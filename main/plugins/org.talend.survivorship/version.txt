@@ -1,0 +1,43 @@
++ 0.9.0 sizhaoliu 2011/09/20
+- first release of survivorship library, this commit contains 4 projects.
+
++ 0.9.1 sizhaoliu 2011/09/26
+- resolved a knowledge base initialization problem 
+- updated sample rules
+
++ 0.9.2 sizhaoliu 2011/10/07
+- added generation button to tRuleSurvivorship component
+- minor modifications in library to adapt rule generation action
+
++ 0.9.3 sizhaoliu 2011/10/13
+- complete rule code generation (MC, MT)
+- equal results are not considered as conflict now
+- corrected initialization of rule count expectation
+
++ 0.9.3 sizhaoliu 2011/10/14
+- resolved repository node duplication
+- added org.drools.eclipse in survivorship-feature to let tdqte contain it (the plugin is contained in tispe before)
+
++ 0.9.4 sizhaoliu 2011/10/18
+- Reordered rule table column
+- Added disativations of parameters in rule table
+
++ 0.9.5 sizhaoliu 2011/11/08
+- Added Most Complete rule
+
++ 0.9.6 sizhaoliu 2011/11/15
+- TDQ-3972 fixed
+- TDQ-3973 rename recNum to TALEND_INTERNAL_ID
+- code cleansing
+
++ 0.9.7 sizhaoliu 2011/11/17
+- Checked "Ignore blanks" option
+- Changed "Operation" label to "Value"
+
++ 0.9.8 sizhaoliu 2011/11/21
+- TDQ-3986 fixed by setting "mvel2.disable.jit" argument
+- removed sysout in studio console
+
++ 0.9.9 sizhaoliu 2011/12/2
+- TDQ-4092 job export issue fixed
+- path auto-correction for case-sensitive operation systems.

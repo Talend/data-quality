@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+     2011-9-21     sizhaoliu                                              
+
+     org.talend.survivorship   
+                   
+     modified from build.xml of hadoop component by mzhao                                                                
+     ====================================================================== -->
+<project name="org.talend.dataquality.survivorship" default="copy">
+	<description>
+            package the survivorship library and copy it to component folder.
+    </description>
+
+	<!-- Projet settings -->
+	<property name="src.dir" value="src" />
+	<property name="bin.dir" value="bin" />
+	<property name="build.dir" value="build" />
+	<property name="dist.dir" value="../org.talend.designer.components.tdqprovider/components/tRuleSurvivorship" />
+	<property name="app.jar" value="org.talend.survivorship.jar" />
+
+	<target name="copy_version_info" >
+		<copy todir="${bin.dir}">
+			<fileset file="version.txt" />
+		</copy>
+	</target>
+	<target name="jars" depends="copy_version_info">
+		<jar basedir="${bin.dir}" jarfile="${build.dir}/${app.jar}" />
+	</target>
+	<target name="copy" depends="jars">
+		<copy todir="${dist.dir}">
+			<fileset dir="${build.dir}/" />
+		</copy>
+	</target>
+</project>

@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Survivorship
+Bundle-SymbolicName: org.talend.survivorship
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-ClassPath: .
+Bundle-Vendor: .Talend SA.
+Require-Bundle: org.drools.eclipse
+Export-Package: org.talend.survivorship,
+ org.talend.survivorship.model,
+ org.talend.survivorship.services
+Eclipse-RegisterBuddy: org.drools.eclipse
