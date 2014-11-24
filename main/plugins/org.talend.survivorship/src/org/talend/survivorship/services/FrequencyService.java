@@ -52,12 +52,11 @@ public class FrequencyService extends AbstractService {
 
         valueToFreq = new HashMap<Object, Integer>();
         frequencyMaps.put(column, valueToFreq);
-        maxOccurence.put(column, 1);
 
         for (Attribute attr : dataset.getAttributesByColumn(column)) {
             if (attr.isAlive()) {
                 Object value = attr.getValue();
-                if (value == null || (ignoreBlanks == true && "".equals(value.toString().trim()))) {
+                if (value == null || (ignoreBlanks == true && "".equals(value.toString().trim()))) { //$NON-NLS-1$
                     continue;
                 }
 
@@ -65,14 +64,21 @@ public class FrequencyService extends AbstractService {
                     // add value to map
                     valueToFreq.put(value, 1);
                 } else {
-                    if (valueToFreq.get(value) == maxOccurence.get(column)) {
-                        maxOccurence.put(column, maxOccurence.get(column) + 1);
-                    }
-                    // already exists: increment number of occurences
+                    // already exists: increment number of occurrences
                     valueToFreq.put(value, valueToFreq.get(value) + 1);
                 }
             }
         }
+
+        int max = 0;
+        for (Object value : valueToFreq.keySet()) {
+            int freq = valueToFreq.get(value);
+            if (freq > max) {
+                max = freq;
+            }
+        }
+        maxOccurence.put(column, max);
+
         return valueToFreq;
     }
 

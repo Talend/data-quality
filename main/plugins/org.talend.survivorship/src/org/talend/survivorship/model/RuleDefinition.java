@@ -120,9 +120,9 @@ public class RuleDefinition {
      * The relation between a rule definition and its precedent one.
      */
     public enum Order {
-        SEQ("SEQ"), // Sequential
-        MC("MC"), // Multi-condition
-        MT("MT");// Multi-target
+        SEQ("SEQ"), // Sequential //$NON-NLS-1$
+        MC("MC"), // Multi-condition //$NON-NLS-1$
+        MT("MT");// Multi-target //$NON-NLS-1$
 
         private final String label;
 
@@ -153,27 +153,27 @@ public class RuleDefinition {
      */
     public enum Function {
 
-        Expression("Expression"), // User defined rules.
+        Expression("Expression"), // User defined rules. //$NON-NLS-1$
 
-        MostCommon("MostCommon"),
+        MostCommon("MostCommon"), //$NON-NLS-1$
 
-        MostRecent("MostRecent"),
+        MostRecent("MostRecent"), //$NON-NLS-1$
 
-        MostAncient("MostAncient"),
+        MostAncient("MostAncient"), //$NON-NLS-1$
 
-        MostComplete("MostComplete"),
+        MostComplete("MostComplete"), //$NON-NLS-1$
 
-        Longest("Longest"),
+        Longest("Longest"), //$NON-NLS-1$
 
-        Shortest("Shortest"),
+        Shortest("Shortest"), //$NON-NLS-1$
 
-        Largest("Largest"),
+        Largest("Largest"), //$NON-NLS-1$
 
-        Smallest("Smallest"),
+        Smallest("Smallest"), //$NON-NLS-1$
 
-        MatchRegex("MatchRegex"),
+        MatchRegex("MatchRegex"), //$NON-NLS-1$
 
-        MatchIndex("MatchIndex");
+        MatchIndex("MatchIndex"); //$NON-NLS-1$
 
         private final String label;
 

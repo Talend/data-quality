@@ -56,14 +56,13 @@ public class NumberService extends AbstractService {
                     continue;
                 }
 
-                if (max == null) {
+                if (max == null||min == null) {
                     max = value;
                     min = value;
                 } else {
                     if (value.doubleValue() > max.doubleValue()) {
                         max = value;
-                    }
-                    if (value.doubleValue() < min.doubleValue()) {
+                    } else if (value.doubleValue() < min.doubleValue()) {
                         min = value;
                     }
                 }

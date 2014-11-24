@@ -38,17 +38,6 @@ public class CompletenessService extends AbstractService {
 		super(dataset);
 	}
 
-	/**
-	 * Put attribute values into the longest/shortest value map of a given
-	 * column.
-	 * 
-	 * @param column
-	 * @return
-	 */
-	public void putAttributeValues() {
-
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -75,7 +64,7 @@ public class CompletenessService extends AbstractService {
 				int count = 0;
 				for (Attribute a : r.getAttributes()) {
 					Object obj = a.getValue();
-					if (obj != null && !"".equals(obj)) {
+                    if (obj != null && !"".equals(obj)) { //$NON-NLS-1$
 						count++;
 					}
 				}

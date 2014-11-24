@@ -104,13 +104,13 @@ public class SurvivorshipManager extends KnowledgeManager {
         if (pos > 0 && pos < rulePath.length() + 1) {
             String projectName = rulePath.substring(pos + 1);
             if (projectName != null) {
-                File f = new File("items/");
+                File f = new File("items/"); //$NON-NLS-1$
                 if (f.exists()) { // running exported job
                     // since path is case sensitive in linux, call toLowerCase() here to correct the spelling.
-                    rulePath = "items/" + projectName.toLowerCase();
-                    f = new File(rulePath + "/metadata/survivorship/");
+                    rulePath = "items/" + projectName.toLowerCase(); //$NON-NLS-1$
+                    f = new File(rulePath + "/metadata/survivorship/"); //$NON-NLS-1$
                     if (!f.exists()) {
-                        System.err.println("[INFO] This error may appear if you did not export the dependencies of the job.");
+                        System.err.println("[INFO] This error may appear if you did not export the dependencies of the job."); //$NON-NLS-1$
                     }
                 } else { // running job in studio
                     // same reason for calling toUpperCase()
@@ -125,7 +125,7 @@ public class SurvivorshipManager extends KnowledgeManager {
 
         // add package declaration including declarative model
         kbuilder.add(
-                ResourceFactory.newFileResource(rulePath + "/metadata/survivorship/" + packageName + "/"
+                ResourceFactory.newFileResource(rulePath + "/metadata/survivorship/" + packageName + "/" //$NON-NLS-1$ //$NON-NLS-2$
                         + SurvivorshipConstants.DROOLS + SurvivorshipConstants.VERSION_SUFFIX
                         + SurvivorshipConstants.PKG_ITEM_EXTENSION), ResourceType.DRL);
 
@@ -133,7 +133,7 @@ public class SurvivorshipManager extends KnowledgeManager {
         for (RuleDefinition definition : ruleDefinitionList) {
             if (definition.getOrder().equals(Order.SEQ)) {
                 kbuilder.add(
-                        ResourceFactory.newFileResource(rulePath + "/metadata/survivorship/" + packageName + "/"
+                        ResourceFactory.newFileResource(rulePath + "/metadata/survivorship/" + packageName + "/" //$NON-NLS-1$ //$NON-NLS-2$
                                 + definition.getRuleName() + SurvivorshipConstants.VERSION_SUFFIX
                                 + SurvivorshipConstants.RULE_ITEM_EXTENSION), ResourceType.DRL);
             }
@@ -141,7 +141,7 @@ public class SurvivorshipManager extends KnowledgeManager {
 
         // add survivorship work flow
         kbuilder.add(
-                ResourceFactory.newFileResource(rulePath + "/metadata/survivorship/" + packageName + "/"
+                ResourceFactory.newFileResource(rulePath + "/metadata/survivorship/" + packageName + "/" //$NON-NLS-1$ //$NON-NLS-2$
                         + SurvivorshipConstants.SURVIVOR_FLOW + SurvivorshipConstants.VERSION_SUFFIX
                         + SurvivorshipConstants.FLOW_ITEM_EXTENSION), ResourceType.BPMN2);
 
@@ -150,7 +150,7 @@ public class SurvivorshipManager extends KnowledgeManager {
             for (KnowledgeBuilderError error : errors) {
                 System.err.println(error.getMessage());
             }
-            throw new IllegalArgumentException("Could not parse knowledge.");
+            throw new IllegalArgumentException("Could not parse knowledge."); //$NON-NLS-1$
         }
         kbase = KnowledgeBaseFactory.newKnowledgeBase();
         kbase.addKnowledgePackages(kbuilder.getKnowledgePackages());
@@ -183,7 +183,7 @@ public class SurvivorshipManager extends KnowledgeManager {
         StatefulKnowledgeSession ksession = kbase.newStatefulKnowledgeSession();
         dataset.reset();
         dataset.initData(data);
-        ksession.setGlobal("dataset", dataset);
+        ksession.setGlobal("dataset", dataset); //$NON-NLS-1$
 
         // go !
         try {
@@ -199,15 +199,15 @@ public class SurvivorshipManager extends KnowledgeManager {
             }
         } catch (InstantiationException e) {
             // failed to create new recordInType instance
-            System.err.println("!!! " + e.getMessage());
+            System.err.println("!!! " + e.getMessage()); //$NON-NLS-1$
             return false;
         } catch (IllegalAccessException e) {
             // failed to create new recordInType instance
-            System.err.println("!!! " + e.getMessage());
+            System.err.println("!!! " + e.getMessage()); //$NON-NLS-1$
             return false;
         }
 
-        ksession.startProcess(packageName + "." + SurvivorshipConstants.SURVIVOR_FLOW);
+        ksession.startProcess(packageName + "." + SurvivorshipConstants.SURVIVOR_FLOW); //$NON-NLS-1$
         ksession.fireAllRules();
         ksession.dispose();
         // kbase.getStatefulKnowledgeSessions().clear();

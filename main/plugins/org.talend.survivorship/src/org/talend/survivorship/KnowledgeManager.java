@@ -68,9 +68,9 @@ public abstract class KnowledgeManager extends Observable {
         this.packageName = packageName;
 
         // MOD 21-10-2011 to fix TDQ-3986
-        System.setProperty("mvel2.disable.jit", "true");
+        System.setProperty("mvel2.disable.jit", "true"); //$NON-NLS-1$ //$NON-NLS-2$
         // MOD 22-10-2012 to fix TDQ-4649
-        System.setProperty("drools.dialect.java.compiler.lnglevel", "1.6");
+        System.setProperty("drools.dialect.java.compiler.lnglevel", "1.6"); //$NON-NLS-1$ //$NON-NLS-2$
 
         columnList = new ArrayList<Column>();
         ruleDefinitionList = new ArrayList<RuleDefinition>();

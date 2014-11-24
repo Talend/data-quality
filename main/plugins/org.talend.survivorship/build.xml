@@ -14,7 +14,7 @@
 	<!-- Projet settings -->
 	<property name="src.dir" value="src" />
 	<property name="bin.dir" value="bin" />
-	<property name="build.dir" value="build" />
+	<property name="build.dir" value="dist" />
 	<property name="dist.dir" value="../org.talend.designer.components.tdqprovider/components/tRuleSurvivorship" />
 	<property name="app.jar" value="org.talend.survivorship.jar" />
 

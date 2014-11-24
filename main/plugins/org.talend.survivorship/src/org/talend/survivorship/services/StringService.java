@@ -60,7 +60,7 @@ public class StringService extends AbstractService {
 
             if (attr.isAlive()) {
                 String value = (String) attr.getValue();
-                if (value == null || (ignoreBlanks && "".equals(value.trim()))) {
+                if (value == null || (ignoreBlanks && "".equals(value.trim()))) { //$NON-NLS-1$
                     continue;
                 }
                 int length = value.length();

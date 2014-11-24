@@ -21,8 +21,6 @@ public abstract class AbstractService {
 
     protected DataSet dataset;
 
-    protected boolean ignoreBlanks = true;
-
     /**
      * AbstractService constructor.
      * 
