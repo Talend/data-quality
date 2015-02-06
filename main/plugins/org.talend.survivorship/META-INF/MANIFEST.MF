@@ -10,4 +10,3 @@ Export-Package: org.talend.survivorship,
  org.talend.survivorship.model,
  org.talend.survivorship.services
 Eclipse-RegisterBuddy: org.drools.eclipse
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
