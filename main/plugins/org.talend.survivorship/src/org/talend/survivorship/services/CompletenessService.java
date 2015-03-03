@@ -20,66 +20,58 @@ import org.talend.survivorship.model.DataSet;
 import org.talend.survivorship.model.Record;
 
 /**
- * Time Service to determine the latest, earliest value of a given column by
- * predefined date format.
- * <p>
- * TODO complete Time Service
+ * Completeness Service to determine the most complete record.
  */
 public class CompletenessService extends AbstractService {
 
-	List<Integer> mostCompleteRecNumList;
+    List<Integer> mostCompleteRecNumList;
 
-	/**
-	 * StringService constructor.
-	 * 
-	 * @param dataset
-	 */
-	public CompletenessService(DataSet dataset) {
-		super(dataset);
-	}
+    /**
+     * StringService constructor.
+     * 
+     * @param dataset
+     */
+    public CompletenessService(DataSet dataset) {
+        super(dataset);
+        mostCompleteRecNumList = new ArrayList<Integer>();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.talend.survivorship.services.AbstractService#init()
-	 */
-	@Override
-	public void init() {
-		if (mostCompleteRecNumList != null) {
-			mostCompleteRecNumList.clear();
-		}
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.talend.survivorship.services.AbstractService#init()
+     */
+    @Override
+    public void init() {
+        mostCompleteRecNumList.clear();
+    }
 
-	/**
-	 * DOC sizhaoliu Comment method "getMostCompleteRecords".
-	 * 
-	 * @return
-	 */
-	public List<Integer> getMostCompleteRecNumList() {
-		if (mostCompleteRecNumList == null) {
-			mostCompleteRecNumList = new ArrayList<Integer>();
-
-			int max = 0;
-			for (Record r : dataset.getRecordList()) {
-				int count = 0;
-				for (Attribute a : r.getAttributes()) {
-					Object obj = a.getValue();
-                    if (obj != null && !"".equals(obj)) { //$NON-NLS-1$
-						count++;
-					}
-				}
-				if (count > max) {
-					mostCompleteRecNumList.clear();
-					mostCompleteRecNumList.add(r.getId());
-					max = count;
-				} else if (count == max) {
-					mostCompleteRecNumList.add(r.getId());
-				} else {
-					// Do nothing
-				}
-			}
-		}
-		return mostCompleteRecNumList;
-	}
+    /**
+     * DOC sizhaoliu Comment method "getMostCompleteRecords".
+     * 
+     * @return
+     */
+    public List<Integer> getMostCompleteRecNumList() {
+        int max = 0;
+        for (Record r : dataset.getRecordList()) {
+            int count = 0;
+            for (Attribute a : r.getAttributes()) {
+                Object obj = a.getValue();
+                if (obj != null && !"".equals(obj)) { //$NON-NLS-1$
+                    count++;
+                }
+            }
+            if (count > max) {
+                mostCompleteRecNumList.clear();
+                mostCompleteRecNumList.add(r.getId());
+                max = count;
+            } else if (count == max) {
+                mostCompleteRecNumList.add(r.getId());
+            } else {
+                // Do nothing
+            }
+        }
+        return mostCompleteRecNumList;
+    }
 
 }
