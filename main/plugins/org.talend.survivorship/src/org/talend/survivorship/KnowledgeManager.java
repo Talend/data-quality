@@ -25,6 +25,46 @@ import org.talend.survivorship.model.RuleDefinition;
  */
 public abstract class KnowledgeManager extends Observable {
 
+    protected String jobName;
+
+    protected String jobVersion;
+
+    /**
+     * Getter for jobName.
+     * 
+     * @return the jobName
+     */
+    public String getJobName() {
+        return this.jobName;
+    }
+
+    /**
+     * Sets the jobName.
+     * 
+     * @param jobName the jobName to set
+     */
+    public void setJobName(String jobName) {
+        this.jobName = jobName;
+    }
+
+    /**
+     * Getter for jobVersion.
+     * 
+     * @return the jobVersion
+     */
+    public String getJobVersion() {
+        return this.jobVersion;
+    }
+
+    /**
+     * Sets the jobVersion.
+     * 
+     * @param jobVersion the jobVersion to set
+     */
+    public void setJobVersion(String jobVersion) {
+        this.jobVersion = jobVersion;
+    }
+
     protected String rulePath;
 
     /**

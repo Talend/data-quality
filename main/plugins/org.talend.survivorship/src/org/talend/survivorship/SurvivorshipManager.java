@@ -104,17 +104,29 @@ public class SurvivorshipManager extends KnowledgeManager {
         if (pos > 0 && pos < rulePath.length() + 1) {
             String projectName = rulePath.substring(pos + 1);
             if (projectName != null) {
-                File f = new File("items/"); //$NON-NLS-1$
+                String itemsFolder = "items/"; //$NON-NLS-1$
+                File f = new File(itemsFolder);
                 if (f.exists()) { // running exported job
                     // since path is case sensitive in linux, call toLowerCase() here to correct the spelling.
-                    rulePath = "items/" + projectName.toLowerCase(); //$NON-NLS-1$
+                    rulePath = itemsFolder + projectName.toLowerCase();
                     f = new File(rulePath + "/metadata/survivorship/"); //$NON-NLS-1$
                     if (!f.exists()) {
                         System.err.println("[INFO] This error may appear if you did not export the dependencies of the job."); //$NON-NLS-1$
                     }
-                } else { // running job in studio
-                    // same reason for calling toUpperCase()
-                    rulePath = rulePath.substring(0, pos + 1).concat(projectName.toUpperCase());
+                } else {
+                    itemsFolder = "jobox/work/" + getJobName() + "_" + getJobVersion() + "/" + getJobName() + "/items/"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+                    f = new File(itemsFolder);
+                    if (f.exists()) {
+                        // since path is case sensitive in linux, call toLowerCase() here to correct the spelling.
+                        rulePath = itemsFolder + projectName.toLowerCase();
+                        f = new File(rulePath + "/metadata/survivorship/"); //$NON-NLS-1$
+                        if (!f.exists()) {
+                            System.err.println("[INFO] This error may appear if you did not export the dependencies of the job."); //$NON-NLS-1$
+                        }
+                    } else { // running job in studio
+                        // same reason for calling toUpperCase()
+                        rulePath = rulePath.substring(0, pos + 1).concat(projectName.toUpperCase());
+                    }
                 }
             }
         }
