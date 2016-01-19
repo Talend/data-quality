@@ -39,6 +39,7 @@ Import-Package: com.fasterxml.jackson.annotation;version="2.5.3",
  com.fasterxml.jackson.core;version="2.5.3",
  com.fasterxml.jackson.databind;version="2.5.3",
  com.fasterxml.jackson.databind.annotation;version="2.5.3",
+ org.apache.commons.lang3.tuple;version="3.3.2",
  org.apache.commons.validator;version="1.5.1",
  org.apache.commons.validator.routines;version="1.5.1",
  org.talend.dataquality.standardization.phone

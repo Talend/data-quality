@@ -15,7 +15,12 @@ package org.talend.dataquality.semantic.index;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -23,7 +28,16 @@ import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queries.TermsFilter;
-import org.apache.lucene.search.*;
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.CachingWrapperFilter;
+import org.apache.lucene.search.FieldCacheTermsFilter;
+import org.apache.lucene.search.Filter;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.SearcherManager;
+import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.talend.dataquality.semantic.model.DQCategory;
@@ -290,5 +304,32 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         }
+    }
+
+    public TopDocs findSimilarValuesInCategory(String input, String category) throws IOException {
+        BooleanQuery combinedQuery = new BooleanQuery();
+        if (category != null && !StringUtils.EMPTY.equals(category)) {
+            Term catTerm = new Term(DictionarySearcher.F_WORD, category);
+            Query catQuery = new TermQuery(catTerm);
+            combinedQuery.add(catQuery, BooleanClause.Occur.MUST);
+        }
+
+        BooleanQuery valueQuery = new BooleanQuery();
+        List<String> tokens = getTokensFromAnalyzer(input);
+        Query inputTermQuery = getTermQuery(F_SYNTERM, StringUtils.join(tokens, ' '), true);
+        valueQuery.add(inputTermQuery, BooleanClause.Occur.SHOULD);
+
+        BooleanQuery inputTokenQuery = new BooleanQuery();
+        for (String token : tokens) {
+            inputTokenQuery.add(getTermQuery(F_SYNTERM, token, true), BooleanClause.Occur.SHOULD);
+        }
+        valueQuery.add(inputTokenQuery, BooleanClause.Occur.SHOULD);
+
+        combinedQuery.add(valueQuery, BooleanClause.Occur.MUST);
+
+        final IndexSearcher searcher = mgr.acquire();
+        TopDocs topDocs = searcher.search(combinedQuery, 50);
+        mgr.release(searcher);
+        return topDocs;
     }
 }
