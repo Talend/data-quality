@@ -13,6 +13,7 @@
 package org.talend.survivorship;
 
 import java.io.File;
+import java.net.URL;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -130,6 +131,15 @@ public class SurvivorshipManager extends KnowledgeManager {
                 }
             }
         }
+        String packagePath = null;
+        if ("Relative".equals(rulePath)) {
+            rulePath = "";
+            URL url = this.getClass().getClassLoader().getResource("metadata/survivorship/" + packageName + "/");
+            packagePath = url.getFile();
+        } else {
+            packagePath = rulePath + "/metadata/survivorship/" + packageName + "/";
+        }
+
         KnowledgeBuilder kbuilder = KnowledgeBuilderFactory.newKnowledgeBuilder();
         // KnowledgeBuilderConfiguration config = KnowledgeBuilderFactory.newKnowledgeBuilderConfiguration();
         // config.setProperty("drools.dialect.mvel.strict", "false");
@@ -137,7 +147,7 @@ public class SurvivorshipManager extends KnowledgeManager {
 
         // add package declaration including declarative model
         kbuilder.add(
-                ResourceFactory.newFileResource(rulePath + "/metadata/survivorship/" + packageName + "/" //$NON-NLS-1$ //$NON-NLS-2$
+                ResourceFactory.newFileResource(packagePath //$NON-NLS-1$ //$NON-NLS-2$
                         + SurvivorshipConstants.DROOLS + SurvivorshipConstants.VERSION_SUFFIX
                         + SurvivorshipConstants.PKG_ITEM_EXTENSION), ResourceType.DRL);
 
@@ -145,7 +155,7 @@ public class SurvivorshipManager extends KnowledgeManager {
         for (RuleDefinition definition : ruleDefinitionList) {
             if (definition.getOrder().equals(Order.SEQ)) {
                 kbuilder.add(
-                        ResourceFactory.newFileResource(rulePath + "/metadata/survivorship/" + packageName + "/" //$NON-NLS-1$ //$NON-NLS-2$
+                        ResourceFactory.newFileResource(packagePath //$NON-NLS-1$ //$NON-NLS-2$
                                 + definition.getRuleName() + SurvivorshipConstants.VERSION_SUFFIX
                                 + SurvivorshipConstants.RULE_ITEM_EXTENSION), ResourceType.DRL);
             }
@@ -153,7 +163,7 @@ public class SurvivorshipManager extends KnowledgeManager {
 
         // add survivorship work flow
         kbuilder.add(
-                ResourceFactory.newFileResource(rulePath + "/metadata/survivorship/" + packageName + "/" //$NON-NLS-1$ //$NON-NLS-2$
+                ResourceFactory.newFileResource(packagePath //$NON-NLS-1$ //$NON-NLS-2$
                         + SurvivorshipConstants.SURVIVOR_FLOW + SurvivorshipConstants.VERSION_SUFFIX
                         + SurvivorshipConstants.FLOW_ITEM_EXTENSION), ResourceType.BPMN2);
 
