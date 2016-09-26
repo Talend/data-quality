@@ -13,7 +13,6 @@
 package org.talend.survivorship;
 
 import java.io.File;
-import java.net.URL;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -132,12 +131,12 @@ public class SurvivorshipManager extends KnowledgeManager {
             }
         }
         String packagePath = null;
-        if ("Relative".equals(rulePath)) {
-            rulePath = "";
-            URL url = this.getClass().getClassLoader().getResource("metadata/survivorship/" + packageName + "/");
-            packagePath = url.getFile();
+        // TDQ-12588 for a real spark mode, the rule files are uploaded to spark node in javajet.
+        if ("Real_spark_relative_path".equals(rulePath)) { //$NON-NLS-1$
+            rulePath = ""; //$NON-NLS-1$
+            packagePath = ""; //$NON-NLS-1$
         } else {
-            packagePath = rulePath + "/metadata/survivorship/" + packageName + "/";
+            packagePath = rulePath + "/metadata/survivorship/" + packageName + "/"; //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         KnowledgeBuilder kbuilder = KnowledgeBuilderFactory.newKnowledgeBuilder();
