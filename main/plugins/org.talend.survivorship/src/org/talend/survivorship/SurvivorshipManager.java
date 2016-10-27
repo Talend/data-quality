@@ -156,29 +156,26 @@ public class SurvivorshipManager extends KnowledgeManager {
         // KnowledgeBuilder kbuilder = KnowledgeBuilderFactory.newKnowledgeBuilder(config);
 
         // add package declaration including declarative model
-        kbuilder.add(
-                newResource(packagePath
-                        + SurvivorshipConstants.DROOLS
-                        + SurvivorshipConstants.VERSION_SUFFIX
-                        + SurvivorshipConstants.PKG_ITEM_EXTENSION, isClassPathResource), ResourceType.DRL);
+        kbuilder.add(newResource(packagePath //
+                + SurvivorshipConstants.DROOLS //
+                + SurvivorshipConstants.VERSION_SUFFIX //
+                + SurvivorshipConstants.PKG_ITEM_EXTENSION, isClassPathResource), ResourceType.DRL);
 
         // add rule definitions
         for (RuleDefinition definition : ruleDefinitionList) {
             if (definition.getOrder().equals(Order.SEQ)) {
-                kbuilder.add(
-                        newResource(packagePath
-                                + definition.getRuleName()
-                                + SurvivorshipConstants.VERSION_SUFFIX
-                                + SurvivorshipConstants.RULE_ITEM_EXTENSION, isClassPathResource), ResourceType.DRL);
+                kbuilder.add(newResource(packagePath //
+                        + definition.getRuleName() //
+                        + SurvivorshipConstants.VERSION_SUFFIX //
+                        + SurvivorshipConstants.RULE_ITEM_EXTENSION, isClassPathResource), ResourceType.DRL);
             }
         }
 
         // add survivorship work flow
-        kbuilder.add(
-                newResource(packagePath
-                        + SurvivorshipConstants.SURVIVOR_FLOW
-                        + SurvivorshipConstants.VERSION_SUFFIX
-                        + SurvivorshipConstants.FLOW_ITEM_EXTENSION, isClassPathResource), ResourceType.BPMN2);
+        kbuilder.add(newResource(packagePath //
+                + SurvivorshipConstants.SURVIVOR_FLOW //
+                + SurvivorshipConstants.VERSION_SUFFIX //
+                + SurvivorshipConstants.FLOW_ITEM_EXTENSION, isClassPathResource), ResourceType.BPMN2);
 
         KnowledgeBuilderErrors errors = kbuilder.getErrors();
         if (errors.size() > 0) {
@@ -234,7 +231,7 @@ public class SurvivorshipManager extends KnowledgeManager {
         // go !
         try {
             FactType recordInType = kbase.getFactType(packageName, SurvivorshipConstants.RECORD_IN);
-            for (int i = 0; i < data.length; i++) {
+            for (int i = data.length - 1; i >= 0; i--) {
                 Object input = recordInType.newInstance();
                 recordInType.set(input, SurvivorshipConstants.TALEND_INTERNAL_ID, i);
                 for (int j = 0; j < columnList.size(); j++) {

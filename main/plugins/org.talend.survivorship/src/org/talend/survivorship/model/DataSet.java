@@ -68,7 +68,7 @@ public class DataSet {
     public void initData(Object[][] input) {
 
         for (int j = 0; j < columnList.size(); j++) {
-        	columnList.get(j).init();
+            columnList.get(j).init();
         }
         for (int i = 0; i < input.length; i++) {
             conflictList.add(new HashSet<String>());
@@ -93,17 +93,17 @@ public class DataSet {
         cs = new CompletenessService(this);
         ns = new NumberService(this);
     }
-    
-    public void reset(){
+
+    public void reset() {
         recordList.clear();
         survivorMap.clear();
         conflictList.clear();
         conflictsOfSurvivor.clear();
-    	fs.init();
-    	ss.init();
-    	ts.init();
-    	cs.init();
-    	ns.init();
+        fs.init();
+        ss.init();
+        ts.init();
+        cs.init();
+        ns.init();
     }
 
     /**
@@ -137,11 +137,13 @@ public class DataSet {
      * @param col
      */
     public void survive(int recNum, String col) {
-        // System.out.println("\tSurviving " + col + " of Record " + recNum);
         Record record = recordList.get(recNum);
         Attribute attribute = record.getAttribute(col);
         if (attribute.isAlive()) {
             attribute.survive();
+            if (survivorMap.get(col) == null) {
+                survivorMap.put(col, attribute.getValue());
+            }
         }
     }
 
@@ -158,6 +160,9 @@ public class DataSet {
         Attribute another = record.getAttribute(aliveField);
         if (attribute.isAlive() && another.isAlive()) {
             attribute.survive();
+            if (survivorMap.get(col) == null) {
+                survivorMap.put(col, attribute.getValue());
+            }
         }
     }
 
@@ -172,7 +177,6 @@ public class DataSet {
         Attribute attribute = record.getAttribute(col);
         if (attribute.isAlive()) {
             attribute.setAlive(false);
-            System.out.println(attribute.getValue());
         }
     }
 
