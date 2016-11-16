@@ -13,9 +13,7 @@
 package org.talend.dataquality.semantic.statistics;
 
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.talend.dataquality.common.inference.Analyzer;
@@ -121,18 +119,18 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
             return;
         }
         if (cat.getCompleteness() != null && cat.getCompleteness().booleanValue()) {
-            Set<String> catIds = new HashSet<String>();
+            boolean validCat = false;
             switch (cat.getType()) {
             case REGEX:
-                catIds = regexClassifier.classify(value);
+                validCat = regexClassifier.validCategory(value, semanticType);
                 break;
             case DICT:
-                catIds = dataDictClassifier.classify(value);
+                validCat = dataDictClassifier.validCategory(value, semanticType);
                 break;
             default:
                 break;
             }
-            if (catIds.contains(semanticType)) {
+            if (validCat) {
                 valueQuality.incrementValid();
             } else {
                 valueQuality.incrementInvalid();

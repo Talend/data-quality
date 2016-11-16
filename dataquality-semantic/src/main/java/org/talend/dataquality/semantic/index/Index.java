@@ -16,7 +16,6 @@ import java.util.Set;
 
 /**
  * created by talend on 2015-07-28 Detailled comment.
- *
  */
 public interface Index {
 
@@ -25,4 +24,6 @@ public interface Index {
     void closeIndex();
 
     Set<String> findCategories(String data);
+
+    boolean validCategory(String data, String semanticType);
 }

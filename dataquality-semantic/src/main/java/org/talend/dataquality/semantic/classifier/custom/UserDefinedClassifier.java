@@ -30,7 +30,7 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
 
     /**
      * Method "addSubCategory" adds a subcategory if it does not already exists.
-     * 
+     *
      * @param category the category to add
      * @return true when the category is added
      */
@@ -40,7 +40,7 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
 
     /**
      * Method "insertOrUpdateSubCategory" inserts or update a category.
-     * 
+     *
      * @param category the category to insert or update
      * @return true when the category is correctly either inserted or updated
      */
@@ -53,7 +53,7 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
 
     /**
      * Method "updateSubCategory" updates a given category.
-     * 
+     *
      * @param category the category to update
      * @return true if the category exists and is updated.
      */
@@ -70,7 +70,7 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
 
     /**
      * classify data into Semantic Category IDs
-     * 
+     *
      * @see org.talend.dataquality.semantic.classifier.impl.AbstractSubCategoryClassifier#classify(java.lang.String)
      */
     @Override
@@ -79,16 +79,64 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
         return classify(str, mainCategory);
     }
 
+    @Override
+    public boolean validCategory(String str, String semanticType) {
+        MainCategory mainCategory = MainCategory.getMainCategory(str);
+        return validCategory(str, mainCategory, semanticType);
+    }
+
+    private boolean validCategory(String str, MainCategory mainCategory, String semanticType) {
+
+        if (mainCategory == MainCategory.UNKNOWN || mainCategory == MainCategory.NULL || mainCategory == MainCategory.BLANK) {
+            // FIXME return UNKNOWN instead of EMPTY as the category ID, require synchronization with dataprep team
+            return semanticType.equals(SemanticCategoryEnum.UNKNOWN.getId());
+        }
+
+        // else
+        for (ISubCategory classifier : potentialSubCategories) {
+            // if the MainCategory is different, ignor it and continue;AlphaNumeric rule should contain pure Alpha and
+            // Numeric.
+            UserDefinedCategory userDefCat = (UserDefinedCategory) classifier;
+            MainCategory classifierCategory = userDefCat.getMainCategory();
+
+            if (mainCategory == MainCategory.Alpha) {
+                if (classifierCategory != MainCategory.Alpha && classifierCategory != MainCategory.AlphaNumeric) {
+                    continue;
+                }
+            } else if (mainCategory == MainCategory.Numeric) {
+                if (classifierCategory != MainCategory.Numeric && classifierCategory != MainCategory.AlphaNumeric) {
+                    continue;
+                }
+            } else if (classifierCategory != mainCategory) {
+                continue;
+            }
+
+            ISemanticFilter filter = classifier.getFilter();
+
+            if (filter != null) {
+                if (!filter.isQualified(str)) {
+                    continue;
+                }
+            }
+            ISemanticValidator validator = classifier.getValidator();
+            if (validator != null && validator.isValid(str)) {
+                if (semanticType.equals(classifier.getName()))
+                    return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * TODO check javadoc
-     * 
+     *
      * classify data into Semantic Category IDs
      * <p/>
      * Validate this input data to adapt which customized rules.
      * <p/>
      * Actually, the main category can be calculated based on the input string, but this method has better performance
      * in case the mainCategory is already calculated previously.
-     * 
+     *
      * @param str is input data
      * @param mainCategory: the MainCategory is computed by the input data
      * @return

@@ -71,4 +71,16 @@ public class LuceneIndex implements Index {
         }
         return foundCategorySet;
     }
+
+    @Override
+    public boolean validCategory(String data, String semanticType) {
+        Boolean validCategory = false;
+        try {
+            validCategory = searcher.validDocumentWithCategory(data, semanticType);
+
+        } catch (IOException e) {
+            LOG.error(e, e);
+        }
+        return validCategory;
+    }
 }
