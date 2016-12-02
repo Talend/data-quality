@@ -53,7 +53,7 @@ public class UDCategorySerDeser {
      * @throws JsonMappingException
      * @throws JsonParseException
      */
-    static UserDefinedClassifier readJsonFile() throws IOException {
+    public static UserDefinedClassifier readJsonFile() throws IOException {
         try {
             InputStream inputStream = UDCategorySerDeser.class
                     .getResourceAsStream("/org/talend/dataquality/semantic/recognizer/" + FILE_NAME);
