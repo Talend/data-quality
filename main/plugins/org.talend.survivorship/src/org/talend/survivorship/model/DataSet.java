@@ -183,12 +183,14 @@ public class DataSet {
         for (Record record : recordList) {
             for (Column col : columnList) {
                 Attribute a = record.getAttribute(col.getName());
-                if (col.getRuleCount() == 0 || a.getSurviveCount() < col.getRuleCount()) {
+                // TDQ-12742, when there are 2 or more rules on a column, the survive count may less than rule count.it is normal
+                // should not 'setAlive(false)'
+                if (col.getRuleCount() == 0 || a.getSurviveCount() == 0) {
                     a.setAlive(false);
                 } else {
                     if (survivorMap.get(col.getName()) == null) {
                         survivorMap.put(col.getName(), a.getValue());
-                    } else {
+                    } else if (col.getRuleCount() == 1) {// TDQ-12742 conflict only when the rule count is 1.
                         Object survivor = survivorMap.get(col.getName());
                         if (a.getValue() != null && !a.getValue().equals(survivor)) {
                             HashSet<String> desc = conflictList.get(a.getRecordID());
