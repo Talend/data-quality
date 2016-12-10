@@ -19,25 +19,28 @@ public class Attribute {
 
     private Record record;
 
-    private String column;
+    private Column column;
 
     private Object value;
 
+    /**
+     * this value indicates if the current attribute is eliminated by one rule.
+     */
     private boolean alive = true;
 
     /**
-     * this value increments at each time the Attribute is survived. By comparing this value with rule count, an
-     * Attribute is alive is it survives from all the rules.
+     * this value indicates if the current attribute is survived by one rule.
      */
-    private int surviveCount = 0;
+    private boolean survived = false;
 
     /**
      * Attribute constructor.
      * 
+     * @param record
      * @param column
      * @param value
      */
-    public Attribute(Record record, String column, Object value) {
+    public Attribute(Record record, Column column, Object value) {
         this.record = record;
         this.column = column;
         this.value = value;
@@ -53,23 +56,12 @@ public class Attribute {
     }
 
     /**
-     * TODO sizhao explain the logic of this attribute.
-     * 
      * Getter for alive.
      * 
      * @return the alive
      */
     public boolean isAlive() {
         return alive;
-    }
-
-    /**
-     * Getter for survivedTimes.
-     * 
-     * @return
-     */
-    public int getSurviveCount() {
-        return surviveCount;
     }
 
     /**
@@ -122,7 +114,7 @@ public class Attribute {
      * 
      * @param column
      */
-    public void setColumn(String column) {
+    public void setColumn(Column column) {
         this.column = column;
     }
 
@@ -131,15 +123,20 @@ public class Attribute {
      * 
      * @return
      */
-    public String getColumn() {
+    public Column getColumn() {
         return column;
     }
 
-    /**
-     * increments survivedTimes.
-     */
-    public void survive() {
-        surviveCount++;
+    public boolean isSurvived() {
+        return survived;
+    }
+
+    public void setSurvived(boolean survived) {
+        this.survived = survived;
+    }
+
+    public String toString() {
+        return "Attribute[" + "record=" + record.getId() + ",  column=" + column.getName() + ", value=" + value + "]";
     }
 
 }

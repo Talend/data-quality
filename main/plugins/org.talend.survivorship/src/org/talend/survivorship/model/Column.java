@@ -14,7 +14,6 @@ package org.talend.survivorship.model;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 
 /**
  * This class represents a column from input.
@@ -30,11 +29,9 @@ public class Column {
      */
     private HashMap<Record, Attribute> attributeMap = new HashMap<Record, Attribute>();
 
-    private int ruleCount = 0;
-
     private boolean resolved = true;
 
-    private HashSet<String> conflictDesc = new HashSet<String>();
+    private String survivingRuleName;
 
     /**
      * Column constructor .
@@ -84,22 +81,12 @@ public class Column {
         attributeMap.put(rec, attribute);
     }
 
-    /**
-     * Setter for ruleCount.
-     * 
-     * @param ruleCount
-     */
-    public void setRuleCount(int ruleCount) {
-        this.ruleCount = ruleCount;
+    public void setSurvivingRuleName(String survivingRuleName) {
+        this.survivingRuleName = survivingRuleName;
     }
 
-    /**
-     * Getter for ruleCount.
-     * 
-     * @return
-     */
-    public int getRuleCount() {
-        return ruleCount;
+    public String getSurvivingRuleName() {
+        return survivingRuleName;
     }
 
     /**
@@ -121,21 +108,11 @@ public class Column {
     }
 
     /**
-     * Getter for conflictDesc.
-     * 
-     * @return the conflictDesc
-     */
-    public HashSet<String> getConflictDesc() {
-        return conflictDesc;
-    }
-
-    /**
      * initialize the column.
      */
     public void init() {
         resolved = true;
         attributeMap.clear();
-        conflictDesc.clear();
     }
 
 }

@@ -77,7 +77,7 @@ public class DataSet {
             Attribute attribute;
             for (int j = 0; j < columnList.size(); j++) {
                 Column col = columnList.get(j);
-                attribute = new Attribute(rec, col.getName(), input[i][j]);
+                attribute = new Attribute(rec, col, input[i][j]);
                 rec.putAttribute(col.getName(), attribute);
                 col.putAttribute(rec, attribute);
             }
@@ -134,15 +134,34 @@ public class DataSet {
      * Survive an attribute by record number and column name.
      * 
      * @param recNum
-     * @param col
+     * @param colName
+     * @deprecated this method is kept for backward compatibility of existing rules
      */
-    public void survive(int recNum, String col) {
+    public void survive(int recNum, String colName) {
         Record record = recordList.get(recNum);
-        Attribute attribute = record.getAttribute(col);
+        Attribute attribute = record.getAttribute(colName);
         if (attribute.isAlive()) {
-            attribute.survive();
-            if (survivorMap.get(col) == null) {
-                survivorMap.put(col, attribute.getValue());
+            attribute.setSurvived(true);
+        }
+    }
+
+    /**
+     * Survive an attribute by record number and column name.
+     * 
+     * @param recNum
+     * @param colName
+     * @param ruleName
+     */
+    public void survive(int recNum, String colName, String ruleName) {
+        Record record = recordList.get(recNum);
+        Attribute attribute = record.getAttribute(colName);
+        if (attribute.isAlive()) {
+            Column column = attribute.getColumn();
+            // TDQ-12742 when there are 2 or more rules on a column, one rule can work only if the previous one does
+            // not producer any survivor
+            if (column.getSurvivingRuleName() == null || ruleName.equals(column.getSurvivingRuleName())) {
+                attribute.setSurvived(true);
+                column.setSurvivingRuleName(ruleName);
             }
         }
     }
@@ -159,10 +178,7 @@ public class DataSet {
         Attribute attribute = record.getAttribute(col);
         Attribute another = record.getAttribute(aliveField);
         if (attribute.isAlive() && another.isAlive()) {
-            attribute.survive();
-            if (survivorMap.get(col) == null) {
-                survivorMap.put(col, attribute.getValue());
-            }
+            attribute.setSurvived(true);
         }
     }
 
@@ -187,14 +203,10 @@ public class DataSet {
         for (Record record : recordList) {
             for (Column col : columnList) {
                 Attribute a = record.getAttribute(col.getName());
-                // TDQ-12742, when there are 2 or more rules on a column, the survive count may less than rule count.it is normal
-                // should not 'setAlive(false)'
-                if (col.getRuleCount() == 0 || a.getSurviveCount() == 0) {
-                    a.setAlive(false);
-                } else {
+                if (a.isSurvived()) {
                     if (survivorMap.get(col.getName()) == null) {
                         survivorMap.put(col.getName(), a.getValue());
-                    } else if (col.getRuleCount() == 1) {// TDQ-12742 conflict only when the rule count is 1.
+                    } else {
                         Object survivor = survivorMap.get(col.getName());
                         if (a.getValue() != null && !a.getValue().equals(survivor)) {
                             HashSet<String> desc = conflictList.get(a.getRecordID());

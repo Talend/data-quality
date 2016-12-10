@@ -87,16 +87,6 @@ public class SurvivorshipManager extends KnowledgeManager {
         return dataset;
     }
 
-    @Override
-    public void addRuleDefinition(RuleDefinition definition) {
-        super.addRuleDefinition(definition);
-        // initialize expectation of survivor times for all the columns.
-        Column col = getColumnByName(definition.getTargetColumn());
-        if (!Order.MC.equals(definition.getOrder()) && col != null) {
-            col.setRuleCount(col.getRuleCount() + 1);
-        }
-    }
-
     /**
      * initialize knowledge base
      */
