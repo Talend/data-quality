@@ -104,6 +104,9 @@ public class DataSet {
         ts.init();
         cs.init();
         ns.init();
+        for (Column col : columnList) {
+            col.init();
+        }
     }
 
     /**

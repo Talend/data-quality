@@ -113,6 +113,7 @@ public class Column {
     public void init() {
         resolved = true;
         attributeMap.clear();
+        survivingRuleName = null;
     }
 
 }
