@@ -26,6 +26,10 @@ public class BroadcastDocumentObject implements Serializable {
 
     private Set<String> valueSet;
 
+    // No argument constructor needed for Jackson Deserialization
+    public BroadcastDocumentObject() {
+    }
+
     /**
      * @param category the category reference
      * @param valueSet the values of the document
