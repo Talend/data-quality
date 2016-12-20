@@ -4,19 +4,19 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.util.CharArraySet;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
 import org.junit.Test;
 import org.talend.dataquality.semantic.api.DictionaryUtils;
@@ -53,22 +53,37 @@ public class BroadcastIndexObjectTest {
     }
 
     @Test
-    public void testCreateAndGet() throws URISyntaxException {
+    public void testCreateAndGet() throws URISyntaxException, IOException {
         // init a local index
-        final URI testUri = new File("target/broadcast").toURI();
+        final File testFolder = new File("target/broadcast");
+        if (testFolder.exists()) {
+            FileUtils.deleteDirectory(testFolder);
+        }
         try {
-            FSDirectory testDir = FSDirectory.open(new File(testUri));
+            FSDirectory testDir = FSDirectory.open(testFolder);
             IndexWriter writer = new IndexWriter(testDir,
                     new IndexWriterConfig(Version.LATEST, new StandardAnalyzer(CharArraySet.EMPTY_SET)));
             if (writer.maxDoc() > 0) {
                 writer.deleteAll();
+                writer.commit();
             }
             for (String key : TEST_INDEX_CONTENT.keySet()) {
                 Document doc = DictionaryUtils.generateDocument("TEST", "CATEGORY_ID", key,
                         new HashSet<>(Arrays.asList(TEST_INDEX_CONTENT.get(key))));
                 writer.addDocument(doc);
             }
+
+            // here we add an extra document and remove it later.
+            Document doc = DictionaryUtils.generateDocument("TEST", "CATEGORY_ID", "DE_LAND",
+                    new HashSet<>(Arrays.asList(new String[] { "Bayern" })));
+            writer.addDocument(doc);
             writer.commit();
+
+            // when a document is deleted from lucene index, it's marked as deleted, but not physically deleted.
+            // we need to assure that it's not propagated to Spark cluster
+            writer.deleteDocuments(new Term(DictionarySearcher.F_WORD, "DE_LAND"));
+            writer.commit();
+
             writer.close();
         } catch (IOException e1) {
             // TODO Auto-generated catch block
@@ -76,7 +91,7 @@ public class BroadcastIndexObjectTest {
         }
 
         // create the broadcast object from local index
-        final Directory cpDir = ClassPathDirectory.open(testUri);
+        final Directory cpDir = ClassPathDirectory.open(testFolder.toURI());
         final BroadcastIndexObject bio = new BroadcastIndexObject(cpDir);
         // get the RamDirectory from BroadcastIndexObject
         final Directory ramDir = bio.get();
@@ -84,9 +99,9 @@ public class BroadcastIndexObjectTest {
         // assertions
         try {
             DirectoryReader cpDirReader = DirectoryReader.open(cpDir);
-            assertEquals("Unexpected document count in created index. ", TEST_INDEX_CONTENT.size(), cpDirReader.maxDoc());
+            assertEquals("Unexpected document count in created index. ", TEST_INDEX_CONTENT.size(), cpDirReader.numDocs());
             DirectoryReader ramDirReader = DirectoryReader.open(ramDir);
-            assertEquals("Unexpected document count in created index. ", TEST_INDEX_CONTENT.size(), ramDirReader.maxDoc());
+            assertEquals("Unexpected document count in created index. ", TEST_INDEX_CONTENT.size(), ramDirReader.numDocs());
             for (int i = 0; i < TEST_INDEX_CONTENT.size(); i++) {
                 Document doc = cpDirReader.document(i);
                 String cpWord = doc.getField(DictionarySearcher.F_WORD).stringValue();

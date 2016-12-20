@@ -7,11 +7,9 @@ import org.apache.commons.io.FileUtils;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.util.CharArraySet;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.index.DirectoryReader;
-import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.*;
 import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.util.Bits;
 import org.apache.lucene.util.Version;
 import org.talend.dataquality.semantic.api.DictionaryUtils;
 import org.talend.dataquality.semantic.model.DQCategory;
@@ -38,7 +36,11 @@ public class IndexRegenerator {
 
         IndexWriter writer = new IndexWriter(outputDir, config);
 
+        Bits liveDocs = MultiFields.getLiveDocs(reader);
         for (int i = 0; i < reader.maxDoc(); i++) {
+            if (liveDocs != null && !liveDocs.get(i)) {
+                continue;
+            }
             Document doc = reader.document(i);
             DQCategory dqCat = DictionaryUtils.categoryFromDocument(doc);
             Document newdoc = DictionaryUtils.categoryToDocument(dqCat);
@@ -65,7 +67,11 @@ public class IndexRegenerator {
 
         IndexWriter writer = new IndexWriter(outputDir, config);
 
+        Bits liveDocs = MultiFields.getLiveDocs(reader);
         for (int i = 0; i < reader.maxDoc(); i++) {
+            if (liveDocs != null && !liveDocs.get(i)) {
+                continue;
+            }
             Document doc = reader.document(i);
             DQDocument entry = DictionaryUtils.dictionaryEntryFromDocument(doc);
             writer.addDocument(DictionaryUtils.generateDocument(entry.getId(), entry.getCategory().getId(),

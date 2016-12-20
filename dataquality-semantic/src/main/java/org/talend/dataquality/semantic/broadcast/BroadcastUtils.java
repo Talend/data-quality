@@ -24,12 +24,10 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.FieldType;
 import org.apache.lucene.document.StringField;
-import org.apache.lucene.index.DirectoryReader;
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriterConfig;
-import org.apache.lucene.index.IndexableField;
+import org.apache.lucene.index.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
+import org.apache.lucene.util.Bits;
 import org.apache.lucene.util.Version;
 import org.talend.dataquality.semantic.index.DictionarySearcher;
 
@@ -46,9 +44,13 @@ class BroadcastUtils {
      */
     static List<BroadcastDocumentObject> readDocumentsFromIndex(Directory indexDir) throws IOException {
         List<BroadcastDocumentObject> dictionaryObject = new ArrayList<>();
-        DirectoryReader ireader = DirectoryReader.open(indexDir);
-        for (int i = 0; i < ireader.maxDoc(); i++) {
-            Document doc = ireader.document(i);
+        DirectoryReader reader = DirectoryReader.open(indexDir);
+        Bits liveDocs = MultiFields.getLiveDocs(reader);
+        for (int i = 0; i < reader.maxDoc(); i++) {
+            if (liveDocs != null && !liveDocs.get(i)) {
+                continue;
+            }
+            Document doc = reader.document(i);
             String category = doc.getField(DictionarySearcher.F_WORD).stringValue();
             Set<String> valueSet = new HashSet<String>();
             // original values must be read from the F_RAW field

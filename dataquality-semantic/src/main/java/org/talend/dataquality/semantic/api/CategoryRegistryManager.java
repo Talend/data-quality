@@ -27,8 +27,10 @@ import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.index.MultiFields;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.util.Bits;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
@@ -170,7 +172,11 @@ public class CategoryRegistryManager {
                 final Directory indexDir = FSDirectory.open(categorySubFolder);
                 final DirectoryReader reader = DirectoryReader.open(indexDir);
 
+                Bits liveDocs = MultiFields.getLiveDocs(reader);
                 for (int i = 0; i < reader.maxDoc(); i++) {
+                    if (liveDocs != null && !liveDocs.get(i)) {
+                        continue;
+                    }
                     Document doc = reader.document(i);
                     DQCategory dqCat = DictionaryUtils.categoryFromDocument(doc);
                     dqCategories.put(dqCat.getName(), dqCat);
@@ -191,7 +197,11 @@ public class CategoryRegistryManager {
         loadBaseIndex(categorySubFolder, CATEGORY_SUBFOLDER_NAME);
         if (categorySubFolder.exists()) {
             try (final DirectoryReader reader = DirectoryReader.open(FSDirectory.open(categorySubFolder))) {
+                Bits liveDocs = MultiFields.getLiveDocs(reader);
                 for (int i = 0; i < reader.maxDoc(); i++) {
+                    if (liveDocs != null && !liveDocs.get(i)) {
+                        continue;
+                    }
                     Document doc = reader.document(i);
                     DQCategory dqCat = DictionaryUtils.categoryFromDocument(doc);
                     dqCategories.put(dqCat.getName(), dqCat);
