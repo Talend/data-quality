@@ -122,22 +122,23 @@ public class ShuffleColumn {
     }
 
     private void processShuffleTable(List<List<Object>> rowList, List<Row> rows) {
-        List<Integer> replacements = calculateReplacementInteger(rows.size(), getPrimeNumber());
+        int size = rows.size();
+        List<Integer> replacements = calculateReplacementInteger(size, getPrimeNumber(size));
         List<Integer> shifts = new ArrayList<Integer>();
 
         if (numColumns.size() == 1) {
             adjustReplacements(replacements);
-            for (int row = 0; row < rows.size(); row++) {
+            for (int row = 0; row < size; row++) {
                 for (int column : numColumns.get(0)) {
                     rowList.get(rows.get(row).rIndex).set(column, rows.get(replacements.get(row)).rItems.get(column));
                 }
             }
         } else {
             for (int group = 0; group < numColumns.size(); group++) {
-                int shift = getShift(shifts, rows.size());
+                int shift = getShift(shifts, size);
                 shifts.add(shift);
-                for (int row = 0; row < rows.size(); row++) {
-                    int replacement = replacements.get((row + shift) % rows.size());
+                for (int row = 0; row < size; row++) {
+                    int replacement = replacements.get((row + shift) % size);
 
                     List<Object> aux = rowList.get(rows.get(row).rIndex);
                     List<Object> auxRow = rows.get(replacement).rItems;
@@ -249,12 +250,17 @@ public class ShuffleColumn {
     }
 
     /**
-     * Gets a prime number.
+     * Gets a prime number, prime with size.
      * 
-     * @return a prime number
+     * @param size
+     * @return a prime number with size
      */
-    protected int getPrimeNumber() {
-        return PRIME_NUMBERS[random.nextInt(PRIME_NUMBERS.length)];
+    protected int getPrimeNumber(int size) {
+        int res = PRIME_NUMBERS[random.nextInt(PRIME_NUMBERS.length)];
+        // --- This condition will almost never be satisfied
+        while (size % res == 0)
+            res = PRIME_NUMBERS[random.nextInt(PRIME_NUMBERS.length)];
+        return res;
     }
 
     /**
