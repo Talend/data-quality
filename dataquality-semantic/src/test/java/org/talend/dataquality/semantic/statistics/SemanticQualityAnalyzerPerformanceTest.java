@@ -12,19 +12,18 @@ import java.util.Random;
 import java.util.Set;
 
 import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.Analyzers;
-import org.talend.dataquality.common.inference.Analyzers.Result;
 import org.talend.dataquality.common.inference.ValueQualityStatistics;
+import org.talend.dataquality.common.inference.Analyzers.Result;
 import org.talend.dataquality.semantic.index.utils.DictionaryGenerationSpec;
 import org.talend.dataquality.semantic.index.utils.SemanticDictionaryGenerator;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
-
-import com.talend.csv.CSVWriter;
 
 public class SemanticQualityAnalyzerPerformanceTest {
 
@@ -143,8 +142,7 @@ public class SemanticQualityAnalyzerPerformanceTest {
             final String projectRoot = new File(resourcePath).getParentFile().getParentFile().getParentFile().getParentFile()
                     .getParentFile().getParentFile().getParentFile().getParentFile().getPath() + File.separator;
             File f = new File(projectRoot + BIG_FILE_PATH);
-            CSVWriter writer = new CSVWriter(new FileWriter(f));
-            writer.setSeparator(';');
+            CSVPrinter writer = new CSVPrinter(new FileWriter(f), CSVFormat.DEFAULT.withDelimiter(';'));
             List<String[]> records = new ArrayList<>();
             Random randomGenerator = new Random();
             for (int i = 0; i < RECORD_LINES_NUMBER; i++) {
@@ -157,7 +155,9 @@ public class SemanticQualityAnalyzerPerformanceTest {
                     records.get(i)[j] = file.get(randomGenerator.nextInt(file.size()));
                 }
             }
-            writer.writeAll(records);
+            for (String[] record : records)
+                writer.printRecord(record);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
