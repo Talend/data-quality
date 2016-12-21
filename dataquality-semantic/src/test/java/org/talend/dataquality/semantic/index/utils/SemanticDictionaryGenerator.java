@@ -69,7 +69,7 @@ public class SemanticDictionaryGenerator {
         reader.close();
     }
 
-    protected List<Set<String>> getDictionaryForCategory(Iterable<CSVRecord> records, DictionaryGenerationSpec spec) {
+    public static List<Set<String>> getDictionaryForCategory(Iterable<CSVRecord> records, DictionaryGenerationSpec spec) {
         List<Set<String>> results = new ArrayList<Set<String>>();
         final int[] columnsToIndex = spec.getColumnsToIndex();
         final CategoryOptimizer optimizer = spec.getOptimizer();
