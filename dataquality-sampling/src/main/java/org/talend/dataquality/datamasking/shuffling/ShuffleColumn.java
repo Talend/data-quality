@@ -256,10 +256,10 @@ public class ShuffleColumn {
      * @return a prime number with size
      */
     protected int getPrimeNumber(int size) {
-        int res = PRIME_NUMBERS[random.nextInt(PRIME_NUMBERS.length)];
-        // --- This condition will almost never be satisfied
-        while (size % res == 0)
+        int res;
+        do {
             res = PRIME_NUMBERS[random.nextInt(PRIME_NUMBERS.length)];
+        } while (size % res == 0);
         return res;
     }
 
