@@ -13,7 +13,9 @@
 package org.talend.dataquality.semantic.statistics;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.talend.dataquality.common.inference.Analyzer;
@@ -23,9 +25,11 @@ import org.talend.dataquality.common.inference.ValueQualityStatistics;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.classifier.ISubCategoryClassifier;
 import org.talend.dataquality.semantic.classifier.impl.DataDictFieldClassifier;
+import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizer;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
+import org.talend.dataquality.semantic.recognizer.LFUCache;
 
 /**
  * created by talend on 2015-07-28 Detailled comment.
@@ -38,6 +42,8 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
     private static final Logger LOG = Logger.getLogger(SemanticQualityAnalyzer.class);
 
     private final ResizableList<ValueQualityStatistics> results = new ResizableList<>(ValueQualityStatistics.class);
+
+    private final Map<String, LFUCache<String, Boolean>> knownValidationCategoryCache = new HashMap<>();
 
     private ISubCategoryClassifier regexClassifier;
 
@@ -112,25 +118,14 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
         return true;
     }
 
-    private void analyzeValue(String semanticType, String value, ValueQualityStatistics valueQuality) {
-        DQCategory cat = CategoryRegistryManager.getInstance().getCategoryMetadataByName(semanticType);
+    private void analyzeValue(String catName, String value, ValueQualityStatistics valueQuality) {
+        DQCategory cat = CategoryRegistryManager.getInstance().getCategoryMetadataByName(catName);
         if (cat == null) {
             valueQuality.incrementValid();
             return;
         }
         if (cat.getCompleteness() != null && cat.getCompleteness().booleanValue()) {
-            boolean validCat = false;
-            switch (cat.getType()) {
-            case REGEX:
-                validCat = regexClassifier.validCategory(value, semanticType);
-                break;
-            case DICT:
-                validCat = dataDictClassifier.validCategory(value, semanticType);
-                break;
-            default:
-                break;
-            }
-            if (validCat) {
+            if (isValid(catName, cat.getType(), value)) {
                 valueQuality.incrementValid();
             } else {
                 valueQuality.incrementInvalid();
@@ -139,6 +134,33 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
         } else {
             valueQuality.incrementValid();
         }
+    }
+
+    private boolean isValid(String catName, CategoryType catType, String value) {
+        LFUCache<String, Boolean> categoryCache = knownValidationCategoryCache.get(catName);
+
+        if (categoryCache == null) {
+            categoryCache = new LFUCache<String, Boolean>(10, 1000, 0.01f);
+            knownValidationCategoryCache.put(catName, categoryCache);
+        } else {
+            final Boolean isValid = categoryCache.get(value);
+            if (isValid != null) {
+                return isValid;
+            }
+        }
+        boolean validCat = false;
+        switch (catType) {
+        case REGEX:
+            validCat = regexClassifier.validCategory(value, catName);
+            break;
+        case DICT:
+            validCat = dataDictClassifier.validCategory(value, catName);
+            break;
+        default:
+            break;
+        }
+        categoryCache.put(value, validCat);
+        return validCat;
     }
 
     private void processInvalidValue(ValueQualityStatistics valueQuality, String invalidValue) {
