@@ -94,6 +94,8 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
 
         // else
         for (ISubCategory classifier : potentialSubCategories) {
+            if (!semanticType.equals(classifier.getName()))
+                continue;
             // if the MainCategory is different, ignor it and continue;AlphaNumeric rule should contain pure Alpha and
             // Numeric.
             UserDefinedCategory userDefCat = (UserDefinedCategory) classifier;
@@ -101,28 +103,28 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
 
             if (mainCategory == MainCategory.Alpha) {
                 if (classifierCategory != MainCategory.Alpha && classifierCategory != MainCategory.AlphaNumeric) {
-                    continue;
+                    break;
                 }
             } else if (mainCategory == MainCategory.Numeric) {
                 if (classifierCategory != MainCategory.Numeric && classifierCategory != MainCategory.AlphaNumeric) {
-                    continue;
+                    break;
                 }
             } else if (classifierCategory != mainCategory) {
-                continue;
+                break;
             }
 
             ISemanticFilter filter = classifier.getFilter();
 
             if (filter != null) {
                 if (!filter.isQualified(str)) {
-                    continue;
+                    break;
                 }
             }
             ISemanticValidator validator = classifier.getValidator();
             if (validator != null && validator.isValid(str)) {
-                if (semanticType.equals(classifier.getName()))
-                    return true;
+                return true;
             }
+            break;
         }
         return false;
     }
