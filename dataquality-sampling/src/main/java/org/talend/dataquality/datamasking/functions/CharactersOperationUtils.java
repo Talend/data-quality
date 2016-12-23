@@ -6,14 +6,14 @@ import org.apache.commons.lang.StringUtils;
 
 public final class CharactersOperationUtils {
 
-    private CharactersOperationUtils() {
-    }
-
     protected static final Pattern patternNumber = Pattern.compile("[0-9]+");
 
     protected static final Pattern patternCharacter = Pattern.compile(".");
 
     protected static final Pattern patternDigit = Pattern.compile("[0-9]");
+
+    private CharactersOperationUtils() {
+    }
 
     private static final boolean factorise(String[] parameters, int length, Pattern pattern) {
         return parameters.length == length && pattern.matcher(parameters[length - 1]).matches();

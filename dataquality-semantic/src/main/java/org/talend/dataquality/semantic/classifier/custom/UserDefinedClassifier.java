@@ -24,7 +24,6 @@ import org.talend.dataquality.semantic.validator.ISemanticValidator;
 
 /**
  * created by talend on 2015-07-28 Detailled comment.
- *
  */
 public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
 
@@ -88,50 +87,20 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
     private boolean validCategory(String str, MainCategory mainCategory, String semanticType) {
 
         if (mainCategory == MainCategory.UNKNOWN || mainCategory == MainCategory.NULL || mainCategory == MainCategory.BLANK) {
-            // FIXME return UNKNOWN instead of EMPTY as the category ID, require synchronization with dataprep team
-            return semanticType.equals(SemanticCategoryEnum.UNKNOWN.getId());
+            return false;
         }
 
-        // else
         for (ISubCategory classifier : potentialSubCategories) {
-            if (!semanticType.equals(classifier.getName()))
-                continue;
-            // if the MainCategory is different, ignor it and continue;AlphaNumeric rule should contain pure Alpha and
-            // Numeric.
-            UserDefinedCategory userDefCat = (UserDefinedCategory) classifier;
-            MainCategory classifierCategory = userDefCat.getMainCategory();
-
-            if (mainCategory == MainCategory.Alpha) {
-                if (classifierCategory != MainCategory.Alpha && classifierCategory != MainCategory.AlphaNumeric) {
-                    break;
-                }
-            } else if (mainCategory == MainCategory.Numeric) {
-                if (classifierCategory != MainCategory.Numeric && classifierCategory != MainCategory.AlphaNumeric) {
-                    break;
-                }
-            } else if (classifierCategory != mainCategory) {
-                break;
+            if (semanticType.equals(classifier.getName())) {
+                return isValid(str, mainCategory, (UserDefinedCategory) classifier);
             }
-
-            ISemanticFilter filter = classifier.getFilter();
-
-            if (filter != null) {
-                if (!filter.isQualified(str)) {
-                    break;
-                }
-            }
-            ISemanticValidator validator = classifier.getValidator();
-            if (validator != null && validator.isValid(str)) {
-                return true;
-            }
-            break;
         }
         return false;
     }
 
     /**
      * TODO check javadoc
-     *
+     * <p>
      * classify data into Semantic Category IDs
      * <p/>
      * Validate this input data to adapt which customized rules.
@@ -139,7 +108,7 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
      * Actually, the main category can be calculated based on the input string, but this method has better performance
      * in case the mainCategory is already calculated previously.
      *
-     * @param str is input data
+     * @param str           is input data
      * @param mainCategory: the MainCategory is computed by the input data
      * @return
      */
@@ -151,37 +120,35 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
             return catSet;
         }
 
-        // else
         for (ISubCategory classifier : potentialSubCategories) {
-            // if the MainCategory is different, ignor it and continue;AlphaNumeric rule should contain pure Alpha and
-            // Numeric.
-            UserDefinedCategory userDefCat = (UserDefinedCategory) classifier;
-            MainCategory classifierCategory = userDefCat.getMainCategory();
-
-            if (mainCategory == MainCategory.Alpha) {
-                if (classifierCategory != MainCategory.Alpha && classifierCategory != MainCategory.AlphaNumeric) {
-                    continue;
-                }
-            } else if (mainCategory == MainCategory.Numeric) {
-                if (classifierCategory != MainCategory.Numeric && classifierCategory != MainCategory.AlphaNumeric) {
-                    continue;
-                }
-            } else if (classifierCategory != mainCategory) {
-                continue;
-            }
-
-            ISemanticFilter filter = classifier.getFilter();
-
-            if (filter != null) {
-                if (!filter.isQualified(str)) {
-                    continue;
-                }
-            }
-            ISemanticValidator validator = classifier.getValidator();
-            if (validator != null && validator.isValid(str)) {
+            if (isValid(str, mainCategory, (UserDefinedCategory) classifier))
                 catSet.add(classifier.getName());
-            }
         }
         return catSet;
+
     }
+
+    private boolean isValid(String str, MainCategory mainCategory, UserDefinedCategory classifier) {
+        MainCategory classifierCategory = ((UserDefinedCategory) classifier).getMainCategory();
+        // if the MainCategory is different, ignor it and continue;AlphaNumeric rule should contain pure Alpha and
+        // Numeric.
+        if (mainCategory == MainCategory.Alpha || mainCategory == MainCategory.Numeric) {
+            if (classifierCategory != mainCategory && classifierCategory != MainCategory.AlphaNumeric)
+                return false;
+        } else if (classifierCategory != mainCategory)
+            return false;
+        if (invalidFilter(str, classifier.getFilter()))
+            return false;
+        return validValidator(str, classifier.getValidator());
+
+    }
+
+    private boolean invalidFilter(String str, ISemanticFilter filter) {
+        return (filter != null && !filter.isQualified(str));
+    }
+
+    private boolean validValidator(String str, ISemanticValidator validator) {
+        return (validator != null && validator.isValid(str));
+    }
+
 }

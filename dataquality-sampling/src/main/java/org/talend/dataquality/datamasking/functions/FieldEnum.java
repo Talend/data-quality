@@ -14,6 +14,8 @@ package org.talend.dataquality.datamasking.functions;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 /**
  * @author jteuladedenantes
  * 
@@ -22,6 +24,8 @@ import java.util.List;
 public class FieldEnum extends AbstractField {
 
     private static final long serialVersionUID = 4434958606928963578L;
+
+    private static final Logger LOGGER = Logger.getLogger(FieldEnum.class);
 
     /**
      * The exhaustive list of values
@@ -32,8 +36,7 @@ public class FieldEnum extends AbstractField {
         this.length = length;
         for (String value : enumValues)
             if (value.length() != length) {
-                // TODO
-                // Error in the field constructor
+                LOGGER.error("The field <" + value + "> with a length = " + value.length() + " should have a length = " + length);
                 return;
             }
         this.enumValues = enumValues;

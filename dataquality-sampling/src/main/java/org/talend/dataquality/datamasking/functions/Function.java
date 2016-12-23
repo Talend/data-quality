@@ -62,6 +62,7 @@ public abstract class Function<T> implements Serializable {
      * The RandomWrapper.
      * @deprecated use {@link setRandom()} instead
      */
+    @Deprecated
     public void setRandomWrapper(Random rand) {
         setRandom(rand);
     }
@@ -127,26 +128,18 @@ public abstract class Function<T> implements Serializable {
     public void parse(String extraParameter, boolean keepNullValues, Random rand) {
         if (extraParameter != null) {
             parameters = clean(extraParameter).split(","); //$NON-NLS-1$
-            if (parameters.length == 1) { // check if it's a path to a readable
-                                              // file
+            if (parameters.length == 1) { // check if it's a path to a readable file
                 try {
                     List<String> aux = KeysLoader.loadKeys(parameters[0].trim());
-                    parameters = new String[aux.size()];
-                    int i = 0;
-                    for (String str : aux)
-                        parameters[i++] = str.trim();
-                } catch (IOException | NullPointerException e2) { // otherwise,
-                                                                      // we just
-                                                                  // get the
-                                                                  // parameter
+                    parameters = aux.toArray(new String[aux.size()]);
+                } catch (IOException | NullPointerException e2) { // otherwise, we just get the parameter
                     LOGGER.debug("The parameter is not a path to a file.");
                     LOGGER.debug(e2);
-                    parameters[0] = parameters[0].trim();
                 }
-            } else {
-                for (int i = 0; i < parameters.length; i++)
-                    parameters[i] = parameters[i].trim();
             }
+            for (int i = 0; i < parameters.length; i++)
+                parameters[i] = parameters[i].trim();
+
         }
         setKeepNull(keepNullValues);
         if (rand != null) {
@@ -168,10 +161,9 @@ public abstract class Function<T> implements Serializable {
             return null;
         }
 
-        if (t != null && keeEmpty) {
-            if (String.valueOf(t).trim().isEmpty())
-                return t;
-        }
+        if (t != null && keeEmpty && String.valueOf(t).trim().isEmpty())
+            return t;
+
         return doGenerateMaskedField(t);
     }
 
