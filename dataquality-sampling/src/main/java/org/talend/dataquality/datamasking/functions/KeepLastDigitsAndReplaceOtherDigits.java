@@ -17,38 +17,21 @@ public class KeepLastDigitsAndReplaceOtherDigits extends Function<String> {
 
     @Override
     protected String doGenerateMaskedField(String str) {
-        if (str != null && !EMPTY_STRING.equals(str) && integerParam >= 0) {
-            String s = str.trim();
-            StringBuilder sb = new StringBuilder(EMPTY_STRING);
-            if (integerParam > s.length()) {
-                return str;
-            }
-            if (integerParam < s.length()) {
-                StringBuilder end = new StringBuilder(EMPTY_STRING);
-                for (int i = s.length() - 1; i >= s.length() - integerParam; --i) {
-                    if (i < 0) {
-                        break;
-                    }
-                    end.append(s.charAt(i));
-                    if (!Character.isDigit(s.charAt(i))) {
-                        integerParam++;
-                    }
-                }
-                for (int i = 0; i < s.length() - integerParam; ++i) {
-                    if (i < 0) {
-                        break;
-                    }
-                    if (Character.isDigit(s.charAt(i))) {
-                        sb.append(rnd.nextInt(9));
-                    } else {
-                        sb.append(s.charAt(i));
-                    }
-                }
-                sb.append(end.reverse());
-                return sb.toString();
+        if (integerParam < 0)
+            return EMPTY_STRING;
+        if (integerParam >= str.trim().length())
+            return str;
+        int totalDigit = 0;
+        StringBuilder sb = new StringBuilder(str.trim());
+        for (int i = sb.length() - 1; i >= 0; i--) {
+            if (Character.isDigit(sb.charAt(i))) {
+                if (integerParam > totalDigit)
+                    totalDigit++;
+                else
+                    sb.setCharAt(i, Character.forDigit(rnd.nextInt(9), 10));
             }
         }
-        return EMPTY_STRING;
+        return sb.toString();
     }
 
 }

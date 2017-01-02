@@ -18,32 +18,22 @@ public class KeepFirstDigitsAndReplaceOtherDigits extends Function<String> {
 
     @Override
     protected String doGenerateMaskedField(String str) {
-        StringBuilder sb = new StringBuilder(EMPTY_STRING);
-        if (str != null && !EMPTY_STRING.equals(str) && integerParam >= 0) {
-            String s = str.trim();
-            int totalDigit = 0;
-            for (int i = 0; i < s.length(); ++i) {
-                if (Character.isDigit(s.charAt(i))) {
+        if (integerParam < 0)
+            return EMPTY_STRING;
+
+        if (integerParam >= str.trim().length())
+            return str;
+        int totalDigit = 0;
+        StringBuilder sb = new StringBuilder(str.trim());
+        for (int i = 0; i < sb.length(); i++) {
+            if (Character.isDigit(sb.charAt(i))) {
+                if (integerParam > totalDigit)
                     totalDigit++;
-                }
-            }
-            if (integerParam > totalDigit) {
-                return str;
-            }
-            for (int i = 0; i < integerParam; ++i) {
-                sb.append(s.charAt(i));
-                if (!Character.isDigit(s.charAt(i))) {
-                    integerParam++;
-                }
-            }
-            for (int i = integerParam; i < s.length(); ++i) {
-                if (Character.isDigit(s.charAt(i))) {
-                    sb.append(rnd.nextInt(9));
-                } else {
-                    sb.append(s.charAt(i));
-                }
+                else
+                    sb.setCharAt(i, Character.forDigit(rnd.nextInt(9), 10));
             }
         }
+
         return sb.toString();
     }
 
