@@ -19,8 +19,10 @@ public class KeepLastDigitsAndReplaceOtherDigits extends Function<String> {
     protected String doGenerateMaskedField(String str) {
         if (integerParam < 0)
             return EMPTY_STRING;
-        if (integerParam >= str.trim().length())
+
+        if (str == null || integerParam >= str.trim().length())
             return str;
+
         int totalDigit = 0;
         StringBuilder sb = new StringBuilder(str.trim());
         for (int i = sb.length() - 1; i >= 0; i--) {

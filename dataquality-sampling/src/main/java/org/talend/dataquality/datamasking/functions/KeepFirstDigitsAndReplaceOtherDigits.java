@@ -21,8 +21,9 @@ public class KeepFirstDigitsAndReplaceOtherDigits extends Function<String> {
         if (integerParam < 0)
             return EMPTY_STRING;
 
-        if (integerParam >= str.trim().length())
+        if (str == null || integerParam >= str.trim().length())
             return str;
+
         int totalDigit = 0;
         StringBuilder sb = new StringBuilder(str.trim());
         for (int i = 0; i < sb.length(); i++) {
