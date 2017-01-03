@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.core.LowerCaseFilter;
 import org.apache.lucene.analysis.miscellaneous.ASCIIFoldingFilter;
@@ -21,9 +22,7 @@ import org.apache.lucene.search.*;
  */
 public abstract class AbstractDictionarySearcher {
 
-    public abstract TopDocs searchDocumentBySynonym(String stringToSearch) throws IOException;
-
-    public abstract Document getDocument(int docNum);
+    private static final Logger LOGGER = Logger.getLogger(AbstractDictionarySearcher.class);
 
     public static final String F_ID = "docid";//$NON-NLS-1$
 
@@ -46,6 +45,10 @@ public abstract class AbstractDictionarySearcher {
     private static final int MAX_CHAR_COUNT_FOR_DICTIONARY_MATCH = 100;
 
     protected DictionarySearchMode searchMode = DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY;
+
+    public abstract TopDocs searchDocumentBySynonym(String stringToSearch) throws IOException;
+
+    public abstract Document getDocument(int docNum);
 
     /**
      * Method "setTopDocLimit" set the maximum number of documents to return after a search.
@@ -130,7 +133,7 @@ public abstract class AbstractDictionarySearcher {
             }
             result.close();
         } catch (IOException e) {
-            // do nothing
+            LOGGER.debug(e);
         }
         if (termList.size() == 1) { // require exact match when the input has only one token
             termList.clear();

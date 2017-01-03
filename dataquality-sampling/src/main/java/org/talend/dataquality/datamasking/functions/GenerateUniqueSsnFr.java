@@ -83,7 +83,7 @@ public class GenerateUniqueSsnFr extends AbstractGenerateUniqueSsn {
         List<String> departments = new ArrayList<String>();
         for (int department = 1; department <= 99; department++) {
             if (department < 10)
-                departments.add("0" + String.valueOf(department));
+                departments.add("0" + department);
             else if (department == 20) {
                 departments.add("2A");
                 departments.add("2B");

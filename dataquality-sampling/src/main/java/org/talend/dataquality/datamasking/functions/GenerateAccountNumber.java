@@ -101,7 +101,7 @@ public abstract class GenerateAccountNumber extends Function<String> {
     /**
      * This function generates an american account number.
      * 
-     * @param accountNumber The account number given in input.
+     * @param number The account number given in input.
      * @return An american account number, the nine first digits belonging to the original input and the others randomly
      * generated.
      */
@@ -117,7 +117,7 @@ public abstract class GenerateAccountNumber extends Function<String> {
     /**
      * This function checks if the account number is an American number account.
      * 
-     * @param accountNumber The account number given in input.
+     * @param number The account number given in input.
      * @return A boolean holding if the account number is correct or not.
      */
     protected boolean isAmericanAccount(String number) {
@@ -128,7 +128,7 @@ public abstract class GenerateAccountNumber extends Function<String> {
             }
         }
 
-        return ((3
+        return (3
                 * (Integer.parseInt(String.valueOf(accountNumber.charAt(0)))
                         + Integer.parseInt(String.valueOf(accountNumber.charAt(3)))
                         + Integer.parseInt(String.valueOf(accountNumber.charAt(6))))
@@ -138,7 +138,7 @@ public abstract class GenerateAccountNumber extends Function<String> {
                 + (Integer.parseInt(String.valueOf(accountNumber.charAt(2)))
                         + Integer.parseInt(String.valueOf(accountNumber.charAt(5)))
                         + Integer.parseInt(String.valueOf(accountNumber.charAt(8)))))
-                % 10 == 0);
+                % 10 == 0;
     }
 
     /**
@@ -161,21 +161,7 @@ public abstract class GenerateAccountNumber extends Function<String> {
             sb.append(rnd.nextInt(10));
         }
 
-        String sb2 = new String(sb);
-        sb2 = sb2.substring(4) + sb2.substring(0, 4);
-
-        StringBuilder numericAccountNumber = new StringBuilder();
-        for (int i = 0; i < sb2.length(); i++) {
-            numericAccountNumber.append(Character.getNumericValue(sb2.charAt(i)));
-        }
-
-        BigInteger ibanNumber = new BigInteger(numericAccountNumber.toString());
-        int check_digits = 98 - ibanNumber.mod(MOD97).intValue();
-
-        sb.setCharAt(2, Character.forDigit(check_digits / 10, 10));
-        sb.setCharAt(3, Character.forDigit(check_digits % 10, 10));
-
-        return sb;
+        return generateIbanLastPart(sb);
     }
 
     /**
@@ -220,7 +206,7 @@ public abstract class GenerateAccountNumber extends Function<String> {
             if (choice == 0) {
                 sb.append(String.valueOf(rnd.nextInt(10)));
             } else {
-                sb.append(new Character((char) (rnd.nextInt(26) + 'A')));
+                sb.append((char) (rnd.nextInt(26) + 'A'));
             }
         }
 
@@ -228,6 +214,10 @@ public abstract class GenerateAccountNumber extends Function<String> {
         sb.append(rib / 10);
         sb.append(rib % 10);
 
+        return generateIbanLastPart(sb);
+    }
+
+    private StringBuilder generateIbanLastPart(StringBuilder sb) {
         String sb2 = new String(sb);
         sb2 = sb2.substring(4) + sb2.substring(0, 4);
 
@@ -237,10 +227,11 @@ public abstract class GenerateAccountNumber extends Function<String> {
         }
 
         BigInteger ibanNumber = new BigInteger(numericAccountNumber.toString());
-        int check_digits = 98 - ibanNumber.mod(MOD97).intValue();
+        int checkDigits = 98 - ibanNumber.mod(MOD97).intValue();
 
-        sb.setCharAt(2, Character.forDigit(check_digits / 10, 10));
-        sb.setCharAt(3, Character.forDigit(check_digits % 10, 10));
+        sb.setCharAt(2, Character.forDigit(checkDigits / 10, 10));
+        sb.setCharAt(3, Character.forDigit(checkDigits % 10, 10));
+
         return sb;
     }
 

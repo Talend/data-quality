@@ -16,7 +16,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.talend.dataquality.semantic.classifier.ISubCategory;
-import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.classifier.impl.AbstractSubCategoryClassifier;
 import org.talend.dataquality.semantic.filter.ISemanticFilter;
 import org.talend.dataquality.semantic.recognizer.MainCategory;
@@ -85,21 +84,17 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
     }
 
     private boolean validCategory(String str, MainCategory mainCategory, String semanticType) {
-
-        if (mainCategory == MainCategory.UNKNOWN || mainCategory == MainCategory.NULL || mainCategory == MainCategory.BLANK) {
-            return false;
-        }
-
-        for (ISubCategory classifier : potentialSubCategories) {
-            if (semanticType.equals(classifier.getName())) {
-                return isValid(str, mainCategory, (UserDefinedCategory) classifier);
+        if (mainCategory != MainCategory.UNKNOWN && mainCategory != MainCategory.NULL && mainCategory != MainCategory.BLANK) {
+            for (ISubCategory classifier : potentialSubCategories) {
+                if (semanticType.equals(classifier.getName())) {
+                    return isValid(str, mainCategory, (UserDefinedCategory) classifier);
+                }
             }
         }
         return false;
     }
 
     /**
-     * TODO check javadoc
      * <p>
      * classify data into Semantic Category IDs
      * <p/>
@@ -108,28 +103,24 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
      * Actually, the main category can be calculated based on the input string, but this method has better performance
      * in case the mainCategory is already calculated previously.
      *
-     * @param str           is input data
+     * @param str is input data
      * @param mainCategory: the MainCategory is computed by the input data
      * @return
      */
     public Set<String> classify(String str, MainCategory mainCategory) {
         Set<String> catSet = new HashSet<>();
-        if (mainCategory == MainCategory.UNKNOWN || mainCategory == MainCategory.NULL || mainCategory == MainCategory.BLANK) {
-            // FIXME return UNKNOWN instead of EMPTY as the category ID, require synchronization with dataprep team
-            catSet.add(SemanticCategoryEnum.UNKNOWN.getId());
-            return catSet;
-        }
-
-        for (ISubCategory classifier : potentialSubCategories) {
-            if (isValid(str, mainCategory, (UserDefinedCategory) classifier))
-                catSet.add(classifier.getName());
+        if (mainCategory != MainCategory.UNKNOWN && mainCategory != MainCategory.NULL && mainCategory != MainCategory.BLANK) {
+            for (ISubCategory classifier : potentialSubCategories) {
+                if (isValid(str, mainCategory, (UserDefinedCategory) classifier))
+                    catSet.add(classifier.getName());
+            }
         }
         return catSet;
 
     }
 
     private boolean isValid(String str, MainCategory mainCategory, UserDefinedCategory classifier) {
-        MainCategory classifierCategory = ((UserDefinedCategory) classifier).getMainCategory();
+        MainCategory classifierCategory = classifier.getMainCategory();
         // if the MainCategory is different, ignor it and continue;AlphaNumeric rule should contain pure Alpha and
         // Numeric.
         if (mainCategory == MainCategory.Alpha || mainCategory == MainCategory.Numeric) {
@@ -144,11 +135,11 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
     }
 
     private boolean invalidFilter(String str, ISemanticFilter filter) {
-        return (filter != null && !filter.isQualified(str));
+        return filter != null && !filter.isQualified(str);
     }
 
     private boolean validValidator(String str, ISemanticValidator validator) {
-        return (validator != null && validator.isValid(str));
+        return validator != null && validator.isValid(str);
     }
 
 }
