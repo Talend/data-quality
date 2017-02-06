@@ -75,6 +75,17 @@ public class DictionaryUtils {
         doc.add(wordTermField);
         for (String value : values) {
             if (value != null) {
+                boolean containsControlChars = false;
+                for (char c : value.toCharArray()) {
+                    if (Character.isISOControl(c)) {
+                        containsControlChars = true;
+                    }
+                }
+                if (containsControlChars) {
+                    System.out.println("The value [" + value
+                            + "] contains at least one ISO control character and is not added to the index of " + word + ".");
+                    continue;
+                }
                 value = value.trim();
                 if (value.length() > 0 && !value.equals(tempWord)) {
                     List<String> tokens = DictionarySearcher.getTokensFromAnalyzer(value);
