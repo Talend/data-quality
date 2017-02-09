@@ -56,7 +56,7 @@ public class NumberService extends AbstractService {
                     continue;
                 }
 
-                if (max == null||min == null) {
+                if (max == null || min == null) {
                     max = value;
                     min = value;
                 } else {
@@ -111,8 +111,8 @@ public class NumberService extends AbstractService {
      */
     @Override
     public void init() {
-    	largestValueMap.clear();
-    	smallestValueMap.clear();
+        largestValueMap.clear();
+        smallestValueMap.clear();
     }
 
 }

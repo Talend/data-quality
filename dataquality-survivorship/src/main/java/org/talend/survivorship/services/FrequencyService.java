@@ -116,8 +116,8 @@ public class FrequencyService extends AbstractService {
      */
     @Override
     public void init() {
-    	frequencyMaps.clear();
-    	maxOccurence.clear();
+        frequencyMaps.clear();
+        maxOccurence.clear();
     }
 
 }

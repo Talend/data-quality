@@ -40,6 +40,9 @@
 
 		<dataquality.email.snapshot.version>1.1.0-SNAPSHOT</dataquality.email.snapshot.version>
 		<dataquality.email.released.version>1.0.6</dataquality.email.released.version>
+		
+		<dataquality.survivorship.snapshot.version>2.0.0-SNAPSHOT</dataquality.survivorship.snapshot.version>
+		<dataquality.survivorship.released.version>2.0.0</dataquality.survivorship.released.version>
 	</properties>
 
 	<modules>

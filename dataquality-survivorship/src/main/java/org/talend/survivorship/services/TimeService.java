@@ -109,8 +109,8 @@ public class TimeService extends AbstractService {
      */
     @Override
     public void init() {
-    	latestValueMap.clear();
-    	earliestValueMap.clear();
+        latestValueMap.clear();
+        earliestValueMap.clear();
     }
 
 }
