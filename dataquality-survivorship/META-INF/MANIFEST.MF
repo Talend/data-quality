@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Survivorship
-Bundle-SymbolicName: org.talend.survivorship
-Bundle-Version: 6.4.0.qualifier
+Bundle-Name: Survivorship runtime library
+Bundle-SymbolicName: org.talend.dataquality.survivorship
+Bundle-Version: 2.0.0.SNAPSHOT
 Bundle-ClassPath: .
 Bundle-Vendor: .Talend SA.
 Require-Bundle: org.drools.eclipse
@@ -10,4 +10,3 @@ Export-Package: org.talend.survivorship,
  org.talend.survivorship.model,
  org.talend.survivorship.services
 Eclipse-RegisterBuddy: org.drools.eclipse
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
