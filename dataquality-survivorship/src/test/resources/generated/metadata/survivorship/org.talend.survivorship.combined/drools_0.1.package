@@ -1,4 +1,4 @@
-package hermes 
+package org.talend.survivorship.combined 
 
 import java.util.Date
 import java.math.BigDecimal

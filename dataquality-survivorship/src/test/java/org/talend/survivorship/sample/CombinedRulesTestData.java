@@ -26,11 +26,11 @@ import org.talend.survivorship.model.RuleDefinition.Order;
 /**
  * Sample input data and result expectation for unit tests.
  */
-public final class HermesData {
+public final class CombinedRulesTestData {
 
     public static final String RULE_PATH = "src/test/resources/generated/";
 
-    public static final String PKG_NAME = "hermes";
+    public static final String PKG_NAME = "org.talend.survivorship.combined";
 
     public static final Object[][] SAMPLE_INPUT_1 = {
             { "1", "Internet", stringToDate("01/01/2016", "dd/MM/yyyy"), "test1@taland.com", "0123456789", "A", 2 },

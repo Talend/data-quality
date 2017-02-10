@@ -19,8 +19,6 @@ import org.talend.survivorship.model.Attribute;
 import org.talend.survivorship.model.DataSet;
 
 /**
- * TODO sizhao create a Junit for this class.
- * 
  * This is the frequency service to use in rules.
  */
 public class FrequencyService extends AbstractService {
@@ -39,8 +37,6 @@ public class FrequencyService extends AbstractService {
     HashMap<String, Integer> maxOccurence = new HashMap<String, Integer>();
 
     /**
-     * TODO sizhao document the input and returned values
-     * 
      * Put attribute values into the frequencyMap of a given column.
      * 
      * @param column

@@ -20,8 +20,6 @@ import org.talend.survivorship.model.DataSet;
 
 /**
  * Time Service to determine the latest, earliest value of a given column by predefined date format.
- * <p>
- * TODO complete Time Service
  */
 public class TimeService extends AbstractService {
 

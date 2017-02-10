@@ -18,51 +18,44 @@ import java.util.List;
 import java.util.Map;
 
 import org.talend.survivorship.SurvivorshipManager;
-import org.talend.survivorship.model.RuleDefinition;
 
 /**
  * This demo shows how to use the survivorship API in the component.
  */
-public class HermesRuntime {
+public class ComponentUsageDemo {
 
     private static SurvivorshipManager manager;
 
     public static void main(String[] args) {
-        run(HermesData.RULES_1, HermesData.SAMPLE_INPUT_1);
-        run(HermesData.RULES_2, HermesData.SAMPLE_INPUT_1);
-        run(HermesData.RULES_1, HermesData.SAMPLE_INPUT_2);
-        run(HermesData.RULES_2, HermesData.SAMPLE_INPUT_2);
-    }
 
-    public static void run(RuleDefinition[] ruleSet, Object[][] sampleInput) {
         // 1. Instantiate <code>SurvivorshipManager</code>.
-        manager = new SurvivorshipManager(HermesData.RULE_PATH, HermesData.PKG_NAME);
+        manager = new SurvivorshipManager(SampleData.RULE_PATH, SampleData.PKG_NAME);
 
         // 2. Add column informations and rule definitions.
-        for (String str : HermesData.COLUMNS.keySet()) {
-            manager.addColumn(str, HermesData.COLUMNS.get(str));
+        for (String str : SampleData.COLUMNS.keySet()) {
+            manager.addColumn(str, SampleData.COLUMNS.get(str));
         }
-        for (int i = 0; i < ruleSet.length; i++) {
-            manager.addRuleDefinition(ruleSet[i]);
+        for (int i = 0; i < SampleData.RULES.length; i++) {
+            manager.addRuleDefinition(SampleData.RULES[i]);
         }
 
         // 3. Initialize <code>KnowlegeBase</code>.
         manager.initKnowledgeBase();
 
         // 4. Run a new session for each group to merge.
-        manager.runSession(sampleInput);
+        manager.runSession(SampleData.SAMPLE_INPUT);
 
         // 5. Retrieve results
         List<HashSet<String>> conflicts = manager.getConflictList();
 
-        for (int i = 0; i < sampleInput.length; i++) {
-            System.out.print("Record " + i + " -> " + Arrays.asList(sampleInput[i]));
+        for (int i = 0; i < SampleData.SAMPLE_INPUT.length; i++) {
+            System.out.print("Record " + i + " -> " + Arrays.asList(SampleData.SAMPLE_INPUT[i]));
             System.out.println(conflicts.get(i));
         }
 
         Map<String, Object> survivors = manager.getSurvivorMap();
         System.out.println("\nSurvivors:");
-        for (String col : HermesData.COLUMNS.keySet()) {
+        for (String col : SampleData.COLUMNS.keySet()) {
             if (survivors.get(col) != null) {
                 System.out.println(col + " -> " + survivors.get(col));
             }

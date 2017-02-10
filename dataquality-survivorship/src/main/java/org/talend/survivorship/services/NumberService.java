@@ -19,8 +19,6 @@ import org.talend.survivorship.model.DataSet;
 
 /**
  * Service to determine the longest, shortest value, etc. of a given column.
- * <p>
- * TODO complete StringService
  */
 public class NumberService extends AbstractService {
 

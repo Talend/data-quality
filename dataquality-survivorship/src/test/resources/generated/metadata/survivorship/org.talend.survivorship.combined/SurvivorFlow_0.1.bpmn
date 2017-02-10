@@ -12,7 +12,7 @@
              xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
              xmlns:tns="http://www.jboss.org/drools">
 
-  <process processType="Private" isExecutable="true" id="hermes.SurvivorFlow" name="SurvivorFlow" >
+  <process processType="Private" isExecutable="true" id="org.talend.survivorship.combined.SurvivorFlow" name="SurvivorFlow" >
 
     <!-- nodes -->
     <startEvent id="_jbpm-unique-0" name="start"  isInterrupting="false">
@@ -45,7 +45,7 @@
   </process>
 
   <bpmndi:BPMNDiagram>
-    <bpmndi:BPMNPlane bpmnElement="hermes.SurvivorFlow" >
+    <bpmndi:BPMNPlane bpmnElement="org.talend.survivorship.combined.SurvivorFlow" >
       <bpmndi:BPMNShape bpmnElement="_jbpm-unique-0" >
         <dc:Bounds x="32" y="16" width="48" height="48" />
       </bpmndi:BPMNShape>

@@ -1,4 +1,4 @@
-package hermes 
+package org.talend.survivorship.combined 
 
 rule "EmRecent"
     no-loop true
