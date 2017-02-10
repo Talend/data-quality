@@ -55,6 +55,7 @@
 		<module>../dataquality-statistics</module>
 		<module>../dataquality-wordnet</module>
 		<module>../dataquality-email</module>
+		<module>../dataquality-survivorship</module>
 	</modules>
 
 	<dependencies>

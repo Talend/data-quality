@@ -1,0 +1,14 @@
+package org.talend.survivorship.sample 
+
+rule "HighScore"
+    no-loop true
+    dialect "mvel"
+    ruleflow-group "HighScoreGroup"
+when
+    $input : RecordIn( score > 0.95 )  
+then
+    dataset.survive( $input.TALEND_INTERNAL_ID, "score" );
+
+end
+
+

@@ -1,0 +1,13 @@
+package hermes 
+
+rule "EmFiliale"
+    no-loop true
+    dialect "mvel"
+    ruleflow-group "EmFilialeGroup"
+when
+    $input : RecordIn( filiale.equals("Internet") )  
+then
+    dataset.survive( $input.TALEND_INTERNAL_ID, "email", drools.getRule().getName());
+end
+
+

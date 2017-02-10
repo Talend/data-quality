@@ -1,0 +1,16 @@
+package org.talend.survivorship.sample 
+
+rule "MostCommonZip"
+    no-loop true
+    dialect "mvel"
+    ruleflow-group "MostCommonZipGroup"
+when
+    $input : RecordIn( dataset.isMostCommon( zip, "zip", true) )  
+then
+    dataset.survive( $input.TALEND_INTERNAL_ID, "zip" );
+    dataset.survive( $input.TALEND_INTERNAL_ID, "state" );
+    dataset.survive( $input.TALEND_INTERNAL_ID, "country" );
+
+end
+
+

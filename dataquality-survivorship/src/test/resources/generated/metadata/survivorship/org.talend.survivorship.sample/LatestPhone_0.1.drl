@@ -1,0 +1,15 @@
+package org.talend.survivorship.sample 
+
+rule "LatestPhone"
+    no-loop true
+    dialect "mvel"
+    ruleflow-group "LatestPhoneGroup"
+when
+    $input : RecordIn( dataset.isLatest( date, "date" ) )  
+then
+    dataset.survive( $input.TALEND_INTERNAL_ID, "date" );
+    dataset.survive( $input.TALEND_INTERNAL_ID, "phone" );
+
+end
+
+

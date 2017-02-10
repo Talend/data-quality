@@ -1,0 +1,20 @@
+package hermes 
+
+import java.util.Date
+import java.math.BigDecimal
+
+global org.talend.survivorship.model.DataSet dataset
+
+declare  RecordIn 
+
+    TALEND_INTERNAL_ID : int  
+    client : String  
+    filiale : String  
+    modif_date : java.util.Date  
+    email : String  
+    phone : String  
+    gid : String  
+    grp_size : int  
+end
+
+

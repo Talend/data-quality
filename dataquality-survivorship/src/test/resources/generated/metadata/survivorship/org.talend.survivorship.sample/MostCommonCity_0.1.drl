@@ -1,0 +1,14 @@
+package org.talend.survivorship.sample 
+
+rule "MostCommonCity"
+    no-loop true
+    dialect "mvel"
+    ruleflow-group "MostCommonCityGroup"
+when
+    $input : RecordIn( dataset.isMostCommon( city, "city", true) )  
+then
+    dataset.survive( $input.TALEND_INTERNAL_ID, "city" );
+
+end
+
+

@@ -18,7 +18,13 @@
 		    <artifactId>drools-core</artifactId>
 		    <version>6.2.0.Final</version>
 		</dependency>
-
+		
+       <dependency>
+          <groupId>org.jbpm</groupId>
+          <artifactId>jbpm-bpmn2</artifactId>
+          <version>6.2.0.Final</version>
+        </dependency>
+        
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>

@@ -1,0 +1,14 @@
+package org.talend.survivorship.sample 
+
+rule "LengthAcct"
+    no-loop true
+    dialect "mvel"
+    ruleflow-group "LengthAcctGroup"
+when
+    $input : RecordIn( acctname.length > 11 )  
+then
+    dataset.survive( $input.TALEND_INTERNAL_ID, "acctName" );
+
+end
+
+

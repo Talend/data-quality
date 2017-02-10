@@ -1,0 +1,13 @@
+package hermes 
+
+rule "EmRecent"
+    no-loop true
+    dialect "mvel"
+    ruleflow-group "EmRecentGroup"
+when
+    $input : RecordIn( dataset.isLatest( modif_date, "modif_date" ) )  
+then
+    dataset.survive( $input.TALEND_INTERNAL_ID, "email" ,drools.getRule().getName());
+end
+
+
