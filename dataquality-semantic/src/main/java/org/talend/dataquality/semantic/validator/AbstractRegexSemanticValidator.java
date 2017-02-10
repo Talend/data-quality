@@ -23,7 +23,7 @@ public abstract class AbstractRegexSemanticValidator implements ISemanticValidat
     protected Pattern pattern;
 
     public boolean isValid(String str) {
-        if (str == null) {
+        if (str == null || pattern == null) {
             return false;
         }
         return pattern.matcher(str.trim()).find();

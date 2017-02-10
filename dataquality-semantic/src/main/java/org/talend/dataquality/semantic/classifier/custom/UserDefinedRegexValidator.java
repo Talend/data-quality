@@ -102,7 +102,11 @@ public class UserDefinedRegexValidator extends AbstractRegexSemanticValidator {
             throw new RuntimeException("null argument of patternString is not allowed.");
         }
         this.patternString = patternString;
-        pattern = caseInsensitive ? Pattern.compile(patternString, Pattern.CASE_INSENSITIVE) : Pattern.compile(patternString);
+        try {
+            pattern = caseInsensitive ? Pattern.compile(patternString, Pattern.CASE_INSENSITIVE) : Pattern.compile(patternString);
+        } catch (IllegalArgumentException e) {
+            LOG.error("Invalid regular expression: " + this.patternString, e);
+        }
     }
 
     /*

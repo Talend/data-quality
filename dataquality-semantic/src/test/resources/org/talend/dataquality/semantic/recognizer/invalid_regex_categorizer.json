@@ -1,0 +1,16 @@
+{
+  "classifiers": [
+    {
+      "id": "1234",
+      "description": "the description",
+      "mainCategory": "AlphaNumeric",
+      "name": "CATEGORY_WITH_INVALID_REGEX",
+      "label": "Category with invalid regex",
+      "filter": null,
+      "validator": {
+        "patternString": "^(this is an invalid regex$",
+        "subValidatorClassName": null
+      }
+    }
+  ]
+}
