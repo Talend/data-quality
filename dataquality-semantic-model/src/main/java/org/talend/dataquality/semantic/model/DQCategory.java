@@ -52,6 +52,12 @@ public class DQCategory {
 
     private Boolean completeness;
 
+    private Boolean draft;
+
+    private Boolean published;
+
+    private Date lastPublished;
+
     public String getId() {
         return id;
     }
@@ -188,9 +194,26 @@ public class DQCategory {
         this.lastModifier = lastModifier;
     }
 
+    public Boolean getDraft() {
+        return draft;
+    }
+
+    public void setDraft(Boolean draft) {
+        this.draft = draft;
+    }
+
+    public Boolean getPublished() {
+        return published;
+    }
+
+    public void setPublished(Boolean published) {
+        this.published = published;
+    }
+
     public String toString() {
         return String.format(
-                "Category [ID=%s  Type=%s  Name=%-20s  Label=%-20s  Completeness=%-5s  Description=%s Creator=%s Last Modifier=%s]",
-                id, type, name, label, completeness, description, creator, lastModifier);
+                "Category [ID=%s  Type=%s  Name=%-20s  Label=%-20s  Completeness=%-5s  Description=%s Creator=%s Last Modifier=%s Draft=%-5s Published=%-5s Last published=%s]",
+                id, type, name, label, completeness, description, creator, lastModifier, draft, published, lastPublished);
     }
+
 }
