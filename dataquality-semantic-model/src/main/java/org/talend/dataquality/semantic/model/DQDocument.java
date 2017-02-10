@@ -29,6 +29,8 @@ public class DQDocument {
 
     private String lastModifier;
 
+    private Boolean draft;
+
     public String getId() {
         return id;
     }
@@ -77,9 +79,17 @@ public class DQDocument {
         this.lastModifier = lastModifier;
     }
 
+    public Boolean getDraft() {
+        return draft;
+    }
+
+    public void setDraft(Boolean draft) {
+        this.draft = draft;
+    }
+
     @Override
     public String toString() {
         return "DQDocument{" + "id='" + id + '\'' + ", categoryName=" + category.getName() + ", values='" + values + '\''
-                + ", creator='" + creator + '\'' + ", lastModifier='" + lastModifier + '\'' + '}';
+                + ", creator='" + creator + '\'' + ", lastModifier='" + lastModifier + '\'' + ", draft='" + draft + '\'' + '}';
     }
 }
