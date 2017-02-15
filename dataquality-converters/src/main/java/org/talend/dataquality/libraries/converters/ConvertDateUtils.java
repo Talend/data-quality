@@ -55,8 +55,8 @@ public final class ConvertDateUtils {
      * @return a outputChronologyType text with the outputFormatPattern. note: if can not parse the dateStr with the
      * inputFormatPattern, will return "".
      */
-    public static String ConvertDate(String dateStr, Chronology inputChronologyType, Chronology outputChronologyType) {
-        return ConvertDate(dateStr, DEFAULT_INPUT_PATTERN, DEFAULT_OUTPUT_PATTERN, inputChronologyType, outputChronologyType);
+    public static String convertDate(String dateStr, Chronology inputChronologyType, Chronology outputChronologyType) {
+        return convertDate(dateStr, DEFAULT_INPUT_PATTERN, DEFAULT_OUTPUT_PATTERN, inputChronologyType, outputChronologyType);
     }
 
     /**
@@ -70,7 +70,7 @@ public final class ConvertDateUtils {
      * @return a outputChronologyType text with the outputFormatPattern. note: if can not parse the dateStr with the
      * inputFormatPattern, will return "".
      */
-    public static String ConvertDate(String dateStr, String inputFormatPattern, String outputFormatPattern,
+    public static String convertDate(String dateStr, String inputFormatPattern, String outputFormatPattern,
             Chronology inputChronologyType, Chronology outputChronologyType) {
         if (dateStr == null || dateStr.trim().equals("")) { //$NON-NLS-1$
             return dateStr;
@@ -127,7 +127,8 @@ public final class ConvertDateUtils {
      *
      * @param localDate - the ISO date to convert and format.
      * @param chrono - an optional Chronology. If null, then IsoChronology is used.
-     * @param outputDateTimeFormatter - the output DateTimeFormatter.
+     * @param outputDateTimeFormatter - the output DateTimeFormatter. If null, then DateTimeFormatter.ofPattern("yyyy-MM-dd") is
+     * used.
      * @return string
      */
     public static String formatDateToString(LocalDate localDate, Chronology chrono, DateTimeFormatter outputDateTimeFormatter) {
@@ -136,6 +137,9 @@ public final class ConvertDateUtils {
             ChronoLocalDate cDate;
             if (chrono == null) {
                 chrono = IsoChronology.INSTANCE;
+            }
+            if (outputDateTimeFormatter == null) {
+                outputDateTimeFormatter = DateTimeFormatter.ofPattern(DEFAULT_OUTPUT_PATTERN);
             }
             try {
                 cDate = chrono.date(localDate);

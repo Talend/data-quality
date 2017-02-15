@@ -56,6 +56,7 @@
 		<module>../dataquality-wordnet</module>
 		<module>../dataquality-email</module>
 		<module>../dataquality-survivorship</module>
+		<module>../dataquality-converters</module>
 	</modules>
 
 	<dependencies>

@@ -89,128 +89,128 @@ public class ConvertDateUtilsTest {
 
     @Test
     public void TestConvertIsoDateTo() {
-        assertEquals(HijrahStr, ConvertDateUtils.ConvertDate(IsoStr, IsoChronology.INSTANCE, HijrahChronology.INSTANCE));
-        assertEquals(JapaneseStr, ConvertDateUtils.ConvertDate(IsoStr, IsoChronology.INSTANCE, JapaneseChronology.INSTANCE));
-        assertEquals(MinguoStr, ConvertDateUtils.ConvertDate(IsoStr, IsoChronology.INSTANCE, MinguoChronology.INSTANCE));
+        assertEquals(HijrahStr, ConvertDateUtils.convertDate(IsoStr, IsoChronology.INSTANCE, HijrahChronology.INSTANCE));
+        assertEquals(JapaneseStr, ConvertDateUtils.convertDate(IsoStr, IsoChronology.INSTANCE, JapaneseChronology.INSTANCE));
+        assertEquals(MinguoStr, ConvertDateUtils.convertDate(IsoStr, IsoChronology.INSTANCE, MinguoChronology.INSTANCE));
         assertEquals(ThaiBuddhistStr,
-                ConvertDateUtils.ConvertDate(IsoStr, IsoChronology.INSTANCE, ThaiBuddhistChronology.INSTANCE));
+                ConvertDateUtils.convertDate(IsoStr, IsoChronology.INSTANCE, ThaiBuddhistChronology.INSTANCE));
 
         assertEquals(IsoStr2,
-                ConvertDateUtils.ConvertDate(IsoStr, pattern, pattern2, IsoChronology.INSTANCE, IsoChronology.INSTANCE));
+                ConvertDateUtils.convertDate(IsoStr, pattern, pattern2, IsoChronology.INSTANCE, IsoChronology.INSTANCE));
         assertEquals(IsoStr3,
-                ConvertDateUtils.ConvertDate(IsoStr, pattern, pattern3, IsoChronology.INSTANCE, IsoChronology.INSTANCE));
+                ConvertDateUtils.convertDate(IsoStr, pattern, pattern3, IsoChronology.INSTANCE, IsoChronology.INSTANCE));
         assertEquals(IsoStr4,
-                ConvertDateUtils.ConvertDate(IsoStr, pattern, pattern4, IsoChronology.INSTANCE, IsoChronology.INSTANCE));
+                ConvertDateUtils.convertDate(IsoStr, pattern, pattern4, IsoChronology.INSTANCE, IsoChronology.INSTANCE));
         assertEquals(IsoStr5,
-                ConvertDateUtils.ConvertDate(IsoStr, pattern, pattern5, IsoChronology.INSTANCE, IsoChronology.INSTANCE));
+                ConvertDateUtils.convertDate(IsoStr, pattern, pattern5, IsoChronology.INSTANCE, IsoChronology.INSTANCE));
 
         assertEquals(HijrahStr1,
-                ConvertDateUtils.ConvertDate(IsoStr, pattern, pattern1, IsoChronology.INSTANCE, HijrahChronology.INSTANCE));
+                ConvertDateUtils.convertDate(IsoStr, pattern, pattern1, IsoChronology.INSTANCE, HijrahChronology.INSTANCE));
         assertEquals(HijrahStr1,
-                ConvertDateUtils.ConvertDate(IsoStr1, pattern1, pattern1, IsoChronology.INSTANCE, HijrahChronology.INSTANCE));
+                ConvertDateUtils.convertDate(IsoStr1, pattern1, pattern1, IsoChronology.INSTANCE, HijrahChronology.INSTANCE));
         assertEquals(HijrahStr,
-                ConvertDateUtils.ConvertDate(IsoStr1, pattern1, pattern, IsoChronology.INSTANCE, HijrahChronology.INSTANCE));
+                ConvertDateUtils.convertDate(IsoStr1, pattern1, pattern, IsoChronology.INSTANCE, HijrahChronology.INSTANCE));
         assertEquals(HijrahStr5,
-                ConvertDateUtils.ConvertDate(IsoStr1, pattern1, pattern5, IsoChronology.INSTANCE, HijrahChronology.INSTANCE));
+                ConvertDateUtils.convertDate(IsoStr1, pattern1, pattern5, IsoChronology.INSTANCE, HijrahChronology.INSTANCE));
 
         assertEquals(JapaneseStr1,
-                ConvertDateUtils.ConvertDate(IsoStr, pattern, pattern1, IsoChronology.INSTANCE, JapaneseChronology.INSTANCE));
+                ConvertDateUtils.convertDate(IsoStr, pattern, pattern1, IsoChronology.INSTANCE, JapaneseChronology.INSTANCE));
         assertEquals(JapaneseStr1,
-                ConvertDateUtils.ConvertDate(IsoStr1, pattern1, pattern1, IsoChronology.INSTANCE, JapaneseChronology.INSTANCE));
+                ConvertDateUtils.convertDate(IsoStr1, pattern1, pattern1, IsoChronology.INSTANCE, JapaneseChronology.INSTANCE));
         assertEquals(JapaneseStr,
-                ConvertDateUtils.ConvertDate(IsoStr1, pattern1, pattern, IsoChronology.INSTANCE, JapaneseChronology.INSTANCE));
+                ConvertDateUtils.convertDate(IsoStr1, pattern1, pattern, IsoChronology.INSTANCE, JapaneseChronology.INSTANCE));
 
         assertEquals(MinguoStr1,
-                ConvertDateUtils.ConvertDate(IsoStr, pattern, pattern1, IsoChronology.INSTANCE, MinguoChronology.INSTANCE));
+                ConvertDateUtils.convertDate(IsoStr, pattern, pattern1, IsoChronology.INSTANCE, MinguoChronology.INSTANCE));
         assertEquals(MinguoStr1,
-                ConvertDateUtils.ConvertDate(IsoStr1, pattern1, pattern1, IsoChronology.INSTANCE, MinguoChronology.INSTANCE));
+                ConvertDateUtils.convertDate(IsoStr1, pattern1, pattern1, IsoChronology.INSTANCE, MinguoChronology.INSTANCE));
         assertEquals(MinguoStr,
-                ConvertDateUtils.ConvertDate(IsoStr1, pattern1, pattern, IsoChronology.INSTANCE, MinguoChronology.INSTANCE));
+                ConvertDateUtils.convertDate(IsoStr1, pattern1, pattern, IsoChronology.INSTANCE, MinguoChronology.INSTANCE));
 
         assertEquals(ThaiBuddhistStr1,
-                ConvertDateUtils.ConvertDate(IsoStr, pattern, pattern1, IsoChronology.INSTANCE, ThaiBuddhistChronology.INSTANCE));
-        assertEquals(ThaiBuddhistStr1, ConvertDateUtils.ConvertDate(IsoStr1, pattern1, pattern1, IsoChronology.INSTANCE,
+                ConvertDateUtils.convertDate(IsoStr, pattern, pattern1, IsoChronology.INSTANCE, ThaiBuddhistChronology.INSTANCE));
+        assertEquals(ThaiBuddhistStr1, ConvertDateUtils.convertDate(IsoStr1, pattern1, pattern1, IsoChronology.INSTANCE,
                 ThaiBuddhistChronology.INSTANCE));
         assertEquals(ThaiBuddhistStr,
-                ConvertDateUtils.ConvertDate(IsoStr1, pattern1, pattern, IsoChronology.INSTANCE, ThaiBuddhistChronology.INSTANCE));
+                ConvertDateUtils.convertDate(IsoStr1, pattern1, pattern, IsoChronology.INSTANCE, ThaiBuddhistChronology.INSTANCE));
     }
 
     @Test
     public void TestConvertHijrahDateTo() {
-        assertEquals(IsoStr, ConvertDateUtils.ConvertDate(HijrahStr, HijrahChronology.INSTANCE, IsoChronology.INSTANCE));
-        assertEquals(JapaneseStr, ConvertDateUtils.ConvertDate(HijrahStr, HijrahChronology.INSTANCE, JapaneseChronology.INSTANCE));
-        assertEquals(MinguoStr, ConvertDateUtils.ConvertDate(HijrahStr, HijrahChronology.INSTANCE, MinguoChronology.INSTANCE));
+        assertEquals(IsoStr, ConvertDateUtils.convertDate(HijrahStr, HijrahChronology.INSTANCE, IsoChronology.INSTANCE));
+        assertEquals(JapaneseStr, ConvertDateUtils.convertDate(HijrahStr, HijrahChronology.INSTANCE, JapaneseChronology.INSTANCE));
+        assertEquals(MinguoStr, ConvertDateUtils.convertDate(HijrahStr, HijrahChronology.INSTANCE, MinguoChronology.INSTANCE));
         assertEquals(ThaiBuddhistStr,
-                ConvertDateUtils.ConvertDate(HijrahStr, HijrahChronology.INSTANCE, ThaiBuddhistChronology.INSTANCE));
+                ConvertDateUtils.convertDate(HijrahStr, HijrahChronology.INSTANCE, ThaiBuddhistChronology.INSTANCE));
 
-        assertEquals(JapaneseStr1, ConvertDateUtils.ConvertDate(HijrahStr, pattern, pattern1, HijrahChronology.INSTANCE,
+        assertEquals(JapaneseStr1, ConvertDateUtils.convertDate(HijrahStr, pattern, pattern1, HijrahChronology.INSTANCE,
                 JapaneseChronology.INSTANCE));
         assertEquals(MinguoStr,
-                ConvertDateUtils.ConvertDate(HijrahStr2, pattern6, pattern, HijrahChronology.INSTANCE, MinguoChronology.INSTANCE));
-        assertEquals(ThaiBuddhistStr5, ConvertDateUtils.ConvertDate(HijrahStr, pattern, pattern5, HijrahChronology.INSTANCE,
+                ConvertDateUtils.convertDate(HijrahStr2, pattern6, pattern, HijrahChronology.INSTANCE, MinguoChronology.INSTANCE));
+        assertEquals(ThaiBuddhistStr5, ConvertDateUtils.convertDate(HijrahStr, pattern, pattern5, HijrahChronology.INSTANCE,
                 ThaiBuddhistChronology.INSTANCE));
 
     }
 
     @Test
     public void TestConvertJapaneseDateTo() {
-        assertEquals(IsoStr, ConvertDateUtils.ConvertDate(JapaneseStr, JapaneseChronology.INSTANCE, IsoChronology.INSTANCE));
-        assertEquals(HijrahStr, ConvertDateUtils.ConvertDate(JapaneseStr, JapaneseChronology.INSTANCE, HijrahChronology.INSTANCE));
-        assertEquals(MinguoStr, ConvertDateUtils.ConvertDate(JapaneseStr, JapaneseChronology.INSTANCE, MinguoChronology.INSTANCE));
+        assertEquals(IsoStr, ConvertDateUtils.convertDate(JapaneseStr, JapaneseChronology.INSTANCE, IsoChronology.INSTANCE));
+        assertEquals(HijrahStr, ConvertDateUtils.convertDate(JapaneseStr, JapaneseChronology.INSTANCE, HijrahChronology.INSTANCE));
+        assertEquals(MinguoStr, ConvertDateUtils.convertDate(JapaneseStr, JapaneseChronology.INSTANCE, MinguoChronology.INSTANCE));
         assertEquals(ThaiBuddhistStr,
-                ConvertDateUtils.ConvertDate(JapaneseStr, JapaneseChronology.INSTANCE, ThaiBuddhistChronology.INSTANCE));
+                ConvertDateUtils.convertDate(JapaneseStr, JapaneseChronology.INSTANCE, ThaiBuddhistChronology.INSTANCE));
 
-        assertEquals(MinguoStr5, ConvertDateUtils.ConvertDate(JapaneseStr4, pattern4, pattern5, JapaneseChronology.INSTANCE,
+        assertEquals(MinguoStr5, ConvertDateUtils.convertDate(JapaneseStr4, pattern4, pattern5, JapaneseChronology.INSTANCE,
                 MinguoChronology.INSTANCE));
-        assertEquals(MinguoStr5, ConvertDateUtils.ConvertDate(JapaneseStr, pattern, pattern5, JapaneseChronology.INSTANCE,
+        assertEquals(MinguoStr5, ConvertDateUtils.convertDate(JapaneseStr, pattern, pattern5, JapaneseChronology.INSTANCE,
                 MinguoChronology.INSTANCE));
     }
 
     @Test
     public void TestConvertMinguoDateTo() {
-        assertEquals(IsoStr, ConvertDateUtils.ConvertDate(MinguoStr, MinguoChronology.INSTANCE, IsoChronology.INSTANCE));
-        assertEquals(HijrahStr, ConvertDateUtils.ConvertDate(MinguoStr, MinguoChronology.INSTANCE, HijrahChronology.INSTANCE));
-        assertEquals(JapaneseStr, ConvertDateUtils.ConvertDate(MinguoStr, MinguoChronology.INSTANCE, JapaneseChronology.INSTANCE));
+        assertEquals(IsoStr, ConvertDateUtils.convertDate(MinguoStr, MinguoChronology.INSTANCE, IsoChronology.INSTANCE));
+        assertEquals(HijrahStr, ConvertDateUtils.convertDate(MinguoStr, MinguoChronology.INSTANCE, HijrahChronology.INSTANCE));
+        assertEquals(JapaneseStr, ConvertDateUtils.convertDate(MinguoStr, MinguoChronology.INSTANCE, JapaneseChronology.INSTANCE));
         assertEquals(ThaiBuddhistStr,
-                ConvertDateUtils.ConvertDate(MinguoStr, MinguoChronology.INSTANCE, ThaiBuddhistChronology.INSTANCE));
+                ConvertDateUtils.convertDate(MinguoStr, MinguoChronology.INSTANCE, ThaiBuddhistChronology.INSTANCE));
 
-        assertEquals(JapaneseStr5, ConvertDateUtils.ConvertDate(MinguoStr, pattern, pattern5, MinguoChronology.INSTANCE,
+        assertEquals(JapaneseStr5, ConvertDateUtils.convertDate(MinguoStr, pattern, pattern5, MinguoChronology.INSTANCE,
                 JapaneseChronology.INSTANCE));
     }
 
     @Test
     public void TestConvertThaiBuddhistDateTo() {
         assertEquals(IsoStr,
-                ConvertDateUtils.ConvertDate(ThaiBuddhistStr, ThaiBuddhistChronology.INSTANCE, IsoChronology.INSTANCE));
+                ConvertDateUtils.convertDate(ThaiBuddhistStr, ThaiBuddhistChronology.INSTANCE, IsoChronology.INSTANCE));
         assertEquals(HijrahStr,
-                ConvertDateUtils.ConvertDate(ThaiBuddhistStr, ThaiBuddhistChronology.INSTANCE, HijrahChronology.INSTANCE));
+                ConvertDateUtils.convertDate(ThaiBuddhistStr, ThaiBuddhistChronology.INSTANCE, HijrahChronology.INSTANCE));
         assertEquals(JapaneseStr,
-                ConvertDateUtils.ConvertDate(ThaiBuddhistStr, ThaiBuddhistChronology.INSTANCE, JapaneseChronology.INSTANCE));
+                ConvertDateUtils.convertDate(ThaiBuddhistStr, ThaiBuddhistChronology.INSTANCE, JapaneseChronology.INSTANCE));
         assertEquals(MinguoStr,
-                ConvertDateUtils.ConvertDate(ThaiBuddhistStr, ThaiBuddhistChronology.INSTANCE, MinguoChronology.INSTANCE));
+                ConvertDateUtils.convertDate(ThaiBuddhistStr, ThaiBuddhistChronology.INSTANCE, MinguoChronology.INSTANCE));
 
-        assertEquals(IsoStr5, ConvertDateUtils.ConvertDate(ThaiBuddhistStr, pattern, pattern5, ThaiBuddhistChronology.INSTANCE,
+        assertEquals(IsoStr5, ConvertDateUtils.convertDate(ThaiBuddhistStr, pattern, pattern5, ThaiBuddhistChronology.INSTANCE,
                 IsoChronology.INSTANCE));
     }
 
     @Test
     public void TestSpecialCases() {
         // test when the input is blank
-        assertEquals("", ConvertDateUtils.ConvertDate("", HijrahChronology.INSTANCE, JapaneseChronology.INSTANCE)); //$NON-NLS-1$ //$NON-NLS-2$
-        assertEquals(" ", ConvertDateUtils.ConvertDate(" ", IsoChronology.INSTANCE, HijrahChronology.INSTANCE)); //$NON-NLS-1$ //$NON-NLS-2$
-        assertEquals(null, ConvertDateUtils.ConvertDate(null, HijrahChronology.INSTANCE, ThaiBuddhistChronology.INSTANCE));
+        assertEquals("", ConvertDateUtils.convertDate("", HijrahChronology.INSTANCE, JapaneseChronology.INSTANCE)); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals(" ", ConvertDateUtils.convertDate(" ", IsoChronology.INSTANCE, HijrahChronology.INSTANCE)); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals(null, ConvertDateUtils.convertDate(null, HijrahChronology.INSTANCE, ThaiBuddhistChronology.INSTANCE));
 
         // test when the input is not a date
-        assertEquals("aa", ConvertDateUtils.ConvertDate("aa", HijrahChronology.INSTANCE, HijrahChronology.INSTANCE)); //$NON-NLS-1$ //$NON-NLS-2$
-        assertEquals("", ConvertDateUtils.ConvertDate( //$NON-NLS-1$
+        assertEquals("aa", ConvertDateUtils.convertDate("aa", HijrahChronology.INSTANCE, HijrahChronology.INSTANCE)); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("", ConvertDateUtils.convertDate( //$NON-NLS-1$
                 "aa", pattern1, pattern, HijrahChronology.INSTANCE, HijrahChronology.INSTANCE)); //$NON-NLS-1$ 
 
         // test when the pattern is null
-        assertEquals(IsoStr5, ConvertDateUtils.ConvertDate(ThaiBuddhistStr, null, pattern5, ThaiBuddhistChronology.INSTANCE,
+        assertEquals(IsoStr5, ConvertDateUtils.convertDate(ThaiBuddhistStr, null, pattern5, ThaiBuddhistChronology.INSTANCE,
                 IsoChronology.INSTANCE));
-        assertEquals(IsoStr, ConvertDateUtils.ConvertDate(ThaiBuddhistStr, pattern, null, ThaiBuddhistChronology.INSTANCE,
+        assertEquals(IsoStr, ConvertDateUtils.convertDate(ThaiBuddhistStr, pattern, null, ThaiBuddhistChronology.INSTANCE,
                 IsoChronology.INSTANCE));
-        assertEquals(IsoStr, ConvertDateUtils.ConvertDate(ThaiBuddhistStr, null, null, ThaiBuddhistChronology.INSTANCE,
+        assertEquals(IsoStr, ConvertDateUtils.convertDate(ThaiBuddhistStr, null, null, ThaiBuddhistChronology.INSTANCE,
                 IsoChronology.INSTANCE));
     }
 
