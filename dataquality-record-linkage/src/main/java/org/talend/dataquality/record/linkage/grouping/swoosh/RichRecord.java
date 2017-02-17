@@ -67,7 +67,7 @@ public class RichRecord extends Record {
 
     private DQAttribute<String> ATTRIBUTE_SCORE;
 
-    //TDQ-12659 : added for multipass. 
+    // TDQ-12659 : added for multipass.
     private boolean isGrpSizeNotUpdated = false;
 
     /**
@@ -96,8 +96,8 @@ public class RichRecord extends Record {
     }
 
     /**
-     * Sets the originRow. 
-     * when it contains the additional columns, move them out. 
+     * Sets the originRow.
+     * when it contains the additional columns, move them out.
      * 
      * @param originRow2 the originRow to set
      */
@@ -125,8 +125,9 @@ public class RichRecord extends Record {
             String gvalue = value3 instanceof Double ? String.valueOf(value3) : (String) value3;
             this.GRP_QUALITY = new DQAttribute<String>(SwooshConstants.GROUP_QUALITY, recordSize + 4, gvalue);
 
-            //get output details
-            if (originRow2.size() > recordSize + 5 && !isMasterInFrist) {//only the not master in the first match will contains output details
+            // get output details
+            if (originRow2.size() > recordSize + 5 && !isMasterInFrist) {// only the not master in the first match will contains
+                                                                             // output details
                 String details = originRow2.get(recordSize + 5).getValue();
                 this.setLabeledAttributeScores(details);
                 ATTRIBUTE_SCORE = new DQAttribute<>(SwooshConstants.ATTRIBUTE_SCORES, recordSize + 5,
@@ -383,7 +384,8 @@ public class RichRecord extends Record {
 
     /**
      * for the merged master rows from multipass, no need to add, only replace. Add one fixed output column: MERGE_INFO
-     * when there is original record from the 1st tmatchgroup, the EXT_SIZE should =7, if with details, should = 8. 
+     * when there is original record from the 1st tmatchgroup, the EXT_SIZE should =7, if with details, should = 8.
+     * 
      * @param oldGID2New
      * @param originalInputColumnSize
      * @return
@@ -402,7 +404,10 @@ public class RichRecord extends Record {
             // Update the matching key field by the merged attributes.
             List<Attribute> matchKeyAttrs = getAttributes();
             for (Attribute attribute : matchKeyAttrs) {
-                originRow.get(attribute.getColumnIndex()).setValue(attribute.getValue());
+                if (originRow.size() > attribute.getColumnIndex()) {// sometime attrubute maybe contain fixed column so that do
+                                                                        // this judge
+                    originRow.get(attribute.getColumnIndex()).setValue(attribute.getValue());
+                }
             }
         }
         if (isMerged || isMaster) {// Master records
@@ -426,7 +431,7 @@ public class RichRecord extends Record {
                 this.MASTER = new DQAttribute<>(SwooshConstants.IS_MASTER, originRow.size(), true);
                 this.SCORE = new DQAttribute<>(SwooshConstants.SCORE2, originRow.size(), 1.0);
 
-                //use the lowest value for group quality
+                // use the lowest value for group quality
                 String finalQuality = "1.0";
                 if (this.GRP_QUALITY != null && GRP_QUALITY.getValue() != null) {
                     if (Double.compare(this.groupQuality, 0.0) > 0) {
@@ -444,7 +449,7 @@ public class RichRecord extends Record {
                 this.ATTRIBUTE_SCORE = new DQAttribute<>(SwooshConstants.ATTRIBUTE_SCORES, originRow.size(), StringUtils.EMPTY);
 
             }
-        } else {//for not master
+        } else {// for not master
             String finalGID = this.getGroupId();
             if (StringUtils.isBlank(finalGID)) {
                 finalGID = computeGID(oldGID2New);
@@ -457,7 +462,7 @@ public class RichRecord extends Record {
                 if (Double.compare(score, 0.0) > 0) {
                     SCORE.setValue(String.valueOf(score));
                 }
-                //for not master, grp quality=0
+                // for not master, grp quality=0
                 GRP_QUALITY.setValue("0.0");
                 if (ATTRIBUTE_SCORE != null) {
 
@@ -473,7 +478,9 @@ public class RichRecord extends Record {
     }
 
     /**
-     * TDQ-12659 : when it is a master and its group size >0 on the last result, means that the current record is an intermediate master record
+     * TDQ-12659 : when it is a master and its group size >0 on the last result, means that the current record is an intermediate
+     * master record
+     * 
      * @return
      */
     public boolean isInterMediateMaster() {
