@@ -1,3 +1,4 @@
 === 2016-02-15 ===
 1. TDQ-13220 Create API that converts dates  - msjian
-   (create project and Add ConvertDateUtils and ConvertDateUtilsTest class)
+   (create project and Add Date Calendar Converter class)
+2. TDQ-13269 create API for Trim on a different character than whitespace  - msjian  

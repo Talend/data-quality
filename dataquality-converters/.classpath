@@ -4,5 +4,6 @@
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry including="**/*.java" kind="src" path="src/main/java"/>
 	<classpathentry including="**/*.java" kind="src" path="src/test/java"/>
+	<classpathentry excluding="**/*.java" kind="src" path="src/test/resources"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

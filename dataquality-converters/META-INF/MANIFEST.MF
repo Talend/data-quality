@@ -6,7 +6,8 @@ Bundle-Version: 1.0.0.SNAPSHOT
 Bundle-Vendor: .Talend SA.
 Bundle-ClassPath: .
 Require-Bundle: org.apache.log4j,
- org.junit
+ org.junit,
+ org.apache.commons.lang
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Export-Package: org.talend.dataquality.libraries.converters
+Export-Package: org.talend.dataquality.converters
