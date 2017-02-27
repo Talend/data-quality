@@ -428,6 +428,16 @@ public class TSwooshGrouping<TYPE> {
                     groupRows.remove(tempGid);
                 }
             }
+            // TDQ-13255 output the non-master of 1st tMatchGroup and also update its GID by the map 'oldGID2New'.
+            if (!groupRows.isEmpty()) {
+                for (RecordGenerator record : notMasterRecords) {
+                    List<DQAttribute<?>> originalRow = record.getOriginalRow();
+                    String GID = oldGID2New.get(originalRow.get(indexGID2).getValue());
+                    RichRecord createRecord = createRecord(originalRow,
+                            GID != null ? GID : originalRow.get(indexGID2).getValue());
+                    output(createRecord);
+                }
+            }
         }
 
     }

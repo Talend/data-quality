@@ -91,9 +91,13 @@ public class ComponentSwooshMatchRecordGrouping extends AnalysisSwooshMatchRecor
         }
     }
 
+    @Override
     protected void clear() {
-        // Clear the GID map , no use anymore.
-        swooshGrouping.getOldGID2New().clear();
+        // Clear the GID map, no use anymore. but should not clear for multi-pass and store on disk. because it will be used to
+        // update the non-master GID.
+        if (!isLinkToPrevious || !isStoreOndisk) {
+            swooshGrouping.getOldGID2New().clear();
+        }
         tmpMatchResult.clear();
         masterRecords.clear();
     }
