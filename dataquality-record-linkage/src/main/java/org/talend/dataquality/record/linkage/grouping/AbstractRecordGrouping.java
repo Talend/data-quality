@@ -91,6 +91,8 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
     // Allow compute Group Quality.
     private Boolean isComputeGrpQuality = Boolean.FALSE;
 
+    protected Boolean isStoreOndisk = Boolean.FALSE;
+
     /*
      * (non-Javadoc)
      * 
@@ -654,6 +656,10 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
     public void setIsPassOriginalValue(Boolean isPassOriginal) {
 
         this.isPassOriginalValue = isPassOriginal;
+    }
+
+    public void setIsStoreOndisk(Boolean isStoreOndisk) {
+        this.isStoreOndisk = isStoreOndisk;
     }
 
 }
