@@ -22,14 +22,6 @@ import org.apache.commons.lang.StringUtils;
 public class StringConverter {
 
     /**
-     * StringConverter constructor.
-     * 
-     */
-    public StringConverter() {
-        super();
-    }
-
-    /**
      * Remove trailing and leading characters(as default the remove Character is whitespace).
      * 
      * @param inputStr - the input text.

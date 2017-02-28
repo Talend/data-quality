@@ -173,13 +173,14 @@ public class DateCalendarConverter {
      * used.
      * @return String
      */
-    public String formatDateToString(LocalDate localDate, Chronology outputChronology, DateTimeFormatter outputDateTimeFormatter) {
+    public String formatDateToString(LocalDate localDate, Chronology outputChronology,
+            DateTimeFormatter outputDateTimeFormatter) {
         if (localDate != null) {
             Locale locale = Locale.getDefault(Locale.Category.FORMAT);
             ChronoLocalDate cDate;
             Chronology chronology = outputChronology == null ? IsoChronology.INSTANCE : outputChronology;
-            DateTimeFormatter dateTimeFormatter = outputDateTimeFormatter == null ? DateTimeFormatter
-                    .ofPattern(DEFAULT_OUTPUT_PATTERN) : outputDateTimeFormatter;
+            DateTimeFormatter dateTimeFormatter = outputDateTimeFormatter == null
+                    ? DateTimeFormatter.ofPattern(DEFAULT_OUTPUT_PATTERN) : outputDateTimeFormatter;
             try {
                 cDate = chronology.date(localDate);
             } catch (DateTimeException ex) {
@@ -231,7 +232,8 @@ public class DateCalendarConverter {
      * is used.
      * @return LocalDate
      */
-    public LocalDate parseStringToDate(String inputDateStr, DateTimeFormatter inputDateTimeFormatter, Chronology inputChronology) {
+    public LocalDate parseStringToDate(String inputDateStr, DateTimeFormatter inputDateTimeFormatter,
+            Chronology inputChronology) {
         if (inputDateStr != null && !inputDateStr.isEmpty()) {
             Chronology chronology = inputChronology == null ? IsoChronology.INSTANCE : inputChronology;
             try {
