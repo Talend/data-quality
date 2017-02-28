@@ -21,34 +21,32 @@ import org.apache.commons.lang.StringUtils;
  */
 public class StringConverter {
 
-    private String inputStr;
-
     /**
      * StringConverter constructor.
      * 
-     * @param inputStr
      */
-    public StringConverter(String inputStr) {
+    public StringConverter() {
         super();
-        this.inputStr = inputStr;
     }
 
     /**
-     * Remove trailing and leading characters(as default the removeCharacter is whitespace).
+     * Remove trailing and leading characters(as default the remove Character is whitespace).
      * 
-     * @return
+     * @param inputStr - the input text.
+     * @return String
      */
-    public String removeTrailingAndLeadingCharacters() {
-        return removeTrailingAndLeadingCharacters(" "); //$NON-NLS-1$
+    public String removeTrailingAndLeading(String inputStr) {
+        return removeTrailingAndLeading(inputStr, " "); //$NON-NLS-1$
     }
 
     /**
      * Remove trailing and leading characters.
      * 
-     * @param removeCharacter - the character need to remove.
+     * @param inputStr - the input text.
+     * @param removeCharacter - the character will remove.
      * @return String.
      */
-    public String removeTrailingAndLeadingCharacters(String removeCharacter) {
+    public String removeTrailingAndLeading(String inputStr, String removeCharacter) {
         if ("".equals(removeCharacter)) { //$NON-NLS-1$
             return inputStr;
         }
