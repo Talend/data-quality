@@ -47,11 +47,6 @@ public class DateCalendarConverter {
     public static final String DEFAULT_OUTPUT_PATTERN = "yyyy-MM-dd";//$NON-NLS-1$
 
     /**
-     * the date text need to parse.
-     */
-    private String dateStr;
-
-    /**
      * the input date text format pattern, default is "yyyy-MM-dd".
      */
     private String inputFormatPattern = DEFAULT_INPUT_PATTERN;
@@ -70,10 +65,6 @@ public class DateCalendarConverter {
      * an optional output Chronology. default is IsoChronology
      */
     private Chronology outputChronologyType = IsoChronology.INSTANCE;
-
-    public void setDateStr(String dateStr) {
-        this.dateStr = dateStr;
-    }
 
     public void setInputFormatPattern(String inputFormatPattern) {
         this.inputFormatPattern = inputFormatPattern;
@@ -98,13 +89,11 @@ public class DateCalendarConverter {
     /**
      * DateCalendarConverter constructor.
      * 
-     * @param dateStr
      * @param inputChronologyType
      * @param outputChronologyType
      */
-    public DateCalendarConverter(String dateStr, Chronology inputChronologyType, Chronology outputChronologyType) {
+    public DateCalendarConverter(Chronology inputChronologyType, Chronology outputChronologyType) {
         this();
-        this.dateStr = dateStr;
         this.inputChronologyType = inputChronologyType == null ? IsoChronology.INSTANCE : inputChronologyType;
         this.outputChronologyType = outputChronologyType == null ? IsoChronology.INSTANCE : outputChronologyType;
     }
@@ -112,15 +101,14 @@ public class DateCalendarConverter {
     /**
      * DateCalendarConverter constructor.
      * 
-     * @param dateStr
      * @param inputFormatPattern
      * @param outputFormatPattern
      * @param inputChronologyType
      * @param outputChronologyType
      */
-    public DateCalendarConverter(String dateStr, String inputFormatPattern, String outputFormatPattern,
-            Chronology inputChronologyType, Chronology outputChronologyType) {
-        this(dateStr, inputChronologyType, outputChronologyType);
+    public DateCalendarConverter(String inputFormatPattern, String outputFormatPattern, Chronology inputChronologyType,
+            Chronology outputChronologyType) {
+        this(inputChronologyType, outputChronologyType);
         this.inputFormatPattern = inputFormatPattern == null ? DEFAULT_INPUT_PATTERN : inputFormatPattern;
         this.outputFormatPattern = outputFormatPattern == null ? DEFAULT_OUTPUT_PATTERN : outputFormatPattern;
     }
@@ -128,10 +116,12 @@ public class DateCalendarConverter {
     /**
      * Convert an inputFormatPattern date text from inputChronologyType to outputChronologyType with outputFormatPattern.
      * 
+     * @param dateStr - the date text need to convert.
+     * 
      * @return a outputChronologyType text with the outputFormatPattern. note: if can not parse the dateStr with the
      * inputFormatPattern, will return "".
      */
-    public String convert() {
+    public String convert(String dateStr) {
         if (dateStr == null || "".equals(dateStr.trim())) { //$NON-NLS-1$
             return dateStr;
         }
@@ -149,7 +139,7 @@ public class DateCalendarConverter {
      * 
      * @param localDate
      * @param outputChronology
-     * @return
+     * @return String
      */
     public String formatDateToString(LocalDate localDate, Chronology outputChronology) {
         return formatDateToString(localDate, outputChronology, DEFAULT_OUTPUT_PATTERN);
@@ -164,7 +154,7 @@ public class DateCalendarConverter {
      * @param localDate - the ISO date to convert and format.
      * @param outputChronology - an optional Chronology. If null, then IsoChronology is used.
      * @param outputPattern - the output date text format pattern. if is null, use default "yyyy-MM-dd".
-     * @return string
+     * @return String
      */
     public String formatDateToString(LocalDate localDate, Chronology outputChronology, String outputPattern) {
         return formatDateToString(localDate, outputChronology,
@@ -181,7 +171,7 @@ public class DateCalendarConverter {
      * @param outputChronology - an optional Chronology. If null, then IsoChronology is used.
      * @param outputDateTimeFormatter - the output DateTimeFormatter. If null, then DateTimeFormatter.ofPattern("yyyy-MM-dd") is
      * used.
-     * @return string
+     * @return String
      */
     public String formatDateToString(LocalDate localDate, Chronology outputChronology,
             DateTimeFormatter outputDateTimeFormatter) {
