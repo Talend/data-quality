@@ -29,14 +29,13 @@ import org.apache.log4j.Logger;
  * this class is used for Converting a date from one Chronology to another with the format pattern.<br/>
  * created by msjian on 2017.1.20 <br/>
  * <br/>
- * 
+ * <p>
  * for example: the date Chronology type and date string as follows:<br/>
  * HijrahChronology 1432-09-19<br/>
  * IsoChronology 2011/08/19<br/>
  * JapaneseChronology 0023-08-19<br/>
  * MinguoChronology 0100 08 19<br/>
  * ThaiBuddhistChronology 2554-08-19<br/>
- * 
  */
 public class DateCalendarConverter {
 
@@ -66,41 +65,23 @@ public class DateCalendarConverter {
      */
     private Chronology outputChronologyType = IsoChronology.INSTANCE;
 
-    public void setInputFormatPattern(String inputFormatPattern) {
-        this.inputFormatPattern = inputFormatPattern;
-    }
-
-    public void setOutputFormatPattern(String outputFormatPattern) {
-        this.outputFormatPattern = outputFormatPattern;
-    }
-
-    public void setInputChronologyType(Chronology inputChronologyType) {
-        this.inputChronologyType = inputChronologyType;
-    }
-
-    public void setOutputChronologyType(Chronology outputChronologyType) {
-        this.outputChronologyType = outputChronologyType;
-    }
-
     public DateCalendarConverter() {
-        super();
+        this(DEFAULT_INPUT_PATTERN, DEFAULT_OUTPUT_PATTERN, IsoChronology.INSTANCE, IsoChronology.INSTANCE);
     }
 
     /**
      * DateCalendarConverter constructor.
-     * 
+     *
      * @param inputChronologyType
      * @param outputChronologyType
      */
     public DateCalendarConverter(Chronology inputChronologyType, Chronology outputChronologyType) {
-        this();
-        this.inputChronologyType = inputChronologyType == null ? IsoChronology.INSTANCE : inputChronologyType;
-        this.outputChronologyType = outputChronologyType == null ? IsoChronology.INSTANCE : outputChronologyType;
+        this(DEFAULT_INPUT_PATTERN, DEFAULT_OUTPUT_PATTERN, inputChronologyType, outputChronologyType);
     }
 
     /**
      * DateCalendarConverter constructor.
-     * 
+     *
      * @param inputFormatPattern
      * @param outputFormatPattern
      * @param inputChronologyType
@@ -108,16 +89,16 @@ public class DateCalendarConverter {
      */
     public DateCalendarConverter(String inputFormatPattern, String outputFormatPattern, Chronology inputChronologyType,
             Chronology outputChronologyType) {
-        this(inputChronologyType, outputChronologyType);
+        this.inputChronologyType = inputChronologyType == null ? IsoChronology.INSTANCE : inputChronologyType;
+        this.outputChronologyType = outputChronologyType == null ? IsoChronology.INSTANCE : outputChronologyType;
         this.inputFormatPattern = inputFormatPattern == null ? DEFAULT_INPUT_PATTERN : inputFormatPattern;
         this.outputFormatPattern = outputFormatPattern == null ? DEFAULT_OUTPUT_PATTERN : outputFormatPattern;
     }
 
     /**
      * Convert an inputFormatPattern date text from inputChronologyType to outputChronologyType with outputFormatPattern.
-     * 
+     *
      * @param dateStr - the date text need to convert.
-     * 
      * @return a outputChronologyType text with the outputFormatPattern. note: if can not parse the dateStr with the
      * inputFormatPattern, will return "".
      */
@@ -136,12 +117,12 @@ public class DateCalendarConverter {
 
     /**
      * format a LocalDate to a string with defaultOutputFormatPattern: "yyyy-MM-dd".
-     * 
+     *
      * @param localDate
      * @param outputChronology
      * @return String
      */
-    public String formatDateToString(LocalDate localDate, Chronology outputChronology) {
+    protected String formatDateToString(LocalDate localDate, Chronology outputChronology) {
         return formatDateToString(localDate, outputChronology, DEFAULT_OUTPUT_PATTERN);
     }
 
@@ -151,14 +132,15 @@ public class DateCalendarConverter {
      * ChronoLocalDate to a String using a DateTimeFormatter with a
      * SHORT pattern based on the Chronology and the current Locale.
      *
-     * @param localDate - the ISO date to convert and format.
+     * @param localDate        - the ISO date to convert and format.
      * @param outputChronology - an optional Chronology. If null, then IsoChronology is used.
-     * @param outputPattern - the output date text format pattern. if is null, use default "yyyy-MM-dd".
+     * @param outputPattern    - the output date text format pattern. if is null, use default "yyyy-MM-dd".
      * @return String
      */
-    public String formatDateToString(LocalDate localDate, Chronology outputChronology, String outputPattern) {
+    protected String formatDateToString(LocalDate localDate, Chronology outputChronology, String outputPattern) {
         return formatDateToString(localDate, outputChronology,
                 DateTimeFormatter.ofPattern(outputPattern == null ? DEFAULT_OUTPUT_PATTERN : outputPattern));
+        // FIXME  DateTimeFormatter.ofPattern will create a new DateTimeFormatter at earch row. Create it in the constructor instead.
     }
 
     /**
@@ -167,13 +149,13 @@ public class DateCalendarConverter {
      * ChronoLocalDate to a String using a DateTimeFormatter with a
      * SHORT pattern based on the Chronology and the current Locale.
      *
-     * @param localDate - the ISO date to convert and format.
-     * @param outputChronology - an optional Chronology. If null, then IsoChronology is used.
+     * @param localDate               - the ISO date to convert and format.
+     * @param outputChronology        - an optional Chronology. If null, then IsoChronology is used.
      * @param outputDateTimeFormatter - the output DateTimeFormatter. If null, then DateTimeFormatter.ofPattern("yyyy-MM-dd") is
-     * used.
+     *                                used.
      * @return String
      */
-    public String formatDateToString(LocalDate localDate, Chronology outputChronology,
+    protected String formatDateToString(LocalDate localDate, Chronology outputChronology,
             DateTimeFormatter outputDateTimeFormatter) {
         if (localDate != null) {
             Locale locale = Locale.getDefault(Locale.Category.FORMAT);
@@ -202,16 +184,17 @@ public class DateCalendarConverter {
      * provided Chronology, then converts this to a LocalDate (ISO)
      * value.
      *
-     * @param inputDateStr - the input date text
-     * for the Chronology and the current Locale.
-     * @param inputPattern - the input date text format pattern.
+     * @param inputDateStr    - the input date text
+     *                        for the Chronology and the current Locale.
+     * @param inputPattern    - the input date text format pattern.
      * @param inputChronology - an optional Chronology. If null, then IsoChronology
-     * is used.
+     *                        is used.
      * @return LocalDate
      */
-    public LocalDate parseStringToDate(String inputDateStr, String inputPattern, Chronology inputChronology) {
+    protected LocalDate parseStringToDate(String inputDateStr, String inputPattern, Chronology inputChronology) {
         if (inputDateStr != null && !inputDateStr.isEmpty()) {
             Locale locale = Locale.getDefault(Locale.Category.FORMAT);
+            // TODO don't create an inputDateTimeFormatter at each row. Store it as a field.
             DateTimeFormatter inputDateTimeFormatter = new DateTimeFormatterBuilder().parseLenient().appendPattern(inputPattern)
                     .toFormatter().withChronology(inputChronology).withDecimalStyle(DecimalStyle.of(locale));
             return parseStringToDate(inputDateStr, inputDateTimeFormatter, inputChronology);
@@ -225,14 +208,14 @@ public class DateCalendarConverter {
      * provided Chronology, then converts this to a LocalDate (ISO)
      * value.
      *
-     * @param inputDateStr - the input date text
-     * for the Chronology and the current Locale.
+     * @param inputDateStr           - the input date text
+     *                               for the Chronology and the current Locale.
      * @param inputDateTimeFormatter - the input DateTimeFormatter.
-     * @param inputChronology - an optional Chronology. If null, then IsoChronology
-     * is used.
+     * @param inputChronology        - an optional Chronology. If null, then IsoChronology
+     *                               is used.
      * @return LocalDate
      */
-    public LocalDate parseStringToDate(String inputDateStr, DateTimeFormatter inputDateTimeFormatter,
+    protected LocalDate parseStringToDate(String inputDateStr, DateTimeFormatter inputDateTimeFormatter,
             Chronology inputChronology) {
         if (inputDateStr != null && !inputDateStr.isEmpty()) {
             Chronology chronology = inputChronology == null ? IsoChronology.INSTANCE : inputChronology;
