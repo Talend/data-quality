@@ -13,4 +13,4 @@ Command line to deploy the ontology repository index:
       -Dpackaging=zip \
       -Dfile=/path/to/tdq-semantic-index-6.0.0.zip \
       -DrepositoryId=thirdparty-releases \
-      -Durl=http://newbuild.talend.com:8081/nexus/content/repositories/thirdparty-releases
+      -Durl=https://artifacts-zl.talend.com/nexus/content/repositories/thirdparty-releases
