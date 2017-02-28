@@ -1,0 +1,7 @@
+ "Lili", "Cheng", "Walker", "beijing", 1, "04-04-2000", "1", 7 
+ "Tony", null, "Martain", "shanghai", 1, "06-06-2000", "1", 0  
+ "Tom", "Green", null, "shanghai", 3, "04-04-2000", "1", 0 
+ "san", "Green", null, "hebeihebei", 2, "08-08-2000", "1", 0 
+ "li", "Brown", "Joseph", "beijing", 2, "08-08-2000", "1", 0 
+ "Tony", null, "William", null, 2, null, "1", 0  
+ "Lili", "si", "Allen", null, 2, null, "1", 0

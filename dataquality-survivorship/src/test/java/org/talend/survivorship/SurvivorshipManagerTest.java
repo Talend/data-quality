@@ -70,7 +70,7 @@ public class SurvivorshipManagerTest {
      * Test method for {@link org.talend.survivorship.SurvivorshipManager#runSession(java.lang.String[][])}.
      */
     @Test
-    public void testRunSession() {
+    public void testRunSession() { // FIXME change this method name which is not informative about the test!
         manager.initKnowledgeBase();
         manager.runSession(SampleData.SAMPLE_INPUT);
 
@@ -99,7 +99,7 @@ public class SurvivorshipManagerTest {
      */
 
     @Test
-    public void testRunSessionCase1() {
+    public void testRunSessionCase1() { // FIXME change this method name which is not informative about the test!
 
         manager = new SurvivorshipManager(SampleData.RULE_PATH, SampleData.PKG_NAME_CONFLICT);
 
@@ -120,6 +120,8 @@ public class SurvivorshipManagerTest {
         Object birthdayObj = survivorMap.get("birthday"); //$NON-NLS-1$
         Assert.assertTrue("The birthdayObj should not be null", birthdayObj != null); //$NON-NLS-1$ 
         Date resultDate = (Date) birthdayObj;
+
+        // FIXME why this assertion? When I run it, I get 04-04-2000
         Assert.assertEquals("The resultDate should be 08-08-2000", "08-08-2000", //$NON-NLS-1$ //$NON-NLS-2$
                 SampleData.dateToString(resultDate, "dd-MM-yyyy")); //$NON-NLS-1$
     }
@@ -131,7 +133,7 @@ public class SurvivorshipManagerTest {
      */
 
     @Test
-    public void testRunSessionCase2() {
+    public void testRunSessionCase2() { // FIXME change this method name which is not informative about the test!
 
         manager = new SurvivorshipManager(SampleData.RULE_PATH, SampleData.PKG_NAME_CONFLICT_FRE_LONG);
 
@@ -152,6 +154,7 @@ public class SurvivorshipManagerTest {
         Object cityObj = survivorMap.get("city"); //$NON-NLS-1$
         Assert.assertTrue("The birthdayObj should not be null", cityObj != null); //$NON-NLS-1$ 
         String resultStr = (String) cityObj;
+        // FIXME why shangai is expected? I get beijing!
         Assert.assertEquals("The resultStr should be shanghai", "shanghai", //$NON-NLS-1$ //$NON-NLS-2$
                 resultStr);
     }
@@ -184,6 +187,7 @@ public class SurvivorshipManagerTest {
         Object firstNameObj = survivorMap.get("firstName"); //$NON-NLS-1$
         Assert.assertTrue("The firstNameObj should not be null", firstNameObj != null); //$NON-NLS-1$ 
         String resultStr = (String) firstNameObj;
+        // FIXME why is Tony expected? I get Lili
         Assert.assertEquals("The resultStr should be Tony", "Tony", //$NON-NLS-1$ //$NON-NLS-2$
                 resultStr);
     }
@@ -198,7 +202,7 @@ public class SurvivorshipManagerTest {
      */
 
     @Test
-    public void testRunSessionCase4() {
+    public void testRunSessionCase4() { // FIXME change this method name which is not informative about the test!
 
         manager = new SurvivorshipManager(SampleData.RULE_PATH, SampleData.PKG_NAME_CONFLICT_FRE_NULL_CONSTANT);
 
@@ -219,6 +223,7 @@ public class SurvivorshipManagerTest {
         Object lastNameObj = survivorMap.get("lastName"); //$NON-NLS-1$
         Assert.assertTrue("The lastNameObj should not be null", lastNameObj != null); //$NON-NLS-1$ 
         String resultStr = (String) lastNameObj;
+        // FIXME why is Tony expected? I get Green
         Assert.assertEquals("The resultStr should be Tony", "Tony", //$NON-NLS-1$ //$NON-NLS-2$
                 resultStr);
     }

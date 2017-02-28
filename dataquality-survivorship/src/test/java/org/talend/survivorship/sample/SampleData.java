@@ -25,6 +25,10 @@ import org.talend.survivorship.model.RuleDefinition.Order;
 
 /**
  * Sample input data and result expectation for unit tests.
+ * FIXME create a SampleData class for each case: this class should manage only one data set and one set of rules.
+ * FIXME we won't be able to read it anymore when we put more than one data set and one set of rules.
+ *
+ *
  */
 public final class SampleData {
 
@@ -44,7 +48,7 @@ public final class SampleData {
 
     public static final String PKG_NAME_CONFLICT_TWO_TARGET_ONE_COLUMN = "org.talend.survivorship.conflict.two_target_one_column"; //$NON-NLS-1$
 
-    public static final Object[][] SAMPLE_INPUT = {
+    public static final Object[][] SAMPLE_INPUT = {  // FIXME read the data from a csv file. It's easier to maintain and read.
             { "GRIZZARD CO.", "110 N MARYLAND AVE", "GLENDALE", "CA", "912066", "FR", "8185431314", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
                     stringToDate("20110101", "yyyyMMdd"), 1.0, 18, 1985, "Something" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
             { "GRIZZARD", "110 NORTH MARYLAND AVENUE", "GLENDALE", "CA", "91205", "US", "9003254892", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
