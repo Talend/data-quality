@@ -65,6 +65,16 @@ public class DateCalendarConverter {
      */
     private Chronology outputChronologyType = IsoChronology.INSTANCE;
 
+    /**
+     * the input DateTimeFormatter(which will be created with inputFormatPattern and inputChronologyType).
+     */
+    private DateTimeFormatter inputDateTimeFormatter;
+
+    /**
+     * the output DateTimeFormatter(which will be created with outputFormatPattern and outputChronologyType).
+     */
+    private DateTimeFormatter outputDateTimeFormatter;
+
     public DateCalendarConverter() {
         this(DEFAULT_INPUT_PATTERN, DEFAULT_OUTPUT_PATTERN, IsoChronology.INSTANCE, IsoChronology.INSTANCE);
     }
@@ -93,142 +103,81 @@ public class DateCalendarConverter {
         this.outputChronologyType = outputChronologyType == null ? IsoChronology.INSTANCE : outputChronologyType;
         this.inputFormatPattern = inputFormatPattern == null ? DEFAULT_INPUT_PATTERN : inputFormatPattern;
         this.outputFormatPattern = outputFormatPattern == null ? DEFAULT_OUTPUT_PATTERN : outputFormatPattern;
+
+        this.inputDateTimeFormatter = new DateTimeFormatterBuilder().parseLenient().appendPattern(this.inputFormatPattern)
+                .toFormatter().withChronology(this.inputChronologyType)
+                .withDecimalStyle(DecimalStyle.of(Locale.getDefault(Locale.Category.FORMAT)));
+
+        this.outputDateTimeFormatter = new DateTimeFormatterBuilder().parseLenient().appendPattern(this.outputFormatPattern)
+                .toFormatter().withChronology(this.outputChronologyType)
+                .withDecimalStyle(DecimalStyle.of(Locale.getDefault(Locale.Category.FORMAT)));
     }
 
     /**
      * Convert an inputFormatPattern date text from inputChronologyType to outputChronologyType with outputFormatPattern.
      *
-     * @param dateStr - the date text need to convert.
+     * @param inputDateStr - the date text need to convert.
      * @return a outputChronologyType text with the outputFormatPattern. note: if can not parse the dateStr with the
      * inputFormatPattern, will return "".
      */
-    public String convert(String dateStr) {
-        if (dateStr == null || "".equals(dateStr.trim())) { //$NON-NLS-1$
-            return dateStr;
+    public String convert(String inputDateStr) {
+        if (inputDateStr == null || "".equals(inputDateStr.trim())) { //$NON-NLS-1$
+            return inputDateStr;
         }
 
         if (inputChronologyType.equals(outputChronologyType) && inputFormatPattern.equals(outputFormatPattern)) {
-            return dateStr;
+            return inputDateStr;
         }
-
-        LocalDate inputDate = parseStringToDate(dateStr, inputFormatPattern, inputChronologyType);
-        return formatDateToString(inputDate, outputChronologyType, outputFormatPattern);
-    }
-
-    /**
-     * format a LocalDate to a string with defaultOutputFormatPattern: "yyyy-MM-dd".
-     *
-     * @param localDate
-     * @param outputChronology
-     * @return String
-     */
-    protected String formatDateToString(LocalDate localDate, Chronology outputChronology) {
-        return formatDateToString(localDate, outputChronology, DEFAULT_OUTPUT_PATTERN);
+        LocalDate inputLocalDate = parseStringToDate(inputDateStr);
+        return formatDateToString(inputLocalDate);
     }
 
     /**
      * Converts a LocalDate (ISO) value to a ChronoLocalDate date
-     * using the provided Chronology, and then formats the
-     * ChronoLocalDate to a String using a DateTimeFormatter with a
-     * SHORT pattern based on the Chronology and the current Locale.
+     * using the outputChronologyType, and then formats the
+     * ChronoLocalDate to a String using outputDateTimeFormatter.
      *
-     * @param localDate        - the ISO date to convert and format.
-     * @param outputChronology - an optional Chronology. If null, then IsoChronology is used.
-     * @param outputPattern    - the output date text format pattern. if is null, use default "yyyy-MM-dd".
+     * @param inputLocalDate - the ISO date to convert and format.
      * @return String
      */
-    protected String formatDateToString(LocalDate localDate, Chronology outputChronology, String outputPattern) {
-        return formatDateToString(localDate, outputChronology,
-                DateTimeFormatter.ofPattern(outputPattern == null ? DEFAULT_OUTPUT_PATTERN : outputPattern));
-        // FIXME  DateTimeFormatter.ofPattern will create a new DateTimeFormatter at earch row. Create it in the constructor instead.
-    }
-
-    /**
-     * Converts a LocalDate (ISO) value to a ChronoLocalDate date
-     * using the provided Chronology, and then formats the
-     * ChronoLocalDate to a String using a DateTimeFormatter with a
-     * SHORT pattern based on the Chronology and the current Locale.
-     *
-     * @param localDate               - the ISO date to convert and format.
-     * @param outputChronology        - an optional Chronology. If null, then IsoChronology is used.
-     * @param outputDateTimeFormatter - the output DateTimeFormatter. If null, then DateTimeFormatter.ofPattern("yyyy-MM-dd") is
-     *                                used.
-     * @return String
-     */
-    protected String formatDateToString(LocalDate localDate, Chronology outputChronology,
-            DateTimeFormatter outputDateTimeFormatter) {
-        if (localDate != null) {
-            Locale locale = Locale.getDefault(Locale.Category.FORMAT);
+    private String formatDateToString(LocalDate inputLocalDate) {
+        if (inputLocalDate != null) {
             ChronoLocalDate cDate;
-            Chronology chronology = outputChronology == null ? IsoChronology.INSTANCE : outputChronology;
-            DateTimeFormatter dateTimeFormatter = outputDateTimeFormatter == null
-                    ? DateTimeFormatter.ofPattern(DEFAULT_OUTPUT_PATTERN) : outputDateTimeFormatter;
             try {
-                cDate = chronology.date(localDate);
+                cDate = outputChronologyType.date(inputLocalDate);
             } catch (DateTimeException ex) {
                 LOG.error(ex, ex);
-                chronology = IsoChronology.INSTANCE;
-                cDate = localDate;
+                cDate = inputLocalDate;
             }
-            DateTimeFormatter dateFormatter = dateTimeFormatter.withChronology(chronology).withLocale(locale)
-                    .withDecimalStyle(DecimalStyle.of(locale));
-            return dateFormatter.format(cDate);
+            try {
+                return outputDateTimeFormatter.format(cDate);
+            } catch (DateTimeException ex) {
+                LOG.error(ex, ex);
+                return ""; //$NON-NLS-1$
+            }
         } else {
             return ""; //$NON-NLS-1$
         }
     }
 
     /**
-     * Parses a String to a ChronoLocalDate using a DateTimeFormatter
-     * with a inputFormatPattern based on the current Locale and the
-     * provided Chronology, then converts this to a LocalDate (ISO)
+     * Parses a String to a ChronoLocalDate using inputDateTimeFormatter
+     * with inputFormatPattern based on the current Locale and the
+     * provided inputChronologyType, then converts this to a LocalDate (ISO)
      * value.
      *
-     * @param inputDateStr    - the input date text
-     *                        for the Chronology and the current Locale.
-     * @param inputPattern    - the input date text format pattern.
-     * @param inputChronology - an optional Chronology. If null, then IsoChronology
-     *                        is used.
+     * @param inputDateStr - the input date text
      * @return LocalDate
      */
-    protected LocalDate parseStringToDate(String inputDateStr, String inputPattern, Chronology inputChronology) {
-        if (inputDateStr != null && !inputDateStr.isEmpty()) {
-            Locale locale = Locale.getDefault(Locale.Category.FORMAT);
-            // TODO don't create an inputDateTimeFormatter at each row. Store it as a field.
-            DateTimeFormatter inputDateTimeFormatter = new DateTimeFormatterBuilder().parseLenient().appendPattern(inputPattern)
-                    .toFormatter().withChronology(inputChronology).withDecimalStyle(DecimalStyle.of(locale));
-            return parseStringToDate(inputDateStr, inputDateTimeFormatter, inputChronology);
+    private LocalDate parseStringToDate(String inputDateStr) {
+        try {
+            TemporalAccessor temporal = inputDateTimeFormatter.parse(inputDateStr);
+            ChronoLocalDate cDate = inputChronologyType.date(temporal);
+            return LocalDate.from(cDate);
+        } catch (Exception e) {
+            LOG.error(e, e);
+            return null;
         }
-        return null;
-    }
-
-    /**
-     * Parses a String to a ChronoLocalDate using a DateTimeFormatter
-     * with a inputFormatPattern based on the current Locale and the
-     * provided Chronology, then converts this to a LocalDate (ISO)
-     * value.
-     *
-     * @param inputDateStr           - the input date text
-     *                               for the Chronology and the current Locale.
-     * @param inputDateTimeFormatter - the input DateTimeFormatter.
-     * @param inputChronology        - an optional Chronology. If null, then IsoChronology
-     *                               is used.
-     * @return LocalDate
-     */
-    protected LocalDate parseStringToDate(String inputDateStr, DateTimeFormatter inputDateTimeFormatter,
-            Chronology inputChronology) {
-        if (inputDateStr != null && !inputDateStr.isEmpty()) {
-            Chronology chronology = inputChronology == null ? IsoChronology.INSTANCE : inputChronology;
-            try {
-                TemporalAccessor temporal = inputDateTimeFormatter.parse(inputDateStr);
-                ChronoLocalDate cDate = chronology.date(temporal);
-                return LocalDate.from(cDate);
-            } catch (Exception e) {
-                LOG.error(e, e);
-                return null;
-            }
-        }
-        return null;
     }
 
 }

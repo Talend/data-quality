@@ -27,7 +27,7 @@ public class StringConverterTest {
     private static final String expected = "abc"; //$NON-NLS-1$
 
     @Test
-    public void TestRemoveTrailingAndLeading() {
+    public void testRemoveTrailingAndLeading() {
         // assertEquals(expected, " abc ".trim()); //$NON-NLS-1$
         // assertEquals('\t', '\u0009');
         StringConverter stringConverter = new StringConverter();
