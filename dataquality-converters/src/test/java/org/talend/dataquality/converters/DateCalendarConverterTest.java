@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDate;
+import java.time.Month;
 import java.time.chrono.Chronology;
 import java.time.chrono.HijrahChronology;
 import java.time.chrono.IsoChronology;
@@ -239,11 +241,51 @@ public class DateCalendarConverterTest {
                 .convert(ThaiBuddhistStr));
     }
 
+    @Test
+    public void testParseStringToDate_formatDateToString() {
+        // convert an ISO-based date to a date in another chronology
+        LocalDate date = LocalDate.of(2011, Month.AUGUST, 19);// LocalDate.from(jdate)
+        // JapaneseDate jdate = JapaneseDate.from(date);
+        // HijrahDate hdate = HijrahDate.from(date);
+        // MinguoDate mdate = MinguoDate.from(date);
+        // ThaiBuddhistDate tdate = ThaiBuddhistDate.from(date);
+
+        LocalDate parseDateString = new DateCalendarConverter(pattern4, pattern4).parseStringToDate("20110819"); //$NON-NLS-1$
+        assertEquals(date, parseDateString);
+        assertEquals("2011-08-19", new DateCalendarConverter().formatDateToString(parseDateString));//$NON-NLS-1$
+
+        LocalDate parseDateString1 = new DateCalendarConverter().parseStringToDate("2011-08-19"); //$NON-NLS-1$
+        assertEquals(date, parseDateString1);
+        assertEquals("2011-08-19", new DateCalendarConverter().formatDateToString(parseDateString1)); //$NON-NLS-1$
+
+        LocalDate parseDateString2 = new DateCalendarConverter(pattern6, pattern6).parseStringToDate("2011 08 19"); //$NON-NLS-1$
+        assertEquals(date, parseDateString2);
+        assertEquals("2011 08 19", new DateCalendarConverter(pattern6, pattern6).formatDateToString(parseDateString2)); //$NON-NLS-1$ 
+
+        LocalDate parseDateString3 = new DateCalendarConverter(pattern4, pattern4).parseStringToDate("20110819"); //$NON-NLS-1$
+        assertEquals(date, parseDateString3);
+        assertEquals("0023 08 19", //$NON-NLS-1$
+                new DateCalendarConverter(null, pattern6, null, JapaneseChronology.INSTANCE)
+                        .formatDateToString(parseDateString3));
+
+        LocalDate parseDateString4 = new DateCalendarConverter(pattern, null, JapaneseChronology.INSTANCE, null)
+                .parseStringToDate("0023-08-19"); //$NON-NLS-1$
+        assertEquals(date, parseDateString4);
+        assertEquals("0023-08-19", //$NON-NLS-1$
+                new DateCalendarConverter(null, pattern, null, JapaneseChronology.INSTANCE).formatDateToString(parseDateString4));
+
+        LocalDate parseDateString5 = new DateCalendarConverter(pattern6, null).parseStringToDate("2011 08 19");//$NON-NLS-1$
+        assertEquals(date, parseDateString5);
+        assertEquals("0023/08/19", //$NON-NLS-1$
+                new DateCalendarConverter(null, pattern1, null, JapaneseChronology.INSTANCE)
+                        .formatDateToString(parseDateString5));
+    }
+
     /**
      * measure the execution time of the current implementation with 100 000 dates to convert.
      */
     @Test
-    public void TestConvert_MeasureTheExecutionTime() {
+    public void testConvert_MeasureTheExecutionTime() {
         Chronology[] chronologys = { IsoChronology.INSTANCE, HijrahChronology.INSTANCE, JapaneseChronology.INSTANCE,
                 MinguoChronology.INSTANCE, ThaiBuddhistChronology.INSTANCE };
 

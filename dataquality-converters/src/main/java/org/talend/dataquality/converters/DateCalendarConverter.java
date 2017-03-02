@@ -94,6 +94,16 @@ public class DateCalendarConverter {
      *
      * @param inputFormatPattern
      * @param outputFormatPattern
+     */
+    public DateCalendarConverter(String inputFormatPattern, String outputFormatPattern) {
+        this(inputFormatPattern, outputFormatPattern, null, null);
+    }
+
+    /**
+     * DateCalendarConverter constructor.
+     *
+     * @param inputFormatPattern
+     * @param outputFormatPattern
      * @param inputChronologyType
      * @param outputChronologyType
      */
@@ -140,7 +150,7 @@ public class DateCalendarConverter {
      * @param inputLocalDate - the ISO date to convert and format.
      * @return String
      */
-    private String formatDateToString(LocalDate inputLocalDate) {
+    protected String formatDateToString(LocalDate inputLocalDate) {
         if (inputLocalDate != null) {
             ChronoLocalDate cDate;
             try {
@@ -169,7 +179,7 @@ public class DateCalendarConverter {
      * @param inputDateStr - the input date text
      * @return LocalDate
      */
-    private LocalDate parseStringToDate(String inputDateStr) {
+    protected LocalDate parseStringToDate(String inputDateStr) {
         try {
             TemporalAccessor temporal = inputDateTimeFormatter.parse(inputDateStr);
             ChronoLocalDate cDate = inputChronologyType.date(temporal);
