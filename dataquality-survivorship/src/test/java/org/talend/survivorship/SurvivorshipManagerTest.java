@@ -136,6 +136,7 @@ public class SurvivorshipManagerTest {
         Date resultDate = (Date) birthdayObj;
 
         // FIXME why this assertion? When I run it, I get 04-04-2000
+        // 08-08-2000 is we expect after implement code because we use most recent to resolve conflict
         Assert.assertEquals("The resultDate should be 08-08-2000", "08-08-2000", //$NON-NLS-1$ //$NON-NLS-2$
                 SampleData.dateToString(resultDate, "dd-MM-yyyy")); //$NON-NLS-1$
     }
@@ -172,6 +173,8 @@ public class SurvivorshipManagerTest {
         Assert.assertTrue("The birthdayObj should not be null", cityObj != null); //$NON-NLS-1$ 
         String resultStr = (String) cityObj;
         // FIXME why shangai is expected? I get beijing!
+        // Because we used longest rule to resolve conflict the frequency of shanghai is 2 and the frequency of beijing is 2.
+        // But length of beijing is 7 the length of shanghai is 8 so that we expect final result is shanghai
         Assert.assertEquals("The resultStr should be shanghai", "shanghai", //$NON-NLS-1$ //$NON-NLS-2$
                 resultStr);
     }
@@ -211,6 +214,10 @@ public class SurvivorshipManagerTest {
         Assert.assertTrue("The firstNameObj should not be null", firstNameObj != null); //$NON-NLS-1$ 
         String resultStr = (String) firstNameObj;
         // FIXME why is Tony expected? I get Lili
+        // There Tony and Lili is conflict.we use most recent on the birthday column so that we choose Tony.
+        // Because of Tony birthday is 06-06-2000 but Lili birthday is 04-04-2000.
+        // After implement resolve conflict code the final result should be Tony but it is Lili until now.
+        // So that the assert will be failed it is noraml
         Assert.assertEquals("The resultStr should be Tony", "Tony", //$NON-NLS-1$ //$NON-NLS-2$
                 resultStr);
     }
@@ -251,6 +258,10 @@ public class SurvivorshipManagerTest {
         Assert.assertTrue("The lastNameObj should not be null", lastNameObj != null); //$NON-NLS-1$ 
         String resultStr = (String) lastNameObj;
         // FIXME why is Tony expected? I get Green
+        // Green is our Constant value which will be setting by user after that.
+        // In fact, Tony and Green is conflict after most common rule.
+        // But Green is constant so that we don't choose it.
+        // On my side result is Green too. need now code to implement it
         Assert.assertEquals("The resultStr should be Tony", "Tony", //$NON-NLS-1$ //$NON-NLS-2$
                 resultStr);
     }
