@@ -1,9 +1,9 @@
-package org.talend.survivorship.conflict.fre_long 
+package org.talend.survivorship.conflict.two_target_same_value 
 
-rule "more_common_city"
+rule "more_common_city1"
     no-loop true
     dialect "mvel"
-    ruleflow-group "more_common_cityGroup"
+    ruleflow-group "most_common_city1Group"
 when
     $input : RecordIn( dataset.isMostCommon( city1, "city1", false) )  
 then

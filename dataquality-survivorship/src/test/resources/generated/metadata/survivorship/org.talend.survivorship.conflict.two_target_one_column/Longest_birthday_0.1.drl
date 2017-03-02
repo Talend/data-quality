@@ -5,7 +5,7 @@ rule "Longest_birthday"
     dialect "mvel"
     ruleflow-group "Longest_birthdayGroup"
 when
-    $input : RecordIn( dataset.isLongest( city, "city", false) )  
+    $input : RecordIn( dataset.isLongest( city1, "city1", false) )  
 then
     dataset.survive( $input.TALEND_INTERNAL_ID, "birthday", drools.getRule().getName());
 

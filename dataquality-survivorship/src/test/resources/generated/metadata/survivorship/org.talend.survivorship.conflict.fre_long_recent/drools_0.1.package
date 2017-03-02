@@ -7,14 +7,15 @@ global org.talend.survivorship.model.DataSet dataset
 
 declare  RecordIn 
 
-    TALEND_INTERNAL_ID : int  
+     TALEND_INTERNAL_ID : int  
     firstname : String  
     lastname : String  
-    city : String  
+    city1 : String
+    city2 : String  
     id : Integer  
     birthday : Date  
     gid : String  
-    grp_size : Integer  
+    grp_size : Integer   
 end
 
 
