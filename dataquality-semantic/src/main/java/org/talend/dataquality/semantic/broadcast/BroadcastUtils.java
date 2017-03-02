@@ -29,6 +29,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Bits;
 import org.apache.lucene.util.Version;
+import org.talend.dataquality.semantic.api.DictionaryUtils;
 import org.talend.dataquality.semantic.index.DictionarySearcher;
 
 class BroadcastUtils {
@@ -112,7 +113,8 @@ class BroadcastUtils {
         ftSyn.freeze();
         indexDoc.add(new StringField(DictionarySearcher.F_CATID, objectDoc.getCategory(), Field.Store.YES));
         for (String value : objectDoc.getValueSet()) {
-            // no need to include the field F_RAW during recreation of directory
+            // F_RAW field is necessary for broadcasting with new validation modes.
+            indexDoc.add(new Field(DictionarySearcher.F_RAW, value, DictionaryUtils.FIELD_TYPE_RAW_VALUE));
             indexDoc.add(new StringField(DictionarySearcher.F_SYNTERM, DictionarySearcher.getJointTokens(value), Field.Store.NO));
         }
         return indexDoc;

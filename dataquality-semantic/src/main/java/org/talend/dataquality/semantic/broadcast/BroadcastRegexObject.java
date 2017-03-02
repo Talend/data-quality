@@ -15,8 +15,10 @@ package org.talend.dataquality.semantic.broadcast;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URI;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.talend.dataquality.semantic.classifier.ISubCategory;
 import org.talend.dataquality.semantic.classifier.custom.UDCategorySerDeser;
 import org.talend.dataquality.semantic.classifier.custom.UserDefinedClassifier;
 
@@ -32,6 +34,29 @@ public class BroadcastRegexObject implements Serializable {
 
     private UserDefinedClassifier regexClassifier;
 
+    /**
+     * @param regexClassifier
+     */
+    public BroadcastRegexObject(UserDefinedClassifier regexClassifier) {
+        this.regexClassifier = regexClassifier;
+    }
+
+    /**
+     * @param udc
+     * @param categories
+     */
+    public BroadcastRegexObject(UserDefinedClassifier udc, Set<String> categories) {
+        this.regexClassifier = new UserDefinedClassifier();
+        for (ISubCategory c : udc.getClassifiers()) {
+            if (categories.contains(c.getName())) {
+                this.regexClassifier.addSubCategory(c);
+            }
+        }
+    }
+
+    /**
+     * @param regexPath
+     */
     public BroadcastRegexObject(URI regexPath) {
         try {
             this.regexClassifier = UDCategorySerDeser.readJsonFile(regexPath);

@@ -18,7 +18,6 @@ import java.util.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.classifier.custom.UserDefinedClassifier;
 import org.talend.dataquality.semantic.classifier.impl.DataDictFieldClassifier;
 import org.talend.dataquality.semantic.index.Index;
@@ -39,22 +38,19 @@ class DefaultCategoryRecognizer implements CategoryRecognizer {
 
     private final UserDefinedClassifier userDefineClassifier;
 
+    private final Map<String, DQCategory> metadata;
+
     private final LFUCache<String, Set<String>> knownCategoryCache = new LFUCache<String, Set<String>>(10, 1000, 0.01f);
 
     private long emptyCount = 0;
 
     private long total = 0;
 
-    private CategoryRegistryManager crm;
-
-    public DefaultCategoryRecognizer(Index dictionary, Index keyword) throws IOException {
-        this(dictionary, keyword, CategoryRegistryManager.getInstance().getRegexClassifier(true));
-    }
-
-    public DefaultCategoryRecognizer(Index dictionary, Index keyword, UserDefinedClassifier regex) throws IOException {
+    public DefaultCategoryRecognizer(Index dictionary, Index keyword, UserDefinedClassifier regex,
+            Map<String, DQCategory> metadata) throws IOException {
         dataDictFieldClassifier = new DataDictFieldClassifier(dictionary, keyword);
         this.userDefineClassifier = regex;
-        crm = CategoryRegistryManager.getInstance();
+        this.metadata = metadata;
     }
 
     @Override
@@ -65,11 +61,6 @@ class DefaultCategoryRecognizer implements CategoryRecognizer {
     @Override
     public UserDefinedClassifier getUserDefineClassifier() {
         return userDefineClassifier;
-    }
-
-    @Override
-    public CategoryRegistryManager getCrm() {
-        return crm;
     }
 
     /**
@@ -142,7 +133,7 @@ class DefaultCategoryRecognizer implements CategoryRecognizer {
         if (!ids.isEmpty()) {
             for (String id : ids) {
                 categoriesAlreadySeen.add(id);
-                DQCategory meta = crm.getCategoryMetadataById(id);
+                DQCategory meta = metadata.get(id);
                 if (meta != null) {
                     incrementCategory(meta.getName(), meta.getLabel());
                     if (!CollectionUtils.isEmpty(meta.getParents()))
@@ -173,14 +164,14 @@ class DefaultCategoryRecognizer implements CategoryRecognizer {
         Pair<String, Integer> currentCategory;
         while (!catToSee.isEmpty()) {
             currentCategory = catToSee.pop();
-            DQCategory dqCategory = crm.getCategoryMetadataById(currentCategory.getLeft());
+            DQCategory dqCategory = metadata.get(currentCategory.getLeft());
             if (dqCategory != null && !CollectionUtils.isEmpty(dqCategory.getParents())) {
                 int parentLevel = currentCategory.getRight() + 1;
                 for (DQCategory parent : dqCategory.getParents()) {
                     if (!categoriesAlreadySeen.contains(parent.getId())) {
                         categoriesAlreadySeen.add(parent.getId());
                         catToSee.add(Pair.of(parent.getId(), parentLevel));
-                        DQCategory meta = crm.getCategoryMetadataById(parent.getId());
+                        DQCategory meta = metadata.get(parent.getId());
                         if (meta != null) {
                             incrementCategory(meta.getName(), meta.getLabel(), parentLevel);
                             categories.add(meta.getName());

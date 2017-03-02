@@ -209,6 +209,11 @@ public enum SemanticCategoryEnum {
     IBAN("583edc44ec06957a34fa6460", "IBAN", "IBAN", CategoryType.REGEX, true),
 
     /**
+     * Compound Types
+     */
+    PHONE("58f9d2e8b45fc36367e8bc38", "Phone number", "Phone number (DE, FR, UK, US)", CategoryType.COMPOUND, true),
+
+    /**
      * the categories with specific implementations
      */
     UNKNOWN("TALEND_INTERNAL_UNKNOWN", "", "Blank, Null and those who have no other semantic category", CategoryType.OTHER, false),

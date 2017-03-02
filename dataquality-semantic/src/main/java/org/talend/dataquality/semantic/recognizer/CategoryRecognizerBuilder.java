@@ -15,6 +15,7 @@ package org.talend.dataquality.semantic.recognizer;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.store.Directory;
@@ -23,6 +24,7 @@ import org.talend.dataquality.semantic.classifier.custom.UDCategorySerDeser;
 import org.talend.dataquality.semantic.classifier.custom.UserDefinedClassifier;
 import org.talend.dataquality.semantic.index.DictionarySearchMode;
 import org.talend.dataquality.semantic.index.LuceneIndex;
+import org.talend.dataquality.semantic.model.DQCategory;
 
 /**
  * created by talend on 2015-07-28 Detailled comment.
@@ -60,11 +62,18 @@ public class CategoryRecognizerBuilder {
 
     private UserDefinedClassifier regexClassifier;
 
+    private Map<String, DQCategory> metadata;
+
     public static CategoryRecognizerBuilder newBuilder() {
         if (INSTANCE == null) {
             INSTANCE = new CategoryRecognizerBuilder();
         }
         return INSTANCE;
+    }
+
+    public CategoryRecognizerBuilder metadata(Map<String, DQCategory> metadata) {
+        this.metadata = metadata;
+        return this;
     }
 
     public CategoryRecognizerBuilder ddPath(URI ddPath) {
@@ -106,16 +115,24 @@ public class CategoryRecognizerBuilder {
 
         switch (mode) {
         case LUCENE:
+            Map<String, DQCategory> meta = getCategoryMetadata();
             LuceneIndex dict = getDataDictIndex();
             LuceneIndex keyword = getKeywordIndex();
             UserDefinedClassifier regex = getRegexClassifier();
-            return new DefaultCategoryRecognizer(dict, keyword, regex);
+            return new DefaultCategoryRecognizer(dict, keyword, regex, meta);
         case ELASTIC_SEARCH:
             throw new IllegalArgumentException("Elasticsearch mode is not supported any more");
         default:
             throw new IllegalArgumentException("no mode specified.");
         }
 
+    }
+
+    public Map<String, DQCategory> getCategoryMetadata() {
+        if (metadata == null) {
+            metadata = CategoryRegistryManager.getInstance().getCategoryMetadataMap();
+        }
+        return metadata;
     }
 
     private LuceneIndex getDataDictIndex() {

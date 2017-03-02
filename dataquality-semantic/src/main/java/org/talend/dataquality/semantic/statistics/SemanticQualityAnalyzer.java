@@ -21,7 +21,6 @@ import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.QualityAnalyzer;
 import org.talend.dataquality.common.inference.ResizableList;
 import org.talend.dataquality.common.inference.ValueQualityStatistics;
-import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.classifier.ISubCategoryClassifier;
 import org.talend.dataquality.semantic.classifier.impl.DataDictFieldClassifier;
 import org.talend.dataquality.semantic.model.CategoryType;
@@ -48,9 +47,9 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
 
     private ISubCategoryClassifier dataDictClassifier;
 
-    private CategoryRegistryManager crm;
-
     private final CategoryRecognizerBuilder builder;
+
+    private Map<String, DQCategory> metadata;
 
     public SemanticQualityAnalyzer(CategoryRecognizerBuilder builder, String[] types, boolean isStoreInvalidValues) {
         this.isStoreInvalidValues = isStoreInvalidValues;
@@ -69,7 +68,7 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
             final CategoryRecognizer categoryRecognizer = builder.build();
             regexClassifier = categoryRecognizer.getUserDefineClassifier();
             dataDictClassifier = categoryRecognizer.getDataDictFieldClassifier();
-            crm = categoryRecognizer.getCrm();
+            metadata = builder.getCategoryMetadata();
         } catch (IOException e) {
             LOG.error(e, e);
         }
@@ -122,8 +121,7 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
 
     private void analyzeValue(String catName, String value, ValueQualityStatistics valueQuality) {
         DQCategory category = null;
-        for (String id : CategoryRegistryManager.getInstance().getCategoryIds()) {
-            DQCategory tmp = CategoryRegistryManager.getInstance().getCategoryMetadataById(id);
+        for (DQCategory tmp : metadata.values()) {
             if (catName.equals(tmp.getName())) {
                 category = tmp;
                 break;
@@ -201,7 +199,7 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
         String currentCategory;
         while (!catToSee.isEmpty()) {
             currentCategory = catToSee.pop();
-            DQCategory dqCategory = crm.getCategoryMetadataById(currentCategory);
+            DQCategory dqCategory = metadata.get(currentCategory);
             if (dqCategory != null)
                 if (!CollectionUtils.isEmpty(dqCategory.getChildren())) {
                     for (DQCategory child : dqCategory.getChildren()) {

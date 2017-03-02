@@ -36,7 +36,7 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
      * @param category the category to add
      * @return true when the category is added
      */
-    public boolean addSubCategory(UserDefinedCategory category) {
+    public boolean addSubCategory(ISubCategory category) {
         return potentialSubCategories.add(category);
     }
 
@@ -46,7 +46,7 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
      * @param category the category to insert or update
      * @return true when the category is correctly either inserted or updated
      */
-    public boolean insertOrUpdateSubCategory(UserDefinedCategory category) {
+    public boolean insertOrUpdateSubCategory(ISubCategory category) {
         if (potentialSubCategories.contains(category)) {
             return updateSubCategory(category);
         } // else
@@ -59,14 +59,14 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
      * @param category the category to update
      * @return true if the category exists and is updated.
      */
-    public boolean updateSubCategory(UserDefinedCategory category) {
+    public boolean updateSubCategory(ISubCategory category) {
         if (removeSubCategory(category)) {
             return addSubCategory(category);
         }
         return false;
     }
 
-    public boolean removeSubCategory(UserDefinedCategory category) {
+    public boolean removeSubCategory(ISubCategory category) {
         return potentialSubCategories.remove(category);
     }
 

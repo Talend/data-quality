@@ -354,6 +354,13 @@ public class CategoryRegistryManager {
     }
 
     /**
+     * Get the full map between category ID and category metadata.
+     */
+    public Map<String, DQCategory> getCategoryMetadataMap() {
+        return dqCategories;
+    }
+
+    /**
      * Get the category object by its technical ID.
      * 
      * @param catId the technical ID of the category
@@ -433,13 +440,24 @@ public class CategoryRegistryManager {
     }
 
     /**
-     * get URI of local dictionary
+     * get URI of local dictionary index
      */
     public URI getDictionaryURI() throws URISyntaxException {
         if (usingLocalCategoryRegistry) {
             return Paths.get(localRegistryPath, DICTIONARY_SUBFOLDER_NAME, contextName).toUri();
         } else {
             return CategoryRecognizerBuilder.class.getResource(CategoryRecognizerBuilder.DEFAULT_DD_PATH).toURI();
+        }
+    }
+
+    /**
+     * get URI of local keyword index
+     */
+    public URI getKeywordURI() throws URISyntaxException {
+        if (usingLocalCategoryRegistry) {
+            return Paths.get(localRegistryPath, KEYWORD_SUBFOLDER_NAME, contextName).toUri();
+        } else {
+            return CategoryRecognizerBuilder.class.getResource(CategoryRecognizerBuilder.DEFAULT_KW_PATH).toURI();
         }
     }
 

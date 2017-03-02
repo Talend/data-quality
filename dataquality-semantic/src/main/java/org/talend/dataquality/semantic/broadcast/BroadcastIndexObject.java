@@ -58,6 +58,15 @@ public class BroadcastIndexObject implements Serializable {
         this(inputDirectory, false);
     }
 
+    public BroadcastIndexObject(Directory inputDirectory, Set<String> categories) {
+        try {
+            documentList = BroadcastUtils.readDocumentsFromIndex(inputDirectory, categories);
+        } catch (IOException e) {
+            documentList = Collections.emptyList();
+            LOGGER.error("Unable to read synonym index.", e);
+        }
+    }
+
     /**
      * Constructor
      * 
