@@ -27,40 +27,43 @@ public class StringConverterTest {
     private static final String expected = "abc"; //$NON-NLS-1$
 
     @Test
-    public void TestRemoveTrailingAndLeading() {
+    public void testRemoveTrailingAndLeading() {
         // assertEquals(expected, " abc ".trim()); //$NON-NLS-1$
         // assertEquals('\t', '\u0009');
+        StringConverter stringConverter = new StringConverter();
 
         // test for default character (whitespace)
-        assertEquals(expected, new StringConverter(expected).removeTrailingAndLeadingCharacters());
-        assertEquals(expected, new StringConverter(" abc").removeTrailingAndLeadingCharacters()); //$NON-NLS-1$
-        assertEquals(expected, new StringConverter(" abc ").removeTrailingAndLeadingCharacters()); //$NON-NLS-1$
-        assertEquals(expected, new StringConverter(" abc  ").removeTrailingAndLeadingCharacters()); //$NON-NLS-1$
-        assertEquals(expected, new StringConverter("  abc ").removeTrailingAndLeadingCharacters()); //$NON-NLS-1$
-        assertEquals(expected, new StringConverter("  abc  ").removeTrailingAndLeadingCharacters()); //$NON-NLS-1$
-
-        assertEquals("ab c", new StringConverter(" ab c").removeTrailingAndLeadingCharacters()); //$NON-NLS-1$ //$NON-NLS-2$
-        assertEquals("a b c", new StringConverter(" a b c ").removeTrailingAndLeadingCharacters()); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals(expected, stringConverter.removeTrailingAndLeading(expected));
+        assertEquals(expected, stringConverter.removeTrailingAndLeading(" abc")); //$NON-NLS-1$
+        assertEquals(expected, stringConverter.removeTrailingAndLeading(" abc ")); //$NON-NLS-1$
+        assertEquals(expected, stringConverter.removeTrailingAndLeading(" abc  ")); //$NON-NLS-1$
+        assertEquals(expected, stringConverter.removeTrailingAndLeading("  abc ")); //$NON-NLS-1$
+        assertEquals(expected, stringConverter.removeTrailingAndLeading("  abc  ")); //$NON-NLS-1$
+        assertEquals("ab c", stringConverter.removeTrailingAndLeading(" ab c")); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("a b c", stringConverter.removeTrailingAndLeading(" a b c ")); //$NON-NLS-1$ //$NON-NLS-2$
 
         // test for other characters
-        assertEquals(expected, new StringConverter("\t" + expected).removeTrailingAndLeadingCharacters("\t")); //$NON-NLS-1$ //$NON-NLS-2$ 
-        assertEquals(expected, new StringConverter(expected + "\t").removeTrailingAndLeadingCharacters("\t")); //$NON-NLS-1$ //$NON-NLS-2$
-        assertEquals(expected, new StringConverter('\u0009' + expected).removeTrailingAndLeadingCharacters("\t")); //$NON-NLS-1$
-        assertEquals(expected,
-                new StringConverter('\u0009' + expected + '\u0009' + '\u0009').removeTrailingAndLeadingCharacters("\t")); //$NON-NLS-1$
+        assertEquals(expected, stringConverter.removeTrailingAndLeading("\t" + expected, "\t")); //$NON-NLS-1$ //$NON-NLS-2$ 
+        assertEquals(expected, stringConverter.removeTrailingAndLeading(expected + "\t", "\t")); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals(expected, stringConverter.removeTrailingAndLeading('\u0009' + expected, "\t")); //$NON-NLS-1$
+        assertEquals(expected, stringConverter.removeTrailingAndLeading('\u0009' + expected + '\u0009' + '\u0009', "\t")); //$NON-NLS-1$
 
-        assertEquals("abc ", new StringConverter("\t" + "abc ").removeTrailingAndLeadingCharacters("\t")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-        assertEquals("a" + "\t" + "bc", new StringConverter("\t" + "a" + "\t" + "bc").removeTrailingAndLeadingCharacters("\t")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
-        assertEquals("\t" + expected, new StringConverter("\t" + "abc ").removeTrailingAndLeadingCharacters()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
+        assertEquals("abc ", stringConverter.removeTrailingAndLeading("\t" + "abc ", "\t")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+        assertEquals("a" + "\t" + "bc", stringConverter.removeTrailingAndLeading("\t" + "a" + "\t" + "bc", "\t")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
+        assertEquals("\t" + expected, stringConverter.removeTrailingAndLeading("\t" + "abc ")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
 
-        assertEquals(expected, new StringConverter("\n" + expected).removeTrailingAndLeadingCharacters("\n")); //$NON-NLS-1$ //$NON-NLS-2$ 
-        assertEquals("abc ", new StringConverter("\n" + "abc ").removeTrailingAndLeadingCharacters("\n")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+        assertEquals(expected, stringConverter.removeTrailingAndLeading("\n" + expected, "\n")); //$NON-NLS-1$ //$NON-NLS-2$ 
+        assertEquals("abc ", stringConverter.removeTrailingAndLeading("\n" + "abc ", "\n")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
-        assertEquals(expected, new StringConverter(expected).removeTrailingAndLeadingCharacters("\r")); //$NON-NLS-1$
-        assertEquals(expected, new StringConverter("\r" + expected).removeTrailingAndLeadingCharacters("\r")); //$NON-NLS-1$ //$NON-NLS-2$ 
-        assertEquals(expected, new StringConverter("\r" + expected + "\r").removeTrailingAndLeadingCharacters("\r")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
-        assertEquals("abc ", new StringConverter("\r" + "abc ").removeTrailingAndLeadingCharacters("\r")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-        assertEquals("abc ", new StringConverter("\r" + "abc " + "\r").removeTrailingAndLeadingCharacters("\r")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+        assertEquals(expected, stringConverter.removeTrailingAndLeading(expected, "\r")); //$NON-NLS-1$
+        assertEquals(expected, stringConverter.removeTrailingAndLeading("\r" + expected, "\r")); //$NON-NLS-1$ //$NON-NLS-2$ 
+        assertEquals(expected, stringConverter.removeTrailingAndLeading("\r" + expected + "\r", "\r")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
+        assertEquals("abc ", stringConverter.removeTrailingAndLeading("\r" + "abc ", "\r")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+        assertEquals("abc ", stringConverter.removeTrailingAndLeading("\r" + "abc " + "\r", "\r")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+
+        assertEquals("bc", stringConverter.removeTrailingAndLeading(" abc", " a")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        assertEquals(" a", stringConverter.removeTrailingAndLeading(" abc", "bc")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        assertEquals("ab", stringConverter.removeTrailingAndLeading("cabc", "c")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
         String[] whitespace_chars = new String[] { "" /* dummy empty string for homogeneity *///$NON-NLS-1$
                 , "\\u0009" // CHARACTER TABULATION //$NON-NLS-1$
@@ -91,11 +94,9 @@ public class StringConverterTest {
                 , "\\u3000" // IDEOGRAPHIC SPACE //$NON-NLS-1$
         };
         for (String testChar : whitespace_chars) {
-            assertEquals(expected, new StringConverter(testChar + expected).removeTrailingAndLeadingCharacters(testChar));
-            assertEquals(expected,
-                    new StringConverter(testChar + expected + testChar).removeTrailingAndLeadingCharacters(testChar));
-            assertEquals(expected,
-                    new StringConverter(testChar + expected + testChar + testChar).removeTrailingAndLeadingCharacters(testChar));
+            assertEquals(expected, stringConverter.removeTrailingAndLeading(testChar + expected, testChar));
+            assertEquals(expected, stringConverter.removeTrailingAndLeading(testChar + expected + testChar, testChar));
+            assertEquals(expected, stringConverter.removeTrailingAndLeading(testChar + expected + testChar + testChar, testChar));
         }
 
     }
