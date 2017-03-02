@@ -403,7 +403,8 @@ public class TSwooshGrouping<TYPE> {
         if (result.isEmpty()) {//no masters in the current block, TDQ-12851
             for (RecordGenerator record : notMasterRecords) {
                 List<DQAttribute<?>> originalRow = record.getOriginalRow();
-                RichRecord createRecord = createRecord(originalRow, originalRow.get(indexGID2).getValue());
+                String GID = oldGID2New.get(originalRow.get(indexGID2).getValue());
+                RichRecord createRecord = createRecord(originalRow, GID != null ? GID : originalRow.get(indexGID2).getValue());
                 output(createRecord);
             }
         } else {
