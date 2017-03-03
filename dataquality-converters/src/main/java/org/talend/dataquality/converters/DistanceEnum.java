@@ -16,19 +16,19 @@ package org.talend.dataquality.converters;
  * Distance enum.
  */
 public enum DistanceEnum {
-    MILLIMETER("millimeter", "mm", 0.001, 1000.0), //$NON-NLS-1$
-    CENTIMETER("centimeter", "cm", 0.01, 100.0), //$NON-NLS-1$
-    DECIMETER("decimeter", "dm", 0.1, 10.0), //$NON-NLS-1$
-    METER("meter", "m", 1.0, 1.0), //$NON-NLS-1$
-    DEKAMETER("dekameter", "dam", 10.0, 0.1), //$NON-NLS-1$
-    HECTOMETER("hectometer", "hm", 100.0, 0.01), //$NON-NLS-1$
-    KILOMETER("kilometer", "km", 1000.0, 0.001), //$NON-NLS-1$
-    INCH("inch", "in", 0.0254, 39.3700787401574803), //$NON-NLS-1$
-    FOOT("foot", "ft", 0.3048, 3.28083989501312336), //$NON-NLS-1$
-    YARD("yard", "yd", 0.9144, 1.09361329833770779), //$NON-NLS-1$
-    MILE("mile", "mi", 1609.344, 0.00062137119223733397), //$NON-NLS-1$
-    NAUTICAL_MILE("nautical mile", "nm", 1852.0, 0.000539956803455723542), //$NON-NLS-1$
-    LIGHT_YEAR("light-year", "ly", 9460730472580800.0, 0.0000000000000001057000834024615463709); //$NON-NLS-1$
+    MILLIMETER("millimeter", "mm", 0.001, 1000.0), //$NON-NLS-1$ //$NON-NLS-2$
+    CENTIMETER("centimeter", "cm", 0.01, 100.0), //$NON-NLS-1$ //$NON-NLS-2$
+    DECIMETER("decimeter", "dm", 0.1, 10.0), //$NON-NLS-1$ //$NON-NLS-2$
+    METER("meter", "m", 1.0, 1.0), //$NON-NLS-1$ //$NON-NLS-2$
+    DEKAMETER("dekameter", "dam", 10.0, 0.1), //$NON-NLS-1$ //$NON-NLS-2$
+    HECTOMETER("hectometer", "hm", 100.0, 0.01), //$NON-NLS-1$ //$NON-NLS-2$
+    KILOMETER("kilometer", "km", 1000.0, 0.001), //$NON-NLS-1$ //$NON-NLS-2$
+    INCH("inch", "in", 0.0254, 39.3700787401574803), //$NON-NLS-1$ //$NON-NLS-2$
+    FOOT("foot", "ft", 0.3048, 3.28083989501312336), //$NON-NLS-1$ //$NON-NLS-2$
+    YARD("yard", "yd", 0.9144, 1.09361329833770779), //$NON-NLS-1$ //$NON-NLS-2$
+    MILE("mile", "mi", 1609.344, 0.00062137119223733397), //$NON-NLS-1$ //$NON-NLS-2$
+    NAUTICAL_MILE("nautical mile", "nm", 1852.0, 0.000539956803455723542), //$NON-NLS-1$ //$NON-NLS-2$
+    LIGHT_YEAR("light-year", "ly", 9460730472580800.0, 0.0000000000000001057000834024615463709); //$NON-NLS-1$ //$NON-NLS-2$
 
     private String displayName;
 

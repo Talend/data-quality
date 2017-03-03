@@ -123,6 +123,8 @@ public class DistanceConverterTest {
         double nm = 5.399568034557236E-6;
         double ly = 1.0570008340246153E-18;
 
+        DistanceConverter converter0 = new DistanceConverter(DistanceEnum.CENTIMETER, DistanceEnum.CENTIMETER);
+        assertEquals(cm, converter0.convert(cm), delta);
         DistanceConverter converter1 = new DistanceConverter(DistanceEnum.CENTIMETER, DistanceEnum.MILLIMETER);
         assertEquals(mm, converter1.convert(cm), delta);
         DistanceConverter converter2 = new DistanceConverter(DistanceEnum.CENTIMETER, DistanceEnum.DECIMETER);
@@ -165,6 +167,8 @@ public class DistanceConverterTest {
         double nm = 5.399568034557236E-5;
         double ly = 1.0570008340246154E-17;
 
+        DistanceConverter converter0 = new DistanceConverter(DistanceEnum.DECIMETER, DistanceEnum.DECIMETER);
+        assertEquals(dm, converter0.convert(dm), delta);
         DistanceConverter converter1 = new DistanceConverter(DistanceEnum.DECIMETER, DistanceEnum.MILLIMETER);
         assertEquals(mm, converter1.convert(dm), delta);
         DistanceConverter converter2 = new DistanceConverter(DistanceEnum.DECIMETER, DistanceEnum.CENTIMETER);
@@ -207,6 +211,8 @@ public class DistanceConverterTest {
         double nm = 5.399568034557236E-4;
         double ly = 1.0570008340246154E-16;
 
+        DistanceConverter converter0 = new DistanceConverter(DistanceEnum.METER, DistanceEnum.METER);
+        assertEquals(m, converter0.convert(m), delta);
         DistanceConverter converter1 = new DistanceConverter(DistanceEnum.METER, DistanceEnum.MILLIMETER);
         assertEquals(mm, converter1.convert(m), delta);
         DistanceConverter converter2 = new DistanceConverter(DistanceEnum.METER, DistanceEnum.CENTIMETER);
@@ -249,6 +255,8 @@ public class DistanceConverterTest {
         double nm = 0.005399568034557236;
         double ly = 1.0570008340246154E-15;
 
+        DistanceConverter converter0 = new DistanceConverter(DistanceEnum.DEKAMETER, DistanceEnum.DEKAMETER);
+        assertEquals(dam, converter0.convert(dam), delta);
         DistanceConverter converter1 = new DistanceConverter(DistanceEnum.DEKAMETER, DistanceEnum.MILLIMETER);
         assertEquals(mm, converter1.convert(dam), delta);
         DistanceConverter converter2 = new DistanceConverter(DistanceEnum.DEKAMETER, DistanceEnum.CENTIMETER);
@@ -291,6 +299,8 @@ public class DistanceConverterTest {
         double nm = 0.05399568034557236;
         double ly = 1.0570008340246154E-14;
 
+        DistanceConverter converter0 = new DistanceConverter(DistanceEnum.HECTOMETER, DistanceEnum.HECTOMETER);
+        assertEquals(hm, converter0.convert(hm), delta);
         DistanceConverter converter1 = new DistanceConverter(DistanceEnum.HECTOMETER, DistanceEnum.MILLIMETER);
         assertEquals(mm, converter1.convert(hm), delta);
         DistanceConverter converter2 = new DistanceConverter(DistanceEnum.HECTOMETER, DistanceEnum.CENTIMETER);
@@ -333,6 +343,8 @@ public class DistanceConverterTest {
         double nm = 0.5399568034557236;
         double ly = 1.0570008340246153E-13;
 
+        DistanceConverter converter0 = new DistanceConverter(DistanceEnum.KILOMETER, DistanceEnum.KILOMETER);
+        assertEquals(km, converter0.convert(km), delta);
         DistanceConverter converter1 = new DistanceConverter(DistanceEnum.KILOMETER, DistanceEnum.MILLIMETER);
         assertEquals(mm, converter1.convert(km), delta);
         DistanceConverter converter2 = new DistanceConverter(DistanceEnum.KILOMETER, DistanceEnum.CENTIMETER);
@@ -375,6 +387,8 @@ public class DistanceConverterTest {
         double nm = 1.371490280777538E-5;
         double ly = 2.684782118422523E-18;
 
+        DistanceConverter converter0 = new DistanceConverter(DistanceEnum.INCH, DistanceEnum.INCH);
+        assertEquals(in, converter0.convert(in), delta);
         DistanceConverter converter1 = new DistanceConverter(DistanceEnum.INCH, DistanceEnum.MILLIMETER);
         assertEquals(mm, converter1.convert(in), delta);
         DistanceConverter converter2 = new DistanceConverter(DistanceEnum.INCH, DistanceEnum.CENTIMETER);
@@ -417,6 +431,8 @@ public class DistanceConverterTest {
         double nm = 1.6457883369330455E-4;
         double ly = 3.221738542107028E-17;
 
+        DistanceConverter converter0 = new DistanceConverter(DistanceEnum.FOOT, DistanceEnum.FOOT);
+        assertEquals(ft, converter0.convert(ft), delta);
         DistanceConverter converter1 = new DistanceConverter(DistanceEnum.FOOT, DistanceEnum.MILLIMETER);
         assertEquals(mm, converter1.convert(ft), delta);
         DistanceConverter converter2 = new DistanceConverter(DistanceEnum.FOOT, DistanceEnum.CENTIMETER);
@@ -459,6 +475,8 @@ public class DistanceConverterTest {
         double nm = 4.937365010799136E-4;
         double ly = 9.665215626321083E-17;
 
+        DistanceConverter converter0 = new DistanceConverter(DistanceEnum.YARD, DistanceEnum.YARD);
+        assertEquals(yd, converter0.convert(yd), delta);
         DistanceConverter converter1 = new DistanceConverter(DistanceEnum.YARD, DistanceEnum.MILLIMETER);
         assertEquals(mm, converter1.convert(yd), delta);
         DistanceConverter converter2 = new DistanceConverter(DistanceEnum.YARD, DistanceEnum.CENTIMETER);
@@ -501,6 +519,8 @@ public class DistanceConverterTest {
         double nm = 0.868976241900648;
         double ly = 1.7010779502325107E-13;
 
+        DistanceConverter converter0 = new DistanceConverter(DistanceEnum.MILE, DistanceEnum.MILE);
+        assertEquals(mi, converter0.convert(mi), delta);
         DistanceConverter converter1 = new DistanceConverter(DistanceEnum.MILE, DistanceEnum.MILLIMETER);
         assertEquals(mm, converter1.convert(mi), delta);
         DistanceConverter converter2 = new DistanceConverter(DistanceEnum.MILE, DistanceEnum.CENTIMETER);
@@ -543,6 +563,8 @@ public class DistanceConverterTest {
         double mi = 1.1507794480235425;
         double ly = 1.9575655446135877E-13;
 
+        DistanceConverter converter0 = new DistanceConverter(DistanceEnum.NAUTICAL_MILE, DistanceEnum.NAUTICAL_MILE);
+        assertEquals(nm, converter0.convert(nm), delta);
         DistanceConverter converter1 = new DistanceConverter(DistanceEnum.NAUTICAL_MILE, DistanceEnum.MILLIMETER);
         assertEquals(mm, converter1.convert(nm), delta);
         DistanceConverter converter2 = new DistanceConverter(DistanceEnum.NAUTICAL_MILE, DistanceEnum.CENTIMETER);
@@ -585,6 +607,8 @@ public class DistanceConverterTest {
         double mi = 5.878625373183607E12;
         double nm = 5.108385784330886E12;
 
+        DistanceConverter converter0 = new DistanceConverter(DistanceEnum.LIGHT_YEAR, DistanceEnum.LIGHT_YEAR);
+        assertEquals(ly, converter0.convert(ly), delta);
         DistanceConverter converter1 = new DistanceConverter(DistanceEnum.LIGHT_YEAR, DistanceEnum.MILLIMETER);
         assertEquals(mm, converter1.convert(ly), delta);
         DistanceConverter converter2 = new DistanceConverter(DistanceEnum.LIGHT_YEAR, DistanceEnum.CENTIMETER);
