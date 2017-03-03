@@ -39,67 +39,40 @@ public class DistanceConverter {
 
     public static final DistanceEnum DEFAULT_DISTANCE_TO = DistanceEnum.KILOMETER;
 
-    public static double convert(double value, DistanceEnum from, DistanceEnum to) {
-        double result = value;
+    private DistanceEnum deFrom;
 
-        DistanceEnum deFrom = from;
-        if (deFrom == null) {
-            deFrom = DEFAULT_DISTANCE_FROM;
+    private DistanceEnum deTo;
+
+    private BigDecimal multiplier;
+
+    /**
+     * Default constructor, the default distance from unit is DistanceEnum.MILE, the default distance to unit is DistanceEnum.KILOMETER.
+     */
+    public DistanceConverter() {
+        this(DEFAULT_DISTANCE_FROM, DEFAULT_DISTANCE_TO);
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param from the distance from unit, default value is DistanceEnum.MILE
+     * @param to   the distance to unit, default value is DistanceEnum.KILOMETER
+     */
+    public DistanceConverter(DistanceEnum from, DistanceEnum to) {
+        this.deFrom = from == null ? DEFAULT_DISTANCE_FROM : from;
+        this.deTo = to == null ? DEFAULT_DISTANCE_TO : to;
+        this.multiplier = new BigDecimal(String.valueOf(this.deFrom.getConversionToBase()))
+                .multiply(new BigDecimal(String.valueOf(this.deTo.getConversionFromBase())));
+    }
+
+    public double convert(double value) {
+        if (Double.isNaN(value)) {
+            return value;
         }
-
-        DistanceEnum deTo = to;
-        if (deTo == null) {
-            deTo = DEFAULT_DISTANCE_TO;
+        if (this.deFrom.equals(this.deTo)) {
+            return value;
         }
-
-        if (!deFrom.equals(deTo)) {
-            // use BigDecimal to eliminate multiplication rounding errors
-            BigDecimal multiplier = new BigDecimal(String.valueOf(deFrom.getConversionToBase()))
-                    .multiply(new BigDecimal(String.valueOf(deTo.getConversionFromBase())));
-            BigDecimal bdResult = new BigDecimal(String.valueOf(value)).multiply(multiplier);
-            result = bdResult.doubleValue();
-        }
-
-        return result;
-    }
-}
-
-enum DistanceEnum {
-    MILLIMETER("mm", 0.001, 1000.0), //$NON-NLS-1$
-    CENTIMETER("cm", 0.01, 100.0), //$NON-NLS-1$
-    DECIMETER("dm", 0.1, 10.0), //$NON-NLS-1$
-    METER("m", 1.0, 1.0), //$NON-NLS-1$
-    DEKAMETER("dam", 10.0, 0.1), //$NON-NLS-1$
-    HECTOMETER("hm", 100.0, 0.01), //$NON-NLS-1$
-    KILOMETER("km", 1000.0, 0.001), //$NON-NLS-1$
-    INCH("in", 0.0254, 39.3700787401574803), //$NON-NLS-1$
-    FOOT("ft", 0.3048, 3.28083989501312336), //$NON-NLS-1$
-    YARD("yd", 0.9144, 1.09361329833770779), //$NON-NLS-1$
-    MILE("mi", 1609.344, 0.00062137119223733397), //$NON-NLS-1$
-    NAUTICAL_MILE("nm", 1852.0, 0.000539956803455723542), //$NON-NLS-1$
-    LIGHT_YEAR("ly", 9460730472580800.0, 0.0000000000000001057000834024615463709); //$NON-NLS-1$
-
-    private String name;
-
-    private double conversionToBase;
-
-    private double conversionFromBase;
-
-    DistanceEnum(String name, double conversionToBase, double conversionFromBase) {
-        this.name = name;
-        this.conversionToBase = conversionToBase;
-        this.conversionFromBase = conversionFromBase;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public double getConversionToBase() {
-        return conversionToBase;
-    }
-
-    public double getConversionFromBase() {
-        return conversionFromBase;
+        BigDecimal bdResult = new BigDecimal(String.valueOf(value)).multiply(this.multiplier);
+        return bdResult.doubleValue();
     }
 }
