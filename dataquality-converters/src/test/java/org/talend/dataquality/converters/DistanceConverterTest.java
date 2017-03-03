@@ -14,7 +14,9 @@ package org.talend.dataquality.converters;
 
 import static org.junit.Assert.*;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 /**
  * Test for class {@link DistanceConverter}.
@@ -24,6 +26,42 @@ import org.junit.Test;
 public class DistanceConverterTest {
 
     private double delta = 1.0E-34;
+
+    @Rule
+    public ExpectedException thrown= ExpectedException.none();
+
+    @Test
+    public void testConvertDoubleNan() {
+        double nan = Double.NaN;
+        DistanceConverter converter = new DistanceConverter(DistanceConverter.DEFAULT_DISTANCE_FROM, DistanceConverter.DEFAULT_DISTANCE_TO);
+        thrown.expect(NumberFormatException.class);
+        converter.convert(nan);
+    }
+
+    @Test
+    public void testConvertZero() {
+        double zero = 0.0;
+        DistanceConverter converter = new DistanceConverter(DistanceConverter.DEFAULT_DISTANCE_FROM, DistanceConverter.DEFAULT_DISTANCE_TO);
+        assertEquals(zero, converter.convert(zero), delta);
+    }
+
+    @Test
+    public void testConvertMaxValue() {
+        double max = Double.MAX_VALUE;
+        DistanceConverter converter0 = new DistanceConverter(DistanceEnum.LIGHT_YEAR, DistanceEnum.MILLIMETER);
+        assertEquals(Double.POSITIVE_INFINITY, converter0.convert(max), delta);
+        DistanceConverter converter1 = new DistanceConverter(DistanceEnum.MILLIMETER, DistanceEnum.LIGHT_YEAR);
+        assertEquals(1.900163142869793E289, converter1.convert(max), delta);
+    }
+
+    @Test
+    public void testConvertMinValue() {
+        double min = Double.MIN_VALUE;
+        DistanceConverter converter0 = new DistanceConverter(DistanceEnum.MILLIMETER, DistanceEnum.LIGHT_YEAR);
+        assertEquals(0.0, converter0.convert(min), delta);
+        DistanceConverter converter1 = new DistanceConverter(DistanceEnum.LIGHT_YEAR, DistanceEnum.MILLIMETER);
+        assertEquals(0.0, converter1.convert(min), delta);
+    }
 
     @Test
     public void testConvertMillimeter() {
@@ -41,6 +79,8 @@ public class DistanceConverterTest {
         double nm = 5.399568034557235E-7;
         double ly = 1.0570008340246155E-19;
 
+        DistanceConverter converter0 = new DistanceConverter(DistanceEnum.MILLIMETER, DistanceEnum.MILLIMETER);
+        assertEquals(mm, converter0.convert(mm), delta);
         DistanceConverter converter1 = new DistanceConverter(DistanceEnum.MILLIMETER, DistanceEnum.CENTIMETER);
         assertEquals(cm, converter1.convert(mm), delta);
         DistanceConverter converter2 = new DistanceConverter(DistanceEnum.MILLIMETER, DistanceEnum.DECIMETER);
