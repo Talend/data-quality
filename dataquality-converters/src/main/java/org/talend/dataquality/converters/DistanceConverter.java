@@ -76,4 +76,3 @@ public class DistanceConverter {
         return bdResult.doubleValue();
     }
 }
-
