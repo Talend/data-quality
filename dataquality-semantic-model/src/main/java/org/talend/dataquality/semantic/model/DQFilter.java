@@ -12,7 +12,9 @@
 // ============================================================================
 package org.talend.dataquality.semantic.model;
 
-public class DQFilter {
+import java.io.Serializable;
+
+public class DQFilter implements Serializable {
 
     private String filterParam;
 

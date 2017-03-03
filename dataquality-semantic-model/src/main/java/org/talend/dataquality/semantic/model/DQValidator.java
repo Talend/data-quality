@@ -12,7 +12,9 @@
 // ============================================================================
 package org.talend.dataquality.semantic.model;
 
-public class DQValidator {
+import java.io.Serializable;
+
+public class DQValidator implements Serializable {
 
     private String patternString;
 
