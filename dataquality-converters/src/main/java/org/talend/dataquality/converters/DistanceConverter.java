@@ -66,6 +66,9 @@ public class DistanceConverter {
     }
 
     public double convert(double value) {
+        if (Double.isNaN(value)) {
+            return value;
+        }
         if (this.deFrom.equals(this.deTo)) {
             return value;
         }

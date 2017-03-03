@@ -27,15 +27,11 @@ public class DistanceConverterTest {
 
     private double delta = 1.0E-34;
 
-    @Rule
-    public ExpectedException thrown= ExpectedException.none();
-
     @Test
     public void testConvertDoubleNan() {
         double nan = Double.NaN;
         DistanceConverter converter = new DistanceConverter(DistanceConverter.DEFAULT_DISTANCE_FROM, DistanceConverter.DEFAULT_DISTANCE_TO);
-        thrown.expect(NumberFormatException.class);
-        converter.convert(nan);
+        assertEquals(nan, converter.convert(nan), delta);
     }
 
     @Test
