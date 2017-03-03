@@ -400,14 +400,7 @@ public class TSwooshGrouping<TYPE> {
 
         // add the not masters again
         List<Record> result = algorithm.getResult();
-        if (result.isEmpty()) {//no masters in the current block, TDQ-12851
-            for (RecordGenerator record : notMasterRecords) {
-                List<DQAttribute<?>> originalRow = record.getOriginalRow();
-                String GID = oldGID2New.get(originalRow.get(indexGID2).getValue());
-                RichRecord createRecord = createRecord(originalRow, GID != null ? GID : originalRow.get(indexGID2).getValue());
-                output(createRecord);
-            }
-        } else {
+        if (!result.isEmpty()) {
             for (Record master : result) {
                 String groupId = StringUtils.isBlank(master.getGroupId()) ? ((RichRecord) master).getGID().getValue()
                         : master.getGroupId();
@@ -429,15 +422,15 @@ public class TSwooshGrouping<TYPE> {
                     groupRows.remove(tempGid);
                 }
             }
-            // TDQ-13255 output the non-master of 1st tMatchGroup and also update its GID by the map 'oldGID2New'.
-            if (!groupRows.isEmpty()) {
-                for (RecordGenerator record : notMasterRecords) {
-                    List<DQAttribute<?>> originalRow = record.getOriginalRow();
-                    String GID = oldGID2New.get(originalRow.get(indexGID2).getValue());
-                    RichRecord createRecord = createRecord(originalRow,
-                            GID != null ? GID : originalRow.get(indexGID2).getValue());
-                    output(createRecord);
-                }
+        }
+        // 1.output no masters in the current block, TDQ-12851
+        // 2.TDQ-13255 output the non-master of 1st tMatchGroup and also update its GID by the map 'oldGID2New'.
+        if (result.isEmpty() || !groupRows.isEmpty()) {
+            for (RecordGenerator record : notMasterRecords) {
+                List<DQAttribute<?>> originalRow = record.getOriginalRow();
+                String GID = oldGID2New.get(originalRow.get(indexGID2).getValue());
+                RichRecord createRecord = createRecord(originalRow, GID != null ? GID : originalRow.get(indexGID2).getValue());
+                output(createRecord);
             }
         }
 
