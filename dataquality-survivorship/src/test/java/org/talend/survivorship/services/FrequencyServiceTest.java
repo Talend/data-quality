@@ -80,9 +80,9 @@ public class FrequencyServiceTest {
         Assert.assertEquals("maxOccurence size should be 2", 2, fs.maxOccurence.size()); //$NON-NLS-1$
         Assert.assertEquals("secondMaxOccurence size should be 2", 2, fs.secondMaxOccurence.size()); //$NON-NLS-1$
         fs.init();
-        Assert.assertEquals("", 0, fs.frequencyMaps.size()); //$NON-NLS-1$
-        Assert.assertEquals("", 0, fs.maxOccurence.size()); //$NON-NLS-1$
-        Assert.assertEquals("", 0, fs.secondMaxOccurence.size()); //$NON-NLS-1$
+        Assert.assertEquals("frequencyMaps size should be 0", 0, fs.frequencyMaps.size()); //$NON-NLS-1$
+        Assert.assertEquals("maxOccurence size should be 0", 0, fs.maxOccurence.size()); //$NON-NLS-1$
+        Assert.assertEquals("secondMaxOccurence size should be 0", 0, fs.secondMaxOccurence.size()); //$NON-NLS-1$
     }
 
     /**
@@ -146,12 +146,12 @@ public class FrequencyServiceTest {
         FrequencyService fs = new FrequencyService(dataSet);
         fs.putAttributeValues("firstName", false); //$NON-NLS-1$
         fs.putAttributeValues("lastName", false); //$NON-NLS-1$
-        Assert.assertEquals(
-                "the size of most common value on firstName column should be 6", 6, fs.getMostCommonValue("firstName", false).size()); //$NON-NLS-1$ //$NON-NLS-2$
-        Assert.assertEquals(
-                "the size of most common value on lastName column should be 1", 1, fs.getMostCommonValue("lastName", false).size()); //$NON-NLS-1$ //$NON-NLS-2$
-        Assert.assertEquals(
-                "most common value on lastName column should be cook", "cook", fs.getMostCommonValue("lastName", false).toArray()[0].toString()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        Assert.assertEquals("the size of most common value on firstName column should be 6", 6, //$NON-NLS-1$
+                fs.getMostCommonValue("firstName", false).size()); //$NON-NLS-1$
+        Assert.assertEquals("the size of most common value on lastName column should be 1", 1, //$NON-NLS-1$
+                fs.getMostCommonValue("lastName", false).size()); //$NON-NLS-1$
+        Assert.assertEquals("most common value on lastName column should be cook", "cook", //$NON-NLS-1$//$NON-NLS-2$
+                fs.getMostCommonValue("lastName", false).toArray()[0].toString()); //$NON-NLS-1$
     }
 
     /**
@@ -166,12 +166,12 @@ public class FrequencyServiceTest {
         FrequencyService fs = new FrequencyService(dataSet);
         fs.putAttributeValues("firstName", false); //$NON-NLS-1$
         fs.putAttributeValues("lastName", false); //$NON-NLS-1$
-        Assert.assertEquals(
-                "the size of most common value on firstName column should be 0", 0, fs.getSecondMostCommonValue("firstName", false).size()); //$NON-NLS-1$ //$NON-NLS-2$
-        Assert.assertEquals(
-                "the size of most common value on lastName column should be 1", 1, fs.getSecondMostCommonValue("lastName", false).size()); //$NON-NLS-1$ //$NON-NLS-2$
-        Assert.assertEquals(
-                "most common value on lastName column should be bell", "bell", fs.getSecondMostCommonValue("lastName", false).toArray()[0].toString()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        Assert.assertEquals("the size of most common value on firstName column should be 0", 0, //$NON-NLS-1$
+                fs.getSecondMostCommonValue("firstName", false).size()); //$NON-NLS-1$
+        Assert.assertEquals("the size of most common value on lastName column should be 1", 1, //$NON-NLS-1$
+                fs.getSecondMostCommonValue("lastName", false).size()); //$NON-NLS-1$
+        Assert.assertEquals("most common value on lastName column should be bell", "bell", //$NON-NLS-1$//$NON-NLS-2$
+                fs.getSecondMostCommonValue("lastName", false).toArray()[0].toString()); //$NON-NLS-1$
     }
 
 }

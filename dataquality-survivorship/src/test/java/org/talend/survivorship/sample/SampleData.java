@@ -36,23 +36,7 @@ public final class SampleData {
 
     public static final String PKG_NAME = "org.talend.survivorship.sample"; //$NON-NLS-1$
 
-    public static final String PKG_NAME_CONFLICT = "org.talend.survivorship.conflict"; //$NON-NLS-1$
-
-    public static final String PKG_NAME_CONFLICT_FRE_LONG = "org.talend.survivorship.conflict.fre_long"; //$NON-NLS-1$
-
-    public static final String PKG_NAME_CONFLICT_FRE_LONG_RECENT = "org.talend.survivorship.conflict.fre_long_recent"; //$NON-NLS-1$
-
-    public static final String PKG_NAME_CONFLICT_FRE_LONG_RECENT_WITHOUT_IGNORE_BLANK = "org.talend.survivorship.conflict.fre_long_recent_without_ignore_blank"; //$NON-NLS-1$
-
-    public static final String PKG_NAME_CONFLICT_TWO_TARGET_SAME_RESULT_REFERENCE_COLUMN = "org.talend.survivorship.conflict.short_reference_column"; //$NON-NLS-1$
-
-    public static final String PKG_NAME_CONFLICT_FRE_NULL_CONSTANT = "org.talend.survivorship.conflict.fre_null_constant"; //$NON-NLS-1$
-
     public static final String PKG_NAME_CONFLICT_FRE_NULL_FRE = "org.talend.survivorship.conflict.fre_null_fre"; //$NON-NLS-1$
-
-    public static final String PKG_NAME_CONFLICT_TWO_TARGET_ONE_COLUMN = "org.talend.survivorship.conflict.two_target_one_column"; //$NON-NLS-1$
-
-    public static final String PKG_NAME_CONFLICT_TWO_TARGET_SAME_VALUE = "org.talend.survivorship.conflict.two_target_same_value"; //$NON-NLS-1$
 
     public static final Object[][] SAMPLE_INPUT = {
             { "GRIZZARD CO.", "110 N MARYLAND AVE", "GLENDALE", "CA", "912066", "FR", "8185431314", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
@@ -63,15 +47,6 @@ public final class SampleData {
                     stringToDate("20110103", "yyyyMMdd"), 0.8572727272727272, 31, 1970, null }, //$NON-NLS-1$ //$NON-NLS-2$
             { "GRIZZARD CO", "1480 S COLORADO BOULEVARD", "LOS ANGELES", "CA", "91206", "US", "(800) 325-4892", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
                     stringToDate("20110115", "yyyyMMdd"), 0.742319482, 35, 0, null } }; //$NON-NLS-1$ //$NON-NLS-2$
-
-    public static final Object[][] SAMPLE_INPUT_CONFLICT = {
-            { "Lili", "Cheng", "Walker", "beijing", 1, stringToDate("04-04-2000", "dd-MM-yyyy"), "1", 7 }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
-            { "Tony", null, "Martain", "shanghai", 1, stringToDate("06-06-2000", "dd-MM-yyyy"), "1", 0 }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ 
-            { "Tom", "Green", null, "shanghai", 3, stringToDate("04-04-2000", "dd-MM-yyyy"), "1", 0 }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
-            { "san", "Green", null, "hebeihebei", 2, stringToDate("08-08-2000", "dd-MM-yyyy"), "1", 0 }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
-            { "li", "Brown", "Joseph", "beijing", 2, stringToDate("08-08-2000", "dd-MM-yyyy"), "1", 0 }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
-            { "Tony", null, "William", null, 2, null, "1", 0 }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
-            { "Lili", "si", "Allen", null, 2, null, "1", 0 } }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ 
 
     public static final LinkedHashMap<String, String> COLUMNS = new LinkedHashMap<String, String>() {
 
@@ -92,24 +67,6 @@ public final class SampleData {
         }
     };
 
-    public static final LinkedHashMap<String, String> COLUMNS_CONFLICT = new LinkedHashMap<String, String>() {
-
-        private static final long serialVersionUID = 1L;
-        {
-
-            put("firstName", "String"); //$NON-NLS-1$ //$NON-NLS-2$
-            put("lastName", "String"); //$NON-NLS-1$ //$NON-NLS-2$
-            put("middleName", "String"); //$NON-NLS-1$ //$NON-NLS-2$
-            put("city1", "String"); //$NON-NLS-1$ //$NON-NLS-2$
-            put("city2", "String"); //$NON-NLS-1$ //$NON-NLS-2$
-            put("id", "Integer"); //$NON-NLS-1$ //$NON-NLS-2$
-            put("birthday", "java.util.Date"); //$NON-NLS-1$ //$NON-NLS-2$
-            put("gid", "String"); //$NON-NLS-1$ //$NON-NLS-2$
-            put("grp_size", "Integer"); //$NON-NLS-1$ //$NON-NLS-2$
-
-        }
-    };
-
     public static final RuleDefinition[] RULES = {
             new RuleDefinition(Order.SEQ, "CompletenessRule", null, Function.MostComplete, null, "completeness", true), //$NON-NLS-1$ //$NON-NLS-2$
             new RuleDefinition(Order.SEQ, "LengthAcct", "acctName", Function.Expression, ".length > 11", "acctName", true), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
@@ -123,45 +80,9 @@ public final class SampleData {
             new RuleDefinition(Order.SEQ, "LatestPhone", "date", Function.MostRecent, null, "date", true), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
             new RuleDefinition(Order.MT, null, null, null, null, "phone", true) }; //$NON-NLS-1$
 
-    public static final RuleDefinition[] RULES_CONFLICT = { new RuleDefinition(Order.SEQ, "more_common_birthday", "birthday", //$NON-NLS-1$ //$NON-NLS-2$
-            Function.MostCommon, null, "birthday", false) }; //$NON-NLS-1$
-
-    public static final RuleDefinition[] RULES_CONFLICT_FRE_LONG = { new RuleDefinition(Order.SEQ, "more_common_city", "city1", //$NON-NLS-1$ //$NON-NLS-2$
-            Function.MostCommon, null, "city1", false) }; //$NON-NLS-1$
-
-    public static final RuleDefinition[] RULES_CONFLICT_FRE_LONG_RECENT = {
-            new RuleDefinition(Order.SEQ, "more_common_firstName", "firstName", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.MostCommon, null, "firstName", true) }; //$NON-NLS-1$
-
-    public static final RuleDefinition[] RULES_CONFLICT_FRE_LONG_RECENT_NO_IGNORE_BLANK = {
-            new RuleDefinition(Order.SEQ, "more_common_firstName", "firstName", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.MostCommon, null, "firstName", false) }; //$NON-NLS-1$
-
-    public static final RuleDefinition[] RULES_CONFLICT_FRE_NULL_CONTSTANT = {
-            new RuleDefinition(Order.SEQ, "more_common_lastName", "lastName", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.MostCommon, null, "lastName", false) }; //$NON-NLS-1$
-
     public static final RuleDefinition[] RULES_CONFLICT_FRE_NULL_FRE = {
             new RuleDefinition(Order.SEQ, "more_common_middleName", "middleName", //$NON-NLS-1$ //$NON-NLS-2$
                     Function.MostCommon, null, "middleName", false) }; //$NON-NLS-1$
-
-    public static final RuleDefinition[] RULES_CONFLICT_TWO_TARGET_ONE_COLUMN = {
-            new RuleDefinition(Order.SEQ, "more_recent_birthday", "birthday", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.MostRecent, null, "birthday", false), //$NON-NLS-1$
-            new RuleDefinition(Order.SEQ, "Longest_birthday", "city1", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.Longest, null, "birthday", false) }; //$NON-NLS-1$
-
-    public static final RuleDefinition[] RULES_CONFLICT_TWO_TARGET_SAME_RESULT = {
-            new RuleDefinition(Order.SEQ, "more_common_city1", "city1", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.MostCommon, null, "city1", false), //$NON-NLS-1$
-            new RuleDefinition(Order.SEQ, "more_common_city2", "city2", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.MostCommon, null, "city2", false) }; //$NON-NLS-1$
-
-    public static final RuleDefinition[] RULES_CONFLICT_TWO_TARGET_SAME_RESULT_REFERENCE_COLUMN = {
-            new RuleDefinition(Order.SEQ, "shortest_city1", "city1", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.Shortest, null, "city1", false), //$NON-NLS-1$
-            new RuleDefinition(Order.SEQ, "shortest_city2", "city2", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.Shortest, null, "city2", false) }; //$NON-NLS-1$
 
     public static final HashMap<String, Object> EXPECTED_SURVIVOR = new HashMap<String, Object>() {
 

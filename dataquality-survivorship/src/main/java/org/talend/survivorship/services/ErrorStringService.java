@@ -21,7 +21,7 @@ import org.talend.survivorship.model.DataSet;
 /**
  * Service to determine the longest, shortest value, etc. of a given column.
  */
-public class StringService extends AbstractService {
+public class ErrorStringService extends AbstractService {
 
     HashMap<String, HashSet<String>> longestValueMap;
 
@@ -36,7 +36,7 @@ public class StringService extends AbstractService {
      * 
      * @param dataset
      */
-    public StringService(DataSet dataset) {
+    public ErrorStringService(DataSet dataset) {
         super(dataset);
         longestValueMap = new HashMap<String, HashSet<String>>();
 
@@ -74,10 +74,12 @@ public class StringService extends AbstractService {
         int secondMax = 0;
         int min = -1;
         int secondMin = -1;
+        int index = 1;
         for (Attribute attr : dataset.getAttributesByColumn(column)) {
 
             if (attr.isAlive()) {
                 String value = (String) attr.getValue();
+                System.out.println("index " + index++ + " is " + value);
                 if (value == null || (ignoreBlanks && "".equals(value.trim()))) { //$NON-NLS-1$
                     continue;
                 }
@@ -86,7 +88,7 @@ public class StringService extends AbstractService {
                     // max value changed so that orginal max value change to second max value
                     secondLongestValues.clear();
                     secondLongestValues.addAll(longestValues);
-                    secondMax = secondMax == -1 ? Integer.MIN_VALUE : max;
+                    secondMax = max;
 
                     longestValues.clear();
                     longestValues.add(value);
@@ -107,7 +109,7 @@ public class StringService extends AbstractService {
                     // min value changed so that orginal min value change to second min value
                     secondShortestValues.clear();
                     secondShortestValues.addAll(shortestValues);
-                    secondMin = secondMin == -1 ? Integer.MAX_VALUE : min;
+                    secondMin = min;
                     shortestValues.clear();
                     shortestValues.add(value);
                     min = length;

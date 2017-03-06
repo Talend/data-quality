@@ -34,6 +34,15 @@ import org.talend.survivorship.model.Attribute;
 import org.talend.survivorship.model.Record;
 import org.talend.survivorship.model.RuleDefinition;
 import org.talend.survivorship.sample.SampleData;
+import org.talend.survivorship.sample.SampleDataConflict;
+import org.talend.survivorship.sample.SampleDataConflictMostCommon2Longest;
+import org.talend.survivorship.sample.SampleDataConflictMostCommon2Longest2MostRecent;
+import org.talend.survivorship.sample.SampleDataConflictMostCommon2Longest2keepOneOfDuplicte;
+import org.talend.survivorship.sample.SampleDataConflictMostCommon2MostRecent;
+import org.talend.survivorship.sample.SampleDataConflictMostCommonAndNoIgnoreBlank;
+import org.talend.survivorship.sample.SampleDataConflictOtherColumn2MostCommon2Constant;
+import org.talend.survivorship.sample.SampleDataConflictShortest2OtherColumnDuplicateSurvivedValue;
+import org.talend.survivorship.sample.SampleDataConflictTwoNoConflictColumnGetOneSameSurvivedValue;
 
 /**
  * DOC sizhaoliu class global comment. Detailled comment
@@ -115,12 +124,12 @@ public class SurvivorshipManagerTest {
     @Test
     public void testRunSessionMostCommon2MostRecent() {
 
-        manager = new SurvivorshipManager(SampleData.RULE_PATH, SampleData.PKG_NAME_CONFLICT);
+        manager = new SurvivorshipManager(SampleData.RULE_PATH, SampleDataConflictMostCommon2MostRecent.PKG_NAME_CONFLICT);
 
-        for (String str : SampleData.COLUMNS_CONFLICT.keySet()) {
-            manager.addColumn(str, SampleData.COLUMNS_CONFLICT.get(str));
+        for (String str : SampleDataConflict.COLUMNS_CONFLICT.keySet()) {
+            manager.addColumn(str, SampleDataConflict.COLUMNS_CONFLICT.get(str));
         }
-        for (RuleDefinition element : SampleData.RULES_CONFLICT) {
+        for (RuleDefinition element : SampleDataConflictMostCommon2MostRecent.RULES_CONFLICT) {
             manager.addRuleDefinition(element);
         }
         manager.initKnowledgeBase();
@@ -153,12 +162,12 @@ public class SurvivorshipManagerTest {
     @Test
     public void testRunSessionMostCommon2Longest() {
 
-        manager = new SurvivorshipManager(SampleData.RULE_PATH, SampleData.PKG_NAME_CONFLICT_FRE_LONG);
+        manager = new SurvivorshipManager(SampleData.RULE_PATH, SampleDataConflictMostCommon2Longest.PKG_NAME_CONFLICT_FRE_LONG);
 
-        for (String str : SampleData.COLUMNS_CONFLICT.keySet()) {
-            manager.addColumn(str, SampleData.COLUMNS_CONFLICT.get(str));
+        for (String str : SampleDataConflict.COLUMNS_CONFLICT.keySet()) {
+            manager.addColumn(str, SampleDataConflict.COLUMNS_CONFLICT.get(str));
         }
-        for (RuleDefinition element : SampleData.RULES_CONFLICT_FRE_LONG) {
+        for (RuleDefinition element : SampleDataConflictMostCommon2Longest.RULES_CONFLICT_FRE_LONG) {
             manager.addRuleDefinition(element);
         }
         manager.initKnowledgeBase();
@@ -194,12 +203,13 @@ public class SurvivorshipManagerTest {
     @Test
     public void testRunSessionMostCommon2Longest2MostRecent() {
 
-        manager = new SurvivorshipManager(SampleData.RULE_PATH, SampleData.PKG_NAME_CONFLICT_FRE_LONG_RECENT);
+        manager = new SurvivorshipManager(SampleData.RULE_PATH,
+                SampleDataConflictMostCommon2Longest2MostRecent.PKG_NAME_CONFLICT_FRE_LONG_RECENT);
 
-        for (String str : SampleData.COLUMNS_CONFLICT.keySet()) {
-            manager.addColumn(str, SampleData.COLUMNS_CONFLICT.get(str));
+        for (String str : SampleDataConflict.COLUMNS_CONFLICT.keySet()) {
+            manager.addColumn(str, SampleDataConflict.COLUMNS_CONFLICT.get(str));
         }
-        for (RuleDefinition element : SampleData.RULES_CONFLICT_FRE_LONG_RECENT) {
+        for (RuleDefinition element : SampleDataConflictMostCommon2Longest2MostRecent.RULES_CONFLICT_FRE_LONG_RECENT) {
             manager.addRuleDefinition(element);
         }
         manager.initKnowledgeBase();
@@ -238,12 +248,13 @@ public class SurvivorshipManagerTest {
     @Test
     public void testRunSessionOtherColumn2MostCommon2Constant() {
 
-        manager = new SurvivorshipManager(SampleData.RULE_PATH, SampleData.PKG_NAME_CONFLICT_FRE_NULL_CONSTANT);
+        manager = new SurvivorshipManager(SampleData.RULE_PATH,
+                SampleDataConflictOtherColumn2MostCommon2Constant.PKG_NAME_CONFLICT_FRE_NULL_CONSTANT);
 
-        for (String str : SampleData.COLUMNS_CONFLICT.keySet()) {
-            manager.addColumn(str, SampleData.COLUMNS_CONFLICT.get(str));
+        for (String str : SampleDataConflict.COLUMNS_CONFLICT.keySet()) {
+            manager.addColumn(str, SampleDataConflict.COLUMNS_CONFLICT.get(str));
         }
-        for (RuleDefinition element : SampleData.RULES_CONFLICT_FRE_NULL_CONTSTANT) {
+        for (RuleDefinition element : SampleDataConflictOtherColumn2MostCommon2Constant.RULES_CONFLICT_FRE_NULL_CONTSTANT) {
             manager.addRuleDefinition(element);
         }
         manager.initKnowledgeBase();
@@ -277,12 +288,13 @@ public class SurvivorshipManagerTest {
     @Test
     public void testRunSessionTwoNoConflictColumnGetOneSameSurvivedValue() {
 
-        manager = new SurvivorshipManager(SampleData.RULE_PATH, SampleData.PKG_NAME_CONFLICT_TWO_TARGET_ONE_COLUMN);
+        manager = new SurvivorshipManager(SampleData.RULE_PATH,
+                SampleDataConflictTwoNoConflictColumnGetOneSameSurvivedValue.PKG_NAME_CONFLICT_TWO_TARGET_ONE_COLUMN);
 
-        for (String str : SampleData.COLUMNS_CONFLICT.keySet()) {
-            manager.addColumn(str, SampleData.COLUMNS_CONFLICT.get(str));
+        for (String str : SampleDataConflict.COLUMNS_CONFLICT.keySet()) {
+            manager.addColumn(str, SampleDataConflict.COLUMNS_CONFLICT.get(str));
         }
-        for (RuleDefinition element : SampleData.RULES_CONFLICT_TWO_TARGET_ONE_COLUMN) {
+        for (RuleDefinition element : SampleDataConflictTwoNoConflictColumnGetOneSameSurvivedValue.RULES_CONFLICT_TWO_TARGET_ONE_COLUMN) {
             manager.addRuleDefinition(element);
         }
         manager.initKnowledgeBase();
@@ -314,12 +326,13 @@ public class SurvivorshipManagerTest {
     @Test
     public void testRunSessionMostCommon2Longest2keepOneOfDuplicte() {
 
-        manager = new SurvivorshipManager(SampleData.RULE_PATH, SampleData.PKG_NAME_CONFLICT_TWO_TARGET_SAME_VALUE);
+        manager = new SurvivorshipManager(SampleData.RULE_PATH,
+                SampleDataConflictMostCommon2Longest2keepOneOfDuplicte.PKG_NAME_CONFLICT_TWO_TARGET_SAME_VALUE);
 
-        for (String str : SampleData.COLUMNS_CONFLICT.keySet()) {
-            manager.addColumn(str, SampleData.COLUMNS_CONFLICT.get(str));
+        for (String str : SampleDataConflict.COLUMNS_CONFLICT.keySet()) {
+            manager.addColumn(str, SampleDataConflict.COLUMNS_CONFLICT.get(str));
         }
-        for (RuleDefinition element : SampleData.RULES_CONFLICT_TWO_TARGET_SAME_RESULT) {
+        for (RuleDefinition element : SampleDataConflictMostCommon2Longest2keepOneOfDuplicte.RULES_CONFLICT_TWO_TARGET_SAME_RESULT) {
             manager.addRuleDefinition(element);
         }
         manager.initKnowledgeBase();
@@ -352,12 +365,13 @@ public class SurvivorshipManagerTest {
     @Test
     public void testRunSessionMostCommonGetConflictThenDefauleRule() {
 
-        manager = new SurvivorshipManager(SampleData.RULE_PATH, SampleData.PKG_NAME_CONFLICT_FRE_LONG_RECENT);
+        manager = new SurvivorshipManager(SampleData.RULE_PATH,
+                SampleDataConflictMostCommon2Longest2MostRecent.PKG_NAME_CONFLICT_FRE_LONG_RECENT);
 
-        for (String str : SampleData.COLUMNS_CONFLICT.keySet()) {
-            manager.addColumn(str, SampleData.COLUMNS_CONFLICT.get(str));
+        for (String str : SampleDataConflict.COLUMNS_CONFLICT.keySet()) {
+            manager.addColumn(str, SampleDataConflict.COLUMNS_CONFLICT.get(str));
         }
-        for (RuleDefinition element : SampleData.RULES_CONFLICT_FRE_LONG_RECENT) {
+        for (RuleDefinition element : SampleDataConflictMostCommon2Longest2MostRecent.RULES_CONFLICT_FRE_LONG_RECENT) {
             manager.addRuleDefinition(element);
         }
         manager.initKnowledgeBase();
@@ -386,12 +400,12 @@ public class SurvivorshipManagerTest {
     public void testRunSessionMostCommonAndNoIgnoreBlank() {
 
         manager = new SurvivorshipManager(SampleData.RULE_PATH,
-                SampleData.PKG_NAME_CONFLICT_FRE_LONG_RECENT_WITHOUT_IGNORE_BLANK);
+                SampleDataConflictMostCommonAndNoIgnoreBlank.PKG_NAME_CONFLICT_FRE_LONG_RECENT_WITHOUT_IGNORE_BLANK);
 
-        for (String str : SampleData.COLUMNS_CONFLICT.keySet()) {
-            manager.addColumn(str, SampleData.COLUMNS_CONFLICT.get(str));
+        for (String str : SampleDataConflict.COLUMNS_CONFLICT.keySet()) {
+            manager.addColumn(str, SampleDataConflict.COLUMNS_CONFLICT.get(str));
         }
-        for (RuleDefinition element : SampleData.RULES_CONFLICT_FRE_LONG_RECENT_NO_IGNORE_BLANK) {
+        for (RuleDefinition element : SampleDataConflictMostCommonAndNoIgnoreBlank.RULES_CONFLICT_FRE_LONG_RECENT_NO_IGNORE_BLANK) {
             manager.addRuleDefinition(element);
         }
         manager.initKnowledgeBase();
@@ -425,12 +439,12 @@ public class SurvivorshipManagerTest {
     public void testRunSessionShortest2OtherColumnDuplicateSurvivedValue() {
 
         manager = new SurvivorshipManager(SampleData.RULE_PATH,
-                SampleData.PKG_NAME_CONFLICT_TWO_TARGET_SAME_RESULT_REFERENCE_COLUMN);
+                SampleDataConflictShortest2OtherColumnDuplicateSurvivedValue.PKG_NAME_CONFLICT_TWO_TARGET_SAME_RESULT_REFERENCE_COLUMN);
 
-        for (String str : SampleData.COLUMNS_CONFLICT.keySet()) {
-            manager.addColumn(str, SampleData.COLUMNS_CONFLICT.get(str));
+        for (String str : SampleDataConflict.COLUMNS_CONFLICT.keySet()) {
+            manager.addColumn(str, SampleDataConflict.COLUMNS_CONFLICT.get(str));
         }
-        for (RuleDefinition element : SampleData.RULES_CONFLICT_TWO_TARGET_SAME_RESULT_REFERENCE_COLUMN) {
+        for (RuleDefinition element : SampleDataConflictShortest2OtherColumnDuplicateSurvivedValue.RULES_CONFLICT_TWO_TARGET_SAME_RESULT_REFERENCE_COLUMN) {
             manager.addRuleDefinition(element);
         }
         manager.initKnowledgeBase();
