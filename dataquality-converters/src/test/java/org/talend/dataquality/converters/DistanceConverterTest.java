@@ -60,6 +60,15 @@ public class DistanceConverterTest {
     }
 
     @Test
+    public void testConvertDefault() {
+        double mi = 1.0;
+        double km = 1.609344;
+
+        DistanceConverter converter = new DistanceConverter();
+        assertEquals(km, converter.convert(mi), delta);
+    }
+
+    @Test
     public void testConvertMillimeter() {
         double mm = 1.0;
         double cm = 0.1;
