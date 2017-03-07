@@ -12,7 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.converters;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
@@ -99,5 +99,44 @@ public class StringConverterTest {
             assertEquals(expected, stringConverter.removeTrailingAndLeading(testChar + expected + testChar + testChar, testChar));
         }
 
+    }
+
+    @Test
+    public void testremoveDuplicate_CR() {
+        StringConverter stringConverter = new StringConverter();
+        String input = "a\rbccccdeaa\r\r\ry"; //$NON-NLS-1$
+        assertEquals("a\rbccccdeaa\ry", stringConverter.removeRepeat(input, "\r")); //$NON-NLS-1$//$NON-NLS-2$
+    }
+
+    @Test
+    public void testremoveDuplicate_LF() {
+        StringConverter stringConverter = new StringConverter();
+        String input = "a\nbccccdeaa\n\n\ny"; //$NON-NLS-1$
+        assertEquals("a\nbccccdeaa\ny", stringConverter.removeRepeat(input, "\n")); //$NON-NLS-1$//$NON-NLS-2$
+    }
+
+    @Test
+    public void testremoveDuplicate_CRLF() {
+        StringConverter stringConverter = new StringConverter();
+        String input = "a\r\nbccccdeaa\r\n\r\n\r\ny"; //$NON-NLS-1$
+        assertEquals("a\r\nbccccdeaa\r\ny", stringConverter.removeRepeat(input, "\r\n")); //$NON-NLS-1$ //$NON-NLS-2$
+    }
+
+    @Test
+    public void testremoveDuplicate_TAB() {
+        StringConverter stringConverter = new StringConverter();
+        String input = "a\tbccccdeaa\t\t\t\t\t\ty"; //$NON-NLS-1$
+        assertEquals("a\tbccccdeaa\ty", stringConverter.removeRepeat(input, "\t")); //$NON-NLS-1$//$NON-NLS-2$
+    }
+
+    @Test
+    public void testremoveDuplicate_LETTER() {
+        StringConverter stringConverter = new StringConverter();
+        String input = "atbccccdeaaCCtcy"; //$NON-NLS-1$
+        assertEquals("atbcdeaaCCtcy", stringConverter.removeRepeat(input, "c")); //$NON-NLS-1$ //$NON-NLS-2$
+        input = "aaatbccccdeaaCCtcy"; //$NON-NLS-1$
+        assertEquals("atbccccdeaCCtcy", stringConverter.removeRepeat(input, "a")); //$NON-NLS-1$//$NON-NLS-2$
+        input = "acacacactbccccdeaCCtaccy"; //$NON-NLS-1$
+        assertEquals("actbccccdeaCCtaccy", stringConverter.removeRepeat(input, "ac")); //$NON-NLS-1$//$NON-NLS-2$
     }
 }
