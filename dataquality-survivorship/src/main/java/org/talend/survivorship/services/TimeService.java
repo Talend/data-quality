@@ -27,6 +27,10 @@ public class TimeService extends AbstractService {
 
     HashMap<String, Date> earliestValueMap;
 
+    HashMap<String, Date> secondLatestValueMap;
+
+    HashMap<String, Date> secondEarliestValueMap;
+
     /**
      * StringService constructor.
      * 
@@ -36,6 +40,8 @@ public class TimeService extends AbstractService {
         super(dataset);
         latestValueMap = new HashMap<String, Date>();
         earliestValueMap = new HashMap<String, Date>();
+        secondLatestValueMap = new HashMap<String, Date>();
+        secondEarliestValueMap = new HashMap<String, Date>();
     }
 
     /**
@@ -48,6 +54,8 @@ public class TimeService extends AbstractService {
 
         Date latest = null;
         Date earliest = null;
+        Date secondLatest = null;
+        Date secondEarliest = null;
 
         for (Attribute attr : dataset.getAttributesByColumn(column)) {
             if (attr.isAlive()) {
@@ -56,16 +64,42 @@ public class TimeService extends AbstractService {
                     continue;
                 }
 
-                if (latest == null || value.after(latest)) {
+                if (latest == null || earliest == null || secondLatest == null || secondEarliest == null) {
                     latest = value;
-                }
-                if (earliest == null || value.before(earliest)) {
                     earliest = value;
+                    secondLatest = value;
+                    secondEarliest = value;
+
+                } else {
+
+                    if (value.after(latest)) {
+                        secondLatest = latest;
+                        latest = value;
+                        // second input data is max then do that
+                        if (secondLatest == earliest) {
+                            secondEarliest = latest;
+                        }
+                    } else if (value.before(earliest)) {
+                        secondEarliest = earliest;
+                        earliest = value;
+                        // second input data is max then do that
+                        if (secondEarliest == latest) {
+                            secondLatest = earliest;
+                        }
+                    }
+                    if (value.before(latest) && value.after(secondLatest)) {
+                        secondLatest = value;
+                    }
+                    if (value.after(earliest) && value.before(secondEarliest)) {
+                        secondEarliest = value;
+                    }
                 }
             }
         }
         latestValueMap.put(column, latest);
         earliestValueMap.put(column, earliest);
+        secondLatestValueMap.put(column, secondLatest);
+        secondEarliestValueMap.put(column, secondEarliest);
     }
 
     /**
@@ -91,6 +125,38 @@ public class TimeService extends AbstractService {
      * @param column
      * @return
      */
+    public boolean isSecondEarliestValue(Object var, String column) {
+
+        if (secondEarliestValueMap.get(column) == null) {
+            putAttributeValues(column);
+        }
+
+        return var.equals(secondEarliestValueMap.get(column));
+    }
+
+    /**
+     * Determine if an object is the second latest value of a given column.
+     * 
+     * @param var
+     * @param column
+     * @return
+     */
+    public boolean isSecondLatestValue(Object var, String column) {
+
+        if (secondLatestValueMap.get(column) == null) {
+            putAttributeValues(column);
+        }
+
+        return var.equals(secondLatestValueMap.get(column));
+    }
+
+    /**
+     * Determine if an object is the second earliest value of a given column.
+     * 
+     * @param var
+     * @param column
+     * @return
+     */
     public boolean isEarliestValue(Object var, String column) {
 
         if (earliestValueMap.get(column) == null) {
@@ -109,6 +175,8 @@ public class TimeService extends AbstractService {
     public void init() {
         latestValueMap.clear();
         earliestValueMap.clear();
+        secondLatestValueMap.clear();
+        secondEarliestValueMap.clear();
     }
 
 }
