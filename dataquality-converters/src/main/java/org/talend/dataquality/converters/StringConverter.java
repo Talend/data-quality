@@ -53,4 +53,19 @@ public class StringConverter {
         return result;
     }
 
+    /**
+     * 
+     * Remove consecutive repeated characters by a specified char.
+     * 
+     * @param str the source String
+     * @param repeatStr need to be removed repeat String
+     * @return the string with the source string removed if found
+     */
+    public String removeRepeat(String str, String repeatStr) {
+        if (StringUtils.isEmpty(str) || StringUtils.isEmpty(repeatStr)) {
+            return str;
+        }
+        return str.replaceAll("(" + repeatStr + ")+", repeatStr); //$NON-NLS-1$ //$NON-NLS-2$
+    }
+
 }
