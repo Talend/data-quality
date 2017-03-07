@@ -18,6 +18,7 @@ import java.net.URISyntaxException;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.store.Directory;
+import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.classifier.custom.UDCategorySerDeser;
 import org.talend.dataquality.semantic.classifier.custom.UserDefinedClassifier;
 import org.talend.dataquality.semantic.index.DictionarySearchMode;
@@ -160,19 +161,17 @@ public class CategoryRecognizerBuilder {
     }
 
     private UserDefinedClassifier getRegexClassifier() {
-        if (regexClassifier == null) {
-            if (regexPath == null) {
-                try {
-                    regexClassifier = UDCategorySerDeser.getRegexClassifier();
-                } catch (IOException e) {
-                    LOGGER.error("Failed to load provided regex classifiers", e);
-                }
-            } else {
-                try {
-                    regexClassifier = UDCategorySerDeser.readJsonFile(regexPath);
-                } catch (IOException e) {
-                    LOGGER.error("Failed to load regex classifiers from URI: " + regexPath, e);
-                }
+        if (regexPath == null) {
+            try {
+                regexClassifier = CategoryRegistryManager.getInstance().getRegexClassifier(true); // always reload
+            } catch (IOException e) {
+                LOGGER.error("Failed to load provided regex classifiers", e);
+            }
+        } else {
+            try {
+                regexClassifier = UDCategorySerDeser.readJsonFile(regexPath);
+            } catch (IOException e) {
+                LOGGER.error("Failed to load regex classifiers from URI: " + regexPath, e);
             }
         }
         return regexClassifier;
