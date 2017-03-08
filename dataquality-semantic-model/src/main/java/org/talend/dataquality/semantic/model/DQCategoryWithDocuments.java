@@ -15,15 +15,11 @@ package org.talend.dataquality.semantic.model;
 import java.io.Serializable;
 import java.util.List;
 
-public class CategoryWithDocuments implements Serializable {
+public class DQCategoryWithDocuments implements Serializable {
 
     private DQCategory category;
 
     private List<DQDocument> documents;
-
-    public CategoryWithDocuments() {
-
-    }
 
     public DQCategory getCategory() {
         return category;
