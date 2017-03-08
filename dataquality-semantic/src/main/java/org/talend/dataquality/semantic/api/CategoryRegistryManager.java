@@ -126,6 +126,11 @@ public class CategoryRegistryManager {
         return instances.get(contextName);
     }
 
+    void reset() {
+        usingLocalCategoryRegistry = false;
+        instances.clear();
+    }
+
     /**
      * Configure the local category registry path.
      * 
