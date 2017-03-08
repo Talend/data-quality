@@ -45,7 +45,7 @@ class DefaultCategoryRecognizer implements CategoryRecognizer {
     private CategoryRegistryManager crm;
 
     public DefaultCategoryRecognizer(Index dictionary, Index keyword) throws IOException {
-        this(dictionary, keyword, CategoryRegistryManager.getInstance().getRegexClassifier());
+        this(dictionary, keyword, CategoryRegistryManager.getInstance().getRegexClassifier(true));
     }
 
     public DefaultCategoryRecognizer(Index dictionary, Index keyword, UserDefinedClassifier regex) throws IOException {
