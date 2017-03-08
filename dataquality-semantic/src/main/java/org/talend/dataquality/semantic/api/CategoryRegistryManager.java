@@ -338,13 +338,6 @@ public class CategoryRegistryManager {
 
     /**
      * get instance of UserDefinedClassifier
-     */
-    public UserDefinedClassifier getRegexClassifier() throws IOException {
-        return getRegexClassifier(true);
-    }
-
-    /**
-     * get instance of UserDefinedClassifier
      * 
      * @param refresh whether classifiers should be reloaded from local json file
      */
