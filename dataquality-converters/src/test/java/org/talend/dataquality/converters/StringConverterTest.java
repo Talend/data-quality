@@ -139,4 +139,21 @@ public class StringConverterTest {
         input = "acacacactbccccdeaCCtaccy"; //$NON-NLS-1$
         assertEquals("actbccccdeaCCtaccy", stringConverter.removeRepeat(input, "ac")); //$NON-NLS-1$//$NON-NLS-2$
     }
+
+    @Test
+    public void testremoveDuplicate_NULL1() {
+        StringConverter stringConverter = new StringConverter();
+        String input = null;
+        assertEquals(null, stringConverter.removeRepeat(input, "c")); //$NON-NLS-1$ 
+        input = ""; //$NON-NLS-1$
+        assertEquals("", stringConverter.removeRepeat(input, "c")); //$NON-NLS-1$ //$NON-NLS-2$
+    }
+
+    @Test
+    public void testremoveDuplicate_NULL2() {
+        StringConverter stringConverter = new StringConverter();
+        String input = "aaabc"; //$NON-NLS-1$
+        assertEquals(input, stringConverter.removeRepeat(input, null));
+        assertEquals(input, stringConverter.removeRepeat(input, "")); //$NON-NLS-1$
+    }
 }
