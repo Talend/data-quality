@@ -110,7 +110,6 @@ public class TimeService extends AbstractService {
      * @return
      */
     public boolean isLatestValue(Object var, String column) {
-
         if (latestValueMap.get(column) == null) {
             putAttributeValues(column);
         }

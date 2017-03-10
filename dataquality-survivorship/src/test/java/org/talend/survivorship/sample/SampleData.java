@@ -39,13 +39,13 @@ public final class SampleData {
     public static final String PKG_NAME_CONFLICT_FRE_NULL_FRE = "org.talend.survivorship.conflict.fre_null_fre"; //$NON-NLS-1$
 
     public static final Object[][] SAMPLE_INPUT = {
-            { "GRIZZARD CO.", "110 N MARYLAND AVE", "GLENDALE", "CA", "912066", "FR", "8185431314", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
+            { "GRIZZARD CO.", "Lili", "110 N MARYLAND AVE", "GLENDALE", "CA", "912066", "FR", "8185431314", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
                     stringToDate("20110101", "yyyyMMdd"), 1.0, 18, 1985, "Something" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-            { "GRIZZARD", "110 NORTH MARYLAND AVENUE", "GLENDALE", "CA", "91205", "US", "9003254892", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
+            { "GRIZZARD", "Tony", "110 NORTH MARYLAND AVENUE", "GLENDALE", "CA", "91205", "US", "9003254892", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
                     stringToDate("20110118", "yyyyMMdd"), 0.9879999999999999, 25, 0, "" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-            { "GRIZZARD INC", "110 N. MARYLAND AVENUE", "GLENDALE", "CA", "91206", "US", "(818) 543-1315", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
+            { "GRIZZARD INC", "Tom", "110 N. MARYLAND AVENUE", "GLENDALE", "CA", "91206", "US", "(818) 543-1315", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
                     stringToDate("20110103", "yyyyMMdd"), 0.8572727272727272, 31, 1970, null }, //$NON-NLS-1$ //$NON-NLS-2$
-            { "GRIZZARD CO", "1480 S COLORADO BOULEVARD", "LOS ANGELES", "CA", "91206", "US", "(800) 325-4892", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
+            { "GRIZZARD CO", "li", "1480 S COLORADO BOULEVARD", "LOS ANGELES", "CA", "91206", "US", "(800) 325-4892", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
                     stringToDate("20110115", "yyyyMMdd"), 0.742319482, 35, 0, null } }; //$NON-NLS-1$ //$NON-NLS-2$
 
     public static final LinkedHashMap<String, String> COLUMNS = new LinkedHashMap<String, String>() {
@@ -53,6 +53,7 @@ public final class SampleData {
         private static final long serialVersionUID = 1L;
         {
             put("acctName", "String"); //$NON-NLS-1$ //$NON-NLS-2$
+            put("firstName", "String"); //$NON-NLS-1$ //$NON-NLS-2$
             put("addr", "String"); //$NON-NLS-1$ //$NON-NLS-2$
             put("city", "String"); //$NON-NLS-1$ //$NON-NLS-2$
             put("state", "String"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -78,7 +79,8 @@ public final class SampleData {
             new RuleDefinition(Order.MT, null, null, null, null, "state", true), //$NON-NLS-1$
             new RuleDefinition(Order.MT, null, null, null, null, "country", true), //$NON-NLS-1$
             new RuleDefinition(Order.SEQ, "LatestPhone", "date", Function.MostRecent, null, "date", true), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-            new RuleDefinition(Order.MT, null, null, null, null, "phone", true) }; //$NON-NLS-1$
+            new RuleDefinition(Order.MT, null, null, null, null, "phone", true), //$NON-NLS-1$
+            new RuleDefinition(Order.SEQ, "firstNameRule", "firstName", Function.MatchRegex, "^\\\\w{2}$", "firstName", true) }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
     public static final RuleDefinition[] RULES_CONFLICT_FRE_NULL_FRE = {
             new RuleDefinition(Order.SEQ, "more_common_middleName", "middleName", //$NON-NLS-1$ //$NON-NLS-2$
@@ -89,6 +91,7 @@ public final class SampleData {
         private static final long serialVersionUID = 1L;
         {
             put("acctName", "GRIZZARD CO."); //$NON-NLS-1$ //$NON-NLS-2$
+            put("firstName", "li"); //$NON-NLS-1$ //$NON-NLS-2$
             put("addr", "110 NORTH MARYLAND AVENUE"); //$NON-NLS-1$ //$NON-NLS-2$
             put("city", "GLENDALE"); //$NON-NLS-1$ //$NON-NLS-2$
             put("state", "CA"); //$NON-NLS-1$ //$NON-NLS-2$

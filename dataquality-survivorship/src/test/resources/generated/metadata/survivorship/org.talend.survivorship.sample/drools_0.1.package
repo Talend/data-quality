@@ -8,7 +8,8 @@ global org.talend.survivorship.model.DataSet dataset
 declare  RecordIn 
 
     TALEND_INTERNAL_ID : int  
-    acctname : String  
+    acctname : String
+    firstname : String  
     addr : String  
     city : String  
     state : String  

@@ -43,6 +43,7 @@ import org.talend.survivorship.sample.SampleDataConflictMostCommonAndNoIgnoreBla
 import org.talend.survivorship.sample.SampleDataConflictOtherColumn2MostCommon2Constant;
 import org.talend.survivorship.sample.SampleDataConflictShortest2OtherColumnDuplicateSurvivedValue;
 import org.talend.survivorship.sample.SampleDataConflictTwoNoConflictColumnGetOneSameSurvivedValue;
+import org.talend.survivorship.sample.SampleDataRegexFunction;
 
 /**
  * DOC sizhaoliu class global comment. Detailled comment
@@ -110,6 +111,41 @@ public class SurvivorshipManagerTest {
         }
         assertTrue("conflicts are not the same as expected.", //$NON-NLS-1$
                 manager.getConflictsOfSurvivor().equals(SampleData.EXPECTED_CONFLICT_OF_SURVIVOR));
+    }
+
+    /**
+     * Test method for {@link org.talend.survivorship.SurvivorshipManager#runSession(java.lang.String[][])}.
+     * no conflict case
+     */
+    @Test
+    public void testRunSessionRegex() {
+        manager = new SurvivorshipManager(SampleData.RULE_PATH, SampleDataRegexFunction.PKG_NAME);
+
+        for (String str : SampleDataRegexFunction.COLUMNS.keySet()) {
+            manager.addColumn(str, SampleDataRegexFunction.COLUMNS.get(str));
+        }
+        for (RuleDefinition element : SampleDataRegexFunction.RULES) {
+            manager.addRuleDefinition(element);
+        }
+        manager.initKnowledgeBase();
+        manager.runSession(SampleDataRegexFunction.SAMPLE_INPUT);
+
+        Map<String, Object> survivors = manager.getSurvivorMap();
+        for (String col : SampleDataRegexFunction.COLUMNS.keySet()) {
+            assertEquals(SampleDataRegexFunction.EXPECTED_SURVIVOR.get(col), survivors.get(col));
+        }
+        assertTrue("conflicts are not the same as expected.", //$NON-NLS-1$
+                manager.getConflictsOfSurvivor().equals(SampleDataRegexFunction.EXPECTED_CONFLICT_OF_SURVIVOR));
+
+        // Run the same test for a second time
+        manager.runSession(SampleDataRegexFunction.SAMPLE_INPUT);
+
+        Map<String, Object> survivors2 = manager.getSurvivorMap();
+        for (String col : SampleDataRegexFunction.COLUMNS.keySet()) {
+            assertEquals(SampleDataRegexFunction.EXPECTED_SURVIVOR.get(col), survivors2.get(col));
+        }
+        assertTrue("conflicts are not the same as expected.", //$NON-NLS-1$
+                manager.getConflictsOfSurvivor().equals(SampleDataRegexFunction.EXPECTED_CONFLICT_OF_SURVIVOR));
     }
 
     /**

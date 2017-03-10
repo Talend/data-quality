@@ -1,0 +1,14 @@
+package org.talend.survivorship.sample 
+
+rule "firstNameRule"
+    no-loop true
+    dialect "mvel"
+    ruleflow-group "firstNameRuleGroup"
+when
+    $input : RecordIn( firstname matches "\\w{2}"  )  
+then
+    dataset.survive( $input.TALEND_INTERNAL_ID, "firstName", drools.getRule().getName());
+
+end
+
+
