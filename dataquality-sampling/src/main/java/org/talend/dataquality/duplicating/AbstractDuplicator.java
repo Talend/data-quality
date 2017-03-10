@@ -21,7 +21,7 @@ import org.apache.log4j.Logger;
 
 public abstract class AbstractDuplicator<TIn, TOut> {
 
-    private static Logger log = Logger.getLogger(AbstractDuplicator.class);
+    private static Logger LOG = Logger.getLogger(AbstractDuplicator.class);
 
     private RandomWrapper rnd;
 
@@ -47,8 +47,8 @@ public abstract class AbstractDuplicator<TIn, TOut> {
         this(expectation, duplicatesPercentage, distributionName);
         rnd = new RandomWrapper(distributionSeed);
         distribution.reseedRandomGenerator(distributionSeed);
-        if (log.isInfoEnabled()) {
-            log.info("Seed for random generator has been set to: " + rnd.getSeed()); //$NON-NLS-1$
+        if (LOG.isInfoEnabled()) {
+            LOG.info("Seed for random generator has been set to: " + rnd.getSeed()); //$NON-NLS-1$
         }
     }
 
@@ -56,8 +56,8 @@ public abstract class AbstractDuplicator<TIn, TOut> {
         if (rnd == null) {
             rnd = new RandomWrapper();
             distribution.reseedRandomGenerator(rnd.getSeed());
-            if (log.isInfoEnabled()) {
-                log.info(
+            if (LOG.isInfoEnabled()) {
+                LOG.info(
                         "A seed is generated for Random generator. If a fixed seed is needed, set it in the advanced parameters of the tDuplicateRow component"); //$NON-NLS-1$
             }
         }

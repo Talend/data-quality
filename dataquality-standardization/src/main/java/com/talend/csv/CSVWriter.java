@@ -18,6 +18,8 @@ import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 /**
  * A very simple CSV writer released under a commercial-friendly license.
  *
@@ -39,6 +41,8 @@ public class CSVWriter implements Closeable {
     private char escapechar = '"';
 
     private String lineEnd;
+
+    private final Logger LOG = Logger.getLogger(CSVWriter.class);
 
     public enum QuoteStatus {
         FORCE,
@@ -82,7 +86,8 @@ public class CSVWriter implements Closeable {
     public CSVWriter setEscapeChar(char escapechar) {
         this.escapechar = escapechar;
         if (this.escapechar == '\0') {
-            throw new RuntimeException("unvalid escape char");
+            throw new IllegalArgumentException("unvalid escape char"); //$NON-NLS-1$
+
         }
         return this;
     }
@@ -90,7 +95,7 @@ public class CSVWriter implements Closeable {
     public CSVWriter setQuoteChar(char quotechar) {
         this.quotechar = quotechar;
         if (this.quotechar == '\0') {
-            throw new RuntimeException("unvalid quote char");
+            throw new IllegalArgumentException("unvalid quote char"); //$NON-NLS-1$
         }
         return this;
     }
@@ -225,9 +230,11 @@ public class CSVWriter implements Closeable {
     }
 
     private boolean needQuote(String field, int fieldIndex) {
-        boolean need = field.indexOf(quotechar) > -1 || field.indexOf(separator) > -1
-                || (lineEnd == null && (field.indexOf('\n') > -1 || field.indexOf('\r') > -1))
-                || (lineEnd != null && field.indexOf(lineEnd) > -1) || (fieldIndex == 0 && field.length() == 0);
+        boolean emptyQutoSepa = (fieldIndex == 0 && field.length() == 0) || field.indexOf(quotechar) > -1
+                || field.indexOf(separator) > -1;
+        boolean includeNR = (lineEnd == null && (field.indexOf('\n') > -1 || field.indexOf('\r') > -1));
+        boolean inLineEnd = (lineEnd != null && field.indexOf(lineEnd) > -1);
+        boolean need = emptyQutoSepa || includeNR || inLineEnd;
 
         if (!need && field.length() > 0) {
             char first = field.charAt(0);

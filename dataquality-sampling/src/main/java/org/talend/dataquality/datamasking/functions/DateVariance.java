@@ -28,7 +28,7 @@ public class DateVariance extends Function<Date> {
 
     private static final Logger LOGGER = Logger.getLogger(DateVariance.class);
 
-    private static final Long nb_ms_per_day = 86400000L;
+    private static final Long NB_MS_PER_DAY = 86400000L;
 
     private int integerParam = 31;
 
@@ -52,7 +52,7 @@ public class DateVariance extends Function<Date> {
                 integerParam = 31;
             }
             do {
-                variation = Math.round((rnd.nextDouble() * 2 - 1) * integerParam * nb_ms_per_day);
+                variation = Math.round((rnd.nextDouble() * 2 - 1) * integerParam * NB_MS_PER_DAY);
             } while (variation == 0);
             Long originalDate = date.getTime();
             Date newDate = new Date(originalDate + variation);

@@ -44,7 +44,7 @@ public class ResizableList<T> implements List<T>, Serializable {
         try {
             itemClass.getConstructor();
         } catch (NoSuchMethodException e) {
-            throw new IllegalArgumentException("Item class must have a zero arg constructor.");
+            throw new IllegalArgumentException("Item class must have a zero arg constructor.", e); //$NON-NLS-1$
         }
         this.itemClass = itemClass;
         this.innerList = new ArrayList<T>();
@@ -82,58 +82,72 @@ public class ResizableList<T> implements List<T>, Serializable {
         }
     }
 
+    @Override
     public int size() {
         return innerList.size();
     }
 
+    @Override
     public boolean isEmpty() {
         return innerList.isEmpty();
     }
 
+    @Override
     public boolean contains(Object o) {
         return innerList.contains(o);
     }
 
+    @Override
     public Iterator<T> iterator() {
         return innerList.iterator();
     }
 
+    @Override
     public Object[] toArray() {
         return innerList.toArray();
     }
 
+    @Override
     public <T1> T1[] toArray(T1[] t1s) {
         return innerList.toArray(t1s);
     }
 
+    @Override
     public boolean add(T t) {
         return innerList.add(t);
     }
 
+    @Override
     public boolean remove(Object o) {
         return innerList.remove(o);
     }
 
+    @Override
     public boolean containsAll(Collection<?> collection) {
         return innerList.containsAll(collection);
     }
 
+    @Override
     public boolean addAll(Collection<? extends T> collection) {
         return innerList.addAll(collection);
     }
 
+    @Override
     public boolean addAll(int i, Collection<? extends T> collection) {
         return innerList.addAll(i, collection);
     }
 
+    @Override
     public boolean removeAll(Collection<?> collection) {
         return innerList.removeAll(collection);
     }
 
+    @Override
     public boolean retainAll(Collection<?> collection) {
         return innerList.retainAll(collection);
     }
 
+    @Override
     public void clear() {
         innerList.clear();
     }
@@ -148,38 +162,47 @@ public class ResizableList<T> implements List<T>, Serializable {
         return innerList.hashCode();
     }
 
+    @Override
     public T get(int i) {
         return innerList.get(i);
     }
 
+    @Override
     public T set(int i, T t) {
         return innerList.set(i, t);
     }
 
+    @Override
     public void add(int i, T t) {
         innerList.add(i, t);
     }
 
+    @Override
     public T remove(int i) {
         return innerList.remove(i);
     }
 
+    @Override
     public int indexOf(Object o) {
         return innerList.indexOf(o);
     }
 
+    @Override
     public int lastIndexOf(Object o) {
         return innerList.lastIndexOf(o);
     }
 
+    @Override
     public ListIterator<T> listIterator() {
         return innerList.listIterator();
     }
 
+    @Override
     public ListIterator<T> listIterator(int i) {
         return innerList.listIterator(i);
     }
 
+    @Override
     public List<T> subList(int i, int i1) {
         return innerList.subList(i, i1);
     }

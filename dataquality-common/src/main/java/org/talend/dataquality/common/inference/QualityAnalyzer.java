@@ -12,19 +12,19 @@
 // ============================================================================
 package org.talend.dataquality.common.inference;
 
-public abstract class QualityAnalyzer<T, QT> implements Analyzer<T> {
+public abstract class QualityAnalyzer<T, Q> implements Analyzer<T> {
 
     private static final long serialVersionUID = 6214486020243062215L;
 
     protected boolean isStoreInvalidValues = true;
 
-    private QT types;
+    private Q types;
 
-    public void setTypes(QT types) {
+    public void setTypes(Q types) {
         this.types = types;
     }
 
-    public QT getTypes() {
+    public Q getTypes() {
         return types;
     }
 
@@ -33,6 +33,7 @@ public abstract class QualityAnalyzer<T, QT> implements Analyzer<T> {
      * {@link Parameters.QualityParam#STORE_VALUE}
      * @param isStoreInvalidValues
      */
+    @Deprecated
     public void setStoreInvalidValues(boolean isStoreInvalidValues) {
         this.isStoreInvalidValues = isStoreInvalidValues;
     }

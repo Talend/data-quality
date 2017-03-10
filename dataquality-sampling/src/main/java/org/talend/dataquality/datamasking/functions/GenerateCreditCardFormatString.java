@@ -25,22 +25,22 @@ public class GenerateCreditCardFormatString extends GenerateCreditCardFormat<Str
     @Override
     protected String doGenerateMaskedField(String str) {
         String strWithoutSpaces = removeFormatInString(str);
-        CreditCardType cct_format = null;
+        CreditCardType cctFormat;
         StringBuilder res = new StringBuilder();
         if (StringUtils.isEmpty(strWithoutSpaces)) {
-            cct_format = chooseCreditCardType();
-            res.append(generateCreditCard(cct_format));
+            cctFormat = chooseCreditCardType();
+            res.append(generateCreditCard(cctFormat));
         } else {
             try {
-                cct_format = getCreditCardType(Long.parseLong(strWithoutSpaces)); // $NON-NLS-1$
+                cctFormat = getCreditCardType(Long.parseLong(strWithoutSpaces)); // $NON-NLS-1$
             } catch (NumberFormatException e) {
-                cct_format = chooseCreditCardType();
+                cctFormat = chooseCreditCardType();
             }
-            if (cct_format != null) {
-                res.append(generateCreditCardFormat(cct_format, strWithoutSpaces));
+            if (cctFormat != null) {
+                res.append(generateCreditCardFormat(cctFormat, strWithoutSpaces));
             } else {
-                cct_format = chooseCreditCardType();
-                res.append(generateCreditCard(cct_format));
+                cctFormat = chooseCreditCardType();
+                res.append(generateCreditCard(cctFormat));
             }
         }
         if (keepFormat)

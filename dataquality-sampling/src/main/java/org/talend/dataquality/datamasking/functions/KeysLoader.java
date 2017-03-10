@@ -30,6 +30,10 @@ import java.util.List;
  */
 public class KeysLoader {
 
+    private KeysLoader() {
+
+    }
+
     /**
      * 
      * @param filePath the file path where keys to be loaded.
@@ -47,7 +51,7 @@ public class KeysLoader {
             }
             in.close();
         } catch (NullPointerException | IOException e) {
-            throw (e);
+            throw e;
         }
         return keys;
     }

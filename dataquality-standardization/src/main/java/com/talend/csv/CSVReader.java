@@ -20,6 +20,10 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.HashMap;
 
+/**
+ * 
+ * Read a csv file
+ */
 public class CSVReader {
 
     private Reader reader;
@@ -480,11 +484,12 @@ public class CSVReader {
             newLen--;
         }
 
+        String subContent = content;
         if (newLen != len) {
-            content = content.substring(0, newLen);
+            subContent = content.substring(0, newLen);
         }
 
-        return content;
+        return subContent;
     }
 
     public void close() throws IOException {
@@ -549,7 +554,7 @@ public class CSVReader {
 
     public String[] getHeaders() throws IOException {
         if (headersReader.headers == null) {
-            return null;
+            return new String[0];
         } else {
             String[] clone = new String[headersReader.length];
             System.arraycopy(headersReader.headers, 0, clone, 0, headersReader.length);

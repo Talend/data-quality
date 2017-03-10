@@ -31,12 +31,12 @@ public class Analyzers implements Analyzer<Analyzers.Result> {
 
     private static final Logger LOGGER = Logger.getLogger(Analyzers.class);
 
-    private final Analyzer<?>[] analyzers;
+    private final Analyzer<?>[] analyzerArrays;
 
     private final ResizableList<Result> results = new ResizableList<>(Result.class);
 
     private Analyzers(Analyzer<?>... analyzers) {
-        this.analyzers = analyzers;
+        this.analyzerArrays = analyzers;
     }
 
     /**
@@ -49,29 +49,33 @@ public class Analyzers implements Analyzer<Analyzers.Result> {
         return new Analyzers(analyzers);
     }
 
+    @Override
     public void init() {
-        for (Analyzer<?> analyzer : analyzers) {
+        for (Analyzer<?> analyzer : analyzerArrays) {
             analyzer.init();
         }
     }
 
+    @Override
     public boolean analyze(String... record) {
         boolean result = true;
         results.resize(record.length);
-        for (Analyzer<?> analyzer : analyzers) {
+        for (Analyzer<?> analyzer : analyzerArrays) {
             result &= analyzer.analyze(record);
         }
         return result;
     }
 
+    @Override
     public void end() {
-        for (Analyzer<?> executor : analyzers) {
+        for (Analyzer<?> executor : analyzerArrays) {
             executor.end();
         }
     }
 
+    @Override
     public List<Result> getResult() {
-        for (Analyzer<?> analyzer : analyzers) {
+        for (Analyzer<?> analyzer : analyzerArrays) {
             final List<?> analysis = analyzer.getResult();
             if (analysis != null) {
                 for (int j = 0; j < analysis.size(); j++) {
@@ -112,7 +116,7 @@ public class Analyzers implements Analyzer<Analyzers.Result> {
 
     @Override
     public void close() throws Exception {
-        for (Analyzer<?> analyzer : analyzers) {
+        for (Analyzer<?> analyzer : analyzerArrays) {
             try {
                 analyzer.close();
             } catch (Exception e) {

@@ -40,7 +40,7 @@ public class GenerateSsnChn extends Function<String> {
     private static final List<Integer> keyWeight = Collections
             .unmodifiableList(Arrays.asList(7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2));
 
-    private static final int KeyMod = 11; // $NON-NLS-1$
+    private static final int KEY_MOD = 11; // $NON-NLS-1$
 
     private static final List<String> keyString = Collections
             .unmodifiableList(Arrays.asList("1", "0", "X", "9", "8", "7", "6", "5", "4", "3", "2"));
@@ -50,7 +50,7 @@ public class GenerateSsnChn extends Function<String> {
         for (int i = 0; i < 17; i++) {
             key += Character.getNumericValue(ssnNumber.charAt(i)) * keyWeight.get(i);
         }
-        key = key % KeyMod;
+        key = key % KEY_MOD;
         return keyString.get(key);
     }
 

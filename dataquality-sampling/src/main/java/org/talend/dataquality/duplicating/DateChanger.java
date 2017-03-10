@@ -73,12 +73,13 @@ public class DateChanger {
 
     @SuppressWarnings("deprecation")
     Date replaceWithRandomDate(Date date) {
-        if (date == null) {
-            date = new Date();
+        Date newDate = date;
+        if (newDate == null) {
+            newDate = new Date();
         }
-        date.setYear(random.nextInt(100));
-        date.setMonth(random.nextInt(12));
-        date.setDate(random.nextInt(31));
-        return date;
+        newDate.setYear(random.nextInt(100));
+        newDate.setMonth(random.nextInt(12));
+        newDate.setDate(random.nextInt(31));
+        return newDate;
     }
 }

@@ -23,7 +23,7 @@ public class GenerateFromFileStringProvided extends GenerateFromFileString {
 
     private static final long serialVersionUID = 8936060786451303843L;
 
-    private final static Logger log = Logger.getLogger(GenerateFromFileStringProvided.class);
+    private static final Logger LOG = Logger.getLogger(GenerateFromFileStringProvided.class);
 
     @Override
     public void parse(String extraParameter, boolean keepNullValues, Random rand) {
@@ -31,7 +31,7 @@ public class GenerateFromFileStringProvided extends GenerateFromFileString {
         try {
             genericTokens = KeysLoader.loadKeys(getClass().getResourceAsStream(parameters[0]));
         } catch (IOException | NullPointerException e) {
-            log.error(e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
         }
     }
 

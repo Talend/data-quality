@@ -30,6 +30,10 @@ class DatePatternHelper {
 
     private static List<Map<Pattern, String>> DATE_PATTERN_GROUP_LIST = new ArrayList<Map<Pattern, String>>();
 
+    private DatePatternHelper() {
+
+    }
+
     static {
         try {
             // Load date patterns
@@ -60,7 +64,7 @@ class DatePatternHelper {
             }
             stream.close();
         } catch (IOException e) {
-            LOGGER.error(e.getMessage());
+            LOGGER.error(e.getMessage(), e);
         }
     }
 

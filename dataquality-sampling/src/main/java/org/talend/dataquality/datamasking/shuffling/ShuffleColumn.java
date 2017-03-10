@@ -274,7 +274,7 @@ public class ShuffleColumn {
     protected List<Integer> calculateReplacementInteger(int size, int prime) {
         List<Integer> list = new ArrayList<Integer>();
         for (int i = 0; i < size; i++) {
-            long aux = ((i + 1l) % size) * (prime % size);
+            long aux = ((i + 1L) % size) * (prime % size);
             list.add((int) (aux % size));
         }
         return list;

@@ -92,14 +92,6 @@ public class EmailValidator implements Serializable {
      */
     public boolean isValid(String email) {
 
-        // if (!isValidUser(emailMatcher.group(1))) {
-        // return false;
-        // }
-
-        // if (!isValidDomain(emailMatcher.group(2))) {
-        // return false;
-        // }
-
         return true;
     }
 

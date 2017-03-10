@@ -39,7 +39,7 @@ public class FieldModifier {
         MODIFY_DATE_VALUE,
         SWITCH_DAY_MONTH_VALUE,
         REPLACE_BY_RANDOM_DATE
-    };
+    }
 
     private static final String LETTER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; //$NON-NLS-1$
 
@@ -54,8 +54,6 @@ public class FieldModifier {
     private static char[] soundexMap = US_ENGLISH_MAPPING_STRING.toCharArray();
 
     private Map<Character, List<Character>> inverseSoundexMap;
-
-    // private Map<String, SynonymIndexSearcher> synonymSearcherMap;
 
     private DateChanger dateChanger = new DateChanger();
 
@@ -189,7 +187,7 @@ public class FieldModifier {
                             charSet.clear();
                             charSet.addAll(soundexSet);
                             charSet.remove(charSet.indexOf(Character.toUpperCase(charToReplace)));
-                            if (charSet.size() > 0) {
+                            if (!charSet.isEmpty()) {
                                 Character[] charArray = charSet.toArray(new Character[charSet.size()]);
                                 Character newChar = charArray[random.nextInt(charArray.length)];
                                 if (Character.isLowerCase(charToReplace)) {

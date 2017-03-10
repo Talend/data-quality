@@ -92,9 +92,7 @@ public class DomainValidator implements Serializable {
         if (groups != null && groups.length > 0) {
             return true;
         } else if (allowLocal) {
-            if (hostnameRegex.isValid(domain)) {
-                return true;
-            }
+            return hostnameRegex.isValid(domain);
         }
 
         return false;

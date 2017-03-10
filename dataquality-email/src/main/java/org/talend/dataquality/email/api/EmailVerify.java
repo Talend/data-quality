@@ -31,7 +31,7 @@ import org.talend.dataquality.email.exception.TalendSMTPRuntimeException;
  */
 public class EmailVerify implements IEmailChecker {
 
-    private static Logger log = Logger.getLogger(EmailVerify.class);
+    private static final Logger LOG = Logger.getLogger(EmailVerify.class);
 
     private List<IEmailChecker> checkers;
 
@@ -57,7 +57,7 @@ public class EmailVerify implements IEmailChecker {
     public EmailVerify addListDomainsChecker(boolean isBlackListDomains, List<String> listDomains) {
         // if white, and the list is empty, consider: INVALID
         if ((listDomains == null || listDomains.isEmpty()) && !isBlackListDomains) {
-            log.warn(
+            LOG.warn(
                     " The selected white list is empty. All emails will be invalid. Either select the black list option or add some domains in the white list."); //$NON-NLS-1$
         }
 
@@ -137,8 +137,10 @@ public class EmailVerify implements IEmailChecker {
                     }
                 }
             } catch (TalendSMTPRuntimeException e) {
+                LOG.warn(e.getMessage(), e);
                 continue;
             } catch (Exception e) {
+                LOG.warn(e.getMessage(), e);
                 return checkResult;
             }
         }
@@ -185,8 +187,10 @@ public class EmailVerify implements IEmailChecker {
                     }
                 }
             } catch (TalendSMTPRuntimeException e) {
+                LOG.warn(e.getMessage(), e);
                 continue;
             } catch (Exception e) {
+                LOG.warn(e.getMessage(), e);
                 return checkResult;
             }
         }

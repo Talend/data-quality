@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
 import org.talend.dataquality.email.CommonCheck.EmailValidator;
 
 /**
@@ -25,8 +24,6 @@ import org.talend.dataquality.email.CommonCheck.EmailValidator;
  *
  */
 public class ListDomainsCheckerImpl extends AbstractEmailChecker {
-
-    private static Logger log = Logger.getLogger(ListDomainsCheckerImpl.class);
 
     private boolean isBlackListDomains;
 
@@ -86,9 +83,9 @@ public class ListDomainsCheckerImpl extends AbstractEmailChecker {
         for (String domainPattern : listDomains) {
             boolean isNeedConversion = domainPattern.indexOf('*') >= 0;
             if (isNeedConversion) {
-                Pattern DOMAIN_PATTERN = listDomainsPatterns.get(domainPattern);
+                Pattern domainPattern2 = listDomainsPatterns.get(domainPattern);
 
-                if (DOMAIN_PATTERN.matcher(domainPart).matches() && EmailValidator.getInstance().isValidDomain(domainPart)) {
+                if (domainPattern2.matcher(domainPart).matches() && EmailValidator.getInstance().isValidDomain(domainPart)) {
                     return true;
                 }
             } else {
@@ -118,8 +115,8 @@ public class ListDomainsCheckerImpl extends AbstractEmailChecker {
                 boolean isNeedConversion = domainPattern.indexOf('*') >= 0;
                 if (isNeedConversion) {
                     String convertedPattern = domainPattern.replace("*", "[\\p{Alnum}-.]*").replace(".", "\\."); //$NON-NLS-1$ //$NON-NLS-2$
-                    Pattern DOMAIN_PATTERN = Pattern.compile(convertedPattern);
-                    listDomainsPatterns.put(domainPattern, DOMAIN_PATTERN);
+                    Pattern domainPattern2 = Pattern.compile(convertedPattern);
+                    listDomainsPatterns.put(domainPattern, domainPattern2);
                 }
             }
         }

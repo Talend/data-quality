@@ -30,7 +30,7 @@ public abstract class GenerateCreditCard<T2> extends Function<T2> {
         AMERICAN_EXPRESS,
         MASTER_CARD,
         VISA
-    };
+    }
 
     /**
      * This function tests a credit card number if valid.
@@ -52,7 +52,7 @@ public abstract class GenerateCreditCard<T2> extends Function<T2> {
                 }
             }
         }
-        return ((s1 + s2) % 10 == 0);
+        return (s1 + s2) % 10 == 0;
     }
 
     /**
@@ -170,8 +170,8 @@ public abstract class GenerateCreditCard<T2> extends Function<T2> {
             if (iin >= 51 && iin <= 56 && number.length() == 16) {
                 return CreditCardType.MASTER_CARD;
             } else {
-                Integer iin_short = iin / 10;
-                if (iin_short == 4) {
+                Integer iinShort = iin / 10;
+                if (iinShort == 4) {
                     return CreditCardType.VISA;
                 }
             }

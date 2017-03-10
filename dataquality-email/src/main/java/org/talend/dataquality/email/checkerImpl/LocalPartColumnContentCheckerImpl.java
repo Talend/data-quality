@@ -13,6 +13,7 @@
 package org.talend.dataquality.email.checkerImpl;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.talend.dataquality.email.api.EmailVerifyResult;
 
 /**
@@ -21,17 +22,17 @@ import org.talend.dataquality.email.api.EmailVerifyResult;
  */
 public class LocalPartColumnContentCheckerImpl extends AbstractEmailChecker {
 
+    private static final Logger LOG = Logger.getLogger(LocalPartColumnContentCheckerImpl.class);
+
     private int nFOfFirst, nLOfFirst, nFOfLast, nLOfLast;
 
     private boolean isCaseSensitive;
 
     private String separator, usedCaseToGenerate, correctedEmail = StringUtils.EMPTY;
 
-    private final static String LOWER = "L";
+    private static final String LOWER = "L"; //$NON-NLS-1$
 
-    private final static String UPPER = "U";
-
-    private final static String KEEP = "K";
+    private static final String UPPER = "U"; //$NON-NLS-1$
 
     /**
      * 
@@ -62,8 +63,14 @@ public class LocalPartColumnContentCheckerImpl extends AbstractEmailChecker {
         this.usedCaseToGenerate = usedCase;
     }
 
-    // if the string is blank, consider default is 0;
-    // if the string can not be parse to a number, use default: 0
+    /**
+     * 
+     * if the string is blank, consider default is 0;
+     * if the string can not be parse to a number, use default: 0
+     * 
+     * @param usedString
+     * @return
+     */
     private int initNumber(String usedString) {
         if (StringUtils.isBlank(usedString)) {
             return 0;
@@ -71,6 +78,7 @@ public class LocalPartColumnContentCheckerImpl extends AbstractEmailChecker {
         try {
             return Integer.parseInt(usedString);
         } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
             return 0;
         }
     }

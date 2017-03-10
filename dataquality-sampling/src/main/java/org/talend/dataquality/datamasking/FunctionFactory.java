@@ -26,8 +26,7 @@ public class FunctionFactory {
 
     private Function<?> getFunction3(FunctionType type, int javaType) throws InstantiationException, IllegalAccessException {
         Function<?> res;
-        switch (type) {
-        case REPLACE_LAST_CHARS:
+        if (type == FunctionType.REPLACE_LAST_CHARS) {
             switch (javaType) {
             case 0:
                 res = getFunction(FunctionType.REPLACE_LAST_CHARS_INT.getClazz());
@@ -42,8 +41,7 @@ public class FunctionFactory {
                 res = null;
                 break;
             }
-            break;
-        case REPLACE_NUMERIC:
+        } else if (type == FunctionType.REPLACE_NUMERIC) {
             switch (javaType) {
             case 0:
                 res = getFunction(FunctionType.REPLACE_NUMERIC_INT.getClazz());
@@ -64,18 +62,15 @@ public class FunctionFactory {
                 res = null;
                 break;
             }
-            break;
-        default:
+        } else {
             res = getFunction(type.getClazz());
-            break;
         }
         return res;
     }
 
     private Function<?> getFunction2(FunctionType type, int javaType) throws InstantiationException, IllegalAccessException {
         Function<?> res;
-        switch (type) {
-        case GENERATE_FROM_LIST_HASH:
+        if (type == FunctionType.GENERATE_FROM_LIST_HASH) {
             switch (javaType) {
             case 0:
                 res = getFunction(FunctionType.GENERATE_FROM_LIST_HASH_INT.getClazz());
@@ -90,8 +85,7 @@ public class FunctionFactory {
                 res = null;
                 break;
             }
-            break;
-        case GENERATE_FROM_FILE_HASH:
+        } else if (type == FunctionType.GENERATE_FROM_FILE_HASH) {
             switch (javaType) {
             case 0:
                 res = getFunction(FunctionType.GENERATE_FROM_FILE_HASH_INT.getClazz());
@@ -106,8 +100,7 @@ public class FunctionFactory {
                 res = null;
                 break;
             }
-            break;
-        case GENERATE_SEQUENCE:
+        } else if (type == FunctionType.GENERATE_SEQUENCE) {
             switch (javaType) {
             case 0:
                 res = getFunction(FunctionType.GENERATE_SEQUENCE_INT.getClazz());
@@ -128,8 +121,8 @@ public class FunctionFactory {
                 res = null;
                 break;
             }
-            break;
-        case NUMERIC_VARIANCE:
+        } else if (type == FunctionType.NUMERIC_VARIANCE) {
+
             switch (javaType) {
             case 0:
                 res = getFunction(FunctionType.NUMERIC_VARIANCE_INT.getClazz());
@@ -147,8 +140,7 @@ public class FunctionFactory {
                 res = null;
                 break;
             }
-            break;
-        case REMOVE_FIRST_CHARS:
+        } else if (type == FunctionType.REMOVE_FIRST_CHARS) {
             switch (javaType) {
             case 0:
                 res = getFunction(FunctionType.REMOVE_FIRST_CHARS_INT.getClazz());
@@ -163,8 +155,7 @@ public class FunctionFactory {
                 res = null;
                 break;
             }
-            break;
-        case REMOVE_LAST_CHARS:
+        } else if (type == FunctionType.REMOVE_LAST_CHARS) {
             switch (javaType) {
             case 0:
                 res = getFunction(FunctionType.REMOVE_LAST_CHARS_INT.getClazz());
@@ -179,8 +170,7 @@ public class FunctionFactory {
                 res = null;
                 break;
             }
-            break;
-        case REPLACE_FIRST_CHARS:
+        } else if (type == FunctionType.REPLACE_FIRST_CHARS) {
             switch (javaType) {
             case 0:
                 res = getFunction(FunctionType.REPLACE_FIRST_CHARS_INT.getClazz());
@@ -195,10 +185,8 @@ public class FunctionFactory {
                 res = null;
                 break;
             }
-            break;
-        default:
+        } else {
             res = getFunction3(type, javaType);
-            break;
         }
         return res;
     }
@@ -215,8 +203,7 @@ public class FunctionFactory {
      */
     public Function<?> getFunction(FunctionType type, int javaType) throws InstantiationException, IllegalAccessException {
         Function<?> res;
-        switch (type) {
-        case KEEP_FIRST_AND_GENERATE:
+        if (type == FunctionType.KEEP_FIRST_AND_GENERATE) {
             switch (javaType) {
             case 0:
                 res = getFunction(FunctionType.KEEP_FIRST_AND_GENERATE_INT.getClazz());
@@ -231,8 +218,7 @@ public class FunctionFactory {
                 res = null;
                 break;
             }
-            break;
-        case KEEP_LAST_AND_GENERATE:
+        } else if (type == FunctionType.KEEP_LAST_AND_GENERATE) {
             switch (javaType) {
             case 0:
                 res = getFunction(FunctionType.KEEP_LAST_AND_GENERATE_INT.getClazz());
@@ -247,8 +233,7 @@ public class FunctionFactory {
                 res = null;
                 break;
             }
-            break;
-        case GENERATE_BETWEEN:
+        } else if (type == FunctionType.GENERATE_BETWEEN) {
             switch (javaType) {
             case 0:
                 res = getFunction(FunctionType.GENERATE_BETWEEN_INT.getClazz());
@@ -272,8 +257,7 @@ public class FunctionFactory {
                 res = null;
                 break;
             }
-            break;
-        case GENERATE_CREDIT_CARD_FORMAT:
+        } else if (type == FunctionType.GENERATE_CREDIT_CARD_FORMAT) {
             switch (javaType) {
             case 1:
                 res = getFunction(FunctionType.GENERATE_CREDIT_CARD_FORMAT_LONG.getClazz());
@@ -285,8 +269,7 @@ public class FunctionFactory {
                 res = null;
                 break;
             }
-            break;
-        case GENERATE_CREDIT_CARD:
+        } else if (type == FunctionType.GENERATE_CREDIT_CARD) {
             switch (javaType) {
             case 1:
                 res = getFunction(FunctionType.GENERATE_CREDIT_CARD_LONG.getClazz());
@@ -298,8 +281,7 @@ public class FunctionFactory {
                 res = null;
                 break;
             }
-            break;
-        case GENERATE_FROM_FILE:
+        } else if (type == FunctionType.GENERATE_FROM_FILE) {
             switch (javaType) {
             case 0:
                 res = getFunction(FunctionType.GENERATE_FROM_FILE_INT.getClazz());
@@ -314,8 +296,8 @@ public class FunctionFactory {
                 res = null;
                 break;
             }
-            break;
-        case GENERATE_FROM_LIST:
+
+        } else if (type == FunctionType.GENERATE_FROM_LIST) {
             switch (javaType) {
             case 0:
                 res = getFunction(FunctionType.GENERATE_FROM_LIST_INT.getClazz());
@@ -330,10 +312,8 @@ public class FunctionFactory {
                 res = null;
                 break;
             }
-            break;
-        default:
+        } else {
             res = getFunction2(type, javaType);
-            break;
         }
         return res;
     }

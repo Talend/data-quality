@@ -22,6 +22,10 @@ public class SemanticMaskerFunctionFactory {
 
     private static final Logger LOGGER = Logger.getLogger(SemanticMaskerFunctionFactory.class);
 
+    private SemanticMaskerFunctionFactory() {
+
+    }
+
     public static Function<String> createMaskerFunctionForSemanticCategory(String semanticCategory, String dataType) {
         return createMaskerFunctionForSemanticCategory(semanticCategory, dataType, null);
     }

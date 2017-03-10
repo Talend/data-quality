@@ -46,7 +46,7 @@ import org.talend.dataquality.email.exception.TalendSMTPRuntimeException;
  */
 public class CallbackMailServerCheckerImpl extends AbstractEmailChecker {
 
-    private static Logger LOG = Logger.getLogger(CallbackMailServerCheckerImpl.class);
+    private static final Logger LOG = Logger.getLogger(CallbackMailServerCheckerImpl.class);
 
     private static String HEADER = "Email Indicator - "; //$NON-NLS-1$
 
@@ -97,6 +97,7 @@ public class CallbackMailServerCheckerImpl extends AbstractEmailChecker {
                 line = in.readLine();
             } catch (IOException e) {
                 line = e.getMessage();
+                LOG.warn(line, e);
                 continue;
             }
             if (LOG.isInfoEnabled()) {

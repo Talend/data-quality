@@ -19,11 +19,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import org.apache.log4j.Logger;
 import org.talend.dataquality.datamasking.functions.Function;
 
 public class DateFunctionAdapter extends Function<String> {
 
     private static final long serialVersionUID = -2845447810365033162L;
+
+    private static final Logger LOG = Logger.getLogger(DateFunctionAdapter.class);
 
     private Function<Date> function;
 
@@ -43,7 +46,7 @@ public class DateFunctionAdapter extends Function<String> {
                 try {
                     dataFormatList.add(new SimpleDateFormat(pattern));
                 } catch (IllegalArgumentException e) {
-                    // do nothing for invalid date pattern;
+                    LOG.warn(e.getMessage(), e);
                 }
             }
         }
@@ -63,7 +66,7 @@ public class DateFunctionAdapter extends Function<String> {
                 final Date result = function.generateMaskedRow(inputDate);
                 return sdf.format(result);
             } catch (ParseException e) {
-                // do nothing, continue to try other patterns;
+                LOG.warn(e.getMessage());
             }
         }
         // no pattern from column metadata is applicable to the input, continue to guess and parse
@@ -75,7 +78,7 @@ public class DateFunctionAdapter extends Function<String> {
                 final Date result = function.generateMaskedRow(inputDate);
                 return sdf.format(result);
             } catch (ParseException e) {
-                // do nothing, continue to try other patterns;
+                LOG.warn(e.getMessage());
             }
         }
         return ReplaceCharacterHelper.replaceCharacters(input, rnd);

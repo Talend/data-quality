@@ -23,7 +23,7 @@ import org.talend.dataquality.email.Constant;
  */
 public class LocalPartRegexCheckerImpl extends AbstractEmailChecker {
 
-    private Pattern localpart_pattern;
+    private Pattern localpartPattern;
 
     // isShort = true, means the user selected: "use simlified pattern"
     public LocalPartRegexCheckerImpl(String regex, boolean isShort, boolean isCaseSensitive) {
@@ -31,7 +31,7 @@ public class LocalPartRegexCheckerImpl extends AbstractEmailChecker {
 
         String localPart = isShort ? translateToRegex(regex) : regex;
         if (localPart != null) {
-            localpart_pattern = isCaseSensitive ? Pattern.compile(localPart)
+            localpartPattern = isCaseSensitive ? Pattern.compile(localPart)
                     : Pattern.compile(localPart, Pattern.CASE_INSENSITIVE);
         }
     }
@@ -55,7 +55,7 @@ public class LocalPartRegexCheckerImpl extends AbstractEmailChecker {
 
         // consider the case where the brackets are repeated several times, like <tal>a9w<end>.
         String[] loacalPartSplits = StringUtils.split(localPart, Constant.LEFT_BRACKET);
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         for (String loacalPartSplit : loacalPartSplits) {
             String splitedStr = loacalPartSplit;
             int indexOf = splitedStr.indexOf(Constant.RIGHT_END);
@@ -63,9 +63,6 @@ public class LocalPartRegexCheckerImpl extends AbstractEmailChecker {
                 String startStr = splitedStr.substring(0, indexOf);
                 String endStr = splitedStr.substring(indexOf + 1);
 
-                // for (String element : Constant.SPECIAL_CHARS) {
-                // startStr = startStr.replace(element, Constant.SLASH + element);
-                // }
                 endStr = replaceChar(endStr);
                 splitedStr = startStr + endStr;
             } else {
@@ -99,7 +96,7 @@ public class LocalPartRegexCheckerImpl extends AbstractEmailChecker {
      */
     @Override
     public boolean check(String email) {
-        if (email == null || localpart_pattern == null) {
+        if (email == null || localpartPattern == null) {
             return false;
         }
         int pos = email.indexOf(Constant.AT);
@@ -107,7 +104,7 @@ public class LocalPartRegexCheckerImpl extends AbstractEmailChecker {
             return false;
         }
         String inputLocalPart = email.substring(0, pos);
-        if (!localpart_pattern.matcher(inputLocalPart).matches()) {
+        if (!localpartPattern.matcher(inputLocalPart).matches()) {
             return false;
         }
         return true;
