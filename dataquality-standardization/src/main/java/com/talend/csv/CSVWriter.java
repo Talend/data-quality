@@ -18,6 +18,8 @@ import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 /**
  * A very simple CSV writer released under a commercial-friendly license.
  *
@@ -39,6 +41,8 @@ public class CSVWriter implements Closeable {
     private char escapechar = '"';
 
     private String lineEnd;
+
+    private final Logger LOG = Logger.getLogger(CSVWriter.class);
 
     public enum QuoteStatus {
         FORCE,
