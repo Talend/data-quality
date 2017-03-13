@@ -225,6 +225,10 @@ public class MFB implements MatchMergeAlgorithm {
         return matcher;
     }
 
+    public IRecordMerger getMerger() {
+        return merger;
+    }
+
     public static class NonMatchResult extends MatchResult {
 
         public static final MatchResult INSTANCE = wrap(new MatchResult(0));

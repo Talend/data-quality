@@ -149,10 +149,12 @@ public class AnalysisSwooshMatchRecordGrouping extends AnalysisMatchRecordGroupi
      *  */
     @Override
     protected void outputRow(RichRecord row) {
-        if (matchResultConsumer != null && matchResultConsumer.isKeepDataInMemory()) {
-            tmpMatchResult.add(row);
-        } else {
-            out(row);
+        if (matchResultConsumer != null) {
+            if (matchResultConsumer.isKeepDataInMemory()) {
+                tmpMatchResult.add(row);
+            } else {
+                out(row);
+            }
         }
     }
 

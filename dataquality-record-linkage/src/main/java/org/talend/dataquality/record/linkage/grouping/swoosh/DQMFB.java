@@ -14,13 +14,21 @@ package org.talend.dataquality.record.linkage.grouping.swoosh;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 
 import org.talend.dataquality.matchmerge.Record;
 import org.talend.dataquality.matchmerge.mfb.MFB;
+import org.talend.dataquality.matchmerge.mfb.MatchMergeCallback;
+import org.talend.dataquality.record.linkage.constant.RecordMatcherType;
+import org.talend.dataquality.record.linkage.grouping.TSwooshGrouping;
+import org.talend.dataquality.record.linkage.grouping.swoosh.SurvivorShipAlgorithmParams.SurvivorshipFunction;
+import org.talend.dataquality.record.linkage.record.CombinedRecordMatcher;
 import org.talend.dataquality.record.linkage.record.IRecordMatcher;
 import org.talend.dataquality.record.linkage.record.IRecordMerger;
+import org.talend.dataquality.record.linkage.utils.SurvivorShipAlgorithmEnum;
 
 /**
  * created by zhao on Jul 10, 2014 MFB algorithm adapted to DQ grouping API, which will continue matching two different
@@ -52,6 +60,45 @@ public class DQMFB extends MFB {
         if (callback != null) {
             callback.onBeginProcessing();
         }
+    }
+
+    @Override
+    public List<Record> execute(Iterator<Record> sourceRecords) {
+        return execute(sourceRecords, callback);
+    }
+
+    public static DQMFB build(RecordMatcherType recordLinkageAlgorithm, List<List<Map<String, String>>> multiMatchRules,
+            List<SurvivorshipFunction[]> multiSurvivorshipFunctions, Map<Integer, SurvivorshipFunction> defaultSurviorshipRules,
+            String mergedRecordSource, Callback callback) throws Exception {
+        AnalysisSwooshMatchRecordGrouping recordGrouping = new AnalysisSwooshMatchRecordGrouping();
+        recordGrouping.setRecordLinkAlgorithm(recordLinkageAlgorithm);
+        for (List<Map<String, String>> matchRule : multiMatchRules) {
+            recordGrouping.addMatchRule(matchRule);
+        }
+        recordGrouping.initialize();
+        CombinedRecordMatcher combinedMatcher = recordGrouping.getCombinedRecordMatcher();
+        List<IRecordMatcher> matchers = combinedMatcher.getMatchers();
+
+        int size = multiSurvivorshipFunctions.get(0).length;
+        String[] parameters = new String[size];
+        SurvivorShipAlgorithmEnum[] typeMergeTable = new SurvivorShipAlgorithmEnum[size];
+
+        SurvivorShipAlgorithmParams matchMergeParam = new SurvivorShipAlgorithmParams();
+        matchMergeParam.setRecordMatcher(combinedMatcher);
+        matchMergeParam.setDefaultSurviorshipRules(defaultSurviorshipRules);
+        for (int i = 0; i < matchers.size(); i++) {
+            matchMergeParam.getSurvivorshipAlgosMap().put(matchers.get(i), multiSurvivorshipFunctions.get(i));
+        }
+        DQMFBRecordMerger recordMerger = new DQMFBRecordMerger(mergedRecordSource, parameters, typeMergeTable, matchMergeParam);
+
+        TSwooshGrouping<Object> tswooshGrouping = new TSwooshGrouping<Object>(recordGrouping);
+        if (callback == null) {
+            callback = tswooshGrouping.new GroupingCallBack();
+        } else if (callback instanceof MatchMergeCallback) {
+            ((MatchMergeCallback) callback).setPrevious(tswooshGrouping.new GroupingCallBack());
+        }
+
+        return new DQMFB(combinedMatcher, recordMerger, callback);
     }
 
     /*

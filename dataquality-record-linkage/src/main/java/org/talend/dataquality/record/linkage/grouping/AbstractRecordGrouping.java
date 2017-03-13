@@ -619,9 +619,6 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
     }
 
     private TokenizedResolutionMethod getTokenMethod(Map<String, String> recordMap) {
-        if (IRecordGrouping.TOKENIZATION_TYPE == null) {
-            return TokenizedResolutionMethod.NO;
-        }
         return TokenizedResolutionMethod.getTypeByValueWithDefault(recordMap.get(IRecordGrouping.TOKENIZATION_TYPE));
     }
 
