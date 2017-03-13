@@ -45,6 +45,10 @@ public class DQMFBRecordMerger extends MFBRecordMerger {
         this.matchMergeParam = matchMergeParam;
     }
 
+    public SurvivorShipAlgorithmParams getMatchMergeParam() {
+        return matchMergeParam;
+    }
+
     /*
      * (non-Javadoc)
      * 

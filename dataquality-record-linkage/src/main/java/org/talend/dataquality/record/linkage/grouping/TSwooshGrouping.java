@@ -223,7 +223,7 @@ public class TSwooshGrouping<TYPE> {
         rcdsGenerators.clear();
     }
 
-    class GroupingCallBack implements MatchMergeAlgorithm.Callback {
+    public class GroupingCallBack implements MatchMergeAlgorithm.Callback {
 
         @Override
         public void onBeginRecord(Record record) {

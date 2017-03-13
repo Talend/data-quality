@@ -47,6 +47,12 @@ public class Attribute {
         this.columnIndex = colIdx;
     }
 
+    public Attribute(String label, int colIdx, String value) {
+        this.label = label;
+        this.columnIndex = colIdx;
+        this.value = value;
+    }
+
     /**
      * @return The column name.
      */
