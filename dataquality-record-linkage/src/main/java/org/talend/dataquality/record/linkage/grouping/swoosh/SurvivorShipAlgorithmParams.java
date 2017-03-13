@@ -113,7 +113,7 @@ public class SurvivorShipAlgorithmParams {
 
         String survivorShipKey;
 
-        SurvivorShipAlgorithmEnum survivorShipFunction;
+        SurvivorShipAlgorithmEnum survivorShipAlgorithmEnum;
 
         // Will be usefull when the function is SurvivorShipAlgorithmEnum.MOST_TRUSTED_SOURCE.
         String parameter;
@@ -124,7 +124,7 @@ public class SurvivorShipAlgorithmParams {
          * @return the survivorShipFunction
          */
         public SurvivorShipAlgorithmEnum getSurvivorShipAlgoEnum() {
-            return this.survivorShipFunction;
+            return this.survivorShipAlgorithmEnum;
         }
 
         /**
@@ -133,7 +133,7 @@ public class SurvivorShipAlgorithmParams {
          * @param survivorShipFunction the survivorShipFunction to set
          */
         public void setSurvivorShipAlgoEnum(SurvivorShipAlgorithmEnum survivorShipFunction) {
-            this.survivorShipFunction = survivorShipFunction;
+            this.survivorShipAlgorithmEnum = survivorShipFunction;
         }
 
         /**

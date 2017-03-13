@@ -64,6 +64,7 @@ public class UDCategorySerDeser {
                     .getResourceAsStream("/org/talend/dataquality/semantic/recognizer/" + FILE_NAME);
             return readJsonFile(inputStream);
         } catch (IOException e) {
+            LOGGER.warn(e.getMessage(), e);
             URL url = new URL("platform:/plugin/" + BUNDLE_NAME //$NON-NLS-1$
                     + "/org/talend/dataquality/semantic/recognizer/" + FILE_NAME); //$NON-NLS-1$
             InputStream inputStream = url.openConnection().getInputStream();
@@ -104,6 +105,7 @@ public class UDCategorySerDeser {
             obj.put("classifiers", array);
             return readJsonFile(obj.toString());
         } catch (JSONException e) {
+            LOGGER.warn(e.getMessage(), e);
             // try another format with "classifier" node.
             return readJsonFile(content);
         }
@@ -123,7 +125,7 @@ public class UDCategorySerDeser {
             mapper.writerWithDefaultPrettyPrinter().writeValue(outputStream, userDefinedClassifier);
             outputStream.close();
         } catch (Exception exc) {
-            System.err.println(exc.getMessage());
+            LOGGER.error(exc.getMessage(), exc);
             return false;
         }
         return true;

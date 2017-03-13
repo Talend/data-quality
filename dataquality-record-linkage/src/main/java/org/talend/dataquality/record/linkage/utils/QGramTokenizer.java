@@ -72,9 +72,9 @@ public class QGramTokenizer implements Serializable {
     }
 
     private String calDefaultPad(char charac, int repeat, String input) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         for (int i = 0; i < repeat; i++) {
-            buf.append('#');
+            buf.append(charac);
         }
         return buf.append(input).append(buf.toString()).toString();
     }

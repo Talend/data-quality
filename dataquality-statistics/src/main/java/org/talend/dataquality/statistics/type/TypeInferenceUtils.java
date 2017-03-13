@@ -73,10 +73,8 @@ public class TypeInferenceUtils {
      * @return true if the value is a double type, false otherwise.
      */
     public static boolean isDouble(String value) {
-        if (!isEmpty(value)) {
-            if (patternDouble.matcher(value).matches()) {
-                return true;
-            }
+        if (!isEmpty(value) && patternDouble.matcher(value).matches()) {
+            return true;
         }
         return false;
     }
@@ -88,10 +86,8 @@ public class TypeInferenceUtils {
      * @return true if the value is a integer type, false otherwise.
      */
     public static boolean isInteger(String value) {
-        if (!isEmpty(value)) {
-            if (patternInteger.matcher(value).matches()) {
-                return true;
-            }
+        if (!isEmpty(value) && patternInteger.matcher(value).matches()) {
+            return true;
         }
         return false;
     }
@@ -124,10 +120,12 @@ public class TypeInferenceUtils {
      * @return true if the value is a boolean type, false otherwise.
      */
     public static boolean isBoolean(String value) {
-        if (!isEmpty(value) && (value.trim().length() == 4 || value.trim().length() == 5)) {
-            if (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")) {
-                return true;
-            }
+        if (isEmpty(value)) {
+            return false;
+        }
+        if ((value.trim().length() == 4 || value.trim().length() == 5)
+                && ("true".equalsIgnoreCase(value) || "false".equalsIgnoreCase(value))) { //$NON-NLS-1$ //$NON-NLS-2$
+            return true;
         }
         return false;
     }
@@ -187,7 +185,7 @@ public class TypeInferenceUtils {
      * @return true if the value is blank or null, false otherwise.
      */
     public static boolean isEmpty(String value) {
-        return (value == null || value.trim().length() == 0);
+        return value == null || value.trim().length() == 0;
     }
 
     /**
@@ -217,7 +215,7 @@ public class TypeInferenceUtils {
     }
 
     public static DataTypeEnum getDataType(String value) {
-        return getDataType(value, Collections.EMPTY_LIST);
+        return getDataType(value, Collections.emptyList());
     }
 
     public static DataTypeEnum getDataType(String value, List<String> customDateTimePatterns) {

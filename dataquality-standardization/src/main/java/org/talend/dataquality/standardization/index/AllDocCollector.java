@@ -33,10 +33,12 @@ public class AllDocCollector extends Collector {
 
     private int docBase;
 
+    @Override
     public boolean acceptsDocsOutOfOrder() {
         return true;
     }
 
+    @Override
     public void setScorer(Scorer scorer) {
         this.scorer = scorer;
     }

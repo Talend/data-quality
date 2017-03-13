@@ -41,7 +41,7 @@ public class LatinExtendedCharPatternRecognizer extends AbstractPatternRecognize
             return result;
         }
         boolean isComplete = true;
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         int n = stringToRecognize.length();
         for (int i = 0; i < n; i++) {
             char c = stringToRecognize.charAt(i);

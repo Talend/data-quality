@@ -32,6 +32,7 @@ public class JaroWinklerMatcher extends JaroMatcher {
      * 
      * @see org.talend.dataquality.record.linkage.attribute.IAttributeMatcher#getMatchType()
      */
+    @Override
     public AttributeMatcherType getMatchType() {
         return AttributeMatcherType.JARO_WINKLER;
     }
@@ -41,6 +42,7 @@ public class JaroWinklerMatcher extends JaroMatcher {
      * 
      * @see org.talend.dataquality.record.linkage.attribute.JaroMatcher#getWeight(java.lang.String, java.lang.String)
      */
+    @Override
     public double getWeight(String str1, String str2) {
         double dist = super.getWeight(str1, str2);
         // This extension modifies the weights of poorly matching pairs string1, string2 which share a common prefix

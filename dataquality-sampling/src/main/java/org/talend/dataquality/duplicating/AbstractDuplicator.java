@@ -21,7 +21,7 @@ import org.apache.log4j.Logger;
 
 public abstract class AbstractDuplicator<TIn, TOut> {
 
-    private static Logger LOG = Logger.getLogger(AbstractDuplicator.class);
+    private static final Logger LOG = Logger.getLogger(AbstractDuplicator.class);
 
     private RandomWrapper rnd;
 

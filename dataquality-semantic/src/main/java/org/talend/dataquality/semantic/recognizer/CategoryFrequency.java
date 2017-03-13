@@ -42,6 +42,7 @@ public class CategoryFrequency implements Comparable<CategoryFrequency>, Seriali
      * 
      * @deprecated
      */
+    @Deprecated
     public CategoryFrequency(ISubCategory cat) {
         // do not use cat.getId() for the moment because it represents the mongoId
         this(cat.getName(), cat.getName());

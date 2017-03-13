@@ -16,6 +16,8 @@ import java.text.MessageFormat;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import org.apache.log4j.Logger;
+
 /**
  * created by scorreia on Jan 21, 2013 Detailled comment
  * 
@@ -26,6 +28,8 @@ public class Messages {
 
     private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME);
 
+    private static final Logger LOG = Logger.getLogger(Messages.class);
+
     private Messages() {
     }
 
@@ -33,6 +37,7 @@ public class Messages {
         try {
             return RESOURCE_BUNDLE.getString(key);
         } catch (MissingResourceException e) {
+            LOG.warn(e);
             return '!' + key + '!';
         }
 
@@ -42,6 +47,7 @@ public class Messages {
         try {
             return MessageFormat.format(getString(key).replaceAll("'", "''"), args); //$NON-NLS-1$//$NON-NLS-2$
         } catch (Exception e) {
+            LOG.warn(e);
             return "!!!" + key + "!!!"; //$NON-NLS-1$//$NON-NLS-2$
         }
     }

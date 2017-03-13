@@ -37,8 +37,6 @@ import java.util.ResourceBundle;
  */
 public abstract class MessagesCore {
 
-    // private static Logger log = Logger.getLogger(MessagesCore.class);
-
     public static final String KEY_NOT_FOUND_PREFIX = "!!!"; //$NON-NLS-1$
 
     public static final String KEY_NOT_FOUND_SUFFIX = "!!!"; //$NON-NLS-1$
@@ -54,15 +52,7 @@ public abstract class MessagesCore {
         if (resourceBundle == null) {
             return KEY_NOT_FOUND_PREFIX + key + KEY_NOT_FOUND_SUFFIX;
         }
-        // log.info("Getting key " + key + "in" + resourceBundle.toString());
         try {
-            // modified by hcheng. when pluginId is not null
-            if (pluginId != null) {
-                // String babiliTranslation = BabiliTool.getBabiliTranslation(key, pluginId);
-                // if (babiliTranslation != null) {
-                // return babiliTranslation;
-                // }
-            }
             return resourceBundle.getString(key);
         } catch (MissingResourceException e) {
             return KEY_NOT_FOUND_PREFIX + key + KEY_NOT_FOUND_SUFFIX;

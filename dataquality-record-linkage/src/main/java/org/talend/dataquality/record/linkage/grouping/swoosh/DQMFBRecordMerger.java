@@ -104,8 +104,7 @@ public class DQMFBRecordMerger extends MFBRecordMerger {
 
                 // Get the merged value and update the merged row.
                 mergedRows[colIdx] = new DQAttribute(StringUtils.EMPTY, colIdx);// No label for the
-                // attributes which are not matching keys;
-
+                // attributes which are not matching keys
                 // Keep values from original records (if any)
                 String leftValue = richRecord1.getOriginRow().get(colIdx).getValue();
                 String rightValue = richRecord2.getOriginRow().get(colIdx).getValue();
@@ -165,12 +164,12 @@ public class DQMFBRecordMerger extends MFBRecordMerger {
     private double getGrpqualityMinValue(RichRecord record1, RichRecord record2) {
         double gQuality1 = record1.getGroupQuality();
         double gQuality2 = record2.getGroupQuality();
-        DQAttribute<String> grp_QUALITY1 = record1.getGRP_QUALITY();
-        DQAttribute<String> grp_QUALITY2 = record2.getGRP_QUALITY();
+        DQAttribute<String> grpQUALITY1 = record1.getGRP_QUALITY();
+        DQAttribute<String> grpQUALITY2 = record2.getGRP_QUALITY();
         String value1 = null, value2 = null;
-        if (grp_QUALITY1 != null && grp_QUALITY2 != null) {
-            value1 = grp_QUALITY1.getValue();
-            value2 = grp_QUALITY2.getValue();
+        if (grpQUALITY1 != null && grpQUALITY2 != null) {
+            value1 = grpQUALITY1.getValue();
+            value2 = grpQUALITY2.getValue();
         }
 
         if (StringUtils.isNotBlank(value1) && StringUtils.isNotBlank(value2)) {

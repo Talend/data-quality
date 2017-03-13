@@ -13,7 +13,15 @@
 package org.talend.dataquality.semantic.recognizer;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
@@ -129,7 +137,7 @@ class DefaultCategoryRecognizer implements CategoryRecognizer {
     @Override
     public String[] process(String data) {
         Set<String> categories = getSubCategorySet(data);
-        if (categories.size() > 0) {
+        if (!categories.isEmpty()) {
             for (String catId : categories) {
                 DQCategory meta = crm.getCategoryMetadataByName(catId);
                 incrementCategory(catId, meta == null ? catId : meta.getLabel());

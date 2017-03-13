@@ -171,12 +171,12 @@ public class FirstNameStandardize {
 
         combinedQuery.add(nameQueries, BooleanClause.Occur.MUST);
 
-        if (countryText != null && !countryText.equals("")) {//$NON-NLS-1$
+        if (countryText != null && !"".equals(countryText)) {//$NON-NLS-1$
             Query countryQuery = getTermQuery(PluginConstant.FIRST_NAME_STANDARDIZE_COUNTRY, countryText, false);
             countryQuery.setBoost(5);
             combinedQuery.add(countryQuery, BooleanClause.Occur.SHOULD);
         }
-        if (genderText != null && !genderText.equals("")) {//$NON-NLS-1$
+        if (genderText != null && !"".equals(genderText)) {//$NON-NLS-1$
             Query genderQuery = getTermQuery(PluginConstant.FIRST_NAME_STANDARDIZE_GENDER, genderText, false);
             genderQuery.setBoost(5);
             combinedQuery.add(genderQuery, BooleanClause.Occur.SHOULD);

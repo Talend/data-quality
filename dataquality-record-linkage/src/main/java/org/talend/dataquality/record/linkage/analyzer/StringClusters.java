@@ -27,6 +27,7 @@ public class StringClusters implements Iterable<StringClusters.StringCluster> {
         allClusters.add(cluster);
     }
 
+    @Override
     public Iterator<StringCluster> iterator() {
         return allClusters.iterator();
     }

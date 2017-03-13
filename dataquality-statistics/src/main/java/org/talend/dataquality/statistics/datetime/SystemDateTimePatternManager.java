@@ -74,7 +74,7 @@ public class SystemDateTimePatternManager {
             }
             stream.close();
         } catch (IOException e) {
-            LOGGER.error(e.getMessage());
+            LOGGER.error(e.getMessage(), e);
         }
     }
 
@@ -171,14 +171,14 @@ public class SystemDateTimePatternManager {
         if (StringUtils.isEmpty(value)) {
             return Collections.singleton(StringUtils.EMPTY);
         }
-        HashSet<String> resultSet = new HashSet<String>();
+        HashSet<String> resultSet = new HashSet<>();
         for (Map<Pattern, String> patternMap : patternGroupList) {
             for (Pattern parser : patternMap.keySet()) {
                 if (parser.matcher(value).find()) {
                     resultSet.add(patternMap.get(parser));
                 }
             }
-            if (resultSet.size() > 0) {
+            if (!resultSet.isEmpty()) {
                 return resultSet;
             }
         }

@@ -149,6 +149,7 @@ public class Record {
         return id != null ? id.hashCode() : 0;
     }
 
+    @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
         for (String relatedId : relatedIds) {

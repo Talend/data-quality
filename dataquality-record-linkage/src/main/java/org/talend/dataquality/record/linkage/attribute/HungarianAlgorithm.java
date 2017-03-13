@@ -57,7 +57,7 @@ public class HungarianAlgorithm {
 
     private final boolean[] committedWorkers;
 
-    private final double EPSILON = 1e-6;
+    private static final double EPSILON = 1e-6;
 
     /**
      * Construct an instance of the algorithm.
@@ -156,15 +156,14 @@ public class HungarianAlgorithm {
      */
     protected void executePhase() {
         while (true) {
-            int minSlackWorker = -1, minSlackJob = -1;
+            int minSlackWorker = -1;
+            int minSlackJob = -1;
             double minSlackValue = Double.POSITIVE_INFINITY;
             for (int j = 0; j < dim; j++) {
-                if (parentWorkerByCommittedJob[j] == -1) {
-                    if (minSlackValueByJob[j] < minSlackValue) {
-                        minSlackValue = minSlackValueByJob[j];
-                        minSlackWorker = minSlackWorkerByJob[j];
-                        minSlackJob = j;
-                    }
+                if (parentWorkerByCommittedJob[j] == -1 && minSlackValueByJob[j] < minSlackValue) {
+                    minSlackValue = minSlackValueByJob[j];
+                    minSlackWorker = minSlackWorkerByJob[j];
+                    minSlackJob = j;
                 }
             }
             if (minSlackValue > 0) {

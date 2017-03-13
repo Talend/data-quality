@@ -57,7 +57,7 @@ public class OutputRecord implements Comparable<OutputRecord> {
      */
     @Override
     public String toString() {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         for (String element : record) {
             buf.append(element).append(" ; ");//$NON-NLS-1$
         }

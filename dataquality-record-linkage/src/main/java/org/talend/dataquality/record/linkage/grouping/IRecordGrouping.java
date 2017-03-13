@@ -18,6 +18,7 @@ import java.util.Map;
 
 import org.talend.dataquality.record.linkage.constant.RecordMatcherType;
 import org.talend.dataquality.record.linkage.grouping.swoosh.SurvivorShipAlgorithmParams;
+import org.talend.dataquality.record.linkage.record.IRecordMatcher;
 
 /**
  * <strike> feature TDQ-1707, record comparison algorithm with blocking key for component tMatchGroupHadoop.</strike>
@@ -105,6 +106,7 @@ public interface IRecordGrouping<T> {
      * Set acceptable threshold.
      * 
      * @param acceptableThreshold
+     * @deprecated {@link IRecordMatcher#setRecordMatchThreshold(double)}
      */
     @Deprecated
     public void setAcceptableThreshold(float acceptableThreshold);

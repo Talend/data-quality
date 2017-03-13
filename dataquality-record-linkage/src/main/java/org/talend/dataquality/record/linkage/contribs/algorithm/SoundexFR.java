@@ -102,7 +102,7 @@ public class SoundexFR implements java.io.Serializable {
         }
 
         // Wrap the String into a Stringbuffer
-        StringBuffer word = new StringBuffer(tempStr);
+        StringBuilder word = new StringBuilder(tempStr);
 
         // Remove all diacretical marks
 
@@ -153,23 +153,19 @@ public class SoundexFR implements java.io.Serializable {
         word.append(tempStr);
 
         for (i = 0; i < size; i++) {
-            if (word.charAt(i) == 'H') {
-                if (!(i > 0 && (word.charAt(i - 1) == 'C' || word.charAt(i - 1) == 'S'))) {
-                    word.deleteCharAt(i);
-                    size--;
-                    i--;
-                }
+            if (word.charAt(i) == 'H' && !(i > 0 && (word.charAt(i - 1) == 'C' || word.charAt(i - 1) == 'S'))) {
+                word.deleteCharAt(i);
+                size--;
+                i--;
             }
         }
 
         // Remove all Ys, unless they are preceeded by As
         for (i = 0; i < size; i++) {
-            if (word.charAt(i) == 'Y') {
-                if (!(i > 0 && word.charAt(i - 1) == 'A')) {
-                    word.deleteCharAt(i);
-                    size--;
-                    i--;
-                }
+            if (word.charAt(i) == 'Y' && !(i > 0 && word.charAt(i - 1) == 'A')) {
+                word.deleteCharAt(i);
+                size--;
+                i--;
             }
         }
 
@@ -233,7 +229,7 @@ public class SoundexFR implements java.io.Serializable {
      * 
      * @param word the string buffer containing the word to check and modify
      */
-    private void removeSimilarGroupChars(StringBuffer word) {
+    private void removeSimilarGroupChars(StringBuilder word) {
         int size = word.length();
 
         for (int i = 0; i < size; i++) {

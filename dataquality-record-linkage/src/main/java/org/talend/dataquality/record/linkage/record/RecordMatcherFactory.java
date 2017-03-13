@@ -28,7 +28,7 @@ import org.talend.dataquality.record.linkage.constant.RecordMatcherType;
  */
 public final class RecordMatcherFactory {
 
-    private static Logger log = Logger.getLogger(RecordMatcherFactory.class);
+    private static final Logger LOG = Logger.getLogger(RecordMatcherFactory.class);
 
     private static List<String> labels = new ArrayList<String>();
 
@@ -44,7 +44,7 @@ public final class RecordMatcherFactory {
                 return createMatcher(type);
             }
         }
-        log.warn("matcher not found: [matcherLabel=" + matcherLabel + "]"); //$NON-NLS-1$ //$NON-NLS-2$
+        LOG.warn("matcher not found: [matcherLabel=" + matcherLabel + "]"); //$NON-NLS-1$ //$NON-NLS-2$
         return null;
     }
 
@@ -102,7 +102,7 @@ public final class RecordMatcherFactory {
 
         // set the weights chosen by the user
         if (!recMatcher.setAttributeWeights(attributeWeights)) {
-            log.warn(Messages.getString("RecordMatcherFactory.0", type.getLabel())); //$NON-NLS-1$ 
+            LOG.warn(Messages.getString("RecordMatcherFactory.0", type.getLabel())); //$NON-NLS-1$ 
             return null; // DO NOT CREATE AN INVALID MATCHER
         }
         return recMatcher;

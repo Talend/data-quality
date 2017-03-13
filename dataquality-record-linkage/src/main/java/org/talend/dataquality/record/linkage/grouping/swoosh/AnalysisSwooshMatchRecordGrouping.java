@@ -138,6 +138,7 @@ public class AnalysisSwooshMatchRecordGrouping extends AnalysisMatchRecordGroupi
     /**
      * DOC yyin Comment method "clear".
      */
+    @Override
     protected void clear() {
         swooshGrouping.getOldGID2New().clear();
         tmpMatchResult.clear();
@@ -159,7 +160,7 @@ public class AnalysisSwooshMatchRecordGrouping extends AnalysisMatchRecordGroupi
     protected void out(RichRecord row) {
         List<DQAttribute<?>> row2 = getValuesFromOriginRow(row);
 
-        Object[] strRow = (Object[]) getArrayFromAttributeList(row2, row2.size());
+        Object[] strRow = getArrayFromAttributeList(row2, row2.size());
 
         outputRow(strRow);
     }

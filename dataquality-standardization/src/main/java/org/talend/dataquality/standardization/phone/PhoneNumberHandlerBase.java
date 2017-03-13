@@ -33,7 +33,7 @@ import com.google.i18n.phonenumbers.geocoding.PhoneNumberOfflineGeocoder;
  */
 public class PhoneNumberHandlerBase {
 
-    private static final Logger log = Logger.getLogger(PhoneNumberHandlerBase.class);
+    private static final Logger LOG = Logger.getLogger(PhoneNumberHandlerBase.class);
 
     private static PhoneNumberUtil GOOGLE_PHONE_UTIL = PhoneNumberUtil.getInstance();
 
@@ -56,7 +56,7 @@ public class PhoneNumberHandlerBase {
         try {
             phonenumber = GOOGLE_PHONE_UTIL.parse(data.toString(), regionCode);
         } catch (Exception e) {
-            log.error("Phone number parsing exception with " + data, e); //$NON-NLS-1$
+            LOG.error("Phone number parsing exception with " + data, e); //$NON-NLS-1$
             return null;
         }
         return phonenumber;
@@ -75,6 +75,7 @@ public class PhoneNumberHandlerBase {
         try {
             phonenumber = GOOGLE_PHONE_UTIL.parse(data.toString(), regionCode);
         } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
             return false;
         }
         return GOOGLE_PHONE_UTIL.isValidNumberForRegion(phonenumber, regionCode);
@@ -322,9 +323,9 @@ public class PhoneNumberHandlerBase {
     public static List<String> getTimeZonesForNumber(Object data, String regionCode) {
         PhoneNumber number = parseToPhoneNumber(data, regionCode);
         if (number == null) {
-            List<String> UNKNOWN_TIME_ZONE_LIST = new ArrayList<String>(1);
-            UNKNOWN_TIME_ZONE_LIST.add(PhoneNumberToTimeZonesMapper.getUnknownTimeZone());
-            return UNKNOWN_TIME_ZONE_LIST;
+            List<String> unknowTimeZoneLs = new ArrayList<>(1);
+            unknowTimeZoneLs.add(PhoneNumberToTimeZonesMapper.getUnknownTimeZone());
+            return unknowTimeZoneLs;
         }
         return PhoneNumberToTimeZonesMapper.getInstance().getTimeZonesForNumber(number);
     }

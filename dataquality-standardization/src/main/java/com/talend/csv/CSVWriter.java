@@ -228,8 +228,8 @@ public class CSVWriter implements Closeable {
     private boolean needQuote(String field, int fieldIndex) {
         boolean emptyQutoSepa = (fieldIndex == 0 && field.length() == 0) || field.indexOf(quotechar) > -1
                 || field.indexOf(separator) > -1;
-        boolean includeNR = (lineEnd == null && (field.indexOf('\n') > -1 || field.indexOf('\r') > -1));
-        boolean inLineEnd = (lineEnd != null && field.indexOf(lineEnd) > -1);
+        boolean includeNR = lineEnd == null && (field.indexOf('\n') > -1 || field.indexOf('\r') > -1);
+        boolean inLineEnd = lineEnd != null && field.indexOf(lineEnd) > -1;
         boolean need = emptyQutoSepa || includeNR || inLineEnd;
 
         if (!need && field.length() > 0) {

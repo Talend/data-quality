@@ -211,6 +211,7 @@ public class DQCategory implements Serializable {
         this.published = published;
     }
 
+    @Override
     public String toString() {
         return String.format(
                 "Category [ID=%s  Type=%s  Name=%-20s  Label=%-20s  Completeness=%-5s  Description=%s Creator=%s Last Modifier=%s Draft=%-5s Published=%-5s Last published=%s]",

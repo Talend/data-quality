@@ -67,6 +67,7 @@ public class LFUCache<K, V> implements Map<K, V> {
         initFrequencyList();
     }
 
+    @Override
     public V put(K k, V v) {
         V oldValue = null;
         CacheNode<K, V> currentNode = cache.get(k);
@@ -86,12 +87,14 @@ public class LFUCache<K, V> implements Map<K, V> {
         return oldValue;
     }
 
+    @Override
     public void putAll(Map<? extends K, ? extends V> map) {
         for (Map.Entry<? extends K, ? extends V> me : map.entrySet()) {
             put(me.getKey(), me.getValue());
         }
     }
 
+    @Override
     public V get(Object k) {
         CacheNode<K, V> currentNode = cache.get(k);
         if (currentNode != null) {
@@ -117,6 +120,7 @@ public class LFUCache<K, V> implements Map<K, V> {
         }
     }
 
+    @Override
     public V remove(Object k) {
         CacheNode<K, V> currentNode = cache.remove(k);
         if (currentNode != null) {
@@ -140,6 +144,7 @@ public class LFUCache<K, V> implements Map<K, V> {
         }
     }
 
+    @Override
     public void clear() {
         for (int i = 0; i <= maxFrequency; i++) {
             frequencyList[i].clear();
@@ -148,30 +153,37 @@ public class LFUCache<K, V> implements Map<K, V> {
         lowestFrequency = 0;
     }
 
+    @Override
     public Set<K> keySet() {
         return this.cache.keySet();
     }
 
+    @Override
     public Collection<V> values() {
         return null; // To change body of implemented methods use File | Settings | File Templates.
     }
 
+    @Override
     public Set<Entry<K, V>> entrySet() {
         return null; // To change body of implemented methods use File | Settings | File Templates.
     }
 
+    @Override
     public int size() {
         return cache.size();
     }
 
+    @Override
     public boolean isEmpty() {
         return this.cache.isEmpty();
     }
 
+    @Override
     public boolean containsKey(Object o) {
         return this.cache.containsKey(o);
     }
 
+    @Override
     public boolean containsValue(Object o) {
         return false; // To change body of implemented methods use File | Settings | File Templates.
     }
@@ -221,11 +233,11 @@ public class LFUCache<K, V> implements Map<K, V> {
 
     private static class CacheNode<Key, Value> {
 
-        public final Key k;
+        private final Key k;
 
-        public Value v;
+        private Value v;
 
-        public int frequency;
+        private int frequency;
 
         public CacheNode(Key k, Value v, int frequency) {
             this.k = k;
@@ -233,11 +245,13 @@ public class LFUCache<K, V> implements Map<K, V> {
             this.frequency = frequency;
         }
 
+        @Override
         public String toString() {
             return "[" + v + "->" + frequency + "]";
         }
     }
 
+    @Override
     public String toString() {
         return cache.toString();
     }

@@ -27,6 +27,7 @@ public class JaroMatcher extends AbstractAttributeMatcher {
      * 
      * @see org.talend.dataquality.record.linkage.attribute.IAttributeMatcher#getMatchType()
      */
+    @Override
     public AttributeMatcherType getMatchType() {
         return AttributeMatcherType.JARO;
     }
@@ -37,6 +38,7 @@ public class JaroMatcher extends AbstractAttributeMatcher {
      * @see org.talend.dataquality.record.linkage.attribute.AbstractAttributeMatcher#getWeight(java.lang.String,
      * java.lang.String)
      */
+    @Override
     public double getWeight(String string1, String string2) {
 
         // get half the length of the string rounded up - (this is the distance used for acceptable transpositions)

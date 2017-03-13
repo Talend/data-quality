@@ -68,7 +68,7 @@ public class CompositePatternFrequencyAnalyzer extends AbstractFrequencyAnalyzer
         if (record == null) {
             return true;
         }
-        if (freqTableStatistics == null || freqTableStatistics.size() == 0) {
+        if (freqTableStatistics == null || freqTableStatistics.isEmpty()) {
             initFreqTableList(record.length);
         }
         for (int i = 0; i < record.length; i++) {

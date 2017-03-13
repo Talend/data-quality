@@ -219,7 +219,7 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
         // extSize + 1 when isSeperateOutput is enabled.
         extSize = isComputeGrpQuality ? extSize + 1 : extSize;
 
-        if (multiMatchRules.size() == 0) {
+        if (multiMatchRules.isEmpty()) {
             // No rule defined.
             return;
         }
@@ -442,7 +442,6 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
 
     private void updateWithExtendedColumn(TYPE[] inputRow, TYPE[] masterRecord, double matchingProba, String distanceDetails,
             String delimiter) throws IOException, InterruptedException {
-        // String[] duplicateRecord = new String[masterRecord.length];
         TYPE[] duplicateRecord = createTYPEArray(masterRecord.length);
         for (int idx = 0; idx < inputRow.length; idx++) {
             duplicateRecord[idx] = inputRow[idx];
