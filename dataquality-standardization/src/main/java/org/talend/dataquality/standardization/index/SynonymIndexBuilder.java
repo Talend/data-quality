@@ -82,11 +82,6 @@ public class SynonymIndexBuilder {
         this.separator = synonymSeparator;
     }
 
-    // FIXME not used yet. Need to be implemented
-    // public void initIndexInRAM() {
-    // indexDir = new RAMDirectory();
-    // }
-
     /**
      * Method "initIndexInFS" initializes the lucene index folder.
      *
@@ -187,7 +182,6 @@ public class SynonymIndexBuilder {
             return 0;
         case 1:
             getWriter().deleteDocuments(new Term(SynonymIndexSearcher.F_WORDTERM, word.trim().toLowerCase()));
-            // System.out.println("The document named <" + word + "> has been deleted.");
             return 1;
         default:
             error.set(false, Messages.getString("SynonymIndexBuilder.documents", docs.totalHits, word));//$NON-NLS-1$
@@ -428,12 +422,8 @@ public class SynonymIndexBuilder {
     public Analyzer getAnalyzer() throws IOException {
         if (analyzer == null) {
             // the entry and the synonyms are indexed as provided
-            // analyzer = new KeywordAnalyzer();
-
             // most used analyzer in lucene
             analyzer = new StandardAnalyzer(CharArraySet.EMPTY_SET);
-
-            // analyzer = new SynonymAnalyzer();
         }
         return this.analyzer;
     }

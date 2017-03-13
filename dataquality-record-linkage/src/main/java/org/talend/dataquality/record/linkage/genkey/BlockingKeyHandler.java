@@ -73,11 +73,11 @@ public class BlockingKeyHandler {
         for (Object obj : inputObject) {
             inputString[index++] = obj == null ? null : obj.toString();
         }
-        Map<String, String> ColumnValueMap = new HashMap<String, String>();
+        Map<String, String> columnValueMap = new HashMap<String, String>();
         for (String columnName : columnIndexMap.keySet()) {
-            ColumnValueMap.put(columnName, inputString[Integer.parseInt(columnIndexMap.get(columnName))]);
+            columnValueMap.put(columnName, inputString[Integer.parseInt(columnIndexMap.get(columnName))]);
         }
-        String genKey = generateKeyAPI.getGenKey(blockKeyDefinitions, ColumnValueMap);
+        String genKey = generateKeyAPI.getGenKey(blockKeyDefinitions, columnValueMap);
         generateKeyAPI.appendGenKeyResult(inputString, genKey);
         return genKey;
     }

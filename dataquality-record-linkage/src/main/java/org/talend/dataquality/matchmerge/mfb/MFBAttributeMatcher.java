@@ -42,11 +42,13 @@ public class MFBAttributeMatcher implements IAttributeMatcher, ITokenization {
 
     @Override
     public double getMatchingWeight(String str1, String str2) {
+        String newStr1 = str1;
+        String newStr2 = str2;
         if (subString.needSubStringOperation()) {
-            str1 = str1.substring(subString.getBeginIndex(), subString.getEndIndex());
-            str2 = str2.substring(subString.getBeginIndex(), subString.getEndIndex());
+            newStr1 = newStr1.substring(subString.getBeginIndex(), subString.getEndIndex());
+            newStr2 = newStr2.substring(subString.getBeginIndex(), subString.getEndIndex());
         }
-        double matchingWeight = delegate.getMatchingWeight(str1, str2);
+        double matchingWeight = delegate.getMatchingWeight(newStr1, newStr2);
         if (matchingWeight < threshold) {
             return 0;
         }

@@ -132,7 +132,7 @@ public class CombinedRecordMatcher extends AbstractRecordMatcher {
      */
     @Override
     public String toString() {
-        StringBuffer buf = new StringBuffer("Combined Matcher: "); //$NON-NLS-1$
+        StringBuilder buf = new StringBuilder("Combined Matcher: "); //$NON-NLS-1$
         int i = 0;
         for (IRecordMatcher matcher : this.matchers) {
             i++;

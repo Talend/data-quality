@@ -59,6 +59,7 @@ public class ClassPathDirectory {
      * 
      * @deprecated use {@link CategoryRegistryManager.setLocalRegistryPath(folder)} instead
      */
+    @Deprecated
     public static void setLocalIndexFolder(String folder) {
         CategoryRegistryManager.setLocalRegistryPath(folder);
     }

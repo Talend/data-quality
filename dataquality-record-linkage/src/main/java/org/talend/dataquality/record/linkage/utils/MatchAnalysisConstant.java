@@ -131,4 +131,8 @@ public class MatchAnalysisConstant {
     public static final String MATCHING_KEY_AND_SURVIVOR_DEFINITION_SECTION_NAME = Messages
             .getString("MatchAnalysisConstant.MATCHING_KEY_AND_SURVIVOR_DEFINITION_SECTION_NAME"); //$NON-NLS-1$
 
+    private MatchAnalysisConstant() {
+
+    }
+
 }

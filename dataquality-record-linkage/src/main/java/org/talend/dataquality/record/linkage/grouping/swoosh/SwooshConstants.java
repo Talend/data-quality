@@ -62,5 +62,9 @@ public class SwooshConstants {
      */
     public static final String NULL_STR = "null"; //$NON-NLS-1$
 
-    public static final String ORIGINAL_RECORD = "ORIGINAL_RECORD";
+    public static final String ORIGINAL_RECORD = "ORIGINAL_RECORD"; //$NON-NLS-1$
+
+    private SwooshConstants() {
+
+    }
 }

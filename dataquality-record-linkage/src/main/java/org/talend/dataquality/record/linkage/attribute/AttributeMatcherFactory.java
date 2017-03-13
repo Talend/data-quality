@@ -25,7 +25,7 @@ import org.talend.dataquality.record.linkage.constant.AttributeMatcherType;
  */
 public final class AttributeMatcherFactory {
 
-    private static Logger log = Logger.getLogger(AttributeMatcherFactory.class);
+    private static final Logger LOG = Logger.getLogger(AttributeMatcherFactory.class);
 
     private static List<String> labels = new ArrayList<String>();
 
@@ -47,7 +47,7 @@ public final class AttributeMatcherFactory {
                 return createMatcher(type);
             }
         }
-        log.warn("matcher not found: [matcherLabel=" + matcherLabel + "]"); //$NON-NLS-1$ //$NON-NLS-2$
+        LOG.warn("matcher not found: [matcherLabel=" + matcherLabel + "]"); //$NON-NLS-1$ //$NON-NLS-2$
         return null;
     }
 
@@ -74,7 +74,7 @@ public final class AttributeMatcherFactory {
                 return createMatcher(type);
             }
         }
-        log.warn("matcher not found: [type=" + type + "][className=" + className + "]"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        LOG.warn("matcher not found: [type=" + type + "][className=" + className + "]"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         return null;
     }
 
@@ -137,7 +137,7 @@ public final class AttributeMatcherFactory {
             }
         }
         // else
-        log.warn("matcher not found: [type=" + type + "]"); //$NON-NLS-1$ //$NON-NLS-2$
+        LOG.warn("matcher not found: [type=" + type + "]"); //$NON-NLS-1$ //$NON-NLS-2$
         return null;
     }
 

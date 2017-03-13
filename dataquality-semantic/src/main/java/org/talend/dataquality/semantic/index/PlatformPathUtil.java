@@ -65,7 +65,8 @@ public class PlatformPathUtil {
         } catch (FileNotFoundException e) {
             // try to get the absolute path from exception message
             final String msg = e.getMessage();
-            if (filePath.endsWith("/")) {
+            LOG.warn(msg, e);
+            if (filePath.endsWith("/")) { //$NON-NLS-1$
                 filePath = filePath.substring(0, filePath.length() - 1);
             }
             final String osFilePath = filePath.replace("/", File.separator); //$NON-NLS-1$

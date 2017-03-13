@@ -25,17 +25,6 @@ public class ComponentSwooshMatchRecordGrouping extends AnalysisSwooshMatchRecor
     /*
      * (non-Javadoc)
      * 
-     * @see org.talend.dataquality.record.linkage.grouping.swoosh.AnalysisSwooshMatchRecordGrouping#initialize()
-     */
-    // @Override
-    // public void initialize() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
-    // masterRecords.clear();
-    // getKeyAttributes();
-    // }
-
-    /*
-     * (non-Javadoc)
-     * 
      * @see org.talend.dataquality.record.linkage.grouping.swoosh.AnalysisSwooshMatchRecordGrouping#end()
      */
     @Override
@@ -73,10 +62,8 @@ public class ComponentSwooshMatchRecordGrouping extends AnalysisSwooshMatchRecor
             tmpMatchResult.add(row);
         } else {
             //TDq-12659  remove intermediate master records, when multipass. 
-            if (isLinkToPrevious) {// use multipass
-                if (row.isInterMediateMaster()) {
-                    return;
-                }
+            if (isLinkToPrevious && row.isInterMediateMaster()) {// use multipass
+                return;
             }
 
             if (this.isPassOriginalValue) {//TDQ-12057 when the first tmatchgroup select to pass the original value, just pass this record 

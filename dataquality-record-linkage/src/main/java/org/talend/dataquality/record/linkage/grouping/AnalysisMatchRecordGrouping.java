@@ -19,7 +19,6 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.talend.dataquality.matchmerge.Attribute;
-import org.talend.dataquality.record.linkage.constant.RecordMatcherType;
 import org.talend.dataquality.record.linkage.grouping.swoosh.DQAttribute;
 import org.talend.dataquality.record.linkage.grouping.swoosh.RichRecord;
 import org.talend.dataquality.record.linkage.grouping.swoosh.SurvivorShipAlgorithmParams;
@@ -35,7 +34,7 @@ public class AnalysisMatchRecordGrouping extends AbstractRecordGrouping<Object> 
      */
     private static final String ISMASTER = "true"; //$NON-NLS-1$
 
-    private static Logger log = Logger.getLogger(AnalysisMatchRecordGrouping.class);
+    private static Logger LOG = Logger.getLogger(AnalysisMatchRecordGrouping.class);
 
     private List<String[]> resultStrList = new ArrayList<String[]>();
 
@@ -106,9 +105,9 @@ public class AnalysisMatchRecordGrouping extends AbstractRecordGrouping<Object> 
             }
             end();
         } catch (IOException e) {
-            log.error(e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
         } catch (InterruptedException e) {
-            log.error(e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
         }
     }
 
@@ -203,14 +202,6 @@ public class AnalysisMatchRecordGrouping extends AbstractRecordGrouping<Object> 
     protected String incrementGroupSize(Object oldGroupSize) {
         return String.valueOf(Integer.parseInt(String.valueOf(oldGroupSize)) + 1);
     }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.talend.dataquality.record.linkage.grouping.AbstractRecordGrouping#createCOLUMNArray(int)
-     * 
-     * @Override protected String[] createTYPEArray(int size) { return new String[size]; }
-     */
 
     /*
      * (non-Javadoc)

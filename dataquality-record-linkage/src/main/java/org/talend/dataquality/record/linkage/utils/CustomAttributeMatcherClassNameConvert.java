@@ -30,7 +30,7 @@ public class CustomAttributeMatcherClassNameConvert {
 
     public static final char QUOTE = '\"';
 
-    private static final Logger log = Logger.getLogger(CustomAttributeMatcherClassNameConvert.class);
+    private static final Logger LOG = Logger.getLogger(CustomAttributeMatcherClassNameConvert.class);
 
     /**
      * DOC zshen Comment method "getClassName".
@@ -92,7 +92,7 @@ public class CustomAttributeMatcherClassNameConvert {
             try {
                 jarURLs.add((new File(allElement)).toURI().toURL());
             } catch (MalformedURLException e) {
-                log.error(e, e);
+                LOG.error(e, e);
             }
         }
         return jarURLs.toArray(new URL[jarURLs.size()]);

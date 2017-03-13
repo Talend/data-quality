@@ -22,7 +22,7 @@ import com.clearspring.analytics.stream.cardinality.HyperLogLog;
  */
 public class CardinalityHLLStatistics {
 
-    private long count = 0l;
+    private long count = 0L;
 
     private HyperLogLog hyperLogLog = null;
 

@@ -40,9 +40,11 @@ public class AlgorithmSwitch {
             return AlgoBox.add_Left_Char(colValue, algoPara);
         case RIGHT_CHAR:
             return AlgoBox.add_Right_Char(colValue, algoPara);
+        default:
+            return StringUtils.EMPTY;
         }
 
-        return ""; //$NON-NLS-1$
+        return StringUtils.EMPTY;
     }
 
     public static String getAlgoResult(String algoName, String algoPara, String colValue) {
@@ -81,9 +83,10 @@ public class AlgorithmSwitch {
             return AlgoBox.soundex(colValue);
         case SUBSTR:
             return AlgoBox.subStr(colValue, algoPara);
+        default:
+            return StringUtils.EMPTY;
         }
 
-        return ""; //$NON-NLS-1$
     }
 
     public static String getPostAlgoResult(String algoName, String algoPara, String colValue) {
@@ -100,8 +103,10 @@ public class AlgorithmSwitch {
             break;
         case USE_DEFAULT:
             return AlgoBox.useDefault(colValue, algoPara);
+        default:
+            return StringUtils.EMPTY;
         }
-        return ""; //$NON-NLS-1$
+        return StringUtils.EMPTY;
     }
 
 }

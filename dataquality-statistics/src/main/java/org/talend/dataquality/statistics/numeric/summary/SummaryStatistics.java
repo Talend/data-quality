@@ -23,7 +23,7 @@ package org.talend.dataquality.statistics.numeric.summary;
  */
 public class SummaryStatistics {
 
-    private org.apache.commons.math3.stat.descriptive.SummaryStatistics summaryStatistics = null;
+    private org.apache.commons.math3.stat.descriptive.SummaryStatistics summaryStatisticsApach = null;
 
     /**
      * Add the data to memory so that the variance can be computed given this list.
@@ -32,43 +32,43 @@ public class SummaryStatistics {
      * See more about add value mehtod
      */
     public void addData(double value) {
-        if (summaryStatistics == null) {
-            summaryStatistics = new org.apache.commons.math3.stat.descriptive.SummaryStatistics();
+        if (summaryStatisticsApach == null) {
+            summaryStatisticsApach = new org.apache.commons.math3.stat.descriptive.SummaryStatistics();
         }
-        summaryStatistics.addValue(value);
+        summaryStatisticsApach.addValue(value);
     }
 
     public double getMin() {
-        if (summaryStatistics != null) {
-            return summaryStatistics.getMin();
+        if (summaryStatisticsApach != null) {
+            return summaryStatisticsApach.getMin();
         }
         return Double.NaN;
     }
 
     public double getMax() {
-        if (summaryStatistics != null) {
-            return summaryStatistics.getMax();
+        if (summaryStatisticsApach != null) {
+            return summaryStatisticsApach.getMax();
         }
         return Double.NaN;
     }
 
     public double getMean() {
-        if (summaryStatistics != null) {
-            return summaryStatistics.getMean();
+        if (summaryStatisticsApach != null) {
+            return summaryStatisticsApach.getMean();
         }
         return Double.NaN;
     }
 
     public double getVariance() {
-        if (summaryStatistics != null) {
-            return summaryStatistics.getVariance();
+        if (summaryStatisticsApach != null) {
+            return summaryStatisticsApach.getVariance();
         }
         return Double.NaN;
     }
 
     public double getSum() {
-        if (summaryStatistics != null) {
-            return summaryStatistics.getSum();
+        if (summaryStatisticsApach != null) {
+            return summaryStatisticsApach.getSum();
         }
         return Double.NaN;
     }

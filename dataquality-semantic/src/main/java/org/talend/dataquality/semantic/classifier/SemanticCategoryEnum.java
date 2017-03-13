@@ -204,6 +204,7 @@ public enum SemanticCategoryEnum {
     /**
      * @deprecated use {@link CategoryRegistryManager.getInstance(contextName).getCategoryLabel()} instead
      */
+    @Deprecated
     public static SemanticCategoryEnum getCategoryById(String catId) {
         if ("".equals(catId)) {
             return UNKNOWN;

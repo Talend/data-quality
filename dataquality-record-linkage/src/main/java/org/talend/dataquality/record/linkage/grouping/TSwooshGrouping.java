@@ -114,7 +114,7 @@ public class TSwooshGrouping<TYPE> {
                     public Object getAttribute() {
                         TYPE type = inputRow[inputRow.length - 1];
                         if (type instanceof List) {
-                            List<Attribute> attris = ((List<Attribute>) inputRow[inputRow.length - 1]);
+                            List<Attribute> attris = (List<Attribute>) inputRow[inputRow.length - 1];
                             Integer colIndex = Integer.valueOf(recordMap.get(IRecordGrouping.COLUMN_IDX));
                             for (Attribute att : attris) {
                                 if (att.getColumnIndex() == colIndex) {
@@ -406,8 +406,7 @@ public class TSwooshGrouping<TYPE> {
                         : master.getGroupId();
                 List<List<DQAttribute<?>>> list = groupRows.get(groupId);
 
-                int groupSize = list == null ? 0 : list.size();
-                restoreMasterData((RichRecord) master, indexGID2, groupSize);
+                restoreMasterData((RichRecord) master);
                 addMembersIntoNewMaster(master, list, groupId);
                 //remove the record already handled.
                 groupRows.remove(groupId);
@@ -428,8 +427,8 @@ public class TSwooshGrouping<TYPE> {
         if (result.isEmpty() || !groupRows.isEmpty()) {
             for (RecordGenerator record : notMasterRecords) {
                 List<DQAttribute<?>> originalRow = record.getOriginalRow();
-                String GID = oldGID2New.get(originalRow.get(indexGID2).getValue());
-                RichRecord createRecord = createRecord(originalRow, GID != null ? GID : originalRow.get(indexGID2).getValue());
+                String gid = oldGID2New.get(originalRow.get(indexGID2).getValue());
+                RichRecord createRecord = createRecord(originalRow, gid != null ? gid : originalRow.get(indexGID2).getValue());
                 output(createRecord);
             }
         }
@@ -442,12 +441,11 @@ public class TSwooshGrouping<TYPE> {
      * @param indexGID
      * @param groupSize
      */
-    private void restoreMasterData(RichRecord master, int indexGID, int groupSize) {
+    private void restoreMasterData(RichRecord master) {
         DQAttribute<?> isMasterAttribute = master.getMASTER();
-        if (Double.compare(master.getGroupQuality(), 0.0d) == 0 && isMasterAttribute.getValue().equals("false")) { //$NON-NLS-1$
+        if (Double.compare(master.getGroupQuality(), 0.0d) == 0 && "false".equals(isMasterAttribute.getValue())) { //$NON-NLS-1$
             isMasterAttribute.setValue("true"); //$NON-NLS-1$
-            Double valueDQ = Double.valueOf(master.getGRP_QUALITY().getValue());// getOriginRow().get(indexGID +
-                                                                                // 4).getValue());
+            Double valueDQ = Double.valueOf(master.getGRP_QUALITY().getValue());
             master.setGroupQuality(valueDQ);
         }
 

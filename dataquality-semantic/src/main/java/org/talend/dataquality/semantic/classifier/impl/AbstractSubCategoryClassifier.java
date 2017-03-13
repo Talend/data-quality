@@ -40,10 +40,8 @@ public abstract class AbstractSubCategoryClassifier implements ISubCategoryClass
         for (ISubCategory classifier : potentialSubCategories) {
             ISemanticFilter filter = classifier.getFilter();
 
-            if (filter != null) {
-                if (!filter.isQualified(str)) {
-                    continue;
-                }
+            if (filter != null && !filter.isQualified(str)) {
+                continue;
             }
             ISemanticValidator validator = classifier.getValidator();
             if (validator != null && validator.isValid(str)) {
