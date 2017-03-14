@@ -36,7 +36,7 @@ public class MTCRHandler extends AbstractChainResponsibilityHandler {
      * java.lang.Object, java.lang.String, boolean)
      */
     @Override
-    protected void doHandle(Object inputData, int rowNum, String column, String ruleName) {
+    protected void doHandle(Object inputData, int rowNum, String ruleName) {
         if (this.getHandlerParameter().getAction() instanceof MostRecentAction) {
 
         }

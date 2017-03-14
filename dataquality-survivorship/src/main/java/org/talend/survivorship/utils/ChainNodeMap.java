@@ -23,9 +23,14 @@ public class ChainNodeMap extends HashMap<String, AbstractChainResponsibilityHan
 
     private static final long serialVersionUID = 1L;
 
-    public void handleRequest(Object inputData, int rowNum, String column) {
+    // public void handleRequest(Object inputData, int rowNum, String column) {
+    // for (String ruleName : this.keySet()) {
+    // this.get(ruleName).handleRequest(inputData, rowNum, column);
+    // }
+    // }
+    public void handleRequest(Object inputData, int rowNum) {
         for (String ruleName : this.keySet()) {
-            this.get(ruleName).handleRequest(inputData, rowNum, column);
+            this.get(ruleName).handleRequest(inputData, rowNum);
         }
     }
 }

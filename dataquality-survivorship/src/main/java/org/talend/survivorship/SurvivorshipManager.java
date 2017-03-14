@@ -13,8 +13,10 @@
 package org.talend.survivorship;
 
 import java.io.File;
+import java.lang.ref.SoftReference;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -188,6 +190,7 @@ public class SurvivorshipManager extends KnowledgeManager {
         kbase.addKnowledgePackages(kbuilder.getKnowledgePackages());
 
         dataset = new DataSet(columnList);
+        dataset.setSurvivorManager(new SoftReference<SurvivorshipManager>(this));
     }
 
     /**
@@ -221,7 +224,7 @@ public class SurvivorshipManager extends KnowledgeManager {
      * 
      * @param data A 2-dimension array containing input records.
      */
-    public boolean runSession(Object[][] data) {
+    public boolean runSessionWithDrools(Object[][] data) {
 
         dataset.reset();
         dataset.initData(data);
@@ -236,7 +239,7 @@ public class SurvivorshipManager extends KnowledgeManager {
      * 
      * @param data A 2-dimension array containing input records.
      */
-    public boolean runSessionWithDrools(Object[][] data) {
+    public boolean runSession(Object[][] data) {
 
         StatefulKnowledgeSession ksession = kbase.newStatefulKnowledgeSession();
         dataset.reset();
@@ -342,9 +345,9 @@ public class SurvivorshipManager extends KnowledgeManager {
      * @return
      */
     private MCCRHandler CreateMCHandler(RuleDefinition rd) {
-        return new MCCRHandler(
-                new HandlerParameter(dataset, rd.getFunction().getAction(), getColumnByName(rd.getReferenceColumn()),
-                        getColumnByName(rd.getTargetColumn()), rd.getRuleName(), rd.getOperation(), rd.isIgnoreBlanks()));
+        return new MCCRHandler(new HandlerParameter(dataset, rd.getFunction().getAction(),
+                getColumnByName(rd.getReferenceColumn()), getColumnByName(rd.getTargetColumn()), rd.getRuleName(),
+                rd.getOperation(), rd.isIgnoreBlanks(), getColumnIndexMap()));
     }
 
     /**
@@ -356,7 +359,7 @@ public class SurvivorshipManager extends KnowledgeManager {
     private MTCRHandler createMTHandler(RuleDefinition perviousSEQRd, RuleDefinition rd) {
         return new MTCRHandler(new HandlerParameter(dataset, perviousSEQRd.getFunction().getAction(),
                 getColumnByName(perviousSEQRd.getReferenceColumn()), getColumnByName(rd.getTargetColumn()),
-                perviousSEQRd.getRuleName(), rd.getOperation(), rd.isIgnoreBlanks()));
+                perviousSEQRd.getRuleName(), rd.getOperation(), rd.isIgnoreBlanks(), getColumnIndexMap()));
     }
 
     /**
@@ -376,10 +379,22 @@ public class SurvivorshipManager extends KnowledgeManager {
      */
     private void executeSurvivored(Object[][] data) {
         for (int i = data.length - 1; i >= 0; i--) {
-            for (int j = 0; j < columnList.size(); j++) {
-                chainMap.handleRequest(data[i][j], i, columnList.get(j).getName());
-            }
+            chainMap.handleRequest(data[i], i);
         }
+    }
+
+    /**
+     * DOC zshen Comment method "getColumnIndexMap".
+     * 
+     * @return
+     */
+    private Map<String, Integer> getColumnIndexMap() {
+        Map<String, Integer> columnIndexMap = new HashMap<>();
+        int index = 0;
+        for (Column col : this.columnList) {
+            columnIndexMap.put(col.getName(), index++);
+        }
+        return columnIndexMap;
     }
 
     /**

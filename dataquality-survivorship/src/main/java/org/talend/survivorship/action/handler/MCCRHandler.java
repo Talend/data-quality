@@ -38,12 +38,11 @@ public class MCCRHandler extends AbstractChainResponsibilityHandler {
      * java.lang.Object, java.lang.String, boolean)
      */
     @Override
-    protected boolean isContinue(Object inputData, String column, int rowNum) {
-        if (this.getHandlerParameter().getRefColumn() != null
-                && !this.getHandlerParameter().getRefColumn().getName().equals(column)) {
+    protected boolean isContinue(Object inputData, int rowNum) {
+        if (this.getHandlerParameter().getRefColumn() == null) {
             return false;
         }
-        if (this.canHandler(inputData, column, getHandlerParameter().getExpression(), rowNum)) {
+        if (this.canHandler(inputData, getHandlerParameter().getExpression(), rowNum)) {
             return true;
         }
         return false;

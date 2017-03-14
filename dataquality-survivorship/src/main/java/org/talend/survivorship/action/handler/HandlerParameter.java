@@ -12,6 +12,8 @@
 // ============================================================================
 package org.talend.survivorship.action.handler;
 
+import java.util.Map;
+
 import org.talend.survivorship.action.ISurvivoredAction;
 import org.talend.survivorship.model.Column;
 import org.talend.survivorship.model.DataSet;
@@ -56,11 +58,13 @@ public class HandlerParameter {
      */
     private boolean isIgnoreBlank;
 
+    private Map<String, Integer> columnIndexMap;
+
     /**
      * DOC zshen org.talend.survivorship.action.handler.HandlerParameter constructor comment.
      */
     public HandlerParameter(DataSet dataset, ISurvivoredAction action, Column refColumn, Column tarColumn, String ruleName,
-            String expression, boolean isIgnoreBlank) {
+            String expression, boolean isIgnoreBlank, Map<String, Integer> columnIndexMap) {
         this.dataset = dataset;
         this.action = action;
         this.refColumn = refColumn;
@@ -68,6 +72,15 @@ public class HandlerParameter {
         this.ruleName = ruleName;
         this.expression = expression;
         this.isIgnoreBlank = isIgnoreBlank;
+        this.columnIndexMap = columnIndexMap;
+    }
+
+    public Object getRefInputData(Object[] inputDatas) {
+        return inputDatas[this.columnIndexMap.get(refColumn.getName())];
+    }
+
+    public Object getTarInputData(Object[] inputDatas) {
+        return inputDatas[this.columnIndexMap.get(tarColumn)];
     }
 
     /**
@@ -194,6 +207,15 @@ public class HandlerParameter {
      */
     public void setIgnoreBlank(boolean isIgnoreBlank) {
         this.isIgnoreBlank = isIgnoreBlank;
+    }
+
+    /**
+     * Getter for columnIndexMap.
+     * 
+     * @return the columnIndexMap
+     */
+    public Map<String, Integer> getColumnIndexMap() {
+        return this.columnIndexMap;
     }
 
 }

@@ -26,4 +26,8 @@ public class SampleDataConflictMostCommon2MostRecent {
     public static final RuleDefinition[] RULES_CONFLICT = { new RuleDefinition(Order.SEQ, "more_common_birthday", "birthday", //$NON-NLS-1$ //$NON-NLS-2$
             Function.MostCommon, null, "birthday", false) }; //$NON-NLS-1$
 
+    public static final RuleDefinition[] RULES_CONFLICT_RESOLVE = {
+            new RuleDefinition(Order.SEQ, "more_recent_birthday", "birthday", //$NON-NLS-1$ //$NON-NLS-2$
+                    Function.MostRecent, null, "birthday", false) }; //$NON-NLS-1$
+
 }

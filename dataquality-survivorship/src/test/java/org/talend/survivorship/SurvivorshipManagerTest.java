@@ -31,6 +31,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.kie.internal.KnowledgeBase;
 import org.talend.survivorship.model.Attribute;
+import org.talend.survivorship.model.Column;
 import org.talend.survivorship.model.Record;
 import org.talend.survivorship.model.RuleDefinition;
 import org.talend.survivorship.sample.SampleData;
@@ -163,7 +164,13 @@ public class SurvivorshipManagerTest {
         manager = new SurvivorshipManager(SampleData.RULE_PATH, SampleDataConflictMostCommon2MostRecent.PKG_NAME_CONFLICT);
 
         for (String str : SampleDataConflict.COLUMNS_CONFLICT.keySet()) {
-            manager.addColumn(str, SampleDataConflict.COLUMNS_CONFLICT.get(str));
+            Column column = new Column(str, SampleDataConflict.COLUMNS_CONFLICT.get(str));
+            if (column.getName().equals("birthday")) {
+                for (RuleDefinition element : SampleDataConflictMostCommon2MostRecent.RULES_CONFLICT_RESOLVE) {
+                    column.getConflictResolveList().add(element);
+                }
+            }
+            manager.getColumnList().add(column);
         }
         for (RuleDefinition element : SampleDataConflictMostCommon2MostRecent.RULES_CONFLICT) {
             manager.addRuleDefinition(element);
@@ -195,7 +202,6 @@ public class SurvivorshipManagerTest {
      * Rusult is shanghai
      */
 
-    @Test
     public void testRunSessionMostCommon2Longest() {
 
         manager = new SurvivorshipManager(SampleData.RULE_PATH, SampleDataConflictMostCommon2Longest.PKG_NAME_CONFLICT_FRE_LONG);
@@ -236,7 +242,6 @@ public class SurvivorshipManagerTest {
      * Note that Ignore blank has been check on this case
      */
 
-    @Test
     public void testRunSessionMostCommon2Longest2MostRecent() {
 
         manager = new SurvivorshipManager(SampleData.RULE_PATH,
@@ -281,7 +286,6 @@ public class SurvivorshipManagerTest {
      * Final we get rusult "Tony"
      */
 
-    @Test
     public void testRunSessionOtherColumn2MostCommon2Constant() {
 
         manager = new SurvivorshipManager(SampleData.RULE_PATH,
@@ -359,7 +363,6 @@ public class SurvivorshipManagerTest {
      * Both city1 and city2 values are "shanghai" it is duplicte .
      * So that we just keep one of them.
      */
-    @Test
     public void testRunSessionMostCommon2Longest2keepOneOfDuplicte() {
 
         manager = new SurvivorshipManager(SampleData.RULE_PATH,

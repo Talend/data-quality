@@ -12,7 +12,11 @@
 // ============================================================================
 package org.talend.survivorship.action.handler;
 
+import java.util.List;
+import java.util.Map;
+
 import org.talend.survivorship.action.ActionParameter;
+import org.talend.survivorship.model.Record;
 
 /**
  * DOC talend class global comment. Detailled comment
@@ -47,17 +51,36 @@ public abstract class AbstractChainResponsibilityHandler {
      * 
      * Handle the request
      */
-    public void handleRequest(Object inputData, int rowNum, String column) {
-        if (!isContinue(inputData, column, rowNum)) {
+    public void handleRequest(Object inputData, int rowNum) {
+        if (!isContinue(inputData, rowNum)) {
             return;
         } else {
-            doHandle(inputData, rowNum, column, handlerParameter.getRuleName());
+            doHandle(inputData, rowNum, handlerParameter.getRuleName());
         }
 
         if (this.getSuccessor() == null) {
             return;
         }
-        this.getSuccessor().handleRequest(inputData, rowNum, column);
+        this.getSuccessor().handleRequest(inputData, rowNum);
+
+    }
+
+    /**
+     * 
+     * Handle the request
+     */
+    public void handleRequest(Record inputData, int rowNum) {
+        Map<String, Integer> columnIndexMap = handlerParameter.getColumnIndexMap();
+        Object[] dataArray = new Object[inputData.getAttributes().size()];
+        for (String colName : columnIndexMap.keySet()) {
+            dataArray[columnIndexMap.get(colName)] = inputData.getAttribute(colName).getValue();
+        }
+        handleRequest(dataArray, rowNum);
+
+    }
+
+    protected void initConflictRowNum(List<Integer> preConflictRowNum) {
+        // no need to implement
     }
 
     /**
@@ -68,7 +91,7 @@ public abstract class AbstractChainResponsibilityHandler {
      * @param column
      * @param ignoreBlanks
      */
-    protected void doHandle(Object inputData, int rowNum, String column, String ruleName) {
+    protected void doHandle(Object inputData, int rowNum, String ruleName) {
         // no thing to do
     }
 
@@ -80,7 +103,7 @@ public abstract class AbstractChainResponsibilityHandler {
      * @param column
      * @param ignoreBlanks
      */
-    protected boolean isContinue(Object inputData, String column, int rowNum) {
+    protected boolean isContinue(Object inputData, int rowNum) {
         return true;
     }
 
@@ -90,9 +113,11 @@ public abstract class AbstractChainResponsibilityHandler {
      * 
      * @return
      */
-    protected boolean canHandler(Object inputData, String column, String expression, int rowNum) {
-        return this.handlerParameter.getAction().checkCanHandle(new ActionParameter(handlerParameter.getDataset(), inputData,
-                rowNum, column, handlerParameter.getRuleName(), expression, handlerParameter.isIgnoreBlank()));
+    protected boolean canHandler(Object inputData, String expression, int rowNum) {
+        return this.handlerParameter.getAction()
+                .checkCanHandle(new ActionParameter(handlerParameter.getDataset(),
+                        handlerParameter.getRefInputData((Object[]) inputData), rowNum, handlerParameter.getRefColumn().getName(),
+                        handlerParameter.getRuleName(), expression, handlerParameter.isIgnoreBlank()));
     }
 
     /**
