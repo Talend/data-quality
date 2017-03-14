@@ -1,0 +1,14 @@
+package org.talend.survivorship.conflict.two_target_one_column 
+
+rule "Longest_birthday"
+    no-loop true
+    dialect "mvel"
+    ruleflow-group "Longest_birthdayGroup"
+when
+    $input : RecordIn( dataset.isLongest( city1, "city1", false) )  
+then
+    dataset.survive( $input.TALEND_INTERNAL_ID, "birthday", drools.getRule().getName());
+
+end
+
+

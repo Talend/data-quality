@@ -36,6 +36,8 @@ public class FrequencyService extends AbstractService {
 
     HashMap<String, Integer> maxOccurence = new HashMap<String, Integer>();
 
+    HashMap<String, Integer> secondMaxOccurence = new HashMap<String, Integer>();
+
     /**
      * Put attribute values into the frequencyMap of a given column.
      * 
@@ -67,14 +69,18 @@ public class FrequencyService extends AbstractService {
         }
 
         int max = 0;
+        int second = 0;
         for (Object value : valueToFreq.keySet()) {
             int freq = valueToFreq.get(value);
             if (freq > max) {
+                second = max;
                 max = freq;
+            } else if (freq < max && freq > second) {
+                second = freq;
             }
         }
         maxOccurence.put(column, max);
-
+        secondMaxOccurence.put(column, second);
         return valueToFreq;
     }
 
@@ -105,6 +111,33 @@ public class FrequencyService extends AbstractService {
         return mostFrequentValues;
     }
 
+    /**
+     * Retrieve the second most common value of a given column.
+     * 
+     * @param column
+     * @param ignoreBlanks
+     * @return
+     */
+    public HashSet<Object> getSecondMostCommonValue(String column, boolean ignoreBlanks) {
+
+        HashMap<Object, Integer> valueToFreq = frequencyMaps.get(column);
+
+        if (valueToFreq == null) {
+            valueToFreq = putAttributeValues(column, ignoreBlanks);
+        }
+        int second = secondMaxOccurence.get(column);
+        HashSet<Object> secondMostFrequentValues = new HashSet<Object>();
+
+        for (Object obj : valueToFreq.keySet()) {
+            int count = valueToFreq.get(obj);
+            if (count == second) {
+                secondMostFrequentValues.add(obj);
+            }
+        }
+
+        return secondMostFrequentValues;
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -114,6 +147,7 @@ public class FrequencyService extends AbstractService {
     public void init() {
         frequencyMaps.clear();
         maxOccurence.clear();
+        secondMaxOccurence.clear();
     }
 
 }
