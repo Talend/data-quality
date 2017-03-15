@@ -23,6 +23,7 @@ import org.talend.dataquality.matchmerge.Record;
 import org.talend.dataquality.matchmerge.mfb.MFB;
 import org.talend.dataquality.matchmerge.mfb.MatchMergeCallback;
 import org.talend.dataquality.record.linkage.constant.RecordMatcherType;
+import org.talend.dataquality.record.linkage.grouping.MatchGroupResultConsumer;
 import org.talend.dataquality.record.linkage.grouping.TSwooshGrouping;
 import org.talend.dataquality.record.linkage.grouping.swoosh.SurvivorShipAlgorithmParams.SurvivorshipFunction;
 import org.talend.dataquality.record.linkage.record.CombinedRecordMatcher;
@@ -69,8 +70,8 @@ public class DQMFB extends MFB {
 
     public static DQMFB build(RecordMatcherType recordLinkageAlgorithm, List<List<Map<String, String>>> multiMatchRules,
             List<SurvivorshipFunction[]> multiSurvivorshipFunctions, Map<Integer, SurvivorshipFunction> defaultSurviorshipRules,
-            String mergedRecordSource, Callback callback) throws Exception {
-        AnalysisSwooshMatchRecordGrouping recordGrouping = new AnalysisSwooshMatchRecordGrouping();
+            String mergedRecordSource, Callback callback, MatchGroupResultConsumer matchResultConsumer) throws Exception {
+        AnalysisSwooshMatchRecordGrouping recordGrouping = new AnalysisSwooshMatchRecordGrouping(matchResultConsumer);
         recordGrouping.setRecordLinkAlgorithm(recordLinkageAlgorithm);
         for (List<Map<String, String>> matchRule : multiMatchRules) {
             recordGrouping.addMatchRule(matchRule);
