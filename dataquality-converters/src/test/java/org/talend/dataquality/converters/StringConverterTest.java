@@ -12,7 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.converters;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
@@ -86,57 +86,63 @@ public class StringConverterTest {
 
     @Test
     public void testremoveDuplicate_CR() {
-        StringConverter stringConverter = new StringConverter();
+        StringConverter stringConverter = new StringConverter("\r"); //$NON-NLS-1$
         String input = "a\rbccccdeaa\r\r\ry"; //$NON-NLS-1$
-        assertEquals("a\rbccccdeaa\ry", stringConverter.removeRepeat(input, "\r")); //$NON-NLS-1$//$NON-NLS-2$
+        assertEquals("a\rbccccdeaa\ry", stringConverter.removeRepeat(input)); //$NON-NLS-1$
     }
 
     @Test
     public void testremoveDuplicate_LF() {
-        StringConverter stringConverter = new StringConverter();
+        StringConverter stringConverter = new StringConverter("\n"); //$NON-NLS-1$
         String input = "a\nbccccdeaa\n\n\ny"; //$NON-NLS-1$
-        assertEquals("a\nbccccdeaa\ny", stringConverter.removeRepeat(input, "\n")); //$NON-NLS-1$//$NON-NLS-2$
+        assertEquals("a\nbccccdeaa\ny", stringConverter.removeRepeat(input)); //$NON-NLS-1$
     }
 
     @Test
     public void testremoveDuplicate_CRLF() {
-        StringConverter stringConverter = new StringConverter();
+        StringConverter stringConverter = new StringConverter("\r\n"); //$NON-NLS-1$
         String input = "a\r\nbccccdeaa\r\n\r\n\r\ny"; //$NON-NLS-1$
-        assertEquals("a\r\nbccccdeaa\r\ny", stringConverter.removeRepeat(input, "\r\n")); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("a\r\nbccccdeaa\r\ny", stringConverter.removeRepeat(input)); //$NON-NLS-1$
     }
 
     @Test
     public void testremoveDuplicate_TAB() {
-        StringConverter stringConverter = new StringConverter();
+        StringConverter stringConverter = new StringConverter("\t"); //$NON-NLS-1$
         String input = "a\tbccccdeaa\t\t\t\t\t\ty"; //$NON-NLS-1$
-        assertEquals("a\tbccccdeaa\ty", stringConverter.removeRepeat(input, "\t")); //$NON-NLS-1$//$NON-NLS-2$
+        assertEquals("a\tbccccdeaa\ty", stringConverter.removeRepeat(input)); //$NON-NLS-1$
     }
 
     @Test
     public void testremoveDuplicate_LETTER() {
-        StringConverter stringConverter = new StringConverter();
+        StringConverter stringConverter = new StringConverter("c"); //$NON-NLS-1$
         String input = "atbccccdeaaCCtcy"; //$NON-NLS-1$
-        assertEquals("atbcdeaaCCtcy", stringConverter.removeRepeat(input, "c")); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("atbcdeaaCCtcy", stringConverter.removeRepeat(input)); //$NON-NLS-1$
+        stringConverter = new StringConverter("a"); //$NON-NLS-1$
         input = "aaatbccccdeaaCCtcy"; //$NON-NLS-1$
-        assertEquals("atbccccdeaCCtcy", stringConverter.removeRepeat(input, "a")); //$NON-NLS-1$//$NON-NLS-2$
+        assertEquals("atbccccdeaCCtcy", stringConverter.removeRepeat(input)); //$NON-NLS-1$
+        stringConverter = new StringConverter("ac"); //$NON-NLS-1$
         input = "acacacactbccccdeaCCtaccy"; //$NON-NLS-1$
-        assertEquals("actbccccdeaCCtaccy", stringConverter.removeRepeat(input, "ac")); //$NON-NLS-1$//$NON-NLS-2$
+        assertEquals("actbccccdeaCCtaccy", stringConverter.removeRepeat(input)); //$NON-NLS-1$
     }
 
     @Test
     public void testremoveDuplicate_NULL1() {
-        StringConverter stringConverter = new StringConverter();
+        StringConverter stringConverter = new StringConverter("c"); //$NON-NLS-1$
         String input = null;
-        assertEquals(null, stringConverter.removeRepeat(input, "c")); //$NON-NLS-1$ 
+        assertEquals(null, stringConverter.removeRepeat(input));
         input = ""; //$NON-NLS-1$
-        assertEquals("", stringConverter.removeRepeat(input, "c")); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("", stringConverter.removeRepeat(input)); //$NON-NLS-1$
     }
 
     @Test
     public void testremoveDuplicate_NULL2() {
         StringConverter stringConverter = new StringConverter();
         String input = "aaabc"; //$NON-NLS-1$
-        assertEquals(input, stringConverter.removeRepeat(input, null));
-        assertEquals(input, stringConverter.removeRepeat(input, "")); //$NON-NLS-1$
+        assertEquals(input, stringConverter.removeRepeat(input));
+        stringConverter = new StringConverter(""); //$NON-NLS-1$
+        assertEquals(input, stringConverter.removeRepeat(input));
+        stringConverter = new StringConverter(null);
+        assertEquals(input, stringConverter.removeRepeat(input));
     }
+
 }

@@ -49,6 +49,32 @@ public class StringConverter {
             , '\u3000' + "" // IDEOGRAPHIC SPACE //$NON-NLS-1$
     };
 
+    private String repeatStr = null;
+
+    private String repeatStrPattern = null;
+
+    /**
+     * 
+     * no need to initialize repeatStr and repeatStrPattern in this case
+     */
+    public StringConverter() {
+
+    }
+
+    /**
+     * 
+     * the repeat String will be removed.
+     * 
+     * @param repeatStr it is a repeat String
+     */
+    public StringConverter(String repeatStr) {
+        this.repeatStr = repeatStr;
+        if (!StringUtils.isEmpty(repeatStr)) {
+            repeatStrPattern = "(" + repeatStr + ")+"; //$NON-NLS-1$ //$NON-NLS-2$
+        }
+
+    }
+
     /**
      * Remove trailing and leading characters which may be empty string, space string,\t,\n,\r,\f...any space, break related
      * characters.
@@ -113,15 +139,14 @@ public class StringConverter {
      * 
      * Remove consecutive repeated characters by a specified char.
      * 
-     * @param str the source String
-     * @param repeatStr need to be removed repeat String
+     * @param inputStr the source String
      * @return the string with the source string removed if found
      */
-    public String removeRepeat(String str, String repeatStr) {
-        if (StringUtils.isEmpty(str) || StringUtils.isEmpty(repeatStr)) {
-            return str;
+    public String removeRepeat(String inputStr) {
+        if (StringUtils.isEmpty(inputStr) || StringUtils.isEmpty(repeatStr) || StringUtils.isEmpty(repeatStrPattern)) {
+            return inputStr;
         }
-        return str.replaceAll("(" + repeatStr + ")+", repeatStr); //$NON-NLS-1$ //$NON-NLS-2$
+        return inputStr.replaceAll(repeatStrPattern, repeatStr);
     }
 
 }
