@@ -53,11 +53,9 @@ public class DQCategory implements Serializable {
 
     private Boolean completeness;
 
-    private Boolean draft;
-
-    private Boolean published;
-
     private Date lastPublished;
+
+    private String state;
 
     public String getId() {
         return id;
@@ -195,27 +193,27 @@ public class DQCategory implements Serializable {
         this.lastModifier = lastModifier;
     }
 
-    public Boolean getDraft() {
-        return draft;
+    public Date getLastPublished() {
+        return lastPublished;
     }
 
-    public void setDraft(Boolean draft) {
-        this.draft = draft;
+    public void setLastPublished(Date lastPublished) {
+        this.lastPublished = lastPublished;
     }
 
-    public Boolean getPublished() {
-        return published;
+    public String getState() {
+        return state;
     }
 
-    public void setPublished(Boolean published) {
-        this.published = published;
+    public void setState(String state) {
+        this.state = state;
     }
 
     @Override
     public String toString() {
         return String.format(
-                "Category [ID=%s  Type=%s  Name=%-20s  Label=%-20s  Completeness=%-5s  Description=%s Creator=%s Last Modifier=%s Draft=%-5s Published=%-5s Last published=%s]",
-                id, type, name, label, completeness, description, creator, lastModifier, draft, published, lastPublished);
+                "Category [ID=%s  Type=%s  Name=%-20s  Label=%-20s  Completeness=%-5s  Description=%s Creator=%s Last Modifier=%s State=%-20s Last published=%s]",
+                id, type, name, label, completeness, description, creator, lastModifier, state, lastPublished);
     }
 
 }

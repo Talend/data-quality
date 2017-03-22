@@ -30,7 +30,7 @@ public class DQDocument implements Serializable {
 
     private String lastModifier;
 
-    private Boolean draft;
+    private String state;
 
     public String getId() {
         return id;
@@ -80,17 +80,17 @@ public class DQDocument implements Serializable {
         this.lastModifier = lastModifier;
     }
 
-    public Boolean getDraft() {
-        return draft;
+    public String getState() {
+        return state;
     }
 
-    public void setDraft(Boolean draft) {
-        this.draft = draft;
+    public void setState(String state) {
+        this.state = state;
     }
 
     @Override
     public String toString() {
         return "DQDocument{" + "id='" + id + '\'' + ", categoryName=" + category.getName() + ", values='" + values + '\''
-                + ", creator='" + creator + '\'' + ", lastModifier='" + lastModifier + '\'' + ", draft='" + draft + '\'' + '}';
+                + ", creator='" + creator + '\'' + ", lastModifier='" + lastModifier + '\'' + ", state='" + state + '\'' + '}';
     }
 }
