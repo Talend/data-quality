@@ -60,7 +60,7 @@ public class StringConverter {
 
     /**
      * 
-     * no need to initialize repeatStr and repeatStrPattern in this case
+     * This constructor is used to some cases but except removing a specify repeated String {@link #removeRepeatedChar(String)}.
      */
     public StringConverter() {
         this(null);
@@ -68,7 +68,7 @@ public class StringConverter {
 
     /**
      * 
-     * the repeat String will be removed.
+     * This constructor is used to remove a specify repeated String {@link #removeRepeatedChar(String)} .
      * 
      * @param repeatStr it is a repeat String
      */

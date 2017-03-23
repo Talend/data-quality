@@ -29,13 +29,6 @@ public class StringConverterTest {
 
     @Test
     public void testRemoveTrailingAndLeading() {
-        // assertEquals(expected, " abc ".trim()); //$NON-NLS-1$
-        // assertEquals(" ", '\u0020' + "");
-        // assertEquals('\t', '\u0009');
-        // assertEquals("\t", '\u0009' + "");
-        // assertEquals("a" + "\t", "a" + '\u0009');
-        // assertNotEquals("\t", '\u0009');
-        // assertNotEquals("\t", "\\u0009");
 
         StringConverter stringConverter = new StringConverter();
 
@@ -154,8 +147,12 @@ public class StringConverterTest {
         StringConverter stringConverter = new StringConverter();
         String input = "a   b\t\t\tc\n\n\nd\r\re\f\ff"; //$NON-NLS-1$
         String cleanStr = stringConverter.removeRepeatedWhitespaces(input);
-
         assertEquals("a b\tc\nd\re\ff", cleanStr); //$NON-NLS-1$
+
+        // \r\n will not be removed
+        input = "aaab\r\n\r\n\r\nx"; //$NON-NLS-1$
+        cleanStr = stringConverter.removeRepeatedWhitespaces(input);
+        assertEquals("aaab\r\n\r\n\r\nx", cleanStr); //$NON-NLS-1$
 
         input = "a\u0085\u0085\u0085b\u00A0\u00A0c\u1680\u1680d\u180E\u180Ee\u2000\u2000f\u2001\u2001g\u2002\u2002h\u2003\u2003i\u2004\u2004"; //$NON-NLS-1$
         cleanStr = stringConverter.removeRepeatedWhitespaces(input);
