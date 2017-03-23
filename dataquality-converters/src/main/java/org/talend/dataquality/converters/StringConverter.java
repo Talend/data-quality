@@ -12,6 +12,9 @@
 // ============================================================================
 package org.talend.dataquality.converters;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -49,16 +52,18 @@ public class StringConverter {
             , '\u3000' + "" // IDEOGRAPHIC SPACE //$NON-NLS-1$
     };
 
-    private String repeatStr = null;
+    private String repeatChar = null;
 
-    private String repeatStrPattern = null;
+    private Pattern removeRepeatCharPattern = null;
+
+    private Pattern removeWhiteSpacesPattern = null;
 
     /**
      * 
      * no need to initialize repeatStr and repeatStrPattern in this case
      */
     public StringConverter() {
-
+        this(null);
     }
 
     /**
@@ -68,11 +73,11 @@ public class StringConverter {
      * @param repeatStr it is a repeat String
      */
     public StringConverter(String repeatStr) {
-        this.repeatStr = repeatStr;
+        this.repeatChar = repeatStr;
         if (!StringUtils.isEmpty(repeatStr)) {
-            repeatStrPattern = "(" + repeatStr + ")+"; //$NON-NLS-1$ //$NON-NLS-2$
+            removeRepeatCharPattern = Pattern.compile("(" + repeatStr + ")+"); //$NON-NLS-1$//$NON-NLS-2$
         }
-
+        removeWhiteSpacesPattern = Pattern.compile("([\\s\\u0085\\p{Z}])\\1+"); //$NON-NLS-1$
     }
 
     /**
@@ -142,11 +147,34 @@ public class StringConverter {
      * @param inputStr the source String
      * @return the string with the source string removed if found
      */
-    public String removeRepeat(String inputStr) {
-        if (StringUtils.isEmpty(inputStr) || StringUtils.isEmpty(repeatStr) || StringUtils.isEmpty(repeatStrPattern)) {
+    public String removeRepeatedChar(String inputStr) {
+        if (StringUtils.isEmpty(inputStr) || StringUtils.isEmpty(repeatChar) || removeRepeatCharPattern == null) {
             return inputStr;
         }
-        return inputStr.replaceAll(repeatStrPattern, repeatStr);
+        Matcher matcher = removeRepeatCharPattern.matcher(inputStr);
+        return matcher.replaceAll(repeatChar);
+    }
+
+    /**
+     * 
+     * Remove all repeated white spaces which include all strings in {@link #WHITESPACE_CHARS} like as " ","\n","\r","\t".
+     * *
+     * 
+     * <pre>
+     * removeRepeatedWhitespaces(null) = null
+     * removeRepeatedWhitespaces("")   = ""
+     * removeRepeatedWhitespaces("a  back\t\t\td") = "a back\td"
+     * </pre>
+     * 
+     * @param inputStr inputStr the source String
+     * @return the string removed all whiteSpaces
+     */
+    public String removeRepeatedWhitespaces(String inputStr) {
+        if (StringUtils.isEmpty(inputStr) || removeWhiteSpacesPattern == null) {
+            return inputStr;
+        }
+        Matcher matcher = removeWhiteSpacesPattern.matcher(inputStr);
+        return matcher.replaceAll("$1"); //$NON-NLS-1$
     }
 
 }
