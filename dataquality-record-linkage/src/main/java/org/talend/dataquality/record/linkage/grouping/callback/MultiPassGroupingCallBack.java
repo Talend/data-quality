@@ -27,9 +27,11 @@ import org.talend.dataquality.record.linkage.utils.BidiMultiMap;
 /**
  * Create by zshen This class is used to finish all kinds of action(match merge remove and so on) in Multi pass match processing.
  */
-public class MultiPassGroupingCallBack<type> extends GroupingCallBack<type> {
+public class MultiPassGroupingCallBack<T> extends GroupingCallBack<T> {
 
     private Map<String, List<List<DQAttribute<?>>>> groupRows = null;
+
+    private int indexGID = 0;
 
     /**
      * Create by zshen MultiPassGroupingCallBack constructor.
@@ -38,14 +40,12 @@ public class MultiPassGroupingCallBack<type> extends GroupingCallBack<type> {
      * @param recordGrouping a strategy which used to decide where should be output
      * @param groupRows keep relation between master GID and it's children
      */
-    public MultiPassGroupingCallBack(BidiMultiMap oldGID2New, AbstractRecordGrouping<type> recordGrouping,
+    public MultiPassGroupingCallBack(BidiMultiMap oldGID2New, AbstractRecordGrouping<T> recordGrouping,
             Map<String, List<List<DQAttribute<?>>>> groupRows) {
         super(oldGID2New, recordGrouping);
         this.groupRows = groupRows;
 
     }
-
-    int indexGID = 0;
 
     @Override
     public void onDifferent(Record record1, Record record2, MatchResult matchResult) {

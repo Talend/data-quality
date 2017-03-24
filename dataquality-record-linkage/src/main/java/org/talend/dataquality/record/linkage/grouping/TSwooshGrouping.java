@@ -52,7 +52,7 @@ public class TSwooshGrouping<TYPE> {
 
     AbstractRecordGrouping<TYPE> recordGrouping;
 
-    BidiMultiMap<String, String> oldGID2New = new BidiMultiMap<>();
+    private BidiMultiMap<String, String> oldGID2New = new BidiMultiMap<>();
 
     // Added TDQ-9320: to use the algorithm handle the record one by one
     private DQMFB algorithm;

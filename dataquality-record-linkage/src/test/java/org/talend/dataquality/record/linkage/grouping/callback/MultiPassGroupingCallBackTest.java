@@ -47,10 +47,12 @@ public class MultiPassGroupingCallBackTest {
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
+        // no need to implement
     }
 
     @AfterClass
     public static void tearDownAfterClass() throws Exception {
+        // no need to implement
     }
 
     @Before
@@ -106,7 +108,7 @@ public class MultiPassGroupingCallBackTest {
      * .
      */
     @Test
-    public void testOnMatch() {
+    public void testOnMatchNotMatchCase() {
         MultiPassGroupingCallBack<Object> mPGroupingCallBack = new MultiPassGroupingCallBack<>(oldGID2New, recordGrouping,
                 groupRows);
         RichRecord record1 = new RichRecord("id1", new Date().getTime(), "source1"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -124,6 +126,23 @@ public class MultiPassGroupingCallBackTest {
         Assert.assertEquals("The Confidence of record1 should be 0.1", "0.1", "" + record1.getScore()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         Assert.assertEquals("The Confidence of record2 should be 1.0", "1.0", "" + record2.getConfidence()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         Assert.assertEquals("The Confidence of record1 should be 0.2", "0.2", "" + record2.getScore()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+
+    }
+
+    /**
+     * Test method for
+     * {@link org.talend.dataquality.record.linkage.grouping.callback.MultiPassGroupingCallBack#onMatch(org.talend.dataquality.matchmerge.Record, org.talend.dataquality.matchmerge.Record, org.talend.dataquality.matchmerge.mfb.MatchResult)}
+     * .
+     */
+    @Test
+    public void testOnMatchBothIdIsNull() {
+        MultiPassGroupingCallBack<Object> mPGroupingCallBack = new MultiPassGroupingCallBack<>(oldGID2New, recordGrouping,
+                groupRows);
+        RichRecord record1 = new RichRecord("id1", new Date().getTime(), "source1"); //$NON-NLS-1$ //$NON-NLS-2$
+        RichRecord record2 = new RichRecord("id2", new Date().getTime(), "source2"); //$NON-NLS-1$ //$NON-NLS-2$
+        record1.setScore(0.1);
+        record2.setScore(0.2);
+        MatchResult matchResult = new MatchResult(1);
 
         // case2 id1==null id2==null
         // old quality 2>1 case
@@ -156,6 +175,23 @@ public class MultiPassGroupingCallBackTest {
         Assert.assertEquals("The result of oldGID2New.get(\"GID2\") should be GID1", "GID1", oldGID2New.get("GID2")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         Assert.assertNotNull("The GID1 attributes should not be null", groupRows.get("GID1")); //$NON-NLS-1$ //$NON-NLS-2$
 
+    }
+
+    /**
+     * Test method for
+     * {@link org.talend.dataquality.record.linkage.grouping.callback.MultiPassGroupingCallBack#onMatch(org.talend.dataquality.matchmerge.Record, org.talend.dataquality.matchmerge.Record, org.talend.dataquality.matchmerge.mfb.MatchResult)}
+     * .
+     */
+    @Test
+    public void testOnMatchBothIdNotNull() {
+        MultiPassGroupingCallBack<Object> mPGroupingCallBack = new MultiPassGroupingCallBack<>(oldGID2New, recordGrouping,
+                groupRows);
+        RichRecord record1 = new RichRecord("id1", new Date().getTime(), "source1"); //$NON-NLS-1$ //$NON-NLS-2$
+        RichRecord record2 = new RichRecord("id2", new Date().getTime(), "source2"); //$NON-NLS-1$ //$NON-NLS-2$
+        record1.setScore(0.1);
+        record2.setScore(0.2);
+        MatchResult matchResult = new MatchResult(1);
+
         // case3 id1=="id1" id2=="id2"
         // old quality 1>2 case
         // groupRows:old !=null new GID!=null
@@ -169,6 +205,8 @@ public class MultiPassGroupingCallBackTest {
         record1.setScore(0.1);
         record2.setScore(0.2);
         matchResult = new MatchResult(1);
+        List<DQAttribute<?>> originRow1 = initOriginRow("GID1", 2, true, 0.21, "0.9"); //$NON-NLS-1$ //$NON-NLS-2$
+        List<DQAttribute<?>> originRow2 = initOriginRow("GID2", 2, true, 0.22, "0.8"); //$NON-NLS-1$ //$NON-NLS-2$
 
         record1.setRecordSize(1);
         record2.setRecordSize(1);
@@ -196,6 +234,23 @@ public class MultiPassGroupingCallBackTest {
         Assert.assertEquals("The size of mapping to id1 should be 5", 5, oldGID2New.getKeys("id1").size()); //$NON-NLS-1$ //$NON-NLS-2$
         Assert.assertEquals("The size of groupRows should be 1", 1, groupRows.size()); //$NON-NLS-1$
         Assert.assertNotNull("The id1 attributes should not be null", groupRows.get("id1")); //$NON-NLS-1$ //$NON-NLS-2$
+
+    }
+
+    /**
+     * Test method for
+     * {@link org.talend.dataquality.record.linkage.grouping.callback.MultiPassGroupingCallBack#onMatch(org.talend.dataquality.matchmerge.Record, org.talend.dataquality.matchmerge.Record, org.talend.dataquality.matchmerge.mfb.MatchResult)}
+     * .
+     */
+    @Test
+    public void testOnMatchOnlyOneIdIsNull() {
+        MultiPassGroupingCallBack<Object> mPGroupingCallBack = new MultiPassGroupingCallBack<>(oldGID2New, recordGrouping,
+                groupRows);
+        RichRecord record1 = new RichRecord("id1", new Date().getTime(), "source1"); //$NON-NLS-1$ //$NON-NLS-2$
+        RichRecord record2 = new RichRecord("id2", new Date().getTime(), "source2"); //$NON-NLS-1$ //$NON-NLS-2$
+        record1.setScore(0.1);
+        record2.setScore(0.2);
+        MatchResult matchResult = new MatchResult(1);
 
         // case4 id1==null id2=="id2"
         // old quality 1==2 case
@@ -238,6 +293,7 @@ public class MultiPassGroupingCallBackTest {
         Assert.assertEquals("The groupid of record2 should be id1", "id1", listResult.get(0).getGroupId()); //$NON-NLS-1$ //$NON-NLS-2$
         Assert.assertEquals("The group size of record2 should be 0", 0, listResult.get(0).getGrpSize()); //$NON-NLS-1$
         Assert.assertFalse("The master of record2 should be false", listResult.get(0).isMaster()); //$NON-NLS-1$
+
     }
 
     /**

@@ -14,13 +14,13 @@ import org.talend.dataquality.record.linkage.utils.BidiMultiMap;
  * 
  * Create by zshen This class is used to finish all kinds of action(match merge remove and so on) in match processing
  */
-public class GroupingCallBack<TYPE> implements MatchMergeAlgorithm.Callback {
+public class GroupingCallBack<T> implements MatchMergeAlgorithm.Callback {
 
     protected BidiMultiMap<String, String> oldGID2New = null;
 
-    protected AbstractRecordGrouping<TYPE> recordGrouping;
+    protected AbstractRecordGrouping<T> recordGrouping;
 
-    public GroupingCallBack(BidiMultiMap<String, String> oldGID2New, AbstractRecordGrouping<TYPE> recordGrouping) {
+    public GroupingCallBack(BidiMultiMap<String, String> oldGID2New, AbstractRecordGrouping<T> recordGrouping) {
         this.oldGID2New = oldGID2New;
         this.recordGrouping = recordGrouping;
     }

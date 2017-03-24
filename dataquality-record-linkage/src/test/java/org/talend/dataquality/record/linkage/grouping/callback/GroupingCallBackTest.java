@@ -33,18 +33,20 @@ import org.talend.dataquality.record.linkage.utils.BidiMultiMap;
  */
 public class GroupingCallBackTest {
 
-    BidiMultiMap<String, String> oldGID2New = null;
+    private BidiMultiMap<String, String> oldGID2New = null;
 
-    List<RichRecord> listResult = null;
+    private List<RichRecord> listResult = null;
 
-    AbstractRecordGrouping<Object> recordGrouping = null;
+    private AbstractRecordGrouping<Object> recordGrouping = null;
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
+        // no need implement
     }
 
     @AfterClass
     public static void tearDownAfterClass() throws Exception {
+        // no need implement
     }
 
     @Before
