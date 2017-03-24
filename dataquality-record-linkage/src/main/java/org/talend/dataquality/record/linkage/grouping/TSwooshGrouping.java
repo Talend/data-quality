@@ -377,7 +377,7 @@ public class TSwooshGrouping<TYPE> {
         List<RecordGenerator> notMasterRecords = new ArrayList<>();
         for (RecordGenerator record : rcdsGenerators) {
             List<DQAttribute<?>> originalRow = record.getOriginalRow();
-            if (!StringUtils.equalsIgnoreCase("true", StringUtils.normalizeSpace(originalRow.get(indexGID2 + 2).getValue()))) {
+            if (!StringUtils.equalsIgnoreCase("true", StringUtils.normalizeSpace(originalRow.get(indexGID2 + 2).getValue()))) { //$NON-NLS-1$
                 List<List<DQAttribute<?>>> list = groupRows.get(originalRow.get(indexGID2).getValue());
                 if (list == null) {
                     list = new ArrayList<>();
@@ -583,8 +583,8 @@ public class TSwooshGrouping<TYPE> {
 
             String grpId1 = richRecord1.getGroupId();
             String grpId2 = richRecord2.getGroupId();
-            String oldgrpId1 = richRecord1.getGID() == null ? null : richRecord1.getGID().getValue(); //
-            String oldgrpId2 = richRecord2.getGID() == null ? null : richRecord2.getGID().getValue();//
+            String oldgrpId1 = richRecord1.getGID() == null ? null : richRecord1.getGID().getValue();
+            String oldgrpId2 = richRecord2.getGID() == null ? null : richRecord2.getGID().getValue();
             uniqueOldGroupQuality(record1, record2);
             if (grpId1 == null && grpId2 == null) {
                 // Both records are original records.
@@ -676,7 +676,6 @@ public class TSwooshGrouping<TYPE> {
             } else {
                 richRecord.getGRP_QUALITY().setValue(String.valueOf(value));
             }
-            // richRecord.getOriginRow().get(getIndexGQ()).setValue(String.valueOf(value));
 
         }
 
@@ -685,7 +684,6 @@ public class TSwooshGrouping<TYPE> {
             // record must be RichRecord from DQ grouping implementation.
             RichRecord richRecord = (RichRecord) record;
             if (richRecord.isMerged()) {
-                // removeOldValues(richRecord);
                 richRecord.setGroupQuality(0);
             }
             richRecord.setMerged(false);
@@ -723,9 +721,8 @@ public class TSwooshGrouping<TYPE> {
          * @return
          */
         private Double getOldGrpQualiry(RichRecord richRecord) {
-            // String value = richRecord.getOriginRow().get(getIndexGQ()).getValue();
             String value = richRecord.getGRP_QUALITY() == null ? null : richRecord.getGRP_QUALITY().getValue();
-            return Double.valueOf(value == null ? "1.0" : value);
+            return Double.valueOf(value == null ? "1.0" : value); //$NON-NLS-1$
         }
 
         /**

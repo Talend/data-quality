@@ -519,6 +519,12 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
 
     protected abstract void outputRow(RichRecord row);
 
+    /**
+     * 
+     * Output rich record content
+     * 
+     * @param row one RichRecord instance which want to output
+     */
     public void outputRichRecord(RichRecord row) {
         this.outputRow(row);
     }

@@ -10,6 +10,10 @@ import org.talend.dataquality.record.linkage.grouping.AbstractRecordGrouping;
 import org.talend.dataquality.record.linkage.grouping.swoosh.RichRecord;
 import org.talend.dataquality.record.linkage.utils.BidiMultiMap;
 
+/**
+ * 
+ * Create by zshen This class is used to finish all kinds of action(match merge remove and so on) in match processing
+ */
 public class GroupingCallBack<TYPE> implements MatchMergeAlgorithm.Callback {
 
     protected BidiMultiMap<String, String> oldGID2New = null;

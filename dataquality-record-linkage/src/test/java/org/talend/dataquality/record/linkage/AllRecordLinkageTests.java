@@ -27,6 +27,8 @@ import org.talend.dataquality.record.linkage.constant.AttributeMatcherTypeTest;
 import org.talend.dataquality.record.linkage.grouping.AbstractRecordGroupingTest;
 import org.talend.dataquality.record.linkage.grouping.SwooshRecordGroupingTest;
 import org.talend.dataquality.record.linkage.grouping.TSwooshGroupingTest;
+import org.talend.dataquality.record.linkage.grouping.callback.GroupingCallBackTest;
+import org.talend.dataquality.record.linkage.grouping.callback.MultiPassGroupingCallBackTest;
 import org.talend.dataquality.record.linkage.grouping.swoosh.AnalysisSwooshMatchRecordGroupingTest;
 import org.talend.dataquality.record.linkage.grouping.swoosh.RichRecordTest;
 import org.talend.dataquality.record.linkage.record.CombinedRecordMatcherTest;
@@ -39,7 +41,7 @@ import org.talend.windowkey.FingerprintKeyerTest;
 import org.talend.windowkey.NGramFingerprintKeyerTest;
 
 /**
- * DOC yyin class global comment. Detailled comment
+ * Create by yyin new junit suit for plugin org.talend.dataquality.record.linkage
  */
 @RunWith(Suite.class)
 @SuiteClasses({ AbstractAttributeMatcherTest.class, DoubleMetaphoneMatcherTest.class, LevenshteinMatcherTest.class,
@@ -47,8 +49,8 @@ import org.talend.windowkey.NGramFingerprintKeyerTest;
         AbstractRecordGroupingTest.class, CombinedRecordMatcherTest.class, SimpleVSRRecordMatcherTest.class,
         AlgorithmSwitchTest.class, QGramTokenizerTest.class, AlgoBoxTest.class, FingerprintKeyerTest.class,
         NGramFingerprintKeyerTest.class, SwooshRecordGroupingTest.class, MFBRecordMatcherTest.class,
-        AnalysisSwooshMatchRecordGroupingTest.class, TSwooshGroupingTest.class, SurvivorshipUtilsTest.class,
-        RichRecordTest.class })
+        AnalysisSwooshMatchRecordGroupingTest.class, TSwooshGroupingTest.class, SurvivorshipUtilsTest.class, RichRecordTest.class,
+        GroupingCallBackTest.class, MultiPassGroupingCallBackTest.class })
 public class AllRecordLinkageTests {
 
 }

@@ -25,17 +25,18 @@ import org.talend.dataquality.record.linkage.grouping.swoosh.SwooshConstants;
 import org.talend.dataquality.record.linkage.utils.BidiMultiMap;
 
 /**
- * DOC zshen class global comment. Detailled comment
+ * Create by zshen This class is used to finish all kinds of action(match merge remove and so on) in Multi pass match processing.
  */
 public class MultiPassGroupingCallBack<type> extends GroupingCallBack<type> {
 
     private Map<String, List<List<DQAttribute<?>>>> groupRows = null;
 
     /**
-     * DOC zshen MultiPassGroupingCallBack constructor comment.
+     * Create by zshen MultiPassGroupingCallBack constructor.
      * 
-     * @param oldGID2New
-     * @param recordGrouping
+     * @param oldGID2New a map which key is old GID value is new GID help us to find the relation
+     * @param recordGrouping a strategy which used to decide where should be output
+     * @param groupRows keep relation between master GID and it's children
      */
     public MultiPassGroupingCallBack(BidiMultiMap oldGID2New, AbstractRecordGrouping<type> recordGrouping,
             Map<String, List<List<DQAttribute<?>>>> groupRows) {
@@ -48,13 +49,11 @@ public class MultiPassGroupingCallBack<type> extends GroupingCallBack<type> {
 
     @Override
     public void onDifferent(Record record1, Record record2, MatchResult matchResult) {
-        // TODO Auto-generated method stub
         super.onDifferent(record1, record2, matchResult);
     }
 
     @Override
     public void onEndRecord(Record record) {
-        // TODO Auto-generated method stub
         super.onEndRecord(record);
     }
 
@@ -157,7 +156,7 @@ public class MultiPassGroupingCallBack<type> extends GroupingCallBack<type> {
     }
 
     /**
-     * zshen Comment method "uniqueOldGroupQuality". unique group quality with min
+     * Create by zshen unique group quality with min
      * 
      * @param record1
      * @param record2
@@ -165,30 +164,29 @@ public class MultiPassGroupingCallBack<type> extends GroupingCallBack<type> {
     private void uniqueOldGroupQuality(Record record1, Record record2) {
         RichRecord richRecord1 = (RichRecord) record1;
         RichRecord richRecord2 = (RichRecord) record2;
-        Double oldGrpQualiry1 = getOldGrpQualiry(richRecord1);
-        Double oldGrpQualiry2 = getOldGrpQualiry(richRecord2);
+        Double oldGrpQualiry1 = getOldGrpQuality(richRecord1);
+        Double oldGrpQualiry2 = getOldGrpQuality(richRecord2);
         if (oldGrpQualiry1 < oldGrpQualiry2) {
-            setOldGrpQualiry(richRecord2, oldGrpQualiry1);
+            setOldGrpQuality(richRecord2, oldGrpQualiry1);
         } else if (oldGrpQualiry1 > oldGrpQualiry2) {
-            setOldGrpQualiry(richRecord2, oldGrpQualiry2);
+            setOldGrpQuality(richRecord2, oldGrpQualiry2);
         }
         // oldGrpQualiry1 < oldGrpQualiry2 case we don't need do anything
     }
 
     /**
-     * DOC zshen Comment method "setOldGrpQualiry".
+     * Create by zshen setting old Group quality
+     * revert value from Double type to String type and keep empty when current value is null
      * 
      * @param double1
      */
-    private void setOldGrpQualiry(RichRecord richRecord, Double value) {
+    private void setOldGrpQuality(RichRecord richRecord, Double value) {
         if (richRecord.getGRP_QUALITY() == null) {
             richRecord.setGRP_QUALITY(
                     new DQAttribute<>(SwooshConstants.GROUP_QUALITY, richRecord.getRecordSize(), StringUtils.EMPTY));
         } else {
             richRecord.getGRP_QUALITY().setValue(String.valueOf(value));
         }
-        // richRecord.getOriginRow().get(getIndexGQ()).setValue(String.valueOf(value));
-
     }
 
     @Override
@@ -196,7 +194,6 @@ public class MultiPassGroupingCallBack<type> extends GroupingCallBack<type> {
         // record must be RichRecord from DQ grouping implementation.
         RichRecord richRecord = (RichRecord) record;
         if (richRecord.isMerged()) {
-            // removeOldValues(richRecord);
             richRecord.setGroupQuality(0);
         }
         richRecord.setMerged(false);
@@ -221,29 +218,28 @@ public class MultiPassGroupingCallBack<type> extends GroupingCallBack<type> {
             richRecord.setGrpSize(richRecord.getRelatedIds().size());
             if (Double.compare(richRecord.getGroupQuality(), 0.0d) == 0) {
                 // group quality will be the confidence (score) or old group quality decide that by who is minimum.
-                Double oldGrpQuality = getOldGrpQualiry(richRecord);
+                Double oldGrpQuality = getOldGrpQuality(richRecord);
                 richRecord.setGroupQuality(getMergeGQ(oldGrpQuality, record.getConfidence()));
             }
         }
     }
 
     /**
-     * DOC zshen Comment method "getOldGrpQualiry".
+     * Create by zshen get old Group quality and retrun 1.0 when current value is null
      * 
      * @param richRecord
      * @return
      */
-    private Double getOldGrpQualiry(RichRecord richRecord) {
-        // String value = richRecord.getOriginRow().get(getIndexGQ()).getValue();
+    private Double getOldGrpQuality(RichRecord richRecord) {
         String value = richRecord.getGRP_QUALITY() == null ? null : richRecord.getGRP_QUALITY().getValue();
         return Double.valueOf(value == null ? "1.0" : value);
     }
 
     /**
-     * DOC zshen Comment method "getMergeGQ".
+     * Create by zshen get minimum one between origin Group quality and current confidence value
      * 
-     * @param oldGrpQuality
-     * @param confidence
+     * @param oldGrpQuality the origin Group quality value
+     * @param confidence current confidence value
      * @return minimum one
      */
     private double getMergeGQ(Double oldGrpQuality, double confidence) {
