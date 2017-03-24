@@ -26,7 +26,6 @@ import org.talend.dataquality.matchmerge.MatchMergeAlgorithm;
 import org.talend.dataquality.matchmerge.Record;
 import org.talend.dataquality.matchmerge.mfb.MatchResult;
 import org.talend.dataquality.matchmerge.mfb.RecordGenerator;
-import org.talend.dataquality.matchmerge.mfb.RecordIterator;
 import org.talend.dataquality.matchmerge.mfb.RecordIterator.ValueGenerator;
 import org.talend.dataquality.record.linkage.grouping.swoosh.DQAttribute;
 import org.talend.dataquality.record.linkage.grouping.swoosh.DQMFB;
@@ -53,7 +52,7 @@ public class TSwooshGrouping<TYPE> {
 
     AbstractRecordGrouping<TYPE> recordGrouping;
 
-    BidiMultiMap<String, String> oldGID2New = new BidiMultiMap<String, String>();
+    BidiMultiMap<String, String> oldGID2New = new BidiMultiMap<>();
 
     // Added TDQ-9320: to use the algorithm handle the record one by one
     private DQMFB algorithm;
@@ -86,7 +85,7 @@ public class TSwooshGrouping<TYPE> {
     public void addToList(final TYPE[] inputRow, List<List<Map<java.lang.String, java.lang.String>>> multiMatchRules) {
         totalCount++;
         java.lang.String attributeName = null;
-        Map<java.lang.String, ValueGenerator> rcdMap = new LinkedHashMap<String, RecordIterator.ValueGenerator>();
+        Map<java.lang.String, ValueGenerator> rcdMap = new LinkedHashMap<>();
         for (List<Map<java.lang.String, java.lang.String>> matchRule : multiMatchRules) {
             for (final Map<java.lang.String, java.lang.String> recordMap : matchRule) {
                 attributeName = recordMap.get(IRecordGrouping.ATTRIBUTE_NAME);
@@ -137,10 +136,10 @@ public class TSwooshGrouping<TYPE> {
             DQAttribute<TYPE> attri;
             // Added TDQ-12057, when pass original & multipass, no need to pass it into OriginalRow.
             if (attribute instanceof List) {
-                attri = new DQAttribute<TYPE>(SwooshConstants.ORIGINAL_RECORD, colIdx, null);
+                attri = new DQAttribute<>(SwooshConstants.ORIGINAL_RECORD, colIdx, null);
                 hasPassedOriginal = true;
             } else {// ~
-                attri = new DQAttribute<TYPE>(StringUtils.EMPTY, colIdx, attribute);
+                attri = new DQAttribute<>(StringUtils.EMPTY, colIdx, attribute);
             }
             rowList.add(attri);
             colIdx++;
@@ -150,7 +149,9 @@ public class TSwooshGrouping<TYPE> {
     }
 
     public void swooshMatch(IRecordMatcher combinedRecordMatcher, SurvivorShipAlgorithmParams survParams) {
-        swooshMatch(combinedRecordMatcher, survParams, new GroupingCallBack());
+        swooshMatch(combinedRecordMatcher, survParams,
+                new org.talend.dataquality.record.linkage.grouping.callback.GroupingCallBack<>(this.oldGID2New,
+                        this.recordGrouping));
     }
 
     /**
@@ -160,7 +161,7 @@ public class TSwooshGrouping<TYPE> {
      * @param survParams
      */
     private void swooshMatch(IRecordMatcher combinedRecordMatcher, SurvivorShipAlgorithmParams survParams,
-            GroupingCallBack callBack) {
+            org.talend.dataquality.record.linkage.grouping.callback.GroupingCallBack callBack) {
         algorithm = (DQMFB) createTswooshAlgorithm(combinedRecordMatcher, survParams, callBack);
 
         Iterator<Record> iterator = new DQRecordIterator(totalCount, rcdsGenerators);
@@ -194,7 +195,9 @@ public class TSwooshGrouping<TYPE> {
 
     // init the algorithm before do matching.
     public void initialMFBForOneRecord(IRecordMatcher combinedRecordMatcher, SurvivorShipAlgorithmParams survParams) {
-        algorithm = (DQMFB) createTswooshAlgorithm(combinedRecordMatcher, survParams, new GroupingCallBack());
+        algorithm = (DQMFB) createTswooshAlgorithm(combinedRecordMatcher, survParams,
+                new org.talend.dataquality.record.linkage.grouping.callback.GroupingCallBack<>(this.oldGID2New,
+                        this.recordGrouping));
     }
 
     // do match on one single record,used by analysis
@@ -369,7 +372,7 @@ public class TSwooshGrouping<TYPE> {
 
     public void swooshMatchWithMultipass(CombinedRecordMatcher combinedRecordMatcher,
             SurvivorShipAlgorithmParams survivorShipAlgorithmParams, int indexGID2) {
-        groupRows = new HashMap<String, List<List<DQAttribute<?>>>>();
+        groupRows = new HashMap<>();
         // key:GID, value: list of rows in this group which are not master.
         List<RecordGenerator> notMasterRecords = new ArrayList<>();
         for (RecordGenerator record : rcdsGenerators) {
@@ -394,7 +397,8 @@ public class TSwooshGrouping<TYPE> {
         totalCount = totalCount - notMasterRecords.size();
 
         // match the masters
-        MultiPassGroupingCallBack multiPassGroupingCallBack = new MultiPassGroupingCallBack();
+        org.talend.dataquality.record.linkage.grouping.callback.MultiPassGroupingCallBack multiPassGroupingCallBack = new org.talend.dataquality.record.linkage.grouping.callback.MultiPassGroupingCallBack<>(
+                this.oldGID2New, this.recordGrouping, this.groupRows);
         multiPassGroupingCallBack.setGIDindex(indexGID2);
         swooshMatch(combinedRecordMatcher, survivorShipAlgorithmParams, multiPassGroupingCallBack);
 
@@ -408,7 +412,7 @@ public class TSwooshGrouping<TYPE> {
 
                 restoreMasterData((RichRecord) master);
                 addMembersIntoNewMaster(master, list, groupId);
-                //remove the record already handled.
+                // remove the record already handled.
                 groupRows.remove(groupId);
 
                 // use the new GID to fetch some members of old GID-- which belong to a temp master in first pass, but
@@ -417,7 +421,7 @@ public class TSwooshGrouping<TYPE> {
                 if (!StringUtils.equals(groupId, tempGid)) {
                     list = groupRows.get(tempGid);
                     addMembersIntoNewMaster(master, list, groupId);
-                    //remove the record already handled.
+                    // remove the record already handled.
                     groupRows.remove(tempGid);
                 }
             }
@@ -549,7 +553,7 @@ public class TSwooshGrouping<TYPE> {
 
         /**
          * Getter for index of group id.
-         * 
+         *
          * @return the index of group id
          */
         public int getIndexGID() {
@@ -558,7 +562,7 @@ public class TSwooshGrouping<TYPE> {
 
         /**
          * Getter for index of group quality.
-         * 
+         *
          * @return the index of group quality
          */
         public int getIndexGQ() {
@@ -579,8 +583,8 @@ public class TSwooshGrouping<TYPE> {
 
             String grpId1 = richRecord1.getGroupId();
             String grpId2 = richRecord2.getGroupId();
-            String oldgrpId1 = richRecord1.getGID() == null ? null : richRecord1.getGID().getValue(); // .getOriginRow().get(getIndexGID()).getValue();
-            String oldgrpId2 = richRecord2.getGID() == null ? null : richRecord2.getGID().getValue();// .getOriginRow().get(getIndexGID()).getValue();
+            String oldgrpId1 = richRecord1.getGID() == null ? null : richRecord1.getGID().getValue(); //
+            String oldgrpId2 = richRecord2.getGID() == null ? null : richRecord2.getGID().getValue();//
             uniqueOldGroupQuality(record1, record2);
             if (grpId1 == null && grpId2 == null) {
                 // Both records are original records.
@@ -643,7 +647,7 @@ public class TSwooshGrouping<TYPE> {
 
         /**
          * zshen Comment method "uniqueOldGroupQuality". unique group quality with min
-         * 
+         *
          * @param record1
          * @param record2
          */
@@ -662,7 +666,7 @@ public class TSwooshGrouping<TYPE> {
 
         /**
          * DOC zshen Comment method "setOldGrpQualiry".
-         * 
+         *
          * @param double1
          */
         private void setOldGrpQualiry(RichRecord richRecord, Double value) {
@@ -714,7 +718,7 @@ public class TSwooshGrouping<TYPE> {
 
         /**
          * DOC zshen Comment method "getOldGrpQualiry".
-         * 
+         *
          * @param richRecord
          * @return
          */
@@ -726,7 +730,7 @@ public class TSwooshGrouping<TYPE> {
 
         /**
          * DOC zshen Comment method "getMergeGQ".
-         * 
+         *
          * @param oldGrpQuality
          * @param confidence
          * @return minimum one
