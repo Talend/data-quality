@@ -39,6 +39,8 @@ public class DQCategory implements Serializable {
 
     private String creator;
 
+    private Date createdAt;
+
     private String technicalDataType;
 
     private List<String> countries;
@@ -207,6 +209,14 @@ public class DQCategory implements Serializable {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
     @Override

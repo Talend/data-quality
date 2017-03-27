@@ -26,6 +26,8 @@ public class DQDocument implements Serializable {
 
     private String creator;
 
+    private Date createdAt;
+
     private Date modifiedAt;
 
     private String lastModifier;
@@ -86,6 +88,14 @@ public class DQDocument implements Serializable {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
     @Override
