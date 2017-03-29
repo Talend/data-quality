@@ -59,7 +59,7 @@ public class DQCategory implements Serializable {
 
     private String lastPublisher;
 
-    private String state;
+    private CategoryState state;
 
     public String getId() {
         return id;
@@ -213,11 +213,11 @@ public class DQCategory implements Serializable {
         this.lastPublisher = lastPublisher;
     }
 
-    public String getState() {
+    public CategoryState getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(CategoryState state) {
         this.state = state;
     }
 

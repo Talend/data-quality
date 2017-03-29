@@ -32,7 +32,7 @@ public class DQDocument implements Serializable {
 
     private String lastModifier;
 
-    private String state;
+    private CategoryState state;
 
     public String getId() {
         return id;
@@ -82,11 +82,11 @@ public class DQDocument implements Serializable {
         this.lastModifier = lastModifier;
     }
 
-    public String getState() {
+    public CategoryState getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(CategoryState state) {
         this.state = state;
     }
 
