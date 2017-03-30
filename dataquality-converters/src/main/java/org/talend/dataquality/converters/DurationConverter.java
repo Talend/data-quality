@@ -32,6 +32,46 @@ import java.time.temporal.ChronoUnit;
  */
 public class DurationConverter {
 
+    /**
+     * 1 day = 24 hours.
+     */
+    private static final long num_24 = 24L;
+
+    /**
+     * 1 minite = 60 seconds
+     */
+    private static final long num_60 = 60L;
+
+    /**
+     * 1 second = 1000 milliseconds.
+     */
+    private static final long num_1000 = 1000L;
+
+    /**
+     * 1 year = 365 days.
+     */
+    private static final long num_365 = 365L;
+
+    /**
+     * 1 month = 30 days.
+     */
+    private static final long num_30 = 30L;
+
+    /**
+     * 1 week = 7 days.
+     */
+    private static final long num_7 = 7L;
+
+    /**
+     * 1 year = 52 weeks.
+     */
+    private static final long num_52 = 52L;
+
+    /**
+     * 1 year = 12 months.
+     */
+    private static final long num_12 = 12L;
+
     public static final ChronoUnit DEFAULT_FROM_UNIT = ChronoUnit.DAYS;
 
     public static final ChronoUnit DEFAULT_TO_UNIT = ChronoUnit.HOURS;
@@ -74,51 +114,55 @@ public class DurationConverter {
         }
 
         // get the days first, then use it as base to convert to the target value.
-        long days = 0;
+        long days = 0L;
         switch (this.fromUnit) {
         case MILLIS:
-            days = value / 24 / 60 / 60 / 1000;
+            days = value / num_24 / num_60 / num_60 / num_1000;
             break;
         case SECONDS:
-            days = value / 24 / 60 / 60;
+            days = value / num_24 / num_60 / num_60;
             break;
         case MINUTES:
-            days = value / 24 / 60;
+            days = value / num_24 / num_60;
             break;
         case HOURS:
-            days = value / 24;
+            days = value / num_24;
             break;
         case DAYS:
             days = value;
             break;
         case YEARS:
-            days = value * 365;
+            days = value * num_365;
             break;
         case MONTHS:
-            days = value * 30;
+            days = value * num_30;
             break;
         case WEEKS:
-            days = value * 7;
+            days = value * num_7;
+            break;
+        default:
             break;
         }
 
         switch (this.toUnit) {
         case MILLIS:
-            return getDays(value, days) * 24 * 60 * 60 * 1000;
+            return getExactDays(value, days) * num_24 * num_60 * num_60 * num_1000;
         case SECONDS:
-            return getDays(value, days) * 24 * 60 * 60;
+            return getExactDays(value, days) * num_24 * num_60 * num_60;
         case MINUTES:
-            return getDays(value, days) * 24 * 60;
+            return getExactDays(value, days) * num_24 * num_60;
         case HOURS:
-            return getDays(value, days) * 24;
+            return getExactDays(value, days) * num_24;
         case DAYS:
-            return getDays(value, days);
+            return getExactDays(value, days);
         case YEARS:
-            return new BigDecimal(days).divide(new BigDecimal(365), RoundingMode.HALF_UP).longValue();
+            return new BigDecimal(days).divide(new BigDecimal(num_365), RoundingMode.HALF_UP).longValue();
         case MONTHS:
-            return new BigDecimal(days).divide(new BigDecimal(30), RoundingMode.HALF_UP).longValue();
+            return new BigDecimal(days).divide(new BigDecimal(num_30), RoundingMode.HALF_UP).longValue();
         case WEEKS:
-            return new BigDecimal(days).divide(new BigDecimal(7), RoundingMode.UP).longValue();
+            return new BigDecimal(days).divide(new BigDecimal(num_7), RoundingMode.UP).longValue();
+        default:
+            break;
         }
         return value;
     }
@@ -130,17 +174,16 @@ public class DurationConverter {
      * @param days
      * @return
      */
-    protected long getDays(long value, long days) {
+    protected long getExactDays(long value, long days) {
         if (this.fromUnit == ChronoUnit.MONTHS) {
-            int yea = (int) (value / 12);
-            int mon = (int) (value % 12);
-            return yea * 365 + mon * 30;
+            long year = value / num_12;
+            long month = value % num_12;
+            return year * num_365 + month * num_30;
         } else if (this.fromUnit == ChronoUnit.WEEKS) {
-            int yea = (int) (value / 52);
-            int wek = (int) (value % 52);
-            return yea * 365 + wek * 7;
-        } else {
-            return days;
+            long year = value / num_52;
+            long week = value % num_52;
+            return year * num_365 + week * num_7;
         }
+        return days;
     }
 }

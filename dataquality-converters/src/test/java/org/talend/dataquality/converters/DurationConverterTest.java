@@ -29,25 +29,25 @@ public class DurationConverterTest {
 
     // 1 year = 365 days = 12 months (!= 12 * 30)
     // 1 month = 30 days
-    long year = 1;
+    private static long year = 1L;
 
-    long month = 12;
+    private static long month = 12L;
 
-    long week = 52;
+    private static long week = 52L;
 
-    long day = 365;
+    private static long day = 365L;
 
-    long hour = 8760;// 365 * 24;
+    private static long hour = 8760L;// 365 * 24;
 
-    long minute = 525600;// 365 * 24 * 60;
+    private static long minute = 525600L;// 365 * 24 * 60;
 
-    long second = 31536000;// 365 * 24 * 60 * 60;
+    private static long second = 31536000L;// 365 * 24 * 60 * 60;
 
-    long millisecond = 31536000000L;// (365 * 24 * 60 * 60 * 1000);
+    private static long millisecond = 31536000000L;// (365 * 24 * 60 * 60 * 1000);
 
     @Test
     public void testConvertZero() {
-        long zero = 0;
+        long zero = 0L;
         assertEquals(zero,
                 new DurationConverter(DurationConverter.DEFAULT_FROM_UNIT, DurationConverter.DEFAULT_TO_UNIT).convert(zero));
     }
