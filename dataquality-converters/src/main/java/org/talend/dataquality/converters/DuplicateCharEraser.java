@@ -24,16 +24,14 @@ import org.apache.commons.lang.StringUtils;
  */
 public class DuplicateCharEraser {
 
-
     private Pattern removeRepeatCharPattern = null;
-
 
     /**
      *
      * This constructor is used to remove WhiteSpace chars like as " ","\t","\r","\n","\f".
      */
     public DuplicateCharEraser() {
-        this("([\\s\\u0085\\p{Z}])"); //$NON-NLS-1$
+        removeRepeatCharPattern = Pattern.compile("(" + "([\\s\\u0085\\p{Z}]|\r\n)" + ")\\1+"); //$NON-NLS-1$//$NON-NLS-2$
     }
 
     /**
@@ -43,10 +41,8 @@ public class DuplicateCharEraser {
      * @param repeatStr
      * @throws IllegalArgumentException
      */
-    public DuplicateCharEraser(String repeatStr) throws IllegalArgumentException {
-        if (!StringUtils.isEmpty(repeatStr)) {
-            removeRepeatCharPattern = Pattern.compile("(" + repeatStr + ")\\1+"); //$NON-NLS-1$//$NON-NLS-2$
-        }
+    public DuplicateCharEraser(char repeatStr) throws IllegalArgumentException {
+        removeRepeatCharPattern = Pattern.compile("([" + repeatStr + "])\\1+"); //$NON-NLS-1$//$NON-NLS-2$
     }
 
     /**
@@ -63,6 +59,5 @@ public class DuplicateCharEraser {
         Matcher matcher = removeRepeatCharPattern.matcher(inputStr);
         return matcher.replaceAll("$1"); //$NON-NLS-1$
     }
-
 
 }
