@@ -46,6 +46,15 @@ public class DurationConverterTest {
     private static long millisecond = 31536000000L;// (365 * 24 * 60 * 60 * 1000);
 
     @Test
+    public void testConvertMonths2Days() {
+        assertEquals(1 * 365 + 1 * 30, new DurationConverter(ChronoUnit.MONTHS, ChronoUnit.DAYS).convert(13));
+        assertNotEquals(13 * 30, new DurationConverter(ChronoUnit.MONTHS, ChronoUnit.DAYS).convert(13));
+
+        assertEquals(5 * 7, new DurationConverter(ChronoUnit.WEEKS, ChronoUnit.DAYS).convert(5));
+        assertEquals(5, new DurationConverter(ChronoUnit.MONTHS, ChronoUnit.WEEKS).convert(1));
+    }
+
+    @Test
     public void testConvertZero() {
         long zero = 0L;
         assertEquals(zero,

@@ -91,8 +91,8 @@ public class DurationConverter {
     /**
      * ConverterDuration Constructor.
      *
-     * @param from - the from ChronoUnit, default value is ChronoUnit.MILE.
-     * @param to - the to ChronoUnit, default value is ChronoUnit.second.
+     * @param from - the from ChronoUnit, default value is ChronoUnit.DAYS.
+     * @param to - the to ChronoUnit, default value is ChronoUnit.HOURS.
      */
     public DurationConverter(ChronoUnit from, ChronoUnit to) {
         this.fromUnit = from == null ? DEFAULT_FROM_UNIT : from;
@@ -168,7 +168,14 @@ public class DurationConverter {
     }
 
     /**
-     * get the days more exactly with what we want.
+     * get the days more exactly with what we want. because:
+     * 1 year = 365 days = 12 months (!= 12 * 30)
+     * 1 month = 30 days
+     * 1 week = 7 days
+     * 
+     * for example:
+     * 13 months = 1*365+1*30 != 13*30.
+     * 5 weeks = 5*7 != 1*30+1*7
      * 
      * @param value
      * @param days
