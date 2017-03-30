@@ -51,7 +51,9 @@ public class CardinalityHLLStatistics {
 
     public void setHyperLogLog(HyperLogLog hyperLogLog2) {
         this.hyperLogLog = hyperLogLog2;
-
     }
-
+    
+    public void setCount(long count) {
+        this.count = count;
+    }
 }
