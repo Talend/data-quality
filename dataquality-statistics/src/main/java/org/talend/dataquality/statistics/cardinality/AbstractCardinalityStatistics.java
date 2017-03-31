@@ -7,14 +7,6 @@ public abstract class AbstractCardinalityStatistics {
 
     protected long count = 0;
 
-    public long getCount() {
-        return this.count;
-    }
-
-    public void setCount(long count) {
-        this.count = count;
-    }
-
     public void incrementCount() {
         this.count++;
     }
@@ -24,4 +16,6 @@ public abstract class AbstractCardinalityStatistics {
     public long getDuplicateCount() {
         return this.count - getDistinctCount();
     }
+
+    public abstract boolean merge(AbstractCardinalityStatistics other);
 }
