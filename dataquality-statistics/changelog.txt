@@ -1,3 +1,5 @@
+TDQ-13389: add the class AbstractCardinalityStatistics
+
 V1.5.6 2016-12-09
 	(no change in this version)
 

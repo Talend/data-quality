@@ -26,11 +26,13 @@ public class DQDocument implements Serializable {
 
     private String creator;
 
+    private Date createdAt;
+
     private Date modifiedAt;
 
     private String lastModifier;
 
-    private Boolean draft;
+    private CategoryState state;
 
     public String getId() {
         return id;
@@ -80,17 +82,25 @@ public class DQDocument implements Serializable {
         this.lastModifier = lastModifier;
     }
 
-    public Boolean getDraft() {
-        return draft;
+    public CategoryState getState() {
+        return state;
     }
 
-    public void setDraft(Boolean draft) {
-        this.draft = draft;
+    public void setState(CategoryState state) {
+        this.state = state;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
     @Override
     public String toString() {
         return "DQDocument{" + "id='" + id + '\'' + ", categoryName=" + category.getName() + ", values='" + values + '\''
-                + ", creator='" + creator + '\'' + ", lastModifier='" + lastModifier + '\'' + ", draft='" + draft + '\'' + '}';
+                + ", creator='" + creator + '\'' + ", lastModifier='" + lastModifier + '\'' + ", state='" + state + '\'' + '}';
     }
 }

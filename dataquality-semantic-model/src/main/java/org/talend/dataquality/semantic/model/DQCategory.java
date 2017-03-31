@@ -39,6 +39,8 @@ public class DQCategory implements Serializable {
 
     private String creator;
 
+    private Date createdAt;
+
     private String technicalDataType;
 
     private List<String> countries;
@@ -53,11 +55,11 @@ public class DQCategory implements Serializable {
 
     private Boolean completeness;
 
-    private Boolean draft;
+    private Date publishedAt;
 
-    private Boolean published;
+    private String lastPublisher;
 
-    private Date lastPublished;
+    private CategoryState state;
 
     public String getId() {
         return id;
@@ -195,27 +197,43 @@ public class DQCategory implements Serializable {
         this.lastModifier = lastModifier;
     }
 
-    public Boolean getDraft() {
-        return draft;
+    public Date getPublishedAt() {
+        return publishedAt;
     }
 
-    public void setDraft(Boolean draft) {
-        this.draft = draft;
+    public void setPublishedAt(Date publishedAt) {
+        this.publishedAt = publishedAt;
     }
 
-    public Boolean getPublished() {
-        return published;
+    public String getLastPublisher() {
+        return lastPublisher;
     }
 
-    public void setPublished(Boolean published) {
-        this.published = published;
+    public void setLastPublisher(String lastPublisher) {
+        this.lastPublisher = lastPublisher;
+    }
+
+    public CategoryState getState() {
+        return state;
+    }
+
+    public void setState(CategoryState state) {
+        this.state = state;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
     @Override
     public String toString() {
         return String.format(
-                "Category [ID=%s  Type=%s  Name=%-20s  Label=%-20s  Completeness=%-5s  Description=%s Creator=%s Last Modifier=%s Draft=%-5s Published=%-5s Last published=%s]",
-                id, type, name, label, completeness, description, creator, lastModifier, draft, published, lastPublished);
+                "Category [ID=%s  Type=%s  Name=%-20s  Label=%-20s  Completeness=%-5s  Description=%s Creator=%s Last Modifier=%s State=%-20s Last published=%s]",
+                id, type, name, label, completeness, description, creator, lastModifier, state, publishedAt);
     }
 
 }
