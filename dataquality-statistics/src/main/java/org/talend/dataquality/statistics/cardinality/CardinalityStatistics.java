@@ -19,7 +19,7 @@ import java.util.Set;
 
 /**
  * Compute cardinalities in memory, use {@link CardinalityHLLAnalyzer} instead if large data set are computed.
- *
+ * 
  * @author zhao
  */
 public class CardinalityStatistics extends AbstractCardinalityStatistics {
@@ -54,5 +54,4 @@ public class CardinalityStatistics extends AbstractCardinalityStatistics {
 
         return true;
     }
-
 }
