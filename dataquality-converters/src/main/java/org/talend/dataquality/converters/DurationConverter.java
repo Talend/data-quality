@@ -160,11 +160,14 @@ public class DurationConverter {
         case DAYS:
             return getExactDays(value, days);
         case YEARS:
-            return new BigDecimal(days).divide(new BigDecimal(num_365), RoundingMode.HALF_UP).longValue();
+            return new BigDecimal(String.valueOf(days)).divide(new BigDecimal(String.valueOf(num_365)), RoundingMode.HALF_UP)
+                    .longValue();
         case MONTHS:
-            return new BigDecimal(days).divide(new BigDecimal(num_30), RoundingMode.HALF_UP).longValue();
+            return new BigDecimal(String.valueOf(days)).divide(new BigDecimal(String.valueOf(num_30)), RoundingMode.HALF_UP)
+                    .longValue();
         case WEEKS:
-            return new BigDecimal(days).divide(new BigDecimal(num_7), RoundingMode.UP).longValue();
+            return new BigDecimal(String.valueOf(days)).divide(new BigDecimal(String.valueOf(num_7)), RoundingMode.UP)
+                    .longValue();
         default:
             break;
         }
