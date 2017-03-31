@@ -29,140 +29,149 @@ public class DurationConverterTest {
 
     // 1 year = 365 days = 12 months (!= 12 * 30)
     // 1 month = 30 days
-    private static long year = 1L;
+    private static double year = 1;
 
-    private static long month = 12L;
+    private static double month = 12;
 
-    private static long week = 52L;
+    private static double week = 52;
 
-    private static long day = 365L;
+    private static double day = 365;
 
-    private static long hour = 8760L;// 365 * 24;
+    private static double hour = 8760;// 365 * 24;
 
-    private static long minute = 525600L;// 365 * 24 * 60;
+    private static double minute = 525600;// 365 * 24 * 60;
 
-    private static long second = 31536000L;// 365 * 24 * 60 * 60;
+    private static double second = 31536000;// 365 * 24 * 60 * 60;
 
-    private static long millisecond = 31536000000L;// (365 * 24 * 60 * 60 * 1000);
+    private static double millisecond = 31536000000L;// (365 * 24 * 60 * 60 * 1000);
 
     @Test
     public void testConvertMonths2Days() {
-        assertEquals(1 * 365 + 1 * 30, new DurationConverter(ChronoUnit.MONTHS, ChronoUnit.DAYS).convert(13));
-        assertNotEquals(13 * 30, new DurationConverter(ChronoUnit.MONTHS, ChronoUnit.DAYS).convert(13));
+        assertEquals(1 * 365 + 1 * 30, new DurationConverter(ChronoUnit.MONTHS, ChronoUnit.DAYS).convert(13), delta);
+        assertNotEquals(13 * 30, new DurationConverter(ChronoUnit.MONTHS, ChronoUnit.DAYS).convert(13), delta);
 
-        assertEquals(5 * 7, new DurationConverter(ChronoUnit.WEEKS, ChronoUnit.DAYS).convert(5));
-        assertEquals(5, new DurationConverter(ChronoUnit.MONTHS, ChronoUnit.WEEKS).convert(1));
+        assertEquals(5 * 7, new DurationConverter(ChronoUnit.WEEKS, ChronoUnit.DAYS).convert(5), delta);
+        assertEquals(5, new DurationConverter(ChronoUnit.MONTHS, ChronoUnit.WEEKS).convert(1), delta);
     }
 
     @Test
     public void testConvertZero() {
-        long zero = 0L;
+        double zero = 0;
         assertEquals(zero,
-                new DurationConverter(DurationConverter.DEFAULT_FROM_UNIT, DurationConverter.DEFAULT_TO_UNIT).convert(zero));
+                new DurationConverter(DurationConverter.DEFAULT_FROM_UNIT, DurationConverter.DEFAULT_TO_UNIT).convert(zero),
+                delta);
+    }
+
+    @Test
+    public void testConvertDoubleNan() {
+        double nan = Double.NaN;
+        assertEquals(nan,
+                new DurationConverter(DurationConverter.DEFAULT_FROM_UNIT, DurationConverter.DEFAULT_TO_UNIT).convert(nan),
+                delta);
     }
 
     @Test
     public void testConvertMaxValue() {
-        long max = Long.MAX_VALUE;
-        assertEquals(max, new DurationConverter(ChronoUnit.YEARS, ChronoUnit.MONTHS).convert(max));
-        assertEquals(max, new DurationConverter(ChronoUnit.MONTHS, ChronoUnit.YEARS).convert(max));
+        double max = Double.MAX_VALUE;
+        assertEquals(max, new DurationConverter(ChronoUnit.YEARS, ChronoUnit.MONTHS).convert(max), delta);
+        assertEquals(max, new DurationConverter(ChronoUnit.MONTHS, ChronoUnit.YEARS).convert(max), delta);
     }
 
     @Test
     public void testConvertMinValue() {
-        long min = Long.MIN_VALUE;
-        assertEquals(min, new DurationConverter(ChronoUnit.MONTHS, ChronoUnit.YEARS).convert(min));
-        assertEquals(min, new DurationConverter(ChronoUnit.YEARS, ChronoUnit.MONTHS).convert(min));
+        double min = Double.MIN_VALUE;
+        assertEquals(min, new DurationConverter(ChronoUnit.MONTHS, ChronoUnit.YEARS).convert(min), delta);
+        assertEquals(min, new DurationConverter(ChronoUnit.YEARS, ChronoUnit.MONTHS).convert(min), delta);
     }
 
     @Test
     public void testConvertDefault() {
-        long day = 1;
-        long hour = 24;
-        assertEquals(hour, new DurationConverter().convert(day));
+        double day = 1;
+        double hour = 24;
+        assertEquals(hour, new DurationConverter().convert(day), delta);
     }
 
     @Test
     public void testConvertYEARS() {
-        assertEquals(year, new DurationConverter(ChronoUnit.YEARS, ChronoUnit.YEARS).convert(year));
-        assertEquals(month, new DurationConverter(ChronoUnit.YEARS, ChronoUnit.MONTHS).convert(year));
+        assertEquals(year, new DurationConverter(ChronoUnit.YEARS, ChronoUnit.YEARS).convert(year), delta);
+        assertEquals(month, new DurationConverter(ChronoUnit.YEARS, ChronoUnit.MONTHS).convert(year), delta);
         assertEquals(week, new DurationConverter(ChronoUnit.YEARS, ChronoUnit.WEEKS).convert(year), delta);
-        assertEquals(day, new DurationConverter(ChronoUnit.YEARS, ChronoUnit.DAYS).convert(year));
-        assertEquals(hour, new DurationConverter(ChronoUnit.YEARS, ChronoUnit.HOURS).convert(year));
-        assertEquals(minute, new DurationConverter(ChronoUnit.YEARS, ChronoUnit.MINUTES).convert(year));
-        assertEquals(second, new DurationConverter(ChronoUnit.YEARS, ChronoUnit.SECONDS).convert(year));
-        assertEquals(millisecond, new DurationConverter(ChronoUnit.YEARS, ChronoUnit.MILLIS).convert(year));
+        assertEquals(day, new DurationConverter(ChronoUnit.YEARS, ChronoUnit.DAYS).convert(year), delta);
+        assertEquals(hour, new DurationConverter(ChronoUnit.YEARS, ChronoUnit.HOURS).convert(year), delta);
+        assertEquals(minute, new DurationConverter(ChronoUnit.YEARS, ChronoUnit.MINUTES).convert(year), delta);
+        assertEquals(second, new DurationConverter(ChronoUnit.YEARS, ChronoUnit.SECONDS).convert(year), delta);
+        assertEquals(millisecond, new DurationConverter(ChronoUnit.YEARS, ChronoUnit.MILLIS).convert(year), delta);
     }
 
     @Test
     public void testConvertMONTHS() {
-        assertEquals(year, new DurationConverter(ChronoUnit.MONTHS, ChronoUnit.YEARS).convert(month));
-        assertEquals(month, new DurationConverter(ChronoUnit.MONTHS, ChronoUnit.MONTHS).convert(month));
-        assertEquals(week, new DurationConverter(ChronoUnit.MONTHS, ChronoUnit.WEEKS).convert(month));
-        assertEquals(day, new DurationConverter(ChronoUnit.MONTHS, ChronoUnit.DAYS).convert(month));
-        assertEquals(hour, new DurationConverter(ChronoUnit.MONTHS, ChronoUnit.HOURS).convert(month));
-        assertEquals(minute, new DurationConverter(ChronoUnit.MONTHS, ChronoUnit.MINUTES).convert(month));
-        assertEquals(second, new DurationConverter(ChronoUnit.MONTHS, ChronoUnit.SECONDS).convert(month));
-        assertEquals(millisecond, new DurationConverter(ChronoUnit.MONTHS, ChronoUnit.MILLIS).convert(month));
+        assertEquals(year, new DurationConverter(ChronoUnit.MONTHS, ChronoUnit.YEARS).convert(month), delta);
+        assertEquals(month, new DurationConverter(ChronoUnit.MONTHS, ChronoUnit.MONTHS).convert(month), delta);
+        assertEquals(week, new DurationConverter(ChronoUnit.MONTHS, ChronoUnit.WEEKS).convert(month), delta);
+        assertEquals(day, new DurationConverter(ChronoUnit.MONTHS, ChronoUnit.DAYS).convert(month), delta);
+        assertEquals(hour, new DurationConverter(ChronoUnit.MONTHS, ChronoUnit.HOURS).convert(month), delta);
+        assertEquals(minute, new DurationConverter(ChronoUnit.MONTHS, ChronoUnit.MINUTES).convert(month), delta);
+        assertEquals(second, new DurationConverter(ChronoUnit.MONTHS, ChronoUnit.SECONDS).convert(month), delta);
+        assertEquals(millisecond, new DurationConverter(ChronoUnit.MONTHS, ChronoUnit.MILLIS).convert(month), delta);
     }
 
     @Test
     public void testConvertWEEKS() {
-        assertEquals(year, new DurationConverter(ChronoUnit.WEEKS, ChronoUnit.YEARS).convert(week));
-        assertEquals(month, new DurationConverter(ChronoUnit.WEEKS, ChronoUnit.MONTHS).convert(week));
-        assertEquals(week, new DurationConverter(ChronoUnit.WEEKS, ChronoUnit.WEEKS).convert(week));
-        assertEquals(day, new DurationConverter(ChronoUnit.WEEKS, ChronoUnit.DAYS).convert(week));
-        assertEquals(hour, new DurationConverter(ChronoUnit.WEEKS, ChronoUnit.HOURS).convert(week));
-        assertEquals(minute, new DurationConverter(ChronoUnit.WEEKS, ChronoUnit.MINUTES).convert(week));
-        assertEquals(second, new DurationConverter(ChronoUnit.WEEKS, ChronoUnit.SECONDS).convert(week));
-        assertEquals(millisecond, new DurationConverter(ChronoUnit.WEEKS, ChronoUnit.MILLIS).convert(week));
+        assertEquals(year, new DurationConverter(ChronoUnit.WEEKS, ChronoUnit.YEARS).convert(week), delta);
+        assertEquals(month, new DurationConverter(ChronoUnit.WEEKS, ChronoUnit.MONTHS).convert(week), delta);
+        assertEquals(week, new DurationConverter(ChronoUnit.WEEKS, ChronoUnit.WEEKS).convert(week), delta);
+        assertEquals(day, new DurationConverter(ChronoUnit.WEEKS, ChronoUnit.DAYS).convert(week), delta);
+        assertEquals(hour, new DurationConverter(ChronoUnit.WEEKS, ChronoUnit.HOURS).convert(week), delta);
+        assertEquals(minute, new DurationConverter(ChronoUnit.WEEKS, ChronoUnit.MINUTES).convert(week), delta);
+        assertEquals(second, new DurationConverter(ChronoUnit.WEEKS, ChronoUnit.SECONDS).convert(week), delta);
+        assertEquals(millisecond, new DurationConverter(ChronoUnit.WEEKS, ChronoUnit.MILLIS).convert(week), delta);
     }
 
     @Test
     public void testConvertHOURS() {
-        assertEquals(year, new DurationConverter(ChronoUnit.HOURS, ChronoUnit.YEARS).convert(hour));
-        assertEquals(month, new DurationConverter(ChronoUnit.HOURS, ChronoUnit.MONTHS).convert(hour));
+        assertEquals(year, new DurationConverter(ChronoUnit.HOURS, ChronoUnit.YEARS).convert(hour), delta);
+        assertEquals(month, new DurationConverter(ChronoUnit.HOURS, ChronoUnit.MONTHS).convert(hour), delta);
         assertEquals(week, new DurationConverter(ChronoUnit.HOURS, ChronoUnit.WEEKS).convert(hour), delta);
-        assertEquals(day, new DurationConverter(ChronoUnit.HOURS, ChronoUnit.DAYS).convert(hour));
-        assertEquals(hour, new DurationConverter(ChronoUnit.HOURS, ChronoUnit.HOURS).convert(hour));
-        assertEquals(minute, new DurationConverter(ChronoUnit.HOURS, ChronoUnit.MINUTES).convert(hour));
-        assertEquals(second, new DurationConverter(ChronoUnit.HOURS, ChronoUnit.SECONDS).convert(hour));
-        assertEquals(millisecond, new DurationConverter(ChronoUnit.HOURS, ChronoUnit.MILLIS).convert(hour));
+        assertEquals(day, new DurationConverter(ChronoUnit.HOURS, ChronoUnit.DAYS).convert(hour), delta);
+        assertEquals(hour, new DurationConverter(ChronoUnit.HOURS, ChronoUnit.HOURS).convert(hour), delta);
+        assertEquals(minute, new DurationConverter(ChronoUnit.HOURS, ChronoUnit.MINUTES).convert(hour), delta);
+        assertEquals(second, new DurationConverter(ChronoUnit.HOURS, ChronoUnit.SECONDS).convert(hour), delta);
+        assertEquals(millisecond, new DurationConverter(ChronoUnit.HOURS, ChronoUnit.MILLIS).convert(hour), delta);
     }
 
     @Test
     public void testConvertMINUTES() {
-        assertEquals(year, new DurationConverter(ChronoUnit.MINUTES, ChronoUnit.YEARS).convert(minute));
-        assertEquals(month, new DurationConverter(ChronoUnit.MINUTES, ChronoUnit.MONTHS).convert(minute));
+        assertEquals(year, new DurationConverter(ChronoUnit.MINUTES, ChronoUnit.YEARS).convert(minute), delta);
+        assertEquals(month, new DurationConverter(ChronoUnit.MINUTES, ChronoUnit.MONTHS).convert(minute), delta);
         assertEquals(week, new DurationConverter(ChronoUnit.MINUTES, ChronoUnit.WEEKS).convert(minute), delta);
-        assertEquals(day, new DurationConverter(ChronoUnit.MINUTES, ChronoUnit.DAYS).convert(minute));
-        assertEquals(hour, new DurationConverter(ChronoUnit.MINUTES, ChronoUnit.HOURS).convert(minute));
-        assertEquals(minute, new DurationConverter(ChronoUnit.MINUTES, ChronoUnit.MINUTES).convert(minute));
-        assertEquals(second, new DurationConverter(ChronoUnit.MINUTES, ChronoUnit.SECONDS).convert(minute));
-        assertEquals(millisecond, new DurationConverter(ChronoUnit.MINUTES, ChronoUnit.MILLIS).convert(minute));
+        assertEquals(day, new DurationConverter(ChronoUnit.MINUTES, ChronoUnit.DAYS).convert(minute), delta);
+        assertEquals(hour, new DurationConverter(ChronoUnit.MINUTES, ChronoUnit.HOURS).convert(minute), delta);
+        assertEquals(minute, new DurationConverter(ChronoUnit.MINUTES, ChronoUnit.MINUTES).convert(minute), delta);
+        assertEquals(second, new DurationConverter(ChronoUnit.MINUTES, ChronoUnit.SECONDS).convert(minute), delta);
+        assertEquals(millisecond, new DurationConverter(ChronoUnit.MINUTES, ChronoUnit.MILLIS).convert(minute), delta);
     }
 
     @Test
     public void testConvertSECONDS() {
-        assertEquals(year, new DurationConverter(ChronoUnit.SECONDS, ChronoUnit.YEARS).convert(second));
-        assertEquals(month, new DurationConverter(ChronoUnit.SECONDS, ChronoUnit.MONTHS).convert(second));
+        assertEquals(year, new DurationConverter(ChronoUnit.SECONDS, ChronoUnit.YEARS).convert(second), delta);
+        assertEquals(month, new DurationConverter(ChronoUnit.SECONDS, ChronoUnit.MONTHS).convert(second), delta);
         assertEquals(week, new DurationConverter(ChronoUnit.SECONDS, ChronoUnit.WEEKS).convert(second), delta);
-        assertEquals(day, new DurationConverter(ChronoUnit.SECONDS, ChronoUnit.DAYS).convert(second));
-        assertEquals(hour, new DurationConverter(ChronoUnit.SECONDS, ChronoUnit.HOURS).convert(second));
-        assertEquals(minute, new DurationConverter(ChronoUnit.SECONDS, ChronoUnit.MINUTES).convert(second));
-        assertEquals(second, new DurationConverter(ChronoUnit.SECONDS, ChronoUnit.SECONDS).convert(second));
-        assertEquals(millisecond, new DurationConverter(ChronoUnit.SECONDS, ChronoUnit.MILLIS).convert(second));
+        assertEquals(day, new DurationConverter(ChronoUnit.SECONDS, ChronoUnit.DAYS).convert(second), delta);
+        assertEquals(hour, new DurationConverter(ChronoUnit.SECONDS, ChronoUnit.HOURS).convert(second), delta);
+        assertEquals(minute, new DurationConverter(ChronoUnit.SECONDS, ChronoUnit.MINUTES).convert(second), delta);
+        assertEquals(second, new DurationConverter(ChronoUnit.SECONDS, ChronoUnit.SECONDS).convert(second), delta);
+        assertEquals(millisecond, new DurationConverter(ChronoUnit.SECONDS, ChronoUnit.MILLIS).convert(second), delta);
     }
 
     @Test
     public void testConvertMILLIS() {
-        assertEquals(year, new DurationConverter(ChronoUnit.MILLIS, ChronoUnit.YEARS).convert(millisecond));
-        assertEquals(month, new DurationConverter(ChronoUnit.MILLIS, ChronoUnit.MONTHS).convert(millisecond));
+        assertEquals(year, new DurationConverter(ChronoUnit.MILLIS, ChronoUnit.YEARS).convert(millisecond), delta);
+        assertEquals(month, new DurationConverter(ChronoUnit.MILLIS, ChronoUnit.MONTHS).convert(millisecond), delta);
         assertEquals(week, new DurationConverter(ChronoUnit.MILLIS, ChronoUnit.WEEKS).convert(millisecond), delta);
-        assertEquals(day, new DurationConverter(ChronoUnit.MILLIS, ChronoUnit.DAYS).convert(millisecond));
-        assertEquals(hour, new DurationConverter(ChronoUnit.MILLIS, ChronoUnit.HOURS).convert(millisecond));
-        assertEquals(minute, new DurationConverter(ChronoUnit.MILLIS, ChronoUnit.MINUTES).convert(millisecond));
-        assertEquals(second, new DurationConverter(ChronoUnit.MILLIS, ChronoUnit.SECONDS).convert(millisecond));
-        assertEquals(millisecond, new DurationConverter(ChronoUnit.MILLIS, ChronoUnit.MILLIS).convert(millisecond));
+        assertEquals(day, new DurationConverter(ChronoUnit.MILLIS, ChronoUnit.DAYS).convert(millisecond), delta);
+        assertEquals(hour, new DurationConverter(ChronoUnit.MILLIS, ChronoUnit.HOURS).convert(millisecond), delta);
+        assertEquals(minute, new DurationConverter(ChronoUnit.MILLIS, ChronoUnit.MINUTES).convert(millisecond), delta);
+        assertEquals(second, new DurationConverter(ChronoUnit.MILLIS, ChronoUnit.SECONDS).convert(millisecond), delta);
+        assertEquals(millisecond, new DurationConverter(ChronoUnit.MILLIS, ChronoUnit.MILLIS).convert(millisecond), delta);
     }
 }

@@ -35,42 +35,42 @@ public class DurationConverter {
     /**
      * 1 day = 24 hours.
      */
-    private static final long num_24 = 24L;
+    private static final double num_24 = 24;
 
     /**
      * 1 minite = 60 seconds
      */
-    private static final long num_60 = 60L;
+    private static final double num_60 = 60;
 
     /**
      * 1 second = 1000 milliseconds.
      */
-    private static final long num_1000 = 1000L;
+    private static final double num_1000 = 1000;
 
     /**
      * 1 year = 365 days.
      */
-    private static final long num_365 = 365L;
+    private static final double num_365 = 365;
 
     /**
      * 1 month = 30 days.
      */
-    private static final long num_30 = 30L;
+    private static final double num_30 = 30;
 
     /**
      * 1 week = 7 days.
      */
-    private static final long num_7 = 7L;
+    private static final double num_7 = 7;
 
     /**
      * 1 year = 52 weeks.
      */
-    private static final long num_52 = 52L;
+    private static final double num_52 = 52;
 
     /**
      * 1 year = 12 months.
      */
-    private static final long num_12 = 12L;
+    private static final double num_12 = 12;
 
     public static final ChronoUnit DEFAULT_FROM_UNIT = ChronoUnit.DAYS;
 
@@ -105,8 +105,12 @@ public class DurationConverter {
      * @param value
      * @return long
      */
-    public long convert(long value) {
-        if (Long.MAX_VALUE == value || Long.MIN_VALUE == value) {
+    public double convert(double value) {
+        if (Double.isNaN(value)) {
+            return value;
+        }
+
+        if (Double.MAX_VALUE == value || Double.MIN_VALUE == value) {
             return value;
         }
         if (this.fromUnit.equals(this.toUnit)) {
@@ -114,7 +118,7 @@ public class DurationConverter {
         }
 
         // get the days first, then use it as base to convert to the target value.
-        long days = 0L;
+        double days = 0;
         switch (this.fromUnit) {
         case MILLIS:
             days = value / num_24 / num_60 / num_60 / num_1000;
@@ -181,14 +185,14 @@ public class DurationConverter {
      * @param days
      * @return
      */
-    protected long getExactDays(long value, long days) {
+    protected double getExactDays(double value, double days) {
         if (this.fromUnit == ChronoUnit.MONTHS) {
-            long year = value / num_12;
-            long month = value % num_12;
+            int year = (int) (value / num_12);
+            int month = (int) (value % num_12);
             return year * num_365 + month * num_30;
         } else if (this.fromUnit == ChronoUnit.WEEKS) {
-            long year = value / num_52;
-            long week = value % num_52;
+            int year = (int) (value / num_52);
+            int week = (int) (value % num_52);
             return year * num_365 + week * num_7;
         }
         return days;
