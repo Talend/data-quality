@@ -31,11 +31,12 @@ public class CardinalityHLLStatistics extends AbstractCardinalityStatistics {
         return hyperLogLog;
     }
 
+    public void setHyperLogLog(HyperLogLog hyperLogLog2) {
+        this.hyperLogLog = hyperLogLog2;
+    }
+
     public long getDistinctCount() {
         return hyperLogLog.cardinality();
     }
 
-    public void setHyperLogLog(HyperLogLog hyperLogLog2) {
-        this.hyperLogLog = hyperLogLog2;
-    }
 }
