@@ -16,31 +16,21 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Compute cardinalities in memory, use {@link #CardinalityHLLAnalyzer()} instead if large data set are computed.
+ * Compute cardinalities in memory, use {@link CardinalityHLLAnalyzer} instead if large data set are computed.
  * 
  * @author zhao
  *
  */
-public class CardinalityStatistics {
+public class CardinalityStatistics extends AbstractCardinalityStatistics {
 
     private final Set<String> distinctData = new HashSet<>();
-
-    private long count = 0;
 
     public void add(String colStr) {
         distinctData.add(colStr);
     }
 
-    public void incrementCount() {
-        count++;
-    }
-
     public long getDistinctCount() {
         return distinctData.size();
-    }
-
-    public long getDuplicateCount() {
-        return count - getDistinctCount();
     }
 
 }
