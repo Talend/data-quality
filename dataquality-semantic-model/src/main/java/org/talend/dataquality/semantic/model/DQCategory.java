@@ -61,6 +61,10 @@ public class DQCategory implements Serializable {
 
     private CategoryState state;
 
+    private List<DQCategory> childrenCategories;
+
+    private List<DQCategory> parentsCategories;
+
     public String getId() {
         return id;
     }
@@ -227,6 +231,22 @@ public class DQCategory implements Serializable {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public List<DQCategory> getChildrenCategories() {
+        return childrenCategories;
+    }
+
+    public void setChildrenCategories(List<DQCategory> childrenCategories) {
+        this.childrenCategories = childrenCategories;
+    }
+
+    public List<DQCategory> getParentsCategories() {
+        return parentsCategories;
+    }
+
+    public void setParentsCategories(List<DQCategory> parentsCategories) {
+        this.parentsCategories = parentsCategories;
     }
 
     @Override
