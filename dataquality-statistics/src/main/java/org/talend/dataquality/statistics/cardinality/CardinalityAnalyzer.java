@@ -20,10 +20,9 @@ import org.talend.dataquality.common.inference.ResizableList;
 
 /**
  * Be caution that this implementation will lead to serious memory issues when data becoming large. Use {
- * {@link #CardianlityHLLAnalyzer()} instead by loose the precision.
- * 
- * @author zhao
+ * {@link CardinalityHLLAnalyzer} instead by loose the precision.
  *
+ * @author zhao
  */
 public class CardinalityAnalyzer implements Analyzer<CardinalityStatistics> {
 
