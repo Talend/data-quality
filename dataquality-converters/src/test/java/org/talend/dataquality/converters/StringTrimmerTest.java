@@ -37,52 +37,52 @@ public class StringTrimmerTest {
         // assertNotEquals("\t", '\u0009');
         // assertNotEquals("\t", "\\u0009");
 
-        StringTrimmer stringConverter = new StringTrimmer();
+        StringTrimmer stringTrimmer = new StringTrimmer();
 
         // test for default character (whitespace)
-        assertEquals(expected, stringConverter.removeTrailingAndLeading(expected));
-        assertEquals(expected, stringConverter.removeTrailingAndLeading(" abc")); //$NON-NLS-1$
-        assertEquals(expected, stringConverter.removeTrailingAndLeading(" abc ")); //$NON-NLS-1$
-        assertEquals(expected, stringConverter.removeTrailingAndLeading(" abc  ")); //$NON-NLS-1$
-        assertEquals(expected, stringConverter.removeTrailingAndLeading("  abc ")); //$NON-NLS-1$
-        assertEquals(expected, stringConverter.removeTrailingAndLeading("  abc  ")); //$NON-NLS-1$
-        assertEquals("ab c", stringConverter.removeTrailingAndLeading(" ab c")); //$NON-NLS-1$ //$NON-NLS-2$
-        assertEquals("a b c", stringConverter.removeTrailingAndLeading(" a b c ")); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals(expected, stringTrimmer.removeTrailingAndLeading(expected));
+        assertEquals(expected, stringTrimmer.removeTrailingAndLeading(" abc")); //$NON-NLS-1$
+        assertEquals(expected, stringTrimmer.removeTrailingAndLeading(" abc ")); //$NON-NLS-1$
+        assertEquals(expected, stringTrimmer.removeTrailingAndLeading(" abc  ")); //$NON-NLS-1$
+        assertEquals(expected, stringTrimmer.removeTrailingAndLeading("  abc ")); //$NON-NLS-1$
+        assertEquals(expected, stringTrimmer.removeTrailingAndLeading("  abc  ")); //$NON-NLS-1$
+        assertEquals("ab c", stringTrimmer.removeTrailingAndLeading(" ab c")); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("a b c", stringTrimmer.removeTrailingAndLeading(" a b c ")); //$NON-NLS-1$ //$NON-NLS-2$
 
         // test for other characters
-        assertEquals(expected, stringConverter.removeTrailingAndLeading("\t" + expected, "\t")); //$NON-NLS-1$ //$NON-NLS-2$ 
-        assertEquals(expected, stringConverter.removeTrailingAndLeading(expected + "\t", "\t")); //$NON-NLS-1$ //$NON-NLS-2$
-        assertEquals(expected, stringConverter.removeTrailingAndLeading('\u0009' + expected, "\t")); //$NON-NLS-1$
-        assertEquals(expected, stringConverter.removeTrailingAndLeading('\u0009' + expected, '\u0009' + "")); //$NON-NLS-1$
-        assertEquals(expected, stringConverter.removeTrailingAndLeading('\u0009' + expected + '\u0009' + '\u0009', "\t")); //$NON-NLS-1$
+        assertEquals(expected, stringTrimmer.removeTrailingAndLeading("\t" + expected, "\t")); //$NON-NLS-1$ //$NON-NLS-2$ 
+        assertEquals(expected, stringTrimmer.removeTrailingAndLeading(expected + "\t", "\t")); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals(expected, stringTrimmer.removeTrailingAndLeading('\u0009' + expected, "\t")); //$NON-NLS-1$
+        assertEquals(expected, stringTrimmer.removeTrailingAndLeading('\u0009' + expected, '\u0009' + "")); //$NON-NLS-1$
+        assertEquals(expected, stringTrimmer.removeTrailingAndLeading('\u0009' + expected + '\u0009' + '\u0009', "\t")); //$NON-NLS-1$
 
-        assertEquals("abc ", stringConverter.removeTrailingAndLeading("\t" + "abc ", "\t")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-        assertEquals("a" + "\t" + "bc", stringConverter.removeTrailingAndLeading("\t" + "a" + "\t" + "bc", "\t")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
-        assertEquals("\t" + expected, stringConverter.removeTrailingAndLeading("\t" + "abc ")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
+        assertEquals("abc ", stringTrimmer.removeTrailingAndLeading("\t" + "abc ", "\t")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+        assertEquals("a" + "\t" + "bc", stringTrimmer.removeTrailingAndLeading("\t" + "a" + "\t" + "bc", "\t")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
+        assertEquals("\t" + expected, stringTrimmer.removeTrailingAndLeading("\t" + "abc ")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
         assertEquals(expected, ("\t" + "abc ").trim()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3
 
-        assertEquals(expected, stringConverter.removeTrailingAndLeading("\n" + expected, "\n")); //$NON-NLS-1$ //$NON-NLS-2$ 
-        assertEquals("abc ", stringConverter.removeTrailingAndLeading("\n" + "abc ", "\n")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+        assertEquals(expected, stringTrimmer.removeTrailingAndLeading("\n" + expected, "\n")); //$NON-NLS-1$ //$NON-NLS-2$ 
+        assertEquals("abc ", stringTrimmer.removeTrailingAndLeading("\n" + "abc ", "\n")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
-        assertEquals(expected, stringConverter.removeTrailingAndLeading(expected, "\r")); //$NON-NLS-1$
-        assertEquals(expected, stringConverter.removeTrailingAndLeading("\r" + expected, "\r")); //$NON-NLS-1$ //$NON-NLS-2$ 
-        assertEquals(expected, stringConverter.removeTrailingAndLeading("\r" + expected + "\r", "\r")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
-        assertEquals("abc ", stringConverter.removeTrailingAndLeading("\r" + "abc ", "\r")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-        assertEquals("abc ", stringConverter.removeTrailingAndLeading("\r" + "abc " + "\r", "\r")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+        assertEquals(expected, stringTrimmer.removeTrailingAndLeading(expected, "\r")); //$NON-NLS-1$
+        assertEquals(expected, stringTrimmer.removeTrailingAndLeading("\r" + expected, "\r")); //$NON-NLS-1$ //$NON-NLS-2$ 
+        assertEquals(expected, stringTrimmer.removeTrailingAndLeading("\r" + expected + "\r", "\r")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
+        assertEquals("abc ", stringTrimmer.removeTrailingAndLeading("\r" + "abc ", "\r")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+        assertEquals("abc ", stringTrimmer.removeTrailingAndLeading("\r" + "abc " + "\r", "\r")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 
-        assertEquals("bc", stringConverter.removeTrailingAndLeading(" abc", " a")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-        assertEquals(" a", stringConverter.removeTrailingAndLeading(" abc", "bc")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-        assertEquals("ab", stringConverter.removeTrailingAndLeading("cabc", "c")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        assertEquals("bc", stringTrimmer.removeTrailingAndLeading(" abc", " a")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        assertEquals(" a", stringTrimmer.removeTrailingAndLeading(" abc", "bc")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        assertEquals("ab", stringTrimmer.removeTrailingAndLeading("cabc", "c")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
 
     @Test
     public void testRemoveTrailingAndLeadingWhitespaces() {
-        StringTrimmer stringConverter = new StringTrimmer();
+        StringTrimmer stringTrimmer = new StringTrimmer();
         String inputData = " " + expected; //$NON-NLS-1$
-        for (String removechar : stringConverter.WHITESPACE_CHARS) {
+        for (String removechar : stringTrimmer.WHITESPACE_CHARS) {
             inputData = inputData + removechar;
         }
-        assertEquals(expected, stringConverter.removeTrailingAndLeadingWhitespaces(inputData));
+        assertEquals(expected, stringTrimmer.removeTrailingAndLeadingWhitespaces(inputData));
     }
 
 }

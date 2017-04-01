@@ -28,21 +28,27 @@ public class DuplicateCharEraser {
 
     /**
      *
-     * This constructor is used to remove WhiteSpace chars like as " ","\t","\r","\n","\f".
+     * This constructor is used to initialize removeRepeatCharPattern and remove WhiteSpace chars like as " ","\t","\r","\n","\f".
      */
     public DuplicateCharEraser() {
-        removeRepeatCharPattern = Pattern.compile("(" + "([\\s\\u0085\\p{Z}]|\r\n)" + ")\\1+"); //$NON-NLS-1$//$NON-NLS-2$
+        removeRepeatCharPattern = Pattern.compile("(" + "([\\s\\u0085\\p{Z}]|\r\n)" + ")\\1+"); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
     }
 
     /**
      * 
-     * This constructor is used to remove a specify repeated String {@link #removeRepeatedChar(String)} .
+     * This constructor is used to remove a given repeated String {@link #removeRepeatedChar(String)} .
+     * initialize removeRepeatCharPattern,add the Escape "\\" for non-word character like as "{","[","(","^,"+" and so on.
      * 
-     * @param repeatStr
-     * @throws IllegalArgumentException
+     * @param repeatChar the string to be removed when it appears consecutively several times.
      */
-    public DuplicateCharEraser(char repeatStr) throws IllegalArgumentException {
-        removeRepeatCharPattern = Pattern.compile("([" + repeatStr + "])\\1+"); //$NON-NLS-1$//$NON-NLS-2$
+    public DuplicateCharEraser(char repeatChar) {
+        Pattern nonWordPattern = Pattern.compile("([\\W])"); //$NON-NLS-1$
+        Matcher matcher = nonWordPattern.matcher(String.valueOf(repeatChar));
+        if (matcher.find()) {
+            removeRepeatCharPattern = Pattern.compile("([\\" + repeatChar + "])\\1+"); //$NON-NLS-1$ //$NON-NLS-2$
+        } else {
+            removeRepeatCharPattern = Pattern.compile("([" + repeatChar + "])\\1+"); //$NON-NLS-1$ //$NON-NLS-2$
+        }
     }
 
     /**
@@ -53,7 +59,7 @@ public class DuplicateCharEraser {
      * @return the string with the source string removed if found
      */
     public String removeRepeatedChar(String inputStr) {
-        if (StringUtils.isEmpty(inputStr) || removeRepeatCharPattern == null) {
+        if (StringUtils.isEmpty(inputStr)) {
             return inputStr;
         }
         Matcher matcher = removeRepeatCharPattern.matcher(inputStr);

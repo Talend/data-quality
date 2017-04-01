@@ -15,7 +15,7 @@ package org.talend.dataquality.converters;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * this class is used for Converting a String.<br/>
+ * this class is used to remove trailing and leading characters.<br/>
  * created by msjian on 2017.2.16
  * 
  */
