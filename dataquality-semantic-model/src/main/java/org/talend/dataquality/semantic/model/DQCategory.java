@@ -61,9 +61,9 @@ public class DQCategory implements Serializable {
 
     private CategoryState state;
 
-    private List<DQCategory> childrenCategories;
+    private List<DQCategory> children;
 
-    private List<DQCategory> parentsCategories;
+    private List<DQCategory> parents;
 
     public String getId() {
         return id;
@@ -234,19 +234,19 @@ public class DQCategory implements Serializable {
     }
 
     public List<DQCategory> getChildrenCategories() {
-        return childrenCategories;
+        return children;
     }
 
     public void setChildrenCategories(List<DQCategory> childrenCategories) {
-        this.childrenCategories = childrenCategories;
+        this.children = childrenCategories;
     }
 
     public List<DQCategory> getParentsCategories() {
-        return parentsCategories;
+        return parents;
     }
 
     public void setParentsCategories(List<DQCategory> parentsCategories) {
-        this.parentsCategories = parentsCategories;
+        this.parents = parentsCategories;
     }
 
     @Override
