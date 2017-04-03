@@ -15,14 +15,11 @@ package org.talend.dataquality.statistics.cardinality;
 import com.clearspring.analytics.stream.cardinality.HyperLogLog;
 
 /**
- * Cardianlity statistics bean of hypper log log .
- * 
- * @author zhao
+ * Cardinality statistics bean of hyper log log .
  *
+ * @author zhao
  */
-public class CardinalityHLLStatistics {
-
-    private long count = 0L;
+public class CardinalityHLLStatistics extends AbstractCardinalityStatistics {
 
     private HyperLogLog hyperLogLog = null;
 
@@ -33,27 +30,38 @@ public class CardinalityHLLStatistics {
         return hyperLogLog;
     }
 
-    public long getDuplicateCount() {
-        return count - getDistinctCount();
-    }
-
-    public long getCount() {
-        return count;
+    public void setHyperLogLog(HyperLogLog hyperLogLog2) {
+        this.hyperLogLog = hyperLogLog2;
     }
 
     public long getDistinctCount() {
         return hyperLogLog.cardinality();
     }
 
-    public void incrementCount() {
-        count += 1;
-    }
+    /**
+     * <b>This method merges two instances of CardinalityHLLStatistics. </b>
+     * <p>
+     * If the instance to merge is not of the type CardinalityHLLStatistics (but CardinalityStatistics),
+     * the method will return false to indicate that the merge was not possible.
+     * Also, if the other instance is a instance of CardinalityHLLStatistics but its {@link HyperLogLog} instance
+     * cannot be merged with the current HyperLogLog instance, this method will catch the exception triggered by
+     * the {@link HyperLogLog#addAll(HyperLogLog)} method and return false.
+     * </p>
+     *
+     * @param other An other instance of CardinalityHLLStatistics
+     * @return boolean that indicates if the merge was possible
+     */
+    public boolean merge(AbstractCardinalityStatistics other) {
+        if (!(other instanceof CardinalityHLLStatistics))
+            return false;
 
-    public void setHyperLogLog(HyperLogLog hyperLogLog2) {
-        this.hyperLogLog = hyperLogLog2;
-    }
-
-    public void setCount(long count) {
-        this.count = count;
+        CardinalityHLLStatistics cardStat = (CardinalityHLLStatistics) other;
+        super.count += other.count;
+        try {
+            this.hyperLogLog.addAll(cardStat.hyperLogLog);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

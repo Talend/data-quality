@@ -22,22 +22,21 @@ import com.clearspring.analytics.stream.cardinality.HyperLogLog;
 
 /**
  * Using hyperloglog estimating cardinalities (distinct count)<br/>
- * Parmater <code>rsd</code> can be set in order to have a better balance between precision and space. by {
+ * Parameter <code>rsd</code> can be set in order to have a better balance between precision and space. by {
  * {@link #setRelativeStandardDeviation(int)}<br/>
  * See more description about this parameter at <a href=
  * "https://github.com/addthis/stream-lib/blob/master/src/main/java/com/clearspring/analytics/stream/cardinality/HyperLogLog.java#L93"
- * >Hypper log log parameter</a>
- * 
- * @author zhao
+ * >Hyper log log parameter</a>
  *
+ * @author zhao
  */
 public class CardinalityHLLAnalyzer implements Analyzer<CardinalityHLLStatistics> {
 
     private static final long serialVersionUID = -5813206492367921798L;
 
-    private ResizableList<CardinalityHLLStatistics> cardinalityStatistics = null;
-
     int rsd = 20; // relative standard deviation
+
+    private ResizableList<CardinalityHLLStatistics> cardinalityStatistics = null;
 
     @Override
     public void init() {
@@ -46,7 +45,7 @@ public class CardinalityHLLAnalyzer implements Analyzer<CardinalityHLLStatistics
 
     /**
      * Set the hyper log log parameter
-     * 
+     *
      * @param rsd
      */
     public void setRelativeStandardDeviation(int rsd) {
