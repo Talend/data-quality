@@ -12,8 +12,6 @@
 // ============================================================================
 package org.talend.dataquality.statistics.cardinality;
 
-import com.clearspring.analytics.stream.cardinality.HyperLogLog;
-
 import java.util.HashSet;
 import java.util.Set;
 
