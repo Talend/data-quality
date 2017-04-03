@@ -49,7 +49,7 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
     /**
      * SynonymIndexSearcher constructor creates this searcher and initializes the index.
      *
-     * @param indexPath the path to the index.
+     * @param indexPathURI the path to the index.
      */
     public DictionarySearcher(URI indexPathURI) {
         try {

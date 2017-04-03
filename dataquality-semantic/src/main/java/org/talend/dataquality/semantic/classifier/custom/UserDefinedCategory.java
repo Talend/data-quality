@@ -16,10 +16,10 @@ import org.talend.dataquality.semantic.classifier.ISubCategory;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.filter.ISemanticFilter;
 import org.talend.dataquality.semantic.filter.impl.CharSequenceFilter;
-import org.talend.dataquality.semantic.recognizer.MainCategory;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.talend.dataquality.semantic.model.MainCategory;
 
 /**
  * created by talend on 2015-07-28 Detailled comment.

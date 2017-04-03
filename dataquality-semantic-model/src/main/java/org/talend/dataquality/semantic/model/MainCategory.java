@@ -10,7 +10,7 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.dataquality.semantic.recognizer;
+package org.talend.dataquality.semantic.model;
 
 import org.apache.commons.lang3.StringUtils;
 

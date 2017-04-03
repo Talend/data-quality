@@ -18,7 +18,7 @@ import java.util.Set;
 import org.talend.dataquality.semantic.classifier.ISubCategory;
 import org.talend.dataquality.semantic.classifier.impl.AbstractSubCategoryClassifier;
 import org.talend.dataquality.semantic.filter.ISemanticFilter;
-import org.talend.dataquality.semantic.recognizer.MainCategory;
+import org.talend.dataquality.semantic.model.MainCategory;
 import org.talend.dataquality.semantic.validator.ISemanticValidator;
 
 /**

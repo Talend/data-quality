@@ -16,17 +16,17 @@ import java.io.Serializable;
 
 public class DQRegEx implements Serializable {
 
-    private String mainCategory;
+    private MainCategory mainCategory;
 
     private DQFilter filter;
 
     private DQValidator validator;
 
-    public String getMainCategory() {
+    public MainCategory getMainCategory() {
         return mainCategory;
     }
 
-    public void setMainCategory(String mainCategory) {
+    public void setMainCategory(MainCategory mainCategory) {
         this.mainCategory = mainCategory;
     }
 
