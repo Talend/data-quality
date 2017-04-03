@@ -46,7 +46,7 @@ public class CardinalityHLLAnalyzer implements Analyzer<CardinalityHLLStatistics
 
     /**
      * Set the hyper log log parameter
-     * 
+     *
      * @param rsd
      */
     public void setRelativeStandardDeviation(int rsd) {
