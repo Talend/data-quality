@@ -143,6 +143,7 @@ public class DictionaryUtils {
         if (!CollectionUtils.isEmpty(cat.getChildren()))
             for (DQCategory child : cat.getChildren())
                 doc.add(new TextField(DictionaryConstants.CHILD, child.getId(), Field.Store.YES));
+
         return doc;
     }
 
