@@ -15,6 +15,7 @@ package org.talend.dataquality.semantic.model;
 public enum CategoryType {
     REGEX("RE"),
     DICT("DD"),
+    COMPOUND("CP"),
     KEYWORD("KW"),
     OTHER("OT");
 
