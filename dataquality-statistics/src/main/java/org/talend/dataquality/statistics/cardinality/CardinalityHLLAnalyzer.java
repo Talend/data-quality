@@ -63,7 +63,7 @@ public class CardinalityHLLAnalyzer implements Analyzer<CardinalityHLLStatistics
             if (cardStats.getHyperLogLog() == null) {
                 cardStats.setHyperLogLog(new HyperLogLog(rsd));
             }
-            cardStats.getHyperLogLog().offer(record[i]);
+            cardStats.add(record[i]);
             cardStats.incrementCount();
         }
         return true;

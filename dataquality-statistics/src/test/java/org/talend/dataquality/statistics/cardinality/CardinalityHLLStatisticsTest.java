@@ -1,5 +1,6 @@
 package org.talend.dataquality.statistics.cardinality;
 
+import com.clearspring.analytics.stream.cardinality.CardinalityMergeException;
 import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Assert;
 import org.junit.Before;
@@ -20,9 +21,11 @@ public class CardinalityHLLStatisticsTest {
         cardHLLStats.setHyperLogLog(new HyperLogLog(20));
     }
 
-    @Test
-    public void testUnpossibleMerge() {
-        CardinalityStatistics cardStat = new CardinalityStatistics();
+    @Test(expected = CardinalityMergeException.class)
+    public void testDifferentHLLMerge() throws CardinalityMergeException {
+
+        CardinalityHLLStatistics cardStat = new CardinalityHLLStatistics();
+        cardStat.setHyperLogLog(new HyperLogLog(28));
         for (int i = 0; i < 1000; i++) {
             cardHLLStats.incrementCount();
             cardStat.incrementCount();
@@ -31,11 +34,19 @@ public class CardinalityHLLStatisticsTest {
             cardStat.add(str);
         }
 
-        Assert.assertEquals(false, cardHLLStats.merge(cardStat));
+        cardHLLStats.merge(cardStat);
+        Assert.assertEquals(cardStat.getDistinctCount(), cardHLLStats.getDistinctCount());
+
+    }
+
+    @Test(expected = ClassCastException.class)
+    public void testDifferentTypeMerge() throws CardinalityMergeException {
+        AbstractCardinalityStatistics stat1 = new CardinalityStatistics();
+        stat1.merge(cardHLLStats);
     }
 
     @Test
-    public void testPossibleMerge() {
+    public void testPossibleMerge() throws CardinalityMergeException {
         CardinalityHLLStatistics otherCardHLLStat = new CardinalityHLLStatistics();
         otherCardHLLStat.setHyperLogLog(new HyperLogLog(20));
         for (int i = 0; i < 1000; i++) {
@@ -45,9 +56,7 @@ public class CardinalityHLLStatisticsTest {
             cardHLLStats.getHyperLogLog().offer(str);
             otherCardHLLStat.getHyperLogLog().offer(str);
         }
-
-        Assert.assertEquals(true, cardHLLStats.merge(otherCardHLLStat));
-        // The merge should not have changed the cardinality because every element was the same for both in the loop.
+        cardHLLStats.merge(otherCardHLLStat);
         Assert.assertEquals(cardHLLStats.getDistinctCount(), otherCardHLLStat.getDistinctCount());
     }
 

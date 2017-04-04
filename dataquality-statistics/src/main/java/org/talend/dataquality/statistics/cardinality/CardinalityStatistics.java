@@ -20,7 +20,7 @@ import java.util.Set;
  *
  * @author zhao
  */
-public class CardinalityStatistics extends AbstractCardinalityStatistics {
+public class CardinalityStatistics extends AbstractCardinalityStatistics<CardinalityStatistics> {
 
     private final Set<String> distinctData = new HashSet<>();
 
@@ -42,15 +42,9 @@ public class CardinalityStatistics extends AbstractCardinalityStatistics {
      * @param other An other instance of CardinalityStatistics
      * @return boolean that indicates if the merge was possible.
      */
-    public boolean merge(AbstractCardinalityStatistics other) {
-        if (!(other instanceof CardinalityStatistics))
-            return false;
-
-        CardinalityStatistics cardStat = (CardinalityStatistics) other;
+    public void merge(CardinalityStatistics other) {
         super.count += other.count;
-        distinctData.addAll(cardStat.distinctData);
-
-        return true;
+        distinctData.addAll(other.distinctData);
     }
 
 }

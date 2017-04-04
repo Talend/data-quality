@@ -1,9 +1,11 @@
 package org.talend.dataquality.statistics.cardinality;
 
+import com.clearspring.analytics.stream.cardinality.CardinalityMergeException;
+
 /**
  * Created by afournier on 31/03/17.
  */
-public abstract class AbstractCardinalityStatistics {
+public abstract class AbstractCardinalityStatistics<T extends AbstractCardinalityStatistics> {
 
     protected long count = 0;
 
@@ -17,5 +19,7 @@ public abstract class AbstractCardinalityStatistics {
         return this.count - getDistinctCount();
     }
 
-    public abstract boolean merge(AbstractCardinalityStatistics other);
+    public abstract void merge(T other) throws CardinalityMergeException;
+
+    public abstract void add(String colStr);
 }

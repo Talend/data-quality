@@ -1,5 +1,6 @@
 package org.talend.dataquality.statistics.cardinality;
 
+import com.clearspring.analytics.stream.cardinality.CardinalityMergeException;
 import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Assert;
 import org.junit.Before;
@@ -19,20 +20,10 @@ public class CardinalityStatisticsTest {
         cardStats = new CardinalityStatistics();
     }
 
-    @Test
-    public void testUnpossibleMerge() {
-        CardinalityHLLStatistics cardHLL = new CardinalityHLLStatistics();
-        cardHLL.setHyperLogLog(new HyperLogLog(20));
-
-        for (int i = 0; i < 1000; i++) {
-            cardStats.incrementCount();
-            cardHLL.incrementCount();
-            String str = RandomStringUtils.randomAscii(2);
-            cardStats.add(str);
-            cardHLL.getHyperLogLog().offer(str);
-        }
-
-        Assert.assertEquals(false, cardStats.merge(cardHLL));
+    @Test(expected = ClassCastException.class)
+    public void testDifferentTypeMerge() throws CardinalityMergeException {
+        AbstractCardinalityStatistics stat1 = new CardinalityHLLStatistics();
+        stat1.merge(cardStats);
     }
 
     @Test
@@ -45,9 +36,7 @@ public class CardinalityStatisticsTest {
             cardStats.add(str);
             otherCardStat.add(str);
         }
-
-        Assert.assertEquals(true, cardStats.merge(otherCardStat));
-        // The merge should not have changed the cardinality because every element was the same for both in the loop.
+        cardStats.merge(otherCardStat);
         Assert.assertEquals(cardStats.getDistinctCount(), otherCardStat.getDistinctCount());
     }
 }

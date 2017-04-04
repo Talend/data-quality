@@ -12,6 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.statistics.cardinality;
 
+import com.clearspring.analytics.stream.cardinality.CardinalityMergeException;
 import com.clearspring.analytics.stream.cardinality.HyperLogLog;
 
 /**
@@ -19,7 +20,7 @@ import com.clearspring.analytics.stream.cardinality.HyperLogLog;
  *
  * @author zhao
  */
-public class CardinalityHLLStatistics extends AbstractCardinalityStatistics {
+public class CardinalityHLLStatistics extends AbstractCardinalityStatistics<CardinalityHLLStatistics> {
 
     private HyperLogLog hyperLogLog = null;
 
@@ -38,6 +39,10 @@ public class CardinalityHLLStatistics extends AbstractCardinalityStatistics {
         return hyperLogLog.cardinality();
     }
 
+    public void add(String colStr) {
+        this.hyperLogLog.offer(colStr);
+    }
+
     /**
      * <b>This method merges two instances of CardinalityHLLStatistics. </b>
      * <p>
@@ -51,17 +56,8 @@ public class CardinalityHLLStatistics extends AbstractCardinalityStatistics {
      * @param other An other instance of CardinalityHLLStatistics
      * @return boolean that indicates if the merge was possible
      */
-    public boolean merge(AbstractCardinalityStatistics other) {
-        if (!(other instanceof CardinalityHLLStatistics))
-            return false;
-
-        CardinalityHLLStatistics cardStat = (CardinalityHLLStatistics) other;
+    public void merge(CardinalityHLLStatistics other) throws CardinalityMergeException {
+        this.hyperLogLog.addAll(other.hyperLogLog);
         super.count += other.count;
-        try {
-            this.hyperLogLog.addAll(cardStat.hyperLogLog);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
     }
 }
