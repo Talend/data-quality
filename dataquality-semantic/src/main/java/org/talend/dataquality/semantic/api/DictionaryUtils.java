@@ -14,10 +14,12 @@ package org.talend.dataquality.semantic.api;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.util.CharArraySet;
@@ -110,6 +112,16 @@ public class DictionaryUtils {
         dqCat.setCompleteness(Boolean.valueOf(doc.getField(DictionaryConstants.COMPLETENESS).stringValue()));
         dqCat.setDescription(doc.getField(DictionaryConstants.DESCRIPTION) == null ? ""
                 : doc.getField(DictionaryConstants.DESCRIPTION).stringValue());
+        IndexableField[] childrenFields = doc.getFields(DictionaryConstants.CHILDREN);
+        if (childrenFields != null) {
+            List<DQCategory> synSet = new ArrayList<>();
+            for (IndexableField f : childrenFields) {
+                DQCategory cat = new DQCategory();
+                cat.setId(f.stringValue());
+                synSet.add(cat);
+            }
+            dqCat.setChildrenCategories(synSet);
+        }
         return dqCat;
     }
 
@@ -122,6 +134,9 @@ public class DictionaryUtils {
         doc.add(new StringField(DictionaryConstants.COMPLETENESS, String.valueOf(cat.getCompleteness().booleanValue()),
                 Field.Store.YES));
         doc.add(new TextField(DictionaryConstants.DESCRIPTION, cat.getDescription(), Field.Store.YES));
+        if (!CollectionUtils.isEmpty(cat.getChildrenCategories()))
+            for (DQCategory child : cat.getChildrenCategories())
+                doc.add(new TextField(DictionaryConstants.CHILDREN, child.getId(), Field.Store.YES));
         return doc;
     }
 

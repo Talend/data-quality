@@ -26,6 +26,8 @@ public class DictionaryConstants {
 
     public static final String DESCRIPTION = "description";
 
+    public static final String CHILDREN = "children";
+
     private DictionaryConstants() {
 
     }
