@@ -112,7 +112,7 @@ public class DictionaryUtils {
         dqCat.setCompleteness(Boolean.valueOf(doc.getField(DictionaryConstants.COMPLETENESS).stringValue()));
         dqCat.setDescription(doc.getField(DictionaryConstants.DESCRIPTION) == null ? ""
                 : doc.getField(DictionaryConstants.DESCRIPTION).stringValue());
-        IndexableField[] childrenFields = doc.getFields(DictionaryConstants.CHILDREN);
+        IndexableField[] childrenFields = doc.getFields(DictionaryConstants.CHILD);
         if (childrenFields != null) {
             List<DQCategory> synSet = new ArrayList<>();
             for (IndexableField f : childrenFields) {
@@ -120,7 +120,7 @@ public class DictionaryUtils {
                 cat.setId(f.stringValue());
                 synSet.add(cat);
             }
-            dqCat.setChildrenCategories(synSet);
+            dqCat.setChildren(synSet);
         }
         return dqCat;
     }
@@ -134,9 +134,9 @@ public class DictionaryUtils {
         doc.add(new StringField(DictionaryConstants.COMPLETENESS, String.valueOf(cat.getCompleteness().booleanValue()),
                 Field.Store.YES));
         doc.add(new TextField(DictionaryConstants.DESCRIPTION, cat.getDescription(), Field.Store.YES));
-        if (!CollectionUtils.isEmpty(cat.getChildrenCategories()))
-            for (DQCategory child : cat.getChildrenCategories())
-                doc.add(new TextField(DictionaryConstants.CHILDREN, child.getId(), Field.Store.YES));
+        if (!CollectionUtils.isEmpty(cat.getChildren()))
+            for (DQCategory child : cat.getChildren())
+                doc.add(new TextField(DictionaryConstants.CHILD, child.getId(), Field.Store.YES));
         return doc;
     }
 
