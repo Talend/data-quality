@@ -20,7 +20,6 @@ import org.apache.lucene.document.StringField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.Version;
 import org.talend.dataquality.semantic.api.DictionaryUtils;
 import org.talend.dataquality.semantic.index.DictionarySearcher;
 import org.talend.dataquality.semantic.index.utils.optimizer.CategoryOptimizer;
@@ -203,8 +202,8 @@ public class SemanticDictionaryGenerator {
     private void generate(GenerationType type, String path) {
         try {
             FileUtils.deleteDirectory(new File(path));
-            FSDirectory outputDir = FSDirectory.open(new File(path));
-            IndexWriterConfig writerConfig = new IndexWriterConfig(Version.LATEST, analyzer);
+            FSDirectory outputDir = FSDirectory.open(new File(path).toPath());
+            IndexWriterConfig writerConfig = new IndexWriterConfig(analyzer);
             IndexWriter writer = new IndexWriter(outputDir, writerConfig);
             for (DictionaryGenerationSpec spec : DictionaryGenerationSpec.values()) {
                 if (spec.getGenerationType().equals(type)) {

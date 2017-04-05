@@ -24,6 +24,7 @@ import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.*;
+import org.apache.lucene.search.BooleanQuery.Builder;
 import org.apache.lucene.store.Directory;
 import org.talend.dataquality.semantic.index.ClassPathDirectory;
 import org.talend.dataquality.semantic.index.DictionarySearcher;
@@ -131,7 +132,7 @@ public class LocalDictionaryCache {
         String jointInput = DictionarySearcher.getJointTokens(input);
         String queryString = isPrefixSearch ? jointInput + "*" : "*" + jointInput + "*";
 
-        final BooleanQuery booleanQuery = new BooleanQuery();
+        final Builder booleanQuery = new BooleanQuery.Builder();
         final Query catQuery = new TermQuery(new Term(DictionarySearcher.F_WORD, categoryName));
         booleanQuery.add(catQuery, BooleanClause.Occur.MUST);
         final Query wildcardQuery = new WildcardQuery(new Term(DictionarySearcher.F_SYNTERM, queryString));
@@ -143,7 +144,7 @@ public class LocalDictionaryCache {
             mgr.maybeRefresh();
             IndexSearcher searcher = mgr.acquire();
             IndexReader reader = searcher.getIndexReader();
-            TopDocs topDocs = searcher.search(booleanQuery, num);
+            TopDocs topDocs = searcher.search(booleanQuery.build(), num);
             mgr.release(searcher);
             for (int i = 0; i < topDocs.scoreDocs.length; i++) {
                 Document doc = reader.document(topDocs.scoreDocs[i].doc);

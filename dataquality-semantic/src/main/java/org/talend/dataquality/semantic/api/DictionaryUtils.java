@@ -24,12 +24,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.util.CharArraySet;
 import org.apache.lucene.document.*;
+import org.apache.lucene.index.IndexOptions;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.Version;
 import org.talend.dataquality.semantic.index.DictionarySearcher;
 import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
@@ -43,11 +43,11 @@ public class DictionaryUtils {
 
     static {
         FIELD_TYPE_SYN.setStored(false);
-        FIELD_TYPE_SYN.setIndexed(true);
+        FIELD_TYPE_SYN.setIndexOptions(IndexOptions.DOCS);
         FIELD_TYPE_SYN.setOmitNorms(true);
         FIELD_TYPE_SYN.freeze();
 
-        FIELD_TYPE_RAW_VALUE.setIndexed(false);
+        FIELD_TYPE_RAW_VALUE.setIndexOptions(IndexOptions.NONE);
         FIELD_TYPE_RAW_VALUE.setStored(true);
         FIELD_TYPE_RAW_VALUE.freeze();
     }
@@ -169,8 +169,8 @@ public class DictionaryUtils {
     }
 
     static void rewriteIndex(Directory srcDir, File destFolder) throws IOException {
-        final FSDirectory destDir = FSDirectory.open(destFolder);
-        final IndexWriterConfig iwc = new IndexWriterConfig(Version.LATEST, new StandardAnalyzer(CharArraySet.EMPTY_SET));
+        final FSDirectory destDir = FSDirectory.open(destFolder.toPath());
+        final IndexWriterConfig iwc = new IndexWriterConfig(new StandardAnalyzer(CharArraySet.EMPTY_SET));
         final IndexWriter writer = new IndexWriter(destDir, iwc);
 
         writer.addIndexes(srcDir);

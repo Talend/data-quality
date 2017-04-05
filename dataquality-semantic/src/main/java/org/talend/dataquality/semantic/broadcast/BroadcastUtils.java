@@ -28,7 +28,6 @@ import org.apache.lucene.index.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Bits;
-import org.apache.lucene.util.Version;
 import org.talend.dataquality.semantic.index.DictionarySearcher;
 
 class BroadcastUtils {
@@ -92,7 +91,7 @@ class BroadcastUtils {
      */
     static Directory createRamDirectoryFromDocuments(List<BroadcastDocumentObject> dictionaryObject) throws IOException {
         RAMDirectory ramDirectory = new RAMDirectory();
-        IndexWriterConfig writerConfig = new IndexWriterConfig(Version.LATEST, new StandardAnalyzer(CharArraySet.EMPTY_SET));
+        IndexWriterConfig writerConfig = new IndexWriterConfig(new StandardAnalyzer(CharArraySet.EMPTY_SET));
         IndexWriter writer = new IndexWriter(ramDirectory, writerConfig);
         for (BroadcastDocumentObject objectDoc : dictionaryObject) {
             writer.addDocument(BroadcastUtils.createLuceneDocumentFromObject(objectDoc));
@@ -106,7 +105,7 @@ class BroadcastUtils {
         Document indexDoc = new Document();
         FieldType ftSyn = new FieldType();
         ftSyn.setStored(false);
-        ftSyn.setIndexed(true);
+        ftSyn.setIndexOptions(IndexOptions.DOCS);
         ftSyn.setOmitNorms(true);
         ftSyn.freeze();
         indexDoc.add(new StringField(DictionarySearcher.F_WORD, objectDoc.getCategory(), Field.Store.YES));

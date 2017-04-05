@@ -38,6 +38,9 @@
 		<dataquality.wordnet.snapshot.version>1.2.0-SNAPSHOT</dataquality.wordnet.snapshot.version>
 		<dataquality.wordnet.released.version>1.1.6</dataquality.wordnet.released.version>
 
+		<dataquality.phone.snapshot.version>1.6.0-SNAPSHOT</dataquality.phone.snapshot.version>
+		<dataquality.phone.released.version>1.6.0</dataquality.phone.released.version>
+
 		<dataquality.email.snapshot.version>1.1.0-SNAPSHOT</dataquality.email.snapshot.version>
 		<dataquality.email.released.version>1.0.6</dataquality.email.released.version>
 		
@@ -57,6 +60,7 @@
 		<module>../dataquality-semantic</module>
 		<module>../dataquality-statistics</module>
 		<module>../dataquality-wordnet</module>
+		<module>../dataquality-phone</module>
 		<module>../dataquality-email</module>
 		<module>../dataquality-survivorship</module>
 		<module>../dataquality-converters</module>

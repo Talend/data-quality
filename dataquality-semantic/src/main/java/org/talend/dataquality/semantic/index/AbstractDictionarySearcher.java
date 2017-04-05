@@ -16,6 +16,7 @@ import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.*;
+import org.apache.lucene.search.BooleanQuery.Builder;
 
 /**
  * Created by jteuladedenantes on 16/11/16.
@@ -98,14 +99,14 @@ public abstract class AbstractDictionarySearcher {
      * @throws IOException
      */
     protected Query createQueryForSemanticKeywordMatch(String input) throws IOException {
-        BooleanQuery booleanQuery = new BooleanQuery();
+        Builder booleanQuery = new BooleanQuery.Builder();
         List<String> tokens = getTokensFromAnalyzer(input);
         // for keyword search, when the token count exceeds MAX_TOKEN_COUNT_FOR_KEYWORD_MATCH, only search the beginning
         // tokens from input
         for (int i = 0; i < Math.min(tokens.size(), MAX_TOKEN_COUNT_FOR_KEYWORD_MATCH); i++) {
             booleanQuery.add(getTermQuery(F_SYNTERM, tokens.get(i), false), BooleanClause.Occur.SHOULD);
         }
-        return booleanQuery;
+        return booleanQuery.build();
     }
 
     public static String getJointTokens(String input) {
@@ -119,7 +120,8 @@ public abstract class AbstractDictionarySearcher {
      * @throws IOException
      */
     public static List<String> getTokensFromAnalyzer(String input) {
-        StandardTokenizer tokenStream = new StandardTokenizer(new StringReader(input));
+        StandardTokenizer tokenStream = new StandardTokenizer();
+        tokenStream.setReader(new StringReader(input));
         TokenStream result = new StandardFilter(tokenStream);
         result = new LowerCaseFilter(result);
         result = new ASCIIFoldingFilter(result);

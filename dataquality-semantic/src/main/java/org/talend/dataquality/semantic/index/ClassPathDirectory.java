@@ -15,19 +15,8 @@ package org.talend.dataquality.semantic.index;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.StringTokenizer;
+import java.nio.file.*;
+import java.util.*;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -99,7 +88,7 @@ public class ClassPathDirectory {
         } else if ("file".equals(uri.getScheme())) {
             LOGGER.debug("Opening '" + uri + "' ...");
             try {
-                return FSDirectory.open(new File(uri));
+                return FSDirectory.open(new File(uri).toPath());
             } catch (IOException e) {
                 throw new IllegalArgumentException("Unable to open path '" + uri + "'.", e);
             }
@@ -107,7 +96,7 @@ public class ClassPathDirectory {
             LOGGER.info("Opening '" + uri + "' ...");
             try {
                 final String path = PlatformPathUtil.getFilePathByPlatformURL(uri.toURL());
-                return FSDirectory.open(new File(path));
+                return FSDirectory.open(new File(path).toPath());
             } catch (IOException e) {
                 throw new IllegalArgumentException("Unable to open bundleresource '" + uri + "'.", e);
             }

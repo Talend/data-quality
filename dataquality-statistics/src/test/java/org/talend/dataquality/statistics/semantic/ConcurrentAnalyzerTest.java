@@ -12,9 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.statistics.semantic;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -29,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.AnalyzerSupplier;
 import org.talend.dataquality.common.inference.ConcurrentAnalyzer;
+import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
 import org.talend.dataquality.semantic.statistics.SemanticAnalyzer;
 import org.talend.dataquality.semantic.statistics.SemanticType;
@@ -41,6 +40,7 @@ public class ConcurrentAnalyzerTest extends SemanticStatisticsTestBase {
 
     @Before
     public void setUp() throws Exception {
+        CategoryRegistryManager.setLocalRegistryPath("target/tmp_idx");
         errorOccurred.set(false);
     }
 

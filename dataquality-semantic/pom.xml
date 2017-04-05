@@ -15,8 +15,18 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.lucene</groupId>
-			<artifactId>lucene-suggest</artifactId>
-			<version>4.10.4</version>
+			<artifactId>lucene-core</artifactId>
+			<version>6.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-analyzers-common</artifactId>
+			<version>6.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-backward-codecs</artifactId>
+			<version>6.1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.talend.dataquality</groupId>
@@ -30,8 +40,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.talend.dataquality</groupId>
-			<artifactId>dataquality-standardization</artifactId>
-			<version>${dataquality.standardization.snapshot.version}</version>
+			<artifactId>dataquality-phone</artifactId>
+			<version>${dataquality.phone.snapshot.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>

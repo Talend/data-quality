@@ -15,12 +15,13 @@ package org.talend.dataquality.semantic.index;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.search.*;
+import org.apache.lucene.search.BooleanClause.Occur;
+import org.apache.lucene.search.BooleanQuery.Builder;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
@@ -30,8 +31,6 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
 
     private SearcherManager mgr;
 
-    private Map<String, CachingWrapperFilter> categoryToCache = new HashMap<>();
-
     /**
      * SynonymIndexSearcher constructor creates this searcher and initializes the index.
      *
@@ -39,7 +38,7 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
      */
     public DictionarySearcher(String indexPath) {
         try {
-            FSDirectory indexDir = FSDirectory.open(new File(indexPath));
+            FSDirectory indexDir = FSDirectory.open(new File(indexPath).toPath());
             mgr = new SearcherManager(indexDir, null);
         } catch (IOException e) {
             LOGGER.error("Unable to open synonym index.", e);
@@ -129,12 +128,13 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
             break;
         }
         final IndexSearcher searcher = mgr.acquire();
-        CachingWrapperFilter tmp = categoryToCache.get(semanticType);
-        if (tmp == null) {
-            tmp = new CachingWrapperFilter(new FieldCacheTermsFilter(F_WORD, semanticType));
-            categoryToCache.put(semanticType, tmp);
-        }
-        boolean validDocument = searcher.search(query, tmp, 1).totalHits != 0;
+
+        Builder builder = new BooleanQuery.Builder();
+        builder.add(query, Occur.MUST);
+        final Query catQuery = new TermQuery(new Term(DictionarySearcher.F_WORD, semanticType));
+        builder.add(catQuery, Occur.FILTER);
+
+        boolean validDocument = searcher.search(builder.build(), 1).totalHits != 0;
         mgr.release(searcher);
         return validDocument;
     }

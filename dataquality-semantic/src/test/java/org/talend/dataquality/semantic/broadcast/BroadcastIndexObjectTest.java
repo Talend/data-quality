@@ -30,7 +30,6 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.Version;
 import org.junit.Test;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.api.DictionaryUtils;
@@ -74,9 +73,8 @@ public class BroadcastIndexObjectTest {
             FileUtils.deleteDirectory(testFolder);
         }
         try {
-            FSDirectory testDir = FSDirectory.open(testFolder);
-            IndexWriter writer = new IndexWriter(testDir,
-                    new IndexWriterConfig(Version.LATEST, new StandardAnalyzer(CharArraySet.EMPTY_SET)));
+            FSDirectory testDir = FSDirectory.open(testFolder.toPath());
+            IndexWriter writer = new IndexWriter(testDir, new IndexWriterConfig(new StandardAnalyzer(CharArraySet.EMPTY_SET)));
             if (writer.maxDoc() > 0) {
                 writer.deleteAll();
                 writer.commit();

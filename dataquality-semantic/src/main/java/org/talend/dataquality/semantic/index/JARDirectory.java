@@ -15,25 +15,12 @@ package org.talend.dataquality.semantic.index;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.nio.file.FileSystem;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
-import org.apache.lucene.store.BaseDirectory;
-import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.store.IOContext;
-import org.apache.lucene.store.IndexInput;
-import org.apache.lucene.store.IndexOutput;
-import org.apache.lucene.store.Lock;
-import org.apache.lucene.store.LockFactory;
+import org.apache.lucene.store.*;
 
 /**
  * Implementation of {@link BaseDirectory} which supports accessing Lucene index inside a jar. The inner index files are extracted
@@ -98,7 +85,7 @@ public class JARDirectory extends Directory {
         LOGGER.info("Extrating index to temporary directory: " + destinationFolder.getAbsolutePath());
         if (destinationFolder.exists()) {
             // File was already extracted, reuse it
-            fsDir = FSDirectory.open(destinationFolder);
+            fsDir = FSDirectory.open(destinationFolder.toPath());
         } else {
             // File was not previously extracted to temporary directory, extract it and open it.
             // To prevent multiple concurrent extracts, lock on class
@@ -116,7 +103,7 @@ public class JARDirectory extends Directory {
                         return FileVisitResult.CONTINUE;
                     }
                 });
-                fsDir = FSDirectory.open(destinationFolder);
+                fsDir = FSDirectory.open(destinationFolder.toPath());
             }
         }
     }
@@ -134,11 +121,6 @@ public class JARDirectory extends Directory {
     @Override
     public void deleteFile(String name) throws IOException {
         fsDir.deleteFile(name);
-    }
-
-    @Override
-    public boolean fileExists(String name) throws IOException {
-        return fsDir.fileExists(name);
     }
 
     @Override
@@ -162,22 +144,18 @@ public class JARDirectory extends Directory {
     }
 
     @Override
-    public void clearLock(String arg0) throws IOException {
-        fsDir.clearLock(arg0);
+    public IndexOutput createTempOutput(String prefix, String suffix, IOContext context) throws IOException {
+        return fsDir.createTempOutput(prefix, suffix, context);
     }
 
     @Override
-    public LockFactory getLockFactory() {
-        return fsDir.getLockFactory();
+    public void renameFile(String source, String dest) throws IOException {
+        fsDir.renameFile(source, dest);
     }
 
     @Override
-    public Lock makeLock(String arg0) {
-        return fsDir.makeLock(arg0);
+    public Lock obtainLock(String name) throws IOException {
+        return fsDir.obtainLock(name);
     }
 
-    @Override
-    public void setLockFactory(LockFactory arg0) throws IOException {
-        fsDir.setLockFactory(arg0);
-    }
 }

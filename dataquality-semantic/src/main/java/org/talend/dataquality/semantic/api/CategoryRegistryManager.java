@@ -173,7 +173,7 @@ public class CategoryRegistryManager {
         if (categorySubFolder.exists()) {
             dqCategories.clear();
             try {
-                final Directory indexDir = FSDirectory.open(categorySubFolder);
+                final Directory indexDir = FSDirectory.open(categorySubFolder.toPath());
                 final DirectoryReader reader = DirectoryReader.open(indexDir);
 
                 Bits liveDocs = MultiFields.getLiveDocs(reader);
@@ -200,7 +200,7 @@ public class CategoryRegistryManager {
                 localRegistryPath + File.separator + CATEGORY_SUBFOLDER_NAME + File.separator + contextName);
         loadBaseIndex(categorySubFolder, CATEGORY_SUBFOLDER_NAME);
         if (categorySubFolder.exists()) {
-            try (final DirectoryReader reader = DirectoryReader.open(FSDirectory.open(categorySubFolder))) {
+            try (final DirectoryReader reader = DirectoryReader.open(FSDirectory.open(categorySubFolder.toPath()))) {
                 Bits liveDocs = MultiFields.getLiveDocs(reader);
                 for (int i = 0; i < reader.maxDoc(); i++) {
                     if (liveDocs != null && !liveDocs.get(i)) {
