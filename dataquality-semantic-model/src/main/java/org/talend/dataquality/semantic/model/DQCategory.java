@@ -233,20 +233,20 @@ public class DQCategory implements Serializable {
         this.createdAt = createdAt;
     }
 
-    public List<DQCategory> getChildrenCategories() {
+    public List<DQCategory> getChildren() {
         return children;
     }
 
-    public void setChildrenCategories(List<DQCategory> childrenCategories) {
-        this.children = childrenCategories;
+    public void setChildren(List<DQCategory> children) {
+        this.children = children;
     }
 
-    public List<DQCategory> getParentsCategories() {
+    public List<DQCategory> getParents() {
         return parents;
     }
 
-    public void setParentsCategories(List<DQCategory> parentsCategories) {
-        this.parents = parentsCategories;
+    public void setParents(List<DQCategory> parents) {
+        this.parents = parents;
     }
 
     @Override
