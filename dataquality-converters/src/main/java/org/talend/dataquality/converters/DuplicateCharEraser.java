@@ -31,7 +31,7 @@ public class DuplicateCharEraser {
      * This constructor is used to initialize removeRepeatCharPattern and remove WhiteSpace chars like as " ","\t","\r","\n","\f".
      */
     public DuplicateCharEraser() {
-        removeRepeatCharPattern = Pattern.compile("(" + "([\\s\\u0085\\p{Z}]|\r\n)" + ")\\1+"); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+        removeRepeatCharPattern = Pattern.compile("([\\s\\u0085\\p{Z}]|\r\n)" + "\\1+"); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
     }
 
     /**

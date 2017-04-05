@@ -26,35 +26,35 @@ import org.junit.Test;
 public class DuplicateCharEraserTest {
 
     @Test
-    public void testremoveDuplicate_CR() {
+    public void testRemoveDuplicateCR() {
         DuplicateCharEraser duplicateCharEraser = new DuplicateCharEraser();
         String input = "a\rbccccdeaa\r\r\ry"; //$NON-NLS-1$
         assertEquals("a\rbccccdeaa\ry", duplicateCharEraser.removeRepeatedChar(input)); //$NON-NLS-1$
     }
 
     @Test
-    public void testremoveDuplicate_LF() {
+    public void testRemoveDuplicateLF() {
         DuplicateCharEraser duplicateCharEraser = new DuplicateCharEraser();
         String input = "a\nbccccdeaa\n\n\ny"; //$NON-NLS-1$
         assertEquals("a\nbccccdeaa\ny", duplicateCharEraser.removeRepeatedChar(input)); //$NON-NLS-1$
     }
 
     @Test
-    public void testremoveDuplicate_CRLF() {
+    public void testRemoveDuplicateCRLF() {
         DuplicateCharEraser duplicateCharEraser = new DuplicateCharEraser();
         String input = "a\r\nbccccdeaa\r\n\r\n\r\ny"; //$NON-NLS-1$
         assertEquals("a\r\nbccccdeaa\r\ny", duplicateCharEraser.removeRepeatedChar(input)); //$NON-NLS-1$
     }
 
     @Test
-    public void testremoveDuplicate_TAB() {
+    public void testRemoveDuplicateTAB() {
         DuplicateCharEraser duplicateCharEraser = new DuplicateCharEraser();
         String input = "a\tbccccdeaa\t\t\t\t\t\ty"; //$NON-NLS-1$
         assertEquals("a\tbccccdeaa\ty", duplicateCharEraser.removeRepeatedChar(input)); //$NON-NLS-1$
     }
 
     @Test
-    public void testremoveDuplicate_LETTER() {
+    public void testRemoveDuplicateLetter() {
         DuplicateCharEraser duplicateCharEraser = new DuplicateCharEraser('c');
         String input = "atbccccdeaaCCtcy"; //$NON-NLS-1$
         assertEquals("atbcdeaaCCtcy", duplicateCharEraser.removeRepeatedChar(input)); //$NON-NLS-1$
@@ -68,7 +68,7 @@ public class DuplicateCharEraserTest {
     }
 
     @Test
-    public void testremoveDuplicate_number() {
+    public void testRemoveDuplicateNumber() {
         DuplicateCharEraser duplicateCharEraser = new DuplicateCharEraser('1');
         String input = "011111123"; //$NON-NLS-1$
         assertEquals("0123", duplicateCharEraser.removeRepeatedChar(input)); //$NON-NLS-1$
@@ -79,26 +79,7 @@ public class DuplicateCharEraserTest {
     }
 
     @Test
-    /**
-     * 
-     * test specail cahrs("|","(","[") in regex.
-     */
-    public void testremoveDuplicate_specailchars() {
-        DuplicateCharEraser stringConverter = new DuplicateCharEraser('|');
-        String input = "atb||||x"; //$NON-NLS-1$
-        assertEquals("atb|x", stringConverter.removeRepeatedChar(input)); //$NON-NLS-1$
-
-        stringConverter = new DuplicateCharEraser('(');
-        input = "atb((((x"; //$NON-NLS-1$
-        assertEquals("atb(x", stringConverter.removeRepeatedChar(input)); //$NON-NLS-1$
-
-        stringConverter = new DuplicateCharEraser('+');
-        input = "ab++c"; //$NON-NLS-1$
-        assertEquals("ab+c", stringConverter.removeRepeatedChar(input)); //$NON-NLS-1$
-    }
-
-    @Test
-    public void testremoveDuplicate_NULL1() {
+    public void testRemoveDuplicateNull1() {
         DuplicateCharEraser duplicateCharEraser = new DuplicateCharEraser('c');
         String input = null;
         assertEquals(null, duplicateCharEraser.removeRepeatedChar(input));
@@ -107,7 +88,7 @@ public class DuplicateCharEraserTest {
     }
 
     @Test
-    public void testremoveDuplicate_NULL2() {
+    public void testRemoveDuplicateNull2() {
         DuplicateCharEraser duplicateCharEraser = new DuplicateCharEraser();
         String input = "aaabc"; //$NON-NLS-1$
         assertEquals(input, duplicateCharEraser.removeRepeatedChar(input));
@@ -118,7 +99,7 @@ public class DuplicateCharEraserTest {
     }
 
     @Test
-    public void testremoveWhiteSpace() {
+    public void testRemoveWhiteSpace() {
         DuplicateCharEraser duplicateCharEraser = new DuplicateCharEraser();
         String input = "a   b\t\t\tc\n\n\nd\r\re\f\ff"; //$NON-NLS-1$
         String cleanStr = duplicateCharEraser.removeRepeatedChar(input);
@@ -138,7 +119,7 @@ public class DuplicateCharEraserTest {
     }
 
     @Test
-    public void testremoveWhiteSpaceNull() {
+    public void testRemoveWhiteSpaceNull() {
         DuplicateCharEraser duplicateCharEraser = new DuplicateCharEraser();
         String input = ""; //$NON-NLS-1$
         String cleanStr = duplicateCharEraser.removeRepeatedChar(input);
@@ -149,7 +130,7 @@ public class DuplicateCharEraserTest {
     }
 
     @Test
-    public void testremoveWhiteSpacWithoutSpace() {
+    public void testRemoveWhiteSpacWithoutSpace() {
         DuplicateCharEraser duplicateCharEraser = new DuplicateCharEraser();
         String input = "abccdef"; //$NON-NLS-1$
         String cleanStr = duplicateCharEraser.removeRepeatedChar(input);
@@ -157,25 +138,34 @@ public class DuplicateCharEraserTest {
     }
 
     @Test
-    public void testremoveSpecialCharacter() {
+    /**
+     *  test specail cahrs('|','(','}','[',']','+','^') in regex.
+     */
+    public void testRemoveSpecialCharacter() {
         DuplicateCharEraser duplicateCharEraser = new DuplicateCharEraser(')');
-        String input = "Gooooalllll))))]]]]]]++++++[[[^^^\\\\"; //$NON-NLS-1$
-        assertEquals("Gooooalllll)]]]]]]++++++[[[^^^\\\\", duplicateCharEraser.removeRepeatedChar(input)); //$NON-NLS-1$
+        String input = "Gooooalllll))))]]]]]]++++++[[[^^^\\\\(((|||"; //$NON-NLS-1$
+        assertEquals("Gooooalllll)]]]]]]++++++[[[^^^\\\\(((|||", duplicateCharEraser.removeRepeatedChar(input)); //$NON-NLS-1$
 
         duplicateCharEraser = new DuplicateCharEraser(']');
-        assertEquals("Gooooalllll))))]++++++[[[^^^\\\\", duplicateCharEraser.removeRepeatedChar(input)); //$NON-NLS-1$
+        assertEquals("Gooooalllll))))]++++++[[[^^^\\\\(((|||", duplicateCharEraser.removeRepeatedChar(input)); //$NON-NLS-1$
 
         duplicateCharEraser = new DuplicateCharEraser('+');
-        assertEquals("Gooooalllll))))]]]]]]+[[[^^^\\\\", duplicateCharEraser.removeRepeatedChar(input)); //$NON-NLS-1$
+        assertEquals("Gooooalllll))))]]]]]]+[[[^^^\\\\(((|||", duplicateCharEraser.removeRepeatedChar(input)); //$NON-NLS-1$
 
         duplicateCharEraser = new DuplicateCharEraser('\\');
-        assertEquals("Gooooalllll))))]]]]]]++++++[[[^^^\\", duplicateCharEraser.removeRepeatedChar(input)); //$NON-NLS-1$
+        assertEquals("Gooooalllll))))]]]]]]++++++[[[^^^\\(((|||", duplicateCharEraser.removeRepeatedChar(input)); //$NON-NLS-1$
 
         duplicateCharEraser = new DuplicateCharEraser('^');
-        assertEquals("Gooooalllll))))]]]]]]++++++[[[^\\\\", duplicateCharEraser.removeRepeatedChar(input)); //$NON-NLS-1$
+        assertEquals("Gooooalllll))))]]]]]]++++++[[[^\\\\(((|||", duplicateCharEraser.removeRepeatedChar(input)); //$NON-NLS-1$
 
         duplicateCharEraser = new DuplicateCharEraser('[');
-        assertEquals("Gooooalllll))))]]]]]]++++++[^^^\\\\", duplicateCharEraser.removeRepeatedChar(input)); //$NON-NLS-1$
+        assertEquals("Gooooalllll))))]]]]]]++++++[^^^\\\\(((|||", duplicateCharEraser.removeRepeatedChar(input)); //$NON-NLS-1$
+
+        duplicateCharEraser = new DuplicateCharEraser('(');
+        assertEquals("Gooooalllll))))]]]]]]++++++[[[^^^\\\\(|||", duplicateCharEraser.removeRepeatedChar(input)); //$NON-NLS-1$
+
+        duplicateCharEraser = new DuplicateCharEraser('|');
+        assertEquals("Gooooalllll))))]]]]]]++++++[[[^^^\\\\(((|", duplicateCharEraser.removeRepeatedChar(input)); //$NON-NLS-1$
 
     }
 
