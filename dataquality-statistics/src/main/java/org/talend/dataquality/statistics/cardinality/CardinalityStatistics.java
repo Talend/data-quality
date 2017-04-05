@@ -12,6 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.statistics.cardinality;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,19 +29,22 @@ public class CardinalityStatistics extends AbstractCardinalityStatistics<Cardina
         distinctData.add(colStr);
     }
 
+    public Set<String> getDistinctData() {
+        return distinctData;
+    }
+
+    private void addAll(Collection<String> col) {
+        this.distinctData.addAll(col);
+    }
+
     public long getDistinctCount() {
         return distinctData.size();
     }
 
     /**
      * <b>This method merges two instances of CardinalityStatistics. </b>
-     * <p>
-     * If the instance to merge is not of the type CardinalityStatistics (but CardinalityHLLStatistics),
-     * the method will return false to indicate that the merge was not possible.
-     * </p>
      *
      * @param other An other instance of CardinalityStatistics
-     * @return boolean that indicates if the merge was possible.
      */
     public void merge(CardinalityStatistics other) {
         super.count += other.count;
