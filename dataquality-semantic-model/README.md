@@ -40,10 +40,10 @@
  |                                                                      |
  +======================================================================+
 --->
-org.talend.dataquality.semantic
+org.talend.dataquality.semantic-model
 ===================
 
-API for semantic category analysis
+Semantic category model used for discovery/validation
 
 Changelog
 -------------
@@ -70,7 +70,7 @@ And include the following dependency:
 <dependency>
   <groupId>org.talend.dataquality</groupId>
   <artifactId>dataquality-semantic-model</artifactId>
-  <version>1.5.6</version>
+  <version>1.6.0</version>
 </dependency>
 ```
 
