@@ -3,7 +3,7 @@ package org.talend.dataquality.semantic.model;
 public enum CategoryState {
     SANDBOX("sandbox"),
     DRAFT("draft"),
-    PUBLISH("publish");
+    PUBLISH("published");
 
     private String technicalName;
 
