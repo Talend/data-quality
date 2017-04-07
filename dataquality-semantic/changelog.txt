@@ -1,3 +1,16 @@
+V1.6.0 2017-04-07
+       - TDQ-13453 add enum mainCategory in semantic model
+       - TDQ-13493 create compound type
+       - TDQ-13046 [Spark] Regex dictionary couldn't be added to DP side	
+       - TDQ-13425 category name is null when delete document by id
+       - TDQ-13092 remove control character from initial CITY index
+       - TDQ-13297 catch exception when initializing regex validators from json 
+       - TDQ-13135 make BroadcastIndexObject contain only complete dictionaries
+       - TDQ-12379 add a cache for the validation, regex validation optimization
+       - TDQ-13062 do not broadcast deleted dictionaries to spark cluster
+       - TDQ-12830 move mongo dict generator to data-quality-ee
+       - TDP-2757  Changes for Streams integration
+
 V1.5.6 2016-12-09
 	- TDQ-13009 fix update metadata issue by using Boolean object instead of native boolean type	
 

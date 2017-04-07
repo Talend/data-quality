@@ -1,3 +1,16 @@
+V3.3.0
+	- TDQ-13511 refactoring inner class TSwooshGrouping.GroupingCallBack make it become a Outer Class
+	- TMDM-10649 : Adapt to CombinedRecordMatcher
+	- TDQ-13225 Swoosh with the option "store on disk"
+	- bug fixed TDQ-13053 SurvivorShip rules impact the grouping of swoosh and fixed dailog can not be open issue when multipass
+	- TDQ-13120 wrong GID in multipass swoosh--revert TDQ-12851
+	- (origin/TDQ-13131_unique_default_survivorship_function) bug fixed TDQ-13131 use the "most common" function as a default when the column is not selected. 
+	- bug fixed  TDQ-13060 t-swoosh tMatchGroup use error default survivship paramter
+	- buf fixed TDQ-13050 resotre log information on the soundex matcher
+	- TDQ-12976 when has two rule tabs, the matching distance can not get correct result(has some redundant value) 
+	- bug fixed TDQ-13025 make sure correctly GROUP_QUALITY when has two rule tab andd add junit test
+	- bug fixed TDQ-12919 fix a special case for 0.8333333334 and add new junit for it
+
 V3.2.6 2016-12-09
     - T-Swoosh bug fixes
 

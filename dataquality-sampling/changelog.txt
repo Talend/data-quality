@@ -1,3 +1,6 @@
+V2.4.0
+	- TDQ-13127 code clean based on sonar tip
+
 V2.3.6 2016-12-09
     (no change in this version)
 
