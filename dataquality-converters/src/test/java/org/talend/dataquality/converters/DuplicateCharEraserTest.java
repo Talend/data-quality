@@ -170,7 +170,7 @@ public class DuplicateCharEraserTest {
     }
 
     @Test
-    public void removeRepeatedChar_severalCharsShouldBeDeduplicated() {
+    public void testSeveralCharsShouldBeDeduplicated() {
         // given
         DuplicateCharEraser duplicateCharEraser = new DuplicateCharEraser("abc");
         String input = "abcabcabc";
@@ -183,7 +183,7 @@ public class DuplicateCharEraserTest {
     }
 
     @Test
-    public void removeRepeatedChar_mustAcceptRegexSpecialChars() {
+    public void testMustAcceptRegexSpecialChars() {
         // given
         DuplicateCharEraser duplicateCharEraser = new DuplicateCharEraser("a*({].");
         String input = "a*({].a*({].a*({].a*({].";
