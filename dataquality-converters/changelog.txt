@@ -1,3 +1,6 @@
+V1.0.1 (NOT RELEASED: under current development)
+	- TDQ-13358 support for String in DuplicateCharEraser
+
 V1.0.0 2017-4-7
 1. TDQ-13220 create project and Create API that converts dates  - msjian
 2. TDQ-13269 create API for Trim on a different character than whitespace  - msjian  
