@@ -12,10 +12,10 @@
 // ============================================================================
 package org.talend.dataquality.converters;
 
+import org.junit.Test;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-
-import org.junit.Test;
 
 /**
  * Test for class {@link DuplicateCharEraser}.
@@ -167,6 +167,32 @@ public class DuplicateCharEraserTest {
         duplicateCharEraser = new DuplicateCharEraser('|');
         assertEquals("Gooooalllll))))]]]]]]++++++[[[^^^\\\\(((|", duplicateCharEraser.removeRepeatedChar(input)); //$NON-NLS-1$
 
+    }
+
+    @Test
+    public void removeRepeatedChar_severalCharsShouldBeDeduplicated() {
+        // given
+        DuplicateCharEraser duplicateCharEraser = new DuplicateCharEraser("abc");
+        String input = "abcabcabc";
+
+        // when
+        String cleanStr = duplicateCharEraser.removeRepeatedChar(input);
+
+        // then
+        assertEquals("abc", cleanStr);
+    }
+
+    @Test
+    public void removeRepeatedChar_mustAcceptRegexSpecialChars() {
+        // given
+        DuplicateCharEraser duplicateCharEraser = new DuplicateCharEraser("a*({].");
+        String input = "a*({].a*({].a*({].a*({].";
+
+        // when
+        String cleanStr = duplicateCharEraser.removeRepeatedChar(input);
+
+        // then
+        assertEquals("a*({].", cleanStr);
     }
 
 }

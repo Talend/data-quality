@@ -42,13 +42,16 @@ public class DuplicateCharEraser {
      * @param repeatChar the string to be removed when it appears consecutively several times.
      */
     public DuplicateCharEraser(char repeatChar) {
-        Pattern nonWordPattern = Pattern.compile("([\\W])"); //$NON-NLS-1$
-        Matcher matcher = nonWordPattern.matcher(String.valueOf(repeatChar));
-        if (matcher.find()) {
-            removeRepeatCharPattern = Pattern.compile("([\\" + repeatChar + "])\\1+"); //$NON-NLS-1$ //$NON-NLS-2$
-        } else {
-            removeRepeatCharPattern = Pattern.compile("([" + repeatChar + "])\\1+"); //$NON-NLS-1$ //$NON-NLS-2$
-        }
+        this(Character.toString(repeatChar));
+    }
+
+    /**
+     * Create a DuplicateCharEraser that will remove any repetition of the given char sequence.
+     *
+     * @param repeatChar the char sequence of which repetitions must be removed.
+     */
+    public DuplicateCharEraser(String repeatChar) {
+        removeRepeatCharPattern = Pattern.compile("(" + Pattern.quote(repeatChar) + ")\\1+");
     }
 
     /**
