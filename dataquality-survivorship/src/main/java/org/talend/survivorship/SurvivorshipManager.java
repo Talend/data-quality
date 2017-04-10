@@ -13,7 +13,10 @@
 package org.talend.survivorship;
 
 import java.io.File;
+import java.lang.ref.SoftReference;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -29,10 +32,15 @@ import org.kie.internal.builder.KnowledgeBuilderErrors;
 import org.kie.internal.builder.KnowledgeBuilderFactory;
 import org.kie.internal.io.ResourceFactory;
 import org.kie.internal.runtime.StatefulKnowledgeSession;
+import org.talend.survivorship.action.handler.AbstractChainResponsibilityHandler;
+import org.talend.survivorship.action.handler.HandlerParameter;
+import org.talend.survivorship.action.handler.MCCRHandler;
+import org.talend.survivorship.action.handler.MTCRHandler;
 import org.talend.survivorship.model.Column;
 import org.talend.survivorship.model.DataSet;
 import org.talend.survivorship.model.RuleDefinition;
 import org.talend.survivorship.model.RuleDefinition.Order;
+import org.talend.survivorship.utils.ChainNodeMap;
 
 /**
  * This class is provided for component runtime.
@@ -58,6 +66,10 @@ public class SurvivorshipManager extends KnowledgeManager {
      * collection of data and informations.
      */
     protected DataSet dataset;
+
+    protected List<AbstractChainResponsibilityHandler> chainList;
+
+    private ChainNodeMap chainMap;
 
     /**
      * SurvivorshipManager constructor.
@@ -178,6 +190,7 @@ public class SurvivorshipManager extends KnowledgeManager {
         kbase.addKnowledgePackages(kbuilder.getKnowledgePackages());
 
         dataset = new DataSet(columnList);
+        dataset.setSurvivorManager(new SoftReference<SurvivorshipManager>(this));
     }
 
     /**
@@ -211,13 +224,27 @@ public class SurvivorshipManager extends KnowledgeManager {
      * 
      * @param data A 2-dimension array containing input records.
      */
+    public boolean runSessionWithDrools(Object[][] data) {
+
+        dataset.reset();
+        dataset.initData(data);
+        initChainResponsibilityHandler();
+        executeSurvivored(data);
+        dataset.finalizeComputation();
+        return true;
+    }
+
+    /**
+     * create and run a new session for a survivor group.
+     * 
+     * @param data A 2-dimension array containing input records.
+     */
     public boolean runSession(Object[][] data) {
 
         StatefulKnowledgeSession ksession = kbase.newStatefulKnowledgeSession();
         dataset.reset();
         dataset.initData(data);
         ksession.setGlobal("dataset", dataset); //$NON-NLS-1$
-
         // go !
         try {
             FactType recordInType = kbase.getFactType(packageName, SurvivorshipConstants.RECORD_IN);
@@ -243,10 +270,131 @@ public class SurvivorshipManager extends KnowledgeManager {
         ksession.startProcess(packageName + "." + SurvivorshipConstants.SURVIVOR_FLOW); //$NON-NLS-1$
         ksession.fireAllRules();
         ksession.dispose();
-        // kbase.getStatefulKnowledgeSessions().clear();
+        kbase.getStatefulKnowledgeSessions().clear();
 
         dataset.finalizeComputation();
         return true;
+    }
+
+    /**
+     * Create by zshen init the handler of chain Responsibility
+     */
+    private void initChainResponsibilityHandler() {
+        String currentRuleColumn = null;
+
+        AbstractChainResponsibilityHandler currentMCHandler = null;
+        AbstractChainResponsibilityHandler firstTargetNode = null;
+        AbstractChainResponsibilityHandler lastTargetNode = null;
+        initChainMap();
+        initChainList();
+        RuleDefinition perviousSEQRd = null;
+        for (RuleDefinition rd : this.getRuleDefinitionList()) {
+            Order order = rd.getOrder();
+            if (order == Order.SEQ) {
+                // next SEQ case inseart first MTCR node into queue
+                if (currentMCHandler != null && firstTargetNode != null) {
+                    currentMCHandler.linkSuccessor(firstTargetNode);
+                    firstTargetNode = null;
+                    lastTargetNode = null;
+                }
+                currentRuleColumn = rd.getRuleName();
+                perviousSEQRd = rd;
+            } else if (order == Order.MT && lastTargetNode != null) {
+                lastTargetNode = lastTargetNode.linkSuccessor(createMTHandler(perviousSEQRd, rd));
+                continue;
+            }
+
+            currentMCHandler = chainMap.get(currentRuleColumn);
+            MCCRHandler newMCHandler = CreateMCHandler(rd);
+            // SEQ case only
+            if (currentMCHandler == null) {
+                currentMCHandler = newMCHandler;
+                firstTargetNode = new MTCRHandler(newMCHandler);
+                lastTargetNode = firstTargetNode;
+                chainMap.put(currentRuleColumn, newMCHandler);
+                chainList.add(newMCHandler);
+            } else {
+                // MC case only
+                currentMCHandler = currentMCHandler.linkSuccessor(newMCHandler);
+            }
+
+        }
+        if (currentMCHandler != null && firstTargetNode != null) {
+            currentMCHandler.linkSuccessor(firstTargetNode);
+            firstTargetNode = null;
+            lastTargetNode = null;
+        }
+    }
+
+    /**
+     * Create by zshen chain responsibility list
+     */
+    private void initChainList() {
+
+        if (chainList == null) {
+            chainList = new ArrayList<>();
+        } else {
+            chainList.clear();
+        }
+    }
+
+    /**
+     * Create by zshen Create new mutli-condiation handler
+     * 
+     * @param rd The rule definition of handler
+     * @return new mutli-condiation handler
+     */
+    private MCCRHandler CreateMCHandler(RuleDefinition rd) {
+        return new MCCRHandler(new HandlerParameter(dataset, rd.getFunction().getAction(),
+                getColumnByName(rd.getReferenceColumn()), getColumnByName(rd.getTargetColumn()), rd.getRuleName(),
+                rd.getOperation(), rd.isIgnoreBlanks(), getColumnIndexMap(), null, false));
+    }
+
+    /**
+     * Create by zshen Create new mutli-target handler
+     * 
+     * @param rd The rule definition of handler
+     * @return new mutli-target handler
+     */
+    private MTCRHandler createMTHandler(RuleDefinition perviousSEQRd, RuleDefinition rd) {
+        return new MTCRHandler(new HandlerParameter(dataset, perviousSEQRd.getFunction().getAction(),
+                getColumnByName(perviousSEQRd.getReferenceColumn()), getColumnByName(rd.getTargetColumn()),
+                perviousSEQRd.getRuleName(), rd.getOperation(), rd.isIgnoreBlanks(), getColumnIndexMap(), null, false));
+    }
+
+    /**
+     * Create by zshen init chain map
+     */
+    private void initChainMap() {
+        if (chainMap == null) {
+            chainMap = new ChainNodeMap();
+        } else {
+            chainMap.clear();
+        }
+
+    }
+
+    /**
+     * Create by zshen Make chainMap execute handler of every column one by one
+     */
+    private void executeSurvivored(Object[][] data) {
+        for (int i = data.length - 1; i >= 0; i--) {
+            chainMap.handleRequest(data[i], i);
+        }
+    }
+
+    /**
+     * Create by zshen Get a map which mapping the name of column and it's index
+     * 
+     * @return a map which mapping the name of column and it's index
+     */
+    private Map<String, Integer> getColumnIndexMap() {
+        Map<String, Integer> columnIndexMap = new HashMap<>();
+        int index = 0;
+        for (Column col : this.columnList) {
+            columnIndexMap.put(col.getName(), index++);
+        }
+        return columnIndexMap;
     }
 
     /**

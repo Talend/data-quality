@@ -1,0 +1,14 @@
+package org.talend.survivorship.conflict.fre_null_fre 
+
+rule "more_common_middleName"
+    no-loop true
+    dialect "mvel"
+    ruleflow-group "more_common_middleNameGroup"
+when
+    $input : RecordIn( dataset.isMostCommon( middlename, "middleName", false) )  
+then
+    dataset.survive( $input.TALEND_INTERNAL_ID, "middleName", drools.getRule().getName());
+
+end
+
+

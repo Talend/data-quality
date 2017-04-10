@@ -17,6 +17,10 @@ package org.talend.survivorship;
  */
 public class SurvivorshipConstants {
 
+    private SurvivorshipConstants() {
+        // no need to implement
+    }
+
     public static final String PKG_ITEM_EXTENSION = "package"; //$NON-NLS-1$
 
     public static final String MODEL_ITEM_EXTENTION = "model.drl"; //$NON-NLS-1$

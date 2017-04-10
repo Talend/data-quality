@@ -12,6 +12,20 @@
 // ============================================================================
 package org.talend.survivorship.model;
 
+import org.talend.survivorship.action.ExclusivenessAction;
+import org.talend.survivorship.action.ExpressionAction;
+import org.talend.survivorship.action.ISurvivoredAction;
+import org.talend.survivorship.action.LargestAction;
+import org.talend.survivorship.action.LongestAction;
+import org.talend.survivorship.action.MatchRegexAction;
+import org.talend.survivorship.action.MostAncientAction;
+import org.talend.survivorship.action.MostCommonAction;
+import org.talend.survivorship.action.MostCompleteAction;
+import org.talend.survivorship.action.MostRecentAction;
+import org.talend.survivorship.action.ShortestAction;
+import org.talend.survivorship.action.SmallestAction;
+import org.talend.survivorship.action.SurvivedValuePassAction;
+
 /**
  * represents definition of a user rule from the component.
  */
@@ -122,7 +136,8 @@ public class RuleDefinition {
     public enum Order {
         SEQ("SEQ"), // Sequential //$NON-NLS-1$
         MC("MC"), // Multi-condition //$NON-NLS-1$
-        MT("MT");// Multi-target //$NON-NLS-1$
+        MT("MT"), // Multi-target //$NON-NLS-1$
+        CR("CR");//conflict resolved  //$NON-NLS-1$
 
         private final String label;
 
@@ -153,32 +168,44 @@ public class RuleDefinition {
      */
     public enum Function {
 
-        Expression("Expression"), // User defined rules. //$NON-NLS-1$
+        Expression("Expression", new ExpressionAction()), // User defined rules. //$NON-NLS-1$
 
-        MostCommon("MostCommon"), //$NON-NLS-1$
+        MostCommon("MostCommon", new MostCommonAction()), //$NON-NLS-1$
 
-        MostRecent("MostRecent"), //$NON-NLS-1$
+        MostRecent("MostRecent", new MostRecentAction()), //$NON-NLS-1$
 
-        MostAncient("MostAncient"), //$NON-NLS-1$
+        MostAncient("MostAncient", new MostAncientAction()), //$NON-NLS-1$
 
-        MostComplete("MostComplete"), //$NON-NLS-1$
+        MostComplete("MostComplete", new MostCompleteAction()), //$NON-NLS-1$
 
-        Longest("Longest"), //$NON-NLS-1$
+        Longest("Longest", new LongestAction()), //$NON-NLS-1$
 
-        Shortest("Shortest"), //$NON-NLS-1$
+        Shortest("Shortest", new ShortestAction()), //$NON-NLS-1$
 
-        Largest("Largest"), //$NON-NLS-1$
+        Largest("Largest", new LargestAction()), //$NON-NLS-1$
 
-        Smallest("Smallest"), //$NON-NLS-1$
+        Smallest("Smallest", new SmallestAction()), //$NON-NLS-1$
 
-        MatchRegex("MatchRegex"), //$NON-NLS-1$
+        MatchRegex("MatchRegex", new MatchRegexAction()), //$NON-NLS-1$
 
-        MatchIndex("MatchIndex"); //$NON-NLS-1$
+        MappingTo("MappingTo", new SurvivedValuePassAction()), //$NON-NLS-1$
+
+        Exclusiveness("Exclusiveness", new ExclusivenessAction()), //$NON-NLS-1$
+
+        MatchIndex("MatchIndex", null); //$NON-NLS-1$
 
         private final String label;
 
+        private final ISurvivoredAction action;
+
+        Function(String label, ISurvivoredAction action) {
+            this.label = label;
+            this.action = action;
+        }
+
         Function(String label) {
             this.label = label;
+            this.action = null;
         }
 
         public String getLabel() {
@@ -188,6 +215,15 @@ public class RuleDefinition {
         @Override
         public String toString() {
             return this.label;
+        }
+
+        /**
+         * Getter for action.
+         * 
+         * @return the action
+         */
+        public ISurvivoredAction getAction() {
+            return this.action;
         }
 
         /**

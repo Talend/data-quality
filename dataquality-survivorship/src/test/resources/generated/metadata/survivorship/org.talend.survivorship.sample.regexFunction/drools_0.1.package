@@ -1,0 +1,20 @@
+package org.talend.survivorship.sample.regexFunction 
+
+import java.util.Date
+import java.math.BigDecimal
+
+global org.talend.survivorship.model.DataSet dataset
+
+declare  RecordIn 
+
+    TALEND_INTERNAL_ID : int  
+    firstname : String  
+    lastname : String  
+    city : String  
+    id : Integer  
+    birthday : Date  
+    gid : String  
+    grp_size : Integer  
+end
+
+

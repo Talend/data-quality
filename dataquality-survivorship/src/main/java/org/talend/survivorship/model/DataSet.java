@@ -12,17 +12,25 @@
 // ============================================================================
 package org.talend.survivorship.model;
 
+import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
+import org.talend.survivorship.SurvivorshipManager;
+import org.talend.survivorship.action.ISurvivoredAction;
+import org.talend.survivorship.action.handler.CRCRHandler;
+import org.talend.survivorship.action.handler.HandlerParameter;
 import org.talend.survivorship.services.CompletenessService;
 import org.talend.survivorship.services.FrequencyService;
 import org.talend.survivorship.services.NumberService;
 import org.talend.survivorship.services.StringService;
 import org.talend.survivorship.services.TimeService;
+import org.talend.survivorship.utils.ChainNodeMap;
 
 /**
  * Collection of a group of data. This class will be instantiated and insert into the rule engine as global variable.
@@ -33,7 +41,11 @@ public class DataSet {
 
     private List<Column> columnList;
 
+    private ChainNodeMap chainMap;
+
     private HashMap<String, Object> survivorMap;
+
+    protected HashMap<String, Integer> survivorIndexMap;
 
     private List<HashSet<String>> conflictList;
 
@@ -49,6 +61,11 @@ public class DataSet {
 
     private NumberService ns;
 
+    private SoftReference<SurvivorshipManager> survivorManager;
+
+    private SoftReference<HashMap<String, List<Integer>>> conflictDataMap = new SoftReference<>(
+            new HashMap<String, List<Integer>>());
+
     /**
      * DataSet constructor.
      * 
@@ -57,12 +74,25 @@ public class DataSet {
      */
     public DataSet(List<Column> columns) {
         columnList = columns;
-        recordList = new ArrayList<Record>();
-        survivorMap = new HashMap<String, Object>();
-        conflictList = new ArrayList<HashSet<String>>();
-        conflictsOfSurvivor = new HashSet<String>();
+        recordList = new ArrayList<>();
+        survivorMap = new HashMap<>();
+        conflictList = new ArrayList<>();
+        conflictsOfSurvivor = new HashSet<>();
+        chainMap = new ChainNodeMap();
+        survivorIndexMap = new HashMap<>();
 
         initServices();
+    }
+
+    /**
+     * DataSet constructor.
+     * 
+     * @param columns
+     * @param input
+     */
+    protected DataSet(List<Column> columns, List<Record> recordList) {
+        this(columns);
+        this.recordList = recordList;
     }
 
     public void initData(Object[][] input) {
@@ -86,7 +116,7 @@ public class DataSet {
     }
 
     private void initServices() {
-        // TODO use the same services instead of creating new instance for each data group.
+        // only data is keep use same one
         fs = new FrequencyService(this);
         ss = new StringService(this);
         ts = new TimeService(this);
@@ -97,6 +127,7 @@ public class DataSet {
     public void reset() {
         recordList.clear();
         survivorMap.clear();
+        survivorIndexMap.clear();
         conflictList.clear();
         conflictsOfSurvivor.clear();
         fs.init();
@@ -140,6 +171,7 @@ public class DataSet {
      * @param colName
      * @deprecated this method is kept for backward compatibility of existing rules
      */
+    @Deprecated
     public void survive(int recNum, String colName) {
         Record record = recordList.get(recNum);
         Attribute attribute = record.getAttribute(colName);
@@ -163,10 +195,54 @@ public class DataSet {
             // TDQ-12742 when there are 2 or more rules on a column, one rule can work only if the previous one does
             // not producer any survivor
             if (column.getSurvivingRuleName() == null || ruleName.equals(column.getSurvivingRuleName())) {
+                String columnName = column.getName();
+
+                // conflict generated
+                CRCRHandler crcrHandler = (CRCRHandler) this.chainMap.get(columnName);
+                // If we don't do that maybe we can store conflict data number form here
+                if (crcrHandler == null) {
+                    for (ConflictRuleDefinition ruleDef : column.getConflictResolveList()) {
+                        ISurvivoredAction action = ruleDef.getFunction().getAction();
+                        Column refColumn = record.getAttribute(ruleDef.getReferenceColumn()).getColumn();
+                        Column tarColumn = column;
+                        String expression = ruleDef.getOperation();
+                        String cRuleName = ruleDef.getRuleName();
+                        boolean isIgnoreBlank = ruleDef.isIgnoreBlanks();
+                        String fillColumn = ruleDef.getFillColumn();
+                        boolean isDealDup = ruleDef.isDuplicateSurCheck();
+                        CRCRHandler newCrcrHandler = new CRCRHandler(new HandlerParameter(this, action, refColumn, tarColumn,
+                                cRuleName, expression, isIgnoreBlank, this.getColumnIndexMap(), fillColumn, isDealDup));
+                        if (crcrHandler == null) {
+                            this.chainMap.put(columnName, newCrcrHandler);
+                        }
+                        crcrHandler = crcrHandler == null ? newCrcrHandler
+                                : (CRCRHandler) crcrHandler.linkSuccessor(newCrcrHandler);
+                    }
+                }
+                // store conflict data
+                if (crcrHandler != null) {
+                    this.addConfDataIndex(columnName, recNum);
+                }
+
+                // modify this attribute after conflict resolve
                 attribute.setSurvived(true);
                 column.setSurvivingRuleName(ruleName);
             }
         }
+    }
+
+    /**
+     * Create by zshen Get a mapping between column name and column index
+     * 
+     * @return a mapping map between column name and column index
+     */
+    private Map<String, Integer> getColumnIndexMap() {
+        Map<String, Integer> columnIndexMap = new HashMap<>();
+        int index = 0;
+        for (Column col : this.columnList) {
+            columnIndexMap.put(col.getName(), index++);
+        }
+        return columnIndexMap;
     }
 
     /**
@@ -207,17 +283,75 @@ public class DataSet {
             for (Column col : columnList) {
                 Attribute a = record.getAttribute(col.getName());
                 if (a.isSurvived()) {
-                    if (survivorMap.get(col.getName()) == null) {
-                        survivorMap.put(col.getName(), a.getValue());
-                    } else {
-                        Object survivor = survivorMap.get(col.getName());
-                        if (a.getValue() != null && !a.getValue().equals(survivor)) {
-                            HashSet<String> desc = conflictList.get(a.getRecordID());
-                            desc.add(col.getName());
-                            conflictsOfSurvivor.add(col.getName());
-                        }
-                    }
+                    // defause case first one
+                    conflictRecord(col, a);
                 }
+            }
+        }
+        // this variable should be same with record.getID()
+        // for (Record record : recordList) {
+        // HashSet<String> hashSet = conflictList.get(record.getId());
+        // }
+
+        Iterator<String> iterator = conflictsOfSurvivor.iterator();
+        while (iterator.hasNext()) {
+            String conflictCol = iterator.next();
+            CRCRHandler crcrHandler = (CRCRHandler) this.chainMap.get(conflictCol);
+            List<Integer> conflictDataIndexList = this.getConflictDataIndexList(conflictCol);
+            if (crcrHandler != null && conflictDataIndexList != null) {
+                crcrHandler.handleRequest();
+            }
+            if (crcrHandler != null) {
+                SurvivedResult survivoredRowNum = crcrHandler.getSurvivoredRowNum();
+                if (survivoredRowNum != null) {
+                    Attribute attribute = recordList.get(survivoredRowNum.getRowNum())
+                            .getAttribute(survivoredRowNum.getColumnName());
+                    Object survivedVlaue = attribute.getValue();
+                    if (crcrHandler.getHandlerParameter().isDealDup() && checkDupSurValue(survivedVlaue)) {
+                        survivedVlaue = crcrHandler.getNonDupResult(survivedVlaue);
+                    }
+                    survivorMap.put(conflictCol, survivedVlaue);
+                    survivorIndexMap.put(conflictCol, survivoredRowNum.getRowNum());
+                }
+            }
+        }
+
+    }
+
+    /**
+     * Create by zshen check whether new value has been exist in the survivorMap.
+     * 
+     * @param value The new value
+     * @return true when exist duplicate else false
+     */
+    private boolean checkDupSurValue(Object value) {
+        Iterator<Object> iterator = survivorMap.values().iterator();
+        while (iterator.hasNext()) {
+            if (value.equals(iterator.next())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Create by zshen record conflict resolved result
+     * 
+     * @param col The column current result is come from
+     * @param a the value which should be record by survived value
+     */
+    private void conflictRecord(Column col, Attribute a) {
+        // default case get first one
+        if (survivorMap.get(col.getName()) == null) {
+            survivorMap.put(col.getName(), a.getValue());
+            survivorIndexMap.put(col.getName(), a.getRecordID());
+        } else {
+            survivorIndexMap.remove(col.getName());
+            Object survivor = survivorMap.get(col.getName());
+            if (a.getValue() != null && !a.getValue().equals(survivor)) {
+                HashSet<String> desc = conflictList.get(a.getRecordID());
+                desc.add(col.getName());
+                conflictsOfSurvivor.add(col.getName());
             }
         }
     }
@@ -225,9 +359,9 @@ public class DataSet {
     /**
      * determine if a value is the most common one of a given column. Used only in rules.
      * 
-     * @param var
-     * @param column
-     * @return
+     * @param var the value which need to be check
+     * @param column the column which var belong
+     * @return true when var is the most common else false
      */
     public boolean isMostCommon(Object var, String column, boolean ignoreBlanks) {
         if (var == null) {
@@ -242,9 +376,9 @@ public class DataSet {
     /**
      * determine if a record is the most complete. Used only in rules.
      * 
-     * @param var
-     * @param column
-     * @return
+     * @param var The input data
+     * @param column The column which input data belong
+     * @return true if it is esle false
      */
     public boolean isMostComplete(int recNum) {
         if (cs.getMostCompleteRecNumList().contains(recNum)) {
@@ -256,9 +390,9 @@ public class DataSet {
     /**
      * determine if a value is the longest one of a given column. Used only in rules.
      * 
-     * @param var
-     * @param column
-     * @return
+     * @param var The value which need to be check
+     * @param column The column which input data belong
+     * @return True if it is esle false
      */
     public boolean isLongest(Object var, String column, boolean ignoreBlanks) {
         if (var == null) {
@@ -270,9 +404,9 @@ public class DataSet {
     /**
      * determine if a value is the shortest one of a given column. Used only in rules.
      * 
-     * @param var
-     * @param column
-     * @return
+     * @param var The value which need to be check
+     * @param column The column which input data belong
+     * @return True if it is esle false
      */
     public boolean isShortest(Object var, String column, boolean ignoreBlanks) {
         if (var == null) {
@@ -284,9 +418,9 @@ public class DataSet {
     /**
      * determine if a value is the latest one of a given column. Used only in rules.
      * 
-     * @param var
-     * @param column
-     * @return
+     * @param var The value which need to be check
+     * @param column The column which input data belong
+     * @return true If it is esle false
      */
     public boolean isLatest(Object var, String column) {
         if (var == null) {
@@ -298,9 +432,9 @@ public class DataSet {
     /**
      * determine if a value is the earliest one of a given column. Used only in rules.
      * 
-     * @param var
-     * @param column
-     * @return
+     * @param var The value which need to be check
+     * @param column The column which input data belong
+     * @return true If it is esle false
      */
     public boolean isEarliest(Object var, String column) {
         if (var == null) {
@@ -312,9 +446,9 @@ public class DataSet {
     /**
      * determine if a value is the largest one of a given column. Used only in rules.
      * 
-     * @param var
-     * @param column
-     * @return
+     * @param var The value which need to be check
+     * @param column The column which input data belong
+     * @return true If it is esle false
      */
     public boolean isLargest(Object var, String column) {
         if (var == null) {
@@ -326,9 +460,9 @@ public class DataSet {
     /**
      * determine if a value is the smallest one of a given column. Used only in rules.
      * 
-     * @param var
-     * @param column
-     * @return
+     * @param var The value which need to be check
+     * @param column The column which input data belong
+     * @return true If it is esle false
      */
     public boolean isSmallest(Object var, String column) {
         if (var == null) {
@@ -371,6 +505,87 @@ public class DataSet {
      */
     public List<Record> getRecordList() {
         return recordList;
+    }
+
+    /**
+     * Sets the survivorManager.
+     * 
+     * @param survivorManager the survivorManager to set
+     */
+    public void setSurvivorManager(SoftReference<SurvivorshipManager> survivorManager) {
+        this.survivorManager = survivorManager;
+    }
+
+    /**
+     * Getter for conflictDataMap.
+     * 
+     * @return the conflictDataMap
+     */
+    public SoftReference<HashMap<String, List<Integer>>> getConflictDataMap() {
+        return this.conflictDataMap;
+    }
+
+    /**
+     * 
+     * Get all of conflict data
+     * 
+     * @param colName the name of column which conflict data come from
+     * @return The list of conflict data
+     */
+    public List<Integer> getConflictDataIndexList(String colName) {
+        Map<String, List<Integer>> tempConflictDataMap = this.getConflictDataMap().get();
+        if (tempConflictDataMap != null) {
+            return tempConflictDataMap.get(colName);
+        } else {
+            return null;
+        }
+
+    }
+
+    /**
+     * 
+     * Create by zshen store conflict row num of every column.
+     * 
+     * @param colName The name of column which generate conflict
+     * @param index The row number of conflic generate
+     */
+    public void addConfDataIndex(String colName, Integer index) {
+        Map<String, List<Integer>> tempConflictDataMap = this.getConflictDataMap().get();
+        if (tempConflictDataMap != null) {
+            List<Integer> indexList = tempConflictDataMap.get(colName);
+            if (indexList == null) {
+                indexList = new ArrayList<>();
+                tempConflictDataMap.put(colName, indexList);
+            }
+            indexList.add(index);
+        } else {
+            return;
+        }
+
+    }
+
+    /**
+     * 
+     * Create by zshen create subset of current dataset by speciala column name.
+     * 
+     * @param colName The column name of new subset
+     * @return a sebset of current dataset not new data be created in the process
+     */
+    public SubDataSet createSubDataSet(String colName) {
+        List<Integer> conflictDataIndexList = this.getConflictDataIndexList(colName);
+        if (conflictDataIndexList == null) {
+            return null;
+        }
+        return new SubDataSet(this, conflictDataIndexList);
+    }
+
+    /**
+     * Getter for survivorIndexMap.
+     * 
+     * @return the survivorIndexMap
+     */
+    public HashMap<String, Integer> getSurvivorIndexMap() {
+        return this.survivorIndexMap;
     }
 
 }

@@ -1,0 +1,21 @@
+package org.talend.survivorship.conflict.fre_null_fre 
+
+import java.util.Date
+import java.math.BigDecimal
+
+global org.talend.survivorship.model.DataSet dataset
+
+declare  RecordIn 
+
+      TALEND_INTERNAL_ID : int  
+    firstname : String  
+    lastname : String  
+    city1 : String
+    city2 : String  
+    id : Integer  
+    birthday : Date  
+    gid : String  
+    grp_size : Integer  
+end
+
+

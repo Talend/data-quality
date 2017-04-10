@@ -26,6 +26,10 @@ public class NumberService extends AbstractService {
 
     HashMap<String, Number> smallestValueMap;
 
+    HashMap<String, Number> secondLargestValueMap;
+
+    HashMap<String, Number> secondSmallestValueMap;
+
     /**
      * StringService constructor.
      * 
@@ -35,6 +39,8 @@ public class NumberService extends AbstractService {
         super(dataset);
         largestValueMap = new HashMap<String, Number>();
         smallestValueMap = new HashMap<String, Number>();
+        secondLargestValueMap = new HashMap<String, Number>();
+        secondSmallestValueMap = new HashMap<String, Number>();
     }
 
     /**
@@ -44,7 +50,7 @@ public class NumberService extends AbstractService {
      * @return
      */
     public void putAttributeValues(String column) {
-        Number max = null, min = null;
+        Number max = null, min = null, secondMax = null, secondMin = null;
         for (Attribute attr : dataset.getAttributesByColumn(column)) {
 
             if (attr.isAlive()) {
@@ -54,20 +60,41 @@ public class NumberService extends AbstractService {
                     continue;
                 }
 
-                if (max == null || min == null) {
+                if (max == null || min == null || secondMin == null || secondMax == null) {
                     max = value;
                     min = value;
+                    secondMax = value;
+                    secondMin = value;
                 } else {
                     if (value.doubleValue() > max.doubleValue()) {
+                        secondMax = max;
                         max = value;
+                        // second input data is max then do that
+                        if (secondMax == min) {
+                            secondMin = max;
+                        }
                     } else if (value.doubleValue() < min.doubleValue()) {
+                        secondMin = min;
                         min = value;
+                        // second input data is min then do that
+                        if (secondMin == max) {
+                            secondMax = min;
+                        }
+                    }
+
+                    if (value.doubleValue() < max.doubleValue() && secondMax.doubleValue() < value.doubleValue()) {
+                        secondMax = value;
+                    }
+                    if (value.doubleValue() > min.doubleValue() && secondMin.doubleValue() > value.doubleValue()) {
+                        secondMin = value;
                     }
                 }
             }
         }
         largestValueMap.put(column, max);
         smallestValueMap.put(column, min);
+        secondLargestValueMap.put(column, secondMax);
+        secondSmallestValueMap.put(column, secondMin);
     }
 
     /**
@@ -102,6 +129,38 @@ public class NumberService extends AbstractService {
         return smallestValueMap.get(column).equals(var);
     }
 
+    /**
+     * Determine if an object is the second largest value of a given column.
+     * 
+     * @param var
+     * @param column
+     * @return
+     */
+    public boolean isSecondLargestValue(Object var, String column) {
+
+        if (secondLargestValueMap.get(column) == null) {
+            putAttributeValues(column);
+        }
+
+        return secondLargestValueMap.get(column).equals(var);
+    }
+
+    /**
+     * Determine if an object is the second smallest value of a given column.
+     * 
+     * @param var
+     * @param column
+     * @return
+     */
+    public boolean isSecondSmallestValue(Object var, String column) {
+
+        if (secondSmallestValueMap.get(column) == null) {
+            putAttributeValues(column);
+        }
+
+        return secondSmallestValueMap.get(column).equals(var);
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -111,6 +170,8 @@ public class NumberService extends AbstractService {
     public void init() {
         largestValueMap.clear();
         smallestValueMap.clear();
+        secondLargestValueMap.clear();
+        secondSmallestValueMap.clear();
     }
 
 }
