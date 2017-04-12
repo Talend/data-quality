@@ -22,13 +22,13 @@ import org.talend.survivorship.model.DataSet;
  */
 public class NumberService extends AbstractService {
 
-    HashMap<String, Number> largestValueMap;
+    protected HashMap<String, Number> largestValueMap;
 
-    HashMap<String, Number> smallestValueMap;
+    protected HashMap<String, Number> smallestValueMap;
 
-    HashMap<String, Number> secondLargestValueMap;
+    protected HashMap<String, Number> secondLargestValueMap;
 
-    HashMap<String, Number> secondSmallestValueMap;
+    protected HashMap<String, Number> secondSmallestValueMap;
 
     /**
      * StringService constructor.
@@ -37,10 +37,10 @@ public class NumberService extends AbstractService {
      */
     public NumberService(DataSet dataset) {
         super(dataset);
-        largestValueMap = new HashMap<String, Number>();
-        smallestValueMap = new HashMap<String, Number>();
-        secondLargestValueMap = new HashMap<String, Number>();
-        secondSmallestValueMap = new HashMap<String, Number>();
+        largestValueMap = new HashMap<>();
+        smallestValueMap = new HashMap<>();
+        secondLargestValueMap = new HashMap<>();
+        secondSmallestValueMap = new HashMap<>();
     }
 
     /**
@@ -50,7 +50,10 @@ public class NumberService extends AbstractService {
      * @return
      */
     public void putAttributeValues(String column) {
-        Number max = null, min = null, secondMax = null, secondMin = null;
+        Number max = null;
+        Number min = null;
+        Number secondMax = null;
+        Number secondMin = null;
         for (Attribute attr : dataset.getAttributesByColumn(column)) {
 
             if (attr.isAlive()) {
@@ -70,14 +73,14 @@ public class NumberService extends AbstractService {
                         secondMax = max;
                         max = value;
                         // second input data is max then do that
-                        if (secondMax == min) {
+                        if (secondMax.equals(min)) {
                             secondMin = max;
                         }
                     } else if (value.doubleValue() < min.doubleValue()) {
                         secondMin = min;
                         min = value;
                         // second input data is min then do that
-                        if (secondMin == max) {
+                        if (secondMin.equals(max)) {
                             secondMax = min;
                         }
                     }

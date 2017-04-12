@@ -13,7 +13,6 @@
 package org.talend.survivorship;
 
 import java.io.File;
-import java.lang.ref.SoftReference;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,6 +32,7 @@ import org.kie.internal.builder.KnowledgeBuilderFactory;
 import org.kie.internal.io.ResourceFactory;
 import org.kie.internal.runtime.StatefulKnowledgeSession;
 import org.talend.survivorship.action.handler.AbstractChainResponsibilityHandler;
+import org.talend.survivorship.action.handler.FunctionParameter;
 import org.talend.survivorship.action.handler.HandlerParameter;
 import org.talend.survivorship.action.handler.MCCRHandler;
 import org.talend.survivorship.action.handler.MTCRHandler;
@@ -190,7 +190,6 @@ public class SurvivorshipManager extends KnowledgeManager {
         kbase.addKnowledgePackages(kbuilder.getKnowledgePackages());
 
         dataset = new DataSet(columnList);
-        dataset.setSurvivorManager(new SoftReference<SurvivorshipManager>(this));
     }
 
     /**
@@ -305,7 +304,7 @@ public class SurvivorshipManager extends KnowledgeManager {
             }
 
             currentMCHandler = chainMap.get(currentRuleColumn);
-            MCCRHandler newMCHandler = CreateMCHandler(rd);
+            MCCRHandler newMCHandler = createMCHandler(rd);
             // SEQ case only
             if (currentMCHandler == null) {
                 currentMCHandler = newMCHandler;
@@ -344,10 +343,12 @@ public class SurvivorshipManager extends KnowledgeManager {
      * @param rd The rule definition of handler
      * @return new mutli-condiation handler
      */
-    private MCCRHandler CreateMCHandler(RuleDefinition rd) {
-        return new MCCRHandler(new HandlerParameter(dataset, rd.getFunction().getAction(),
-                getColumnByName(rd.getReferenceColumn()), getColumnByName(rd.getTargetColumn()), rd.getRuleName(),
-                rd.getOperation(), rd.isIgnoreBlanks(), getColumnIndexMap(), null, false));
+    private MCCRHandler createMCHandler(RuleDefinition rd) {
+        FunctionParameter functionParameter = new FunctionParameter(rd.getFunction().getAction(), rd.getOperation(),
+                rd.isIgnoreBlanks(), false);
+        HandlerParameter handlerParameter = new HandlerParameter(dataset, getColumnByName(rd.getReferenceColumn()),
+                getColumnByName(rd.getTargetColumn()), rd.getRuleName(), getColumnIndexMap(), null, functionParameter);
+        return new MCCRHandler(handlerParameter);
     }
 
     /**
@@ -357,9 +358,10 @@ public class SurvivorshipManager extends KnowledgeManager {
      * @return new mutli-target handler
      */
     private MTCRHandler createMTHandler(RuleDefinition perviousSEQRd, RuleDefinition rd) {
-        return new MTCRHandler(new HandlerParameter(dataset, perviousSEQRd.getFunction().getAction(),
-                getColumnByName(perviousSEQRd.getReferenceColumn()), getColumnByName(rd.getTargetColumn()),
-                perviousSEQRd.getRuleName(), rd.getOperation(), rd.isIgnoreBlanks(), getColumnIndexMap(), null, false));
+        FunctionParameter functionParameter = new FunctionParameter(perviousSEQRd.getFunction().getAction(), rd.getOperation(),
+                rd.isIgnoreBlanks(), false);
+        return new MTCRHandler(new HandlerParameter(dataset, getColumnByName(perviousSEQRd.getReferenceColumn()),
+                getColumnByName(rd.getTargetColumn()), perviousSEQRd.getRuleName(), getColumnIndexMap(), null, functionParameter));
     }
 
     /**

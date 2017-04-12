@@ -48,10 +48,7 @@ public class MCCRHandler extends AbstractChainResponsibilityHandler {
         if (this.getHandlerParameter().getRefColumn() == null) {
             return false;
         }
-        if (this.canHandler(inputData, getHandlerParameter().getExpression(), rowNum)) {
-            return true;
-        }
-        return false;
+        return this.canHandler(inputData, getHandlerParameter().getExpression(), rowNum);
     }
 
 }

@@ -23,13 +23,13 @@ import org.talend.survivorship.model.DataSet;
  */
 public class StringService extends AbstractService {
 
-    HashMap<String, HashSet<String>> longestValueMap;
+    protected HashMap<String, HashSet<String>> longestValueMap;
 
-    HashMap<String, HashSet<String>> shortestValueMap;
+    protected HashMap<String, HashSet<String>> shortestValueMap;
 
-    HashMap<String, HashSet<String>> secondLongestValueMap;
+    protected HashMap<String, HashSet<String>> secondLongestValueMap;
 
-    HashMap<String, HashSet<String>> secondShortestValueMap;
+    protected HashMap<String, HashSet<String>> secondShortestValueMap;
 
     /**
      * StringService constructor.
@@ -38,13 +38,13 @@ public class StringService extends AbstractService {
      */
     public StringService(DataSet dataset) {
         super(dataset);
-        longestValueMap = new HashMap<String, HashSet<String>>();
+        longestValueMap = new HashMap<>();
 
-        shortestValueMap = new HashMap<String, HashSet<String>>();
+        shortestValueMap = new HashMap<>();
 
-        secondLongestValueMap = new HashMap<String, HashSet<String>>();
+        secondLongestValueMap = new HashMap<>();
 
-        secondShortestValueMap = new HashMap<String, HashSet<String>>();
+        secondShortestValueMap = new HashMap<>();
 
     }
 
@@ -58,16 +58,16 @@ public class StringService extends AbstractService {
      */
     public void putAttributeValues(String column, boolean ignoreBlanks) {
 
-        HashSet<String> longestValues = new HashSet<String>();
+        HashSet<String> longestValues = new HashSet<>();
         longestValueMap.put(column, longestValues);
 
-        HashSet<String> shortestValues = new HashSet<String>();
+        HashSet<String> shortestValues = new HashSet<>();
         shortestValueMap.put(column, shortestValues);
 
-        HashSet<String> secondLongestValues = new HashSet<String>();
+        HashSet<String> secondLongestValues = new HashSet<>();
         secondLongestValueMap.put(column, secondLongestValues);
 
-        HashSet<String> secondShortestValues = new HashSet<String>();
+        HashSet<String> secondShortestValues = new HashSet<>();
         secondShortestValueMap.put(column, secondShortestValues);
 
         int max = 0;

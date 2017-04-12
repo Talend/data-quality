@@ -79,28 +79,25 @@ public class HandlerParameter {
      * create by zshen constructor of HandlerParameter.
      * 
      * @param dataset
-     * @param action
      * @param refColumn
      * @param tarColumn
      * @param ruleName
-     * @param expression
-     * @param isIgnoreBlank
      * @param columnIndexMap
      * @param fillColumn
-     * @param isDealDup
+     * @param funPar
      */
-    public HandlerParameter(DataSet dataset, ISurvivoredAction action, Column refColumn, Column tarColumn, String ruleName,
-            String expression, boolean isIgnoreBlank, Map<String, Integer> columnIndexMap, String fillColumn, boolean isDealDup) {
+    public HandlerParameter(DataSet dataset, Column refColumn, Column tarColumn, String ruleName,
+            Map<String, Integer> columnIndexMap, String fillColumn, FunctionParameter funPar) {
         this.dataset = dataset;
-        this.action = action;
+        this.action = funPar.getAction();
         this.refColumn = refColumn;
         this.tarColumn = tarColumn;
         this.ruleName = ruleName;
-        this.expression = expression;
-        this.isIgnoreBlank = isIgnoreBlank;
+        this.expression = funPar.getExpression();
+        this.isIgnoreBlank = funPar.isIgnoreBlank();
         this.columnIndexMap = columnIndexMap;
         this.fillColumn = fillColumn;
-        this.isDealDup = isDealDup;
+        this.isDealDup = funPar.isDealDup();
     }
 
     /**
@@ -262,7 +259,7 @@ public class HandlerParameter {
         return this.getDataset().getConflictDataIndexList(this.getTarColumn().getName());
     }
 
-    public void UpdateDataSet() {
+    public void updateDataSet() {
         this.setDataset(this.getDataset().createSubDataSet(this.getTarColumn().getName()));
     }
 

@@ -23,6 +23,12 @@ import org.talend.survivorship.model.DataSet;
  */
 public class FrequencyService extends AbstractService {
 
+    protected HashMap<String, HashMap<Object, Integer>> frequencyMaps = new HashMap<>();
+
+    protected HashMap<String, Integer> maxOccurence = new HashMap<>();
+
+    protected HashMap<String, Integer> secondMaxOccurence = new HashMap<>();
+
     /**
      * FrequencyService constructor.
      * 
@@ -31,12 +37,6 @@ public class FrequencyService extends AbstractService {
     public FrequencyService(DataSet dataset) {
         super(dataset);
     }
-
-    HashMap<String, HashMap<Object, Integer>> frequencyMaps = new HashMap<String, HashMap<Object, Integer>>();
-
-    HashMap<String, Integer> maxOccurence = new HashMap<String, Integer>();
-
-    HashMap<String, Integer> secondMaxOccurence = new HashMap<String, Integer>();
 
     /**
      * Put attribute values into the frequencyMap of a given column.
@@ -48,7 +48,7 @@ public class FrequencyService extends AbstractService {
     public HashMap<Object, Integer> putAttributeValues(String column, boolean ignoreBlanks) {
         HashMap<Object, Integer> valueToFreq = frequencyMaps.get(column);
 
-        valueToFreq = new HashMap<Object, Integer>();
+        valueToFreq = new HashMap<>();
         frequencyMaps.put(column, valueToFreq);
 
         for (Attribute attr : dataset.getAttributesByColumn(column)) {

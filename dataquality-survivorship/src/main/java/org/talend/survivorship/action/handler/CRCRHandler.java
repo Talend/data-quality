@@ -85,13 +85,13 @@ public class CRCRHandler extends AbstractChainResponsibilityHandler {
             return;
         }
         // ConflictDataIndexList be clear
-        this.getHandlerParameter().UpdateDataSet();
+        this.getHandlerParameter().updateDataSet();
         // 2.loop all of data which make sure on the previous node
         for (Integer index : conflictDataIndexList) {
             InputConvertResult inputData = getInputData(index);
             if (this.canHandler(inputData.getInputData(), getHandlerParameter().getExpression(), index)) {
-                doHandle(index, inputData.isIsfilled() ? this.getHandlerParameter().getFillColumn()
-                        : this.getHandlerParameter().getTarColumn().getName());
+                doHandle(index, inputData.isIsfilled() ? this.getHandlerParameter().getFillColumn() : this.getHandlerParameter()
+                        .getTarColumn().getName());
                 if (this.getSuccessor() != null) {
                     // 3.generate new conflict data for next node
                     // init ConflictDataIndexList for next one
@@ -178,10 +178,7 @@ public class CRCRHandler extends AbstractChainResponsibilityHandler {
         if (!this.getHandlerParameter().isConflictRow(rowNum)) {
             return false;
         }
-        if (this.canHandler(inputData, getHandlerParameter().getExpression(), rowNum)) {
-            return true;
-        }
-        return false;
+        return this.canHandler(inputData, getHandlerParameter().getExpression(), rowNum);
     }
 
     /*

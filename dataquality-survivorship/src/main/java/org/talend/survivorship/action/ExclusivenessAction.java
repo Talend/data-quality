@@ -33,10 +33,7 @@ public class ExclusivenessAction extends AbstractSurvivoredAction {
         List<String> contantsList = Arrays.asList(contantsArray);
 
         Object inputData = actionParameter.getInputData();
-        if (contantsList.contains(inputData)) {
-            return false;
-        }
-        return true;
+        return !(contantsList.contains(inputData));
     }
 
 }

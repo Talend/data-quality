@@ -21,9 +21,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.talend.survivorship.SurvivorshipManager;
 import org.talend.survivorship.action.ISurvivoredAction;
 import org.talend.survivorship.action.handler.CRCRHandler;
+import org.talend.survivorship.action.handler.FunctionParameter;
 import org.talend.survivorship.action.handler.HandlerParameter;
 import org.talend.survivorship.services.CompletenessService;
 import org.talend.survivorship.services.FrequencyService;
@@ -60,8 +60,6 @@ public class DataSet {
     private CompletenessService cs;
 
     private NumberService ns;
-
-    private SoftReference<SurvivorshipManager> survivorManager;
 
     private SoftReference<HashMap<String, List<Integer>>> conflictDataMap = new SoftReference<>(
             new HashMap<String, List<Integer>>());
@@ -210,13 +208,14 @@ public class DataSet {
                         boolean isIgnoreBlank = ruleDef.isIgnoreBlanks();
                         String fillColumn = ruleDef.getFillColumn();
                         boolean isDealDup = ruleDef.isDuplicateSurCheck();
-                        CRCRHandler newCrcrHandler = new CRCRHandler(new HandlerParameter(this, action, refColumn, tarColumn,
-                                cRuleName, expression, isIgnoreBlank, this.getColumnIndexMap(), fillColumn, isDealDup));
+                        FunctionParameter functionParameter = new FunctionParameter(action, expression, isIgnoreBlank, isDealDup);
+                        CRCRHandler newCrcrHandler = new CRCRHandler(new HandlerParameter(this, refColumn, tarColumn, cRuleName,
+                                this.getColumnIndexMap(), fillColumn, functionParameter));
                         if (crcrHandler == null) {
                             this.chainMap.put(columnName, newCrcrHandler);
                         }
-                        crcrHandler = crcrHandler == null ? newCrcrHandler
-                                : (CRCRHandler) crcrHandler.linkSuccessor(newCrcrHandler);
+                        crcrHandler = crcrHandler == null ? newCrcrHandler : (CRCRHandler) crcrHandler
+                                .linkSuccessor(newCrcrHandler);
                     }
                 }
                 // store conflict data
@@ -304,8 +303,8 @@ public class DataSet {
             if (crcrHandler != null) {
                 SurvivedResult survivoredRowNum = crcrHandler.getSurvivoredRowNum();
                 if (survivoredRowNum != null) {
-                    Attribute attribute = recordList.get(survivoredRowNum.getRowNum())
-                            .getAttribute(survivoredRowNum.getColumnName());
+                    Attribute attribute = recordList.get(survivoredRowNum.getRowNum()).getAttribute(
+                            survivoredRowNum.getColumnName());
                     Object survivedVlaue = attribute.getValue();
                     if (crcrHandler.getHandlerParameter().isDealDup() && checkDupSurValue(survivedVlaue)) {
                         survivedVlaue = crcrHandler.getNonDupResult(survivedVlaue);
@@ -505,15 +504,6 @@ public class DataSet {
      */
     public List<Record> getRecordList() {
         return recordList;
-    }
-
-    /**
-     * Sets the survivorManager.
-     * 
-     * @param survivorManager the survivorManager to set
-     */
-    public void setSurvivorManager(SoftReference<SurvivorshipManager> survivorManager) {
-        this.survivorManager = survivorManager;
     }
 
     /**

@@ -23,13 +23,13 @@ import org.talend.survivorship.model.DataSet;
  */
 public class TimeService extends AbstractService {
 
-    HashMap<String, Date> latestValueMap;
+    protected HashMap<String, Date> latestValueMap;
 
-    HashMap<String, Date> earliestValueMap;
+    protected HashMap<String, Date> earliestValueMap;
 
-    HashMap<String, Date> secondLatestValueMap;
+    protected HashMap<String, Date> secondLatestValueMap;
 
-    HashMap<String, Date> secondEarliestValueMap;
+    protected HashMap<String, Date> secondEarliestValueMap;
 
     /**
      * StringService constructor.
@@ -76,14 +76,14 @@ public class TimeService extends AbstractService {
                         secondLatest = latest;
                         latest = value;
                         // second input data is max then do that
-                        if (secondLatest == earliest) {
+                        if (secondLatest.equals(earliest)) {
                             secondEarliest = latest;
                         }
                     } else if (value.before(earliest)) {
                         secondEarliest = earliest;
                         earliest = value;
                         // second input data is max then do that
-                        if (secondEarliest == latest) {
+                        if (secondEarliest.equals(latest)) {
                             secondLatest = earliest;
                         }
                     }

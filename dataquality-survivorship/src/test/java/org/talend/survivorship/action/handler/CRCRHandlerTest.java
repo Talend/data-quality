@@ -17,11 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.talend.survivorship.action.ISurvivoredAction;
 import org.talend.survivorship.model.Attribute;
@@ -36,42 +32,6 @@ import org.talend.survivorship.model.SurvivedResult;
  * Create by zshen test for CRCRHandler
  */
 public class CRCRHandlerTest {
-
-    /**
-     * DOC zshen Comment method "setUpBeforeClass".
-     * 
-     * @throws java.lang.Exception
-     */
-    @BeforeClass
-    public static void setUpBeforeClass() throws Exception {
-    }
-
-    /**
-     * DOC zshen Comment method "tearDownAfterClass".
-     * 
-     * @throws java.lang.Exception
-     */
-    @AfterClass
-    public static void tearDownAfterClass() throws Exception {
-    }
-
-    /**
-     * DOC zshen Comment method "setUp".
-     * 
-     * @throws java.lang.Exception
-     */
-    @Before
-    public void setUp() throws Exception {
-    }
-
-    /**
-     * DOC zshen Comment method "tearDown".
-     * 
-     * @throws java.lang.Exception
-     */
-    @After
-    public void tearDown() throws Exception {
-    }
 
     /**
      * Test method for {@link org.talend.survivorship.action.handler.CRCRHandler#handleRequest(java.lang.Object, int)}.
@@ -105,8 +65,9 @@ public class CRCRHandlerTest {
         Map<String, Integer> columnIndexMap = new HashMap<>();
         columnIndexMap.put("city1", 0);
         columnIndexMap.put("city2", 1);
-        HandlerParameter handlerParameter = new HandlerParameter(dataset, action, refColumn, tarColumn, ruleName, expression,
-                isIgnoreBlank, columnIndexMap, fillColumn, isDealDup);
+        FunctionParameter functionParameter = new FunctionParameter(action, expression, isIgnoreBlank, isDealDup);
+        HandlerParameter handlerParameter = new HandlerParameter(dataset, refColumn, tarColumn, ruleName, columnIndexMap,
+                fillColumn, functionParameter);
         CRCRHandler crcrHandler = new CRCRHandler(handlerParameter);
         DataSet subDataset = null;
         for (int index = 0; index < 5; index++) {
@@ -169,8 +130,9 @@ public class CRCRHandlerTest {
         String fillColumn = "city2";
         boolean isDealDup = false;
         Map<String, Integer> columnIndexMap = new HashMap<>();
-        HandlerParameter handlerParameter = new HandlerParameter(dataset, action, refColumn, tarColumn, ruleName, expression,
-                isIgnoreBlank, columnIndexMap, fillColumn, isDealDup);
+        FunctionParameter functionParameter = new FunctionParameter(action, expression, isIgnoreBlank, isDealDup);
+        HandlerParameter handlerParameter = new HandlerParameter(dataset, refColumn, tarColumn, ruleName, columnIndexMap,
+                fillColumn, functionParameter);
         return handlerParameter;
     }
 
@@ -208,8 +170,9 @@ public class CRCRHandlerTest {
         Map<String, Integer> columnIndexMap = new HashMap<>();
         columnIndexMap.put("city1", 0);
         columnIndexMap.put("city2", 1);
-        HandlerParameter handlerParameter = new HandlerParameter(dataset, action, refColumn, tarColumn, ruleName, expression,
-                isIgnoreBlank, columnIndexMap, fillColumn, isDealDup);
+        FunctionParameter functionParameter = new FunctionParameter(action, expression, isIgnoreBlank, isDealDup);
+        HandlerParameter handlerParameter = new HandlerParameter(dataset, refColumn, tarColumn, ruleName, columnIndexMap,
+                fillColumn, functionParameter);
         CRCRHandler crcrHandler = new CRCRHandler(handlerParameter);
         Map<Integer, String> preConflictRowNum = new HashMap<>();
         preConflictRowNum.put(0, "city1");

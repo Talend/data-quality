@@ -17,10 +17,6 @@ package org.talend.survivorship;
  */
 public class SurvivorshipConstants {
 
-    private SurvivorshipConstants() {
-        // no need to implement
-    }
-
     public static final String PKG_ITEM_EXTENSION = "package"; //$NON-NLS-1$
 
     public static final String MODEL_ITEM_EXTENTION = "model.drl"; //$NON-NLS-1$
@@ -38,4 +34,8 @@ public class SurvivorshipConstants {
     public static final String RECORD_IN = "RecordIn"; //$NON-NLS-1$
 
     public static final String TALEND_INTERNAL_ID = "TALEND_INTERNAL_ID"; //$NON-NLS-1$
+
+    private SurvivorshipConstants() {
+        // no need to implement
+    }
 }
