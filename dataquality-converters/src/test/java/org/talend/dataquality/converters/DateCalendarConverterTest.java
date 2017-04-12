@@ -28,6 +28,7 @@ import java.time.chrono.IsoChronology;
 import java.time.chrono.JapaneseChronology;
 import java.time.chrono.MinguoChronology;
 import java.time.chrono.ThaiBuddhistChronology;
+import java.util.Locale;
 
 import org.apache.log4j.Logger;
 import org.junit.Assert;
@@ -97,6 +98,18 @@ public class DateCalendarConverterTest {
 
     private static final String HijrahStr2 = "1417 06 16"; //$NON-NLS-1$
 
+    private static final String patternEnglishDate = "dd/MMM/yyyy";
+
+    private static final String patternFrenchDate = "dd/MMM/yyyy";
+
+    private static final String patternChineseDate = "dd MMM yyyy";
+
+    private static final String englishDate = "01/Sep/2015";
+
+    private static final String frenchDate = "01/sept./2015";
+
+    private static final String expectedChineseDate = "01 九月 0104";
+
     @Test
     public void testConvert_IsoDateTo() {
         assertEquals(HijrahStr, new DateCalendarConverter(IsoChronology.INSTANCE, HijrahChronology.INSTANCE).convert(IsoStr));
@@ -152,6 +165,18 @@ public class DateCalendarConverterTest {
     }
 
     @Test
+    public void testConvert_withLocale() {
+        assertEquals(expectedChineseDate, new DateCalendarConverter(patternEnglishDate, patternChineseDate,
+                IsoChronology.INSTANCE, MinguoChronology.INSTANCE, Locale.US, Locale.CHINESE).convert(englishDate));
+        assertEquals(englishDate, new DateCalendarConverter(patternChineseDate, patternEnglishDate, MinguoChronology.INSTANCE,
+                IsoChronology.INSTANCE, Locale.CHINESE, Locale.US).convert(expectedChineseDate));
+        assertEquals(expectedChineseDate, new DateCalendarConverter(patternFrenchDate, patternChineseDate, IsoChronology.INSTANCE,
+                MinguoChronology.INSTANCE, Locale.FRANCE, Locale.CHINESE).convert(frenchDate));
+        assertEquals(frenchDate, new DateCalendarConverter(patternChineseDate, patternFrenchDate, MinguoChronology.INSTANCE,
+                IsoChronology.INSTANCE, Locale.CHINESE, Locale.FRANCE).convert(expectedChineseDate));
+    }
+
+    @Test
     public void testConvert_HijrahDateTo() {
         assertEquals(IsoStr, new DateCalendarConverter(HijrahChronology.INSTANCE, IsoChronology.INSTANCE).convert(HijrahStr));
         assertEquals(JapaneseStr,
@@ -166,9 +191,8 @@ public class DateCalendarConverterTest {
                         .convert(HijrahStr));
         assertEquals(MinguoStr, new DateCalendarConverter(pattern6, pattern, HijrahChronology.INSTANCE, MinguoChronology.INSTANCE)
                 .convert(HijrahStr2));
-        assertEquals(ThaiBuddhistStr5,
-                new DateCalendarConverter(pattern, pattern5, HijrahChronology.INSTANCE, ThaiBuddhistChronology.INSTANCE)
-                        .convert(HijrahStr));
+        assertEquals(ThaiBuddhistStr5, new DateCalendarConverter(pattern, pattern5, HijrahChronology.INSTANCE,
+                ThaiBuddhistChronology.INSTANCE, Locale.US, Locale.US).convert(HijrahStr));
     }
 
     @Test
@@ -230,7 +254,7 @@ public class DateCalendarConverterTest {
         // test when the input is not a date
         assertEquals("aa", new DateCalendarConverter(HijrahChronology.INSTANCE, HijrahChronology.INSTANCE).convert("aa")); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals("", new DateCalendarConverter( //$NON-NLS-1$
-                pattern1, pattern, HijrahChronology.INSTANCE, HijrahChronology.INSTANCE).convert("aa")); //$NON-NLS-1$ 
+                pattern1, pattern, HijrahChronology.INSTANCE, HijrahChronology.INSTANCE).convert("aa")); //$NON-NLS-1$
 
         // test when the pattern is null
         assertEquals(IsoStr5, new DateCalendarConverter(null, pattern5, ThaiBuddhistChronology.INSTANCE, IsoChronology.INSTANCE)
@@ -260,7 +284,7 @@ public class DateCalendarConverterTest {
 
         LocalDate parseDateString2 = new DateCalendarConverter(pattern6, pattern6).parseStringToDate("2011 08 19"); //$NON-NLS-1$
         assertEquals(date, parseDateString2);
-        assertEquals("2011 08 19", new DateCalendarConverter(pattern6, pattern6).formatDateToString(parseDateString2)); //$NON-NLS-1$ 
+        assertEquals("2011 08 19", new DateCalendarConverter(pattern6, pattern6).formatDateToString(parseDateString2)); //$NON-NLS-1$
 
         LocalDate parseDateString3 = new DateCalendarConverter(pattern4, pattern4).parseStringToDate("20110819"); //$NON-NLS-1$
         assertEquals(date, parseDateString3);
@@ -297,7 +321,8 @@ public class DateCalendarConverterTest {
                 InputStream dateStream = this.getClass().getResourceAsStream("dateList.txt"); //$NON-NLS-1$
                 BufferedReader br = null;
                 try {
-                    br = new BufferedReader(new InputStreamReader(dateStream, "UTF-8")); //$NON-NLS-1$ //for Hindi language Double-byte type
+                    br = new BufferedReader(new InputStreamReader(dateStream, "UTF-8")); //$NON-NLS-1$ //for Hindi language
+                                                                                         // Double-byte type
                 } catch (UnsupportedEncodingException e1) {
                     LOGGER.error(e1, e1);
                     Assert.fail(e1.getMessage());

@@ -45,6 +45,9 @@ public class DateCalendarConverter {
 
     public static final String DEFAULT_OUTPUT_PATTERN = "yyyy-MM-dd";//$NON-NLS-1$
 
+    public static final Locale DEFAULT_OUTPUT_LOCALE = Locale.getDefault();
+
+    public static final Locale DEFAULT_INPUT_LOCALE = Locale.getDefault();
     /**
      * the input date text format pattern, default is "yyyy-MM-dd".
      */
@@ -76,7 +79,7 @@ public class DateCalendarConverter {
     private DateTimeFormatter outputDateTimeFormatter;
 
     public DateCalendarConverter() {
-        this(DEFAULT_INPUT_PATTERN, DEFAULT_OUTPUT_PATTERN, IsoChronology.INSTANCE, IsoChronology.INSTANCE);
+        this(DEFAULT_INPUT_PATTERN, DEFAULT_OUTPUT_PATTERN, IsoChronology.INSTANCE, IsoChronology.INSTANCE, DEFAULT_INPUT_LOCALE, DEFAULT_OUTPUT_LOCALE);
     }
 
     /**
@@ -86,7 +89,7 @@ public class DateCalendarConverter {
      * @param outputChronologyType
      */
     public DateCalendarConverter(Chronology inputChronologyType, Chronology outputChronologyType) {
-        this(DEFAULT_INPUT_PATTERN, DEFAULT_OUTPUT_PATTERN, inputChronologyType, outputChronologyType);
+        this(DEFAULT_INPUT_PATTERN, DEFAULT_OUTPUT_PATTERN, inputChronologyType, outputChronologyType, DEFAULT_INPUT_LOCALE, DEFAULT_OUTPUT_LOCALE);
     }
 
     /**
@@ -96,7 +99,24 @@ public class DateCalendarConverter {
      * @param outputFormatPattern
      */
     public DateCalendarConverter(String inputFormatPattern, String outputFormatPattern) {
-        this(inputFormatPattern, outputFormatPattern, null, null);
+        this(inputFormatPattern, outputFormatPattern, null, null, DEFAULT_INPUT_LOCALE, DEFAULT_OUTPUT_LOCALE);
+    }
+
+    /**
+     * Convert a date by change the chronology, and use specific locale to manage month as literal.
+     *
+     * @param inputFormatPattern Pattern of the input date to convert.
+     * @param outputFormatPattern Pattern of the conversion result.
+     * @param inputChronologyType Chronology of the input date.
+     * @param outputChronologyType Chronology we want to use to convert the date.
+     * @param inputLocale Locale of the input date, when the date contains month in literal.
+     * @param outputLocale Locale of the converted date when the date contains month in literal.
+     */
+    public DateCalendarConverter(String inputFormatPattern, String outputFormatPattern, Chronology inputChronologyType,
+            Chronology outputChronologyType, Locale inputLocale, Locale outputLocale) {
+        this(inputFormatPattern, outputFormatPattern, inputChronologyType, outputChronologyType);
+        this.inputDateTimeFormatter = this.inputDateTimeFormatter.withLocale(inputLocale);
+        this.outputDateTimeFormatter = this.outputDateTimeFormatter.withLocale(outputLocale);
     }
 
     /**
