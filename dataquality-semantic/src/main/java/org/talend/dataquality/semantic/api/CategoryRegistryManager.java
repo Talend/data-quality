@@ -22,6 +22,7 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.zip.CRC32;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
@@ -69,7 +70,7 @@ public class CategoryRegistryManager {
      * More often, the value is set to true when the localRegistryPath is configured. see
      * {@link CategoryRegistryManager.setLocalRegistryPath()}
      */
-    private static boolean usingLocalCategoryRegistry = false;
+    private static boolean usingLocalCategoryRegistry = true;
 
     private static String localRegistryPath = System.getProperty("user.home") + "/.talend/dataquality/semantic";
 
@@ -103,8 +104,9 @@ public class CategoryRegistryManager {
     private CategoryRegistryManager(String contextName) {
         this.contextName = contextName;
 
-        loadBaseCategories();
-        if (usingLocalCategoryRegistry) {
+        if (dqCategories.isEmpty()) {
+            // loadBaseCategories();
+            // if (usingLocalCategoryRegistry) {
             try {
                 loadRegisteredCategories();
             } catch (IOException e) {
@@ -176,15 +178,8 @@ public class CategoryRegistryManager {
                 final Directory indexDir = FSDirectory.open(categorySubFolder);
                 final DirectoryReader reader = DirectoryReader.open(indexDir);
 
-                Bits liveDocs = MultiFields.getLiveDocs(reader);
-                for (int i = 0; i < reader.maxDoc(); i++) {
-                    if (liveDocs != null && !liveDocs.get(i)) {
-                        continue;
-                    }
-                    Document doc = reader.document(i);
-                    DQCategory dqCat = DictionaryUtils.categoryFromDocument(doc);
-                    dqCategories.put(dqCat.getName(), dqCat);
-                }
+                fillDqCategoriesMap(reader);
+
                 reader.close();
                 indexDir.close();
             } catch (IOException e) {
@@ -201,15 +196,8 @@ public class CategoryRegistryManager {
         loadBaseIndex(categorySubFolder, CATEGORY_SUBFOLDER_NAME);
         if (categorySubFolder.exists()) {
             try (final DirectoryReader reader = DirectoryReader.open(FSDirectory.open(categorySubFolder))) {
-                Bits liveDocs = MultiFields.getLiveDocs(reader);
-                for (int i = 0; i < reader.maxDoc(); i++) {
-                    if (liveDocs != null && !liveDocs.get(i)) {
-                        continue;
-                    }
-                    Document doc = reader.document(i);
-                    DQCategory dqCat = DictionaryUtils.categoryFromDocument(doc);
-                    dqCategories.put(dqCat.getName(), dqCat);
-                }
+                fillDqCategoriesMap(reader);
+
             }
         }
 
@@ -242,6 +230,32 @@ public class CategoryRegistryManager {
         }
     }
 
+    private void fillDqCategoriesMap(DirectoryReader reader) throws IOException {
+        Map<String, Set<String>> idToParents = new HashMap<>();
+        Bits liveDocs = MultiFields.getLiveDocs(reader);
+        for (int i = 0; i < reader.maxDoc(); i++) {
+            if (liveDocs != null && !liveDocs.get(i)) {
+                continue;
+            }
+            Document doc = reader.document(i);
+            DQCategory dqCat = DictionaryUtils.categoryFromDocument(doc);
+            dqCategories.put(dqCat.getId(), dqCat);
+            if (!CollectionUtils.isEmpty(dqCat.getChildren())) {
+                for (DQCategory cat : dqCat.getChildren()) {
+                    if (idToParents.get(cat.getId()) == null)
+                        idToParents.put(cat.getId(), new HashSet<String>());
+                    idToParents.get(cat.getId()).add(dqCat.getId());
+                }
+            }
+        }
+        for (String id : idToParents.keySet()) {
+            List<DQCategory> tmp = new ArrayList<>();
+            for (String child : idToParents.get(id))
+                tmp.add(new DQCategory(child));
+            dqCategories.get(id).setParents(tmp);
+        }
+    }
+
     private void loadBaseIndex(final File destSubFolder, String sourceSubFolder) throws IOException, URISyntaxException {
         synchronized (indexExtractionLock) {
             if (!destSubFolder.exists()) {
@@ -269,6 +283,7 @@ public class CategoryRegistryManager {
             dqCat.setType(cat.getCategoryType());
             dqCat.setCompleteness(cat.getCompleteness());
 
+            // TODO
             dqCategories.put(cat.getId(), dqCat);
         }
     }
@@ -339,6 +354,15 @@ public class CategoryRegistryManager {
      */
     public DQCategory getCategoryMetadataByName(String catId) {
         return dqCategories.get(catId);
+    }
+
+    /**
+     * Get the category IDs.
+     *
+     * @return the category IDs
+     */
+    public Set<String> getCategoryIds() {
+        return dqCategories.keySet();
     }
 
     /**

@@ -14,6 +14,7 @@ package org.talend.dataquality.semantic.recognizer;
 
 import java.util.Collection;
 
+import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.classifier.ISubCategoryClassifier;
 
 /**
@@ -21,6 +22,8 @@ import org.talend.dataquality.semantic.classifier.ISubCategoryClassifier;
  * 
  */
 public interface CategoryRecognizer {
+
+    CategoryRegistryManager getCrm();
 
     void prepare();
 
