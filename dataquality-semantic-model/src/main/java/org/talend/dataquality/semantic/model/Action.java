@@ -18,6 +18,7 @@ public enum Action {
     RETRIEVE,
     DELETE,
     UPDATE,
+    DELETE_ALL,
     CREATE_DOCUMENT,
     RETRIEVE_DOCUMENT,
     DELETE_DOCUMENT,
