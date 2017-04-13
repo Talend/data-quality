@@ -12,17 +12,26 @@
 // ============================================================================
 package org.talend.survivorship.model;
 
+import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
+import org.talend.survivorship.SurvivorshipManager;
+import org.talend.survivorship.action.ISurvivoredAction;
+import org.talend.survivorship.action.handler.AbstractChainResponsibilityHandler;
+import org.talend.survivorship.action.handler.CRCRHandler;
+import org.talend.survivorship.action.handler.HandlerParameter;
 import org.talend.survivorship.services.CompletenessService;
 import org.talend.survivorship.services.FrequencyService;
 import org.talend.survivorship.services.NumberService;
 import org.talend.survivorship.services.StringService;
 import org.talend.survivorship.services.TimeService;
+import org.talend.survivorship.utils.ChainNodeMap;
 
 /**
  * Collection of a group of data. This class will be instantiated and insert into the rule engine as global variable.
@@ -32,6 +41,8 @@ public class DataSet {
     private List<Record> recordList;
 
     private List<Column> columnList;
+
+    private ChainNodeMap chainMap;
 
     private HashMap<String, Object> survivorMap;
 
@@ -49,6 +60,8 @@ public class DataSet {
 
     private NumberService ns;
 
+    private SoftReference<SurvivorshipManager> survivorManager;
+
     /**
      * DataSet constructor.
      * 
@@ -61,6 +74,7 @@ public class DataSet {
         survivorMap = new HashMap<String, Object>();
         conflictList = new ArrayList<HashSet<String>>();
         conflictsOfSurvivor = new HashSet<String>();
+        chainMap = new ChainNodeMap();
 
         initServices();
     }
@@ -140,6 +154,7 @@ public class DataSet {
      * @param colName
      * @deprecated this method is kept for backward compatibility of existing rules
      */
+    @Deprecated
     public void survive(int recNum, String colName) {
         Record record = recordList.get(recNum);
         Attribute attribute = record.getAttribute(colName);
@@ -163,10 +178,48 @@ public class DataSet {
             // TDQ-12742 when there are 2 or more rules on a column, one rule can work only if the previous one does
             // not producer any survivor
             if (column.getSurvivingRuleName() == null || ruleName.equals(column.getSurvivingRuleName())) {
+
+                if (column.getSurvivingRuleName() != null) {
+                    // conflict generated
+                    CRCRHandler crcrHandler = (CRCRHandler) this.chainMap.get(column.getName());
+                    // If we don't do that maybe we can store conflict data number form here
+                    if (crcrHandler == null) {
+                        for (RuleDefinition ruleDef : column.getConflictResolveList()) {
+                            ISurvivoredAction action = ruleDef.getFunction().getAction();
+                            Column refColumn = record.getAttribute(ruleDef.getReferenceColumn()).getColumn();
+                            Column tarColumn = column;
+                            String expression = ruleDef.getOperation();
+                            boolean isIgnoreBlank = ruleDef.isIgnoreBlanks();
+                            CRCRHandler newCrcrHandler = new CRCRHandler(new HandlerParameter(this, action, refColumn, tarColumn,
+                                    ruleName, expression, isIgnoreBlank, this.getColumnIndexMap()));
+                            if (crcrHandler == null) {
+                                this.chainMap.put(column.getName(), newCrcrHandler);
+                            }
+                            crcrHandler = crcrHandler == null ? newCrcrHandler
+                                    : (CRCRHandler) crcrHandler.linkSuccessor(newCrcrHandler);
+                        }
+                    }
+                }
+
+                // modify this attribute after conflict resolve
                 attribute.setSurvived(true);
                 column.setSurvivingRuleName(ruleName);
             }
         }
+    }
+
+    /**
+     * DOC zshen Comment method "getColumnIndexMap".
+     * 
+     * @return
+     */
+    private Map<String, Integer> getColumnIndexMap() {
+        Map<String, Integer> columnIndexMap = new HashMap<>();
+        int index = 0;
+        for (Column col : this.columnList) {
+            columnIndexMap.put(col.getName(), index++);
+        }
+        return columnIndexMap;
     }
 
     /**
@@ -203,21 +256,57 @@ public class DataSet {
      * Compute all the attributes to see if they are alive.
      */
     public void finalizeComputation() {
+        // this variable should be same with record.getID()
+        int rowNumber = 0;
         for (Record record : recordList) {
             for (Column col : columnList) {
+                AbstractChainResponsibilityHandler crcrHandler = this.chainMap.get(col.getName());
+                if (crcrHandler != null) {
+                    crcrHandler.handleRequest(record, rowNumber);
+                }
                 Attribute a = record.getAttribute(col.getName());
                 if (a.isSurvived()) {
-                    if (survivorMap.get(col.getName()) == null) {
-                        survivorMap.put(col.getName(), a.getValue());
-                    } else {
-                        Object survivor = survivorMap.get(col.getName());
-                        if (a.getValue() != null && !a.getValue().equals(survivor)) {
-                            HashSet<String> desc = conflictList.get(a.getRecordID());
-                            desc.add(col.getName());
-                            conflictsOfSurvivor.add(col.getName());
-                        }
-                    }
+                    conflictRecord(col, a);
                 }
+            }
+            rowNumber++;
+        }
+        for (Record record : recordList) {
+            HashSet<String> hashSet = conflictList.get(record.getId());
+        }
+
+        Iterator<String> iterator = conflictsOfSurvivor.iterator();
+        while (iterator.hasNext()) {
+            String conflictCol = iterator.next();
+            CRCRHandler crcrHandler = (CRCRHandler) this.chainMap.get(conflictCol);
+            if (crcrHandler != null) {
+                int survivoredRowNum = crcrHandler.getSurvivoredRowNum();
+                Attribute attribute = recordList.get(survivoredRowNum).getAttribute(conflictCol);
+                survivorMap.put(conflictCol, attribute.getValue());
+            }
+        }
+
+    }
+
+    /**
+     * DOC zshen Comment method "conflictResolve".
+     * 
+     * @param col
+     * @param a
+     */
+    private void conflictRecord(Column col, Attribute a) {
+        // default case get first one
+        if (survivorMap.get(col.getName()) == null) {
+            survivorMap.put(col.getName(), a.getValue());
+        } else {
+
+            //
+
+            Object survivor = survivorMap.get(col.getName());
+            if (a.getValue() != null && !a.getValue().equals(survivor)) {
+                HashSet<String> desc = conflictList.get(a.getRecordID());
+                desc.add(col.getName());
+                conflictsOfSurvivor.add(col.getName());
             }
         }
     }
@@ -371,6 +460,15 @@ public class DataSet {
      */
     public List<Record> getRecordList() {
         return recordList;
+    }
+
+    /**
+     * Sets the survivorManager.
+     * 
+     * @param survivorManager the survivorManager to set
+     */
+    public void setSurvivorManager(SoftReference<SurvivorshipManager> survivorManager) {
+        this.survivorManager = survivorManager;
     }
 
 }

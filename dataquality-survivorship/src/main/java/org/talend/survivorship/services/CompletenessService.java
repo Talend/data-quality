@@ -27,7 +27,7 @@ public class CompletenessService extends AbstractService {
     List<Integer> mostCompleteRecNumList;
 
     /**
-     * StringService constructor.
+     * Completeness constructor.
      * 
      * @param dataset
      */
