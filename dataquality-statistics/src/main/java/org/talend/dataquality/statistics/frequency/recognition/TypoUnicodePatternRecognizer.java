@@ -2,6 +2,7 @@ package org.talend.dataquality.statistics.frequency.recognition;
 
 import java.util.Collections;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.talend.dataquality.statistics.type.DataTypeEnum;
@@ -79,7 +80,7 @@ public abstract class TypoUnicodePatternRecognizer extends AbstractPatternRecogn
 
     /**
      * This methods returns a new instance of {@link WithCase}.
-     * 
+     *
      * @return
      */
     public static TypoUnicodePatternRecognizer withCase() {
@@ -88,7 +89,7 @@ public abstract class TypoUnicodePatternRecognizer extends AbstractPatternRecogn
 
     /**
      * This methods returns a new instance of {@link NoCase}.
-     * 
+     *
      * @return
      */
     public static TypoUnicodePatternRecognizer noCase() {
@@ -117,105 +118,38 @@ public abstract class TypoUnicodePatternRecognizer extends AbstractPatternRecogn
             // convert the string to recognize into a char array, in order to use Character class.
             char[] ca = stringToRecognize.toCharArray();
             StringBuilder sb = new StringBuilder();
+            // Pattern that will be used to recognize when to replace the last pattern (a char) when a word has been recognize
+            // from it.
+            Pattern p = Pattern.compile("((\\[Word])|(\\[wORD]))");
             // current position in the String
-            int pos = 0;
-            // Position of the beginning of the current sequence of characters
-            int sequenceBeginning;
-            // Last pattern recognize, useful to transform an upper case Char to a Word and a vice versa, without having to go
+            int runningPos = 0;
+            // Position at the beginning of the while loop. Used to identify special characters :
+            // If this value is still the same after the for loop, this means the character is a special character.
+            int loopStart;
+            // Last recognized pattern, useful to transform an upper case Char to a Word and a vice versa, without having to go
             // through the StringBuilder.
-            String lastPattern = null;
-            int length = stringToRecognize.length();
-
-            while (pos < length) {
-                int start = pos;
-                // Check Upper-Case sequence
-                if (Character.isUpperCase(Character.codePointAt(ca, pos))) {
-                    sequenceBeginning = pos;
-                    pos++;
-                    while (pos < length && Character.isUpperCase(Character.codePointAt(ca, pos))) {
-                        pos++;
-                    }
-                    if ("[char]".equals(lastPattern)) {
-                        lastPattern = "[wORD]";
-                        sb.replace(sb.length() - 6, sb.length(), lastPattern);
-                    } else if (pos == sequenceBeginning + 1) {
-                        lastPattern = "[Char]";
-                        sb.append(lastPattern);
-                    } else if (pos != sequenceBeginning) {
-                        lastPattern = "[WORD]";
-                        sb.append(lastPattern);
-                    }
-                    if (pos == length) {
-                        break;
+            String lastPattern = "";
+            String currentPattern;
+            CasePatternExplorer[] patternExplorers = CasePatternExplorer.values();
+            while (runningPos < ca.length) {
+                loopStart = runningPos;
+                for (CasePatternExplorer cpe : patternExplorers) {
+                    currentPattern = cpe.explore(ca, runningPos, lastPattern);
+                    if (currentPattern != null) {
+                        runningPos += cpe.seqLength;
+                        if (p.matcher(currentPattern).matches()) {
+                            sb.replace(sb.length() - 6, sb.length(), currentPattern);
+                        } else {
+                            sb.append(currentPattern);
+                        }
+                        lastPattern = currentPattern;
                     }
                 }
-
-                // Check lower-case sequence (include alphabetical character that are not east asian ideograms).
-                if (Character.isAlphabetic(Character.codePointAt(ca, pos))
-                        && !Character.isIdeographic(Character.codePointAt(ca, pos))) {
-                    sequenceBeginning = pos;
-                    pos++;
-                    while (pos < length && Character.isAlphabetic(Character.codePointAt(ca, pos))
-                            && !Character.isUpperCase(Character.codePointAt(ca, pos))
-                            && !Character.isIdeographic(Character.codePointAt(ca, pos))) {
-                        pos++;
-                    }
-                    // If the last pattern is a Capital Letter, the pattern will be replaced by [Word]
-                    if ("[Char]".equals(lastPattern)) {
-                        lastPattern = "[Word]";
-                        sb.replace(sb.length() - 6, sb.length(), lastPattern);
-                    }
-                    // If the position has only moved by one, the sequence is a single char.
-                    else if (pos == sequenceBeginning + 1) {
-                        lastPattern = "[char]";
-                        sb.append(lastPattern);
-                    } else if (pos != sequenceBeginning) {
-                        lastPattern = "[word]";
-                        sb.append(lastPattern);
-                    }
-                    if (pos == length) {
-                        break;
-                    }
-                }
-
-                // Check ideograms
-                if (Character.isIdeographic(Character.codePointAt(ca, pos))) {
-                    sequenceBeginning = pos;
-                    lastPattern = "[Ideogram]";
-                    pos++;
-                    while (pos < length && Character.isIdeographic(Character.codePointAt(ca, pos))) {
-                        pos++;
-                    }
-                    if (pos > sequenceBeginning + 1) {
-                        lastPattern = "[IdeogramSeq]";
-                    }
-                    sb.append(lastPattern);
-                    if (pos == length) {
-                        break;
-                    }
-                }
-
-                // Check numbers
-                if (Character.isDigit(Character.codePointAt(ca, pos))) {
-                    sequenceBeginning = pos;
-                    pos++;
-                    while (pos < length && Character.isDigit(Character.codePointAt(ca, pos))) {
-                        pos++;
-                    }
-                    if (pos == sequenceBeginning + 1) {
-                        lastPattern = "[digit]";
-                        sb.append(lastPattern);
-                    } else if (pos != sequenceBeginning) {
-                        lastPattern = "[number]";
-                        sb.append(lastPattern);
-                    }
-                }
-
-                if (start == pos) {
-                    lastPattern = "" + ca[start];
+                if (loopStart == runningPos) {
+                    lastPattern = "" + ca[loopStart];
                     sb.append(lastPattern);
                     isComplete = false;
-                    pos++;
+                    runningPos++;
                 }
             }
             result.setResult(Collections.singleton(sb.toString()), isComplete);
@@ -228,6 +162,99 @@ public abstract class TypoUnicodePatternRecognizer extends AbstractPatternRecogn
             return result.getPatternStringSet();
         }
 
+        private enum CasePatternExplorer {
+
+            IDEOGRAPHIC(1, "[Ideogram]", "[IdeogramSeq]"),
+            NUMERIC(2, "[digit]", "[number]"),
+            UPPER_CASE(3, "[Char]", "[WORD]", "[wORD]", "\\[char\\]"),
+            NOT_UPPER_CASE(4, "[char]", "[word]", "[Word]", "\\[Char\\]");
+
+            /**
+             * Character type, indicates what to match the character with
+             */
+            private int type = 0;
+
+            /**
+             * Pattern for a single character type
+             */
+            private String patternUnit = "";
+
+            /**
+             * Pattern for a sequence of a character type
+             */
+            private String patternSequence = "";
+
+            /**
+             * Special pattern for a sequence of combined type of characters, depend on the last pattern
+             */
+            private String SpecialPattern = null;
+
+            /**
+             * Pattern matcher to verify if the special pattern has to be used
+             */
+            private Pattern lastPattern2Match = null;
+
+            private int seqLength = 0;
+
+            CasePatternExplorer(int type, String patternUnit, String patternSequence) {
+                this.type = type;
+                this.patternUnit = patternUnit;
+                this.patternSequence = patternSequence;
+            }
+
+            CasePatternExplorer(int type, String patternUnit, String patternSequence, String SpecialPattern,
+                    String lastPattern2Match) {
+                this(type, patternUnit, patternSequence);
+                this.SpecialPattern = SpecialPattern;
+                this.lastPattern2Match = Pattern.compile(lastPattern2Match);
+            }
+
+            private String explore(char[] ca, int start, String lastPattern) {
+                int pos = start;
+                switch (type) {
+                case 1:
+                    while (pos < ca.length && Character.isIdeographic(Character.codePointAt(ca, pos))) {
+                        pos++;
+                    }
+                    break;
+                case 2:
+                    while (pos < ca.length && Character.isDigit(Character.codePointAt(ca, pos))) {
+                        pos++;
+                    }
+                    break;
+                case 3:
+                    while (pos < ca.length && Character.isUpperCase(Character.codePointAt(ca, pos))) {
+                        pos++;
+                    }
+                    break;
+                case 4:
+                    while (pos < ca.length && Character.isAlphabetic(Character.codePointAt(ca, pos))
+                            && !Character.isUpperCase(Character.codePointAt(ca, pos))
+                            && !Character.isIdeographic(Character.codePointAt(ca, pos))) {
+                        pos++;
+                    }
+                    break;
+                default:
+                    break;
+                }
+                seqLength = pos - start;
+                return getPattern(seqLength, lastPattern);
+            }
+
+            private String getPattern(int seqLength, String lastPattern) {
+                if (seqLength == 0) {
+                    return null;
+                }
+                if (lastPattern2Match != null && lastPattern2Match.matcher(lastPattern).matches()) {
+                    return SpecialPattern;
+                }
+                if (seqLength == 1) {
+                    return patternUnit;
+                } else {
+                    return patternSequence;
+                }
+            }
+        }
     }
 
     static class NoCase extends TypoUnicodePatternRecognizer {
@@ -251,79 +278,24 @@ public abstract class TypoUnicodePatternRecognizer extends AbstractPatternRecogn
             boolean isComplete = true;
             char[] ca = stringToRecognize.toCharArray();
             StringBuilder sb = new StringBuilder();
-            int pos = 0;
-            int sequenceBeginning;
-            int length = stringToRecognize.length();
-            while (pos < length) {
-                int start = pos;
+            int runningPos = 0;
+            int loopStart;
+            String currentPattern;
+            while (runningPos < ca.length) {
+                loopStart = runningPos;
 
-                sequenceBeginning = pos;
+                for (NoCasePatternExplorer ncpe : NoCasePatternExplorer.values()) {
+                    currentPattern = ncpe.explore(ca, runningPos);
+                    if (currentPattern != null) {
+                        runningPos += ncpe.seqLength;
+                        sb.append(currentPattern);
+                    }
+                }
 
-                // Check ideograms.
-                // If there is some digits in the middle of the sequence, it will be recognized as a [alnum(CJK)] pattern.
-                if (Character.isIdeographic(Character.codePointAt(ca, pos))) {
-                    pos++;
-                    while (pos < length && Character.isIdeographic(Character.codePointAt(ca, pos))) {
-                        pos++;
-                    }
-                    if (pos < length && Character.isDigit(Character.codePointAt(ca, pos))) {
-                        pos++;
-                        while (pos < length && (Character.isIdeographic(Character.codePointAt(ca, pos))
-                                || Character.isDigit(Character.codePointAt(ca, pos)))) {
-                            pos++;
-                        }
-                        sb.append("[alnum(CJK)]");
-                    } else if (pos == sequenceBeginning + 1) {
-                        sb.append("[Ideogram]");
-                    } else {
-                        sb.append("[IdeogramSeq]");
-                    }
-                    if (pos == length) {
-                        break;
-                    }
-                } else if (Character.isAlphabetic(Character.codePointAt(ca, pos))) {
-                    pos++;
-                    while (pos < length && !Character.isIdeographic(Character.codePointAt(ca, pos))
-                            && Character.isAlphabetic(Character.codePointAt(ca, pos))) {
-                        pos++;
-                    }
-                    if (pos < length && Character.isDigit(Character.codePointAt(ca, pos))) {
-                        pos++;
-                        // Continue to increment while the character is a digit or is alphabetic but not ideographic.
-                        while (pos < length && (Character.isDigit(Character.codePointAt(ca, pos))
-                                || (Character.isAlphabetic(Character.codePointAt(ca, pos))
-                                        && !Character.isIdeographic(Character.codePointAt(ca, pos))))) {
-                            pos++;
-                        }
-                        sb.append("[alnum]");
-                    } else if (pos == sequenceBeginning + 1) {
-                        sb.append("[char]");
-                    } else {
-                        sb.append("[word]");
-                    }
-                } else if (Character.isDigit(Character.codePointAt(ca, pos))) {
-                    pos++;
-                    while (pos < length && Character.isDigit(Character.codePointAt(ca, pos))) {
-                        pos++;
-                    }
-                    if (pos < length && !Character.isIdeographic(Character.codePointAt(ca, pos))
-                            && Character.isAlphabetic(Character.codePointAt(ca, pos))) {
-                        pos++;
-                        while (pos < length && !Character.isIdeographic(Character.codePointAt(ca, pos))
-                                && (Character.isAlphabetic(Character.codePointAt(ca, pos))
-                                        || Character.isDigit(Character.codePointAt(ca, pos)))) {
-                            pos++;
-                        }
-                        sb.append("[alnum]");
-                    } else if (pos == sequenceBeginning + 1) {
-                        sb.append("[digit]");
-                    } else {
-                        sb.append("[number]");
-                    }
-                } else {
-                    sb.append(ca[start]);
+                if (runningPos == loopStart) {
+                    sb.append(ca[loopStart]);
                     isComplete = false;
-                    pos++;
+                    runningPos++;
                 }
             }
             result.setResult(Collections.singleton(sb.toString()), isComplete);
@@ -335,6 +307,143 @@ public abstract class TypoUnicodePatternRecognizer extends AbstractPatternRecogn
             RecognitionResult result = recognize(originalValue);
             return result.getPatternStringSet();
         }
-    }
 
+        private enum NoCasePatternExplorer {
+
+            ALPHABETIC(1, "[char]", "[word]", "[alnum]"),
+            IDEOGRAPHIC(2, "[Ideogram]", "[IdeogramSeq]", "[alnum(CJK)]"),
+            NUMERIC(3, "[digit]", "[number]");
+
+            /**
+             * character type, indicates what to match the character with
+             */
+            private int type = 0;
+
+            /**
+             * Pattern for a single character type
+             */
+            private String patternUnit = "";
+
+            /**
+             * Pattern for a sequence of a character type
+             */
+            private String patternSequence = "";
+
+            /**
+             * Pattern for an alphanumeric sequence of the character type
+             */
+            private String patternAlnum = "";
+
+            /**
+             * Tells if the current sequence is an alnum
+             */
+            private boolean isAlnum = false;
+
+            /**
+             * Current pattern found at exploration
+             */
+            private int seqLength = 0;
+
+            NoCasePatternExplorer(int type, String patternUnit, String patternSequence) {
+                this.type = type;
+                this.patternUnit = patternUnit;
+                this.patternSequence = patternSequence;
+            }
+
+            NoCasePatternExplorer(int type, String patternMatch1, String patternMatch2, String patternAlnum) {
+                this(type, patternMatch1, patternMatch2);
+                this.patternAlnum = patternAlnum;
+            }
+
+            private String explore(char[] ca, int start) {
+                isAlnum = false;
+                int pos = start;
+                int posAlnum;
+                switch (type) {
+                case 1:
+                    while (pos < ca.length && Character.isAlphabetic(Character.codePointAt(ca, pos))
+                            && !Character.isIdeographic(Character.codePointAt(ca, pos))) {
+                        pos++;
+                    }
+                    if (pos > start) {
+                        posAlnum = exploreAlnum(ca, pos);
+                        if (posAlnum > pos) {
+                            isAlnum = true;
+                            pos = posAlnum;
+                        }
+                    }
+                    break;
+                case 2:
+                    while (pos < ca.length && Character.isIdeographic(Character.codePointAt(ca, pos))) {
+                        pos++;
+                    }
+                    if (pos > start) {
+                        posAlnum = exploreCJKalnum(ca, pos);
+                        if (posAlnum > pos) {
+                            isAlnum = true;
+                            pos = posAlnum;
+                        }
+                    }
+                    break;
+                case 3:
+                    while (pos < ca.length && Character.isDigit(Character.codePointAt(ca, pos))) {
+                        pos++;
+                    }
+                    if (pos > start) {
+                        posAlnum = exploreAlnum(ca, pos);
+                        if (posAlnum > pos) {
+                            isAlnum = true;
+                            patternAlnum = "[alnum]";
+                            pos = posAlnum;
+                        } else { // If not, is it an alnum with CJK Ideograms ?
+                            posAlnum = exploreCJKalnum(ca, pos);
+                            if (posAlnum > pos) {
+                                isAlnum = true;
+                                patternAlnum = "[alnum(CJK)]";
+                                pos = posAlnum;
+                            }
+                        }
+                    }
+                    break;
+                default:
+                    break;
+                }
+                seqLength = pos - start;
+                return getPattern(seqLength);
+            }
+
+            private int exploreCJKalnum(char[] ca, int start) {
+                int pos = start;
+                while (pos < ca.length && (Character.isDigit(Character.codePointAt(ca, pos))
+                        || Character.isIdeographic(Character.codePointAt(ca, pos)))) {
+                    pos++;
+                }
+                return pos;
+            }
+
+            private int exploreAlnum(char[] ca, int start) {
+                int pos = start;
+                while (pos < ca.length && (Character.isDigit(Character.codePointAt(ca, pos))
+                        || (Character.isAlphabetic(Character.codePointAt(ca, pos))
+                                && !Character.isIdeographic(Character.codePointAt(ca, pos))))) {
+                    pos++;
+                }
+                return pos;
+            }
+
+            private String getPattern(int seqLength) {
+                if (seqLength == 0) {
+                    return null;
+                }
+                if (isAlnum) {
+                    return patternAlnum;
+                }
+                if (seqLength == 1) {
+                    return patternUnit;
+                } else {
+                    return patternSequence;
+                }
+            }
+        }
+    }
 }

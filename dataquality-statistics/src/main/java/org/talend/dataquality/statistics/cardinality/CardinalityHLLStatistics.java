@@ -24,9 +24,6 @@ public class CardinalityHLLStatistics extends AbstractCardinalityStatistics<Card
 
     private HyperLogLog hyperLogLog = null;
 
-    public CardinalityHLLStatistics() {
-    }
-
     public HyperLogLog getHyperLogLog() {
         return hyperLogLog;
     }
