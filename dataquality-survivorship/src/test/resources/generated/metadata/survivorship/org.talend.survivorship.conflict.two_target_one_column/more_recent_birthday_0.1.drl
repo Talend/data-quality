@@ -1,0 +1,14 @@
+package org.talend.survivorship.conflict.two_target_one_column 
+
+rule "more_recent_birthday"
+    no-loop true
+    dialect "mvel"
+    ruleflow-group "more_recent_birthdayGroup"
+when
+    $input : RecordIn( dataset.isLatest( birthday, "birthday" ) )  
+then
+    dataset.survive( $input.TALEND_INTERNAL_ID, "birthday", drools.getRule().getName());
+
+end
+
+

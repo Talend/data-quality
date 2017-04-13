@@ -12,8 +12,10 @@
 // ============================================================================
 package org.talend.survivorship.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * This class represents a column from input.
@@ -32,6 +34,8 @@ public class Column {
     private boolean resolved = true;
 
     private String survivingRuleName;
+
+    private List<RuleDefinition> conflictResolveList;
 
     /**
      * Column constructor .
@@ -114,6 +118,18 @@ public class Column {
         resolved = true;
         attributeMap.clear();
         survivingRuleName = null;
+    }
+
+    /**
+     * Getter for conflictResolveList.
+     * 
+     * @return the conflictResolveList
+     */
+    public List<RuleDefinition> getConflictResolveList() {
+        if (conflictResolveList == null) {
+            conflictResolveList = new ArrayList<>();
+        }
+        return this.conflictResolveList;
     }
 
 }
