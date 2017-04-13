@@ -15,11 +15,13 @@ package org.talend.dataquality.semantic.index;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.queries.TermsFilter;
 import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
@@ -115,7 +117,8 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
         return doc;
     }
 
-    public boolean validDocumentWithCategory(String stringToSearch, String semanticType) throws IOException {
+    public boolean validDocumentWithCategories(String stringToSearch, String semanticType, Set<String> children)
+            throws IOException {
         Query query;
         switch (searchMode) {
         case MATCH_SEMANTIC_DICTIONARY:
@@ -129,14 +132,33 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
             break;
         }
         final IndexSearcher searcher = mgr.acquire();
+        boolean validDocument = false;
         CachingWrapperFilter tmp = categoryToCache.get(semanticType);
         if (tmp == null) {
-            tmp = new CachingWrapperFilter(new FieldCacheTermsFilter(F_WORD, semanticType));
+            if (CollectionUtils.isEmpty(children)) {
+                tmp = new CachingWrapperFilter(new FieldCacheTermsFilter(F_CATID, semanticType));
+            } else {
+                tmp = new CachingWrapperFilter(new FieldCacheTermsFilter(F_CATID, children.toArray(new String[children.size()])));
+            }
             categoryToCache.put(semanticType, tmp);
         }
-        boolean validDocument = searcher.search(query, tmp, 1).totalHits != 0;
+        validDocument = searcher.search(query, tmp, 1).totalHits != 0;
         mgr.release(searcher);
         return validDocument;
+    }
+
+    /**
+     *
+     * @param semanticTypes
+     * @return
+     * @throws IOException
+     */
+    protected Filter createFilterForSemanticTypes(Set<String> semanticTypes) {
+        List<Term> terms = new ArrayList<>();
+        for (String semanticType : semanticTypes) {
+            terms.add(new Term(F_WORD, semanticType));
+        }
+        return new TermsFilter(terms);
     }
 
     /**

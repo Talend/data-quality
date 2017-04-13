@@ -53,6 +53,7 @@ public class CategoryRegistryManangerTest {
         } finally {
             FileUtils.deleteDirectory(new File(path));
             crm.reset();
+            CategoryRegistryManager.setLocalRegistryPath(System.getProperty("user.home") + "/.talend/dataquality/semantic");
         }
     }
 

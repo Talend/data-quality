@@ -15,6 +15,7 @@ package org.talend.dataquality.semantic.classifier.custom;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.talend.dataquality.semantic.classifier.ISubCategory;
 import org.talend.dataquality.semantic.classifier.impl.AbstractSubCategoryClassifier;
 import org.talend.dataquality.semantic.filter.ISemanticFilter;
@@ -80,17 +81,26 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
     }
 
     @Override
-    public boolean validCategory(String str, String semanticType) {
+    public boolean validCategories(String str, String semanticType, Set<String> children) {
         MainCategory mainCategory = MainCategory.getMainCategory(str);
-        return validCategory(str, mainCategory, semanticType);
+        return validCategories(str, mainCategory, semanticType, children);
     }
 
-    private boolean validCategory(String str, MainCategory mainCategory, String semanticType) {
-        if (mainCategory != MainCategory.UNKNOWN && mainCategory != MainCategory.NULL && mainCategory != MainCategory.BLANK) {
-            for (ISubCategory classifier : potentialSubCategories) {
-                if (semanticType.equals(classifier.getName())) {
-                    return isValid(str, mainCategory, (UserDefinedCategory) classifier);
-                }
+    private boolean validCategories(String str, MainCategory mainCategory, String semanticType, Set<String> children) {
+        if (mainCategory == MainCategory.UNKNOWN || mainCategory == MainCategory.NULL || mainCategory == MainCategory.BLANK) {
+            return false;
+        }
+        int cpt = 0;
+        boolean hasChildren = !CollectionUtils.isEmpty(children);
+        for (ISubCategory classifier : potentialSubCategories) {
+            if (!hasChildren && semanticType.equals(classifier.getId()))
+                return isValid(str, mainCategory, (UserDefinedCategory) classifier);
+            if (hasChildren && children.contains(classifier.getId())) {
+                cpt++;
+                if (isValid(str, mainCategory, (UserDefinedCategory) classifier))
+                    return true;
+                if (cpt == children.size())
+                    return false;
             }
         }
         return false;
@@ -114,7 +124,7 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
         if (mainCategory != MainCategory.UNKNOWN && mainCategory != MainCategory.NULL && mainCategory != MainCategory.BLANK) {
             for (ISubCategory classifier : potentialSubCategories) {
                 if (isValid(str, mainCategory, (UserDefinedCategory) classifier))
-                    catSet.add(classifier.getName());
+                    catSet.add(classifier.getId());
             }
         }
         return catSet;

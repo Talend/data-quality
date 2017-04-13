@@ -13,16 +13,9 @@
 package org.talend.dataquality.semantic.recognizer;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.classifier.custom.UserDefinedClassifier;
@@ -71,6 +64,11 @@ class DefaultCategoryRecognizer implements CategoryRecognizer {
     @Override
     public UserDefinedClassifier getUserDefineClassifier() {
         return userDefineClassifier;
+    }
+
+    @Override
+    public CategoryRegistryManager getCrm() {
+        return crm;
     }
 
     /**
@@ -137,17 +135,43 @@ class DefaultCategoryRecognizer implements CategoryRecognizer {
      */
     @Override
     public String[] process(String data) {
-        Set<String> categories = getSubCategorySet(data);
-        if (!categories.isEmpty()) {
-            for (String catId : categories) {
-                DQCategory meta = crm.getCategoryMetadataByName(catId);
-                incrementCategory(catId, meta == null ? catId : meta.getLabel());
+        Set<String> ids = getSubCategorySet(data);
+        Set<String> categories = new HashSet<>();
+        if (!ids.isEmpty()) {
+            for (String id : ids) {
+                DQCategory meta = crm.getCategoryMetadataByName(id);
+                if (meta != null) {
+                    incrementCategory(meta.getName(), meta.getLabel());
+                    incrementAncestorsCategories(id);
+                    categories.add(meta.getName());
+                }
             }
         } else {
             incrementCategory(StringUtils.EMPTY);
         }
         total++;
         return categories.toArray(new String[categories.size()]);
+    }
+
+    private void incrementAncestorsCategories(String id) {
+        Deque<String> catToSee = new ArrayDeque<>();
+        Set<String> catAlreadySeen = new HashSet<>();
+        catToSee.add(id);
+        String currentCategory;
+        while (!catToSee.isEmpty()) {
+            currentCategory = catToSee.pop();
+            DQCategory dqCategory = crm.getCategoryMetadataByName(currentCategory);
+            if (dqCategory != null && !CollectionUtils.isEmpty(dqCategory.getParents()))
+                for (DQCategory parent : dqCategory.getParents()) {
+                    if (!catAlreadySeen.contains(parent.getId())) {
+                        catAlreadySeen.add(parent.getId());
+                        catToSee.add(parent.getId());
+                        DQCategory meta = crm.getCategoryMetadataByName(parent.getId());
+                        if (meta != null)
+                            incrementCategory(meta.getName(), meta.getLabel());
+                    }
+                }
+        }
     }
 
     private void incrementCategory(String catId) {

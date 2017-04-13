@@ -64,7 +64,7 @@ public class LuceneIndex implements Index {
             TopDocs docs = searcher.searchDocumentBySynonym(data);
             for (ScoreDoc scoreDoc : docs.scoreDocs) {
                 Document document = searcher.getDocument(scoreDoc.doc);
-                foundCategorySet.add(document.getValues(DictionarySearcher.F_WORD)[0]);
+                foundCategorySet.add(document.getField(DictionarySearcher.F_CATID).stringValue());
             }
         } catch (IOException e) {
             LOG.error(e, e);
@@ -73,10 +73,10 @@ public class LuceneIndex implements Index {
     }
 
     @Override
-    public boolean validCategory(String data, String semanticType) {
+    public boolean validCategories(String data, String semanticType, Set<String> children) {
         Boolean validCategory = false;
         try {
-            validCategory = searcher.validDocumentWithCategory(data, semanticType);
+            validCategory = searcher.validDocumentWithCategories(data, semanticType, children);
 
         } catch (IOException e) {
             LOG.error(e, e);
