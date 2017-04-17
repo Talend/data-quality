@@ -46,8 +46,8 @@ public class TypoUnicodePatternRecognizerTest {
                 TypoUnicodePatternRecognizer.withCase().getValuePattern(str).toArray()[0]);
 
         // some other examples with mail patterns
-        str = "不亦1說乎@gmail.com";
-        Assert.assertEquals("[alnum(CJK)]@[word].[word]",
+        str = "不45亦_1說乎@gmail.com";
+        Assert.assertEquals("[alnum(CJK)]_[alnum(CJK)]@[word].[word]",
                 TypoUnicodePatternRecognizer.noCase().getValuePattern(str).toArray()[0]);
 
         str = "afff123@gmail.com";
