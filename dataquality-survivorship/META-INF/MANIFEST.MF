@@ -8,6 +8,9 @@ Bundle-Vendor: .Talend SA.
 Require-Bundle: org.drools.eclipse,
  org.junit
 Export-Package: org.talend.survivorship,
+ org.talend.survivorship.action,
+ org.talend.survivorship.action.handler,
  org.talend.survivorship.model,
- org.talend.survivorship.services
+ org.talend.survivorship.services,
+ org.talend.survivorship.utils
 Eclipse-RegisterBuddy: org.drools.eclipse

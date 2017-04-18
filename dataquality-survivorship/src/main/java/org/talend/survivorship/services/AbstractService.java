@@ -30,6 +30,10 @@ public abstract class AbstractService {
         this.dataset = dataset;
     }
 
+    /**
+     * 
+     * Create by zshen init current service
+     */
     public abstract void init();
 
 }
