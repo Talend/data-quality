@@ -34,4 +34,8 @@ public class SurvivorshipConstants {
     public static final String RECORD_IN = "RecordIn"; //$NON-NLS-1$
 
     public static final String TALEND_INTERNAL_ID = "TALEND_INTERNAL_ID"; //$NON-NLS-1$
+
+    private SurvivorshipConstants() {
+        // no need to implement
+    }
 }

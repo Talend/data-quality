@@ -1,0 +1,14 @@
+package org.talend.survivorship.conflict.fre_other_survived 
+
+rule "short_firstName"
+    no-loop true
+    dialect "mvel"
+    ruleflow-group "short_firstNameGroup"
+when
+    $input : RecordIn( dataset.isShortest( firstname, "firstName", false) )  
+then
+    dataset.survive( $input.TALEND_INTERNAL_ID, "firstName", drools.getRule().getName());
+
+end
+
+

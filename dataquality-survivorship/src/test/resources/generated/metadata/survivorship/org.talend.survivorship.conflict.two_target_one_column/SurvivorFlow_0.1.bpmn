@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<definitions id="Definition"
+             targetNamespace="http://www.jboss.org/drools"
+             typeLanguage="http://www.java.com/javaTypes"
+             expressionLanguage="http://www.mvel.org/2.0"
+             xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd"
+             xmlns:g="http://www.jboss.org/drools/flow/gpd"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:tns="http://www.jboss.org/drools">
+
+  <process processType="Private" isExecutable="true" id="org.talend.survivorship.conflict.two_target_one_column.SurvivorFlow" name="SurvivorFlow" >
+
+    <!-- nodes -->
+    <startEvent id="_jbpm-unique-94" name="start"  isInterrupting="false">
+    </startEvent>
+    <businessRuleTask id="_jbpm-unique-95" name="more_recent_birthday" g:ruleFlowGroup="more_recent_birthdayGroup" >
+      <ioSpecification>
+        <inputSet>
+        </inputSet>
+        <outputSet>
+        </outputSet>
+      </ioSpecification>
+    </businessRuleTask>
+    <businessRuleTask id="_jbpm-unique-96" name="Longest_birthday" g:ruleFlowGroup="Longest_birthdayGroup" >
+      <ioSpecification>
+        <inputSet>
+        </inputSet>
+        <outputSet>
+        </outputSet>
+      </ioSpecification>
+    </businessRuleTask>
+    <endEvent id="_jbpm-unique-97" name="end" >
+        <terminateEventDefinition />
+    </endEvent>
+
+    <!-- connections -->
+    <sequenceFlow id="_jbpm-unique-94-_jbpm-unique-95" sourceRef="_jbpm-unique-94" targetRef="_jbpm-unique-95" />
+    <sequenceFlow id="_jbpm-unique-95-_jbpm-unique-96" sourceRef="_jbpm-unique-95" targetRef="_jbpm-unique-96" />
+    <sequenceFlow id="_jbpm-unique-96-_jbpm-unique-97" sourceRef="_jbpm-unique-96" targetRef="_jbpm-unique-97" />
+
+  </process>
+
+  <bpmndi:BPMNDiagram>
+    <bpmndi:BPMNPlane bpmnElement="org.talend.survivorship.conflict.two_target_one_column.SurvivorFlow" >
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-94" >
+        <dc:Bounds x="72" y="16" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-95" >
+        <dc:Bounds x="16" y="96" width="160" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-96" >
+        <dc:Bounds x="28" y="176" width="136" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-97" >
+        <dc:Bounds x="72" y="256" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-94-_jbpm-unique-95" >
+        <di:waypoint x="96" y="40" />
+        <di:waypoint x="96" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-95-_jbpm-unique-96" >
+        <di:waypoint x="96" y="120" />
+        <di:waypoint x="96" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-96-_jbpm-unique-97" >
+        <di:waypoint x="96" y="200" />
+        <di:waypoint x="96" y="280" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+
+</definitions>
