@@ -28,6 +28,8 @@ public class DictionaryConstants {
 
     public static final String CHILD = "child";
 
+    public static final String VALIDATION_MODE = "validationMode";
+
     private DictionaryConstants() {
 
     }

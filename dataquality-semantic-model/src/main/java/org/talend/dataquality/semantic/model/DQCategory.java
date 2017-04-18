@@ -59,6 +59,8 @@ public class DQCategory implements Serializable {
 
     private String lastPublisher;
 
+    private ValidationMode validationMode;
+
     private CategoryState state;
 
     private List<DQCategory> children;
@@ -247,6 +249,14 @@ public class DQCategory implements Serializable {
 
     public void setParents(List<DQCategory> parents) {
         this.parents = parents;
+    }
+
+    public ValidationMode getValidationMode() {
+        return validationMode;
+    }
+
+    public void setValidationMode(ValidationMode validationMode) {
+        this.validationMode = validationMode;
     }
 
     @Override
