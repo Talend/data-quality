@@ -48,6 +48,7 @@ public class DateCalendarConverter {
     public static final Locale DEFAULT_OUTPUT_LOCALE = Locale.getDefault();
 
     public static final Locale DEFAULT_INPUT_LOCALE = Locale.getDefault();
+
     /**
      * the input date text format pattern, default is "yyyy-MM-dd".
      */
@@ -79,7 +80,8 @@ public class DateCalendarConverter {
     private DateTimeFormatter outputDateTimeFormatter;
 
     public DateCalendarConverter() {
-        this(DEFAULT_INPUT_PATTERN, DEFAULT_OUTPUT_PATTERN, IsoChronology.INSTANCE, IsoChronology.INSTANCE, DEFAULT_INPUT_LOCALE, DEFAULT_OUTPUT_LOCALE);
+        this(DEFAULT_INPUT_PATTERN, DEFAULT_OUTPUT_PATTERN, IsoChronology.INSTANCE, IsoChronology.INSTANCE, DEFAULT_INPUT_LOCALE,
+                DEFAULT_OUTPUT_LOCALE);
     }
 
     /**
@@ -89,7 +91,8 @@ public class DateCalendarConverter {
      * @param outputChronologyType
      */
     public DateCalendarConverter(Chronology inputChronologyType, Chronology outputChronologyType) {
-        this(DEFAULT_INPUT_PATTERN, DEFAULT_OUTPUT_PATTERN, inputChronologyType, outputChronologyType, DEFAULT_INPUT_LOCALE, DEFAULT_OUTPUT_LOCALE);
+        this(DEFAULT_INPUT_PATTERN, DEFAULT_OUTPUT_PATTERN, inputChronologyType, outputChronologyType, DEFAULT_INPUT_LOCALE,
+                DEFAULT_OUTPUT_LOCALE);
     }
 
     /**
