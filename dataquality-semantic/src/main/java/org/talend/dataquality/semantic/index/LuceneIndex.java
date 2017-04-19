@@ -22,6 +22,7 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
+import org.talend.dataquality.semantic.model.ValidationMode;
 
 /**
  * Created by sizhaoliu on 03/04/15.
@@ -73,10 +74,10 @@ public class LuceneIndex implements Index {
     }
 
     @Override
-    public boolean validCategories(String data, String semanticType, Set<String> children) {
+    public boolean validCategories(String data, String semanticType, Set<String> children, ValidationMode validationMode) {
         Boolean validCategory = false;
         try {
-            validCategory = searcher.validDocumentWithCategories(data, semanticType, children);
+            validCategory = searcher.validDocumentWithCategories(data, semanticType, children, validationMode);
 
         } catch (IOException e) {
             LOG.error(e, e);

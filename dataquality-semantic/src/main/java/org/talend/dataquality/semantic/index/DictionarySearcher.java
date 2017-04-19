@@ -18,6 +18,7 @@ import java.net.URI;
 import java.util.*;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.Term;
@@ -25,6 +26,7 @@ import org.apache.lucene.queries.TermsFilter;
 import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.talend.dataquality.semantic.model.ValidationMode;
 
 public class DictionarySearcher extends AbstractDictionarySearcher {
 
@@ -117,8 +119,8 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
         return doc;
     }
 
-    public boolean validDocumentWithCategories(String stringToSearch, String semanticType, Set<String> children)
-            throws IOException {
+    public boolean validDocumentWithCategories(String stringToSearch, String semanticType, Set<String> children,
+            ValidationMode validationMode) throws IOException {
         Query query;
         switch (searchMode) {
         case MATCH_SEMANTIC_DICTIONARY:
@@ -132,7 +134,6 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
             break;
         }
         final IndexSearcher searcher = mgr.acquire();
-        boolean validDocument = false;
         CachingWrapperFilter tmp = categoryToCache.get(semanticType);
         if (tmp == null) {
             if (CollectionUtils.isEmpty(children)) {
@@ -142,9 +143,31 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
             }
             categoryToCache.put(semanticType, tmp);
         }
-        validDocument = searcher.search(query, tmp, 1).totalHits != 0;
+        TopDocs docs = searcher.search(query, tmp, 1);
+        boolean validDocument = validDocumentByValidationMode(searcher, docs, stringToSearch, validationMode);
         mgr.release(searcher);
         return validDocument;
+    }
+
+    private boolean validDocumentByValidationMode(IndexSearcher searcher, TopDocs docs, String stringToSearch,
+            ValidationMode validationMode) throws IOException {
+        if (ValidationMode.SIMPLIFIED.equals(validationMode))
+            return docs.totalHits != 0;
+        String transformedString = transformSringByValidationMode(stringToSearch, validationMode);
+        if (!StringUtils.isEmpty(transformedString))
+            for (ScoreDoc scoreDoc : docs.scoreDocs) {
+                Document document = searcher.doc(scoreDoc.doc);
+                for (String raw : document.getValues(DictionarySearcher.F_RAW))
+                    if (transformedString.equals(transformSringByValidationMode(raw, validationMode)))
+                        return true;
+            }
+        return false;
+    }
+
+    private String transformSringByValidationMode(String stringToTransform, ValidationMode validationMode) {
+        if (ValidationMode.EXACT_IGNORE_CASE_AND_ACCENT.equals(validationMode))
+            return StringUtils.stripAccents(stringToTransform.toLowerCase());
+        return stringToTransform;
     }
 
     /**

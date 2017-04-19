@@ -26,6 +26,7 @@ import org.talend.dataquality.semantic.classifier.ISubCategoryClassifier;
 import org.talend.dataquality.semantic.classifier.impl.DataDictFieldClassifier;
 import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
+import org.talend.dataquality.semantic.model.ValidationMode;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizer;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
 import org.talend.dataquality.semantic.recognizer.LFUCache;
@@ -160,19 +161,23 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
             }
         }
         boolean validCat = false;
+        ValidationMode validationMode = ValidationMode.EXACT;
+        DQCategory dqCategory = crm.getCategoryMetadataByName(catId);
+        if (dqCategory != null && dqCategory.getValidationMode() != null)
+            validationMode = dqCategory.getValidationMode();
         switch (catType) {
         case REGEX:
-            validCat = regexClassifier.validCategories(value, catId, null);
+            validCat = regexClassifier.validCategories(value, catId, null, validationMode);
             break;
         case DICT:
 
-            validCat = dataDictClassifier.validCategories(value, catId, null);
+            validCat = dataDictClassifier.validCategories(value, catId, null, validationMode);
             break;
         case COMPOUND:
             Map<CategoryType, Set<String>> children = getChildrenCategories(catId);
-            validCat = regexClassifier.validCategories(value, catId, children.get(CategoryType.REGEX));
+            validCat = regexClassifier.validCategories(value, catId, children.get(CategoryType.REGEX), validationMode);
             if (!validCat)
-                validCat = dataDictClassifier.validCategories(value, catId, children.get(CategoryType.DICT));
+                validCat = dataDictClassifier.validCategories(value, catId, children.get(CategoryType.DICT), validationMode);
             break;
         default:
             break;

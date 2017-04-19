@@ -20,6 +20,7 @@ import org.talend.dataquality.semantic.classifier.ISubCategory;
 import org.talend.dataquality.semantic.classifier.impl.AbstractSubCategoryClassifier;
 import org.talend.dataquality.semantic.filter.ISemanticFilter;
 import org.talend.dataquality.semantic.model.MainCategory;
+import org.talend.dataquality.semantic.model.ValidationMode;
 import org.talend.dataquality.semantic.validator.ISemanticValidator;
 
 /**
@@ -81,7 +82,7 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
     }
 
     @Override
-    public boolean validCategories(String str, String semanticType, Set<String> children) {
+    public boolean validCategories(String str, String semanticType, Set<String> children, ValidationMode validationMode) {
         MainCategory mainCategory = MainCategory.getMainCategory(str);
         return validCategories(str, mainCategory, semanticType, children);
     }
