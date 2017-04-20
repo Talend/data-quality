@@ -34,6 +34,7 @@ import org.talend.dataquality.semantic.index.DictionarySearcher;
 import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.model.DQDocument;
+import org.talend.dataquality.semantic.model.ValidationMode;
 
 public class DictionaryUtils {
 
@@ -112,6 +113,8 @@ public class DictionaryUtils {
         dqCat.setCompleteness(Boolean.valueOf(doc.getField(DictionaryConstants.COMPLETENESS).stringValue()));
         dqCat.setDescription(doc.getField(DictionaryConstants.DESCRIPTION) == null ? ""
                 : doc.getField(DictionaryConstants.DESCRIPTION).stringValue());
+        if (doc.getField(DictionaryConstants.VALIDATION_MODE) != null)
+            dqCat.setValidationMode(ValidationMode.valueOf(doc.getField(DictionaryConstants.VALIDATION_MODE).stringValue()));
         IndexableField[] childrenFields = doc.getFields(DictionaryConstants.CHILD);
         if (childrenFields != null) {
             List<DQCategory> synSet = new ArrayList<>();
@@ -134,6 +137,9 @@ public class DictionaryUtils {
         doc.add(new StringField(DictionaryConstants.COMPLETENESS, String.valueOf(cat.getCompleteness().booleanValue()),
                 Field.Store.YES));
         doc.add(new TextField(DictionaryConstants.DESCRIPTION, cat.getDescription(), Field.Store.YES));
+        if (cat.getValidationMode() != null)
+            doc.add(new TextField(DictionaryConstants.VALIDATION_MODE, cat.getValidationMode().name(), Field.Store.YES));
+
         if (!CollectionUtils.isEmpty(cat.getChildren()))
             for (DQCategory child : cat.getChildren())
                 doc.add(new TextField(DictionaryConstants.CHILD, child.getId(), Field.Store.YES));
