@@ -404,6 +404,7 @@ public class TSwooshGrouping<TYPE> {
 
         // add the not masters again
         List<Record> result = algorithm.getResult();
+        List<List<DQAttribute<?>>> remainNoMasterLs = new ArrayList<>();
         if (!result.isEmpty()) {
             for (Record master : result) {
                 String groupId = StringUtils.isBlank(master.getGroupId()) ? ((RichRecord) master).getGID().getValue()
@@ -425,12 +426,25 @@ public class TSwooshGrouping<TYPE> {
                     groupRows.remove(tempGid);
                 }
             }
-        }
-        // 1.output no masters in the current block, TDQ-12851
-        // 2.TDQ-13255 output the non-master of 1st tMatchGroup and also update its GID by the map 'oldGID2New'.
-        if (result.isEmpty() || !groupRows.isEmpty()) {
+        } else {// the current block are all no masters,put them to remainNoMasterLs to output, TDQ-12851
             for (RecordGenerator record : notMasterRecords) {
-                List<DQAttribute<?>> originalRow = record.getOriginalRow();
+                remainNoMasterLs.add(record.getOriginalRow());
+
+            }
+        }
+
+        // the non-master of 1st tMatchGroup and still in groupRows will be output.
+        if (!groupRows.isEmpty()) {
+            Iterator<String> keyIterator = groupRows.keySet().iterator();
+            while (keyIterator.hasNext()) {
+                String keyGid = keyIterator.next();
+                remainNoMasterLs.addAll(groupRows.get(keyGid));
+            }
+        }
+
+        // TDQ-13225 TDQ-13490 output the remained none-master records, also update its GID by the map 'oldGID2New'
+        if (!remainNoMasterLs.isEmpty()) {
+            for (List<DQAttribute<?>> originalRow : remainNoMasterLs) {
                 String gid = oldGID2New.get(originalRow.get(indexGID2).getValue());
                 RichRecord createRecord = createRecord(originalRow, gid != null ? gid : originalRow.get(indexGID2).getValue());
                 output(createRecord);

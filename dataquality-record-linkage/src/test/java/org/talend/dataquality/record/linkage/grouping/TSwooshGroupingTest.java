@@ -420,6 +420,98 @@ public class TSwooshGroupingTest {
         Assert.assertTrue(isUpdated4GID);
     }
 
+    @Test
+    /**
+     * *
+     * <pre>
+     * |=-+------------+---------+---------+------------------------------------+--------+------+-----+----------=|
+     * |id|name        |blockkey1|blockkey2|GID                                 |GRP_SIZE|MASTER|SCORE|GRP_QUALITY|
+     * |=-+------------+---------+---------+------------------------------------+--------+------+-----+----------=|
+     * |1 | John Doe   | FR      | F       |dbf300e2-e8ea-4231-87bd-ac2992488f16|2       |true  |1.0  |0.9        |
+     * |1 | John Doe   | FR      | M       |dbf300e2-e8ea-4231-87bd-ac2992488f16|0       |false |0.9  |0.0        |
+     * |2 | Jon Doe    | FR      | F       |dbf300e2-e8ea-4231-87bd-ac2992488f16|0       |false |0.9  |0.0        |
+     * |3 | John Doe   | US      | F       |975b6a73-88b2-446b-b2fe-be53faf1a6d1|1       |true  |1.0  |1.0        |
+     * |4 | Johnny Doe | US      | M       |fe87468b-e74b-49d7-84ac-84537e623e00|2       |true  |1.0  |1.0        |
+     * |4 | Johnny Doe | US      | M       |fe87468b-e74b-49d7-84ac-84537e623e00|0       |false |1.0  |0.0        |
+     * |5 | Johnny Doe | US      | M       |fe87468b-e74b-49d7-84ac-84537e623e00|0       |false |1.0  |0.0        |
+     * '--+------------+---------+---------+------------------------------------+--------+------+-----+-----------'
+     * </pre>
+     * 
+     * Test case for TDQ-13490
+     * Expected:
+     * 1. id "4" GRP_SIZE 2
+     * @return
+     */
+    public void testSwooshMatchWithMultipass_withblock3() {
+        // look as block 1
+        List<String[]> inputDataList_1 = new ArrayList<>();
+        // look as block 2
+        List<String[]> inputDataList_2 = new ArrayList<>();
+        inputDataList_1.add(new String[] { "1", "John Doe", "FR", "F", "dbf300e2-e8ea-4231-87bd-ac2992488f16", "2", "true", "1.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
+                "0.9" });//$NON-NLS-1$ 
+        inputDataList_1
+                .add(new String[] { "2", "Jon Doe", "FR", "F", "dbf300e2-e8ea-4231-87bd-ac2992488f16", "0", "false", "0.9", "0.0" //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
+        });
+        inputDataList_2
+                .add(new String[] { "1", "John Doe", "FR", "M", "dbf300e2-e8ea-4231-87bd-ac2992488f16", "0", "false", "0.9", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
+                        "0.0" });//$NON-NLS-1$ 
+        inputDataList_1.add(new String[] { "3", "John Doe", "US", "F", "975b6a73-88b2-446b-b2fe-be53faf1a6d1", "1", "true", "1.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$//$NON-NLS-7$//$NON-NLS-8$
+                "1.0" });//$NON-NLS-1$
+        inputDataList_2.add(new String[] { "4", "Johnny Doe", "US", "M", "fe87468b-e74b-49d7-84ac-84537e623e00", "2", "true", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$//$NON-NLS-7$
+                "1.0", "1.0" });//$NON-NLS-1$ //$NON-NLS-2$
+        inputDataList_2.add(new String[] { "4", "Johnny Doe", "US", "M", "fe87468b-e74b-49d7-84ac-84537e623e00", "0", "true", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$//$NON-NLS-7$
+                "1.0", "0.0" });//$NON-NLS-1$ //$NON-NLS-2$
+        inputDataList_2.add(new String[] { "5", "Johnny Doe", "US", "M", "fe87468b-e74b-49d7-84ac-84537e623e00", "0", "false", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$//$NON-NLS-7$
+                "1", "0" });//$NON-NLS-1$ //$NON-NLS-2$
+
+        List<List<Map<String, String>>> ruleMapListList = createMatchRules();
+        TempRecordGrouping tempRecordGrouping = new TempRecordGrouping();
+        tempRecordGrouping.setOrginalInputColumnSize(4);
+        tempRecordGrouping.setIsLinkToPrevious(true);
+        tempRecordGrouping.setIsStoreOndisk(true);
+        TSwooshGrouping<String> tSwooshGrouping = new TSwooshGrouping<String>(tempRecordGrouping);
+        // for block 1
+        for (String[] stringRow : inputDataList_1) {
+            tSwooshGrouping.addToList(stringRow, ruleMapListList);
+        }
+
+        int originalInputColumnSize = 4;
+
+        // init CombinedRecordMatcher
+        CombinedRecordMatcher combinMatcher = new CombinedRecordMatcher();
+        combinMatcher.setblockingThreshold(1.0);
+        combinMatcher.setRecordSize(1);
+        MFBRecordMatcher mfbRecordMatcher = createMFBMatcher();
+        combinMatcher.add(mfbRecordMatcher);
+        SurvivorShipAlgorithmParams survivorParams = createSurvivoshipAlgorithm(combinMatcher, mfbRecordMatcher);
+
+        // call the test method
+        tSwooshGrouping.swooshMatchWithMultipass(combinMatcher, survivorParams, originalInputColumnSize);
+        tSwooshGrouping.afterAllRecordFinished();
+        // for block 2
+        for (String[] stringRow : inputDataList_2) {
+            tSwooshGrouping.addToList(stringRow, ruleMapListList);
+        }
+
+        // call the test method
+        tSwooshGrouping.swooshMatchWithMultipass(combinMatcher, survivorParams, originalInputColumnSize);
+        tSwooshGrouping.afterAllRecordFinished();
+
+        // check result
+        String grpSize = null;
+        for (RichRecord rr : result) {
+            String s = rr.getGroupId() == null ? rr.getGID().getValue() : rr.getGroupId();
+            String t = rr.getGRP_SIZE() == null ? rr.getGrpSize() + "" : rr.getGRP_SIZE().getValue(); //$NON-NLS-1$
+            System.err.println("--" + rr.getAttributes().get(0).getValue() + "--" + s + "==" + rr.isMaster() + "==" + t + "==" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+                    + rr.getGroupQuality());
+            // find id is 4 master data
+            if ("fe87468b-e74b-49d7-84ac-84537e623e00".equals(s) && rr.isMaster()) { //$NON-NLS-1$
+                grpSize = t;
+            }
+        }
+        Assert.assertEquals(grpSize, "2"); //$NON-NLS-1$
+    }
+
     private SurvivorShipAlgorithmParams createSurvivoshipAlgorithm(CombinedRecordMatcher combinMatcher,
             MFBRecordMatcher mfbRecordMatcher) {
         SurvivorShipAlgorithmParams survivorParams = new SurvivorShipAlgorithmParams();
