@@ -239,7 +239,7 @@ public class TSwooshGroupingTest {
      * 3.id "4" GID should be updated with master.
      * </pre>
      */
-    public void testSwooshMatchWithMultipass_withblock() {
+    public void testSwooshMatchWithMultipassWithblock() {
         // look as block 1
         List<String[]> inputDataList_1 = new ArrayList<>();
         // look as block 2
@@ -345,7 +345,7 @@ public class TSwooshGroupingTest {
      * 2.id "4" GID should be updated with master.
      * </pre>
      */
-    public void testSwooshMatchWithMultipass_withblock2() {
+    public void testSwooshMatchWithMultipassWithblock2() {
         // look as block 1
         List<String[]> inputDataList_1 = new ArrayList<>();
         // look as block 2
@@ -442,7 +442,7 @@ public class TSwooshGroupingTest {
      * 1. id "4" GRP_SIZE 2
      * @return
      */
-    public void testSwooshMatchWithMultipass_withblock3() {
+    public void testSwooshMatchWithMultipassWithblock3() {
         // look as block 1
         List<String[]> inputDataList_1 = new ArrayList<>();
         // look as block 2
@@ -507,6 +507,7 @@ public class TSwooshGroupingTest {
             // find id is 4 master data
             if ("fe87468b-e74b-49d7-84ac-84537e623e00".equals(s) && rr.isMaster()) { //$NON-NLS-1$
                 grpSize = t;
+                break;
             }
         }
         Assert.assertEquals(grpSize, "2"); //$NON-NLS-1$
