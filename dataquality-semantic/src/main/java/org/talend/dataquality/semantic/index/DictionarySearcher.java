@@ -18,6 +18,7 @@ import java.net.URI;
 import java.util.*;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.Term;
@@ -26,6 +27,7 @@ import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.talend.dataquality.semantic.model.DQCategory;
+import org.talend.dataquality.semantic.model.ValidationMode;
 
 public class DictionarySearcher extends AbstractDictionarySearcher {
 
@@ -80,7 +82,6 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
      */
     @Override
     public TopDocs searchDocumentBySynonym(String stringToSearch) throws IOException {
-        TopDocs topDocs = null;
         Query query;
         switch (searchMode) {
         case MATCH_SEMANTIC_DICTIONARY:
@@ -94,7 +95,7 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
             break;
         }
         final IndexSearcher searcher = mgr.acquire();
-        topDocs = searcher.search(query, topDocLimit);
+        TopDocs topDocs = searcher.search(query, topDocLimit);
         mgr.release(searcher);
         return topDocs;
     }
@@ -133,19 +134,91 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
             break;
         }
         final IndexSearcher searcher = mgr.acquire();
-        boolean validDocument = false;
-        CachingWrapperFilter tmp = categoryToCache.get(semanticType);
-        if (tmp == null) {
-            if (CollectionUtils.isEmpty(children)) {
-                tmp = new CachingWrapperFilter(new FieldCacheTermsFilter(F_CATID, semanticType.getId()));
-            } else {
-                tmp = new CachingWrapperFilter(new FieldCacheTermsFilter(F_CATID, children.toArray(new String[children.size()])));
-            }
-            categoryToCache.put(semanticType.getId(), tmp);
+        CachingWrapperFilter cachingWrapperFilter = categoryToCache.get(semanticType);
+        boolean hasChildren = !CollectionUtils.isEmpty(children);
+
+        // define the subset in which we will search
+        if (cachingWrapperFilter == null) {
+            if (hasChildren)
+                cachingWrapperFilter = new CachingWrapperFilter(
+                        new FieldCacheTermsFilter(F_CATID, children.toArray(new String[children.size()])));
+            else
+                cachingWrapperFilter = new CachingWrapperFilter(new FieldCacheTermsFilter(F_CATID, semanticType.getId()));
+            categoryToCache.put(semanticType.getId(), cachingWrapperFilter);
         }
-        validDocument = searcher.search(query, tmp, 1).totalHits != 0;
+
+        // the lucene search
+        TopDocs docs = searcher.search(query, cachingWrapperFilter, topDocLimit);
+
+        ValidationMode validationMode = ValidationMode.EXACT;
+        if (!hasChildren && semanticType.getValidationMode() != null) {
+            validationMode = semanticType.getValidationMode();
+            if (ValidationMode.SIMPLIFIED.equals(validationMode)) {
+                mgr.release(searcher);
+                return docs.totalHits != 0;
+            }
+        }
+
+        boolean validDocument = false;
+        for (int i = 0; i < docs.scoreDocs.length && !validDocument; i++) {
+            Document document = searcher.doc(docs.scoreDocs[i].doc);
+            if (hasChildren)
+                validationMode = getChildrenValidationMode(children, document);
+            validDocument = validDocumentByValidationMode(document, stringToSearch, validationMode);
+        }
         mgr.release(searcher);
         return validDocument;
+    }
+
+    /**
+     * This method searches the validation mode associated to the found document.
+     * For that, we have to find its category.
+     *
+     * @param children the categories
+     * @param document the found document
+     * @return the validation mode
+     */
+    private ValidationMode getChildrenValidationMode(Set<DQCategory> children, Document document) {
+        for (DQCategory child : children)
+            if (child.getId().equals(document.getField(DictionarySearcher.F_CATID).stringValue())
+                    && child.getValidationMode() != null)
+                return child.getValidationMode() != null ? child.getValidationMode() : ValidationMode.EXACT;
+        return ValidationMode.EXACT;
+    }
+
+    /**
+     * this method valids stringToSearch according to a validation mode
+     *
+     * @param document found in lucene index
+     * @param stringToSearch to valid
+     * @param validationMode
+     * @return a boolean
+     * @throws IOException
+     */
+    private boolean validDocumentByValidationMode(Document document, String stringToSearch, ValidationMode validationMode)
+            throws IOException {
+
+        if (ValidationMode.SIMPLIFIED.equals(validationMode))
+            return true;
+        String transformedString = transformSringByValidationMode(stringToSearch, validationMode);
+        if (!StringUtils.isEmpty(transformedString))
+            for (String raw : document.getValues(DictionarySearcher.F_RAW))
+                if (transformedString.equals(transformSringByValidationMode(raw, validationMode)))
+                    return true;
+        return false;
+    }
+
+    /**
+     * This method transforms a string according to a validation mode
+     *
+     * @param stringToTransform
+     * @param validationMode
+     * @return the transformed string
+     */
+    private String transformSringByValidationMode(String stringToTransform, ValidationMode validationMode) {
+        if (ValidationMode.EXACT_IGNORE_CASE_AND_ACCENT.equals(validationMode))
+            return StringUtils.stripAccents(stringToTransform.toLowerCase());
+        return stringToTransform;
     }
 
     /**
