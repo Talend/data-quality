@@ -154,16 +154,11 @@ public abstract class TypoUnicodePatternRecognizer extends AbstractPatternRecogn
 
     private enum PatternExplorer {
 
-        ALPHABETIC(1, "[char]", "[word]", "[alnum]"),
-        IDEOGRAPHIC(2, "[Ideogram]", "[IdeogramSeq]", "[alnum(CJK)]"),
-        NUMERIC(3, "[digit]", "[number]"),
-        UPPER_CASE(4, "[Char]", "[WORD]", "[Word]"),
-        NOT_UPPER_CASE(5, "[char]", "[word]", "[wORD]");
-
-        /**
-         * Character type, indicates what to match the character with
-         */
-        private int type = 0;
+        ALPHABETIC("[char]", "[word]", "[alnum]"),
+        IDEOGRAPHIC("[Ideogram]", "[IdeogramSeq]", "[alnum(CJK)]"),
+        NUMERIC("[digit]", "[number]", null),
+        UPPER_CASE("[Char]", "[WORD]", "[Word]"),
+        NOT_UPPER_CASE("[char]", "[word]", "[wORD]");
 
         /**
          * Pattern for a single character type
@@ -178,36 +173,31 @@ public abstract class TypoUnicodePatternRecognizer extends AbstractPatternRecogn
         /**
          * Special pattern for a sequence of combined type of characters, depend on the last pattern
          */
-        private String specialPattern = null;
+        private String specialPattern;
 
         private boolean isSpecial;
 
-        PatternExplorer(int type, String patternUnit, String patternSequence) {
-            this.type = type;
+        PatternExplorer(String patternUnit, String patternSequence, String specialPattern) {
             this.patternUnit = patternUnit;
             this.patternSequence = patternSequence;
-        }
-
-        PatternExplorer(int type, String patternUnit, String patternSequence, String specialPattern) {
-            this(type, patternUnit, patternSequence);
             this.specialPattern = specialPattern;
         }
 
         private int exploreWithCase(char[] ca, int start) {
             isSpecial = false;
             int pos = start;
-            switch (type) {
-            case 2:
+            switch (this) {
+            case IDEOGRAPHIC:
                 while (pos < ca.length && Character.isIdeographic(Character.codePointAt(ca, pos))) {
                     pos++;
                 }
                 break;
-            case 3:
+            case NUMERIC:
                 while (pos < ca.length && Character.isDigit(Character.codePointAt(ca, pos))) {
                     pos++;
                 }
                 break;
-            case 4:
+            case UPPER_CASE:
                 while (pos < ca.length && Character.isUpperCase(Character.codePointAt(ca, pos))) {
                     pos++;
                 }
@@ -215,7 +205,7 @@ public abstract class TypoUnicodePatternRecognizer extends AbstractPatternRecogn
                     pos += exploreSpecial(ca, pos);
                 }
                 break;
-            case 5:
+            case NOT_UPPER_CASE:
                 while (pos < ca.length && isAlphabeticButNotIdeographic(ca, pos)
                         && !Character.isUpperCase(Character.codePointAt(ca, pos))) {
                     pos++;
@@ -233,18 +223,18 @@ public abstract class TypoUnicodePatternRecognizer extends AbstractPatternRecogn
         private int exploreNoCase(char[] ca, int start) {
             isSpecial = false;
             int pos = start;
-            switch (type) {
-            case 1:
+            switch (this) {
+            case ALPHABETIC:
                 while (pos < ca.length && isAlphabeticButNotIdeographic(ca, pos)) {
                     pos++;
                 }
                 break;
-            case 2:
+            case IDEOGRAPHIC:
                 while (pos < ca.length && Character.isIdeographic(Character.codePointAt(ca, pos))) {
                     pos++;
                 }
                 break;
-            case 3:
+            case NUMERIC:
                 while (pos < ca.length && Character.isDigit(Character.codePointAt(ca, pos))) {
                     pos++;
                 }
@@ -262,20 +252,20 @@ public abstract class TypoUnicodePatternRecognizer extends AbstractPatternRecogn
 
         private int exploreSpecial(char[] ca, int start) {
             int pos = start;
-            switch (type) {
-            case 1:
+            switch (this) {
+            case ALPHABETIC:
                 while (pos < ca.length
                         && (isAlphabeticButNotIdeographic(ca, pos) || Character.isDigit(Character.codePointAt(ca, pos)))) {
                     pos++;
                 }
                 break;
-            case 2:
+            case IDEOGRAPHIC:
                 while (pos < ca.length && (Character.isIdeographic(Character.codePointAt(ca, pos))
                         || Character.isDigit(Character.codePointAt(ca, pos)))) {
                     pos++;
                 }
                 break;
-            case 3:
+            case NUMERIC:
                 pos += ALPHABETIC.exploreSpecial(ca, start);
                 if (pos > start) {
                     specialPattern = "[alnum]";
@@ -286,16 +276,11 @@ public abstract class TypoUnicodePatternRecognizer extends AbstractPatternRecogn
                     }
                 }
                 break;
-            case 4:
-                while (pos < ca.length && isAlphabeticButNotIdeographic(ca, pos)
-                        && !Character.isUpperCase(Character.codePointAt(ca, pos))) {
-                    pos++;
-                }
+            case UPPER_CASE:
+                pos += NOT_UPPER_CASE.exploreWithCase(ca, start);
                 break;
-            case 5:
-                while (pos < ca.length && Character.isUpperCase(Character.codePointAt(ca, pos))) {
-                    pos++;
-                }
+            case NOT_UPPER_CASE:
+                pos += UPPER_CASE.exploreWithCase(ca, start);
                 break;
             default:
                 break;
