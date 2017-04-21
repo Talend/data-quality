@@ -12,6 +12,8 @@
 // ============================================================================
 package org.talend.dataquality.semantic.index;
 
+import org.talend.dataquality.semantic.model.DQCategory;
+
 import java.util.Set;
 
 /**
@@ -25,5 +27,5 @@ public interface Index {
 
     Set<String> findCategories(String data);
 
-    boolean validCategories(String data, String semanticType, Set<String> children);
+    boolean validCategories(String data, DQCategory semanticType, Set<DQCategory> children);
 }

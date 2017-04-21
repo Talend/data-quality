@@ -22,6 +22,7 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
+import org.talend.dataquality.semantic.model.DQCategory;
 
 /**
  * Created by sizhaoliu on 03/04/15.
@@ -73,7 +74,7 @@ public class LuceneIndex implements Index {
     }
 
     @Override
-    public boolean validCategories(String data, String semanticType, Set<String> children) {
+    public boolean validCategories(String data, DQCategory semanticType, Set<DQCategory> children) {
         Boolean validCategory = false;
         try {
             validCategory = searcher.validDocumentWithCategories(data, semanticType, children);

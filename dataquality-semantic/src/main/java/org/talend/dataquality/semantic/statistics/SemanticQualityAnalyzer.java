@@ -121,22 +121,20 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
     }
 
     private void analyzeValue(String catName, String value, ValueQualityStatistics valueQuality) {
-        String catId = null;
-        DQCategory cat = null;
+        DQCategory category = null;
         for (String id : CategoryRegistryManager.getInstance().getCategoryIds()) {
             DQCategory tmp = CategoryRegistryManager.getInstance().getCategoryMetadataByName(id);
             if (catName.equals(tmp.getName())) {
-                catId = id;
-                cat = tmp;
+                category = tmp;
                 break;
             }
         }
-        if (cat == null) {
+        if (category == null) {
             valueQuality.incrementValid();
             return;
         }
-        if (cat.getCompleteness() != null && cat.getCompleteness().booleanValue()) {
-            if (isValid(catId, cat.getType(), value)) {
+        if (category.getCompleteness() != null && category.getCompleteness().booleanValue()) {
+            if (isValid(category, category.getType(), value)) {
                 valueQuality.incrementValid();
             } else {
                 valueQuality.incrementInvalid();
@@ -147,12 +145,12 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
         }
     }
 
-    private boolean isValid(String catId, CategoryType catType, String value) {
-        LFUCache<String, Boolean> categoryCache = knownValidationCategoryCache.get(catId);
+    private boolean isValid(DQCategory category, CategoryType catType, String value) {
+        LFUCache<String, Boolean> categoryCache = knownValidationCategoryCache.get(category);
 
         if (categoryCache == null) {
             categoryCache = new LFUCache<String, Boolean>(10, 1000, 0.01f);
-            knownValidationCategoryCache.put(catId, categoryCache);
+            knownValidationCategoryCache.put(category.getId(), categoryCache);
         } else {
             final Boolean isValid = categoryCache.get(value);
             if (isValid != null) {
@@ -162,17 +160,17 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
         boolean validCat = false;
         switch (catType) {
         case REGEX:
-            validCat = regexClassifier.validCategories(value, catId, null);
+            validCat = regexClassifier.validCategories(value, category, null);
             break;
         case DICT:
 
-            validCat = dataDictClassifier.validCategories(value, catId, null);
+            validCat = dataDictClassifier.validCategories(value, category, null);
             break;
         case COMPOUND:
-            Map<CategoryType, Set<String>> children = getChildrenCategories(catId);
-            validCat = regexClassifier.validCategories(value, catId, children.get(CategoryType.REGEX));
+            Map<CategoryType, Set<DQCategory>> children = getChildrenCategories(category.getId());
+            validCat = regexClassifier.validCategories(value, category, children.get(CategoryType.REGEX));
             if (!validCat)
-                validCat = dataDictClassifier.validCategories(value, catId, children.get(CategoryType.DICT));
+                validCat = dataDictClassifier.validCategories(value, category, children.get(CategoryType.DICT));
             break;
         default:
             break;
@@ -187,12 +185,12 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
         }
     }
 
-    private Map<CategoryType, Set<String>> getChildrenCategories(String id) {
+    private Map<CategoryType, Set<DQCategory>> getChildrenCategories(String id) {
         Deque<String> catToSee = new ArrayDeque<>();
         Set<String> catAlreadySeen = new HashSet<>();
-        Map<CategoryType, Set<String>> children = new HashMap<>();
-        children.put(CategoryType.REGEX, new HashSet<String>());
-        children.put(CategoryType.DICT, new HashSet<String>());
+        Map<CategoryType, Set<DQCategory>> children = new HashMap<>();
+        children.put(CategoryType.REGEX, new HashSet<DQCategory>());
+        children.put(CategoryType.DICT, new HashSet<DQCategory>());
         catToSee.add(id);
         String currentCategory;
         while (!catToSee.isEmpty()) {
@@ -207,7 +205,7 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
                         }
                     }
                 } else if (!currentCategory.equals(id)) {
-                    children.get(dqCategory.getType()).add(currentCategory);
+                    children.get(dqCategory.getType()).add(dqCategory);
                 }
         }
         return children;

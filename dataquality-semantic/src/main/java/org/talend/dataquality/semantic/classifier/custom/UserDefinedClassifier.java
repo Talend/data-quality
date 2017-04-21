@@ -19,6 +19,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.talend.dataquality.semantic.classifier.ISubCategory;
 import org.talend.dataquality.semantic.classifier.impl.AbstractSubCategoryClassifier;
 import org.talend.dataquality.semantic.filter.ISemanticFilter;
+import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.model.MainCategory;
 import org.talend.dataquality.semantic.validator.ISemanticValidator;
 
@@ -81,21 +82,25 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
     }
 
     @Override
-    public boolean validCategories(String str, String semanticType, Set<String> children) {
+    public boolean validCategories(String str, DQCategory semanticType, Set<DQCategory> children) {
         MainCategory mainCategory = MainCategory.getMainCategory(str);
         return validCategories(str, mainCategory, semanticType, children);
     }
 
-    private boolean validCategories(String str, MainCategory mainCategory, String semanticType, Set<String> children) {
+    private boolean validCategories(String str, MainCategory mainCategory, DQCategory semanticType, Set<DQCategory> children) {
         if (mainCategory == MainCategory.UNKNOWN || mainCategory == MainCategory.NULL || mainCategory == MainCategory.BLANK) {
             return false;
         }
         int cpt = 0;
+        final Set<String> childrenId = new HashSet<>();
         boolean hasChildren = !CollectionUtils.isEmpty(children);
+        if (hasChildren)
+            for (DQCategory child : children)
+                childrenId.add(child.getId());
         for (ISubCategory classifier : potentialSubCategories) {
-            if (!hasChildren && semanticType.equals(classifier.getId()))
+            if (!hasChildren && semanticType.getId().equals(classifier.getId()))
                 return isValid(str, mainCategory, (UserDefinedCategory) classifier);
-            if (hasChildren && children.contains(classifier.getId())) {
+            if (hasChildren && childrenId.contains(classifier.getId())) {
                 cpt++;
                 if (isValid(str, mainCategory, (UserDefinedCategory) classifier))
                     return true;

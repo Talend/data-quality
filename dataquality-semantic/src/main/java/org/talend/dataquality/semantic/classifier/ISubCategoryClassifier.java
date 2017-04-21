@@ -12,6 +12,8 @@
 // ============================================================================
 package org.talend.dataquality.semantic.classifier;
 
+import org.talend.dataquality.semantic.model.DQCategory;
+
 import java.io.Serializable;
 import java.util.Set;
 
@@ -28,5 +30,5 @@ public interface ISubCategoryClassifier extends Serializable {
      */
     public Set<String> classify(String str);
 
-    boolean validCategories(String value, String semanticType, Set<String> children);
+    boolean validCategories(String value, DQCategory semanticType, Set<DQCategory> children);
 }

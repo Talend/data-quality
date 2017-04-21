@@ -25,6 +25,7 @@ import org.apache.lucene.queries.TermsFilter;
 import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.talend.dataquality.semantic.model.DQCategory;
 
 public class DictionarySearcher extends AbstractDictionarySearcher {
 
@@ -117,7 +118,7 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
         return doc;
     }
 
-    public boolean validDocumentWithCategories(String stringToSearch, String semanticType, Set<String> children)
+    public boolean validDocumentWithCategories(String stringToSearch, DQCategory semanticType, Set<DQCategory> children)
             throws IOException {
         Query query;
         switch (searchMode) {
@@ -136,11 +137,11 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
         CachingWrapperFilter tmp = categoryToCache.get(semanticType);
         if (tmp == null) {
             if (CollectionUtils.isEmpty(children)) {
-                tmp = new CachingWrapperFilter(new FieldCacheTermsFilter(F_CATID, semanticType));
+                tmp = new CachingWrapperFilter(new FieldCacheTermsFilter(F_CATID, semanticType.getId()));
             } else {
                 tmp = new CachingWrapperFilter(new FieldCacheTermsFilter(F_CATID, children.toArray(new String[children.size()])));
             }
-            categoryToCache.put(semanticType, tmp);
+            categoryToCache.put(semanticType.getId(), tmp);
         }
         validDocument = searcher.search(query, tmp, 1).totalHits != 0;
         mgr.release(searcher);
