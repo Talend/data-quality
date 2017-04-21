@@ -34,6 +34,8 @@ public class CategoryRecognizerBuilder {
 
     private static CategoryRecognizerBuilder INSTANCE;
 
+    public static final String DEFAULT_METADATA_PATH = "/category/";
+
     public static final String DEFAULT_DD_PATH = "/index/dictionary/";
 
     public static final String DEFAULT_KW_PATH = "/index/keyword/";

@@ -1,6 +1,7 @@
 package org.talend.dataquality.semantic.api;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -50,6 +51,8 @@ public class CategoryRegistryManangerTest {
             final UserDefinedClassifier trulyReloaded = crm.getRegexClassifier(true);
             assertEquals("Unexpected size of classifiers", 46, trulyReloaded.getClassifiers().size());
 
+        } catch (Exception e) {
+            fail("Failed due to exception: " + e.getMessage());
         } finally {
             FileUtils.deleteDirectory(new File(path));
             crm.reset();

@@ -105,7 +105,7 @@ public class UDCategorySerDeser {
             obj.put("classifiers", array);
             return readJsonFile(obj.toString());
         } catch (JSONException e) {
-            LOGGER.warn(e.getMessage(), e);
+            LOGGER.trace(e.getMessage(), e);
             // try another format with "classifier" node.
             return readJsonFile(content);
         }

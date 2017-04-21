@@ -20,7 +20,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.zip.CRC32;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
@@ -33,7 +32,6 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Bits;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.classifier.custom.UDCategorySerDeser;
 import org.talend.dataquality.semantic.classifier.custom.UserDefinedClassifier;
 import org.talend.dataquality.semantic.index.ClassPathDirectory;
@@ -105,13 +103,13 @@ public class CategoryRegistryManager {
         this.contextName = contextName;
 
         if (dqCategories.isEmpty()) {
-            // loadBaseCategories();
-            // if (usingLocalCategoryRegistry) {
             try {
-                loadRegisteredCategories();
-            } catch (IOException e) {
-                LOGGER.error(e.getMessage(), e);
-            } catch (URISyntaxException e) {
+                if (usingLocalCategoryRegistry) {
+                    loadRegisteredCategories();
+                } else {
+                    loadInitialCategories();
+                }
+            } catch (IOException | URISyntaxException e) {
                 LOGGER.error(e.getMessage(), e);
             }
         }
@@ -129,8 +127,12 @@ public class CategoryRegistryManager {
     }
 
     void reset() {
-        usingLocalCategoryRegistry = false;
+        setUsingLocalCategoryRegistry(false);
         instances.clear();
+    }
+
+    private static void setUsingLocalCategoryRegistry(boolean b) {
+        usingLocalCategoryRegistry = b;
     }
 
     /**
@@ -230,6 +232,12 @@ public class CategoryRegistryManager {
         }
     }
 
+    private void loadInitialCategories() throws IOException, URISyntaxException {
+        try (final DirectoryReader reader = DirectoryReader.open(ClassPathDirectory.open(getMetadataURI()))) {
+            fillDqCategoriesMap(reader);
+        }
+    }
+
     private void fillDqCategoriesMap(DirectoryReader reader) throws IOException {
         Map<String, Set<String>> idToParents = new HashMap<>();
         Bits liveDocs = MultiFields.getLiveDocs(reader);
@@ -265,26 +273,6 @@ public class CategoryRegistryManager {
                     DictionaryUtils.rewriteIndex(srcDir, destSubFolder);
                 }
             }
-        }
-    }
-
-    private void loadBaseCategories() {
-        LOGGER.info("Loading base categories.");
-        for (SemanticCategoryEnum cat : SemanticCategoryEnum.values()) {
-            DQCategory dqCat = new DQCategory();
-
-            CRC32 checksum = new CRC32();
-            checksum.update(cat.getId().getBytes(), 0, cat.getId().getBytes().length);
-            final String hash = Long.toHexString(checksum.getValue());
-            dqCat.setId(hash);
-            dqCat.setName(cat.getId());
-            dqCat.setLabel(cat.getDisplayName());
-            dqCat.setDescription(cat.getDescription());
-            dqCat.setType(cat.getCategoryType());
-            dqCat.setCompleteness(cat.getCompleteness());
-
-            // TODO
-            dqCategories.put(cat.getId(), dqCat);
         }
     }
 
@@ -398,6 +386,17 @@ public class CategoryRegistryManager {
             }
         }
         return udc;
+    }
+
+    /**
+     * get URI of local category metadata
+     */
+    public URI getMetadataURI() throws URISyntaxException {
+        if (usingLocalCategoryRegistry) {
+            return Paths.get(localRegistryPath, CATEGORY_SUBFOLDER_NAME, contextName).toUri();
+        } else {
+            return CategoryRecognizerBuilder.class.getResource(CategoryRecognizerBuilder.DEFAULT_METADATA_PATH).toURI();
+        }
     }
 
     /**
