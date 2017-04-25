@@ -305,8 +305,7 @@ public class CategoryRecognizerTest {
             String[] catNames = catRecognizer.process(data);
             assertEquals("Invalid assumption for data <" + data + ">, actual categories: " + Arrays.asList(catNames), //$NON-NLS-1$
                     EXPECTED_CAT_ID_FOR_SINGLE_VALUES.get(data).length, catNames.length);
-            // System.out.println("\n" + data + " => expected: " +
-            // Arrays.asList(EXPECTED_CAT_ID_FOR_SINGLE_VALUES.get(data)));
+            // System.out.println("\n" + data + " => expected: " + Arrays.asList(EXPECTED_CAT_ID_FOR_SINGLE_VALUES.get(data)));
 
             for (String catName : catNames) {
                 assertTrue(

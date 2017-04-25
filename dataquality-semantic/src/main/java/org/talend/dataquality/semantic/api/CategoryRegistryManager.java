@@ -322,7 +322,7 @@ public class CategoryRegistryManager {
     }
 
     /**
-     * Get the label of a category by its ID.
+     * Get the label of a category by its functional ID.
      * 
      * @param catId the category ID
      * @return the category label
@@ -335,13 +335,28 @@ public class CategoryRegistryManager {
     }
 
     /**
-     * Get the category object by its ID.
+     * Get the category object by its technical ID.
      * 
-     * @param catId the category ID
+     * @param catId the technical ID of the category
      * @return the category object
      */
-    public DQCategory getCategoryMetadataByName(String catId) {
+    public DQCategory getCategoryMetadataById(String catId) {
         return dqCategories.get(catId);
+    }
+
+    /**
+     * Get the category object by its functional ID (aka. name).
+     * 
+     * @param catName the functional ID (aka. name)
+     * @return the category object
+     */
+    public DQCategory getCategoryMetadataByName(String catName) {
+        for (DQCategory cat : dqCategories.values()) {
+            if (cat.getName().equals(catName)) {
+                return cat;
+            }
+        }
+        return null;
     }
 
     /**

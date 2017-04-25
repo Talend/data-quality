@@ -139,7 +139,7 @@ class DefaultCategoryRecognizer implements CategoryRecognizer {
         Set<String> categories = new HashSet<>();
         if (!ids.isEmpty()) {
             for (String id : ids) {
-                DQCategory meta = crm.getCategoryMetadataByName(id);
+                DQCategory meta = crm.getCategoryMetadataById(id);
                 if (meta != null) {
                     incrementCategory(meta.getName(), meta.getLabel());
                     incrementAncestorsCategories(id);
@@ -160,7 +160,7 @@ class DefaultCategoryRecognizer implements CategoryRecognizer {
         String currentCategory;
         while (!catToSee.isEmpty()) {
             currentCategory = catToSee.pop();
-            DQCategory dqCategory = crm.getCategoryMetadataByName(currentCategory);
+            DQCategory dqCategory = crm.getCategoryMetadataById(currentCategory);
             if (dqCategory != null && !CollectionUtils.isEmpty(dqCategory.getParents()))
                 for (DQCategory parent : dqCategory.getParents()) {
                     if (!catAlreadySeen.contains(parent.getId())) {

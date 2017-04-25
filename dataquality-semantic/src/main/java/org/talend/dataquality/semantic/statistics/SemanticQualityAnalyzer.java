@@ -123,7 +123,7 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
     private void analyzeValue(String catName, String value, ValueQualityStatistics valueQuality) {
         DQCategory category = null;
         for (String id : CategoryRegistryManager.getInstance().getCategoryIds()) {
-            DQCategory tmp = CategoryRegistryManager.getInstance().getCategoryMetadataByName(id);
+            DQCategory tmp = CategoryRegistryManager.getInstance().getCategoryMetadataById(id);
             if (catName.equals(tmp.getName())) {
                 category = tmp;
                 break;
@@ -195,7 +195,7 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
         String currentCategory;
         while (!catToSee.isEmpty()) {
             currentCategory = catToSee.pop();
-            DQCategory dqCategory = crm.getCategoryMetadataByName(currentCategory);
+            DQCategory dqCategory = crm.getCategoryMetadataById(currentCategory);
             if (dqCategory != null)
                 if (!CollectionUtils.isEmpty(dqCategory.getChildren())) {
                     for (DQCategory child : dqCategory.getChildren()) {
