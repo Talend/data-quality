@@ -67,6 +67,14 @@ public class DQCategory implements Serializable {
 
     private List<DQCategory> parents;
 
+    public DQCategory(String id) {
+        this.id = id;
+    }
+
+    public DQCategory() {
+
+    }
+
     public String getId() {
         return id;
     }

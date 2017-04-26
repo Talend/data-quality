@@ -12,26 +12,13 @@
 // ============================================================================
 package org.talend.dataquality.semantic.classifier.custom;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -115,6 +102,46 @@ public class UserDefinedClassifierTest {
 
     private final int MAX_TLD_LENGTH = 24;
 
+    /**
+     * Map from technical ID to category name
+     * 583edc44ec06957a34fa6456 -> EN_MONTH
+     * 583edc44ec06957a34fa646a -> EN_MONTH_ABBREV
+     * 583edc44ec06957a34fa644c -> UK_SSN
+     * 583edc44ec06957a34fa6448 -> SE_SSN
+     * 583edc44ec06957a34fa6444 -> FR_SSN
+     * 583edc44ec06957a34fa642e -> US_SSN
+     * 583edc44ec06957a34fa6430 -> EMAIL
+     * 583edc44ec06957a34fa645e -> FR_CODE_COMMUNE_INSEE
+     * 583edc44ec06957a34fa643c -> FR_POSTAL_CODE
+     * 583edc44ec06957a34fa647c -> DE_POSTAL_CODE
+     * 583edc44ec06957a34fa6488 -> US_POSTAL_CODE
+     * 583edc44ec06957a34fa6474 -> US_STATE_CODE
+     * 583edc44ec06957a34fa6470 -> US_STATE
+     * 583edc44ec06957a34fa6434 -> URL
+     * 583edc44ec06957a34fa642c -> WEB_DOMAIN
+     * 583edc44ec06957a34fa6446 -> ISBN_10
+     * 583edc44ec06957a34fa644a -> ISBN_13
+     * 583edc44ec06957a34fa6438 -> MAC_ADDRESS
+     * 583edc44ec06957a34fa644e -> EN_MONEY_AMOUNT
+     * 583edc44ec06957a34fa6468 -> FR_MONEY_AMOUNT
+     * 583edc44ec06957a34fa643e -> DE_PHONE
+     * 583edc44ec06957a34fa646c -> FR_PHONE
+     * 583edc44ec06957a34fa645c -> US_PHONE
+     * 583edc44ec06957a34fa6476 -> COLOR_HEX_CODE
+     * 583edc44ec06957a34fa6432 -> BG_VAT_NUMBER
+     * 583edc44ec06957a34fa6482 -> AT_VAT_NUMBER
+     * 583edc44ec06957a34fa646e -> GEO_COORDINATES
+     * 583edc44ec06957a34fa6436 -> GEO_COORDINATE
+     * 583edc44ec06957a34fa6462 -> GEO_COORDINATES_DEG
+     * 583edc44ec06957a34fa643a -> EN_WEEKDAY
+     * 583edc44ec06957a34fa6484 -> SEDOL
+     * 583edc44ec06957a34fa647a -> HDFS_URL
+     * 583edc44ec06957a34fa6472 -> FILE_URL
+     * 583edc44ec06957a34fa645a -> MAILTO_URL
+     * 583edc44ec06957a34fa6464 -> DATA_URL
+     * 583edc44ec06957a34fa6460 -> IBAN
+     *
+     */
     public static Map<String, String[]> TEST_DATA = new LinkedHashMap<String, String[]>() {
 
         private static final long serialVersionUID = -5067273062214728849L;
@@ -130,83 +157,85 @@ public class UserDefinedClassifierTest {
             put("cat", new String[] {});//$NON-NLS-1$
             put("2012-02-03 7:08PM", new String[] {});//$NON-NLS-1$
             put("1/2/2012", new String[] {});//$NON-NLS-1$
-            put("january", new String[] { "EN_MONTH" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("jan", new String[] { "EN_MONTH_ABBREV" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("february", new String[] { "EN_MONTH" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("march", new String[] { "EN_MONTH" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("auG", new String[] { "EN_MONTH_ABBREV" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("MAY", new String[] { "EN_MONTH", "EN_MONTH_ABBREV" });//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            put("january", new String[] { "583edc44ec06957a34fa6456" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("jan", new String[] { "583edc44ec06957a34fa646a" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("february", new String[] { "583edc44ec06957a34fa6456" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("march", new String[] { "583edc44ec06957a34fa6456" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("auG", new String[] { "583edc44ec06957a34fa646a" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("MAY", new String[] { "583edc44ec06957a34fa6456", "583edc44ec06957a34fa646a" });//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
             put("januar", new String[] {});//$NON-NLS-1$
             put("janvier", new String[] {});//$NON-NLS-1$
 
-            put("AB123456C", new String[] { "UK_SSN" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("AB 12 34 56 C", new String[] { "UK_SSN" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("TN 31 12 58 F", new String[] { "UK_SSN" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("20120101-3842", new String[] { "SE_SSN" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("AB123456C", new String[] { "583edc44ec06957a34fa644c" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("AB 12 34 56 C", new String[] { "583edc44ec06957a34fa644c" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("TN 31 12 58 F", new String[] { "583edc44ec06957a34fa644c" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("20120101-3842", new String[] { "583edc44ec06957a34fa6448" });//$NON-NLS-1$ //$NON-NLS-2$
             put("120101-3842", new String[] {});//$NON-NLS-1$
 
             put("christophe", new String[] {});//$NON-NLS-1$
-            put("sda@talend.com", new String[] { "EMAIL" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("abc@gmail.com", new String[] { "EMAIL" }); //$NON-NLS-1$ //$NON-NLS-2$
-            put(" abc@gmail.com ", new String[] { "EMAIL" }); //$NON-NLS-1$ //$NON-NLS-2$
-            put("abc@gmail.com ", new String[] { "EMAIL" }); //$NON-NLS-1$ //$NON-NLS-2$
-            put(" abc@gmail.com", new String[] { "EMAIL" }); //$NON-NLS-1$ //$NON-NLS-2$
+            put("sda@talend.com", new String[] { "583edc44ec06957a34fa6430" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("abc@gmail.com", new String[] { "583edc44ec06957a34fa6430" }); //$NON-NLS-1$ //$NON-NLS-2$
+            put(" abc@gmail.com ", new String[] { "583edc44ec06957a34fa6430" }); //$NON-NLS-1$ //$NON-NLS-2$
+            put("abc@gmail.com ", new String[] { "583edc44ec06957a34fa6430" }); //$NON-NLS-1$ //$NON-NLS-2$
+            put(" abc@gmail.com", new String[] { "583edc44ec06957a34fa6430" }); //$NON-NLS-1$ //$NON-NLS-2$
             put("abc@gmail", new String[] {}); //$NON-NLS-1$
-            put("12345", new String[] { "FR_CODE_COMMUNE_INSEE", "FR_POSTAL_CODE", "DE_POSTAL_CODE", "US_POSTAL_CODE" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-            put("2A345", new String[] { "FR_CODE_COMMUNE_INSEE" }); //$NON-NLS-1$ //$NON-NLS-2$
-            put("12345-6789", new String[] { "US_POSTAL_CODE" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            put("12345", new String[] { "583edc44ec06957a34fa645e", "583edc44ec06957a34fa643c", "583edc44ec06957a34fa647c", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+                    "583edc44ec06957a34fa6488" }); //$NON-NLS-1$
+            put("2A345", new String[] { "583edc44ec06957a34fa645e" }); //$NON-NLS-1$ //$NON-NLS-2$
+            put("12345-6789", new String[] { "583edc44ec06957a34fa6488" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
             put("Talend", new String[] {}); //$NON-NLS-1$
             put("9 rue pages, 92150 suresnes", new String[] {}); //$NON-NLS-1$
             put("avenue des champs elysees", new String[] {}); //$NON-NLS-1$
-            put("MA", new String[] { "US_STATE_CODE" }); //$NON-NLS-1$ //$NON-NLS-2$
-            put("FL", new String[] { "US_STATE_CODE" }); //$NON-NLS-1$ //$NON-NLS-2$
-            put("FLorIda", new String[] { "US_STATE" }); //$NON-NLS-1$ //$NON-NLS-2$
-            put("FLORIDA", new String[] { "US_STATE" }); //$NON-NLS-1$ //$NON-NLS-2$
-            put("New Hampshire", new String[] { "US_STATE" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("Arizona", new String[] { "US_STATE" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("Alabama", new String[] { "US_STATE" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("MA", new String[] { "583edc44ec06957a34fa6474" }); //$NON-NLS-1$ //$NON-NLS-2$
+            put("FL", new String[] { "583edc44ec06957a34fa6474" }); //$NON-NLS-1$ //$NON-NLS-2$
+            put("FLorIda", new String[] { "583edc44ec06957a34fa6470" }); //$NON-NLS-1$ //$NON-NLS-2$
+            put("FLORIDA", new String[] { "583edc44ec06957a34fa6470" }); //$NON-NLS-1$ //$NON-NLS-2$
+            put("New Hampshire", new String[] { "583edc44ec06957a34fa6470" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("Arizona", new String[] { "583edc44ec06957a34fa6470" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("Alabama", new String[] { "583edc44ec06957a34fa6470" });//$NON-NLS-1$ //$NON-NLS-2$
             put("F", new String[] {});//$NON-NLS-1$ //$NON-NLS-2$
             put("M", new String[] {});//$NON-NLS-1$ //$NON-NLS-2$
             put("Male", new String[] {});//$NON-NLS-1$ //$NON-NLS-2$
             put("female", new String[] {});//$NON-NLS-1$ //$NON-NLS-2$
 
-            put("http://www.talend.com", new String[] { "URL" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("www.talend.com", new String[] { "WEB_DOMAIN" });//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-            put("talend.com", new String[] { "WEB_DOMAIN" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("talend.com", new String[] { "WEB_DOMAIN" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("talend.veryLongTDL", new String[] { "WEB_DOMAIN" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("http://www.talend.com", new String[] { "583edc44ec06957a34fa6434" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("www.talend.com", new String[] { "583edc44ec06957a34fa642c" });//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            put("talend.com", new String[] { "583edc44ec06957a34fa642c" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("talend.com", new String[] { "583edc44ec06957a34fa642c" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("talend.veryLongTDL", new String[] { "583edc44ec06957a34fa642c" });//$NON-NLS-1$ //$NON-NLS-2$
             put("talend.TDLlongerThan25Characters", new String[] {});//$NON-NLS-1$ //$NON-NLS-2$
-            put("talendSmallerThan63Charactersxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.com", new String[] { "WEB_DOMAIN" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("talendSmallerThan63Charactersxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.com", //$NON-NLS-1$
+                    new String[] { "583edc44ec06957a34fa642c" });//$NON-NLS-1$
             put("talendLongerThan63Charactersxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.com", new String[] {});//$NON-NLS-1$ //$NON-NLS-2$
 
-            put("1 81 04 95 201 569 62", new String[] { "FR_SSN" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("1810495201569", new String[] { "FR_SSN" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("123-45-6789", new String[] { "US_SSN" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("1 81 04 95 201 569 62", new String[] { "583edc44ec06957a34fa6444" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("1810495201569", new String[] { "583edc44ec06957a34fa6444" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("123-45-6789", new String[] { "583edc44ec06957a34fa642e" });//$NON-NLS-1$ //$NON-NLS-2$
             put("azjfnskjqnfoajr", new String[] {});//$NON-NLS-1$
-            put("ISBN 9-787-11107-5", new String[] { "ISBN_10" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("ISBN 9-787-11107-5", new String[] { "583edc44ec06957a34fa6446" });//$NON-NLS-1$ //$NON-NLS-2$
             put("SINB 9-787-11107-5", new String[] {});//$NON-NLS-1$
-            put("ISBN 2-711-79141-6", new String[] { "ISBN_10" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("ISBN-13: 978-2711791415", new String[] { "ISBN_13" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("ISBN: 978-2711791415", new String[] { "ISBN_13" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("ISBN 978-2711791415", new String[] { "ISBN_13" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("ISBN 2-711-79141-6", new String[] { "583edc44ec06957a34fa6446" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("ISBN-13: 978-2711791415", new String[] { "583edc44ec06957a34fa644a" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("ISBN: 978-2711791415", new String[] { "583edc44ec06957a34fa644a" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("ISBN 978-2711791415", new String[] { "583edc44ec06957a34fa644a" });//$NON-NLS-1$ //$NON-NLS-2$
 
-            put("A4:4E:31:B9:C5:B4", new String[] { "MAC_ADDRESS" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("A4:4E:31:B9:C5:B4", new String[] { "583edc44ec06957a34fa6438" });//$NON-NLS-1$ //$NON-NLS-2$
             put("A4:4E:31:B9:C5:B4:B4", new String[] {});//$NON-NLS-1$
             put("A4-4E-31-B9-C5-B4", new String[] {});//$NON-NLS-1$
 
-            put("$3,000", new String[] { "EN_MONEY_AMOUNT" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("$3000", new String[] { "EN_MONEY_AMOUNT" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("$3,000", new String[] { "583edc44ec06957a34fa644e" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("$3000", new String[] { "583edc44ec06957a34fa644e" });//$NON-NLS-1$ //$NON-NLS-2$
             put("$ 3000", new String[] {});//$NON-NLS-1$
-            put("CA$3000", new String[] { "EN_MONEY_AMOUNT" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("€3000", new String[] { "EN_MONEY_AMOUNT" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("3000 €", new String[] { "FR_MONEY_AMOUNT" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("345,56 €", new String[] { "FR_MONEY_AMOUNT" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("35 k€", new String[] { "FR_MONEY_AMOUNT" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("35 054 T€", new String[] { "FR_MONEY_AMOUNT" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("35 456 544 k£", new String[] { "FR_MONEY_AMOUNT" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("CA$3000", new String[] { "583edc44ec06957a34fa644e" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("€3000", new String[] { "583edc44ec06957a34fa644e" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("3000 €", new String[] { "583edc44ec06957a34fa6468" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("345,56 €", new String[] { "583edc44ec06957a34fa6468" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("35 k€", new String[] { "583edc44ec06957a34fa6468" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("35 054 T€", new String[] { "583edc44ec06957a34fa6468" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("35 456 544 k£", new String[] { "583edc44ec06957a34fa6468" });//$NON-NLS-1$ //$NON-NLS-2$
 
-            put("00496-8738059275", new String[] { "DE_PHONE" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("00338.01345678", new String[] { "FR_PHONE" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("00496-8738059275", new String[] { "583edc44ec06957a34fa643e" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("00338.01345678", new String[] { "583edc44ec06957a34fa646c" });//$NON-NLS-1$ //$NON-NLS-2$
 
             put("John Doe", new String[] {});//$NON-NLS-1$ //$NON-NLS-2$
             put("Georges W. Bush", new String[] {});//$NON-NLS-1$ //$NON-NLS-2$
@@ -221,19 +250,19 @@ public class UserDefinedClassifierTest {
             put("J. S. Smith, Jr.", new String[] {});//$NON-NLS-1$ //$NON-NLS-2$
             put("Catherine Zeta-Jones", new String[] {});//$NON-NLS-1$ //$NON-NLS-2$
 
-            put("#990000", new String[] { "COLOR_HEX_CODE" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("#AAAAAA", new String[] { "COLOR_HEX_CODE" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("#cc3366", new String[] { "COLOR_HEX_CODE" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("#c1d906", new String[] { "COLOR_HEX_CODE" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("#990000", new String[] { "583edc44ec06957a34fa6476" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("#AAAAAA", new String[] { "583edc44ec06957a34fa6476" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("#cc3366", new String[] { "583edc44ec06957a34fa6476" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("#c1d906", new String[] { "583edc44ec06957a34fa6476" });//$NON-NLS-1$ //$NON-NLS-2$
 
-            put("BG123456789", new String[] { "BG_VAT_NUMBER" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("BG123456789", new String[] { "BG_VAT_NUMBER" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("AT12345678", new String[] { "AT_VAT_NUMBER" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("BG123456789", new String[] { "583edc44ec06957a34fa6432" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("BG123456789", new String[] { "583edc44ec06957a34fa6432" });//$NON-NLS-1$ //$NON-NLS-2$
+            put("AT12345678", new String[] { "583edc44ec06957a34fa6482" });//$NON-NLS-1$ //$NON-NLS-2$
 
             // put("132.2356", new String[] { "LONGITUDE_LATITUDE_COORDINATE" });
-            put("40.7127837,-74.00594130000002", new String[] { "GEO_COORDINATES" }); //$NON-NLS-1$ //$NON-NLS-2$
-            put("30.082993", new String[] { "GEO_COORDINATE" }); //$NON-NLS-1$ //$NON-NLS-2$
-            put("N 0:59:59.99,E 0:59:59.99", new String[] { "GEO_COORDINATES_DEG" }); //$NON-NLS-1$ //$NON-NLS-2$
+            put("40.7127837,-74.00594130000002", new String[] { "583edc44ec06957a34fa646e" }); //$NON-NLS-1$ //$NON-NLS-2$
+            put("30.082993", new String[] { "583edc44ec06957a34fa6436" }); //$NON-NLS-1$ //$NON-NLS-2$
+            put("N 0:59:59.99,E 0:59:59.99", new String[] { "583edc44ec06957a34fa6462" }); //$NON-NLS-1$ //$NON-NLS-2$
 
             put("00:00", new String[] {}); //$NON-NLS-1$ //$NON-NLS-2$
             put("12:00", new String[] {}); //$NON-NLS-1$ //$NON-NLS-2$
@@ -241,52 +270,53 @@ public class UserDefinedClassifierTest {
             put("15:53", new String[] {}); //$NON-NLS-1$ //$NON-NLS-2$
             put("23:59", new String[] {}); //$NON-NLS-1$ //$NON-NLS-2$
 
-            put("Monday", new String[] { "EN_WEEKDAY" }); //$NON-NLS-1$ //<$NON-NLS-2$
-            put("MonDay", new String[] { "EN_WEEKDAY" }); //$NON-NLS-1$ //$NON-NLS-2$
-            put("MOnDay", new String[] { "EN_WEEKDAY" }); //$NON-NLS-1$ //$NON-NLS-2$
-            put("MOn", new String[] { "EN_WEEKDAY" }); //$NON-NLS-1$ //$NON-NLS-2$
-            put("Tue", new String[] { "EN_WEEKDAY" }); //$NON-NLS-1$ //$NON-NLS-2$
-            put("Wed", new String[] { "EN_WEEKDAY" }); //$NON-NLS-1$ //$NON-NLS-2$
-            put("Wednesday", new String[] { "EN_WEEKDAY" }); //$NON-NLS-1$ //$NON-NLS-2$
-            put("Thurs", new String[] { "EN_WEEKDAY" }); //$NON-NLS-1$ //$NON-NLS-2$
+            put("Monday", new String[] { "583edc44ec06957a34fa643a" }); //$NON-NLS-1$ //<$NON-NLS-2$
+            put("MonDay", new String[] { "583edc44ec06957a34fa643a" }); //$NON-NLS-1$ //$NON-NLS-2$
+            put("MOnDay", new String[] { "583edc44ec06957a34fa643a" }); //$NON-NLS-1$ //$NON-NLS-2$
+            put("MOn", new String[] { "583edc44ec06957a34fa643a" }); //$NON-NLS-1$ //$NON-NLS-2$
+            put("Tue", new String[] { "583edc44ec06957a34fa643a" }); //$NON-NLS-1$ //$NON-NLS-2$
+            put("Wed", new String[] { "583edc44ec06957a34fa643a" }); //$NON-NLS-1$ //$NON-NLS-2$
+            put("Wednesday", new String[] { "583edc44ec06957a34fa643a" }); //$NON-NLS-1$ //$NON-NLS-2$
+            put("Thurs", new String[] { "583edc44ec06957a34fa643a" }); //$NON-NLS-1$ //$NON-NLS-2$
 
             put("25:59", new String[] {}); // does not match TIME (as expected) //$NON-NLS-1$
 
-            put("0067340", new String[] { "SEDOL" }); //$NON-NLS-1$ //$NON-NLS-2$
-            put("4155586", new String[] { "SEDOL", "US_PHONE" }); //$NON-NLS-1$ //$NON-NLS-2$
-            put("(541) 754-3010", new String[] { "US_PHONE" }); //$NON-NLS-1$ //$NON-NLS-2$
-            put("B01HL06", new String[] { "SEDOL" }); //$NON-NLS-1$ //$NON-NLS-2$
+            put("0067340", new String[] { "583edc44ec06957a34fa6484" }); //$NON-NLS-1$ //$NON-NLS-2$
+            put("4155586", new String[] { "583edc44ec06957a34fa6484", "583edc44ec06957a34fa645c" }); //$NON-NLS-1$ //$NON-NLS-2$
+            put("(541) 754-3010", new String[] { "583edc44ec06957a34fa645c" }); //$NON-NLS-1$ //$NON-NLS-2$
+            put("B01HL06", new String[] { "583edc44ec06957a34fa6484" }); //$NON-NLS-1$ //$NON-NLS-2$
 
             put("132.2356", new String[] {}); //$NON-NLS-1$
             put("R&D", new String[] {}); //$NON-NLS-1$
 
-            put("hdfs://127.0.0.1/user/luis/sample.txt", new String[] { "HDFS_URL" }); //$NON-NLS-1$ //$NON-NLS-2$
-            put("hdfs://toto.com/user/luis/sample.txt", new String[] { "HDFS_URL" }); //$NON-NLS-1$ //$NON-NLS-2$
+            put("hdfs://127.0.0.1/user/luis/sample.txt", new String[] { "583edc44ec06957a34fa647a" }); //$NON-NLS-1$ //$NON-NLS-2$
+            put("hdfs://toto.com/user/luis/sample.txt", new String[] { "583edc44ec06957a34fa647a" }); //$NON-NLS-1$ //$NON-NLS-2$
 
-            put("file://localhost/c/WINDOWS/clock.avi", new String[] { "FILE_URL" }); //$NON-NLS-1$ //$NON-NLS-2$
-            put("file://localhost/c|/WINDOWS/clock.avi", new String[] { "FILE_URL" }); //$NON-NLS-1$ //$NON-NLS-2$ "
-            put("file://localhost/c:/WINDOWS/clock.avi", new String[] { "FILE_URL" }); //$NON-NLS-1$ //$NON-NLS-2$
-            put("file:///C:/WORKSPACE/reports.html", new String[] { "FILE_URL" }); //$NON-NLS-1$ //$NON-NLS-2$
+            put("file://localhost/c/WINDOWS/clock.avi", new String[] { "583edc44ec06957a34fa6472" }); //$NON-NLS-1$ //$NON-NLS-2$
+            put("file://localhost/c|/WINDOWS/clock.avi", new String[] { "583edc44ec06957a34fa6472" }); //$NON-NLS-1$ //$NON-NLS-2$
+                                                                                                       // "
+            put("file://localhost/c:/WINDOWS/clock.avi", new String[] { "583edc44ec06957a34fa6472" }); //$NON-NLS-1$ //$NON-NLS-2$
+            put("file:///C:/WORKSPACE/reports.html", new String[] { "583edc44ec06957a34fa6472" }); //$NON-NLS-1$ //$NON-NLS-2$
 
             put("mailto:?to=&subject=mailto%20with%20examples&body=http://en.wikipedia.org/wiki/Mailto", //$NON-NLS-1$
-                    new String[] { "MAILTO_URL" }); //$NON-NLS-1$
-            put("mailto:someone@example.com?subject=This%20is%20the%20subject", new String[] { "MAILTO_URL" }); //$NON-NLS-1$ //$NON-NLS-2$
+                    new String[] { "583edc44ec06957a34fa645a" }); //$NON-NLS-1$
+            put("mailto:someone@example.com?subject=This%20is%20the%20subject", new String[] { "583edc44ec06957a34fa645a" }); //$NON-NLS-1$ //$NON-NLS-2$
             put("mailto:p.dupond@example.com?subject=Sujet%20du%20courrier&cc=pierre@example.org&cc=jacques@example.net&body=Bonjour", //$NON-NLS-1$
-                    new String[] { "MAILTO_URL" }); //$NON-NLS-1$
+                    new String[] { "583edc44ec06957a34fa645a" }); //$NON-NLS-1$
 
-            put("data:text/html;charset=US-ASCII,%3Ch1%3EHello!%3C%2Fh1%3E", new String[] { "DATA_URL" }); //$NON-NLS-1$ //$NON-NLS-2$
-            put("data:text/html;charset=,%3Ch1%3EHello!%3C%2Fh1%3E", new String[] { "DATA_URL" }); //$NON-NLS-1$ //$NON-NLS-2$
+            put("data:text/html;charset=US-ASCII,%3Ch1%3EHello!%3C%2Fh1%3E", new String[] { "583edc44ec06957a34fa6464" }); //$NON-NLS-1$ //$NON-NLS-2$
+            put("data:text/html;charset=,%3Ch1%3EHello!%3C%2Fh1%3E", new String[] { "583edc44ec06957a34fa6464" }); //$NON-NLS-1$ //$NON-NLS-2$
             put("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAABlBMVEUAAAD///+l2Z/dAAAA", //$NON-NLS-1$
-                    new String[] { "DATA_URL" }); //$NON-NLS-1$
-            put("data:,Hello World!", new String[] { "DATA_URL" }); //$NON-NLS-1$ //$NON-NLS-2$
-            put("FR7630001007941234567890185", new String[] { "IBAN" });
+                    new String[] { "583edc44ec06957a34fa6464" }); //$NON-NLS-1$
+            put("data:,Hello World!", new String[] { "583edc44ec06957a34fa6464" }); //$NON-NLS-1$ //$NON-NLS-2$
+            put("FR7630001007941234567890185", new String[] { "583edc44ec06957a34fa6460" });
         }
     };
 
     @Before
     public void prepare() {
         for (STATE state : STATE.values()) {
-            TEST_DATA.put(state.toString(), new String[] { "US_STATE" }); //$NON-NLS-1$
+            TEST_DATA.put(state.toString(), new String[] { "583edc44ec06957a34fa6470" }); //$NON-NLS-1$
         }
     }
 

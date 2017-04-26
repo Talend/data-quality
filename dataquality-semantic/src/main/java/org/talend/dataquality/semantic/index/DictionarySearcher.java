@@ -15,14 +15,18 @@ package org.talend.dataquality.semantic.index;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.queries.TermsFilter;
 import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.talend.dataquality.semantic.model.ValidationMode;
 
 public class DictionarySearcher extends AbstractDictionarySearcher {
 
@@ -115,7 +119,8 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
         return doc;
     }
 
-    public boolean validDocumentWithCategory(String stringToSearch, String semanticType) throws IOException {
+    public boolean validDocumentWithCategories(String stringToSearch, String semanticType, Set<String> children,
+            ValidationMode validationMode) throws IOException {
         Query query;
         switch (searchMode) {
         case MATCH_SEMANTIC_DICTIONARY:
@@ -131,12 +136,52 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
         final IndexSearcher searcher = mgr.acquire();
         CachingWrapperFilter tmp = categoryToCache.get(semanticType);
         if (tmp == null) {
-            tmp = new CachingWrapperFilter(new FieldCacheTermsFilter(F_WORD, semanticType));
+            if (CollectionUtils.isEmpty(children)) {
+                tmp = new CachingWrapperFilter(new FieldCacheTermsFilter(F_CATID, semanticType));
+            } else {
+                tmp = new CachingWrapperFilter(new FieldCacheTermsFilter(F_CATID, children.toArray(new String[children.size()])));
+            }
             categoryToCache.put(semanticType, tmp);
         }
-        boolean validDocument = searcher.search(query, tmp, 1).totalHits != 0;
+        TopDocs docs = searcher.search(query, tmp, 1);
+        boolean validDocument = validDocumentByValidationMode(searcher, docs, stringToSearch, validationMode);
         mgr.release(searcher);
         return validDocument;
+    }
+
+    private boolean validDocumentByValidationMode(IndexSearcher searcher, TopDocs docs, String stringToSearch,
+            ValidationMode validationMode) throws IOException {
+        if (ValidationMode.SIMPLIFIED.equals(validationMode))
+            return docs.totalHits != 0;
+        String transformedString = transformSringByValidationMode(stringToSearch, validationMode);
+        if (!StringUtils.isEmpty(transformedString))
+            for (ScoreDoc scoreDoc : docs.scoreDocs) {
+                Document document = searcher.doc(scoreDoc.doc);
+                for (String raw : document.getValues(DictionarySearcher.F_RAW))
+                    if (transformedString.equals(transformSringByValidationMode(raw, validationMode)))
+                        return true;
+            }
+        return false;
+    }
+
+    private String transformSringByValidationMode(String stringToTransform, ValidationMode validationMode) {
+        if (ValidationMode.EXACT_IGNORE_CASE_AND_ACCENT.equals(validationMode))
+            return StringUtils.stripAccents(stringToTransform.toLowerCase());
+        return stringToTransform;
+    }
+
+    /**
+     *
+     * @param semanticTypes
+     * @return
+     * @throws IOException
+     */
+    protected Filter createFilterForSemanticTypes(Set<String> semanticTypes) {
+        List<Term> terms = new ArrayList<>();
+        for (String semanticType : semanticTypes) {
+            terms.add(new Term(F_WORD, semanticType));
+        }
+        return new TermsFilter(terms);
     }
 
     /**

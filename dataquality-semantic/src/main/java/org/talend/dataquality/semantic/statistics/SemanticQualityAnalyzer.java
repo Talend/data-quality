@@ -13,10 +13,9 @@
 package org.talend.dataquality.semantic.statistics;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.QualityAnalyzer;
@@ -27,6 +26,7 @@ import org.talend.dataquality.semantic.classifier.ISubCategoryClassifier;
 import org.talend.dataquality.semantic.classifier.impl.DataDictFieldClassifier;
 import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
+import org.talend.dataquality.semantic.model.ValidationMode;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizer;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
 import org.talend.dataquality.semantic.recognizer.LFUCache;
@@ -49,6 +49,8 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
 
     private ISubCategoryClassifier dataDictClassifier;
 
+    private CategoryRegistryManager crm;
+
     private final CategoryRecognizerBuilder builder;
 
     public SemanticQualityAnalyzer(CategoryRecognizerBuilder builder, String[] types, boolean isStoreInvalidValues) {
@@ -68,6 +70,7 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
             final CategoryRecognizer categoryRecognizer = builder.build();
             regexClassifier = categoryRecognizer.getUserDefineClassifier();
             dataDictClassifier = categoryRecognizer.getDataDictFieldClassifier();
+            crm = categoryRecognizer.getCrm();
         } catch (IOException e) {
             LOG.error(e, e);
         }
@@ -119,13 +122,22 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
     }
 
     private void analyzeValue(String catName, String value, ValueQualityStatistics valueQuality) {
-        DQCategory cat = CategoryRegistryManager.getInstance().getCategoryMetadataByName(catName);
+        String catId = null;
+        DQCategory cat = null;
+        for (String id : CategoryRegistryManager.getInstance().getCategoryIds()) {
+            DQCategory tmp = CategoryRegistryManager.getInstance().getCategoryMetadataByName(id);
+            if (catName.equals(tmp.getName())) {
+                catId = id;
+                cat = tmp;
+                break;
+            }
+        }
         if (cat == null) {
             valueQuality.incrementValid();
             return;
         }
         if (cat.getCompleteness() != null && cat.getCompleteness().booleanValue()) {
-            if (isValid(catName, cat.getType(), value)) {
+            if (isValid(catId, cat.getType(), value)) {
                 valueQuality.incrementValid();
             } else {
                 valueQuality.incrementInvalid();
@@ -136,12 +148,12 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
         }
     }
 
-    private boolean isValid(String catName, CategoryType catType, String value) {
-        LFUCache<String, Boolean> categoryCache = knownValidationCategoryCache.get(catName);
+    private boolean isValid(String catId, CategoryType catType, String value) {
+        LFUCache<String, Boolean> categoryCache = knownValidationCategoryCache.get(catId);
 
         if (categoryCache == null) {
             categoryCache = new LFUCache<String, Boolean>(10, 1000, 0.01f);
-            knownValidationCategoryCache.put(catName, categoryCache);
+            knownValidationCategoryCache.put(catId, categoryCache);
         } else {
             final Boolean isValid = categoryCache.get(value);
             if (isValid != null) {
@@ -149,12 +161,23 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
             }
         }
         boolean validCat = false;
+        ValidationMode validationMode = ValidationMode.EXACT;
+        DQCategory dqCategory = crm.getCategoryMetadataByName(catId);
+        if (dqCategory != null && dqCategory.getValidationMode() != null)
+            validationMode = dqCategory.getValidationMode();
         switch (catType) {
         case REGEX:
-            validCat = regexClassifier.validCategory(value, catName);
+            validCat = regexClassifier.validCategories(value, catId, null, validationMode);
             break;
         case DICT:
-            validCat = dataDictClassifier.validCategory(value, catName);
+
+            validCat = dataDictClassifier.validCategories(value, catId, null, validationMode);
+            break;
+        case COMPOUND:
+            Map<CategoryType, Set<String>> children = getChildrenCategories(catId);
+            validCat = regexClassifier.validCategories(value, catId, children.get(CategoryType.REGEX), validationMode);
+            if (!validCat)
+                validCat = dataDictClassifier.validCategories(value, catId, children.get(CategoryType.DICT), validationMode);
             break;
         default:
             break;
@@ -167,6 +190,32 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
         if (isStoreInvalidValues) {
             valueQuality.appendInvalidValue(invalidValue);
         }
+    }
+
+    private Map<CategoryType, Set<String>> getChildrenCategories(String id) {
+        Deque<String> catToSee = new ArrayDeque<>();
+        Set<String> catAlreadySeen = new HashSet<>();
+        Map<CategoryType, Set<String>> children = new HashMap<>();
+        children.put(CategoryType.REGEX, new HashSet<String>());
+        children.put(CategoryType.DICT, new HashSet<String>());
+        catToSee.add(id);
+        String currentCategory;
+        while (!catToSee.isEmpty()) {
+            currentCategory = catToSee.pop();
+            DQCategory dqCategory = crm.getCategoryMetadataByName(currentCategory);
+            if (dqCategory != null)
+                if (!CollectionUtils.isEmpty(dqCategory.getChildren())) {
+                    for (DQCategory child : dqCategory.getChildren()) {
+                        if (!catAlreadySeen.contains(child.getId())) {
+                            catAlreadySeen.add(child.getId());
+                            catToSee.add(child.getId());
+                        }
+                    }
+                } else if (!currentCategory.equals(id)) {
+                    children.get(dqCategory.getType()).add(currentCategory);
+                }
+        }
+        return children;
     }
 
     @Override
