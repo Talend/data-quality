@@ -45,7 +45,7 @@
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
-						<Import-Package></Import-Package>
+						<Import-Package/>
 						<Include-Resource>{maven-resources}</Include-Resource>
 					</instructions>
 				</configuration>
