@@ -12,8 +12,10 @@
 // ============================================================================
 package org.talend.survivorship.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * This class represents a column from input.
@@ -27,11 +29,13 @@ public class Column {
     /**
      * contains all attributes of the column in the group.
      */
-    private HashMap<Record, Attribute> attributeMap = new HashMap<Record, Attribute>();
+    private HashMap<Record, Attribute> attributeMap = new HashMap<>();
 
     private boolean resolved = true;
 
     private String survivingRuleName;
+
+    private List<ConflictRuleDefinition> conflictResolveList;
 
     /**
      * Column constructor .
@@ -69,6 +73,21 @@ public class Column {
      */
     public Collection<Attribute> getAttributes() {
         return attributeMap.values();
+    }
+
+    /**
+     * Getter for attributes.
+     * 
+     * @return
+     */
+    public Collection<Attribute> getAttributesByFilter(List<Integer> dataSetIndex) {
+        List<Attribute> filterList = new ArrayList<>();
+        for (Record record : attributeMap.keySet()) {
+            if (dataSetIndex.contains(record.getId())) {
+                filterList.add(attributeMap.get(record));
+            }
+        }
+        return filterList;
     }
 
     /**
@@ -114,6 +133,18 @@ public class Column {
         resolved = true;
         attributeMap.clear();
         survivingRuleName = null;
+    }
+
+    /**
+     * Getter for conflictResolveList.
+     * 
+     * @return the conflictResolveList
+     */
+    public List<ConflictRuleDefinition> getConflictResolveList() {
+        if (conflictResolveList == null) {
+            conflictResolveList = new ArrayList<>();
+        }
+        return this.conflictResolveList;
     }
 
 }

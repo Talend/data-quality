@@ -1,0 +1,14 @@
+package org.talend.survivorship.conflict.fre_other_survived 
+
+rule "most_common_city1"
+    no-loop true
+    dialect "mvel"
+    ruleflow-group "most_common_city1Group"
+when
+    $input : RecordIn( dataset.isMostCommon( city1, "city1", false) )  
+then
+    dataset.survive( $input.TALEND_INTERNAL_ID, "city1", drools.getRule().getName());
+
+end
+
+

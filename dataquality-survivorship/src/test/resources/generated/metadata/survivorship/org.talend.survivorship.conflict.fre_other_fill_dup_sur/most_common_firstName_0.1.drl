@@ -1,0 +1,14 @@
+package org.talend.survivorship.conflict.fre_other_fill_dup_sur 
+
+rule "most_common_firstName"
+    no-loop true
+    dialect "mvel"
+    ruleflow-group "most_common_firstNameGroup"
+when
+    $input : RecordIn( dataset.isLongest( firstname, "firstName", false) )  
+then
+    dataset.survive( $input.TALEND_INTERNAL_ID, "firstName", drools.getRule().getName());
+
+end
+
+

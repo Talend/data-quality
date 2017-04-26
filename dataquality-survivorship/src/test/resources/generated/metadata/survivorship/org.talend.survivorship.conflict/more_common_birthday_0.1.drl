@@ -1,0 +1,14 @@
+package org.talend.survivorship.conflict 
+
+rule "more_common_birthday"
+    no-loop true
+    dialect "mvel"
+    ruleflow-group "more_common_birthdayGroup"
+when
+    $input : RecordIn( dataset.isMostCommon( birthday, "birthday", false) )  
+then
+    dataset.survive( $input.TALEND_INTERNAL_ID, "birthday", drools.getRule().getName());
+
+end
+
+
