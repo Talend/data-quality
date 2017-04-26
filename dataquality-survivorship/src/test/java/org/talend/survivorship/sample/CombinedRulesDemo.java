@@ -25,33 +25,19 @@ import org.talend.survivorship.model.RuleDefinition;
  */
 public class CombinedRulesDemo {
 
-    private static SurvivorshipManager manager;
-
     public static void main(String[] args) {
-        run(CombinedRulesTestData.RULES_1, CombinedRulesTestData.SAMPLE_INPUT_1);
-        run(CombinedRulesTestData.RULES_2, CombinedRulesTestData.SAMPLE_INPUT_1);
-        run(CombinedRulesTestData.RULES_1, CombinedRulesTestData.SAMPLE_INPUT_2);
+        // run(CombinedRulesTestData.RULES_1, CombinedRulesTestData.SAMPLE_INPUT_1);
+        // run(CombinedRulesTestData.RULES_2, CombinedRulesTestData.SAMPLE_INPUT_1);
+        // run(CombinedRulesTestData.RULES_1, CombinedRulesTestData.SAMPLE_INPUT_2);
         run(CombinedRulesTestData.RULES_2, CombinedRulesTestData.SAMPLE_INPUT_2);
     }
 
     public static void run(RuleDefinition[] ruleSet, Object[][] sampleInput) {
         // 1. Instantiate <code>SurvivorshipManager</code>.
-        manager = new SurvivorshipManager(CombinedRulesTestData.RULE_PATH, CombinedRulesTestData.PKG_NAME);
-
-        // 2. Add column informations and rule definitions.
-        for (String str : CombinedRulesTestData.COLUMNS.keySet()) {
-            manager.addColumn(str, CombinedRulesTestData.COLUMNS.get(str));
-        }
-        for (int i = 0; i < ruleSet.length; i++) {
-            manager.addRuleDefinition(ruleSet[i]);
-        }
-
-        // 3. Initialize <code>KnowlegeBase</code>.
-        manager.initKnowledgeBase();
+        SurvivorshipManager manager = initManager(ruleSet);
 
         // 4. Run a new session for each group to merge.
         manager.runSession(sampleInput);
-
         // 5. Retrieve results
         List<HashSet<String>> conflicts = manager.getConflictList();
 
@@ -69,5 +55,23 @@ public class CombinedRulesDemo {
         }
         System.out.println("CONFLICTS -> " + manager.getConflictsOfSurvivor());
 
+    }
+
+    public static SurvivorshipManager initManager(RuleDefinition[] ruleSet) {
+        // 1. Instantiate <code>SurvivorshipManager</code>.
+        SurvivorshipManager manager = new SurvivorshipManager(CombinedRulesTestData.RULE_PATH, CombinedRulesTestData.PKG_NAME);
+
+        // 2. Add column informations and rule definitions.
+        for (String str : CombinedRulesTestData.COLUMNS.keySet()) {
+            manager.addColumn(str, CombinedRulesTestData.COLUMNS.get(str));
+        }
+        for (RuleDefinition element : ruleSet) {
+            manager.addRuleDefinition(element);
+        }
+
+        // 3. Initialize <code>KnowlegeBase</code>.
+        manager.initKnowledgeBase();
+
+        return manager;
     }
 }

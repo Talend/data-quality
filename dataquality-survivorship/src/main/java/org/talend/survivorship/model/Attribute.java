@@ -135,8 +135,9 @@ public class Attribute {
         this.survived = survived;
     }
 
+    @Override
     public String toString() {
-        return "Attribute[" + "record=" + record.getId() + ",  column=" + column.getName() + ", value=" + value + "]";
+        return "Attribute[" + "record=" + record.getId() + ",  column=" + column.getName() + ", value=" + value + "]"; //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$
     }
 
 }

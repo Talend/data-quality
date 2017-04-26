@@ -14,6 +14,8 @@ package org.talend.survivorship;
 
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -29,10 +31,18 @@ import org.kie.internal.builder.KnowledgeBuilderErrors;
 import org.kie.internal.builder.KnowledgeBuilderFactory;
 import org.kie.internal.io.ResourceFactory;
 import org.kie.internal.runtime.StatefulKnowledgeSession;
+import org.talend.survivorship.action.handler.AbstractChainResponsibilityHandler;
+import org.talend.survivorship.action.handler.FunctionParameter;
+import org.talend.survivorship.action.handler.HandlerParameter;
+import org.talend.survivorship.action.handler.MCCRHandler;
+import org.talend.survivorship.action.handler.MTCRHandler;
 import org.talend.survivorship.model.Column;
+import org.talend.survivorship.model.ConflictRuleDefinition;
 import org.talend.survivorship.model.DataSet;
 import org.talend.survivorship.model.RuleDefinition;
+import org.talend.survivorship.model.RuleDefinition.Function;
 import org.talend.survivorship.model.RuleDefinition.Order;
+import org.talend.survivorship.utils.ChainNodeMap;
 
 /**
  * This class is provided for component runtime.
@@ -58,6 +68,10 @@ public class SurvivorshipManager extends KnowledgeManager {
      * collection of data and informations.
      */
     protected DataSet dataset;
+
+    protected List<AbstractChainResponsibilityHandler> chainList;
+
+    private ChainNodeMap chainMap;
 
     /**
      * SurvivorshipManager constructor.
@@ -211,13 +225,27 @@ public class SurvivorshipManager extends KnowledgeManager {
      * 
      * @param data A 2-dimension array containing input records.
      */
+    public boolean runSessionWithJava(Object[][] data) {
+
+        dataset.reset();
+        dataset.initData(data);
+        initChainResponsibilityHandler();
+        executeSurvivored(data);
+        dataset.finalizeComputation();
+        return true;
+    }
+
+    /**
+     * create and run a new session for a survivor group.
+     * 
+     * @param data A 2-dimension array containing input records.
+     */
     public boolean runSession(Object[][] data) {
 
         StatefulKnowledgeSession ksession = kbase.newStatefulKnowledgeSession();
         dataset.reset();
         dataset.initData(data);
         ksession.setGlobal("dataset", dataset); //$NON-NLS-1$
-
         // go !
         try {
             FactType recordInType = kbase.getFactType(packageName, SurvivorshipConstants.RECORD_IN);
@@ -243,10 +271,275 @@ public class SurvivorshipManager extends KnowledgeManager {
         ksession.startProcess(packageName + "." + SurvivorshipConstants.SURVIVOR_FLOW); //$NON-NLS-1$
         ksession.fireAllRules();
         ksession.dispose();
-        // kbase.getStatefulKnowledgeSessions().clear();
+        kbase.getStatefulKnowledgeSessions().clear();
 
         dataset.finalizeComputation();
         return true;
+    }
+
+    /**
+     * 
+     * create by zshen check whether conflict rule is valid
+     * 
+     * @return invalid column map key is column name value is error message
+     */
+    public Map<String, List<String>> checkConflictRuleValid() {
+        Map<String, List<String>> returnMap = new HashMap<>();
+        List<String> ruleColumnList = new ArrayList<>();
+        List<Column> executeOrder = new ArrayList<>();
+        Map<String, List<String>> cycDepenStatus = new HashMap<>();
+        for (RuleDefinition ruleDef : this.getRuleDefinitionList()) {
+            ruleColumnList.add(ruleDef.getTargetColumn());
+        }
+        for (Column col : this.getColumnList()) {
+            String conflictTargetColumnName = col.getName();
+            for (ConflictRuleDefinition conRuleDef : col.getConflictResolveList()) {
+
+                if (!ruleColumnList.contains(conflictTargetColumnName)) {
+                    List<String> messageList = returnMap.get(conflictTargetColumnName);
+                    if (messageList == null) {
+                        messageList = new ArrayList<>();
+                        returnMap.put(conflictTargetColumnName, messageList);
+                    }
+                    String errorMessage = conflictTargetColumnName + " is not exist survived value in the rule list"; //$NON-NLS-1$
+                    if (!messageList.contains(errorMessage)) {
+                        messageList.add(errorMessage);
+                    }
+                }
+                if (Function.MappingTo == conRuleDef.getFunction()) {
+                    String conflictRefColumnName = conRuleDef.getReferenceColumn();
+                    if (!ruleColumnList.contains(conflictRefColumnName)) {
+                        List<String> messageList = returnMap.get(conflictRefColumnName);
+                        if (messageList == null) {
+                            messageList = new ArrayList<>();
+                            returnMap.put(conflictRefColumnName, messageList);
+                        }
+                        String errorMessage = conflictRefColumnName + " is not exist survived value in the rule list"; //$NON-NLS-1$
+                        if (!messageList.contains(errorMessage)) {
+                            messageList.add(errorMessage);
+                        }
+                    }
+                    if (cycDepenStatus.get(conflictTargetColumnName) == null) {
+                        cycDepenStatus.put(conflictTargetColumnName, new ArrayList<String>());
+                    }
+                    boolean checkCycDependency = checkCycDependency(conflictTargetColumnName, conflictRefColumnName, executeOrder,
+                            cycDepenStatus);
+                    if (!checkCycDependency) {
+                        List<String> messageList = returnMap.get(conflictRefColumnName);
+                        if (messageList == null) {
+                            messageList = new ArrayList<>();
+                            returnMap.put(conflictRefColumnName, messageList);
+                        }
+                        String errorMessage = conflictRefColumnName + " can not mapping to " + conflictTargetColumnName //$NON-NLS-1$
+                                + " because of circular dependency"; //$NON-NLS-1$
+                        if (!messageList.contains(errorMessage)) {
+                            messageList.add(errorMessage);
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        if (returnMap.size() == 0) {
+            this.getDataSet().setColumnOrder(fillOtherColumn(executeOrder));
+        }
+        return returnMap;
+    }
+
+    /**
+     * Create by zshen fill other no order column
+     * 
+     * @param executeOrder The column list which take order
+     * @return full column list
+     */
+    private List<Column> fillOtherColumn(List<Column> executeOrder) {
+        for (Column col : this.getColumnList()) {
+            if (!executeOrder.contains(col)) {
+                executeOrder.add(col);
+            }
+        }
+        return executeOrder;
+    }
+
+    /**
+     * Create by zshen check whether exist Circular dependency
+     * 
+     * @param source of column name
+     */
+    private boolean checkCycDependency(String sourceColumnName, String targetColumnName, List<Column> executeOrder,
+            Map<String, List<String>> cycDepenStatus) {
+        Column dependencyColumn = this.getColumnByName(targetColumnName);
+        List<String> dependencyList = cycDepenStatus.get(sourceColumnName);
+        if (!dependencyList.contains(targetColumnName)) {
+            dependencyList.add(targetColumnName);
+        }
+        boolean checkStatusMap = checkStatusMap(cycDepenStatus, sourceColumnName, targetColumnName);
+        if (!checkStatusMap) {
+            return false;
+        }
+        for (ConflictRuleDefinition conRuleDef : dependencyColumn.getConflictResolveList()) {
+            if (Function.MappingTo == conRuleDef.getFunction()) {
+                if (cycDepenStatus.get(targetColumnName) == null) {
+                    cycDepenStatus.put(targetColumnName, new ArrayList<String>());
+                }
+                if (!checkCycDependency(targetColumnName, conRuleDef.getReferenceColumn(), executeOrder, cycDepenStatus)) {
+                    return false;
+                }
+            }
+        }
+        if (!executeOrder.contains(dependencyColumn)) {
+
+            executeOrder.add(dependencyColumn);
+        }
+        return true;
+    }
+
+    /**
+     * Create by zshen check dependency status
+     * 
+     * @param cycDepenStatus
+     * @param sourceColumnName
+     * @param targetColumnName
+     */
+    private boolean checkStatusMap(Map<String, List<String>> cycDepenStatus, String sourceColumnName, String targetColumnName) {
+        List<String> list = cycDepenStatus.get(targetColumnName);
+        if (list == null) {
+            return true;
+        }
+        for (String depCol : list) {
+            if (depCol.equals(sourceColumnName)) {
+                return false;
+            }
+            if (!checkStatusMap(cycDepenStatus, sourceColumnName, depCol)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Create by zshen init the handler of chain Responsibility
+     */
+    private void initChainResponsibilityHandler() {
+        String currentRuleColumn = null;
+
+        AbstractChainResponsibilityHandler currentMCHandler = null;
+        AbstractChainResponsibilityHandler firstTargetNode = null;
+        AbstractChainResponsibilityHandler lastTargetNode = null;
+        initChainMap();
+        initChainList();
+        RuleDefinition perviousSEQRd = null;
+        for (RuleDefinition rd : this.getRuleDefinitionList()) {
+            Order order = rd.getOrder();
+            if (order == Order.SEQ) {
+                // next SEQ case inseart first MTCR node into queue
+                if (currentMCHandler != null && firstTargetNode != null) {
+                    currentMCHandler.linkSuccessor(firstTargetNode);
+                    firstTargetNode = null;
+                    lastTargetNode = null;
+                }
+                currentRuleColumn = rd.getRuleName();
+                perviousSEQRd = rd;
+            } else if (order == Order.MT && lastTargetNode != null) {
+                lastTargetNode = lastTargetNode.linkSuccessor(createMTHandler(perviousSEQRd, rd));
+                continue;
+            }
+
+            currentMCHandler = chainMap.get(currentRuleColumn);
+            MCCRHandler newMCHandler = createMCHandler(rd);
+            // SEQ case only
+            if (currentMCHandler == null) {
+                currentMCHandler = newMCHandler;
+                firstTargetNode = new MTCRHandler(newMCHandler);
+                lastTargetNode = firstTargetNode;
+                chainMap.put(currentRuleColumn, newMCHandler);
+                chainList.add(newMCHandler);
+            } else {
+                // MC case only
+                currentMCHandler = currentMCHandler.linkSuccessor(newMCHandler);
+            }
+
+        }
+        if (currentMCHandler != null && firstTargetNode != null) {
+            currentMCHandler.linkSuccessor(firstTargetNode);
+            firstTargetNode = null;
+            lastTargetNode = null;
+        }
+    }
+
+    /**
+     * Create by zshen chain responsibility list
+     */
+    private void initChainList() {
+
+        if (chainList == null) {
+            chainList = new ArrayList<>();
+        } else {
+            chainList.clear();
+        }
+    }
+
+    /**
+     * Create by zshen Create new mutli-condiation handler
+     * 
+     * @param rd The rule definition of handler
+     * @return new mutli-condiation handler
+     */
+    private MCCRHandler createMCHandler(RuleDefinition rd) {
+        FunctionParameter functionParameter = new FunctionParameter(rd.getFunction().getAction(), rd.getOperation(),
+                rd.isIgnoreBlanks(), false);
+        HandlerParameter handlerParameter = new HandlerParameter(dataset, getColumnByName(rd.getReferenceColumn()),
+                getColumnByName(rd.getTargetColumn()), rd.getRuleName(), getColumnIndexMap(), null, functionParameter);
+        return new MCCRHandler(handlerParameter);
+    }
+
+    /**
+     * Create by zshen Create new mutli-target handler
+     * 
+     * @param rd The rule definition of handler
+     * @return new mutli-target handler
+     */
+    private MTCRHandler createMTHandler(RuleDefinition perviousSEQRd, RuleDefinition rd) {
+        FunctionParameter functionParameter = new FunctionParameter(perviousSEQRd.getFunction().getAction(), rd.getOperation(),
+                rd.isIgnoreBlanks(), false);
+        return new MTCRHandler(new HandlerParameter(dataset, getColumnByName(perviousSEQRd.getReferenceColumn()),
+                getColumnByName(rd.getTargetColumn()), perviousSEQRd.getRuleName(), getColumnIndexMap(), null,
+                functionParameter));
+    }
+
+    /**
+     * Create by zshen init chain map
+     */
+    private void initChainMap() {
+        if (chainMap == null) {
+            chainMap = new ChainNodeMap();
+        } else {
+            chainMap.clear();
+        }
+
+    }
+
+    /**
+     * Create by zshen Make chainMap execute handler of every column one by one
+     */
+    private void executeSurvivored(Object[][] data) {
+        for (int i = data.length - 1; i >= 0; i--) {
+            chainMap.handleRequest(data[i], i);
+        }
+    }
+
+    /**
+     * Create by zshen Get a map which mapping the name of column and it's index
+     * 
+     * @return a map which mapping the name of column and it's index
+     */
+    private Map<String, Integer> getColumnIndexMap() {
+        Map<String, Integer> columnIndexMap = new HashMap<>();
+        int index = 0;
+        for (Column col : this.columnList) {
+            columnIndexMap.put(col.getName(), index++);
+        }
+        return columnIndexMap;
     }
 
     /**
