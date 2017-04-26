@@ -126,7 +126,7 @@ public class CategoryRegistryManager {
         return instances.get(contextName);
     }
 
-    void reset() {
+    public void reset() {
         setUsingLocalCategoryRegistry(false);
         instances.clear();
     }
