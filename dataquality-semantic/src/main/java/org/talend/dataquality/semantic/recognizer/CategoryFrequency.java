@@ -27,13 +27,15 @@ public class CategoryFrequency implements Comparable<CategoryFrequency>, Seriali
 
     private static final long serialVersionUID = -3859689633174391877L;
 
-    String categoryId;
-
     String categoryName;
+
+    String categoryLabel;
 
     float frequency;
 
     long count;
+
+    int categoryLevel;
 
     /**
      * CategoryFrequency constructor from a category.
@@ -55,8 +57,8 @@ public class CategoryFrequency implements Comparable<CategoryFrequency>, Seriali
      * @param catName the category name
      */
     public CategoryFrequency(String catId, String catName) {
-        this.categoryId = catId;
-        this.categoryName = catName;
+        this.categoryName = catId;
+        this.categoryLabel = catName;
     }
 
     /**
@@ -64,20 +66,20 @@ public class CategoryFrequency implements Comparable<CategoryFrequency>, Seriali
      *
      * @param catId the category ID
      * @param catName the category name
-     * @param count the occurrence
+     * @param categoryLevel the level of the category
      */
-    public CategoryFrequency(String catId, String catName, long count) {
-        this.categoryId = catId;
-        this.categoryName = catName;
-        this.count = count;
+    public CategoryFrequency(String catId, String catName, int categoryLevel) {
+        this.categoryName = catId;
+        this.categoryLabel = catName;
+        this.categoryLevel = categoryLevel;
     }
 
     public String getCategoryId() {
-        return categoryId;
+        return categoryName;
     }
 
     public String getCategoryName() {
-        return categoryName != null ? categoryName : categoryId;
+        return categoryLabel != null ? categoryLabel : categoryName;
     }
 
     public float getFrequency() {
@@ -86,6 +88,10 @@ public class CategoryFrequency implements Comparable<CategoryFrequency>, Seriali
 
     public long getCount() {
         return count;
+    }
+
+    public int getCategoryLevel() {
+        return categoryLevel;
     }
 
     @Override
@@ -131,7 +137,7 @@ public class CategoryFrequency implements Comparable<CategoryFrequency>, Seriali
 
     @Override
     public String toString() {
-        return "[Category: " + categoryId + " Count: " + count + " Frequency: " + frequency + "]";
+        return "[Category: " + categoryName + " Count: " + count + " Frequency: " + frequency + "]";
     }
 
     public static void main(String[] args) {

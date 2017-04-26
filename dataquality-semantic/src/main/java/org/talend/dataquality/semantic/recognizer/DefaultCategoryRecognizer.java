@@ -17,6 +17,7 @@ import java.util.*;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.classifier.custom.UserDefinedClassifier;
 import org.talend.dataquality.semantic.classifier.impl.DataDictFieldClassifier;
@@ -154,23 +155,25 @@ class DefaultCategoryRecognizer implements CategoryRecognizer {
     }
 
     private void incrementAncestorsCategories(String id) {
-        Deque<String> catToSee = new ArrayDeque<>();
+        Deque<Pair<String, Integer>> catToSee = new ArrayDeque<>();
         Set<String> catAlreadySeen = new HashSet<>();
-        catToSee.add(id);
-        String currentCategory;
+        catToSee.add(Pair.of(id, 0));
+        Pair<String, Integer> currentCategory;
         while (!catToSee.isEmpty()) {
             currentCategory = catToSee.pop();
-            DQCategory dqCategory = crm.getCategoryMetadataById(currentCategory);
-            if (dqCategory != null && !CollectionUtils.isEmpty(dqCategory.getParents()))
+            DQCategory dqCategory = crm.getCategoryMetadataById(currentCategory.getLeft());
+            if (dqCategory != null && !CollectionUtils.isEmpty(dqCategory.getParents())) {
+                int parentLevel = currentCategory.getRight() + 1;
                 for (DQCategory parent : dqCategory.getParents()) {
                     if (!catAlreadySeen.contains(parent.getId())) {
                         catAlreadySeen.add(parent.getId());
-                        catToSee.add(parent.getId());
-                        DQCategory meta = crm.getCategoryMetadataByName(parent.getId());
+                        catToSee.add(Pair.of(parent.getId(), parentLevel));
+                        DQCategory meta = crm.getCategoryMetadataById(parent.getId());
                         if (meta != null)
-                            incrementCategory(meta.getName(), meta.getLabel());
+                            incrementCategory(meta.getName(), meta.getLabel(), parentLevel);
                     }
                 }
+            }
         }
     }
 
@@ -179,9 +182,14 @@ class DefaultCategoryRecognizer implements CategoryRecognizer {
     }
 
     private void incrementCategory(String catId, String catName) {
+        incrementCategory(catId, catName, 0);
+
+    }
+
+    private void incrementCategory(String catId, String catName, int categoryLevel) {
         CategoryFrequency c = categoryToFrequency.get(catId);
         if (c == null) {
-            c = new CategoryFrequency(catId, catName);
+            c = new CategoryFrequency(catId, catName, categoryLevel);
             categoryToFrequency.put(catId, c);
             catList.add(c);
         }

@@ -55,17 +55,18 @@ public class CategoryRecognizerTest {
             put("US_POSTAL_CODE", 6.25F);
             put("ADDRESS_LINE", 6.25F);
             put("FR_SSN", 6.25F);
+            put("PHONE", 6.25F);
             put("FR_DEPARTEMENT", 3.12F);
             put("COUNTRY", 3.12F);
             put("COUNTRY_CODE_ISO3", 3.12F);
             put("CONTINENT_CODE", 3.12F);
             put("CURRENCY_CODE", 3.12F);
-            put("LANGUAGE_CODE_ISO3", 3.12F);
             put("ANIMAL", 3.12F);
+            put("LANGUAGE_CODE_ISO3", 3.12F);
             put("EN_MONTH", 3.12F);
+            put("DE_POSTAL_CODE", 3.12F);
             put("FR_POSTAL_CODE", 3.12F);
             put("FR_CODE_COMMUNE_INSEE", 3.12F);
-            put("DE_POSTAL_CODE", 3.12F);
             put("COMPANY", 3.12F);
             put("GENDER", 3.12F);
             put("URL", 3.12F);
@@ -76,7 +77,6 @@ public class CategoryRecognizerTest {
             put("FULL_NAME", 3.12F);
             put("IBAN", 3.12F);
             put("", 12.5F);
-
         }
 
     };
@@ -291,7 +291,7 @@ public class CategoryRecognizerTest {
             log.debug("frequencyTableItem = " + tableItem.getCategoryId() + " / " + tableItem.getCount() + " / "
                     + tableItem.getFrequency() + " %");
 
-            // System.out.println("put(\"" + tableItem.getCategoryId() + "\", " + tableItem.getFrequency() + "F);");
+            System.out.println("put(\"" + tableItem.getCategoryId() + "\", " + tableItem.getFrequency() + "F);");
             assertEquals(EXPECTED_FREQUECY_TABLE.get(tableItem.getCategoryId()), tableItem.getFrequency(), 0.001);
         }
 

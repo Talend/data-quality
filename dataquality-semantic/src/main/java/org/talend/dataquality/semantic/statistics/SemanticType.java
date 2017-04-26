@@ -37,26 +37,40 @@ public class SemanticType {
      * Get suggested suggsted category.
      */
     public String getSuggestedCategory() {
-        long max = 0;
+        long maxValue = 0;
         String electedCategory = "UNKNOWN"; // Unknown by default
         int categoryOrdinal = Integer.MAX_VALUE;
+        int levelCategory = Integer.MAX_VALUE;
         for (Map.Entry<CategoryFrequency, Long> entry : categoryToCount.entrySet()) {
-            if (entry.getValue() > max) {
-                max = entry.getValue();
-                electedCategory = entry.getKey().getCategoryId();
-                SemanticCategoryEnum cat = SemanticCategoryEnum.getCategoryById(electedCategory);
-                categoryOrdinal = cat == null ? 0 : cat.ordinal(); // rank user category higher than provided ones
-            } else if (entry.getValue() == max) {
-                final String currentCat = entry.getKey().getCategoryId();
-                SemanticCategoryEnum cat = SemanticCategoryEnum.getCategoryById(currentCat);
-                final int currentOrdinal = cat == null ? 0 : cat.ordinal(); // rank user category higher than provided ones
-                if (currentOrdinal < categoryOrdinal) {
-                    electedCategory = currentCat;
-                    categoryOrdinal = currentOrdinal;
+            int currentCategoryLevel = entry.getKey().getCategoryLevel();
+            String currentId = entry.getKey().getCategoryId();
+            if (entry.getValue() > maxValue) {
+                maxValue = entry.getValue();
+                levelCategory = currentCategoryLevel;
+                categoryOrdinal = getCategoryOrdinal(currentId); // rank user category higher than provided ones
+                electedCategory = currentId;
+            } else if (entry.getValue() == maxValue) {
+                if (currentCategoryLevel < levelCategory) {
+                    levelCategory = currentCategoryLevel;
+                    categoryOrdinal = getCategoryOrdinal(currentId); // rank user category higher than provided ones
+                    electedCategory = currentId;
+                } else if (currentCategoryLevel == levelCategory) {
+                    final int currentOrdinal = getCategoryOrdinal(currentId); // rank user category higher than provided ones
+                    if (currentOrdinal < categoryOrdinal) {
+                        categoryOrdinal = currentOrdinal;
+                        electedCategory = currentId;
+                    }
                 }
             }
         }
         return electedCategory;
+    }
+
+    private int getCategoryOrdinal(String categoryId) {
+        SemanticCategoryEnum cat = SemanticCategoryEnum.getCategoryById(categoryId);
+        if (cat == null)
+            return 0;
+        return cat.ordinal();
     }
 
     /**

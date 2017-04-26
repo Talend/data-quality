@@ -31,6 +31,8 @@ public class SemanticQualityAnalyzerTest {
 
     private static final List<String[]> RECORDS_CREDIT_CARDS = getRecords("credit_card_number_samples.csv");
 
+    private static final List<String[]> RECORDS_PHONES = getRecords("phone_number.csv");
+
     private final String[] EXPECTED_CATEGORIES_DICT = new String[] { //
             "", //
             "CIVILITY", //
@@ -71,6 +73,9 @@ public class SemanticQualityAnalyzerTest {
             new long[] { 20, 10, 0 }, //
     };
 
+    private static final long[][] EXPECTED_VALIDITY_COUNT_PHONE = new long[][] { //
+            new long[] { 11, 0, 0 } };
+
     @BeforeClass
     public static void setupBuilder() throws URISyntaxException {
         final URI ddPath = SemanticQualityAnalyzerTest.class.getResource(CategoryRecognizerBuilder.DEFAULT_DD_PATH).toURI();
@@ -89,6 +94,11 @@ public class SemanticQualityAnalyzerTest {
     @Test
     public void testSemanticQualityAnalyzerWithRegexCategory() {
         testAnalysis(RECORDS_CREDIT_CARDS, EXPECTED_CATEGORIES_REGEX, EXPECTED_VALIDITY_COUNT_REGEX);
+    }
+
+    @Test
+    public void testSemanticQualityAnalyzerWithPhoneCategory() {
+        testAnalysis(RECORDS_PHONES, new String[] { "PHONE" }, EXPECTED_VALIDITY_COUNT_PHONE);
     }
 
     public void testAnalysis(List<String[]> records, String[] expectedCategories, long[][] expectedValidityCount) {
@@ -119,7 +129,7 @@ public class SemanticQualityAnalyzerTest {
             for (CategoryFrequency cf : stats.getCategoryToCount().keySet()) {
                 if (expectedCategories[i].equals(cf.getCategoryId())) {
                     SemanticCategoryEnum cat = SemanticCategoryEnum.getCategoryById(cf.getCategoryId());
-                    if (cat.getCompleteness()) {
+                    if (cat != null && cat.getCompleteness()) {
                         assertEquals("Unexpected SemanticType occurence on column " + i, expectedValidityCount[i][0],
                                 cf.getCount());
                     }
