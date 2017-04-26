@@ -143,7 +143,8 @@ class DefaultCategoryRecognizer implements CategoryRecognizer {
                 DQCategory meta = crm.getCategoryMetadataById(id);
                 if (meta != null) {
                     incrementCategory(meta.getName(), meta.getLabel());
-                    incrementAncestorsCategories(id);
+                    if (!CollectionUtils.isEmpty(meta.getParents()))
+                        incrementAncestorsCategories(categories, id);
                     categories.add(meta.getName());
                 }
             }
@@ -154,7 +155,16 @@ class DefaultCategoryRecognizer implements CategoryRecognizer {
         return categories.toArray(new String[categories.size()]);
     }
 
-    private void incrementAncestorsCategories(String id) {
+    /**
+     * For the discovery, if a category c matches with the data,
+     * it means all the ancestor categories of c have to match too.
+     * This method increments the ancestor categories of c.
+     * 
+     * @param categories, the category result
+     * @param id, the category ID of the matched category c
+     * 
+     */
+    private void incrementAncestorsCategories(Set<String> categories, String id) {
         Deque<Pair<String, Integer>> catToSee = new ArrayDeque<>();
         Set<String> catAlreadySeen = new HashSet<>();
         catToSee.add(Pair.of(id, 0));
@@ -169,8 +179,10 @@ class DefaultCategoryRecognizer implements CategoryRecognizer {
                         catAlreadySeen.add(parent.getId());
                         catToSee.add(Pair.of(parent.getId(), parentLevel));
                         DQCategory meta = crm.getCategoryMetadataById(parent.getId());
-                        if (meta != null)
+                        if (meta != null) {
                             incrementCategory(meta.getName(), meta.getLabel(), parentLevel);
+                            categories.add(meta.getName());
+                        }
                     }
                 }
             }

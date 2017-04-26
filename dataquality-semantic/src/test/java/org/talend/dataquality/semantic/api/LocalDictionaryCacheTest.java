@@ -121,9 +121,6 @@ public class LocalDictionaryCacheTest {
 
     public static void main(String[] args) {
 
-        // CategoryRegistryManager.setLocalRegistryPath(System.getProperty("java.io.tmpdir") +
-        // "/org.talend.dataquality.semantic/");
-
         for (DQCategory cat : CategoryRegistryManager.getInstance().listCategories()) {
             System.out.println(cat);
         }

@@ -30,7 +30,7 @@ public class SemanticCompoundAnalyzerTest {
 
     private CategoryRecognizerBuilder builder;
 
-    public static final String PHONE = "PHONE";
+    private static final String PHONE = "PHONE";
 
     final List<String[]> TEST_RECORDS_PHONE = new ArrayList<String[]>() {
 

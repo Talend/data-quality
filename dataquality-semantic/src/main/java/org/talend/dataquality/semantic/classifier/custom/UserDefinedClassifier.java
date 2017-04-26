@@ -84,29 +84,45 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
     @Override
     public boolean validCategories(String str, DQCategory semanticType, Set<DQCategory> children) {
         MainCategory mainCategory = MainCategory.getMainCategory(str);
-        return validCategories(str, mainCategory, semanticType, children);
+        if (mainCategory == MainCategory.UNKNOWN || mainCategory == MainCategory.NULL || mainCategory == MainCategory.BLANK)
+            return false;
+        if (CollectionUtils.isEmpty(children))
+            return validCategories(str, mainCategory, semanticType);
+        return validChildrenCategories(str, mainCategory, children);
+
     }
 
-    private boolean validCategories(String str, MainCategory mainCategory, DQCategory semanticType, Set<DQCategory> children) {
-        if (mainCategory == MainCategory.UNKNOWN || mainCategory == MainCategory.NULL || mainCategory == MainCategory.BLANK) {
-            return false;
-        }
+    /**
+     * if there are children, we valid a COMPOUND category, so we have to valid the string with the children categories list
+     * 
+     * @param str, the string to valid
+     * @param mainCategory
+     * @param children, the children categories list
+     * @return
+     */
+    private boolean validChildrenCategories(String str, MainCategory mainCategory, Set<DQCategory> children) {
         int cpt = 0;
         final Set<String> childrenId = new HashSet<>();
-        boolean hasChildren = !CollectionUtils.isEmpty(children);
-        if (hasChildren)
-            for (DQCategory child : children)
-                childrenId.add(child.getId());
+        for (DQCategory child : children)
+            childrenId.add(child.getId());
         for (ISubCategory classifier : potentialSubCategories) {
-            if (!hasChildren && semanticType.getId().equals(classifier.getId()))
-                return isValid(str, mainCategory, (UserDefinedCategory) classifier);
-            if (hasChildren && childrenId.contains(classifier.getId())) {
+            if (childrenId.contains(classifier.getId())) {
                 cpt++;
                 if (isValid(str, mainCategory, (UserDefinedCategory) classifier))
                     return true;
                 if (cpt == children.size())
                     return false;
             }
+        }
+        return false;
+
+    }
+
+    private boolean validCategories(String str, MainCategory mainCategory, DQCategory semanticType) {
+        for (ISubCategory classifier : potentialSubCategories) {
+            if (semanticType.getId().equals(classifier.getId()))
+                return isValid(str, mainCategory, (UserDefinedCategory) classifier);
+
         }
         return false;
     }

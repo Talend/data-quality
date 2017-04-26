@@ -60,7 +60,7 @@ public class LuceneIndex implements Index {
     @Override
     public Set<String> findCategories(String data) {
 
-        Set<String> foundCategorySet = new HashSet<String>();
+        Set<String> foundCategorySet = new HashSet<>();
         try {
             TopDocs docs = searcher.searchDocumentBySynonym(data);
             for (ScoreDoc scoreDoc : docs.scoreDocs) {

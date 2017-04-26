@@ -185,6 +185,13 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
         }
     }
 
+    /**
+     * For the validation of a COMPOUND category, we only have to valid the leaves children categories.
+     * This methods find the DICT children categories and the REGEX children categories.
+     * 
+     * @param id, the category from we search the children
+     * @return the DICT children categories and the REGEX children categories with a map.
+     */
     private Map<CategoryType, Set<DQCategory>> getChildrenCategories(String id) {
         Deque<String> catToSee = new ArrayDeque<>();
         Set<String> catAlreadySeen = new HashSet<>();

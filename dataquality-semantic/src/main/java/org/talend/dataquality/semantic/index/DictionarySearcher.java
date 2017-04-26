@@ -31,6 +31,8 @@ import org.talend.dataquality.semantic.model.ValidationMode;
 
 public class DictionarySearcher extends AbstractDictionarySearcher {
 
+    public static final String UNABLE_TO_OPEN_INDEX = "Unable to open synonym index.";
+
     private static final Logger LOGGER = Logger.getLogger(DictionarySearcher.class);
 
     private SearcherManager mgr;
@@ -47,7 +49,7 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
             FSDirectory indexDir = FSDirectory.open(new File(indexPath));
             mgr = new SearcherManager(indexDir, null);
         } catch (IOException e) {
-            LOGGER.error("Unable to open synonym index.", e);
+            LOGGER.error(UNABLE_TO_OPEN_INDEX, e);
         }
     }
 
@@ -61,7 +63,7 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
             Directory indexDir = ClassPathDirectory.open(indexPathURI);
             mgr = new SearcherManager(indexDir, null);
         } catch (IOException e) {
-            LOGGER.error("Unable to open synonym index.", e);
+            LOGGER.error(UNABLE_TO_OPEN_INDEX, e);
         }
     }
 
@@ -69,7 +71,7 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
         try {
             mgr = new SearcherManager(indexDir, null);
         } catch (IOException e) {
-            LOGGER.error("Unable to open synonym index.", e);
+            LOGGER.error(UNABLE_TO_OPEN_INDEX, e);
         }
     }
 
@@ -84,12 +86,10 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
     public TopDocs searchDocumentBySynonym(String stringToSearch) throws IOException {
         Query query;
         switch (searchMode) {
-        case MATCH_SEMANTIC_DICTIONARY:
-            query = createQueryForSemanticDictionaryMatch(stringToSearch);
-            break;
         case MATCH_SEMANTIC_KEYWORD:
             query = createQueryForSemanticKeywordMatch(stringToSearch);
             break;
+        case MATCH_SEMANTIC_DICTIONARY:
         default: // do the same as MATCH_SEMANTIC_DICTIONARY mode
             query = createQueryForSemanticDictionaryMatch(stringToSearch);
             break;
@@ -123,12 +123,10 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
             throws IOException {
         Query query;
         switch (searchMode) {
-        case MATCH_SEMANTIC_DICTIONARY:
-            query = createQueryForSemanticDictionaryMatch(stringToSearch);
-            break;
         case MATCH_SEMANTIC_KEYWORD:
             query = createQueryForSemanticKeywordMatch(stringToSearch);
             break;
+        case MATCH_SEMANTIC_DICTIONARY:
         default: // do the same as MATCH_SEMANTIC_DICTIONARY mode
             query = createQueryForSemanticDictionaryMatch(stringToSearch);
             break;

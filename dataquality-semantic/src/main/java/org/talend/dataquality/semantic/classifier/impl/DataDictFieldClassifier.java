@@ -42,7 +42,7 @@ public class DataDictFieldClassifier implements ISubCategoryClassifier {
         StringTokenizer t = new StringTokenizer(data, " ");
         final int tokenCount = t.countTokens();
 
-        HashSet<String> result = new HashSet<String>();
+        HashSet<String> result = new HashSet<>();
         // if it's a valid syntactic data --> search in DD
         if (tokenCount < 3) {
             result.addAll(dictionary.findCategories(data));
@@ -59,8 +59,7 @@ public class DataDictFieldClassifier implements ISubCategoryClassifier {
         StringTokenizer t = new StringTokenizer(data, " ");
         final int tokenCount = t.countTokens();
 
-        boolean result = false;
-        result = dictionary.validCategories(data, semanticType, children);
+        boolean result = dictionary.validCategories(data, semanticType, children);
         // if it's a valid syntactic data --> search in DD
         if (!result && tokenCount >= 3) {
             result = keyword.validCategories(data, semanticType, children);

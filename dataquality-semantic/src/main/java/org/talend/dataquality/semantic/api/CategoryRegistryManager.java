@@ -85,7 +85,7 @@ public class CategoryRegistryManager {
     /**
      * Map between category ID and the object containing its metadata.
      */
-    private Map<String, DQCategory> dqCategories = new LinkedHashMap<String, DQCategory>();
+    private Map<String, DQCategory> dqCategories = new LinkedHashMap<>();
 
     private String contextName;
 
@@ -238,9 +238,16 @@ public class CategoryRegistryManager {
         }
     }
 
+    /**
+     * Fill dqCategories which contains for each category ID, the metadata with all the children and the parents.
+     *
+     * @param reader
+     * @throws IOException
+     */
     private void fillDqCategoriesMap(DirectoryReader reader) throws IOException {
-        Map<String, Set<String>> idToParents = new HashMap<>();
+        Map<String, Set<String>> categoryToParents = new HashMap<>();
         Bits liveDocs = MultiFields.getLiveDocs(reader);
+        // add the categories
         for (int i = 0; i < reader.maxDoc(); i++) {
             if (liveDocs != null && !liveDocs.get(i)) {
                 continue;
@@ -248,19 +255,31 @@ public class CategoryRegistryManager {
             Document doc = reader.document(i);
             DQCategory dqCat = DictionaryUtils.categoryFromDocument(doc);
             dqCategories.put(dqCat.getId(), dqCat);
-            if (!CollectionUtils.isEmpty(dqCat.getChildren())) {
-                for (DQCategory cat : dqCat.getChildren()) {
-                    if (idToParents.get(cat.getId()) == null)
-                        idToParents.put(cat.getId(), new HashSet<String>());
-                    idToParents.get(cat.getId()).add(dqCat.getId());
-                }
-            }
+            if (!CollectionUtils.isEmpty(dqCat.getChildren()))
+                fillCategoryToParents(categoryToParents, dqCat);
         }
-        for (String id : idToParents.keySet()) {
-            List<DQCategory> tmp = new ArrayList<>();
-            for (String child : idToParents.get(id))
-                tmp.add(new DQCategory(child));
-            dqCategories.get(id).setParents(tmp);
+
+        // add the parent references in the child
+        for (Map.Entry<String, Set<String>> entry : categoryToParents.entrySet())
+            if (dqCategories.get(entry.getKey()) != null) {
+                List<DQCategory> parents = new ArrayList<>();
+                for (String child : entry.getValue())
+                    parents.add(new DQCategory(child));
+                dqCategories.get(entry.getKey()).setParents(parents);
+            }
+    }
+
+    /**
+     * fill the map child -> parents
+     * 
+     * @param categoryToParents, the map child -> parents
+     * @param dqCat, the category used to create the reference child -> parents
+     */
+    private void fillCategoryToParents(Map<String, Set<String>> categoryToParents, DQCategory dqCat) {
+        for (DQCategory cat : dqCat.getChildren()) {
+            if (categoryToParents.get(cat.getId()) == null)
+                categoryToParents.put(cat.getId(), new HashSet<String>());
+            categoryToParents.get(cat.getId()).add(dqCat.getId());
         }
     }
 
@@ -295,7 +314,7 @@ public class CategoryRegistryManager {
         if (includeOpenCategories) {
             return dqCategories.values();
         } else {
-            List<DQCategory> catList = new ArrayList<DQCategory>();
+            List<DQCategory> catList = new ArrayList<>();
             for (DQCategory dqCat : dqCategories.values()) {
                 if (dqCat.getCompleteness()) {
                     catList.add(dqCat);
@@ -312,7 +331,7 @@ public class CategoryRegistryManager {
      * @return collection of category objects of the given type
      */
     public List<DQCategory> listCategories(CategoryType type) {
-        List<DQCategory> catList = new ArrayList<DQCategory>();
+        List<DQCategory> catList = new ArrayList<>();
         for (DQCategory dqCat : dqCategories.values()) {
             if (type.equals(dqCat.getType())) {
                 catList.add(dqCat);
@@ -374,31 +393,30 @@ public class CategoryRegistryManager {
      * @param refresh whether classifiers should be reloaded from local json file
      */
     public UserDefinedClassifier getRegexClassifier(boolean refresh) throws IOException {
-        if (!usingLocalCategoryRegistry) {
+        if (!usingLocalCategoryRegistry)
             return UDCategorySerDeser.getRegexClassifier();
-        } else {
-            // load regexes from local registry
-            if (udc == null || refresh) {
-                final File regexRegistryFile = new File(localRegistryPath + File.separator + REGEX_SUBFOLDER_NAME + File.separator
-                        + contextName + File.separator + REGEX_CATEGRIZER_FILE_NAME);
 
-                if (!regexRegistryFile.exists()) {
-                    regexRegistryFile.getParentFile().mkdirs();
-                    // load provided RE into registry
-                    InputStream is = CategoryRecognizer.class.getResourceAsStream(REGEX_CATEGRIZER_FILE_NAME);
-                    StringBuilder sb = new StringBuilder();
-                    for (String line : IOUtils.readLines(is)) {
-                        sb.append(line);
-                    }
-                    JSONObject obj = new JSONObject(sb.toString());
-                    JSONArray array = obj.getJSONArray("classifiers");
-                    FileOutputStream fos = new FileOutputStream(regexRegistryFile);
-                    IOUtils.write(array.toString(2), fos);
-                    fos.close();
+        // load regexes from local registry
+        if (udc == null || refresh) {
+            final File regexRegistryFile = new File(localRegistryPath + File.separator + REGEX_SUBFOLDER_NAME + File.separator
+                    + contextName + File.separator + REGEX_CATEGRIZER_FILE_NAME);
+
+            if (!regexRegistryFile.exists()) {
+                regexRegistryFile.getParentFile().mkdirs();
+                // load provided RE into registry
+                InputStream is = CategoryRecognizer.class.getResourceAsStream(REGEX_CATEGRIZER_FILE_NAME);
+                StringBuilder sb = new StringBuilder();
+                for (String line : IOUtils.readLines(is)) {
+                    sb.append(line);
                 }
-
-                udc = UDCategorySerDeser.readJsonFile(regexRegistryFile.toURI());
+                JSONObject obj = new JSONObject(sb.toString());
+                JSONArray array = obj.getJSONArray("classifiers");
+                FileOutputStream fos = new FileOutputStream(regexRegistryFile);
+                IOUtils.write(array.toString(2), fos);
+                fos.close();
             }
+
+            udc = UDCategorySerDeser.readJsonFile(regexRegistryFile.toURI());
         }
         return udc;
     }

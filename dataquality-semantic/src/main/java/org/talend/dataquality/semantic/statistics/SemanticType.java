@@ -50,20 +50,19 @@ public class SemanticType {
                 categoryOrdinal = getCategoryOrdinal(currentId); // rank user category higher than provided ones
                 electedCategory = currentId;
             } else if (entry.getValue() == maxValue) {
+                final int currentOrdinal = getCategoryOrdinal(currentId); // rank user category higher than provided ones
                 if (currentCategoryLevel < levelCategory) {
                     levelCategory = currentCategoryLevel;
-                    categoryOrdinal = getCategoryOrdinal(currentId); // rank user category higher than provided ones
+                    categoryOrdinal = currentOrdinal; // rank user category higher than provided ones
                     electedCategory = currentId;
-                } else if (currentCategoryLevel == levelCategory) {
-                    final int currentOrdinal = getCategoryOrdinal(currentId); // rank user category higher than provided ones
-                    if (currentOrdinal < categoryOrdinal) {
-                        categoryOrdinal = currentOrdinal;
-                        electedCategory = currentId;
-                    }
+                } else if (currentCategoryLevel == levelCategory && currentOrdinal < categoryOrdinal) {
+                    categoryOrdinal = currentOrdinal;
+                    electedCategory = currentId;
                 }
             }
         }
         return electedCategory;
+
     }
 
     private int getCategoryOrdinal(String categoryId) {
