@@ -289,7 +289,9 @@ public class DataSet {
                 }
             }
         }
-
+        if (getColumnOrder() == null) {
+            return;
+        }
         for (Column nextCol : getColumnOrder()) {
             String nextColName = nextCol.getName();
             if (conflictsOfSurvivor.contains(nextColName)) {
