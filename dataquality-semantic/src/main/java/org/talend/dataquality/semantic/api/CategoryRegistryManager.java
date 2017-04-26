@@ -68,7 +68,7 @@ public class CategoryRegistryManager {
      * More often, the value is set to true when the localRegistryPath is configured. see
      * {@link CategoryRegistryManager.setLocalRegistryPath()}
      */
-    private static boolean usingLocalCategoryRegistry = true;
+    private static boolean usingLocalCategoryRegistry = false;
 
     private static String localRegistryPath = System.getProperty("user.home") + "/.talend/dataquality/semantic";
 

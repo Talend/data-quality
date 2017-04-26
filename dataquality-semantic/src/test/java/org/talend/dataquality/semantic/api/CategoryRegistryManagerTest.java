@@ -16,7 +16,7 @@ import org.talend.dataquality.semantic.classifier.ISubCategory;
 import org.talend.dataquality.semantic.classifier.custom.UDCategorySerDeser;
 import org.talend.dataquality.semantic.classifier.custom.UserDefinedClassifier;
 
-public class CategoryRegistryManangerTest {
+public class CategoryRegistryManagerTest {
 
     @Test
     public void testGetRegexClassifier() throws IOException, URISyntaxException {
@@ -56,7 +56,6 @@ public class CategoryRegistryManangerTest {
         } finally {
             FileUtils.deleteDirectory(new File(path));
             crm.reset();
-            CategoryRegistryManager.setLocalRegistryPath(System.getProperty("user.home") + "/.talend/dataquality/semantic");
         }
     }
 
