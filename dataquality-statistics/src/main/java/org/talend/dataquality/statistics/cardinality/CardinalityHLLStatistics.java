@@ -36,8 +36,8 @@ public class CardinalityHLLStatistics extends AbstractCardinalityStatistics<Card
         return hyperLogLog.cardinality();
     }
 
-    public void add(String colStr) {
-        this.hyperLogLog.offer(colStr);
+    public void add(Object colObj) {
+        this.hyperLogLog.offer(colObj);
     }
 
     /**

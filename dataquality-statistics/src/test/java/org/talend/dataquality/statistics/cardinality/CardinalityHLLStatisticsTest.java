@@ -1,11 +1,11 @@
 package org.talend.dataquality.statistics.cardinality;
 
-import com.clearspring.analytics.stream.cardinality.CardinalityMergeException;
 import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.clearspring.analytics.stream.cardinality.CardinalityMergeException;
 import com.clearspring.analytics.stream.cardinality.HyperLogLog;
 
 /**
@@ -19,6 +19,23 @@ public class CardinalityHLLStatisticsTest {
     public void setUp() throws Exception {
         cardHLLStats = new CardinalityHLLStatistics();
         cardHLLStats.setHyperLogLog(new HyperLogLog(20));
+    }
+
+    @Test
+    public void typeDifferentFromString() {
+        Integer[] ints = { 0, 2, 4, 6, 8, 8 };
+        for (Integer i : ints) {
+            cardHLLStats.add(i);
+            cardHLLStats.incrementCount();
+        }
+        Assert.assertEquals(cardHLLStats.getDistinctCount(), 5);
+
+        Double[] doubles = { 0.5, 2.5, 4.5, 6.5, 8.5, 8.5 };
+        for (Double d : doubles) {
+            cardHLLStats.add(d);
+            cardHLLStats.incrementCount();
+        }
+        Assert.assertEquals(cardHLLStats.getDistinctCount(), 10);
     }
 
     @Test(expected = CardinalityMergeException.class)
