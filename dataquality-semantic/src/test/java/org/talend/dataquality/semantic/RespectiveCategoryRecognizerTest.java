@@ -712,6 +712,9 @@ public class RespectiveCategoryRecognizerTest {
                     add(ImmutablePair.of("SL6 1AY", true));
                     add(ImmutablePair.of("SL61AY", true));
                     add(ImmutablePair.of("NT2ABC", false));
+
+                    add(ImmutablePair.of("SW1X 9HB", true));
+                    add(ImmutablePair.of("SW1X9HB", true));
                 }
             });
 
