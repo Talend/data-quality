@@ -66,6 +66,20 @@ public class CategoryFrequency implements Comparable<CategoryFrequency>, Seriali
      *
      * @param catId the category ID
      * @param catName the category name
+     * @param count the occurrence
+     */
+    public CategoryFrequency(String catId, String catName, long count) {
+        this.categoryName = catId;
+        this.categoryLabel = catName;
+        this.categoryLevel = 0;
+        this.count = count;
+    }
+
+    /**
+     * CategoryFrequency constructor from a category.
+     *
+     * @param catId the category ID
+     * @param catName the category name
      * @param categoryLevel the level of the category
      */
     public CategoryFrequency(String catId, String catName, int categoryLevel) {
