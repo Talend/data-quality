@@ -51,13 +51,13 @@ class BroadcastUtils {
                 continue;
             }
             Document doc = reader.document(i);
-            String category = doc.getField(DictionarySearcher.F_WORD).stringValue();
+            String catId = doc.getField(DictionarySearcher.F_CATID).stringValue();
             Set<String> valueSet = new HashSet<String>();
             // original values must be read from the F_RAW field
             for (IndexableField syntermField : doc.getFields(DictionarySearcher.F_RAW)) {
                 valueSet.add(syntermField.stringValue());
             }
-            dictionaryObject.add(new BroadcastDocumentObject(category, valueSet));
+            dictionaryObject.add(new BroadcastDocumentObject(catId, valueSet));
         }
         return dictionaryObject;
     }
@@ -76,12 +76,13 @@ class BroadcastUtils {
             Document doc = reader.document(i);
             String category = doc.getField(DictionarySearcher.F_WORD).stringValue();
             if (catNames.contains(category)) {
+                String catId = doc.getField(DictionarySearcher.F_CATID).stringValue();
                 Set<String> valueSet = new HashSet<String>();
                 // original values must be read from the F_RAW field
                 for (IndexableField syntermField : doc.getFields(DictionarySearcher.F_RAW)) {
                     valueSet.add(syntermField.stringValue());
                 }
-                dictionaryObject.add(new BroadcastDocumentObject(category, valueSet));
+                dictionaryObject.add(new BroadcastDocumentObject(catId, valueSet));
             }
         }
         return dictionaryObject;
@@ -109,7 +110,7 @@ class BroadcastUtils {
         ftSyn.setIndexed(true);
         ftSyn.setOmitNorms(true);
         ftSyn.freeze();
-        indexDoc.add(new StringField(DictionarySearcher.F_WORD, objectDoc.getCategory(), Field.Store.YES));
+        indexDoc.add(new StringField(DictionarySearcher.F_CATID, objectDoc.getCategory(), Field.Store.YES));
         for (String value : objectDoc.getValueSet()) {
             // no need to include the field F_RAW during recreation of directory
             indexDoc.add(new StringField(DictionarySearcher.F_SYNTERM, DictionarySearcher.getJointTokens(value), Field.Store.NO));

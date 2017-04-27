@@ -60,7 +60,7 @@ public class BroadcastIndexObjectTest {
             // then
             DirectoryReader directoryReader = DirectoryReader.open(directory);
             Document ramDoc = directoryReader.document(0);
-            String word = ramDoc.getField(DictionarySearcher.F_WORD).stringValue();
+            String word = ramDoc.getField(DictionarySearcher.F_CATID).stringValue();
             assertEquals(1, directoryReader.numDocs());
             assertEquals("CATEGORY", word);
         }
@@ -82,20 +82,20 @@ public class BroadcastIndexObjectTest {
                 writer.commit();
             }
             for (String key : TEST_INDEX_CONTENT.keySet()) {
-                Document doc = DictionaryUtils.generateDocument("TEST", "CATEGORY_ID", key,
+                Document doc = DictionaryUtils.generateDocument("TEST", key, key,
                         new HashSet<>(Arrays.asList(TEST_INDEX_CONTENT.get(key))));
                 writer.addDocument(doc);
             }
 
             // here we add an extra document and remove it later.
-            Document doc = DictionaryUtils.generateDocument("TEST", "CATEGORY_ID", "DE_LAND",
+            Document doc = DictionaryUtils.generateDocument("TEST", "DE_LAND", "DE_LAND",
                     new HashSet<>(Arrays.asList(new String[] { "Bayern" })));
             writer.addDocument(doc);
             writer.commit();
 
             // when a document is deleted from lucene index, it's marked as deleted, but not physically deleted.
             // we need to assure that it's not propagated to Spark cluster
-            writer.deleteDocuments(new Term(DictionarySearcher.F_WORD, "DE_LAND"));
+            writer.deleteDocuments(new Term(DictionarySearcher.F_CATID, "DE_LAND"));
             writer.commit();
 
             writer.close();
@@ -118,9 +118,9 @@ public class BroadcastIndexObjectTest {
             assertEquals("Unexpected document count in created index. ", TEST_INDEX_CONTENT.size(), ramDirReader.numDocs());
             for (int i = 0; i < TEST_INDEX_CONTENT.size(); i++) {
                 Document doc = cpDirReader.document(i);
-                String cpWord = doc.getField(DictionarySearcher.F_WORD).stringValue();
+                String cpWord = doc.getField(DictionarySearcher.F_CATID).stringValue();
                 Document ramDoc = ramDirReader.document(i);
-                String ramWord = ramDoc.getField(DictionarySearcher.F_WORD).stringValue();
+                String ramWord = ramDoc.getField(DictionarySearcher.F_CATID).stringValue();
                 assertEquals("Unexpected word", cpWord, ramWord);
             }
         } catch (IOException e) {
