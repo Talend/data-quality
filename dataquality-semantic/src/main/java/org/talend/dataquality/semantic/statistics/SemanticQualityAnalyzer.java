@@ -22,6 +22,7 @@ import org.talend.dataquality.common.inference.QualityAnalyzer;
 import org.talend.dataquality.common.inference.ResizableList;
 import org.talend.dataquality.common.inference.ValueQualityStatistics;
 import org.talend.dataquality.semantic.classifier.ISubCategoryClassifier;
+import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.classifier.impl.DataDictFieldClassifier;
 import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
@@ -54,8 +55,28 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
     public SemanticQualityAnalyzer(CategoryRecognizerBuilder builder, String[] types, boolean isStoreInvalidValues) {
         this.isStoreInvalidValues = isStoreInvalidValues;
         this.builder = builder;
-        setTypes(types);
         init();
+        setTypes(types);
+    }
+
+    @Override
+    public void setTypes(String[] types) {
+        List<String> idList = new ArrayList<>();
+        for (String type : types) {
+            DQCategory dqCat = null;
+            for (DQCategory tmpCat : metadata.values()) {
+                if (type.equals(tmpCat.getName())) {
+                    dqCat = tmpCat;
+                    break;
+                }
+            }
+            if (dqCat == null) {
+                idList.add(SemanticCategoryEnum.UNKNOWN.name());
+            } else {
+                idList.add(dqCat.getId());
+            }
+        }
+        super.setTypes(idList.toArray(new String[idList.size()]));
     }
 
     public SemanticQualityAnalyzer(CategoryRecognizerBuilder builder, String... types) {
@@ -119,14 +140,8 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
         return true;
     }
 
-    private void analyzeValue(String catName, String value, ValueQualityStatistics valueQuality) {
-        DQCategory category = null;
-        for (DQCategory tmp : metadata.values()) {
-            if (catName.equals(tmp.getName())) {
-                category = tmp;
-                break;
-            }
-        }
+    private void analyzeValue(String catId, String value, ValueQualityStatistics valueQuality) {
+        DQCategory category = metadata.get(catId);
         if (category == null) {
             valueQuality.incrementValid();
             return;
