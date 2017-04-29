@@ -132,7 +132,7 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
             break;
         }
         final IndexSearcher searcher = mgr.acquire();
-        CachingWrapperFilter cachingWrapperFilter = categoryToCache.get(semanticType);
+        CachingWrapperFilter cachingWrapperFilter = categoryToCache.get(semanticType.getId());
         boolean hasChildren = !CollectionUtils.isEmpty(children);
 
         // define the subset in which we will search

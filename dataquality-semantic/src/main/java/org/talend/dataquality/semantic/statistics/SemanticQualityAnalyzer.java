@@ -146,7 +146,7 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
     }
 
     private boolean isValid(DQCategory category, CategoryType catType, String value) {
-        LFUCache<String, Boolean> categoryCache = knownValidationCategoryCache.get(category);
+        LFUCache<String, Boolean> categoryCache = knownValidationCategoryCache.get(category.getId());
 
         if (categoryCache == null) {
             categoryCache = new LFUCache<String, Boolean>(10, 1000, 0.01f);
