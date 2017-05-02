@@ -7,7 +7,7 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>dataquality-libraries</artifactId>
-	<version>1.6.1-SNAPSHOT</version>
+	<version>1.6.1</version>
 	<packaging>pom</packaging>
 	<name>dataquality-libraries</name>
 	<description>Parent pom aggregating other library projects, devops tools</description>
@@ -21,31 +21,31 @@
 		<java.version>1.7</java.version>
 		<junit.version>4.12</junit.version>
 
-		<org.talend.daikon.version>0.14.0</org.talend.daikon.version>
+		<org.talend.daikon.version>0.16.0</org.talend.daikon.version>
 
 		<dataquality.libraries.snapshot.version>1.6.1-SNAPSHOT</dataquality.libraries.snapshot.version>
-		<dataquality.libraries.released.version>1.6.0</dataquality.libraries.released.version>
+		<dataquality.libraries.released.version>1.6.1</dataquality.libraries.released.version>
 
 		<dataquality.record.linkage.snapshot.version>3.3.1-SNAPSHOT</dataquality.record.linkage.snapshot.version>
-		<dataquality.record.linkage.released.version>3.3.0</dataquality.record.linkage.released.version>
+		<dataquality.record.linkage.released.version>3.3.1</dataquality.record.linkage.released.version>
 
 		<dataquality.sampling.snapshot.version>2.4.1-SNAPSHOT</dataquality.sampling.snapshot.version>
-		<dataquality.sampling.released.version>2.4.0</dataquality.sampling.released.version>
+		<dataquality.sampling.released.version>2.4.1</dataquality.sampling.released.version>
 
 		<dataquality.standardization.snapshot.version>3.3.1-SNAPSHOT</dataquality.standardization.snapshot.version>
-		<dataquality.standardization.released.version>3.3.0</dataquality.standardization.released.version>
+		<dataquality.standardization.released.version>3.3.1</dataquality.standardization.released.version>
 
 		<dataquality.wordnet.snapshot.version>1.2.1-SNAPSHOT</dataquality.wordnet.snapshot.version>
-		<dataquality.wordnet.released.version>1.2.0</dataquality.wordnet.released.version>
+		<dataquality.wordnet.released.version>1.2.1</dataquality.wordnet.released.version>
 
 		<dataquality.email.snapshot.version>1.1.1-SNAPSHOT</dataquality.email.snapshot.version>
-		<dataquality.email.released.version>1.1.0</dataquality.email.released.version>
+		<dataquality.email.released.version>1.1.1</dataquality.email.released.version>
 		
 		<dataquality.survivorship.snapshot.version>2.0.1-SNAPSHOT</dataquality.survivorship.snapshot.version>
-		<dataquality.survivorship.released.version>2.0.0</dataquality.survivorship.released.version>
+		<dataquality.survivorship.released.version>2.0.1</dataquality.survivorship.released.version>
 		
 		<dataquality.converters.snapshot.version>1.0.1-SNAPSHOT</dataquality.converters.snapshot.version>
-                <dataquality.converters.released.version>1.0.0</dataquality.converters.released.version>
+		<dataquality.converters.released.version>1.0.1</dataquality.converters.released.version>
 	</properties>
 
 	<modules>

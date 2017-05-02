@@ -1,5 +1,8 @@
+V3.3.1 2017-05-02
+	(no change in this version)
+
 V3.3.0 2017-04-07
-       - TDQ-13066 SynonymIndexBuilder.getDocument() should always return live records
+    - TDQ-13066 SynonymIndexBuilder.getDocument() should always return live records
 
 V3.2.6 2016-12-09
     (no change in this version)

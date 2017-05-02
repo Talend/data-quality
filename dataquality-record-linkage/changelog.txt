@@ -1,4 +1,7 @@
-V3.3.0
+V3.3.1 2017-05-02
+	- TDQ-13490 avoid to output duplicate none-master records when swoosh with store on disk
+
+V3.3.0 2017-04-07
 	- TDQ-13511 refactoring inner class TSwooshGrouping.GroupingCallBack make it become a Outer Class
 	- TMDM-10649 : Adapt to CombinedRecordMatcher
 	- TDQ-13225 Swoosh with the option "store on disk"

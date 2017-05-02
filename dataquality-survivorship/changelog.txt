@@ -1,4 +1,7 @@
-V2.0.0 (in development)
+V2.0.1 2017-05-02
+	(no change in this version)
+
+V2.0.0 2017-04-07
     - TDQ-12855 move to data-quality repo
 
 
