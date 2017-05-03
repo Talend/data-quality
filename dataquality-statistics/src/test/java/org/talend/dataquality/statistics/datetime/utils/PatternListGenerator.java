@@ -97,13 +97,13 @@ public class PatternListGenerator {
             add(new LocaledPattern("d/M/yyyy", Locale.US, "OTHER", false));
             add(new LocaledPattern("MM/dd/yyyy", Locale.US, "OTHER", false));
             add(new LocaledPattern("M/d/yyyy", Locale.US, "OTHER", false));
-            // add(new LocaledPattern("MM-dd-yy", Locale.US, "OTHER", false));
+            add(new LocaledPattern("MM-dd-yy", Locale.US, "OTHER", false));
             add(new LocaledPattern("M-d-yy", Locale.US, "OTHER", false));
-            // add(new LocaledPattern("MM-dd-yyyy", Locale.US, "OTHER", false));
+            add(new LocaledPattern("MM-dd-yyyy", Locale.US, "OTHER", false));
             add(new LocaledPattern("M-d-yyyy", Locale.US, "OTHER", false));
-            // add(new LocaledPattern("yyyy-MM-dd", Locale.US, "OTHER", false));
+            add(new LocaledPattern("yyyy-MM-dd", Locale.US, "OTHER", false));
             add(new LocaledPattern("yyyy-M-d", Locale.US, "OTHER", false));
-            // add(new LocaledPattern("MM/dd/yy", Locale.US, "OTHER", false));
+            add(new LocaledPattern("MM/dd/yy", Locale.US, "OTHER", false));
             add(new LocaledPattern("M/d/yy", Locale.US, "OTHER", false));
         }
     };

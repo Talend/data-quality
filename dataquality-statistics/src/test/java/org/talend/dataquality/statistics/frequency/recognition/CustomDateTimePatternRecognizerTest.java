@@ -76,10 +76,10 @@ public class CustomDateTimePatternRecognizerTest {
 
             {
                 put("yyyy-M-d", 4L);
-                put("d/M/yyyy", 3L);
                 put("", 2L);
                 put("dd/MM/yyyy", 2L);
-                put("M/d/yyyy", 2L);
+                put("d/M/yyyy", 1L);
+                put("M/d/yyyy", 1L);
                 put("aaa", 1L);
                 put("99 aaa Aaaaa", 1L);
                 put("M/d/yy", 1L);

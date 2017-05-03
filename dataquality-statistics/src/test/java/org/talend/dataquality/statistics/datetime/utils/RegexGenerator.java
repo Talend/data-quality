@@ -61,9 +61,9 @@ public class RegexGenerator {
             put("MMMM", "(\\p{L}{3,10})");
             put("MMM", "(([A-Z]\\p{L}{2})|([a-z]\\p{L}{2,3}\\.?))");// this line must be after the replacement of 'a'
             put("MM", "(0[1-9]|1[0-2])");
-            put("M", "(0?[1-9]|1[0-2])");
+            put("M", "([1-9]|1[0-2])");
             put("dd", "(0[1-9]|[1-2][0-9]|3[0-1])");
-            put("d", "(0?[1-9]|[1-2][0-9]|3[0-1])");
+            put("d", "([1-9]|[1-2][0-9]|3[0-1])");
 
             // can use \\p{L} starting from here
             put("EEEE", "(\\p{L}{3,10})");// TO CHECK

@@ -15,13 +15,8 @@ package org.talend.dataquality.statistics.frequency.pattern;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -53,7 +48,7 @@ public class CompositePatternFrequencyAnalyzerTest {
         Assert.assertEquals(Collections.singleton("aaaa9999ィゥェ中国"), patternString1);
 
         Set<String> patternString4 = analyzer.getValuePatternSet("2008-01-01");
-        Assert.assertEquals(new HashSet<String>(Arrays.asList(new String[] { "yyyy-MM-dd", "yyyy-M-d" })), patternString4);
+        Assert.assertEquals(new HashSet<String>(Arrays.asList(new String[] { "yyyy-MM-dd" })), patternString4);
 
         Set<String> patternString5 = analyzer.getValuePatternSet("2008-1月-01");
         Assert.assertEquals(Collections.singleton("9999-9月-99"), patternString5);

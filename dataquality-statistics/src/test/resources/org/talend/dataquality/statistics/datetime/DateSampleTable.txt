@@ -98,6 +98,13 @@ lundi 22 mars 1999 5 h 06 CET	EEEE d MMMM yyyy H' h 'mm z	fr_CA	FULL	true
 3/22/1999 05:06:07	M/d/yyyy HH:mm:ss	fr_FR	MEDIUM	true
 3/22/1999 5:06	M/d/yyyy H:mm	ja_JP	SHORT	true
 3/22/1999 5:06:07	M/d/yyyy H:mm:ss	ja_JP	MEDIUM	true
+03-22-99	MM-dd-yy	en_US	OTHER	false
+03-22-99 5:06 AM	MM-dd-yy h:mm a	en_US	SHORT	true
+03-22-99 5:06:07 AM	MM-dd-yy h:mm:ss a	en_US	MEDIUM	true
+03-22-99 05:06	MM-dd-yy HH:mm	fr_FR	SHORT	true
+03-22-99 05:06:07	MM-dd-yy HH:mm:ss	fr_FR	MEDIUM	true
+03-22-99 5:06	MM-dd-yy H:mm	ja_JP	SHORT	true
+03-22-99 5:06:07	MM-dd-yy H:mm:ss	ja_JP	MEDIUM	true
 3-22-99	M-d-yy	en_US	OTHER	false
 3-22-99 5:06 AM	M-d-yy h:mm a	en_US	SHORT	true
 3-22-99 5:06:07 AM	M-d-yy h:mm:ss a	en_US	MEDIUM	true
@@ -105,6 +112,13 @@ lundi 22 mars 1999 5 h 06 CET	EEEE d MMMM yyyy H' h 'mm z	fr_CA	FULL	true
 3-22-99 05:06:07	M-d-yy HH:mm:ss	fr_FR	MEDIUM	true
 3-22-99 5:06	M-d-yy H:mm	ja_JP	SHORT	true
 3-22-99 5:06:07	M-d-yy H:mm:ss	ja_JP	MEDIUM	true
+03-22-1999	MM-dd-yyyy	en_US	OTHER	false
+03-22-1999 5:06 AM	MM-dd-yyyy h:mm a	en_US	SHORT	true
+03-22-1999 5:06:07 AM	MM-dd-yyyy h:mm:ss a	en_US	MEDIUM	true
+03-22-1999 05:06	MM-dd-yyyy HH:mm	fr_FR	SHORT	true
+03-22-1999 05:06:07	MM-dd-yyyy HH:mm:ss	fr_FR	MEDIUM	true
+03-22-1999 5:06	MM-dd-yyyy H:mm	ja_JP	SHORT	true
+03-22-1999 5:06:07	MM-dd-yyyy H:mm:ss	ja_JP	MEDIUM	true
 3-22-1999	M-d-yyyy	en_US	OTHER	false
 3-22-1999 5:06 AM	M-d-yyyy h:mm a	en_US	SHORT	true
 3-22-1999 5:06:07 AM	M-d-yyyy h:mm:ss a	en_US	MEDIUM	true
@@ -112,11 +126,23 @@ lundi 22 mars 1999 5 h 06 CET	EEEE d MMMM yyyy H' h 'mm z	fr_CA	FULL	true
 3-22-1999 05:06:07	M-d-yyyy HH:mm:ss	fr_FR	MEDIUM	true
 3-22-1999 5:06	M-d-yyyy H:mm	ja_JP	SHORT	true
 3-22-1999 5:06:07	M-d-yyyy H:mm:ss	ja_JP	MEDIUM	true
+1999-03-22 5:06 AM	yyyy-MM-dd h:mm a	en_US	SHORT	true
+1999-03-22 5:06:07 AM	yyyy-MM-dd h:mm:ss a	en_US	MEDIUM	true
+1999-03-22 05:06	yyyy-MM-dd HH:mm	fr_FR	SHORT	true
+1999-03-22 5:06	yyyy-MM-dd H:mm	ja_JP	SHORT	true
+1999-03-22 5:06:07	yyyy-MM-dd H:mm:ss	ja_JP	MEDIUM	true
 1999-3-22 5:06 AM	yyyy-M-d h:mm a	en_US	SHORT	true
 1999-3-22 5:06:07 AM	yyyy-M-d h:mm:ss a	en_US	MEDIUM	true
 1999-3-22 05:06	yyyy-M-d HH:mm	fr_FR	SHORT	true
 1999-3-22 05:06:07	yyyy-M-d HH:mm:ss	fr_FR	MEDIUM	true
 1999-3-22 5:06	yyyy-M-d H:mm	ja_JP	SHORT	true
+03/22/99	MM/dd/yy	en_US	OTHER	false
+03/22/99 5:06 AM	MM/dd/yy h:mm a	en_US	SHORT	true
+03/22/99 5:06:07 AM	MM/dd/yy h:mm:ss a	en_US	MEDIUM	true
+03/22/99 05:06	MM/dd/yy HH:mm	fr_FR	SHORT	true
+03/22/99 05:06:07	MM/dd/yy HH:mm:ss	fr_FR	MEDIUM	true
+03/22/99 5:06	MM/dd/yy H:mm	ja_JP	SHORT	true
+03/22/99 5:06:07	MM/dd/yy H:mm:ss	ja_JP	MEDIUM	true
 3/22/99 5:06:07 AM	M/d/yy h:mm:ss a	en_US	MEDIUM	true
 3/22/99 05:06	M/d/yy HH:mm	fr_FR	SHORT	true
 3/22/99 05:06:07	M/d/yy HH:mm:ss	fr_FR	MEDIUM	true
@@ -182,7 +208,6 @@ Mon, 22 Mar 1999 05:06:07 +0100	EEE, d MMM yyyy HH:mm:ss Z	en_US	RFC1123_WITH_DA
 22.03.99 5:06	dd.MM.yy H:mm	ru	SHORT	true
 99-03-22 5.06.PD	yy-MM-dd h.mm.a	sq	SHORT	true
 22.3.99. 05.06	d.M.yy. HH.mm	sr	SHORT	true
-1999-03-22 05:06	yyyy-MM-dd HH:mm	sv	SHORT	true
 05:06 22/03/1999	HH:mm dd/MM/yyyy	vi	SHORT	true
 22.3.1999 5.06.07	d.M.yyyy H.mm.ss	be	MEDIUM	true
 22.3.1999 5:06:07	d.M.yyyy H:mm:ss	cs	MEDIUM	true
