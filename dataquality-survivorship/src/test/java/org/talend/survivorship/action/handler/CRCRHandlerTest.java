@@ -256,6 +256,7 @@ public class CRCRHandlerTest {
         AbstractChainResponsibilityHandler crcr2 = new CRCRHandler(createHandlerParameter);
         CRCRHandler crcr3 = new CRCRHandler(createHandlerParameter);
         CRCRHandler crcr4 = new CRCRHandler(createHandlerParameter);
+        CRCRHandler crcr5 = new CRCRHandler(createHandlerParameter);
         crcr1.linkSuccessor(crcr2);
 
         // link case and last handler contain 1 result
@@ -272,16 +273,23 @@ public class CRCRHandlerTest {
         // single handler and not a single result
         preConflictRowNum = new HashMap<>();
         preConflictRowNum.put(0, "city3");
-        preConflictRowNum.put(1, "city3");
+        preConflictRowNum.put(1, "city4");
         crcr3.initConflictRowNum(preConflictRowNum);
         survivoredRowNum = crcr3.getSurvivoredRowNum();
+        Assert.assertNotNull("survivoredRowNum should not be null", survivoredRowNum);
+        Assert.assertEquals("The column name should be city3", "city3", survivoredRowNum.getColumnName());
+        Assert.assertEquals("The row number should be 0", 0, survivoredRowNum.getRowNum().intValue());
+        // single handler and size of preConflictRowNum is zero
+        preConflictRowNum = new HashMap<>();
+        crcr4.initConflictRowNum(preConflictRowNum);
+        survivoredRowNum = crcr4.getSurvivoredRowNum();
         Assert.assertNull("survivoredRowNum should be null", survivoredRowNum);
         // single handler and not a single result but all of result value are same
         preConflictRowNum = new HashMap<>();
         preConflictRowNum.put(0, "city4");
         preConflictRowNum.put(1, "city4");
-        crcr4.initConflictRowNum(preConflictRowNum);
-        survivoredRowNum = crcr4.getSurvivoredRowNum();
+        crcr5.initConflictRowNum(preConflictRowNum);
+        survivoredRowNum = crcr5.getSurvivoredRowNum();
         Assert.assertEquals("The column name should be city4", "city4", survivoredRowNum.getColumnName());
         Assert.assertEquals("The row number should be 0", 0, survivoredRowNum.getRowNum().intValue());
 

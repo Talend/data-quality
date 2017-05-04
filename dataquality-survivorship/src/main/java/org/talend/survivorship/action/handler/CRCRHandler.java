@@ -218,14 +218,27 @@ public class CRCRHandler extends AbstractChainResponsibilityHandler {
      */
     public SurvivedResult getSurvivoredRowNum() {
         if (this.conflictRowNum.size() == 1 || allNumWithSameData()) {
-            Iterator<Integer> iterator = this.conflictRowNum.keySet().iterator();
-            Integer index = iterator.next();
-            return new SurvivedResult(index, conflictRowNum.get(index));
+            return CreateSurvivedResult();
         } else if (this.getSuccessor() != null) {
             return this.getSuccessor().getSurvivoredRowNum();
         } else {
-            return null;
+            return CreateSurvivedResult();
         }
+    }
+
+    /**
+     * zshen Create survived reulst
+     * 
+     * @return use first one data to Create survived reulst
+     */
+    private SurvivedResult CreateSurvivedResult() {
+        Iterator<Integer> iterator = this.conflictRowNum.keySet().iterator();
+        if (iterator.hasNext()) {
+            Integer index = iterator.next();
+            return new SurvivedResult(index, conflictRowNum.get(index));
+        }
+        return null;
+
     }
 
     /**
