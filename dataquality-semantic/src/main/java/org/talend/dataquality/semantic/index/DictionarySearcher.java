@@ -137,10 +137,13 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
 
         // define the subset in which we will search
         if (cachingWrapperFilter == null) {
-            if (hasChildren)
+            if (hasChildren) {
+                Set<String> childrenId = new HashSet<>();
+                for (DQCategory category : children)
+                    childrenId.add(category.getId());
                 cachingWrapperFilter = new CachingWrapperFilter(
-                        new FieldCacheTermsFilter(F_CATID, children.toArray(new String[children.size()])));
-            else
+                        new FieldCacheTermsFilter(F_CATID, childrenId.toArray(new String[childrenId.size()])));
+            } else
                 cachingWrapperFilter = new CachingWrapperFilter(new FieldCacheTermsFilter(F_CATID, semanticType.getId()));
             categoryToCache.put(semanticType.getId(), cachingWrapperFilter);
         }
