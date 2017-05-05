@@ -78,19 +78,13 @@ public class DictionaryUtils {
         doc.add(wordTermField);
         for (String value : values) {
             if (value != null) {
-                boolean containsControlChars = false;
-                for (char c : value.toCharArray()) {
-                    if (Character.isISOControl(c)) {
-                        containsControlChars = true;
-                    }
-                }
-                if (containsControlChars) {
+                if (containsControlChars(value)) {
                     System.out.println("The value [" + value
                             + "] contains at least one ISO control character and is not added to the index of " + word + ".");
                     continue;
                 }
                 value = value.trim();
-                if (value.length() > 0 && !value.equals(tempWord)) {
+                if (value.length() > 0) {
                     List<String> tokens = DictionarySearcher.getTokensFromAnalyzer(value);
                     doc.add(new StringField(DictionarySearcher.F_SYNTERM, StringUtils.join(tokens, ' '), Field.Store.NO));
                     doc.add(new Field(DictionarySearcher.F_RAW, value, FIELD_TYPE_RAW_VALUE));
@@ -101,6 +95,15 @@ public class DictionaryUtils {
             }
         }
         return doc;
+    }
+
+    private static boolean containsControlChars(String value) {
+        for (char c : value.toCharArray()) {
+            if (Character.isISOControl(c)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static DQCategory categoryFromDocument(Document doc) {
@@ -157,31 +160,33 @@ public class DictionaryUtils {
         if (knownCategoryName != null) {
             dqCat = CategoryRegistryManager.getInstance().getCategoryMetadataByName(knownCategoryName);
         }
-        String catId = doc.getField(DictionarySearcher.F_CATID).stringValue();
-        dqCat.setId(catId);
-        String catName = doc.getField(DictionarySearcher.F_WORD).stringValue();
-        dqCat.setName(catName);
-        dqDoc.setCategory(dqCat);
+        if (dqCat != null) {
+            String catId = doc.getField(DictionarySearcher.F_CATID).stringValue();
+            dqCat.setId(catId);
+            String catName = doc.getField(DictionarySearcher.F_WORD).stringValue();
+            dqCat.setName(catName);
+            dqDoc.setCategory(dqCat);
 
-        String docId = doc.getField(DictionarySearcher.F_ID).stringValue();
-        dqDoc.setId(docId);
-        IndexableField[] synTermFields = doc.getFields(DictionarySearcher.F_RAW);
-        Set<String> synSet = new HashSet<String>();
-        for (IndexableField f : synTermFields) {
-            synSet.add(f.stringValue());
+            String docId = doc.getField(DictionarySearcher.F_ID).stringValue();
+            dqDoc.setId(docId);
+            IndexableField[] synTermFields = doc.getFields(DictionarySearcher.F_RAW);
+            Set<String> synSet = new HashSet<>();
+            for (IndexableField f : synTermFields) {
+                synSet.add(f.stringValue());
+            }
+            dqDoc.setValues(synSet);
         }
-        dqDoc.setValues(synSet);
         return dqDoc;
     }
 
     static void rewriteIndex(Directory srcDir, File destFolder) throws IOException {
-        final FSDirectory destDir = FSDirectory.open(destFolder);
-        final IndexWriterConfig iwc = new IndexWriterConfig(Version.LATEST, new StandardAnalyzer(CharArraySet.EMPTY_SET));
-        final IndexWriter writer = new IndexWriter(destDir, iwc);
+        try (FSDirectory destDir = FSDirectory.open(destFolder)) {
+            final IndexWriterConfig iwc = new IndexWriterConfig(Version.LATEST, new StandardAnalyzer(CharArraySet.EMPTY_SET));
+            final IndexWriter writer = new IndexWriter(destDir, iwc);
 
-        writer.addIndexes(srcDir);
-        writer.commit();
-        writer.close();
-        destDir.close();
+            writer.addIndexes(srcDir);
+            writer.commit();
+            writer.close();
+        }
     }
 }
