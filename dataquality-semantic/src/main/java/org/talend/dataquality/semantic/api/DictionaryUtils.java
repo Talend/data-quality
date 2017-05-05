@@ -180,13 +180,10 @@ public class DictionaryUtils {
     }
 
     static void rewriteIndex(Directory srcDir, File destFolder) throws IOException {
-        try (FSDirectory destDir = FSDirectory.open(destFolder)) {
-            final IndexWriterConfig iwc = new IndexWriterConfig(Version.LATEST, new StandardAnalyzer(CharArraySet.EMPTY_SET));
-            final IndexWriter writer = new IndexWriter(destDir, iwc);
-
+        final IndexWriterConfig iwc = new IndexWriterConfig(Version.LATEST, new StandardAnalyzer(CharArraySet.EMPTY_SET));
+        try (FSDirectory destDir = FSDirectory.open(destFolder); IndexWriter writer = new IndexWriter(destDir, iwc)) {
             writer.addIndexes(srcDir);
             writer.commit();
-            writer.close();
         }
     }
 }
