@@ -12,11 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.statistics.datetime.utils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -25,6 +21,12 @@ import java.util.Map;
 import org.apache.commons.io.IOUtils;
 import org.talend.dataquality.statistics.datetime.SystemDateTimePatternManager;
 
+/**
+ * Generator of date format groups to improve the performance.
+ * Before, we have to try over all regex patterns in order to find out all possible matches.
+ * Now, We made exlusive groups of patterns, and we just need to go over by group, and stops at the group where at least one of
+ * regexes matches the data.
+ */
 public class FormatGroupGenerator {
 
     private static DateTimeFormatCode calculateFormatCode(String format, String regex) {

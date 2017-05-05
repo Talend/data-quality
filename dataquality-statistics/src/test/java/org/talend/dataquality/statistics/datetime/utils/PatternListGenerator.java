@@ -26,6 +26,9 @@ import java.util.*;
 import org.apache.commons.io.IOUtils;
 import org.talend.dataquality.statistics.datetime.SystemDateTimePatternManager;
 
+/**
+ * The class is used for generating regexes and unit tests for all date patterns supported in datetime discovery.
+ */
 public class PatternListGenerator {
 
     private static Set<LocaledPattern> knownLocaledPatternList = new LinkedHashSet<LocaledPattern>();
@@ -51,6 +54,13 @@ public class PatternListGenerator {
 
     private static StringBuilder timeRegexFileTextBuilder = new StringBuilder();
 
+    /**
+     * General locales to support. For each of them, we generate:
+     * 1. SHORT style date + SHORT style SHORT
+     * 2. MEDIUM style date + MEDIUM style time
+     * 3. LONG style date + LONG style time
+     * 4. FULL style date + FULL style time
+     */
     private static Locale[] localeArray = new Locale[] { Locale.US, //
             Locale.FRANCE, //
             Locale.GERMANY, //
@@ -61,6 +71,13 @@ public class PatternListGenerator {
             Locale.CHINA, //
     };
 
+    /**
+     * Important locales with which we need not only support their own pattern, but also the following combination in addition:
+     * 1. SHORT style date + MEDIUM style time
+     * 2. MEDIUM style date + SHORT style time
+     * 3. all date patterns in OTHER_COMMON_PATTERNS_NEED_COMBINATION combined with the SHORT and MEDIUM style time of the
+     * following locales.
+     */
     private static Locale[] primaryLocaleArray = new Locale[] { Locale.US, //
             Locale.FRANCE, //
             Locale.GERMANY, //
@@ -68,6 +85,9 @@ public class PatternListGenerator {
             Locale.JAPAN, //
     };
 
+    /**
+     * Add important date pattern here which need to be combined with SHORT and MEDIUM style time of the primary locales.
+     */
     private static List<LocaledPattern> OTHER_COMMON_PATTERNS_NEED_COMBINATION = new ArrayList<LocaledPattern>() {
 
         private static final long serialVersionUID = 1L;
@@ -88,6 +108,9 @@ public class PatternListGenerator {
         }
     };
 
+    /**
+     * Add other single patterns here which do not need to be combined with SHORT and MEDIUM style time of the primary locales.
+     */
     private static List<LocaledPattern> OTHER_COMMON_PATTERNS = new ArrayList<LocaledPattern>() {
 
         private static final long serialVersionUID = 1L;

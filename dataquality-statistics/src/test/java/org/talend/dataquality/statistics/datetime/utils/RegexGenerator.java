@@ -15,6 +15,9 @@ package org.talend.dataquality.statistics.datetime.utils;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * Generate regex from java Datetime pattern
+ */
 public class RegexGenerator {
 
     Map<String, String> PATTERN_REGEX_MAP = new LinkedHashMap<String, String>() {
@@ -72,6 +75,10 @@ public class RegexGenerator {
         }
     };
 
+    /**
+     * replace literal parts of the datetime pattern by symbols to keep them from being converted, and recover them after
+     * conversion.
+     */
     public String convertPatternToRegex(String pattern) {
         String regex = pattern;
         regex = regex.replace("' h '", "*****");
