@@ -75,6 +75,7 @@ public class RespectiveCategoryRecognizerTest {
                     add(ImmutablePair.of("sliu@talend.com.1a", false)); // tld which has two characters can not contains digit
                     add(ImmutablePair.of("marius.reidy@lmb.liebMr..com", false));
                     add(ImmutablePair.of("sidbpl@cebpl.caisse-epargne.fr", true)); // hyphen is allowed in domain
+                    add(ImmutablePair.of("sidbpl@cebpl.caisse-epargne.FR", true));
                 }
             });
 
@@ -86,6 +87,7 @@ public class RespectiveCategoryRecognizerTest {
                     add(ImmutablePair.of("ftp://user:pass@talend.com", true));
                     add(ImmutablePair.of("http://www.centraldiecastingmfgcoinc.com/this/is/a/path?sort=desc#anchor", true));
                     add(ImmutablePair.of("https://info.talend.com/fr_di_di_dummies.html?type=tydl#bar", true));
+                    add(ImmutablePair.of("HTTPS://info.talend.com/fr_di_di_dummies.html?type=tydl#bar", true));
                     add(ImmutablePair.of("hdfs://127.0.0.1/user/luis/sample.txt", false));
 
                 }
@@ -691,6 +693,7 @@ public class RespectiveCategoryRecognizerTest {
                 {
                     add(ImmutablePair.of("data:text/html;charset=US-ASCII,%3Ch1%3EHello!%3C%2Fh1%3E", true));
                     add(ImmutablePair.of("data:text/html;charset=,%3Ch1%3EHello!%3C%2Fh1%3E", true));
+                    add(ImmutablePair.of("data:TEXT/html;charset=,%3Ch1%3EHello!%3C%2Fh1%3E", true));
                     add(ImmutablePair.of("PIETROWSKI", false));
                 }
             });

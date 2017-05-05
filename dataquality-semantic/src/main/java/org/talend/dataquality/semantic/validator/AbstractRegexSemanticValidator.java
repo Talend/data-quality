@@ -20,12 +20,19 @@ import java.util.regex.Pattern;
  */
 public abstract class AbstractRegexSemanticValidator implements ISemanticValidator {
 
-    protected Pattern pattern;
+    protected Pattern caseSensitivePattern;
 
-    public boolean isValid(String str) {
-        if (str == null || pattern == null) {
+    protected Pattern caseInsensitivePattern;
+
+    public boolean isValid(String str, boolean caseSensitive) {
+        if (str == null || caseSensitivePattern == null || caseInsensitivePattern == null) {
             return false;
         }
-        return pattern.matcher(str.trim()).find();
+        return (caseSensitive ? caseSensitivePattern.matcher(str.trim()).find()
+                : caseInsensitivePattern.matcher(str.trim()).find());
+    }
+
+    public boolean isValid(String str) {
+        return isValid(str, false);
     }
 }

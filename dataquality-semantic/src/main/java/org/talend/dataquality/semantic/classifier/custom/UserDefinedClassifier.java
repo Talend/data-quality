@@ -108,7 +108,7 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
         for (ISubCategory classifier : potentialSubCategories) {
             if (childrenId.contains(classifier.getId())) {
                 cpt++;
-                if (isValid(str, mainCategory, (UserDefinedCategory) classifier))
+                if (isValid(str, mainCategory, (UserDefinedCategory) classifier, true))
                     return true;
                 if (cpt == children.size())
                     return false;
@@ -121,7 +121,7 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
     private boolean validCategories(String str, MainCategory mainCategory, DQCategory semanticType) {
         for (ISubCategory classifier : potentialSubCategories) {
             if (semanticType.getId().equals(classifier.getId()))
-                return isValid(str, mainCategory, (UserDefinedCategory) classifier);
+                return isValid(str, mainCategory, (UserDefinedCategory) classifier, true);
 
         }
         return false;
@@ -144,7 +144,7 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
         Set<String> catSet = new HashSet<>();
         if (mainCategory != MainCategory.UNKNOWN && mainCategory != MainCategory.NULL && mainCategory != MainCategory.BLANK) {
             for (ISubCategory classifier : potentialSubCategories) {
-                if (isValid(str, mainCategory, (UserDefinedCategory) classifier))
+                if (isValid(str, mainCategory, (UserDefinedCategory) classifier, false))
                     catSet.add(classifier.getId());
             }
         }
@@ -152,7 +152,7 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
 
     }
 
-    private boolean isValid(String str, MainCategory mainCategory, UserDefinedCategory classifier) {
+    private boolean isValid(String str, MainCategory mainCategory, UserDefinedCategory classifier, boolean caseSensitive) {
         MainCategory classifierCategory = classifier.getMainCategory();
         // if the MainCategory is different, ignor it and continue;AlphaNumeric rule should contain pure Alpha and
         // Numeric.
@@ -163,7 +163,7 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
             return false;
         if (invalidFilter(str, classifier.getFilter()))
             return false;
-        return validValidator(str, classifier.getValidator());
+        return validValidator(str, classifier.getValidator(), caseSensitive);
 
     }
 
@@ -171,8 +171,8 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
         return filter != null && !filter.isQualified(str);
     }
 
-    private boolean validValidator(String str, ISemanticValidator validator) {
-        return validator != null && validator.isValid(str);
+    private boolean validValidator(String str, ISemanticValidator validator, boolean caseSensitive) {
+        return validator != null && validator.isValid(str, caseSensitive);
     }
 
 }

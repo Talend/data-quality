@@ -305,6 +305,7 @@ public class UserDefinedClassifierTest {
                     new String[] { "583edc44ec06957a34fa645a" }); //$NON-NLS-1$
 
             put("data:text/html;charset=US-ASCII,%3Ch1%3EHello!%3C%2Fh1%3E", new String[] { "583edc44ec06957a34fa6464" }); //$NON-NLS-1$ //$NON-NLS-2$
+            put("data:TEXT/html;charset=US-ASCII,%3Ch1%3EHello!%3C%2Fh1%3E", new String[] { "583edc44ec06957a34fa6464" });
             put("data:text/html;charset=,%3Ch1%3EHello!%3C%2Fh1%3E", new String[] { "583edc44ec06957a34fa6464" }); //$NON-NLS-1$ //$NON-NLS-2$
             put("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAABlBMVEUAAAD///+l2Z/dAAAA", //$NON-NLS-1$
                     new String[] { "583edc44ec06957a34fa6464" }); //$NON-NLS-1$

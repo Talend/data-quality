@@ -103,7 +103,9 @@ public class UserDefinedRegexValidator extends AbstractRegexSemanticValidator {
         }
         this.patternString = patternString;
         try {
-            pattern = caseInsensitive ? Pattern.compile(patternString, Pattern.CASE_INSENSITIVE) : Pattern.compile(patternString);
+            caseInsensitivePattern = caseInsensitive ? Pattern.compile(patternString, Pattern.CASE_INSENSITIVE)
+                    : Pattern.compile(patternString);
+            caseSensitivePattern = Pattern.compile(patternString);
         } catch (IllegalArgumentException e) {
             LOG.error("Invalid regular expression: " + this.patternString, e);
         }
@@ -116,7 +118,12 @@ public class UserDefinedRegexValidator extends AbstractRegexSemanticValidator {
      */
     @Override
     public boolean isValid(String str) {
-        if (!super.isValid(str)) {
+        return isValid(str, false);
+    }
+
+    @Override
+    public boolean isValid(String str, boolean caseSensitive) {
+        if (!super.isValid(str, caseSensitive)) {
             return false;
         }
         // else

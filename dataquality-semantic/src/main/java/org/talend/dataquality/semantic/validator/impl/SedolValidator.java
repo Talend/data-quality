@@ -44,6 +44,11 @@ public class SedolValidator implements ISemanticValidator {
         return checksum == checksumFromSedol;
     }
 
+    @Override
+    public boolean isValid(String str, boolean caseSensitive) {
+        return isValid(str);
+    }
+
     public int getSedolCheckDigit(String str) {
         String strUpper = str.toUpperCase();
         int total = 0;

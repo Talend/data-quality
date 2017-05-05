@@ -66,11 +66,19 @@ public class SemanticQualityAnalyzerTest {
     private final String[] EXPECTED_CATEGORIES_REGEX = new String[] { //
             "", //
             "VISA_CARD", //
+            "DATA_URL", //
     };
 
-    private static final long[][] EXPECTED_VALIDITY_COUNT_REGEX = new long[][] { //
+    private static final long[][] EXPECTED_VALIDITY_COUNT_REGEX_FOR_DISCOVERY = new long[][] { //
             new long[] { 30, 0, 0 }, //
             new long[] { 20, 10, 0 }, //
+            new long[] { 30, 0, 0 }, //
+    };
+
+    private static final long[][] EXPECTED_VALIDITY_COUNT_REGEX_FOR_VALIDATION = new long[][] { //
+            new long[] { 30, 0, 0 }, //
+            new long[] { 20, 10, 0 }, //
+            new long[] { 19, 11, 0 }, //
     };
 
     private static final long[][] EXPECTED_VALIDITY_COUNT_PHONE = new long[][] { //
@@ -88,20 +96,22 @@ public class SemanticQualityAnalyzerTest {
 
     @Test
     public void testSemanticQualityAnalyzerWithDictionaryCategory() {
-        testAnalysis(RECORDS_CRM_CUST, EXPECTED_CATEGORIES_DICT, EXPECTED_VALIDITY_COUNT_DICT);
+        testAnalysis(RECORDS_CRM_CUST, EXPECTED_CATEGORIES_DICT, EXPECTED_VALIDITY_COUNT_DICT, EXPECTED_VALIDITY_COUNT_DICT);
     }
 
     @Test
     public void testSemanticQualityAnalyzerWithRegexCategory() {
-        testAnalysis(RECORDS_CREDIT_CARDS, EXPECTED_CATEGORIES_REGEX, EXPECTED_VALIDITY_COUNT_REGEX);
+        testAnalysis(RECORDS_CREDIT_CARDS, EXPECTED_CATEGORIES_REGEX, EXPECTED_VALIDITY_COUNT_REGEX_FOR_DISCOVERY,
+                EXPECTED_VALIDITY_COUNT_REGEX_FOR_VALIDATION);
     }
 
     @Test
     public void testSemanticQualityAnalyzerWithPhoneCategory() {
-        testAnalysis(RECORDS_PHONES, new String[] { "PHONE" }, EXPECTED_VALIDITY_COUNT_PHONE);
+        testAnalysis(RECORDS_PHONES, new String[] { "PHONE" }, EXPECTED_VALIDITY_COUNT_PHONE, EXPECTED_VALIDITY_COUNT_PHONE);
     }
 
-    public void testAnalysis(List<String[]> records, String[] expectedCategories, long[][] expectedValidityCount) {
+    public void testAnalysis(List<String[]> records, String[] expectedCategories, long[][] expectedValidityCountForDiscovery,
+            long[][] expectedValidityCountForValidation) {
         Analyzer<Result> analyzers = Analyzers.with(//
                 new SemanticAnalyzer(builder), //
                 new SemanticQualityAnalyzer(builder, expectedCategories)//
@@ -130,7 +140,7 @@ public class SemanticQualityAnalyzerTest {
                 if (expectedCategories[i].equals(cf.getCategoryId())) {
                     SemanticCategoryEnum cat = SemanticCategoryEnum.getCategoryById(cf.getCategoryId());
                     if (cat != null && cat.getCompleteness()) {
-                        assertEquals("Unexpected SemanticType occurence on column " + i, expectedValidityCount[i][0],
+                        assertEquals("Unexpected SemanticType occurence on column " + i, expectedValidityCountForDiscovery[i][0],
                                 cf.getCount());
                     }
                 }
@@ -142,9 +152,12 @@ public class SemanticQualityAnalyzerTest {
             final ValueQualityStatistics stats = result.get(i).get(ValueQualityStatistics.class);
             // System.out.println("new long[] {" + stats.getValidCount() + ", " + stats.getInvalidCount() + ", "
             // + stats.getEmptyCount() + "}, //");
-            assertEquals("Unexpected valid count on column " + i, expectedValidityCount[i][0], stats.getValidCount());
-            assertEquals("Unexpected invalid count on column " + i, expectedValidityCount[i][1], stats.getInvalidCount());
-            assertEquals("Unexpected empty count on column " + i, expectedValidityCount[i][2], stats.getEmptyCount());
+            assertEquals("Unexpected valid count on column " + i, expectedValidityCountForValidation[i][0],
+                    stats.getValidCount());
+            assertEquals("Unexpected invalid count on column " + i, expectedValidityCountForValidation[i][1],
+                    stats.getInvalidCount());
+            assertEquals("Unexpected empty count on column " + i, expectedValidityCountForValidation[i][2],
+                    stats.getEmptyCount());
             assertEquals("Unexpected unknown count on column " + i, 0, stats.getUnknownCount());
         }
     }

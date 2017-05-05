@@ -13,4 +13,9 @@ public class IBANValidator implements ISemanticValidator {
         String strWithoutSpaces = StringUtils.replace(str, " ", "");
         return org.apache.commons.validator.routines.IBANValidator.DEFAULT_IBAN_VALIDATOR.isValid(strWithoutSpaces);
     }
+
+    @Override
+    public boolean isValid(String str, boolean caseSensitive) {
+        return isValid(str);
+    }
 }
