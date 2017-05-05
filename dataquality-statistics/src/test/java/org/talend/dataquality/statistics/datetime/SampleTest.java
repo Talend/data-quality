@@ -17,12 +17,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.BeforeClass;
@@ -67,7 +62,7 @@ public class SampleTest {
             put("1999-03-22", new HashSet<String>(Arrays.asList(new String[] //
             { "yyyy-MM-dd", "yyyy-M-d" })));
             put("1999/03/22", new HashSet<String>(Arrays.asList(new String[] //
-            { "yyyy/MM/dd" })));
+            { "yyyy/MM/dd", "yyyy/M/d" })));
             put("1999-3-22", new HashSet<String>(Arrays.asList(new String[] //
             { "yyyy-M-d" })));
             put("March 22, 1999", new HashSet<String>(Arrays.asList(new String[] //

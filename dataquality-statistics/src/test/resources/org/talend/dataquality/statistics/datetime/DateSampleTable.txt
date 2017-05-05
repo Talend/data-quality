@@ -130,6 +130,7 @@ March 22 1999	MMMM d yyyy	en_US	OTHER	false
 22-Mar-99 05.06.07.000000888 AM	dd-MMM-yy hh.mm.ss.nnnnnnnnn a	en_GB	OTHER	true
 Mon Mar 22 05:06:07 CET 1999	EEE MMM dd HH:mm:ss z yyyy	en_US	OTHER	true
 22/Mar/99 5:06 AM	dd/MMM/yy h:mm a	en_US	OTHER	true
+1999/3/22	yyyy/M/d	en_US	OTHER	false
 19990322+0100	yyyyMMddZ	en_US	BASIC_ISO_DATE	false
 19990322	yyyyMMdd	en_US	BASIC_ISO_DATE	false
 1999-03-22+01:00	yyyy-MM-ddXXX	en_US	ISO_DATE	false

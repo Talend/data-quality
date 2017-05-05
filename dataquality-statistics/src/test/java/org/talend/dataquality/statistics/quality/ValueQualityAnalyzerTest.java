@@ -15,7 +15,6 @@ package org.talend.dataquality.statistics.quality;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -25,7 +24,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.junit.AfterClass;
@@ -57,7 +55,6 @@ public class ValueQualityAnalyzerTest {
 
     @AfterClass
     public static void tearDown() throws IOException {
-        FileUtils.deleteDirectory(new File(LOCAL_CATEGORY_REGISTRY_PATH));
         CategoryRegistryManager.getInstance().reset();
     }
 
