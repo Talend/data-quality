@@ -15,7 +15,7 @@ package org.talend.dataquality.semantic.validator;
 import java.io.Serializable;
 
 /**
- * Created by sizhaoliu on 16.03.15.
+ * Interface for RE validators which can validate data with a regex pattern and an optional sub-validator
  */
 public interface ISemanticValidator extends Serializable {
 

@@ -10,20 +10,14 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.dataquality.semantic.validator.impl;
+package org.talend.dataquality.semantic.validator;
 
-import java.util.Locale;
-
-import org.talend.dataquality.semantic.validator.AbstractPhoneNumberValidator;
-import org.talend.dataquality.semantic.validator.ISemanticSubValidator;
+import java.io.Serializable;
 
 /**
- * Created by vlesquere on 24/06/16.
+ * Interface for sub-validators
  */
-public class FRPhoneNumberValidator extends AbstractPhoneNumberValidator implements ISemanticSubValidator {
+public interface ISemanticSubValidator extends Serializable {
 
-    @Override
-    public boolean isValid(String phoneNumber) {
-        return isValidPhoneNumber(phoneNumber, Locale.FRANCE);
-    }
+    public boolean isValid(String str);
 }

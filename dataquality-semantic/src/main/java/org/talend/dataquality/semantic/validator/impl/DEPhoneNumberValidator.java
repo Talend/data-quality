@@ -15,11 +15,12 @@ package org.talend.dataquality.semantic.validator.impl;
 import java.util.Locale;
 
 import org.talend.dataquality.semantic.validator.AbstractPhoneNumberValidator;
+import org.talend.dataquality.semantic.validator.ISemanticSubValidator;
 
 /**
  * Created by vlesquere on 24/06/16.
  */
-public class DEPhoneNumberValidator extends AbstractPhoneNumberValidator {
+public class DEPhoneNumberValidator extends AbstractPhoneNumberValidator implements ISemanticSubValidator {
 
     @Override
     public boolean isValid(String phoneNumber) {

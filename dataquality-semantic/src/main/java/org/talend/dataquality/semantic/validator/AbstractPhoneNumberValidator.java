@@ -16,18 +16,9 @@ import java.util.Locale;
 
 import org.talend.dataquality.standardization.phone.PhoneNumberHandlerBase;
 
-public abstract class AbstractPhoneNumberValidator implements ISemanticValidator {
+public abstract class AbstractPhoneNumberValidator {
 
     protected boolean isValidPhoneNumber(String phoneNumber, Locale locale) {
         return PhoneNumberHandlerBase.isPossiblePhoneNumber(phoneNumber, locale.getCountry());
     }
-
-    @Override
-    public boolean isValid(String str, boolean caseSensitive) {
-        return isValid(str);
-    }
-
-    @Override
-    public abstract boolean isValid(String phoneNumber);
-
 }

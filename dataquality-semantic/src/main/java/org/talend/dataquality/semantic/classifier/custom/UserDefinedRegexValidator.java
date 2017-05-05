@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.talend.dataquality.semantic.validator.AbstractRegexSemanticValidator;
-import org.talend.dataquality.semantic.validator.ISemanticValidator;
+import org.talend.dataquality.semantic.validator.ISemanticSubValidator;
 
 /**
  * The regex validator can have a sub-validator defined in json file. Like : <br/>
@@ -44,7 +44,7 @@ public class UserDefinedRegexValidator extends AbstractRegexSemanticValidator {
      */
     private String subValidatorClassName = "";
 
-    private ISemanticValidator subValidator;
+    private ISemanticSubValidator subValidator;
 
     private boolean isSetSubValidator = false;
 
@@ -134,11 +134,11 @@ public class UserDefinedRegexValidator extends AbstractRegexSemanticValidator {
         return true;
     }
 
-    private ISemanticValidator createSubValidator(String validatorName) {
+    private ISemanticSubValidator createSubValidator(String validatorName) {
         if (validatorName != null && !validatorName.isEmpty()) {
             try {
                 Class<?> subSemanticValidator = Class.forName(validatorName);
-                return (ISemanticValidator) subSemanticValidator.newInstance();
+                return (ISemanticSubValidator) subSemanticValidator.newInstance();
             } catch (ClassNotFoundException e) {
                 LOG.error(e, e);
             } catch (InstantiationException e) {

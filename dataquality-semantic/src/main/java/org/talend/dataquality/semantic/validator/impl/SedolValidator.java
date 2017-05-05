@@ -13,7 +13,7 @@
 package org.talend.dataquality.semantic.validator.impl;
 
 import org.apache.commons.lang3.StringUtils;
-import org.talend.dataquality.semantic.validator.ISemanticValidator;
+import org.talend.dataquality.semantic.validator.ISemanticSubValidator;
 
 /**
  * SEDOL validator using checksum algorithm from http://rosettacode.org/wiki/SEDOLs#Java
@@ -22,7 +22,7 @@ import org.talend.dataquality.semantic.validator.ISemanticValidator;
  * @author mzhao
  *
  */
-public class SedolValidator implements ISemanticValidator {
+public class SedolValidator implements ISemanticSubValidator {
 
     private static final int[] mult = { 1, 3, 1, 7, 3, 9 };
 
@@ -42,11 +42,6 @@ public class SedolValidator implements ISemanticValidator {
         }
         int checksumFromSedol = getSedolCheckDigit(sedolStr);
         return checksum == checksumFromSedol;
-    }
-
-    @Override
-    public boolean isValid(String str, boolean caseSensitive) {
-        return isValid(str);
     }
 
     public int getSedolCheckDigit(String str) {
