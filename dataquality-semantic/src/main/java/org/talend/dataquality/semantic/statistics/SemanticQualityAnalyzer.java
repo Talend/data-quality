@@ -134,7 +134,7 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
             return;
         }
         if (category.getCompleteness() != null && category.getCompleteness().booleanValue()) {
-            if (isValid(category, category.getType(), value)) {
+            if (isValid(category, value)) {
                 valueQuality.incrementValid();
             } else {
                 valueQuality.incrementInvalid();
@@ -145,7 +145,7 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
         }
     }
 
-    private boolean isValid(DQCategory category, CategoryType catType, String value) {
+    private boolean isValid(DQCategory category, String value) {
         LFUCache<String, Boolean> categoryCache = knownValidationCategoryCache.get(category.getId());
 
         if (categoryCache == null) {
@@ -158,12 +158,11 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
             }
         }
         boolean validCat = false;
-        switch (catType) {
+        switch (category.getType()) {
         case REGEX:
             validCat = regexClassifier.validCategories(value, category, null);
             break;
         case DICT:
-
             validCat = dataDictClassifier.validCategories(value, category, null);
             break;
         case COMPOUND:

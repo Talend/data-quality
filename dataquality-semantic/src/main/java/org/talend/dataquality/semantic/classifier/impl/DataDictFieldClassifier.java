@@ -31,10 +31,11 @@ public class DataDictFieldClassifier implements ISubCategoryClassifier {
 
     private Index keyword;
 
+    private final int MAX_TOKEN_FOR_KEYWORDS = 3;
+
     public DataDictFieldClassifier(Index dictionary, Index keyword) {
         this.dictionary = dictionary;
         this.keyword = keyword;
-
     }
 
     @Override
@@ -44,7 +45,7 @@ public class DataDictFieldClassifier implements ISubCategoryClassifier {
 
         HashSet<String> result = new HashSet<>();
         // if it's a valid syntactic data --> search in DD
-        if (tokenCount < 3) {
+        if (tokenCount < MAX_TOKEN_FOR_KEYWORDS) {
             result.addAll(dictionary.findCategories(data));
         } else {
             result.addAll(dictionary.findCategories(data));
@@ -56,16 +57,7 @@ public class DataDictFieldClassifier implements ISubCategoryClassifier {
 
     @Override
     public boolean validCategories(String data, DQCategory semanticType, Set<DQCategory> children) {
-        StringTokenizer t = new StringTokenizer(data, " ");
-        final int tokenCount = t.countTokens();
-
-        boolean result = dictionary.validCategories(data, semanticType, children);
-        // if it's a valid syntactic data --> search in DD
-        if (!result && tokenCount >= 3) {
-            result = keyword.validCategories(data, semanticType, children);
-        }
-
-        return result;
+        return dictionary.validCategories(data, semanticType, children);
     }
 
     public void closeIndex() {
