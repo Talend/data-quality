@@ -181,9 +181,10 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
      */
     private ValidationMode getChildrenValidationMode(Set<DQCategory> children, Document document) {
         for (DQCategory child : children)
-            if (child.getId().equals(document.getField(DictionarySearcher.F_CATID).stringValue())
-                    && child.getValidationMode() != null)
+            if (child.getId().equals(document.getField(DictionarySearcher.F_CATID).stringValue()))
                 return child.getValidationMode() != null ? child.getValidationMode() : ValidationMode.EXACT;
+        // We should never enter here if everything went well, hence we log at an error level
+        LOGGER.error("The document does not belong to any children category");
         return ValidationMode.EXACT;
     }
 
