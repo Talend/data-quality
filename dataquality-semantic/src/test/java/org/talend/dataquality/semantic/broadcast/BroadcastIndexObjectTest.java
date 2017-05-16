@@ -83,13 +83,13 @@ public class BroadcastIndexObjectTest {
             }
             for (String key : TEST_INDEX_CONTENT.keySet()) {
                 Document doc = DictionaryUtils.generateDocument("TEST", key, key,
-                        new HashSet<>(Arrays.asList(TEST_INDEX_CONTENT.get(key))));
+                        new LinkedHashSet<>(Arrays.asList(TEST_INDEX_CONTENT.get(key))));
                 writer.addDocument(doc);
             }
 
             // here we add an extra document and remove it later.
             Document doc = DictionaryUtils.generateDocument("TEST", "DE_LAND", "DE_LAND",
-                    new HashSet<>(Arrays.asList(new String[] { "Bayern" })));
+                    new LinkedHashSet<>(Arrays.asList(new String[] { "Bayern" })));
             writer.addDocument(doc);
             writer.commit();
 

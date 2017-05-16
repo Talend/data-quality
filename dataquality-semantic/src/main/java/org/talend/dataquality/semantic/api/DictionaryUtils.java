@@ -14,10 +14,7 @@ package org.talend.dataquality.semantic.api;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -170,7 +167,7 @@ public class DictionaryUtils {
             String docId = doc.getField(DictionarySearcher.F_ID).stringValue();
             dqDoc.setId(docId);
             IndexableField[] synTermFields = doc.getFields(DictionarySearcher.F_RAW);
-            Set<String> synSet = new HashSet<>();
+            Set<String> synSet = new LinkedHashSet<>();
             for (IndexableField f : synTermFields) {
                 synSet.add(f.stringValue());
             }
