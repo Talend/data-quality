@@ -249,6 +249,17 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
     }
 
     /**
+     * Method "getSynonymsByDocNumber".
+     *
+     * @param docNo the doc number
+     * @return the synonyms or null if no document is found
+     */
+    public String[] getSynonymsByDocNumber(int docNo) {
+        Document document = getDocument(docNo);
+        return document != null ? document.getValues(F_RAW) : null;
+    }
+
+    /**
      * Method "getNumDocs".
      *
      * @return the number of documents in the index
