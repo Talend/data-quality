@@ -88,9 +88,6 @@ public class DictionaryUtils {
                     List<String> tokens = DictionarySearcher.getTokensFromAnalyzer(value);
                     doc.add(new StringField(DictionarySearcher.F_SYNTERM, StringUtils.join(tokens, ' '), Field.Store.NO));
                     doc.add(new Field(DictionarySearcher.F_RAW, value, FIELD_TYPE_RAW_VALUE));
-                    if (tokens.size() > 1) {
-                        doc.add(new Field(DictionarySearcher.F_SYN, value, FIELD_TYPE_SYN));
-                    }
                 }
             }
         }
