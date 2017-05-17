@@ -138,13 +138,15 @@ class DefaultCategoryRecognizer implements CategoryRecognizer {
     public String[] process(String data) {
         Set<String> ids = getSubCategorySet(data);
         Set<String> categories = new HashSet<>();
+        Set<String> categoriesAlreadySeen = new HashSet<>();
         if (!ids.isEmpty()) {
             for (String id : ids) {
+                categoriesAlreadySeen.add(id);
                 DQCategory meta = crm.getCategoryMetadataById(id);
                 if (meta != null) {
                     incrementCategory(meta.getName(), meta.getLabel());
                     if (!CollectionUtils.isEmpty(meta.getParents()))
-                        incrementAncestorsCategories(categories, id);
+                        incrementAncestorsCategories(categories, id, categoriesAlreadySeen);
                     categories.add(meta.getName());
                 }
             }
@@ -162,11 +164,11 @@ class DefaultCategoryRecognizer implements CategoryRecognizer {
      * 
      * @param categories, the category result
      * @param id, the category ID of the matched category c
+     * @param categoriesAlreadySeen, the categories already seen
      * 
      */
-    private void incrementAncestorsCategories(Set<String> categories, String id) {
+    private void incrementAncestorsCategories(Set<String> categories, String id, Set<String> categoriesAlreadySeen) {
         Deque<Pair<String, Integer>> catToSee = new ArrayDeque<>();
-        Set<String> catAlreadySeen = new HashSet<>();
         catToSee.add(Pair.of(id, 0));
         Pair<String, Integer> currentCategory;
         while (!catToSee.isEmpty()) {
@@ -175,8 +177,8 @@ class DefaultCategoryRecognizer implements CategoryRecognizer {
             if (dqCategory != null && !CollectionUtils.isEmpty(dqCategory.getParents())) {
                 int parentLevel = currentCategory.getRight() + 1;
                 for (DQCategory parent : dqCategory.getParents()) {
-                    if (!catAlreadySeen.contains(parent.getId())) {
-                        catAlreadySeen.add(parent.getId());
+                    if (!categoriesAlreadySeen.contains(parent.getId())) {
+                        categoriesAlreadySeen.add(parent.getId());
                         catToSee.add(Pair.of(parent.getId(), parentLevel));
                         DQCategory meta = crm.getCategoryMetadataById(parent.getId());
                         if (meta != null) {
