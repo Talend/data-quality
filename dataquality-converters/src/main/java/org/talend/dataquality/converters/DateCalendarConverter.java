@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2017 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -52,32 +52,32 @@ public class DateCalendarConverter {
     /**
      * the input date text format pattern, default is "yyyy-MM-dd".
      */
-    private String inputFormatPattern = DEFAULT_INPUT_PATTERN;
+    protected String inputFormatPattern = DEFAULT_INPUT_PATTERN;
 
     /**
      * the output date text format pattern, default is "yyyy-MM-dd".
      */
-    private String outputFormatPattern = DEFAULT_OUTPUT_PATTERN;
+    protected String outputFormatPattern = DEFAULT_OUTPUT_PATTERN;
 
     /**
      * an optional input Chronology. default is IsoChronology
      */
-    private Chronology inputChronologyType = IsoChronology.INSTANCE;
+    protected Chronology inputChronologyType = IsoChronology.INSTANCE;
 
     /**
      * an optional output Chronology. default is IsoChronology
      */
-    private Chronology outputChronologyType = IsoChronology.INSTANCE;
+    protected Chronology outputChronologyType = IsoChronology.INSTANCE;
 
     /**
      * the input DateTimeFormatter(which will be created with inputFormatPattern and inputChronologyType).
      */
-    private DateTimeFormatter inputDateTimeFormatter;
+    protected DateTimeFormatter inputDateTimeFormatter;
 
     /**
      * the output DateTimeFormatter(which will be created with outputFormatPattern and outputChronologyType).
      */
-    private DateTimeFormatter outputDateTimeFormatter;
+    protected DateTimeFormatter outputDateTimeFormatter;
 
     public DateCalendarConverter() {
         this(DEFAULT_INPUT_PATTERN, DEFAULT_OUTPUT_PATTERN, IsoChronology.INSTANCE, IsoChronology.INSTANCE, DEFAULT_INPUT_LOCALE,
