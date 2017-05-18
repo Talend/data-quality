@@ -15,14 +15,13 @@ package org.talend.dataquality.record.linkage.attribute;
 import org.apache.commons.codec.language.Soundex;
 import org.apache.log4j.Logger;
 import org.talend.dataquality.record.linkage.constant.AttributeMatcherType;
-import org.talend.dataquality.record.linkage.record.AbstractRecordMatcher;
 
 /**
  * DOC scorreia class global comment. Detailled comment
  */
 public class SoundexMatcher extends AbstractAttributeMatcher {
 
-    private static final Logger LOG = Logger.getLogger(AbstractRecordMatcher.class);
+    private static final Logger LOG = Logger.getLogger(SoundexMatcher.class);
 
     private static final long serialVersionUID = 5208397253497469289L;
 
