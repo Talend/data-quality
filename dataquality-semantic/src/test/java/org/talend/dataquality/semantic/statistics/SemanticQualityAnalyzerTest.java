@@ -19,7 +19,8 @@ import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.Analyzers;
 import org.talend.dataquality.common.inference.Analyzers.Result;
 import org.talend.dataquality.common.inference.ValueQualityStatistics;
-import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
+import org.talend.dataquality.semantic.api.CategoryRegistryManager;
+import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.recognizer.CategoryFrequency;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
 
@@ -32,6 +33,8 @@ public class SemanticQualityAnalyzerTest {
     private static final List<String[]> RECORDS_CREDIT_CARDS = getRecords("credit_card_number_samples.csv");
 
     private static final List<String[]> RECORDS_PHONES = getRecords("phone_number.csv");
+
+    public static final CategoryRegistryManager crm = CategoryRegistryManager.getInstance();
 
     private final String[] EXPECTED_CATEGORIES_DICT = new String[] { //
             "", //
@@ -138,7 +141,8 @@ public class SemanticQualityAnalyzerTest {
                     result.get(i).get(SemanticType.class).getSuggestedCategory());
             for (CategoryFrequency cf : stats.getCategoryToCount().keySet()) {
                 if (expectedCategories[i].equals(cf.getCategoryId())) {
-                    SemanticCategoryEnum cat = SemanticCategoryEnum.getCategoryById(cf.getCategoryId());
+                    // System.out.println(stats.getCategoryToCount().get(cf));
+                    DQCategory cat = crm.getCategoryMetadataByName(cf.getCategoryId());
                     if (cat != null && cat.getCompleteness()) {
                         assertEquals("Unexpected SemanticType occurence on column " + i, expectedValidityCountForDiscovery[i][0],
                                 cf.getCount());
