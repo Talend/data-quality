@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2015 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2017 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -40,28 +40,28 @@ import org.apache.commons.lang.StringUtils;
  */
 public class JulianDayConverter extends DateCalendarConverter {
 
-    /** if it covert a calendar date to Numerical days */
+    /** if it convert a calendar date to Numerical days */
     private boolean convertCalendarToTemporal = false;
 
     /**
-     * input TemporalField
+     * input TemporalField like as JulianFields and ChronoField.
      */
-    private TemporalField inputTemporFiled = null;
+    private TemporalField inputTemporalField = null;
 
     /**
-     * output outputTemporFiled
+     * output outputTemporFiled like as JulianFields and ChronoField.
      */
-    private TemporalField outputTemporFiled = null;
+    private TemporalField outputTemporalField = null;
 
     /**
      * 
      * Convert Chronology to TemporalField and using default pattern{@link super.DEFAULT_INPUT_PATTERN} to parse date.
      * 
      * @param inputChronologyType Chronology of the input date.
-     * @param outputjulianField Output TemproalFiled.
+     * @param outputTemporalField Output TemproalField like as JulianFields and ChronoField.
      */
-    public JulianDayConverter(Chronology inputChronologyType, TemporalField outputjulianField) {
-        this(inputChronologyType, null, null, outputjulianField);
+    public JulianDayConverter(Chronology inputChronologyType, TemporalField outputTemporalField) {
+        this(inputChronologyType, null, null, outputTemporalField);
 
     }
 
@@ -70,20 +70,17 @@ public class JulianDayConverter extends DateCalendarConverter {
      * Convert Chronology to TemporalField and using given inputFormatPattern to parse date.
      * 
      * @param inputChronologyType Chronology of the input date.
-     * @param outputjulianField Output TemproalFiled.
+     * @param outputTemporalField Output TemproalField like as JulianFields and ChronoField.
      * @param inputFormatPattern Pattern of the input date to convert.
-     * @param inputLocal Locale of the input date.
+     * @param inputLocale Locale of the input date.
      */
-    public JulianDayConverter(Chronology inputChronologyType, String inputFormatPattern, Locale inputLocal,
-            TemporalField outputjulianField) {
+    public JulianDayConverter(Chronology inputChronologyType, String inputFormatPattern, Locale inputLocale,
+            TemporalField outputTemporalField) {
         convertCalendarToTemporal = true;
         this.inputChronologyType = inputChronologyType;
         this.inputFormatPattern = inputFormatPattern != null ? inputFormatPattern : DEFAULT_INPUT_PATTERN;
-        this.outputTemporFiled = outputjulianField;
-        Locale locale = inputLocal;
-        if (locale == null) {
-            locale = Locale.getDefault(Locale.Category.FORMAT);
-        }
+        this.outputTemporalField = outputTemporalField;
+        Locale locale = inputLocale != null ? inputLocale : Locale.getDefault(Locale.Category.FORMAT);
         inputDateTimeFormatter = new DateTimeFormatterBuilder().parseLenient().appendPattern(this.inputFormatPattern)
                 .toFormatter(locale).withChronology(this.inputChronologyType).withDecimalStyle(DecimalStyle.of(locale));
 
@@ -93,11 +90,11 @@ public class JulianDayConverter extends DateCalendarConverter {
      * 
      * Convert TemporalField to Chronology and output String use default locale and pattern.
      * 
-     * @param inputJulianField Input TemporalField.
+     * @param inputTemporalField Input TemporalField like as JulianFields and ChronoField.
      * @param outputChronologyType Chronology we want to use to convert the date.
      */
-    public JulianDayConverter(TemporalField inputJulianField, Chronology outputChronologyType) {
-        this(inputJulianField, outputChronologyType, null, null);
+    public JulianDayConverter(TemporalField inputTemporalField, Chronology outputChronologyType) {
+        this(inputTemporalField, outputChronologyType, null, null);
 
     }
 
@@ -105,22 +102,19 @@ public class JulianDayConverter extends DateCalendarConverter {
      * 
      * Convert TemporalField to Chronology and output String use given locale and pattern.
      * 
-     * @param inputJulianField Input TemporalField.
+     * @param inputTemporalField Input TemporalField like as JulianFields and ChronoField.
      * @param outputChronologyType Chronology we want to use to convert the date.
      * @param outputFormatPattern Pattern of the Chronology date.
-     * @param outputLocale Locale of the converted date
+     * @param outputLocale Locale of the converted date.
      */
-    public JulianDayConverter(TemporalField inputJulianField, Chronology outputChronologyType, String outputFormatPattern,
+    public JulianDayConverter(TemporalField inputTemporalField, Chronology outputChronologyType, String outputFormatPattern,
             Locale outputLocale) {
         convertCalendarToTemporal = false;
-        this.inputTemporFiled = inputJulianField;
+        this.inputTemporalField = inputTemporalField;
         this.outputChronologyType = outputChronologyType;
         this.outputFormatPattern = outputFormatPattern != null ? outputFormatPattern : DEFAULT_OUTPUT_PATTERN;
-        Locale locale = outputLocale;
-        if (locale == null) {
-            locale = Locale.getDefault(Locale.Category.FORMAT);
-        }
-        inputDateTimeFormatter = new DateTimeFormatterBuilder().parseLenient().appendValue(inputTemporFiled).toFormatter()
+        Locale locale = outputLocale != null ? outputLocale : Locale.getDefault(Locale.Category.FORMAT);
+        inputDateTimeFormatter = new DateTimeFormatterBuilder().parseLenient().appendValue(inputTemporalField).toFormatter()
                 .withDecimalStyle(DecimalStyle.of(locale));
         outputDateTimeFormatter = new DateTimeFormatterBuilder().parseLenient().appendPattern(this.outputFormatPattern)
                 .toFormatter(locale).withChronology(this.outputChronologyType).withDecimalStyle(DecimalStyle.of(locale));
@@ -131,22 +125,21 @@ public class JulianDayConverter extends DateCalendarConverter {
      * 
      * Convert a TemporalField to another TemporalField
      * 
-     * @param inputTemporFiled Input TemporalField.
-     * @param outputTemporFiled Output TemporalField.
+     * @param inputTemporalField Input TemporalField like as JulianFields and ChronoField.
+     * @param outputTemporalField Output TemporalField like as JulianFields and ChronoField.
      */
-    public JulianDayConverter(TemporalField inputTemporFiled, TemporalField outputTemporFiled) {
+    public JulianDayConverter(TemporalField inputTemporalField, TemporalField outputTemporalField) {
         convertCalendarToTemporal = false;
-        this.inputTemporFiled = inputTemporFiled;
-        this.outputTemporFiled = outputTemporFiled;
-        inputDateTimeFormatter = new DateTimeFormatterBuilder().parseLenient().appendValue(inputTemporFiled).toFormatter()
-                // .withChronology(this.inputChronologyType)
+        this.inputTemporalField = inputTemporalField;
+        this.outputTemporalField = outputTemporalField;
+        inputDateTimeFormatter = new DateTimeFormatterBuilder().parseLenient().appendValue(inputTemporalField).toFormatter()
                 .withDecimalStyle(DecimalStyle.of(Locale.getDefault(Locale.Category.FORMAT)));
     }
 
     /**
-     * 1.Calendar convert to TemporalFiled
-     * 2.TemporalFiled convert to Calendar
-     * 3.TemporalFiled convert to another TemporalFiled
+     * 1.Calendar convert to TemporalField
+     * 2.TemporalField convert to Calendar
+     * 3.TemporalField convert to another TemporalField
      * if fail to parse a String,return original value.
      */
     @Override
@@ -159,12 +152,12 @@ public class JulianDayConverter extends DateCalendarConverter {
         if (localDate == null) {
             return outputDateStr;
         }
-        if (convertCalendarToTemporal) {// Calendar->TemporalFiled
-            outputDateStr = Long.toString(localDate.getLong(outputTemporFiled));
+        if (convertCalendarToTemporal) {// Calendar->TemporalField
+            outputDateStr = Long.toString(localDate.getLong(outputTemporalField));
         } else {
-            if (inputTemporFiled != null && outputTemporFiled != null) {// TemporalFiled->another TemporalFiled
-                outputDateStr = Long.toString(localDate.getLong(outputTemporFiled));
-            } else {// TemporalFiled->Calendar
+            if (inputTemporalField != null && outputTemporalField != null) {// TemporalField->another TemporalField
+                outputDateStr = Long.toString(localDate.getLong(outputTemporalField));
+            } else {// TemporalField->Calendar
                 outputDateStr = formatDateToString(localDate);
             }
         }
