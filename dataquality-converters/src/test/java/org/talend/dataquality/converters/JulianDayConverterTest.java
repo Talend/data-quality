@@ -21,9 +21,9 @@ import java.time.chrono.MinguoChronology;
 import java.time.chrono.ThaiBuddhistChronology;
 import java.time.temporal.ChronoField;
 import java.time.temporal.JulianFields;
+import java.util.Locale;
 
 import org.junit.Test;
-
 
 /**
  * DOC qiongli class global comment. Detailled comment
@@ -47,7 +47,6 @@ public class JulianDayConverterTest {
     private String rataDie = "736467"; //$NON-NLS-1$
 
     private String epochDay = "17304"; //$NON-NLS-1$
-
 
     @Test
     public void testJulianToCalendar() {
@@ -135,7 +134,6 @@ public class JulianDayConverterTest {
 
         jc = new JulianDayConverter(IsoChronology.INSTANCE, JulianFields.RATA_DIE);
         assertEquals(rataDie, jc.convert(calendarISO));
-
     }
 
     @Test
@@ -248,7 +246,6 @@ public class JulianDayConverterTest {
 
     @Test
     public void testInvalidConvert() {
-
         JulianDayConverter jc = new JulianDayConverter(JulianFields.JULIAN_DAY, IsoChronology.INSTANCE);
         assertEquals(null, jc.convert(null));
 
@@ -256,10 +253,42 @@ public class JulianDayConverterTest {
         assertEquals("", jc.convert("")); //$NON-NLS-1$ //$NON-NLS-2$
 
         jc = new JulianDayConverter(IsoChronology.INSTANCE, JulianFields.JULIAN_DAY);
-        assertEquals("abc", jc.convert("abc")); //$NON-NLS-1$ //$NON-NLS-2$
-        
+
+        // invalid pattern for Julian day.
+        jc = new JulianDayConverter(IsoChronology.INSTANCE, "yyyy/MM/dd", Locale.UK, JulianFields.JULIAN_DAY); //$NON-NLS-1$
+        assertEquals(calendarISO, jc.convert(calendarISO));
+
+        jc = new JulianDayConverter(JapaneseChronology.INSTANCE, "dd/MM/yyyy", Locale.US, JulianFields.JULIAN_DAY); //$NON-NLS-1$
+        assertEquals(calendarJapa, jc.convert(calendarJapa));
+
         jc = new JulianDayConverter(IsoChronology.INSTANCE, null);
         assertEquals("abc", jc.convert("abc")); //$NON-NLS-1$ //$NON-NLS-2$
+    }
+
+    @Test
+    public void testCalendarToNumberWithInputMonthLabel() {
+        JulianDayConverter jc = new JulianDayConverter(IsoChronology.INSTANCE, "dd-LLL-yyyy", Locale.UK, JulianFields.JULIAN_DAY); //$NON-NLS-1$
+        assertEquals(julianDay, jc.convert("18-May-2017")); //$NON-NLS-1$
+        jc = new JulianDayConverter(IsoChronology.INSTANCE, "yyyy-LLL-dd", //$NON-NLS-1$
+                Locale.CHINESE, JulianFields.MODIFIED_JULIAN_DAY);
+        assertEquals(modiJulianDay, jc.convert("2017-五月-18")); //$NON-NLS-1$
+        jc = new JulianDayConverter(IsoChronology.INSTANCE, "dd-LLL-yyyy HH:mm:ss", Locale.UK, JulianFields.RATA_DIE); //$NON-NLS-1$
+        assertEquals(rataDie, jc.convert("18-May-2017 02:03:04")); //$NON-NLS-1$
+        // Don't remove these case!Locale.US with 'LLLL' format doesn't work for JDK 8,it should be work for JDK9.
+        //        jc = new JulianDayConverter(JulianFields.JULIAN_DAY, IsoChronology.INSTANCE, "dd-LLL-yyyy", Locale.UK); //$NON-NLS-1$
+        //        assertEquals("18-May-2017", jc.convert(julianDay)); //$NON-NLS-1$
+    }
+
+    @Test
+    public void testNumberToCalendarWithOutputPattern() {
+        JulianDayConverter jc = new JulianDayConverter(JulianFields.JULIAN_DAY, IsoChronology.INSTANCE, "dd/MM/yyyy", Locale.UK); //$NON-NLS-1$
+        assertEquals("18/05/2017", jc.convert(julianDay)); //$NON-NLS-1$
+
+        jc = new JulianDayConverter(JulianFields.MODIFIED_JULIAN_DAY, IsoChronology.INSTANCE, "dd/LLL/yyyy", Locale.CHINESE); //$NON-NLS-1$
+        assertEquals("18/五月/2017", jc.convert(modiJulianDay)); //$NON-NLS-1$
+
+        jc = new JulianDayConverter(JapaneseChronology.INSTANCE, null, Locale.US, JulianFields.MODIFIED_JULIAN_DAY);
+        assertEquals(modiJulianDay, jc.convert(calendarJapa));
     }
 
 }
