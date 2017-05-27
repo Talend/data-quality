@@ -243,6 +243,7 @@ public class PatternListGenerator {
         patternList.add(new LocaledPattern("yyyyMMddZ", Locale.US, "BASIC_ISO_DATE", false));
         patternList.add(new LocaledPattern("yyyyMMdd", Locale.US, "BASIC_ISO_DATE", false));
         // 2. ISO_DATE
+        patternList.add(new LocaledPattern("yyyy-MM-ddG", Locale.US, "ISO_DATE", false));// 2017-05-27AD
         patternList.add(new LocaledPattern("yyyy-MM-ddXXX", Locale.US, "ISO_DATE", false));
         patternList.add(new LocaledPattern("yyyy-MM-dd", Locale.US, "ISO_DATE", false));
         // 3. ISO_DATE_TIME

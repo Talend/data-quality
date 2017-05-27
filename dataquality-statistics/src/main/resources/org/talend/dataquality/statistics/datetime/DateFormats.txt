@@ -158,6 +158,7 @@ en_US	dd/MMM/yy h:mm a
 en_US	yyyy/M/d
 en_US	yyyyMMddZ
 en_US	yyyyMMdd
+en_US	yyyy-MM-ddG
 en_US	yyyy-MM-ddXXX
 en_US	yyyy-MM-dd'T'HH:mm:ss.SSS'['VV']'
 en_US	yyyy-MM-dd'T'HH:mm:ss.SSS
