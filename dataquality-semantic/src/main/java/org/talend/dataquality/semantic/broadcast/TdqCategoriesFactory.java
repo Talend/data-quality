@@ -3,7 +3,9 @@ package org.talend.dataquality.semantic.broadcast;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.store.Directory;
@@ -25,12 +27,7 @@ public class TdqCategoriesFactory {
      * @return the serializable object
      */
     public static final TdqCategories createTdqCategories() {
-        final Collection<DQCategory> dqCats = CategoryRegistryManager.getInstance().listCategories(false);
-        final Set<String> catNames = new HashSet<>();
-        for (DQCategory cat : dqCats) {
-            catNames.add(cat.getName());
-        }
-        return createTdqCategories(catNames);
+        return createTdqCategories(null);
     }
 
     /**
@@ -39,12 +36,12 @@ public class TdqCategoriesFactory {
      * @param categories
      * @return the serializable object
      */
-    public static final TdqCategories createTdqCategories(Set<String> categories) {
+    public static final TdqCategories createTdqCategories(Set<String> categoryNames) {
         CategoryRegistryManager crm = CategoryRegistryManager.getInstance();
-        final Map<String, DQCategory> dqCategoryMap = new HashMap<>();
+        final Map<String, DQCategory> selectedCategoryMap = new HashMap<>();
         for (DQCategory dqCat : crm.listCategories(false)) {
-            if (categories.contains(dqCat.getName())) {
-                dqCategoryMap.put(dqCat.getId(), dqCat);
+            if (categoryNames == null || categoryNames.contains(dqCat.getName())) {
+                selectedCategoryMap.put(dqCat.getId(), dqCat);
             }
         }
         final BroadcastIndexObject dictionary;
@@ -53,17 +50,17 @@ public class TdqCategoriesFactory {
         final BroadcastMetadataObject meta;
         try {
             try (Directory ddDir = FSDirectory.open(new File(crm.getDictionaryURI()))) {
-                dictionary = new BroadcastIndexObject(ddDir, categories);
+                dictionary = new BroadcastIndexObject(ddDir, selectedCategoryMap.keySet());
                 LOGGER.debug("Returning dictionary at path '{" + crm.getDictionaryURI() + "}'.");
             }
             try (Directory kwDir = FSDirectory.open(new File(crm.getKeywordURI()))) {
-                keyword = new BroadcastIndexObject(kwDir, categories);
+                keyword = new BroadcastIndexObject(kwDir, selectedCategoryMap.keySet());
                 LOGGER.debug("Returning keywords at path '{" + crm.getRegexURI() + "}'.");
             }
             UserDefinedClassifier classifiers = crm.getRegexClassifier(true);
-            regex = new BroadcastRegexObject(classifiers, categories);
+            regex = new BroadcastRegexObject(classifiers, selectedCategoryMap.keySet());
             LOGGER.debug("Returning regexes at path '{" + crm.getRegexURI() + "}'.");
-            meta = new BroadcastMetadataObject(dqCategoryMap);
+            meta = new BroadcastMetadataObject(selectedCategoryMap);
             LOGGER.debug("Returning category metadata.");
             return new TdqCategories(meta, dictionary, keyword, regex);
         } catch (URISyntaxException | IOException e) {

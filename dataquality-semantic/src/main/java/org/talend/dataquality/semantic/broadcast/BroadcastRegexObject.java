@@ -48,7 +48,7 @@ public class BroadcastRegexObject implements Serializable {
     public BroadcastRegexObject(UserDefinedClassifier udc, Set<String> categories) {
         this.regexClassifier = new UserDefinedClassifier();
         for (ISubCategory c : udc.getClassifiers()) {
-            if (categories.contains(c.getName())) {
+            if (categories.contains(c.getId())) {
                 this.regexClassifier.addSubCategory(c);
             }
         }

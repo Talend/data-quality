@@ -61,7 +61,7 @@ public class TdqCategoriesFactoryTest {
     }
 
     @Test
-    public void testCreateTdqCategoriesWithSpecifiedKeywordCategory() throws IOException {
+    public void testCreateTdqCategoriesWithSpecifiedRegexCategory() throws IOException {
         TdqCategories cats = TdqCategoriesFactory
                 .createTdqCategories(new HashSet<String>(Arrays.asList(new String[] { SemanticCategoryEnum.EMAIL.name() })));
 

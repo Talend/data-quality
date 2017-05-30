@@ -66,7 +66,8 @@ class BroadcastUtils {
     /**
      * initialize a list of serializable BroadcastDocumentObject from existing lucene Directory
      */
-    static List<BroadcastDocumentObject> readDocumentsFromIndex(Directory indexDir, Set<String> catNames) throws IOException {
+    static List<BroadcastDocumentObject> readDocumentsFromIndex(Directory indexDir, Set<String> selectedCategoryIds)
+            throws IOException {
         List<BroadcastDocumentObject> dictionaryObject = new ArrayList<>();
         DirectoryReader reader = DirectoryReader.open(indexDir);
         Bits liveDocs = MultiFields.getLiveDocs(reader);
@@ -75,10 +76,9 @@ class BroadcastUtils {
                 continue;
             }
             Document doc = reader.document(i);
-            String category = doc.getField(DictionarySearcher.F_WORD).stringValue();
-            if (catNames.contains(category)) {
-                String catId = doc.getField(DictionarySearcher.F_CATID).stringValue();
-                Set<String> valueSet = new HashSet<String>();
+            String catId = doc.getField(DictionarySearcher.F_CATID).stringValue();
+            if (selectedCategoryIds.contains(catId)) {
+                Set<String> valueSet = new HashSet<>();
                 // original values must be read from the F_RAW field
                 for (IndexableField syntermField : doc.getFields(DictionarySearcher.F_RAW)) {
                     valueSet.add(syntermField.stringValue());
