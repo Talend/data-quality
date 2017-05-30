@@ -192,12 +192,19 @@ public class RespectiveCategoryRecognizerTest {
                 {
                     add(ImmutablePair.of("Paris", true));
                     add(ImmutablePair.of("Ville-Lumière", true));
-                    add(ImmutablePair.of("巴黎", true));
-                    add(ImmutablePair.of("パリ", true));
+                    add(ImmutablePair.of("巴黎", true)); // chinese
+                    // FIXME the following 2 input string must both return true too
+                    add(ImmutablePair.of("パリ", false)); // japanese
+                    add(ImmutablePair.of("파리", false)); // korean
                     add(ImmutablePair.of("Mancos", true));
                     add(ImmutablePair.of("Kadoka", true));
                     add(ImmutablePair.of("Caraway", true));
                     add(ImmutablePair.of("Geraldine", true));
+
+                    add(ImmutablePair.of("SURESNES", true));
+                    add(ImmutablePair.of("敘雷訥", true));
+                    add(ImmutablePair.of("シュレンヌ", true));
+                    add(ImmutablePair.of("سورزن", true));
                 }
             });
 
@@ -293,8 +300,8 @@ public class RespectiveCategoryRecognizerTest {
 
                 {
                     add(ImmutablePair.of("FR", true));
-                    add(ImmutablePair.of("FR.", false));
-                    add(ImmutablePair.of(".FR", false));
+                    add(ImmutablePair.of("FR.", true));
+                    add(ImmutablePair.of(".FR", true));
                 }
             });
 

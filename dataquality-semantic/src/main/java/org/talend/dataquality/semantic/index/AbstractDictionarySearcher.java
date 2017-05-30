@@ -133,10 +133,6 @@ public abstract class AbstractDictionarySearcher {
         } catch (IOException e) {
             LOGGER.debug(e);
         }
-        if (termList.size() == 1) { // require exact match when the input has only one token
-            termList.clear();
-            termList.add(StringUtils.stripAccents(input.toLowerCase()));
-        }
         return termList;
     }
 
