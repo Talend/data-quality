@@ -21,7 +21,12 @@ import java.time.chrono.IsoChronology;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.FormatStyle;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 import org.talend.dataquality.statistics.datetime.SystemDateTimePatternManager;
@@ -243,7 +248,7 @@ public class PatternListGenerator {
         patternList.add(new LocaledPattern("yyyyMMddZ", Locale.US, "BASIC_ISO_DATE", false));
         patternList.add(new LocaledPattern("yyyyMMdd", Locale.US, "BASIC_ISO_DATE", false));
         // 2. ISO_DATE
-        patternList.add(new LocaledPattern("yyyy-MM-ddG", Locale.US, "ISO_DATE", false));// 2017-05-27AD
+        patternList.add(new LocaledPattern("yyyy-MM-dd G", Locale.US, "ISO_DATE", false));// 2017-05-27 AD
         patternList.add(new LocaledPattern("yyyy-MM-ddXXX", Locale.US, "ISO_DATE", false));
         patternList.add(new LocaledPattern("yyyy-MM-dd", Locale.US, "ISO_DATE", false));
         // 3. ISO_DATE_TIME
