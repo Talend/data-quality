@@ -72,7 +72,7 @@ public class RegexGenerator {
             put("VV", "\\p{L}{4,10}\\/\\p{L}{4,15}");
 
             // replace the 'G' char by AD|BC
-            put("G", "\\p{L}{2}");
+            put("G", "(AD|BC)");
 
             put("'", "");
         }

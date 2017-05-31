@@ -13,3 +13,6 @@ value5
 32/5/2015
 
 11 Oct 16 // unsupported pattern
+
+2017-05-27 ADB
+2017-05-27 ADBC
