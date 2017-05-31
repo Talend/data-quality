@@ -32,7 +32,7 @@ public enum SemanticCategoryEnum {
     ANIMAL("5836fb6f42b02a69874f3a95", "Animal", "Animal (multilingual)", CategoryType.DICT, false),
     ANSWER("5836fb7042b02a69874f3aff", "Answer", "Yes/No (in EN, FR, DE and ES)", CategoryType.DICT, false),
     AIRPORT("5836fb7042b02a69874f3b0b", "Airport", "Airport name", CategoryType.DICT, false),
-    AIRPORT_CODE("5836fb7642b02a69874f77e3", "Airport Code", "Airport name", CategoryType.DICT, true),
+    AIRPORT_CODE("5836fb7642b02a69874f77e3", "Airport Code", "Airport code", CategoryType.DICT, true),
     CIVILITY("5836fbb042b02a698752e66b", "Civility", "Civility (multilingual)", CategoryType.DICT, true),
     CONTINENT("5836fbb042b02a698752e679", "Continent", "Continent name (multilingual)", CategoryType.DICT, true),
     CONTINENT_CODE("5836fbb042b02a698752e68f", "Continent Code", "Continent code", CategoryType.DICT, true),

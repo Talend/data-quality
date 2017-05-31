@@ -135,11 +135,11 @@ public class DictionaryUtils {
                 Field.Store.YES));
         doc.add(new TextField(DictionaryConstants.DESCRIPTION, cat.getDescription(), Field.Store.YES));
         if (cat.getValidationMode() != null)
-            doc.add(new TextField(DictionaryConstants.VALIDATION_MODE, cat.getValidationMode().name(), Field.Store.YES));
+            doc.add(new StringField(DictionaryConstants.VALIDATION_MODE, cat.getValidationMode().name(), Field.Store.YES));
 
         if (!CollectionUtils.isEmpty(cat.getChildren()))
             for (DQCategory child : cat.getChildren())
-                doc.add(new TextField(DictionaryConstants.CHILD, child.getId(), Field.Store.YES));
+                doc.add(new StringField(DictionaryConstants.CHILD, child.getId(), Field.Store.YES));
         return doc;
     }
 

@@ -29,7 +29,7 @@ public class TdqCategoriesFactoryTest {
         TdqCategories cats = TdqCategoriesFactory.createTdqCategories();
 
         Map<String, DQCategory> meta = cats.getCategoryMetadata().get();
-        assertEquals("Unexpected metadata size!", 73, meta.values().size());
+        assertEquals("Unexpected metadata size!", 75, meta.values().size());
 
         for (DQCategory value : expectedCategories) {
             assertTrue("This category is not found in metadata: " + value, meta.values().contains(value));

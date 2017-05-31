@@ -193,9 +193,8 @@ public class RespectiveCategoryRecognizerTest {
                     add(ImmutablePair.of("Paris", true));
                     add(ImmutablePair.of("Ville-Lumière", true));
                     add(ImmutablePair.of("巴黎", true)); // chinese
-                    // FIXME the following 2 input string must both return true too
-                    add(ImmutablePair.of("パリ", false)); // japanese
-                    add(ImmutablePair.of("파리", false)); // korean
+                    add(ImmutablePair.of("パリ", true)); // japanese
+                    add(ImmutablePair.of("파리", true)); // korean
                     add(ImmutablePair.of("Mancos", true));
                     add(ImmutablePair.of("Kadoka", true));
                     add(ImmutablePair.of("Caraway", true));
