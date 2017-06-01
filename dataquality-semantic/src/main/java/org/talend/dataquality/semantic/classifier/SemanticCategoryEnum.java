@@ -12,8 +12,6 @@
 // ============================================================================
 package org.talend.dataquality.semantic.classifier;
 
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
@@ -109,8 +107,8 @@ public enum SemanticCategoryEnum {
     /**
      * the categories defined in Keyword index
      */
-    ADDRESS_LINE("58eb5a0deee16441b0d2d76c", "Address Line", "Address line which contains STREET_TYPE keyword", CategoryType.DICT, false),
-    FULL_NAME("58eb5a0feee16441b0d2d792", "Full Name", "Full name which contains CIVILITY keyword", CategoryType.DICT, false),
+    ADDRESS_LINE("58eb5a0deee16441b0d2d76c", "Address Line", "Address line which contains STREET_TYPE keyword", CategoryType.KEYWORD, false),
+    FULL_NAME("58eb5a0feee16441b0d2d792", "Full Name", "Full name which contains CIVILITY keyword", CategoryType.KEYWORD, false),
 
     /**
      * the categories defined in categorizer.json
@@ -119,29 +117,29 @@ public enum SemanticCategoryEnum {
     BANK_ROUTING_TRANSIT_NUMBER(
             "583edc44ec06957a34fa6450",
             "Bank Routing Transit Number",
-            "Bank routing transit Number",
+            "Bank routing transit number",
             CategoryType.REGEX,
             true),
     BE_POSTAL_CODE("583edc44ec06957a34fa6480", "BE Postal Code", "Belgium postal code", CategoryType.REGEX, true),
     BG_VAT_NUMBER("583edc44ec06957a34fa6432", "BG VAT Number", "Bulgaria VAT number", CategoryType.REGEX, true),
     COLOR_HEX_CODE("583edc44ec06957a34fa6476", "Color Hex Code", "Color hexadecimal code", CategoryType.REGEX, true),
-    EMAIL("583edc44ec06957a34fa6430", "Email", "email", CategoryType.REGEX, true),
+    EMAIL("583edc44ec06957a34fa6430", "Email", "Email address", CategoryType.REGEX, true),
     EN_MONEY_AMOUNT(
             "583edc44ec06957a34fa644e",
             "Money Amount (EN)",
             "Amount of money in English format",
             CategoryType.REGEX,
             true),
-    EN_MONTH("583edc44ec06957a34fa6456", "EN Month", "Month in English", CategoryType.REGEX, true),
-    EN_MONTH_ABBREV("583edc44ec06957a34fa646a", "EN Month Abbrev", "Month English abbreviation", CategoryType.REGEX, true),
-    EN_WEEKDAY("583edc44ec06957a34fa643a", "EN Weekday", "Weekday or their abbreviation", CategoryType.REGEX, true),
+    EN_MONTH("583edc44ec06957a34fa6456", "EN Month", "Month in English", CategoryType.DICT, true),
+    EN_MONTH_ABBREV("583edc44ec06957a34fa646a", "EN Month Abbrev", "Month English abbreviation", CategoryType.DICT, true),
+    EN_WEEKDAY("583edc44ec06957a34fa643a", "EN Weekday", "Weekday or their abbreviation", CategoryType.DICT, true),
     FR_MONEY_AMOUNT(
             "583edc44ec06957a34fa6468",
             "Money Amount (FR)",
             "Amount of money in French format",
             CategoryType.REGEX,
             true),
-    FR_PHONE("583edc44ec06957a34fa646c", "FR Phone", "French Phone Number", CategoryType.REGEX, true),
+    FR_PHONE("583edc44ec06957a34fa646c", "FR Phone", "French phone number", CategoryType.REGEX, true),
     FR_POSTAL_CODE("583edc44ec06957a34fa643c", "FR Postal Code", "French postal code", CategoryType.REGEX, true),
     FR_CODE_COMMUNE_INSEE(
             "583edc44ec06957a34fa645e",
@@ -149,13 +147,13 @@ public enum SemanticCategoryEnum {
             "French Insee code of cities with Corsica and colonies",
             CategoryType.REGEX,
             true),
-    FR_SSN("583edc44ec06957a34fa6444", "FR Social Security Number", "French Social Security Number", CategoryType.REGEX, true),
+    FR_SSN("583edc44ec06957a34fa6444", "FR Social Security Number", "French social security number", CategoryType.REGEX, true),
     FR_VAT_NUMBER("583edc44ec06957a34fa6478", "FR VAT Number", "French VAT number", CategoryType.REGEX, true),
-    US_PHONE("583edc44ec06957a34fa645c", "US Phone", "US Phone Number", CategoryType.REGEX, true),
+    US_PHONE("583edc44ec06957a34fa645c", "US Phone", "American phone number", CategoryType.REGEX, true),
     US_POSTAL_CODE("583edc44ec06957a34fa6488", "US Postal Code", "US postal code", CategoryType.REGEX, true),
-    US_SSN("583edc44ec06957a34fa642e", "US Social Security Number", "US Social Security number", CategoryType.REGEX, true),
-    US_STATE("583edc44ec06957a34fa6470", "US State", "US states", CategoryType.REGEX, true),
-    US_STATE_CODE("583edc44ec06957a34fa6474", "US State Code", "US State code", CategoryType.REGEX, true),
+    US_SSN("583edc44ec06957a34fa642e", "US Social Security Number", "US social security number", CategoryType.REGEX, true),
+    US_STATE("583edc44ec06957a34fa6470", "US State", "US states", CategoryType.DICT, true),
+    US_STATE_CODE("583edc44ec06957a34fa6474", "US State Code", "US state code", CategoryType.DICT, true),
     DE_PHONE("583edc44ec06957a34fa643e", "DE Phone", "German phone number", CategoryType.REGEX, true),
     DE_POSTAL_CODE("583edc44ec06957a34fa647c", "DE Postal Code", "German postal code", CategoryType.REGEX, true),
     UK_PHONE("583edc44ec06957a34fa647e", "UK Phone", "UK phone number", CategoryType.REGEX, true),
@@ -163,7 +161,7 @@ public enum SemanticCategoryEnum {
     UK_SSN(
             "583edc44ec06957a34fa644c",
             "UK Social Security Number",
-            "national identification number, national identity number, or national insurance number generally called an NI Number (NINO)",
+            "National Insurance number, generally called an NI Number (NINO)",
             CategoryType.REGEX,
             true),
     GEO_COORDINATES(
@@ -189,7 +187,7 @@ public enum SemanticCategoryEnum {
             true),
     GEO_COORDINATES_DEG(
             "583edc44ec06957a34fa6462",
-            "Geographic coordinates (degrees)",
+            "Geographic Coordinates (degree)",
             "Latitude and longitude coordinates separated by a comma in the form: N 0:59:59.99,E 0:59:59.99",
             CategoryType.REGEX,
             true),
@@ -199,19 +197,36 @@ public enum SemanticCategoryEnum {
     VISA_CARD("583edc44ec06957a34fa6440", "Visa Card", "Visa card", CategoryType.REGEX, true),
     PASSPORT("583edc44ec06957a34fa6486", "Passport", "Passport number", CategoryType.REGEX, true),
     SEDOL("583edc44ec06957a34fa6484", "SEDOL", "Stock Exchange Daily Official List", CategoryType.REGEX, true),
-    SE_SSN("583edc44ec06957a34fa6448", "SE Social Security Number", "Swedish person number", CategoryType.REGEX, true),
-    URL("583edc44ec06957a34fa6434", "Web URL", "Web site URL", CategoryType.REGEX, true),
-    WEB_DOMAIN("583edc44ec06957a34fa642c", "Web Domain", "Web site domain", CategoryType.REGEX, true),
+    SE_SSN(
+            "583edc44ec06957a34fa6448",
+            "SE Social Security Number",
+            "The personal identity number (Swedish: personnummer) is the Swedish national identification number.",
+            CategoryType.REGEX,
+            true),
+    URL("583edc44ec06957a34fa6434", "URL", "Website URL", CategoryType.REGEX, true),
+    WEB_DOMAIN("583edc44ec06957a34fa642c", "Web Domain", "Website domain", CategoryType.REGEX, true),
     HDFS_URL("583edc44ec06957a34fa647a", "HDFS URL", "HDFS URL", CategoryType.REGEX, true),
-    FILE_URL("583edc44ec06957a34fa6472", "File URL", "File URL", CategoryType.REGEX, true),
-    MAILTO_URL("583edc44ec06957a34fa645a", "MailTo URL", "MailTo URL", CategoryType.REGEX, true),
-    DATA_URL("583edc44ec06957a34fa6464", "Data URL", "Data URL", CategoryType.REGEX, true),
+    FILE_URL("583edc44ec06957a34fa6472", "File URL", "FILE URL", CategoryType.REGEX, true),
+    MAILTO_URL("583edc44ec06957a34fa645a", "MailTo URL", "MAIL TO URL", CategoryType.REGEX, true),
+    DATA_URL("583edc44ec06957a34fa6464", "Data URL", "DATA URL", CategoryType.REGEX, true),
     IBAN("583edc44ec06957a34fa6460", "IBAN", "IBAN", CategoryType.REGEX, true),
 
     /**
      * Compound Types
      */
     PHONE("58f9d2e8b45fc36367e8bc38", "Phone number", "Phone number (DE, FR, UK, US)", CategoryType.COMPOUND, true),
+    NA_STATE(
+            "5911906440161c655fd8b681",
+            "North American state",
+            "North American state groups together US and Canadian states",
+            CategoryType.COMPOUND,
+            true),
+    NA_STATE_CODE(
+            "591191f640161c655fd8b682",
+            "North American state code",
+            "North American state code groups together US and Canadian state codes",
+            CategoryType.COMPOUND,
+            true),
 
     /**
      * the categories with specific implementations
@@ -269,9 +284,9 @@ public enum SemanticCategoryEnum {
     }
 
     /**
-     * @deprecated use {@link CategoryRegistryManager.getInstance(contextName).getCategoryLabel()} instead
+     * Get a category by its functional ID.
+     * Note: this method is called mainly for category sorting purpose, and it will return null for user categories.
      */
-    @Deprecated
     public static SemanticCategoryEnum getCategoryById(String catId) {
         if ("".equals(catId)) {
             return UNKNOWN;
@@ -283,19 +298,43 @@ public enum SemanticCategoryEnum {
         }
     }
 
+    /**
+     * Run the program to check it the content of this enumeration is identical to the metadata in lucene index.
+     */
     public static void main(String[] args) {
-        Collection<DQCategory> cats = CategoryRegistryManager.getInstance().listCategories();
-        Map<String, DQCategory> idMap = new HashMap<String, DQCategory>();
-        for (DQCategory cat : cats) {
-            idMap.put(cat.getName(), cat);
+        Map<String, DQCategory> idMap = CategoryRegistryManager.getInstance().getCategoryMetadataMap();
+
+        int count = 0;
+        for (SemanticCategoryEnum catEnum : SemanticCategoryEnum.values()) {
+            DQCategory meta = idMap.get(catEnum.getTechnicalId());
+            if (meta != null) {
+                String enumString = catEnum.name() + "(\"" + meta.getId() + "\", \"" + catEnum.getDisplayName() + "\", \""
+                        + catEnum.getDescription() + "\", CategoryType." + catEnum.getCategoryType().name() + ", "
+                        + catEnum.getCompleteness() + "),";
+
+                String dqCatString = meta.getName() + "(\"" + meta.getId() + "\", \"" + meta.getLabel() + "\", \""
+                        + meta.getDescription() + "\", CategoryType." + meta.getType().name() + ", " + meta.getCompleteness()
+                        + "),";
+
+                if (!enumString.equals(dqCatString)) {
+                    System.err.println(">>> The enumeration item {" + catEnum.name()
+                            + "} differs from actual metadata. Please update one of them.");
+                }
+                System.out.println("Enum: " + enumString);
+                System.out.println("Meta: " + dqCatString + "\n");
+
+                count++;
+            }
         }
 
-        for (SemanticCategoryEnum catEnum : SemanticCategoryEnum.values()) {
-            DQCategory meta = idMap.get(catEnum.name());
-            if (meta != null) {
-                System.out.println(catEnum.name() + "(\"" + meta.getId() + "\", \"" + catEnum.getDisplayName() + "\", \""
-                        + catEnum.getDescription() + "\", CategoryType." + catEnum.getCategoryType().name() + ", "
-                        + catEnum.getCompleteness() + "),");
+        for (DQCategory meta : idMap.values()) {
+            if (SemanticCategoryEnum.getCategoryById(meta.getName()) == null) {
+                System.err.println(">>> Could not find category {" + meta.getName() + "} in current enumeration. Please add it.");
+
+                String dqCatString = meta.getName() + "(\"" + meta.getId() + "\", \"" + meta.getLabel() + "\", \""
+                        + meta.getDescription() + "\", CategoryType." + meta.getType().name() + ", " + meta.getCompleteness()
+                        + "),";
+                System.err.println(dqCatString + "\n");
             }
         }
     }

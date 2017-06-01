@@ -129,6 +129,12 @@ public class CategoryFrequency implements Comparable<CategoryFrequency>, Seriali
 
     @Override
     public int compareTo(CategoryFrequency o) {
+        // The EMPTY category must always be ranked after the others
+        if ("".equals(this.categoryName)) {
+            return -1;
+        } else if ("".equals(o.categoryName)) {
+            return 1;
+        }
         if (this.getCount() > o.getCount()) {
             return 1;
         } else if (this.getCount() < o.getCount()) {

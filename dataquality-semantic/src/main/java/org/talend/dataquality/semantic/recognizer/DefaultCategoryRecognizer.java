@@ -208,19 +208,7 @@ class DefaultCategoryRecognizer implements CategoryRecognizer {
             category.frequency = Math.round(category.count * 10000 / total) / 100F;
         }
 
-        Collections.sort(catList, new Comparator<CategoryFrequency>() {
-
-            @Override
-            public int compare(CategoryFrequency o1, CategoryFrequency o2) {
-                // The EMPTY category must always be ranked after the others
-                if ("".equals(o1.categoryName)) {
-                    return 1;
-                } else if ("".equals(o2.categoryName)) {
-                    return -1;
-                }
-                return (int) (o2.count - o1.count);
-            }
-        });
+        Collections.sort(catList, Collections.reverseOrder());
         return catList;
     }
 

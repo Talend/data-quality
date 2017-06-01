@@ -320,4 +320,25 @@ public class CategoryRecognizerTest {
 
     }
 
+    @Test
+    public void testCompound() {
+        final String[] input = new String[] { "al", "ZZ", "AZ", "RT", "CO", "GA", "HI", "MD", "KS", "KY", "FL" };
+
+        catRecognizer.prepare();
+        for (String data : input) {
+            String[] cats = catRecognizer.process(data);
+        }
+
+        Collection<CategoryFrequency> result = catRecognizer.getResult();
+        for (CategoryFrequency cf : result) {
+            System.out.println(cf);
+        }
+
+        assertEquals(8, result.size());
+        CategoryFrequency categoryFrequency = result.iterator().next();
+
+        assertEquals("US_STATE_CODE", categoryFrequency.getCategoryId());
+        assertEquals(81.81, categoryFrequency.getFrequency(), 0.0001);
+    }
+
 }
