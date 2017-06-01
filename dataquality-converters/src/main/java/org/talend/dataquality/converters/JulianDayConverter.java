@@ -104,7 +104,7 @@ public class JulianDayConverter extends DateCalendarConverter {
      * 
      * @param inputTemporalField Input TemporalField like as JulianFields and ChronoField.
      * @param outputChronologyType Chronology we want to use to convert the date.
-     * @param outputFormatPattern Pattern of the Chronology date.
+     * @param outputFormatPattern Pattern of the Chronology date.if it is null,use default pattern "yyyy-MM-dd G"
      * @param outputLocale Locale of the converted date.
      */
     public JulianDayConverter(TemporalField inputTemporalField, Chronology outputChronologyType, String outputFormatPattern,
@@ -112,7 +112,7 @@ public class JulianDayConverter extends DateCalendarConverter {
         convertCalendarToTemporal = false;
         this.inputTemporalField = inputTemporalField;
         this.outputChronologyType = outputChronologyType;
-        this.outputFormatPattern = outputFormatPattern != null ? outputFormatPattern : DEFAULT_OUTPUT_PATTERN;
+        this.outputFormatPattern = outputFormatPattern != null ? outputFormatPattern : "yyyy-MM-dd G"; //$NON-NLS-1$
         Locale locale = outputLocale != null ? outputLocale : Locale.getDefault(Locale.Category.FORMAT);
         inputDateTimeFormatter = new DateTimeFormatterBuilder().parseLenient().appendValue(inputTemporalField).toFormatter()
                 .withDecimalStyle(DecimalStyle.of(locale));
