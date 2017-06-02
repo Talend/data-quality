@@ -86,6 +86,7 @@ public class DataDictFieldClassifierTest {
             assertEquals("Validating [" + input + "] in mode EXACT", EXPECTED_VALIDATION_RESULTS_BEVERAGE.get(input)[2],
                     ddClassifier.validCategories(input, category, null));
         }
+        category.setCompleteness(Boolean.FALSE);
 
     }
 
@@ -96,7 +97,6 @@ public class DataDictFieldClassifierTest {
         ISubCategoryClassifier ddClassifier = builder.getDataDictFieldClassifier();
 
         DQCategory category = crm.getCategoryMetadataByName("FR_COMMUNE");
-        category.setCompleteness(Boolean.TRUE);
 
         for (String input : EXPECTED_VALIDATION_RESULTS_FR_COMMUNE.keySet()) {
             category.setValidationMode(ValidationMode.SIMPLIFIED);
@@ -111,6 +111,5 @@ public class DataDictFieldClassifierTest {
             assertEquals("Validating [" + input + "] in mode EXACT", EXPECTED_VALIDATION_RESULTS_FR_COMMUNE.get(input)[2],
                     ddClassifier.validCategories(input, category, null));
         }
-
     }
 }
