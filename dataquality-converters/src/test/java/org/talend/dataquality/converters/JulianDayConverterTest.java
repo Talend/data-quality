@@ -56,7 +56,7 @@ public class JulianDayConverterTest {
 
     @Test
     public void testJulianToCalendar() {
-        JulianDayConverter jc = new JulianDayConverter(JulianFields.JULIAN_DAY, IsoChronology.INSTANCE);
+        JulianDayConverter jc = new JulianDayConverter(JulianFields.JULIAN_DAY, IsoChronology.INSTANCE, null, Locale.US);
         assertEquals(calendarISO + ISOEarStr, jc.convert(julianDay));
 
         jc = new JulianDayConverter(JulianFields.JULIAN_DAY, JapaneseChronology.INSTANCE, outputPattern, outputLocale);
@@ -75,7 +75,7 @@ public class JulianDayConverterTest {
 
     @Test
     public void testModifyJulianToCalendar() {
-        JulianDayConverter jc = new JulianDayConverter(JulianFields.MODIFIED_JULIAN_DAY, IsoChronology.INSTANCE);
+        JulianDayConverter jc = new JulianDayConverter(JulianFields.MODIFIED_JULIAN_DAY, IsoChronology.INSTANCE, null, Locale.US);
         assertEquals(calendarISO + ISOEarStr, jc.convert(modiJulianDay));
 
         jc = new JulianDayConverter(JulianFields.MODIFIED_JULIAN_DAY, JapaneseChronology.INSTANCE, outputPattern, outputLocale);
@@ -94,7 +94,7 @@ public class JulianDayConverterTest {
 
     @Test
     public void testRataDieToCalendar() {
-        JulianDayConverter jc = new JulianDayConverter(JulianFields.RATA_DIE, IsoChronology.INSTANCE);
+        JulianDayConverter jc = new JulianDayConverter(JulianFields.RATA_DIE, IsoChronology.INSTANCE, null, Locale.US);
         assertEquals(calendarISO + ISOEarStr, jc.convert(rataDie));
 
         jc = new JulianDayConverter(JulianFields.RATA_DIE, JapaneseChronology.INSTANCE, outputPattern, outputLocale);
@@ -112,7 +112,7 @@ public class JulianDayConverterTest {
 
     @Test
     public void testEpchoToCalendar() {
-        JulianDayConverter jc = new JulianDayConverter(ChronoField.EPOCH_DAY, IsoChronology.INSTANCE);
+        JulianDayConverter jc = new JulianDayConverter(ChronoField.EPOCH_DAY, IsoChronology.INSTANCE, null, Locale.US);
         assertEquals(calendarISO + ISOEarStr, jc.convert(epochDay));
 
         jc = new JulianDayConverter(ChronoField.EPOCH_DAY, JapaneseChronology.INSTANCE, outputPattern, outputLocale);
