@@ -14,13 +14,11 @@ package org.talend.dataquality.statistics.datetime;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.TemporalAccessor;
+import java.util.*;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
@@ -37,9 +35,15 @@ public class SystemDateTimePatternManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SystemDateTimePatternManager.class);
 
+    private static final Locale DEFAULT_LOCALE = Locale.US;
+
+    private static final Locale SYSTEM_LOCALE = Locale.getDefault();
+
     private static List<Map<Pattern, String>> DATE_PATTERN_GROUP_LIST = new ArrayList<Map<Pattern, String>>();
 
     private static List<Map<Pattern, String>> TIME_PATTERN_GROUP_LIST = new ArrayList<Map<Pattern, String>>();
+
+    private static Map<String, DateTimeFormatter> dateTimeFormatterCache = new HashMap<String, DateTimeFormatter>();
 
     static {
         try {
@@ -136,7 +140,16 @@ public class SystemDateTimePatternManager {
                 for (Pattern parser : patternMap.keySet()) {
                     try {
                         if (parser.matcher(value).find()) {
-                            return true;
+
+                            String dateFormat = patternMap.get(parser);
+                            TemporalAccessor accessor = getDateFromPattern(value, dateFormat, SYSTEM_LOCALE);
+
+                            if (accessor == null && DEFAULT_LOCALE != SYSTEM_LOCALE) {
+                                accessor = getDateFromPattern(value, dateFormat, DEFAULT_LOCALE);
+                            }
+
+                            if (accessor != null)
+                                return true;
                         }
                     } catch (Exception e) {
                         // ignore
@@ -183,5 +196,33 @@ public class SystemDateTimePatternManager {
             }
         }
         return resultSet;
+    }
+
+    private static DateTimeFormatter getDateTimeFormatterByPattern(String customPattern, Locale locale) {
+        String localeStr = locale.toString();
+        DateTimeFormatter formatter = dateTimeFormatterCache.get(customPattern + localeStr);
+        if (formatter == null) {
+            try {
+                formatter = new DateTimeFormatterBuilder().parseCaseInsensitive().appendPattern(customPattern)
+                        .toFormatter(locale);
+            } catch (IllegalArgumentException e) {
+                return null;
+            }
+            dateTimeFormatterCache.put(customPattern + localeStr, formatter);
+        }
+        return formatter;
+    }
+
+    private static TemporalAccessor getDateFromPattern(String value, String datePattern, Locale locale) {
+        DateTimeFormatter formatter = getDateTimeFormatterByPattern(datePattern, locale);
+
+        TemporalAccessor accessor = null;
+        try {
+            accessor = formatter.parse(value);
+        } catch (DateTimeParseException exception) {
+            LOGGER.debug(exception.getMessage(), exception);
+        }
+
+        return accessor;
     }
 }
