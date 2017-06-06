@@ -81,8 +81,8 @@ public class JulianDayConverter extends DateCalendarConverter {
         super.inputFormatPattern = inputFormatPattern != null ? inputFormatPattern : DEFAULT_INPUT_PATTERN;
         this.outputTemporalField = outputTemporalField;
         Locale locale = inputLocale != null ? inputLocale : Locale.getDefault(Locale.Category.FORMAT);
-        super.inputDateTimeFormatter = new DateTimeFormatterBuilder().parseLenient().appendPattern(this.inputFormatPattern)
-                .toFormatter(locale).withChronology(this.inputChronologyType).withDecimalStyle(DecimalStyle.of(locale));
+        super.inputDateTimeFormatter = new DateTimeFormatterBuilder().parseLenient().appendPattern(super.inputFormatPattern)
+                .toFormatter(locale).withChronology(super.inputChronologyType).withDecimalStyle(DecimalStyle.of(locale));
 
     }
 
@@ -114,11 +114,10 @@ public class JulianDayConverter extends DateCalendarConverter {
         super.outputChronologyType = outputChronologyType;
         super.outputFormatPattern = outputFormatPattern != null ? outputFormatPattern : "yyyy-MM-dd G"; //$NON-NLS-1$
         Locale locale = outputLocale != null ? outputLocale : Locale.getDefault(Locale.Category.FORMAT);
-        super.inputDateTimeFormatter = new DateTimeFormatterBuilder().parseLenient().appendValue(inputTemporalField)
-                .toFormatter()
+        super.inputDateTimeFormatter = new DateTimeFormatterBuilder().parseLenient().appendValue(inputTemporalField).toFormatter()
                 .withDecimalStyle(DecimalStyle.of(locale));
-        super.outputDateTimeFormatter = new DateTimeFormatterBuilder().parseLenient().appendPattern(this.outputFormatPattern)
-                .toFormatter(locale).withChronology(this.outputChronologyType).withDecimalStyle(DecimalStyle.of(locale));
+        super.outputDateTimeFormatter = new DateTimeFormatterBuilder().parseLenient().appendPattern(super.outputFormatPattern)
+                .toFormatter(locale).withChronology(super.outputChronologyType).withDecimalStyle(DecimalStyle.of(locale));
 
     }
 
@@ -133,8 +132,7 @@ public class JulianDayConverter extends DateCalendarConverter {
         this.convertCalendarToTemporal = false;
         this.inputTemporalField = inputTemporalField;
         this.outputTemporalField = outputTemporalField;
-        super.inputDateTimeFormatter = new DateTimeFormatterBuilder().parseLenient().appendValue(inputTemporalField)
-                .toFormatter()
+        super.inputDateTimeFormatter = new DateTimeFormatterBuilder().parseLenient().appendValue(inputTemporalField).toFormatter()
                 .withDecimalStyle(DecimalStyle.of(Locale.getDefault(Locale.Category.FORMAT)));
     }
 
