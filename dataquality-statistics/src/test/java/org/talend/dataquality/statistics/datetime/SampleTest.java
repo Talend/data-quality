@@ -355,10 +355,14 @@ public class SampleTest {
             { "EEE MMM dd HH:mm:ss z yyyy" })));
             put("22/Mar/99 5:06 AM", new HashSet<String>(Arrays.asList(new String[] //
             { "dd/MMM/yy h:mm a" })));
+            put("1999/3/22", new HashSet<String>(Arrays.asList(new String[] //
+            { "yyyy/M/d" })));
             put("19990322+0100", new HashSet<String>(Arrays.asList(new String[] //
             { "yyyyMMddZ" })));
             put("19990322", new HashSet<String>(Arrays.asList(new String[] //
             { "yyyyMMdd" })));
+            put("1999-03-22 AD", new HashSet<String>(Arrays.asList(new String[] //
+            { "yyyy-MM-dd G" })));
             put("1999-03-22+01:00", new HashSet<String>(Arrays.asList(new String[] //
             { "yyyy-MM-ddXXX" })));
             put("1999-03-22T05:06:07.000[Europe/Paris]", new HashSet<String>(Arrays.asList(new String[] //
@@ -375,8 +379,10 @@ public class SampleTest {
             { "yyyy-MM-dd'T'HH:mm:ssXXX" })));
             put("1999-081+01:00", new HashSet<String>(Arrays.asList(new String[] //
             { "yyyy-DDDXXX" })));
-            put("1999-W13-4+01:00", new HashSet<String>(Arrays.asList(new String[] //
-            { "yyyy-'W'w-WXXX" })));
+            put("1999W132", new HashSet<String>(Arrays.asList(new String[] //
+            { "YYYY'W'wc" })));
+            put("1999-W13-2", new HashSet<String>(Arrays.asList(new String[] //
+            { "YYYY-'W'w-c" })));
             put("1999-03-22T05:06:07.000+01:00[Europe/Paris]", new HashSet<String>(Arrays.asList(new String[] //
             { "yyyy-MM-dd'T'HH:mm:ss.SSSXXX'['VV']'" })));
             put("1999-03-22T05:06:07+01:00[Europe/Paris]", new HashSet<String>(Arrays.asList(new String[] //

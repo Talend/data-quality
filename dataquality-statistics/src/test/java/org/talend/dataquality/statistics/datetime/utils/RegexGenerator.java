@@ -36,7 +36,7 @@ public class RegexGenerator {
             put("XXX", "[+-](0[0-9]|1[0-2]):00");
             put("Z", "[+-](0[0-9]|1[0-2])00");
             put("z", "[A-Z]{2,5}");
-            put("W", "[1-7]");
+            put("c", "[1-7]");
             put("w", "([1-4]?[0-9]|5[0-2])");
             put("DDD", "[0-9]{1,3}");
 
@@ -55,6 +55,7 @@ public class RegexGenerator {
             // replace the 'a' char by AM|PM
             put("a", "\\p{L}{2}");
 
+            put("YYYY", "[0-9]{4}");
             put("yyyy", "[0-9]{4}");
             put("yy", "[0-9]{2}");
             put("y", "[0-9]{2,4}"); // TO CHECK
@@ -84,6 +85,7 @@ public class RegexGenerator {
      */
     public String convertPatternToRegex(String pattern) {
         String regex = pattern;
+        regex = regex.replace("'o''clock'", "@@@");
         regex = regex.replace("' h '", "*****");
         regex = regex.replace("Uhr", "===");
         regex = regex.replace("'Z'", "___");
@@ -97,6 +99,7 @@ public class RegexGenerator {
         regex = regex.replace("+++", "W");
         regex = regex.replace("!!", "'");
         regex = regex.replace("*****", " h ");
+        regex = regex.replace("@@@", "o'clock");
 
         return regex;
     }

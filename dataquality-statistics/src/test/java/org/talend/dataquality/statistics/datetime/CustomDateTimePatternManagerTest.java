@@ -269,6 +269,9 @@ public class CustomDateTimePatternManagerTest {
 
     @Test
     public void testWeeklyBasedYear_TDQ11802() {
+        assertTrue(CustomDateTimePatternManager.isDate("2009-W01-Monday", Collections.<String> singletonList("YYYY-'W'ww-EEEE")));
+        assertFalse(
+                CustomDateTimePatternManager.isDate("2009-W01-Monday", Collections.<String> singletonList("yyyy-'W'ww-EEEE")));
         assertTrue(
                 CustomDateTimePatternManager.isDate("July / 1940 / 06", Collections.<String> singletonList("MMMM / yyyy / dd")));
         assertFalse(

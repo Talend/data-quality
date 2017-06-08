@@ -58,6 +58,8 @@ public class FormatGroupGenerator {
             } else {
                 dateSeparator = format.charAt(idx + 4) + "";
             }
+        } else if (format.contains("YYYY")) {
+            code.append("y4");
         } else if (format.contains("yy")) {
             code.append("y2");
             int idx = format.indexOf("yy");
