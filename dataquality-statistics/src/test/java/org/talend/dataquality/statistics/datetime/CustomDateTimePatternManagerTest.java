@@ -12,18 +12,14 @@
 // ============================================================================
 package org.talend.dataquality.statistics.datetime;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
@@ -33,6 +29,14 @@ import org.slf4j.LoggerFactory;
 public class CustomDateTimePatternManagerTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CustomDateTimePatternManagerTest.class);
+
+    private static void setFinalStatic(Field field, Object newValue) throws Exception {
+        field.setAccessible(true);
+        Field modifiersField = Field.class.getDeclaredField("modifiers");
+        modifiersField.setAccessible(true);
+        modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+        field.set(null, newValue);
+    }
 
     @Test
     public void testNewPatterns_TDQ11229() {
@@ -77,13 +81,25 @@ public class CustomDateTimePatternManagerTest {
     }
 
     @Test
-    public void testValidDatesFromFile() throws IOException {
+    public void testValidDatesFromFile() throws Exception {
 
         List<String> contents = readLineContentsFromFile("ListOfValidDates.txt");
 
         for (String line : contents) {
-            if (!line.isEmpty()) {
-                assertTrue("Unexpected Invalid Date: " + line, SystemDateTimePatternManager.isDate(line));
+            if (!line.isEmpty() && !line.startsWith("#")) {
+
+                String[] sampleLine = line.trim().split("\t");
+                String sample = sampleLine[0];
+                String locale = sampleLine[1];
+                locale = locale.replaceAll("_", "-");
+                Locale local = Locale.forLanguageTag(locale);
+
+                // SystemDateTimePatternManager.renewCache();
+                setFinalStatic(SystemDateTimePatternManager.class.getDeclaredField("SYSTEM_LOCALE"), local);
+                setFinalStatic(SystemDateTimePatternManager.class.getDeclaredField("dateTimeFormatterCache"),
+                        new HashMap<String, DateTimeFormatter>());
+
+                assertTrue("Unexpected Invalid Date: " + line, SystemDateTimePatternManager.isDate(sample));
             }
         }
     }
