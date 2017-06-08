@@ -17,13 +17,19 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SampleTest {
 
     private static List<String> DATE_SAMPLES;
@@ -499,6 +505,14 @@ public class SampleTest {
         TIME_SAMPLES = IOUtils.readLines(timeInputStream, "UTF-8");
     }
 
+    private static void setFinalStatic(Field field, Object newValue) throws Exception {
+        field.setAccessible(true);
+        Field modifiersField = Field.class.getDeclaredField("modifiers");
+        modifiersField.setAccessible(true);
+        modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+        field.set(null, newValue);
+    }
+
     @Test
     public void testDatesWithMultipleFormats() throws IOException {
 
@@ -535,7 +549,7 @@ public class SampleTest {
     }
 
     @Test
-    public void testAllSupportedDatesWithRegexes() throws IOException {
+    public void testAllSupportedDatesWithRegexes() throws Exception {
 
         for (int i = 1; i < DATE_SAMPLES.size(); i++) {
             String line = DATE_SAMPLES.get(i);
@@ -547,6 +561,16 @@ public class SampleTest {
                 // System.out.println(SystemDateTimePatternManager.isDate(sample) + "\t" + locale + "\t" + sample + "\t"
                 // + expectedPattern);
                 // System.out.println(SystemDateTimePatternManager.datePatternReplace(sample));
+
+                String locale = sampleLine[2];
+                locale = locale.replaceAll("_", "-");
+                Locale local = Locale.forLanguageTag(locale);
+
+                // SystemDateTimePatternManager.renewCache();
+                setFinalStatic(SystemDateTimePatternManager.class.getDeclaredField("SYSTEM_LOCALE"), local);
+                setFinalStatic(SystemDateTimePatternManager.class.getDeclaredField("dateTimeFormatterCache"),
+                        new HashMap<String, DateTimeFormatter>());
+
                 assertTrue(sample + " is expected to be a valid date but actually not.",
                         SystemDateTimePatternManager.isDate(sample));
             }
@@ -554,7 +578,7 @@ public class SampleTest {
     }
 
     @Test
-    public void testAllSupportedTimesWithRegexes() throws IOException {
+    public void testAllSupportedTimesWithRegexes() throws Exception {
 
         for (int i = 1; i < TIME_SAMPLES.size(); i++) {
             String line = TIME_SAMPLES.get(i);
@@ -565,9 +589,17 @@ public class SampleTest {
                 // String locale = sampleLine[2];
                 // System.out.println(SystemDateTimePatternManager.isTime(sample) + "\t" + locale + "\t" + sample + "\t"
                 // + expectedPattern);
+
+                String locale = sampleLine[2];
+                locale = locale.replaceAll("_", "-");
+                Locale local = Locale.forLanguageTag(locale);
+
+                setFinalStatic(SystemDateTimePatternManager.class.getDeclaredField("SYSTEM_LOCALE"), local);
+
                 assertTrue(sample + " is expected to be a valid time but actually not.",
                         SystemDateTimePatternManager.isTime(sample));
             }
         }
     }
+
 }

@@ -35,9 +35,9 @@ public class SystemDateTimePatternManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SystemDateTimePatternManager.class);
 
-    private static final Locale DEFAULT_LOCALE = Locale.US;
+    private static Locale DEFAULT_LOCALE = Locale.US;
 
-    private static final Locale SYSTEM_LOCALE = Locale.getDefault();
+    private static Locale SYSTEM_LOCALE = Locale.getDefault();
 
     private static List<Map<Pattern, String>> DATE_PATTERN_GROUP_LIST = new ArrayList<Map<Pattern, String>>();
 

@@ -60,8 +60,6 @@ public class PerformanceComparer {
                     String sample = sampleLine[0];
                     if (useNewImpl) {
                         CustomDateTimePatternManager.isDate(sample, CUSTOM_PATTERN_LIST);
-                    } else {
-                        CustomDateTimePatternManagerOld.isDate(sample, CUSTOM_PATTERN_LIST);
                     }
                 }
             }
