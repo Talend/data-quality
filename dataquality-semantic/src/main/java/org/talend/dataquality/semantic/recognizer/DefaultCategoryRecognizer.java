@@ -170,32 +170,33 @@ class DefaultCategoryRecognizer implements CategoryRecognizer {
             currentCategory = catToSee.pop();
             DQCategory dqCategory = metadata.get(currentCategory);
             Integer categoryLevel = categoryToLevel.get(currentCategory);
-            if (dqCategory != null && !CollectionUtils.isEmpty(dqCategory.getParents()) && categoryLevel != null) {
+            if (dqCategory != null && !CollectionUtils.isEmpty(dqCategory.getParents())) {
                 for (DQCategory parent : dqCategory.getParents()) {
-                    Integer level = categoryToLevel.get(parent.getId());
+                    String parentId = parent.getId();
+                    Integer level = categoryToLevel.get(parentId);
                     if (level == null || level < categoryLevel + 1) {
-                        categoryToLevel.put(parent.getId(), categoryLevel + 1);
-                        catToSee.add(parent.getId());
+                        categoryToLevel.put(parentId, categoryLevel + 1);
+                        catToSee.add(parentId);
                     }
                 }
             }
         }
     }
 
-    private void incrementCategory(String catId) {
-        incrementCategory(catId, catId);
+    private void incrementCategory(String categoryName) {
+        incrementCategory(categoryName, categoryName);
     }
 
-    private void incrementCategory(String catId, String catName) {
-        incrementCategory(catId, catName, 0);
+    private void incrementCategory(String categoryName, String categoryLabel) {
+        incrementCategory(categoryName, categoryLabel, 0);
 
     }
 
-    private void incrementCategory(String catId, String catName, int categoryLevel) {
-        CategoryFrequency c = categoryToFrequency.get(catId);
+    private void incrementCategory(String categoryName, String categoryLabel, int categoryLevel) {
+        CategoryFrequency c = categoryToFrequency.get(categoryName);
         if (c == null) {
-            c = new CategoryFrequency(catId, catName, categoryLevel);
-            categoryToFrequency.put(catId, c);
+            c = new CategoryFrequency(categoryName, categoryLabel, categoryLevel);
+            categoryToFrequency.put(categoryName, c);
             catList.add(c);
         }
         c.count++;

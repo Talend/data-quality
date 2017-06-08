@@ -53,24 +53,24 @@ public class CategoryFrequency implements Comparable<CategoryFrequency>, Seriali
     /**
      * CategoryFrequency constructor from a category.
      *
-     * @param catId the category ID
-     * @param catName the category name
+     * @param categoryName the category name
+     * @param categoryLabel the category label
      */
-    public CategoryFrequency(String catId, String catName) {
-        this.categoryName = catId;
-        this.categoryLabel = catName;
+    public CategoryFrequency(String categoryName, String categoryLabel) {
+        this.categoryName = categoryName;
+        this.categoryLabel = categoryLabel;
     }
 
     /**
      * CategoryFrequency constructor from a category.
      *
-     * @param catId the category ID
-     * @param catName the category name
+     * @param categoryName the category name
+     * @param categoryLabel the category label
      * @param count the occurrence
      */
-    public CategoryFrequency(String catId, String catName, long count) {
-        this.categoryName = catId;
-        this.categoryLabel = catName;
+    public CategoryFrequency(String categoryName, String categoryLabel, long count) {
+        this.categoryName = categoryName;
+        this.categoryLabel = categoryLabel;
         this.categoryLevel = 0;
         this.count = count;
     }
@@ -78,13 +78,13 @@ public class CategoryFrequency implements Comparable<CategoryFrequency>, Seriali
     /**
      * CategoryFrequency constructor from a category.
      *
-     * @param catId the category ID
-     * @param catName the category name
+     * @param categoryName the category name
+     * @param categoryLabel the category label
      * @param categoryLevel the level of the category
      */
-    public CategoryFrequency(String catId, String catName, int categoryLevel) {
-        this.categoryName = catId;
-        this.categoryLabel = catName;
+    public CategoryFrequency(String categoryName, String categoryLabel, int categoryLevel) {
+        this.categoryName = categoryName;
+        this.categoryLabel = categoryLabel;
         this.categoryLevel = categoryLevel;
     }
 
