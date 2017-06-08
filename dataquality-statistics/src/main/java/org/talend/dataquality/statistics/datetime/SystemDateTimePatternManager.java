@@ -18,6 +18,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAccessor;
+import java.time.temporal.TemporalQueries;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -140,16 +141,10 @@ public class SystemDateTimePatternManager {
                 for (Pattern parser : patternMap.keySet()) {
                     try {
                         if (parser.matcher(value).find()) {
-
                             String dateFormat = patternMap.get(parser);
-                            TemporalAccessor accessor = getDateFromPattern(value, dateFormat, SYSTEM_LOCALE);
-
-                            if (accessor == null && DEFAULT_LOCALE != SYSTEM_LOCALE) {
-                                accessor = getDateFromPattern(value, dateFormat, DEFAULT_LOCALE);
-                            }
-
-                            if (accessor != null)
+                            if (isMatchDateTimePattern(value, dateFormat, SYSTEM_LOCALE)) {
                                 return true;
+                            }
                         }
                     } catch (Exception e) {
                         // ignore
@@ -213,16 +208,39 @@ public class SystemDateTimePatternManager {
         return formatter;
     }
 
-    private static TemporalAccessor getDateFromPattern(String value, String datePattern, Locale locale) {
-        DateTimeFormatter formatter = getDateTimeFormatterByPattern(datePattern, locale);
+    private static boolean validateWithDateTimeFormatter(String value, DateTimeFormatter formatter) {
+        if (formatter != null) {
+            try {
+                final TemporalAccessor temporal = formatter.parse(value);
+                if (temporal != null && (temporal.query(TemporalQueries.localDate()) != null
+                        || temporal.query(TemporalQueries.localTime()) != null)) {
+                    return true;
+                }
+            } catch (DateTimeParseException e) {
+                return false;
+            }
+        }
+        return false;
+    }
 
-        TemporalAccessor accessor = null;
-        try {
-            accessor = formatter.parse(value);
-        } catch (DateTimeParseException exception) {
-            LOGGER.debug(exception.getMessage(), exception);
+    static boolean isMatchDateTimePattern(String value, String pattern, Locale locale) {
+        if (pattern == null) {
+            return false;
         }
 
-        return accessor;
+        // firstly, try with user-defined locale
+        final DateTimeFormatter formatter = getDateTimeFormatterByPattern(pattern, locale);
+        if (validateWithDateTimeFormatter(value, formatter)) {
+            return true;
+        } else {
+            if (!DEFAULT_LOCALE.equals(locale)) {
+                // try with LOCALE_US if user defined locale is not US
+                final DateTimeFormatter formatterUS = getDateTimeFormatterByPattern(pattern, Locale.US);
+                if (validateWithDateTimeFormatter(value, formatterUS)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

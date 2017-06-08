@@ -12,17 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.statistics.datetime;
 
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.time.temporal.TemporalAccessor;
-import java.time.temporal.TemporalQueries;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Customized date time pattern manager.
@@ -33,8 +23,6 @@ import java.util.Set;
 public final class CustomDateTimePatternManager {
 
     private static final Locale DEFAULT_LOCALE = Locale.US;
-
-    private static Map<String, DateTimeFormatter> dateTimeFormatterCache = new HashMap<String, DateTimeFormatter>();
 
     public static boolean isDate(String value, List<String> customPatterns) {
         return isDate(value, customPatterns, DEFAULT_LOCALE);
@@ -64,54 +52,8 @@ public final class CustomDateTimePatternManager {
 
     private static boolean isMatchCustomPatterns(String value, List<String> customPatterns, Locale locale) {
         for (String pattern : customPatterns) {
-            if (isMatchCustomPattern(value, pattern, locale)) {
+            if (SystemDateTimePatternManager.isMatchDateTimePattern(value, pattern, locale)) {
                 return true;
-            }
-        }
-        return false;
-    }
-
-    private static DateTimeFormatter getDateTimeFormatterByPattern(String customPattern, Locale locale) {
-        String localeStr = locale.toString();
-        DateTimeFormatter formatter = dateTimeFormatterCache.get(customPattern + localeStr);
-        if (formatter == null) {
-            try {
-                formatter = DateTimeFormatter.ofPattern(customPattern, locale);
-            } catch (IllegalArgumentException e) {
-                return null;
-            }
-            dateTimeFormatterCache.put(customPattern + localeStr, formatter);
-        }
-        return formatter;
-    }
-
-    private static boolean isMatchCustomPattern(String value, String customPattern, Locale locale) {
-        if (customPattern == null) {
-            return false;
-        }
-
-        try {// firstly, try with user-defined locale
-            final DateTimeFormatter formatter = getDateTimeFormatterByPattern(customPattern, locale);
-            if (formatter != null) {
-                final TemporalAccessor temporal = formatter.parse(value);
-                if (temporal.query(TemporalQueries.localDate()) != null || temporal.query(TemporalQueries.localTime()) != null) {
-                    return true;
-                }
-            }
-        } catch (DateTimeParseException e) {
-            if (!DEFAULT_LOCALE.equals(locale)) {
-                try {// try with LOCALE_US if user defined locale is not US
-                    final DateTimeFormatter formatter = getDateTimeFormatterByPattern(customPattern, Locale.US);
-                    if (formatter != null) {
-                        final TemporalAccessor temporal = formatter.parse(value);
-                        if (temporal.query(TemporalQueries.localDate()) != null
-                                || temporal.query(TemporalQueries.localTime()) != null) {
-                            return true;
-                        }
-                    }
-                } catch (DateTimeParseException e2) {
-                    // return false
-                }
             }
         }
         return false;
@@ -133,7 +75,7 @@ public final class CustomDateTimePatternManager {
     public static Set<String> replaceByDateTimePattern(String value, List<String> customPatterns, Locale locale) {
         Set<String> resultPatternSet = new HashSet<String>();
         for (String customPattern : customPatterns) {
-            if (isMatchCustomPattern(value, customPattern, locale)) {
+            if (SystemDateTimePatternManager.isMatchDateTimePattern(value, customPattern, locale)) {
                 resultPatternSet.add(customPattern);
             }
         }
