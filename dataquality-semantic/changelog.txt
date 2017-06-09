@@ -1,3 +1,11 @@
+V1.6.3 2017-06-09
+	- TDQ-12854 remove unused F_SYN field in the lucene index
+	- TDQ-13671 do not try to do validation for keywords
+	- TDQ-13810 fix wrong percentages displayed with COMPOUND semantic types
+	- TDQ-13132 packed dictionary object for DataPrep full-run on Spark
+	- TDQ-13840 improve SIMPLIFIED validation mode
+	- TDQ-13821 wrond semantic level for complex compound types
+
 V1.6.2 2017-05-09
 	- TDQ-13699 regex is case insensitive for discovery and case sensitive for validation
 	- TDQ-13715 allowing value to be equal to category name

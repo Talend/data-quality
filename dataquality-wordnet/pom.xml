@@ -3,11 +3,11 @@
 	<parent>
 		<groupId>org.talend.dataquality</groupId>
 		<artifactId>dataquality-libraries</artifactId>
-		<version>1.6.3-SNAPSHOT</version>
+		<version>1.6.3</version>
 		<relativePath>../dataquality-libraries</relativePath>
 	</parent>
 	<artifactId>dataquality-wordnet</artifactId>
-	<version>${dataquality.wordnet.snapshot.version}</version>
+	<version>${dataquality.wordnet.released.version}</version>
 	<packaging>bundle</packaging>
 	<name>dataquality-wordnet</name>
 	<description>Content validation API based on WordNet dictionary</description>

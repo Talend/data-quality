@@ -1,3 +1,8 @@
+V1.6.3 2017-06-09
+	- TDQ-13851 support Date pattern "yyyy-MM-dd G"
+	- TDQ-13347 the value "5 TOTO 1999" must not be considered as a valid date
+	- TDQ-13907 fix the week based date pattern
+
 V1.6.2 2017-05-09
 	- TDQ-13539 add support for a new date pattern yyyy/M/d
 	- TDQ-13369 use more strict date patterns which do not allow padding zeroes for single M and/or d

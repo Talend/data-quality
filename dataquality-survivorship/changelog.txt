@@ -1,3 +1,6 @@
+V2.0.3 2017-06-09
+	- TDQ-13798 tRuleSurvivorship improvements
+
 V2.0.2 2017-05-09
 	- TDQ-13653 fixed the issue which result in wrong default survived value
 
