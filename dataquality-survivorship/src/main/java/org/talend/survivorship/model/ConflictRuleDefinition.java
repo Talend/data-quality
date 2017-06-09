@@ -58,9 +58,9 @@ public class ConflictRuleDefinition extends RuleDefinition {
      * @param duplicateSurCheck Whether deal with duplicate case in the survived value
      */
     public ConflictRuleDefinition(Order order, String ruleName, String referenceColumn, Function function, String operation,
-            String targetColumn, boolean ignoreBlanks, String fillColumn, boolean duplicateSurCheck, boolean disableRule) {
+            String targetColumn, boolean ignoreBlanks, boolean duplicateSurCheck, boolean disableRule) {
         super(order, ruleName, referenceColumn, function, operation, targetColumn, ignoreBlanks);
-        this.fillColumn = fillColumn;
+        this.fillColumn = null;
         this.duplicateSurCheck = duplicateSurCheck;
         this.disableRule = disableRule;
     }

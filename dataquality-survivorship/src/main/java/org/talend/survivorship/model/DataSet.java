@@ -202,7 +202,7 @@ public class DataSet {
                 // If we don't do that maybe we can store conflict data number form here
                 if (crcrHandler == null) {
                     for (ConflictRuleDefinition ruleDef : column.getConflictResolveList()) {
-                        //If current rule has been disable then continue next one
+                        // If current rule has been disable then continue next one
                         boolean disableRule = ruleDef.isDisableRule();
                         if (disableRule) {
                             continue;
@@ -328,10 +328,7 @@ public class DataSet {
      */
     public boolean checkDupSurValue(Object value, String colName) {
         Object refSurvive = survivorMap.get(colName);
-        if (value.equals(refSurvive)) {
-            return true;
-        }
-        return false;
+        return value.equals(refSurvive);
     }
 
     /**

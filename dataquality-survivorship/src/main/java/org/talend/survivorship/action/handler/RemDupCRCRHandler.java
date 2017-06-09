@@ -34,11 +34,8 @@ public class RemDupCRCRHandler extends DataCleanCRCRHandler {
     @Override
     protected boolean canHandler(Object inputData, String expression, int rowNum) {
         Object realValue = this.getHandlerParameter().getTarInputData((Object[]) inputData);
-        if (!this.getHandlerParameter().getDataset().checkDupSurValue(realValue,
-                this.handlerParameter.getRefColumn().getName())) {
-            return true;
-        }
-        return false;
-    }
+        return !this.getHandlerParameter().getDataset().checkDupSurValue(realValue,
+                this.handlerParameter.getRefColumn().getName());
 
+    }
 }
