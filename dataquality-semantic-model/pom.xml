@@ -3,11 +3,11 @@
 	<parent>
 		<groupId>org.talend.dataquality</groupId>
 		<artifactId>dataquality-libraries</artifactId>
-		<version>1.6.3</version>
+		<version>1.6.4-SNAPSHOT</version>
 		<relativePath>../dataquality-libraries</relativePath>
 	</parent>
 	<artifactId>dataquality-semantic-model</artifactId>
-	<version>${dataquality.libraries.released.version}</version>
+	<version>${dataquality.libraries.snapshot.version}</version>
 	<packaging>bundle</packaging>
 	<name>dataquality-semantic-model</name>
 	<description>Model for semantic category features</description>

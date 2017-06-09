@@ -3,11 +3,11 @@
 	<parent>
 		<groupId>org.talend.dataquality</groupId>
 		<artifactId>dataquality-libraries</artifactId>
-		<version>1.6.3</version>
+		<version>1.6.4-SNAPSHOT</version>
 		<relativePath>../dataquality-libraries</relativePath>
 	</parent>
 	<artifactId>dataquality-email</artifactId>
-	<version>${dataquality.email.released.version}</version>
+	<version>${dataquality.email.snapshot.version}</version>
 	<packaging>bundle</packaging>
 	<name>dataquality-email</name>
 	<description>Email Validation API</description>
