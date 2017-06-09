@@ -5,7 +5,7 @@ rule "most_common_firstName"
     dialect "mvel"
     ruleflow-group "most_common_firstNameGroup"
 when
-    $input : RecordIn( dataset.isLongest( firstname, "firstName", false) )  
+    $input : RecordIn( dataset.isMostCommon( firstname, "firstName", true) )  
 then
     dataset.survive( $input.TALEND_INTERNAL_ID, "firstName", drools.getRule().getName());
 

@@ -28,6 +28,11 @@ public abstract class AbstractChainResponsibilityHandler {
      */
     protected AbstractChainResponsibilityHandler successor;
 
+    /**
+     * Previous one successor
+     */
+    protected AbstractChainResponsibilityHandler preSuccessor;
+
     protected HandlerParameter handlerParameter;
 
     public AbstractChainResponsibilityHandler(AbstractChainResponsibilityHandler acrhandler) {
@@ -135,7 +140,17 @@ public abstract class AbstractChainResponsibilityHandler {
      */
     public AbstractChainResponsibilityHandler linkSuccessor(AbstractChainResponsibilityHandler nextHandler) {
         successor = nextHandler;
+        nextHandler.preSuccessor = this;
         return successor;
+    }
+
+    /**
+     * Getter for preSuccessor.
+     * 
+     * @return the preSuccessor
+     */
+    protected AbstractChainResponsibilityHandler getPreSuccessor() {
+        return this.preSuccessor;
     }
 
 }

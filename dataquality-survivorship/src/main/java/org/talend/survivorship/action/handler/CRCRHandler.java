@@ -21,8 +21,10 @@ import java.util.Set;
 
 import org.drools.core.util.StringUtils;
 import org.talend.survivorship.action.ExclusivenessAction;
+import org.talend.survivorship.model.Attribute;
+import org.talend.survivorship.model.DataSet;
+import org.talend.survivorship.model.FilledAttribute;
 import org.talend.survivorship.model.InputConvertResult;
-import org.talend.survivorship.model.Record;
 import org.talend.survivorship.model.SubDataSet;
 import org.talend.survivorship.model.SurvivedResult;
 
@@ -87,12 +89,14 @@ public class CRCRHandler extends AbstractChainResponsibilityHandler {
         }
         // ConflictDataIndexList be clear
         this.getHandlerParameter().updateDataSet();
-        // 2.loop all of data which make sure on the previous node
+        if (this.getPreSuccessor() != null) {
+            ((SubDataSet) this.getHandlerParameter().getDataset()).getFillAttributeMap()
+                    .putAll(((SubDataSet) this.getPreSuccessor().getHandlerParameter().getDataset()).getFillAttributeMap());
+        }
         for (Integer index : conflictDataIndexList) {
             InputConvertResult inputData = getInputData(index);
             if (this.canHandler(inputData.getInputData(), getHandlerParameter().getExpression(), index)) {
-                doHandle(index, inputData.isIsfilled() ? this.getHandlerParameter().getFillColumn()
-                        : this.getHandlerParameter().getTarColumn().getName());
+                doHandle(index, getRealColName(index));
                 if (this.getSuccessor() != null) {
                     // 3.generate new conflict data for next node
                     // init ConflictDataIndexList for next one
@@ -108,10 +112,34 @@ public class CRCRHandler extends AbstractChainResponsibilityHandler {
         List<Integer> newConflictDataIndexList = this.getHandlerParameter().getConflictDataIndexList();
         if (newConflictDataIndexList.size() <= 0) {
             this.getHandlerParameter().getConflictDataIndexList().addAll(conflictDataIndexList);
+            this.getSuccessor().getHandlerParameter().getConflictDataIndexList().clear();
         } else if (newConflictDataIndexList.size() == 1) {
             return;
+        } else {
+            this.getSuccessor().getHandlerParameter().getConflictDataIndexList().clear();
+            this.getSuccessor().getHandlerParameter().getConflictDataIndexList().addAll(newConflictDataIndexList);
         }
         this.getSuccessor().handleRequest();
+    }
+
+    /**
+     * Get the column name which is filled column name or target column name
+     * 
+     * 
+     * @return
+     */
+    private String getRealColName(int index) {
+        DataSet dataset = this.getHandlerParameter().getDataset();
+        String tarName = this.getHandlerParameter().getTarColumn().getName();
+        if (dataset instanceof SubDataSet) {
+
+            Attribute attribute = this.getHandlerParameter().getDataset().getRecordList().get(index).getAttribute(tarName);
+            FilledAttribute filledAttribute = ((SubDataSet) dataset).getFillAttributeMap().get(attribute);
+            if (filledAttribute != null) {
+                return filledAttribute.getColumn().getName();
+            }
+        }
+        return tarName;
     }
 
     /**
@@ -124,13 +152,7 @@ public class CRCRHandler extends AbstractChainResponsibilityHandler {
         Map<String, Integer> columnIndexMap = handlerParameter.getColumnIndexMap();
         Object[] dataArray = new Object[columnIndexMap.size()];
         for (String colName : columnIndexMap.keySet()) {
-            Record record = handlerParameter.getDataset().getRecordList().get(rowNum);
-            Object value = record.getAttribute(colName).getValue();
-
-            if (isNeedFillColumn(value, colName)) {
-                value = record.getAttribute(handlerParameter.getFillColumn()).getValue();
-                inputResult.setIsfilled(true);
-            }
+            Object value = handlerParameter.getDataset().getValueAfterFiled(rowNum, colName);
             dataArray[columnIndexMap.get(colName)] = value;
         }
         inputResult.setInputData(dataArray);
@@ -144,16 +166,9 @@ public class CRCRHandler extends AbstractChainResponsibilityHandler {
      * @param columnName The name of column
      * @return true when the value need to be fill else false
      */
-    private boolean isNeedFillColumn(Object value, String columnName) {
-        if (!fillColumnIsValid() || !columnName.equals(handlerParameter.getRefColumn().getName())) {
-            return false;
-        }
+    protected boolean isNeedFillColumn(Object value, String columnName) {
         boolean ignoreBlank = handlerParameter.isIgnoreBlank();
         return inputDataIsEmpty(value, ignoreBlank);
-    }
-
-    private boolean fillColumnIsValid() {
-        return handlerParameter.getFillColumn() != null && !handlerParameter.getFillColumn().trim().isEmpty();
     }
 
     /**
@@ -328,7 +343,7 @@ public class CRCRHandler extends AbstractChainResponsibilityHandler {
         Iterator<Integer> iterator = this.conflictRowNum.keySet().iterator();
         while (iterator.hasNext()) {
             Integer index = iterator.next();
-            setContainer.add(this.getHandlerParameter().getInputData(index, this.conflictRowNum.get(index)));
+            setContainer.add(this.getHandlerParameter().getDataset().getValueAfterFiled(index, this.conflictRowNum.get(index)));
         }
         return setContainer.size() == 1;
     }

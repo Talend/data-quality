@@ -32,7 +32,7 @@ public class ExclusivenessActionTest {
         int rowNum = 0;
         String column = "firstName";
         String ruleName = "rule1";
-        String expression = "Tony,Green";
+        String expression = "Tony|Green";
         boolean ignoreBlanks = false;
         ActionParameter actionParameter = new ActionParameter(dataset, inputData, rowNum, column, ruleName, expression,
                 ignoreBlanks);

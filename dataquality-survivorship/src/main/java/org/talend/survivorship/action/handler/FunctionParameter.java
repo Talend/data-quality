@@ -13,6 +13,7 @@
 package org.talend.survivorship.action.handler;
 
 import org.talend.survivorship.action.ISurvivoredAction;
+import org.talend.survivorship.model.RuleDefinition.Function;
 
 /**
  * Create by zshen parameter of survived function
@@ -27,8 +28,19 @@ public class FunctionParameter {
 
     private boolean isDealDup;
 
+    private Function function;
+
     public FunctionParameter(ISurvivoredAction action, String expression, boolean isIgnoreBlank, boolean isDealDup) {
         this.action = action;
+        this.function = Function.getFunction(action);
+        this.expression = expression;
+        this.isIgnoreBlank = isIgnoreBlank;
+        this.isDealDup = isDealDup;
+    }
+
+    public FunctionParameter(Function function, String expression, boolean isIgnoreBlank, boolean isDealDup) {
+        this.function = function;
+        this.action = function.getAction();
         this.expression = expression;
         this.isIgnoreBlank = isIgnoreBlank;
         this.isDealDup = isDealDup;
@@ -68,6 +80,15 @@ public class FunctionParameter {
      */
     public boolean isDealDup() {
         return this.isDealDup;
+    }
+
+    /**
+     * Getter for function.
+     * 
+     * @return the function
+     */
+    protected Function getFunction() {
+        return this.function;
     }
 
 }

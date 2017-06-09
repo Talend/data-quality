@@ -21,6 +21,8 @@ public class ConflictRuleDefinition extends RuleDefinition {
 
     private boolean duplicateSurCheck;
 
+    private boolean disableRule;
+
     /**
      * create by zshen constructor of ConflictRuleDefinition .
      * 
@@ -39,6 +41,28 @@ public class ConflictRuleDefinition extends RuleDefinition {
         super(order, ruleName, referenceColumn, function, operation, targetColumn, ignoreBlanks);
         this.fillColumn = fillColumn;
         this.duplicateSurCheck = duplicateSurCheck;
+        this.disableRule = false;
+    }
+
+    /**
+     * create by zshen constructor of ConflictRuleDefinition .
+     * 
+     * @param order The type of rule
+     * @param ruleName The name of rule
+     * @param referenceColumn The name of reference column
+     * @param function The action of current rule
+     * @param operation The parameter of function
+     * @param targetColumn The name of target column
+     * @param ignoreBlanks Whether ignore blanks case in the rule
+     * @param fillColumn The name of fill column
+     * @param duplicateSurCheck Whether deal with duplicate case in the survived value
+     */
+    public ConflictRuleDefinition(Order order, String ruleName, String referenceColumn, Function function, String operation,
+            String targetColumn, boolean ignoreBlanks, String fillColumn, boolean duplicateSurCheck, boolean disableRule) {
+        super(order, ruleName, referenceColumn, function, operation, targetColumn, ignoreBlanks);
+        this.fillColumn = fillColumn;
+        this.duplicateSurCheck = duplicateSurCheck;
+        this.disableRule = disableRule;
     }
 
     /**
@@ -57,6 +81,15 @@ public class ConflictRuleDefinition extends RuleDefinition {
      */
     public boolean isDuplicateSurCheck() {
         return this.duplicateSurCheck;
+    }
+
+    /**
+     * Getter for disableRule.
+     * 
+     * @return the disableRule
+     */
+    public boolean isDisableRule() {
+        return this.disableRule;
     }
 
 }

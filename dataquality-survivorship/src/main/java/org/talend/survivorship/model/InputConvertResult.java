@@ -28,6 +28,11 @@ public class InputConvertResult {
     private boolean isfilled;
 
     /**
+     * The attribute after filled
+     */
+    private FilledAttribute filledArrtibute;
+
+    /**
      * Getter for inputData.
      * 
      * @return the inputData
@@ -43,6 +48,24 @@ public class InputConvertResult {
      */
     public boolean isIsfilled() {
         return this.isfilled;
+    }
+
+    /**
+     * Getter for filledArrtibute.
+     * 
+     * @return the filledArrtibute
+     */
+    public FilledAttribute getFilledArrtibute() {
+        return this.filledArrtibute;
+    }
+
+    /**
+     * Sets the filledArrtibute.
+     * 
+     * @param filledArrtibute the filledArrtibute to set
+     */
+    public void setFilledArrtibute(FilledAttribute filledArrtibute) {
+        this.filledArrtibute = filledArrtibute;
     }
 
     /**

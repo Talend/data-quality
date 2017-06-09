@@ -30,13 +30,17 @@ public class SampleDataConflictMostCommon2Longest2keepOneOfDuplicte {
     public static final ConflictRuleDefinition[] RULES_CONFLICT_RESOLVE = {
             new ConflictRuleDefinition(Order.SEQ, "longest_city1", "city1", //$NON-NLS-1$ //$NON-NLS-2$
                     Function.Longest, null, "city1", false, null, false), //$NON-NLS-1$
+            new ConflictRuleDefinition(Order.SEQ, "longest_city2", "city1", //$NON-NLS-1$ //$NON-NLS-2$
+                    Function.RemoveDuplicate, null, "city2", false, null, false), //$NON-NLS-1$
             new ConflictRuleDefinition(Order.SEQ, "longest_city2", "city2", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.Longest, null, "city2", false, null, true) }; //$NON-NLS-1$
+                    Function.Longest, null, "city2", false, null, false) };
 
     public static final ConflictRuleDefinition[] RULES_CONFLICT_RESOLVE2 = {
             new ConflictRuleDefinition(Order.SEQ, "longest_city1", "city1", //$NON-NLS-1$ //$NON-NLS-2$
                     Function.Shortest, null, "city1", false, null, false), //$NON-NLS-1$
+            new ConflictRuleDefinition(Order.SEQ, "longest_city2", "city1", //$NON-NLS-1$ //$NON-NLS-2$
+                    Function.RemoveDuplicate, null, "city2", false, null, false), //$NON-NLS-1$
             new ConflictRuleDefinition(Order.SEQ, "longest_city2", "city2", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.Shortest, null, "city2", false, null, true) }; //$NON-NLS-1$
+                    Function.Shortest, null, "city2", false, null, false) }; //$NON-NLS-1$
 
 }

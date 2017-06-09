@@ -1,4 +1,4 @@
-Lili,Cheng,Walker,beijing,beijing,1,04-04-2000,1,10
+Lili,Cheng,Walker,beijing,beijing,1,04-04-2000,1,11
 Tony,,Martain,shanghai,shanghai,1,06-06-2000,1,0
 Tom,Green,,shanghai,shanghai,3,04-04-2000,1,0
 san,Green,,hebeihebei,hebeihebei,2,08-08-2000,1,0
@@ -7,4 +7,5 @@ Tony,,William,xian,xian,2,null,1,0
 Lili,si,Allen,lasa,null,2,null,1,0
    ,null,null,null,null,2,null,1,0
    ,null,null,null,null,2,null,1,0
-   ,null,null,null,null,2,null,1,0
+   ,Green,null,null,null,2,null,1,0
+shenze,,null,null,wulumuqi,2,null,1,0

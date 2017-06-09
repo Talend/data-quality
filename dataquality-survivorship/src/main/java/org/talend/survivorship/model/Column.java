@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class represents a column from input.
@@ -80,11 +81,18 @@ public class Column {
      * 
      * @return
      */
-    public Collection<Attribute> getAttributesByFilter(List<Integer> dataSetIndex) {
+    public Collection<Attribute> getAttributesByFilter(List<Integer> dataSetIndex,
+            Map<Attribute, FilledAttribute> filledAttributeMap) {
         List<Attribute> filterList = new ArrayList<>();
         for (Record record : attributeMap.keySet()) {
             if (dataSetIndex.contains(record.getId())) {
-                filterList.add(attributeMap.get(record));
+                Attribute attribute = attributeMap.get(record);
+                FilledAttribute filledAttribute = null;
+                // when there is not a fill empty operation then get conflict directly
+                if (filledAttributeMap != null) {
+                    filledAttribute = filledAttributeMap.get(attribute);
+                }
+                filterList.add(filledAttribute == null ? attribute : filledAttribute);
             }
         }
         return filterList;

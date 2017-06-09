@@ -361,10 +361,6 @@ public class CRCRHandlerTest {
         longestResult = crcr1.getLongestResult("value");
         Assert.assertEquals("The result of logest value should be value11", "value11", longestResult.toString());
 
-        createHandlerParameter.setFillColumn(null);
-        longestResult = crcr1.getLongestResult("value");
-        Assert.assertEquals("The result of logest value should be value2", "value2", longestResult.toString());
-
         createHandlerParameter = this.createHandlerParameter(RuleDefinition.Function.Exclusiveness.getAction());
         createHandlerParameter.setTarColumn(col1);
         conflictIndex = new ArrayList<>();

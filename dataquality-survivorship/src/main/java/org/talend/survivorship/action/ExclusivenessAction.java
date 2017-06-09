@@ -16,6 +16,10 @@ package org.talend.survivorship.action;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+
 /**
  * Create by zshen define a action which filter some exclusiveness values
  */
@@ -28,10 +32,22 @@ public class ExclusivenessAction extends AbstractSurvivoredAction {
      */
     @Override
     public boolean checkCanHandle(ActionParameter actionParameter) {
-        String exclusivenessStr = actionParameter.getExpression();
+        if (actionParameter.getExpression() == null) {
+            return true;
+        }
+        ScriptEngineManager manager = new ScriptEngineManager();
+        ScriptEngine engine = manager.getEngineByName("javascript"); //$NON-NLS-1$
+        try {
+            if (actionParameter.getInputData() != null) {
+                engine.put("inputData", actionParameter.getInputData()); //$NON-NLS-1$
+                Object eval = engine.eval("inputData.match(\"" + actionParameter.getExpression() + "\")"); //$NON-NLS-1$ //$NON-NLS-2$
+                return eval == null;
 
-        Object inputData = actionParameter.getInputData();
-        return !checkUnExpect(exclusivenessStr, inputData);
+            }
+        } catch (ScriptException e) {
+            // no need implement
+        }
+        return false;
     }
 
     public static boolean checkUnExpect(String exclusivenessStr, Object inputData) {

@@ -17,13 +17,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.talend.survivorship.action.ISurvivoredAction;
 import org.talend.survivorship.action.handler.CRCRHandler;
 import org.talend.survivorship.action.handler.FunctionParameter;
+import org.talend.survivorship.action.handler.HandlerFactory;
 import org.talend.survivorship.action.handler.HandlerParameter;
 import org.talend.survivorship.services.CompletenessService;
 import org.talend.survivorship.services.FrequencyService;
@@ -202,6 +202,11 @@ public class DataSet {
                 // If we don't do that maybe we can store conflict data number form here
                 if (crcrHandler == null) {
                     for (ConflictRuleDefinition ruleDef : column.getConflictResolveList()) {
+                        //If current rule has been disable then continue next one
+                        boolean disableRule = ruleDef.isDisableRule();
+                        if (disableRule) {
+                            continue;
+                        }
                         ISurvivoredAction action = ruleDef.getFunction().getAction();
                         Column refColumn = record.getAttribute(ruleDef.getReferenceColumn()).getColumn();
                         Column tarColumn = column;
@@ -211,8 +216,8 @@ public class DataSet {
                         String fillColumn = ruleDef.getFillColumn();
                         boolean isDealDup = ruleDef.isDuplicateSurCheck();
                         FunctionParameter functionParameter = new FunctionParameter(action, expression, isIgnoreBlank, isDealDup);
-                        CRCRHandler newCrcrHandler = new CRCRHandler(new HandlerParameter(this, refColumn, tarColumn, cRuleName,
-                                this.getColumnIndexMap(), fillColumn, functionParameter));
+                        CRCRHandler newCrcrHandler = HandlerFactory.getInstance().createCRCRHandler(new HandlerParameter(this,
+                                refColumn, tarColumn, cRuleName, this.getColumnIndexMap(), fillColumn, functionParameter));
                         if (crcrHandler == null) {
                             this.chainMap.put(columnName, newCrcrHandler);
                         }
@@ -304,12 +309,9 @@ public class DataSet {
                 if (crcrHandler != null) {
                     SurvivedResult survivoredRowNum = crcrHandler.getSurvivoredRowNum();
                     if (survivoredRowNum != null) {
-                        Attribute attribute = recordList.get(survivoredRowNum.getRowNum())
-                                .getAttribute(survivoredRowNum.getColumnName());
-                        Object survivedVlaue = attribute.getValue();
-                        if (crcrHandler.getHandlerParameter().isDealDup() && checkDupSurValue(survivedVlaue)) {
-                            survivedVlaue = crcrHandler.getNonDupResult(survivedVlaue);
-                        }
+                        Object survivedVlaue = this.getValueAfterFiled(survivoredRowNum.getRowNum(),
+                                survivoredRowNum.getColumnName());
+                        conflictsOfSurvivor.remove(conflictCol);
                         survivorMap.put(conflictCol, survivedVlaue);
                         survivorIndexMap.put(conflictCol, survivoredRowNum.getRowNum());
                     }
@@ -324,12 +326,10 @@ public class DataSet {
      * @param value The new value
      * @return true when exist duplicate else false
      */
-    private boolean checkDupSurValue(Object value) {
-        Iterator<Object> iterator = survivorMap.values().iterator();
-        while (iterator.hasNext()) {
-            if (value.equals(iterator.next())) {
-                return true;
-            }
+    public boolean checkDupSurValue(Object value, String colName) {
+        Object refSurvive = survivorMap.get(colName);
+        if (value.equals(refSurvive)) {
+            return true;
         }
         return false;
     }
@@ -505,6 +505,19 @@ public class DataSet {
      */
     public List<Record> getRecordList() {
         return recordList;
+    }
+
+    /**
+     * 
+     * Get the value which special rowNum and colName
+     * 
+     * @param rowNum
+     * @param colName
+     * @return The value which special rowNum and colName
+     */
+    public Object getValueAfterFiled(int rowNum, String colName) {
+        Record record = this.getRecordList().get(rowNum);
+        return record.getAttribute(colName).getValue();
     }
 
     /**

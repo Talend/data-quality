@@ -18,6 +18,7 @@ import java.util.Map;
 import org.talend.survivorship.action.ISurvivoredAction;
 import org.talend.survivorship.model.Column;
 import org.talend.survivorship.model.DataSet;
+import org.talend.survivorship.model.RuleDefinition.Function;
 
 /**
  * create by zshen parameter of handler node
@@ -94,7 +95,7 @@ public class HandlerParameter {
     }
 
     public Object getTarInputData(Object[] inputDatas) {
-        return inputDatas[this.columnIndexMap.get(tarColumn)];
+        return inputDatas[this.columnIndexMap.get(tarColumn.getName())];
     }
 
     /**
@@ -256,6 +257,16 @@ public class HandlerParameter {
      */
     public boolean isDealDup() {
         return this.functionPara.isDealDup();
+    }
+
+    /**
+     * 
+     * Getter for Function of functionParam.
+     * 
+     * @return The Function
+     */
+    public Function getFunction() {
+        return this.functionPara.getFunction();
     }
 
 }
