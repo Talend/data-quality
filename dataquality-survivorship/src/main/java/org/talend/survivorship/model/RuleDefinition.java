@@ -12,10 +12,10 @@
 // ============================================================================
 package org.talend.survivorship.model;
 
-import org.talend.survivorship.action.ExclusivenessAction;
+import org.talend.survivorship.action.ExcludeValuesAction;
 import org.talend.survivorship.action.ExpressionAction;
 import org.talend.survivorship.action.FillEmptyAction;
-import org.talend.survivorship.action.ISurvivoredAction;
+import org.talend.survivorship.action.ISurvivorshipAction;
 import org.talend.survivorship.action.LargestAction;
 import org.talend.survivorship.action.LongestAction;
 import org.talend.survivorship.action.MatchRegexAction;
@@ -26,7 +26,7 @@ import org.talend.survivorship.action.MostRecentAction;
 import org.talend.survivorship.action.RemoveDuplicateAction;
 import org.talend.survivorship.action.ShortestAction;
 import org.talend.survivorship.action.SmallestAction;
-import org.talend.survivorship.action.SurvivedValuePassAction;
+import org.talend.survivorship.action.SurviveAsAction;
 
 /**
  * represents definition of a user rule from the component.
@@ -139,7 +139,7 @@ public class RuleDefinition {
         SEQ("SEQ"), // Sequential //$NON-NLS-1$
         MC("MC"), // Multi-condition //$NON-NLS-1$
         MT("MT"), // Multi-target //$NON-NLS-1$
-        CR("CR");//conflict resolved  //$NON-NLS-1$
+        CR("CR");// conflict resolved //$NON-NLS-1$
 
         private final String label;
 
@@ -170,7 +170,7 @@ public class RuleDefinition {
      */
     public enum Function {
 
-        Exclusiveness("Exclusiveness", new ExclusivenessAction()), //$NON-NLS-1$
+        ExcludeValues("ExcludeValues", new ExcludeValuesAction()), //$NON-NLS-1$
 
         Expression("Expression", new ExpressionAction()), // User defined rules. //$NON-NLS-1$
 
@@ -180,7 +180,7 @@ public class RuleDefinition {
 
         Longest("Longest", new LongestAction()), //$NON-NLS-1$
 
-        MappingTo("MappingTo", new SurvivedValuePassAction()), //$NON-NLS-1$
+        SurviveAs("SurviveAs", new SurviveAsAction()), //$NON-NLS-1$
 
         MatchRegex("MatchRegex", new MatchRegexAction()), //$NON-NLS-1$
 
@@ -196,22 +196,15 @@ public class RuleDefinition {
 
         Shortest("Shortest", new ShortestAction()), //$NON-NLS-1$
 
-        Smallest("Smallest", new SmallestAction()), //$NON-NLS-1$
-
-        MatchIndex("MatchIndex", null); //$NON-NLS-1$
+        Smallest("Smallest", new SmallestAction()); //$NON-NLS-1$
 
         private final String label;
 
-        private final ISurvivoredAction action;
+        private final ISurvivorshipAction action;
 
-        Function(String label, ISurvivoredAction action) {
+        Function(String label, ISurvivorshipAction action) {
             this.label = label;
             this.action = action;
-        }
-
-        Function(String label) {
-            this.label = label;
-            this.action = null;
         }
 
         public String getLabel() {
@@ -228,7 +221,7 @@ public class RuleDefinition {
          * 
          * @return the action
          */
-        public ISurvivoredAction getAction() {
+        public ISurvivorshipAction getAction() {
             return this.action;
         }
 
@@ -253,7 +246,7 @@ public class RuleDefinition {
          * @param label the label of the Function
          * @return the Function type given the label or null
          */
-        public static Function getFunction(ISurvivoredAction action) {
+        public static Function getFunction(ISurvivorshipAction action) {
             for (Function fun : Function.values()) {
                 if (action.equals(fun.action)) {
                     return fun;

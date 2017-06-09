@@ -15,14 +15,14 @@ package org.talend.survivorship.action.handler;
 /**
  * The class which used to remove duplicate survived value
  */
-public class RemDupCRCRHandler extends DataCleanCRCRHandler {
+public class RemoveDuplicateCRCRHandler extends DataCleansingCRCRHandler {
 
     /**
      * The constructor of RemDupCRCRHandler class.
      * 
      * @param handlerParameter
      */
-    public RemDupCRCRHandler(HandlerParameter handlerParameter) {
+    public RemoveDuplicateCRCRHandler(HandlerParameter handlerParameter) {
         super(handlerParameter);
     }
 
@@ -32,10 +32,10 @@ public class RemDupCRCRHandler extends DataCleanCRCRHandler {
      * @see org.talend.survivorship.action.handler.DataCleanCRCRHandler#canHandler(java.lang.Object, java.lang.String, int)
      */
     @Override
-    protected boolean canHandler(Object inputData, String expression, int rowNum) {
+    protected boolean canHandle(Object inputData, String expression, int rowNum) {
         Object realValue = this.getHandlerParameter().getTarInputData((Object[]) inputData);
         return !this.getHandlerParameter().getDataset().checkDupSurValue(realValue,
-                this.handlerParameter.getRefColumn().getName());
+                this.handlerParameter.getReferenceColumn().getName());
 
     }
 }

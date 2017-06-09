@@ -12,7 +12,10 @@
 // ============================================================================
 package org.talend.survivorship;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -186,9 +189,9 @@ public class SurvivorshipManagerTest {
         HashSet<String> conflictsOfSurvivor = manager.getConflictsOfSurvivor();
         assertEquals("The size of conflictsOfSurvivor should be 0", 0, conflictsOfSurvivor.size()); //$NON-NLS-1$
         Map<String, Object> survivorMap = manager.getSurvivorMap();
-        assertTrue("The SurvivorMap should not be null", survivorMap != null); //$NON-NLS-1$ 
+        assertTrue("The SurvivorMap should not be null", survivorMap != null); //$NON-NLS-1$
         Object birthdayObj = survivorMap.get("birthday"); //$NON-NLS-1$
-        assertTrue("The birthdayObj should not be null", birthdayObj != null); //$NON-NLS-1$ 
+        assertTrue("The birthdayObj should not be null", birthdayObj != null); //$NON-NLS-1$
         Date resultDate = (Date) birthdayObj;
 
         // 08-08-2000 is we expect after implement code because we use most recent to resolve conflict
@@ -230,9 +233,9 @@ public class SurvivorshipManagerTest {
         assertEquals("The size of conflictsOfSurvivor should be 1", 1, conflictsOfSurvivor.size()); //$NON-NLS-1$
         assertTrue("The column of conflict should be birthday", conflictsOfSurvivor.contains("birthday")); //$NON-NLS-1$ //$NON-NLS-2$
         Map<String, Object> survivorMap = manager.getSurvivorMap();
-        assertTrue("The SurvivorMap should not be null", survivorMap != null); //$NON-NLS-1$ 
+        assertTrue("The SurvivorMap should not be null", survivorMap != null); //$NON-NLS-1$
         Object birthdayObj = survivorMap.get("birthday"); //$NON-NLS-1$
-        assertTrue("The birthdayObj should not be null", birthdayObj != null); //$NON-NLS-1$ 
+        assertTrue("The birthdayObj should not be null", birthdayObj != null); //$NON-NLS-1$
         Date resultDate = (Date) birthdayObj;
 
         // 08-08-2000 is we expect after implement code because we use most recent to resolve conflict
@@ -273,9 +276,9 @@ public class SurvivorshipManagerTest {
         HashSet<String> conflictsOfSurvivor = manager.getConflictsOfSurvivor();
         assertEquals("The size of conflictsOfSurvivor should be 0", 0, conflictsOfSurvivor.size()); //$NON-NLS-1$
         Map<String, Object> survivorMap = manager.getSurvivorMap();
-        assertTrue("The SurvivorMap should not be null", survivorMap != null); //$NON-NLS-1$ 
+        assertTrue("The SurvivorMap should not be null", survivorMap != null); //$NON-NLS-1$
         Object lastNameObj = survivorMap.get("lastName"); //$NON-NLS-1$
-        assertTrue("The birthdayObj should not be null", lastNameObj != null); //$NON-NLS-1$ 
+        assertTrue("The birthdayObj should not be null", lastNameObj != null); //$NON-NLS-1$
         String resultLastName = lastNameObj.toString();
 
         // shenze is we expect after implement code because we use longest to resolve conflict
@@ -315,9 +318,9 @@ public class SurvivorshipManagerTest {
         HashSet<String> conflictsOfSurvivor = manager.getConflictsOfSurvivor();
         assertEquals("The size of conflictsOfSurvivor should be 0", 0, conflictsOfSurvivor.size()); //$NON-NLS-1$
         Map<String, Object> survivorMap = manager.getSurvivorMap();
-        assertTrue("The SurvivorMap should not be null", survivorMap != null); //$NON-NLS-1$ 
+        assertTrue("The SurvivorMap should not be null", survivorMap != null); //$NON-NLS-1$
         Object cityObj = survivorMap.get("city1"); //$NON-NLS-1$
-        assertTrue("The birthdayObj should not be null", cityObj != null); //$NON-NLS-1$ 
+        assertTrue("The birthdayObj should not be null", cityObj != null); //$NON-NLS-1$
         String resultStr = (String) cityObj;
         // Because we used longest rule to resolve conflict the frequency of shanghai is 2 and the frequency of beijing is 2.
         // But length of beijing is 7 the length of shanghai is 8 so that we expect final result is shanghai
@@ -362,9 +365,9 @@ public class SurvivorshipManagerTest {
         HashSet<String> conflictsOfSurvivor = manager.getConflictsOfSurvivor();
         assertEquals("The size of conflictsOfSurvivor should be 0", 0, conflictsOfSurvivor.size()); //$NON-NLS-1$
         Map<String, Object> survivorMap = manager.getSurvivorMap();
-        assertTrue("The SurvivorMap should not be null", survivorMap != null); //$NON-NLS-1$ 
+        assertTrue("The SurvivorMap should not be null", survivorMap != null); //$NON-NLS-1$
         Object firstNameObj = survivorMap.get("firstName"); //$NON-NLS-1$
-        assertTrue("The firstNameObj should not be null", firstNameObj != null); //$NON-NLS-1$ 
+        assertTrue("The firstNameObj should not be null", firstNameObj != null); //$NON-NLS-1$
         String resultStr = (String) firstNameObj;
         // There Tony and Lili is conflict.we use most recent on the birthday column so that we choose Tony.
         // Because of Tony birthday is 06-06-2000 but Lili birthday is 04-04-2000.
@@ -406,9 +409,9 @@ public class SurvivorshipManagerTest {
         HashSet<String> conflictsOfSurvivor = manager.getConflictsOfSurvivor();
         assertEquals("The size of conflictsOfSurvivor should be 0", 0, conflictsOfSurvivor.size()); //$NON-NLS-1$
         Map<String, Object> survivorMap = manager.getSurvivorMap();
-        assertTrue("The SurvivorMap should not be null", survivorMap != null); //$NON-NLS-1$ 
+        assertTrue("The SurvivorMap should not be null", survivorMap != null); //$NON-NLS-1$
         Object city1 = survivorMap.get("city1"); //$NON-NLS-1$
-        assertTrue("The firstNameObj should not be null", city1 != null); //$NON-NLS-1$ 
+        assertTrue("The firstNameObj should not be null", city1 != null); //$NON-NLS-1$
         String resultStr = (String) city1;
         // There Tony and Lili is conflict.we use most recent on the birthday column so that we choose Tony.
         // Because of Tony birthday is 06-06-2000 but Lili birthday is 04-04-2000.
@@ -453,9 +456,9 @@ public class SurvivorshipManagerTest {
         manager.runSession(getTableValue("/org.talend.survivorship.conflict/conflicts.csv")); //$NON-NLS-1$
         // 5. Retrieve results
         Map<String, Object> survivorMap = manager.getSurvivorMap();
-        assertTrue("The SurvivorMap should not be null", survivorMap != null); //$NON-NLS-1$ 
+        assertTrue("The SurvivorMap should not be null", survivorMap != null); //$NON-NLS-1$
         Object lastNameObj = survivorMap.get("lastName"); //$NON-NLS-1$
-        assertTrue("The lastNameObj should not be null", lastNameObj != null); //$NON-NLS-1$ 
+        assertTrue("The lastNameObj should not be null", lastNameObj != null); //$NON-NLS-1$
         String resultStr = (String) lastNameObj;
         // conflicting between "" and Green after most common
         // after fill empty conflicting between "tony" "shenze" and "Green"
@@ -507,15 +510,16 @@ public class SurvivorshipManagerTest {
         manager.runSession(getTableValue("/org.talend.survivorship.conflict/conflicts.csv")); //$NON-NLS-1$
         // 5. Retrieve results
         // HashSet<String> conflictsOfSurvivor = manager.getConflictsOfSurvivor();
-        //        Assert.assertEquals("The size of conflictsOfSurvivor should be 1", 1, conflictsOfSurvivor.size()); //$NON-NLS-1$
-        //        Assert.assertTrue("The column of conflict should be lastName", conflictsOfSurvivor.contains("lastName")); //$NON-NLS-1$ //$NON-NLS-2$
+        // Assert.assertEquals("The size of conflictsOfSurvivor should be 1", 1, conflictsOfSurvivor.size()); //$NON-NLS-1$
+        // Assert.assertTrue("The column of conflict should be lastName", conflictsOfSurvivor.contains("lastName")); //$NON-NLS-1$
+        // //$NON-NLS-2$
         Map<String, Object> survivorMap = manager.getSurvivorMap();
-        assertTrue("The SurvivorMap should not be null", survivorMap != null); //$NON-NLS-1$ 
+        assertTrue("The SurvivorMap should not be null", survivorMap != null); //$NON-NLS-1$
         Object lastNameObj = survivorMap.get("lastName"); //$NON-NLS-1$
-        assertTrue("The lastNameObj should not be null", lastNameObj != null); //$NON-NLS-1$ 
+        assertTrue("The lastNameObj should not be null", lastNameObj != null); //$NON-NLS-1$
         String resultStr2 = (String) lastNameObj;
         Object firstNameObj = survivorMap.get("firstName"); //$NON-NLS-1$
-        assertTrue("The firstNameObj should not be null", firstNameObj != null); //$NON-NLS-1$ 
+        assertTrue("The firstNameObj should not be null", firstNameObj != null); //$NON-NLS-1$
         String resultStr1 = (String) firstNameObj;
         // Green is our Constant value which will be setting by user after that.
         // In fact, Tony and Green is conflict after most common rule.
@@ -554,10 +558,10 @@ public class SurvivorshipManagerTest {
         HashSet<String> conflictsOfSurvivor = manager.getConflictsOfSurvivor();
         assertEquals("The size of conflictsOfSurvivor should be 0", 0, conflictsOfSurvivor.size()); //$NON-NLS-1$
         Map<String, Object> survivorMap = manager.getSurvivorMap();
-        assertTrue("The SurvivorMap should not be null", survivorMap != null); //$NON-NLS-1$ 
+        assertTrue("The SurvivorMap should not be null", survivorMap != null); //$NON-NLS-1$
         assertTrue("The size of SurvivorMap should be 1", survivorMap.size() == 1); //$NON-NLS-1$
         Object birthdayObj = survivorMap.get("birthday"); //$NON-NLS-1$
-        assertTrue("The birthdayNameObj should not be null", birthdayObj != null); //$NON-NLS-1$ 
+        assertTrue("The birthdayNameObj should not be null", birthdayObj != null); //$NON-NLS-1$
         String resultDate = SampleData.dateToString((Date) birthdayObj, "dd-MM-yyyy"); //$NON-NLS-1$
         assertEquals("The resultDate should be 08-08-2000", "08-08-2000", //$NON-NLS-1$ //$NON-NLS-2$
                 resultDate);
@@ -601,15 +605,15 @@ public class SurvivorshipManagerTest {
         HashSet<String> conflictsOfSurvivor = manager.getConflictsOfSurvivor();
         assertEquals("The size of conflictsOfSurvivor should be 0", 0, conflictsOfSurvivor.size()); //$NON-NLS-1$
         Map<String, Object> survivorMap = manager.getSurvivorMap();
-        assertTrue("The SurvivorMap should not be null", survivorMap != null); //$NON-NLS-1$ 
+        assertTrue("The SurvivorMap should not be null", survivorMap != null); //$NON-NLS-1$
         assertTrue("The size of SurvivorMap should be 2", survivorMap.size() == 2); //$NON-NLS-1$
         Object city1Obj = survivorMap.get("city1"); //$NON-NLS-1$
-        assertTrue("The city1Obj should not be null", city1Obj != null); //$NON-NLS-1$ 
+        assertTrue("The city1Obj should not be null", city1Obj != null); //$NON-NLS-1$
         String resultDate = city1Obj.toString();
         assertEquals("The resultDate should be shanghai", "shanghai", //$NON-NLS-1$ //$NON-NLS-2$
                 resultDate);
         Object city2Obj = survivorMap.get("city2"); //$NON-NLS-1$
-        assertTrue("The city1Obj should not be null", city2Obj != null); //$NON-NLS-1$ 
+        assertTrue("The city1Obj should not be null", city2Obj != null); //$NON-NLS-1$
         resultDate = city2Obj.toString();
         assertEquals("The resultDate should be beijing", "beijing", //$NON-NLS-1$ //$NON-NLS-2$
                 resultDate);
@@ -654,15 +658,15 @@ public class SurvivorshipManagerTest {
         HashSet<String> conflictsOfSurvivor = manager.getConflictsOfSurvivor();
         assertEquals("The size of conflictsOfSurvivor should be 0", 0, conflictsOfSurvivor.size()); //$NON-NLS-1$
         Map<String, Object> survivorMap = manager.getSurvivorMap();
-        assertTrue("The SurvivorMap should not be null", survivorMap != null); //$NON-NLS-1$ 
+        assertTrue("The SurvivorMap should not be null", survivorMap != null); //$NON-NLS-1$
         assertTrue("The size of SurvivorMap should be 2", survivorMap.size() == 2); //$NON-NLS-1$
         Object city1Obj = survivorMap.get("city1"); //$NON-NLS-1$
-        assertTrue("The city1Obj should not be null", city1Obj != null); //$NON-NLS-1$ 
+        assertTrue("The city1Obj should not be null", city1Obj != null); //$NON-NLS-1$
         String resultDate = city1Obj.toString();
         assertEquals("The resultDate should be beijing", "beijing", //$NON-NLS-1$ //$NON-NLS-2$
                 resultDate);
         Object city2Obj = survivorMap.get("city2"); //$NON-NLS-1$
-        assertTrue("The city1Obj should not be null", city2Obj != null); //$NON-NLS-1$ 
+        assertTrue("The city1Obj should not be null", city2Obj != null); //$NON-NLS-1$
         resultDate = city2Obj.toString();
         assertEquals("The resultDate should be shanghai", "shanghai", //$NON-NLS-1$ //$NON-NLS-2$
                 resultDate);
@@ -695,9 +699,9 @@ public class SurvivorshipManagerTest {
         assertEquals("The size of conflictsOfSurvivor should be 1", 1, conflictsOfSurvivor.size()); //$NON-NLS-1$
         assertTrue("The column of conflict should be firstName", conflictsOfSurvivor.contains("firstName")); //$NON-NLS-1$ //$NON-NLS-2$
         Map<String, Object> survivorMap = manager.getSurvivorMap();
-        assertTrue("The SurvivorMap should not be null", survivorMap != null); //$NON-NLS-1$ 
+        assertTrue("The SurvivorMap should not be null", survivorMap != null); //$NON-NLS-1$
         Object firstNameObj = survivorMap.get("firstName"); //$NON-NLS-1$
-        assertTrue("The firstNameObj should not be null", firstNameObj != null); //$NON-NLS-1$ 
+        assertTrue("The firstNameObj should not be null", firstNameObj != null); //$NON-NLS-1$
         assertResultIsFirstConflictedValue();
 
     }
@@ -729,9 +733,9 @@ public class SurvivorshipManagerTest {
         HashSet<String> conflictsOfSurvivor = manager.getConflictsOfSurvivor();
         assertEquals("The size of conflictsOfSurvivor should be 0", 0, conflictsOfSurvivor.size()); //$NON-NLS-1$
         Map<String, Object> survivorMap = manager.getSurvivorMap();
-        assertTrue("The SurvivorMap should not be null", survivorMap != null); //$NON-NLS-1$ 
+        assertTrue("The SurvivorMap should not be null", survivorMap != null); //$NON-NLS-1$
         Object firstNameObj = survivorMap.get("firstName"); //$NON-NLS-1$
-        assertTrue("The firstNameObj should not be null", firstNameObj != null); //$NON-NLS-1$ 
+        assertTrue("The firstNameObj should not be null", firstNameObj != null); //$NON-NLS-1$
         String resultDate = firstNameObj.toString();
         assertEquals("The resultDate should be \"   \"", "   ", resultDate); //$NON-NLS-1$ //$NON-NLS-2$
     }
@@ -777,13 +781,13 @@ public class SurvivorshipManagerTest {
         HashSet<String> conflictsOfSurvivor = manager.getConflictsOfSurvivor();
         assertEquals("The size of conflictsOfSurvivor should be 0", 0, conflictsOfSurvivor.size()); //$NON-NLS-1$
         Map<String, Object> survivorMap = manager.getSurvivorMap();
-        assertTrue("The SurvivorMap should not be null", survivorMap != null); //$NON-NLS-1$ 
+        assertTrue("The SurvivorMap should not be null", survivorMap != null); //$NON-NLS-1$
         Object city1NameObj = survivorMap.get("city1"); //$NON-NLS-1$
-        assertTrue("The city1NameObj should not be null", city1NameObj != null); //$NON-NLS-1$ 
+        assertTrue("The city1NameObj should not be null", city1NameObj != null); //$NON-NLS-1$
         String resultDate = city1NameObj.toString();
         assertEquals("The resultDate should be lasa", "lasa", resultDate); //$NON-NLS-1$ //$NON-NLS-2$
         Object city2NameObj = survivorMap.get("city2"); //$NON-NLS-1$
-        assertTrue("The city2NameObj should not be null", city2NameObj != null); //$NON-NLS-1$ 
+        assertTrue("The city2NameObj should not be null", city2NameObj != null); //$NON-NLS-1$
         resultDate = city2NameObj.toString();
         assertEquals("The resultDate should be xian", "xian", resultDate); //$NON-NLS-1$ //$NON-NLS-2$
     }
@@ -813,12 +817,12 @@ public class SurvivorshipManagerTest {
         assertTrue("firstName is not exist survived value so that it must be invalid value", //$NON-NLS-1$
                 checkConflictRuleValid.containsKey("firstName")); //$NON-NLS-1$
         assertEquals("firstName is not exist survived value so that it must be invalid value", //$NON-NLS-1$
-                "firstName is not exist survived value in the rule list", //$NON-NLS-1$
+                "firstName does not contain any survived value", //$NON-NLS-1$
                 checkConflictRuleValid.get("firstName").get(0)); //$NON-NLS-1$
         assertTrue("lastName is not exist survived value so that it must be invalid value", //$NON-NLS-1$
                 checkConflictRuleValid.containsKey("lastName")); //$NON-NLS-1$
         assertEquals("lastName is not exist survived value so that it must be invalid value", //$NON-NLS-1$
-                "lastName is not exist survived value in the rule list", //$NON-NLS-1$
+                "lastName does not contain any survived value", //$NON-NLS-1$
                 checkConflictRuleValid.get("lastName").get(0)); //$NON-NLS-1$
 
     }
@@ -847,13 +851,13 @@ public class SurvivorshipManagerTest {
         Map<String, List<String>> checkConflictRuleValid = manager.checkConflictRuleValid();
         assertTrue("city1 and city2 should be exist circular dependency", //$NON-NLS-1$
                 checkConflictRuleValid.containsKey("city1")); //$NON-NLS-1$
-        assertEquals("city1 can not mapping to city2 because of circular dependency", //$NON-NLS-1$
-                "city1 can not mapping to city2 because of circular dependency", //$NON-NLS-1$
+        assertEquals("city2 cannot be survived as city1 because of circular dependency", //$NON-NLS-1$
+                "city2 cannot be survived as city1 because of circular dependency", //$NON-NLS-1$
                 checkConflictRuleValid.get("city1").get(0)); //$NON-NLS-1$
         assertTrue("city2 and city1 should be exist circular dependency", //$NON-NLS-1$
                 checkConflictRuleValid.containsKey("city2")); //$NON-NLS-1$
-        assertEquals("city2 can not mapping to city1 because of circular dependency", //$NON-NLS-1$
-                "city2 can not mapping to city1 because of circular dependency", //$NON-NLS-1$
+        assertEquals("city1 cannot be survived as city2 because of circular dependency", //$NON-NLS-1$
+                "city1 cannot be survived as city2 because of circular dependency", //$NON-NLS-1$
                 checkConflictRuleValid.get("city2").get(0)); //$NON-NLS-1$
 
     }
@@ -885,14 +889,14 @@ public class SurvivorshipManagerTest {
                 checkConflictRuleValid.containsKey("city2")); //$NON-NLS-1$
         assertTrue("id and city1 should be exist circular dependency", //$NON-NLS-1$
                 checkConflictRuleValid.containsKey("id")); //$NON-NLS-1$
-        assertEquals("city1 can not mapping to city2 because of circular dependency", //$NON-NLS-1$
-                "city1 can not mapping to city2 because of circular dependency", //$NON-NLS-1$
+        assertEquals("city2 cannot be survived as city1 because of circular dependency", //$NON-NLS-1$
+                "city2 cannot be survived as city1 because of circular dependency", //$NON-NLS-1$
                 checkConflictRuleValid.get("city1").get(0)); //$NON-NLS-1$
-        assertEquals("city2 can not mapping to id because of circular dependency", //$NON-NLS-1$
-                "city2 can not mapping to id because of circular dependency", //$NON-NLS-1$
+        assertEquals("id cannot be survived as city2 because of circular dependency", //$NON-NLS-1$
+                "id cannot be survived as city2 because of circular dependency", //$NON-NLS-1$
                 checkConflictRuleValid.get("city2").get(0)); // $NON- //$NON-NLS-1$
-        assertEquals("id can not mapping to city1 because of circular dependency", //$NON-NLS-1$
-                "id can not mapping to city1 because of circular dependency", //$NON-NLS-1$
+        assertEquals("city1 cannot be survived as id because of circular dependency", //$NON-NLS-1$
+                "city1 cannot be survived as id because of circular dependency", //$NON-NLS-1$
                 checkConflictRuleValid.get("id").get(0)); //$NON-NLS-1$
 
     }

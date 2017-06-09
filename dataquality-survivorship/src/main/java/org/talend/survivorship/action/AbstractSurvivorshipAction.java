@@ -15,7 +15,7 @@ package org.talend.survivorship.action;
 /**
  * create by zshen Abstract Action
  */
-public abstract class AbstractSurvivoredAction implements ISurvivoredAction {
+public abstract class AbstractSurvivorshipAction implements ISurvivorshipAction {
 
     /*
      * (non-Javadoc)
@@ -36,7 +36,7 @@ public abstract class AbstractSurvivoredAction implements ISurvivoredAction {
      * java.lang.Object, java.lang.String, java.lang.String, int, boolean)
      */
     @Override
-    public boolean checkCanHandle(ActionParameter actionParameter) {
+    public boolean canHandle(ActionParameter actionParameter) {
         return false;
     }
 

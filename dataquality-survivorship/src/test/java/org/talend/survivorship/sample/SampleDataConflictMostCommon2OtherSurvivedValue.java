@@ -29,5 +29,5 @@ public class SampleDataConflictMostCommon2OtherSurvivedValue {
 
     public static final ConflictRuleDefinition[] RULES_CONFLICT_RESOLVE = {
             new ConflictRuleDefinition(Order.CR, "more_recent_birthday", "firstName", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.MappingTo, null, "city1", false, null, false) }; //$NON-NLS-1$
+                    Function.SurviveAs, null, "city1", false, null, false) }; //$NON-NLS-1$
 }

@@ -15,14 +15,24 @@ package org.talend.survivorship.action.handler;
 import org.talend.survivorship.action.ActionParameter;
 
 /**
- * create by zshen muti-Target Responsibility chain handler
+ * create by zshen Multi-Target Responsibility chain handler
  */
-public class MTCRHandler extends AbstractChainResponsibilityHandler {
+public class MTCRHandler extends AbstractChainOfResponsibilityHandler {
 
-    public MTCRHandler(AbstractChainResponsibilityHandler acrHandler) {
-        super(acrHandler);
+    /**
+     * constructor
+     * 
+     * @param abstractCRHandler
+     */
+    public MTCRHandler(AbstractChainOfResponsibilityHandler abstractCRHandler) {
+        super(abstractCRHandler);
     }
 
+    /**
+     * construct
+     * 
+     * @param handlerParameter
+     */
     public MTCRHandler(HandlerParameter handlerParameter) {
         super(handlerParameter);
     }
@@ -38,7 +48,7 @@ public class MTCRHandler extends AbstractChainResponsibilityHandler {
     protected void doHandle(Object inputData, int rowNum, String ruleName) {
         this.getHandlerParameter().getAction()
                 .handle(new ActionParameter(getHandlerParameter().getDataset(), inputData, rowNum,
-                        getHandlerParameter().getTarColumn().getName(), ruleName, getHandlerParameter().getExpression(),
+                        getHandlerParameter().getTargetColumn().getName(), ruleName, getHandlerParameter().getExpression(),
                         getHandlerParameter().isIgnoreBlank()));
     }
 

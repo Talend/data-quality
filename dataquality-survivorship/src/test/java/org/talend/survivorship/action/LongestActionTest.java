@@ -23,7 +23,7 @@ public class LongestActionTest {
 
     /**
      * Test method for
-     * {@link org.talend.survivorship.action.LongestAction#checkCanHandle(org.talend.survivorship.action.ActionParameter)}.
+     * {@link org.talend.survivorship.action.LongestAction#canHandle(org.talend.survivorship.action.ActionParameter)}.
      */
     @Test
     public void testCheckCanHandle() {
@@ -37,7 +37,7 @@ public class LongestActionTest {
         ActionParameter actionParameter = new ActionParameter(dataset, inputData, rowNum, column, ruleName, expression,
                 ignoreBlanks);
         LongestAction longestAction = new LongestAction();
-        boolean checkCanHandle = longestAction.checkCanHandle(actionParameter);
+        boolean checkCanHandle = longestAction.canHandle(actionParameter);
         Assert.assertFalse("100 is not a String so that result should be false", checkCanHandle);
     }
 

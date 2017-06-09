@@ -23,7 +23,7 @@ public class MostRecentActionTest {
 
     /**
      * Test method for
-     * {@link org.talend.survivorship.action.MostRecentAction#checkCanHandle(org.talend.survivorship.action.ActionParameter)}.
+     * {@link org.talend.survivorship.action.MostRecentAction#canHandle(org.talend.survivorship.action.ActionParameter)}.
      */
     @Test
     public void testCheckCanHandle() {
@@ -37,7 +37,7 @@ public class MostRecentActionTest {
         ActionParameter actionParameter = new ActionParameter(dataset, inputData, rowNum, column, ruleName, expression,
                 ignoreBlanks);
         MostRecentAction mostRecentAction = new MostRecentAction();
-        boolean checkCanHandle = mostRecentAction.checkCanHandle(actionParameter);
+        boolean checkCanHandle = mostRecentAction.canHandle(actionParameter);
         Assert.assertFalse("100 is not a date so that result should be false", checkCanHandle);
     }
 

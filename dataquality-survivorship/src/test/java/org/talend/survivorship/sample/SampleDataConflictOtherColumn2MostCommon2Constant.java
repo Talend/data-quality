@@ -29,7 +29,7 @@ public class SampleDataConflictOtherColumn2MostCommon2Constant {
             new ConflictRuleDefinition(Order.SEQ, "fillEmpty_lastName", "firstName", //$NON-NLS-1$ //$NON-NLS-2$
                     Function.FillEmpty, null, "lastName", false, null, false), //$NON-NLS-1$
             new ConflictRuleDefinition(Order.SEQ, "more_common_lastName", "lastName", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.Exclusiveness, "Green|Blue", "lastName", false, null, false), //$NON-NLS-1$ //$NON-NLS-2$
+                    Function.ExcludeValues, "Green|Blue", "lastName", false, null, false), //$NON-NLS-1$ //$NON-NLS-2$
             new ConflictRuleDefinition(Order.SEQ, "more_common_lastName", "lastName", //$NON-NLS-1$ //$NON-NLS-2$
                     Function.Longest, null, "lastName", false, null, false) }; //$NON-NLS-1$ 
 

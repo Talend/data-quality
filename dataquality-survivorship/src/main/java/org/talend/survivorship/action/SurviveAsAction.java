@@ -17,7 +17,7 @@ import java.util.HashMap;
 /**
  * Create by zshen define a action which make sure get current survived value from the row of other survived result
  */
-public class SurvivedValuePassAction extends AbstractSurvivoredAction {
+public class SurviveAsAction extends AbstractSurvivorshipAction {
 
     /*
      * (non-Javadoc)
@@ -25,7 +25,7 @@ public class SurvivedValuePassAction extends AbstractSurvivoredAction {
      * @see org.talend.survivorship.action.AbstractSurvivoredAction#checkCanHandle(org.talend.survivorship.action.ActionParameter)
      */
     @Override
-    public boolean checkCanHandle(ActionParameter actionParameter) {
+    public boolean canHandle(ActionParameter actionParameter) {
         HashMap<String, Integer> survivorIndexMap = actionParameter.getDataset().getSurvivorIndexMap();
         String refColumn = actionParameter.getColumn();
         Integer survivedValueIndex = survivorIndexMap.get(refColumn);

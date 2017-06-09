@@ -50,12 +50,12 @@ public class ActionParameter {
     private boolean ignoreBlanks;
 
     /**
-     * The parameter of some special action(Expression,MatchRegex,MappingTo)
+     * The parameter of some special action(Expression,MatchRegex,SurviveAs)
      */
     private String expression;
 
     /**
-     * create by zshen create a new instance of ActionParameter.
+     * constructor of ActionParameter.
      */
     public ActionParameter(DataSet dataset, Object inputData, int rowNum, String column, String ruleName, String expression,
             boolean ignoreBlanks) {

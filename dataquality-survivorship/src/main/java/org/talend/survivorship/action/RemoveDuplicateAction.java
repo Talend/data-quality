@@ -15,6 +15,6 @@ package org.talend.survivorship.action;
 /**
  * The action which used to Remove duplicate value in the survived values
  */
-public class RemoveDuplicateAction extends AbstractSurvivoredAction {
+public class RemoveDuplicateAction extends AbstractSurvivorshipAction {
 
 }

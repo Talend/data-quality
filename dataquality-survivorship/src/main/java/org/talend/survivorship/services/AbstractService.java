@@ -32,7 +32,7 @@ public abstract class AbstractService {
 
     /**
      * 
-     * Create by zshen init current service
+     * init current service
      */
     public abstract void init();
 

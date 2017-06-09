@@ -15,14 +15,14 @@ package org.talend.survivorship.action.handler;
 /**
  * Abstract class about data cleaning process
  */
-public abstract class DataCleanCRCRHandler extends CRCRHandler {
+public abstract class DataCleansingCRCRHandler extends CRCRHandler {
 
     /**
      * The constructor of DataCleanCRCRHandler
      * 
      * @param handlerParameter
      */
-    public DataCleanCRCRHandler(HandlerParameter handlerParameter) {
+    public DataCleansingCRCRHandler(HandlerParameter handlerParameter) {
         super(handlerParameter);
     }
 
@@ -33,7 +33,7 @@ public abstract class DataCleanCRCRHandler extends CRCRHandler {
      * java.lang.String, int)
      */
     @Override
-    protected boolean canHandler(Object inputData, String expression, int rowNum) {
+    protected boolean canHandle(Object inputData, String expression, int rowNum) {
         // This class is not resolve conflict so that any data will return true
         return true;
     }

@@ -12,7 +12,7 @@
 // ============================================================================
 package org.talend.survivorship.action.handler;
 
-import org.talend.survivorship.action.ISurvivoredAction;
+import org.talend.survivorship.action.ISurvivorshipAction;
 import org.talend.survivorship.model.RuleDefinition.Function;
 
 /**
@@ -20,30 +20,26 @@ import org.talend.survivorship.model.RuleDefinition.Function;
  */
 public class FunctionParameter {
 
-    private ISurvivoredAction action;
+    private ISurvivorshipAction action;
 
     private String expression;
 
     private boolean isIgnoreBlank;
 
-    private boolean isDealDup;
+    private boolean isRemoveDuplicate;
 
     private Function function;
 
-    public FunctionParameter(ISurvivoredAction action, String expression, boolean isIgnoreBlank, boolean isDealDup) {
+    public FunctionParameter(ISurvivorshipAction action, String expression, boolean isIgnoreBlank, boolean isRemoveDuplicate) {
         this.action = action;
         this.function = Function.getFunction(action);
         this.expression = expression;
         this.isIgnoreBlank = isIgnoreBlank;
-        this.isDealDup = isDealDup;
+        this.isRemoveDuplicate = isRemoveDuplicate;
     }
 
-    public FunctionParameter(Function function, String expression, boolean isIgnoreBlank, boolean isDealDup) {
-        this.function = function;
-        this.action = function.getAction();
-        this.expression = expression;
-        this.isIgnoreBlank = isIgnoreBlank;
-        this.isDealDup = isDealDup;
+    public FunctionParameter(Function function, String expression, boolean isIgnoreBlank, boolean isRemoveDuplicate) {
+        this(function.getAction(), expression, isIgnoreBlank, isRemoveDuplicate);
     }
 
     /**
@@ -51,7 +47,7 @@ public class FunctionParameter {
      * 
      * @return the action
      */
-    public ISurvivoredAction getAction() {
+    public ISurvivorshipAction getAction() {
         return this.action;
     }
 
@@ -74,12 +70,12 @@ public class FunctionParameter {
     }
 
     /**
-     * Getter for isDealDup.
+     * Getter for isRemoveDuplicate.
      * 
-     * @return the isDealDup
+     * @return the isRemoveDuplicate
      */
-    public boolean isDealDup() {
-        return this.isDealDup;
+    public boolean isRemoveDuplicate() {
+        return this.isRemoveDuplicate;
     }
 
     /**

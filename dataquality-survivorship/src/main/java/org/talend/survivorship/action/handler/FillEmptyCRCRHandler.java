@@ -20,7 +20,7 @@ import org.talend.survivorship.model.SubDataSet;
 /**
  * The class to handle fill empty action
  */
-public class FillEmptyCRCRHandler extends DataCleanCRCRHandler {
+public class FillEmptyCRCRHandler extends DataCleansingCRCRHandler {
 
     /**
      * The constructor of FillEmptyCRCRHandler.
@@ -39,11 +39,11 @@ public class FillEmptyCRCRHandler extends DataCleanCRCRHandler {
     @Override
     protected void doHandle(Integer rowNum, String columnName) {
         Record record = handlerParameter.getDataset().getRecordList().get(rowNum);
-        Attribute tarAttribute = record.getAttribute(handlerParameter.getTarColumn().getName());
+        Attribute tarAttribute = record.getAttribute(handlerParameter.getTargetColumn().getName());
         Object value = tarAttribute.getValue();
-        if (isNeedFillColumn(value, handlerParameter.getRefColumn().getName())) {
+        if (needFillColumn(value, handlerParameter.getReferenceColumn().getName())) {
 
-            Attribute sourceAttribute = record.getAttribute(handlerParameter.getRefColumn().getName());
+            Attribute sourceAttribute = record.getAttribute(handlerParameter.getReferenceColumn().getName());
 
             FilledAttribute filledAttribute = new FilledAttribute(tarAttribute, sourceAttribute);
             ((SubDataSet) this.getHandlerParameter().getDataset()).addFillAttributeMap(filledAttribute);

@@ -39,7 +39,7 @@ public class MatchRegexActionTest {
                 ignoreBlanks);
 
         MatchRegexAction matchRegexAction = new MatchRegexAction();
-        boolean checkCanHandle = matchRegexAction.checkCanHandle(actionParaneter);
+        boolean checkCanHandle = matchRegexAction.canHandle(actionParaneter);
         Assert.assertEquals("The result of checkCanHandle shuold be true", true, checkCanHandle); //$NON-NLS-1$
     }
 
@@ -61,7 +61,7 @@ public class MatchRegexActionTest {
                 ignoreBlanks);
 
         MatchRegexAction matchRegexAction = new MatchRegexAction();
-        boolean checkCanHandle = matchRegexAction.checkCanHandle(actionParaneter);
+        boolean checkCanHandle = matchRegexAction.canHandle(actionParaneter);
         Assert.assertEquals("The result of checkCanHandle shuold be false", false, checkCanHandle); //$NON-NLS-1$
     }
 
@@ -83,7 +83,7 @@ public class MatchRegexActionTest {
                 ignoreBlanks);
 
         MatchRegexAction matchRegexAction = new MatchRegexAction();
-        boolean checkCanHandle = matchRegexAction.checkCanHandle(actionParaneter);
+        boolean checkCanHandle = matchRegexAction.canHandle(actionParaneter);
         Assert.assertEquals("The result of checkCanHandle shuold be false", false, checkCanHandle); //$NON-NLS-1$
     }
 
@@ -105,7 +105,7 @@ public class MatchRegexActionTest {
                 ignoreBlanks);
 
         MatchRegexAction matchRegexAction = new MatchRegexAction();
-        boolean checkCanHandle = matchRegexAction.checkCanHandle(actionParaneter);
+        boolean checkCanHandle = matchRegexAction.canHandle(actionParaneter);
         Assert.assertEquals("The result of checkCanHandle shuold be false", false, checkCanHandle); //$NON-NLS-1$
     }
 

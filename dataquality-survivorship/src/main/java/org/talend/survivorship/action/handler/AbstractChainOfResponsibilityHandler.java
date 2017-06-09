@@ -18,28 +18,28 @@ import org.talend.survivorship.action.ActionParameter;
 
 /**
  * create by zshen abstract chainResponsibility class
- * all kind of handle node will expands it
+ * all kinds of handle node will expands it
  * 
  */
-public abstract class AbstractChainResponsibilityHandler {
+public abstract class AbstractChainOfResponsibilityHandler {
 
     /**
      * Next one successor
      */
-    protected AbstractChainResponsibilityHandler successor;
+    protected AbstractChainOfResponsibilityHandler successor;
 
     /**
      * Previous one successor
      */
-    protected AbstractChainResponsibilityHandler preSuccessor;
+    protected AbstractChainOfResponsibilityHandler preSuccessor;
 
     protected HandlerParameter handlerParameter;
 
-    public AbstractChainResponsibilityHandler(AbstractChainResponsibilityHandler acrhandler) {
+    public AbstractChainOfResponsibilityHandler(AbstractChainOfResponsibilityHandler acrhandler) {
         handlerParameter = acrhandler.getHandlerParameter();
     }
 
-    public AbstractChainResponsibilityHandler(HandlerParameter handlerParameter) {
+    public AbstractChainOfResponsibilityHandler(HandlerParameter handlerParameter) {
         this.handlerParameter = handlerParameter;
     }
 
@@ -57,7 +57,7 @@ public abstract class AbstractChainResponsibilityHandler {
      * Handle the request
      */
     public void handleRequest(Object inputData, int rowNum) {
-        if (!isContinue(inputData, rowNum)) {
+        if (!needContinue(inputData, rowNum)) {
             return;
         } else {
             doHandle(inputData, rowNum, handlerParameter.getRuleName());
@@ -84,7 +84,7 @@ public abstract class AbstractChainResponsibilityHandler {
     }
 
     /**
-     * create by zshen handle inputData in the method.
+     * handle inputData in the method.
      * 
      * @param inputData input data
      * @param rowNum row number of inputdata
@@ -95,15 +95,15 @@ public abstract class AbstractChainResponsibilityHandler {
     }
 
     /**
-     * Create by zshen whether current rule should be execute by next handler node
+     * whether current rule should be execute by next handler node
      * Note that when current method return false mean that execute will be stop include of behind handler node
      * 
      * @param inputData input data
      * @param rowNum row number of inputdata
      * @return true when current execute should stop immediately
      */
-    protected boolean isContinue(Object inputData, int rowNum) {
-        // current class alaways return true from here this method need to be overrided in special case
+    protected boolean needContinue(Object inputData, int rowNum) {
+        // current class always return true from here this method need to be overrided in special case
         return true;
     }
 
@@ -112,16 +112,15 @@ public abstract class AbstractChainResponsibilityHandler {
      * Judge whether current handler should be execute
      * 
      * @param inputData input data
-     * @param expression parameter when current Function is(Expression,MappingTo,MatchRegex)
+     * @param expression parameter when current Function is(Expression,SurviveAs,MatchRegex)
      * @param rowNum row number of inputdata
      * 
      * @return true when current inputdata is adopt to require else false
      */
-    protected boolean canHandler(Object inputData, String expression, int rowNum) {
-        return this.handlerParameter.getAction()
-                .checkCanHandle(new ActionParameter(handlerParameter.getDataset(),
-                        handlerParameter.getRefInputData((Object[]) inputData), rowNum, handlerParameter.getRefColumn().getName(),
-                        handlerParameter.getRuleName(), expression, handlerParameter.isIgnoreBlank()));
+    protected boolean canHandle(Object inputData, String expression, int rowNum) {
+        return this.handlerParameter.getAction().canHandle(new ActionParameter(handlerParameter.getDataset(),
+                handlerParameter.getRefInputData((Object[]) inputData), rowNum, handlerParameter.getReferenceColumn().getName(),
+                handlerParameter.getRuleName(), expression, handlerParameter.isIgnoreBlank()));
     }
 
     /**
@@ -129,7 +128,7 @@ public abstract class AbstractChainResponsibilityHandler {
      * 
      * @return the successor
      */
-    public AbstractChainResponsibilityHandler getSuccessor() {
+    public AbstractChainOfResponsibilityHandler getSuccessor() {
         return this.successor;
     }
 
@@ -138,7 +137,7 @@ public abstract class AbstractChainResponsibilityHandler {
      * 
      * @param successor the successor to set
      */
-    public AbstractChainResponsibilityHandler linkSuccessor(AbstractChainResponsibilityHandler nextHandler) {
+    public AbstractChainOfResponsibilityHandler linkSuccessor(AbstractChainOfResponsibilityHandler nextHandler) {
         successor = nextHandler;
         nextHandler.preSuccessor = this;
         return successor;
@@ -149,7 +148,7 @@ public abstract class AbstractChainResponsibilityHandler {
      * 
      * @return the preSuccessor
      */
-    protected AbstractChainResponsibilityHandler getPreSuccessor() {
+    protected AbstractChainOfResponsibilityHandler getPreSuccessor() {
         return this.preSuccessor;
     }
 

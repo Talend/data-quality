@@ -23,7 +23,7 @@ public class SmallestActionTest {
 
     /**
      * Test method for
-     * {@link org.talend.survivorship.action.SmallestAction#checkCanHandle(org.talend.survivorship.action.ActionParameter)}.
+     * {@link org.talend.survivorship.action.SmallestAction#canHandle(org.talend.survivorship.action.ActionParameter)}.
      */
     @Test
     public void testCheckCanHandle() {
@@ -37,7 +37,7 @@ public class SmallestActionTest {
         ActionParameter actionParameter = new ActionParameter(dataset, inputData, rowNum, column, ruleName, expression,
                 ignoreBlanks);
         SmallestAction smallestAction = new SmallestAction();
-        boolean checkCanHandle = smallestAction.checkCanHandle(actionParameter);
+        boolean checkCanHandle = smallestAction.canHandle(actionParameter);
         Assert.assertFalse("100 is not a String so that result should be false", checkCanHandle);
     }
 

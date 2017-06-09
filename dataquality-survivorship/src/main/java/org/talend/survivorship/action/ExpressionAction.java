@@ -21,7 +21,7 @@ import javax.script.ScriptException;
 /**
  * Create by zshen define a action which make sure input value is adapt the special expression
  */
-public class ExpressionAction extends AbstractSurvivoredAction {
+public class ExpressionAction extends AbstractSurvivorshipAction {
 
     /*
      * (non-Javadoc)
@@ -30,7 +30,7 @@ public class ExpressionAction extends AbstractSurvivoredAction {
      * java.lang.Object, java.lang.String, boolean)
      */
     @Override
-    public boolean checkCanHandle(ActionParameter actionParameter) {
+    public boolean canHandle(ActionParameter actionParameter) {
         if (actionParameter.getExpression() == null) {
             return false;
         }
@@ -47,7 +47,7 @@ public class ExpressionAction extends AbstractSurvivoredAction {
             } else {
                 String varName = actionParameter.getColumn() + "String"; //$NON-NLS-1$
                 engine.put(varName, actionParameter.getInputData());
-                return (Boolean) engine.eval("" + varName + actionParameter.getExpression()); //$NON-NLS-1$ 
+                return (Boolean) engine.eval("" + varName + actionParameter.getExpression()); //$NON-NLS-1$
 
             }
         } catch (ScriptException e) {

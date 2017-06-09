@@ -25,11 +25,11 @@ import org.talend.survivorship.model.Record;
 /**
  * Create by zshen Test for SurvivedValuePassAction
  */
-public class SurvivedValuePassActionTest {
+public class SurviveAsActionTest {
 
     /**
      * Test method for
-     * {@link org.talend.survivorship.action.SurvivedValuePassAction#checkCanHandle(org.talend.survivorship.action.ActionParameter)}
+     * {@link org.talend.survivorship.action.SurviveAsAction#canHandle(org.talend.survivorship.action.ActionParameter)}
      * .
      */
     @Test
@@ -87,13 +87,13 @@ public class SurvivedValuePassActionTest {
         boolean ignoreBlanks = false;
         ActionParameter actionParameter = new ActionParameter(dataset, inputData, rowNum, column, ruleName, expression,
                 ignoreBlanks);
-        SurvivedValuePassAction survivedValuePassAction = new SurvivedValuePassAction();
-        boolean checkCanHandle = survivedValuePassAction.checkCanHandle(actionParameter);
+        SurviveAsAction survivedValuePassAction = new SurviveAsAction();
+        boolean checkCanHandle = survivedValuePassAction.canHandle(actionParameter);
         Assert.assertTrue("intput data is same with survived value both null so that result should be true", checkCanHandle);
 
         inputData = 0;
         actionParameter = new ActionParameter(dataset, inputData, rowNum, column, ruleName, expression, ignoreBlanks);
-        checkCanHandle = survivedValuePassAction.checkCanHandle(actionParameter);
+        checkCanHandle = survivedValuePassAction.canHandle(actionParameter);
         Assert.assertFalse("intput data is not same with survived value so that result should be false", checkCanHandle);
     }
 

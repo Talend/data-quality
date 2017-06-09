@@ -43,7 +43,7 @@ public class ExpressionActionTest {
                 ignoreBlanks);
 
         ExpressionAction expressionAction = new ExpressionAction();
-        boolean checkCanHandle = expressionAction.checkCanHandle(actionParaneter);
+        boolean checkCanHandle = expressionAction.canHandle(actionParaneter);
         Assert.assertEquals("The result of checkCanHandle shuold be true", true, checkCanHandle); //$NON-NLS-1$
     }
 
@@ -66,7 +66,7 @@ public class ExpressionActionTest {
                 ignoreBlanks);
 
         ExpressionAction expressionAction = new ExpressionAction();
-        boolean checkCanHandle = expressionAction.checkCanHandle(actionParaneter);
+        boolean checkCanHandle = expressionAction.canHandle(actionParaneter);
         Assert.assertEquals("The result of checkCanHandle shuold be true", true, checkCanHandle); //$NON-NLS-1$
     }
 
@@ -89,7 +89,7 @@ public class ExpressionActionTest {
                 ignoreBlanks);
 
         ExpressionAction expressionAction = new ExpressionAction();
-        boolean checkCanHandle = expressionAction.checkCanHandle(actionParaneter);
+        boolean checkCanHandle = expressionAction.canHandle(actionParaneter);
         Assert.assertEquals("The result of checkCanHandle shuold be true", true, checkCanHandle); //$NON-NLS-1$
     }
 
@@ -112,7 +112,7 @@ public class ExpressionActionTest {
                 ignoreBlanks);
 
         ExpressionAction expressionAction = new ExpressionAction();
-        boolean checkCanHandle = expressionAction.checkCanHandle(actionParaneter);
+        boolean checkCanHandle = expressionAction.canHandle(actionParaneter);
         Assert.assertEquals("The result of checkCanHandle shuold be false because of exception", false, checkCanHandle); //$NON-NLS-1$
     }
 
@@ -135,7 +135,7 @@ public class ExpressionActionTest {
                 ignoreBlanks);
 
         ExpressionAction expressionAction = new ExpressionAction();
-        boolean checkCanHandle = expressionAction.checkCanHandle(actionParaneter);
+        boolean checkCanHandle = expressionAction.canHandle(actionParaneter);
         Assert.assertEquals("The result of checkCanHandle shuold be false because of expression is null", false, checkCanHandle); //$NON-NLS-1$
     }
 

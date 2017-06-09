@@ -23,7 +23,7 @@ public class MostAncientActionTest {
 
     /**
      * Test method for
-     * {@link org.talend.survivorship.action.MostAncientAction#checkCanHandle(org.talend.survivorship.action.ActionParameter)}.
+     * {@link org.talend.survivorship.action.MostAncientAction#canHandle(org.talend.survivorship.action.ActionParameter)}.
      */
     @Test
     public void testCheckCanHandle() {
@@ -37,7 +37,7 @@ public class MostAncientActionTest {
         ActionParameter actionParameter = new ActionParameter(dataset, inputData, rowNum, column, ruleName, expression,
                 ignoreBlanks);
         MostAncientAction mostAncientAction = new MostAncientAction();
-        boolean checkCanHandle = mostAncientAction.checkCanHandle(actionParameter);
+        boolean checkCanHandle = mostAncientAction.canHandle(actionParameter);
         Assert.assertFalse("100 is not a date so that result should be false", checkCanHandle);
     }
 

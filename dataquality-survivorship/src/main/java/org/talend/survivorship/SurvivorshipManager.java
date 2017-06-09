@@ -31,7 +31,7 @@ import org.kie.internal.builder.KnowledgeBuilderErrors;
 import org.kie.internal.builder.KnowledgeBuilderFactory;
 import org.kie.internal.io.ResourceFactory;
 import org.kie.internal.runtime.StatefulKnowledgeSession;
-import org.talend.survivorship.action.handler.AbstractChainResponsibilityHandler;
+import org.talend.survivorship.action.handler.AbstractChainOfResponsibilityHandler;
 import org.talend.survivorship.action.handler.FunctionParameter;
 import org.talend.survivorship.action.handler.HandlerParameter;
 import org.talend.survivorship.action.handler.MCCRHandler;
@@ -69,7 +69,7 @@ public class SurvivorshipManager extends KnowledgeManager {
      */
     protected DataSet dataset;
 
-    protected List<AbstractChainResponsibilityHandler> chainList;
+    protected List<AbstractChainOfResponsibilityHandler> chainList;
 
     private ChainNodeMap chainMap;
 
@@ -301,12 +301,12 @@ public class SurvivorshipManager extends KnowledgeManager {
                         messageList = new ArrayList<>();
                         returnMap.put(conflictTargetColumnName, messageList);
                     }
-                    String errorMessage = conflictTargetColumnName + " is not exist survived value in the rule list"; //$NON-NLS-1$
+                    String errorMessage = conflictTargetColumnName + " does not contain any survived value"; //$NON-NLS-1$
                     if (!messageList.contains(errorMessage)) {
                         messageList.add(errorMessage);
                     }
                 }
-                if (Function.MappingTo == conRuleDef.getFunction()) {
+                if (Function.SurviveAs == conRuleDef.getFunction()) {
                     String conflictRefColumnName = conRuleDef.getReferenceColumn();
                     if (!ruleColumnList.contains(conflictRefColumnName)) {
                         List<String> messageList = returnMap.get(conflictRefColumnName);
@@ -314,7 +314,7 @@ public class SurvivorshipManager extends KnowledgeManager {
                             messageList = new ArrayList<>();
                             returnMap.put(conflictRefColumnName, messageList);
                         }
-                        String errorMessage = conflictRefColumnName + " is not exist survived value in the rule list"; //$NON-NLS-1$
+                        String errorMessage = conflictRefColumnName + " does not contain any survived value"; //$NON-NLS-1$
                         if (!messageList.contains(errorMessage)) {
                             messageList.add(errorMessage);
                         }
@@ -330,7 +330,7 @@ public class SurvivorshipManager extends KnowledgeManager {
                             messageList = new ArrayList<>();
                             returnMap.put(conflictRefColumnName, messageList);
                         }
-                        String errorMessage = conflictRefColumnName + " can not mapping to " + conflictTargetColumnName //$NON-NLS-1$
+                        String errorMessage = conflictTargetColumnName + " cannot be survived as " + conflictRefColumnName //$NON-NLS-1$
                                 + " because of circular dependency"; //$NON-NLS-1$
                         if (!messageList.contains(errorMessage)) {
                             messageList.add(errorMessage);
@@ -378,7 +378,7 @@ public class SurvivorshipManager extends KnowledgeManager {
             return false;
         }
         for (ConflictRuleDefinition conRuleDef : dependencyColumn.getConflictResolveList()) {
-            if (Function.MappingTo == conRuleDef.getFunction()) {
+            if (Function.SurviveAs == conRuleDef.getFunction()) {
                 if (cycDepenStatus.get(targetColumnName) == null) {
                     cycDepenStatus.put(targetColumnName, new ArrayList<String>());
                 }
@@ -423,9 +423,9 @@ public class SurvivorshipManager extends KnowledgeManager {
     private void initChainResponsibilityHandler() {
         String currentRuleColumn = null;
 
-        AbstractChainResponsibilityHandler currentMCHandler = null;
-        AbstractChainResponsibilityHandler firstTargetNode = null;
-        AbstractChainResponsibilityHandler lastTargetNode = null;
+        AbstractChainOfResponsibilityHandler currentMCHandler = null;
+        AbstractChainOfResponsibilityHandler firstTargetNode = null;
+        AbstractChainOfResponsibilityHandler lastTargetNode = null;
         initChainMap();
         initChainList();
         RuleDefinition perviousSEQRd = null;

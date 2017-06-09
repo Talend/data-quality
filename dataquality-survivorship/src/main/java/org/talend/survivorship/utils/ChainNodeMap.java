@@ -14,13 +14,13 @@ package org.talend.survivorship.utils;
 
 import java.util.HashMap;
 
-import org.talend.survivorship.action.handler.AbstractChainResponsibilityHandler;
+import org.talend.survivorship.action.handler.AbstractChainOfResponsibilityHandler;
 
 /**
  * Create by zshen Create a map used to store all of handler node.
  * The key is name of column the value is firstly node of handler
  */
-public class ChainNodeMap extends HashMap<String, AbstractChainResponsibilityHandler> {
+public class ChainNodeMap extends HashMap<String, AbstractChainOfResponsibilityHandler> {
 
     private static final long serialVersionUID = 1L;
 

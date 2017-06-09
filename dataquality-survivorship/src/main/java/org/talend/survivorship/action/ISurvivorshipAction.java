@@ -15,23 +15,21 @@ package org.talend.survivorship.action;
 /**
  * Create by zshen define a interface of action
  */
-public interface ISurvivoredAction {
+public interface ISurvivorshipAction {
 
     /**
-     * 
-     * Create by zshen record inputdata exist a possible which is survived value
+     * record inputdata exist a possible which is a survived value
      * 
      * @param parameterObject the parameter of current action
      */
     public void handle(ActionParameter parameterObject);
 
     /**
-     * 
-     * Create by zshen Check whether current inputdata is survived value
+     * Check whether current inputdata is a survived value
      * 
      * @param parameterObject the parameter of action
      * @return true when inpudata is survived value else false
      */
-    public boolean checkCanHandle(ActionParameter parameterObject);
+    public boolean canHandle(ActionParameter parameterObject);
 
 }

@@ -15,7 +15,7 @@ package org.talend.survivorship.action;
 /**
  * The action which used to fill empty column
  */
-public class FillEmptyAction extends AbstractSurvivoredAction {
+public class FillEmptyAction extends AbstractSurvivorshipAction {
 
     // no anything implements is because this action can not be used by itself
     // So that if it is only one CR for current column will not impact anything

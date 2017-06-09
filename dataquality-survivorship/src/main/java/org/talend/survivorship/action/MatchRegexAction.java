@@ -19,7 +19,7 @@ import javax.script.ScriptException;
 /**
  * Create by zshen define a action which make sure input value is adapt the special regex
  */
-public class MatchRegexAction extends AbstractSurvivoredAction {
+public class MatchRegexAction extends AbstractSurvivorshipAction {
 
     /*
      * (non-Javadoc)
@@ -28,7 +28,7 @@ public class MatchRegexAction extends AbstractSurvivoredAction {
      * java.lang.Object, java.lang.String, java.lang.String, int, boolean)
      */
     @Override
-    public boolean checkCanHandle(ActionParameter actionParameter) {
+    public boolean canHandle(ActionParameter actionParameter) {
         if (actionParameter.getExpression() == null) {
             return false;
         }

@@ -19,11 +19,11 @@ import org.talend.survivorship.model.DataSet;
 /**
  * Create by zshen test for ExclusivenessAction
  */
-public class ExclusivenessActionTest {
+public class ExcludeValuesActionTest {
 
     /**
      * Test method for
-     * {@link org.talend.survivorship.action.ExclusivenessAction#checkCanHandle(org.talend.survivorship.action.ActionParameter)}.
+     * {@link org.talend.survivorship.action.ExcludeValuesAction#canHandle(org.talend.survivorship.action.ActionParameter)}.
      */
     @Test
     public void testCheckCanHandle() {
@@ -36,13 +36,13 @@ public class ExclusivenessActionTest {
         boolean ignoreBlanks = false;
         ActionParameter actionParameter = new ActionParameter(dataset, inputData, rowNum, column, ruleName, expression,
                 ignoreBlanks);
-        ExclusivenessAction exclusivenessAction = new ExclusivenessAction();
-        boolean checkCanHandle = exclusivenessAction.checkCanHandle(actionParameter);
+        ExcludeValuesAction exclusivenessAction = new ExcludeValuesAction();
+        boolean checkCanHandle = exclusivenessAction.canHandle(actionParameter);
         Assert.assertFalse("Tony is a constant value so that result should be false", checkCanHandle);
 
         actionParameter = new ActionParameter(dataset, inputData, rowNum, column, ruleName, expression, ignoreBlanks);
         inputData = "Tony1";
-        checkCanHandle = exclusivenessAction.checkCanHandle(actionParameter);
+        checkCanHandle = exclusivenessAction.canHandle(actionParameter);
         Assert.assertFalse("Tony1 is not a constant value so that result should be true", checkCanHandle);
     }
 

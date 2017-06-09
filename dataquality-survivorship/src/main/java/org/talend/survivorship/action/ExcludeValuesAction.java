@@ -21,9 +21,9 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 /**
- * Create by zshen define a action which filter some exclusiveness values
+ * Create by zshen define a action which filter values that do not match the defined regex
  */
-public class ExclusivenessAction extends AbstractSurvivoredAction {
+public class ExcludeValuesAction extends AbstractSurvivorshipAction {
 
     /*
      * (non-Javadoc)
@@ -31,7 +31,7 @@ public class ExclusivenessAction extends AbstractSurvivoredAction {
      * @see org.talend.survivorship.action.AbstractSurvivoredAction#checkCanHandle(org.talend.survivorship.action.ActionParameter)
      */
     @Override
-    public boolean checkCanHandle(ActionParameter actionParameter) {
+    public boolean canHandle(ActionParameter actionParameter) {
         if (actionParameter.getExpression() == null) {
             return true;
         }
@@ -50,8 +50,8 @@ public class ExclusivenessAction extends AbstractSurvivoredAction {
         return false;
     }
 
-    public static boolean checkUnExpect(String exclusivenessStr, Object inputData) {
-        String[] contantsArray = exclusivenessStr.split(","); //$NON-NLS-1$
+    public static boolean checkUnexpectedValue(String valuesToExclude, Object inputData) {
+        String[] contantsArray = valuesToExclude.split(","); //$NON-NLS-1$
         List<String> contantsList = Arrays.asList(contantsArray);
 
         return contantsList.contains(inputData);

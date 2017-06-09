@@ -15,7 +15,7 @@ package org.talend.survivorship.action.handler;
 import java.util.List;
 import java.util.Map;
 
-import org.talend.survivorship.action.ISurvivoredAction;
+import org.talend.survivorship.action.ISurvivorshipAction;
 import org.talend.survivorship.model.Column;
 import org.talend.survivorship.model.DataSet;
 import org.talend.survivorship.model.RuleDefinition.Function;
@@ -33,12 +33,12 @@ public class HandlerParameter {
     /**
      * record which one is reference column
      */
-    private Column refColumn;
+    private Column referenceColumn;
 
     /**
      * record which one is target column
      */
-    private Column tarColumn;
+    private Column targetColumn;
 
     /**
      * record which one is fill column
@@ -58,26 +58,26 @@ public class HandlerParameter {
     /**
      * function information
      */
-    private FunctionParameter functionPara;
+    private FunctionParameter functionParam;
 
     /**
      * 
-     * create by zshen constructor of HandlerParameter.
+     * constructor of HandlerParameter.
      * 
      * @param dataset
-     * @param refColumn
-     * @param tarColumn
+     * @param referenceColumn
+     * @param targetColumn
      * @param ruleName
      * @param columnIndexMap
      * @param fillColumn
-     * @param funPar
+     * @param funcParam
      */
-    public HandlerParameter(DataSet dataset, Column refColumn, Column tarColumn, String ruleName,
-            Map<String, Integer> columnIndexMap, String fillColumn, FunctionParameter funPar) {
+    public HandlerParameter(DataSet dataset, Column referenceColumn, Column targetColumn, String ruleName,
+            Map<String, Integer> columnIndexMap, String fillColumn, FunctionParameter funcParam) {
         this.dataset = dataset;
-        this.functionPara = funPar;
-        this.refColumn = refColumn;
-        this.tarColumn = tarColumn;
+        this.functionParam = funcParam;
+        this.referenceColumn = referenceColumn;
+        this.targetColumn = targetColumn;
         this.ruleName = ruleName;
         this.columnIndexMap = columnIndexMap;
         this.fillColumn = fillColumn;
@@ -85,17 +85,17 @@ public class HandlerParameter {
 
     /**
      * 
-     * create by zshen get reference column value from input arrays
+     * get reference column value from input arrays
      * 
      * @param inputData input data arrays
      * @return reference column data
      */
     public Object getRefInputData(Object[] inputData) {
-        return inputData[this.columnIndexMap.get(refColumn.getName())];
+        return inputData[this.columnIndexMap.get(referenceColumn.getName())];
     }
 
     public Object getTarInputData(Object[] inputDatas) {
-        return inputDatas[this.columnIndexMap.get(tarColumn.getName())];
+        return inputDatas[this.columnIndexMap.get(targetColumn.getName())];
     }
 
     /**
@@ -112,8 +112,8 @@ public class HandlerParameter {
      * 
      * @return the action
      */
-    public ISurvivoredAction getAction() {
-        return this.functionPara.getAction();
+    public ISurvivorshipAction getAction() {
+        return this.functionParam.getAction();
     }
 
     /**
@@ -121,8 +121,8 @@ public class HandlerParameter {
      * 
      * @return the refColumn
      */
-    public Column getRefColumn() {
-        return this.refColumn;
+    public Column getReferenceColumn() {
+        return this.referenceColumn;
     }
 
     /**
@@ -130,8 +130,8 @@ public class HandlerParameter {
      * 
      * @return the tarColumn
      */
-    public Column getTarColumn() {
-        return this.tarColumn;
+    public Column getTargetColumn() {
+        return this.targetColumn;
     }
 
     /**
@@ -149,7 +149,7 @@ public class HandlerParameter {
      * @return the expression
      */
     public String getExpression() {
-        return this.functionPara.getExpression();
+        return this.functionParam.getExpression();
     }
 
     /**
@@ -158,7 +158,7 @@ public class HandlerParameter {
      * @return the isIgnoreBlank
      */
     public boolean isIgnoreBlank() {
-        return this.functionPara.isIgnoreBlank();
+        return this.functionParam.isIgnoreBlank();
     }
 
     /**
@@ -176,7 +176,7 @@ public class HandlerParameter {
      * @param refColumn the refColumn to set
      */
     public void setRefColumn(Column refColumn) {
-        this.refColumn = refColumn;
+        this.referenceColumn = refColumn;
     }
 
     /**
@@ -185,7 +185,7 @@ public class HandlerParameter {
      * @param tarColumn the tarColumn to set
      */
     public void setTarColumn(Column tarColumn) {
-        this.tarColumn = tarColumn;
+        this.targetColumn = tarColumn;
     }
 
     /**
@@ -212,19 +212,19 @@ public class HandlerParameter {
     }
 
     public List<Integer> getConflictDataIndexList() {
-        return this.getDataset().getConflictDataIndexList(this.getTarColumn().getName());
+        return this.getDataset().getConflictDataIndexList(this.getTargetColumn().getName());
     }
 
     public void updateDataSet() {
-        this.setDataset(this.getDataset().createSubDataSet(this.getTarColumn().getName()));
+        this.setDataset(this.getDataset().createSubDataSet(this.getTargetColumn().getName()));
     }
 
     public void addConfDataIndex(Integer index) {
-        this.getDataset().addConfDataIndex(this.getTarColumn().getName(), index);
+        this.getDataset().addConfDataIndex(this.getTargetColumn().getName(), index);
     }
 
     /**
-     * Create by zshen Comment method "getInputData".
+     * Comment method "getInputData".
      * 
      * @param index
      */
@@ -251,12 +251,12 @@ public class HandlerParameter {
     }
 
     /**
-     * Getter for isDealDup.
+     * Getter for isRemoveDuplicate.
      * 
-     * @return the isDealDup
+     * @return the isRemoveDuplicate
      */
-    public boolean isDealDup() {
-        return this.functionPara.isDealDup();
+    public boolean isRemoveDuplicate() {
+        return this.functionParam.isRemoveDuplicate();
     }
 
     /**
@@ -266,7 +266,7 @@ public class HandlerParameter {
      * @return The Function
      */
     public Function getFunction() {
-        return this.functionPara.getFunction();
+        return this.functionParam.getFunction();
     }
 
 }

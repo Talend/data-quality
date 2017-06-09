@@ -24,17 +24,17 @@ public class SampleDataConflictCheckRule {
 
     public static final ConflictRuleDefinition[] RULES_CONFLICT_RESOLVE = {
             new ConflictRuleDefinition(Order.SEQ, "longest_city1", "firstName", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.MappingTo, null, "city1", false, null, false), //$NON-NLS-1$
+                    Function.SurviveAs, null, "city1", false, null, false), //$NON-NLS-1$
             new ConflictRuleDefinition(Order.SEQ, "longest_city2", "city2", //$NON-NLS-1$ //$NON-NLS-2$
                     Function.Longest, null, "lastName", false, null, true) }; //$NON-NLS-1$
 
     public static final ConflictRuleDefinition[] RULES_CONFLICT_RESOLVE_CASE4 = {
             new ConflictRuleDefinition(Order.SEQ, "longest_city1", "firstName", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.MappingTo, null, "city1", false, null, false), //$NON-NLS-1$
+                    Function.SurviveAs, null, "city1", false, null, false), //$NON-NLS-1$
             new ConflictRuleDefinition(Order.SEQ, "longest_city2", "city1", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.MappingTo, null, "city2", false, null, true), //$NON-NLS-1$
+                    Function.SurviveAs, null, "city2", false, null, true), //$NON-NLS-1$
             new ConflictRuleDefinition(Order.SEQ, "longest_city2", "city2", //$NON-NLS-1$
-                    Function.MappingTo, null, "id", false, null, true) }; //$NON-NLS-1$
+                    Function.SurviveAs, null, "id", false, null, true) }; //$NON-NLS-1$
 
     public static final RuleDefinition[] RULES = {
             new RuleDefinition(Order.SEQ, "more_common_city1", "city1", //$NON-NLS-1$ //$NON-NLS-2$
@@ -44,9 +44,9 @@ public class SampleDataConflictCheckRule {
 
     public static final ConflictRuleDefinition[] RULES_CONFLICT_RESOLVE_CASE2 = {
             new ConflictRuleDefinition(Order.SEQ, "longest_city1", "city1", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.MappingTo, null, "city2", false, null, false), //$NON-NLS-1$
+                    Function.SurviveAs, null, "city2", false, null, false), //$NON-NLS-1$
             new ConflictRuleDefinition(Order.SEQ, "longest_city2", "city2", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.MappingTo, null, "city1", false, null, true) }; //$NON-NLS-1$
+                    Function.SurviveAs, null, "city1", false, null, true) }; //$NON-NLS-1$
 
     public static final RuleDefinition[] RULES_CASE3 = {
             new RuleDefinition(Order.SEQ, "more_common_city1", "city1", //$NON-NLS-1$ //$NON-NLS-2$
@@ -63,15 +63,15 @@ public class SampleDataConflictCheckRule {
                     Function.MostCommon, null, "id", false) }; //$NON-NLS-1$
 
     public static final ConflictRuleDefinition[] RULES_CONFLICT_RESOLVE_CASE3 = {
-            new ConflictRuleDefinition(Order.SEQ, "longest_city1", "city1", Function.MappingTo, null, "city2", false, null, //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+            new ConflictRuleDefinition(Order.SEQ, "longest_city1", "city1", Function.SurviveAs, null, "city2", false, null, //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
                     false),
-            new ConflictRuleDefinition(Order.SEQ, "longest_city1", "minddleName", Function.MappingTo, null, "city2", false, null, //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+            new ConflictRuleDefinition(Order.SEQ, "longest_city1", "minddleName", Function.SurviveAs, null, "city2", false, null, //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
                     false),
-            new ConflictRuleDefinition(Order.SEQ, "longest_city2", "id", Function.MappingTo, null, "city1", false, null, true), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-            new ConflictRuleDefinition(Order.SEQ, "longest_city2", "firstName", Function.MappingTo, null, "city1", false, null, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            new ConflictRuleDefinition(Order.SEQ, "longest_city2", "id", Function.SurviveAs, null, "city1", false, null, true), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            new ConflictRuleDefinition(Order.SEQ, "longest_city2", "firstName", Function.SurviveAs, null, "city1", false, null, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
                     true),
-            new ConflictRuleDefinition(Order.SEQ, "longest_city2", "city2", Function.MappingTo, null, "id", false, null, true), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-            new ConflictRuleDefinition(Order.SEQ, "longest_city2", "lastName", Function.MappingTo, null, "id", false, null, //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+            new ConflictRuleDefinition(Order.SEQ, "longest_city2", "city2", Function.SurviveAs, null, "id", false, null, true), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            new ConflictRuleDefinition(Order.SEQ, "longest_city2", "lastName", Function.SurviveAs, null, "id", false, null, //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
                     true) };
 
 }

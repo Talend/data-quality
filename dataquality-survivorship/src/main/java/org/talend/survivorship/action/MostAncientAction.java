@@ -17,7 +17,7 @@ import java.util.Date;
 /**
  * Create by zshen define a action which make sure find out most ancient input value in all of values
  */
-public class MostAncientAction extends AbstractSurvivoredAction {
+public class MostAncientAction extends AbstractSurvivorshipAction {
 
     /*
      * (non-Javadoc)
@@ -26,7 +26,7 @@ public class MostAncientAction extends AbstractSurvivoredAction {
      * java.lang.Object, java.lang.String, boolean)
      */
     @Override
-    public boolean checkCanHandle(ActionParameter actionParameter) {
+    public boolean canHandle(ActionParameter actionParameter) {
         if (!(actionParameter.getInputData() instanceof Date)) {
             return false;
         }

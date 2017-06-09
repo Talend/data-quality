@@ -24,7 +24,7 @@ public class ConflictRuleDefinition extends RuleDefinition {
     private boolean disableRule;
 
     /**
-     * create by zshen constructor of ConflictRuleDefinition .
+     * constructor of ConflictRuleDefinition .
      * 
      * @param order The type of rule
      * @param ruleName The name of rule
@@ -45,7 +45,7 @@ public class ConflictRuleDefinition extends RuleDefinition {
     }
 
     /**
-     * create by zshen constructor of ConflictRuleDefinition .
+     * constructor of ConflictRuleDefinition .
      * 
      * @param order The type of rule
      * @param ruleName The name of rule

@@ -20,7 +20,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import org.talend.survivorship.action.ISurvivoredAction;
+import org.talend.survivorship.action.ISurvivorshipAction;
 import org.talend.survivorship.action.handler.CRCRHandler;
 import org.talend.survivorship.action.handler.FunctionParameter;
 import org.talend.survivorship.action.handler.HandlerFactory;
@@ -207,7 +207,7 @@ public class DataSet {
                         if (disableRule) {
                             continue;
                         }
-                        ISurvivoredAction action = ruleDef.getFunction().getAction();
+                        ISurvivorshipAction action = ruleDef.getFunction().getAction();
                         Column refColumn = record.getAttribute(ruleDef.getReferenceColumn()).getColumn();
                         Column tarColumn = column;
                         String expression = ruleDef.getOperation();
@@ -238,7 +238,7 @@ public class DataSet {
     }
 
     /**
-     * Create by zshen Get a mapping between column name and column index
+     * Get a mapping between column name and column index
      * 
      * @return a mapping map between column name and column index
      */
@@ -307,7 +307,7 @@ public class DataSet {
                     crcrHandler.handleRequest();
                 }
                 if (crcrHandler != null) {
-                    SurvivedResult survivoredRowNum = crcrHandler.getSurvivoredRowNum();
+                    SurvivedResult survivoredRowNum = crcrHandler.getSurvivedRowNum();
                     if (survivoredRowNum != null) {
                         Object survivedVlaue = this.getValueAfterFiled(survivoredRowNum.getRowNum(),
                                 survivoredRowNum.getColumnName());
@@ -321,7 +321,7 @@ public class DataSet {
     }
 
     /**
-     * Create by zshen check whether new value has been exist in the survivorMap.
+     * check whether new value has been exist in the survivorMap.
      * 
      * @param value The new value
      * @return true when exist duplicate else false
@@ -332,7 +332,7 @@ public class DataSet {
     }
 
     /**
-     * Create by zshen record conflict resolved result
+     * record conflict resolved result
      * 
      * @param col The column current result is come from
      * @param a the value which should be record by survived value
@@ -505,7 +505,6 @@ public class DataSet {
     }
 
     /**
-     * 
      * Get the value which special rowNum and colName
      * 
      * @param rowNum
@@ -527,7 +526,6 @@ public class DataSet {
     }
 
     /**
-     * 
      * Get all of conflict data
      * 
      * @param colName the name of column which conflict data come from
@@ -544,8 +542,7 @@ public class DataSet {
     }
 
     /**
-     * 
-     * Create by zshen store conflict row num of every column.
+     * store conflict row num of every column.
      * 
      * @param colName The name of column which generate conflict
      * @param index The row number of conflic generate
@@ -566,8 +563,7 @@ public class DataSet {
     }
 
     /**
-     * 
-     * Create by zshen create subset of current dataset by speciala column name.
+     * create subset of current dataset by speciala column name.
      * 
      * @param colName The column name of new subset
      * @return a sebset of current dataset not new data be created in the process

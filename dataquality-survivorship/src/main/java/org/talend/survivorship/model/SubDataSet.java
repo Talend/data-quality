@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * A sub dataset of original dataset
+ * Create by zshen A sub dataset of original dataset
  */
 public class SubDataSet extends DataSet {
 
@@ -29,7 +29,7 @@ public class SubDataSet extends DataSet {
     private DataSet orignialDataSet = null;
 
     /**
-     * Create by zshen Create a new sub dataset.
+     * Create a new sub dataset.
      * 
      * @param dataSet original dataset
      * @param conflictDataIndexList index list all of conflict data

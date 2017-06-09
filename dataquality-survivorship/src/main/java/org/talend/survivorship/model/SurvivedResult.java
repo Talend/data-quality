@@ -13,7 +13,7 @@
 package org.talend.survivorship.model;
 
 /**
- * create by zshen Temp store survived result
+ * create by zshen Temp store for survived results
  */
 public class SurvivedResult {
 
@@ -28,7 +28,7 @@ public class SurvivedResult {
     private String columnName;
 
     /**
-     * Create by zshen survivedResult constructor comment.
+     * SurvivedResult constructor comment.
      * 
      * @param rowNum
      * @param columnName

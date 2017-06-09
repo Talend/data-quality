@@ -13,22 +13,21 @@
 package org.talend.survivorship.action.handler;
 
 /**
- * Create by zshen muti-Condition Responsibility chain handler
+ * Create by zshen multi-Condition Responsibility chain handler
  */
-public class MCCRHandler extends AbstractChainResponsibilityHandler {
+public class MCCRHandler extends AbstractChainOfResponsibilityHandler {
 
     /**
-     * 
-     * Create by zshen create new MCCRHandler by another Responsibility chain handler.
+     * create new MCCRHandler by another Responsibility chain handler.
      * 
      * @param acrHandler old Responsibility chain handler
      */
-    public MCCRHandler(AbstractChainResponsibilityHandler acrHandler) {
+    public MCCRHandler(AbstractChainOfResponsibilityHandler acrHandler) {
         super(acrHandler);
     }
 
     /**
-     * Create by zshen create new MCCRHandler by HandlerParameter.
+     * create new MCCRHandler by HandlerParameter.
      * 
      * @param parameterObject parameter of current handler
      */
@@ -44,11 +43,11 @@ public class MCCRHandler extends AbstractChainResponsibilityHandler {
      * java.lang.Object, java.lang.String, boolean)
      */
     @Override
-    protected boolean isContinue(Object inputData, int rowNum) {
-        if (this.getHandlerParameter().getRefColumn() == null) {
+    protected boolean needContinue(Object inputData, int rowNum) {
+        if (this.getHandlerParameter().getReferenceColumn() == null) {
             return false;
         }
-        return this.canHandler(inputData, getHandlerParameter().getExpression(), rowNum);
+        return this.canHandle(inputData, getHandlerParameter().getExpression(), rowNum);
     }
 
 }

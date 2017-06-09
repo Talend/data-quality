@@ -23,7 +23,7 @@ public class ShortestActionTest {
 
     /**
      * Test method for
-     * {@link org.talend.survivorship.action.ShortestAction#checkCanHandle(org.talend.survivorship.action.ActionParameter)}.
+     * {@link org.talend.survivorship.action.ShortestAction#canHandle(org.talend.survivorship.action.ActionParameter)}.
      */
     @Test
     public void testCheckCanHandle() {
@@ -37,7 +37,7 @@ public class ShortestActionTest {
         ActionParameter actionParameter = new ActionParameter(dataset, inputData, rowNum, column, ruleName, expression,
                 ignoreBlanks);
         ShortestAction shortestAction = new ShortestAction();
-        boolean checkCanHandle = shortestAction.checkCanHandle(actionParameter);
+        boolean checkCanHandle = shortestAction.canHandle(actionParameter);
         Assert.assertFalse("100 is not a String so that result should be false", checkCanHandle); //$NON-NLS-1$
     }
 

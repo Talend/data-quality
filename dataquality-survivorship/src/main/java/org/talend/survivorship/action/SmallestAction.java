@@ -15,7 +15,7 @@ package org.talend.survivorship.action;
 /**
  * Create by zshen define a action which make sure find out smallest input value in all of values
  */
-public class SmallestAction extends AbstractSurvivoredAction {
+public class SmallestAction extends AbstractSurvivorshipAction {
 
     /*
      * (non-Javadoc)
@@ -24,7 +24,7 @@ public class SmallestAction extends AbstractSurvivoredAction {
      * java.lang.Object, java.lang.String, boolean)
      */
     @Override
-    public boolean checkCanHandle(ActionParameter actionParameter) {
+    public boolean canHandle(ActionParameter actionParameter) {
         if (!(actionParameter.getInputData() instanceof String)) {
             return false;
         }

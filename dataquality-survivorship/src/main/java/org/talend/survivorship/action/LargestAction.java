@@ -15,7 +15,7 @@ package org.talend.survivorship.action;
 /**
  * Create by zshen define a action which make sure find out Largest input value in all of values
  */
-public class LargestAction extends AbstractSurvivoredAction {
+public class LargestAction extends AbstractSurvivorshipAction {
 
     /*
      * (non-Javadoc)
@@ -24,7 +24,7 @@ public class LargestAction extends AbstractSurvivoredAction {
      * java.lang.Object, java.lang.String, boolean)
      */
     @Override
-    public boolean checkCanHandle(ActionParameter actionParameter) {
+    public boolean canHandle(ActionParameter actionParameter) {
         if (!(actionParameter.getInputData() instanceof Number)) {
             return false;
         }

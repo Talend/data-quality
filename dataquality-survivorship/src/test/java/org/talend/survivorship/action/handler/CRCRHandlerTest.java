@@ -19,7 +19,7 @@ import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.talend.survivorship.action.ISurvivoredAction;
+import org.talend.survivorship.action.ISurvivorshipAction;
 import org.talend.survivorship.model.Attribute;
 import org.talend.survivorship.model.Column;
 import org.talend.survivorship.model.DataSet;
@@ -54,7 +54,7 @@ public class CRCRHandlerTest {
         List<Integer> conflictRowNum = new ArrayList<>();
         conflictRowNum.add(0);
         dataset.getConflictDataMap().get().put("city2", conflictRowNum);
-        ISurvivoredAction action = RuleDefinition.Function.MostCommon.getAction();
+        ISurvivorshipAction action = RuleDefinition.Function.MostCommon.getAction();
         Column refColumn = col1;
         Column tarColumn = col2;
         String ruleName = "rule1";
@@ -108,9 +108,9 @@ public class CRCRHandlerTest {
         preConflictRowNum.put(2, "city1");
         preConflictRowNum.put(3, "city2");
         crcrHandler.initConflictRowNum(preConflictRowNum);
-        Assert.assertEquals("the column name of record 1 should be city1", "city1", crcrHandler.conflictRowNum.get(1));
-        Assert.assertEquals("the column name of record 2 should be city1", "city1", crcrHandler.conflictRowNum.get(2));
-        Assert.assertEquals("the column name of record 3 should be city2", "city2", crcrHandler.conflictRowNum.get(3));
+        Assert.assertEquals("the column name of record 1 should be city1", "city1", crcrHandler.conflictingRowNumbers.get(1));
+        Assert.assertEquals("the column name of record 2 should be city1", "city1", crcrHandler.conflictingRowNumbers.get(2));
+        Assert.assertEquals("the column name of record 3 should be city2", "city2", crcrHandler.conflictingRowNumbers.get(3));
     }
 
     /**
@@ -118,7 +118,7 @@ public class CRCRHandlerTest {
      * 
      * @return
      */
-    private HandlerParameter createHandlerParameter(ISurvivoredAction action) {
+    private HandlerParameter createHandlerParameter(ISurvivorshipAction action) {
         List<Column> columns = new ArrayList<>();
         DataSet dataset = new DataSet(columns);
         if (action == null) {
@@ -139,7 +139,7 @@ public class CRCRHandlerTest {
     }
 
     /**
-     * Test method for {@link org.talend.survivorship.action.handler.CRCRHandler#isContinue(java.lang.Object, int)}.
+     * Test method for {@link org.talend.survivorship.action.handler.CRCRHandler#needContinue(java.lang.Object, int)}.
      */
     @Test
     public void testIsContinue() {
@@ -161,7 +161,7 @@ public class CRCRHandlerTest {
         List<Integer> conflictRowNum = new ArrayList<>();
         conflictRowNum.add(0);
         dataset.getConflictDataMap().get().put("city2", conflictRowNum);
-        ISurvivoredAction action = RuleDefinition.Function.MostCommon.getAction();
+        ISurvivorshipAction action = RuleDefinition.Function.MostCommon.getAction();
         Column refColumn = col1;
         Column tarColumn = col2;
         String ruleName = "rule1";
@@ -179,9 +179,9 @@ public class CRCRHandlerTest {
         Map<Integer, String> preConflictRowNum = new HashMap<>();
         preConflictRowNum.put(0, "city1");
         crcrHandler.initConflictRowNum(preConflictRowNum);
-        boolean continue1 = crcrHandler.isContinue(new Object[] { "value1", "value2" }, 0);
-        boolean continue2 = crcrHandler.isContinue(new Object[] { "value1", "value2" }, 1);
-        boolean continue3 = crcrHandler.isContinue(new Object[] { "value1", "value2" }, 2);
+        boolean continue1 = crcrHandler.needContinue(new Object[] { "value1", "value2" }, 0);
+        boolean continue2 = crcrHandler.needContinue(new Object[] { "value1", "value2" }, 1);
+        boolean continue3 = crcrHandler.needContinue(new Object[] { "value1", "value2" }, 2);
         Assert.assertEquals("0 is conflict row Number so that continue1 should be true", true, continue1);
         Assert.assertEquals("1 is not conflict row Number so that continue2 should be false", false, continue2);
         Assert.assertEquals("2 is not conflict row Number so that continue3 should be false", false, continue3);
@@ -189,23 +189,23 @@ public class CRCRHandlerTest {
 
     /**
      * Test method for
-     * {@link org.talend.survivorship.action.handler.CRCRHandler#linkSuccessor(org.talend.survivorship.action.handler.AbstractChainResponsibilityHandler)}
+     * {@link org.talend.survivorship.action.handler.CRCRHandler#linkSuccessor(org.talend.survivorship.action.handler.AbstractChainOfResponsibilityHandler)}
      * .
      */
     @Test
     public void testLinkSuccessor() {
         HandlerParameter createHandlerParameter = this.createHandlerParameter(null);
-        AbstractChainResponsibilityHandler crcr1 = new CRCRHandler(createHandlerParameter);
-        AbstractChainResponsibilityHandler crcr2 = new CRCRHandler(createHandlerParameter);
-        AbstractChainResponsibilityHandler mtcr = new MTCRHandler(createHandlerParameter);
-        AbstractChainResponsibilityHandler link1 = crcr1.linkSuccessor(crcr2);
-        AbstractChainResponsibilityHandler link2 = crcr2.linkSuccessor(mtcr);
+        AbstractChainOfResponsibilityHandler crcr1 = new CRCRHandler(createHandlerParameter);
+        AbstractChainOfResponsibilityHandler crcr2 = new CRCRHandler(createHandlerParameter);
+        AbstractChainOfResponsibilityHandler mtcr = new MTCRHandler(createHandlerParameter);
+        AbstractChainOfResponsibilityHandler link1 = crcr1.linkSuccessor(crcr2);
+        AbstractChainOfResponsibilityHandler link2 = crcr2.linkSuccessor(mtcr);
         Assert.assertEquals("link1 should same with crcr2", link1, crcr2);
         Assert.assertEquals("link2 should keep crcr2 too because of mtcr is not conflict resolve handler", link2, crcr2);
     }
 
     /**
-     * Test method for {@link org.talend.survivorship.action.handler.CRCRHandler#getSurvivoredRowNum()}.
+     * Test method for {@link org.talend.survivorship.action.handler.CRCRHandler#getSurvivedRowNum()}.
      */
     @Test
     public void testGetSurvivoredRowNum() {
@@ -253,7 +253,7 @@ public class CRCRHandlerTest {
         HandlerParameter createHandlerParameter = this.createHandlerParameter(null);
         createHandlerParameter.setDataset(dataset);
         CRCRHandler crcr1 = new CRCRHandler(createHandlerParameter);
-        AbstractChainResponsibilityHandler crcr2 = new CRCRHandler(createHandlerParameter);
+        AbstractChainOfResponsibilityHandler crcr2 = new CRCRHandler(createHandlerParameter);
         CRCRHandler crcr3 = new CRCRHandler(createHandlerParameter);
         CRCRHandler crcr4 = new CRCRHandler(createHandlerParameter);
         CRCRHandler crcr5 = new CRCRHandler(createHandlerParameter);
@@ -267,7 +267,7 @@ public class CRCRHandlerTest {
         preConflictRowNum = new HashMap<>();
         preConflictRowNum.put(0, "city2");
         crcr2.initConflictRowNum(preConflictRowNum);
-        SurvivedResult survivoredRowNum = crcr1.getSurvivoredRowNum();
+        SurvivedResult survivoredRowNum = crcr1.getSurvivedRowNum();
         Assert.assertEquals("The column name should be city2", "city2", survivoredRowNum.getColumnName());
         Assert.assertEquals("The row number should be 0", 0, survivoredRowNum.getRowNum().intValue());
         // single handler and not a single result
@@ -275,21 +275,21 @@ public class CRCRHandlerTest {
         preConflictRowNum.put(0, "city3");
         preConflictRowNum.put(1, "city4");
         crcr3.initConflictRowNum(preConflictRowNum);
-        survivoredRowNum = crcr3.getSurvivoredRowNum();
+        survivoredRowNum = crcr3.getSurvivedRowNum();
         Assert.assertNotNull("survivoredRowNum should not be null", survivoredRowNum);
         Assert.assertEquals("The column name should be city3", "city3", survivoredRowNum.getColumnName());
         Assert.assertEquals("The row number should be 0", 0, survivoredRowNum.getRowNum().intValue());
         // single handler and size of preConflictRowNum is zero
         preConflictRowNum = new HashMap<>();
         crcr4.initConflictRowNum(preConflictRowNum);
-        survivoredRowNum = crcr4.getSurvivoredRowNum();
+        survivoredRowNum = crcr4.getSurvivedRowNum();
         Assert.assertNull("survivoredRowNum should be null", survivoredRowNum);
         // single handler and not a single result but all of result value are same
         preConflictRowNum = new HashMap<>();
         preConflictRowNum.put(0, "city4");
         preConflictRowNum.put(1, "city4");
         crcr5.initConflictRowNum(preConflictRowNum);
-        survivoredRowNum = crcr5.getSurvivoredRowNum();
+        survivoredRowNum = crcr5.getSurvivedRowNum();
         Assert.assertEquals("The column name should be city4", "city4", survivoredRowNum.getColumnName());
         Assert.assertEquals("The row number should be 0", 0, survivoredRowNum.getRowNum().intValue());
 
@@ -361,7 +361,7 @@ public class CRCRHandlerTest {
         longestResult = crcr1.getLongestResult("value");
         Assert.assertEquals("The result of logest value should be value11", "value11", longestResult.toString());
 
-        createHandlerParameter = this.createHandlerParameter(RuleDefinition.Function.Exclusiveness.getAction());
+        createHandlerParameter = this.createHandlerParameter(RuleDefinition.Function.ExcludeValues.getAction());
         createHandlerParameter.setTarColumn(col1);
         conflictIndex = new ArrayList<>();
         conflictIndex.add(0);
@@ -375,7 +375,7 @@ public class CRCRHandlerTest {
     }
 
     /**
-     * Test method for {@link org.talend.survivorship.action.handler.CRCRHandler#getNonDupResult(java.lang.Object)}.
+     * Test method for {@link org.talend.survivorship.action.handler.CRCRHandler#getNonDuplicatedResult(java.lang.Object)}.
      */
     @Test
     public void testGetNonDupResult() {
@@ -428,15 +428,15 @@ public class CRCRHandlerTest {
         createHandlerParameter.setDataset(new SubDataSet(dataset, conflictIndex));
         CRCRHandler crcr1 = new CRCRHandler(createHandlerParameter);
 
-        Object nonDupResult = crcr1.getNonDupResult("value");
+        Object nonDupResult = crcr1.getNonDuplicatedResult("value");
         Assert.assertEquals("The result of no duplicate value should be empty", "", nonDupResult.toString());
 
         createHandlerParameter.setFillColumn(null);
-        nonDupResult = crcr1.getNonDupResult("value");
+        nonDupResult = crcr1.getNonDuplicatedResult("value");
         Assert.assertEquals("The result of logest value should be value11", "value11", nonDupResult.toString());
 
         createHandlerParameter.setFillColumn("");
-        nonDupResult = crcr1.getNonDupResult("value");
+        nonDupResult = crcr1.getNonDuplicatedResult("value");
         Assert.assertEquals("The result of logest value should be value11", "value11", nonDupResult.toString());
     }
 

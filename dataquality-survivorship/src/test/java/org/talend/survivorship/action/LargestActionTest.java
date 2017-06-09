@@ -23,7 +23,7 @@ public class LargestActionTest {
 
     /**
      * Test method for
-     * {@link org.talend.survivorship.action.LargestAction#checkCanHandle(org.talend.survivorship.action.ActionParameter)}.
+     * {@link org.talend.survivorship.action.LargestAction#canHandle(org.talend.survivorship.action.ActionParameter)}.
      */
     @Test
     public void testCheckCanHandle() {
@@ -37,7 +37,7 @@ public class LargestActionTest {
         ActionParameter actionParameter = new ActionParameter(dataset, inputData, rowNum, column, ruleName, expression,
                 ignoreBlanks);
         LargestAction largestAction = new LargestAction();
-        boolean checkCanHandle = largestAction.checkCanHandle(actionParameter);
+        boolean checkCanHandle = largestAction.canHandle(actionParameter);
         Assert.assertFalse("100 is not a Number so that result should be false", checkCanHandle);
     }
 

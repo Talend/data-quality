@@ -13,18 +13,11 @@
 package org.talend.survivorship.action.handler;
 
 /**
- * The factory which create handler
+ * The factory which creates handler
  */
 public class HandlerFactory {
 
     private static HandlerFactory instance = null;
-
-    public static HandlerFactory getInstance() {
-        if (instance == null) {
-            instance = new HandlerFactory();
-        }
-        return instance;
-    }
 
     /**
      * 
@@ -32,6 +25,13 @@ public class HandlerFactory {
      */
     private HandlerFactory() {
 
+    }
+
+    public static HandlerFactory getInstance() {
+        if (instance == null) {
+            instance = new HandlerFactory();
+        }
+        return instance;
     }
 
     /**
@@ -45,7 +45,7 @@ public class HandlerFactory {
         CRCRHandler returnHandler = null;
         switch (parameter.getFunction()) {
         case RemoveDuplicate:
-            returnHandler = new RemDupCRCRHandler(parameter);
+            returnHandler = new RemoveDuplicateCRCRHandler(parameter);
             return returnHandler;
         case FillEmpty:
             returnHandler = new FillEmptyCRCRHandler(parameter);

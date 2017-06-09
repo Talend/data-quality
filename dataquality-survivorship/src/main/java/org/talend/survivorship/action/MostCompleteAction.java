@@ -15,7 +15,7 @@ package org.talend.survivorship.action;
 /**
  * Create by zshen define a action which make sure find out most complete input value in all of values
  */
-public class MostCompleteAction extends AbstractSurvivoredAction {
+public class MostCompleteAction extends AbstractSurvivorshipAction {
 
     /*
      * (non-Javadoc)
@@ -24,7 +24,7 @@ public class MostCompleteAction extends AbstractSurvivoredAction {
      * java.lang.Object, java.lang.String, boolean)
      */
     @Override
-    public boolean checkCanHandle(ActionParameter actionParameter) {
+    public boolean canHandle(ActionParameter actionParameter) {
         // how to reduce the times which be call here.One time one row is best
 
         return actionParameter.getDataset().isMostComplete(actionParameter.getRowNum());

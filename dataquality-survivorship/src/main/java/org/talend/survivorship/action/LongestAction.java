@@ -15,7 +15,7 @@ package org.talend.survivorship.action;
 /**
  * Create by zshen define a action which make sure find out Longest input value in all of values
  */
-public class LongestAction extends AbstractSurvivoredAction {
+public class LongestAction extends AbstractSurvivorshipAction {
 
     /*
      * (non-Javadoc)
@@ -24,7 +24,7 @@ public class LongestAction extends AbstractSurvivoredAction {
      * java.lang.Object, java.lang.String, boolean)
      */
     @Override
-    public boolean checkCanHandle(ActionParameter actionParameter) {
+    public boolean canHandle(ActionParameter actionParameter) {
         if (!(actionParameter.getInputData() instanceof String)) {
             return false;
         }
