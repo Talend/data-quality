@@ -66,6 +66,7 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
             DQCategory dqCat = null;
             for (DQCategory tmpCat : metadata.values()) {
                 if (type.equals(tmpCat.getName())) {
+                    tmpCat.setChildren(getChildrenCategories(tmpCat.getId()));
                     dqCat = tmpCat;
                     break;
                 }
@@ -179,15 +180,30 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
             validCat = dataDictClassifier.validCategories(value, category, null);
             break;
         case COMPOUND:
-            Map<CategoryType, Set<DQCategory>> children = getChildrenCategories(category.getId());
-            validCat = regexClassifier.validCategories(value, category, children.get(CategoryType.REGEX));
-            if (!validCat)
-                validCat = dataDictClassifier.validCategories(value, category, children.get(CategoryType.DICT));
+            validCat = isCompoundValid(category, value);
             break;
         default:
             break;
         }
         categoryCache.put(value, validCat);
+        return validCat;
+    }
+
+    private boolean isCompoundValid(DQCategory category, String value) {
+        boolean validCat = false;
+        Set<DQCategory> regexChildrenCategories = new HashSet<>();
+        Set<DQCategory> dictChildrenCategories = new HashSet<>();
+        for (DQCategory cat : category.getChildren()) {
+            if (CategoryType.DICT.equals(cat.getType()))
+                dictChildrenCategories.add(cat);
+            else if (CategoryType.REGEX.equals(cat.getType()))
+                regexChildrenCategories.add(cat);
+        }
+
+        if (!CollectionUtils.isEmpty(regexChildrenCategories))
+            validCat = regexClassifier.validCategories(value, category, regexChildrenCategories);
+        if (!validCat && !CollectionUtils.isEmpty(dictChildrenCategories))
+            validCat = dataDictClassifier.validCategories(value, category, dictChildrenCategories);
         return validCat;
     }
 
@@ -204,12 +220,11 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
      * @param id, the category from we search the children
      * @return the DICT children categories and the REGEX children categories with a map.
      */
-    private Map<CategoryType, Set<DQCategory>> getChildrenCategories(String id) {
+    private List<DQCategory> getChildrenCategories(String id) {
         Deque<String> catToSee = new ArrayDeque<>();
         Set<String> catAlreadySeen = new HashSet<>();
-        Map<CategoryType, Set<DQCategory>> children = new HashMap<>();
-        children.put(CategoryType.REGEX, new HashSet<DQCategory>());
-        children.put(CategoryType.DICT, new HashSet<DQCategory>());
+        List<DQCategory> children = new ArrayList<>();
+
         catToSee.add(id);
         String currentCategory;
         while (!catToSee.isEmpty()) {
@@ -224,7 +239,7 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
                         }
                     }
                 } else if (!currentCategory.equals(id)) {
-                    children.get(dqCategory.getType()).add(dqCategory);
+                    children.add(dqCategory);
                 }
         }
         return children;
