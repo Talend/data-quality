@@ -34,8 +34,6 @@ public class CategoryRecognizerBuilder {
 
     private static final Logger LOGGER = Logger.getLogger(CategoryRecognizerBuilder.class);
 
-    private static CategoryRecognizerBuilder INSTANCE;
-
     public static final String DEFAULT_METADATA_PATH = "/category/";
 
     public static final String DEFAULT_DD_PATH = "/index/dictionary/";
@@ -65,10 +63,7 @@ public class CategoryRecognizerBuilder {
     private Map<String, DQCategory> metadata;
 
     public static CategoryRecognizerBuilder newBuilder() {
-        if (INSTANCE == null) {
-            INSTANCE = new CategoryRecognizerBuilder();
-        }
-        return INSTANCE;
+        return new CategoryRecognizerBuilder();
     }
 
     public CategoryRecognizerBuilder metadata(Map<String, DQCategory> metadata) {
