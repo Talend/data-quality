@@ -130,26 +130,27 @@ public class CategoryFrequency implements Comparable<CategoryFrequency>, Seriali
     @Override
     public int compareTo(CategoryFrequency o) {
         // The EMPTY category must always be ranked after the others
-        int count = Long.compare(this.getCount(), o.getCount());
-        if (count != 0) {
-            return count;
+        if ("".equals(this.categoryName)) {
+            return -1;
+        } else if ("".equals(o.categoryName)) {
+            return 1;
+        }
+        if (this.getCount() > o.getCount()) {
+            return 1;
+        } else if (this.getCount() < o.getCount()) {
+            return -1;
         } else {
-            int level = -Integer.compare(this.getCategoryLevel(), o.getCategoryLevel());
-            if (level != 0) {
-                return level;
-            } else {
-                final SemanticCategoryEnum cat1 = SemanticCategoryEnum.getCategoryById(this.getCategoryId());
-                final SemanticCategoryEnum cat2 = SemanticCategoryEnum.getCategoryById(o.getCategoryId());
+            final SemanticCategoryEnum cat1 = SemanticCategoryEnum.getCategoryById(this.getCategoryId());
+            final SemanticCategoryEnum cat2 = SemanticCategoryEnum.getCategoryById(o.getCategoryId());
 
-                if (cat1 != null && cat2 != null) {
-                    return cat2.ordinal() - cat1.ordinal();
-                } else if (cat1 == null && cat2 != null) {
-                    return 1;
-                } else if (cat1 != null && cat2 == null) {
-                    return -1;
-                } else {
-                    return o.getCategoryId().compareTo(this.getCategoryId());
-                }
+            if (cat1 != null && cat2 != null) {
+                return cat2.ordinal() - cat1.ordinal();
+            } else if (cat1 == null && cat2 != null) {
+                return 1;
+            } else if (cat1 != null && cat2 == null) {
+                return -1;
+            } else {
+                return o.getCategoryId().compareTo(this.getCategoryId());
             }
         }
     }

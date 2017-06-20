@@ -12,7 +12,8 @@
 // ============================================================================
 package org.talend.dataquality.semantic.statistics;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.recognizer.CategoryFrequency;
@@ -36,9 +37,32 @@ public class SemanticType {
      * Get suggested suggsted category.
      */
     public String getSuggestedCategory() {
-        List<CategoryFrequency> frequencies = new ArrayList<>(categoryToCount.keySet());
-        Collections.sort(frequencies, Collections.reverseOrder());
-        return frequencies.get(0).getCategoryId();
+        long maxValue = 0;
+        String electedCategory = "UNKNOWN"; // Unknown by default
+        int categoryOrdinal = Integer.MAX_VALUE;
+        int levelCategory = Integer.MAX_VALUE;
+        for (Map.Entry<CategoryFrequency, Long> entry : categoryToCount.entrySet()) {
+            int currentCategoryLevel = entry.getKey().getCategoryLevel();
+            String currentId = entry.getKey().getCategoryId();
+            if (entry.getValue() > maxValue) {
+                maxValue = entry.getValue();
+                levelCategory = currentCategoryLevel;
+                categoryOrdinal = getCategoryOrdinal(currentId); // rank user category higher than provided ones
+                electedCategory = currentId;
+            } else if (entry.getValue() == maxValue) {
+                final int currentOrdinal = getCategoryOrdinal(currentId); // rank user category higher than provided ones
+                if (currentCategoryLevel < levelCategory) {
+                    levelCategory = currentCategoryLevel;
+                    categoryOrdinal = currentOrdinal; // rank user category higher than provided ones
+                    electedCategory = currentId;
+                } else if (currentCategoryLevel == levelCategory && currentOrdinal < categoryOrdinal) {
+                    categoryOrdinal = currentOrdinal;
+                    electedCategory = currentId;
+                }
+            }
+        }
+        return electedCategory;
+
     }
 
     private int getCategoryOrdinal(String categoryId) {
