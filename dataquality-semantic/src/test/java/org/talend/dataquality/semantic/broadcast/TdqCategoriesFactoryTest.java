@@ -78,7 +78,7 @@ public class TdqCategoriesFactoryTest {
         assertEquals("Unexpected classifier count!", 1, udc.getClassifiers().size());
         assertEquals("Unexpected classifier name!", "EMAIL", udc.getClassifiers().iterator().next().getName());
     }
-    
+
     @Test
     public void testSerializable() throws Exception {
         TdqCategories baseValue = TdqCategoriesFactory
