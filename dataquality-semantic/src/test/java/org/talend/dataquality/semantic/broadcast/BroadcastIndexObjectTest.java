@@ -12,8 +12,6 @@
 // ============================================================================
 package org.talend.dataquality.semantic.broadcast;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -37,6 +35,8 @@ import org.talend.dataquality.semantic.api.DictionaryUtils;
 import org.talend.dataquality.semantic.index.ClassPathDirectory;
 import org.talend.dataquality.semantic.index.DictionarySearcher;
 
+import static org.junit.Assert.assertEquals;
+
 public class BroadcastIndexObjectTest {
 
     private static final Map<String, String[]> TEST_INDEX_CONTENT = new LinkedHashMap<String, String[]>() {
@@ -56,7 +56,7 @@ public class BroadcastIndexObjectTest {
         final BroadcastDocumentObject object = new BroadcastDocumentObject("CATEGORY", Collections.singleton("Value"));
         final BroadcastIndexObject bio = new BroadcastIndexObject(Collections.singletonList(object));
 
-        try (Directory directory = bio.get()) { // when
+        try (Directory directory = bio.asDirectory()) { // when
             // then
             DirectoryReader directoryReader = DirectoryReader.open(directory);
             Document ramDoc = directoryReader.document(0);
@@ -108,7 +108,7 @@ public class BroadcastIndexObjectTest {
         final Directory cpDir = ClassPathDirectory.open(testFolder.toURI());
         final BroadcastIndexObject bio = new BroadcastIndexObject(cpDir, true);
         // get the RamDirectory from BroadcastIndexObject
-        final Directory ramDir = bio.get();
+        final Directory ramDir = bio.asDirectory();
 
         // assertions
         try {

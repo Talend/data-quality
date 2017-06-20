@@ -18,6 +18,7 @@ import java.util.*;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.RAMDirectory;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
@@ -38,7 +39,10 @@ public class BroadcastIndexObject implements Serializable {
     private List<BroadcastDocumentObject> documentList;
 
     // The lucene index created from the serializable object
-    private Directory ramDirectory;
+    private RAMDirectory ramDirectory;
+
+    public BroadcastIndexObject() {
+    }
 
     /**
      * Build an index based on a list of {@link BroadcastDocumentObject}.
@@ -97,12 +101,16 @@ public class BroadcastIndexObject implements Serializable {
         return documentList;
     }
 
+    public void setDocumentList(List<BroadcastDocumentObject> documentList) {
+        this.documentList = documentList;
+    }
+
     /**
      * The singleton method which creates the lucene index if necessary.
      * 
      * @return the lucene index
      */
-    public synchronized Directory get() {
+    public synchronized Directory asDirectory() {
         if (ramDirectory == null) {
             try {
                 ramDirectory = BroadcastUtils.createRamDirectoryFromDocuments(documentList);

@@ -92,7 +92,7 @@ class BroadcastUtils {
     /**
      * create a lucene RAMDirectory from a list of BroadcastDocumentObject
      */
-    static Directory createRamDirectoryFromDocuments(List<BroadcastDocumentObject> dictionaryObject) throws IOException {
+    static RAMDirectory createRamDirectoryFromDocuments(List<BroadcastDocumentObject> dictionaryObject) throws IOException {
         RAMDirectory ramDirectory = new RAMDirectory();
         IndexWriterConfig writerConfig = new IndexWriterConfig(Version.LATEST, new StandardAnalyzer(CharArraySet.EMPTY_SET));
         IndexWriter writer = new IndexWriter(ramDirectory, writerConfig);
