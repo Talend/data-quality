@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
@@ -18,6 +19,8 @@ import org.talend.dataquality.semantic.model.DQCategory;
 public class DefaultCategoryRecognizerTest {
 
     private CategoryRecognizer recognizer;
+
+    private CategoryRecognizerBuilder builder;
 
     private static final String US_STATE_PHONE_FR_COMMUNE = "US_STATE_PHONE_FR_COMMUNE";
 
@@ -34,7 +37,7 @@ public class DefaultCategoryRecognizerTest {
      */
     @Before
     public void init() throws IOException {
-        CategoryRecognizerBuilder builder = CategoryRecognizerBuilder.newBuilder();
+        builder = CategoryRecognizerBuilder.newBuilder();
         Map<String, DQCategory> metadata = builder.getCategoryMetadata();
         String randomId1 = "RANDOM_ID_1";
         String randomId2 = "RANDOM_ID_2";
@@ -119,6 +122,13 @@ public class DefaultCategoryRecognizerTest {
         for (int i = 0; i < resultArray.length; i++) {
             assertEquals(expectedCategories.get(i), resultArray[i].getCategoryId());
 
+        }
+    }
+
+    @After
+    public void finish() {
+        if (builder != null) {
+            builder.metadata(null);
         }
     }
 }
