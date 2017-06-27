@@ -104,11 +104,11 @@ public final class CustomDateTimePatternManager {
      * Get Locale by value and pattern,only pattern "yyyy-MM-dd G" can be extracted Locale.
      * 
      * <pre>
-     * getLocaleByEra("2017-06-26",  new ArrayList().add("yyyy-MM-dd"))  = DEFAULT_LOCALE
-     * getLocaleByEra("0006-01-01 明治",  new ArrayList().add("yyyy-MM-dd G"))  = Locale.JAPANESE
-     * getLocaleByEra("0106-05-18 民國",  new ArrayList().add("yyyy-MM-dd G"))  = Locale.TAIWAN
-     * getLocaleByEra("1438-08-22 هـ",  new ArrayList().add("yyyy-MM-dd G"))  = new Locale("ar")
-     * getLocaleByEra("04171-11-12 ปีก่อนคริสต์กาลที่",  new ArrayList().add("yyyy-MM-dd G"))  = new Locale("th")
+     * getLocaleByEra("2017-06-26",  Arrays.asList("yyyy-MM-dd G"))  = DEFAULT_LOCALE
+     * getLocaleByEra("0006-01-01 明治",  Arrays.asList("yyyy-MM-dd G"))  = Locale.JAPANESE
+     * getLocaleByEra("0106-05-18 民國",  Arrays.asList("yyyy-MM-dd G"))  = Locale.TAIWAN
+     * getLocaleByEra("1438-08-22 هـ",  Arrays.asList("yyyy-MM-dd G"))  = new Locale("ar")
+     * getLocaleByEra("04171-11-12 ปีก่อนคริสต์กาลที่",  Arrays.asList("yyyy-MM-dd G"))  = new Locale("th")
      * </pre>
      * 
      * @param value a String of date like as "0106-05-18 民國"

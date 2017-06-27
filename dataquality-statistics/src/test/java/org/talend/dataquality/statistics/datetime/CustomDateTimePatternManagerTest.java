@@ -283,6 +283,7 @@ public class CustomDateTimePatternManagerTest {
     public void testIsDateWithoutLocale() throws Exception {
         List<String> patternLs = new ArrayList<String>();
         patternLs.add("yyyy-MM-dd G"); //$NON-NLS-1$
+        assertTrue(CustomDateTimePatternManager.isDate("2017-05-18 AD", patternLs)); //$NON-NLS-1$
         assertTrue(CustomDateTimePatternManager.isDate("0106-05-18 民國", patternLs)); //$NON-NLS-1$
         assertTrue(CustomDateTimePatternManager.isDate("6625-11-12 民國前", patternLs)); //$NON-NLS-1$
         assertTrue(CustomDateTimePatternManager.isDate("0006-01-01 明治", patternLs)); //$NON-NLS-1$
@@ -291,5 +292,10 @@ public class CustomDateTimePatternManagerTest {
         assertTrue(CustomDateTimePatternManager.isDate("0014-05-30 大正", patternLs)); //$NON-NLS-1$
         assertTrue(CustomDateTimePatternManager.isDate("1438-08-22 هـ", patternLs)); //$NON-NLS-1$
         assertTrue(CustomDateTimePatternManager.isDate("4171-11-12 ปีก่อนคริสต์กาลที่", patternLs)); //$NON-NLS-1$
+
+        assertFalse(CustomDateTimePatternManager.isDate("", patternLs));
+        assertFalse(CustomDateTimePatternManager.isDate("0106-05-18 民國", new ArrayList<String>())); //$NON-NLS-1$
+        assertFalse(CustomDateTimePatternManager.isDate("0106-05-18 民國", Arrays.asList("yyyy-MM-dd"))); //$NON-NLS-1$
+
     }
 }
