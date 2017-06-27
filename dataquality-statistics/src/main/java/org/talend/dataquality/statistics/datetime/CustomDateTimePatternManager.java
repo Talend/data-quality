@@ -14,6 +14,8 @@ package org.talend.dataquality.statistics.datetime;
 
 import java.util.*;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * Customized date time pattern manager.
  * 
@@ -24,8 +26,12 @@ public final class CustomDateTimePatternManager {
 
     private static final Locale DEFAULT_LOCALE = Locale.US;
 
+    private static final String PATTERN_WITH_ERA = "yyyy-MM-dd G"; //$NON-NLS-1$
+
     public static boolean isDate(String value, List<String> customPatterns) {
-        return isDate(value, customPatterns, DEFAULT_LOCALE);
+        // get Locale by value and pattern with era.
+        Locale locale = getLocaleByEra(value, customPatterns);
+        return isDate(value, customPatterns, locale);
     }
 
     public static boolean isDate(String value, List<String> customPatterns, Locale locale) {
@@ -92,4 +98,69 @@ public final class CustomDateTimePatternManager {
         }
         return resultPatternSet;
     }
+
+    /**
+     * 
+     * Get Locale by value and pattern,only pattern "yyyy-MM-dd G" can be extracted Locale.
+     * 
+     * <pre>
+     * getLocaleByEra("2017-06-26",  new ArrayList().add("yyyy-MM-dd"))  = DEFAULT_LOCALE
+     * getLocaleByEra("0006-01-01 明治",  new ArrayList().add("yyyy-MM-dd G"))  = Locale.JAPANESE
+     * getLocaleByEra("0106-05-18 民國",  new ArrayList().add("yyyy-MM-dd G"))  = Locale.TAIWAN
+     * getLocaleByEra("1438-08-22 هـ",  new ArrayList().add("yyyy-MM-dd G"))  = new Locale("ar")
+     * getLocaleByEra("04171-11-12 ปีก่อนคริสต์กาลที่",  new ArrayList().add("yyyy-MM-dd G"))  = new Locale("th")
+     * </pre>
+     * 
+     * @param value a String of date like as "0106-05-18 民國"
+     * @param customPatterns date patterns
+     * @return
+     */
+    private static Locale getLocaleByEra(String value, List<String> customPatterns) {
+        if (StringUtils.isEmpty(value) || customPatterns.isEmpty()) {
+            return DEFAULT_LOCALE;
+        }
+        boolean isPatternWithEra = false;
+        for (String pattern : customPatterns) {
+            if (PATTERN_WITH_ERA.equals(pattern)) {
+                isPatternWithEra = true;
+                break;
+            }
+        }
+        if (isPatternWithEra) {
+            for (LocaleEraEnum localEra : LocaleEraEnum.values()) {
+                if (StringUtils.endsWithAny(value, localEra.getEras())) {
+                    return localEra.getLocale();
+                }
+            }
+        }
+        return DEFAULT_LOCALE;
+
+    }
+
+    private enum LocaleEraEnum {
+
+        ISO(Locale.US, new String[] { "AD", "BC" }), //$NON-NLS-1$ //$NON-NLS-2$
+        JAPANESE(Locale.JAPANESE, new String[] { "明治", "平成", "昭和", "大正" }), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+        HIJRI(new Locale("ar"), new String[] { "هـ" }), //$NON-NLS-1$ //$NON-NLS-2$
+        MINGUO(Locale.TRADITIONAL_CHINESE, new String[] { "民國", "民國前" }), //$NON-NLS-1$//$NON-NLS-2$
+        THAI_BUDDHIST(new Locale("th"), new String[] { "พ.ศ.", "ปีก่อนคริสต์กาลที่" }); //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$
+
+        private Locale locale;
+
+        private String[] eras;
+
+        LocaleEraEnum(Locale locale, String[] eras) {
+            this.locale = locale;
+            this.eras = eras;
+        }
+
+        public Locale getLocale() {
+            return locale;
+        }
+
+        public String[] getEras() {
+            return eras;
+        }
+    }
+
 }
