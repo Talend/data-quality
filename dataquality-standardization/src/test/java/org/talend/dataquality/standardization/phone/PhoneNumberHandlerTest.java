@@ -18,16 +18,12 @@ public class PhoneNumberHandlerTest {
 
     private String US_NUM_3 = "001-541-754-3010"; //$NON-NLS-1$
 
-    PhoneNumberHandler handler;
+    private PhoneNumberHandler handler;
 
     @Before
-    public void setup() {
+    public void setUp() {
         handler = new PhoneNumberHandler();
         handler.setDefaultRegion("US");
-    }
-
-    public PhoneNumberHandlerTest() {
-        // TODO Auto-generated constructor stub
     }
 
     @Test
