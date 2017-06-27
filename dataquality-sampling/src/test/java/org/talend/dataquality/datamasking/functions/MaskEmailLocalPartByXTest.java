@@ -11,7 +11,7 @@ public class MaskEmailLocalPartByXTest {
 
     private String output;
 
-    private String mail = "hehe.hehe@uestc.edu.cn";
+    private String mail = "çéhœ.h啊hش@uestc.edu.cn";
 
     private String spemail = "hehe@telecom-bretagne.eu";
 

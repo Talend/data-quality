@@ -28,7 +28,7 @@ public class MaskTopEmailDomainByXTest {
 
     private String mailStandard = "hehe@gmail.com";
 
-    private String mailWithPointsInLocal = "hehe.haha@gmail.com";
+    private String mailWithPointsInLocal = "hehe.haha@çéhœش.com";
 
     private String mailMultipalDomaim = "hehe.haha@uestc.in.edu.cn";
 
