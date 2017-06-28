@@ -22,6 +22,7 @@
 
 package org.talend.windowkey;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
@@ -33,7 +34,9 @@ import org.apache.commons.lang.StringUtils;
  * 
  * Minor changes done
  */
-public class FingerprintKeyer {
+public class FingerprintKeyer implements Serializable {
+
+    private static final long serialVersionUID = -1874933453576608132L;
 
     private static final Pattern alphanum = Pattern.compile("\\p{Punct}|\\p{Cntrl}"); //$NON-NLS-1$
 
@@ -46,7 +49,7 @@ public class FingerprintKeyer {
         for (String ss : frags) {
             set.add(ss); // order fragments and dedupe
         }
-        StringBuffer b = new StringBuffer();
+        StringBuilder b = new StringBuilder();
         Iterator<String> i = set.iterator();
         while (i.hasNext()) { // join ordered fragments back together
             b.append(i.next());
@@ -57,7 +60,7 @@ public class FingerprintKeyer {
 
     protected String asciify(String s) {
         char[] c = s.toCharArray();
-        StringBuffer b = new StringBuffer();
+        StringBuilder b = new StringBuilder();
         for (char element : c) {
             b.append(translate(element));
         }

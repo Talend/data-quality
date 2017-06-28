@@ -100,7 +100,7 @@ public class FirstNameStandardize {
         return matches;
     }
 
-    public void getFuzzySearch(String input, TopDocsCollector<?> collector) throws Exception {
+    public void getFuzzySearch(String input, TopDocsCollector<?> collector) throws Exception {// NOSONAR
         Query q = new FuzzyQuery(new Term(PluginConstant.FIRST_NAME_STANDARDIZE_NAME, input));
         Query qalias = new FuzzyQuery(new Term(PluginConstant.FIRST_NAME_STANDARDIZE_ALIAS, input));
         BooleanQuery combinedQuery = new BooleanQuery();
@@ -109,7 +109,7 @@ public class FirstNameStandardize {
         searcher.search(combinedQuery, collector);
     }
 
-    private TopDocs getFuzzySearch(String input) throws Exception {
+    private TopDocs getFuzzySearch(String input) throws Exception {// NOSONAR
         // MOD sizhaoliu 2012-7-4 TDQ-1576 tFirstnameMatch returns no firstname when several matches exist
         // The 2 letter prefix requires exact match while the word to search may not be lowercased as in the index.
         // Extracted and documented MATCHING_SIMILARITY constant.

@@ -47,10 +47,10 @@ public class HistogramStatistics {
      */
     public void setParameters(double max, double min, int numBins) {
         if (max <= min) {
-            throw new RuntimeException("max must be greater than min");
+            throw new RuntimeException("max must be greater than min");// NOSONAR
         }
         if (numBins <= 0) {
-            throw new RuntimeException("invalid numBins value :" + numBins + " , numBins must be a none zero integer");
+            throw new RuntimeException("invalid numBins value :" + numBins + " , numBins must be a none zero integer");// NOSONAR
         }
         this.max = max;
         this.min = min;

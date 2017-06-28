@@ -52,7 +52,7 @@ public class TalendURLClassLoader extends URLClassLoader {
         if (cls == null) {
             try {
                 cls = super.findClass(className);
-            } catch (ClassNotFoundException cne) {
+            } catch (ClassNotFoundException cne) {// NOSONAR
                 // MOD mzhao 11128, try to load by current thread loader.e.g: when a class has a super class that needs
                 // to load by current loader other than url loader.
                 cls = getClass().getClassLoader().loadClass(className);

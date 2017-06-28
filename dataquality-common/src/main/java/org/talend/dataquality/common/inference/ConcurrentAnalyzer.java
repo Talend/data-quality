@@ -26,7 +26,7 @@ public class ConcurrentAnalyzer<T> implements Analyzer<T> {
 
     private static final long serialVersionUID = 6896234073310039985L;
 
-    private final ThreadLocal<Analyzer<T>> threadLocal;
+    private final ThreadLocal<Analyzer<T>> threadLocal;// NOSONAR
 
     private ConcurrentAnalyzer(int maxSize, AnalyzerSupplier<Analyzer<T>> supplier) {
         GenericKeyedObjectPool.Config config = new GenericKeyedObjectPool.Config();
@@ -46,7 +46,7 @@ public class ConcurrentAnalyzer<T> implements Analyzer<T> {
                 try {
                     return pool.borrowObject(Thread.currentThread());
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    throw new RuntimeException(e);// NOSONAR
                 }
             }
 
@@ -56,7 +56,7 @@ public class ConcurrentAnalyzer<T> implements Analyzer<T> {
                     // Order matters here as remove() causes get() to return null.
                     pool.returnObject(Thread.currentThread(), get());
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    throw new RuntimeException(e);// NOSONAR
                 } finally {
                     // Thread local keeps a lot of references, make sure everything gets cleaned up on error.
                     super.remove();

@@ -12,6 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.statistics.numeric.histogram;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,7 +22,9 @@ import java.util.Map;
  * @author zhao
  *
  */
-public class HistogramParameter {
+public class HistogramParameter implements Serializable {
+
+    private static final long serialVersionUID = -1315253782432071580L;
 
     // -- default values of min, max and number of bins --
     private double defaultMin = Double.MIN_VALUE;
@@ -35,7 +38,7 @@ public class HistogramParameter {
      * The map is maintaining column index to parameter set relationship. Key of the map is column index starting from
      * zero while value is the parameters min,max and number of bins.
      */
-    private Map<Integer, HistogramColumnParameter> columnParameters = new HashMap<>();
+    private Map<Integer, HistogramColumnParameter> columnParameters = new HashMap<>();// NOSONAR
 
     public double getDefaultMin() {
         return defaultMin;

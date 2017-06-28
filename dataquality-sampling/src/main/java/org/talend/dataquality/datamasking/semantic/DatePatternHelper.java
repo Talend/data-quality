@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
@@ -73,7 +74,8 @@ class DatePatternHelper {
             return StringUtils.EMPTY;
         }
         for (Map<Pattern, String> patternMap : DATE_PATTERN_GROUP_LIST) {
-            for (Pattern parser : patternMap.keySet()) {
+            for (Entry<Pattern, String> entry : patternMap.entrySet()) {
+                Pattern parser = entry.getKey();
                 if (parser.matcher(value).find()) {
                     return patternMap.get(parser);
                 }

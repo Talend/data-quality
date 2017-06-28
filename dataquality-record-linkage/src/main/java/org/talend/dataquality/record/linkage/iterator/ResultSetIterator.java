@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.talend.dataquality.matchmerge.Attribute;
 import org.talend.dataquality.matchmerge.Record;
 import org.talend.dataquality.record.linkage.grouping.swoosh.RichRecord;
@@ -31,6 +32,8 @@ import org.talend.dataquality.record.linkage.grouping.swoosh.RichRecord;
  * 
  */
 public class ResultSetIterator implements Iterator<Record> {
+
+    private static Logger LOG = Logger.getLogger(ResultSetIterator.class);
 
     private final java.sql.Connection connection;
 
@@ -46,7 +49,7 @@ public class ResultSetIterator implements Iterator<Record> {
         this.connection = sqlConnection;
         this.statement = sqlConnection.createStatement();
         statement.execute(sqlQuery);
-        this.resultSet = statement.getResultSet();
+        this.resultSet = statement.getResultSet();// NOSONAR
 
         this.columnNames = elementNames;
     }
@@ -68,10 +71,11 @@ public class ResultSetIterator implements Iterator<Record> {
         } catch (SQLException e) {
             try {
                 close();
-            } catch (SQLException e1) {
-                throw new RuntimeException("Could not close the connection", e); //$NON-NLS-1$
+            } catch (SQLException e1) {// NOSONAR
+                LOG.error(e);
+                throw new RuntimeException("Could not close the connection", e); //$NON-NLS-1$ // NOSONAR
             }
-            throw new RuntimeException("Could not move to next result", e); //$NON-NLS-1$
+            throw new RuntimeException("Could not move to next result", e); //$NON-NLS-1$ // NOSONAR
         }
     }
 
@@ -82,6 +86,10 @@ public class ResultSetIterator implements Iterator<Record> {
      */
     @Override
     public Record next() {
+        // if (!hasNext()) {
+        // throw new NoSuchElementException();
+        // }
+
         List<Attribute> attributes = new ArrayList<Attribute>();
         try {
             ResultSetMetaData metaData = resultSet.getMetaData();
@@ -97,13 +105,14 @@ public class ResultSetIterator implements Iterator<Record> {
                     value = object == null ? null : String.valueOf(object);
                 } catch (SQLException exp) {
                     // TDQ-11425 if SQLException, keep the current value is null and continue.
+                    LOG.info(exp.getMessage(), exp);
                 }
                 attribute.setValue(value);
                 attributes.add(attribute);
             }
             return new RichRecord(attributes, String.valueOf(index++), 0, StringUtils.EMPTY);
         } catch (Exception e) {
-            throw new RuntimeException("Could not build next result", e); //$NON-NLS-1$
+            throw new RuntimeException("Could not build next result", e); //$NON-NLS-1$ // NOSONAR
         }
     }
 

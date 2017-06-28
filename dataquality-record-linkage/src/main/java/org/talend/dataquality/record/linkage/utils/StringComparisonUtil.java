@@ -67,11 +67,11 @@ public final class StringComparisonUtil implements Serializable {
      * @return a string buffer of characters from string1 within string2 if they are of a given distance seperation from
      * the position in string1
      */
-    public static StringBuffer getCommonCharacters(final String string1, final String string2, final int distanceSep) {
+    public static StringBuilder getCommonCharacters(final String string1, final String string2, final int distanceSep) {
         // create a return buffer of characters
-        final StringBuffer returnCommons = new StringBuffer();
+        final StringBuilder returnCommons = new StringBuilder();
         // create a copy of string2 for processing
-        final StringBuffer copy = new StringBuffer(string2);
+        final StringBuilder copy = new StringBuilder(string2);
         // iterate over string1
         for (int i = 0; i < string1.length(); i++) {
             final char ch = string1.charAt(i);

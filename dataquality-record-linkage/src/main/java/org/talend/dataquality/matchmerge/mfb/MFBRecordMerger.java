@@ -144,22 +144,16 @@ public class MFBRecordMerger implements IRecordMerger {
                 return rightValue;
             }
         case MOST_RECENT:
-            if (leftTimeStamp > rightTimeStamp) {
+            if (leftTimeStamp >= rightTimeStamp) {
                 return leftValue;
-            } else if (leftTimeStamp < rightTimeStamp) {
-                return rightValue;
             } else {
-                // Both r1 and r2 have same timestamp, return first value
-                return leftValue;
+                return rightValue;
             }
         case MOST_ANCIENT:
-            if (leftTimeStamp < rightTimeStamp) {
+            if (leftTimeStamp <= rightTimeStamp) {
                 return leftValue;
-            } else if (leftTimeStamp > rightTimeStamp) {
-                return rightValue;
             } else {
-                // Both r1 and r2 have same timestamp, return first value
-                return leftValue;
+                return rightValue;
             }
         case PREFER_TRUE:
             if (Boolean.parseBoolean(leftValue) || Boolean.parseBoolean(rightValue)) {
@@ -176,31 +170,23 @@ public class MFBRecordMerger implements IRecordMerger {
         case MOST_COMMON:
             return mergedValues.mostCommon();
         case LONGEST:
-            if (leftValueLength > rightValueLength) {
+            if (leftValueLength >= rightValueLength) {
                 return leftValue;
-            } else if (leftValueLength < rightValueLength) {
-                return rightValue;
             } else {
-                // Same length and equals or same length
-                return leftValue;
+                return rightValue;
             }
         case SHORTEST:
-            if (leftValueLength < rightValueLength) {
+            if (leftValueLength <= rightValueLength) {
                 return leftValue;
-            } else if (leftValueLength > rightValueLength) {
-                return rightValue;
             } else {
-                // Same length and equals or same length
-                return leftValue;
+                return rightValue;
             }
         case MOST_TRUSTED_SOURCE:
             String mostTrustedSourceName = parameter;
             if (mostTrustedSourceName == null) {
                 throw new IllegalStateException("Survivorship 'most trusted source' must specify a trusted source."); //$NON-NLS-1$
             }
-            if (mostTrustedSourceName.equals(leftSource)) {
-                return leftValue;
-            } else if (mostTrustedSourceName.equals(rightSource)) {
+            if (mostTrustedSourceName.equals(rightSource)) {
                 return rightValue;
             } else {
                 // r1 and r2 are not from a trusted source, return first value

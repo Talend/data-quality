@@ -38,7 +38,7 @@ public class DataTypeAnalyzer implements Analyzer<DataTypeOccurences> {
     private final ResizableList<DataTypeOccurences> dataTypes = new ResizableList<>(DataTypeOccurences.class);
 
     /** Optional custom date patterns. */
-    protected List<String> customDateTimePatterns = new ArrayList<>();
+    protected List<String> customDateTimePatterns = new ArrayList<>();// NOSONAR
 
     /**
      * Default empty constructor.

@@ -32,7 +32,7 @@ public class ResizableList<T> implements List<T>, Serializable {
 
     private Class<T> itemClass;
 
-    private List<T> innerList;
+    private List<T> innerList; // NOSONAR
 
     /**
      * Creates a list with explicit {@link #resize(int) resize} that contains instances of <i>T</i>.
@@ -78,7 +78,7 @@ public class ResizableList<T> implements List<T>, Serializable {
             }
             return addedMissing;
         } catch (Exception e) {
-            throw new RuntimeException("Unable to resize list of items.", e);
+            throw new RuntimeException("Unable to resize list of items.", e);// NOSONAR
         }
     }
 

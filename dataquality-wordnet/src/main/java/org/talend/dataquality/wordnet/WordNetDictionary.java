@@ -57,7 +57,7 @@ public class WordNetDictionary {
     }
 
     private void initDictinary() {
-        String path = null;
+        String path;
         URL url = WordNetDictionary.class.getResource("/dict");
         if ("file".equals(url.getProtocol())) {
             // nothing to do
@@ -78,7 +78,7 @@ public class WordNetDictionary {
         String filePath = url.getPath();
         try {
             url.openConnection().getInputStream();
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) {// NOSONAR
             // try to get the absolute path from exception message
             final String msg = e.getMessage();
             if (filePath.endsWith("/")) {
@@ -97,7 +97,7 @@ public class WordNetDictionary {
         if (ENGLISH_STOP_WORDS_SET.contains(input.toLowerCase())) {
             return true;
         }
-        IIndexWord idxWord = null;
+        IIndexWord idxWord;
         for (POS pos : POS.values()) {
             idxWord = dict.getIndexWord(input, pos);
             if (idxWord != null) {

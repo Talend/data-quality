@@ -121,7 +121,8 @@ public class SynonymRecordSearcher {
          */
         static void computeOutputRows(int recordLength, List<WordResult> foundWords, List<List<WordResult>> wrs,
                 Collection<OutputRecord> outputRows) {
-            assert !wrs.isEmpty();
+            boolean notEmpty = !wrs.isEmpty();
+            assert notEmpty;
             // handle last vector of word results
             if (wrs.size() == 1) {
                 List<WordResult> lastWR = wrs.get(0);

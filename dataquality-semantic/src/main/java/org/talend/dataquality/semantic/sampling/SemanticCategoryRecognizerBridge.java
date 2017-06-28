@@ -42,7 +42,7 @@ public class SemanticCategoryRecognizerBridge {
      * 
      * @return a map of column index to list of categories <column idx, List<Semantic category>>
      */
-    public void inferSemanticCategories() throws Exception {
+    public void inferSemanticCategories() throws Exception {// NOSONAR
         if (sampleDataCache != null) {
             for (Object[] record : sampleDataCache) {
                 if (stopRequested) {

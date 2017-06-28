@@ -39,7 +39,7 @@ public class CompositePatternFrequencyAnalyzer extends AbstractFrequencyAnalyzer
 
     private static final long serialVersionUID = -4658709249927616622L;
 
-    private List<AbstractPatternRecognizer> patternFreqRecognizers = new ArrayList<AbstractPatternRecognizer>();
+    private List<AbstractPatternRecognizer> patternFreqRecognizers = new ArrayList<>();// NOSONAR
 
     private DataTypeEnum[] types; // types of columns
 
@@ -72,7 +72,7 @@ public class CompositePatternFrequencyAnalyzer extends AbstractFrequencyAnalyzer
             initFreqTableList(record.length);
         }
         for (int i = 0; i < record.length; i++) {
-            AbstractFrequencyStatistics freqStats = freqTableStatistics.get(i);
+            AbstractFrequencyStatistics freqStats = freqTableStatistics.get(i);// NOSONAR
 
             if (types.length > 0) {
                 analyzeField(record[i], freqStats, types[i]);

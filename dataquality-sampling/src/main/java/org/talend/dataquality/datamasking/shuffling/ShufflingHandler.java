@@ -73,6 +73,8 @@ public class ShufflingHandler {
             t.join();
         } catch (InterruptedException e) {
             LOGGER.error(e.getMessage(), e);
+            // clean up state...
+            Thread.currentThread().interrupt();
         }
 
     }

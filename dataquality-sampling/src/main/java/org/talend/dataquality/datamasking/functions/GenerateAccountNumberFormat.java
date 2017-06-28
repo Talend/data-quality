@@ -26,7 +26,7 @@ public class GenerateAccountNumberFormat extends GenerateAccountNumber {
     @Override
     protected String doGenerateMaskedField(String str) {
         String accountNumber = removeFormatInString(str); // $NON-NLS-1$ //$NON-NLS-2$
-        StringBuilder accountNumberFormat = new StringBuilder();
+        StringBuilder accountNumberFormat;
         boolean isAmerican = false;
         if (!StringUtils.isEmpty(accountNumber) && accountNumber.length() > 9) {
             try {

@@ -92,9 +92,9 @@ public class HandleLuceneImpl implements HandleLucene {
                     result = stdname.replaceName(inputName, fuzzyQuery);
                 } else if (countryText != null && genderText != null) {
                     result = stdname.replaceNameWithCountryGenderInfo(inputName, countryText, genderText, fuzzyQuery);
-                } else if (countryText != null && genderText == null) {
+                } else if (countryText != null && genderText == null) {// NOSONAR
                     result = stdname.replaceNameWithCountryInfo(inputName, countryText, fuzzyQuery);
-                } else if (countryText == null && genderText != null) {
+                } else if (countryText == null && genderText != null) {// NOSONAR
                     result = stdname.replaceNameWithGenderInfo(inputName, genderText, fuzzyQuery);
                 }
             } catch (Exception e) {
@@ -123,7 +123,9 @@ public class HandleLuceneImpl implements HandleLucene {
             LOG.error(e, e);
         }
 
-        searcher.getIndexReader().close();
+        if (searcher != null) {
+            searcher.getIndexReader().close();
+        }
 
         return getHits();
     }
@@ -183,7 +185,7 @@ public class HandleLuceneImpl implements HandleLucene {
      */
     @Override
     public String replaceName(String folderName, String inputName, boolean fuzzyQuery) throws IOException {
-        String result = null;
+        String result;
         IndexSearcher searcher = getIndexSearcher(folderName);
         Analyzer searchAnalyzer = getAnalyzer();
         FirstNameStandardize stdname = new FirstNameStandardize(searcher, searchAnalyzer, HITS_PER_PAGE);
@@ -200,7 +202,7 @@ public class HandleLuceneImpl implements HandleLucene {
     @Override
     public String replaceNameWithCountryGenderInfo(String folderName, String inputName, String inputCountry, String inputGender,
             boolean fuzzyQuery) throws Exception {
-        String result = null;
+        String result;
         IndexSearcher searcher = getIndexSearcher(folderName);
         Analyzer searchAnalyzer = getAnalyzer();
         FirstNameStandardize stdname = new FirstNameStandardize(searcher, searchAnalyzer, HITS_PER_PAGE);
@@ -217,7 +219,7 @@ public class HandleLuceneImpl implements HandleLucene {
     @Override
     public String replaceNameWithCountryInfo(String folderName, String inputName, String inputCountry, boolean fuzzyQuery)
             throws Exception {
-        String result = null;
+        String result;
         IndexSearcher searcher = getIndexSearcher(folderName);
         Analyzer searchAnalyzer = getAnalyzer();
         FirstNameStandardize stdname = new FirstNameStandardize(searcher, searchAnalyzer, HITS_PER_PAGE);
@@ -234,7 +236,7 @@ public class HandleLuceneImpl implements HandleLucene {
     @Override
     public String replaceNameWithGenderInfo(String folderName, String inputName, String inputGender, boolean fuzzyQuery)
             throws Exception {
-        String result = null;
+        String result;
         IndexSearcher searcher = getIndexSearcher(folderName);
         Analyzer searchAnalyzer = getAnalyzer();
         FirstNameStandardize stdname = new FirstNameStandardize(searcher, searchAnalyzer, HITS_PER_PAGE);

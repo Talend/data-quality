@@ -98,6 +98,7 @@ public class SynonymIndexBuilder {
         try {
             indexDir = FSDirectory.open(file);
         } catch (IOException e) {
+            LOG.info(e);
             error.set(false, Messages.getString("SynonymIndexBuilder.failLoad"));//$NON-NLS-1$
         }
     }
@@ -512,7 +513,7 @@ public class SynonymIndexBuilder {
      * @throws IOException
      */
     private TopDocs searchDocumentByWord(String word) throws IOException {
-        TopDocs docs = null;
+        TopDocs docs;
         // FIXME can we avoid the creation of a new searcher (use IndexReader.reopen?)
         SynonymIndexSearcher newSynIdxSearcher = getNewSynIdxSearcher();
         docs = newSynIdxSearcher.searchDocumentByWord(word);

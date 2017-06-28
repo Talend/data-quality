@@ -67,7 +67,7 @@ public class ShuffleColumn {
     }
 
     private List<List<Integer>> getNumColumn(List<List<String>> shuffledColumns) {
-        if (shuffledColumns.isEmpty() || shuffledColumns == null)
+        if (shuffledColumns == null || shuffledColumns.isEmpty())
             throw new IllegalArgumentException("At least one column name should be given");
         List<Integer> noDuplicated = new ArrayList<Integer>();
         for (List<String> subList : shuffledColumns) {
@@ -176,7 +176,7 @@ public class ShuffleColumn {
      * @return
      */
     private int getShift(List<Integer> shifts, int integer) {
-        int shift = 0;
+        int shift;
         if (shifts.size() >= integer) {
             return random.nextInt(integer);
         }

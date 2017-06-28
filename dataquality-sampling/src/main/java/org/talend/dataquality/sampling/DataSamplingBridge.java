@@ -149,7 +149,7 @@ public class DataSamplingBridge {
             break;
         case Reservoir:
             if (reservoirSampler == null) {
-                throw new Exception("DataSamplingBridge is not initialized");
+                throw new Exception("DataSamplingBridge is not initialized");// NOSONAR
             }
             records = reservoirSamplingData.get(recordCursor);
             break;

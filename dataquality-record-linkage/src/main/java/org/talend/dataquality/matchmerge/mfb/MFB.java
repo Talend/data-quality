@@ -89,7 +89,7 @@ public class MFB implements MatchMergeAlgorithm {
                 try {
                     attributeMatcher = AttributeMatcherFactory.createMatcher(algorithm, algorithmParameters[i]);
                 } catch (Exception e) {
-                    throw new RuntimeException("Could not instantiate match class '" + algorithmParameters[i] + "'.", e); //$NON-NLS-1$//$NON-NLS-2$
+                    throw new RuntimeException("Could not instantiate match class '" + algorithmParameters[i] + "'.", e); //$NON-NLS-1$//$NON-NLS-2$ //NOSONAR
                 }
             }
             attributeMatcher.setNullOption(nullOptions[i]); // Null handling

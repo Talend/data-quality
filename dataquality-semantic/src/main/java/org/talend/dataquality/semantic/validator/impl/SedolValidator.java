@@ -38,7 +38,7 @@ public class SedolValidator implements ISemanticSubValidator {
             String csStr = StringUtils.right(str, 1);
             checksum = Integer.valueOf(csStr);
         } catch (NumberFormatException e) {
-            throw new RuntimeException("Invalid checksum digit. ", e);
+            throw new RuntimeException("Invalid checksum digit. ", e);// NOSONAR
         }
         int checksumFromSedol = getSedolCheckDigit(sedolStr);
         return checksum == checksumFromSedol;

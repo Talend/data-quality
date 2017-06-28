@@ -27,7 +27,7 @@ public abstract class AbstractSubCategoryClassifier implements ISubCategoryClass
 
     private static final long serialVersionUID = -5396224246178196818L;
 
-    protected Set<ISubCategory> potentialSubCategories = new HashSet<>();
+    protected Set<ISubCategory> potentialSubCategories = new HashSet<>();// NOSONAR
 
     /*
      * (non-Javadoc)

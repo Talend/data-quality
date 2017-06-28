@@ -293,7 +293,7 @@ public enum SemanticCategoryEnum {
         }
         try {
             return valueOf(catId);
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {// NOSONAR
             return null;
         }
     }

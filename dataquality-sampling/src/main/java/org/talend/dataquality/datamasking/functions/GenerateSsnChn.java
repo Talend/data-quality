@@ -68,7 +68,9 @@ public class GenerateSsnChn extends Function<String> {
             LOGGER.error("The file of chinese regions is not correctly loaded " + e.getMessage(), e);
         }
 
-        result.append(places.get(rnd.nextInt(places.size())));
+        if (places != null) {
+            result.append(places.get(rnd.nextInt(places.size())));
+        }
 
         // Year
         int yyyy = rnd.nextInt(200) + 1900;

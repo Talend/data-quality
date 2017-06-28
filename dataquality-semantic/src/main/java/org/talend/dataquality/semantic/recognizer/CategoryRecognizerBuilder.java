@@ -13,6 +13,7 @@
 package org.talend.dataquality.semantic.recognizer;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
@@ -30,7 +31,9 @@ import org.talend.dataquality.semantic.model.DQCategory;
  * created by talend on 2015-07-28 Detailled comment.
  *
  */
-public class CategoryRecognizerBuilder {
+public class CategoryRecognizerBuilder implements Serializable {
+
+    private static final long serialVersionUID = -6729360735287408707L;
 
     private static final Logger LOGGER = Logger.getLogger(CategoryRecognizerBuilder.class);
 
@@ -56,9 +59,9 @@ public class CategoryRecognizerBuilder {
 
     private LuceneIndex keywordIndex;
 
-    private Directory ddDirectory;
+    private Directory ddDirectory;// NOSONAR
 
-    private Directory kwDirectory;
+    private Directory kwDirectory;// NOSONAR
 
     private UserDefinedClassifier regexClassifier;
 

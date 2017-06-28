@@ -48,7 +48,7 @@ public class NGramFingerprintKeyer extends FingerprintKeyer {
         String s = str.toLowerCase(); // then lowercase it
         s = alphanum.matcher(s).replaceAll(""); // then remove all punctuation and control chars //$NON-NLS-1$
         TreeSet<String> set = ngram_split(s, ngramSize);
-        StringBuffer b = new StringBuffer();
+        StringBuilder b = new StringBuilder();
         Iterator<String> i = set.iterator();
         while (i.hasNext()) { // join ordered fragments back together
             b.append(i.next());

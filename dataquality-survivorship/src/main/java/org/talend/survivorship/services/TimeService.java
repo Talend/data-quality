@@ -64,7 +64,7 @@ public class TimeService extends AbstractService {
                     continue;
                 }
 
-                if (latest == null || earliest == null || secondLatest == null || secondEarliest == null) {
+                if (latest == null || earliest == null || secondLatest == null || secondEarliest == null) {// NOSONAR
                     latest = value;
                     earliest = value;
                     secondLatest = value;

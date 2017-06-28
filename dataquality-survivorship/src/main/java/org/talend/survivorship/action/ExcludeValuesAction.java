@@ -44,7 +44,7 @@ public class ExcludeValuesAction extends AbstractSurvivorshipAction {
                 return eval == null;
 
             }
-        } catch (ScriptException e) {
+        } catch (ScriptException e) {// NOSONAR
             // no need implement
         }
         return false;

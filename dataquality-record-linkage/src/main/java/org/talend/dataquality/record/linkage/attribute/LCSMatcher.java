@@ -50,7 +50,7 @@ public class LCSMatcher extends AbstractAttributeMatcher {
 
         int m = s.length();
         int n = t.length();
-        int cost = 0;
+        int cost;
         int maxLen = 0;
         int[] p = new int[n];
         int[] d = new int[n];

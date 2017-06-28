@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.drools.core.util.StringUtils;
@@ -150,7 +151,8 @@ public class CRCRHandler extends AbstractChainOfResponsibilityHandler {
         InputConvertResult inputResult = new InputConvertResult();
         Map<String, Integer> columnIndexMap = handlerParameter.getColumnIndexMap();
         Object[] dataArray = new Object[columnIndexMap.size()];
-        for (String colName : columnIndexMap.keySet()) {
+        for (Entry<String, Integer> entry : columnIndexMap.entrySet()) {
+            String colName = entry.getKey();
             Object value = handlerParameter.getDataset().getValueAfterFiled(rowNum, colName);
             dataArray[columnIndexMap.get(colName)] = value;
         }

@@ -50,7 +50,7 @@ public class ExpressionAction extends AbstractSurvivorshipAction {
                 return (Boolean) engine.eval("" + varName + actionParameter.getExpression()); //$NON-NLS-1$
 
             }
-        } catch (ScriptException e) {
+        } catch (ScriptException e) {// NOSONAR
             // no need implement
         }
         return false;

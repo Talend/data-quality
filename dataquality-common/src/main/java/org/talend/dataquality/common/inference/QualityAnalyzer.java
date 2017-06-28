@@ -18,7 +18,7 @@ public abstract class QualityAnalyzer<T, Q> implements Analyzer<T> {
 
     protected boolean isStoreInvalidValues = true;
 
-    private Q types;
+    private Q types;// NOSONAR
 
     public void setTypes(Q types) {
         this.types = types;

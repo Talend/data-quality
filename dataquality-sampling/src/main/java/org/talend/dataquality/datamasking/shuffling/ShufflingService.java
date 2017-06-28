@@ -209,6 +209,8 @@ public class ShufflingService {
                 executor.awaitTermination(5, TimeUnit.SECONDS);
             } catch (InterruptedException e) {
                 LOGGER.error(e.getMessage(), e);
+                // clean up state...
+                Thread.currentThread().interrupt();
             }
         }
 

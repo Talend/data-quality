@@ -50,7 +50,7 @@ public class StringsClusterAnalyzer implements Analyzer<StringClusters> {
 
     private final StringClusters stringClusters = new StringClusters();
 
-    private List<Record> records = new ArrayList<>();
+    private List<Record> records = new ArrayList<>(); // NOSONAR
 
     private BlockingKeyHandler blockKeyHandler = null;
 
@@ -58,7 +58,7 @@ public class StringsClusterAnalyzer implements Analyzer<StringClusters> {
 
     private int currentBlockIndex = 0;
 
-    private PostMerge[] postMerges = new PostMerge[0];
+    private PostMerge[] postMerges = new PostMerge[0]; // NOSONAR
 
     private static List<Record> postMerge(List<Record> records, AttributeMatcherType matchAlgorithm, float threshold) {
         List<Record> mergeResult;

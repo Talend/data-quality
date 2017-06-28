@@ -12,6 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.record.linkage.genkey;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +26,9 @@ import org.talend.dataquality.record.linkage.utils.MatchAnalysisConstant;
  * created by zshen on Aug 7, 2013 generating the blocking keys.
  * 
  */
-public class AbstractGenerateKey {
+public class AbstractGenerateKey implements Serializable {
+
+    private static final long serialVersionUID = 2730342485108317315L;
 
     public static final String TGENKEY_ALL_COLUMN_NAMES = "tgenkey_all_column_names";//$NON-NLS-1$
 
@@ -117,7 +120,7 @@ public class AbstractGenerateKey {
      * @return
      */
     public String getAlgoForEachColumn(String originalValue, Map<String, String> blockKey, String[] params) {
-        String tempVar = null;
+        String tempVar;
         String colValue = originalValue;
         String preAlgoName = blockKey.get(params[0]);
         String preAlgoPara = blockKey.get(params[1]);
@@ -130,17 +133,17 @@ public class AbstractGenerateKey {
             colValue = StringUtils.EMPTY;
         }
 
-        tempVar = AlgorithmSwitch.getPreAlgoResult(preAlgoName, preAlgoPara, colValue).toString();
+        tempVar = AlgorithmSwitch.getPreAlgoResult(preAlgoName, preAlgoPara, colValue);
         if (StringUtils.isNotEmpty(tempVar)) {
             colValue = tempVar;
         }
 
-        tempVar = AlgorithmSwitch.getAlgoResult(keyAlgoName, keyAlgoPara, colValue).toString();
+        tempVar = AlgorithmSwitch.getAlgoResult(keyAlgoName, keyAlgoPara, colValue);
         if (StringUtils.isNotEmpty(tempVar)) {
             colValue = tempVar;
         }
 
-        tempVar = AlgorithmSwitch.getPostAlgoResult(postAlgoName, postAlgoPara, colValue).toString();
+        tempVar = AlgorithmSwitch.getPostAlgoResult(postAlgoName, postAlgoPara, colValue);
         if (StringUtils.isNotEmpty(tempVar)) {
             colValue = tempVar;
         }

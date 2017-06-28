@@ -145,7 +145,7 @@ public class SurvivorshipManager extends KnowledgeManager {
                 }
             }
         }
-        String packagePath = null;
+        String packagePath;
         // TDQ-12588 for a real spark mode, the rule files are uploaded to spark node in javajet.
         if ("Real_spark_relative_path".equals(rulePath)) { //$NON-NLS-1$
             rulePath = ""; //$NON-NLS-1$
@@ -258,11 +258,11 @@ public class SurvivorshipManager extends KnowledgeManager {
                 }
                 ksession.insert(input);
             }
-        } catch (InstantiationException e) {
+        } catch (InstantiationException e) {// NOSONAR
             // failed to create new recordInType instance
             System.err.println("!!! " + e.getMessage()); //$NON-NLS-1$
             return false;
-        } catch (IllegalAccessException e) {
+        } catch (IllegalAccessException e) {// NOSONAR
             // failed to create new recordInType instance
             System.err.println("!!! " + e.getMessage()); //$NON-NLS-1$
             return false;
@@ -462,8 +462,8 @@ public class SurvivorshipManager extends KnowledgeManager {
         }
         if (currentMCHandler != null && firstTargetNode != null) {
             currentMCHandler.linkSuccessor(firstTargetNode);
-            firstTargetNode = null;
-            lastTargetNode = null;
+            firstTargetNode = null;// NOSONAR
+            lastTargetNode = null;// NOSONAR
         }
     }
 

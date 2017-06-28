@@ -208,7 +208,7 @@ public class SynonymIndexSearcher {
      * @throws java.io.IOException
      */
     public TopDocs searchDocumentBySynonym(String stringToSearch) throws IOException {
-        TopDocs topDocs = null;
+        TopDocs topDocs;
         Query query;
         switch (searchMode) {
         case MATCH_ANY:

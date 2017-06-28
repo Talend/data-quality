@@ -24,7 +24,7 @@ public class KeepYear extends Function<Date> {
 
     private static final long serialVersionUID = 2836713659481652846L;
 
-    private static Calendar c = Calendar.getInstance();
+    private Calendar c = Calendar.getInstance();
 
     @Override
     protected Date doGenerateMaskedField(Date date) {

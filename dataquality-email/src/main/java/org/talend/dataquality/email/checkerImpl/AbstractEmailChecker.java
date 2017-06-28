@@ -42,7 +42,7 @@ public abstract class AbstractEmailChecker implements IEmailChecker {
      * @see org.talend.dataquality.email.api.IEmailChecker#check(java.lang.String, java.lang.String[])
      */
     public EmailVerifyResult check(String email, String... strings) {
-        EmailVerifyResult result = EmailVerifyResult.INVALID;
+        EmailVerifyResult result;
         if (check(email)) {
             result = EmailVerifyResult.VALID;
         } else {

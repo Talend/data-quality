@@ -19,7 +19,16 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAccessor;
 import java.time.temporal.TemporalQueries;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
@@ -138,7 +147,8 @@ public class SystemDateTimePatternManager {
 
             // Check the value with a list of regex patterns
             for (Map<Pattern, String> patternMap : patternGroupList) {
-                for (Pattern parser : patternMap.keySet()) {
+                for (Entry<Pattern, String> entry : patternMap.entrySet()) {
+                    Pattern parser = entry.getKey();
                     try {
                         if (parser.matcher(value).find()) {
                             String dateFormat = patternMap.get(parser);
@@ -146,7 +156,7 @@ public class SystemDateTimePatternManager {
                                 return true;
                             }
                         }
-                    } catch (Exception e) {
+                    } catch (Exception e) {// NOSONAR
                         // ignore
                     }
                 }
@@ -181,7 +191,8 @@ public class SystemDateTimePatternManager {
         }
         HashSet<String> resultSet = new HashSet<>();
         for (Map<Pattern, String> patternMap : patternGroupList) {
-            for (Pattern parser : patternMap.keySet()) {
+            for (Entry<Pattern, String> entry : patternMap.entrySet()) {
+                Pattern parser = entry.getKey();
                 if (parser.matcher(value).find()) {
                     resultSet.add(patternMap.get(parser));
                 }
@@ -200,7 +211,7 @@ public class SystemDateTimePatternManager {
             try {
                 formatter = new DateTimeFormatterBuilder().parseCaseInsensitive().appendPattern(customPattern)
                         .toFormatter(locale);
-            } catch (IllegalArgumentException e) {
+            } catch (IllegalArgumentException e) {// NOSONAR
                 return null;
             }
             dateTimeFormatterCache.put(customPattern + localeStr, formatter);

@@ -54,7 +54,7 @@ public abstract class MessagesCore {
         }
         try {
             return resourceBundle.getString(key);
-        } catch (MissingResourceException e) {
+        } catch (MissingResourceException e) {// NOSONAR
             return KEY_NOT_FOUND_PREFIX + key + KEY_NOT_FOUND_SUFFIX;
         }
     }

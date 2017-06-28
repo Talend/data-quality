@@ -23,6 +23,8 @@ import java.util.Locale;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 
+import com.google.i18n.phonenumbers.PhoneNumberToTimeZonesMapper;
+
 /**
  * DOC qiongli class global comment. Detailled comment
  */
@@ -85,6 +87,7 @@ public class PhoneNumberHandlerBaseTest {
      */
     @Test
     public void testIsValidPhoneNumber() {
+        assertFalse(phoneNumberHandlerBase.isValidPhoneNumber(null, REGCODE_FR));
         assertTrue(phoneNumberHandlerBase.isValidPhoneNumber(FR_NUM_1, REGCODE_FR));
         assertTrue(phoneNumberHandlerBase.isValidPhoneNumber(FR_NUM_2, REGCODE_FR));
         assertTrue(phoneNumberHandlerBase.isValidPhoneNumber(FR_NUM_5, REGCODE_FR));
@@ -148,6 +151,7 @@ public class PhoneNumberHandlerBaseTest {
         assertTrue(phoneNumberHandlerBase.isPossiblePhoneNumber(FR_NUM_1, null));
         assertFalse(phoneNumberHandlerBase.isPossiblePhoneNumber(FR_NUM_3, null));
         assertFalse(phoneNumberHandlerBase.isPossiblePhoneNumber(null, REGCODE_FR));
+        assertFalse(phoneNumberHandlerBase.isPossiblePhoneNumber("", REGCODE_FR));
 
         assertTrue(phoneNumberHandlerBase.isPossiblePhoneNumber(FR_NUM_1, REGCODE_FR));
         assertTrue(phoneNumberHandlerBase.isPossiblePhoneNumber(FR_NUM_2, REGCODE_FR));
@@ -179,6 +183,7 @@ public class PhoneNumberHandlerBaseTest {
      */
     @Test
     public void testFormatE164() {
+        assertEquals(StringUtils.EMPTY, phoneNumberHandlerBase.formatE164(null, REGCODE_FR)); //$NON-NLS-1$
         assertEquals("+33656965822", phoneNumberHandlerBase.formatE164(FR_NUM_1, REGCODE_FR)); //$NON-NLS-1$
         assertEquals("+33147554323", phoneNumberHandlerBase.formatE164(FR_NUM_2, REGCODE_FR)); //$NON-NLS-1$
         assertEquals("+33662965822", phoneNumberHandlerBase.formatE164(FR_NUM_5, REGCODE_FR)); //$NON-NLS-1$
@@ -200,6 +205,7 @@ public class PhoneNumberHandlerBaseTest {
      */
     @Test
     public void testFormatInternational() {
+        assertEquals(StringUtils.EMPTY, phoneNumberHandlerBase.formatInternational(null, REGCODE_FR)); //$NON-NLS-1$
 
         assertEquals("+33 6 56 96 58 22", phoneNumberHandlerBase.formatInternational(FR_NUM_1, REGCODE_FR)); //$NON-NLS-1$
         assertEquals("+33 1 47 55 43 23", phoneNumberHandlerBase.formatInternational(FR_NUM_2, REGCODE_FR)); //$NON-NLS-1$
@@ -222,6 +228,7 @@ public class PhoneNumberHandlerBaseTest {
      */
     @Test
     public void testFormatNational() {
+        assertEquals(StringUtils.EMPTY, phoneNumberHandlerBase.formatNational(null, REGCODE_FR)); //$NON-NLS-1$
 
         assertEquals("06 56 96 58 22", phoneNumberHandlerBase.formatNational(FR_NUM_1, REGCODE_FR)); //$NON-NLS-1$
         assertEquals("01 47 55 43 23", phoneNumberHandlerBase.formatNational(FR_NUM_2, REGCODE_FR)); //$NON-NLS-1$
@@ -243,6 +250,7 @@ public class PhoneNumberHandlerBaseTest {
      */
     @Test
     public void testFormatRFC396() {
+        assertEquals(StringUtils.EMPTY, phoneNumberHandlerBase.formatRFC396(null, REGCODE_FR)); //$NON-NLS-1$
 
         assertEquals("tel:+33-6-56-96-58-22", phoneNumberHandlerBase.formatRFC396(FR_NUM_1, REGCODE_FR)); //$NON-NLS-1$
         assertEquals("tel:+33-1-47-55-43-23", phoneNumberHandlerBase.formatRFC396(FR_NUM_2, REGCODE_FR)); //$NON-NLS-1$
@@ -322,6 +330,7 @@ public class PhoneNumberHandlerBaseTest {
 
     @Test
     public void testGetCarrierNameForNumber() {
+        assertEquals(StringUtils.EMPTY, phoneNumberHandlerBase.getCarrierNameForNumber(null, REGCODE_US, Locale.UK));
 
         assertEquals(StringUtils.EMPTY,
                 phoneNumberHandlerBase.getCarrierNameForNumber(CN_NUM_1, REGCODE_CN, Locale.SIMPLIFIED_CHINESE));
@@ -341,6 +350,8 @@ public class PhoneNumberHandlerBaseTest {
 
     @Test
     public void testgetGeocoderDescriptionForNumber() {
+        assertEquals(StringUtils.EMPTY, //$NON-NLS-1$
+                phoneNumberHandlerBase.getGeocoderDescriptionForNumber(null, REGCODE_CN, Locale.SIMPLIFIED_CHINESE));
 
         assertEquals("北京市", //$NON-NLS-1$
                 phoneNumberHandlerBase.getGeocoderDescriptionForNumber(CN_NUM_3, REGCODE_CN, Locale.SIMPLIFIED_CHINESE));
@@ -390,6 +401,9 @@ public class PhoneNumberHandlerBaseTest {
 
     @Test
     public void testGetTimeZonesForNumber() {
+        assertEquals(PhoneNumberToTimeZonesMapper.getUnknownTimeZone(),
+                phoneNumberHandlerBase.getTimeZonesForNumber(null, null).get(0)); //$NON-NLS-1$
+
         assertEquals(2, phoneNumberHandlerBase.getTimeZonesForNumber(CN_NUM_1, REGCODE_CN).size());
         assertEquals("[Asia/Shanghai, Asia/Urumqi]", //$NON-NLS-1$
                 phoneNumberHandlerBase.getTimeZonesForNumber(CN_NUM_1, REGCODE_CN).toString());
@@ -416,5 +430,12 @@ public class PhoneNumberHandlerBaseTest {
         assertEquals("[Etc/Unknown]", phoneNumberHandlerBase.getTimeZonesForNumber(DE_NUM_3, REGCODE_US).toString()); //$NON-NLS-1$
         assertEquals("[Etc/Unknown]", phoneNumberHandlerBase.getTimeZonesForNumber(DE_NUM_4, REGCODE_US).toString()); //$NON-NLS-1$
 
+    }
+
+    @Test
+    public void testGetPhoneNumberType() {
+        assertEquals(PhoneNumberTypeEnum.MOBILE, phoneNumberHandlerBase.getPhoneNumberType(FR_NUM_5, REGCODE_FR));
+        assertEquals(PhoneNumberTypeEnum.UNKNOWN, phoneNumberHandlerBase.getPhoneNumberType(DE_NUM_4, REGCODE_US));
+        assertEquals(PhoneNumberTypeEnum.FIXED_LINE, phoneNumberHandlerBase.getPhoneNumberType(CN_NUM_3, REGCODE_CN));
     }
 }

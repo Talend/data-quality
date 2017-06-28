@@ -84,7 +84,7 @@ public class TSwooshGrouping<TYPE> {
      */
     public void addToList(final TYPE[] inputRow, List<List<Map<java.lang.String, java.lang.String>>> multiMatchRules) {
         totalCount++;
-        java.lang.String attributeName = null;
+        String attributeName;
         Map<java.lang.String, ValueGenerator> rcdMap = new LinkedHashMap<>();
         for (List<Map<java.lang.String, java.lang.String>> matchRule : multiMatchRules) {
             for (final Map<java.lang.String, java.lang.String> recordMap : matchRule) {

@@ -12,23 +12,27 @@
 // ============================================================================
 package org.talend.dataquality.record.linkage.genkey;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * generate the blocking key for each selected columns
  */
-public class BlockingKeyHandler {
+public class BlockingKeyHandler implements Serializable {
 
-    private List<Object[]> inputData = new ArrayList<Object[]>();
+    private static final long serialVersionUID = -2941862471389467585L;
+
+    private List<Object[]> inputData = new ArrayList<Object[]>(); // NOSONAR
 
     private AbstractGenerateKey generateKeyAPI = new AbstractGenerateKey();
 
-    private List<Map<String, String>> blockKeyDefinitions = null;
+    private List<Map<String, String>> blockKeyDefinitions = null; // NOSONAR
 
-    protected Map<String, String> columnIndexMap = null;
+    protected Map<String, String> columnIndexMap = null; // NOSONAR
 
     /**
      * Getter for inputData.
@@ -74,7 +78,8 @@ public class BlockingKeyHandler {
             inputString[index++] = obj == null ? null : obj.toString();
         }
         Map<String, String> columnValueMap = new HashMap<String, String>();
-        for (String columnName : columnIndexMap.keySet()) {
+        for (Entry<String, String> entry : columnIndexMap.entrySet()) {
+            String columnName = entry.getKey();
             columnValueMap.put(columnName, inputString[Integer.parseInt(columnIndexMap.get(columnName))]);
         }
         String genKey = generateKeyAPI.getGenKey(blockKeyDefinitions, columnValueMap);

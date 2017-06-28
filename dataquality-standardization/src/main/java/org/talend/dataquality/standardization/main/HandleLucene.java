@@ -72,7 +72,7 @@ public interface HandleLucene {
      * @throws Exception
      */
     public String replaceNameWithCountryGenderInfo(String folderName, String inputName, String inputCountry, String inputGender,
-            boolean fuzzyQuery) throws Exception;
+            boolean fuzzyQuery) throws Exception;// NOSONAR
 
     /**
      * 
@@ -85,7 +85,7 @@ public interface HandleLucene {
      * @throws Exception
      */
     public String replaceNameWithCountryInfo(String folderName, String inputName, String inputCountry, boolean fuzzyQuery)
-            throws Exception;
+            throws Exception;// NOSONAR
 
     /**
      * 
@@ -100,7 +100,7 @@ public interface HandleLucene {
      * @throws Exception
      */
     public String replaceNameWithGenderInfo(String folderName, String inputName, String inputGender, boolean fuzzyQuery)
-            throws Exception;
+            throws Exception;// NOSONAR
 
     /**
      * Input filename to be indexed once for all and indexfolder to store the files of indexing.

@@ -15,7 +15,6 @@ package org.talend.dataquality.record.linkage.grouping.swoosh;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Vector;
 
 import org.talend.dataquality.matchmerge.Attribute;
 import org.talend.dataquality.matchmerge.Record;
@@ -50,7 +49,7 @@ public class DQRecordIterator extends RecordIterator {
      * @see org.talend.dataquality.matchmerge.mfb.ValuesIterator#createRecord(java.util.Vector)
      */
     @Override
-    protected Record createRecord(Vector<Attribute> attriVector, List<DQAttribute<?>> originalRow) {
+    protected Record createRecord(List<Attribute> attriVector, List<DQAttribute<?>> originalRow) {
         // Sort the attributes in the vector by column index.
         Collections.sort(attriVector, new Comparator<Attribute>() {
 

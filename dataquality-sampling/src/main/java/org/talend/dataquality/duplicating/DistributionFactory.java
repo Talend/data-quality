@@ -36,7 +36,9 @@ public class DistributionFactory {
 
     public static AbstractIntegerDistribution createDistribution(String name, double expectation, long seed) {
         AbstractIntegerDistribution distro = createDistribution(name, expectation);
-        distro.reseedRandomGenerator(seed);
+        if (distro != null) {
+            distro.reseedRandomGenerator(seed);
+        }
         return distro;
     }
 }

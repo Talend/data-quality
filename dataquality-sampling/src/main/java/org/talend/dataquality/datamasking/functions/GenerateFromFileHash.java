@@ -12,11 +12,11 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
-import org.apache.log4j.Logger;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import org.apache.log4j.Logger;
 
 /**
  * created by jgonzalez on 24 juin 2015. This function works like GenerateFromFile, the only difference is that it will
@@ -30,7 +30,7 @@ public abstract class GenerateFromFileHash<T> extends Function<T> {
 
     private static final Logger LOGGER = Logger.getLogger(GenerateFromFileHash.class);
 
-    protected List<T> genericTokens = new ArrayList<T>();
+    protected List<T> genericTokens = new ArrayList<T>(); // NOSONAR
 
     @Override
     public void parse(String extraParameter, boolean keepNullValues, Random rand) {

@@ -28,7 +28,7 @@ public enum DataTypeEnum {
     public static DataTypeEnum get(String typeName) {
         try {
             return DataTypeEnum.valueOf(typeName.toUpperCase());
-        } catch (Exception e) {
+        } catch (Exception e) {// NOSONAR
             return DataTypeEnum.STRING;
         }
     }

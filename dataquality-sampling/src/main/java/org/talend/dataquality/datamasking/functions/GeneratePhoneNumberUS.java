@@ -25,7 +25,7 @@ public class GeneratePhoneNumberUS extends Function<String> {
         StringBuilder result = new StringBuilder(EMPTY_STRING);
         result.append(rnd.nextInt(8) + 2);
         result.append(rnd.nextInt(9));
-        int tmp = 0;
+        int tmp;
         do {
             tmp = rnd.nextInt(9);
         } while (tmp == result.charAt(1) - 48);

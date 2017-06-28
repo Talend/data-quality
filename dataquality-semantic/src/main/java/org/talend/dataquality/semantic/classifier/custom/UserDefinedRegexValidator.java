@@ -99,7 +99,7 @@ public class UserDefinedRegexValidator extends AbstractRegexSemanticValidator {
 
     public void setPatternString(String patternString) {
         if (StringUtils.isEmpty(patternString)) {
-            throw new RuntimeException("null argument of patternString is not allowed.");
+            throw new RuntimeException("null argument of patternString is not allowed.");// NOSONAR
         }
         this.patternString = patternString;
         try {

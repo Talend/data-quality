@@ -19,7 +19,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.talend.dataquality.record.linkage.Messages;
-import org.talend.dataquality.record.linkage.attribute.DummyMatcher;
 import org.talend.dataquality.record.linkage.attribute.IAttributeMatcher;
 import org.talend.dataquality.record.linkage.constant.AttributeMatcherType;
 
@@ -190,7 +189,7 @@ public abstract class AbstractRecordMatcher implements IRecordMatcher {
         for (int i = 0; i < recordSize; i++) {
             final double w = weights[i];
             // total = 0 already handled before
-            final BigDecimal l = new BigDecimal(Double.toString(w / total));
+            final BigDecimal l = new BigDecimal(Double.toString(w / total)); // NOSONAR
             normalized[i] = l.setScale(16, BigDecimal.ROUND_UP).doubleValue();
         }
         return normalized;
