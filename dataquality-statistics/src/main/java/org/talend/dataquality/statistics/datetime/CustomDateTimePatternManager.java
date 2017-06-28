@@ -29,8 +29,8 @@ public final class CustomDateTimePatternManager {
     private static final String PATTERN_WITH_ERA = "yyyy-MM-dd G"; //$NON-NLS-1$
 
     public static boolean isDate(String value, List<String> customPatterns) {
-        // get Locale by value and pattern with era.
-        Locale locale = getLocaleByEra(value, customPatterns);
+        // guess Locale by value and pattern with era.
+        Locale locale = guessLocaleByEra(value, customPatterns);
         return isDate(value, customPatterns, locale);
     }
 
@@ -101,36 +101,27 @@ public final class CustomDateTimePatternManager {
 
     /**
      * 
-     * Get Locale by value and pattern,only pattern "yyyy-MM-dd G" can be extracted Locale.
+     * Guess Locale by value and pattern,only pattern "yyyy-MM-dd G" can be extracted Locale.
      * 
      * <pre>
-     * getLocaleByEra("2017-06-26",  Arrays.asList("yyyy-MM-dd G"))  = DEFAULT_LOCALE
-     * getLocaleByEra("0006-01-01 明治",  Arrays.asList("yyyy-MM-dd G"))  = Locale.JAPANESE
-     * getLocaleByEra("0106-05-18 民國",  Arrays.asList("yyyy-MM-dd G"))  = Locale.TAIWAN
-     * getLocaleByEra("1438-08-22 هـ",  Arrays.asList("yyyy-MM-dd G"))  = new Locale("ar")
-     * getLocaleByEra("04171-11-12 ปีก่อนคริสต์กาลที่",  Arrays.asList("yyyy-MM-dd G"))  = new Locale("th")
+     * guessLocaleByEra("2017-06-26",  Arrays.asList("yyyy-MM-dd G"))  = DEFAULT_LOCALE
+     * guessLocaleByEra("0006-01-01 明治",  Arrays.asList("yyyy-MM-dd G"))  = Locale.JAPANESE
+     * guessLocaleByEra("0106-05-18 民國",  Arrays.asList("yyyy-MM-dd G"))  = Locale.TAIWAN
+     * guessLocaleByEra("1438-08-22 هـ",  Arrays.asList("yyyy-MM-dd G"))  = new Locale("ar")
+     * guessLocaleByEra("04171-11-12 ปีก่อนคริสต์กาลที่",  Arrays.asList("yyyy-MM-dd G"))  = new Locale("th")
      * </pre>
      * 
      * @param value a String of date like as "0106-05-18 民國"
      * @param customPatterns date patterns
      * @return
      */
-    private static Locale getLocaleByEra(String value, List<String> customPatterns) {
-        if (StringUtils.isEmpty(value) || customPatterns.isEmpty()) {
+    private static Locale guessLocaleByEra(String value, List<String> customPatterns) {
+        if (StringUtils.isEmpty(value) || customPatterns.isEmpty() || !customPatterns.contains(PATTERN_WITH_ERA)) {
             return DEFAULT_LOCALE;
         }
-        boolean isPatternWithEra = false;
-        for (String pattern : customPatterns) {
-            if (PATTERN_WITH_ERA.equals(pattern)) {
-                isPatternWithEra = true;
-                break;
-            }
-        }
-        if (isPatternWithEra) {
-            for (LocaleEraEnum localEra : LocaleEraEnum.values()) {
-                if (StringUtils.endsWithAny(value, localEra.getEras())) {
-                    return localEra.getLocale();
-                }
+        for (LocaleEraEnum localEra : LocaleEraEnum.values()) {
+            if (StringUtils.endsWithAny(value, localEra.getEras())) {
+                return localEra.getLocale();
             }
         }
         return DEFAULT_LOCALE;
