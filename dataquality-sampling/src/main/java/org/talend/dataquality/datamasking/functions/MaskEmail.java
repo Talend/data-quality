@@ -27,7 +27,8 @@ public abstract class MaskEmail extends Function<String> {
 
     private static final long serialVersionUID = 3837984827035744721L;
 
-    protected static final Pattern EMAIL_REGEX = Pattern.compile("^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w-]+\\.)+[\\w-]+[\\w-]$");
+    protected static final Pattern EMAIL_REGEX = Pattern.compile(
+            "^(([^\\s\\p{Cntrl}\\(\\)<>@,;:'\\\\\\\"\\.\\[\\]]|')+|(\\\"[^\\\"]*\\\"))(\\.(([^\\s\\p{Cntrl}\\(\\)<>@,;:'\\\\\\\"\\.\\[\\]]|')+|(\\\"[^\\\"]*\\\")))*@([\\p{L}\\p{M}0-9]([\\p{L}\\p{M}0-9\\-]{0,61}[\\p{L}\\p{M}0-9])?\\.)+[\\p{L}\\p{M}]{2,6}$");
 
     /**
      * DOC qzhao Comment method "isValidEmailAddress".<br>

@@ -29,7 +29,7 @@ public class MaskFullEmailDomainByXTest {
 
     private String output;
 
-    private String mail = "hehe.hehe@uestc.edu.cn";
+    private String mail = "hehe.hehe@çéhœh.啊hش.cn";
 
     private String spemail = "hehe@telecom-bretagne.eu";
 

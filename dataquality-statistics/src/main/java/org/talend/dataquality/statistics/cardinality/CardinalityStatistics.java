@@ -23,17 +23,17 @@ import java.util.Set;
  */
 public class CardinalityStatistics extends AbstractCardinalityStatistics<CardinalityStatistics> {
 
-    private final Set<String> distinctData = new HashSet<>();
+    private final Set<Object> distinctData = new HashSet<>();
 
-    public void add(String colStr) {
-        distinctData.add(colStr);
+    public void add(Object colObj) {
+        distinctData.add(colObj);
     }
 
-    public Set<String> getDistinctData() {
+    public Set<Object> getDistinctData() {
         return distinctData;
     }
 
-    private void addAll(Collection<String> col) {
+    private void addAll(Collection<Object> col) {
         this.distinctData.addAll(col);
     }
 
