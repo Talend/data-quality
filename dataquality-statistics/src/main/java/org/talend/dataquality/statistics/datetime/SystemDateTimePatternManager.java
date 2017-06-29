@@ -14,6 +14,10 @@ package org.talend.dataquality.statistics.datetime;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.chrono.HijrahChronology;
+import java.time.chrono.JapaneseChronology;
+import java.time.chrono.MinguoChronology;
+import java.time.chrono.ThaiBuddhistChronology;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
@@ -200,6 +204,17 @@ public class SystemDateTimePatternManager {
             try {
                 formatter = new DateTimeFormatterBuilder().parseCaseInsensitive().appendPattern(customPattern)
                         .toFormatter(locale);
+                // TDQ-13936 add Chronology for specified Locale.
+                if (Locale.JAPANESE.equals(locale)) {
+                    formatter = formatter.withChronology(JapaneseChronology.INSTANCE);
+                } else if (Locale.TRADITIONAL_CHINESE.equals(locale)) {
+                    formatter = formatter.withChronology(MinguoChronology.INSTANCE);
+                } else if ("ar".equals(locale.getLanguage())) { //$NON-NLS-1$
+                    formatter = formatter.withChronology(HijrahChronology.INSTANCE);
+                } else if ("th".equals(locale.getLanguage())) { //$NON-NLS-1$
+                    formatter = formatter.withChronology(ThaiBuddhistChronology.INSTANCE).withLocale(locale);
+                }
+
             } catch (IllegalArgumentException e) {
                 return null;
             }
