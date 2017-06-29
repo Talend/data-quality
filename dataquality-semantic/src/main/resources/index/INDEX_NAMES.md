@@ -28,7 +28,7 @@ Dictionary index
 |`FR_REGION`|Nov. 2015|Sep. 2016|fr_reg2016.txt|INSEE|
 |`FR_REGION_LEGACY`|Sep. 2016|Sep. 2016|fr_reg2015.csv|INSEE|
 |`GENDER`|Jul. 2015|Jul. 2015|gender_cleaned.csv|Talend|
-|`HR_DEPARTMENT`|Jul. 2015|Jul. 2015|department_cleaned.csv|Talend|
+|`HR_DEPARTMENT`|Jul. 2015|Jul. 2015|hr_department_cleaned.csv|Talend|
 |`INDUSTRY`|Oct. 2015|Oct. 2015|industry_GICS_simplified.csv|[TDQ-10903.](https://jira.talendforge.org/browse/TDQ-10903)|
 |`INDUSTRY_GROUP`|Oct. 2015|Oct. 2015|industry_GICS_simplified.csv|[TDQ-10903.](https://jira.talendforge.org/browse/TDQ-10903)|
 |`JOB_TITLE`|Jul. 2015|Jun. 2016|jobTitle_cleaned.csv|Talend|
