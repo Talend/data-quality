@@ -19,7 +19,7 @@ Dictionary index
 |14  |`CURRENCY_NAME`|Jul. 2015|Oct. 2015|country-codes.csv|[http://data.okfn.org](http://data.okfn.org/data/country-codes) ([Public Domain Dedication and License](http://opendatacommons.org/licenses/pddl/1-0/))|
 |15  |`FIRST_NAME`|Jul. 2015|Jun. 2016|firstname_cleaned.csv|Talend|
 |16  |`GENDER`|Jul. 2015|Jul. 2015|gender_cleaned.csv|Talend|
-|17  |`HR_DEPARTMENT`|Jul. 2015|Jul. 2015|department_cleaned.csv|Talend|
+|17  |`FR_DEPARTMENT`|Jul. 2015|Jul. 2015|department_cleaned.csv|Talend|
 |18  |`INDUSTRY`|Oct. 2015|Oct. 2015|industry_GICS_simplified.csv|[TDQ-10903.](https://jira.talendforge.org/browse/TDQ-10903)|
 |19  |`INDUSTRY_GROUP`|Oct. 2015|Oct. 2015|industry_GICS_simplified.csv|[TDQ-10903.](https://jira.talendforge.org/browse/TDQ-10903)|
 |20  |`JOB_TITLE`|Jul. 2015|Jun. 2016|jobTitle_cleaned.csv|Talend|
@@ -44,7 +44,11 @@ Dictionary index
 |39  |`ANSWER`|Feb. 2016|Jun. 2016|N/A|Talend|
 |40  |`LAST_NAME`|Jun. 2016|Jun. 2016|lastname12k.csv|[United States Census Bureau](http://www.census.gov/)| ([Licence](https://www.ons.gov.uk/census/2001censusandearlier/dataandproducts/copyrightandlicensing/licenseinformation))
 |41  |`FR_REGION_LEGACY`|Sep. 2016|Sep. 2016|fr_reg2015.csv|INSEE|
-
+|42  |`US_STATE`|May 2017|May 2017|N/A|Talend|
+|43  |`US_STATE_CODE`|May 2017|May 2017|N/A|Talend|
+|44  |`EN_MONTH`|May 2017|May 2017|N/A|Talend|
+|45  |`EN_MONTH_ABBREV`|May 2017|May 2017|N/A|Talend|
+|46  |`EN_WEEKDAY`|May 2017|May 2017|N/A|Talend|
 
 Keyword index
 --------------------
