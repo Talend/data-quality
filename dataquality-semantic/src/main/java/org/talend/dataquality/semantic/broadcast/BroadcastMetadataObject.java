@@ -14,14 +14,18 @@ public class BroadcastMetadataObject implements Serializable {
 
     private Map<String, DQCategory> metadata;
 
-    /**
-     * @param metadata
-     */
+    public BroadcastMetadataObject() {
+    }
+
     public BroadcastMetadataObject(Map<String, DQCategory> metadata) {
         this.metadata = metadata;
     }
 
-    public Map<String, DQCategory> get() {
+    public Map<String, DQCategory> getMetadata() {
         return metadata;
+    }
+
+    public void setMetadata(Map<String, DQCategory> metadata) {
+        this.metadata = metadata;
     }
 }

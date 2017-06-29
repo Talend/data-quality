@@ -34,17 +34,13 @@ public class BroadcastRegexObject implements Serializable {
 
     private UserDefinedClassifier regexClassifier;
 
-    /**
-     * @param regexClassifier
-     */
+    public BroadcastRegexObject() {
+    }
+
     public BroadcastRegexObject(UserDefinedClassifier regexClassifier) {
         this.regexClassifier = regexClassifier;
     }
 
-    /**
-     * @param udc
-     * @param categories
-     */
     public BroadcastRegexObject(UserDefinedClassifier udc, Set<String> categories) {
         this.regexClassifier = new UserDefinedClassifier();
         for (ISubCategory c : udc.getClassifiers()) {
@@ -54,9 +50,6 @@ public class BroadcastRegexObject implements Serializable {
         }
     }
 
-    /**
-     * @param regexPath
-     */
     public BroadcastRegexObject(URI regexPath) {
         try {
             this.regexClassifier = UDCategorySerDeser.readJsonFile(regexPath);
@@ -65,8 +58,11 @@ public class BroadcastRegexObject implements Serializable {
         }
     }
 
-    public UserDefinedClassifier get() {
+    public UserDefinedClassifier getRegexClassifier() {
         return regexClassifier;
     }
 
+    public void setRegexClassifier(UserDefinedClassifier regexClassifier) {
+        this.regexClassifier = regexClassifier;
+    }
 }
