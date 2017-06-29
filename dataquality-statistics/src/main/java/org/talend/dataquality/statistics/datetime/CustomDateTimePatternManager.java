@@ -28,6 +28,8 @@ public final class CustomDateTimePatternManager {
 
     private static final String PATTERN_WITH_ERA = "yyyy-MM-dd G"; //$NON-NLS-1$
 
+    private static Map<String, Locale> localeEraMap = null;
+
     public static boolean isDate(String value, List<String> customPatterns) {
         // guess Locale by value and pattern with era.
         Locale locale = guessLocaleByEra(value, customPatterns);
@@ -119,38 +121,37 @@ public final class CustomDateTimePatternManager {
         if (StringUtils.isEmpty(value) || customPatterns.isEmpty() || !customPatterns.contains(PATTERN_WITH_ERA)) {
             return DEFAULT_LOCALE;
         }
-        for (LocaleEraEnum localEra : LocaleEraEnum.values()) {
-            if (StringUtils.endsWithAny(value, localEra.getEras())) {
-                return localEra.getLocale();
+        String[] splitValues = value.split(" "); //$NON-NLS-1$
+        if (splitValues.length == 2 && !StringUtils.isEmpty(splitValues[1])) {
+            initMapIfNeeded();
+            Locale locale = localeEraMap.get(splitValues[1]);
+            if (locale != null) {
+                return locale;
             }
         }
         return DEFAULT_LOCALE;
 
     }
 
-    private enum LocaleEraEnum {
-
-        ISO(Locale.US, new String[] { "AD", "BC" }), //$NON-NLS-1$ //$NON-NLS-2$
-        JAPANESE(Locale.JAPANESE, new String[] { "明治", "平成", "昭和", "大正" }), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-        HIJRI(new Locale("ar"), new String[] { "هـ" }), //$NON-NLS-1$ //$NON-NLS-2$
-        MINGUO(Locale.TRADITIONAL_CHINESE, new String[] { "民國", "民國前" }), //$NON-NLS-1$//$NON-NLS-2$
-        THAI_BUDDHIST(new Locale("th"), new String[] { "พ.ศ.", "ปีก่อนคริสต์กาลที่" }); //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$
-
-        private Locale locale;
-
-        private String[] eras;
-
-        LocaleEraEnum(Locale locale, String[] eras) {
-            this.locale = locale;
-            this.eras = eras;
-        }
-
-        public Locale getLocale() {
-            return locale;
-        }
-
-        public String[] getEras() {
-            return eras;
+    /**
+     * 
+     * initialize localeEraMap once.
+     */
+    private static void initMapIfNeeded() {
+        if (localeEraMap == null) {
+            localeEraMap = new HashMap<String, Locale>();
+            Locale localeTH = new Locale("th"); //$NON-NLS-1$
+            localeEraMap.put("AD", Locale.US); //$NON-NLS-1$
+            localeEraMap.put("BC", Locale.US); //$NON-NLS-1$
+            localeEraMap.put("明治", Locale.JAPANESE); //$NON-NLS-1$
+            localeEraMap.put("平成", Locale.JAPANESE); //$NON-NLS-1$
+            localeEraMap.put("昭和", Locale.JAPANESE); //$NON-NLS-1$
+            localeEraMap.put("大正", Locale.JAPANESE); //$NON-NLS-1$
+            localeEraMap.put("هـ", new Locale("ar")); //$NON-NLS-1$//$NON-NLS-2$
+            localeEraMap.put("民國", Locale.TRADITIONAL_CHINESE); //$NON-NLS-1$
+            localeEraMap.put("民國前", Locale.TRADITIONAL_CHINESE); //$NON-NLS-1$
+            localeEraMap.put("พ.ศ.", localeTH); //$NON-NLS-1$
+            localeEraMap.put("ปีก่อนคริสต์กาลที่", localeTH); //$NON-NLS-1$
         }
     }
 
