@@ -46,6 +46,8 @@ public class SystemDateTimePatternManager {
 
     private static Map<String, DateTimeFormatter> dateTimeFormatterCache = new HashMap<String, DateTimeFormatter>();
 
+    private static final String PATTERN_WITH_ERA = "yyyy-MM-dd G"; //$NON-NLS-1$
+
     static {
         try {
             // Load date patterns
@@ -200,6 +202,8 @@ public class SystemDateTimePatternManager {
             try {
                 formatter = new DateTimeFormatterBuilder().parseCaseInsensitive().appendPattern(customPattern)
                         .toFormatter(locale);
+                // TDQ-13936 add Chronology for specified Locale.
+                formatter = ChronologyParameterManager.getDateTimeFormatterWithChronology(formatter, locale);
             } catch (IllegalArgumentException e) {
                 return null;
             }
@@ -229,11 +233,19 @@ public class SystemDateTimePatternManager {
         }
 
         // firstly, try with user-defined locale
-        final DateTimeFormatter formatter = getDateTimeFormatterByPattern(pattern, locale);
+        Locale correctLocale = locale;
+        // TDQ-13936 Guess locale by the end of value when the pattern is "yyyy-MM-dd G"
+        if (PATTERN_WITH_ERA.equals(pattern)) {
+            Locale guessLocale = ChronologyParameterManager.guessLocaleByEra(value);
+            if (!DEFAULT_LOCALE.equals(guessLocale)) {
+                correctLocale = guessLocale;
+            }
+        }
+        final DateTimeFormatter formatter = getDateTimeFormatterByPattern(pattern, correctLocale);
         if (validateWithDateTimeFormatter(value, formatter)) {
             return true;
         } else {
-            if (!DEFAULT_LOCALE.equals(locale)) {
+            if (!DEFAULT_LOCALE.equals(correctLocale)) {
                 // try with LOCALE_US if user defined locale is not US
                 final DateTimeFormatter formatterUS = getDateTimeFormatterByPattern(pattern, Locale.US);
                 if (validateWithDateTimeFormatter(value, formatterUS)) {
