@@ -7,7 +7,7 @@
 		<relativePath>../dataquality-libraries</relativePath>
 	</parent>
 	<artifactId>dataquality-converters</artifactId>
-	<version>${dataquality.converters.snapshot.version}</version>
+	<version>${dataquality.converters.version}</version>
 	<packaging>bundle</packaging>
 	<name>dataquality-converters</name>
 	<description>API for all types of convert functions</description>

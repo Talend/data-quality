@@ -7,7 +7,7 @@
 		<relativePath>../dataquality-libraries</relativePath>
 	</parent>
 	<artifactId>dataquality-common</artifactId>
-	<version>${dataquality.libraries.snapshot.version}</version>
+	<version>${dataquality.libraries.version}</version>
 	<packaging>bundle</packaging>
 	<name>dataquality-common</name>
 	<description>Data Quality Common Library is the low level library containing interfaces and common utility classes.</description>

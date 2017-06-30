@@ -7,7 +7,7 @@
 		<relativePath>../dataquality-libraries</relativePath>
 	</parent>
 	<artifactId>dataquality-survivorship</artifactId>
-	<version>${dataquality.survivorship.snapshot.version}</version>
+	<version>${dataquality.survivorship.version}</version>
 	<packaging>bundle</packaging>
 	<name>dataquality-survivorship</name>
 	<description>Data Survivorship runtime API based on Drools</description>

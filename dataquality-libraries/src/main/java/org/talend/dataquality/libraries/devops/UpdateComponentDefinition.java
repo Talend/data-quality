@@ -23,6 +23,13 @@ import java.util.Map;
 import org.apache.commons.io.IOUtils;
 
 /**
+ * Java application for updating DQ library versions used in studio components.
+ * 
+ * Usage:
+ * 1. update the expect version in DEP_VERSION_MAP field.
+ * 2. tell the application if need to USE_SNAPSHOT_VERSION.
+ * 3. Run this class as Java application.
+ * 
  * @author sizhaoliu
  */
 public class UpdateComponentDefinition {
@@ -48,12 +55,12 @@ public class UpdateComponentDefinition {
         private static final long serialVersionUID = 1L;
 
         {
-            put("org.talend.dataquality.common", "1.6.2");
-            put("org.talend.dataquality.record.linkage", "3.3.2");
-            put("org.talend.dataquality.sampling", "2.4.2");
-            put("org.talend.dataquality.standardization", "3.3.2");
-            put("org.talend.dataquality.email", "1.1.2");
-            put("org.talend.dataquality.survivorship", "2.0.2");
+            put("org.talend.dataquality.common", "1.7.0");
+            put("org.talend.dataquality.record.linkage", "3.4.0");
+            put("org.talend.dataquality.sampling", "2.5.0");
+            put("org.talend.dataquality.standardization", "3.4.0");
+            put("org.talend.dataquality.email", "1.2.0");
+            put("org.talend.dataquality.survivorship", "2.1.0");
         }
     };
 

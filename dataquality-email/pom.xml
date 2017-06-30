@@ -7,7 +7,7 @@
 		<relativePath>../dataquality-libraries</relativePath>
 	</parent>
 	<artifactId>dataquality-email</artifactId>
-	<version>${dataquality.email.snapshot.version}</version>
+	<version>${dataquality.email.version}</version>
 	<packaging>bundle</packaging>
 	<name>dataquality-email</name>
 	<description>Email Validation API</description>

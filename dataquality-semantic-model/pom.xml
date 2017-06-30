@@ -7,7 +7,7 @@
 		<relativePath>../dataquality-libraries</relativePath>
 	</parent>
 	<artifactId>dataquality-semantic-model</artifactId>
-	<version>${dataquality.libraries.snapshot.version}</version>
+	<version>${dataquality.libraries.version}</version>
 	<packaging>bundle</packaging>
 	<name>dataquality-semantic-model</name>
 	<description>Model for semantic category features</description>

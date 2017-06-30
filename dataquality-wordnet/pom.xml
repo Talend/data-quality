@@ -7,7 +7,7 @@
 		<relativePath>../dataquality-libraries</relativePath>
 	</parent>
 	<artifactId>dataquality-wordnet</artifactId>
-	<version>${dataquality.wordnet.snapshot.version}</version>
+	<version>${dataquality.wordnet.version}</version>
 	<packaging>bundle</packaging>
 	<name>dataquality-wordnet</name>
 	<description>Content validation API based on WordNet dictionary</description>

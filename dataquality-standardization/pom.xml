@@ -7,7 +7,7 @@
 		<relativePath>../dataquality-libraries</relativePath>
 	</parent>
 	<artifactId>dataquality-standardization</artifactId>
-	<version>${dataquality.standardization.snapshot.version}</version>
+	<version>${dataquality.standardization.version}</version>
 	<packaging>bundle</packaging>
 	<name>dataquality-standardization</name>
 	<description>Standardization library based on Apache Lucene</description>

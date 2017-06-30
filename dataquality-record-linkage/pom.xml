@@ -7,7 +7,7 @@
 		<relativePath>../dataquality-libraries</relativePath>
 	</parent>
 	<artifactId>dataquality-record-linkage</artifactId>
-	<version>${dataquality.record.linkage.snapshot.version}</version>
+	<version>${dataquality.record.linkage.version}</version>
 	<packaging>bundle</packaging>
 	<name>dataquality-record-linkage</name>
 	<description>Record Matching algorithms, blocking key calculation and T-Swoosh</description>
@@ -16,7 +16,7 @@
 		<dependency>
 			<groupId>org.talend.dataquality</groupId>
 			<artifactId>dataquality-common</artifactId>
-			<version>${dataquality.libraries.snapshot.version}</version>
+			<version>${dataquality.libraries.version}</version>
 		</dependency>
 
 		<dependency>

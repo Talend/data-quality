@@ -7,7 +7,7 @@
 		<relativePath>../dataquality-libraries</relativePath>
 	</parent>
 	<artifactId>dataquality-statistics</artifactId>
-	<version>${dataquality.libraries.snapshot.version}</version>
+	<version>${dataquality.libraries.version}</version>
 	<packaging>bundle</packaging>
 	<name>dataquality-statistics</name>
 	<description>API for data analysis and statistics</description>
@@ -25,12 +25,12 @@
 		<dependency>
 			<groupId>org.talend.dataquality</groupId>
 			<artifactId>dataquality-common</artifactId>
-			<version>${dataquality.libraries.snapshot.version}</version>
+			<version>${dataquality.libraries.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.talend.dataquality</groupId>
 			<artifactId>dataquality-semantic</artifactId>
-			<version>${dataquality.libraries.snapshot.version}</version>
+			<version>${dataquality.libraries.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

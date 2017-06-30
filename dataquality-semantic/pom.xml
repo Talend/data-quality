@@ -7,7 +7,7 @@
 		<relativePath>../dataquality-libraries</relativePath>
 	</parent>
 	<artifactId>dataquality-semantic</artifactId>
-	<version>${dataquality.libraries.snapshot.version}</version>
+	<version>${dataquality.libraries.version}</version>
 	<packaging>bundle</packaging>
 	<name>dataquality-semantic</name>
 	<description>API for semantic category analysis</description>
@@ -21,17 +21,17 @@
 		<dependency>
 			<groupId>org.talend.dataquality</groupId>
 			<artifactId>dataquality-common</artifactId>
-			<version>${dataquality.libraries.snapshot.version}</version>
+			<version>${dataquality.libraries.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.talend.dataquality</groupId>
 			<artifactId>dataquality-semantic-model</artifactId>
-			<version>${dataquality.libraries.snapshot.version}</version>
+			<version>${dataquality.libraries.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.talend.dataquality</groupId>
 			<artifactId>dataquality-standardization</artifactId>
-			<version>${dataquality.standardization.snapshot.version}</version>
+			<version>${dataquality.standardization.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
