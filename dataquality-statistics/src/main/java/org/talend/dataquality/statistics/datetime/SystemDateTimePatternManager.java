@@ -19,7 +19,15 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAccessor;
 import java.time.temporal.TemporalQueries;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
@@ -46,7 +54,7 @@ public class SystemDateTimePatternManager {
 
     private static Map<String, DateTimeFormatter> dateTimeFormatterCache = new HashMap<String, DateTimeFormatter>();
 
-    private static final String PATTERN_WITH_ERA = "yyyy-MM-dd G"; //$NON-NLS-1$
+    private static final String PATTERN_SUFFIX_ERA = " G"; //$NON-NLS-1$
 
     static {
         try {
@@ -203,7 +211,9 @@ public class SystemDateTimePatternManager {
                 formatter = new DateTimeFormatterBuilder().parseCaseInsensitive().appendPattern(customPattern)
                         .toFormatter(locale);
                 // TDQ-13936 add Chronology for specified Locale.
-                formatter = ChronologyParameterManager.getDateTimeFormatterWithChronology(formatter, locale);
+                if (customPattern != null && customPattern.endsWith(PATTERN_SUFFIX_ERA)) {
+                    formatter = ChronologyParameterManager.getDateTimeFormatterWithChronology(formatter, locale);
+                }
             } catch (IllegalArgumentException e) {
                 return null;
             }
@@ -235,7 +245,7 @@ public class SystemDateTimePatternManager {
         // firstly, try with user-defined locale
         Locale correctLocale = locale;
         // TDQ-13936 Guess locale by the end of value when the pattern is "yyyy-MM-dd G"
-        if (PATTERN_WITH_ERA.equals(pattern)) {
+        if (pattern.endsWith(PATTERN_SUFFIX_ERA)) {
             Locale guessLocale = ChronologyParameterManager.guessLocaleByEra(value);
             if (!DEFAULT_LOCALE.equals(guessLocale)) {
                 correctLocale = guessLocale;
