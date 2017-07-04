@@ -154,7 +154,7 @@ public class CRCRHandler extends AbstractChainOfResponsibilityHandler {
         for (Entry<String, Integer> entry : columnIndexMap.entrySet()) {
             String colName = entry.getKey();
             Object value = handlerParameter.getDataset().getValueAfterFiled(rowNum, colName);
-            dataArray[columnIndexMap.get(colName)] = value;
+            dataArray[entry.getValue()] = value;
         }
         inputResult.setInputData(dataArray);
         return inputResult;
