@@ -14,6 +14,8 @@ package org.talend.dataquality.email.CommonCheck;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * created by talend on 2014年12月30日 Detailled comment
  *
@@ -58,10 +60,14 @@ public class InetAddressValidator implements Serializable {
      * @return true if the argument contains a valid IPv4 address
      */
     public boolean isValidInet4Address(String inet4Address) {
+        if (StringUtils.isEmpty(inet4Address)) {
+            return false;
+        }
+
         // verify that address conforms to generic IPv4 format
         String[] groups = ipv4Validator.match(inet4Address);
 
-        if (groups == null) {
+        if (groups == null || groups.length < 4) {
             return false;
         }
 

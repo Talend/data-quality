@@ -12,7 +12,8 @@
 // ============================================================================
 package org.talend.dataquality.email;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -62,21 +63,21 @@ public class EmailVerifyTest {
      * Test method for {@link org.talend.dataquality.email.api.EmailVerify#verify(java.lang.String)}.
      */
     @Test
-    public void testVerify_regular() {
+    public void testVerifyRegular() {
         email = "ab_2c@sina.com"; //$NON-NLS-1$
         emailVerify = emailVerify.addRegularRegexChecker(true, ""); //$NON-NLS-1$
         assertEquals(EmailVerifyResult.VALID, emailVerify.checkEmail(email));
     }
 
     @Test
-    public void testVerify_regular_invalid() {
+    public void testVerifyRegularInvalid() {
         email = "ab_2c@sina.com."; //$NON-NLS-1$
         emailVerify = emailVerify.addRegularRegexChecker(true, null);
         assertEquals(EmailVerifyResult.INVALID, emailVerify.checkEmail(email));
     }
 
     @Test
-    public void testVerify_regular_invalid_2() {
+    public void testVerifyRegularInvalid2() {
         email = "ab_2c"; //$NON-NLS-1$
         emailVerify = emailVerify.addRegularRegexChecker(true, ""); //$NON-NLS-1$
         assertEquals(EmailVerifyResult.INVALID, emailVerify.checkEmail(email));
@@ -86,7 +87,7 @@ public class EmailVerifyTest {
      * Test method for {@link org.talend.dataquality.email.api.EmailVerify#verify(java.lang.String)}.
      */
     @Test
-    public void testVerify_localPart() {
+    public void testVerifyLocalPart() {
         email = "abc@sina.com"; //$NON-NLS-1$
         emailVerify = emailVerify.addRegularRegexChecker(true, " ").addLocalPartRegexChecker(regularPattern, false, true); //$NON-NLS-1$
         assertEquals(EmailVerifyResult.VALID, emailVerify.checkEmail(email));
@@ -98,20 +99,20 @@ public class EmailVerifyTest {
      * Test method for {@link org.talend.dataquality.email.api.EmailVerify#verify(java.lang.String)}.
      */
     @Test
-    public void testVerify_localPart_2() {
+    public void testVerifyLocalPart2() {
         email = "abc-sina.com"; //$NON-NLS-1$
         emailVerify = emailVerify.addRegularRegexChecker(true, null).addLocalPartRegexChecker(regularPattern, false, true);
         assertEquals(EmailVerifyResult.INVALID, emailVerify.checkEmail(email));
     }
 
     @Test
-    public void testVerify_localPart_3() {
+    public void testVerifyLocalPart3() {
         emailVerify = emailVerify.addRegularRegexChecker(true, null).addLocalPartRegexChecker(regularPattern, false, true);
         assertEquals(EmailVerifyResult.INVALID, emailVerify.checkEmail(null));
     }
 
     @Test
-    public void testVerify_RegularAndlocalPart_9985() {
+    public void testVerifyRegularAndlocalPart9985() {
         email = "2@qq.com"; //$NON-NLS-1$
         emailVerify = emailVerify.addRegularRegexChecker(true, "^\\w+([-+.]\\w+)@\\w([-.]\\w+)\\.\\w+([-.]\\w+)$") //$NON-NLS-1$
                 .addLocalPartRegexChecker("^\\d$", false, false); //$NON-NLS-1$
@@ -122,7 +123,7 @@ public class EmailVerifyTest {
      * Test method for {@link org.talend.dataquality.email.api.EmailVerify#verify(java.lang.String)}.
      */
     @Test
-    public void testVerify_TLD() {
+    public void testVerifyTLD() {
         email = "ab_2c@sina.com.xyz"; //$NON-NLS-1$
         List<String> tldLs = new ArrayList<String>();
         tldLs.add("xyz".toUpperCase()); //$NON-NLS-1$
@@ -133,7 +134,7 @@ public class EmailVerifyTest {
     }
 
     @Test
-    public void testVerify_TLD_2() {
+    public void testVerifyTLD2() {
         email = "ab_2c-sina.com.xy"; //$NON-NLS-1$
         List<String> tldLs = new ArrayList<String>();
         tldLs.add("xyz".toUpperCase()); //$NON-NLS-1$
@@ -142,7 +143,7 @@ public class EmailVerifyTest {
     }
 
     @Test
-    public void testVerify_TLD_3() {
+    public void testVerifyTLD3() {
         List<String> tldLs = new ArrayList<String>();
         tldLs.add("xyz".toUpperCase()); //$NON-NLS-1$
         emailVerify = emailVerify.addRegularRegexChecker(false, "").addTLDsChecker(true, tldLs, true); //$NON-NLS-1$
@@ -150,7 +151,7 @@ public class EmailVerifyTest {
     }
 
     @Test
-    public void testVerify_TLD_4() {
+    public void testVerifyTLD4() {
         List<String> tldLs = new ArrayList<String>();
         tldLs.add("xyz".toUpperCase()); //$NON-NLS-1$
         emailVerify = emailVerify.addRegularRegexChecker(false, "").addTLDsChecker(true, tldLs, true); //$NON-NLS-1$
@@ -161,7 +162,7 @@ public class EmailVerifyTest {
      * Test method for {@link org.talend.dataquality.email.api.EmailVerify#verify(java.lang.String)}.
      */
     @Test
-    public void testVerify_domain_white() {
+    public void testVerifyDomainWhite() {
         email = "ab@abx.com"; //$NON-NLS-1$
         List<String> ls = new ArrayList<String>();
         ls.add("abx.com"); //$NON-NLS-1$
@@ -170,7 +171,7 @@ public class EmailVerifyTest {
     }
 
     @Test
-    public void testVerify_domain_white_2() {
+    public void testVerifyDomainWhite2() {
         email = "ab-abx.com"; //$NON-NLS-1$
         List<String> ls = new ArrayList<String>();
         ls.add("abx.com"); //$NON-NLS-1$
@@ -179,7 +180,7 @@ public class EmailVerifyTest {
     }
 
     @Test
-    public void testVerify_domain_white_3() {
+    public void testVerifyDomainWhite3() {
         List<String> ls = new ArrayList<String>();
         ls.add("abx.com"); //$NON-NLS-1$
         emailVerify = emailVerify.addListDomainsChecker(false, ls);
@@ -561,4 +562,15 @@ public class EmailVerifyTest {
         }
     }
 
+    @Test
+    public void testAddCallbackMailServerChecker() {
+        EmailVerify serverChecker = emailVerify.addCallbackMailServerChecker(true);
+        assertNotNull(serverChecker);
+    }
+
+    @Test
+    public void testCheckEmail() {
+        emailVerify.initEmailVerify();
+        assertEquals(EmailVerifyResult.INVALID, emailVerify.checkEmail(null, null));
+    }
 }
