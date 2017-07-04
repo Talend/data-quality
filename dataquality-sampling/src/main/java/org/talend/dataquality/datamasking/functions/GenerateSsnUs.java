@@ -29,7 +29,7 @@ public class GenerateSsnUs extends Function<String> {
         result.append(rnd.nextInt(8));
         result.append(rnd.nextInt(9));
         if (result.charAt(0) == '0' && result.charAt(1) == '0' || result.charAt(0) == '6' && result.charAt(1) == '6') {
-            int tmp = 0;
+            int tmp;
             do {
                 tmp = rnd.nextInt(9);
             } while ((char) tmp == result.charAt(0));

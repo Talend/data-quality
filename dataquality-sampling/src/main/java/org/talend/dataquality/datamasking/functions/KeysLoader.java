@@ -39,15 +39,23 @@ public class KeysLoader {
      */
     public static List<String> loadKeys(String filePath) throws IOException, NullPointerException {
         List<String> keys = new ArrayList<>();
-        BufferedReader in;
+        BufferedReader in = null;
+        FileReader fileReader = null;
         try {
-            in = new BufferedReader(new FileReader(filePath));
+            fileReader = new FileReader(filePath);
+            in = new BufferedReader(fileReader);
             while (in.ready()) {
                 keys.add(in.readLine().trim());
             }
-            in.close();
         } catch (NullPointerException | IOException e) {
             throw e;
+        } finally {
+            if (in != null) {
+                in.close();
+            }
+            if (fileReader != null) {
+                fileReader.close();
+            }
         }
         return keys;
     }

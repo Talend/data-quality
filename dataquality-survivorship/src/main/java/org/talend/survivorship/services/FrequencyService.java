@@ -14,6 +14,7 @@ package org.talend.survivorship.services;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map.Entry;
 
 import org.talend.survivorship.model.Attribute;
 import org.talend.survivorship.model.DataSet;
@@ -46,9 +47,7 @@ public class FrequencyService extends AbstractService {
      * @return
      */
     public HashMap<Object, Integer> putAttributeValues(String column, boolean ignoreBlanks) {
-        HashMap<Object, Integer> valueToFreq = frequencyMaps.get(column);
-
-        valueToFreq = new HashMap<>();
+        HashMap<Object, Integer> valueToFreq = new HashMap<>();
         frequencyMaps.put(column, valueToFreq);
 
         for (Attribute attr : dataset.getAttributesByColumn(column)) {
@@ -70,8 +69,8 @@ public class FrequencyService extends AbstractService {
 
         int max = 0;
         int second = 0;
-        for (Object value : valueToFreq.keySet()) {
-            int freq = valueToFreq.get(value);
+        for (Entry<Object, Integer> entry : valueToFreq.entrySet()) {
+            int freq = entry.getValue();
             if (freq > max) {
                 second = max;
                 max = freq;
@@ -101,8 +100,9 @@ public class FrequencyService extends AbstractService {
         int max = maxOccurence.get(column);
         HashSet<Object> mostFrequentValues = new HashSet<Object>();
 
-        for (Object obj : valueToFreq.keySet()) {
-            int count = valueToFreq.get(obj);
+        for (Entry<Object, Integer> entry : valueToFreq.entrySet()) {
+            Object obj = entry.getKey();
+            int count = entry.getValue();
             if (count == max) {
                 mostFrequentValues.add(obj);
             }
@@ -128,8 +128,9 @@ public class FrequencyService extends AbstractService {
         int second = secondMaxOccurence.get(column);
         HashSet<Object> secondMostFrequentValues = new HashSet<Object>();
 
-        for (Object obj : valueToFreq.keySet()) {
-            int count = valueToFreq.get(obj);
+        for (Entry<Object, Integer> entry : valueToFreq.entrySet()) {
+            Object obj = entry.getKey();
+            int count = entry.getValue();
             if (count == second) {
                 secondMostFrequentValues.add(obj);
             }

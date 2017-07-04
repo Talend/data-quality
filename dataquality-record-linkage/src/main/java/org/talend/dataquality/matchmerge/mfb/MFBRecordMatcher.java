@@ -73,7 +73,9 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
             maxWeight += matcher.getWeight();
             matchIndex++;
         }
-        double normalizedConfidence = confidence > 0 ? confidence / maxWeight : confidence; // Normalize to 0..1 value
+        double normalizedConfidence = confidence > 0 && maxWeight != 0 ? confidence / maxWeight : confidence; // Normalize
+                                                                                                              // to 0..1
+                                                                                                              // value
         result.setConfidence(normalizedConfidence);
         if (normalizedConfidence < minConfidenceValue) {
             if (LOGGER.isDebugEnabled()) {

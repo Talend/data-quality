@@ -117,7 +117,7 @@ public class AbstractGenerateKey {
      * @return
      */
     public String getAlgoForEachColumn(String originalValue, Map<String, String> blockKey, String[] params) {
-        String tempVar = null;
+        String tempVar;
         String colValue = originalValue;
         String preAlgoName = blockKey.get(params[0]);
         String preAlgoPara = blockKey.get(params[1]);
@@ -130,17 +130,17 @@ public class AbstractGenerateKey {
             colValue = StringUtils.EMPTY;
         }
 
-        tempVar = AlgorithmSwitch.getPreAlgoResult(preAlgoName, preAlgoPara, colValue).toString();
+        tempVar = AlgorithmSwitch.getPreAlgoResult(preAlgoName, preAlgoPara, colValue);
         if (StringUtils.isNotEmpty(tempVar)) {
             colValue = tempVar;
         }
 
-        tempVar = AlgorithmSwitch.getAlgoResult(keyAlgoName, keyAlgoPara, colValue).toString();
+        tempVar = AlgorithmSwitch.getAlgoResult(keyAlgoName, keyAlgoPara, colValue);
         if (StringUtils.isNotEmpty(tempVar)) {
             colValue = tempVar;
         }
 
-        tempVar = AlgorithmSwitch.getPostAlgoResult(postAlgoName, postAlgoPara, colValue).toString();
+        tempVar = AlgorithmSwitch.getPostAlgoResult(postAlgoName, postAlgoPara, colValue);
         if (StringUtils.isNotEmpty(tempVar)) {
             colValue = tempVar;
         }

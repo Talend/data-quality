@@ -82,8 +82,10 @@ public abstract class AbstractAttributeMatcher implements IAttributeMatcher, ITo
             break;
         }
 
-        assert !isNullOrEmpty(str1) : "string should not be null or empty here"; //$NON-NLS-1$
-        assert !isNullOrEmpty(str2) : "string should not be null or empty here"; //$NON-NLS-1$
+        boolean isNullorEmptyStr1 = !isNullOrEmpty(str1);
+        boolean isNullorEmptyStr2 = !isNullOrEmpty(str2);
+        assert isNullorEmptyStr1 : "string should not be null or empty here"; //$NON-NLS-1$
+        assert isNullorEmptyStr2 : "string should not be null or empty here"; //$NON-NLS-1$
         // TDQ-10366 qiongli,catch the Exception.
         if (fingerPrintApply) {
             FingerprintKeyer fg = new FingerprintKeyer();

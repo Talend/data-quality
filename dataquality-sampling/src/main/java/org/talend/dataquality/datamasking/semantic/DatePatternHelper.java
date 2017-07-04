@@ -73,7 +73,8 @@ class DatePatternHelper {
             return StringUtils.EMPTY;
         }
         for (Map<Pattern, String> patternMap : DATE_PATTERN_GROUP_LIST) {
-            for (Pattern parser : patternMap.keySet()) {
+            for (Entry<Pattern, String> entry : patternMap.entrySet()) {
+                Pattern parser = entry.getKey();
                 if (parser.matcher(value).find()) {
                     return patternMap.get(parser);
                 }

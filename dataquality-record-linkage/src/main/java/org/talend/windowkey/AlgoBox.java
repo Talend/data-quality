@@ -87,7 +87,7 @@ public class AlgoBox {
             return ""; //$NON-NLS-1$
         }
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         String[] arr_1 = pattern.split(";"); //$NON-NLS-1$
 
         for (String valueOf_arr_1 : arr_1) {
@@ -129,9 +129,9 @@ public class AlgoBox {
 
         String d_pattern = "[a-zA-Z&&[^aeiouAEIOU]]"; //$NON-NLS-1$
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         int s_len = sInput.length();
-        String s = null;
+        String s;
 
         for (int i = 0; i < s_len; i++) {
             s = sInput.substring(i, i + 1);
@@ -151,9 +151,9 @@ public class AlgoBox {
 
         String d_pattern = "[aeiouAEIOU]"; //$NON-NLS-1$
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         int s_len = sInput.length();
-        String s = null;
+        String s;
 
         for (int i = 0; i < s_len; i++) {
             s = sInput.substring(i, i + 1);
@@ -230,7 +230,7 @@ public class AlgoBox {
             return ""; //$NON-NLS-1$
         }
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         StringTokenizer tok = new StringTokenizer(sInput);
 
         while (tok.hasMoreTokens()) {
@@ -251,7 +251,7 @@ public class AlgoBox {
             return ""; //$NON-NLS-1$
         }
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
         StringTokenizer tok = new StringTokenizer(sInput);
 

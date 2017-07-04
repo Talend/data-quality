@@ -42,7 +42,7 @@ public class HandlerFactory {
      * @return
      */
     public CRCRHandler createCRCRHandler(HandlerParameter parameter) {
-        CRCRHandler returnHandler = null;
+        CRCRHandler returnHandler;
         switch (parameter.getFunction()) {
         case RemoveDuplicate:
             returnHandler = new RemoveDuplicateCRCRHandler(parameter);

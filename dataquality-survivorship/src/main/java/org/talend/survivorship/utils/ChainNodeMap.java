@@ -25,7 +25,8 @@ public class ChainNodeMap extends HashMap<String, AbstractChainOfResponsibilityH
     private static final long serialVersionUID = 1L;
 
     public void handleRequest(Object inputData, int rowNum) {
-        for (String ruleName : this.keySet()) {
+        for (java.util.Map.Entry<String, AbstractChainOfResponsibilityHandler> entry : this.entrySet()) {
+            String ruleName = entry.getKey();
             this.get(ruleName).handleRequest(inputData, rowNum);
         }
     }

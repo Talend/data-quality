@@ -108,6 +108,8 @@ public class AnalysisMatchRecordGrouping extends AbstractRecordGrouping<Object> 
             LOG.error(e.getMessage(), e);
         } catch (InterruptedException e) {
             LOG.error(e.getMessage(), e);
+            // clean up state...
+            Thread.currentThread().interrupt();
         }
     }
 
@@ -122,7 +124,7 @@ public class AnalysisMatchRecordGrouping extends AbstractRecordGrouping<Object> 
         String[] inputStrRow = new String[currentRecord.getAttributes().size()];
         int index = 0;
         for (Attribute obj : currentRecord.getAttributes()) {
-            inputStrRow[index++] = obj.getValue() == null ? null : obj.getValue().toString();
+            inputStrRow[index++] = obj.getValue() == null ? null : obj.getValue();
         }
         doGroup(inputStrRow);
     }

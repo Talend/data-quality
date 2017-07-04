@@ -46,8 +46,8 @@ public class JaroMatcher extends AbstractAttributeMatcher {
                 + ((Math.min(string1.length(), string2.length())) % 2);
 
         // get common characters
-        final StringBuffer common1 = StringComparisonUtil.getCommonCharacters(string1, string2, halflen);
-        final StringBuffer common2 = StringComparisonUtil.getCommonCharacters(string2, string1, halflen);
+        final StringBuilder common1 = StringComparisonUtil.getCommonCharacters(string1, string2, halflen);
+        final StringBuilder common2 = StringComparisonUtil.getCommonCharacters(string2, string1, halflen);
 
         // check for zero in common
         if (common1.length() == 0 || common2.length() == 0) {

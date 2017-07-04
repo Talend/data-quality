@@ -65,7 +65,7 @@ public abstract class GenerateCreditCard<T2> extends Function<T2> {
     public Long generateCreditCardFormat(CreditCardType cct, Long valueIn) {
         StringBuilder res = new StringBuilder(""); //$NON-NLS-1$
         int len = valueIn.toString().length();
-        String prefix = ""; //$NON-NLS-1$
+        String prefix;
         if (cct == CreditCardType.VISA) {
             prefix = valueIn.toString().substring(0, 1);
         } else {
@@ -89,7 +89,7 @@ public abstract class GenerateCreditCard<T2> extends Function<T2> {
 
     public StringBuilder generateCreditCardFormat(CreditCardType cct, String str) {
         StringBuilder res = new StringBuilder(""); //$NON-NLS-1$
-        String prefix = ""; //$NON-NLS-1$
+        String prefix;
         if (cct == CreditCardType.VISA) {
             prefix = str.substring(0, 1);
         } else {
@@ -117,8 +117,8 @@ public abstract class GenerateCreditCard<T2> extends Function<T2> {
      * @return a new credit card number.
      */
     public Long generateCreditCard(CreditCardType cct) {
-        int len = 0;
-        String init = ""; //$NON-NLS-1$
+        int len;
+        String init;
         StringBuilder res = new StringBuilder(""); //$NON-NLS-1$
 
         switch (cct) {

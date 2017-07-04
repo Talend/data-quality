@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
@@ -75,8 +76,9 @@ public class SurvivorshipUtils {
         // Set default survivorship functions.
         Map<Integer, SurvivorshipFunction> defaultSurvRules = new HashMap<>();
 
-        for (String columnName : columnWithType.keySet()) {
-            String dataTypeName = columnWithType.get(columnName);
+        for (Entry<String, String> entry : columnWithType.entrySet()) {
+            String columnName = entry.getKey();
+            String dataTypeName = entry.getValue();
 
             for (Map<String, String> defSurvDef : defaultSurvivorshipRules) {
                 // the column's data type start with id_, so need to add id_ ahead of the default survivorship's data

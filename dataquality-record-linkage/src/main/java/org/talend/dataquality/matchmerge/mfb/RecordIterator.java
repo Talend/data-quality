@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
+import java.util.NoSuchElementException;
 
 import org.talend.dataquality.matchmerge.Attribute;
 import org.talend.dataquality.matchmerge.AttributeValues;
@@ -66,7 +66,11 @@ public class RecordIterator implements Iterator<Record> {
 
     @Override
     public Record next() {
-        Vector<Attribute> record = new Vector<Attribute>();
+        if (!hasNext()) {
+            throw new NoSuchElementException();
+        }
+
+        List<Attribute> record = new ArrayList<Attribute>();
         // Records
         int rcdIdx = currentIndex;
         if (currentIndex >= rcdGenerators.size()) {
@@ -97,12 +101,12 @@ public class RecordIterator implements Iterator<Record> {
      * @param record
      * @return
      */
-    protected Record createRecord(Vector<Attribute> record, List<DQAttribute<?>> originRow) {
+    protected Record createRecord(List<Attribute> record, List<DQAttribute<?>> originRow) {
         return new Record(record, String.valueOf(currentIndex - 1), timestamp++, "MFB");
     }
 
     @Override
     public void remove() {
-        throw new RuntimeException("Not supported");
+        throw new RuntimeException("Not supported");// NOSONAR
     }
 }

@@ -46,7 +46,7 @@ public class FingerprintKeyer {
         for (String ss : frags) {
             set.add(ss); // order fragments and dedupe
         }
-        StringBuffer b = new StringBuffer();
+        StringBuilder b = new StringBuilder();
         Iterator<String> i = set.iterator();
         while (i.hasNext()) { // join ordered fragments back together
             b.append(i.next());
@@ -57,7 +57,7 @@ public class FingerprintKeyer {
 
     protected String asciify(String s) {
         char[] c = s.toCharArray();
-        StringBuffer b = new StringBuffer();
+        StringBuilder b = new StringBuilder();
         for (char element : c) {
             b.append(translate(element));
         }

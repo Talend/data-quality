@@ -226,9 +226,15 @@ public class CategoryRegistryManager {
             JSONObject obj = new JSONObject(sb.toString());
             JSONArray array = obj.getJSONArray("classifiers");
             regexRegistryFolder.mkdirs();
-            FileOutputStream fos = new FileOutputStream(regexRegistryFolder + File.separator + REGEX_CATEGRIZER_FILE_NAME);
-            IOUtils.write(array.toString(2), fos);
-            fos.close();
+            FileOutputStream fos = null;
+            try {
+                fos = new FileOutputStream(regexRegistryFolder + File.separator + REGEX_CATEGRIZER_FILE_NAME);
+                IOUtils.write(array.toString(2), fos);
+            } finally {
+                if (fos != null) {
+                    fos.close();
+                }
+            }
         }
     }
 
@@ -287,9 +293,16 @@ public class CategoryRegistryManager {
         synchronized (indexExtractionLock) {
             if (!destSubFolder.exists()) {
                 final URI indexSourceURI = this.getClass().getResource("/" + sourceSubFolder).toURI();
-                final Directory srcDir = ClassPathDirectory.open(indexSourceURI);
-                if (usingLocalCategoryRegistry && !destSubFolder.exists()) {
-                    DictionaryUtils.rewriteIndex(srcDir, destSubFolder);
+                Directory srcDir = null;
+                try {
+                    srcDir = ClassPathDirectory.open(indexSourceURI);
+                    if (usingLocalCategoryRegistry && !destSubFolder.exists()) {
+                        DictionaryUtils.rewriteIndex(srcDir, destSubFolder);
+                    }
+                } finally {
+                    if (srcDir != null) {
+                        srcDir.close();
+                    }
                 }
             }
         }

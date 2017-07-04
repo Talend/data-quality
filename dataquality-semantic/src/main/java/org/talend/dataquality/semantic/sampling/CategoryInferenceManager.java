@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.talend.dataquality.semantic.recognizer.CategoryFrequency;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizer;
@@ -47,8 +48,9 @@ public class CategoryInferenceManager {
      */
     public Map<Integer, List<SemanticCategory>> getSemanticCategory() {
         Map<Integer, List<SemanticCategory>> categories = new HashMap<>();
-        for (Integer colIdx : categoryRecognizers.keySet()) {
-            CategoryRecognizer categoryRecognizer = categoryRecognizers.get(colIdx);
+        for (Entry<Integer, CategoryRecognizer> entry : categoryRecognizers.entrySet()) {
+            Integer colIdx = entry.getKey();
+            CategoryRecognizer categoryRecognizer = entry.getValue();
 
             List<SemanticCategory> categoryList = new ArrayList<>();
             Collection<CategoryFrequency> result = categoryRecognizer.getResult();

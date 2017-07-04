@@ -268,8 +268,8 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
         boolean isSimilar = false;
         for (TYPE[] masterRecord : masterRecords) {
             if (isLinkToPrevious) {
-                int masterGRPSize = Integer.valueOf(String.valueOf(masterRecord[originalInputColumnSize + 1]));
-                int inputGRPSize = Integer.valueOf(String.valueOf(inputRow[originalInputColumnSize + 1]));
+                int masterGRPSize = Integer.parseInt(String.valueOf(masterRecord[originalInputColumnSize + 1]));
+                int inputGRPSize = Integer.parseInt(String.valueOf(inputRow[originalInputColumnSize + 1]));
                 // Don't compare the records whose GRP_SIZE both > 1.
                 if (masterGRPSize > 1 && inputGRPSize > 1) {
                     continue;
@@ -289,15 +289,16 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
                 isSimilar = true;
                 // Master GRP_SIZE ++
                 if (isLinkToPrevious) {
-                    int masterGRPSize = Integer.valueOf(String.valueOf(masterRecord[originalInputColumnSize + 1]));
+                    int masterGRPSize = Integer.parseInt(String.valueOf(masterRecord[originalInputColumnSize + 1]));
                     if (masterGRPSize == 1) {
                         inputRow[originalInputColumnSize + 1] = incrementGroupSize(inputRow[originalInputColumnSize + 1]);
                         TYPE[] inputRowWithExtColumns = createNewInputRowForMultPass(inputRow, originalInputColumnSize + extSize);
                         // since the 'masterRecord' will be output as a duplicate,if the masterRecord Gneed GRP_QUALITY
                         // is less than Input,should set masterRecord GRP_QUALITY to 'inputRow_with_extColumns' at here.
                         if (isComputeGrpQuality) {
-                            double inputGRP = Double.valueOf(String.valueOf(inputRowWithExtColumns[originalInputColumnSize + 4]));
-                            double masterGRP = Double.valueOf(String.valueOf(masterRecord[originalInputColumnSize + 4]));
+                            double inputGRP = Double
+                                    .parseDouble(String.valueOf(inputRowWithExtColumns[originalInputColumnSize + 4]));
+                            double masterGRP = Double.parseDouble(String.valueOf(masterRecord[originalInputColumnSize + 4]));
                             if (masterGRP < inputGRP) {
                                 inputRowWithExtColumns[originalInputColumnSize + 4] = masterRecord[originalInputColumnSize + 4];
                             }
@@ -404,7 +405,7 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
      * @return
      */
     private double computeGroupQuality(TYPE[] masterRecord, double matchingProba, int idx) {
-        double groupQuality = Double.valueOf(String.valueOf(masterRecord[masterRecord.length - extSize + idx]));
+        double groupQuality = Double.parseDouble(String.valueOf(masterRecord[masterRecord.length - extSize + idx]));
         if (matchingProba < groupQuality) {
             // Use the minimal match distance as the group score.
             groupQuality = matchingProba;

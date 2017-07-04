@@ -45,7 +45,7 @@ public class DateVariance extends Function<Date> {
     @Override
     protected Date doGenerateMaskedField(Date date) {
         if (date != null) {
-            long variation = 0;
+            long variation;
             if (integerParam < 0) {
                 integerParam *= -1;
             } else if (integerParam == 0) {

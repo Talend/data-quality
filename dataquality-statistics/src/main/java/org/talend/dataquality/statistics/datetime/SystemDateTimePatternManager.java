@@ -27,6 +27,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -148,10 +149,11 @@ public class SystemDateTimePatternManager {
 
             // Check the value with a list of regex patterns
             for (Map<Pattern, String> patternMap : patternGroupList) {
-                for (Pattern parser : patternMap.keySet()) {
+                for (Entry<Pattern, String> entry : patternMap.entrySet()) {
+                    Pattern parser = entry.getKey();
                     try {
                         if (parser.matcher(value).find()) {
-                            String dateFormat = patternMap.get(parser);
+                            String dateFormat = entry.getValue();
                             if (isMatchDateTimePattern(value, dateFormat, SYSTEM_LOCALE)) {
                                 return true;
                             }
@@ -191,9 +193,10 @@ public class SystemDateTimePatternManager {
         }
         HashSet<String> resultSet = new HashSet<>();
         for (Map<Pattern, String> patternMap : patternGroupList) {
-            for (Pattern parser : patternMap.keySet()) {
+            for (Entry<Pattern, String> entry : patternMap.entrySet()) {
+                Pattern parser = entry.getKey();
                 if (parser.matcher(value).find()) {
-                    resultSet.add(patternMap.get(parser));
+                    resultSet.add(entry.getValue());
                 }
             }
             if (!resultSet.isEmpty()) {

@@ -74,7 +74,8 @@ public class BlockingKeyHandler {
             inputString[index++] = obj == null ? null : obj.toString();
         }
         Map<String, String> columnValueMap = new HashMap<String, String>();
-        for (String columnName : columnIndexMap.keySet()) {
+        for (Entry<String, String> entry : columnIndexMap.entrySet()) {
+            String columnName = entry.getKey();
             columnValueMap.put(columnName, inputString[Integer.parseInt(columnIndexMap.get(columnName))]);
         }
         String genKey = generateKeyAPI.getGenKey(blockKeyDefinitions, columnValueMap);
