@@ -53,6 +53,11 @@ public class BidiMultiMap<K, V> extends HashMap<K, V> {
         return value2Keys.equals(o);
     }
 
+    @Override
+    public int hashCode() {
+        return value2Keys.hashCode();
+    }
+
     public List<K> getKeys(V value) {
         return value2Keys.get(value);
     }
