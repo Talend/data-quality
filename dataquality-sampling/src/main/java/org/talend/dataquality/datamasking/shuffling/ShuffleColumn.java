@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import org.apache.commons.collections.CollectionUtils;
+
 /**
  * The class ShuffleColumn defines the basic common methods used in the "shuffling" functions. As with shuffling, this
  * technique is effective only on a large data set.<br>
@@ -67,8 +69,9 @@ public class ShuffleColumn {
     }
 
     private List<List<Integer>> getNumColumn(List<List<String>> shuffledColumns) {
-        if (shuffledColumns == null || shuffledColumns.isEmpty())
+        if (CollectionUtils.isEmpty(shuffledColumns)){//shuffledColumns == null || shuffledColumns.isEmpty())
             throw new IllegalArgumentException("At least one column name should be given");
+        }
         List<Integer> noDuplicated = new ArrayList<Integer>();
         for (List<String> subList : shuffledColumns) {
             List<Integer> indexes = new ArrayList<Integer>();

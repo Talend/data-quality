@@ -50,7 +50,7 @@ public class BidiMultiMap<K, V> extends HashMap<K, V> {
 
     @Override
     public boolean equals(Object o) {
-        return super.equals(o);
+        return value2Keys.equals(o);
     }
 
     public List<K> getKeys(V value) {
