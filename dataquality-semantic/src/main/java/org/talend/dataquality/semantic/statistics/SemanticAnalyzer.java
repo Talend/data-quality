@@ -18,8 +18,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.lang3.NotImplementedException;
+import org.talend.dataquality.common.exception.DQRuntimeException;
 import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.ResizableList;
 import org.talend.dataquality.semantic.recognizer.CategoryFrequency;
@@ -88,7 +90,8 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
             for (int i = 0; i < record.length; i++) {
                 CategoryRecognizer categoryRecognizer = columnIdxToCategoryRecognizer.get(i);
                 if (categoryRecognizer == null) {
-                    throw new RuntimeException("CategoryRecognizer is null for record and i=" + i + " " + Arrays.asList(record));
+                    throw new DQRuntimeException(
+                            "CategoryRecognizer is null for record and i=" + i + " " + Arrays.asList(record));
                 } else {
                     categoryRecognizer.process(record[i]);
                 }
@@ -123,8 +126,9 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
      */
     @Override
     public List<SemanticType> getResult() {
-        for (Integer colIdx : columnIdxToCategoryRecognizer.keySet()) {
-            Collection<CategoryFrequency> result = columnIdxToCategoryRecognizer.get(colIdx).getResult();
+        for (Entry<Integer, CategoryRecognizer> entry : columnIdxToCategoryRecognizer.entrySet()) {
+            Integer colIdx = entry.getKey();
+            Collection<CategoryFrequency> result = entry.getValue().getResult();
             for (CategoryFrequency semCategory : result) {
                 results.get(colIdx).increment(semCategory, semCategory.getCount());
             }

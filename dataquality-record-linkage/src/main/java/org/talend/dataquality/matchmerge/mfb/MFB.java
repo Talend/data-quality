@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Queue;
 
 import org.apache.log4j.Logger;
+import org.talend.dataquality.common.exception.DQRuntimeException;
 import org.talend.dataquality.matchmerge.MatchMergeAlgorithm;
 import org.talend.dataquality.matchmerge.Record;
 import org.talend.dataquality.matchmerge.SubString;
@@ -89,7 +90,7 @@ public class MFB implements MatchMergeAlgorithm {
                 try {
                     attributeMatcher = AttributeMatcherFactory.createMatcher(algorithm, algorithmParameters[i]);
                 } catch (Exception e) {
-                    throw new RuntimeException("Could not instantiate match class '" + algorithmParameters[i] + "'.", e); //$NON-NLS-1$//$NON-NLS-2$
+                    throw new DQRuntimeException("Could not instantiate match class '" + algorithmParameters[i] + "'.", e); //$NON-NLS-1$//$NON-NLS-2$
                 }
             }
             attributeMatcher.setNullOption(nullOptions[i]); // Null handling

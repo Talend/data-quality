@@ -31,6 +31,7 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.talend.dataquality.standardization.constant.PluginConstant;
+import org.talend.dataquality.standardization.exception.DQException;
 import org.talend.dataquality.standardization.index.IndexBuilder;
 import org.talend.dataquality.standardization.query.FirstNameStandardize;
 
@@ -123,8 +124,9 @@ public class HandleLuceneImpl implements HandleLucene {
             LOG.error(e, e);
         }
 
-        searcher.getIndexReader().close();
-
+        if (searcher != null) {
+            searcher.getIndexReader().close();
+        }
         return getHits();
     }
 
@@ -183,7 +185,7 @@ public class HandleLuceneImpl implements HandleLucene {
      */
     @Override
     public String replaceName(String folderName, String inputName, boolean fuzzyQuery) throws IOException {
-        String result = null;
+        String result;
         IndexSearcher searcher = getIndexSearcher(folderName);
         Analyzer searchAnalyzer = getAnalyzer();
         FirstNameStandardize stdname = new FirstNameStandardize(searcher, searchAnalyzer, HITS_PER_PAGE);
@@ -199,12 +201,17 @@ public class HandleLuceneImpl implements HandleLucene {
      */
     @Override
     public String replaceNameWithCountryGenderInfo(String folderName, String inputName, String inputCountry, String inputGender,
-            boolean fuzzyQuery) throws Exception {
-        String result = null;
+            boolean fuzzyQuery) throws DQException {
+        String result;
         IndexSearcher searcher = getIndexSearcher(folderName);
         Analyzer searchAnalyzer = getAnalyzer();
-        FirstNameStandardize stdname = new FirstNameStandardize(searcher, searchAnalyzer, HITS_PER_PAGE);
-        result = stdname.replaceNameWithCountryGenderInfo(inputName, inputCountry, inputGender, fuzzyQuery);
+        FirstNameStandardize stdname;
+        try {
+            stdname = new FirstNameStandardize(searcher, searchAnalyzer, HITS_PER_PAGE);
+            result = stdname.replaceNameWithCountryGenderInfo(inputName, inputCountry, inputGender, fuzzyQuery);
+        } catch (IOException e) {
+            throw new DQException(e);
+        }
         return result;
     }
 
@@ -216,12 +223,17 @@ public class HandleLuceneImpl implements HandleLucene {
      */
     @Override
     public String replaceNameWithCountryInfo(String folderName, String inputName, String inputCountry, boolean fuzzyQuery)
-            throws Exception {
-        String result = null;
+            throws DQException {
+        String result;
         IndexSearcher searcher = getIndexSearcher(folderName);
         Analyzer searchAnalyzer = getAnalyzer();
-        FirstNameStandardize stdname = new FirstNameStandardize(searcher, searchAnalyzer, HITS_PER_PAGE);
-        result = stdname.replaceNameWithCountryInfo(inputName, inputCountry, fuzzyQuery);
+        FirstNameStandardize stdname;
+        try {
+            stdname = new FirstNameStandardize(searcher, searchAnalyzer, HITS_PER_PAGE);
+            result = stdname.replaceNameWithCountryInfo(inputName, inputCountry, fuzzyQuery);
+        } catch (IOException e) {
+            throw new DQException(e);
+        }
         return result;
     }
 
@@ -233,12 +245,17 @@ public class HandleLuceneImpl implements HandleLucene {
      */
     @Override
     public String replaceNameWithGenderInfo(String folderName, String inputName, String inputGender, boolean fuzzyQuery)
-            throws Exception {
-        String result = null;
+            throws DQException {
+        String result;
         IndexSearcher searcher = getIndexSearcher(folderName);
         Analyzer searchAnalyzer = getAnalyzer();
-        FirstNameStandardize stdname = new FirstNameStandardize(searcher, searchAnalyzer, HITS_PER_PAGE);
-        result = stdname.replaceNameWithGenderInfo(inputName, inputGender, fuzzyQuery);
+        FirstNameStandardize stdname;
+        try {
+            stdname = new FirstNameStandardize(searcher, searchAnalyzer, HITS_PER_PAGE);
+            result = stdname.replaceNameWithGenderInfo(inputName, inputGender, fuzzyQuery);
+        } catch (IOException e) {
+            throw new DQException(e);
+        }
         return result;
     }
 

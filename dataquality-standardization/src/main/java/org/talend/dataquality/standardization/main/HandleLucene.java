@@ -15,6 +15,8 @@ package org.talend.dataquality.standardization.main;
 import java.io.IOException;
 import java.util.Map;
 
+import org.talend.dataquality.standardization.exception.DQException;
+
 /**
  * DOC klliu class global comment.
  */
@@ -72,7 +74,7 @@ public interface HandleLucene {
      * @throws Exception
      */
     public String replaceNameWithCountryGenderInfo(String folderName, String inputName, String inputCountry, String inputGender,
-            boolean fuzzyQuery) throws Exception;
+            boolean fuzzyQuery) throws DQException;
 
     /**
      * 
@@ -85,7 +87,7 @@ public interface HandleLucene {
      * @throws Exception
      */
     public String replaceNameWithCountryInfo(String folderName, String inputName, String inputCountry, boolean fuzzyQuery)
-            throws Exception;
+            throws DQException;
 
     /**
      * 
@@ -100,7 +102,7 @@ public interface HandleLucene {
      * @throws Exception
      */
     public String replaceNameWithGenderInfo(String folderName, String inputName, String inputGender, boolean fuzzyQuery)
-            throws Exception;
+            throws DQException;
 
     /**
      * Input filename to be indexed once for all and indexfolder to store the files of indexing.

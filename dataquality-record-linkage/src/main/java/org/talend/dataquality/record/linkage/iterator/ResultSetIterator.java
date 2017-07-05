@@ -22,6 +22,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import org.talend.dataquality.common.exception.DQRuntimeException;
 import org.talend.dataquality.matchmerge.Attribute;
 import org.talend.dataquality.matchmerge.Record;
 import org.talend.dataquality.record.linkage.grouping.swoosh.RichRecord;
@@ -31,6 +33,8 @@ import org.talend.dataquality.record.linkage.grouping.swoosh.RichRecord;
  * 
  */
 public class ResultSetIterator implements Iterator<Record> {
+
+    private static Logger LOG = Logger.getLogger(ResultSetIterator.class);
 
     private final java.sql.Connection connection;
 
@@ -69,9 +73,10 @@ public class ResultSetIterator implements Iterator<Record> {
             try {
                 close();
             } catch (SQLException e1) {
-                throw new RuntimeException("Could not close the connection", e); //$NON-NLS-1$
+                LOG.debug(e1);
+                throw new DQRuntimeException("Could not close the connection", e); //$NON-NLS-1$
             }
-            throw new RuntimeException("Could not move to next result", e); //$NON-NLS-1$
+            throw new DQRuntimeException("Could not move to next result", e); //$NON-NLS-1$
         }
     }
 
@@ -96,6 +101,7 @@ public class ResultSetIterator implements Iterator<Record> {
                     // when the value is null, do not turn to "null"
                     value = object == null ? null : String.valueOf(object);
                 } catch (SQLException exp) {
+                    LOG.debug(exp);
                     // TDQ-11425 if SQLException, keep the current value is null and continue.
                 }
                 attribute.setValue(value);
@@ -103,7 +109,8 @@ public class ResultSetIterator implements Iterator<Record> {
             }
             return new RichRecord(attributes, String.valueOf(index++), 0, StringUtils.EMPTY);
         } catch (Exception e) {
-            throw new RuntimeException("Could not build next result", e); //$NON-NLS-1$
+            LOG.error(e);
+            throw new DQRuntimeException("Could not build next result", e); //$NON-NLS-1$
         }
     }
 

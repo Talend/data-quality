@@ -13,6 +13,8 @@
 package org.talend.survivorship.action;
 
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -22,6 +24,8 @@ import javax.script.ScriptException;
  * Create by zshen define a action which make sure input value is adapt the special expression
  */
 public class ExpressionAction extends AbstractSurvivorshipAction {
+
+    private static final Logger LOGGER = Logger.getLogger("ExcludeValuesAction");
 
     /*
      * (non-Javadoc)
@@ -51,6 +55,7 @@ public class ExpressionAction extends AbstractSurvivorshipAction {
 
             }
         } catch (ScriptException e) {
+            LOGGER.log(Level.CONFIG, e.getMessage(), e);
             // no need implement
         }
         return false;

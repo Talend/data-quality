@@ -26,7 +26,6 @@ public class ChainNodeMap extends HashMap<String, AbstractChainOfResponsibilityH
 
     public void handleRequest(Object inputData, int rowNum) {
         for (java.util.Map.Entry<String, AbstractChainOfResponsibilityHandler> entry : this.entrySet()) {
-            String ruleName = entry.getKey();
             entry.getValue().handleRequest(inputData, rowNum);
         }
     }

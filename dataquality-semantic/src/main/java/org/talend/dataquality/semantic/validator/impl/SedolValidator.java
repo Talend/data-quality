@@ -13,6 +13,7 @@
 package org.talend.dataquality.semantic.validator.impl;
 
 import org.apache.commons.lang3.StringUtils;
+import org.talend.dataquality.common.exception.DQRuntimeException;
 import org.talend.dataquality.semantic.validator.ISemanticSubValidator;
 
 /**
@@ -38,7 +39,7 @@ public class SedolValidator implements ISemanticSubValidator {
             String csStr = StringUtils.right(str, 1);
             checksum = Integer.valueOf(csStr);
         } catch (NumberFormatException e) {
-            throw new RuntimeException("Invalid checksum digit. ", e);
+            throw new DQRuntimeException("Invalid checksum digit. ", e);
         }
         int checksumFromSedol = getSedolCheckDigit(sedolStr);
         return checksum == checksumFromSedol;

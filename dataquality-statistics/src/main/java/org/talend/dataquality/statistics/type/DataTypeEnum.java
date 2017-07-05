@@ -12,6 +12,9 @@
 // ============================================================================
 package org.talend.dataquality.statistics.type;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * created by talend on 2015-07-28 Detailled comment.
  *
@@ -25,10 +28,13 @@ public enum DataTypeEnum {
     TIME,
     EMPTY;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(DataTypeEnum.class);
+
     public static DataTypeEnum get(String typeName) {
         try {
             return DataTypeEnum.valueOf(typeName.toUpperCase());
         } catch (Exception e) {
+            LOGGER.debug(e.getMessage(), e);
             return DataTypeEnum.STRING;
         }
     }

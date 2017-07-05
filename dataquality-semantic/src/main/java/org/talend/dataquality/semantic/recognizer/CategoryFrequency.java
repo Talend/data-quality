@@ -145,7 +145,7 @@ public class CategoryFrequency implements Comparable<CategoryFrequency>, Seriali
                     return cat2.ordinal() - cat1.ordinal();
                 } else if (cat1 == null && cat2 != null) {
                     return 1;
-                } else if (cat1 != null && cat2 == null) {
+                } else if (cat2 == null && cat1 != null) {
                     return -1;
                 } else {
                     return o.getCategoryId().compareTo(this.getCategoryId());

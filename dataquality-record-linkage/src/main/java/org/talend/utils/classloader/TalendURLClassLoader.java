@@ -17,10 +17,14 @@ import java.net.URLClassLoader;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 /**
  * DOC mzhao bug 11128, try to load by current thread loader.
  */
 public class TalendURLClassLoader extends URLClassLoader {
+
+    private static Logger LOG = Logger.getLogger(TalendURLClassLoader.class);
 
     private Map<String, Class<?>> classesMap = new HashMap<String, Class<?>>();
 
@@ -53,6 +57,7 @@ public class TalendURLClassLoader extends URLClassLoader {
             try {
                 cls = super.findClass(className);
             } catch (ClassNotFoundException cne) {
+                LOG.info(cne);
                 // MOD mzhao 11128, try to load by current thread loader.e.g: when a class has a super class that needs
                 // to load by current loader other than url loader.
                 cls = getClass().getClassLoader().loadClass(className);

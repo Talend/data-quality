@@ -19,6 +19,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
+import org.talend.dataquality.common.exception.DQRuntimeException;
+
 /**
  * A {@link List} that can resize to a given maximum size and ensure that all index in list have an instance of
  * <i>T</i>. <b>Important:</b>type <i>T</i> must have a public zero args constructor.
@@ -78,7 +80,7 @@ public class ResizableList<T> implements List<T>, Serializable {
             }
             return addedMissing;
         } catch (Exception e) {
-            throw new RuntimeException("Unable to resize list of items.", e);
+            throw new DQRuntimeException("Unable to resize list of items.", e);
         }
     }
 

@@ -17,6 +17,8 @@ import java.math.RoundingMode;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.talend.dataquality.common.exception.DQRuntimeException;
+
 /**
  * Histogram statistics bean.
  * 
@@ -47,10 +49,10 @@ public class HistogramStatistics {
      */
     public void setParameters(double max, double min, int numBins) {
         if (max <= min) {
-            throw new RuntimeException("max must be greater than min");
+            throw new DQRuntimeException("max must be greater than min");
         }
         if (numBins <= 0) {
-            throw new RuntimeException("invalid numBins value :" + numBins + " , numBins must be a none zero integer");
+            throw new DQRuntimeException("invalid numBins value :" + numBins + " , numBins must be a none zero integer");
         }
         this.max = max;
         this.min = min;

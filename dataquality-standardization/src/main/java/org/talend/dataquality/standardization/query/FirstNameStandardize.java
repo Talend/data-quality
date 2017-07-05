@@ -43,6 +43,7 @@ import org.apache.lucene.search.TopDocsCollector;
 import org.apache.lucene.search.TopFieldCollector;
 import org.apache.lucene.search.TopScoreDocCollector;
 import org.talend.dataquality.standardization.constant.PluginConstant;
+import org.talend.dataquality.standardization.exception.DQException;
 
 /**
  * DOC scorreia class global comment. Detailled comment
@@ -100,21 +101,30 @@ public class FirstNameStandardize {
         return matches;
     }
 
-    public void getFuzzySearch(String input, TopDocsCollector<?> collector) throws Exception {
+    public void getFuzzySearch(String input, TopDocsCollector<?> collector) throws DQException {
         Query q = new FuzzyQuery(new Term(PluginConstant.FIRST_NAME_STANDARDIZE_NAME, input));
         Query qalias = new FuzzyQuery(new Term(PluginConstant.FIRST_NAME_STANDARDIZE_ALIAS, input));
         BooleanQuery combinedQuery = new BooleanQuery();
         combinedQuery.add(q, BooleanClause.Occur.SHOULD);
         combinedQuery.add(qalias, BooleanClause.Occur.SHOULD);
-        searcher.search(combinedQuery, collector);
+        try {
+            searcher.search(combinedQuery, collector);
+        } catch (IOException e) {
+            throw new DQException(e);
+        }
     }
 
-    private TopDocs getFuzzySearch(String input) throws Exception {
+    private TopDocs getFuzzySearch(String input) throws DQException {
         // MOD sizhaoliu 2012-7-4 TDQ-1576 tFirstnameMatch returns no firstname when several matches exist
         // The 2 letter prefix requires exact match while the word to search may not be lowercased as in the index.
         // Extracted and documented MATCHING_SIMILARITY constant.
         Query q = new FuzzyQuery(new Term("name", input.toLowerCase()), maxEdits);//$NON-NLS-1$
-        TopDocs matches = searcher.search(q, 10);
+        TopDocs matches;
+        try {
+            matches = searcher.search(q, 10);
+        } catch (IOException e) {
+            throw new DQException(e);
+        }
         return matches;
     }
 

@@ -159,6 +159,7 @@ public class SystemDateTimePatternManager {
                             }
                         }
                     } catch (Exception e) {
+                        LOGGER.debug(e.getMessage(), e);
                         // ignore
                     }
                 }
@@ -218,6 +219,7 @@ public class SystemDateTimePatternManager {
                     formatter = ChronologyParameterManager.getDateTimeFormatterWithChronology(formatter, locale);
                 }
             } catch (IllegalArgumentException e) {
+                LOGGER.debug(e.getMessage(), e);
                 return null;
             }
             dateTimeFormatterCache.put(customPattern + localeStr, formatter);

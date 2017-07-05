@@ -15,6 +15,8 @@ package org.talend.survivorship.action;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -24,6 +26,8 @@ import javax.script.ScriptException;
  * Create by zshen define a action which filter values that do not match the defined regex
  */
 public class ExcludeValuesAction extends AbstractSurvivorshipAction {
+
+    private static final Logger LOGGER = Logger.getLogger("ExcludeValuesAction");
 
     /*
      * (non-Javadoc)
@@ -45,6 +49,7 @@ public class ExcludeValuesAction extends AbstractSurvivorshipAction {
 
             }
         } catch (ScriptException e) {
+            LOGGER.log(Level.CONFIG, e.getMessage(), e);
             // no need implement
         }
         return false;

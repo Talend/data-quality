@@ -19,6 +19,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.kie.api.definition.type.FactType;
 import org.kie.api.io.Resource;
@@ -58,6 +60,8 @@ import org.talend.survivorship.utils.ChainNodeMap;
  * 4. Run a new session for each group to merge.
  */
 public class SurvivorshipManager extends KnowledgeManager {
+
+    private static final Logger LOGGER = Logger.getLogger("SurvivorshipManager");
 
     /**
      * Base of executable knowledge.
@@ -145,7 +149,7 @@ public class SurvivorshipManager extends KnowledgeManager {
                 }
             }
         }
-        String packagePath = null;
+        String packagePath;
         // TDQ-12588 for a real spark mode, the rule files are uploaded to spark node in javajet.
         if ("Real_spark_relative_path".equals(rulePath)) { //$NON-NLS-1$
             rulePath = ""; //$NON-NLS-1$
@@ -260,9 +264,11 @@ public class SurvivorshipManager extends KnowledgeManager {
             }
         } catch (InstantiationException e) {
             // failed to create new recordInType instance
+            LOGGER.log(Level.CONFIG, e.getMessage(), e);
             System.err.println("!!! " + e.getMessage()); //$NON-NLS-1$
             return false;
         } catch (IllegalAccessException e) {
+            LOGGER.log(Level.CONFIG, e.getMessage(), e);
             // failed to create new recordInType instance
             System.err.println("!!! " + e.getMessage()); //$NON-NLS-1$
             return false;

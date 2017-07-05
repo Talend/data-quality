@@ -14,6 +14,7 @@ package org.talend.dataquality.semantic.classifier;
 
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
@@ -244,6 +245,8 @@ public enum SemanticCategoryEnum {
 
     private boolean completeness;
 
+    private static final Logger LOG = Logger.getLogger(SemanticCategoryEnum.class);
+
     /**
      * SemanticCategoryEnum constructor.
      * 
@@ -294,6 +297,7 @@ public enum SemanticCategoryEnum {
         try {
             return valueOf(catId);
         } catch (IllegalArgumentException e) {
+            LOG.debug(e.getMessage(), e);
             return null;
         }
     }

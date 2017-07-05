@@ -15,6 +15,8 @@ package org.talend.dataquality.semantic.sampling;
 import java.util.List;
 import java.util.Map;
 
+import org.talend.dataquality.semantic.exception.DQException;
+
 /**
  * created by zhao <br>
  * Bridge for data sampling and semantic category API.
@@ -42,7 +44,7 @@ public class SemanticCategoryRecognizerBridge {
      * 
      * @return a map of column index to list of categories <column idx, List<Semantic category>>
      */
-    public void inferSemanticCategories() throws Exception {
+    public void inferSemanticCategories() throws DQException {
         if (sampleDataCache != null) {
             for (Object[] record : sampleDataCache) {
                 if (stopRequested) {
