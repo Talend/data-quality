@@ -230,7 +230,7 @@ public class CallbackMailServerCheckerImpl extends AbstractEmailChecker {
             mxList = getMX(domain);
         } catch (NamingException ex) {
             if (LOG.isDebugEnabled()) {
-                LOG.debug(ex.getMessage(), ex);
+                LOG.info(ex.getMessage(), ex);
             }
             // talend email on the outside of office room case
             throw new TalendSMTPRuntimeException(ex.getMessage());
