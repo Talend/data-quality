@@ -12,10 +12,7 @@
 // ============================================================================
 package org.talend.survivorship;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -47,6 +44,7 @@ import org.talend.survivorship.sample.SampleDataConflictMostCommon2Longest2keepO
 import org.talend.survivorship.sample.SampleDataConflictMostCommon2MostRecent;
 import org.talend.survivorship.sample.SampleDataConflictMostCommon2OtherSurvivedValue;
 import org.talend.survivorship.sample.SampleDataConflictMostCommonAndNoIgnoreBlank;
+import org.talend.survivorship.sample.SampleDataConflictMutilGroupFillEmptyBy;
 import org.talend.survivorship.sample.SampleDataConflictOtherColumn2MostCommon2Constant;
 import org.talend.survivorship.sample.SampleDataConflictOtherColumn2MostCommon2ConstantEmptyDuplicate;
 import org.talend.survivorship.sample.SampleDataConflictShortest2OtherColumnDuplicateSurvivedValue;
@@ -184,7 +182,7 @@ public class SurvivorshipManagerTest {
         }
         manager.initKnowledgeBase();
         manager.checkConflictRuleValid();
-        manager.runSession(getTableValue("/org.talend.survivorship.conflict/conflicts.csv")); //$NON-NLS-1$
+        manager.runSession(getTableValue("/org.talend.survivorship.conflict/conflicts.csv", 11, 9, 1)); //$NON-NLS-1$
         // 5. Retrieve results
         HashSet<String> conflictsOfSurvivor = manager.getConflictsOfSurvivor();
         assertEquals("The size of conflictsOfSurvivor should be 0", 0, conflictsOfSurvivor.size()); //$NON-NLS-1$
@@ -227,7 +225,7 @@ public class SurvivorshipManagerTest {
         }
         manager.initKnowledgeBase();
         manager.checkConflictRuleValid();
-        manager.runSession(getTableValue("/org.talend.survivorship.conflict/conflicts.csv")); //$NON-NLS-1$
+        manager.runSession(getTableValue("/org.talend.survivorship.conflict/conflicts.csv", 11, 9, 1)); //$NON-NLS-1$
         // 5. Retrieve results
         HashSet<String> conflictsOfSurvivor = manager.getConflictsOfSurvivor();
         assertEquals("The size of conflictsOfSurvivor should be 1", 1, conflictsOfSurvivor.size()); //$NON-NLS-1$
@@ -271,7 +269,7 @@ public class SurvivorshipManagerTest {
         }
         manager.initKnowledgeBase();
         manager.checkConflictRuleValid();
-        manager.runSession(getTableValue("/org.talend.survivorship.conflict/conflicts.csv")); //$NON-NLS-1$
+        manager.runSession(getTableValue("/org.talend.survivorship.conflict/conflicts.csv", 11, 9, 1)); //$NON-NLS-1$
         // 5. Retrieve results
         HashSet<String> conflictsOfSurvivor = manager.getConflictsOfSurvivor();
         assertEquals("The size of conflictsOfSurvivor should be 0", 0, conflictsOfSurvivor.size()); //$NON-NLS-1$
@@ -313,7 +311,7 @@ public class SurvivorshipManagerTest {
         }
         manager.initKnowledgeBase();
         manager.checkConflictRuleValid();
-        manager.runSession(getTableValue("/org.talend.survivorship.conflict/conflicts.csv")); //$NON-NLS-1$
+        manager.runSession(getTableValue("/org.talend.survivorship.conflict/conflicts.csv", 11, 9, 1)); //$NON-NLS-1$
         // 5. Retrieve results
         HashSet<String> conflictsOfSurvivor = manager.getConflictsOfSurvivor();
         assertEquals("The size of conflictsOfSurvivor should be 0", 0, conflictsOfSurvivor.size()); //$NON-NLS-1$
@@ -360,7 +358,7 @@ public class SurvivorshipManagerTest {
 
         manager.initKnowledgeBase();
         manager.checkConflictRuleValid();
-        manager.runSession(getTableValue("/org.talend.survivorship.conflict/conflicts.csv")); //$NON-NLS-1$
+        manager.runSession(getTableValue("/org.talend.survivorship.conflict/conflicts.csv", 11, 9, 1)); //$NON-NLS-1$
         // 5. Retrieve results
         HashSet<String> conflictsOfSurvivor = manager.getConflictsOfSurvivor();
         assertEquals("The size of conflictsOfSurvivor should be 0", 0, conflictsOfSurvivor.size()); //$NON-NLS-1$
@@ -404,7 +402,7 @@ public class SurvivorshipManagerTest {
 
         manager.initKnowledgeBase();
         manager.checkConflictRuleValid();
-        manager.runSession(getTableValue("/org.talend.survivorship.conflict/conflicts.csv")); //$NON-NLS-1$
+        manager.runSession(getTableValue("/org.talend.survivorship.conflict/conflicts.csv", 11, 9, 1)); //$NON-NLS-1$
         // 5. Retrieve results
         HashSet<String> conflictsOfSurvivor = manager.getConflictsOfSurvivor();
         assertEquals("The size of conflictsOfSurvivor should be 0", 0, conflictsOfSurvivor.size()); //$NON-NLS-1$
@@ -453,7 +451,7 @@ public class SurvivorshipManagerTest {
         }
         manager.initKnowledgeBase();
         manager.checkConflictRuleValid();
-        manager.runSession(getTableValue("/org.talend.survivorship.conflict/conflicts.csv")); //$NON-NLS-1$
+        manager.runSession(getTableValue("/org.talend.survivorship.conflict/conflicts.csv", 11, 9, 1)); //$NON-NLS-1$
         // 5. Retrieve results
         Map<String, Object> survivorMap = manager.getSurvivorMap();
         assertTrue("The SurvivorMap should not be null", survivorMap != null); //$NON-NLS-1$
@@ -507,7 +505,7 @@ public class SurvivorshipManagerTest {
         }
         manager.initKnowledgeBase();
         manager.checkConflictRuleValid();
-        manager.runSession(getTableValue("/org.talend.survivorship.conflict/conflicts.csv")); //$NON-NLS-1$
+        manager.runSession(getTableValue("/org.talend.survivorship.conflict/conflicts.csv", 11, 9, 1)); //$NON-NLS-1$
         // 5. Retrieve results
         // HashSet<String> conflictsOfSurvivor = manager.getConflictsOfSurvivor();
         // Assert.assertEquals("The size of conflictsOfSurvivor should be 1", 1, conflictsOfSurvivor.size()); //$NON-NLS-1$
@@ -553,7 +551,7 @@ public class SurvivorshipManagerTest {
         }
         manager.initKnowledgeBase();
         manager.checkConflictRuleValid();
-        manager.runSession(getTableValue("/org.talend.survivorship.conflict/conflicts.csv")); //$NON-NLS-1$
+        manager.runSession(getTableValue("/org.talend.survivorship.conflict/conflicts.csv", 11, 9, 1)); //$NON-NLS-1$
         // 5. Retrieve results
         HashSet<String> conflictsOfSurvivor = manager.getConflictsOfSurvivor();
         assertEquals("The size of conflictsOfSurvivor should be 0", 0, conflictsOfSurvivor.size()); //$NON-NLS-1$
@@ -600,7 +598,7 @@ public class SurvivorshipManagerTest {
         }
         manager.initKnowledgeBase();
         manager.checkConflictRuleValid();
-        manager.runSession(getTableValue("/org.talend.survivorship.conflict/conflicts.csv")); //$NON-NLS-1$
+        manager.runSession(getTableValue("/org.talend.survivorship.conflict/conflicts.csv", 11, 9, 1)); //$NON-NLS-1$
         // 5. Retrieve results
         HashSet<String> conflictsOfSurvivor = manager.getConflictsOfSurvivor();
         assertEquals("The size of conflictsOfSurvivor should be 0", 0, conflictsOfSurvivor.size()); //$NON-NLS-1$
@@ -653,7 +651,7 @@ public class SurvivorshipManagerTest {
         }
         manager.initKnowledgeBase();
         manager.checkConflictRuleValid();
-        manager.runSession(getTableValue("/org.talend.survivorship.conflict/conflicts.csv")); //$NON-NLS-1$
+        manager.runSession(getTableValue("/org.talend.survivorship.conflict/conflicts.csv", 11, 9, 1)); //$NON-NLS-1$
         // 5. Retrieve results
         HashSet<String> conflictsOfSurvivor = manager.getConflictsOfSurvivor();
         assertEquals("The size of conflictsOfSurvivor should be 0", 0, conflictsOfSurvivor.size()); //$NON-NLS-1$
@@ -693,7 +691,7 @@ public class SurvivorshipManagerTest {
         }
         manager.initKnowledgeBase();
         manager.checkConflictRuleValid();
-        manager.runSession(getTableValue("/org.talend.survivorship.conflict/conflicts.csv")); //$NON-NLS-1$
+        manager.runSession(getTableValue("/org.talend.survivorship.conflict/conflicts.csv", 11, 9, 1)); //$NON-NLS-1$
         // 5. Retrieve results
         HashSet<String> conflictsOfSurvivor = manager.getConflictsOfSurvivor();
         assertEquals("The size of conflictsOfSurvivor should be 1", 1, conflictsOfSurvivor.size()); //$NON-NLS-1$
@@ -728,7 +726,7 @@ public class SurvivorshipManagerTest {
         }
         manager.initKnowledgeBase();
         manager.checkConflictRuleValid();
-        manager.runSession(getTableValue("/org.talend.survivorship.conflict/conflicts.csv")); //$NON-NLS-1$
+        manager.runSession(getTableValue("/org.talend.survivorship.conflict/conflicts.csv", 11, 9, 1)); //$NON-NLS-1$
         // 5. Retrieve results
         HashSet<String> conflictsOfSurvivor = manager.getConflictsOfSurvivor();
         assertEquals("The size of conflictsOfSurvivor should be 0", 0, conflictsOfSurvivor.size()); //$NON-NLS-1$
@@ -776,7 +774,7 @@ public class SurvivorshipManagerTest {
         }
         manager.initKnowledgeBase();
         manager.checkConflictRuleValid();
-        manager.runSession(getTableValue("/org.talend.survivorship.conflict/conflicts.csv")); //$NON-NLS-1$
+        manager.runSession(getTableValue("/org.talend.survivorship.conflict/conflicts.csv", 11, 9, 1)); //$NON-NLS-1$
         // 5. Retrieve results
         HashSet<String> conflictsOfSurvivor = manager.getConflictsOfSurvivor();
         assertEquals("The size of conflictsOfSurvivor should be 0", 0, conflictsOfSurvivor.size()); //$NON-NLS-1$
@@ -790,6 +788,61 @@ public class SurvivorshipManagerTest {
         assertTrue("The city2NameObj should not be null", city2NameObj != null); //$NON-NLS-1$
         resultDate = city2NameObj.toString();
         assertEquals("The resultDate should be xian", "xian", resultDate); //$NON-NLS-1$ //$NON-NLS-2$
+    }
+
+    /**
+     * Test method for {@link org.talend.survivorship.SurvivorshipManager#runSession(java.lang.String[][])}.
+     * 
+     * @case10 most common&&no check ignore blank fillEmptyby and most common again
+     * 
+     * 
+     */
+
+    @Test
+    public void testRunSessionMoreThanOneGroupThenFillEmtpyBy() {
+
+        manager = new SurvivorshipManager(SampleData.RULE_PATH, SampleDataConflictMutilGroupFillEmptyBy.PKG_NAME_CONFLICT);
+
+        for (String str : SampleDataConflict.COLUMNS_CONFLICT.keySet()) {
+            Column column = new Column(str, SampleDataConflict.COLUMNS_CONFLICT.get(str));
+            if (column.getName().equals("firstName")) { //$NON-NLS-1$ 
+                for (ConflictRuleDefinition element : SampleDataConflictMutilGroupFillEmptyBy.RULES_CONFLICT_RESOLVE) {
+                    if (column.getName().equals(element.getTargetColumn())) {
+                        column.getConflictResolveList().add(element);
+                    }
+                }
+            }
+            manager.getColumnList().add(column);
+        }
+        for (RuleDefinition element : SampleDataConflictMutilGroupFillEmptyBy.RULES_CONFLICT) {
+            manager.addRuleDefinition(element);
+        }
+        // group 1
+        manager.initKnowledgeBase();
+        manager.checkConflictRuleValid();
+        manager.runSession(getTableValue("/org.talend.survivorship.conflict/mutilGroupConflicts.csv", 3, 9, 1)); //$NON-NLS-1$
+        // 5. Retrieve results
+        HashSet<String> conflictsOfSurvivor = manager.getConflictsOfSurvivor();
+        assertEquals("The size of conflictsOfSurvivor should be 0", 0, conflictsOfSurvivor.size()); //$NON-NLS-1$
+        Map<String, Object> survivorMap = manager.getSurvivorMap();
+        assertTrue("The SurvivorMap should not be null", survivorMap != null); //$NON-NLS-1$
+        Object firstNameObj = survivorMap.get("firstName"); //$NON-NLS-1$
+        assertTrue("The city1NameObj should not be null", firstNameObj != null); //$NON-NLS-1$
+        String resultDate = firstNameObj.toString();
+        assertEquals("The resultDate should be Lili", "Lili", resultDate); //$NON-NLS-1$ //$NON-NLS-2$
+        // group 2
+        manager.initKnowledgeBase();
+        manager.checkConflictRuleValid();
+        manager.runSession(getTableValue("/org.talend.survivorship.conflict/mutilGroupConflicts.csv", 2, 9, 2)); //$NON-NLS-1$
+        // 5. Retrieve results
+        conflictsOfSurvivor = manager.getConflictsOfSurvivor();
+        assertEquals("The size of conflictsOfSurvivor should be 0", 0, conflictsOfSurvivor.size()); //$NON-NLS-1$
+        survivorMap = manager.getSurvivorMap();
+        assertTrue("The SurvivorMap should not be null", survivorMap != null); //$NON-NLS-1$
+        firstNameObj = survivorMap.get("firstName"); //$NON-NLS-1$
+        assertTrue("The city1NameObj should not be null", firstNameObj != null); //$NON-NLS-1$
+        resultDate = firstNameObj.toString();
+        assertEquals("The resultDate should be Lili", "Lili", resultDate); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     /**
@@ -976,12 +1029,12 @@ public class SurvivorshipManagerTest {
 
     /**
      * 
-     * Create by zshen get input data from special csv file
+     * Get input data from special csv file
      * 
      * @param file the file full path
      * @return array of input data
      */
-    protected Object[][] getTableValue(String file) {
+    protected Object[][] getTableValue(String file, int rowNum, int colNum, int groupNum) {
 
         String pathString = ""; //$NON-NLS-1$
         try {
@@ -993,14 +1046,28 @@ public class SurvivorshipManagerTest {
         BufferedReader br = null;
         String line = ""; //$NON-NLS-1$
         String cvsSplitBy = ","; //$NON-NLS-1$
+        int gCount = 0;
 
-        Object[][] result = new Object[11][9];
-
+        Object[][] result = new Object[rowNum][colNum];
+        boolean start = false;
         try {
             br = new BufferedReader(new FileReader(pathString));
             int index = 0;
             while ((line = br.readLine()) != null) {
                 Object[] items = line.split(cvsSplitBy);
+                if (Integer.valueOf(items[colNum - 1].toString()) != 0) {
+                    gCount += 1;
+                    if (gCount > groupNum) {
+                        break;
+                    } else if (gCount < groupNum) {
+                        continue;
+                    }
+                    start = true;
+                }
+
+                if (!start) {
+                    continue;
+                }
                 int y = 0;
                 for (Object readArray : items) {
                     if (readArray.toString().equals("null")) { //$NON-NLS-1$
