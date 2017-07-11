@@ -13,6 +13,7 @@ Bundle-ClassPath: .
 Export-Package: org.talend.dataquality.standardization,
  org.talend.dataquality.standardization.action,
  org.talend.dataquality.standardization.constant,
+ org.talend.dataquality.standardization.exception,
  org.talend.dataquality.standardization.i18n,
  org.talend.dataquality.standardization.index,
  org.talend.dataquality.standardization.main,

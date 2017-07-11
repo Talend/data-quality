@@ -12,7 +12,6 @@
 // ============================================================================
 package org.talend.dataquality.sampling;
 
-
 /**
  * created by zhao interface for sample data source. This interface provide a "stream" stype data operation.
  *
