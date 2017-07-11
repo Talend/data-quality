@@ -12,7 +12,6 @@
 // ============================================================================
 package org.talend.dataquality.sampling;
 
-import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * created by zhao interface for sample data source. This interface provide a "stream" stype data operation.
@@ -34,7 +33,7 @@ public interface SamplingDataSource<DataSource> {
      * @return true if there are records still to be read, false otherwise
      * @throws Exception throws when unexpected exception occurs.
      */
-    public boolean hasNext() throws DQException;
+    public boolean hasNext() throws Exception;
 
     /**
      * 
@@ -42,7 +41,7 @@ public interface SamplingDataSource<DataSource> {
      * 
      * @return Array of field data of one record.
      */
-    public Object[] getRecord() throws DQException;
+    public Object[] getRecord() throws Exception;
 
     /**
      * 
@@ -52,6 +51,6 @@ public interface SamplingDataSource<DataSource> {
      * @return true if success, false otherwise.
      * @throws TalendException When unexpected exception occurs
      */
-    public boolean finalizeDataSampling() throws DQException;
+    public boolean finalizeDataSampling() throws Exception;
 
 }
