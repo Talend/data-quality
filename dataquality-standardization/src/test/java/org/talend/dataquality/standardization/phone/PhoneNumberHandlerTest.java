@@ -1,8 +1,6 @@
 package org.talend.dataquality.standardization.phone;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.Locale;
 
@@ -23,7 +21,8 @@ public class PhoneNumberHandlerTest {
     @Before
     public void setUp() {
         handler = new PhoneNumberHandler();
-        handler.setDefaultRegion("US");
+        handler.setDefaultRegion("US"); //$NON-NLS-1$
+        handler.setDefaultLocale(Locale.ENGLISH);
     }
 
     @Test
@@ -52,7 +51,7 @@ public class PhoneNumberHandlerTest {
 
     @Test
     public void testFormatInternational() {
-        assertEquals(StringUtils.EMPTY, handler.formatInternational(null)); //$NON-NLS-1$
+        assertEquals(StringUtils.EMPTY, handler.formatInternational(null));
 
         assertEquals("+1 541-754-3010", handler.formatInternational(US_NUM_1)); //$NON-NLS-1$
         assertEquals("+1 541-754-3010", handler.formatInternational(US_NUM_2)); //$NON-NLS-1$
