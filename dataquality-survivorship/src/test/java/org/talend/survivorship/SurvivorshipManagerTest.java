@@ -836,7 +836,8 @@ public class SurvivorshipManagerTest {
         manager.runSession(getTableValue("/org.talend.survivorship.conflict/mutilGroupConflicts.csv", 2, 9, 2)); //$NON-NLS-1$
         // 5. Retrieve results
         conflictsOfSurvivor = manager.getConflictsOfSurvivor();
-        assertEquals("The size of conflictsOfSurvivor should be 0", 0, conflictsOfSurvivor.size()); //$NON-NLS-1$
+        assertEquals("The size of conflictsOfSurvivor should be 1", 1, conflictsOfSurvivor.size()); //$NON-NLS-1$
+        assertTrue("The column of conflict should be firstName", conflictsOfSurvivor.contains("firstName")); //$NON-NLS-1$ //$NON-NLS-2$
         survivorMap = manager.getSurvivorMap();
         assertTrue("The SurvivorMap should not be null", survivorMap != null); //$NON-NLS-1$
         firstNameObj = survivorMap.get("firstName"); //$NON-NLS-1$
