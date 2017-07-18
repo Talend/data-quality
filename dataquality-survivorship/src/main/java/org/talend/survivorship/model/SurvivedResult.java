@@ -28,6 +28,12 @@ public class SurvivedResult {
     private String columnName;
 
     /**
+     * Indicate that whether current result sucess to resolved conflict
+     * Default it is false
+     */
+    private boolean resolved;
+
+    /**
      * SurvivedResult constructor comment.
      * 
      * @param rowNum
@@ -55,6 +61,24 @@ public class SurvivedResult {
      */
     public String getColumnName() {
         return this.columnName;
+    }
+
+    /**
+     * Getter for resolved.
+     * 
+     * @return the resolved
+     */
+    public boolean isResolved() {
+        return this.resolved;
+    }
+
+    /**
+     * Sets the resolved.
+     * 
+     * @param resolved the resolved to set
+     */
+    public void setResolved(boolean resolved) {
+        this.resolved = resolved;
     }
 
 }

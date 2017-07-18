@@ -311,9 +311,11 @@ public class DataSet {
                 if (crcrHandler != null) {
                     SurvivedResult survivoredRowNum = crcrHandler.getSurvivedRowNum();
                     if (survivoredRowNum != null) {
+                        if (survivoredRowNum.isResolved()) {
+                            conflictsOfSurvivor.remove(conflictCol);
+                        }
                         Object survivedVlaue = this.getValueAfterFiled(survivoredRowNum.getRowNum(),
                                 survivoredRowNum.getColumnName());
-                        conflictsOfSurvivor.remove(conflictCol);
                         survivorMap.put(conflictCol, survivedVlaue);
                         survivorIndexMap.put(conflictCol, survivoredRowNum.getRowNum());
                     }

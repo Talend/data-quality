@@ -233,25 +233,36 @@ public class CRCRHandler extends AbstractChainOfResponsibilityHandler {
      * fill by other column
      */
     public SurvivedResult getSurvivedRowNum() {
-        if (this.conflictingRowNumbers.size() == 1 || isAllConflictingRowWithSameData()) {
-            return CreateSurvivedResult();
+        if (isValidResult()) {
+            return createSurvivedResult(true);
         } else if (this.getSuccessor() != null) {
             return this.getSuccessor().getSurvivedRowNum();
         } else {
-            return CreateSurvivedResult();
+            return createSurvivedResult(false);
         }
     }
 
     /**
-     * zshen Create survived reulst
+     * Judge current handler "isValidResult"
+     * 
+     * @return
+     */
+    public boolean isValidResult() {
+        return this.conflictingRowNumbers.size() == 1 || isAllConflictingRowWithSameData();
+    }
+
+    /**
+     * Create survived reulst
      * 
      * @return use first one data to Create survived reulst
      */
-    private SurvivedResult CreateSurvivedResult() {
+    private SurvivedResult createSurvivedResult(boolean resolved) {
         Iterator<Integer> iterator = this.conflictingRowNumbers.keySet().iterator();
         if (iterator.hasNext()) {
             Integer index = iterator.next();
-            return new SurvivedResult(index, conflictingRowNumbers.get(index));
+            SurvivedResult survivedResult = new SurvivedResult(index, conflictingRowNumbers.get(index));
+            survivedResult.setResolved(resolved);
+            return survivedResult;
         }
         return null;
 
