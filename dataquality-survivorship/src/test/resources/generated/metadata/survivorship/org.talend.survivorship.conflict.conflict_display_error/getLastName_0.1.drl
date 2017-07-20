@@ -1,0 +1,14 @@
+package org.talend.survivorship.conflict.conflict_display_error 
+
+rule "getLastName"
+    no-loop true
+    dialect "mvel"
+    ruleflow-group "getLastNameGroup"
+when
+    $input : RecordIn( dataset.isLongest( lastname, "lastName", false) )  
+then
+    dataset.survive( $input.TALEND_INTERNAL_ID, "lastName", drools.getRule().getName());
+
+end
+
+

@@ -302,6 +302,7 @@ public class DataSet {
         for (Column nextCol : getColumnOrder()) {
             String nextColName = nextCol.getName();
             if (conflictsOfSurvivor.contains(nextColName)) {
+
                 String conflictCol = nextColName;
                 CRCRHandler crcrHandler = (CRCRHandler) this.chainMap.get(conflictCol);
                 List<Integer> conflictDataIndexList = this.getConflictDataIndexList(conflictCol);
@@ -318,8 +319,26 @@ public class DataSet {
                                 survivoredRowNum.getColumnName());
                         survivorMap.put(conflictCol, survivedVlaue);
                         survivorIndexMap.put(conflictCol, survivoredRowNum.getRowNum());
+                        arrangeConflictCol(conflictCol, survivoredRowNum);
                     }
                 }
+            }
+        }
+    }
+
+    /**
+     * Clean up ConflictCol
+     * 
+     * @param conflictCol
+     * @param survivoredRowNum
+     */
+    private void arrangeConflictCol(String conflictCol, SurvivedResult survivoredRowNum) {
+        List<Integer> orignalList = conflictDataMap.get().get(conflictCol);
+        for (int index : orignalList) {
+            if (survivoredRowNum.getRowNum() == index) {
+                conflictList.get(index).remove(conflictCol);
+            } else {
+                conflictList.get(index).add(conflictCol);
             }
         }
     }
