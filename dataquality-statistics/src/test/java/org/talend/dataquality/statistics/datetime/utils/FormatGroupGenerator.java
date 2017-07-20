@@ -12,7 +12,11 @@
 // ============================================================================
 package org.talend.dataquality.statistics.datetime.utils;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -164,9 +168,17 @@ public class FormatGroupGenerator {
         }
 
         // Date Formats
-        String path = SystemDateTimePatternManager.class.getResource("DateRegexesGrouped.txt").getFile()
-                .replace("target" + File.separator + "classes", "src" + File.separator + "main" + File.separator + "resources");
-        IOUtils.write(sb.toString(), new FileOutputStream(new File(path)));
+        String pathSeparator = "/"; //$NON-NLS-1$
+        String targetPath = SystemDateTimePatternManager.class.getResource("DateRegexesGrouped.txt").getFile(); //$NON-NLS-1$
+        String srcPath = targetPath.replace("target" + pathSeparator + "classes", "src" + pathSeparator + "main" + pathSeparator
+                + "resources");
+        IOUtils.write(sb.toString(), new FileOutputStream(new File(srcPath)));
+        // Update DateRegexesGrouped.txt in "dataquality-sampling" at the same time.
+        String samplingParent = new File(targetPath).getParentFile().getParentFile().getParentFile().getParentFile()
+                .getParentFile().getParentFile().getParentFile().getParentFile().getParentFile().getPath();
+        String samplingPath = samplingParent + pathSeparator
+                + "dataquality-sampling/src/main/resources/org/talend/dataquality/datamasking/semantic/DateRegexesGrouped.txt"; //$NON-NLS-1$
+        IOUtils.write(sb.toString(), new FileOutputStream(new File(samplingPath)));
     }
 }
 
