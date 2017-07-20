@@ -18,13 +18,13 @@ import java.util.List;
 import java.util.Queue;
 
 import org.apache.log4j.Logger;
-import org.talend.dataquality.common.exception.DQRuntimeException;
 import org.talend.dataquality.matchmerge.MatchMergeAlgorithm;
 import org.talend.dataquality.matchmerge.Record;
 import org.talend.dataquality.matchmerge.SubString;
 import org.talend.dataquality.record.linkage.attribute.AttributeMatcherFactory;
 import org.talend.dataquality.record.linkage.attribute.IAttributeMatcher;
 import org.talend.dataquality.record.linkage.constant.AttributeMatcherType;
+import org.talend.dataquality.record.linkage.exception.DQRuntimeException;
 import org.talend.dataquality.record.linkage.record.IRecordMatcher;
 import org.talend.dataquality.record.linkage.record.IRecordMerger;
 import org.talend.dataquality.record.linkage.utils.SurvivorShipAlgorithmEnum;
