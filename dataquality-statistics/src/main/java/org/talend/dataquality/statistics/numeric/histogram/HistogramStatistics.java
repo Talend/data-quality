@@ -17,7 +17,7 @@ import java.math.RoundingMode;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.talend.dataquality.common.exception.DQRuntimeException;
+import org.talend.dataquality.statistics.exception.DQRuntimeException;
 
 /**
  * Histogram statistics bean.

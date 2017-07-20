@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.talend.dataquality.common.exception.DQRuntimeException;
+import org.talend.dataquality.semantic.exception.DQRuntimeException;
 import org.talend.dataquality.semantic.validator.AbstractRegexSemanticValidator;
 import org.talend.dataquality.semantic.validator.ISemanticSubValidator;
 
