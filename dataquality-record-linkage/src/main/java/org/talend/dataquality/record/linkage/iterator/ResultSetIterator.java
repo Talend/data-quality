@@ -23,9 +23,9 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.talend.dataquality.common.exception.DQRuntimeException;
 import org.talend.dataquality.matchmerge.Attribute;
 import org.talend.dataquality.matchmerge.Record;
+import org.talend.dataquality.record.linkage.exception.DQRuntimeException;
 import org.talend.dataquality.record.linkage.grouping.swoosh.RichRecord;
 
 /**
