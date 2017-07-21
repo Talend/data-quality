@@ -170,8 +170,8 @@ public class FormatGroupGenerator {
         // Date Formats
         String pathSeparator = "/"; //$NON-NLS-1$
         String targetPath = SystemDateTimePatternManager.class.getResource("DateRegexesGrouped.txt").getFile(); //$NON-NLS-1$
-        String srcPath = targetPath.replace("target" + pathSeparator + "classes", "src" + pathSeparator + "main" + pathSeparator
-                + "resources");
+        String srcPath = targetPath.replace("target" + pathSeparator + "classes",
+                "src" + pathSeparator + "main" + pathSeparator + "resources");
         IOUtils.write(sb.toString(), new FileOutputStream(new File(srcPath)));
         // Update DateRegexesGrouped.txt in "dataquality-sampling" at the same time.
         String samplingParent = new File(targetPath).getParentFile().getParentFile().getParentFile().getParentFile()

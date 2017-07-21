@@ -1,6 +1,5 @@
 package org.talend.dataquality.semantic.exception;
 
-
 public class DQRuntimeException extends RuntimeException {
 
     private static final long serialVersionUID = -617440686721994515L;

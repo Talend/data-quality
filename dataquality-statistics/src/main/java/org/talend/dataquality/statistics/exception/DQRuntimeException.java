@@ -1,6 +1,5 @@
 package org.talend.dataquality.statistics.exception;
 
-
 public class DQRuntimeException extends RuntimeException {
 
     private static final long serialVersionUID = -902782445327067011L;

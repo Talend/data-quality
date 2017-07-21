@@ -11,6 +11,7 @@ Require-Bundle: org.apache.log4j,
  org.apache.commons.lang,
  org.apache.commons.pool,
  org.junit
-Export-Package: org.talend.dataquality.common.inference,
+Export-Package: org.talend.dataquality.common.exception,
+ org.talend.dataquality.common.inference,
  org.talend.dataquality.common.regex
 Import-Package: org.slf4j
