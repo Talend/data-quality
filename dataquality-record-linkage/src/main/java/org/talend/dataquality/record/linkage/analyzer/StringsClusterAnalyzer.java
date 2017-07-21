@@ -12,22 +12,11 @@
 // ============================================================================
 package org.talend.dataquality.record.linkage.analyzer;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.io.Serializable;
+import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
-import org.talend.dataquality.common.inference.Analyzer;
-import org.talend.dataquality.matchmerge.Attribute;
-import org.talend.dataquality.matchmerge.AttributeValues;
-import org.talend.dataquality.matchmerge.MatchMergeAlgorithm;
-import org.talend.dataquality.matchmerge.Record;
-import org.talend.dataquality.matchmerge.SubString;
+import org.talend.dataquality.matchmerge.*;
 import org.talend.dataquality.matchmerge.mfb.MFB;
 import org.talend.dataquality.record.linkage.attribute.IAttributeMatcher;
 import org.talend.dataquality.record.linkage.constant.AttributeMatcherType;
@@ -42,7 +31,7 @@ import org.talend.dataquality.record.linkage.utils.SurvivorShipAlgorithmEnum;
  * @author mzhao
  *
  */
-public class StringsClusterAnalyzer implements Analyzer<StringClusters> {
+public class StringsClusterAnalyzer implements Serializable {
 
     private static final long serialVersionUID = -3359232597093558703L;
 
@@ -191,11 +180,6 @@ public class StringsClusterAnalyzer implements Analyzer<StringClusters> {
         return cluster;
     }
 
-    @Override
-    public Analyzer<StringClusters> merge(Analyzer<StringClusters> another) {
-        return null;
-    }
-
     /**
      * created by talend on 2015-07-28 Detailled comment.
      *
@@ -228,10 +212,5 @@ public class StringsClusterAnalyzer implements Analyzer<StringClusters> {
         public void remove() {
             throw new UnsupportedOperationException("remove");
         }
-    }
-
-    @Override
-    public void close() throws Exception {
-
     }
 }

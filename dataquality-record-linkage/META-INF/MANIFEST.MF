@@ -7,7 +7,6 @@ Require-Bundle: org.apache.log4j,
  org.apache.commons.codec,
  org.apache.commons.collections,
  org.apache.commons.io,
- org.talend.dataquality.common,
  org.junit
 Bundle-Vendor: .Talend SA.
 Export-Package: org.talend.dataquality.matchmerge,

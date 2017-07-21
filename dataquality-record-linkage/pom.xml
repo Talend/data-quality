@@ -14,12 +14,6 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.talend.dataquality</groupId>
-			<artifactId>dataquality-common</artifactId>
-			<version>${dataquality.libraries.version}</version>
-		</dependency>
-
-		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
 		</dependency>
