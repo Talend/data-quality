@@ -13,7 +13,7 @@
 package org.talend.dataquality.semantic.validator.impl;
 
 import org.apache.commons.lang3.StringUtils;
-import org.talend.dataquality.common.exception.DQRuntimeException;
+import org.talend.dataquality.semantic.exception.DQRuntimeException;
 import org.talend.dataquality.semantic.validator.ISemanticSubValidator;
 
 /**
