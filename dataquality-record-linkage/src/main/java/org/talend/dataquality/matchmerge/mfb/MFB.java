@@ -24,7 +24,7 @@ import org.talend.dataquality.matchmerge.SubString;
 import org.talend.dataquality.record.linkage.attribute.AttributeMatcherFactory;
 import org.talend.dataquality.record.linkage.attribute.IAttributeMatcher;
 import org.talend.dataquality.record.linkage.constant.AttributeMatcherType;
-import org.talend.dataquality.record.linkage.exception.DQRuntimeException;
+import org.talend.dataquality.record.linkage.exception.DQRecordLinkageRuntimeException;
 import org.talend.dataquality.record.linkage.record.IRecordMatcher;
 import org.talend.dataquality.record.linkage.record.IRecordMerger;
 import org.talend.dataquality.record.linkage.utils.SurvivorShipAlgorithmEnum;
@@ -90,7 +90,8 @@ public class MFB implements MatchMergeAlgorithm {
                 try {
                     attributeMatcher = AttributeMatcherFactory.createMatcher(algorithm, algorithmParameters[i]);
                 } catch (Exception e) {
-                    throw new DQRuntimeException("Could not instantiate match class '" + algorithmParameters[i] + "'.", e); //$NON-NLS-1$//$NON-NLS-2$
+                    throw new DQRecordLinkageRuntimeException(
+                            "Could not instantiate match class '" + algorithmParameters[i] + "'.", e); //$NON-NLS-1$//$NON-NLS-2$
                 }
             }
             attributeMatcher.setNullOption(nullOptions[i]); // Null handling

@@ -25,7 +25,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.talend.dataquality.matchmerge.Attribute;
 import org.talend.dataquality.matchmerge.Record;
-import org.talend.dataquality.record.linkage.exception.DQRuntimeException;
+import org.talend.dataquality.record.linkage.exception.DQRecordLinkageRuntimeException;
 import org.talend.dataquality.record.linkage.grouping.swoosh.RichRecord;
 
 /**
@@ -74,9 +74,9 @@ public class ResultSetIterator implements Iterator<Record> {
                 close();
             } catch (SQLException e1) {
                 LOG.debug(e1);
-                throw new DQRuntimeException("Could not close the connection", e); //$NON-NLS-1$
+                throw new DQRecordLinkageRuntimeException("Could not close the connection", e); //$NON-NLS-1$
             }
-            throw new DQRuntimeException("Could not move to next result", e); //$NON-NLS-1$
+            throw new DQRecordLinkageRuntimeException("Could not move to next result", e); //$NON-NLS-1$
         }
     }
 
@@ -110,7 +110,7 @@ public class ResultSetIterator implements Iterator<Record> {
             return new RichRecord(attributes, String.valueOf(index++), 0, StringUtils.EMPTY);
         } catch (Exception e) {
             LOG.error(e);
-            throw new DQRuntimeException("Could not build next result", e); //$NON-NLS-1$
+            throw new DQRecordLinkageRuntimeException("Could not build next result", e); //$NON-NLS-1$
         }
     }
 

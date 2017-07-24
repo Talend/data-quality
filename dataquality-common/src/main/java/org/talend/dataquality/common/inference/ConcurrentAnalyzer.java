@@ -17,7 +17,7 @@ import java.util.List;
 import org.apache.commons.pool.KeyedObjectPool;
 import org.apache.commons.pool.KeyedPoolableObjectFactory;
 import org.apache.commons.pool.impl.GenericKeyedObjectPool;
-import org.talend.dataquality.common.exception.DQRuntimeException;
+import org.talend.dataquality.common.exception.DQCommonRuntimeException;
 
 /**
  * A {@link Analyzer} implementation that allows use of an Analyzer pool by several threads. Please note analyzer
@@ -47,7 +47,7 @@ public class ConcurrentAnalyzer<T> implements Analyzer<T> {
                 try {
                     return pool.borrowObject(Thread.currentThread());
                 } catch (Exception e) {
-                    throw new DQRuntimeException(e);
+                    throw new DQCommonRuntimeException(e);
                 }
             }
 
@@ -57,7 +57,7 @@ public class ConcurrentAnalyzer<T> implements Analyzer<T> {
                     // Order matters here as remove() causes get() to return null.
                     pool.returnObject(Thread.currentThread(), get());
                 } catch (Exception e) {
-                    throw new DQRuntimeException(e);
+                    throw new DQCommonRuntimeException(e);
                 } finally {
                     // Thread local keeps a lot of references, make sure everything gets cleaned up on error.
                     super.remove();

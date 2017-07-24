@@ -19,7 +19,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-import org.talend.dataquality.common.exception.DQRuntimeException;
+import org.talend.dataquality.common.exception.DQCommonRuntimeException;
 
 /**
  * A {@link List} that can resize to a given maximum size and ensure that all index in list have an instance of
@@ -80,7 +80,7 @@ public class ResizableList<T> implements List<T>, Serializable {
             }
             return addedMissing;
         } catch (Exception e) {
-            throw new DQRuntimeException("Unable to resize list of items.", e);
+            throw new DQCommonRuntimeException("Unable to resize list of items.", e);
         }
     }
 

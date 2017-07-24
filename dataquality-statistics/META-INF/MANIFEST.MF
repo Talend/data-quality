@@ -24,6 +24,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.talend.dataquality.statistics,
  org.talend.dataquality.statistics.cardinality,
  org.talend.dataquality.statistics.datetime,
+ org.talend.dataquality.statistics.exception,
  org.talend.dataquality.statistics.frequency,
  org.talend.dataquality.statistics.frequency.impl,
  org.talend.dataquality.statistics.frequency.pattern,

@@ -23,7 +23,7 @@ import java.util.Map.Entry;
 import org.apache.commons.lang3.NotImplementedException;
 import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.ResizableList;
-import org.talend.dataquality.semantic.exception.DQRuntimeException;
+import org.talend.dataquality.semantic.exception.DQSemanticRuntimeException;
 import org.talend.dataquality.semantic.recognizer.CategoryFrequency;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizer;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
@@ -90,7 +90,7 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
             for (int i = 0; i < record.length; i++) {
                 CategoryRecognizer categoryRecognizer = columnIdxToCategoryRecognizer.get(i);
                 if (categoryRecognizer == null) {
-                    throw new DQRuntimeException(
+                    throw new DQSemanticRuntimeException(
                             "CategoryRecognizer is null for record and i=" + i + " " + Arrays.asList(record));
                 } else {
                     categoryRecognizer.process(record[i]);
