@@ -12,7 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.standardization.query;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,23 +43,23 @@ public class FirstNameStandardizeTest {
 
     private static final String inputName = "Michel"; //$NON-NLS-1$
 
-    private static final String[][] expected = { { "Michel", "AUS", "MITCHEL", "MICHELE", "MICHEL" }, //
-            { "Michel", "BEL", "MICHEL", "MICHEL", "MICHEL" }, //
-            { "Michel", "DEU", "MICHEL", "MICHEL", "MICHEL" }, //
-            { "Michel", "ESP", "MICHEL", "MICHEL", "MICHEL" }, //
-            { "Michel", "FRA", "MICHEL", "MICHEL", "MICHEL" }, //
-            { "Michel", "ITA", "MICHELA", "MICHELA", "MICHELE" }, //
-            { "Michel", "RUS", "MICHEL", "MICHEL", "MICHEL" }, //
-            { "Michel", "USA", "MICHEL", "MICHEL", "MICHEL" }, //
+    private static final String[][] expected = { { "Michel", "AUS", "MITCHEL", "MICHELE", "MICHEL" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+            { "Michel", "BEL", "MICHEL", "MICHEL", "MICHEL" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+            { "Michel", "DEU", "MICHEL", "MICHEL", "MICHEL" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+            { "Michel", "ESP", "MICHEL", "MICHEL", "MICHEL" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+            { "Michel", "FRA", "MICHEL", "MICHEL", "MICHEL" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+            { "Michel", "ITA", "MICHELA", "MICHELA", "MICHELE" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+            { "Michel", "RUS", "MICHEL", "MICHEL", "MICHEL" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+            { "Michel", "USA", "MICHEL", "MICHEL", "MICHEL" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 
-            { "Adrian", "AUS", "ADRIAN", "ADRIAN", "ADRIAN" }, //
-            { "Adrian", "BEL", "ADRIAN", "ADRIAN", "ADRIAN" }, //
-            { "Adrian", "DEU", "ADRIAN", "ADRIAN", "ADRIAN" }, //
-            { "Adrian", "ESP", "ADRIAN", "ADRIAN", "ADRIAN" }, //
-            { "Adrian", "FRA", "ADRIAN", "ADRIAN", "ADRIAN" }, //
-            { "Adrian", "ITA", "ADRIANO", "ADRIANA", "ADRIANO" }, //
-            { "Adrian", "RUS", "ADRIAN", "ADRIAN", "ADRIAN" }, //
-            { "Adrian", "USA", "ADRIAN", "ADRIAN", "ADRIAN" }, //
+            { "Adrian", "AUS", "ADRIAN", "ADRIAN", "ADRIAN" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+            { "Adrian", "BEL", "ADRIAN", "ADRIAN", "ADRIAN" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+            { "Adrian", "DEU", "ADRIAN", "ADRIAN", "ADRIAN" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+            { "Adrian", "ESP", "ADRIAN", "ADRIAN", "ADRIAN" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+            { "Adrian", "FRA", "ADRIAN", "ADRIAN", "ADRIAN" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+            { "Adrian", "ITA", "ADRIANO", "ADRIANA", "ADRIANO" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+            { "Adrian", "RUS", "ADRIAN", "ADRIAN", "ADRIAN" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+            { "Adrian", "USA", "ADRIAN", "ADRIAN", "ADRIAN" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
     };
 
     private static final String[][] expected_fuzzy = { { "Alessandra", "ALESSANDRA", "ALESSANDRA" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -71,6 +71,15 @@ public class FirstNameStandardizeTest {
             { "Elif", "ELIF", "ELIF" }, { "Sreenivas", "", "" }, { "subhash", "SUBHASH", "SUBHASH" }, { "Dara", "DARA", "DARA" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$ //$NON-NLS-11$ //$NON-NLS-12$
             { "Gabor", "GABOR", "GABOR" }, { "Jill", "JILL", "JILL" }, { "Michael", "MICHAEL", "MICHAEL" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
             { "bhargav", "", "BHARGAW" }, { "nonya", "", "NONNA" } }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+
+    // input name |input gender|FIRSTNAMEMATCH|
+    private static final String[][] expected_gender = { { "Philippe", "M", "PHILIPPE" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            { "Hubert", "M", "HUBERT" }, { "Ghislain", "M", "GHISLAIN" }, { "Christian", "F", "CHRISTIAN" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
+            { "Bernard", "M", "BERNARD" }, { "Michel", "M", "MICHEL" }, { "Nicole", "F", "NICOLE" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
+            { "Pierre", "M", "PIERRE" }, { "George", "M", "GEORGE" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
+            { "Jacques", "M", "JACQUES" }, { "Didier", "M", "DIDIER" }, { "Roger", "M", "ROGER" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
+            { null, "M", "" }, { "", "F", "" }, { "M.", "M", "" }, { "M", "M", "" }, { "Philipp", "M", "PHILIPP" }, //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$//$NON-NLS-7$//$NON-NLS-8$//$NON-NLS-9$//$NON-NLS-10$//$NON-NLS-11$//$NON-NLS-12$//$NON-NLS-13$//$NON-NLS-14$
+            { "Habert", "M", "HOBERT" } }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
     /**
      * DOC sizhaoliu Comment method "setUpBeforeClass".
@@ -104,7 +113,7 @@ public class FirstNameStandardizeTest {
             System.out.println("testReplaceName:\n" + res); //$NON-NLS-1$
             assertEquals("MICHEL", res); //$NON-NLS-1$
 
-            fnameStandardize.replaceNameWithCountryGenderInfo(inputName, "ITA", "F", true);
+            fnameStandardize.replaceNameWithCountryGenderInfo(inputName, "ITA", "F", true); //$NON-NLS-1$ //$NON-NLS-2$
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -135,7 +144,7 @@ public class FirstNameStandardizeTest {
                 System.out.print(resF + "\", \""); //$NON-NLS-1$
                 assertEquals(testCase[3], resF);
 
-                // results for female first name query
+                // results for male first name query
                 resM = fnameStandardize.replaceNameWithCountryGenderInfo(testCase[0], testCase[1], "M", true); //$NON-NLS-1$
                 System.out.println(resM + "\"}, //"); //$NON-NLS-1$
                 assertEquals(testCase[4], resM);
@@ -178,4 +187,32 @@ public class FirstNameStandardizeTest {
 
     }
 
+    /**
+     * Test method for
+     * {@link org.talend.dataquality.standardization.query.FirstNameStandardize#replaceNameWithGenderInfo(java.lang.String, java.lang.String, boolean)}
+     * .
+     */
+    @Test
+    public void testReplaceNameWithGenderInfo() {
+        try {
+
+            System.out.println("\ntestReplaceNameWithGenderInfo:"); //$NON-NLS-1$
+            System.out.println("Name\tgender\tFIRSTNAMEMATCH"); //$NON-NLS-1$
+            for (String[] testCase : expected_gender) {
+                String res = ""; //$NON-NLS-1$
+                System.out.print("{\"" + testCase[0] + "\", \"" + testCase[1] + "\", \""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+
+                // results for query with gender info
+                res = fnameStandardize.replaceNameWithGenderInfo(testCase[0], testCase[1], true);
+                System.out.print(res + "\"},\n"); //$NON-NLS-1$
+                assertEquals(testCase[2], res);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 }

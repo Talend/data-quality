@@ -157,7 +157,8 @@ public class FirstNameStandardize {
         if (inputName == null || inputName.length() == 0) {
             return new ScoreDoc[0];
         }
-        // // DOC set get county and gender fields value
+
+        // set get county and gender fields value
         String countryText = null;
         String genderText = null;
         if (information2value != null) {
@@ -219,7 +220,7 @@ public class FirstNameStandardize {
      */
     public String replaceName(String inputName, boolean fuzzyQuery) throws IOException {
         ScoreDoc[] results = standardize(inputName, null, fuzzyQuery);
-        return results.length == 0 ? "" : searcher.doc(results[0].doc).get("name");//$NON-NLS-1$ //$NON-NLS-2$
+        return getFinalAccurateResult(inputName, results);
     }
 
     public String replaceNameWithCountryGenderInfo(String inputName, String inputCountry, String inputGender, boolean fuzzyQuery)
@@ -228,21 +229,41 @@ public class FirstNameStandardize {
         indexFields.put("country", inputCountry);//$NON-NLS-1$
         indexFields.put("gender", inputGender);//$NON-NLS-1$
         ScoreDoc[] results = standardize(inputName, indexFields, fuzzyQuery);
-        return results.length == 0 ? "" : searcher.doc(results[0].doc).get("name");//$NON-NLS-1$ //$NON-NLS-2$
+        return getFinalAccurateResult(inputName, results);
     }
 
     public String replaceNameWithCountryInfo(String inputName, String inputCountry, boolean fuzzyQuery) throws IOException {
         Map<String, String> indexFields = new HashMap<String, String>();
         indexFields.put("country", inputCountry);//$NON-NLS-1$
         ScoreDoc[] results = standardize(inputName, indexFields, fuzzyQuery);
-        return results.length == 0 ? "" : searcher.doc(results[0].doc).get("name");//$NON-NLS-1$ //$NON-NLS-2$
+        return getFinalAccurateResult(inputName, results);
     }
 
     public String replaceNameWithGenderInfo(String inputName, String inputGender, boolean fuzzyQuery) throws IOException {
         Map<String, String> indexFields = new HashMap<String, String>();
         indexFields.put("gender", inputGender);//$NON-NLS-1$
         ScoreDoc[] results = standardize(inputName, indexFields, fuzzyQuery);
-        return results.length == 0 ? "" : searcher.doc(results[0].doc).get("name");//$NON-NLS-1$ //$NON-NLS-2$
+        return getFinalAccurateResult(inputName, results);
+    }
+
+    /**
+     * TDQ-12953: improve try to get an accurate result.
+     * 
+     * @param inputName
+     * @param results
+     * @return
+     * @throws IOException
+     */
+    protected String getFinalAccurateResult(String inputName, ScoreDoc[] results) throws IOException {
+        if (results.length == 0) {
+            return "";//$NON-NLS-1$
+        }
+        // if the result and input are more different, we return "".
+        String result = searcher.doc(results[0].doc).get("name");//$NON-NLS-1$
+        if (result.length() - inputName.length() >= 3) {
+            return "";//$NON-NLS-1$
+        }
+        return result;
     }
 
     public void setMaxEdits(int maxEdits) {
