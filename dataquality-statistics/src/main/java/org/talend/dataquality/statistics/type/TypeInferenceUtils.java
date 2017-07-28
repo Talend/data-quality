@@ -45,7 +45,8 @@ public class TypeInferenceUtils {
             + ")"// END grouped part
             + ")" // END Alternative II
             + ")" // END Decimal part
-            + "([ ]?[eE][-+]?[0-9]+)?$"); // scientific part
+            + "([ ]?[eE][-+]?[0-9]+)?" // scientific part
+            + "([ ]?%)?$"); // percentage part
 
     /**
      * Detect if the given value is a double type.
