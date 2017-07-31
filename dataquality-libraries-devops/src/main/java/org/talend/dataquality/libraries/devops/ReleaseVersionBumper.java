@@ -22,12 +22,7 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.TransformerFactoryConfigurationError;
+import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.XPath;
@@ -86,7 +81,7 @@ public class ReleaseVersionBumper {
         final String projectRoot = new File(resourcePath).getParentFile().getParentFile().getParentFile().getParentFile()
                 .getParentFile().getParentFile().getParentFile().getPath() + File.separator;
 
-        String parentPomPath = "./pom.xml";
+        String parentPomPath = "../dataquality-libraries/pom.xml";
         File inputFile = new File(projectRoot + parentPomPath);
         if (inputFile.exists()) {
             System.out.println("Updating: " + inputFile.getAbsolutePath());

@@ -1,8 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Data Quality Libraries Plug-in
-Bundle-SymbolicName: org.talend.dataquality.libraries
+Bundle-Name: Data Quality Libraries DevOps Plug-in
+Bundle-SymbolicName: org.talend.dataquality.libraries.devops
 Bundle-Version: 1.7.0.SNAPSHOT
 Bundle-Vendor: .Talend SA.
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
+Require-Bundle: org.apache.commons.io
