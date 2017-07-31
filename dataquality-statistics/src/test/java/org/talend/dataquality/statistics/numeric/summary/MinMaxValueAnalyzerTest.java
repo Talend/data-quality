@@ -12,6 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.statistics.numeric.summary;
 
+import static jdk.nashorn.internal.objects.Global.Infinity;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -25,6 +26,8 @@ import org.talend.dataquality.statistics.type.DataTypeEnum;
 public class MinMaxValueAnalyzerTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MinMaxValueAnalyzerTest.class);
+
+    private static final double DELTA = 1E-8;
 
     @Before
     public void setUp() throws Exception {
@@ -101,27 +104,26 @@ public class MinMaxValueAnalyzerTest {
 
         final String[][] testers = new String[][] {
                 //
-                { "1,1", "3.333,33", "5,555", "1E308" }, //
-                { "2.2", "4,444.44", "6.666", "1E309" },//
+                { "1,1", "3.333,33", "5,555", "1E308", "3.8", "1E-3" }, //
+                { "2.2", "4,444.44", "6.666", "1E309", "38%", "2E-2%" },//
         };
 
-        SummaryAnalyzer analyzer = new SummaryAnalyzer(
-                new DataTypeEnum[] { DataTypeEnum.DOUBLE, DataTypeEnum.DOUBLE, DataTypeEnum.DOUBLE, DataTypeEnum.DOUBLE, });
+        SummaryAnalyzer analyzer = new SummaryAnalyzer(new DataTypeEnum[] { DataTypeEnum.DOUBLE, DataTypeEnum.DOUBLE,
+                DataTypeEnum.DOUBLE, DataTypeEnum.DOUBLE, DataTypeEnum.DOUBLE, DataTypeEnum.DOUBLE, });
 
         for (String[] values : testers) {
             analyzer.analyze(values);
         }
+        assertMinAndMax(analyzer.getResult().get(0), 1.1, 2.2);
+        assertMinAndMax(analyzer.getResult().get(1), 3333.33, 4444.44);
+        assertMinAndMax(analyzer.getResult().get(2), 6.666, 5555);
+        assertMinAndMax(analyzer.getResult().get(3), 1E308, Infinity);
+        assertMinAndMax(analyzer.getResult().get(4), 0.38, 3.8);
+        assertMinAndMax(analyzer.getResult().get(5), 0.0002, 0.001);
+    }
 
-        SummaryStatistics summary1 = analyzer.getResult().get(0);
-        LOGGER.debug("Min: " + summary1.getMin() + "  Max: " + summary1.getMax());
-
-        SummaryStatistics summary2 = analyzer.getResult().get(1);
-        LOGGER.debug("Min: " + summary2.getMin() + "  Max: " + summary2.getMax());
-
-        SummaryStatistics summary3 = analyzer.getResult().get(2);
-        LOGGER.debug("Min: " + summary3.getMin() + "  Max: " + summary3.getMax());
-
-        SummaryStatistics summary4 = analyzer.getResult().get(3);
-        LOGGER.debug("Min: " + summary4.getMin() + "  Max: " + summary4.getMax());
+    private void assertMinAndMax(SummaryStatistics summaryStatistics, double min, double max) {
+        assertEquals(min, summaryStatistics.getMin(), DELTA);
+        assertEquals(max, summaryStatistics.getMax(), DELTA);
     }
 }
