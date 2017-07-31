@@ -293,16 +293,9 @@ public class CategoryRegistryManager {
         synchronized (indexExtractionLock) {
             if (!destSubFolder.exists()) {
                 final URI indexSourceURI = this.getClass().getResource("/" + sourceSubFolder).toURI();
-                Directory srcDir = null;
-                try {
-                    srcDir = ClassPathDirectory.open(indexSourceURI);
-                    if (usingLocalCategoryRegistry && !destSubFolder.exists()) {
-                        DictionaryUtils.rewriteIndex(srcDir, destSubFolder);
-                    }
-                } finally {
-                    if (srcDir != null) {
-                        srcDir.close();
-                    }
+                final Directory srcDir = ClassPathDirectory.open(indexSourceURI);
+                if (usingLocalCategoryRegistry && !destSubFolder.exists()) {
+                    DictionaryUtils.rewriteIndex(srcDir, destSubFolder);
                 }
             }
         }
