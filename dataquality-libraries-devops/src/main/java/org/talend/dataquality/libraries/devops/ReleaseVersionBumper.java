@@ -77,7 +77,7 @@ public class ReleaseVersionBumper {
         final String projectRoot = new File(resourcePath).getParentFile().getParentFile().getParentFile().getParentFile()
                 .getParentFile().getParentFile().getParentFile().getPath() + File.separator;
 
-        String parentPomPath = "./pom.xml";
+        String parentPomPath = "../dataquality-libraries/pom.xml";
         File inputFile = new File(projectRoot + parentPomPath);
         if (inputFile.exists()) {
             System.out.println("Updating: " + inputFile.getAbsolutePath());
