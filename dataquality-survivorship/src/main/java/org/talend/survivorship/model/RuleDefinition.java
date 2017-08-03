@@ -257,13 +257,4 @@ public class RuleDefinition {
         }
     }
 
-    /**
-     * Sets the referenceColumn.
-     * 
-     * @param referenceColumn the referenceColumn to set
-     */
-    public void setReferenceColumn(String referenceColumn) {
-        this.referenceColumn = referenceColumn;
-    }
-
 }
