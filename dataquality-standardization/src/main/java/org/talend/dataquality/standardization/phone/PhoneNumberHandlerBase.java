@@ -54,7 +54,8 @@ public class PhoneNumberHandlerBase {
         }
         PhoneNumber phonenumber = null;
         try {
-            phonenumber = GOOGLE_PHONE_UTIL.parse(data.toString(), regionCode);
+            final CharSequence cs = data.toString();
+            phonenumber = GOOGLE_PHONE_UTIL.parse(cs, regionCode);
         } catch (Exception e) {
             LOG.error("Phone number parsing exception with " + data, e); //$NON-NLS-1$
             return null;
@@ -73,7 +74,8 @@ public class PhoneNumberHandlerBase {
     public static boolean isValidPhoneNumber(Object data, String regionCode) {
         PhoneNumber phonenumber = null;
         try {
-            phonenumber = GOOGLE_PHONE_UTIL.parse(data.toString(), regionCode);
+            final CharSequence cs = data.toString();
+            phonenumber = GOOGLE_PHONE_UTIL.parse(cs, regionCode);
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
             return false;
@@ -94,7 +96,8 @@ public class PhoneNumberHandlerBase {
         if (data == null || StringUtils.isBlank(data.toString())) {
             return false;
         }
-        return GOOGLE_PHONE_UTIL.isPossibleNumber(data.toString(), regionCode);
+        final CharSequence cs = data.toString();
+        return GOOGLE_PHONE_UTIL.isPossibleNumber(cs, regionCode);
 
     }
 
@@ -107,11 +110,11 @@ public class PhoneNumberHandlerBase {
      * @return the formatted phone number like as "+12423651234"
      */
     public static String formatE164(Object data, String regionCode) {
-        PhoneNumber phonemuber = parseToPhoneNumber(data, regionCode);
-        if (phonemuber == null) {
+        PhoneNumber phoneNumber = parseToPhoneNumber(data, regionCode);
+        if (phoneNumber == null) {
             return StringUtils.EMPTY;
         }
-        return GOOGLE_PHONE_UTIL.format(phonemuber, PhoneNumberFormat.E164);
+        return GOOGLE_PHONE_UTIL.format(phoneNumber, PhoneNumberFormat.E164);
     }
 
     /**
@@ -123,11 +126,11 @@ public class PhoneNumberHandlerBase {
      * @return the formatted phone number like as "+1 242-365-1234"
      */
     public static String formatInternational(Object data, String regionCode) {
-        PhoneNumber phonemuber = parseToPhoneNumber(data, regionCode);
-        if (phonemuber == null) {
+        PhoneNumber phoneNumber = parseToPhoneNumber(data, regionCode);
+        if (phoneNumber == null) {
             return StringUtils.EMPTY;
         }
-        return GOOGLE_PHONE_UTIL.format(phonemuber, PhoneNumberFormat.INTERNATIONAL);
+        return GOOGLE_PHONE_UTIL.format(phoneNumber, PhoneNumberFormat.INTERNATIONAL);
     }
 
     /**
@@ -139,11 +142,11 @@ public class PhoneNumberHandlerBase {
      * @return the formatted phone number like as "(242) 365-1234"
      */
     public static String formatNational(Object data, String regionCode) {
-        PhoneNumber phonemuber = parseToPhoneNumber(data, regionCode);
-        if (phonemuber == null) {
+        PhoneNumber phoneNumber = parseToPhoneNumber(data, regionCode);
+        if (phoneNumber == null) {
             return StringUtils.EMPTY;
         }
-        return GOOGLE_PHONE_UTIL.format(phonemuber, PhoneNumberFormat.NATIONAL);
+        return GOOGLE_PHONE_UTIL.format(phoneNumber, PhoneNumberFormat.NATIONAL);
     }
 
     /**
@@ -155,11 +158,11 @@ public class PhoneNumberHandlerBase {
      * @return the formatted phone number like as "tel:+1-242-365-1234"
      */
     public static String formatRFC396(Object data, String regionCode) {
-        PhoneNumber phonemuber = parseToPhoneNumber(data, regionCode);
-        if (phonemuber == null) {
+        PhoneNumber phoneNumber = parseToPhoneNumber(data, regionCode);
+        if (phoneNumber == null) {
             return StringUtils.EMPTY;
         }
-        return GOOGLE_PHONE_UTIL.format(phonemuber, PhoneNumberFormat.RFC3966);
+        return GOOGLE_PHONE_UTIL.format(phoneNumber, PhoneNumberFormat.RFC3966);
     }
 
     /**
