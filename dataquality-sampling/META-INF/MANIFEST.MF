@@ -10,6 +10,8 @@ Require-Bundle: org.apache.log4j,
  org.junit
 Export-Package: org.talend.dataquality.datamasking,
  org.talend.dataquality.datamasking.functions,
+ org.talend.dataquality.datamasking.generic,
+ org.talend.dataquality.datamasking.generic.fields,
  org.talend.dataquality.datamasking.semantic,
  org.talend.dataquality.datamasking.shuffling,
  org.talend.dataquality.duplicating,

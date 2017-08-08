@@ -21,6 +21,10 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
+import org.talend.dataquality.datamasking.generic.fields.AbstractField;
+import org.talend.dataquality.datamasking.generic.fields.FieldDate;
+import org.talend.dataquality.datamasking.generic.fields.FieldEnum;
+import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
 
 /**
  * 

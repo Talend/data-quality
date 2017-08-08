@@ -15,6 +15,9 @@ package org.talend.dataquality.datamasking.functions;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.talend.dataquality.datamasking.generic.fields.AbstractField;
+import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
+
 /**
  * 
  * @author dprot

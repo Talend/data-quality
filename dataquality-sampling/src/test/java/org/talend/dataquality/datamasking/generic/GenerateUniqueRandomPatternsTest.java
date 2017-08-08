@@ -1,4 +1,4 @@
-package org.talend.dataquality.datamasking.functions;
+package org.talend.dataquality.datamasking.generic;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -12,6 +12,9 @@ import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.talend.dataquality.datamasking.generic.fields.AbstractField;
+import org.talend.dataquality.datamasking.generic.fields.FieldEnum;
+import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
 
 public class GenerateUniqueRandomPatternsTest {
 
@@ -54,9 +57,9 @@ public class GenerateUniqueRandomPatternsTest {
     @Test
     public void testUnique() {
         Set<StringBuilder> uniqueSetTocheck = new HashSet<StringBuilder>();
-        for (long i = 0; i < pattern.getFields().get(0).getWidth(); i++)
-            for (long j = 0; j < pattern.getFields().get(1).getWidth(); j++)
-                for (long k = 0; k < pattern.getFields().get(2).getWidth(); k++)
+        for (long i = 0; i < pattern.getFields().get(0).getWidth(); i++) {
+            for (long j = 0; j < pattern.getFields().get(1).getWidth(); j++) {
+                for (long k = 0; k < pattern.getFields().get(2).getWidth(); k++) {
                     for (long l = 0; l < pattern.getFields().get(3).getWidth(); l++) {
                         StringBuilder uniqueMaskedNumber = pattern.generateUniqueString(new ArrayList<String>(
                                 Arrays.asList(pattern.getFields().get(0).decode(i), pattern.getFields().get(1).decode(j),
@@ -66,5 +69,8 @@ public class GenerateUniqueRandomPatternsTest {
                                 uniqueSetTocheck.contains(uniqueMaskedNumber));
                         uniqueSetTocheck.add(uniqueMaskedNumber);
                     }
+                }
+            }
+        }
     }
 }

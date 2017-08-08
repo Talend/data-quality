@@ -10,7 +10,7 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.dataquality.datamasking.functions;
+package org.talend.dataquality.datamasking.generic;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Random;
 
 import org.apache.log4j.Logger;
+import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 
 /**
  * @author jteuladedenantes

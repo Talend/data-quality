@@ -10,7 +10,7 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.dataquality.datamasking.functions;
+package org.talend.dataquality.datamasking.generic.fields;
 
 import java.util.List;
 
@@ -31,6 +31,23 @@ public class FieldEnum extends AbstractField {
      * The exhaustive list of values
      */
     private List<String> enumValues;
+
+    public FieldEnum(List<String> enumValues) {
+        int maxLen = 0;
+        for (String value : enumValues) {
+            if (value.length() > maxLen) {
+                maxLen = value.length();
+            }
+        }
+        for (String value : enumValues) {
+            if (value.length() < maxLen) {
+                LOGGER.error("The value <" + value + "> with a length = " + value.length() + " should have a length = " + maxLen);
+                return;
+            }
+        }
+        this.enumValues = enumValues;
+        this.length = maxLen;
+    }
 
     public FieldEnum(List<String> enumValues, int length) {
         this.length = length;
