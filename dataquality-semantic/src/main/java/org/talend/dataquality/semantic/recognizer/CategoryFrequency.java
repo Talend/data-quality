@@ -37,6 +37,8 @@ public class CategoryFrequency implements Comparable<CategoryFrequency>, Seriali
 
     int categoryLevel;
 
+    float score;
+
     /**
      * CategoryFrequency constructor from a category.
      *
@@ -88,6 +90,20 @@ public class CategoryFrequency implements Comparable<CategoryFrequency>, Seriali
         this.categoryLevel = categoryLevel;
     }
 
+    public static void main(String[] args) {
+        CategoryFrequency cf1 = new CategoryFrequency("", "");
+        CategoryFrequency cf2 = new CategoryFrequency("CITY", "CITY");
+        List<CategoryFrequency> list = new ArrayList<>();
+        list.add(cf1);
+        list.add(cf2);
+        System.out.println(list);
+
+        Collections.sort(list);
+
+        System.out.println(list);
+
+    }
+
     public String getCategoryId() {
         return categoryName;
     }
@@ -106,6 +122,14 @@ public class CategoryFrequency implements Comparable<CategoryFrequency>, Seriali
 
     public int getCategoryLevel() {
         return categoryLevel;
+    }
+
+    public float getScore() {
+        return score;
+    }
+
+    public void setScore(float score) {
+        this.score = score;
     }
 
     @Override
@@ -130,7 +154,13 @@ public class CategoryFrequency implements Comparable<CategoryFrequency>, Seriali
     @Override
     public int compareTo(CategoryFrequency o) {
         // The EMPTY category must always be ranked after the others
-        int count = Long.compare(this.getCount(), o.getCount());
+
+        int count = Float.compare(this.getScore(), o.getScore());
+        if (count != 0) {
+            return count;
+        }
+
+        count = Long.compare(this.getCount(), o.getCount());
         if (count != 0) {
             return count;
         } else {
@@ -157,19 +187,5 @@ public class CategoryFrequency implements Comparable<CategoryFrequency>, Seriali
     @Override
     public String toString() {
         return "[Category: " + categoryName + " Count: " + count + " Frequency: " + frequency + "]";
-    }
-
-    public static void main(String[] args) {
-        CategoryFrequency cf1 = new CategoryFrequency("", "");
-        CategoryFrequency cf2 = new CategoryFrequency("CITY", "CITY");
-        List<CategoryFrequency> list = new ArrayList<>();
-        list.add(cf1);
-        list.add(cf2);
-        System.out.println(list);
-
-        Collections.sort(list);
-
-        System.out.println(list);
-
     }
 }

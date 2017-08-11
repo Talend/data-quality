@@ -86,6 +86,27 @@ public class Analyzers implements Analyzer<Analyzers.Result> {
         return results;
     }
 
+    @Override
+    public Analyzer<Result> merge(Analyzer<Result> another) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public void close() throws Exception {
+        for (Analyzer<?> analyzer : analyzerArrays) {
+            try {
+                analyzer.close();
+            } catch (Exception e) {
+                LOGGER.error("Unable to close " + analyzer, e);
+            }
+        }
+    }
+
+    @Override
+    public void setMetadata(Metadata metadata, List<String> values) {
+        // doNothing
+    }
+
     /**
      * A generic composite result which aggregates several analyzer's results.
      */
@@ -108,21 +129,4 @@ public class Analyzers implements Analyzer<Analyzers.Result> {
             results.put(result.getClass(), result);
         }
     }
-
-    @Override
-    public Analyzer<Result> merge(Analyzer<Result> another) {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public void close() throws Exception {
-        for (Analyzer<?> analyzer : analyzerArrays) {
-            try {
-                analyzer.close();
-            } catch (Exception e) {
-                LOGGER.error("Unable to close " + analyzer, e);
-            }
-        }
-    }
-
 }

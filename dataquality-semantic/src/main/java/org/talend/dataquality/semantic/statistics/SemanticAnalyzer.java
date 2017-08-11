@@ -13,15 +13,12 @@
 package org.talend.dataquality.semantic.statistics;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.talend.dataquality.common.inference.Analyzer;
+import org.talend.dataquality.common.inference.Metadata;
 import org.talend.dataquality.common.inference.ResizableList;
 import org.talend.dataquality.semantic.exception.DQSemanticRuntimeException;
 import org.talend.dataquality.semantic.recognizer.CategoryFrequency;
@@ -51,6 +48,10 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
 
     private int currentCount = 0;
 
+    private Map<Metadata, List> metadatas;
+
+    private float weight = Float.valueOf(System.getProperty("matching.metadata.weight"));
+
     public SemanticAnalyzer(CategoryRecognizerBuilder builder) {
         this(builder, 10000);
     }
@@ -59,6 +60,7 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
         this.builder = builder;
         this.limit = limit;
         builder.initIndex();
+        metadatas = new HashMap<>();
     }
 
     /**
@@ -77,6 +79,7 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
         columnIdxToCategoryRecognizer.clear();
         results.clear();
         builder.initIndex();
+        metadatas.clear();
     }
 
     /**
@@ -126,14 +129,29 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
      */
     @Override
     public List<SemanticType> getResult() {
+
         for (Entry<Integer, CategoryRecognizer> entry : columnIdxToCategoryRecognizer.entrySet()) {
             Integer colIdx = entry.getKey();
             Collection<CategoryFrequency> result = entry.getValue().getResult();
             for (CategoryFrequency semCategory : result) {
+
+                float score = Math.min(semCategory.getFrequency() + getScoreOnHeader(semCategory.getCategoryName()), 100);
+
+                semCategory.setScore(score);
                 results.get(colIdx).increment(semCategory, semCategory.getCount());
             }
         }
+
         return results;
+    }
+
+    private float getScoreOnHeader(String categoryName) {
+        float score = 0;
+        if (metadatas.get(Metadata.HEADER_NAME) != null && metadatas.get(Metadata.HEADER_NAME).contains(categoryName)
+                && weight != 0) {
+            score = 100 - (weight * 10);
+        }
+        return score;
     }
 
     @Override
@@ -148,4 +166,8 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
         }
     }
 
+    @Override
+    public void setMetadata(Metadata metadata, List<String> values) {
+        metadatas.put(metadata, values);
+    }
 }

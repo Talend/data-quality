@@ -62,4 +62,10 @@ public interface Analyzer<T> extends Serializable, AutoCloseable {
      */
     Analyzer<T> merge(Analyzer<T> another);
 
+    /**
+     * Store metadata
+     * @param metadata metadata name
+     * @param values value associated to the metadata
+     */
+    void setMetadata(Metadata metadata, List<String> values);
 }

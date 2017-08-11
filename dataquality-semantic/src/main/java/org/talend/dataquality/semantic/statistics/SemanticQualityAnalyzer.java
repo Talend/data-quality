@@ -17,10 +17,7 @@ import java.util.*;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
-import org.talend.dataquality.common.inference.Analyzer;
-import org.talend.dataquality.common.inference.QualityAnalyzer;
-import org.talend.dataquality.common.inference.ResizableList;
-import org.talend.dataquality.common.inference.ValueQualityStatistics;
+import org.talend.dataquality.common.inference.*;
 import org.talend.dataquality.semantic.classifier.ISubCategoryClassifier;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.classifier.impl.DataDictFieldClassifier;
@@ -280,5 +277,10 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
     @Override
     public void close() throws Exception {
         ((DataDictFieldClassifier) dataDictClassifier).closeIndex();
+    }
+
+    @Override
+    public void setMetadata(Metadata metadata, List<String> values) {
+        //do nothing
     }
 }
