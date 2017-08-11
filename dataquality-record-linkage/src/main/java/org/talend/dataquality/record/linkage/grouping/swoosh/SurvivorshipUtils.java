@@ -24,6 +24,8 @@ import org.apache.commons.lang.StringUtils;
 import org.talend.dataquality.record.linkage.constant.AttributeMatcherType;
 import org.talend.dataquality.record.linkage.grouping.AnalysisMatchRecordGrouping;
 import org.talend.dataquality.record.linkage.grouping.IRecordGrouping;
+import org.talend.dataquality.record.linkage.grouping.adapter.ComponentMatchParameterAdapter;
+import org.talend.dataquality.record.linkage.grouping.adapter.MatchParameterAdapter;
 import org.talend.dataquality.record.linkage.grouping.swoosh.SurvivorShipAlgorithmParams.SurvivorshipFunction;
 import org.talend.dataquality.record.linkage.record.CombinedRecordMatcher;
 import org.talend.dataquality.record.linkage.record.IRecordMatcher;
@@ -35,15 +37,37 @@ import org.talend.dataquality.record.linkage.utils.SurvivorShipAlgorithmEnum;
  */
 public class SurvivorshipUtils {
 
-    private static final String NUMBER_ID = "id_"; //$NON-NLS-1$
+    public static final String NUMBER_ID = "id_"; //$NON-NLS-1$
 
     public static final String DEFAULT_CONCATENATE_PARAMETER = ","; //$NON-NLS-1$
 
-    private static final String SURVIVORSHIP_FUNCTION = "SURVIVORSHIP_FUNCTION"; //$NON-NLS-1$
+    public static final String SURVIVORSHIP_FUNCTION = "SURVIVORSHIP_FUNCTION"; //$NON-NLS-1$
 
-    private static final String PARAMETER = "PARAMETER"; //$NON-NLS-1$
+    public static final String PARAMETER = "PARAMETER"; //$NON-NLS-1$
 
-    private static final String DATA_TYPE = "DATA_TYPE"; //$NON-NLS-1$
+    public static final String DATA_TYPE = "DATA_TYPE"; //$NON-NLS-1$
+
+    /**
+     * 
+     * zshen Comment method "createSurvivorShipAlgorithmParams".
+     * Same with {@link AnalysisRecordGroupingUtils#createSurvivorShipAlgorithmParams} so
+     * that any modify need to synchronization them with same time
+     * 
+     * @param analysisMatchRecordGrouping
+     * @param recordMatchingIndicator
+     * @param columnMap
+     * @return
+     */
+    public static SurvivorShipAlgorithmParams createSurvivorShipAlgorithmParams(
+            AnalysisMatchRecordGrouping analysisMatchRecordGrouping, List<List<Map<String, String>>> joinKeyRules,
+            List<Map<String, String>> defaultSurvivorshipRules,
+            List<Map<String, String>> particularDefaultSurvivorshipDefinitions, Map<String, String> columnWithType,
+            Map<String, String> columnWithIndex) {
+
+        return createSurvivorShipAlgorithmParams(new ComponentMatchParameterAdapter(analysisMatchRecordGrouping, joinKeyRules,
+                defaultSurvivorshipRules, particularDefaultSurvivorshipDefinitions, columnWithType, columnWithIndex));
+
+    }
 
     /**
      * 
@@ -60,6 +84,7 @@ public class SurvivorshipUtils {
             AnalysisMatchRecordGrouping analysisMatchRecordGrouping, List<List<Map<String, String>>> joinKeyRules,
             List<Map<String, String>> defaultSurvivorshipRules, Map<String, String> columnWithType,
             Map<String, String> columnWithIndex) {
+
         SurvivorShipAlgorithmParams survivorShipAlgorithmParams = new SurvivorShipAlgorithmParams();
 
         // Survivorship functions.
@@ -141,6 +166,41 @@ public class SurvivorshipUtils {
     }
 
     /**
+     * 
+     * zshen Comment method "createSurvivorShipAlgorithmParams".
+     * Same with {@link AnalysisRecordGroupingUtils#createSurvivorShipAlgorithmParams} so
+     * that any modify need to synchronization them with same time
+     * 
+     * @param analysisMatchRecordGrouping
+     * @param recordMatchingIndicator
+     * @param columnMap
+     * @return
+     */
+    public static SurvivorShipAlgorithmParams createSurvivorShipAlgorithmParams(MatchParameterAdapter parameterAdapter) {
+        SurvivorShipAlgorithmParams survivorShipAlgorithmParams = new SurvivorShipAlgorithmParams();
+
+        // Survivorship functions.
+        List<SurvivorshipFunction> survFunctions = parameterAdapter.getAllSurvivorshipFunctions();
+
+        survivorShipAlgorithmParams.setSurviorShipAlgos(survFunctions.toArray(new SurvivorshipFunction[survFunctions.size()]));
+
+        // Set default survivorship functions.
+        Map<Integer, SurvivorshipFunction> defaultSurvRules = parameterAdapter.getDefaultSurviorShipRules();
+
+        survivorShipAlgorithmParams.setDefaultSurviorshipRules(defaultSurvRules);
+
+        // Set the record matcher
+        CombinedRecordMatcher combinedRecordMatcher = parameterAdapter.getCombinedRecordMatcher();
+        survivorShipAlgorithmParams.setRecordMatcher(combinedRecordMatcher);
+        Map<IRecordMatcher, SurvivorshipFunction[]> survAlgos = parameterAdapter.getSurvivorshipAlgosMap(defaultSurvRules,
+                survFunctions);
+
+        survivorShipAlgorithmParams.setSurvivorshipAlgosMap(survAlgos);
+
+        return survivorShipAlgorithmParams;
+    }
+
+    /**
      * DOC talend Comment method "createSurvivorshipFunction".
      * 
      * @param survivorShipAlgorithmParams
@@ -175,7 +235,7 @@ public class SurvivorshipUtils {
         defaultSurvRules.put(columnIndex, survFunc);
     }
 
-    private final static String[] NUMBERS = new String[] { NUMBER_ID + Integer.class.getSimpleName(),
+    public final static String[] NUMBERS = new String[] { NUMBER_ID + Integer.class.getSimpleName(),
             NUMBER_ID + Float.class.getSimpleName(), NUMBER_ID + Double.class.getSimpleName(),
             NUMBER_ID + Long.class.getSimpleName(), NUMBER_ID + Short.class.getSimpleName(),
             NUMBER_ID + BigDecimal.class.getSimpleName(), NUMBER_ID + Byte.class.getSimpleName() };

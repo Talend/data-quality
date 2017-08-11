@@ -120,6 +120,168 @@ public class SurvivorshipUtilsTest {
      * @throws InstantiationException
      */
     @Test
+    public void testCreateSurvivorShipAlgorithmParamsLowerWithParticularDefault()
+            throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+        List<List<java.util.Map<String, String>>> matchingRulesAll_tMatchGroup_1 = matcherListInit(false);
+        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 = new SwooshMatchRecordGroupingImpl();
+        recordGroupImp_tMatchGroup_1.setOrginalInputColumnSize(3);
+        recordGroupImp_tMatchGroup_1
+                .setRecordLinkAlgorithm(org.talend.dataquality.record.linkage.constant.RecordMatcherType.T_SwooshAlgorithm);
+        // add mutch rules
+        for (java.util.List<java.util.Map<String, String>> matcherList : matchingRulesAll_tMatchGroup_1) {
+            recordGroupImp_tMatchGroup_1.addMatchRule(matcherList);
+        }
+        recordGroupImp_tMatchGroup_1.initialize();
+
+        java.util.List<java.util.Map<String, String>> defaultSurvivorshipRules_tMatchGroup_1 = initDefaultRules();
+        java.util.List<java.util.Map<String, String>> particularDefaultSurvivorshipDefinitions = initParticularDefaultRules();
+        java.util.Map<String, String> columnWithIndex_tMatchGroup_1 = new java.util.HashMap<>();
+        java.util.Map<String, String> columnWithType_tMatchGroup_1 = new java.util.HashMap<>();
+
+        columnWithType_tMatchGroup_1.put("id", "id_Integer"); //$NON-NLS-1$ //$NON-NLS-2$
+        columnWithIndex_tMatchGroup_1.put("id", "0"); //$NON-NLS-1$ //$NON-NLS-2$
+        columnWithType_tMatchGroup_1.put("name", "id_String"); //$NON-NLS-1$ //$NON-NLS-2$
+        columnWithIndex_tMatchGroup_1.put("name", "1"); //$NON-NLS-1$ //$NON-NLS-2$
+        columnWithType_tMatchGroup_1.put("provinceID", "id_Integer"); //$NON-NLS-1$ //$NON-NLS-2$
+        columnWithIndex_tMatchGroup_1.put("provinceID", "2"); //$NON-NLS-1$ //$NON-NLS-2$
+        columnWithType_tMatchGroup_1.put("gender", "id_String"); //$NON-NLS-1$ //$NON-NLS-2$
+        columnWithIndex_tMatchGroup_1.put("gender", "3"); //$NON-NLS-1$ //$NON-NLS-2$
+        columnWithType_tMatchGroup_1.put("GID", "id_String"); //$NON-NLS-1$ //$NON-NLS-2$
+        columnWithIndex_tMatchGroup_1.put("GID", "4"); //$NON-NLS-1$ //$NON-NLS-2$
+        columnWithType_tMatchGroup_1.put("GRP_SIZE", "id_Integer"); //$NON-NLS-1$ //$NON-NLS-2$
+        columnWithIndex_tMatchGroup_1.put("GRP_SIZE", "5"); //$NON-NLS-1$ //$NON-NLS-2$
+        columnWithType_tMatchGroup_1.put("MASTER", "id_Boolean"); //$NON-NLS-1$ //$NON-NLS-2$
+        columnWithIndex_tMatchGroup_1.put("MASTER", "6"); //$NON-NLS-1$ //$NON-NLS-2$
+        columnWithType_tMatchGroup_1.put("SCORE", "id_Double"); //$NON-NLS-1$ //$NON-NLS-2$
+        columnWithIndex_tMatchGroup_1.put("SCORE", "7"); //$NON-NLS-1$ //$NON-NLS-2$
+        columnWithType_tMatchGroup_1.put("GRP_QUALITY", "id_Double"); //$NON-NLS-1$ //$NON-NLS-2$
+        columnWithIndex_tMatchGroup_1.put("GRP_QUALITY", "8"); //$NON-NLS-1$ //$NON-NLS-2$
+        columnWithType_tMatchGroup_1.put("MATCHING_DISTANCES", //$NON-NLS-1$
+                "id_String"); //$NON-NLS-1$
+        columnWithIndex_tMatchGroup_1.put("MATCHING_DISTANCES", "9"); //$NON-NLS-1$ //$NON-NLS-2$
+        SurvivorShipAlgorithmParams createSurvivorShipAlgorithmParams = SurvivorshipUtils.createSurvivorShipAlgorithmParams(
+                (AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1, matchingRulesAll_tMatchGroup_1,
+                defaultSurvivorshipRules_tMatchGroup_1, particularDefaultSurvivorshipDefinitions, columnWithType_tMatchGroup_1,
+                columnWithIndex_tMatchGroup_1);
+        Map<IRecordMatcher, SurvivorshipFunction[]> survivorshipAlgosMap = createSurvivorShipAlgorithmParams
+                .getSurvivorshipAlgosMap();
+        SurvivorshipFunction[] survivorshipFunctions1 = survivorshipAlgosMap
+                .get(recordGroupImp_tMatchGroup_1.getCombinedRecordMatcher().getMatchers().get(0));
+        SurvivorshipFunction[] survivorshipFunctions2 = survivorshipAlgosMap
+                .get(recordGroupImp_tMatchGroup_1.getCombinedRecordMatcher().getMatchers().get(1));
+
+        Assert.assertNotNull(survivorshipFunctions1);
+        Assert.assertNotNull(survivorshipFunctions2);
+        // current AttributeMatcher is dummy and column type is mapping defaultFunction so that function use default
+        Assert.assertEquals(SurvivorShipAlgorithmEnum.SMALLEST, survivorshipFunctions1[0].getSurvivorShipAlgoEnum());
+        // current AttributeMatcher is not dummy and column so that function keep Original
+        Assert.assertEquals(SurvivorShipAlgorithmEnum.CONCATENATE, survivorshipFunctions1[1].getSurvivorShipAlgoEnum());
+        // current AttributeMatcher is dummy and column type is mapping ParticulardefaultFunction so that function use default
+        Assert.assertEquals(SurvivorShipAlgorithmEnum.LONGEST, survivorshipFunctions1[2].getSurvivorShipAlgoEnum());
+        // current AttributeMatcher is dummy and column type is not mapping defaultFunction so that function fixed use CONCATENATE
+        Assert.assertEquals(SurvivorShipAlgorithmEnum.MOST_COMMON, survivorshipFunctions1[3].getSurvivorShipAlgoEnum());
+        // current AttributeMatcher is not dummy and column so that function keep Original
+        Assert.assertEquals(SurvivorShipAlgorithmEnum.CONCATENATE, survivorshipFunctions2[0].getSurvivorShipAlgoEnum());
+        // current AttributeMatcher is dummy and column type is not mapping defaultFunction so that function fixed use CONCATENATE
+        Assert.assertEquals(SurvivorShipAlgorithmEnum.MOST_COMMON, survivorshipFunctions2[1].getSurvivorShipAlgoEnum());
+        // current AttributeMatcher is not dummy and column so that function keep Original
+        Assert.assertEquals(SurvivorShipAlgorithmEnum.CONCATENATE, survivorshipFunctions2[2].getSurvivorShipAlgoEnum());
+        // current AttributeMatcher is dummy and column type is not mapping defaultFunction so that function fixed use CONCATENATE
+        Assert.assertEquals(SurvivorShipAlgorithmEnum.MOST_COMMON, survivorshipFunctions2[3].getSurvivorShipAlgoEnum());
+
+    }
+
+    /**
+     * Test method for
+     * {@link org.talend.dataquality.record.linkage.grouping.swoosh.SurvivorshipUtils#createSurvivorShipAlgorithmParams(org.talend.dataquality.record.linkage.grouping.AnalysisMatchRecordGrouping, java.util.List, java.util.List, java.util.Map, java.util.Map)}
+     * .
+     * 
+     * @throws ClassNotFoundException
+     * @throws IllegalAccessException
+     * @throws InstantiationException
+     */
+    @Test
+    public void testCreateSurvivorShipAlgorithmParamsUpperWithParticularDefault()
+            throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+        List<List<java.util.Map<String, String>>> matchingRulesAll_tMatchGroup_1 = matcherListInit(true);
+        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 = new SwooshMatchRecordGroupingImpl();
+        recordGroupImp_tMatchGroup_1.setOrginalInputColumnSize(3);
+        recordGroupImp_tMatchGroup_1
+                .setRecordLinkAlgorithm(org.talend.dataquality.record.linkage.constant.RecordMatcherType.T_SwooshAlgorithm);
+        // add mutch rules
+        for (java.util.List<java.util.Map<String, String>> matcherList : matchingRulesAll_tMatchGroup_1) {
+            recordGroupImp_tMatchGroup_1.addMatchRule(matcherList);
+        }
+        recordGroupImp_tMatchGroup_1.initialize();
+
+        java.util.List<java.util.Map<String, String>> defaultSurvivorshipRules_tMatchGroup_1 = initDefaultRules();
+        java.util.List<java.util.Map<String, String>> particularDefaultSurvivorshipDefinitions = initParticularDefaultRules();
+        java.util.Map<String, String> columnWithIndex_tMatchGroup_1 = new java.util.HashMap<>();
+        java.util.Map<String, String> columnWithType_tMatchGroup_1 = new java.util.HashMap<>();
+
+        columnWithType_tMatchGroup_1.put("id", "id_Integer"); //$NON-NLS-1$ //$NON-NLS-2$
+        columnWithIndex_tMatchGroup_1.put("id", "0"); //$NON-NLS-1$ //$NON-NLS-2$
+        columnWithType_tMatchGroup_1.put("name", "id_String"); //$NON-NLS-1$ //$NON-NLS-2$
+        columnWithIndex_tMatchGroup_1.put("name", "1"); //$NON-NLS-1$ //$NON-NLS-2$
+        columnWithType_tMatchGroup_1.put("provinceID", "id_Integer"); //$NON-NLS-1$ //$NON-NLS-2$
+        columnWithIndex_tMatchGroup_1.put("provinceID", "2"); //$NON-NLS-1$ //$NON-NLS-2$
+        columnWithType_tMatchGroup_1.put("gender", "id_String"); //$NON-NLS-1$ //$NON-NLS-2$
+        columnWithIndex_tMatchGroup_1.put("gender", "3"); //$NON-NLS-1$ //$NON-NLS-2$
+        columnWithType_tMatchGroup_1.put("GID", "id_String"); //$NON-NLS-1$ //$NON-NLS-2$
+        columnWithIndex_tMatchGroup_1.put("GID", "4"); //$NON-NLS-1$ //$NON-NLS-2$
+        columnWithType_tMatchGroup_1.put("GRP_SIZE", "id_Integer"); //$NON-NLS-1$ //$NON-NLS-2$
+        columnWithIndex_tMatchGroup_1.put("GRP_SIZE", "5"); //$NON-NLS-1$ //$NON-NLS-2$
+        columnWithType_tMatchGroup_1.put("MASTER", "id_Boolean"); //$NON-NLS-1$ //$NON-NLS-2$
+        columnWithIndex_tMatchGroup_1.put("MASTER", "6"); //$NON-NLS-1$ //$NON-NLS-2$
+        columnWithType_tMatchGroup_1.put("SCORE", "id_Double"); //$NON-NLS-1$ //$NON-NLS-2$
+        columnWithIndex_tMatchGroup_1.put("SCORE", "7"); //$NON-NLS-1$ //$NON-NLS-2$
+        columnWithType_tMatchGroup_1.put("GRP_QUALITY", "id_Double"); //$NON-NLS-1$ //$NON-NLS-2$
+        columnWithIndex_tMatchGroup_1.put("GRP_QUALITY", "8"); //$NON-NLS-1$ //$NON-NLS-2$
+        columnWithType_tMatchGroup_1.put("MATCHING_DISTANCES", //$NON-NLS-1$
+                "id_String"); //$NON-NLS-1$
+        columnWithIndex_tMatchGroup_1.put("MATCHING_DISTANCES", "9"); //$NON-NLS-1$ //$NON-NLS-2$
+        SurvivorShipAlgorithmParams createSurvivorShipAlgorithmParams = SurvivorshipUtils.createSurvivorShipAlgorithmParams(
+                (AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1, matchingRulesAll_tMatchGroup_1,
+                defaultSurvivorshipRules_tMatchGroup_1, particularDefaultSurvivorshipDefinitions, columnWithType_tMatchGroup_1,
+                columnWithIndex_tMatchGroup_1);
+        Map<IRecordMatcher, SurvivorshipFunction[]> survivorshipAlgosMap = createSurvivorShipAlgorithmParams
+                .getSurvivorshipAlgosMap();
+        SurvivorshipFunction[] survivorshipFunctions1 = survivorshipAlgosMap
+                .get(recordGroupImp_tMatchGroup_1.getCombinedRecordMatcher().getMatchers().get(0));
+        SurvivorshipFunction[] survivorshipFunctions2 = survivorshipAlgosMap
+                .get(recordGroupImp_tMatchGroup_1.getCombinedRecordMatcher().getMatchers().get(1));
+
+        Assert.assertNotNull(survivorshipFunctions1);
+        Assert.assertNotNull(survivorshipFunctions2);
+        // current AttributeMatcher is dummy and column type is mapping defaultFunction so that function use default
+        Assert.assertEquals(SurvivorShipAlgorithmEnum.SMALLEST, survivorshipFunctions1[0].getSurvivorShipAlgoEnum());
+        // current AttributeMatcher is not dummy and column so that function keep Original
+        Assert.assertEquals(SurvivorShipAlgorithmEnum.CONCATENATE, survivorshipFunctions1[1].getSurvivorShipAlgoEnum());
+        // current AttributeMatcher is dummy and column type is mapping particulardefaultFunction so that function use default
+        Assert.assertEquals(SurvivorShipAlgorithmEnum.LONGEST, survivorshipFunctions1[2].getSurvivorShipAlgoEnum());
+        // current AttributeMatcher is dummy and column type is not mapping defaultFunction so that function fixed use CONCATENATE
+        Assert.assertEquals(SurvivorShipAlgorithmEnum.MOST_COMMON, survivorshipFunctions1[3].getSurvivorShipAlgoEnum());
+        // current AttributeMatcher is not dummy and column so that function keep Original
+        Assert.assertEquals(SurvivorShipAlgorithmEnum.CONCATENATE, survivorshipFunctions2[0].getSurvivorShipAlgoEnum());
+        // current AttributeMatcher is dummy and column type is not mapping defaultFunction so that function fixed use CONCATENATE
+        Assert.assertEquals(SurvivorShipAlgorithmEnum.MOST_COMMON, survivorshipFunctions2[1].getSurvivorShipAlgoEnum());
+        // current AttributeMatcher is not dummy and column so that function keep Original
+        Assert.assertEquals(SurvivorShipAlgorithmEnum.CONCATENATE, survivorshipFunctions2[2].getSurvivorShipAlgoEnum());
+        // current AttributeMatcher is dummy and column type is not mapping defaultFunction so that function fixed use CONCATENATE
+        Assert.assertEquals(SurvivorShipAlgorithmEnum.MOST_COMMON, survivorshipFunctions2[3].getSurvivorShipAlgoEnum());
+
+    }
+
+    /**
+     * Test method for
+     * {@link org.talend.dataquality.record.linkage.grouping.swoosh.SurvivorshipUtils#createSurvivorShipAlgorithmParams(org.talend.dataquality.record.linkage.grouping.AnalysisMatchRecordGrouping, java.util.List, java.util.List, java.util.Map, java.util.Map)}
+     * .
+     * 
+     * @throws ClassNotFoundException
+     * @throws IllegalAccessException
+     * @throws InstantiationException
+     */
+    @Test
     public void testCreateSurvivorShipAlgorithmParamsLower()
             throws InstantiationException, IllegalAccessException, ClassNotFoundException {
         List<List<java.util.Map<String, String>>> matchingRulesAll_tMatchGroup_1 = matcherListInit(false);
@@ -201,6 +363,23 @@ public class SurvivorshipUtilsTest {
         realSurShipMap_tMatchGroup_1.put("SURVIVORSHIP_FUNCTION", //$NON-NLS-1$
                 "Smallest"); //$NON-NLS-1$
         realSurShipMap_tMatchGroup_1.put("DATA_TYPE", "NUMBER"); //$NON-NLS-1$ //$NON-NLS-2$
+        realSurShipMap_tMatchGroup_1.put("PARAMETER", ""); //$NON-NLS-1$ //$NON-NLS-2$
+        defaultSurvivorshipRules_tMatchGroup_1.add(realSurShipMap_tMatchGroup_1);
+        return defaultSurvivorshipRules_tMatchGroup_1;
+    }
+
+    /**
+     * DOC zshen Comment method "initDefaultRules".
+     * 
+     * @return
+     */
+    private List<Map<String, String>> initParticularDefaultRules() {
+        java.util.List<java.util.Map<String, String>> defaultSurvivorshipRules_tMatchGroup_1 = new java.util.ArrayList<>();
+        java.util.Map<String, String> realSurShipMap_tMatchGroup_1 = null;
+        realSurShipMap_tMatchGroup_1 = new java.util.HashMap<>();
+        realSurShipMap_tMatchGroup_1.put("SURVIVORSHIP_FUNCTION", //$NON-NLS-1$
+                "Longest"); //$NON-NLS-1$
+        realSurShipMap_tMatchGroup_1.put("INPUT_COLUMN", "provinceID"); //$NON-NLS-1$ //$NON-NLS-2$
         realSurShipMap_tMatchGroup_1.put("PARAMETER", ""); //$NON-NLS-1$ //$NON-NLS-2$
         defaultSurvivorshipRules_tMatchGroup_1.add(realSurShipMap_tMatchGroup_1);
         return defaultSurvivorshipRules_tMatchGroup_1;
