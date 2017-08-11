@@ -134,7 +134,7 @@ public class ComponentMatchParameterAdapter extends MatchParameterAdapter {
                 if (StringUtils.equalsIgnoreCase(dataTypeName,
                         SurvivorshipUtils.NUMBER_ID + defSurvDef.get(SurvivorshipUtils.DATA_TYPE))
                         || StringUtils.equalsIgnoreCase(defSurvDef.get(SurvivorshipUtils.DATA_TYPE), "Number") //$NON-NLS-1$ 
-                        && ArrayUtils.contains(SurvivorshipUtils.NUMBERS, dataTypeName)) {
+                                && ArrayUtils.contains(SurvivorshipUtils.NUMBERS, dataTypeName)) {
                     putNewSurvFunc(defaultSurvRules, Integer.parseInt(columnWithIndex.get(columnName)), columnName,
                             defSurvDef.get(SurvivorshipUtils.PARAMETER), defSurvDef.get(SurvivorshipUtils.SURVIVORSHIP_FUNCTION));
                     break;
