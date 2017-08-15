@@ -19,6 +19,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.talend.dataquality.common.exception.DQCommonRuntimeException;
 
 public class ResizableListTest {
 
@@ -39,7 +40,7 @@ public class ResizableListTest {
         new ResizableList<>(InvalidItem.class);
     }
 
-    @Test
+    @Test(expected = DQCommonRuntimeException.class)
     public void testResize() throws Exception {
         assertEquals(0, list.size());
         list.resize(1); // Resize to 1 should add 1 item and 0 should be Item::index
@@ -48,6 +49,12 @@ public class ResizableListTest {
         list.resize(2); // Resize to 2 should add 1 new item and 1 should be Item::index
         assertEquals(2, list.size());
         assertEquals(1, list.get(1).getIndex());
+        try {
+            list.resize(-1);
+        } catch (DQCommonRuntimeException e) {
+            assertTrue(e.getMessage().startsWith("Unable to resize list of items."));
+            throw e;
+        }
     }
 
     @Test

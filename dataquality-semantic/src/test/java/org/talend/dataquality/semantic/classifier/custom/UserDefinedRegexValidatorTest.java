@@ -18,6 +18,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.talend.dataquality.semantic.exception.DQSemanticRuntimeException;
 
 public class UserDefinedRegexValidatorTest {
 
@@ -117,7 +118,7 @@ public class UserDefinedRegexValidatorTest {
         UserDefinedRegexValidator validator = new UserDefinedRegexValidator();
         try {
             validator.setPatternString(null);
-        } catch (RuntimeException e) {
+        } catch (DQSemanticRuntimeException e) {
             Assert.assertEquals(e.getMessage(), "null argument of patternString is not allowed.");
         }
         try {
