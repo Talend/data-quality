@@ -52,7 +52,7 @@ public class ResizableListTest {
         try {
             list.resize(-1);
         } catch (DQCommonRuntimeException e) {
-            assertTrue(e.getMessage().startsWith("Unable to resize list of items."));
+            assertEquals("Unable to resize list of items.", e.getMessage());
             throw e;
         }
     }
