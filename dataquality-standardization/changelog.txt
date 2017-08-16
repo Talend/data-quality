@@ -1,5 +1,6 @@
 V3.4.0 2017-07-28
     TDQ-12953 improve FirstNameStandardize class to get an accurate result.
+    TDQ-14152 TDQ-14236 upgrade libphonenumber related jars.
     
 V3.3.3 2017-06-09
 	(no change in this version)
