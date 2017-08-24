@@ -29,8 +29,6 @@ import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
 
 public class SemanticAnalyzerTest {
 
-    private CategoryRecognizerBuilder builder;
-
     final List<String[]> TEST_RECORDS = new ArrayList<String[]>() {
 
         private static final long serialVersionUID = 1L;
@@ -54,6 +52,8 @@ public class SemanticAnalyzerTest {
 
     final List<String> EXPECTED_CATEGORY_TAGADA = Arrays
             .asList(new String[] { "", SemanticCategoryEnum.LAST_NAME.name(), SemanticCategoryEnum.FIRST_NAME.name(), "", "" });
+
+    private CategoryRecognizerBuilder builder;
 
     @Before
     public void setUp() throws Exception {
