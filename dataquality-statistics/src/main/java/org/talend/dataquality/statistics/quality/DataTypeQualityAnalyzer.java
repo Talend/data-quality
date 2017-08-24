@@ -18,10 +18,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.talend.dataquality.common.inference.Analyzer;
-import org.talend.dataquality.common.inference.QualityAnalyzer;
-import org.talend.dataquality.common.inference.ResizableList;
-import org.talend.dataquality.common.inference.ValueQualityStatistics;
+import org.talend.dataquality.common.inference.*;
 import org.talend.dataquality.statistics.datetime.CustomDateTimePatternManager;
 import org.talend.dataquality.statistics.type.DataTypeEnum;
 import org.talend.dataquality.statistics.type.TypeInferenceUtils;
@@ -34,17 +31,11 @@ public class DataTypeQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
 
     private static final long serialVersionUID = -5951511723860660263L;
 
-    private final ResizableList<ValueQualityStatistics> results = new ResizableList<>(ValueQualityStatistics.class);
-
     private static final Logger LOG = LoggerFactory.getLogger(DataTypeQualityAnalyzer.class);
 
-    private List<String> customDateTimePatterns = new ArrayList<>();
+    private final ResizableList<ValueQualityStatistics> results = new ResizableList<>(ValueQualityStatistics.class);
 
-    public void addCustomDateTimePattern(String pattern) {
-        if (StringUtils.isNotBlank(pattern)) {
-            customDateTimePatterns.add(pattern);
-        }
-    }
+    private List<String> customDateTimePatterns = new ArrayList<>();
 
     public DataTypeQualityAnalyzer(DataTypeEnum[] types, boolean isStoreInvalidValues) {
         this.isStoreInvalidValues = isStoreInvalidValues;
@@ -53,6 +44,12 @@ public class DataTypeQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
 
     public DataTypeQualityAnalyzer(DataTypeEnum... types) {
         setTypes(types);
+    }
+
+    public void addCustomDateTimePattern(String pattern) {
+        if (StringUtils.isNotBlank(pattern)) {
+            customDateTimePatterns.add(pattern);
+        }
     }
 
     @Override
@@ -134,5 +131,10 @@ public class DataTypeQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
 
     @Override
     public void close() throws Exception {
+    }
+
+    @Override
+    public void setMetadata(Metadata metadata, List<String> values) {
+
     }
 }

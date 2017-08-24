@@ -15,6 +15,7 @@ package org.talend.dataquality.statistics.text;
 import java.util.List;
 
 import org.talend.dataquality.common.inference.Analyzer;
+import org.talend.dataquality.common.inference.Metadata;
 import org.talend.dataquality.common.inference.ResizableList;
 
 /**
@@ -130,4 +131,8 @@ public class TextLengthAnalyzer implements Analyzer<TextLengthStatistics> {
 
     }
 
+    @Override
+    public void setMetadata(Metadata metadata, List<String> values) {
+
+    }
 }

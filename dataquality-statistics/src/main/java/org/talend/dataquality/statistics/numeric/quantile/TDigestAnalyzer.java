@@ -17,6 +17,7 @@ import java.util.List;
 import org.apache.commons.lang.NotImplementedException;
 import org.talend.daikon.number.BigDecimalParser;
 import org.talend.dataquality.common.inference.Analyzer;
+import org.talend.dataquality.common.inference.Metadata;
 import org.talend.dataquality.common.inference.ResizableList;
 import org.talend.dataquality.statistics.numeric.NumericalStatisticsAnalyzer;
 import org.talend.dataquality.statistics.type.DataTypeEnum;
@@ -105,4 +106,8 @@ public class TDigestAnalyzer extends NumericalStatisticsAnalyzer<TDigestQuantile
         throw new NotImplementedException();
     }
 
+    @Override
+    public void setMetadata(Metadata metadata, List<String> values) {
+
+    }
 }
