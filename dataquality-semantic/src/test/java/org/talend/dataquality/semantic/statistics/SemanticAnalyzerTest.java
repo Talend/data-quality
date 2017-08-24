@@ -124,8 +124,6 @@ public class SemanticAnalyzerTest {
 
     @Test
     public void firstNameToFRCommune() {
-        System.setProperty("matching.metadata.weight", "0.9");
-
         SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(builder);
 
         Analyzer<Result> analyzer = Analyzers.with(semanticAnalyzer);
@@ -152,8 +150,6 @@ public class SemanticAnalyzerTest {
 
     @Test
     public void metadataLastNameWithPhoneNumber() {
-        System.setProperty("matching.metadata.weight", "0.9");
-
         SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(builder);
 
         Analyzer<Result> analyzer = Analyzers.with(semanticAnalyzer);

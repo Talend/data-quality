@@ -35,6 +35,8 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
 
     private static final long serialVersionUID = 6808620909722453108L;
 
+    private static float DEFAULT_WEIGHT_VALUE = 0.9f;
+
     private final ResizableList<SemanticType> results = new ResizableList<>(SemanticType.class);
 
     private final Map<Integer, CategoryRecognizer> columnIdxToCategoryRecognizer = new HashMap<>();
@@ -50,7 +52,7 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
 
     private Map<Metadata, List> metadatas;
 
-    private float weight = Float.valueOf(System.getProperty("matching.metadata.weight"));
+    private float weight = getWeight();
 
     public SemanticAnalyzer(CategoryRecognizerBuilder builder) {
         this(builder, 10000);
@@ -169,5 +171,16 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
     @Override
     public void setMetadata(Metadata metadata, List<String> values) {
         metadatas.put(metadata, values);
+    }
+
+    private float getWeight() {
+        float weight = DEFAULT_WEIGHT_VALUE;
+        ResourceBundle semanticProperties = ResourceBundle.getBundle("dataquality-semantic");
+        String weightValue = semanticProperties.getString("matching.metadata.weight");
+        if (weightValue != null)
+            weight = Float.valueOf(weightValue);
+
+        return weight;
+
     }
 }
