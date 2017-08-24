@@ -95,6 +95,8 @@ public class SemanticQualityAnalyzerTest {
                 .ddPath(ddPath) //
                 .kwPath(kwPath) //
                 .lucene();
+        System.setProperty("matching.metadata.weight", "0.9");
+
     }
 
     @Test

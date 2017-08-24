@@ -40,6 +40,7 @@ public class SemanticAnalyzerTest {
             add(new String[] { "France" });
         }
     };
+
     final List<String[]> TEST_RECORDS_TAGADA = new ArrayList<String[]>() {
 
         private static final long serialVersionUID = 1L;
@@ -49,8 +50,10 @@ public class SemanticAnalyzerTest {
             add(new String[] { "2", "Bowie", "David", "67", "01/08/1947", "true" });
         }
     };
+
     final List<String> EXPECTED_CATEGORY_TAGADA = Arrays
             .asList(new String[] { "", SemanticCategoryEnum.LAST_NAME.name(), SemanticCategoryEnum.FIRST_NAME.name(), "", "" });
+
     final List<String[]> TEST_RECORDS_CITY_METADATA = new ArrayList<String[]>() {
 
         private static final long serialVersionUID = 1L;
@@ -68,7 +71,9 @@ public class SemanticAnalyzerTest {
             add(new String[] { "Jean Charles" });
         }
     };
+
     final List<String> EXPECTED_FR_COMMUNE_CATEGORY_METADATA = Arrays.asList(new String[] { SemanticCategoryEnum.CITY.name() });
+
     final List<String[]> TEST_RECORDS_PHONE_METADATA = new ArrayList<String[]>() {
 
         private static final long serialVersionUID = 1L;
@@ -80,7 +85,9 @@ public class SemanticAnalyzerTest {
             add(new String[] { "+509 7845 2156" });
         }
     };
+
     final List<String> EXPECTED_PHONE_CATEGORY_METADATA = Arrays.asList(new String[] { SemanticCategoryEnum.PHONE.name() });
+
     private CategoryRecognizerBuilder builder;
 
     @Before
