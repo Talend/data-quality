@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Semantic Model
 Bundle-SymbolicName: org.talend.dataquality.semantic.model;singleton:=true
-Bundle-Version: 1.7.0
+Bundle-Version: 1.7.1.SNAPSHOT
 Bundle-Vendor: .Talend SA.
 Export-Package: org.talend.dataquality.semantic.model
 Bundle-ActivationPolicy: lazy
