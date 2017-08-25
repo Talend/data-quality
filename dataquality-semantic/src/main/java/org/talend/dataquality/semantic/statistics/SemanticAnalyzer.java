@@ -134,9 +134,10 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
         for (Entry<Integer, CategoryRecognizer> entry : columnIdxToCategoryRecognizer.entrySet()) {
             Integer colIdx = entry.getKey();
             Collection<CategoryFrequency> result = entry.getValue().getResult();
+
             for (CategoryFrequency semCategory : result) {
 
-                float score = Math.min(semCategory.getFrequency() + getScoreOnHeader(semCategory.getCategoryName()), 100);
+                float score = Math.min(semCategory.getFrequency() + getScoreOnHeader(colIdx, semCategory.getCategoryName()), 100);
 
                 semCategory.setScore(score);
                 results.get(colIdx).increment(semCategory, semCategory.getCount());
@@ -146,9 +147,10 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
         return results;
     }
 
-    private float getScoreOnHeader(String categoryName) {
+    private float getScoreOnHeader(Integer columnIdx, String categoryName) {
         float score = 0;
-        if (metadatas.get(Metadata.HEADER_NAME) != null && metadatas.get(Metadata.HEADER_NAME).contains(categoryName)
+
+        if (metadatas.get(Metadata.HEADER_NAME) != null && metadatas.get(Metadata.HEADER_NAME).get(columnIdx).equals(categoryName)
                 && weight != 0) {
             score = 100 - (weight * 10);
         }

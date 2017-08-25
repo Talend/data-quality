@@ -59,20 +59,21 @@ public class SemanticAnalyzerTest {
         private static final long serialVersionUID = 1L;
 
         {
-            add(new String[] { "Paris" });
-            add(new String[] { "Paris" });
-            add(new String[] { "Paris" });
-            add(new String[] { "Paris" });
-            add(new String[] { "Paris" });
-            add(new String[] { "Paris" });
-            add(new String[] { "Paris" });
-            add(new String[] { "La rochelle" });
-            add(new String[] { "New York" });
-            add(new String[] { "Jean Charles" });
+            add(new String[] { "1", "Lennon", "Paris" });
+            add(new String[] { "1", "Bowie", "Paris" });
+            add(new String[] { "1", "Lennon", "Paris" });
+            add(new String[] { "1", "Bowie", "Paris" });
+            add(new String[] { "1", "Lennon", "Paris" });
+            add(new String[] { "1", "Bowie", "Paris" });
+            add(new String[] { "1", "Lennon", "Paris" });
+            add(new String[] { "1", "Bowie", "La rochelle" });
+            add(new String[] { "1", "Lennon", "New York" });
+            add(new String[] { "1", "Bowie", "Jean Charles" });
         }
     };
 
-    final List<String> EXPECTED_FR_COMMUNE_CATEGORY_METADATA = Arrays.asList(new String[] { SemanticCategoryEnum.CITY.name() });
+    final List<String> EXPECTED_FR_COMMUNE_CATEGORY_METADATA = Arrays
+            .asList(new String[] { "", SemanticCategoryEnum.LAST_NAME.name(), SemanticCategoryEnum.CITY.name() });
 
     final List<String[]> TEST_RECORDS_PHONE_METADATA = new ArrayList<String[]>() {
 
@@ -129,7 +130,7 @@ public class SemanticAnalyzerTest {
         Analyzer<Result> analyzer = Analyzers.with(semanticAnalyzer);
 
         analyzer.init();
-        semanticAnalyzer.setMetadata(Metadata.HEADER_NAME, Arrays.asList("City"));
+        semanticAnalyzer.setMetadata(Metadata.HEADER_NAME, Arrays.asList("", "First name", "City"));
 
         for (String[] record : TEST_RECORDS_CITY_METADATA) {
             analyzer.analyze(record);
