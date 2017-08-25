@@ -166,8 +166,4 @@ public class ValueQualityAnalyzer implements Analyzer<ValueQualityStatistics> {
     public void close() throws Exception {
     }
 
-    @Override
-    public void setMetadata(Metadata metadata, List<String> values) {
-
-    }
 }

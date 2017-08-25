@@ -15,7 +15,6 @@ package org.talend.dataquality.statistics.frequency;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.talend.dataquality.common.inference.Metadata;
 import org.talend.dataquality.common.inference.ResizableList;
 import org.talend.dataquality.statistics.frequency.impl.CMSFrequencyEvaluator;
 import org.talend.dataquality.statistics.frequency.impl.EFrequencyAlgorithm;
@@ -45,8 +44,4 @@ public class DataTypeFrequencyAnalyzer extends AbstractFrequencyAnalyzer<DataTyp
         freqTableStatistics = new ResizableList<>(freqTableList);
     }
 
-    @Override
-    public void setMetadata(Metadata metadata, List<String> values) {
-
-    }
 }

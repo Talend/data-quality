@@ -106,8 +106,4 @@ public class TDigestAnalyzer extends NumericalStatisticsAnalyzer<TDigestQuantile
         throw new NotImplementedException();
     }
 
-    @Override
-    public void setMetadata(Metadata metadata, List<String> values) {
-
-    }
 }

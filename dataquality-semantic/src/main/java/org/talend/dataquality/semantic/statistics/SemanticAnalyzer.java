@@ -81,7 +81,6 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
         columnIdxToCategoryRecognizer.clear();
         results.clear();
         builder.initIndex();
-        metadatas.clear();
     }
 
     /**
@@ -168,7 +167,11 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
         }
     }
 
-    @Override
+    /**
+     * Store metadata
+     * @param metadata metadata name
+     * @param values value associated to the metadata
+     */
     public void setMetadata(Metadata metadata, List<String> values) {
         metadatas.put(metadata, values);
     }

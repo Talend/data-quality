@@ -131,8 +131,4 @@ public class TextLengthAnalyzer implements Analyzer<TextLengthStatistics> {
 
     }
 
-    @Override
-    public void setMetadata(Metadata metadata, List<String> values) {
-
-    }
 }

@@ -17,7 +17,10 @@ import java.util.*;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
-import org.talend.dataquality.common.inference.*;
+import org.talend.dataquality.common.inference.Analyzer;
+import org.talend.dataquality.common.inference.QualityAnalyzer;
+import org.talend.dataquality.common.inference.ResizableList;
+import org.talend.dataquality.common.inference.ValueQualityStatistics;
 import org.talend.dataquality.semantic.classifier.ISubCategoryClassifier;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.classifier.impl.DataDictFieldClassifier;
@@ -41,11 +44,11 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
 
     private final Map<String, LFUCache<String, Boolean>> knownValidationCategoryCache = new HashMap<>();
 
+    private final CategoryRecognizerBuilder builder;
+
     private ISubCategoryClassifier regexClassifier;
 
     private ISubCategoryClassifier dataDictClassifier;
-
-    private final CategoryRecognizerBuilder builder;
 
     private Map<String, DQCategory> metadata;
 
@@ -54,6 +57,10 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
         this.builder = builder;
         init();
         setTypes(types);
+    }
+
+    public SemanticQualityAnalyzer(CategoryRecognizerBuilder builder, String... types) {
+        this(builder, types, false);
     }
 
     @Override
@@ -75,10 +82,6 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
             }
         }
         super.setTypes(idList.toArray(new String[idList.size()]));
-    }
-
-    public SemanticQualityAnalyzer(CategoryRecognizerBuilder builder, String... types) {
-        this(builder, types, false);
     }
 
     @Override
@@ -279,8 +282,4 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
         ((DataDictFieldClassifier) dataDictClassifier).closeIndex();
     }
 
-    @Override
-    public void setMetadata(Metadata metadata, List<String> values) {
-        //do nothing
-    }
 }

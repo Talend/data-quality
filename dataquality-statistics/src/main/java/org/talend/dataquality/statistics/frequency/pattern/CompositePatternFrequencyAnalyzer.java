@@ -141,8 +141,4 @@ public class CompositePatternFrequencyAnalyzer extends AbstractFrequencyAnalyzer
         freqTableStatistics = new ResizableList<>(freqTableList);
     }
 
-    @Override
-    public void setMetadata(Metadata metadata, List<String> values) {
-
-    }
 }

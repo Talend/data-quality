@@ -133,8 +133,4 @@ public class DataTypeQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
     public void close() throws Exception {
     }
 
-    @Override
-    public void setMetadata(Metadata metadata, List<String> values) {
-
-    }
 }

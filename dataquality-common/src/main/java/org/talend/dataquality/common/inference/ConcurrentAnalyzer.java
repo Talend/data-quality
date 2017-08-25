@@ -106,11 +106,6 @@ public class ConcurrentAnalyzer<T> implements Analyzer<T> {
         threadLocal.remove();
     }
 
-    @Override
-    public void setMetadata(Metadata metadata, List<String> values) {
-        //doNothing
-    }
-
     private static class Factory<T> implements KeyedPoolableObjectFactory<Thread, Analyzer<T>> {
 
         private final AnalyzerSupplier<Analyzer<T>> supplier;

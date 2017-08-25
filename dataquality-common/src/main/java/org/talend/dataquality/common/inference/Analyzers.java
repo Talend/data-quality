@@ -102,11 +102,6 @@ public class Analyzers implements Analyzer<Analyzers.Result> {
         }
     }
 
-    @Override
-    public void setMetadata(Metadata metadata, List<String> values) {
-        // doNothing
-    }
-
     /**
      * A generic composite result which aggregates several analyzer's results.
      */

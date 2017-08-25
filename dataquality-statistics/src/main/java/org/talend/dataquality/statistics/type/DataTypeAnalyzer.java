@@ -15,7 +15,6 @@ package org.talend.dataquality.statistics.type;
 import java.util.*;
 
 import org.talend.dataquality.common.inference.Analyzer;
-import org.talend.dataquality.common.inference.Metadata;
 import org.talend.dataquality.common.inference.ResizableList;
 
 /**
@@ -130,11 +129,6 @@ public class DataTypeAnalyzer implements Analyzer<DataTypeOccurences> {
 
     @Override
     public void close() throws Exception {
-
-    }
-
-    @Override
-    public void setMetadata(Metadata metadata, List<String> values) {
 
     }
 }
