@@ -97,9 +97,7 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
      */
     public Set<String> classify(String str, MainCategory mainCategory) {
         Set<String> catSet = new HashSet<>();
-        if (mainCategory == MainCategory.UNKNOWN || mainCategory == MainCategory.NULL || mainCategory == MainCategory.BLANK) {
-            // FIXME return UNKNOWN instead of EMPTY as the category ID, require synchronization with dataprep team
-            catSet.add(SemanticCategoryEnum.UNKNOWN.getId());
+        if (mainCategory == MainCategory.NULL || mainCategory == MainCategory.BLANK) {
             return catSet;
         }
 

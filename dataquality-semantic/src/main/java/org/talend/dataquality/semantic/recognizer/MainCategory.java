@@ -23,8 +23,7 @@ public enum MainCategory {
     AlphaNumeric,
     Numeric,
     BLANK,
-    NULL,
-    UNKNOWN;
+    NULL;
 
     public static MainCategory getMainCategory(String str) {
         if (str == null) {
@@ -58,7 +57,7 @@ public enum MainCategory {
             return MainCategory.Alpha;
         }
 
-        return MainCategory.UNKNOWN;
+        return MainCategory.AlphaNumeric;
     }
 
 }

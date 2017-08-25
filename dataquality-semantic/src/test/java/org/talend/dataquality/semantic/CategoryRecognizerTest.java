@@ -45,37 +45,37 @@ public class CategoryRecognizerTest {
         private static final long serialVersionUID = -5067273062214728849L;
 
         {
-            put("FIRST_NAME", 9.37F);
-            put("MONTH", 9.37F);
-            put("AIRPORT_CODE", 6.25F);
-            put("CITY", 6.25F);
-            put("FR_COMMUNE", 6.25F);
-            put("LAST_NAME", 6.25F);
-            put("EMAIL", 6.25F);
-            put("US_POSTAL_CODE", 6.25F);
-            put("ADDRESS_LINE", 6.25F);
-            put("FR_SSN", 6.25F);
-            put("FR_DEPARTEMENT", 3.12F);
-            put("COUNTRY", 3.12F);
-            put("COUNTRY_CODE_ISO3", 3.12F);
-            put("CONTINENT_CODE", 3.12F);
-            put("CURRENCY_CODE", 3.12F);
-            put("LANGUAGE_CODE_ISO3", 3.12F);
-            put("ANIMAL", 3.12F);
-            put("EN_MONTH", 3.12F);
-            put("FR_POSTAL_CODE", 3.12F);
-            put("FR_CODE_COMMUNE_INSEE", 3.12F);
-            put("DE_POSTAL_CODE", 3.12F);
-            put("COMPANY", 3.12F);
-            put("GENDER", 3.12F);
-            put("URL", 3.12F);
-            put("US_SSN", 3.12F);
-            put("ISBN_10", 3.12F);
-            put("DE_PHONE", 3.12F);
-            put("FR_PHONE", 3.12F);
-            put("FULL_NAME", 3.12F);
-            put("IBAN", 3.12F);
-            put("", 12.5F);
+            put("FIRST_NAME", 8.82F);
+            put("MONTH", 8.82F);
+            put("AIRPORT_CODE", 5.88F);
+            put("CITY", 5.88F);
+            put("FR_COMMUNE", 5.88F);
+            put("LAST_NAME", 5.88F);
+            put("EMAIL", 5.88F);
+            put("US_POSTAL_CODE", 5.88F);
+            put("ADDRESS_LINE", 5.88F);
+            put("FR_SSN", 5.88F);
+            put("FR_DEPARTEMENT", 2.94F);
+            put("COUNTRY", 2.94F);
+            put("COUNTRY_CODE_ISO3", 2.94F);
+            put("CONTINENT_CODE", 2.94F);
+            put("CURRENCY_CODE", 2.94F);
+            put("LANGUAGE_CODE_ISO3", 2.94F);
+            put("ANIMAL", 2.94F);
+            put("EN_MONTH", 2.94F);
+            put("FR_POSTAL_CODE", 2.94F);
+            put("FR_CODE_COMMUNE_INSEE", 2.94F);
+            put("DE_POSTAL_CODE", 2.94F);
+            put("COMPANY", 8.82F);
+            put("GENDER", 2.94F);
+            put("URL", 2.94F);
+            put("US_SSN", 2.94F);
+            put("ISBN_10", 2.94F);
+            put("DE_PHONE", 2.94F);
+            put("FR_PHONE", 2.94F);
+            put("FULL_NAME", 2.94F);
+            put("IBAN", 2.94F);
+            put("", 11.76F);
 
         }
 
@@ -121,6 +121,8 @@ public class CategoryRecognizerTest {
                             SemanticCategoryEnum.US_POSTAL_CODE.getId() });
             put("12345-6789", new String[] { SemanticCategoryEnum.US_POSTAL_CODE.getId() });
             put("Talend", new String[] { SemanticCategoryEnum.COMPANY.getId() });
+            put("1-2-3", new String[] { SemanticCategoryEnum.COMPANY.getId() });
+            put("1605", new String[] { SemanticCategoryEnum.COMPANY.getId() });
             put("9 rue pages, 92150 suresnes", new String[] { SemanticCategoryEnum.ADDRESS_LINE.getId() });
             put("avenue des champs elysees", new String[] { SemanticCategoryEnum.ADDRESS_LINE.getId() });
             put("F", new String[] { SemanticCategoryEnum.GENDER.getId() });
@@ -178,6 +180,8 @@ public class CategoryRecognizerTest {
                             SemanticCategoryEnum.US_POSTAL_CODE.getDisplayName() });
             put("12345-6789", new String[] { SemanticCategoryEnum.US_POSTAL_CODE.getDisplayName() });
             put("Talend", new String[] { SemanticCategoryEnum.COMPANY.getDisplayName() });
+            put("1-2-3", new String[] { SemanticCategoryEnum.COMPANY.getDisplayName() });
+            put("1605", new String[] { SemanticCategoryEnum.COMPANY.getDisplayName() });
             put("9 rue pages, 92150 suresnes", new String[] { SemanticCategoryEnum.ADDRESS_LINE.getDisplayName() });
             put("avenue des champs elysees", new String[] { SemanticCategoryEnum.ADDRESS_LINE.getDisplayName() });
             put("F", new String[] { SemanticCategoryEnum.GENDER.getDisplayName() });
