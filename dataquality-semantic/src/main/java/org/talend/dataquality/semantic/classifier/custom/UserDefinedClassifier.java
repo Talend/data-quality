@@ -84,7 +84,7 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
     @Override
     public boolean validCategories(String str, DQCategory semanticType, Set<DQCategory> children) {
         MainCategory mainCategory = MainCategory.getMainCategory(str);
-        if (mainCategory == MainCategory.UNKNOWN || mainCategory == MainCategory.NULL || mainCategory == MainCategory.BLANK)
+        if (mainCategory == MainCategory.NULL || mainCategory == MainCategory.BLANK)
             return false;
         if (CollectionUtils.isEmpty(children))
             return validCategories(str, mainCategory, semanticType);
@@ -142,7 +142,7 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
      */
     public Set<String> classify(String str, MainCategory mainCategory) {
         Set<String> catSet = new HashSet<>();
-        if (mainCategory != MainCategory.UNKNOWN && mainCategory != MainCategory.NULL && mainCategory != MainCategory.BLANK) {
+        if (mainCategory != MainCategory.NULL && mainCategory != MainCategory.BLANK) {
             for (ISubCategory classifier : potentialSubCategories) {
                 if (isValid(str, mainCategory, (UserDefinedCategory) classifier, false))
                     catSet.add(classifier.getId());
