@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Linkage Plug-in
 Bundle-SymbolicName: org.talend.dataquality.record.linkage
-Bundle-Version: 3.2.8.SNAPSHOT
+Bundle-Version: 3.2.8
 Require-Bundle: org.apache.log4j,
  org.apache.commons.codec,
  org.apache.commons.collections,

@@ -1,3 +1,8 @@
+V1.5.8 2017-08-29
+	TDQ-13131 use the "most common" function as a default when the column is not selected.
+	TDQ-13053 SurvivorShip rules impact the grouping of swoosh and fixed dialog can not be open issue when multi-pass
+	TDQ-13225 TDQ-13372 don't clear the map(oldGID,newGID); output the non-master data of 1st tMatchGroup.
+
 V1.5.7 2017-01-10
 	(no change in this version)
 

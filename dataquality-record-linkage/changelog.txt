@@ -1,3 +1,6 @@
+V3.2.8 2017-08-29
+	(no change in this version)
+
 V3.2.7 2017-01-10
 	- TDQ-12919 & TDQ-13025 T-Swoosh tMatchGroup GRP_QUALITY doesn't get correct result
 	- TDQ-12976 when has two rule tabs, the matching distance can not get correct result

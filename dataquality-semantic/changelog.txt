@@ -1,3 +1,8 @@
+V1.5.8 2017-08-29
+	- TDQ-13467 update UK_POSTAL_CODE pattern
+	- TDQ-13297 catch exception when initializing regex validators from json
+	- TDQ-13046 provide serializable object to hold regexes
+
 V1.5.7 2017-01-10
 	- TDQ-13062 do not broadcast deleted dictionaries to spark cluster
 	- TDQ-13092 remove control character from CITY index

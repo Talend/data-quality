@@ -21,7 +21,11 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.*;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.XPath;
@@ -40,7 +44,7 @@ import org.w3c.dom.NodeList;
  */
 public class ReleaseVersionBumper {
 
-    private String targetVersion = "1.5.8-SNAPSHOT";
+    private String targetVersion = "1.5.8";
 
     private static final String DATAQUALITY_PREFIX = "dataquality.";
 

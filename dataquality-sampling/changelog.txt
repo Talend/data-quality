@@ -1,3 +1,6 @@
+V2.3.8 2017-08-29
+	(no change in this version)
+
 V2.3.7 2017-01-10
 	(no change in this version)
 
