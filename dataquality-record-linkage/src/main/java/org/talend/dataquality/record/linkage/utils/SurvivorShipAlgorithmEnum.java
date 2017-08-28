@@ -20,17 +20,19 @@ import java.util.List;
  */
 public enum SurvivorShipAlgorithmEnum {
 
-    CONCATENATE(0, "Concatenate", "Concatenate", null), //$NON-NLS-1$ //$NON-NLS-2$
+    CONCATENATE(
+            0,
+            "Concatenate", "Concatenate", DefaultSurvivorShipDataTypeEnum.BOOLEAN, DefaultSurvivorShipDataTypeEnum.DATE, DefaultSurvivorShipDataTypeEnum.STRING), //$NON-NLS-1$ //$NON-NLS-2$
     PREFER_TRUE(1, "Prefer True (for booleans)", "PreferTrue", DefaultSurvivorShipDataTypeEnum.BOOLEAN), //$NON-NLS-1$ //$NON-NLS-2$
     PREFER_FALSE(2, "Prefer False (for booleans)", "PreferFalse", DefaultSurvivorShipDataTypeEnum.BOOLEAN), //$NON-NLS-1$ //$NON-NLS-2$
-    MOST_COMMON(3, "Most common", "MostCommon", null), //$NON-NLS-1$ //$NON-NLS-2$
+    MOST_COMMON(3, "Most common", "MostCommon"), //$NON-NLS-1$ //$NON-NLS-2$
     MOST_RECENT(4, "Most recent", "MostRecent", DefaultSurvivorShipDataTypeEnum.DATE), //$NON-NLS-1$ //$NON-NLS-2$
     MOST_ANCIENT(5, "Most ancient", "MostAncient", DefaultSurvivorShipDataTypeEnum.DATE), //$NON-NLS-1$ //$NON-NLS-2$
     LONGEST(6, "Longest (for strings)", "Longest", DefaultSurvivorShipDataTypeEnum.STRING), //$NON-NLS-1$ //$NON-NLS-2$
     SHORTEST(7, "Shortest (for strings)", "Shortest", DefaultSurvivorShipDataTypeEnum.STRING), //$NON-NLS-1$ //$NON-NLS-2$
     LARGEST(8, "Largest (for numbers)", "Largest", DefaultSurvivorShipDataTypeEnum.NUMBER), //$NON-NLS-1$ //$NON-NLS-2$
     SMALLEST(9, "Smallest (for numbers)", "Smallest", DefaultSurvivorShipDataTypeEnum.NUMBER), //$NON-NLS-1$ //$NON-NLS-2$
-    MOST_TRUSTED_SOURCE(10, "Most trusted source", "MostTrustedSource", null); //$NON-NLS-1$ //$NON-NLS-2$
+    MOST_TRUSTED_SOURCE(10, "Most trusted source", "MostTrustedSource"); //$NON-NLS-1$ //$NON-NLS-2$
 
     private int index;
 
@@ -38,9 +40,9 @@ public enum SurvivorShipAlgorithmEnum {
 
     private String componentValueName;
 
-    private DefaultSurvivorShipDataTypeEnum dataType;
+    private DefaultSurvivorShipDataTypeEnum[] dataType;
 
-    SurvivorShipAlgorithmEnum(int index, String value, String componentValueName, DefaultSurvivorShipDataTypeEnum dataType) {
+    SurvivorShipAlgorithmEnum(int index, String value, String componentValueName, DefaultSurvivorShipDataTypeEnum... dataType) {
         this.index = index;
         this.value = value;
         this.componentValueName = componentValueName;
@@ -108,7 +110,7 @@ public enum SurvivorShipAlgorithmEnum {
      * 
      * @return the dataType
      */
-    public DefaultSurvivorShipDataTypeEnum getDataType() {
+    public DefaultSurvivorShipDataTypeEnum[] getDataType() {
         return this.dataType;
     }
 
