@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Semantic Library
 Bundle-SymbolicName: org.talend.dataquality.wordnet;singleton:=true
-Bundle-Version: 1.2.4
+Bundle-Version: 1.2.5.SNAPSHOT
 Bundle-Vendor: .Talend SA.
 Export-Package: org.talend.dataquality.wordnet
 Bundle-ActivationPolicy: lazy
