@@ -117,7 +117,7 @@ public class ComponentMatchParameterAdapter extends MatchParameterAdapter {
             String dataTypeName = entry.getValue();
 
             for (Map<String, String> pdefaultSurvivdef : particularDefaultSurvivorshipDefinitions) {
-                if (pdefaultSurvivdef.get("INPUT_COLUMN") == columnName) { //$NON-NLS-1$
+                if (pdefaultSurvivdef.get("INPUT_COLUMN").equals(columnName)) { //$NON-NLS-1$
                     putNewSurvFunc(defaultSurvRules, Integer.parseInt(columnWithIndex.get(columnName)), columnName,
                             pdefaultSurvivdef.get(SurvivorshipUtils.PARAMETER),
                             pdefaultSurvivdef.get(SurvivorshipUtils.SURVIVORSHIP_FUNCTION));

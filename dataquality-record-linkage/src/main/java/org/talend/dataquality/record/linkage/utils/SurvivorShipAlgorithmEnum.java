@@ -22,7 +22,11 @@ public enum SurvivorShipAlgorithmEnum {
 
     CONCATENATE(
             0,
-            "Concatenate", "Concatenate", DefaultSurvivorShipDataTypeEnum.BOOLEAN, DefaultSurvivorShipDataTypeEnum.DATE, DefaultSurvivorShipDataTypeEnum.STRING), //$NON-NLS-1$ //$NON-NLS-2$
+            "Concatenate", //$NON-NLS-1$
+            "Concatenate", //$NON-NLS-1$
+            DefaultSurvivorShipDataTypeEnum.BOOLEAN,
+            DefaultSurvivorShipDataTypeEnum.DATE,
+            DefaultSurvivorShipDataTypeEnum.STRING),
     PREFER_TRUE(1, "Prefer True (for booleans)", "PreferTrue", DefaultSurvivorShipDataTypeEnum.BOOLEAN), //$NON-NLS-1$ //$NON-NLS-2$
     PREFER_FALSE(2, "Prefer False (for booleans)", "PreferFalse", DefaultSurvivorShipDataTypeEnum.BOOLEAN), //$NON-NLS-1$ //$NON-NLS-2$
     MOST_COMMON(3, "Most common", "MostCommon"), //$NON-NLS-1$ //$NON-NLS-2$
