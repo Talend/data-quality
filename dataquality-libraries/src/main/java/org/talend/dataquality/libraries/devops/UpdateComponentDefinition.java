@@ -48,15 +48,15 @@ public class UpdateComponentDefinition {
         private static final long serialVersionUID = 1L;
 
         {
-            put("org.talend.dataquality.common", "1.5.8");
-            put("org.talend.dataquality.record.linkage", "3.2.8");
-            put("org.talend.dataquality.sampling", "2.3.8");
-            put("org.talend.dataquality.standardization", "3.2.8");
-            put("org.talend.dataquality.email", "1.0.8");
+            put("org.talend.dataquality.common", "1.5.9");
+            put("org.talend.dataquality.record.linkage", "3.2.9");
+            put("org.talend.dataquality.sampling", "2.3.9");
+            put("org.talend.dataquality.standardization", "3.2.9");
+            put("org.talend.dataquality.email", "1.0.9");
         }
     };
 
-    private static final boolean USE_SNAPSHOT_VERSION = false;
+    private static final boolean USE_SNAPSHOT_VERSION = true;
 
     private static void handleComponentDefinition(File f) {
         File compoDefFile = new File(f.getAbsolutePath() + "/" + f.getName() + "_java.xml");

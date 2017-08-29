@@ -3,11 +3,11 @@
 	<parent>
 		<groupId>org.talend.dataquality</groupId>
 		<artifactId>dataquality-libraries</artifactId>
-		<version>1.5.8</version>
+		<version>1.5.9-SNAPSHOT</version>
 		<relativePath>../dataquality-libraries</relativePath>
 	</parent>
 	<artifactId>dataquality-sampling</artifactId>
-	<version>${dataquality.sampling.released.version}</version>
+	<version>${dataquality.sampling.snapshot.version}</version>
 	<packaging>bundle</packaging>
 	<name>dataquality-sampling</name>
 	<description>Reservoir sampling, data masking, data duplication</description>

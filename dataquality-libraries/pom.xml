@@ -7,7 +7,7 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>dataquality-libraries</artifactId>
-	<version>1.5.8</version>
+	<version>1.5.9-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>dataquality-libraries</name>
 	<description>Parent pom aggregating other library projects, devops tools</description>
@@ -23,22 +23,22 @@
 
 		<org.talend.daikon.version>0.15.0</org.talend.daikon.version>
 
-		<dataquality.libraries.snapshot.version>1.5.8-SNAPSHOT</dataquality.libraries.snapshot.version>
+		<dataquality.libraries.snapshot.version>1.5.9-SNAPSHOT</dataquality.libraries.snapshot.version>
 		<dataquality.libraries.released.version>1.5.8</dataquality.libraries.released.version>
 
-		<dataquality.record.linkage.snapshot.version>3.2.8-SNAPSHOT</dataquality.record.linkage.snapshot.version>
+		<dataquality.record.linkage.snapshot.version>3.2.9-SNAPSHOT</dataquality.record.linkage.snapshot.version>
 		<dataquality.record.linkage.released.version>3.2.8</dataquality.record.linkage.released.version>
 
-		<dataquality.sampling.snapshot.version>2.3.8-SNAPSHOT</dataquality.sampling.snapshot.version>
+		<dataquality.sampling.snapshot.version>2.3.9-SNAPSHOT</dataquality.sampling.snapshot.version>
 		<dataquality.sampling.released.version>2.3.8</dataquality.sampling.released.version>
 
-		<dataquality.standardization.snapshot.version>3.2.8-SNAPSHOT</dataquality.standardization.snapshot.version>
+		<dataquality.standardization.snapshot.version>3.2.9-SNAPSHOT</dataquality.standardization.snapshot.version>
 		<dataquality.standardization.released.version>3.2.8</dataquality.standardization.released.version>
 
-		<dataquality.wordnet.snapshot.version>1.1.8-SNAPSHOT</dataquality.wordnet.snapshot.version>
+		<dataquality.wordnet.snapshot.version>1.1.9-SNAPSHOT</dataquality.wordnet.snapshot.version>
 		<dataquality.wordnet.released.version>1.1.8</dataquality.wordnet.released.version>
 
-		<dataquality.email.snapshot.version>1.0.8-SNAPSHOT</dataquality.email.snapshot.version>
+		<dataquality.email.snapshot.version>1.0.9-SNAPSHOT</dataquality.email.snapshot.version>
 		<dataquality.email.released.version>1.0.8</dataquality.email.released.version>
 	</properties>
 
