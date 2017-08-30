@@ -59,21 +59,21 @@ public class SemanticAnalyzerTest {
         private static final long serialVersionUID = 1L;
 
         {
-            add(new String[] { "1", "Lennon", "Paris" });
-            add(new String[] { "1", "Bowie", "Paris" });
-            add(new String[] { "1", "Lennon", "Paris" });
-            add(new String[] { "1", "Bowie", "Paris" });
-            add(new String[] { "1", "Lennon", "Paris" });
-            add(new String[] { "1", "Bowie", "Paris" });
-            add(new String[] { "1", "Lennon", "Paris" });
-            add(new String[] { "1", "Bowie", "La rochelle" });
-            add(new String[] { "1", "Lennon", "New York" });
-            add(new String[] { "1", "Bowie", "Jean Charles" });
+            add(new String[] { "1", "Washington" });
+            add(new String[] { "2", "Washington" });
+            add(new String[] { "3", "Washington" });
+            add(new String[] { "4", "Washington" });
+            add(new String[] { "5", "Washington" });
+            add(new String[] { "6", "Washington" });
+            add(new String[] { "7", "Washington" });
+            add(new String[] { "8", "Washington" });
+            add(new String[] { "9", "New York" });
+            add(new String[] { "10", "+33688052266" });
         }
     };
 
     final List<String> EXPECTED_FR_COMMUNE_CATEGORY_METADATA = Arrays
-            .asList(new String[] { "", SemanticCategoryEnum.LAST_NAME.name(), SemanticCategoryEnum.CITY.name() });
+            .asList(new String[] { "", SemanticCategoryEnum.LAST_NAME.name() });
 
     final List<String[]> TEST_RECORDS_PHONE_METADATA = new ArrayList<String[]>() {
 
@@ -130,7 +130,7 @@ public class SemanticAnalyzerTest {
         Analyzer<Result> analyzer = Analyzers.with(semanticAnalyzer);
 
         analyzer.init();
-        semanticAnalyzer.setMetadata(Metadata.HEADER_NAME, Arrays.asList("", "First name", "City"));
+        semanticAnalyzer.setMetadata(Metadata.HEADER_NAME, Arrays.asList("", "Last Name"));
 
         for (String[] record : TEST_RECORDS_CITY_METADATA) {
             analyzer.analyze(record);

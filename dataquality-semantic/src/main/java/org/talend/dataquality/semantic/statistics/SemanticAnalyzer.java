@@ -137,7 +137,8 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
 
             for (CategoryFrequency semCategory : result) {
 
-                float score = Math.min(semCategory.getFrequency() + getScoreOnHeader(colIdx, semCategory.getCategoryName()), 100);
+                float score = Math.min(semCategory.getFrequency() * getWeight()
+                        + (getScoreOnHeader(colIdx, semCategory.getCategoryName()) * 100 * (1 - getWeight())), 100);
 
                 semCategory.setScore(score);
                 results.get(colIdx).increment(semCategory, semCategory.getCount());
@@ -148,11 +149,11 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
     }
 
     private float getScoreOnHeader(Integer columnIdx, String categoryName) {
-        float score = 0;
+        int score = 0;
 
         if (metadatas.get(Metadata.HEADER_NAME) != null && metadatas.get(Metadata.HEADER_NAME).get(columnIdx).equals(categoryName)
                 && weight != 0) {
-            score = 100 - (weight * 10);
+            score = 1;
         }
         return score;
     }
@@ -171,6 +172,7 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
 
     /**
      * Store metadata
+     * 
      * @param metadata metadata name
      * @param values value associated to the metadata
      */
