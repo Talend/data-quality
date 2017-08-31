@@ -13,10 +13,15 @@
 package org.talend.dataquality.semantic.statistics;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.NotImplementedException;
+import org.apache.commons.lang3.StringUtils;
 import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.Metadata;
 import org.talend.dataquality.common.inference.ResizableList;
@@ -52,15 +57,33 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
 
     private Map<Metadata, List> metadatas;
 
-    private float weight = getWeight();
+    private float weight = DEFAULT_WEIGHT_VALUE;
 
+    /**
+     * @param builder the builder for creating lucene index access and regex classifiers
+     */
     public SemanticAnalyzer(CategoryRecognizerBuilder builder) {
         this(builder, 10000);
     }
 
+    /**
+     * @param builder the builder for creating lucene index access and regex classifiers
+     * @param limit the limit of rows to handle
+     */
     public SemanticAnalyzer(CategoryRecognizerBuilder builder, int limit) {
+        this(builder, limit, DEFAULT_WEIGHT_VALUE);
+    }
+
+    /**
+     * @param builder the builder for creating lucene index access and regex classifiers
+     * @param limit the limit of rows to handle
+     * @param weight the weight of data discovery result for score calculation, default to 0.9, which means the metadata will also
+     * be taken into account for a weight of 0.1
+     */
+    public SemanticAnalyzer(CategoryRecognizerBuilder builder, int limit, float weight) {
         this.builder = builder;
         this.limit = limit;
+        this.weight = weight;
         builder.initIndex();
         metadatas = new HashMap<>();
     }
@@ -136,9 +159,8 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
             Collection<CategoryFrequency> result = entry.getValue().getResult();
 
             for (CategoryFrequency semCategory : result) {
-
-                float score = Math.min(semCategory.getFrequency() * getWeight()
-                        + (getScoreOnHeader(colIdx, semCategory.getCategoryName()) * 100 * (1 - getWeight())), 100);
+                final float scoreOnHeader = getScoreOnHeader(colIdx, semCategory.getCategoryName());
+                final float score = semCategory.getFrequency() * weight + (scoreOnHeader * 100 * (1 - weight));
 
                 semCategory.setScore(score);
                 results.get(colIdx).increment(semCategory, semCategory.getCount());
@@ -150,9 +172,9 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
 
     private float getScoreOnHeader(Integer columnIdx, String categoryName) {
         int score = 0;
-
-        if (metadatas.get(Metadata.HEADER_NAME) != null && metadatas.get(Metadata.HEADER_NAME).get(columnIdx).equals(categoryName)
-                && weight != 0) {
+        final boolean match = StringUtils.equalsIgnoreCase(metadatas.get(Metadata.HEADER_NAME).get(columnIdx).toString(),
+                categoryName);
+        if (metadatas.get(Metadata.HEADER_NAME) != null && match && Float.compare(weight, 0f) != 0) {
             score = 1;
         }
         return score;
@@ -178,16 +200,5 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
      */
     public void setMetadata(Metadata metadata, List<String> values) {
         metadatas.put(metadata, values);
-    }
-
-    private float getWeight() {
-        float weight = DEFAULT_WEIGHT_VALUE;
-        ResourceBundle semanticProperties = ResourceBundle.getBundle("dataquality-semantic");
-        String weightValue = semanticProperties.getString("matching.column.weight");
-        if (weightValue != null)
-            weight = Float.valueOf(weightValue);
-
-        return weight;
-
     }
 }

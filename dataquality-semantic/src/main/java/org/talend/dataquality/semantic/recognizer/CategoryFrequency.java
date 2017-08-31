@@ -13,9 +13,6 @@
 package org.talend.dataquality.semantic.recognizer;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import org.talend.dataquality.semantic.classifier.ISubCategory;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
@@ -172,6 +169,6 @@ public class CategoryFrequency implements Comparable<CategoryFrequency>, Seriali
 
     @Override
     public String toString() {
-        return "[Category: " + categoryName + " Count: " + count + " Frequency: " + frequency + "]";
+        return "[Category: " + categoryName + " Count: " + count + " Frequency: " + frequency + " Score: " + score + "]";
     }
 }
