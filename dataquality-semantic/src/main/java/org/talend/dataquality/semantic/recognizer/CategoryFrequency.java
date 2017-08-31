@@ -90,20 +90,6 @@ public class CategoryFrequency implements Comparable<CategoryFrequency>, Seriali
         this.categoryLevel = categoryLevel;
     }
 
-    public static void main(String[] args) {
-        CategoryFrequency cf1 = new CategoryFrequency("", "");
-        CategoryFrequency cf2 = new CategoryFrequency("CITY", "CITY");
-        List<CategoryFrequency> list = new ArrayList<>();
-        list.add(cf1);
-        list.add(cf2);
-        System.out.println(list);
-
-        Collections.sort(list);
-
-        System.out.println(list);
-
-    }
-
     public String getCategoryId() {
         return categoryName;
     }
