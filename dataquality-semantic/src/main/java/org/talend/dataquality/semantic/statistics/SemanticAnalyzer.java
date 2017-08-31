@@ -183,7 +183,7 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
     private float getWeight() {
         float weight = DEFAULT_WEIGHT_VALUE;
         ResourceBundle semanticProperties = ResourceBundle.getBundle("dataquality-semantic");
-        String weightValue = semanticProperties.getString("matching.metadata.weight");
+        String weightValue = semanticProperties.getString("matching.column.weight");
         if (weightValue != null)
             weight = Float.valueOf(weightValue);
 
