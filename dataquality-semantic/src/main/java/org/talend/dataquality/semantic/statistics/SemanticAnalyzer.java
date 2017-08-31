@@ -55,7 +55,7 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
 
     private int currentCount = 0;
 
-    private Map<Metadata, List> metadataMap;
+    private Map<Metadata, List<String>> metadataMap;
 
     private float weight = DEFAULT_WEIGHT_VALUE;
 
@@ -172,10 +172,12 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
 
     private float getScoreOnHeader(Integer columnIdx, String categoryName) {
         int score = 0;
-        final boolean match = StringUtils.equalsIgnoreCase(metadataMap.get(Metadata.HEADER_NAME).get(columnIdx).toString(),
-                categoryName);
-        if (metadataMap.get(Metadata.HEADER_NAME) != null && match && Float.compare(weight, 0f) != 0) {
-            score = 1;
+        List<String> metadata = metadataMap.get(Metadata.HEADER_NAME);
+        if (metadata != null) {
+            final boolean match = StringUtils.equalsIgnoreCase(metadata.get(columnIdx), categoryName);
+            if (metadataMap.get(Metadata.HEADER_NAME) != null && match && Float.compare(weight, 0f) != 0) {
+                score = 1;
+            }
         }
         return score;
     }
