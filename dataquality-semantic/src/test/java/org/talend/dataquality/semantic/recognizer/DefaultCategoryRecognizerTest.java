@@ -12,6 +12,7 @@ import java.util.Map;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
@@ -128,6 +129,7 @@ public class DefaultCategoryRecognizerTest {
     @After
     public void finish() {
         if (builder != null) {
+            CategoryRegistryManager.getInstance().reset();
             builder.metadata(null);
         }
     }
