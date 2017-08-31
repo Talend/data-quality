@@ -17,11 +17,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.talend.dataquality.common.inference.Metadata;
 import org.talend.dataquality.common.inference.ResizableList;
 import org.talend.dataquality.statistics.frequency.AbstractFrequencyAnalyzer;
 import org.talend.dataquality.statistics.frequency.AbstractFrequencyStatistics;
-import org.talend.dataquality.statistics.frequency.recognition.*;
+import org.talend.dataquality.statistics.frequency.recognition.AbstractPatternRecognizer;
+import org.talend.dataquality.statistics.frequency.recognition.DateTimePatternRecognizer;
+import org.talend.dataquality.statistics.frequency.recognition.EmptyPatternRecognizer;
+import org.talend.dataquality.statistics.frequency.recognition.LatinExtendedCharPatternRecognizer;
+import org.talend.dataquality.statistics.frequency.recognition.RecognitionResult;
 import org.talend.dataquality.statistics.type.DataTypeEnum;
 
 /**
@@ -140,5 +143,4 @@ public class CompositePatternFrequencyAnalyzer extends AbstractFrequencyAnalyzer
         }
         freqTableStatistics = new ResizableList<>(freqTableList);
     }
-
 }

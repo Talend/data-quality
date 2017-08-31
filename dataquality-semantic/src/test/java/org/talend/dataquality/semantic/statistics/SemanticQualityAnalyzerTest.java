@@ -95,8 +95,6 @@ public class SemanticQualityAnalyzerTest {
                 .ddPath(ddPath) //
                 .kwPath(kwPath) //
                 .lucene();
-        System.setProperty("matching.column.weight", "0.9");
-
     }
 
     @Test

@@ -18,7 +18,10 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.talend.dataquality.common.inference.*;
+import org.talend.dataquality.common.inference.Analyzer;
+import org.talend.dataquality.common.inference.QualityAnalyzer;
+import org.talend.dataquality.common.inference.ResizableList;
+import org.talend.dataquality.common.inference.ValueQualityStatistics;
 import org.talend.dataquality.statistics.datetime.CustomDateTimePatternManager;
 import org.talend.dataquality.statistics.type.DataTypeEnum;
 import org.talend.dataquality.statistics.type.TypeInferenceUtils;
@@ -132,5 +135,4 @@ public class DataTypeQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
     @Override
     public void close() throws Exception {
     }
-
 }

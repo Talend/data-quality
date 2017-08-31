@@ -68,5 +68,4 @@ public class CardinalityAnalyzer implements Analyzer<CardinalityStatistics> {
     @Override
     public void close() throws Exception {
     }
-
 }
