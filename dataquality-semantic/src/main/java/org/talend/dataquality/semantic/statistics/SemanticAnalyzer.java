@@ -48,9 +48,7 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
 
     private final CategoryRecognizerBuilder builder;
 
-    // Threshold of handle to be run. since the semantic inferring will require
-    // more time than expected, we may only want to run the handle method on a
-    // sample with small size. Default value is 10000.
+    // Threshold of rows to be handled. in case we only want to analyze a given number of samples. Default value is 10000.
     private int limit = 10000;
 
     private int currentCount = 0;
@@ -96,6 +94,16 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
      */
     public void setLimit(int limit) {
         this.limit = limit;
+    }
+
+    /**
+     * Set the weight of data discovery result for score calculation.
+     *
+     * @param weight the weight of data discovery result for score calculation, default to 0.9, which means the metadata will also
+     * be taken into account for a weight of 0.1
+     */
+    public void setWeight(float weight) {
+        this.weight = weight;
     }
 
     @Override
