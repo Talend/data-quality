@@ -36,18 +36,18 @@ public class LuceneIndexTest {
 
         {
             put(new String[] { "talend", SemanticCategoryEnum.COMPANY.getId() }, //
-                    new String[] { "Talend", "Vox Talent" });
+                    new String[] { "Talend" });
             put(new String[] { "Russian Federatio", SemanticCategoryEnum.COUNTRY.getId() }, //
-                    new String[] { "Russian Federation", "Fédération de Russie" });
+                    new String[] { "Russian Federation", "Russia" });
             put(new String[] { "Federation de Russie", SemanticCategoryEnum.COUNTRY.getId() }, //
-                    new String[] { "Russian Federation", "Fédération de Russie" });
+                    new String[] { "Russian Federation", "Fédération de Russie", "Russie" });
             put(new String[] { "Russie", SemanticCategoryEnum.COUNTRY.getId() }, //
-                    new String[] { "Russie", "Russia" });
+                    new String[] { "Russie", "Russia", "Fédération de Russie" });
 
             put(new String[] { "viet nam", SemanticCategoryEnum.COUNTRY.getId() }, //
-                    new String[] { "Viet Nam", "Viêt-nam", "Viêt Nam" });
+                    new String[] { "Viet Nam", "Viêt-nam", "Viêt Nam", "Vietnam", "Viêtnam" });
             put(new String[] { "vietnam", SemanticCategoryEnum.COUNTRY.getId() }, //
-                    new String[] { "Vietnam", "Viêtnam" });
+                    new String[] { "Vietnam", "Viêtnam", "Viet Nam", "Viêt-nam", "Viêt Nam" });
 
             put(new String[] { "Oil Gas Consumable Fuels", SemanticCategoryEnum.INDUSTRY.getId() }, //
                     new String[] { "Oil, Gas & Consumable Fuels", "Gas Utilities" });
@@ -57,26 +57,26 @@ public class LuceneIndexTest {
             put(new String[] { "clermont ferrand", SemanticCategoryEnum.FR_COMMUNE.getId() }, //
                     new String[] { "Clermont-Ferrand", "Clermont" });
             put(new String[] { "Clermont Fd", SemanticCategoryEnum.FR_COMMUNE.getId() }, //
-                    new String[] { "Clermont-Ferrand", "Clermont" });
+                    new String[] { "Clermont" });
             put(new String[] { "clermont fd", SemanticCategoryEnum.FR_COMMUNE.getId() }, //
-                    new String[] { "Clermont-Ferrand", "Clermont" });
+                    new String[] { "Clermont" });
             put(new String[] { "Clermont", SemanticCategoryEnum.FR_COMMUNE.getId() }, //
-                    new String[] { "Clermont-Ferrand", "Clermont" });
+                    new String[] { "Clermont" });
             put(new String[] { "clermont", SemanticCategoryEnum.FR_COMMUNE.getId() }, //
-                    new String[] { "Clermont-Ferrand", "Clermont" });
+                    new String[] { "Clermont" });
             put(new String[] { "Ferrand", SemanticCategoryEnum.FR_COMMUNE.getId() }, //
-                    new String[] { "Clermont-Ferrand", "Ferran" });
+                    new String[] { "Ferran" });
             put(new String[] { "ferrand", SemanticCategoryEnum.FR_COMMUNE.getId() }, //
-                    new String[] { "Clermont-Ferrand", "Ferran" });
+                    new String[] { "Ferran" });
 
             put(new String[] { "carrières", SemanticCategoryEnum.FR_COMMUNE.getId() }, //
-                    new String[] { "Carrières-sur-Seine" });
+                    new String[] { "Cabrières", "Carnières", "Courrières" });
             put(new String[] { "carrieres", SemanticCategoryEnum.FR_COMMUNE.getId() }, //
-                    new String[] { "Carrières-sur-Seine" });
+                    new String[] { "Cabrières", "Carnières", "Courrières" });
             put(new String[] { "carrière", SemanticCategoryEnum.FR_COMMUNE.getId() }, //
-                    new String[] { "Carrère" });
+                    new String[] { "Carrère", "Cabrières", "Carnières" });
             put(new String[] { "carriere", SemanticCategoryEnum.FR_COMMUNE.getId() }, //
-                    new String[] { "Carrère" });
+                    new String[] { "Carrère", "Jarrier" });
         }
     };
 
@@ -92,7 +92,7 @@ public class LuceneIndexTest {
         for (String[] input : EXPECTED_SIMILAR_VALUES.keySet()) {
             final List<String> expectedMatches = Arrays.asList(EXPECTED_SIMILAR_VALUES.get(input));
             LOGGER.debug("-----------search [" + input[0] + "] in category " + input[1] + "----------");
-            Map<String, Float> resultMap = dataDictIndex.findSimilarFieldsInCategory(input[0], input[1]);
+            Map<String, Double> resultMap = dataDictIndex.findSimilarFieldsInCategory(input[0], input[1], 0.6);
             for (String key : resultMap.keySet()) {
                 LOGGER.debug(key + " \t " + resultMap.get(key));
             }

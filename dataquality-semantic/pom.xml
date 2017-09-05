@@ -38,6 +38,11 @@
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.talend.dataquality</groupId>
+			<artifactId>dataquality-record-linkage</artifactId>
+			<version>${dataquality.record.linkage.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>3.3.2</version>
