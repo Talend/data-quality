@@ -67,6 +67,10 @@ public class DQCategory implements Serializable {
 
     private List<DQCategory> parents;
 
+    private Boolean isModified;
+
+    private Boolean isDeleted;
+
     public DQCategory(String id) {
         this.id = id;
     }
@@ -265,6 +269,22 @@ public class DQCategory implements Serializable {
 
     public void setValidationMode(ValidationMode validationMode) {
         this.validationMode = validationMode;
+    }
+
+    public Boolean isModified() {
+        return isModified;
+    }
+
+    public void setModified(Boolean modified) {
+        isModified = modified;
+    }
+
+    public Boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
     }
 
     @Override

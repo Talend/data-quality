@@ -14,7 +14,10 @@ package org.talend.dataquality.semantic.api;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -108,10 +111,15 @@ public class DictionaryUtils {
                 doc.getField(DictionaryConstants.LABEL) == null ? "" : doc.getField(DictionaryConstants.LABEL).stringValue());
         dqCat.setType(CategoryType.valueOf(doc.getField(DictionaryConstants.TYPE).stringValue()));
         dqCat.setCompleteness(Boolean.valueOf(doc.getField(DictionaryConstants.COMPLETENESS).stringValue()));
+        if (doc.getField(DictionaryConstants.IS_MODIFIED) != null)
+            dqCat.setModified(Boolean.valueOf(doc.getField(DictionaryConstants.IS_MODIFIED).stringValue()));
+        if (doc.getField(DictionaryConstants.IS_DELETED) != null)
+            dqCat.setDeleted(Boolean.valueOf(doc.getField(DictionaryConstants.IS_DELETED).stringValue()));
         dqCat.setDescription(doc.getField(DictionaryConstants.DESCRIPTION) == null ? ""
                 : doc.getField(DictionaryConstants.DESCRIPTION).stringValue());
         if (doc.getField(DictionaryConstants.VALIDATION_MODE) != null)
             dqCat.setValidationMode(ValidationMode.valueOf(doc.getField(DictionaryConstants.VALIDATION_MODE).stringValue()));
+
         IndexableField[] childrenFields = doc.getFields(DictionaryConstants.CHILD);
         if (childrenFields != null) {
             List<DQCategory> synSet = new ArrayList<>();
