@@ -13,11 +13,7 @@
 package org.talend.dataquality.semantic.statistics;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.NotImplementedException;
@@ -40,7 +36,7 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
 
     private static final long serialVersionUID = 6808620909722453108L;
 
-    private static float DEFAULT_WEIGHT_VALUE = 0.9f;
+    private static float DEFAULT_WEIGHT_VALUE = 0.1f;
 
     private final ResizableList<SemanticType> results = new ResizableList<>(SemanticType.class);
 
@@ -167,8 +163,8 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
             Collection<CategoryFrequency> result = entry.getValue().getResult();
 
             for (CategoryFrequency semCategory : result) {
-                final float scoreOnHeader = getScoreOnHeader(colIdx, semCategory.getCategoryName());
-                final float score = semCategory.getFrequency() * weight + (scoreOnHeader * 100 * (1 - weight));
+                final int scoreOnHeader = getScoreOnHeader(colIdx, semCategory.getCategoryName());
+                final float score = Math.min(semCategory.getScore() + scoreOnHeader * weight * 100, 100);
 
                 semCategory.setScore(score);
                 results.get(colIdx).increment(semCategory, semCategory.getCount());
@@ -178,7 +174,7 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
         return results;
     }
 
-    private float getScoreOnHeader(Integer columnIdx, String categoryName) {
+    private int getScoreOnHeader(Integer columnIdx, String categoryName) {
         int score = 0;
         List<String> metadata = metadataMap.get(Metadata.HEADER_NAME);
         if (metadata != null) {

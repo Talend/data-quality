@@ -296,10 +296,10 @@ public class CategoryRecognizerTest {
         assertEquals(EXPECTED_FREQUECY_TABLE.size(), result.size());
         for (CategoryFrequency tableItem : result) {
             log.debug("frequencyTableItem = " + tableItem.getCategoryId() + " / " + tableItem.getCount() + " / "
-                    + tableItem.getFrequency() + " %");
+                    + tableItem.getScore() + " %");
 
-            System.out.println("put(\"" + tableItem.getCategoryId() + "\", " + tableItem.getFrequency() + "F);");
-            assertEquals(EXPECTED_FREQUECY_TABLE.get(tableItem.getCategoryId()), tableItem.getFrequency(), 0.001);
+            System.out.println("put(\"" + tableItem.getCategoryId() + "\", " + tableItem.getScore() + "F);");
+            assertEquals(EXPECTED_FREQUECY_TABLE.get(tableItem.getCategoryId()), tableItem.getScore(), 0.001);
         }
 
     }
@@ -342,7 +342,7 @@ public class CategoryRecognizerTest {
         CategoryFrequency categoryFrequency = result.iterator().next();
 
         assertEquals("US_STATE_CODE", categoryFrequency.getCategoryId());
-        assertEquals(81.81, categoryFrequency.getFrequency(), 0.0001);
+        assertEquals(81.81, categoryFrequency.getScore(), 0.0001);
     }
 
 }
