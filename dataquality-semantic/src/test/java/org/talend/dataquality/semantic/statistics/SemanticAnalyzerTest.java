@@ -35,7 +35,7 @@ public class SemanticAnalyzerTest {
         private static final long serialVersionUID = 1L;
 
         {
-            add(new String[] { "CHAT" });
+            add(new String[] { "veau" });
             add(new String[] { "United States" });
             add(new String[] { "France" });
         }
@@ -46,7 +46,7 @@ public class SemanticAnalyzerTest {
         private static final long serialVersionUID = 1L;
 
         {
-            add(new String[] { "1", "Lennon", "John", "40", "10/09/1940", "false" });
+            add(new String[] { "1", "Williams", "John", "40", "10/09/1940", "false" });
             add(new String[] { "2", "Bowie", "David", "67", "01/08/1947", "true" });
         }
     };
@@ -67,8 +67,18 @@ public class SemanticAnalyzerTest {
             add(new String[] { "6", "Washington" });
             add(new String[] { "7", "Washington" });
             add(new String[] { "8", "Washington" });
-            add(new String[] { "9", "New York" });
-            add(new String[] { "10", "+33688052266" });
+            add(new String[] { "9", "Washington" });
+            add(new String[] { "10", "Washington" });
+            add(new String[] { "11", "Washington" });
+            add(new String[] { "12", "Washington" });
+            add(new String[] { "13", "Washington" });
+            add(new String[] { "14", "Washington" });
+            add(new String[] { "15", "Washington" });
+            add(new String[] { "16", "Washington" });
+            add(new String[] { "17", "Washington" });
+            add(new String[] { "18", "New York" });
+            add(new String[] { "19", "+33688052266" });
+            add(new String[] { "20", "+33688052266" });
         }
     };
 
@@ -132,6 +142,9 @@ public class SemanticAnalyzerTest {
         analyzer.init();
         semanticAnalyzer.setMetadata(Metadata.HEADER_NAME, Arrays.asList("", "Last Name"));
 
+        //85% last name
+        //90% city
+        //and column name is city
         for (String[] record : TEST_RECORDS_CITY_METADATA) {
             analyzer.analyze(record);
         }

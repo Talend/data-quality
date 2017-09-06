@@ -199,7 +199,7 @@ class DefaultCategoryRecognizer implements CategoryRecognizer {
     @Override
     public Collection<CategoryFrequency> getResult() {
         for (CategoryFrequency category : categoryToFrequency.values()) {
-            category.frequency = Math.round(category.count * 10000 / total) / 100F;
+            category.score = Math.round(category.count * 10000 / total) / 100F;
         }
 
         Collections.sort(catList, Collections.reverseOrder());
