@@ -44,7 +44,7 @@ public abstract class AbstractDictionarySearcher {
 
     protected DictionarySearchMode searchMode = DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY;
 
-    public abstract TopDocs searchDocumentBySynonym(String stringToSearch) throws IOException;
+    public abstract TopDocs searchDocumentBySynonym(String stringToSearch, List<String> categoryIds) throws IOException;
 
     public abstract Document getDocument(int docNum);
 

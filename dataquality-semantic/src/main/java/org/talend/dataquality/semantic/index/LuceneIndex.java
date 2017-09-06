@@ -64,11 +64,11 @@ public class LuceneIndex implements Index {
     }
 
     @Override
-    public Set<String> findCategories(String data) {
+    public Set<String> findCategories(String data, List<String> categoryIds) {
 
         Set<String> foundCategorySet = new HashSet<>();
         try {
-            TopDocs docs = searcher.searchDocumentBySynonym(data);
+            TopDocs docs = searcher.searchDocumentBySynonym(data, categoryIds);
             for (ScoreDoc scoreDoc : docs.scoreDocs) {
                 Document document = searcher.getDocument(scoreDoc.doc);
                 foundCategorySet.add(document.getField(DictionarySearcher.F_CATID).stringValue());

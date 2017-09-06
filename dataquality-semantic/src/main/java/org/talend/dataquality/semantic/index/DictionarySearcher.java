@@ -79,11 +79,12 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
      * search for documents by one of the synonym (which may be the word).
      *
      * @param stringToSearch
+     * @param categoryIds
      * @return
      * @throws java.io.IOException
      */
     @Override
-    public TopDocs searchDocumentBySynonym(String stringToSearch) throws IOException {
+    public TopDocs searchDocumentBySynonym(String stringToSearch, List<String> categoryIds) throws IOException {
         Query query;
         switch (searchMode) {
         case MATCH_SEMANTIC_KEYWORD:
@@ -94,8 +95,10 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
             query = createQueryForSemanticDictionaryMatch(stringToSearch);
             break;
         }
+        CachingWrapperFilter cachingWrapperFilter = new CachingWrapperFilter(
+                new FieldCacheTermsFilter(F_CATID, categoryIds.toArray(new String[categoryIds.size()])));
         final IndexSearcher searcher = mgr.acquire();
-        TopDocs topDocs = searcher.search(query, topDocLimit);
+        TopDocs topDocs = searcher.search(query, cachingWrapperFilter, topDocLimit);
         mgr.release(searcher);
         return topDocs;
     }

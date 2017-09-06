@@ -40,6 +40,10 @@ class DefaultCategoryRecognizer implements CategoryRecognizer {
 
     private final Map<String, DQCategory> metadata;
 
+    private final List<String> sharedCategories = new ArrayList<>();
+
+    private final List<String> tenantCategories = new ArrayList<>();
+
     private final LFUCache<String, Set<String>> knownCategoryCache = new LFUCache<String, Set<String>>(10, 1000, 0.01f);
 
     private long emptyCount = 0;
@@ -48,12 +52,19 @@ class DefaultCategoryRecognizer implements CategoryRecognizer {
 
     private FingerprintkeyMatcher keyMatcher;
 
-    public DefaultCategoryRecognizer(Index dictionary, Index keyword, UserDefinedClassifier regex,
+    public DefaultCategoryRecognizer(final Index sharedDictionary, Index dictionary, Index keyword, UserDefinedClassifier regex,
             Map<String, DQCategory> metadata) throws IOException {
-        dataDictFieldClassifier = new DataDictFieldClassifier(dictionary, keyword);
+        dataDictFieldClassifier = new DataDictFieldClassifier(sharedDictionary, dictionary, keyword);
         this.userDefineClassifier = regex;
         this.metadata = metadata;
         this.keyMatcher = new FingerprintkeyMatcher();
+        for (DQCategory cat : metadata.values())
+            if (!cat.isDeleted())
+                if (cat.isModified())
+                    tenantCategories.add(cat.getId());
+                else
+                    sharedCategories.add(cat.getId());
+
     }
 
     @Override
@@ -87,7 +98,7 @@ class DefaultCategoryRecognizer implements CategoryRecognizer {
         case Alpha:
         case Numeric:
         case AlphaNumeric:
-            subCategorySet.addAll(dataDictFieldClassifier.classify(data));
+            subCategorySet.addAll(dataDictFieldClassifier.classify(data, sharedCategories, tenantCategories));
             if (userDefineClassifier != null) {
                 subCategorySet.addAll(userDefineClassifier.classify(data, mainCategory));
             }

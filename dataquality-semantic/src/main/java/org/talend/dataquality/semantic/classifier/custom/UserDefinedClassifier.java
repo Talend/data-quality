@@ -13,10 +13,12 @@
 package org.talend.dataquality.semantic.classifier.custom;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.talend.dataquality.semantic.classifier.ISubCategory;
+import org.talend.dataquality.semantic.classifier.ISubCategoryClassifier;
 import org.talend.dataquality.semantic.classifier.impl.AbstractSubCategoryClassifier;
 import org.talend.dataquality.semantic.filter.ISemanticFilter;
 import org.talend.dataquality.semantic.model.DQCategory;
@@ -73,12 +75,15 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
     /**
      * classify data into Semantic Category IDs
      *
-     * @see org.talend.dataquality.semantic.classifier.impl.AbstractSubCategoryClassifier#classify(java.lang.String)
+     * @see ISubCategoryClassifier#classify(String, List, List)
+     * @param data
+     * @param sharedCategories
+     * @param tenantCategories
      */
     @Override
-    public Set<String> classify(String str) {
-        MainCategory mainCategory = MainCategory.getMainCategory(str);
-        return classify(str, mainCategory);
+    public Set<String> classify(String data, List<String> sharedCategories, List<String> tenantCategories) {
+        MainCategory mainCategory = MainCategory.getMainCategory(data);
+        return classify(data, mainCategory);
     }
 
     @Override

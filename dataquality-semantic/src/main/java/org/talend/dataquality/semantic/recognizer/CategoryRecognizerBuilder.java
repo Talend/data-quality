@@ -54,9 +54,13 @@ public class CategoryRecognizerBuilder {
 
     private LuceneIndex dataDictIndex;
 
+    private LuceneIndex sharedDataDictIndex;
+
     private LuceneIndex keywordIndex;
 
     private Directory ddDirectory;
+
+    private Directory sharedddDirectory;
 
     private Directory kwDirectory;
 
@@ -116,10 +120,11 @@ public class CategoryRecognizerBuilder {
         switch (mode) {
         case LUCENE:
             Map<String, DQCategory> meta = getCategoryMetadata();
+            LuceneIndex sharedDict = getSharedDataDictIndex();
             LuceneIndex dict = getDataDictIndex();
             LuceneIndex keyword = getKeywordIndex();
             UserDefinedClassifier regex = getRegexClassifier();
-            return new DefaultCategoryRecognizer(dict, keyword, regex, meta);
+            return new DefaultCategoryRecognizer(sharedDict, dict, keyword, regex, meta);
         case ELASTIC_SEARCH:
             throw new IllegalArgumentException("Elasticsearch mode is not supported any more");
         default:
@@ -154,6 +159,11 @@ public class CategoryRecognizerBuilder {
                 }
             }
         }
+        return dataDictIndex;
+    }
+
+    private LuceneIndex getSharedDataDictIndex() {
+        // TODO
         return dataDictIndex;
     }
 

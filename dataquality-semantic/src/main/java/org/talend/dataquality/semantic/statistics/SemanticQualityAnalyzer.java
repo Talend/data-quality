@@ -148,7 +148,7 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
             return;
         }
         if (category.getCompleteness() != null && category.getCompleteness().booleanValue()) {
-            if (isValid(category, value)) {
+            if (!Boolean.TRUE.equals(category.isDeleted()) && isValid(category, value)) {
                 valueQuality.incrementValid();
             } else {
                 valueQuality.incrementInvalid();
