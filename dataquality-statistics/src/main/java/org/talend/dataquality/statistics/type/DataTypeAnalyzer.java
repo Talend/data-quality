@@ -135,5 +135,4 @@ public class DataTypeAnalyzer implements Analyzer<DataTypeOccurences> {
     public void close() throws Exception {
 
     }
-
 }

@@ -20,16 +20,22 @@ import java.util.List;
  */
 public enum SurvivorShipAlgorithmEnum {
 
-    CONCATENATE(0, "Concatenate", "Concatenate"), //$NON-NLS-1$ //$NON-NLS-2$
-    PREFER_TRUE(1, "Prefer True (for booleans)", "PreferTrue"), //$NON-NLS-1$ //$NON-NLS-2$
-    PREFER_FALSE(2, "Prefer False (for booleans)", "PreferFalse"), //$NON-NLS-1$ //$NON-NLS-2$
+    CONCATENATE(
+            0,
+            "Concatenate", //$NON-NLS-1$
+            "Concatenate", //$NON-NLS-1$
+            DefaultSurvivorShipDataTypeEnum.BOOLEAN,
+            DefaultSurvivorShipDataTypeEnum.DATE,
+            DefaultSurvivorShipDataTypeEnum.STRING),
+    PREFER_TRUE(1, "Prefer True (for booleans)", "PreferTrue", DefaultSurvivorShipDataTypeEnum.BOOLEAN), //$NON-NLS-1$ //$NON-NLS-2$
+    PREFER_FALSE(2, "Prefer False (for booleans)", "PreferFalse", DefaultSurvivorShipDataTypeEnum.BOOLEAN), //$NON-NLS-1$ //$NON-NLS-2$
     MOST_COMMON(3, "Most common", "MostCommon"), //$NON-NLS-1$ //$NON-NLS-2$
-    MOST_RECENT(4, "Most recent", "MostRecent"), //$NON-NLS-1$ //$NON-NLS-2$
-    MOST_ANCIENT(5, "Most ancient", "MostAncient"), //$NON-NLS-1$ //$NON-NLS-2$
-    LONGEST(6, "Longest (for strings)", "Longest"), //$NON-NLS-1$ //$NON-NLS-2$
-    SHORTEST(7, "Shortest (for strings)", "Shortest"), //$NON-NLS-1$ //$NON-NLS-2$
-    LARGEST(8, "Largest (for numbers)", "Largest"), //$NON-NLS-1$ //$NON-NLS-2$
-    SMALLEST(9, "Smallest (for numbers)", "Smallest"), //$NON-NLS-1$ //$NON-NLS-2$
+    MOST_RECENT(4, "Most recent", "MostRecent", DefaultSurvivorShipDataTypeEnum.DATE), //$NON-NLS-1$ //$NON-NLS-2$
+    MOST_ANCIENT(5, "Most ancient", "MostAncient", DefaultSurvivorShipDataTypeEnum.DATE), //$NON-NLS-1$ //$NON-NLS-2$
+    LONGEST(6, "Longest (for strings)", "Longest", DefaultSurvivorShipDataTypeEnum.STRING), //$NON-NLS-1$ //$NON-NLS-2$
+    SHORTEST(7, "Shortest (for strings)", "Shortest", DefaultSurvivorShipDataTypeEnum.STRING), //$NON-NLS-1$ //$NON-NLS-2$
+    LARGEST(8, "Largest (for numbers)", "Largest", DefaultSurvivorShipDataTypeEnum.NUMBER), //$NON-NLS-1$ //$NON-NLS-2$
+    SMALLEST(9, "Smallest (for numbers)", "Smallest", DefaultSurvivorShipDataTypeEnum.NUMBER), //$NON-NLS-1$ //$NON-NLS-2$
     MOST_TRUSTED_SOURCE(10, "Most trusted source", "MostTrustedSource"); //$NON-NLS-1$ //$NON-NLS-2$
 
     private int index;
@@ -38,10 +44,13 @@ public enum SurvivorShipAlgorithmEnum {
 
     private String componentValueName;
 
-    SurvivorShipAlgorithmEnum(int index, String value, String componentValueName) {
+    private DefaultSurvivorShipDataTypeEnum[] dataType;
+
+    SurvivorShipAlgorithmEnum(int index, String value, String componentValueName, DefaultSurvivorShipDataTypeEnum... dataType) {
         this.index = index;
         this.value = value;
         this.componentValueName = componentValueName;
+        this.dataType = dataType;
     }
 
     public int getIndex() {
@@ -99,4 +108,14 @@ public enum SurvivorShipAlgorithmEnum {
 
         return null;
     }
+
+    /**
+     * Getter for dataType.
+     * 
+     * @return the dataType
+     */
+    public DefaultSurvivorShipDataTypeEnum[] getDataType() {
+        return this.dataType;
+    }
+
 }

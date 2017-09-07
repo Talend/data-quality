@@ -1,3 +1,8 @@
+V1.7.0 2017-08-24
+	- TDQ-13046 take into account regex changes with tDataprepRun Spark
+	- TDP-3858 tdq dictionnaries json serialization
+	- TDQ-13785 improve validation for compound
+
 V1.6.3 2017-06-09
 	- TDQ-12854 remove unused F_SYN field in the lucene index
 	- TDQ-13671 do not try to do validation for keywords

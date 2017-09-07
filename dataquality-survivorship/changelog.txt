@@ -1,3 +1,9 @@
+V2.1.0 2017-08-24
+	- TDQ-13981 when tRuleSurvivorship input data has two groups can not use "fill empty by" function
+	- TDQ-13983 "Conflict" column doesn't show conflict columnName when rules doesn't resolve the conflict
+	- TDQ-13994 fix NPE with "Survivor As" function
+	- TDQ-13984 "Remove Duplicate" can not run with combination of certain rules, the Conflict value show on a wrong row
+
 V2.0.3 2017-06-09
 	- TDQ-13798 tRuleSurvivorship improvements
 

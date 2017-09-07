@@ -13,9 +13,6 @@
 package org.talend.dataquality.semantic.recognizer;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import org.talend.dataquality.semantic.classifier.ISubCategory;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
@@ -36,6 +33,8 @@ public class CategoryFrequency implements Comparable<CategoryFrequency>, Seriali
     long count;
 
     int categoryLevel;
+
+    float score;
 
     /**
      * CategoryFrequency constructor from a category.
@@ -108,6 +107,14 @@ public class CategoryFrequency implements Comparable<CategoryFrequency>, Seriali
         return categoryLevel;
     }
 
+    public float getScore() {
+        return score;
+    }
+
+    public void setScore(float score) {
+        this.score = score;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -130,7 +137,13 @@ public class CategoryFrequency implements Comparable<CategoryFrequency>, Seriali
     @Override
     public int compareTo(CategoryFrequency o) {
         // The EMPTY category must always be ranked after the others
-        int count = Long.compare(this.getCount(), o.getCount());
+
+        int count = Float.compare(this.getScore(), o.getScore());
+        if (count != 0) {
+            return count;
+        }
+
+        count = Long.compare(this.getCount(), o.getCount());
         if (count != 0) {
             return count;
         } else {
@@ -156,20 +169,6 @@ public class CategoryFrequency implements Comparable<CategoryFrequency>, Seriali
 
     @Override
     public String toString() {
-        return "[Category: " + categoryName + " Count: " + count + " Frequency: " + frequency + "]";
-    }
-
-    public static void main(String[] args) {
-        CategoryFrequency cf1 = new CategoryFrequency("", "");
-        CategoryFrequency cf2 = new CategoryFrequency("CITY", "CITY");
-        List<CategoryFrequency> list = new ArrayList<>();
-        list.add(cf1);
-        list.add(cf2);
-        System.out.println(list);
-
-        Collections.sort(list);
-
-        System.out.println(list);
-
+        return "[Category: " + categoryName + " Count: " + count + " Frequency: " + frequency + " Score: " + score + "]";
     }
 }

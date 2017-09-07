@@ -122,6 +122,9 @@ public class MatchAnalysisConstant {
     public static final String SURVIVIORSHIP_DEFAULT_DEFINITION_SECTION_NAME = Messages
             .getString("MatchAnalysisConstant.SURVIVIORSHIP_DEFAULT_DEFINITION_SECTION_NAME"); //$NON-NLS-1$
 
+    public static final String SURVIVIORSHIP_PARTICULAR_DEFAULT_DEFINITION_SECTION_NAME = Messages
+            .getString("MatchAnalysisConstant.SURVIVIORSHIP_PARTICULAR_DEFAULT_DEFINITION_SECTION_NAME"); //$NON-NLS-1$
+
     public static final String SURVIVORSHIP_KEY_DEFAULT_VALUE = Messages.getString("MatchAnalysisConstant.KEY_NAME"); //$NON-NLS-1$
 
     public static final String MATCH_RULE_TAB_SWITCH = "MATCH_RULE_TAB_SWITCH"; //$NON-NLS-1$

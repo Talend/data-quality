@@ -12,11 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.standardization.phone;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.Locale;
 
@@ -267,8 +263,7 @@ public class PhoneNumberHandlerBaseTest {
     }
 
     /**
-     * Test method for {@link org.talend.dataquality.standardization.phone.PhoneNumberHandlerBase#getSupportedRegions()}
-     * .
+     * Test method for {@link org.talend.dataquality.standardization.phone.PhoneNumberHandlerBase#getSupportedRegions()} .
      */
     @Test
     public void testGetSupportedRegions() {
@@ -278,8 +273,7 @@ public class PhoneNumberHandlerBaseTest {
 
     /**
      * Test method for
-     * {@link org.talend.dataquality.standardization.phone.PhoneNumberHandlerBase#getCountryCodeForRegion(java.lang.String)}
-     * .
+     * {@link org.talend.dataquality.standardization.phone.PhoneNumberHandlerBase#getCountryCodeForRegion(java.lang.String)} .
      */
     @Test
     public void testExtractCountryCode() {
@@ -332,8 +326,7 @@ public class PhoneNumberHandlerBaseTest {
     public void testGetCarrierNameForNumber() {
         assertEquals(StringUtils.EMPTY, phoneNumberHandlerBase.getCarrierNameForNumber(null, REGCODE_US, Locale.UK));
 
-        assertEquals(StringUtils.EMPTY,
-                phoneNumberHandlerBase.getCarrierNameForNumber(CN_NUM_1, REGCODE_CN, Locale.SIMPLIFIED_CHINESE));
+        assertEquals("中国联通", phoneNumberHandlerBase.getCarrierNameForNumber(CN_NUM_1, REGCODE_CN, Locale.SIMPLIFIED_CHINESE));
         assertEquals("China Unicom", phoneNumberHandlerBase.getCarrierNameForNumber(CN_NUM_1, REGCODE_CN, Locale.UK)); //$NON-NLS-1$
         assertEquals("China Mobile", phoneNumberHandlerBase.getCarrierNameForNumber(CN_NUM_2, REGCODE_CN, Locale.UK)); //$NON-NLS-1$
 

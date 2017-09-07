@@ -1,3 +1,9 @@
+V1.7.0 2017-08-24
+	- TDQ-13389 CardinalityStatistics can now take an Object instead of a String
+	- TDQ-13936 Recognize dates when a String with eras
+	- TDQ-13935 sync 'DateRegexesGrouped.txt' in 'sampling' and 'statistics'
+	- TDQ-13103 update pattern to support percentages
+
 V1.6.3 2017-06-09
 	- TDQ-13851 support Date pattern "yyyy-MM-dd G"
 	- TDQ-13347 the value "5 TOTO 1999" must not be considered as a valid date

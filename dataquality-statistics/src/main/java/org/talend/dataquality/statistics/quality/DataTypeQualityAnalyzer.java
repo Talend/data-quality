@@ -34,17 +34,11 @@ public class DataTypeQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
 
     private static final long serialVersionUID = -5951511723860660263L;
 
-    private final ResizableList<ValueQualityStatistics> results = new ResizableList<>(ValueQualityStatistics.class);
-
     private static final Logger LOG = LoggerFactory.getLogger(DataTypeQualityAnalyzer.class);
 
-    private List<String> customDateTimePatterns = new ArrayList<>();
+    private final ResizableList<ValueQualityStatistics> results = new ResizableList<>(ValueQualityStatistics.class);
 
-    public void addCustomDateTimePattern(String pattern) {
-        if (StringUtils.isNotBlank(pattern)) {
-            customDateTimePatterns.add(pattern);
-        }
-    }
+    private List<String> customDateTimePatterns = new ArrayList<>();
 
     public DataTypeQualityAnalyzer(DataTypeEnum[] types, boolean isStoreInvalidValues) {
         this.isStoreInvalidValues = isStoreInvalidValues;
@@ -53,6 +47,12 @@ public class DataTypeQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
 
     public DataTypeQualityAnalyzer(DataTypeEnum... types) {
         setTypes(types);
+    }
+
+    public void addCustomDateTimePattern(String pattern) {
+        if (StringUtils.isNotBlank(pattern)) {
+            customDateTimePatterns.add(pattern);
+        }
     }
 
     @Override

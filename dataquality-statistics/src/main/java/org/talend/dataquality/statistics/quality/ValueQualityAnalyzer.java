@@ -19,6 +19,7 @@ import org.apache.commons.lang.NullArgumentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.dataquality.common.inference.Analyzer;
+import org.talend.dataquality.common.inference.Metadata;
 import org.talend.dataquality.common.inference.QualityAnalyzer;
 import org.talend.dataquality.common.inference.ValueQualityStatistics;
 import org.talend.dataquality.statistics.type.DataTypeEnum;
@@ -31,11 +32,11 @@ public class ValueQualityAnalyzer implements Analyzer<ValueQualityStatistics> {
 
     private static final long serialVersionUID = -5951511723860660263L;
 
+    private static Logger log = LoggerFactory.getLogger(ValueQualityAnalyzer.class);
+
     private final QualityAnalyzer<ValueQualityStatistics, DataTypeEnum[]> dataTypeQualityAnalyzer;
 
     private final QualityAnalyzer<ValueQualityStatistics, String[]> semanticQualityAnalyzer;
-
-    private static Logger log = LoggerFactory.getLogger(ValueQualityAnalyzer.class);
 
     public ValueQualityAnalyzer(QualityAnalyzer<ValueQualityStatistics, DataTypeEnum[]> dataTypeQualityAnalyzer,
             QualityAnalyzer<ValueQualityStatistics, String[]> semanticQualityAnalyzer, boolean isStoreInvalidValues) {

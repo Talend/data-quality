@@ -1,3 +1,6 @@
+V1.1.0 2017-08-24
+	(no change in this version)
+
 V1.0.3 2017-06-09
 	- TDQ-13499 support a new date format "yyyy-MM-dd G" and julian day conversion
 

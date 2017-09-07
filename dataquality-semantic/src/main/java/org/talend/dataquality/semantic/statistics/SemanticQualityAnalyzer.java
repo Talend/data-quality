@@ -44,11 +44,11 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
 
     private final Map<String, LFUCache<String, Boolean>> knownValidationCategoryCache = new HashMap<>();
 
+    private final CategoryRecognizerBuilder builder;
+
     private ISubCategoryClassifier regexClassifier;
 
     private ISubCategoryClassifier dataDictClassifier;
-
-    private final CategoryRecognizerBuilder builder;
 
     private Map<String, DQCategory> metadata;
 
@@ -57,6 +57,10 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
         this.builder = builder;
         init();
         setTypes(types);
+    }
+
+    public SemanticQualityAnalyzer(CategoryRecognizerBuilder builder, String... types) {
+        this(builder, types, false);
     }
 
     @Override
@@ -78,10 +82,6 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
             }
         }
         super.setTypes(idList.toArray(new String[idList.size()]));
-    }
-
-    public SemanticQualityAnalyzer(CategoryRecognizerBuilder builder, String... types) {
-        this(builder, types, false);
     }
 
     @Override
@@ -281,4 +281,5 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
     public void close() throws Exception {
         ((DataDictFieldClassifier) dataDictClassifier).closeIndex();
     }
+
 }

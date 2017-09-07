@@ -21,7 +21,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.NotImplementedException;
+import org.apache.commons.lang3.StringUtils;
 import org.talend.dataquality.common.inference.Analyzer;
+import org.talend.dataquality.common.inference.Metadata;
 import org.talend.dataquality.common.inference.ResizableList;
 import org.talend.dataquality.semantic.exception.DQSemanticRuntimeException;
 import org.talend.dataquality.semantic.recognizer.CategoryFrequency;
@@ -38,27 +40,50 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
 
     private static final long serialVersionUID = 6808620909722453108L;
 
+    private static float DEFAULT_WEIGHT_VALUE = 0.9f;
+
     private final ResizableList<SemanticType> results = new ResizableList<>(SemanticType.class);
 
     private final Map<Integer, CategoryRecognizer> columnIdxToCategoryRecognizer = new HashMap<>();
 
     private final CategoryRecognizerBuilder builder;
 
-    // Threshold of handle to be run. since the semantic inferring will require
-    // more time than expected, we may only want to run the handle method on a
-    // sample with small size. Default value is 10000.
+    // Threshold of rows to be handled. in case we only want to analyze a given number of samples. Default value is 10000.
     private int limit = 10000;
 
     private int currentCount = 0;
 
+    private Map<Metadata, List<String>> metadataMap;
+
+    private float weight = DEFAULT_WEIGHT_VALUE;
+
+    /**
+     * @param builder the builder for creating lucene index access and regex classifiers
+     */
     public SemanticAnalyzer(CategoryRecognizerBuilder builder) {
         this(builder, 10000);
     }
 
+    /**
+     * @param builder the builder for creating lucene index access and regex classifiers
+     * @param limit the limit of rows to handle
+     */
     public SemanticAnalyzer(CategoryRecognizerBuilder builder, int limit) {
+        this(builder, limit, DEFAULT_WEIGHT_VALUE);
+    }
+
+    /**
+     * @param builder the builder for creating lucene index access and regex classifiers
+     * @param limit the limit of rows to handle
+     * @param weight the weight of data discovery result for score calculation, default to 0.9, which means the metadata will also
+     * be taken into account for a weight of 0.1
+     */
+    public SemanticAnalyzer(CategoryRecognizerBuilder builder, int limit, float weight) {
         this.builder = builder;
         this.limit = limit;
+        this.weight = weight;
         builder.initIndex();
+        metadataMap = new HashMap<>();
     }
 
     /**
@@ -69,6 +94,16 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
      */
     public void setLimit(int limit) {
         this.limit = limit;
+    }
+
+    /**
+     * Set the weight of data discovery result for score calculation.
+     *
+     * @param weight the weight of data discovery result for score calculation, default to 0.9, which means the metadata will also
+     * be taken into account for a weight of 0.1
+     */
+    public void setWeight(float weight) {
+        this.weight = weight;
     }
 
     @Override
@@ -126,14 +161,33 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
      */
     @Override
     public List<SemanticType> getResult() {
+
         for (Entry<Integer, CategoryRecognizer> entry : columnIdxToCategoryRecognizer.entrySet()) {
             Integer colIdx = entry.getKey();
             Collection<CategoryFrequency> result = entry.getValue().getResult();
+
             for (CategoryFrequency semCategory : result) {
+                final float scoreOnHeader = getScoreOnHeader(colIdx, semCategory.getCategoryName());
+                final float score = semCategory.getFrequency() * weight + (scoreOnHeader * 100 * (1 - weight));
+
+                semCategory.setScore(score);
                 results.get(colIdx).increment(semCategory, semCategory.getCount());
             }
         }
+
         return results;
+    }
+
+    private float getScoreOnHeader(Integer columnIdx, String categoryName) {
+        int score = 0;
+        List<String> metadata = metadataMap.get(Metadata.HEADER_NAME);
+        if (metadata != null) {
+            final boolean match = StringUtils.equalsIgnoreCase(metadata.get(columnIdx), categoryName);
+            if (metadataMap.get(Metadata.HEADER_NAME) != null && match && Float.compare(weight, 0f) != 0) {
+                score = 1;
+            }
+        }
+        return score;
     }
 
     @Override
@@ -148,4 +202,13 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
         }
     }
 
+    /**
+     * Store metadata
+     * 
+     * @param metadata metadata name
+     * @param values value associated to the metadata
+     */
+    public void setMetadata(Metadata metadata, List<String> values) {
+        metadataMap.put(metadata, values);
+    }
 }
