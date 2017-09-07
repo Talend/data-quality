@@ -214,23 +214,12 @@ class DefaultCategoryRecognizer implements CategoryRecognizer {
     public Collection<CategoryFrequency> getResult(String columnName, float weight) {
         for (CategoryFrequency category : categoryToFrequency.values()) {
 
-            final int scoreOnHeader = getScoreOnHeader(columnName, category.getCategoryName(), weight);
+            final double scoreOnHeader = keyMatcher.getMatchingWeight(columnName, category.getCategoryName());
             category.score = Math.min(Math.round(category.count * 10000 / total) / 100F + scoreOnHeader * weight * 100, 100);
         }
 
         Collections.sort(catList, Collections.reverseOrder());
         return catList;
-    }
-
-    private int getScoreOnHeader(String columnName, String categoryName, float weight) {
-        int score = 0;
-
-        final double match = keyMatcher.getMatchingWeight(columnName, categoryName);
-        if (match == 1 && Float.compare(weight, 0f) != 0) {
-            score = 1;
-        }
-
-        return score;
     }
 
     @Override
