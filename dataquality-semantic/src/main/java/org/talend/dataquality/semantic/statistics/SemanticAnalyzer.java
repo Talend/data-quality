@@ -20,7 +20,6 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.Metadata;
 import org.talend.dataquality.common.inference.ResizableList;
-import org.talend.dataquality.record.linkage.attribute.FingerprintkeyMatcher;
 import org.talend.dataquality.semantic.exception.DQSemanticRuntimeException;
 import org.talend.dataquality.semantic.recognizer.CategoryFrequency;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizer;
@@ -53,8 +52,6 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
 
     private float weight = DEFAULT_WEIGHT_VALUE;
 
-    private FingerprintkeyMatcher keyMatcher;
-
     /**
      * @param builder the builder for creating lucene index access and regex classifiers
      */
@@ -82,7 +79,6 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
         this.weight = weight;
         builder.initIndex();
         metadataMap = new HashMap<>();
-        keyMatcher = new FingerprintkeyMatcher();
     }
 
     /**
@@ -163,30 +159,20 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
 
         for (Entry<Integer, CategoryRecognizer> entry : columnIdxToCategoryRecognizer.entrySet()) {
             Integer colIdx = entry.getKey();
-            Collection<CategoryFrequency> result = entry.getValue().getResult();
+            String columnName = "";
+
+            if (metadataMap.get(Metadata.HEADER_NAME) != null) {
+                List<String> metadata = metadataMap.get(Metadata.HEADER_NAME);
+                columnName = metadata.get(colIdx);
+            }
+            Collection<CategoryFrequency> result = entry.getValue().getResult(columnName, weight);
 
             for (CategoryFrequency semCategory : result) {
-                final int scoreOnHeader = getScoreOnHeader(colIdx, semCategory.getCategoryName());
-                final float score = Math.min(semCategory.getScore() + scoreOnHeader * weight * 100, 100);
-
-                semCategory.setScore(score);
                 results.get(colIdx).increment(semCategory, semCategory.getCount());
             }
         }
 
         return results;
-    }
-
-    private int getScoreOnHeader(Integer columnIdx, String categoryName) {
-        int score = 0;
-        List<String> metadata = metadataMap.get(Metadata.HEADER_NAME);
-        if (metadata != null) {
-            final double match = keyMatcher.getMatchingWeight(metadata.get(columnIdx), categoryName);
-            if (metadataMap.get(Metadata.HEADER_NAME) != null && match == 1 && Float.compare(weight, 0f) != 0) {
-                score = 1;
-            }
-        }
-        return score;
     }
 
     @Override

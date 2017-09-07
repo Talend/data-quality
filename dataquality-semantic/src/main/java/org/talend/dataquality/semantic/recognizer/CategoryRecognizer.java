@@ -32,7 +32,14 @@ public interface CategoryRecognizer {
 
     ISubCategoryClassifier getUserDefineClassifier();
 
+    /**
+     *
+     * @deprecated
+     * Use getResult(String columnName, float weight) instead
+     */
     Collection<CategoryFrequency> getResult();
+
+    Collection<CategoryFrequency> getResult(String columnName, float weight);
 
     void end();
 }

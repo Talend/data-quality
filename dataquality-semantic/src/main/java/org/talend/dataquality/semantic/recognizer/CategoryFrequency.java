@@ -28,8 +28,6 @@ public class CategoryFrequency implements Comparable<CategoryFrequency>, Seriali
 
     String categoryLabel;
 
-    float frequency;
-
     long count;
 
     int categoryLevel;
@@ -100,7 +98,7 @@ public class CategoryFrequency implements Comparable<CategoryFrequency>, Seriali
      * @return
      */
     public float getFrequency() {
-        return frequency;
+        return score;
     }
 
     public long getCount() {
@@ -168,6 +166,6 @@ public class CategoryFrequency implements Comparable<CategoryFrequency>, Seriali
 
     @Override
     public String toString() {
-        return "[Category: " + categoryName + " Count: " + count + " Frequency: " + frequency + " Score: " + score + "]";
+        return "[Category: " + categoryName + " Count: " + count + " Score: " + score + "]";
     }
 }

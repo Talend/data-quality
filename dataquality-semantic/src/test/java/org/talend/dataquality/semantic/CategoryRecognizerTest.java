@@ -38,8 +38,6 @@ import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
  */
 public class CategoryRecognizerTest {
 
-    private static Logger log = Logger.getLogger(CategoryRecognizerTest.class);
-
     private static final Map<String, Float> EXPECTED_FREQUECY_TABLE = new LinkedHashMap<String, Float>() {
 
         private static final long serialVersionUID = -5067273062214728849L;
@@ -80,6 +78,8 @@ public class CategoryRecognizerTest {
         }
 
     };
+
+    private static Logger log = Logger.getLogger(CategoryRecognizerTest.class);
 
     private static Map<String, String[]> EXPECTED_CAT_ID = new LinkedHashMap<String, String[]>() {
 
