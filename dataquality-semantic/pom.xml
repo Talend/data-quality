@@ -25,6 +25,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.talend.dataquality</groupId>
+			<artifactId>dataquality-record-linkage</artifactId>
+			<version>${dataquality.record.linkage.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.talend.dataquality</groupId>
 			<artifactId>dataquality-semantic-model</artifactId>
 			<version>${dataquality.libraries.version}</version>
 		</dependency>

@@ -17,10 +17,10 @@ import java.util.*;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.NotImplementedException;
-import org.apache.commons.lang3.StringUtils;
 import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.Metadata;
 import org.talend.dataquality.common.inference.ResizableList;
+import org.talend.dataquality.record.linkage.attribute.FingerprintkeyMatcher;
 import org.talend.dataquality.semantic.exception.DQSemanticRuntimeException;
 import org.talend.dataquality.semantic.recognizer.CategoryFrequency;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizer;
@@ -53,6 +53,8 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
 
     private float weight = DEFAULT_WEIGHT_VALUE;
 
+    private FingerprintkeyMatcher keyMatcher;
+
     /**
      * @param builder the builder for creating lucene index access and regex classifiers
      */
@@ -80,6 +82,7 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
         this.weight = weight;
         builder.initIndex();
         metadataMap = new HashMap<>();
+        keyMatcher = new FingerprintkeyMatcher();
     }
 
     /**
@@ -178,8 +181,8 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
         int score = 0;
         List<String> metadata = metadataMap.get(Metadata.HEADER_NAME);
         if (metadata != null) {
-            final boolean match = StringUtils.equalsIgnoreCase(metadata.get(columnIdx), categoryName);
-            if (metadataMap.get(Metadata.HEADER_NAME) != null && match && Float.compare(weight, 0f) != 0) {
+            final double match = keyMatcher.getMatchingWeight(metadata.get(columnIdx), categoryName);
+            if (metadataMap.get(Metadata.HEADER_NAME) != null && match == 1 && Float.compare(weight, 0f) != 0) {
                 score = 1;
             }
         }

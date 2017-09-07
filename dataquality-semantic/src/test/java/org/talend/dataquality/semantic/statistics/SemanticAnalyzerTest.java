@@ -134,6 +134,35 @@ public class SemanticAnalyzerTest {
     }
 
     @Test
+    public void firstNameToFRCommuneIgnoreCaseAndAccent() {
+        SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(builder);
+
+        Analyzer<Result> analyzer = Analyzers.with(semanticAnalyzer);
+
+        analyzer.init();
+        semanticAnalyzer.setMetadata(Metadata.HEADER_NAME, Arrays.asList("", "Läst name"));
+
+        // 85% last name
+        // 90% city
+        // and column name is city
+        for (String[] record : TEST_RECORDS_CITY_METADATA) {
+            analyzer.analyze(record);
+        }
+        analyzer.end();
+
+        List<Result> results = analyzer.getResult();
+        for (int i = 0; i < EXPECTED_FR_COMMUNE_CATEGORY_METADATA.size(); i++) {
+            Result result = results.get(i);
+
+            if (result.exist(SemanticType.class)) {
+                final SemanticType semanticType = result.get(SemanticType.class);
+                final String suggestedCategory = semanticType.getSuggestedCategory();
+                assertEquals("Unexpected Category.", EXPECTED_FR_COMMUNE_CATEGORY_METADATA.get(i), suggestedCategory);
+            }
+        }
+    }
+
+    @Test
     public void firstNameToFRCommune() {
         SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(builder);
 
@@ -142,9 +171,9 @@ public class SemanticAnalyzerTest {
         analyzer.init();
         semanticAnalyzer.setMetadata(Metadata.HEADER_NAME, Arrays.asList("", "Last Name"));
 
-        //85% last name
-        //90% city
-        //and column name is city
+        // 85% last name
+        // 90% city
+        // and column name is city
         for (String[] record : TEST_RECORDS_CITY_METADATA) {
             analyzer.analyze(record);
         }
