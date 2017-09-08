@@ -18,6 +18,7 @@ import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * created by jgonzalez on 20 août 2015 Detailled comment
@@ -35,20 +36,20 @@ public class GenerateSsnUkTest {
     }
 
     @Test
-    public void testEmpty() {
+    public void testEmpty() throws DQException {
         gsuk.setKeepEmpty(true);
         output = gsuk.generateMaskedRow("");
         assertEquals("", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testGood() {
+    public void testGood() throws DQException {
         output = gsuk.generateMaskedRow(null);
         assertEquals(output, "HH 08 07 52 C"); //$NON-NLS-1$
     }
 
     @Test
-    public void testCheck() {
+    public void testCheck() throws DQException {
         gsuk.setRandom(new Random());
         boolean res = true;
         for (int i = 0; i < 10; ++i) {
@@ -60,7 +61,7 @@ public class GenerateSsnUkTest {
     }
 
     @Test
-    public void testNull() {
+    public void testNull() throws DQException {
         gsuk.keepNull = true;
         output = gsuk.generateMaskedRow(null);
         assertEquals(output, null);

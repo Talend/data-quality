@@ -26,7 +26,7 @@ public class FluctuateNumericString extends NumericVariance<String> {
     private static final Pattern patternInteger = Pattern.compile("^(\\+|-)?\\d+$");
 
     @Override
-    protected String doGenerateMaskedField(String input) {
+    protected String doGenerateMaskedField(String input) throws org.talend.dataquality.sampling.exception.DQException {
         if (input == null || EMPTY_STRING.equals(input.trim())) {
             return input;
         } else {

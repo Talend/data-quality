@@ -19,6 +19,7 @@ import static org.junit.Assert.fail;
 import java.util.Random;
 
 import org.junit.Test;
+import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * created by jgonzalez on 25 juin 2015 Detailled comment
@@ -33,35 +34,35 @@ public class ReplaceCharactersTest {
     private ReplaceCharacters rc = new ReplaceCharacters();
 
     @Test
-    public void testGood() {
+    public void testGood() throws DQException {
         rc.parse("X", false, new Random(42));
         output = rc.generateMaskedRow(input);
         assertEquals("XXX456XX XXXXX", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testEmpty() {
+    public void testEmpty() throws DQException {
         rc.setKeepEmpty(true);
         output = rc.generateMaskedRow("");
         assertEquals("", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testParameter() {
+    public void testParameter() throws DQException {
         rc.parse("5", false, new Random(42));
         output = rc.generateMaskedRow(input);
         assertEquals("55545655 55555", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testEmptyParameter() {
+    public void testEmptyParameter() throws DQException {
         rc.parse(" ", false, new Random(42));
         output = rc.generateMaskedRow(input);
         assertEquals("ahw456ma rnqdp", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testWrongParameter() {
+    public void testWrongParameter() throws DQException {
         try {
             rc.parse("12", false, new Random(42));
             fail("should get exception with input " + rc.parameters); //$NON-NLS-1$

@@ -25,7 +25,7 @@ import org.talend.dataquality.duplicating.AllDataqualitySamplingTests;
 public class DateFunctionAdapterTest {
 
     @Test
-    public void testGenerateMaskedRow() {
+    public void testGenerateMaskedRow() throws org.talend.dataquality.sampling.exception.DQException {
         final DateVariance dv = new DateVariance();
         dv.parse("61", true, new Random(AllDataqualitySamplingTests.RANDOM_SEED));
         final List<String> patternList = Arrays

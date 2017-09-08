@@ -12,6 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.generic.fields;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -19,7 +20,7 @@ import java.util.List;
 
 /**
  * @author dprot
- * 
+ * <p>
  * A FieldDate is a field containing a date with format YYYYMMDD
  */
 
@@ -28,10 +29,10 @@ public class FieldDate extends AbstractField {
     private static final long serialVersionUID = -4061095254204934437L;
 
     public static final List<Integer> cumulativeMonthSize = Collections
-            .unmodifiableList(Arrays.asList(0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334));
+            .unmodifiableList(Arrays.asList(0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365));
 
     public static final List<Integer> cumulativeMonthSizeLeapYear = Collections
-            .unmodifiableList(Arrays.asList(0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335));
+            .unmodifiableList(Arrays.asList(0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366));
 
     public static final List<Integer> monthSize = Collections
             .unmodifiableList(Arrays.asList(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31));
@@ -46,7 +47,6 @@ public class FieldDate extends AbstractField {
     private List<Integer> numberDaysPerYear = new ArrayList<Integer>();
 
     /**
-     * 
      * Create a field corresponding to a date with format YYYYMMDD, from year 1900 included to 2100 excluded
      */
     public FieldDate() {
@@ -55,7 +55,7 @@ public class FieldDate extends AbstractField {
 
     /**
      * Create a field corresponding to a date with format YYYYMMDD, firstYear included, lastYear excluded
-     * 
+     *
      * @param firstYear
      * @param lastYear
      */
@@ -68,7 +68,6 @@ public class FieldDate extends AbstractField {
     }
 
     /**
-     * 
      * Initialize the attribute numberDaysPerYear
      */
     private void computeDaysPerYear() {
@@ -84,7 +83,6 @@ public class FieldDate extends AbstractField {
     }
 
     /**
-     * 
      * @param year
      * @return true if a given year is a leap year
      */
@@ -172,9 +170,8 @@ public class FieldDate extends AbstractField {
     }
 
     /**
-     * 
      * Find the nearest entry in numberList smaller than number (with a dichotomic search)
-     * 
+     *
      * @param number
      * @param numberList
      * @return
@@ -187,7 +184,7 @@ public class FieldDate extends AbstractField {
         int mean = (maxIndex + minIndex) / 2;
 
         do {
-            if (numberList.get(mean) < number) {
+            if (numberList.get(mean) <= number) {
                 minIndex = mean;
             } else {
                 maxIndex = mean;

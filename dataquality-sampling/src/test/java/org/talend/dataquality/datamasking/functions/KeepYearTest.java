@@ -19,7 +19,7 @@ import java.util.Date;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.talend.dataquality.datamasking.functions.KeepYear;
+import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * created by jgonzalez on 25 juin 2015 Detailled comment
@@ -39,7 +39,7 @@ public class KeepYearTest {
     }
 
     @Test
-    public void testGood() {
+    public void testGood() throws DQException {
         dateToModify = ky.generateMaskedRow(dateToModify);
         assertEquals("01-01-1982", sdf.format(dateToModify)); //$NON-NLS-1$
     }

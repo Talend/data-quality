@@ -21,7 +21,7 @@ public class NumericVarianceDouble extends NumericVariance<Double> {
     private static final long serialVersionUID = 3652667602304768170L;
 
     @Override
-    protected Double doGenerateMaskedField(Double d) {
+    protected Double doGenerateMaskedField(Double d) throws org.talend.dataquality.sampling.exception.DQException {
         if (d == null) {
             return 0.0;
         } else {

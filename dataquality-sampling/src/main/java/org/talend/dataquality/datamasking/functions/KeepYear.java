@@ -27,7 +27,7 @@ public class KeepYear extends Function<Date> {
     private Calendar c = Calendar.getInstance();
 
     @Override
-    protected Date doGenerateMaskedField(Date date) {
+    protected Date doGenerateMaskedField(Date date) throws org.talend.dataquality.sampling.exception.DQException {
         Date newDate = new Date(System.currentTimeMillis());
         if (date != null) {
             c.setTime(date);

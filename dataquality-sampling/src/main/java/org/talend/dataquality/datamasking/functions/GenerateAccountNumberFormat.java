@@ -24,7 +24,7 @@ public class GenerateAccountNumberFormat extends GenerateAccountNumber {
     private static final long serialVersionUID = 116648954835024228L;
 
     @Override
-    protected String doGenerateMaskedField(String str) {
+    protected String doGenerateMaskedField(String str) throws org.talend.dataquality.sampling.exception.DQException {
         String accountNumber = removeFormatInString(str); // $NON-NLS-1$ //$NON-NLS-2$
         StringBuilder accountNumberFormat;
         boolean isAmerican = false;

@@ -46,7 +46,7 @@ public abstract class GenerateFromFile<T> extends Function<T> {
     protected abstract T getOutput(String string);
 
     @Override
-    protected T doGenerateMaskedField(T t) {
+    protected T doGenerateMaskedField(T t) throws org.talend.dataquality.sampling.exception.DQException {
         if (!genericTokens.isEmpty()) {
             return genericTokens.get(rnd.nextInt(genericTokens.size()));
         } else {

@@ -21,7 +21,7 @@ public class GenerateBetweenFloat extends GenerateBetween<Float> {
     private static final long serialVersionUID = -4512545989788331124L;
 
     @Override
-    protected Float doGenerateMaskedField(Float f) {
+    protected Float doGenerateMaskedField(Float f) throws org.talend.dataquality.sampling.exception.DQException {
         return (float) rnd.nextInt((max - min) + 1) + min;
     }
 }

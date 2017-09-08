@@ -18,6 +18,7 @@ import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * @author jteuladedenantes
@@ -28,6 +29,10 @@ public class GenerateUniqueSsnJapanTest {
 
     private AbstractGenerateUniqueSsn gnj = new GenerateUniqueSsnJapan();
 
+    public GenerateUniqueSsnJapanTest() throws DQException {
+        super();
+    }
+
     @Before
     public void setUp() throws Exception {
         gnj.setRandom(new Random(42));
@@ -35,26 +40,26 @@ public class GenerateUniqueSsnJapanTest {
     }
 
     @Test
-    public void testEmpty() {
+    public void testEmpty() throws DQException {
         gnj.setKeepEmpty(true);
         output = gnj.generateMaskedRow("");
         assertEquals("", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testGood1() {
+    public void testGood1() throws DQException {
         output = gnj.generateMaskedRow("830807527228");
         assertEquals("477564837070", output);
     }
 
     @Test
-    public void testGood2() {
+    public void testGood2() throws DQException {
         output = gnj.generateMaskedRow("486953617449");
         assertEquals("370892787197", output);
     }
 
     @Test
-    public void testWrongSsnFieldNumber() {
+    public void testWrongSsnFieldNumber() throws DQException {
         gnj.setKeepInvalidPattern(false);
         // without a number
         output = gnj.generateMaskedRow("83080727228");
@@ -62,7 +67,7 @@ public class GenerateUniqueSsnJapanTest {
     }
 
     @Test
-    public void testWrongSsnFieldLetter() {
+    public void testWrongSsnFieldLetter() throws DQException {
         gnj.setKeepInvalidPattern(false);
         // with a letter instead of a number
         output = gnj.generateMaskedRow("83080752722P");

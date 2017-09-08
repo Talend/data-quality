@@ -55,7 +55,7 @@ public class GenerateSsnChn extends Function<String> {
     }
 
     @Override
-    protected String doGenerateMaskedField(String str) {
+    protected String doGenerateMaskedField(String str) throws org.talend.dataquality.sampling.exception.DQException {
         StringBuilder result = new StringBuilder(EMPTY_STRING);
 
         // Region code

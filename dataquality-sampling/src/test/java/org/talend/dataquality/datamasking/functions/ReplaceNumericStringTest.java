@@ -19,6 +19,7 @@ import static org.junit.Assert.fail;
 import java.util.Random;
 
 import org.junit.Test;
+import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * created by jgonzalez on 25 juin 2015 Detailled comment
@@ -33,21 +34,21 @@ public class ReplaceNumericStringTest {
     private ReplaceNumericString rns = new ReplaceNumericString();
 
     @Test
-    public void testGood() {
+    public void testGood() throws DQException {
         rns.parse("0", false, new Random(42));
         output = rns.generateMaskedRow(input);
         assertEquals("abc000def", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testEmpty() {
+    public void testEmpty() throws DQException {
         rns.setKeepEmpty(true);
         output = rns.generateMaskedRow("");
         assertEquals("", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testEmptyParameter() {
+    public void testEmptyParameter() throws DQException {
         rns.parse(" ", false, new Random(42));
         output = rns.generateMaskedRow(input);
         assertEquals("abc830def", output); //$NON-NLS-1$

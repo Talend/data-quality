@@ -18,6 +18,7 @@ import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * created by jgonzalez on 20 août 2015 Detailled comment
@@ -35,20 +36,20 @@ public class GeneratePhoneNumberJapanTest {
     }
 
     @Test
-    public void testGood() {
+    public void testGood() throws DQException {
         output = gpnj.generateMaskedRow(null);
         assertEquals(output, "3 8308 0752"); //$NON-NLS-1$
     }
 
     @Test
-    public void testEmpty() {
+    public void testEmpty() throws DQException {
         gpnj.setKeepEmpty(true);
         output = gpnj.generateMaskedRow("");
         assertEquals("", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testCheck() {
+    public void testCheck() throws DQException {
         boolean res = true;
         gpnj.setRandom(new Random());
         for (int i = 0; i < 10; ++i) {

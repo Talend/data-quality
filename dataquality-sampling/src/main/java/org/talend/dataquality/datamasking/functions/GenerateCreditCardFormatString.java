@@ -23,7 +23,7 @@ public class GenerateCreditCardFormatString extends GenerateCreditCardFormat<Str
     private static final long serialVersionUID = 3682663337119470753L;
 
     @Override
-    protected String doGenerateMaskedField(String str) {
+    protected String doGenerateMaskedField(String str) throws org.talend.dataquality.sampling.exception.DQException {
         String strWithoutSpaces = removeFormatInString(str);
         CreditCardType cctFormat;
         StringBuilder res = new StringBuilder();

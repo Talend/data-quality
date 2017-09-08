@@ -29,7 +29,7 @@ public class BetweenIndexesKeep extends BetweenIndexes {
     }
 
     @Override
-    protected String doGenerateMaskedField(String str) {
+    protected String doGenerateMaskedField(String str) throws org.talend.dataquality.sampling.exception.DQException {
         if (!isValidParameters || str == null)
             return getDefaultOutput();
         if (endIndex > str.length())

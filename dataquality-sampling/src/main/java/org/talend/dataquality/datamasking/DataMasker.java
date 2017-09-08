@@ -13,6 +13,8 @@
 
 package org.talend.dataquality.datamasking;
 
+import org.talend.dataquality.sampling.exception.DQException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +26,7 @@ import java.util.List;
  */
 public abstract class DataMasker<TIn, TOut> {
 
-    protected abstract TOut generateOutput(TIn v, boolean isOriginal);
+    protected abstract TOut generateOutput(TIn v, boolean isOriginal) throws DQException;
 
     /**
      * DOC jgonzalez Comment method "process". This method is called to generate the masked output.
@@ -34,15 +36,15 @@ public abstract class DataMasker<TIn, TOut> {
      * not, only the masked row wiil be generated.
      * @return A masekd row from the ouput schema.
      */
-    public List<TOut> process(TIn v, boolean keepOriginal) {
-        List<TOut> reslutList = new ArrayList<>();
+    public List<TOut> process(TIn v, boolean keepOriginal) throws DQException {
+        List<TOut> resultList = new ArrayList<>();
 
         if (keepOriginal) {
-            reslutList.add(generateOutput(v, true));
+            resultList.add(generateOutput(v, true));
         }
-        reslutList.add(generateOutput(v, false));
+        resultList.add(generateOutput(v, false));
 
-        return reslutList;
+        return resultList;
     }
 
 }

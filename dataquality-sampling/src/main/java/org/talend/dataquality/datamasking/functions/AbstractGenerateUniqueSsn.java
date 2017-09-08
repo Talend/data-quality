@@ -12,11 +12,12 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
-import java.util.List;
-import java.util.Random;
-
 import org.talend.dataquality.datamasking.generic.GenerateUniqueRandomPatterns;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
+import org.talend.dataquality.sampling.exception.DQException;
+
+import java.util.List;
+import java.util.Random;
 
 /**
  * @author jteuladedenantes
@@ -35,7 +36,7 @@ public abstract class AbstractGenerateUniqueSsn extends Function<String> {
      */
     protected int checkSumSize = 0;
 
-    public AbstractGenerateUniqueSsn() {
+    public AbstractGenerateUniqueSsn() throws DQException {
         List<AbstractField> fields = createFieldsListFromPattern();
         ssnPattern = new GenerateUniqueRandomPatterns(fields);
     }
@@ -47,7 +48,7 @@ public abstract class AbstractGenerateUniqueSsn extends Function<String> {
     }
 
     @Override
-    protected String doGenerateMaskedField(String str) {
+    protected String doGenerateMaskedField(String str) throws DQException, DQException {
         if (str == null)
             return null;
 
@@ -78,6 +79,6 @@ public abstract class AbstractGenerateUniqueSsn extends Function<String> {
      */
     protected abstract List<AbstractField> createFieldsListFromPattern();
 
-    protected abstract StringBuilder doValidGenerateMaskedField(String str);
+    protected abstract StringBuilder doValidGenerateMaskedField(String str) throws DQException;
 
 }

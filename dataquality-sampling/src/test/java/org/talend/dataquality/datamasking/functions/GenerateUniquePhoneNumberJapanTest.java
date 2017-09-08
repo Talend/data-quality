@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
+import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * Created by jteuladedenantes on 22/09/16.
@@ -25,6 +26,10 @@ public class GenerateUniquePhoneNumberJapanTest {
 
     private static PhoneNumberUtil GOOGLE_PHONE_UTIL = PhoneNumberUtil.getInstance();
 
+    public GenerateUniquePhoneNumberJapanTest() throws DQException {
+        super();
+    }
+
     @Before
     public void setUp() throws Exception {
         gnj.setRandom(new Random(56));
@@ -32,20 +37,20 @@ public class GenerateUniquePhoneNumberJapanTest {
     }
 
     @Test
-    public void testValidWithFormat() {
+    public void testValidWithFormat() throws DQException {
         output = gnj.generateMaskedRow("49-92 8 7895");
         assertEquals("49-01 0 9355", output);
     }
 
     @Test
-    public void testValidWithoutFormat() {
+    public void testValidWithoutFormat() throws DQException {
         gnj.setKeepFormat(false);
         output = gnj.generateMaskedRow("49-92 8 7895");
         assertEquals("490109355", output);
     }
 
     @Test
-    public void testInvalid() {
+    public void testInvalid() throws DQException {
         // without a number
         output = gnj.generateMaskedRow("35686");
         assertEquals("42445", output);
@@ -56,7 +61,7 @@ public class GenerateUniquePhoneNumberJapanTest {
     }
 
     @Test
-    public void testValidAfterMasking() {
+    public void testValidAfterMasking() throws DQException {
         gnj.setKeepFormat(false);
         String input;
         String output;

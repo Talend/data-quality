@@ -24,7 +24,7 @@ public class GenerateSsnUs extends Function<String> {
     private static final long serialVersionUID = -7651076296534530622L;
 
     @Override
-    protected String doGenerateMaskedField(String str) {
+    protected String doGenerateMaskedField(String str) throws org.talend.dataquality.sampling.exception.DQException {
         StringBuilder result = new StringBuilder(EMPTY_STRING);
         result.append(rnd.nextInt(8));
         result.append(rnd.nextInt(9));

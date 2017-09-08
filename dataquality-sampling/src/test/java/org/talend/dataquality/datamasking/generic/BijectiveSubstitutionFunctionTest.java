@@ -32,9 +32,9 @@ public class BijectiveSubstitutionFunctionTest {
     public void setUp() throws Exception {
 
         List<FieldDefinition> fieldDefinitionList = new ArrayList<>();
-        fieldDefinitionList.add(new FieldDefinition(FieldDefinitionType.INTERVAL.getComponentValue(), null, 1, 2));
-        fieldDefinitionList.add(new FieldDefinition(FieldDefinitionType.INTERVAL.getComponentValue(), null, 0, 99));
-        fieldDefinitionList.add(new FieldDefinition(FieldDefinitionType.INTERVAL.getComponentValue(), null, 1, 12));
+        fieldDefinitionList.add(new FieldDefinition(FieldDefinitionType.INTERVAL.getComponentValue(), null, 1L, 2L));
+        fieldDefinitionList.add(new FieldDefinition(FieldDefinitionType.INTERVAL.getComponentValue(), null, 0L, 99L));
+        fieldDefinitionList.add(new FieldDefinition(FieldDefinitionType.INTERVAL.getComponentValue(), null, 1L, 12L));
 
         fieldDefinitionList.add(new FieldDefinition(FieldDefinitionType.ENUMERATION.getComponentValue(),
                 "01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19," + "2A,2B," //
@@ -42,8 +42,8 @@ public class BijectiveSubstitutionFunctionTest {
                         + "34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66," //
                         + "67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99", //
                 null, null));
-        fieldDefinitionList.add(new FieldDefinition(FieldDefinitionType.INTERVAL.getComponentValue(), null, 1, 990));
-        fieldDefinitionList.add(new FieldDefinition(FieldDefinitionType.INTERVAL.getComponentValue(), null, 1, 999));
+        fieldDefinitionList.add(new FieldDefinition(FieldDefinitionType.INTERVAL.getComponentValue(), null, 1L, 990L));
+        fieldDefinitionList.add(new FieldDefinition(FieldDefinitionType.INTERVAL.getComponentValue(), null, 1L, 999L));
 
         fn = new BijectiveSubstitutionFunction(fieldDefinitionList);
         fn.setRandom(new Random(42));
@@ -51,14 +51,14 @@ public class BijectiveSubstitutionFunctionTest {
     }
 
     @Test
-    public void testEmpty() {
+    public void testEmpty() throws org.talend.dataquality.sampling.exception.DQException {
         fn.setKeepEmpty(true);
         output = fn.generateMaskedRow("");
         assertEquals("", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testKeepInvalidPatternTrue() {
+    public void testKeepInvalidPatternTrue() throws org.talend.dataquality.sampling.exception.DQException {
         fn.setKeepInvalidPattern(true);
         output = fn.generateMaskedRow(null);
         assertEquals(null, output);
@@ -69,7 +69,7 @@ public class BijectiveSubstitutionFunctionTest {
     }
 
     @Test
-    public void testKeepInvalidPatternFalse() {
+    public void testKeepInvalidPatternFalse() throws org.talend.dataquality.sampling.exception.DQException {
         fn.setKeepInvalidPattern(false);
         output = fn.generateMaskedRow(null);
         assertEquals(null, output);
@@ -80,13 +80,13 @@ public class BijectiveSubstitutionFunctionTest {
     }
 
     @Test
-    public void testGood1() {
+    public void testGood1() throws org.talend.dataquality.sampling.exception.DQException {
         output = fn.generateMaskedRow("1860348282074");
         assertEquals("2000132446558", output);
     }
 
     @Test
-    public void testGood2() {
+    public void testGood2() throws org.talend.dataquality.sampling.exception.DQException {
         fn.setKeepFormat(false);
         // with spaces
         output = fn.generateMaskedRow("2 12 12 15 953 006");
@@ -94,14 +94,14 @@ public class BijectiveSubstitutionFunctionTest {
     }
 
     @Test
-    public void testGood3() {
+    public void testGood3() throws org.talend.dataquality.sampling.exception.DQException {
         // corse department
         output = fn.generateMaskedRow("10501  2B 532895");
         assertEquals("12312  85 719322", output);
     }
 
     @Test
-    public void testGood4() {
+    public void testGood4() throws org.talend.dataquality.sampling.exception.DQException {
         fn.setKeepFormat(false);
         // with a control key less than 10
         output = fn.generateMaskedRow("1960159794247");
@@ -109,7 +109,7 @@ public class BijectiveSubstitutionFunctionTest {
     }
 
     @Test
-    public void testWrongSsnFieldNumber() {
+    public void testWrongSsnFieldNumber() throws org.talend.dataquality.sampling.exception.DQException {
         fn.setKeepInvalidPattern(false);
         // without a number
         output = fn.generateMaskedRow("186034828207");
@@ -117,7 +117,7 @@ public class BijectiveSubstitutionFunctionTest {
     }
 
     @Test
-    public void testWrongSsnFieldLetter() {
+    public void testWrongSsnFieldLetter() throws org.talend.dataquality.sampling.exception.DQException {
         fn.setKeepInvalidPattern(false);
         // with a wrong letter
         output = fn.generateMaskedRow("186034Y282079");
@@ -125,7 +125,7 @@ public class BijectiveSubstitutionFunctionTest {
     }
 
     @Test
-    public void testWrongSsnFieldPattern() {
+    public void testWrongSsnFieldPattern() throws org.talend.dataquality.sampling.exception.DQException {
         fn.setKeepInvalidPattern(false);
         // with a letter instead of a number
         output = fn.generateMaskedRow("1860I48282079");

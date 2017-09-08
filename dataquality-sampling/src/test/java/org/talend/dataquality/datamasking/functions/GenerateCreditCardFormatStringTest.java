@@ -18,6 +18,7 @@ import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * created by jgonzalez on 30 juin 2015 Detailled comment
@@ -36,14 +37,14 @@ public class GenerateCreditCardFormatStringTest {
     }
 
     @Test
-    public void testGood() {
+    public void testGood() throws DQException {
         String input = "4120356987563"; //$NON-NLS-1$
         output = gccfs.generateMaskedRow(input).toString();
         assertEquals(output, String.valueOf(4038405589322L));
     }
 
     @Test
-    public void testEmpty() {
+    public void testEmpty() throws DQException {
         String input = ""; //$NON-NLS-1$
         gccfs.setKeepEmpty(true);
         output = gccfs.generateMaskedRow(input).toString();
@@ -51,7 +52,7 @@ public class GenerateCreditCardFormatStringTest {
     }
 
     @Test
-    public void testSpaces() {
+    public void testSpaces() throws DQException {
         gccfs.setKeepFormat(true);
         String input = "41 2 0356  9875 63"; //$NON-NLS-1$
         output = gccfs.generateMaskedRow(input).toString();
@@ -59,14 +60,14 @@ public class GenerateCreditCardFormatStringTest {
     }
 
     @Test
-    public void testSpaces2() {
+    public void testSpaces2() throws DQException {
         String input = "41 2 0356  9875 63"; //$NON-NLS-1$
         output = gccfs.generateMaskedRow(input).toString();
         assertEquals(output, "4038405589322");
     }
 
     @Test
-    public void testCheck() {
+    public void testCheck() throws DQException {
         gccfs.setRandom(new Random());
         boolean res = true;
         for (int i = 0; i < 10; ++i) {
@@ -77,7 +78,7 @@ public class GenerateCreditCardFormatStringTest {
     }
 
     @Test
-    public void testBad() {
+    public void testBad() throws DQException {
         output = gccfs.generateMaskedRow(null).toString();
         assertEquals(output, "4384055893226268"); //$NON-NLS-1$
     }

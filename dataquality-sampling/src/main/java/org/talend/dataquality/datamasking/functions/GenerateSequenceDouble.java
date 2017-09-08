@@ -21,7 +21,7 @@ public class GenerateSequenceDouble extends GenerateSequence<Double> {
     private static final long serialVersionUID = -6248102148860709547L;
 
     @Override
-    protected Double doGenerateMaskedField(Double d) {
+    protected Double doGenerateMaskedField(Double d) throws org.talend.dataquality.sampling.exception.DQException {
         return (double) seq++;
     }
 

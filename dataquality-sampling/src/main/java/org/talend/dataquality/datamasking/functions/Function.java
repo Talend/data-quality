@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * created by jgonzalez on 18 juin 2015. This class is an abstract class that
@@ -156,7 +157,7 @@ public abstract class Function<T> implements Serializable {
         return res.toString();
     }
 
-    public T generateMaskedRow(T t) {
+    public T generateMaskedRow(T t) throws DQException {
         if (t == null && keepNull) {
             return null;
         }
@@ -200,5 +201,5 @@ public abstract class Function<T> implements Serializable {
      * The input value.
      * @return A new value after applying the function.
      */
-    protected abstract T doGenerateMaskedField(T t);
+    protected abstract T doGenerateMaskedField(T t) throws DQException, DQException;
 }

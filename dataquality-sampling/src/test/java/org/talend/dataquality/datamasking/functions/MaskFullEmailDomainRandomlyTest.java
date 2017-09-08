@@ -23,6 +23,7 @@ import org.junit.Assert;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
+import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * DOC qzhao class global comment. Detailled comment
@@ -39,28 +40,28 @@ public class MaskFullEmailDomainRandomlyTest {
     private String mail = "jugonzalez@talend.com";
 
     @Test
-    public void testEmpty() {
+    public void testEmpty() throws DQException {
         maskEmailDomainName.setKeepEmpty(true);
         output = maskEmailDomainName.generateMaskedRow("");
         assertEquals("", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testOneGoodInput() {
+    public void testOneGoodInput() throws DQException {
         maskEmailDomainName.parse("test.com", false, new Random(42));
         output = maskEmailDomainName.generateMaskedRow(mail);
         Assert.assertEquals(output, "jugonzalez@test.com");
     }
 
     @Test
-    public void test1OneGoodInputWithSpace() {
+    public void test1OneGoodInputWithSpace() throws DQException {
         maskEmailDomainName.parse("", false, new Random(42));
         output = maskEmailDomainName.generateMaskedRow(mail);
         Assert.assertEquals(output, "jugonzalez@");
     }
 
     @Test
-    public void testServeralGoodInputs() {
+    public void testServeralGoodInputs() throws DQException {
         maskEmailDomainName.parse("aol.com, att.net, comcast.net, facebook.com, gmail.com, gmx.com", false, new Random(42));
         for (int i = 0; i < 20; i++) {
             output = maskEmailDomainName.generateMaskedRow(mail);
@@ -69,7 +70,7 @@ public class MaskFullEmailDomainRandomlyTest {
     }
 
     @Test
-    public void testServeralGoodInputsWithSpace() {
+    public void testServeralGoodInputsWithSpace() throws DQException {
         maskEmailDomainName.parse("aol.com, att.net, ", false, new Random(42));
         List<String> results = Arrays.asList("jugonzalez@aol.com", "jugonzalez@att.net");
         for (int i = 0; i < 20; i++) {
@@ -79,7 +80,7 @@ public class MaskFullEmailDomainRandomlyTest {
     }
 
     @Test
-    public void test1GoodLocalFile() throws URISyntaxException {
+    public void test1GoodLocalFile() throws URISyntaxException, DQException {
         String path = this.getClass().getResource("data/domain.txt").toURI().getPath();
         maskEmailDomainName.parse(path, false, new Random(42));
         for (int i = 0; i < 20; i++) {
@@ -89,27 +90,27 @@ public class MaskFullEmailDomainRandomlyTest {
     }
 
     @Test
-    public void testNullEmail() {
+    public void testNullEmail() throws DQException {
         maskEmailDomainName.parse("hehe", false, new Random(42));
         output = maskEmailDomainName.generateMaskedRow(null);
         Assert.assertTrue(output.isEmpty());
     }
 
     @Test
-    public void testNotKeepNullEmail() {
+    public void testNotKeepNullEmail() throws DQException {
         maskEmailDomainName.parse("hehe", true, new Random(42));
         output = maskEmailDomainName.generateMaskedRow(null);
         Assert.assertTrue(output == null);
     }
 
     @Test
-    public void testEmptyEmail() {
+    public void testEmptyEmail() throws DQException {
         output = maskEmailDomainName.generateMaskedRow("");
         Assert.assertTrue(output.isEmpty());
     }
 
     @Test
-    public void testWrongFormat() {
+    public void testWrongFormat() throws DQException {
         maskEmailDomainName.parse("replace", true, new Random(42));
         output = maskEmailDomainName.generateMaskedRow("hehe");
         Assert.assertEquals("replace", output);

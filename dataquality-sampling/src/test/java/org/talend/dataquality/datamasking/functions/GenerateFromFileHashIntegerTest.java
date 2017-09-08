@@ -19,6 +19,7 @@ import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * created by jgonzalez on 30 juin 2015 Detailled comment
@@ -35,12 +36,12 @@ public class GenerateFromFileHashIntegerTest {
     }
 
     @Test
-    public void testGood() {
+    public void testGood() throws DQException {
         assertEquals(9, gffhi.generateMaskedRow(null).intValue());
     }
 
     @Test
-    public void testNull() {
+    public void testNull() throws DQException {
         gffhi.keepNull = true;
         assertEquals(1, gffhi.generateMaskedRow(0).intValue());
         assertEquals(null, gffhi.generateMaskedRow(null));

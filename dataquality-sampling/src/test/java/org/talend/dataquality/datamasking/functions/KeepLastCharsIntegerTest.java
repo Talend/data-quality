@@ -19,6 +19,7 @@ import static org.junit.Assert.fail;
 import java.util.Random;
 
 import org.junit.Test;
+import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * created by jgonzalez on 30 juin 2015 Detailled comment
@@ -33,21 +34,21 @@ public class KeepLastCharsIntegerTest {
     private KeepLastCharsInteger klag = new KeepLastCharsInteger();
 
     @Test
-    public void testGood() {
+    public void testGood() throws DQException {
         klag.parse("3", false, new Random(42));
         output = klag.generateMaskedRow(input);
         assertEquals(830456, output); // $NON-NLS-1$
     }
 
     @Test
-    public void testDummyGood() {
+    public void testDummyGood() throws DQException {
         klag.parse("7", false, new Random(42));
         output = klag.generateMaskedRow(input);
         assertEquals(input, output);
     }
 
     @Test
-    public void testNegativeParameter() {
+    public void testNegativeParameter() throws DQException {
         try {
             klag.parse("-2", false, new Random(42));
             fail("should get exception with input " + klag.parameters); //$NON-NLS-1$

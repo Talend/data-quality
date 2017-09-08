@@ -20,6 +20,7 @@ import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * created by jgonzalez on 29 juin 2015 Detailled comment
@@ -39,14 +40,14 @@ public class GenerateBetweenDateTest {
     }
 
     @Test
-    public void testGood() {
+    public void testGood() throws DQException {
         gbd.parameters = "01-02-1992, 29-02-1992".split(","); //$NON-NLS-1$ //$NON-NLS-2$
         output = sdf.format(gbd.generateMaskedRow(null));
         assertEquals(output, "21-02-1992"); //$NON-NLS-1$
     }
 
     @Test
-    public void testBad() {
+    public void testBad() throws DQException {
         gbd.parameters = "not a date, 29-02-1992".split(","); //$NON-NLS-1$ //$NON-NLS-2$
         output = sdf.format(gbd.generateMaskedRow(null));
         assertEquals(output, sdf.format(new Date(System.currentTimeMillis())));

@@ -6,9 +6,10 @@ package org.talend.dataquality.datamasking.generic;
 public class FieldDefinition {
 
     public enum FieldDefinitionType {
-        CONSTANT("Constant"),
-        INTERVAL("Interval"),
-        ENUMERATION("Enumeration");
+        DATEPATTERN("DATEPATTERN"),
+        INTERVAL("INTERVAL"),
+        ENUMERATION("ENUMERATION"),
+        ENUMERATION_FROM_FILE("ENUMERATION_FROM_FILE");
 
         private String componentValue;
 
@@ -34,11 +35,11 @@ public class FieldDefinition {
 
     private String value;
 
-    private Integer min;
+    private Long min;
 
-    private Integer max;
+    private Long max;
 
-    public FieldDefinition(String type, String value, Integer min, Integer max) {
+    public FieldDefinition(String type, String value, Long min, Long max) {
         this.type = FieldDefinitionType.getTypeByComponentValue(type);
         this.value = value;
         this.min = min;
@@ -53,11 +54,11 @@ public class FieldDefinition {
         return value;
     }
 
-    public Integer getMin() {
+    public Long getMin() {
         return min;
     }
 
-    public Integer getMax() {
+    public Long getMax() {
         return max;
     }
 

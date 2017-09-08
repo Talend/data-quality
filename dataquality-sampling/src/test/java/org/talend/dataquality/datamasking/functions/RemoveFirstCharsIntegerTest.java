@@ -17,6 +17,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.Random;
 
 import org.junit.Test;
+import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * created by jgonzalez on 25 juin 2015 Detailled comment
@@ -31,7 +32,7 @@ public class RemoveFirstCharsIntegerTest {
     private RemoveFirstCharsInteger rfci = new RemoveFirstCharsInteger();
 
     @Test
-    public void test() {
+    public void test() throws DQException {
         rfci.parse("2", false, new Random(42));
         ;
         output = rfci.generateMaskedRow(input);
@@ -39,7 +40,7 @@ public class RemoveFirstCharsIntegerTest {
     }
 
     @Test
-    public void testDummyGood() {
+    public void testDummyGood() throws DQException {
         rfci.parse("10", false, new Random(42));
         output = rfci.generateMaskedRow(input);
         assertEquals(output, 0);

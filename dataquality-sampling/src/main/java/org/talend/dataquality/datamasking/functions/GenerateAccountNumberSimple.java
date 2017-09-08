@@ -21,7 +21,7 @@ public class GenerateAccountNumberSimple extends GenerateAccountNumber {
     private static final long serialVersionUID = 5440282325373170840L;
 
     @Override
-    protected String doGenerateMaskedField(String str) {
+    protected String doGenerateMaskedField(String str) throws org.talend.dataquality.sampling.exception.DQException {
         StringBuilder accountNumber = generateIban();
         for (int i = 4; i < accountNumber.length(); i += 5) {
             accountNumber.insert(i, ' ');

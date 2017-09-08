@@ -25,7 +25,7 @@ public class GenerateBetweenDate extends Function<Date> {
     private static final long serialVersionUID = 7513182257849118816L;
 
     @Override
-    protected Date doGenerateMaskedField(Date date) {
+    protected Date doGenerateMaskedField(Date date) throws org.talend.dataquality.sampling.exception.DQException {
         if (parameters.length == 2) {
             SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy"); //$NON-NLS-1$
             Date minDate = null;

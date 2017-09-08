@@ -1,12 +1,13 @@
 package org.talend.dataquality.datamasking.functions;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import org.talend.dataquality.datamasking.generic.GenerateUniqueRandomPatterns;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
+import org.talend.dataquality.sampling.exception.DQException;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Created by jteuladedenantes on 21/09/16.
@@ -19,7 +20,7 @@ public abstract class AbstractGenerateUniquePhoneNumber extends Function<String>
 
     private ReplaceNumericString replaceNumeric = new ReplaceNumericString();
 
-    public AbstractGenerateUniquePhoneNumber() {
+    public AbstractGenerateUniquePhoneNumber() throws DQException {
         List<AbstractField> fields = createFieldsListFromPattern();
 
         phoneNumberPattern = new GenerateUniqueRandomPatterns(fields);
@@ -33,7 +34,7 @@ public abstract class AbstractGenerateUniquePhoneNumber extends Function<String>
     }
 
     @Override
-    protected String doGenerateMaskedField(String str) {
+    protected String doGenerateMaskedField(String str) throws DQException {
 
         if (str == null)
             return null;

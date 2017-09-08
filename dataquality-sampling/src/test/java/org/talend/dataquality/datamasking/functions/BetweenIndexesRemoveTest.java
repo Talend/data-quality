@@ -19,6 +19,7 @@ import static org.junit.Assert.fail;
 import java.util.Random;
 
 import org.junit.Test;
+import org.talend.dataquality.sampling.exception.DQException;
 
 public class BetweenIndexesRemoveTest {
 
@@ -29,21 +30,21 @@ public class BetweenIndexesRemoveTest {
     private String output;
 
     @Test
-    public void testGood() {
+    public void testGood() throws DQException {
         bir.parse("2, 4", false, new Random(42));
         output = bir.generateMaskedRow(input);
         assertEquals("Se", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testEmpty() {
+    public void testEmpty() throws DQException {
         bir.parse("2, 4", false, new Random(42));
         output = bir.generateMaskedRow("");
         assertEquals("", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testNegativeParameter() {
+    public void testNegativeParameter() throws DQException {
         try {
             bir.parse("-2, 8", false, new Random(42));
             fail("should get exception with input " + bir.parameters); //$NON-NLS-1$
@@ -55,7 +56,7 @@ public class BetweenIndexesRemoveTest {
     }
 
     @Test
-    public void testSwitchParameter() {
+    public void testSwitchParameter() throws DQException {
         try {
             bir.parse("4, 2", false, new Random(42));
             fail("should get exception with input " + bir.parameters); //$NON-NLS-1$
@@ -67,7 +68,7 @@ public class BetweenIndexesRemoveTest {
     }
 
     @Test
-    public void testBad() {
+    public void testBad() throws DQException {
         try {
             bir.parse("1", false, new Random(42));
             fail("should get exception with input " + bir.parameters); //$NON-NLS-1$
@@ -79,7 +80,7 @@ public class BetweenIndexesRemoveTest {
     }
 
     @Test
-    public void testDummyParameters() {
+    public void testDummyParameters() throws DQException {
         bir.parse("423,452", false, new Random(42));
         output = bir.generateMaskedRow(input);
         assertEquals(input, output);

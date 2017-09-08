@@ -18,10 +18,10 @@ import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * created by jgonzalez on 30 juin 2015 Detailled comment
- *
  */
 public class GenerateCreditCardStringTest {
 
@@ -35,20 +35,20 @@ public class GenerateCreditCardStringTest {
     }
 
     @Test
-    public void test() {
+    public void test() throws DQException {
         output = gccs.generateMaskedRow(null).toString();
         assertEquals(output, "4384055893226268"); //$NON-NLS-1$
     }
 
     @Test
-    public void testEmpty() {
+    public void testEmpty() throws DQException {
         gccs.setKeepEmpty(true);
         output = gccs.generateMaskedRow("").toString();
         assertEquals("", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testCheck() {
+    public void testCheck() throws DQException {
         gccs.setRandom(new Random());
         boolean res = true;
         for (int i = 0; i < 10; ++i) {
@@ -59,7 +59,7 @@ public class GenerateCreditCardStringTest {
     }
 
     @Test
-    public void testNull() {
+    public void testNull() throws DQException {
         gccs.keepNull = true;
         output = String.valueOf(gccs.generateMaskedRow(null));
         assertEquals(output, "null"); //$NON-NLS-1$

@@ -21,7 +21,7 @@ public class GenerateCreditCardString extends GenerateCreditCardSimple<String> {
     private static final long serialVersionUID = -5085537661042535376L;
 
     @Override
-    protected String doGenerateMaskedField(String str) {
+    protected String doGenerateMaskedField(String str) throws org.talend.dataquality.sampling.exception.DQException {
         generateCreditCard();
         return String.valueOf(number);
     }

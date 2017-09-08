@@ -19,6 +19,7 @@ import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * created by jgonzalez on 29 juin 2015 Detailled comment
@@ -37,20 +38,20 @@ public class GenerateFromFileStringTest {
     }
 
     @Test
-    public void testEmpty() {
+    public void testEmpty() throws DQException {
         gffs.setKeepEmpty(true);
         output = gffs.generateMaskedRow("").toString();
         assertEquals("", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testGood() {
+    public void testGood() throws DQException {
         output = gffs.generateMaskedRow(null);
         assertEquals("Brad X", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testNull() {
+    public void testNull() throws DQException {
         gffs.keepNull = true;
         output = gffs.generateMaskedRow(null);
         assertEquals(null, output);
