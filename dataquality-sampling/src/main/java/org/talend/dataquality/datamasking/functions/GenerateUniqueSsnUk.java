@@ -36,7 +36,7 @@ public class GenerateUniqueSsnUk extends AbstractGenerateUniqueSsn {
     }
 
     @Override
-    protected List<AbstractField> createFieldsListFromPattern() {
+    protected List<AbstractField> createFieldsListFromPattern() throws DQException {
         List<Character> forbiddenLetters = new ArrayList<Character>(Arrays.asList('D', 'F', 'I', 'Q', 'U', 'V'));
 
         List<String> forbiddenTwoLetters = new ArrayList<String>(Arrays.asList("BG", "GB", "NK", "KN", "TN", "NT", "ZZ"));

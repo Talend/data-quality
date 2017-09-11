@@ -34,7 +34,7 @@ public class GenerateUniqueSsnUs extends AbstractGenerateUniqueSsn {
     }
 
     @Override
-    protected List<AbstractField> createFieldsListFromPattern() {
+    protected List<AbstractField> createFieldsListFromPattern() throws DQException {
         List<AbstractField> fields = new ArrayList<AbstractField>();
         List<String> firstField = new ArrayList<String>();
         for (int i = 1; i < 900; i++) {

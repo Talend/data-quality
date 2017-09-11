@@ -15,6 +15,7 @@ package org.talend.dataquality.datamasking.generic.fields;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * @author jteuladedenantes
@@ -32,29 +33,27 @@ public class FieldEnum extends AbstractField {
      */
     private List<String> enumValues;
 
-    public FieldEnum(List<String> enumValues) {
+    public FieldEnum(List<String> enumValues) throws DQException {
         int maxLen = 0;
         for (String value : enumValues) {
             if (value.length() > maxLen) {
                 maxLen = value.length();
             }
         }
-        for (String value : enumValues) {
-            if (value.length() < maxLen) {
-                LOGGER.error("The value <" + value + "> with a length = " + value.length() + " should have a length = " + maxLen);
-                return;
-            }
-        }
-        this.enumValues = enumValues;
-        this.length = maxLen;
+        initialize(enumValues, maxLen);
     }
 
-    public FieldEnum(List<String> enumValues, int length) {
+    public FieldEnum(List<String> enumValues, int length) throws DQException {
+        initialize(enumValues, length);
+    }
+
+    private void initialize(List<String> enumValues, int length) throws DQException {
         this.length = length;
         for (String value : enumValues)
-            if (value.length() != length) {
+            if (value.length() != this.length) {
                 LOGGER.error("The field <" + value + "> with a length = " + value.length() + " should have a length = " + length);
-                return;
+                throw new DQException(
+                        "The value <" + value + "> with a length = " + value.length() + " should have a length = " + length);
             }
         this.enumValues = enumValues;
     }

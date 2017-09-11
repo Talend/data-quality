@@ -61,7 +61,7 @@ public abstract class AbstractGenerateUniquePhoneNumber extends Function<String>
             return result.toString();
     }
 
-    protected List<AbstractField> createFieldsListFromPattern() {
+    protected List<AbstractField> createFieldsListFromPattern() throws DQException {
         List<AbstractField> fields = new ArrayList<AbstractField>();
         long max = (long) Math.pow(10, getDigitsNumberToMask()) - 1;
         fields.add(new FieldInterval(0, max));

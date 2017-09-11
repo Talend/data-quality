@@ -29,6 +29,8 @@ public class BijectiveSubstitutionFunction extends Function<String> {
 
     public BijectiveSubstitutionFunction(List<FieldDefinition> fieldDefinitionList) throws DQException, IOException {
 
+        keepFormat = true;
+
         List<AbstractField> fieldList = new ArrayList<AbstractField>();
 
         for (FieldDefinition definition : fieldDefinitionList) {

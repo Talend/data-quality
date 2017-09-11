@@ -48,7 +48,7 @@ public abstract class AbstractGenerateUniqueSsn extends Function<String> {
     }
 
     @Override
-    protected String doGenerateMaskedField(String str) throws DQException, DQException {
+    protected String doGenerateMaskedField(String str) throws DQException {
         if (str == null)
             return null;
 
@@ -77,7 +77,7 @@ public abstract class AbstractGenerateUniqueSsn extends Function<String> {
     /**
      * @return the list of patterns for each field
      */
-    protected abstract List<AbstractField> createFieldsListFromPattern();
+    protected abstract List<AbstractField> createFieldsListFromPattern() throws DQException;
 
     protected abstract StringBuilder doValidGenerateMaskedField(String str) throws DQException;
 

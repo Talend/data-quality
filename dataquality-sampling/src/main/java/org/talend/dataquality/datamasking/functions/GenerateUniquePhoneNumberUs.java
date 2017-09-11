@@ -40,7 +40,7 @@ public class GenerateUniquePhoneNumberUs extends AbstractGenerateUniquePhoneNumb
     }
 
     @Override
-    protected List<AbstractField> createFieldsListFromPattern() {
+    protected List<AbstractField> createFieldsListFromPattern() throws DQException {
         List<AbstractField> fields = new ArrayList<AbstractField>();
 
         List<String> secondAndThirdDigits = new ArrayList<String>();

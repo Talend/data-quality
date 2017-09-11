@@ -14,11 +14,10 @@ package org.talend.dataquality.datamasking.generic;
 
 import java.io.Serializable;
 import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-import org.apache.log4j.Logger;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.sampling.exception.DQException;
 
@@ -138,7 +137,7 @@ public class GenerateUniqueRandomPatterns implements Serializable {
             numberToMask += listToMask.get(i) * basedWidthsList.get(i);
 
         if (key == null)
-            setKey((new Random()).nextInt() % 10000 + 1000);
+            setKey((new SecureRandom()).nextInt() % 10000 + 1000);
         long coprimeNumber = findLargestCoprime(Math.abs(key));
         // uniqueMaskedNumber is the number we masked
         long uniqueMaskedNumber = (numberToMask * coprimeNumber) % longestWidth;

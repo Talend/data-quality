@@ -82,7 +82,7 @@ public class GenerateUniqueSsnFr extends AbstractGenerateUniqueSsn {
      * @return the list of each field
      */
     @Override
-    protected List<AbstractField> createFieldsListFromPattern() {
+    protected List<AbstractField> createFieldsListFromPattern() throws DQException {
         List<AbstractField> fields = new ArrayList<AbstractField>();
 
         fields.add(new FieldInterval(1, 2));

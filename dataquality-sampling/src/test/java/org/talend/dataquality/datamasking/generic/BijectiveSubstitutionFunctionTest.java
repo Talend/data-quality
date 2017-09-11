@@ -87,17 +87,16 @@ public class BijectiveSubstitutionFunctionTest {
 
     @Test
     public void testGood2() throws org.talend.dataquality.sampling.exception.DQException {
-        fn.setKeepFormat(false);
         // with spaces
         output = fn.generateMaskedRow("2 12 12 15 953 006");
-        assertEquals("1170511293176", output);
+        assertEquals("1 17 05 11 293 176", output);
     }
 
     @Test
     public void testGood3() throws org.talend.dataquality.sampling.exception.DQException {
         // corse department
-        output = fn.generateMaskedRow("10501  2B 532895");
-        assertEquals("12312  85 719322", output);
+        output = fn.generateMaskedRow("10501-2B-532895");
+        assertEquals("12312-85-719322", output);
     }
 
     @Test
