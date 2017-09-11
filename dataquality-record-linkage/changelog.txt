@@ -1,3 +1,6 @@
+V3.4.1 2017-09-11
+	- TDQ-14135 modify match analysis editor to support Default survivorship
+
 V3.4.0 2017-08-24
 	(no change in this version)
 

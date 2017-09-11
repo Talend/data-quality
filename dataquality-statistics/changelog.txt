@@ -1,3 +1,6 @@
+V1.7.1 2017-09-11
+	(no change in this version)
+
 V1.7.0 2017-08-24
 	- TDQ-13389 CardinalityStatistics can now take an Object instead of a String
 	- TDQ-13936 Recognize dates when a String with eras

@@ -1,3 +1,6 @@
+V2.5.1 2017-09-11
+	(no change in this version)
+
 V2.5.0 2017-08-24
 	- TDQ-13809 change regex to valid emails with special characters
 	- TDQ-13935 sync 'DateRegexesGrouped.txt' in 'sampling' and 'statistics'

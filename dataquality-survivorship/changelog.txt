@@ -1,3 +1,6 @@
+V2.1.1 2017-09-11
+	(no change in this version)
+
 V2.1.0 2017-08-24
 	- TDQ-13981 when tRuleSurvivorship input data has two groups can not use "fill empty by" function
 	- TDQ-13983 "Conflict" column doesn't show conflict columnName when rules doesn't resolve the conflict

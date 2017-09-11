@@ -1,3 +1,7 @@
+V1.7.1 2017-09-11
+	- TDQ-14268 data is not discovered when pure numeric value
+	- TDQ-13885 add a weight on header name when exact matching
+
 V1.7.0 2017-08-24
 	- TDQ-13046 take into account regex changes with tDataprepRun Spark
 	- TDP-3858 tdq dictionnaries json serialization
