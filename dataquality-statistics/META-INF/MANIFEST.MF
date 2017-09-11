@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Semantic Library
 Bundle-SymbolicName: org.talend.dataquality.statistics;singleton:=true
-Bundle-Version: 1.7.1
+Bundle-Version: 1.7.2.SNAPSHOT
 Bundle-Vendor: .Talend SA.
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.slf4j.api,
