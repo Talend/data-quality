@@ -18,8 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.StringUtils;
 import org.talend.dataquality.record.linkage.constant.AttributeMatcherType;
 import org.talend.dataquality.record.linkage.grouping.AnalysisMatchRecordGrouping;
 import org.talend.dataquality.record.linkage.grouping.IRecordGrouping;
@@ -131,10 +129,8 @@ public class ComponentMatchParameterAdapter extends MatchParameterAdapter {
             for (Map<String, String> defSurvDef : defaultSurvivorshipRules) {
                 // the column's data type start with id_, so need to add id_ ahead of the default survivorship's data
                 // type before judging if they are equal
-                if (StringUtils.equalsIgnoreCase(dataTypeName,
-                        SurvivorshipUtils.NUMBER_ID + defSurvDef.get(SurvivorshipUtils.DATA_TYPE))
-                        || StringUtils.equalsIgnoreCase(defSurvDef.get(SurvivorshipUtils.DATA_TYPE), "Number") //$NON-NLS-1$ 
-                                && ArrayUtils.contains(SurvivorshipUtils.NUMBERS, dataTypeName)) {
+
+                if (SurvivorshipUtils.isMappingDataType(dataTypeName, defSurvDef.get(SurvivorshipUtils.DATA_TYPE))) {
                     putNewSurvFunc(defaultSurvRules, Integer.parseInt(columnWithIndex.get(columnName)), columnName,
                             defSurvDef.get(SurvivorshipUtils.PARAMETER), defSurvDef.get(SurvivorshipUtils.SURVIVORSHIP_FUNCTION));
                     break;
