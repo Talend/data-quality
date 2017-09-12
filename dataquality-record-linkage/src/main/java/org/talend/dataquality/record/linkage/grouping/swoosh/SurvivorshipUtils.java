@@ -29,6 +29,7 @@ import org.talend.dataquality.record.linkage.grouping.adapter.MatchParameterAdap
 import org.talend.dataquality.record.linkage.grouping.swoosh.SurvivorShipAlgorithmParams.SurvivorshipFunction;
 import org.talend.dataquality.record.linkage.record.CombinedRecordMatcher;
 import org.talend.dataquality.record.linkage.record.IRecordMatcher;
+import org.talend.dataquality.record.linkage.utils.DefaultSurvivorShipDataTypeEnum;
 import org.talend.dataquality.record.linkage.utils.SurvivorShipAlgorithmEnum;
 
 /**
@@ -108,9 +109,8 @@ public class SurvivorshipUtils {
             for (Map<String, String> defSurvDef : defaultSurvivorshipRules) {
                 // the column's data type start with id_, so need to add id_ ahead of the default survivorship's data
                 // type before judging if they are equal
-                if (StringUtils.equalsIgnoreCase(dataTypeName, NUMBER_ID + defSurvDef.get(DATA_TYPE))
-                        || StringUtils.equalsIgnoreCase(defSurvDef.get(DATA_TYPE), "Number") //$NON-NLS-1$ 
-                                && ArrayUtils.contains(NUMBERS, dataTypeName)) {
+
+                if (isMappingDataType(dataTypeName, defSurvDef.get(DATA_TYPE))) {
                     putNewSurvFunc(survivorShipAlgorithmParams, defaultSurvRules,
                             Integer.parseInt(columnWithIndex.get(columnName)), columnName, defSurvDef.get(PARAMETER),
                             defSurvDef.get(SURVIVORSHIP_FUNCTION));
@@ -233,6 +233,58 @@ public class SurvivorshipUtils {
         survFunc.setParameter(parameter);
         survFunc.setSurvivorShipAlgoEnum(SurvivorShipAlgorithmEnum.getTypeBySavedValue(algorithmType));
         defaultSurvRules.put(columnIndex, survFunc);
+    }
+
+    /**
+     * 
+     * Judge whether input data type is mapping to fact data type
+     * 
+     * @param factTypeName
+     * @param parameterDataType
+     * @return
+     */
+    public static boolean isMappingDataType(String factTypeName, String parameterDataType) {
+
+        if (StringUtils.equalsIgnoreCase(factTypeName, NUMBER_ID + parameterDataType)
+                || isNumberDataType(factTypeName, parameterDataType)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 
+     * Judge whether input data type is belong to NUMBERS type
+     * 
+     * @param factTypeName
+     * @param parameterDataType
+     * @return
+     */
+    public static boolean isNumberDataType(String factTypeName, String parameterDataType) {
+        if (StringUtils.equalsIgnoreCase(parameterDataType, "Number") //$NON-NLS-1$ 
+                && ArrayUtils.contains(NUMBERS, factTypeName)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 
+     * Convert input data type to DefaultSurvivorShipDataTypeEnum
+     * 
+     * @param factTypeName
+     * @return
+     */
+    public static String convertDataType(String factTypeName) {
+        for (DefaultSurvivorShipDataTypeEnum dataType : DefaultSurvivorShipDataTypeEnum.values()) {
+            String dataTypeName = dataType.name();
+            if (isNumberDataType(factTypeName, dataTypeName)) {
+                return DefaultSurvivorShipDataTypeEnum.NUMBER.name();
+            } else if (StringUtils.equalsIgnoreCase(factTypeName, NUMBER_ID + dataTypeName)) {
+                return dataTypeName;
+            }
+        }
+        return null;
     }
 
     public final static String[] NUMBERS = new String[] { NUMBER_ID + Integer.class.getSimpleName(),
