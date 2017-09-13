@@ -14,6 +14,13 @@ package org.talend.dataquality.converters;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+
+import org.apache.commons.lang.StringUtils;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -50,7 +57,7 @@ public class StringTrimmerTest {
         assertEquals("a b c", stringTrimmer.removeTrailingAndLeading(" a b c ")); //$NON-NLS-1$ //$NON-NLS-2$
 
         // test for other characters
-        assertEquals(expected, stringTrimmer.removeTrailingAndLeading("\t" + expected, "\t")); //$NON-NLS-1$ //$NON-NLS-2$ 
+        assertEquals(expected, stringTrimmer.removeTrailingAndLeading("\t" + expected, "\t")); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals(expected, stringTrimmer.removeTrailingAndLeading(expected + "\t", "\t")); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals(expected, stringTrimmer.removeTrailingAndLeading('\u0009' + expected, "\t")); //$NON-NLS-1$
         assertEquals(expected, stringTrimmer.removeTrailingAndLeading('\u0009' + expected, '\u0009' + "")); //$NON-NLS-1$
@@ -58,15 +65,16 @@ public class StringTrimmerTest {
 
         assertEquals("abc ", stringTrimmer.removeTrailingAndLeading("\t" + "abc ", "\t")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
         assertEquals("a" + "\t" + "bc", stringTrimmer.removeTrailingAndLeading("\t" + "a" + "\t" + "bc", "\t")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
-        assertEquals("\t" + expected, stringTrimmer.removeTrailingAndLeading("\t" + "abc ")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
-        assertEquals(expected, ("\t" + "abc ").trim()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3
+        assertEquals("\t" + expected, stringTrimmer.removeTrailingAndLeading("\t" + "abc ")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        assertEquals(expected, ("\t" + "abc ").trim()); //$NON-NLS-1$ //$NON-NLS-2$
+                                                        // //$NON-NLS-3
 
-        assertEquals(expected, stringTrimmer.removeTrailingAndLeading("\n" + expected, "\n")); //$NON-NLS-1$ //$NON-NLS-2$ 
+        assertEquals(expected, stringTrimmer.removeTrailingAndLeading("\n" + expected, "\n")); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals("abc ", stringTrimmer.removeTrailingAndLeading("\n" + "abc ", "\n")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
         assertEquals(expected, stringTrimmer.removeTrailingAndLeading(expected, "\r")); //$NON-NLS-1$
-        assertEquals(expected, stringTrimmer.removeTrailingAndLeading("\r" + expected, "\r")); //$NON-NLS-1$ //$NON-NLS-2$ 
-        assertEquals(expected, stringTrimmer.removeTrailingAndLeading("\r" + expected + "\r", "\r")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
+        assertEquals(expected, stringTrimmer.removeTrailingAndLeading("\r" + expected, "\r")); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals(expected, stringTrimmer.removeTrailingAndLeading("\r" + expected + "\r", "\r")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         assertEquals("abc ", stringTrimmer.removeTrailingAndLeading("\r" + "abc ", "\r")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
         assertEquals("abc ", stringTrimmer.removeTrailingAndLeading("\r" + "abc " + "\r", "\r")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 
@@ -79,10 +87,86 @@ public class StringTrimmerTest {
     public void testRemoveTrailingAndLeadingWhitespaces() {
         StringTrimmer stringTrimmer = new StringTrimmer();
         String inputData = " " + expected; //$NON-NLS-1$
-        for (String removechar : stringTrimmer.WHITESPACE_CHARS) {
+        for (String removechar : StringTrimmer.WHITESPACE_CHARS) {
             inputData = inputData + removechar;
         }
         assertEquals(expected, stringTrimmer.removeTrailingAndLeadingWhitespaces(inputData));
     }
 
+    @Test
+    public void testRemoveTrailingAndLeadingWhitespacesOptimization() {
+        int nbTests = 10000;
+        for (int maxNbSpace = 1; maxNbSpace < 10; maxNbSpace += 3) {
+            System.out.print("Test with max Nb Space = " + maxNbSpace + "\t");
+            String[] ex = generateExamples(nbTests, maxNbSpace);
+            for (int i = 0; i < 2; i++) { // first run is taking a long time =>
+                                              // run twice at least
+                runPerfTests(ex, i);
+            }
+        }
+
+    }
+
+    private void runPerfTests(String[] ex, int runNumber) {
+        // call string trimmer
+        StringTrimmer stringTrimmer = new StringTrimmer();
+        long start = System.currentTimeMillis();
+        for (int i = 0; i < ex.length; i++) {
+            stringTrimmer.removeTrailingAndLeadingWhitespaces(ex[i]);
+        }
+        long duration1 = System.currentTimeMillis() - start;
+        if (runNumber == 1) // only display second run results (first run is
+                                // taking too much time to start
+            System.out.print("New trimmer implementation: " + duration1 + "\t");
+
+        // call original implementation
+        start = System.currentTimeMillis();
+        for (int i = 0; i < ex.length; i++) {
+            originalRemoveTrailingAndLeadingWhitespaces(ex[i]);
+        }
+        long duration2 = System.currentTimeMillis() - start;
+        if (runNumber == 1) {
+            System.out.println("Original trimmer implementation: " + duration2);
+            Assert.assertTrue("New StringTrimmer implementation should be faster than original implemenation. Run: " + runNumber,
+                    duration1 <= (duration2 + 10));
+        }
+    }
+
+    private String[] generateExamples(int n, int maxNbSpace) {
+        List<String> examples = new ArrayList<String>();
+        Random rng = new Random();
+
+        for (int i = 0; i < n; i++) {
+            StringBuilder base = new StringBuilder("mdjqfdsqjpoierupoezflmdjdfsdvxcsdhnnkqfklm");
+            for (int j = 0; j < maxNbSpace; j++) {
+                // prepend spaces before base string
+                char[] chars = new char[rng.nextInt(maxNbSpace)];
+                Arrays.fill(chars, ' ');
+                base.insert(0, chars);
+                // append spaces after base string
+                chars = new char[rng.nextInt(maxNbSpace)];
+                Arrays.fill(chars, ' ');
+                base.append(chars);
+            }
+            examples.add(base.toString());
+        }
+        return examples.toArray(new String[examples.size()]);
+    }
+
+    private String originalRemoveTrailingAndLeadingWhitespaces(String inputStr) {
+        if (StringUtils.isEmpty(inputStr)) {
+            return inputStr;
+        }
+
+        String result = inputStr; // original
+        // String result = inputStr.trim(); // pull request from davkrause
+        while (StringUtils.startsWithAny(result, StringTrimmer.WHITESPACE_CHARS)) {
+            result = StringUtils.removeStart(result, result.substring(0, 1));
+        }
+
+        while (StringUtils.endsWithAny(result, StringTrimmer.WHITESPACE_CHARS)) {
+            result = StringUtils.removeEnd(result, result.substring(result.length() - 1, result.length()));
+        }
+        return result;
+    }
 }

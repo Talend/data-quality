@@ -21,12 +21,12 @@ import org.apache.commons.lang.StringUtils;
  */
 public class StringTrimmer {
 
-    public String[] WHITESPACE_CHARS = new String[] { "\t" // CHARACTER TABULATION //$NON-NLS-1$
+    public static final String[] WHITESPACE_CHARS = new String[] { " " // SPACE //$NON-NLS-1$
+            , "\t" // CHARACTER TABULATION //$NON-NLS-1$
             , "\n" // LINE FEED (LF) //$NON-NLS-1$
             , '\u000B' + "" // LINE TABULATION //$NON-NLS-1$
             , "\f" // FORM FEED (FF) //$NON-NLS-1$
             , "\r" // CARRIAGE RETURN (CR) //$NON-NLS-1$
-            , " " // SPACE //$NON-NLS-1$
             , '\u0085' + "" // NEXT LINE (NEL) //$NON-NLS-1$
             , '\u00A0' + "" // NO-BREAK SPACE //$NON-NLS-1$
             , '\u1680' + "" // OGHAM SPACE MARK //$NON-NLS-1$
