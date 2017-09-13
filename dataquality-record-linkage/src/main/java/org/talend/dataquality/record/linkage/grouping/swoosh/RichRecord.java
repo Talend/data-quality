@@ -450,11 +450,8 @@ public class RichRecord extends Record {
 
             }
         } else {// for not master
-            String finalGID = this.getGroupId();
-            // if (StringUtils.isBlank(finalGID)) {
-            finalGID = computeGID(oldGID2New);
+            String finalGID = computeGID(oldGID2New);
             setGroupId(finalGID);
-            // }
             if (recordSize == originRow.size()) {
                 if (GID == null) {
                     addOtherAttributeForNotMaster(oldGID2New);
