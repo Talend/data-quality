@@ -61,11 +61,13 @@ public class DictionaryUtils {
 
     /**
      * generate a document.
+     * Use Document categoryToDocument(DQDocument doc)
      *
      * @param word
      * @param values
      * @return
      */
+    @Deprecated
     public static Document generateDocument(String docId, String catId, String word, Set<String> values) {
         String tempWord = word.trim();
         Document doc = new Document();
@@ -149,6 +151,11 @@ public class DictionaryUtils {
             for (DQCategory child : cat.getChildren())
                 doc.add(new StringField(DictionaryConstants.CHILD, child.getId(), Field.Store.YES));
         return doc;
+    }
+
+    public static Document dqDocumentToLuceneDocument(DQDocument doc) {
+
+        return generateDocument(doc.getId(), doc.getCategory().getId(), doc.getCategory().getName(), doc.getValues());
     }
 
     public static DQDocument dictionaryEntryFromDocument(Document doc) {

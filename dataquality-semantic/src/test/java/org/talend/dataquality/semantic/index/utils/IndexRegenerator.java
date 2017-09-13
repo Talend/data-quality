@@ -74,8 +74,7 @@ public class IndexRegenerator {
             }
             Document doc = reader.document(i);
             DQDocument entry = DictionaryUtils.dictionaryEntryFromDocument(doc);
-            writer.addDocument(DictionaryUtils.generateDocument(entry.getId(), entry.getCategory().getId(),
-                    entry.getCategory().getName(), entry.getValues()));
+            writer.addDocument(DictionaryUtils.dqDocumentToLuceneDocument(entry));
         }
         writer.commit();
         writer.close();
