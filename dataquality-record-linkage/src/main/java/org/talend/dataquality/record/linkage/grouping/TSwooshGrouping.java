@@ -606,7 +606,7 @@ public class TSwooshGrouping<TYPE> {
                 richRecord2.setGroupId(grpId1);
                 updateNotMasteredRecords(grpId2, grpId1);
                 // Put into the map: <gid2,gid1>
-                oldGID2New.put(grpId1, grpId2);
+                oldGID2New.put(grpId2, grpId1);
                 // Update map where value equals to gid2
                 List<String> keysOfGID2 = oldGID2New.getKeys(grpId2);
                 if (keysOfGID2 != null) {
