@@ -95,7 +95,7 @@ public class JARDirectory extends Directory {
         final String unzipFolderName = extractPath + File.separator + indexDirectory + File.separator + contextName
                 + File.separator;
         final File destinationFolder = Paths.get(unzipFolderName).toFile();
-        LOGGER.info("Extrating index to temporary directory: " + destinationFolder.getAbsolutePath());
+        LOGGER.info("Extracting index to temporary directory: " + destinationFolder.getAbsolutePath());
         if (destinationFolder.exists()) {
             // File was already extracted, reuse it
             fsDir = FSDirectory.open(destinationFolder);
