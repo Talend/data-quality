@@ -66,7 +66,7 @@ public class GenerateUniqueSsnChnTest {
     @Test
     public void testGood() {
         output = gnf.generateMaskedRow("64010119520414123X");
-        assertEquals("150923205211538130", output);
+        assertEquals("15092320521223813X", output);
     }
 
     @Test

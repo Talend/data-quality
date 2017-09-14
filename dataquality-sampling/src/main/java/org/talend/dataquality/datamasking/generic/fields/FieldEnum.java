@@ -33,7 +33,7 @@ public class FieldEnum extends AbstractField {
      */
     private List<String> enumValues;
 
-    public FieldEnum(List<String> enumValues)  {
+    public FieldEnum(List<String> enumValues) {
         int maxLen = 0;
         for (String value : enumValues) {
             if (value.length() > maxLen) {
@@ -43,11 +43,11 @@ public class FieldEnum extends AbstractField {
         initialize(enumValues, maxLen);
     }
 
-    public FieldEnum(List<String> enumValues, int length)  {
+    public FieldEnum(List<String> enumValues, int length) {
         initialize(enumValues, length);
     }
 
-    private void initialize(List<String> enumValues, int length)  {
+    private void initialize(List<String> enumValues, int length) {
         this.length = length;
         for (String value : enumValues)
             if (value.length() != this.length) {

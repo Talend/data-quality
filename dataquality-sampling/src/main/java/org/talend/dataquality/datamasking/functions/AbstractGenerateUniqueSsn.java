@@ -12,11 +12,11 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
-import java.util.List;
-import java.util.Random;
-
 import org.talend.dataquality.datamasking.generic.GenerateUniqueRandomPatterns;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
+
+import java.util.List;
+import java.util.Random;
 
 /**
  * @author jteuladedenantes
@@ -47,11 +47,7 @@ public abstract class AbstractGenerateUniqueSsn extends Function<String> {
     }
 
     @Override
-<<<<<<< HEAD
-    protected String doGenerateMaskedField(String str) throws DQException {
-=======
     protected String doGenerateMaskedField(String str) {
->>>>>>> parent of d97e232... feat(TDQ-11977) : add DatePattern support
         if (str == null)
             return null;
 
@@ -80,7 +76,7 @@ public abstract class AbstractGenerateUniqueSsn extends Function<String> {
     /**
      * @return the list of patterns for each field
      */
-    protected abstract List<AbstractField> createFieldsListFromPattern() throws DQException;
+    protected abstract List<AbstractField> createFieldsListFromPattern();
 
     protected abstract StringBuilder doValidGenerateMaskedField(String str);
 

@@ -86,7 +86,7 @@ public class BijectiveSubstitutionFunctionTest {
     }
 
     @Test
-    public void testGood2()  {
+    public void testGood2() {
         // with spaces
         output = fn.generateMaskedRow("2 12 12 15 953 006");
         assertEquals("1 17 05 11 293 176", output);

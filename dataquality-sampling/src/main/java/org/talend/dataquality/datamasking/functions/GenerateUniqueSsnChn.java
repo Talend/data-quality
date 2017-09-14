@@ -77,7 +77,7 @@ public class GenerateUniqueSsnChn extends AbstractGenerateUniqueSsn {
     }
 
     @Override
-    protected List<AbstractField> createFieldsListFromPattern() throws DQException {
+    protected List<AbstractField> createFieldsListFromPattern() {
         List<AbstractField> fields = new ArrayList<AbstractField>();
 
         InputStream is = GenerateUniqueSsnChn.class.getResourceAsStream("RegionListChina.txt");

@@ -1,11 +1,11 @@
 package org.talend.dataquality.datamasking.functions;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldEnum;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by jteuladedenantes on 21/09/16.
@@ -35,7 +35,7 @@ public class GenerateUniquePhoneNumberUs extends AbstractGenerateUniquePhoneNumb
     }
 
     @Override
-    protected List<AbstractField> createFieldsListFromPattern() throws DQException {
+    protected List<AbstractField> createFieldsListFromPattern() {
         List<AbstractField> fields = new ArrayList<AbstractField>();
 
         List<String> secondAndThirdDigits = new ArrayList<String>();

@@ -12,12 +12,12 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldEnum;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 
@@ -77,7 +77,7 @@ public class GenerateUniqueSsnFr extends AbstractGenerateUniqueSsn {
      * @return the list of each field
      */
     @Override
-    protected List<AbstractField> createFieldsListFromPattern() throws DQException {
+    protected List<AbstractField> createFieldsListFromPattern() {
         List<AbstractField> fields = new ArrayList<AbstractField>();
 
         fields.add(new FieldInterval(1, 2));

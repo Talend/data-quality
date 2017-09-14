@@ -12,13 +12,13 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldEnum;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author jteuladedenantes
@@ -31,7 +31,7 @@ public class GenerateUniqueSsnUk extends AbstractGenerateUniqueSsn {
     private static final long serialVersionUID = 2583289679952923493L;
 
     @Override
-    protected List<AbstractField> createFieldsListFromPattern() throws DQException {
+    protected List<AbstractField> createFieldsListFromPattern() {
         List<Character> forbiddenLetters = new ArrayList<Character>(Arrays.asList('D', 'F', 'I', 'Q', 'U', 'V'));
 
         List<String> forbiddenTwoLetters = new ArrayList<String>(Arrays.asList("BG", "GB", "NK", "KN", "TN", "NT", "ZZ"));
