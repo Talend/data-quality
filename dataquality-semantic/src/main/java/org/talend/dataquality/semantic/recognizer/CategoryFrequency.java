@@ -32,7 +32,7 @@ public class CategoryFrequency implements Comparable<CategoryFrequency>, Seriali
 
     int categoryLevel;
 
-    double score;
+    float score;
 
     /**
      * CategoryFrequency constructor from a category.
@@ -98,7 +98,7 @@ public class CategoryFrequency implements Comparable<CategoryFrequency>, Seriali
      * @return
      */
     public float getFrequency() {
-        return (float) score;
+        return score;
     }
 
     public long getCount() {
@@ -109,7 +109,7 @@ public class CategoryFrequency implements Comparable<CategoryFrequency>, Seriali
         return categoryLevel;
     }
 
-    public double getScore() {
+    public float getScore() {
         return score;
     }
 
@@ -140,7 +140,7 @@ public class CategoryFrequency implements Comparable<CategoryFrequency>, Seriali
     public int compareTo(CategoryFrequency o) {
         // The EMPTY category must always be ranked after the others
 
-        int count = Double.compare(this.getScore(), o.getScore());
+        int count = Float.compare(this.getScore(), o.getScore());
         if (count != 0) {
             return count;
         } else {

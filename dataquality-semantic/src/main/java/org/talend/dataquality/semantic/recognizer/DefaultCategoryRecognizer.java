@@ -214,7 +214,8 @@ class DefaultCategoryRecognizer implements CategoryRecognizer {
     public Collection<CategoryFrequency> getResult(String columnName, float weight) {
         for (CategoryFrequency category : categoryToFrequency.values()) {
 
-            final double scoreOnHeader = keyMatcher.getMatchingWeight(columnName, category.getCategoryName());
+            final float scoreOnHeader = Double.valueOf(keyMatcher.getMatchingWeight(columnName, category.getCategoryName()))
+                    .floatValue();
             category.score = Math.min(Math.round(category.count * 10000 / total) / 100F + scoreOnHeader * weight * 100, 100);
         }
 
