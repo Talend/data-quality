@@ -17,7 +17,6 @@ import static org.junit.Assert.assertEquals;
 import java.util.Random;
 
 import org.junit.Test;
-import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * created by jgonzalez on 30 juin 2015 Detailled comment
@@ -32,14 +31,14 @@ public class NumericVarianceLongTest {
     private NumericVarianceLong nvl = new NumericVarianceLong();
 
     @Test
-    public void testGood() throws DQException {
+    public void testGood() {
         nvl.parse("10", false, new Random(42));
         output = nvl.generateMaskedRow(input).toString();
         assertEquals(output, String.valueOf(114));
     }
 
     @Test
-    public void testDummy() throws DQException {
+    public void testDummy() {
         nvl.parse("-10", false, new Random(42));
         output = nvl.generateMaskedRow(input).toString();
         assertEquals(output, String.valueOf(114));

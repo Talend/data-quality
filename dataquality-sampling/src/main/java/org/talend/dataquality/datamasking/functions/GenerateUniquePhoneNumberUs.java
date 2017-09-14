@@ -6,7 +6,6 @@ import java.util.List;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldEnum;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
-import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * Created by jteuladedenantes on 21/09/16.
@@ -14,10 +13,6 @@ import org.talend.dataquality.sampling.exception.DQException;
 public class GenerateUniquePhoneNumberUs extends AbstractGenerateUniquePhoneNumber {
 
     private static final long serialVersionUID = 3821280930509201884L;
-
-    public GenerateUniquePhoneNumberUs() throws DQException {
-        super();
-    }
 
     @Override
     protected int getDigitsNumberToMask() {

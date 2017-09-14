@@ -18,7 +18,6 @@ import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * @author dprot
@@ -29,10 +28,6 @@ public class GenerateUniqueSsnIndiaTest {
 
     private AbstractGenerateUniqueSsn gnf = new GenerateUniqueSsnIndia();
 
-    public GenerateUniqueSsnIndiaTest() throws DQException {
-        super();
-    }
-
     @Before
     public void setUp() throws Exception {
         gnf.setRandom(new Random(42));
@@ -40,7 +35,7 @@ public class GenerateUniqueSsnIndiaTest {
     }
 
     @Test
-    public void testKeepInvalidPatternTrue() throws DQException {
+    public void testKeepInvalidPatternTrue() {
         gnf.setKeepInvalidPattern(true);
         output = gnf.generateMaskedRow(null);
         assertEquals(null, output);
@@ -51,7 +46,7 @@ public class GenerateUniqueSsnIndiaTest {
     }
 
     @Test
-    public void testKeepInvalidPatternFalse() throws DQException {
+    public void testKeepInvalidPatternFalse() {
         gnf.setKeepInvalidPattern(false);
         output = gnf.generateMaskedRow(null);
         assertEquals(null, output);
@@ -62,20 +57,20 @@ public class GenerateUniqueSsnIndiaTest {
     }
 
     @Test
-    public void testGood1() throws DQException {
+    public void testGood1() {
         output = gnf.generateMaskedRow("186034828209");
         assertEquals("578462130603", output);
     }
 
     @Test
-    public void testGood2() throws DQException {
+    public void testGood2() {
         // with spaces
         output = gnf.generateMaskedRow("21212159530   8");
         assertEquals("48639384490   5", output);
     }
 
     @Test
-    public void testWrongSsnFieldNumber() throws DQException {
+    public void testWrongSsnFieldNumber() {
         gnf.setKeepInvalidPattern(false);
         // without a number
         output = gnf.generateMaskedRow("21860348282");
@@ -83,7 +78,7 @@ public class GenerateUniqueSsnIndiaTest {
     }
 
     @Test
-    public void testWrongSsnField1() throws DQException {
+    public void testWrongSsnField1() {
         gnf.setKeepInvalidPattern(false);
         // Wrong first field
         output = gnf.generateMaskedRow("086034828209");
@@ -91,7 +86,7 @@ public class GenerateUniqueSsnIndiaTest {
     }
 
     @Test
-    public void testWrongSsnFieldLetter() throws DQException {
+    public void testWrongSsnFieldLetter() {
         gnf.setKeepInvalidPattern(false);
         // with a letter instead of a number
         output = gnf.generateMaskedRow("186034Y20795");

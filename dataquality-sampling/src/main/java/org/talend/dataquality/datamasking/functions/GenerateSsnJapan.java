@@ -22,7 +22,7 @@ public class GenerateSsnJapan extends Function<String> {
     private static final long serialVersionUID = -8621894245597689328L;
 
     @Override
-    protected String doGenerateMaskedField(String str) throws org.talend.dataquality.sampling.exception.DQException {
+    protected String doGenerateMaskedField(String str) {
         StringBuilder result = new StringBuilder(EMPTY_STRING);
         for (int i = 0; i < 12; ++i) {
             result.append(rnd.nextInt(9));

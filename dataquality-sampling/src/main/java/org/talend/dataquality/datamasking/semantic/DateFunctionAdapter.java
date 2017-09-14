@@ -21,7 +21,6 @@ import java.util.Random;
 
 import org.apache.log4j.Logger;
 import org.talend.dataquality.datamasking.functions.Function;
-import org.talend.dataquality.sampling.exception.DQException;
 
 public class DateFunctionAdapter extends Function<String> {
 
@@ -54,7 +53,7 @@ public class DateFunctionAdapter extends Function<String> {
     }
 
     @Override
-    protected String doGenerateMaskedField(String input) throws DQException, DQException {
+    protected String doGenerateMaskedField(String input) {
         if (input == null || EMPTY_STRING.equals(input.trim())) {
             return input;
         }

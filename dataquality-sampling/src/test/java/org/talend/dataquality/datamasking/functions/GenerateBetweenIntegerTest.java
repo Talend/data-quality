@@ -18,7 +18,6 @@ import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * created by jgonzalez on 29 juin 2015 Detailled comment
@@ -36,14 +35,14 @@ public class GenerateBetweenIntegerTest {
     }
 
     @Test
-    public void testGood() throws DQException {
+    public void testGood() {
         gbi.parse("10,20", false, new Random(42)); //$NON-NLS-1$
         output = gbi.generateMaskedRow(null).toString();
         assertEquals(output, "17"); //$NON-NLS-1$
     }
 
     @Test
-    public void testCheck() throws DQException {
+    public void testCheck() {
         gbi.setRandom(new Random());
         gbi.parameters = "0,100".split(","); //$NON-NLS-1$ //$NON-NLS-2$
         boolean res = true;
@@ -55,14 +54,14 @@ public class GenerateBetweenIntegerTest {
     }
 
     @Test
-    public void testBad() throws DQException {
+    public void testBad() {
         gbi.parameters = "jk,df".split(","); //$NON-NLS-1$ //$NON-NLS-2$
         output = gbi.generateMaskedRow(0).toString();
         assertEquals(output, "0"); //$NON-NLS-1$
     }
 
     @Test
-    public void testWrongParameter() throws DQException {
+    public void testWrongParameter() {
         gbi.parse(null, false, new Random(42)); // $NON-NLS-1$
         output = gbi.generateMaskedRow(null).toString();
         assertEquals(output, "0"); //$NON-NLS-1$

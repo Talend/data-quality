@@ -15,7 +15,7 @@ package org.talend.dataquality.datamasking.functions;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
-import org.talend.dataquality.sampling.exception.DQException;
+import org.talend.dataquality.datamasking.functions.SetToNull;
 
 /**
  * created by jgonzalez on 25 juin 2015 Detailled comment
@@ -28,7 +28,7 @@ public class SetToNullTest {
     private SetToNull<?> stn = new SetToNull<>();
 
     @Test
-    public void test() throws DQException {
+    public void test() {
         output = stn.generateMaskedRow(null);
         assertEquals(output, null);
     }

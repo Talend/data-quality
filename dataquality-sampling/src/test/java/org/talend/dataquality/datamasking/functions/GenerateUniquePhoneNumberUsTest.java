@@ -11,7 +11,6 @@ import org.junit.Test;
 
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
-import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * Created by jdenantes on 21/09/16.
@@ -26,10 +25,6 @@ public class GenerateUniquePhoneNumberUsTest {
 
     private static PhoneNumberUtil GOOGLE_PHONE_UTIL = PhoneNumberUtil.getInstance();
 
-    public GenerateUniquePhoneNumberUsTest() throws DQException {
-        super();
-    }
-
     @Before
     public void setUp() throws Exception {
         gnu.setRandom(new Random(42));
@@ -37,7 +32,7 @@ public class GenerateUniquePhoneNumberUsTest {
     }
 
     @Test
-    public void testKeepInvalidPatternTrue() throws DQException {
+    public void testKeepInvalidPatternTrue() {
         gnu.setKeepInvalidPattern(true);
         output = gnu.generateMaskedRow(null);
         assertEquals(null, output);
@@ -48,7 +43,7 @@ public class GenerateUniquePhoneNumberUsTest {
     }
 
     @Test
-    public void testKeepInvalidPatternFalse() throws DQException {
+    public void testKeepInvalidPatternFalse() {
         gnu.setKeepInvalidPattern(false);
         output = gnu.generateMaskedRow(null);
         assertEquals(null, output);
@@ -59,13 +54,13 @@ public class GenerateUniquePhoneNumberUsTest {
     }
 
     @Test
-    public void testGood1() throws DQException {
+    public void testGood1() {
         output = gnu.generateMaskedRow("35-6/42-5/9 865");
         assertEquals("35-6/41-6/5 815", output);
     }
 
     @Test
-    public void testGood2() throws DQException {
+    public void testGood2() {
         gnu.setKeepFormat(false);
         // with spaces
         output = gnu.generateMaskedRow("356-425-9865");
@@ -73,7 +68,7 @@ public class GenerateUniquePhoneNumberUsTest {
     }
 
     @Test
-    public void testWrongSsnFieldNumber() throws DQException {
+    public void testWrongSsnFieldNumber() {
         gnu.setKeepInvalidPattern(false);
         // with two 1 at the fifth and the sixth position
         output = gnu.generateMaskedRow("465 311 9856");
@@ -81,7 +76,7 @@ public class GenerateUniquePhoneNumberUsTest {
     }
 
     @Test
-    public void testValidAfterMasking() throws DQException {
+    public void testValidAfterMasking() {
         gnu.setKeepFormat(false);
         String input;
         String output;

@@ -21,7 +21,7 @@ public class GenerateFromPattern extends Function<String> {
     private static final long serialVersionUID = 7920843158759995757L;
 
     @Override
-    protected String doGenerateMaskedField(String str) throws org.talend.dataquality.sampling.exception.DQException {
+    protected String doGenerateMaskedField(String str) {
         StringBuilder result = new StringBuilder(EMPTY_STRING);
         int count = 0;
         if (parameters != null)

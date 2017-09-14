@@ -23,7 +23,7 @@ public class SetToNull<T> extends Function<T> {
     private static final long serialVersionUID = -1747988334179919785L;
 
     @Override
-    protected T doGenerateMaskedField(T t) throws org.talend.dataquality.sampling.exception.DQException {
+    protected T doGenerateMaskedField(T t) {
         return null;
     }
 

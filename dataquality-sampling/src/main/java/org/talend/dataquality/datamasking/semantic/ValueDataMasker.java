@@ -16,7 +16,6 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.talend.dataquality.datamasking.functions.Function;
-import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * API of data masking action using semantic domain information.
@@ -58,7 +57,7 @@ public class ValueDataMasker implements Serializable {
      * @param input
      * @return the masked value
      */
-    public String maskValue(String input) throws DQException, DQException {
+    public String maskValue(String input) {
         return function.generateMaskedRow(input);
     }
 

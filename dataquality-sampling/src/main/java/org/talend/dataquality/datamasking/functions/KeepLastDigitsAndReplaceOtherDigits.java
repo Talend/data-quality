@@ -16,7 +16,7 @@ public class KeepLastDigitsAndReplaceOtherDigits extends Function<String> {
     }
 
     @Override
-    protected String doGenerateMaskedField(String str) throws org.talend.dataquality.sampling.exception.DQException {
+    protected String doGenerateMaskedField(String str) {
         if (integerParam < 0)
             return EMPTY_STRING;
 

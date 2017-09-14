@@ -27,7 +27,7 @@ public class GenerateFromFileStringProvidedTest {
      * Test method for {@link org.talend.dataquality.datamasking.functions.GenerateFromList#init()}.
      */
     @Test
-    public void testInit() throws org.talend.dataquality.sampling.exception.DQException {
+    public void testInit() {
         GenerateFromFileStringProvided gfls = new GenerateFromFileStringProvided();
 
         gfls.parse(MaskableCategoryEnum.FR_COMMUNE.getParameter(), true, new Random(AllDataqualitySamplingTests.RANDOM_SEED));

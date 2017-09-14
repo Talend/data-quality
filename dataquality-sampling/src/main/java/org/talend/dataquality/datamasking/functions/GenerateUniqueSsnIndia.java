@@ -17,7 +17,6 @@ import java.util.List;
 
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
-import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * 
@@ -42,10 +41,6 @@ public class GenerateUniqueSsnIndia extends AbstractGenerateUniqueSsn {
 
     // The inverse table (for checksum)
     private static final int[] INV = { 0, 4, 3, 2, 1, 5, 6, 7, 8, 9 };
-
-    public GenerateUniqueSsnIndia() throws DQException {
-        super();
-    }
 
     @Override
     protected StringBuilder doValidGenerateMaskedField(String str) {

@@ -21,7 +21,7 @@ public class GenerateCreditCardFormatLong extends GenerateCreditCardFormat<Long>
     private static final long serialVersionUID = 4432818921989956298L;
 
     @Override
-    protected Long doGenerateMaskedField(Long l) throws org.talend.dataquality.sampling.exception.DQException {
+    protected Long doGenerateMaskedField(Long l) {
         CreditCardType cctFormat;
         Long res;
         if (l == null) {

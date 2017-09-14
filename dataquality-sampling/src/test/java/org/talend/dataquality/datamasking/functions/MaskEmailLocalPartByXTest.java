@@ -6,7 +6,6 @@ import java.util.Random;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.talend.dataquality.sampling.exception.DQException;
 
 public class MaskEmailLocalPartByXTest {
 
@@ -19,28 +18,28 @@ public class MaskEmailLocalPartByXTest {
     private MaskEmailLocalPartByX maskEmailLocalPartByX = new MaskEmailLocalPartByX();
 
     @Test
-    public void testEmpty() throws DQException {
+    public void testEmpty() {
         maskEmailLocalPartByX.setKeepEmpty(true);
         output = maskEmailLocalPartByX.generateMaskedRow("");
         assertEquals("", output); //$NON-NLS-1$
     }
 
     @Test
-    public void test1Good() throws DQException {
+    public void test1Good() {
         maskEmailLocalPartByX.parse("", false, new Random());
         output = maskEmailLocalPartByX.generateMaskedRow(mail);
         Assert.assertEquals("XXXXXXXXX@uestc.edu.cn", output);
     }
 
     @Test
-    public void testNullParameter() throws DQException {
+    public void testNullParameter() {
         maskEmailLocalPartByX.parse(null, false, new Random());
         output = maskEmailLocalPartByX.generateMaskedRow(mail);
         Assert.assertEquals("XXXXXXXXX@uestc.edu.cn", output);
     }
 
     @Test
-    public void testSpecialEmail() throws DQException {
+    public void testSpecialEmail() {
         maskEmailLocalPartByX.parse("", true, new Random(Long.valueOf(12345678)));
         output = maskEmailLocalPartByX.generateMaskedRow(spemail);
         Assert.assertEquals("XXXX@telecom-bretagne.eu", output);
@@ -48,49 +47,49 @@ public class MaskEmailLocalPartByXTest {
     }
 
     @Test
-    public void test2WithInput() throws DQException {
+    public void test2WithInput() {
         maskEmailLocalPartByX.parse("hehe", false, new Random());
         output = maskEmailLocalPartByX.generateMaskedRow(mail);
         Assert.assertEquals("XXXXXXXXX@uestc.edu.cn", output);
     }
 
     @Test
-    public void test2WithOneCharacter() throws DQException {
+    public void test2WithOneCharacter() {
         maskEmailLocalPartByX.parse("A", false, new Random());
         output = maskEmailLocalPartByX.generateMaskedRow(mail);
         Assert.assertEquals("AAAAAAAAA@uestc.edu.cn", output);
     }
 
     @Test
-    public void test2WithOneDigit() throws DQException {
+    public void test2WithOneDigit() {
         maskEmailLocalPartByX.parse("1", false, new Random());
         output = maskEmailLocalPartByX.generateMaskedRow(mail);
         Assert.assertEquals("XXXXXXXXX@uestc.edu.cn", output);
     }
 
     @Test
-    public void test3NullEmail() throws DQException {
+    public void test3NullEmail() {
         maskEmailLocalPartByX.parse("", false, new Random());
         output = maskEmailLocalPartByX.generateMaskedRow(null);
         Assert.assertTrue(output.isEmpty());
     }
 
     @Test
-    public void test3KeepNullEmail() throws DQException {
+    public void test3KeepNullEmail() {
         maskEmailLocalPartByX.parse("", true, new Random());
         output = maskEmailLocalPartByX.generateMaskedRow(null);
         Assert.assertTrue(output == null);
     }
 
     @Test
-    public void test4EmptyEmail() throws DQException {
+    public void test4EmptyEmail() {
         maskEmailLocalPartByX.parse("", false, new Random());
         output = maskEmailLocalPartByX.generateMaskedRow("");
         Assert.assertTrue(output.isEmpty());
     }
 
     @Test
-    public void test5WrongFormat() throws DQException {
+    public void test5WrongFormat() {
         maskEmailLocalPartByX.parse("", false, new Random());
         output = maskEmailLocalPartByX.generateMaskedRow("hehe");
         Assert.assertEquals("XXXX", output);

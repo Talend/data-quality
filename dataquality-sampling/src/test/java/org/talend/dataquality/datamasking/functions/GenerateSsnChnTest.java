@@ -18,7 +18,6 @@ import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * @author dprot
@@ -35,20 +34,20 @@ public class GenerateSsnChnTest {
     }
 
     @Test
-    public void testEmpty() throws DQException {
+    public void testEmpty() {
         gnf.setKeepEmpty(true);
         output = gnf.generateMaskedRow("");
         assertEquals("", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testGood() throws DQException {
+    public void testGood() {
         output = gnf.generateMaskedRow(null);
         assertEquals("610201206301240556", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testCheckFirstDigit() throws DQException {
+    public void testCheckFirstDigit() {
         // First digit should not be a '9' in a Chinese SSN
         gnf.setRandom(new Random());
         boolean res = true;
@@ -60,7 +59,7 @@ public class GenerateSsnChnTest {
     }
 
     @Test
-    public void testCheckYear() throws DQException {
+    public void testCheckYear() {
         // Year should be between 1900 and 2100
         gnf.setRandom(new Random());
         boolean res = true;
@@ -73,7 +72,7 @@ public class GenerateSsnChnTest {
     }
 
     @Test
-    public void testNull() throws DQException {
+    public void testNull() {
         gnf.keepNull = true;
         output = gnf.generateMaskedRow(null);
         assertEquals(null, output);

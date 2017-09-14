@@ -42,7 +42,7 @@ public class MaskAddress extends Function<String> {
             "INDUSTRIELLE")); //$NON-NLS-1$
 
     @Override
-    protected String doGenerateMaskedField(String str) throws org.talend.dataquality.sampling.exception.DQException {
+    protected String doGenerateMaskedField(String str) {
         StringBuilder sb = new StringBuilder(EMPTY_STRING);
         if (str != null && !EMPTY_STRING.equals(str) && !(" ").equals(str)) { //$NON-NLS-1$
             String[] address = str.split(",| "); //$NON-NLS-1$

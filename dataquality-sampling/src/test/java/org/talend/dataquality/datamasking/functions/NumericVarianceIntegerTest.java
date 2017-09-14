@@ -20,7 +20,6 @@ import java.util.Random;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * created by jgonzalez on 29 juin 2015 Detailled comment
@@ -36,7 +35,7 @@ public class NumericVarianceIntegerTest {
     private NumericVarianceInteger nvi = new NumericVarianceInteger();
 
     @Test
-    public void testGood() throws DQException {
+    public void testGood() {
         nvi.parse("10", false, new Random(42));
         output = nvi.generateMaskedRow(input).toString();
         assertEquals(-7, nvi.rate);
@@ -44,7 +43,7 @@ public class NumericVarianceIntegerTest {
     }
 
     @Test
-    public void testNullParameter() throws DQException {
+    public void testNullParameter() {
         nvi.parse(null, false, new Random(8766));
         output = nvi.generateMaskedRow(input).toString();
         assertEquals(9, nvi.rate);
@@ -52,7 +51,7 @@ public class NumericVarianceIntegerTest {
     }
 
     @Test
-    public void testDummy() throws DQException {
+    public void testDummy() {
         nvi.parse("-10", false, new Random(42));
         output = nvi.generateMaskedRow(input).toString();
         assertEquals(-7, nvi.rate);
@@ -61,10 +60,10 @@ public class NumericVarianceIntegerTest {
 
     /**
      * 
-     * {@link Function#generateMaskedRow(Object)}
+     * {@link org.talend.dataquality.datamasking.functions.NumericVarianceInteger#doGenerateMaskedField(Integer)}
      */
     @Test
-    public void testOverFlowCase() throws DQException {
+    public void testOverFlowCase() {
         // Before OverFlow Case 99999999+20*99999999/100=119999998
         nvi.parse("30", false, new Random(42));
         output = nvi.generateMaskedRow(99999999).toString();

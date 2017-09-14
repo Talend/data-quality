@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
-import org.talend.dataquality.sampling.exception.DQException;
+import org.talend.dataquality.sampling.exception.DQRuntimeException;
 
 /**
  * @author jteuladedenantes
@@ -56,7 +56,7 @@ public class GenerateUniqueRandomPatterns implements Serializable {
      */
     private List<Long> basedWidthsList;
 
-    public GenerateUniqueRandomPatterns(List<AbstractField> fields) throws DQException {
+    public GenerateUniqueRandomPatterns(List<AbstractField> fields) {
         super();
         this.fields = fields;
 
@@ -67,7 +67,7 @@ public class GenerateUniqueRandomPatterns implements Serializable {
             longestWidthBig = longestWidthBig.multiply(BigInteger.valueOf(width));
         }
         if (longestWidthBig.compareTo(BigInteger.valueOf(WIDTH_THRESHOLD)) > 0)
-            throw new DQException("The pattern is too large to be handled with this component");
+            throw new DQRuntimeException("The pattern is too large to be handled with this component");
 
         longestWidth = longestWidthBig.longValue();
 
@@ -157,7 +157,7 @@ public class GenerateUniqueRandomPatterns implements Serializable {
     }
 
     /**
-     * @param the key from we want to find a coprime number with longestWidth
+     * @param key the key from we want to find a coprime number with longestWidth
      * @return the largest coprime number with longestWidth less than key
      */
     private long findLargestCoprime(long key) {

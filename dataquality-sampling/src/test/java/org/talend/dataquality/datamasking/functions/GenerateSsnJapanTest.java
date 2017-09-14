@@ -18,7 +18,6 @@ import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * created by jgonzalez on 20 août 2015 Detailled comment
@@ -36,20 +35,20 @@ public class GenerateSsnJapanTest {
     }
 
     @Test
-    public void testEmpty() throws DQException {
+    public void testEmpty() {
         gnj.setKeepEmpty(true);
         output = gnj.generateMaskedRow("");
         assertEquals("", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testGood() throws DQException {
+    public void testGood() {
         output = gnj.generateMaskedRow(null);
         assertEquals(output, "830807527228"); //$NON-NLS-1$
     }
 
     @Test
-    public void testNull() throws DQException {
+    public void testNull() {
         gnj.keepNull = true;
         output = gnj.generateMaskedRow(null);
         assertEquals(output, null);

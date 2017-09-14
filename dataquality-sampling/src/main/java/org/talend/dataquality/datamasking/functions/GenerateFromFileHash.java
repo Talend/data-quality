@@ -45,7 +45,7 @@ public abstract class GenerateFromFileHash<T> extends Function<T> {
     }
 
     @Override
-    protected T doGenerateMaskedField(T t) throws org.talend.dataquality.sampling.exception.DQException {
+    protected T doGenerateMaskedField(T t) {
         if (!genericTokens.isEmpty()) {
             if (t == null) {
                 return genericTokens.get(rnd.nextInt(genericTokens.size()));

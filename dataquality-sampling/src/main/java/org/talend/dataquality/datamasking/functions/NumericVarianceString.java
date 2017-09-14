@@ -17,7 +17,7 @@ public class NumericVarianceString extends NumericVariance<String> {
     private static final long serialVersionUID = -8029563336814263376L;
 
     @Override
-    protected String doGenerateMaskedField(String input) throws org.talend.dataquality.sampling.exception.DQException {
+    protected String doGenerateMaskedField(String input) {
         if (input == null || EMPTY_STRING.equals(input)) {
             return input;
         } else {

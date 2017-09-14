@@ -18,7 +18,6 @@ import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * created by jgonzalez on 19 août 2015 Detailled comment
@@ -36,28 +35,28 @@ public class GenerateFromPatternTest {
     }
 
     @Test
-    public void testGood() throws DQException {
+    public void testGood() {
         gfp.parameters = "aaAA99".split(","); //$NON-NLS-1$ //$NON-NLS-2$
         output = gfp.generateMaskedRow(null);
         assertEquals(output, "ahWM07"); //$NON-NLS-1$
     }
 
     @Test
-    public void testGood2() throws DQException {
+    public void testGood2() {
         gfp.parameters = "aaAA99\\1, @gmail.com".split(","); //$NON-NLS-1$ //$NON-NLS-2$
         output = gfp.generateMaskedRow(null);
         assertEquals(output, "ahWM07@gmail.com"); //$NON-NLS-1$
     }
 
     @Test
-    public void testBad() throws DQException {
+    public void testBad() {
         gfp.parameters = Function.EMPTY_STRING.split(","); //$NON-NLS-1$
         output = gfp.generateMaskedRow(null);
         assertEquals(output, Function.EMPTY_STRING);
     }
 
     @Test
-    public void testNull() throws DQException {
+    public void testNull() {
         gfp.keepNull = true;
         output = gfp.generateMaskedRow(null);
         assertEquals(output, null);

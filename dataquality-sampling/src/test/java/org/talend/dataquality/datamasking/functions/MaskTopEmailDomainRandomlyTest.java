@@ -23,7 +23,6 @@ import org.junit.Assert;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
-import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * DOC qzhao class global comment. Detailled comment
@@ -40,28 +39,28 @@ public class MaskTopEmailDomainRandomlyTest {
     private MaskTopEmailDomainRandomly maskTopEmailDomainRandomly = new MaskTopEmailDomainRandomly();
 
     @Test
-    public void testEmpty() throws DQException {
+    public void testEmpty() {
         maskTopEmailDomainRandomly.setKeepEmpty(true);
         output = maskTopEmailDomainRandomly.generateMaskedRow("");
         assertEquals("", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testOneGoodStandard() throws DQException {
+    public void testOneGoodStandard() {
         maskTopEmailDomainRandomly.parse("gmail,test", false, new Random(24));
         output = maskTopEmailDomainRandomly.generateMaskedRow(mailStandard);
         Assert.assertEquals("hehe@test.com", output);
     }
 
     @Test
-    public void testOneGoodStandardWithSpace() throws DQException {
+    public void testOneGoodStandardWithSpace() {
         maskTopEmailDomainRandomly.parse("", false, new Random(24));
         output = maskTopEmailDomainRandomly.generateMaskedRow(mailStandard);
         Assert.assertEquals("hehe@.com", output);
     }
 
     @Test
-    public void testSeveralGoodStandard() throws DQException {
+    public void testSeveralGoodStandard() {
         maskTopEmailDomainRandomly.parse("test1, test2, test3", false, new Random(24));
         List<String> results = Arrays.asList("hehe@test1.com", "hehe@test2.com", "hehe@test3.com");
 
@@ -72,7 +71,7 @@ public class MaskTopEmailDomainRandomlyTest {
     }
 
     @Test
-    public void test1SeveralGoodStandardWithSpace() throws DQException {
+    public void test1SeveralGoodStandardWithSpace() {
         maskTopEmailDomainRandomly.parse("test1, test2, ", false, new Random(24));
         List<String> results = Arrays.asList("hehe@test1.com", "hehe@test2.com");
 
@@ -83,7 +82,7 @@ public class MaskTopEmailDomainRandomlyTest {
     }
 
     @Test
-    public void testSeveralGoodMultipalDomaim() throws DQException {
+    public void testSeveralGoodMultipalDomaim() {
         maskTopEmailDomainRandomly.parse("test1, test2, test3", false, new Random(24));
         List<String> results = Arrays.asList("hehe.haha@test1.cn", "hehe.haha@test2.cn", "hehe.haha@test3.cn");
 
@@ -94,7 +93,7 @@ public class MaskTopEmailDomainRandomlyTest {
     }
 
     @Test
-    public void testOneGoodFromFile() throws URISyntaxException, DQException {
+    public void testOneGoodFromFile() throws URISyntaxException {
         String filePath = this.getClass().getResource("data/top-domain.txt").toURI().getPath();
         maskTopEmailDomainRandomly.parse(filePath, false, new Random(24));
 
@@ -105,7 +104,7 @@ public class MaskTopEmailDomainRandomlyTest {
     }
 
     @Test
-    public void testServeralGoodFromFile() throws URISyntaxException, DQException {
+    public void testServeralGoodFromFile() throws URISyntaxException {
         String filePath = this.getClass().getResource("data/top-domain.txt").toURI().getPath();
         maskTopEmailDomainRandomly.parse(filePath, false, new Random(24));
 
@@ -116,28 +115,28 @@ public class MaskTopEmailDomainRandomlyTest {
     }
 
     @Test
-    public void testNullEmail() throws DQException {
+    public void testNullEmail() {
         maskTopEmailDomainRandomly.parse("", false, new Random());
         output = maskTopEmailDomainRandomly.generateMaskedRow(null);
         Assert.assertTrue(output.isEmpty());
     }
 
     @Test
-    public void testKeepNullEmail() throws DQException {
+    public void testKeepNullEmail() {
         maskTopEmailDomainRandomly.parse("", true, new Random());
         output = maskTopEmailDomainRandomly.generateMaskedRow(null);
         Assert.assertTrue(output == null);
     }
 
     @Test
-    public void testEmptyEmail() throws DQException {
+    public void testEmptyEmail() {
         maskTopEmailDomainRandomly.parse("", false, new Random());
         output = maskTopEmailDomainRandomly.generateMaskedRow("");
         Assert.assertTrue(output.isEmpty());
     }
 
     @Test
-    public void testWrongFormat() throws DQException {
+    public void testWrongFormat() {
         maskTopEmailDomainRandomly.parse("replace", false, new Random());
         output = maskTopEmailDomainRandomly.generateMaskedRow("hehe");
         Assert.assertEquals("replace", output);

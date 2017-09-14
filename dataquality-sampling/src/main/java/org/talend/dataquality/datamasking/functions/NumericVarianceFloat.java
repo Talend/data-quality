@@ -21,7 +21,7 @@ public class NumericVarianceFloat extends NumericVariance<Float> {
     private static final long serialVersionUID = -8029563336814263376L;
 
     @Override
-    protected Float doGenerateMaskedField(Float f) throws org.talend.dataquality.sampling.exception.DQException {
+    protected Float doGenerateMaskedField(Float f) {
         if (f == null) {
             return 0.0f;
         } else {

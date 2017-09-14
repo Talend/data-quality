@@ -17,7 +17,6 @@ import static org.junit.Assert.assertEquals;
 import java.util.Random;
 
 import org.junit.Test;
-import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * created by jgonzalez on 29 juin 2015 Detailled comment
@@ -32,21 +31,21 @@ public class ReplaceLastCharsStringTest {
     private ReplaceLastCharsString rlcs = new ReplaceLastCharsString();
 
     @Test
-    public void testGood() throws DQException {
+    public void testGood() {
         rlcs.parse("3", false, new Random(42));
         output = rlcs.generateMaskedRow(input);
         assertEquals(output, "123830");
     }
 
     @Test
-    public void testEmpty() throws DQException {
+    public void testEmpty() {
         rlcs.setKeepEmpty(true);
         output = rlcs.generateMaskedRow("");
         assertEquals("", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testDummyGood() throws DQException {
+    public void testDummyGood() {
         rlcs.parse("7", false, new Random(42));
         output = rlcs.generateMaskedRow(input);
         assertEquals(output, "830807");

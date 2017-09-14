@@ -21,7 +21,7 @@ public class GenerateSequenceInteger extends GenerateSequence<Integer> {
     private static final long serialVersionUID = 6100107351748175598L;
 
     @Override
-    protected Integer doGenerateMaskedField(Integer i) throws org.talend.dataquality.sampling.exception.DQException {
+    protected Integer doGenerateMaskedField(Integer i) {
         return seq++;
     }
 

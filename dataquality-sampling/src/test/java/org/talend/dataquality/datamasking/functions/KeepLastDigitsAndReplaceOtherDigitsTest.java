@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import java.util.Random;
 
 import org.junit.Test;
-import org.talend.dataquality.sampling.exception.DQException;
 
 public class KeepLastDigitsAndReplaceOtherDigitsTest {
 
@@ -16,14 +15,14 @@ public class KeepLastDigitsAndReplaceOtherDigitsTest {
     private KeepLastDigitsAndReplaceOtherDigits kfag = new KeepLastDigitsAndReplaceOtherDigits();
 
     @Test
-    public void testGood() throws DQException {
+    public void testGood() {
         kfag.parse("3", false, new Random(42));
         output = kfag.generateMaskedRow(input);
         assertEquals("a0b3c8d456", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testGoodTwice() throws DQException {
+    public void testGoodTwice() {
         kfag.parse("4", false, new Random(42));
         output = kfag.generateMaskedRow(input);
         assertEquals("a3b8c3d456", output); //$NON-NLS-1$
@@ -32,14 +31,14 @@ public class KeepLastDigitsAndReplaceOtherDigitsTest {
     }
 
     @Test
-    public void testDummyGood() throws DQException {
+    public void testDummyGood() {
         kfag.parse("15", false, new Random(542));
         output = kfag.generateMaskedRow(input);
         assertEquals(input, output);
     }
 
     @Test
-    public void testDummyGoodExactSize() throws DQException {
+    public void testDummyGoodExactSize() {
         kfag.parse("10", false, new Random(542));
         output = kfag.generateMaskedRow(input);
         assertEquals(input, output);

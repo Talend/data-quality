@@ -41,7 +41,7 @@ public class GenerateSsnIndia extends Function<String> {
     static int[] inv = { 0, 4, 3, 2, 1, 5, 6, 7, 8, 9 };
 
     @Override
-    protected String doGenerateMaskedField(String str) throws org.talend.dataquality.sampling.exception.DQException {
+    protected String doGenerateMaskedField(String str) {
         StringBuilder result = new StringBuilder(EMPTY_STRING);
         result.append(1 + rnd.nextInt(9));
         for (int i = 0; i < 10; ++i) {

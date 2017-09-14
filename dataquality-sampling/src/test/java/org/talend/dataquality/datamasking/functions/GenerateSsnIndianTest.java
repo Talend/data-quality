@@ -18,7 +18,6 @@ import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * @author dprot
@@ -36,20 +35,20 @@ public class GenerateSsnIndianTest {
     }
 
     @Test
-    public void testGood() throws DQException {
+    public void testGood() {
         output = gni.generateMaskedRow(null);
         assertEquals("938405589326", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testEmpty() throws DQException {
+    public void testEmpty() {
         gni.setKeepEmpty(true);
         output = gni.generateMaskedRow("");
         assertEquals("", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testCheckFirstDigit() throws DQException {
+    public void testCheckFirstDigit() {
         // First digit should not be a '0' in a Indian SSN
         gni.setRandom(new Random());
         boolean res = true;
@@ -61,7 +60,7 @@ public class GenerateSsnIndianTest {
     }
 
     @Test
-    public void testNull() throws DQException {
+    public void testNull() {
         gni.keepNull = true;
         output = gni.generateMaskedRow(null);
         assertEquals(null, output);

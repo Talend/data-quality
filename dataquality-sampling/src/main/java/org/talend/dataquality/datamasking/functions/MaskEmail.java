@@ -51,7 +51,7 @@ public abstract class MaskEmail extends Function<String> {
      * </ul>
      */
     @Override
-    protected String doGenerateMaskedField(String str) throws org.talend.dataquality.sampling.exception.DQException {
+    protected String doGenerateMaskedField(String str) {
         if (StringUtils.isEmpty(str)) {
             return EMPTY_STRING;
         }

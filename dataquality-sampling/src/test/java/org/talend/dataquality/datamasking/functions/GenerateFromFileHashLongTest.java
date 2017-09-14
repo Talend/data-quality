@@ -19,7 +19,6 @@ import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * created by jgonzalez on 30 juin 2015 Detailled comment
@@ -36,13 +35,13 @@ public class GenerateFromFileHashLongTest {
     }
 
     @Test
-    public void testGood() throws DQException {
+    public void testGood() {
         assertEquals(18, gffhl.generateMaskedRow(101L).longValue());
         assertEquals(9, gffhl.generateMaskedRow(null).longValue());
     }
 
     @Test
-    public void testBad() throws DQException {
+    public void testBad() {
         gffhl.keepNull = true;
         assertEquals(null, gffhl.generateMaskedRow(null));
     }

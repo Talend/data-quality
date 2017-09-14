@@ -19,7 +19,6 @@ import java.util.List;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldEnum;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
-import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * @author jteuladedenantes
@@ -30,10 +29,6 @@ import org.talend.dataquality.sampling.exception.DQException;
 public class GenerateUniqueSsnUk extends AbstractGenerateUniqueSsn {
 
     private static final long serialVersionUID = 2583289679952923493L;
-
-    public GenerateUniqueSsnUk() throws DQException {
-        super();
-    }
 
     @Override
     protected List<AbstractField> createFieldsListFromPattern() throws DQException {

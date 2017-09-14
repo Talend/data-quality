@@ -19,7 +19,6 @@ import static org.junit.Assert.fail;
 import java.util.Random;
 
 import org.junit.Test;
-import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * created by jgonzalez on 29 juin 2015 Detailled comment
@@ -34,28 +33,28 @@ public class ReplaceFirstCharsStringTest {
     private ReplaceFirstCharsString rfcs = new ReplaceFirstCharsString();
 
     @Test
-    public void testGood() throws DQException {
+    public void testGood() {
         rfcs.parse("3,y", false, new Random(42));
         output = rfcs.generateMaskedRow(input);
         assertEquals("yyy456", output);
     }
 
     @Test
-    public void testEmpty() throws DQException {
+    public void testEmpty() {
         rfcs.setKeepEmpty(true);
         output = rfcs.generateMaskedRow("");
         assertEquals("", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testDummyGood() throws DQException {
+    public void testDummyGood() {
         rfcs.parse("7", false, new Random(42));
         output = rfcs.generateMaskedRow(input);
         assertEquals("830807", output);
     }
 
     @Test
-    public void testWrongParameters() throws DQException {
+    public void testWrongParameters() {
         try {
             rfcs.parse("0,xs", false, new Random(42));
             fail("should get exception with input " + rfcs.parameters); //$NON-NLS-1$

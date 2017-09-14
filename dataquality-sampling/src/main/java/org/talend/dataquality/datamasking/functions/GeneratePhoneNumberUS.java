@@ -21,7 +21,7 @@ public class GeneratePhoneNumberUS extends Function<String> {
     private static final long serialVersionUID = 1160032103743243299L;
 
     @Override
-    protected String doGenerateMaskedField(String str) throws org.talend.dataquality.sampling.exception.DQException {
+    protected String doGenerateMaskedField(String str) {
         StringBuilder result = new StringBuilder(EMPTY_STRING);
         result.append(rnd.nextInt(8) + 2);
         result.append(rnd.nextInt(9));

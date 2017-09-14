@@ -18,7 +18,6 @@ import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * @author dprot
@@ -29,10 +28,6 @@ public class GenerateUniqueSsnChnTest {
 
     private AbstractGenerateUniqueSsn gnf = new GenerateUniqueSsnChn();
 
-    public GenerateUniqueSsnChnTest() throws DQException {
-        super();
-    }
-
     @Before
     public void setUp() throws Exception {
         gnf.setRandom(new Random(42));
@@ -40,14 +35,14 @@ public class GenerateUniqueSsnChnTest {
     }
 
     @Test
-    public void testEmpty() throws DQException {
+    public void testEmpty() {
         gnf.setKeepEmpty(true);
         output = gnf.generateMaskedRow("");
         assertEquals("", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testKeepInvalidPatternTrue() throws DQException {
+    public void testKeepInvalidPatternTrue() {
         gnf.setKeepInvalidPattern(true);
         output = gnf.generateMaskedRow(null);
         assertEquals(null, output);
@@ -58,7 +53,7 @@ public class GenerateUniqueSsnChnTest {
     }
 
     @Test
-    public void testKeepInvalidPatternFalse() throws DQException {
+    public void testKeepInvalidPatternFalse() {
         gnf.setKeepInvalidPattern(false);
         output = gnf.generateMaskedRow(null);
         assertEquals(null, output);
@@ -69,27 +64,27 @@ public class GenerateUniqueSsnChnTest {
     }
 
     @Test
-    public void testGood() throws DQException {
+    public void testGood() {
         output = gnf.generateMaskedRow("64010119520414123X");
-        assertEquals("15092320521223813X", output);
+        assertEquals("150923205211538130", output);
     }
 
     @Test
-    public void testGoodSpace() throws DQException {
+    public void testGoodSpace() {
         // with spaces
         output = gnf.generateMaskedRow("231202 19510411 456   4");
         assertEquals("410422 19840319 136   X", output);
     }
 
     @Test
-    public void testGoodLeapYear() throws DQException {
+    public void testGoodLeapYear() {
         // leap year for date of birth
         output = gnf.generateMaskedRow("232723 19960229 459 4");
         assertEquals("445322 19370707 229 X", output);
     }
 
     @Test
-    public void testWrongSsnFieldNumber() throws DQException {
+    public void testWrongSsnFieldNumber() {
         gnf.setKeepInvalidPattern(false);
         // without a number
         output = gnf.generateMaskedRow("6401011920414123X");
@@ -97,7 +92,7 @@ public class GenerateUniqueSsnChnTest {
     }
 
     @Test
-    public void testWrongSsnFieldLetter() throws DQException {
+    public void testWrongSsnFieldLetter() {
         gnf.setKeepInvalidPattern(false);
         // with a wrong letter
         output = gnf.generateMaskedRow("640101195204141C3X");
@@ -105,7 +100,7 @@ public class GenerateUniqueSsnChnTest {
     }
 
     @Test
-    public void testWrongSsnFieldRegion() throws DQException {
+    public void testWrongSsnFieldRegion() {
         gnf.setKeepInvalidPattern(false);
         // With an invalid region code
         output = gnf.generateMaskedRow("11000119520414123X");
@@ -113,7 +108,7 @@ public class GenerateUniqueSsnChnTest {
     }
 
     @Test
-    public void testWrongSsnFieldBirth() throws DQException {
+    public void testWrongSsnFieldBirth() {
         gnf.setKeepInvalidPattern(false);
         // With an invalid date of birth (wrong year)
         output = gnf.generateMaskedRow("64010118520414123X");
@@ -121,7 +116,7 @@ public class GenerateUniqueSsnChnTest {
     }
 
     @Test
-    public void testWrongSsnFieldBirth2() throws DQException {
+    public void testWrongSsnFieldBirth2() {
         gnf.setKeepInvalidPattern(false);
         // With an invalid date of birth (day not existing)
         output = gnf.generateMaskedRow("64010119520434123X");
@@ -129,7 +124,7 @@ public class GenerateUniqueSsnChnTest {
     }
 
     @Test
-    public void testWrongSsnFieldBirth3() throws DQException {
+    public void testWrongSsnFieldBirth3() {
         gnf.setKeepInvalidPattern(false);
         // With an invalid date of birth (29th February in a non-leap year)
         output = gnf.generateMaskedRow("64010119530229123X");

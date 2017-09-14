@@ -21,7 +21,6 @@ import java.util.Random;
 import org.apache.commons.lang.ArrayUtils;
 import org.junit.Before;
 import org.junit.Test;
-import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * created by jgonzalez on 29 juin 2015 Detailled comment
@@ -35,7 +34,7 @@ public class GenerateFromFileHashStringTest {
     public void setUp() throws Exception {
     }
 
-    public void testGood() throws URISyntaxException, DQException {
+    public void testGood() throws URISyntaxException {
         GenerateFromFileHashString gffhs = new GenerateFromFileHashString();
         final String path = this.getClass().getResource("data/name.txt").toURI().getPath(); //$NON-NLS-1$
         gffhs.parse(path, false, new Random(42));
@@ -44,14 +43,14 @@ public class GenerateFromFileHashStringTest {
     }
 
     @Test
-    public void testEmpty() throws DQException {
+    public void testEmpty() {
         GenerateFromFileHashString gffhs = new GenerateFromFileHashString();
         gffhs.setKeepEmpty(true);
         output = gffhs.generateMaskedRow("").toString();
         assertEquals("", output); //$NON-NLS-1$
     }
 
-    public void testSeparatorWin() throws URISyntaxException, DQException {
+    public void testSeparatorWin() throws URISyntaxException {
         GenerateFromFileHashString gffhs = new GenerateFromFileHashString();
         final String pathWin = this.getClass().getResource("data/name_win.txt").toURI().getPath(); //$NON-NLS-1$
         gffhs.parse(pathWin, false, new Random(42));
@@ -65,7 +64,7 @@ public class GenerateFromFileHashStringTest {
     }
 
     @Test
-    public void testSeparatorLinux() throws URISyntaxException, DQException {
+    public void testSeparatorLinux() throws URISyntaxException {
         GenerateFromFileHashString gffhs = new GenerateFromFileHashString();
         final String linuxFilePath = this.getClass().getResource("data/last_names.csv").toURI().getPath(); //$NON-NLS-1$
         gffhs.parse(linuxFilePath, false, new Random(42));
@@ -78,7 +77,7 @@ public class GenerateFromFileHashStringTest {
         }
     }
 
-    public void testNull() throws URISyntaxException, DQException {
+    public void testNull() throws URISyntaxException {
         GenerateFromFileHashString gffhs = new GenerateFromFileHashString();
         final String path = this.getClass().getResource("data/name.txt").toURI().getPath(); //$NON-NLS-1$
         gffhs.parse(path, false, new Random(42));

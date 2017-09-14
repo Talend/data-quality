@@ -20,7 +20,6 @@ import java.util.Random;
 
 import org.junit.Test;
 import org.talend.dataquality.duplicating.AllDataqualitySamplingTests;
-import org.talend.dataquality.sampling.exception.DQException;
 
 public class ValueDataMaskerTest {
 
@@ -129,7 +128,7 @@ public class ValueDataMaskerTest {
      * @throws InstantiationException
      */
     @Test
-    public void testProcess() throws InstantiationException, IllegalAccessException, DQException {
+    public void testProcess() throws InstantiationException, IllegalAccessException {
 
         for (String[] input : EXPECTED_MASKED_VALUES.keySet()) {
             String inputValue = input[0];

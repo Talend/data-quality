@@ -18,7 +18,6 @@ import java.util.List;
 import org.talend.dataquality.datamasking.generic.GenerateUniqueRandomPatterns;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
-import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * @author jteuladedenantes class global comment. Detailled comment
@@ -30,10 +29,6 @@ public class GenerateUniqueSsnJapan extends AbstractGenerateUniqueSsn {
 
     private static final long serialVersionUID = -2321693247791991249L;
 
-    public GenerateUniqueSsnJapan() throws DQException {
-        super();
-    }
-
     @Override
     protected List<AbstractField> createFieldsListFromPattern() {
         List<AbstractField> fields = new ArrayList<AbstractField>();
@@ -42,7 +37,7 @@ public class GenerateUniqueSsnJapan extends AbstractGenerateUniqueSsn {
     }
 
     @Override
-    protected StringBuilder doValidGenerateMaskedField(String str) throws DQException {
+    protected StringBuilder doValidGenerateMaskedField(String str) {
         // read the input str
         List<String> strs = new ArrayList<String>();
         strs.add(str.substring(0, 12));

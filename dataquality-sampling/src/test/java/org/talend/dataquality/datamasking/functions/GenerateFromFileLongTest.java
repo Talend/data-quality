@@ -18,7 +18,6 @@ import java.net.URISyntaxException;
 import java.util.Random;
 
 import org.junit.Test;
-import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * created by jgonzalez on 30 juin 2015 Detailled comment
@@ -29,14 +28,14 @@ public class GenerateFromFileLongTest {
     private GenerateFromFileLong gffl = new GenerateFromFileLong();
 
     @Test
-    public void testGood() throws URISyntaxException, DQException {
+    public void testGood() throws URISyntaxException {
         String path = this.getClass().getResource("data/numbers.txt").toURI().getPath(); //$NON-NLS-1$
         gffl.parse(path, false, new Random(42));
         assertEquals(9, gffl.generateMaskedRow(0L).longValue());
     }
 
     @Test
-    public void testNull() throws DQException {
+    public void testNull() {
         gffl.parse(Function.EMPTY_STRING, false, new Random(42));
         gffl.setKeepNull(true);
         assertEquals(0, gffl.generateMaskedRow(0L).longValue());

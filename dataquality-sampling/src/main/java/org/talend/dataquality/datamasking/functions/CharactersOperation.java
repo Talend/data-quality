@@ -68,7 +68,7 @@ public abstract class CharactersOperation<T> extends Function<T> {
     }
 
     @Override
-    protected T doGenerateMaskedField(T t) throws org.talend.dataquality.sampling.exception.DQException {
+    protected T doGenerateMaskedField(T t) {
         if (!isValidParameters || t == null)
             return getDefaultOutput();
         String str = t.toString();

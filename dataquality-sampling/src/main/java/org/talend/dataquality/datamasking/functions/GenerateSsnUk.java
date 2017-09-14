@@ -43,7 +43,7 @@ public class GenerateSsnUk extends Function<String> {
     }
 
     @Override
-    protected String doGenerateMaskedField(String str) throws org.talend.dataquality.sampling.exception.DQException {
+    protected String doGenerateMaskedField(String str) {
         StringBuilder result = new StringBuilder(EMPTY_STRING);
         StringBuilder prefix;
         char tmp;

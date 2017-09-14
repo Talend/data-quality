@@ -20,7 +20,6 @@ import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * created by jgonzalez on 25 juin 2015 Detailled comment
@@ -40,28 +39,28 @@ public class BetweenIndexesReplaceTest {
     }
 
     @Test
-    public void testGood() throws DQException {
+    public void testGood() {
         bir.parse("2, 4, X", false, new Random(42));
         output = bir.generateMaskedRow(input);
         assertEquals("SXXXe", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testEmpty() throws DQException {
+    public void testEmpty() {
         bir.parse("2, 4, X", false, new Random(42));
         output = bir.generateMaskedRow(input);
         assertEquals("SXXXe", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testDummyGood() throws DQException {
+    public void testDummyGood() {
         bir.parse("1, 8", false, new Random(42));
         output = bir.generateMaskedRow("");
         assertEquals("", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testBad() throws DQException {
+    public void testBad() {
         try {
             bir.parse("1", false, new Random(42));
             fail("should get exception with input " + bir.parameters); //$NON-NLS-1$
@@ -73,7 +72,7 @@ public class BetweenIndexesReplaceTest {
     }
 
     @Test
-    public void testBad2() throws DQException {
+    public void testBad2() {
         try {
             bir.parse("lk, df", false, new Random(42));
             fail("should get exception with input " + bir.parameters); //$NON-NLS-1$

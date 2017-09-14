@@ -25,7 +25,6 @@ import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldDate;
 import org.talend.dataquality.datamasking.generic.fields.FieldEnum;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
-import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * 
@@ -47,10 +46,6 @@ public class GenerateUniqueSsnChn extends AbstractGenerateUniqueSsn {
 
     private static final List<String> keyString = Collections
             .unmodifiableList(Arrays.asList("1", "0", "X", "9", "8", "7", "6", "5", "4", "3", "2"));
-
-    public GenerateUniqueSsnChn() throws DQException {
-        super();
-    }
 
     private String computeChineseKey(String ssnNumber) {
         int key = 0;

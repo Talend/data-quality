@@ -19,7 +19,6 @@ import static org.junit.Assert.fail;
 import java.util.Random;
 
 import org.junit.Test;
-import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * created by jgonzalez on 25 juin 2015 Detailled comment
@@ -34,28 +33,28 @@ public class BetweenIndexesKeepTest {
     private String output;
 
     @Test
-    public void testGood() throws DQException {
+    public void testGood() {
         bik.parse("2, 4", false, new Random(42));
         output = bik.generateMaskedRow(input);
         assertEquals("tev", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testGood2() throws DQException {
+    public void testGood2() {
         bik.parse("1, 2", false, new Random(42));
         output = bik.generateMaskedRow(input);
         assertEquals("St", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testEmpty() throws DQException {
+    public void testEmpty() {
         bik.parse("2, 4", false, new Random(42));
         output = bik.generateMaskedRow("");
         assertEquals("", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testWrongParameter() throws DQException {
+    public void testWrongParameter() {
         try {
             bik.parse("0, 8", false, new Random(42));
             fail("should get exception with input " + bik.parameters); //$NON-NLS-1$
@@ -67,7 +66,7 @@ public class BetweenIndexesKeepTest {
     }
 
     @Test
-    public void testBad() throws DQException {
+    public void testBad() {
         try {
             bik.parse("1", false, new Random(42));
             fail("should get exception with input " + bik.parameters); //$NON-NLS-1$
@@ -79,7 +78,7 @@ public class BetweenIndexesKeepTest {
     }
 
     @Test
-    public void testBad2() throws DQException {
+    public void testBad2() {
         try {
             bik.parse("lk, df", false, new Random(42));
             fail("should get exception with input " + bik.parameters); //$NON-NLS-1$
@@ -91,7 +90,7 @@ public class BetweenIndexesKeepTest {
     }
 
     @Test
-    public void testDummyParameters() throws DQException {
+    public void testDummyParameters() {
         bik.parse("423,452", false, new Random(42));
         output = bik.generateMaskedRow(input);
         assertEquals("", output);

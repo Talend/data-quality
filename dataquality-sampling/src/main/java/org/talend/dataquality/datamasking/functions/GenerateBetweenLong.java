@@ -21,7 +21,7 @@ public class GenerateBetweenLong extends GenerateBetween<Long> {
     private static final long serialVersionUID = -2361958167462225641L;
 
     @Override
-    protected Long doGenerateMaskedField(Long l) throws org.talend.dataquality.sampling.exception.DQException {
+    protected Long doGenerateMaskedField(Long l) {
         return (long) rnd.nextInt((max - min) + 1) + min;
     }
 }

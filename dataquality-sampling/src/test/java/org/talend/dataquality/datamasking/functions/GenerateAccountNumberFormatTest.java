@@ -18,7 +18,6 @@ import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * created by jgonzalez on 29 juin 2015 Detailled comment
@@ -36,14 +35,14 @@ public class GenerateAccountNumberFormatTest {
     }
 
     @Test
-    public void testGood() throws DQException {
+    public void testGood() {
         ganf.setKeepFormat(true);
         output = ganf.generateMaskedRow("DK49 038 4 0 5 5 8   93  22 62"); //$NON-NLS-1$
         assertEquals("DK82 765 7 2 0 9 5   51  85 63", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testEmpty() throws DQException {
+    public void testEmpty() {
         ganf.setKeepFormat(true);
         ganf.setKeepEmpty(true);
         output = ganf.generateMaskedRow(""); //$NON-NLS-1$
@@ -51,32 +50,32 @@ public class GenerateAccountNumberFormatTest {
     }
 
     @Test
-    public void testGood2() throws DQException {
+    public void testGood2() {
         output = ganf.generateMaskedRow("DK49 038 4 0 5 5 8   93  22 62"); //$NON-NLS-1$
         assertEquals("DK82 7657 2095 5185 63", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testAmericanNumber() throws DQException {
+    public void testAmericanNumber() {
         output = ganf.generateMaskedRow("453 654 94 87 4684 687"); //$NON-NLS-1$
         assertEquals("453654948 7657209551", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testAmericanNumber2() throws DQException {
+    public void testAmericanNumber2() {
         ganf.setKeepFormat(true);
         output = ganf.generateMaskedRow("453 654 94 87 58 425 6"); //$NON-NLS-1$
         assertEquals("453 654 94 87 65 720 9551", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testIsNotAmericanNumber() throws DQException {
+    public void testIsNotAmericanNumber() {
         output = ganf.generateMaskedRow("454344678 4536"); //$NON-NLS-1$
         assertEquals("FR33 7657 2095 51R3 4XZP 6F4O 058", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testBad() throws DQException {
+    public void testBad() {
         output = ganf.generateMaskedRow("not an iban"); //$NON-NLS-1$
         assertEquals("FR33 7657 2095 51R3 4XZP 6F4O 058", output); //$NON-NLS-1$
     }

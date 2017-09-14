@@ -22,7 +22,7 @@ import org.talend.dataquality.duplicating.AllDataqualitySamplingTests;
 public class ReplaceCharactersWithGenerationTest {
 
     @Test
-    public void testInit() throws org.talend.dataquality.sampling.exception.DQException {
+    public void testInit() {
         ReplaceCharactersWithGeneration rcwg = new ReplaceCharactersWithGeneration();
 
         rcwg.parse(null, true, new Random(AllDataqualitySamplingTests.RANDOM_SEED));

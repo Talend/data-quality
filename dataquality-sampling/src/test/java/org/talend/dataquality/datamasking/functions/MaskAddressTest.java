@@ -19,7 +19,6 @@ import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * created by jgonzalez on 29 juin 2015 Detailled comment
@@ -37,21 +36,21 @@ public class MaskAddressTest {
     }
 
     @Test
-    public void testEmpty() throws DQException {
+    public void testEmpty() {
         ma.setKeepEmpty(true);
         output = ma.generateMaskedRow("");
         assertEquals("", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testGood() throws DQException {
+    public void testGood() {
         String input = "5 rue de l'oise"; //$NON-NLS-1$
         output = ma.generateMaskedRow(input);
         assertEquals("6 rue XX XXXXXX", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testWithFile() throws URISyntaxException, DQException {
+    public void testWithFile() throws URISyntaxException {
         String path = this.getClass().getResource("data/top-domain.txt").toURI().getPath(); //$NON-NLS-1$
         ma.parse(path, false, new Random(42));
         String input = "5 rue de l'oise et facebook"; //$NON-NLS-1$
@@ -60,7 +59,7 @@ public class MaskAddressTest {
     }
 
     @Test
-    public void testBad() throws DQException {
+    public void testBad() {
         String input = "not an address"; //$NON-NLS-1$
         output = ma.generateMaskedRow(input);
         assertEquals(output, "XXX XX XXXXXXX"); //$NON-NLS-1$

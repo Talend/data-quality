@@ -43,7 +43,7 @@ public class DateVariance extends Function<Date> {
     }
 
     @Override
-    protected Date doGenerateMaskedField(Date date) throws org.talend.dataquality.sampling.exception.DQException {
+    protected Date doGenerateMaskedField(Date date) {
         if (date != null) {
             long variation;
             if (integerParam < 0) {

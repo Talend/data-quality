@@ -19,7 +19,6 @@ import static org.junit.Assert.fail;
 import java.util.Random;
 
 import org.junit.Test;
-import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * created by jgonzalez on 25 juin 2015 Detailled comment
@@ -34,21 +33,21 @@ public class ReplaceNumericIntegerTest {
     private ReplaceNumericInteger rni = new ReplaceNumericInteger();
 
     @Test
-    public void testGood() throws DQException {
+    public void testGood() {
         rni.parse("6", false, new Random(42));
         output = rni.generateMaskedRow(input);
         assertEquals(666, output);
     }
 
     @Test
-    public void testNullParameter() throws DQException {
+    public void testNullParameter() {
         rni.parse(null, false, new Random(42));
         output = rni.generateMaskedRow(input);
         assertEquals(830, output);
     }
 
     @Test
-    public void testWrongParameter() throws DQException {
+    public void testWrongParameter() {
         try {
             rni.parse("r", false, new Random(42));
             fail("should get exception with input " + rni.parameters); //$NON-NLS-1$
@@ -60,7 +59,7 @@ public class ReplaceNumericIntegerTest {
     }
 
     @Test
-    public void testBad() throws DQException {
+    public void testBad() {
         try {
             rni.parse("10", false, new Random(42));
             fail("should get exception with input " + rni.parameters); //$NON-NLS-1$

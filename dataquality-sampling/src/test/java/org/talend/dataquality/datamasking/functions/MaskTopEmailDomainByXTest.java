@@ -18,7 +18,6 @@ import java.util.Random;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * DOC qzhao class global comment. Detailled comment
@@ -36,77 +35,77 @@ public class MaskTopEmailDomainByXTest {
     private MaskTopEmailDomainByX maskTopEmailDomainByX = new MaskTopEmailDomainByX();
 
     @Test
-    public void testEmpty() throws DQException {
+    public void testEmpty() {
         maskTopEmailDomainByX.setKeepEmpty(true);
         output = maskTopEmailDomainByX.generateMaskedRow("");
         assertEquals("", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testGoodStandard() throws DQException {
+    public void testGoodStandard() {
         maskTopEmailDomainByX.parse("", false, new Random());
         output = maskTopEmailDomainByX.generateMaskedRow(mailStandard);
         Assert.assertEquals("hehe@XXXXX.com", output);
     }
 
     @Test
-    public void testGoodWithPointsInLocal() throws DQException {
+    public void testGoodWithPointsInLocal() {
         maskTopEmailDomainByX.parse("", false, new Random());
         output = maskTopEmailDomainByX.generateMaskedRow(mailWithPointsInLocal);
         Assert.assertEquals("hehe.haha@XXXXX.com", output);
     }
 
     @Test
-    public void testMultipalDomaim() throws DQException {
+    public void testMultipalDomaim() {
         maskTopEmailDomainByX.parse("", false, new Random());
         output = maskTopEmailDomainByX.generateMaskedRow(mailMultipalDomaim);
         Assert.assertEquals("hehe.haha@XXXXX.XX.XXX.cn", output);
     }
 
     @Test
-    public void testOneCharacter() throws DQException {
+    public void testOneCharacter() {
         maskTopEmailDomainByX.parse("Z", false, new Random());
         output = maskTopEmailDomainByX.generateMaskedRow(mailMultipalDomaim);
         Assert.assertEquals("hehe.haha@ZZZZZ.ZZ.ZZZ.cn", output);
     }
 
     @Test
-    public void testString() throws DQException {
+    public void testString() {
         maskTopEmailDomainByX.parse("Zed", false, new Random());
         output = maskTopEmailDomainByX.generateMaskedRow(mailMultipalDomaim);
         Assert.assertEquals("hehe.haha@XXXXX.XX.XXX.cn", output);
     }
 
     @Test
-    public void testOneDigit() throws DQException {
+    public void testOneDigit() {
         maskTopEmailDomainByX.parse("Zed", false, new Random());
         output = maskTopEmailDomainByX.generateMaskedRow(mailMultipalDomaim);
         Assert.assertEquals("hehe.haha@XXXXX.XX.XXX.cn", output);
     }
 
     @Test
-    public void testNullEmail() throws DQException {
+    public void testNullEmail() {
         maskTopEmailDomainByX.parse("", false, new Random());
         output = maskTopEmailDomainByX.generateMaskedRow(null);
         Assert.assertEquals("", output);
     }
 
     @Test
-    public void testKeepNullEmail() throws DQException {
+    public void testKeepNullEmail() {
         maskTopEmailDomainByX.parse("", true, new Random());
         output = maskTopEmailDomainByX.generateMaskedRow(null);
         Assert.assertEquals(output, output);
     }
 
     @Test
-    public void testEmptyEmail() throws DQException {
+    public void testEmptyEmail() {
         maskTopEmailDomainByX.parse("", false, new Random());
         output = maskTopEmailDomainByX.generateMaskedRow("");
         Assert.assertTrue(output.isEmpty());
     }
 
     @Test
-    public void testWrongFormat() throws DQException {
+    public void testWrongFormat() {
         maskTopEmailDomainByX.parse("", false, new Random());
         output = maskTopEmailDomainByX.generateMaskedRow("hehe");
         Assert.assertEquals("XXXX", output);

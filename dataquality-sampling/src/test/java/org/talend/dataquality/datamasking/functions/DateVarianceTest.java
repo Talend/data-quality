@@ -20,7 +20,6 @@ import java.util.Random;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * created by jgonzalez on 29 juin 2015 Detailled comment
@@ -43,7 +42,7 @@ public class DateVarianceTest {
     }
 
     @Test
-    public void testGoodCase1() throws ParseException, DQException {
+    public void testGoodCase1() throws ParseException {
         dv.parse("31", false, rand); //$NON-NLS-1$
         for (int index = 0; index < 20; index++) {
             String output = sdf.format(dv.generateMaskedRow(input));
@@ -53,7 +52,7 @@ public class DateVarianceTest {
     }
 
     @Test
-    public void testGoodCase2() throws ParseException, DQException {
+    public void testGoodCase2() throws ParseException {
         dv.parse("-31", false, rand); //$NON-NLS-1$
         for (int index = 0; index < 20; index++) {
             String output = sdf.format(dv.generateMaskedRow(input));
@@ -63,7 +62,7 @@ public class DateVarianceTest {
     }
 
     @Test
-    public void testGoodCase3() throws ParseException, DQException {
+    public void testGoodCase3() throws ParseException {
         dv.parse("1", false, rand); //$NON-NLS-1$
         for (int index = 0; index < 20; index++) {
             String output = sdf.format(dv.generateMaskedRow(input));
@@ -73,7 +72,7 @@ public class DateVarianceTest {
     }
 
     @Test
-    public void testGoodCase4() throws ParseException, DQException {
+    public void testGoodCase4() throws ParseException {
         dv.parse("1,3", false, rand); //$NON-NLS-1$
         for (int index = 0; index < 20; index++) {
             String output = sdf.format(dv.generateMaskedRow(input));
@@ -83,7 +82,7 @@ public class DateVarianceTest {
     }
 
     @Test
-    public void testDummyGood() throws ParseException, DQException {
+    public void testDummyGood() throws ParseException {
         dv.parse("0", false, rand); //$NON-NLS-1$
         for (int index = 0; index < 20; index++) {
             String output = sdf.format(dv.generateMaskedRow(input));
@@ -93,7 +92,7 @@ public class DateVarianceTest {
     }
 
     @Test
-    public void testNullParameter() throws ParseException, DQException {
+    public void testNullParameter() throws ParseException {
         dv.parse(null, false, rand); // $NON-NLS-1$
         for (int index = 0; index < 20; index++) {
             String output = sdf.format(dv.generateMaskedRow(input));
@@ -103,7 +102,7 @@ public class DateVarianceTest {
     }
 
     @Test
-    public void testBad() throws ParseException, DQException {
+    public void testBad() throws ParseException {
         dv.parse("j", false, rand); //$NON-NLS-1$
         for (int index = 0; index < 20; index++) {
             String output = sdf.format(dv.generateMaskedRow(input));

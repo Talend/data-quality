@@ -21,7 +21,7 @@ public class GenerateSequenceFloat extends GenerateSequence<Float> {
     private static final long serialVersionUID = 1643268660478079881L;
 
     @Override
-    protected Float doGenerateMaskedField(Float f) throws org.talend.dataquality.sampling.exception.DQException {
+    protected Float doGenerateMaskedField(Float f) {
         return (float) seq++;
     }
 

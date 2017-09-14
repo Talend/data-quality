@@ -19,7 +19,6 @@ import static org.junit.Assert.fail;
 import java.util.Random;
 
 import org.junit.Test;
-import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * created by jgonzalez on 25 juin 2015 Detailled comment
@@ -34,7 +33,7 @@ public class RemoveLastCharsLongTest {
     private RemoveLastCharsLong rlci = new RemoveLastCharsLong();
 
     @Test
-    public void test() throws DQException {
+    public void test() {
         rlci.parse("2", false, new Random(42));
         output = rlci.generateMaskedRow(input);
         assertEquals(6, output);
@@ -51,21 +50,21 @@ public class RemoveLastCharsLongTest {
     }
 
     @Test
-    public void testDummyGood() throws DQException {
+    public void testDummyGood() {
         rlci.parse("10", false, new Random(42));
         output = rlci.generateMaskedRow(input);
         assertEquals(0, output);
     }
 
     @Test
-    public void testLimitCase() throws DQException {
+    public void testLimitCase() {
         rlci.parse("0", false, new Random(42));
         output = rlci.generateMaskedRow(input);
         assertEquals(666, output);
     }
 
     @Test
-    public void testWrongParameterCase() throws DQException {
+    public void testWrongParameterCase() {
         try {
             rlci.parse("a", false, new Random(42));
             fail("should get exception with input " + rlci.parameters); //$NON-NLS-1$

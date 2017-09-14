@@ -23,7 +23,7 @@ public class GenerateUuid extends Function<String> {
     private static final long serialVersionUID = 7525227345231199052L;
 
     @Override
-    protected String doGenerateMaskedField(String str) throws org.talend.dataquality.sampling.exception.DQException {
+    protected String doGenerateMaskedField(String str) {
         return UUID.randomUUID().toString();
     }
 }

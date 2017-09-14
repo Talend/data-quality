@@ -18,7 +18,6 @@ import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * created by jgonzalez on 29 juin 2015 Detailled comment
@@ -36,7 +35,7 @@ public class GenerateAccountNumberSimpleTest {
     }
 
     @Test
-    public void testEmpty() throws DQException {
+    public void testEmpty() {
         gans.setKeepFormat(true);
         gans.setKeepEmpty(true);
         output = gans.generateMaskedRow(Function.EMPTY_STRING); // $NON-NLS-1$
@@ -44,13 +43,13 @@ public class GenerateAccountNumberSimpleTest {
     }
 
     @Test
-    public void testGood() throws DQException {
+    public void testGood() {
         output = gans.generateMaskedRow(Function.EMPTY_STRING);
         assertEquals("FR54 0384 0558 93A2 20ZR 3V86 K48", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testNull() throws DQException {
+    public void testNull() {
         gans.keepNull = true;
         output = gans.generateMaskedRow(null);
         assertEquals(null, output);

@@ -18,7 +18,6 @@ import java.util.Random;
 import org.apache.log4j.Logger;
 import org.talend.dataquality.datamasking.functions.GenerateFromFileString;
 import org.talend.dataquality.datamasking.functions.KeysLoader;
-import org.talend.dataquality.sampling.exception.DQException;
 
 public class GenerateFromFileStringProvided extends GenerateFromFileString {
 
@@ -37,7 +36,7 @@ public class GenerateFromFileStringProvided extends GenerateFromFileString {
     }
 
     @Override
-    public String generateMaskedRow(String t) throws DQException {
+    public String generateMaskedRow(String t) {
         if (t == null || EMPTY_STRING.equals(t.trim())) {
             return t;
         }
@@ -45,7 +44,7 @@ public class GenerateFromFileStringProvided extends GenerateFromFileString {
     }
 
     @Override
-    protected String doGenerateMaskedField(String str) throws DQException {
+    protected String doGenerateMaskedField(String str) {
         return super.doGenerateMaskedField(str);
     }
 }

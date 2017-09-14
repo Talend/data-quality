@@ -18,7 +18,6 @@ import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * created by jgonzalez on 29 juin 2015 Detailled comment
@@ -38,14 +37,14 @@ public class KeepLastCharsStringTest {
     }
 
     @Test
-    public void testEmpty() throws DQException {
+    public void testEmpty() {
         klads.setKeepEmpty(true);
         output = klads.generateMaskedRow("");
         assertEquals("", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testGood() throws DQException {
+    public void testGood() {
         klads.parse("3", false, new Random(42));
         output = klads.generateMaskedRow(input);
         assertEquals("830456", output); //$NON-NLS-1$
@@ -62,14 +61,14 @@ public class KeepLastCharsStringTest {
     }
 
     @Test
-    public void testDummyGood() throws DQException {
+    public void testDummyGood() {
         klads.parse("7", false, new Random(42));
         output = klads.generateMaskedRow(input);
         assertEquals(input, output);
     }
 
     @Test
-    public void testParameter() throws DQException {
+    public void testParameter() {
         klads.parse("3,i", false, new Random(42));
         output = klads.generateMaskedRow(input);
         assertEquals("iii456", output);

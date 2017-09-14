@@ -17,7 +17,6 @@ import static org.junit.Assert.assertEquals;
 import java.util.Random;
 
 import org.junit.Test;
-import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * created by jgonzalez on 29 juin 2015 Detailled comment
@@ -32,28 +31,28 @@ public class KeepFirstCharsStringTest {
     private KeepFirstCharsString kfag = new KeepFirstCharsString();
 
     @Test
-    public void testEmpty() throws DQException {
+    public void testEmpty() {
         kfag.setKeepEmpty(true);
         output = kfag.generateMaskedRow("");
         assertEquals("", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testGood() throws DQException {
+    public void testGood() {
         kfag.parse("3", false, new Random(42));
         output = kfag.generateMaskedRow(input);
         assertEquals("a1b8h0m075", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testDummyGood() throws DQException {
+    public void testDummyGood() {
         kfag.parse("15", false, new Random(542));
         output = kfag.generateMaskedRow(input);
         assertEquals(input, output);
     }
 
     @Test
-    public void testParameters() throws DQException {
+    public void testParameters() {
         kfag.parse("5,8", false, new Random(542));
         output = kfag.generateMaskedRow(input);
         assertEquals("a1b2c88888", output);

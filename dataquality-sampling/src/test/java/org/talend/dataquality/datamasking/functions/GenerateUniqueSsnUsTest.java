@@ -18,7 +18,6 @@ import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * @author jteuladedenantes
@@ -29,10 +28,6 @@ public class GenerateUniqueSsnUsTest {
 
     private AbstractGenerateUniqueSsn gnu = new GenerateUniqueSsnUs();
 
-    public GenerateUniqueSsnUsTest() throws DQException {
-        super();
-    }
-
     @Before
     public void setUp() throws Exception {
         gnu.setRandom(new Random(42));
@@ -40,26 +35,26 @@ public class GenerateUniqueSsnUsTest {
     }
 
     @Test
-    public void testEmpty() throws DQException {
+    public void testEmpty() {
         gnu.setKeepEmpty(true);
         output = gnu.generateMaskedRow("");
         assertEquals("", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testGood1() throws DQException {
+    public void testGood1() {
         output = gnu.generateMaskedRow("153 65 4862");
         assertEquals("513 99 6374", output);
     }
 
     @Test
-    public void testGood2() throws DQException {
+    public void testGood2() {
         output = gnu.generateMaskedRow("1 56 46 45 99");
         assertEquals("1 63 91 55 89", output);
     }
 
     @Test
-    public void testWrongSsnFieldNumber() throws DQException {
+    public void testWrongSsnFieldNumber() {
         gnu.setKeepInvalidPattern(false);
         // without a number
         output = gnu.generateMaskedRow("153 65 486");
@@ -67,7 +62,7 @@ public class GenerateUniqueSsnUsTest {
     }
 
     @Test
-    public void testWrongSsnField666() throws DQException {
+    public void testWrongSsnField666() {
         gnu.setKeepInvalidPattern(false);
         // with the forbidden number 666
         output = gnu.generateMaskedRow("666 65 4862");
@@ -75,7 +70,7 @@ public class GenerateUniqueSsnUsTest {
     }
 
     @Test
-    public void testWrongSsnField00() throws DQException {
+    public void testWrongSsnField00() {
         gnu.setKeepInvalidPattern(false);
         // with the forbidden number 00
         output = gnu.generateMaskedRow("153 00 4862");

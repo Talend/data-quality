@@ -52,5 +52,5 @@ public abstract class NumericVariance<T2> extends Function<T2> {
     }
 
     @Override
-    protected abstract T2 doGenerateMaskedField(T2 t) throws org.talend.dataquality.sampling.exception.DQException;
+    protected abstract T2 doGenerateMaskedField(T2 t);
 }

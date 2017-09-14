@@ -27,7 +27,7 @@ public class GenerateSsnFr extends Function<String> {
     private static final BigInteger MOD97 = new BigInteger("97"); //$NON-NLS-1$
 
     @Override
-    protected String doGenerateMaskedField(String str) throws org.talend.dataquality.sampling.exception.DQException {
+    protected String doGenerateMaskedField(String str) {
         StringBuilder result = new StringBuilder(EMPTY_STRING);
         result.append(rnd.nextInt(2) + 1);
         int yy = rnd.nextInt(99) + 1;

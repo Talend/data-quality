@@ -18,7 +18,6 @@ import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * created by jgonzalez on 29 juin 2015 Detailled comment
@@ -36,14 +35,14 @@ public class GenerateCreditCardFormatLongTest {
     }
 
     @Test
-    public void testGood() throws DQException {
+    public void testGood() {
         Long input = 4120356987563L;
         output = gccfl.generateMaskedRow(input).toString();
         assertEquals(output, String.valueOf(4038405589322L));
     }
 
     @Test
-    public void testCheck() throws DQException {
+    public void testCheck() {
         gccfl.setRandom(new Random());
         boolean res = true;
         for (int i = 0; i < 10; ++i) {
@@ -54,7 +53,7 @@ public class GenerateCreditCardFormatLongTest {
     }
 
     @Test
-    public void testBad() throws DQException {
+    public void testBad() {
         output = gccfl.generateMaskedRow(null).toString();
         assertEquals(output, "4384055893226268");
     }

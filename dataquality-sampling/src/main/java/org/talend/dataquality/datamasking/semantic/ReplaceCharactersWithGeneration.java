@@ -23,7 +23,7 @@ public class ReplaceCharactersWithGeneration extends Function<String> {
     private static final long serialVersionUID = 368348491822287354L;
 
     @Override
-    protected String doGenerateMaskedField(String input) throws org.talend.dataquality.sampling.exception.DQException {
+    protected String doGenerateMaskedField(String input) {
         return ReplaceCharacterHelper.replaceCharacters(input, rnd);
     }
 

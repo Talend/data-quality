@@ -18,7 +18,6 @@ import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.talend.dataquality.sampling.exception.DQException;
 
 /**
  * @author jteuladedenantes
@@ -30,10 +29,6 @@ public class GenerateUniqueSsnUkTest {
 
     private AbstractGenerateUniqueSsn gnu = new GenerateUniqueSsnUk();
 
-    public GenerateUniqueSsnUkTest() throws DQException {
-        super();
-    }
-
     @Before
     public void setUp() throws Exception {
         gnu.setRandom(new Random(42));
@@ -41,26 +36,26 @@ public class GenerateUniqueSsnUkTest {
     }
 
     @Test
-    public void testEmpty() throws DQException {
+    public void testEmpty() {
         gnu.setKeepEmpty(true);
         output = gnu.generateMaskedRow("");
         assertEquals("", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testGood1() throws DQException {
+    public void testGood1() {
         output = gnu.generateMaskedRow("AL 486934 D");
         assertEquals("TG 807846 D", output);
     }
 
     @Test
-    public void testGood2() throws DQException {
+    public void testGood2() {
         output = gnu.generateMaskedRow("PP132459A ");
         assertEquals("NJ207147A ", output);
     }
 
     @Test
-    public void testWrongSsnFieldNumber() throws DQException {
+    public void testWrongSsnFieldNumber() {
         gnu.setKeepInvalidPattern(false);
         // without a number
         output = gnu.generateMaskedRow("PP13259A");
@@ -68,7 +63,7 @@ public class GenerateUniqueSsnUkTest {
     }
 
     @Test
-    public void testWrongSsnFieldForbiddenD() throws DQException {
+    public void testWrongSsnFieldForbiddenD() {
         gnu.setKeepInvalidPattern(false);
         // with the forbidden letter D
         output = gnu.generateMaskedRow("LO 486934 A");
@@ -76,7 +71,7 @@ public class GenerateUniqueSsnUkTest {
     }
 
     @Test
-    public void testWrongSsnFieldForbiddenNK() throws DQException {
+    public void testWrongSsnFieldForbiddenNK() {
         gnu.setKeepInvalidPattern(false);
         // with the forbidden letters NK
         output = gnu.generateMaskedRow("NK 486934 B");
