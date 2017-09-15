@@ -15,7 +15,12 @@ package org.talend.dataquality.semantic.index;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -23,7 +28,13 @@ import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queries.TermsFilter;
-import org.apache.lucene.search.*;
+import org.apache.lucene.search.CachingWrapperFilter;
+import org.apache.lucene.search.FieldCacheTermsFilter;
+import org.apache.lucene.search.Filter;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.SearcherManager;
+import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.talend.dataquality.semantic.model.DQCategory;
@@ -38,6 +49,8 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
     private SearcherManager mgr;
 
     private Map<String, CachingWrapperFilter> categoryToCache = new HashMap<>();
+
+    private Filter cachingWrapperFilter;
 
     /**
      * SynonymIndexSearcher constructor creates this searcher and initializes the index.
@@ -75,6 +88,11 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
         }
     }
 
+    public void setCategoriesToSearch(List<String> categoryIds) {
+        cachingWrapperFilter = new CachingWrapperFilter(
+                new FieldCacheTermsFilter(F_CATID, categoryIds.toArray(new String[categoryIds.size()])));
+    }
+
     /**
      * search for documents by one of the synonym (which may be the word).
      *
@@ -84,7 +102,7 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
      * @throws java.io.IOException
      */
     @Override
-    public TopDocs searchDocumentBySynonym(String stringToSearch, List<String> categoryIds) throws IOException {
+    public TopDocs searchDocumentBySynonym(String stringToSearch) throws IOException {
         Query query;
         switch (searchMode) {
         case MATCH_SEMANTIC_KEYWORD:
@@ -95,10 +113,13 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
             query = createQueryForSemanticDictionaryMatch(stringToSearch);
             break;
         }
-        CachingWrapperFilter cachingWrapperFilter = new CachingWrapperFilter(
-                new FieldCacheTermsFilter(F_CATID, categoryIds.toArray(new String[categoryIds.size()])));
         final IndexSearcher searcher = mgr.acquire();
-        TopDocs topDocs = searcher.search(query, cachingWrapperFilter, topDocLimit);
+        TopDocs topDocs;
+        if (cachingWrapperFilter == null) {
+            topDocs = searcher.search(query, topDocLimit);
+        } else {
+            topDocs = searcher.search(query, cachingWrapperFilter, topDocLimit);
+        }
         mgr.release(searcher);
         return topDocs;
     }

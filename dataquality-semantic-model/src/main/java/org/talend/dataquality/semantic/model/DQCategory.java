@@ -67,9 +67,9 @@ public class DQCategory implements Serializable {
 
     private List<DQCategory> parents;
 
-    private Boolean isModified;
+    private Boolean isModified = Boolean.FALSE;
 
-    private Boolean isDeleted;
+    private Boolean isDeleted = Boolean.FALSE;
 
     public DQCategory(String id) {
         this.id = id;

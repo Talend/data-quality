@@ -13,7 +13,6 @@
 package org.talend.dataquality.semantic.classifier.impl;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.talend.dataquality.semantic.classifier.ISubCategory;
@@ -36,7 +35,7 @@ public abstract class AbstractSubCategoryClassifier implements ISubCategoryClass
      * @see org.talend.dataquality.semantic.classifier.ISubCategoryClassifier#classify(java.lang.String)
      */
     @Override
-    public Set<String> classify(String data, List<String> sharedCategories, List<String> tenantCategories) {
+    public Set<String> classify(String data) {
         Set<String> catSet = new HashSet<>();
         for (ISubCategory classifier : potentialSubCategories) {
             ISemanticFilter filter = classifier.getFilter();

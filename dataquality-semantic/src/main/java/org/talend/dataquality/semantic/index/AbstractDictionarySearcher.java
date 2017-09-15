@@ -15,7 +15,12 @@ import org.apache.lucene.analysis.standard.StandardTokenizer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.search.*;
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.FuzzyQuery;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.search.TopDocs;
 
 /**
  * Created by jteuladedenantes on 16/11/16.
@@ -44,7 +49,7 @@ public abstract class AbstractDictionarySearcher {
 
     protected DictionarySearchMode searchMode = DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY;
 
-    public abstract TopDocs searchDocumentBySynonym(String stringToSearch, List<String> categoryIds) throws IOException;
+    public abstract TopDocs searchDocumentBySynonym(String stringToSearch) throws IOException;
 
     public abstract Document getDocument(int docNum);
 
@@ -135,5 +140,4 @@ public abstract class AbstractDictionarySearcher {
         }
         return termList;
     }
-
 }

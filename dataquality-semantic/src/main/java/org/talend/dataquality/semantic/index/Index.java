@@ -12,10 +12,10 @@
 // ============================================================================
 package org.talend.dataquality.semantic.index;
 
-import org.talend.dataquality.semantic.model.DQCategory;
-
 import java.util.List;
 import java.util.Set;
+
+import org.talend.dataquality.semantic.model.DQCategory;
 
 /**
  * created by talend on 2015-07-28 Detailled comment.
@@ -26,7 +26,9 @@ public interface Index {
 
     void closeIndex();
 
-    Set<String> findCategories(String data, List<String> categoryIds);
+    Set<String> findCategories(String data);
 
     boolean validCategories(String data, DQCategory semanticType, Set<DQCategory> children);
+
+    void setCategoriesToSearch(List<String> categoryIds);
 }

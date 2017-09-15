@@ -13,11 +13,9 @@
 package org.talend.dataquality.semantic.classifier.impl;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.talend.dataquality.semantic.classifier.ISubCategoryClassifier;
 import org.talend.dataquality.semantic.index.Index;
 import org.talend.dataquality.semantic.model.DQCategory;
@@ -44,23 +42,19 @@ public class DataDictFieldClassifier implements ISubCategoryClassifier {
     }
 
     @Override
-    public Set<String> classify(String data, List<String> sharedCategories, List<String> tenantCategories) {
+    public Set<String> classify(String data) {
         StringTokenizer t = new StringTokenizer(data, " ");
         final int tokenCount = t.countTokens();
 
         HashSet<String> result = new HashSet<>();
         // if it's a valid syntactic data --> search in DD
         if (tokenCount < MAX_TOKEN_FOR_KEYWORDS) {
-            if (CollectionUtils.isNotEmpty(tenantCategories))
-                result.addAll(dictionary.findCategories(data, tenantCategories));
-            if (CollectionUtils.isNotEmpty(sharedCategories))
-                result.addAll(sharedDictionary.findCategories(data, sharedCategories));
+            result.addAll(dictionary.findCategories(data));
+            result.addAll(sharedDictionary.findCategories(data));
         } else {
-            if (CollectionUtils.isNotEmpty(tenantCategories))
-                result.addAll(dictionary.findCategories(data, tenantCategories));
-            if (CollectionUtils.isNotEmpty(sharedCategories))
-                result.addAll(sharedDictionary.findCategories(data, sharedCategories));
-            result.addAll(keyword.findCategories(data, tenantCategories));
+            result.addAll(dictionary.findCategories(data));
+            result.addAll(sharedDictionary.findCategories(data));
+            result.addAll(keyword.findCategories(data));
         }
 
         return result;

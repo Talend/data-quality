@@ -54,7 +54,6 @@ class DefaultCategoryRecognizer implements CategoryRecognizer {
 
     public DefaultCategoryRecognizer(final Index sharedDictionary, Index dictionary, Index keyword, UserDefinedClassifier regex,
             Map<String, DQCategory> metadata) throws IOException {
-        dataDictFieldClassifier = new DataDictFieldClassifier(sharedDictionary, dictionary, keyword);
         this.userDefineClassifier = regex;
         this.metadata = metadata;
         this.keyMatcher = new FingerprintkeyMatcher();
@@ -65,6 +64,9 @@ class DefaultCategoryRecognizer implements CategoryRecognizer {
                 else
                     sharedCategories.add(cat.getId());
 
+        sharedDictionary.setCategoriesToSearch(sharedCategories);
+        dictionary.setCategoriesToSearch(tenantCategories);
+        dataDictFieldClassifier = new DataDictFieldClassifier(sharedDictionary, dictionary, keyword);
     }
 
     @Override
@@ -98,7 +100,7 @@ class DefaultCategoryRecognizer implements CategoryRecognizer {
         case Alpha:
         case Numeric:
         case AlphaNumeric:
-            subCategorySet.addAll(dataDictFieldClassifier.classify(data, sharedCategories, tenantCategories));
+            subCategorySet.addAll(dataDictFieldClassifier.classify(data));
             if (userDefineClassifier != null) {
                 subCategorySet.addAll(userDefineClassifier.classify(data, mainCategory));
             }

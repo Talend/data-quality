@@ -81,7 +81,7 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
      * @param tenantCategories
      */
     @Override
-    public Set<String> classify(String data, List<String> sharedCategories, List<String> tenantCategories) {
+    public Set<String> classify(String data) {
         MainCategory mainCategory = MainCategory.getMainCategory(data);
         return classify(data, mainCategory);
     }
