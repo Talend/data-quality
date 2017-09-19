@@ -13,6 +13,7 @@
 package org.talend.survivorship;
 
 import java.io.File;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -198,6 +199,45 @@ public class SurvivorshipManager extends KnowledgeManager {
         dataset = new DataSet(columnList);
     }
 
+
+    /**
+     * 
+     * Add InputStream as resource.
+     * 
+     * @param resourceStreamsMap key is ResourceType, value is a List with File input stream
+     */
+    public void initKnowledgeBase(List<InputStream> ruleFiles, List<InputStream> workFlowFiles) {
+
+        if (ruleFiles.isEmpty()) {
+            System.err.println("The resouces of DRL streams is Empty!"); //$NON-NLS-1$
+            return;
+        }
+
+        if (ruleFiles.isEmpty()) {
+            System.err.println("The resouces of BPMN2 streams is Empty!"); //$NON-NLS-1$
+            return;
+        }
+        KnowledgeBuilder kbuilder = KnowledgeBuilderFactory.newKnowledgeBuilder();
+
+        for (InputStream stream : ruleFiles) {
+            kbuilder.add(newResource(stream), ResourceType.DRL);
+        }
+        for (InputStream stream : workFlowFiles) {
+            kbuilder.add(newResource(stream), ResourceType.BPMN2);
+        }
+
+        KnowledgeBuilderErrors errors = kbuilder.getErrors();
+        if (errors.size() > 0) {
+            for (KnowledgeBuilderError error : errors) {
+                System.err.println(error.getMessage());
+            }
+            throw new IllegalArgumentException("Could not parse knowledge."); //$NON-NLS-1$
+        }
+        kbase = KnowledgeBaseFactory.newKnowledgeBase();
+        kbase.addKnowledgePackages(kbuilder.getKnowledgePackages());
+
+        dataset = new DataSet(columnList);
+    }
     /**
      * Support to create resource from jar file
      */
@@ -207,6 +247,13 @@ public class SurvivorshipManager extends KnowledgeManager {
         } else {
             return ResourceFactory.newFileResource(packagePath);
         }
+    }
+
+    public static Resource newResource(InputStream stream) {
+        if (stream == null) {
+            System.err.println("InputStream is null!!!!!!!!!!!");
+        }
+        return ResourceFactory.newInputStreamResource(stream);
     }
 
     /**
