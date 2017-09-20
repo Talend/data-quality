@@ -13,7 +13,16 @@
 package org.talend.dataquality.semantic.recognizer;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -40,10 +49,6 @@ class DefaultCategoryRecognizer implements CategoryRecognizer {
 
     private final Map<String, DQCategory> metadata;
 
-    private final List<String> sharedCategories = new ArrayList<>();
-
-    private final List<String> tenantCategories = new ArrayList<>();
-
     private final LFUCache<String, Set<String>> knownCategoryCache = new LFUCache<String, Set<String>>(10, 1000, 0.01f);
 
     private long emptyCount = 0;
@@ -57,12 +62,18 @@ class DefaultCategoryRecognizer implements CategoryRecognizer {
         this.userDefineClassifier = regex;
         this.metadata = metadata;
         this.keyMatcher = new FingerprintkeyMatcher();
-        for (DQCategory cat : metadata.values())
-            if (!cat.isDeleted())
-                if (cat.isModified())
+
+        final List<String> sharedCategories = new ArrayList<>();
+        final List<String> tenantCategories = new ArrayList<>();
+        for (DQCategory cat : metadata.values()) {
+            if (!cat.isDeleted()) {
+                if (cat.isModified()) {
                     tenantCategories.add(cat.getId());
-                else
+                } else {
                     sharedCategories.add(cat.getId());
+                }
+            }
+        }
 
         sharedDictionary.setCategoriesToSearch(sharedCategories);
         dictionary.setCategoriesToSearch(tenantCategories);

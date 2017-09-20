@@ -163,8 +163,25 @@ public class CategoryRecognizerBuilder {
     }
 
     private LuceneIndex getSharedDataDictIndex() {
-        // TODO
-        return dataDictIndex;
+        if (sharedDataDictIndex == null) {
+            if (sharedddDirectory == null) {
+                if (ddPath == null) { // FIXME create sharedddPath field or find another way to init the index
+                    try {
+                        ddPath = CategoryRecognizerBuilder.class.getResource(DEFAULT_DD_PATH).toURI();
+                    } catch (URISyntaxException e) {
+                        LOGGER.error(e.getMessage(), e);
+                    }
+                }
+                sharedDataDictIndex = new LuceneIndex(ddPath, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY);
+            } else {
+                if (ddPath == null) {
+                    sharedDataDictIndex = new LuceneIndex(sharedddDirectory, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY);
+                } else {
+                    throw new IllegalArgumentException("Please call either ddDirectory() or ddPath() but not both!");
+                }
+            }
+        }
+        return sharedDataDictIndex;
     }
 
     private LuceneIndex getKeywordIndex() {

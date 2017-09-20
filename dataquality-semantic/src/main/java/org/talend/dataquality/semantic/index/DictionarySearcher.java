@@ -50,7 +50,7 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
 
     private Map<String, CachingWrapperFilter> categoryToCache = new HashMap<>();
 
-    private Filter cachingWrapperFilter;
+    private CachingWrapperFilter cachingWrapperFilterForDiscovery;
 
     /**
      * SynonymIndexSearcher constructor creates this searcher and initializes the index.
@@ -89,7 +89,7 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
     }
 
     public void setCategoriesToSearch(List<String> categoryIds) {
-        cachingWrapperFilter = new CachingWrapperFilter(
+        cachingWrapperFilterForDiscovery = new CachingWrapperFilter(
                 new FieldCacheTermsFilter(F_CATID, categoryIds.toArray(new String[categoryIds.size()])));
     }
 
@@ -97,7 +97,6 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
      * search for documents by one of the synonym (which may be the word).
      *
      * @param stringToSearch
-     * @param categoryIds
      * @return
      * @throws java.io.IOException
      */
@@ -115,10 +114,10 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
         }
         final IndexSearcher searcher = mgr.acquire();
         TopDocs topDocs;
-        if (cachingWrapperFilter == null) {
-            topDocs = searcher.search(query, topDocLimit);
+        if (cachingWrapperFilterForDiscovery != null) {
+            topDocs = searcher.search(query, cachingWrapperFilterForDiscovery, topDocLimit);
         } else {
-            topDocs = searcher.search(query, cachingWrapperFilter, topDocLimit);
+            topDocs = searcher.search(query, topDocLimit);
         }
         mgr.release(searcher);
         return topDocs;
