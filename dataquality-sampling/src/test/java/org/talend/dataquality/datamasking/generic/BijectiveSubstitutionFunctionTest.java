@@ -32,18 +32,18 @@ public class BijectiveSubstitutionFunctionTest {
     public void setUp() throws Exception {
 
         List<FieldDefinition> fieldDefinitionList = new ArrayList<>();
-        fieldDefinitionList.add(new FieldDefinition(FieldDefinitionType.INTERVAL.getComponentValue(), null, 1L, 2L));
-        fieldDefinitionList.add(new FieldDefinition(FieldDefinitionType.INTERVAL.getComponentValue(), null, 0L, 99L));
-        fieldDefinitionList.add(new FieldDefinition(FieldDefinitionType.INTERVAL.getComponentValue(), null, 1L, 12L));
+        fieldDefinitionList.add(new FieldDefinition(FieldDefinitionType.INTERVAL.getComponentValue(), null, "1,2"));
+        fieldDefinitionList.add(new FieldDefinition(FieldDefinitionType.INTERVAL.getComponentValue(), null, "0,99"));
+        fieldDefinitionList.add(new FieldDefinition(FieldDefinitionType.INTERVAL.getComponentValue(), null, "1,12"));
 
         fieldDefinitionList.add(new FieldDefinition(FieldDefinitionType.ENUMERATION.getComponentValue(),
                 "01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19," + "2A,2B," //
                         + "21,22,23,24,25,26,27,28,29,30,31,32,33," //
                         + "34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66," //
                         + "67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99", //
-                null, null));
-        fieldDefinitionList.add(new FieldDefinition(FieldDefinitionType.INTERVAL.getComponentValue(), null, 1L, 990L));
-        fieldDefinitionList.add(new FieldDefinition(FieldDefinitionType.INTERVAL.getComponentValue(), null, 1L, 999L));
+                null));
+        fieldDefinitionList.add(new FieldDefinition(FieldDefinitionType.INTERVAL.getComponentValue(), null, "1,990"));
+        fieldDefinitionList.add(new FieldDefinition(FieldDefinitionType.INTERVAL.getComponentValue(), null, "1,999"));
 
         fn = new BijectiveSubstitutionFunction(fieldDefinitionList);
         fn.setRandom(new Random(42));

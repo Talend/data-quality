@@ -1,5 +1,7 @@
 package org.talend.dataquality.datamasking.generic;
 
+import org.talend.dataquality.sampling.exception.DQRuntimeException;
+
 /**
  *
  */
@@ -39,11 +41,17 @@ public class FieldDefinition {
 
     private Long max;
 
-    public FieldDefinition(String type, String value, Long min, Long max) {
-        this.type = FieldDefinitionType.getTypeByComponentValue(type);
+    public FieldDefinition(String inputType, String value, String interval) {
+        this.type = FieldDefinitionType.getTypeByComponentValue(inputType);
         this.value = value;
-        this.min = min;
-        this.max = max;
+        if (type.equals(FieldDefinitionType.INTERVAL) || type.equals(FieldDefinitionType.DATEPATTERN)) {
+            String[] values = interval.split(",");
+            if (values.length != 2)
+                throw new DQRuntimeException(
+                        "The interval " + interval + " is not well-defined. Please use the following syntax: \"1,10\"");
+            this.min = Long.valueOf(values[0]);
+            this.max = Long.valueOf(values[1]);
+        }
     }
 
     public FieldDefinitionType getType() {
