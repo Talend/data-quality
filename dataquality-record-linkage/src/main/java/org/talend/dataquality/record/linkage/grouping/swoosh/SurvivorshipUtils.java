@@ -245,11 +245,8 @@ public class SurvivorshipUtils {
      */
     public static boolean isMappingDataType(String factTypeName, String parameterDataType) {
 
-        if (StringUtils.equalsIgnoreCase(factTypeName, NUMBER_ID + parameterDataType)
-                || isNumberDataType(factTypeName, parameterDataType)) {
-            return true;
-        }
-        return false;
+        return StringUtils.equalsIgnoreCase(factTypeName, NUMBER_ID + parameterDataType)
+                || isNumberDataType(factTypeName, parameterDataType);
     }
 
     /**
@@ -261,11 +258,9 @@ public class SurvivorshipUtils {
      * @return
      */
     public static boolean isNumberDataType(String factTypeName, String parameterDataType) {
-        if (StringUtils.equalsIgnoreCase(parameterDataType, "Number") //$NON-NLS-1$ 
-                && ArrayUtils.contains(NUMBERS, factTypeName)) {
-            return true;
-        }
-        return false;
+        return StringUtils.equalsIgnoreCase(parameterDataType, "Number") //$NON-NLS-1$ 
+                && ArrayUtils.contains(NUMBERS, factTypeName);
+
     }
 
     /**
