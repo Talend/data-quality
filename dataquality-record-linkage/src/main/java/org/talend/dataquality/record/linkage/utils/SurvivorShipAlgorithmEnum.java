@@ -20,7 +20,9 @@ import java.util.List;
  */
 public enum SurvivorShipAlgorithmEnum {
 
-    CONCATENATE(0, "Concatenate", //$NON-NLS-1$
+    CONCATENATE(
+            0,
+            "Concatenate", //$NON-NLS-1$
             "Concatenate", //$NON-NLS-1$
             DefaultSurvivorShipDataTypeEnum.BOOLEAN,
             DefaultSurvivorShipDataTypeEnum.STRING),
