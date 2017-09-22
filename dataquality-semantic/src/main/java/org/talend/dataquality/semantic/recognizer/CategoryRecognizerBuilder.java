@@ -90,6 +90,11 @@ public class CategoryRecognizerBuilder {
         return this;
     }
 
+    public CategoryRecognizerBuilder dataDictIndex(LuceneIndex dataDictIndex) {
+        this.dataDictIndex = dataDictIndex;
+        return this;
+    }
+
     public CategoryRecognizerBuilder kwPath(URI kwPath) {
         this.kwPath = kwPath;
         return this;

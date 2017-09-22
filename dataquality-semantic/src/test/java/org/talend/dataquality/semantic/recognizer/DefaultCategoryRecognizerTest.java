@@ -1,19 +1,39 @@
 package org.talend.dataquality.semantic.recognizer;
 
 import static org.junit.Assert.assertEquals;
+import static org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder.DEFAULT_DD_PATH;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.analysis.util.CharArraySet;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.document.StringField;
+import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.RAMDirectory;
+import org.apache.lucene.util.Version;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
+import org.talend.dataquality.semantic.api.DictionaryConstants;
+import org.talend.dataquality.semantic.api.DictionaryUtils;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
+import org.talend.dataquality.semantic.index.ClassPathDirectory;
+import org.talend.dataquality.semantic.index.DictionarySearchMode;
+import org.talend.dataquality.semantic.index.DictionarySearcher;
+import org.talend.dataquality.semantic.index.LuceneIndex;
 import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
 
@@ -68,6 +88,41 @@ public class DefaultCategoryRecognizerTest {
         recognizer = builder.lucene().build();
     }
 
+    public void initTenantIndex(boolean addExistingValues) throws IOException, URISyntaxException {
+
+        Map<String, DQCategory> metadata = builder.getCategoryMetadata();
+
+        metadata.get(SemanticCategoryEnum.AIRPORT_CODE.getTechnicalId()).setModified(true);
+        IndexSearcher sharedLuceneDocumentSearcher = new IndexSearcher(DirectoryReader
+                .open(ClassPathDirectory.open(CategoryRecognizerBuilder.class.getResource(DEFAULT_DD_PATH).toURI())));
+
+        Directory ramDirectory = new RAMDirectory();
+        IndexWriterConfig writerConfig = new IndexWriterConfig(Version.LATEST, new StandardAnalyzer(CharArraySet.EMPTY_SET));
+        IndexWriter writer = new IndexWriter(ramDirectory, writerConfig);
+
+        final Term searchTerm = new Term(DictionaryConstants.ID, SemanticCategoryEnum.AIRPORT_CODE.getTechnicalId());
+
+        if (addExistingValues)
+            for (ScoreDoc d : sharedLuceneDocumentSearcher.search(new TermQuery(searchTerm), Integer.MAX_VALUE).scoreDocs) {
+                Document doc = sharedLuceneDocumentSearcher.getIndexReader().document(d.doc);
+                for (String value : doc.getValues(DictionarySearcher.F_RAW)) {
+                    List<String> tokens = DictionarySearcher.getTokensFromAnalyzer(value);
+                    doc.add(new StringField(DictionarySearcher.F_SYNTERM, StringUtils.join(tokens, ' '), Field.Store.NO));
+                }
+                writer.addDocument(doc);
+            }
+
+        writer.addDocument(DictionaryUtils.generateDocument("ID_DOCUMENT", SemanticCategoryEnum.AIRPORT_CODE.getTechnicalId(),
+                SemanticCategoryEnum.AIRPORT_CODE.getId(), new HashSet<String>(Arrays.asList("AAAA", "BBBB"))));
+        writer.addDocument(DictionaryUtils.generateDocument("ID_DOCUMENT2", SemanticCategoryEnum.AIRPORT_CODE.getTechnicalId(),
+                SemanticCategoryEnum.AIRPORT_CODE.getId(), new HashSet<String>(Arrays.asList("CCCC", "DDDD"))));
+
+        writer.commit();
+        writer.close();
+        recognizer = builder.dataDictIndex(new LuceneIndex(ramDirectory, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY)).lucene()
+                .build();
+    }
+
     /**
      * check the order with the following priorities
      * "count" first, "level" next and "SemanticCategoryEnum.java ordinal" last
@@ -80,15 +135,8 @@ public class DefaultCategoryRecognizerTest {
         recognizer.process("alabama");
         recognizer.process("1-844-224-4468");
         recognizer.process("berulle");
-        Collection<CategoryFrequency> result = recognizer.getResult();
-        CategoryFrequency[] resultArray = result.toArray(new CategoryFrequency[result.size()]);
-        List<String> expectedCategories = Arrays.asList(US_STATE_PHONE_FR_COMMUNE, US_STATE_PHONE,
-                SemanticCategoryEnum.FR_COMMUNE.getId(), SemanticCategoryEnum.US_PHONE.getId(),
-                SemanticCategoryEnum.US_STATE.getId(), SemanticCategoryEnum.PHONE.getId());
-        assertEquals(expectedCategories.size(), resultArray.length);
-        for (int i = 0; i < resultArray.length; i++) {
-            assertEquals(expectedCategories.get(i), resultArray[i].getCategoryId());
-        }
+        checkResults(US_STATE_PHONE_FR_COMMUNE, US_STATE_PHONE, SemanticCategoryEnum.FR_COMMUNE.getId(),
+                SemanticCategoryEnum.US_PHONE.getId(), SemanticCategoryEnum.US_STATE.getId(), SemanticCategoryEnum.PHONE.getId());
     }
 
     @Test
@@ -97,17 +145,10 @@ public class DefaultCategoryRecognizerTest {
         recognizer.process("0675982547");
         recognizer.process("1-844-224-4468");
         recognizer.process("berulle");
-        Collection<CategoryFrequency> result = recognizer.getResult();
-        CategoryFrequency[] resultArray = result.toArray(new CategoryFrequency[result.size()]);
-        List<String> expectedCategories = Arrays.asList(US_STATE_PHONE_FR_COMMUNE, US_STATE_PHONE,
-                SemanticCategoryEnum.PHONE.getId(), SemanticCategoryEnum.FR_COMMUNE.getId(),
-                SemanticCategoryEnum.FR_PHONE.getId(), SemanticCategoryEnum.US_PHONE.getId(),
-                SemanticCategoryEnum.US_STATE.getId(), SemanticCategoryEnum.DE_PHONE.getId());
-        assertEquals(expectedCategories.size(), resultArray.length);
-        for (int i = 0; i < resultArray.length; i++) {
-            assertEquals(expectedCategories.get(i), resultArray[i].getCategoryId());
-
-        }
+        checkResults(US_STATE_PHONE_FR_COMMUNE, US_STATE_PHONE, SemanticCategoryEnum.PHONE.getId(),
+                SemanticCategoryEnum.FR_COMMUNE.getId(), SemanticCategoryEnum.FR_PHONE.getId(),
+                SemanticCategoryEnum.US_PHONE.getId(), SemanticCategoryEnum.US_STATE.getId(),
+                SemanticCategoryEnum.DE_PHONE.getId());
     }
 
     @Test
@@ -115,15 +156,49 @@ public class DefaultCategoryRecognizerTest {
         recognizer.process("alabama");
         recognizer.process("la bernardiere");
         recognizer.process("berulle");
+        checkResults(US_STATE_PHONE_FR_COMMUNE, SemanticCategoryEnum.FR_COMMUNE.getId(), SemanticCategoryEnum.US_STATE.getId(),
+                US_STATE_PHONE);
+    }
+
+    @Test
+    public void discoveryWithTenantIndex() throws IOException, URISyntaxException {
+        recognizer.process("CDG");
+        checkResults(SemanticCategoryEnum.AIRPORT_CODE.getId());
+        recognizer.process("AAAA");
+        checkResults(StringUtils.EMPTY);
+
+        initTenantIndex(true);
+        recognizer.process("CDG");
+        checkResults(SemanticCategoryEnum.AIRPORT_CODE.getId());
+        recognizer.process("AAAA");
+        checkResults(SemanticCategoryEnum.AIRPORT_CODE.getId());
+
+        initTenantIndex(false);
+        recognizer.process("CDG");
+        checkResults(StringUtils.EMPTY);
+        recognizer.process("AAAA");
+        checkResults(SemanticCategoryEnum.AIRPORT_CODE.getId());
+    }
+
+    @Test
+    public void discoveryWithTenantIndexAndDeletedCategory() throws IOException, URISyntaxException {
+        recognizer.process("damien");
+        checkResults(SemanticCategoryEnum.FIRST_NAME.getId());
+
+        builder.getCategoryMetadata().get(SemanticCategoryEnum.FIRST_NAME.getTechnicalId()).setDeleted(true);
+        recognizer = builder.lucene().build();
+        recognizer.process("damien");
+        checkResults(StringUtils.EMPTY);
+    }
+
+    public void checkResults(String... expectedCategories) {
         Collection<CategoryFrequency> result = recognizer.getResult();
         CategoryFrequency[] resultArray = result.toArray(new CategoryFrequency[result.size()]);
-        List<String> expectedCategories = Arrays.asList(US_STATE_PHONE_FR_COMMUNE, SemanticCategoryEnum.FR_COMMUNE.getId(),
-                SemanticCategoryEnum.US_STATE.getId(), US_STATE_PHONE);
-        assertEquals(expectedCategories.size(), resultArray.length);
+        assertEquals(expectedCategories.length, resultArray.length);
         for (int i = 0; i < resultArray.length; i++) {
-            assertEquals(expectedCategories.get(i), resultArray[i].getCategoryId());
-
+            assertEquals(expectedCategories[i], resultArray[i].getCategoryId());
         }
+        recognizer.reset();
     }
 
     @After
