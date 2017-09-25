@@ -17,11 +17,7 @@ import static org.junit.Assert.fail;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.log4j.Logger;
@@ -30,6 +26,7 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.junit.Before;
 import org.junit.Test;
+import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
 
 public class ConcurrentDictionaryAccessTest {
 
@@ -44,7 +41,7 @@ public class ConcurrentDictionaryAccessTest {
 
     private DictionarySearcher newSemanticDictionarySearcher() {
         try {
-            final URI ddPath = this.getClass().getResource("/index/dictionary").toURI();
+            final URI ddPath = this.getClass().getResource(CategoryRecognizerBuilder.DEFAULT_DD_PATH).toURI();
             final DictionarySearcher searcher = new DictionarySearcher(ddPath);
             searcher.setTopDocLimit(20);
             searcher.setSearchMode(DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY);

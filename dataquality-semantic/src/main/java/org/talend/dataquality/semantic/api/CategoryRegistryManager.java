@@ -72,11 +72,11 @@ public class CategoryRegistryManager {
 
     private static String localRegistryPath = System.getProperty("user.home") + "/.talend/dataquality/semantic";
 
-    public static final String CATEGORY_SUBFOLDER_NAME = "category";
+    public static final String METADATA_SUBFOLDER_NAME = "metadata";
 
-    public static final String DICTIONARY_SUBFOLDER_NAME = "index/dictionary";
+    public static final String DICTIONARY_SUBFOLDER_NAME = "dictionary";
 
-    public static final String KEYWORD_SUBFOLDER_NAME = "index/keyword";
+    public static final String KEYWORD_SUBFOLDER_NAME = "keyword";
 
     public static final String REGEX_SUBFOLDER_NAME = "regex";
 
@@ -173,7 +173,7 @@ public class CategoryRegistryManager {
     public void reloadCategoriesFromRegistry() {
         LOGGER.info("Reload categories from local registry.");
         File categorySubFolder = new File(
-                localRegistryPath + File.separator + contextName + File.separator + CATEGORY_SUBFOLDER_NAME);
+                localRegistryPath + File.separator + contextName + File.separator + METADATA_SUBFOLDER_NAME);
         if (categorySubFolder.exists()) {
             dqCategories.clear();
             try {
@@ -194,8 +194,8 @@ public class CategoryRegistryManager {
         // read local DD categories
         LOGGER.info("Loading categories from local registry.");
         final File categorySubFolder = new File(
-                localRegistryPath + File.separator + contextName + File.separator + CATEGORY_SUBFOLDER_NAME);
-        loadBaseIndex(categorySubFolder, CATEGORY_SUBFOLDER_NAME);
+                localRegistryPath + File.separator + contextName + File.separator + METADATA_SUBFOLDER_NAME);
+        loadBaseIndex(categorySubFolder, METADATA_SUBFOLDER_NAME);
         if (categorySubFolder.exists()) {
             try (final DirectoryReader reader = DirectoryReader.open(FSDirectory.open(categorySubFolder))) {
                 fillDqCategoriesMap(reader);
@@ -218,7 +218,7 @@ public class CategoryRegistryManager {
                 localRegistryPath + File.separator + contextName + File.separator + REGEX_SUBFOLDER_NAME);
         if (!regexRegistryFolder.exists()) {
             // load provided RE into registry
-            InputStream is = CategoryRecognizer.class.getResourceAsStream(REGEX_CATEGRIZER_FILE_NAME);
+            InputStream is = CategoryRecognizer.class.getResourceAsStream(CategoryRecognizerBuilder.DEFAULT_RE_PATH);
             StringBuilder sb = new StringBuilder();
             for (String line : IOUtils.readLines(is)) {
                 sb.append(line);
@@ -440,7 +440,7 @@ public class CategoryRegistryManager {
      */
     public URI getMetadataURI() throws URISyntaxException {
         if (usingLocalCategoryRegistry) {
-            return Paths.get(localRegistryPath, contextName, CATEGORY_SUBFOLDER_NAME).toUri();
+            return Paths.get(localRegistryPath, contextName, METADATA_SUBFOLDER_NAME).toUri();
         } else {
             return CategoryRecognizerBuilder.class.getResource(CategoryRecognizerBuilder.DEFAULT_METADATA_PATH).toURI();
         }
