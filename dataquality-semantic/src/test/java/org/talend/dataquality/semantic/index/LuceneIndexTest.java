@@ -30,7 +30,7 @@ public class LuceneIndexTest {
 
     private static final Logger LOGGER = Logger.getLogger(LuceneIndexTest.class);
 
-    private static Map<String[], String[]> EXPECTED_SIMILAR_VALUES = new LinkedHashMap<String[], String[]>() {
+    private Map<String[], String[]> EXPECTED_SIMILAR_VALUES = new LinkedHashMap<String[], String[]>() {
 
         private static final long serialVersionUID = 1L;
 
