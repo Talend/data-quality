@@ -55,13 +55,13 @@ public class CategoryRecognizerBuilder {
 
     private LuceneIndex dataDictIndex;
 
-    private LuceneIndex sharedDataDictIndex;
+    private LuceneIndex dataDictCustomIndex;
 
     private LuceneIndex keywordIndex;
 
     private Directory ddDirectory;
 
-    private Directory sharedddDirectory;
+    private Directory ddCustomDirectory;
 
     private Directory kwDirectory;
 
@@ -91,8 +91,8 @@ public class CategoryRecognizerBuilder {
         return this;
     }
 
-    public CategoryRecognizerBuilder dataDictIndex(LuceneIndex dataDictIndex) {
-        this.dataDictIndex = dataDictIndex;
+    public CategoryRecognizerBuilder ddCustomDirectory(Directory ddCustomDirectory) {
+        this.ddCustomDirectory = ddCustomDirectory;
         return this;
     }
 
@@ -126,11 +126,11 @@ public class CategoryRecognizerBuilder {
         switch (mode) {
         case LUCENE:
             Map<String, DQCategory> meta = getCategoryMetadata();
-            LuceneIndex sharedDict = getSharedDataDictIndex();
             LuceneIndex dict = getDataDictIndex();
+            LuceneIndex customDict = getCustomDataDictIndex();
             LuceneIndex keyword = getKeywordIndex();
             UserDefinedClassifier regex = getRegexClassifier();
-            return new DefaultCategoryRecognizer(sharedDict, dict, keyword, regex, meta);
+            return new DefaultCategoryRecognizer(dict, customDict, keyword, regex, meta);
         case ELASTIC_SEARCH:
             throw new IllegalArgumentException("Elasticsearch mode is not supported any more");
         default:
@@ -168,26 +168,20 @@ public class CategoryRecognizerBuilder {
         return dataDictIndex;
     }
 
-    private LuceneIndex getSharedDataDictIndex() {
-        if (sharedDataDictIndex == null) {
-            if (sharedddDirectory == null) {
-                if (ddPath == null) { // FIXME create sharedddPath field or find another way to init the index
-                    try {
-                        ddPath = CategoryRecognizerBuilder.class.getResource(DEFAULT_DD_PATH).toURI();
-                    } catch (URISyntaxException e) {
-                        LOGGER.error(e.getMessage(), e);
-                    }
-                }
-                sharedDataDictIndex = new LuceneIndex(ddPath, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY);
-            } else {
-                if (ddPath == null) {
-                    sharedDataDictIndex = new LuceneIndex(sharedddDirectory, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY);
-                } else {
-                    throw new IllegalArgumentException("Please call either ddDirectory() or ddPath() but not both!");
+    private LuceneIndex getCustomDataDictIndex() {
+        if (ddCustomDirectory == null) {
+            if (ddPath == null) { // FIXME create custom DD field correctly
+                try {
+                    ddPath = CategoryRecognizerBuilder.class.getResource(DEFAULT_DD_PATH).toURI();
+                } catch (URISyntaxException e) {
+                    LOGGER.error(e.getMessage(), e);
                 }
             }
+            dataDictCustomIndex = new LuceneIndex(ddPath, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY);
+        } else {
+            dataDictCustomIndex = new LuceneIndex(ddCustomDirectory, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY);
         }
-        return sharedDataDictIndex;
+        return dataDictCustomIndex;
     }
 
     private LuceneIndex getKeywordIndex() {

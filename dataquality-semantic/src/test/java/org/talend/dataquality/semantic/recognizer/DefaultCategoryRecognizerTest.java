@@ -31,9 +31,7 @@ import org.talend.dataquality.semantic.api.DictionaryConstants;
 import org.talend.dataquality.semantic.api.DictionaryUtils;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.index.ClassPathDirectory;
-import org.talend.dataquality.semantic.index.DictionarySearchMode;
 import org.talend.dataquality.semantic.index.DictionarySearcher;
-import org.talend.dataquality.semantic.index.LuceneIndex;
 import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
 
@@ -119,8 +117,7 @@ public class DefaultCategoryRecognizerTest {
 
         writer.commit();
         writer.close();
-        recognizer = builder.dataDictIndex(new LuceneIndex(ramDirectory, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY)).lucene()
-                .build();
+        recognizer = builder.ddCustomDirectory(ramDirectory).lucene().build();
     }
 
     /**

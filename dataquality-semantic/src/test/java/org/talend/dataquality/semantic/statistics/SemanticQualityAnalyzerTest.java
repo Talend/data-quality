@@ -41,9 +41,7 @@ import org.talend.dataquality.semantic.api.DictionaryConstants;
 import org.talend.dataquality.semantic.api.DictionaryUtils;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.index.ClassPathDirectory;
-import org.talend.dataquality.semantic.index.DictionarySearchMode;
 import org.talend.dataquality.semantic.index.DictionarySearcher;
-import org.talend.dataquality.semantic.index.LuceneIndex;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.recognizer.CategoryFrequency;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
@@ -269,7 +267,7 @@ public class SemanticQualityAnalyzerTest {
 
         writer.commit();
         writer.close();
-        builder.dataDictIndex(new LuceneIndex(ramDirectory, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY)).lucene().build();
+        builder.ddCustomDirectory(ramDirectory).lucene().build();
     }
 
     @After
