@@ -121,7 +121,7 @@ public class CategoryRegistryManager {
 
     public static synchronized CategoryRegistryManager getInstance(String contextName) {
         if (instances.get(contextName) == null) {
-            instances.put(contextName, new CategoryRegistryManager(contextName));
+            instances.put(contextName, instances.get("default"));
         }
         return instances.get(contextName);
     }
@@ -144,6 +144,9 @@ public class CategoryRegistryManager {
         if (folder != null && folder.trim().length() > 0) {
             localRegistryPath = folder;
             usingLocalCategoryRegistry = true;
+            if (instances.get("default") == null) {
+                instances.put("default", new CategoryRegistryManager("default"));
+            }
             getInstance();
         } else {
             LOGGER.warn("Cannot set an empty path as local registy location. Use default one: " + localRegistryPath);
@@ -172,8 +175,8 @@ public class CategoryRegistryManager {
      */
     public void reloadCategoriesFromRegistry() {
         LOGGER.info("Reload categories from local registry.");
-        File categorySubFolder = new File(
-                localRegistryPath + File.separator + contextName + File.separator + METADATA_SUBFOLDER_NAME);
+        File categorySubFolder = new File(localRegistryPath + File.separator + contextName + File.separator + "prod"
+                + File.separator + METADATA_SUBFOLDER_NAME);
         if (categorySubFolder.exists()) {
             dqCategories.clear();
             try {
@@ -194,7 +197,7 @@ public class CategoryRegistryManager {
         // read local DD categories
         LOGGER.info("Loading categories from local registry.");
         final File categorySubFolder = new File(
-                localRegistryPath + File.separator + contextName + File.separator + METADATA_SUBFOLDER_NAME);
+                localRegistryPath + File.separator + "shared/prod" + File.separator + METADATA_SUBFOLDER_NAME);
         loadBaseIndex(categorySubFolder, METADATA_SUBFOLDER_NAME);
         if (categorySubFolder.exists()) {
             try (final DirectoryReader reader = DirectoryReader.open(FSDirectory.open(categorySubFolder))) {
@@ -205,17 +208,17 @@ public class CategoryRegistryManager {
 
         // extract initial DD categories if not present
         final File dictionarySubFolder = new File(
-                localRegistryPath + File.separator + contextName + File.separator + DICTIONARY_SUBFOLDER_NAME);
+                localRegistryPath + File.separator + "shared/prod" + File.separator + DICTIONARY_SUBFOLDER_NAME);
         loadBaseIndex(dictionarySubFolder, DICTIONARY_SUBFOLDER_NAME);
 
         // extract initial KW categories if not present
         final File keywordSubFolder = new File(
-                localRegistryPath + File.separator + contextName + File.separator + KEYWORD_SUBFOLDER_NAME);
+                localRegistryPath + File.separator + "shared/prod" + File.separator + KEYWORD_SUBFOLDER_NAME);
         loadBaseIndex(keywordSubFolder, KEYWORD_SUBFOLDER_NAME);
 
         // read local RE categories
         final File regexRegistryFolder = new File(
-                localRegistryPath + File.separator + contextName + File.separator + REGEX_SUBFOLDER_NAME);
+                localRegistryPath + File.separator + "shared/prod" + File.separator + REGEX_SUBFOLDER_NAME);
         if (!regexRegistryFolder.exists()) {
             // load provided RE into registry
             InputStream is = CategoryRecognizer.class.getResourceAsStream(CategoryRecognizerBuilder.DEFAULT_RE_PATH);
@@ -412,8 +415,8 @@ public class CategoryRegistryManager {
 
         // load regexes from local registry
         if (udc == null || refresh) {
-            final File regexRegistryFile = new File(localRegistryPath + File.separator + contextName + File.separator
-                    + REGEX_SUBFOLDER_NAME + File.separator + REGEX_CATEGRIZER_FILE_NAME);
+            final File regexRegistryFile = new File(localRegistryPath + File.separator + contextName + File.separator + "prod"
+                    + File.separator + REGEX_SUBFOLDER_NAME + File.separator + REGEX_CATEGRIZER_FILE_NAME);
 
             if (!regexRegistryFile.exists()) {
                 regexRegistryFile.getParentFile().mkdirs();
@@ -440,7 +443,7 @@ public class CategoryRegistryManager {
      */
     public URI getMetadataURI() throws URISyntaxException {
         if (usingLocalCategoryRegistry) {
-            return Paths.get(localRegistryPath, contextName, METADATA_SUBFOLDER_NAME).toUri();
+            return Paths.get(localRegistryPath, contextName, "prod", METADATA_SUBFOLDER_NAME).toUri();
         } else {
             return CategoryRecognizerBuilder.class.getResource(CategoryRecognizerBuilder.DEFAULT_METADATA_PATH).toURI();
         }
@@ -451,7 +454,7 @@ public class CategoryRegistryManager {
      */
     public URI getDictionaryURI() throws URISyntaxException {
         if (usingLocalCategoryRegistry) {
-            return Paths.get(localRegistryPath, contextName, DICTIONARY_SUBFOLDER_NAME).toUri();
+            return Paths.get(localRegistryPath, contextName, "prod", DICTIONARY_SUBFOLDER_NAME).toUri();
         } else {
             return CategoryRecognizerBuilder.class.getResource(CategoryRecognizerBuilder.DEFAULT_DD_PATH).toURI();
         }
@@ -462,7 +465,7 @@ public class CategoryRegistryManager {
      */
     public URI getKeywordURI() throws URISyntaxException {
         if (usingLocalCategoryRegistry) {
-            return Paths.get(localRegistryPath, contextName, KEYWORD_SUBFOLDER_NAME).toUri();
+            return Paths.get(localRegistryPath, contextName, "prod", KEYWORD_SUBFOLDER_NAME).toUri();
         } else {
             return CategoryRecognizerBuilder.class.getResource(CategoryRecognizerBuilder.DEFAULT_KW_PATH).toURI();
         }
@@ -473,7 +476,7 @@ public class CategoryRegistryManager {
      */
     public URI getRegexURI() throws URISyntaxException {
         if (usingLocalCategoryRegistry) {
-            return Paths.get(localRegistryPath, contextName, REGEX_SUBFOLDER_NAME, REGEX_CATEGRIZER_FILE_NAME).toUri();
+            return Paths.get(localRegistryPath, contextName, "prod", REGEX_SUBFOLDER_NAME, REGEX_CATEGRIZER_FILE_NAME).toUri();
         } else {
             return CategoryRecognizerBuilder.class.getResource(CategoryRecognizerBuilder.DEFAULT_RE_PATH).toURI();
         }
