@@ -13,6 +13,7 @@
 package org.talend.survivorship;
 
 import java.io.File;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -194,6 +195,55 @@ public class SurvivorshipManager extends KnowledgeManager {
         dataset = new DataSet(columnList);
     }
 
+
+    /**
+     * 
+     * Add InputStream as resource.
+     * 
+     * @param resourceStreamsMap key is ResourceType, value is a List with File input stream
+     */
+    public void initKnowledgeBase(Map<org.kie.api.io.ResourceType, List<InputStream>> streamsMap) {
+        if(streamsMap.isEmpty()){
+            System.err.println("The resouce of DRL streams is Empty!"); //$NON-NLS-1$
+            return;
+        }
+        List<InputStream> ruleFiles = streamsMap.get(ResourceType.DRL);
+        List<InputStream> workFlowFiles = streamsMap.get(ResourceType.BPMN2);
+
+        if (ruleFiles.isEmpty()) {
+            System.err.println("The resouce of DRL streams is Empty!"); //$NON-NLS-1$
+            return;
+        }
+
+        if (workFlowFiles.isEmpty()) {
+            System.err.println("The resouce of BPMN2 streams is Empty!"); //$NON-NLS-1$
+            return;
+        }
+        KnowledgeBuilder kbuilder = KnowledgeBuilderFactory.newKnowledgeBuilder();
+
+        for (InputStream stream : ruleFiles) {
+            if (stream != null) {
+                kbuilder.add(newResource(stream), ResourceType.DRL);
+            }
+        }
+        for (InputStream stream : workFlowFiles) {
+            if (stream != null) {
+                kbuilder.add(newResource(stream), ResourceType.BPMN2);
+            }
+        }
+
+        KnowledgeBuilderErrors errors = kbuilder.getErrors();
+        if (errors.size() > 0) {
+            for (KnowledgeBuilderError error : errors) {
+                System.err.println(error.getMessage());
+            }
+            throw new IllegalArgumentException("Could not parse knowledge."); //$NON-NLS-1$
+        }
+        kbase = KnowledgeBaseFactory.newKnowledgeBase();
+        kbase.addKnowledgePackages(kbuilder.getKnowledgePackages());
+
+        dataset = new DataSet(columnList);
+    }
     /**
      * Support to create resource from jar file
      */
@@ -203,6 +253,17 @@ public class SurvivorshipManager extends KnowledgeManager {
         } else {
             return ResourceFactory.newFileResource(packagePath);
         }
+    }
+
+    /**
+     * 
+     * DOC talend Comment method "newResource".
+     * 
+     * @param stream
+     * @return
+     */
+    public static Resource newResource(InputStream stream) {
+        return ResourceFactory.newInputStreamResource(stream);
     }
 
     /**
