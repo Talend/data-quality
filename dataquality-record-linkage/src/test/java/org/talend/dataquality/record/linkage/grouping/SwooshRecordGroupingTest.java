@@ -659,7 +659,8 @@ public class SwooshRecordGroupingTest {
         Assert.assertTrue(groupRows_tMatchGroup_1.size() > 10);
         boolean hasGroup5 = false, hasGroup2 = false;
         for (row2Struct one : groupRows_tMatchGroup_1) {
-            // System.out.println(one.customer_id + "--" + one.city + "--" + one.country + "--" + one.GID + "--" + one.GRP_SIZE+
+            // System.out.println(one.customer_id + "--" + one.city + "--" + one.country + "--" + one.GID + "--" +
+            // one.GRP_SIZE+
             // "--" + one.MASTER);
             if (one.customer_id == 100000) {
                 Assert.assertTrue(one.MASTER);
@@ -742,7 +743,8 @@ public class SwooshRecordGroupingTest {
         Assert.assertTrue(groupRows_tMatchGroup_1.size() == 14);
         boolean hasGroup5 = false, hasGroup7 = false;
         for (row2Struct one : groupRows_tMatchGroup_1) {
-            // System.out.println(one.customer_id + "--" + one.city + "--" + one.country + "--" + one.GID + "--" + one.GRP_SIZE+
+            // System.out.println(one.customer_id + "--" + one.city + "--" + one.country + "--" + one.GID + "--" +
+            // one.GRP_SIZE+
             // "--" + one.MASTER);
             if ("AAAAAAAAAAAAAAA".equals(one.country)) {
                 hasGroup5 = true;
@@ -934,7 +936,8 @@ public class SwooshRecordGroupingTest {
         Collections.sort(groupRows_tMatchGroup_1);
         Assert.assertTrue(groupRows_tMatchGroup_1.size() == 1);
         for (row2Struct one : groupRows_tMatchGroup_1) {
-            // System.out.println(one.customer_id + "--" + one.city + "--" + one.country + "--" + one.GID + "--" + one.GRP_SIZE+
+            // System.out.println(one.customer_id + "--" + one.city + "--" + one.country + "--" + one.GID + "--" +
+            // one.GRP_SIZE+
             // "--" + one.MASTER);
             Assert.assertTrue(one.MASTER);
             Assert.assertTrue(1 == one.GRP_SIZE);
@@ -1009,7 +1012,8 @@ public class SwooshRecordGroupingTest {
         Assert.assertTrue(groupRows_tMatchGroup_1.size() == 10);
         boolean hasGroup9 = false;
         for (row2Struct one : groupRows_tMatchGroup_1) {
-            // System.out.println(one.customer_id + "--" + one.city + "--" + one.country + "--" + one.GID + "--" + one.GRP_SIZE+
+            // System.out.println(one.customer_id + "--" + one.city + "--" + one.country + "--" + one.GID + "--" +
+            // one.GRP_SIZE+
             // "--" + one.MASTER);
             if (one.MASTER) {
                 hasGroup9 = true;
@@ -1087,7 +1091,8 @@ public class SwooshRecordGroupingTest {
         Assert.assertTrue(groupRows_tMatchGroup_1.size() > 0);
         boolean hasGroup5 = false;
         for (row2Struct one : groupRows_tMatchGroup_1) {
-            // System.out.println(one.customer_id + "--" + one.city + "--" + one.country + "--" + one.GID + "--" + one.GRP_SIZE+
+            // System.out.println(one.customer_id + "--" + one.city + "--" + one.country + "--" + one.GID + "--" +
+            // one.GRP_SIZE+
             // "--" + one.MASTER);
             Assert.assertTrue(one.SCORE > 0);
             if (one.MASTER) {
@@ -1542,7 +1547,8 @@ public class SwooshRecordGroupingTest {
         int n = 0;
         Assert.assertTrue(groupRows_tMatchGroup_1.size() > 0);
         for (row2Struct one : groupRows_tMatchGroup_1) {
-            // System.out.println(one.customer_id + "--" + one.city + "--" + one.country + "--" + one.GID + "--" + one.GRP_SIZE
+            // System.out.println(one.customer_id + "--" + one.city + "--" + one.country + "--" + one.GID + "--" +
+            // one.GRP_SIZE
             // + "--" + one.MASTER);
             if (one.GRP_SIZE == 7) {
                 Assert.assertEquals("USAUSAUSAUSAUSAUSAUSA", one.country);
@@ -1975,7 +1981,8 @@ public class SwooshRecordGroupingTest {
         // assert
         Assert.assertTrue(groupRows_tMatchGroup_1.size() > 0);
         for (row2Struct one : groupRows_tMatchGroup_1) {
-            // System.out.println(one.customer_id + "--" + one.city + "--" + one.country + "--" + one.GID + "--" + one.GRP_SIZE
+            // System.out.println(one.customer_id + "--" + one.city + "--" + one.country + "--" + one.GID + "--" +
+            // one.GRP_SIZE
             // + "--" + one.MASTER + "--" + one.GRP_QUALITY + "--" + one.SCORE + "--" + one.MERGE_INFO + "--"
             // + one.MATCHING_DISTANCES);
             if (StringUtils.equals("true", one.MERGE_INFO) && !one.MASTER) {
@@ -2404,8 +2411,8 @@ public class SwooshRecordGroupingTest {
     }
 
     /**
-     * after the first tmatchgroup, there is an column added on its output. To contain the original values(List<Attribute>
-     * attributes from Record).
+     * after the first tmatchgroup, there is an column added on its output. To contain the original
+     * values(List<Attribute> attributes from Record).
      */
     @Test
     public void testSwooshIntMatchGroup_passOriginal_1st()
@@ -2558,7 +2565,8 @@ public class SwooshRecordGroupingTest {
         // assert
         Assert.assertTrue(groupRows_tMatchGroup_1.size() > 0);
         for (row2Struct one : groupRows_tMatchGroup_1) {
-            // System.out.println(one.customer_id + "--" + one.city + "--" + one.country + "--" + one.GID + "--" + one.GRP_SIZE
+            // System.out.println(one.customer_id + "--" + one.city + "--" + one.country + "--" + one.GID + "--" +
+            // one.GRP_SIZE
             // + "--" + one.MASTER + "--" + one.MERGED_RECORD);
 
             if (one.MASTER) {
@@ -2736,7 +2744,8 @@ public class SwooshRecordGroupingTest {
         // System.err.println("--pass original---2---" + groupRows_tMatchGroup_1.size());
         Assert.assertTrue(groupRows_tMatchGroup_1.size() > 0);
         for (row2Struct one : groupRows_tMatchGroup_1) {
-            // System.out.println(one.customer_id + "--" + one.city + "--" + one.country + "--" + one.GID + "--" + one.GRP_SIZE
+            // System.out.println(one.customer_id + "--" + one.city + "--" + one.country + "--" + one.GID + "--" +
+            // one.GRP_SIZE
             // + "--" + one.MASTER + "--");
             Assert.assertNull(one.MERGED_RECORD);
             if (one.MASTER) {
@@ -2917,7 +2926,8 @@ public class SwooshRecordGroupingTest {
         // System.err.println("--pass original---with output---" + groupRows_tMatchGroup_1.size());
         Assert.assertTrue(groupRows_tMatchGroup_1.size() > 0);
         for (row2Struct one : groupRows_tMatchGroup_1) {
-            // System.out.println(one.customer_id + "--" + one.city + "--" + one.country + "--" + one.GID + "--" + one.GRP_SIZE
+            // System.out.println(one.customer_id + "--" + one.city + "--" + one.country + "--" + one.GID + "--" +
+            // one.GRP_SIZE
             // + "--" + one.MASTER + "--" + one.MATCHING_DISTANCES);
 
             if (one.MASTER) {
@@ -3081,7 +3091,8 @@ public class SwooshRecordGroupingTest {
         // System.err.println("--remove intermediate masters---" + groupRows_tMatchGroup_1.size());
         Assert.assertEquals("should be: 11 ", 11, groupRows_tMatchGroup_1.size());
         for (row2Struct one : groupRows_tMatchGroup_1) {
-            // System.out.println(one.customer_id + "--" + one.city + "--" + one.country + "--" + one.GID + "--" + one.GRP_SIZE
+            // System.out.println(one.customer_id + "--" + one.city + "--" + one.country + "--" + one.GID + "--" +
+            // one.GRP_SIZE
             // + "--" + one.MASTER);
             if (one.MASTER && one.customer_id == 2) {// no merge
                 Assert.assertEquals("should be: 2", "2", String.valueOf(one.GRP_SIZE));
@@ -3438,8 +3449,8 @@ public class SwooshRecordGroupingTest {
     }
 
     @Test
-    public void testSwooshMultipasstMatchGroup_oneRecordOneGroup_14229() throws IOException, InterruptedException,
-            InstantiationException, IllegalAccessException, ClassNotFoundException {
+    public void testSwooshMultipasstMatchGroup_oneRecordOneGroup_14229()
+            throws IOException, InterruptedException, InstantiationException, IllegalAccessException, ClassNotFoundException {
         List<List<Map<String, String>>> matchingRulesAll_tMatchGroup_1 = new ArrayList<List<Map<String, String>>>();
         List<Map<String, String>> matcherList_tMatchGroup_1 = null;
         Map<String, String> tmpMap_tMatchGroup_1 = null;
@@ -3458,12 +3469,11 @@ public class SwooshRecordGroupingTest {
         // MASTER and only in case of separate output.
         final Map<String, Integer> indexMap_tMatchGroup_1 = new HashMap<String, Integer>();
 
-        // TDQ-9172 reuse JAVA API at here.
         AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 = createComponent(masterRows_tMatchGroup_1,
                 groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
 
         recordGroupImp_tMatchGroup_1.setRecordLinkAlgorithm(RecordMatcherType.T_SwooshAlgorithm);
-        // add mutch rules
+
         for (List<Map<String, String>> matcherList : matchingRulesAll_tMatchGroup_1) {
             recordGroupImp_tMatchGroup_1.addMatchRule(matcherList);
         }
@@ -3503,13 +3513,8 @@ public class SwooshRecordGroupingTest {
         Collections.sort(groupRows_tMatchGroup_1);
         Assert.assertTrue(groupRows_tMatchGroup_1.size() == 8);
         for (row2Struct one : groupRows_tMatchGroup_1) {
-            // System.out.println(one.customer_id + "--" + one.city + "--" + one.country + "--" + one.GID + "--" +
-            // one.GRP_SIZE
-            // + "--" + one.MASTER);
-            String gid = null;
             if (one.MASTER) {
                 Assert.assertTrue(6 == one.GRP_SIZE || 1 == one.GRP_SIZE);
-                gid = one.GID;
             }
         }
     }
