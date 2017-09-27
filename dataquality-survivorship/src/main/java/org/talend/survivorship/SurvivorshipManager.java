@@ -199,7 +199,6 @@ public class SurvivorshipManager extends KnowledgeManager {
         dataset = new DataSet(columnList);
     }
 
-
     /**
      * 
      * Add InputStream as resource.
@@ -207,7 +206,7 @@ public class SurvivorshipManager extends KnowledgeManager {
      * @param resourceStreamsMap key is ResourceType, value is a List with File input stream
      */
     public void initKnowledgeBase(Map<org.kie.api.io.ResourceType, List<InputStream>> streamsMap) {
-        if(streamsMap.isEmpty()){
+        if (streamsMap.isEmpty()) {
             System.err.println("The resouce of DRL streams is Empty!"); //$NON-NLS-1$
             return;
         }
@@ -248,6 +247,7 @@ public class SurvivorshipManager extends KnowledgeManager {
 
         dataset = new DataSet(columnList);
     }
+
     /**
      * Support to create resource from jar file
      */
