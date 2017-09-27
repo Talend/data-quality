@@ -102,12 +102,9 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
             break;
         }
         final IndexSearcher searcher = mgr.acquire();
-        TopDocs topDocs;
-        if (cachingWrapperFilterForDiscovery != null) {
-            topDocs = searcher.search(query, cachingWrapperFilterForDiscovery, topDocLimit);
-        } else {
-            topDocs = searcher.search(query, topDocLimit);
-        }
+
+        // if the filter is NULL, it's equivalent to a method call to searcher.search(query, topDocLimit)
+        TopDocs topDocs = searcher.search(query, cachingWrapperFilterForDiscovery, topDocLimit);
         mgr.release(searcher);
         return topDocs;
     }

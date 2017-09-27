@@ -55,7 +55,7 @@ public class CategoryRegistryManagerTest {
             fail("Failed due to exception: " + e.getMessage());
         } finally {
             FileUtils.deleteDirectory(new File(path));
-            crm.reset();
+            CategoryRegistryManager.reset();
         }
     }
 

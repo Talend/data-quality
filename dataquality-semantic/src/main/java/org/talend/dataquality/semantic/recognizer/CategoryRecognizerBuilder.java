@@ -169,17 +169,9 @@ public class CategoryRecognizerBuilder {
     }
 
     private LuceneIndex getCustomDataDictIndex() {
-        if (ddCustomDirectory == null) {
-            if (ddPath == null) { // FIXME create custom DD field correctly
-                try {
-                    ddPath = CategoryRecognizerBuilder.class.getResource(DEFAULT_DD_PATH).toURI();
-                } catch (URISyntaxException e) {
-                    LOGGER.error(e.getMessage(), e);
-                }
-            }
-            dataDictCustomIndex = new LuceneIndex(ddPath, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY);
-        } else {
+        if (ddCustomDirectory != null) {
             dataDictCustomIndex = new LuceneIndex(ddCustomDirectory, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY);
+            ddCustomDirectory = null;
         }
         return dataDictCustomIndex;
     }

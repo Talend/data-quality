@@ -55,7 +55,7 @@ public class ValueQualityAnalyzerTest {
 
     @AfterClass
     public static void tearDown() throws IOException {
-        CategoryRegistryManager.getInstance().reset();
+        CategoryRegistryManager.reset();
     }
 
     public static List<String[]> getRecords(InputStream inputStream, String separator) {

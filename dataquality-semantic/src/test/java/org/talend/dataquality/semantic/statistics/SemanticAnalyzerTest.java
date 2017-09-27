@@ -25,6 +25,7 @@ import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.Analyzers;
 import org.talend.dataquality.common.inference.Analyzers.Result;
 import org.talend.dataquality.common.inference.Metadata;
+import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
 
@@ -131,6 +132,32 @@ public class SemanticAnalyzerTest {
                 assertEquals("Unexpected Category.", EXPECTED_CATEGORY_TAGADA.get(i), suggestedCategory);
             }
         }
+    }
+
+    @Test
+    public void testTagadaWithCustomIndex() {
+        CategoryRegistryManager.setUsingLocalCategoryRegistry(true);
+
+        SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(builder);
+
+        Analyzer<Result> analyzer = Analyzers.with(semanticAnalyzer);
+        analyzer.init();
+        for (String[] record : TEST_RECORDS_TAGADA) {
+            analyzer.analyze(record);
+        }
+        analyzer.end();
+
+        for (int i = 0; i < EXPECTED_CATEGORY_TAGADA.size(); i++) {
+            Result result = analyzer.getResult().get(i);
+
+            if (result.exist(SemanticType.class)) {
+                final SemanticType semanticType = result.get(SemanticType.class);
+                final String suggestedCategory = semanticType.getSuggestedCategory();
+                assertEquals("Unexpected Category.", EXPECTED_CATEGORY_TAGADA.get(i), suggestedCategory);
+            }
+        }
+
+        CategoryRegistryManager.reset();
     }
 
     @Test

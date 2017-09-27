@@ -30,7 +30,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
 import org.junit.After;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.Analyzers;
@@ -109,8 +109,8 @@ public class SemanticQualityAnalyzerTest {
     private static final long[][] EXPECTED_VALIDITY_COUNT_PHONE = new long[][] { //
             new long[] { 11, 0, 0 } };
 
-    @BeforeClass
-    public static void setupBuilder() throws URISyntaxException {
+    @Before
+    public void setupBuilder() throws URISyntaxException {
         final URI ddPath = SemanticQualityAnalyzerTest.class.getResource(CategoryRecognizerBuilder.DEFAULT_DD_PATH).toURI();
         final URI kwPath = SemanticQualityAnalyzerTest.class.getResource(CategoryRecognizerBuilder.DEFAULT_KW_PATH).toURI();
         builder = CategoryRecognizerBuilder.newBuilder() //
@@ -143,7 +143,11 @@ public class SemanticQualityAnalyzerTest {
                 new String[] { SemanticCategoryEnum.AIRPORT_CODE.getId() }, expectedCount, expectedCount);
         testAnalysis(Collections.singletonList(new String[] { "AAAA" }),
                 new String[] { SemanticCategoryEnum.AIRPORT_CODE.getId() }, expectedCount, expectedCount);
+    }
 
+    @Test
+    public void testMultiTenantIndexWithoutExistingValues() throws IOException, URISyntaxException {
+        long[][] expectedCount = new long[][] { new long[] { 1, 0, 0 } };
         initTenantIndex(false);
         testAnalysis(Collections.singletonList(new String[] { "CDG" }), new String[] { StringUtils.EMPTY }, expectedCount,
                 expectedCount);
@@ -241,6 +245,7 @@ public class SemanticQualityAnalyzerTest {
         Map<String, DQCategory> metadata = builder.getCategoryMetadata();
 
         metadata.get(SemanticCategoryEnum.AIRPORT_CODE.getTechnicalId()).setModified(true);
+
         IndexSearcher sharedLuceneDocumentSearcher = new IndexSearcher(DirectoryReader
                 .open(ClassPathDirectory.open(CategoryRecognizerBuilder.class.getResource(DEFAULT_DD_PATH).toURI())));
 
@@ -268,12 +273,13 @@ public class SemanticQualityAnalyzerTest {
         writer.commit();
         writer.close();
         builder.ddCustomDirectory(ramDirectory).lucene().build();
+
     }
 
     @After
     public void finish() {
+        CategoryRegistryManager.reset();
         if (builder != null) {
-            CategoryRegistryManager.getInstance().reset();
             builder.metadata(null);
         }
     }

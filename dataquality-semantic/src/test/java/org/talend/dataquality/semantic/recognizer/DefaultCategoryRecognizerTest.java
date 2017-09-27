@@ -201,7 +201,7 @@ public class DefaultCategoryRecognizerTest {
     @After
     public void finish() {
         if (builder != null) {
-            CategoryRegistryManager.getInstance().reset();
+            CategoryRegistryManager.reset();
             builder.metadata(null);
         }
     }

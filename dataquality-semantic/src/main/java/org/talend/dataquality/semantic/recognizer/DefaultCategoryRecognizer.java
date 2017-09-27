@@ -13,16 +13,7 @@
 package org.talend.dataquality.semantic.recognizer;
 
 import java.io.IOException;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -57,27 +48,29 @@ class DefaultCategoryRecognizer implements CategoryRecognizer {
 
     private FingerprintkeyMatcher keyMatcher;
 
-    public DefaultCategoryRecognizer(final Index sharedDictionary, Index dictionary, Index keyword, UserDefinedClassifier regex,
-            Map<String, DQCategory> metadata) throws IOException {
+    public DefaultCategoryRecognizer(final Index sharedDictionary, Index customDictionary, Index keyword,
+            UserDefinedClassifier regex, Map<String, DQCategory> metadata) throws IOException {
         this.userDefineClassifier = regex;
         this.metadata = metadata;
         this.keyMatcher = new FingerprintkeyMatcher();
 
-        final List<String> sharedCategories = new ArrayList<>();
-        final List<String> tenantCategories = new ArrayList<>();
-        for (DQCategory cat : metadata.values()) {
-            if (!cat.isDeleted()) {
-                if (cat.isModified()) {
-                    tenantCategories.add(cat.getId());
-                } else {
-                    sharedCategories.add(cat.getId());
+        if (customDictionary != null) {
+            final List<String> sharedCategories = new ArrayList<>();
+            final List<String> tenantCategories = new ArrayList<>();
+            for (DQCategory cat : metadata.values()) {
+                if (!cat.isDeleted()) {
+                    if (cat.isModified()) {
+                        tenantCategories.add(cat.getId());
+                    } else {
+                        sharedCategories.add(cat.getId());
+                    }
                 }
             }
-        }
 
-        sharedDictionary.setCategoriesToSearch(sharedCategories);
-        dictionary.setCategoriesToSearch(tenantCategories);
-        dataDictFieldClassifier = new DataDictFieldClassifier(sharedDictionary, dictionary, keyword);
+            sharedDictionary.setCategoriesToSearch(sharedCategories);
+            customDictionary.setCategoriesToSearch(tenantCategories);
+        }
+        dataDictFieldClassifier = new DataDictFieldClassifier(sharedDictionary, customDictionary, keyword);
     }
 
     @Override

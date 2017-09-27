@@ -15,11 +15,7 @@ package org.talend.dataquality.semantic.api;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -27,15 +23,7 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.search.BooleanClause;
-import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.SearcherManager;
-import org.apache.lucene.search.TermQuery;
-import org.apache.lucene.search.TopDocs;
-import org.apache.lucene.search.WildcardQuery;
+import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
 import org.talend.dataquality.semantic.index.ClassPathDirectory;
 import org.talend.dataquality.semantic.index.DictionarySearcher;
@@ -49,7 +37,7 @@ public class LocalDictionaryCache {
 
     LocalDictionaryCache(String contextName) {
         try {
-            URI ddPath = CategoryRegistryManager.getInstance(contextName).getDictionaryURI();
+            URI ddPath = CategoryRegistryManager.getInstance().getDictionaryURI();
             Directory dir = ClassPathDirectory.open(ddPath);
             mgr = new SearcherManager(dir, null);
         } catch (IOException e) {

@@ -57,10 +57,9 @@ public class CategoryRegistryManager {
 
     private static final Logger LOGGER = Logger.getLogger(CategoryRegistryManager.class);
 
-    /**
-     * Map between context names and corresponding instances.
-     */
-    private static final Map<String, CategoryRegistryManager> instances = new HashMap<>();
+    private static CategoryRegistryManager instance;
+
+    private static final Map<String, CustomDictionaryHolder> customDictionaryHolderMap = new HashMap<>();
 
     /**
      * Whether the local category registry will be used.
@@ -87,7 +86,7 @@ public class CategoryRegistryManager {
      */
     private Map<String, DQCategory> dqCategories = new LinkedHashMap<>();
 
-    private String contextName;
+    private static final String contextName = "shared";
 
     private UserDefinedClassifier udc;
 
@@ -96,11 +95,6 @@ public class CategoryRegistryManager {
     private static final Object indexExtractionLock = new Object();
 
     private CategoryRegistryManager() {
-        this("default");
-    }
-
-    private CategoryRegistryManager(String contextName) {
-        this.contextName = contextName;
 
         if (dqCategories.isEmpty()) {
             try {
@@ -116,22 +110,18 @@ public class CategoryRegistryManager {
     }
 
     public static CategoryRegistryManager getInstance() {
-        return getInstance("default");
-    }
-
-    public static synchronized CategoryRegistryManager getInstance(String contextName) {
-        if (instances.get(contextName) == null) {
-            instances.put(contextName, instances.get("default"));
+        if (instance == null) {
+            instance = new CategoryRegistryManager();
         }
-        return instances.get(contextName);
+        return instance;
     }
 
-    public void reset() {
+    public static void reset() {
         setUsingLocalCategoryRegistry(false);
-        instances.clear();
+        instance = null;
     }
 
-    private static void setUsingLocalCategoryRegistry(boolean b) {
+    public static void setUsingLocalCategoryRegistry(boolean b) {
         usingLocalCategoryRegistry = b;
     }
 
@@ -144,10 +134,9 @@ public class CategoryRegistryManager {
         if (folder != null && folder.trim().length() > 0) {
             localRegistryPath = folder;
             usingLocalCategoryRegistry = true;
-            if (instances.get("default") == null) {
-                instances.put("default", new CategoryRegistryManager("default"));
+            if (instance == null) {
+                instance = new CategoryRegistryManager();
             }
-            getInstance();
         } else {
             LOGGER.warn("Cannot set an empty path as local registy location. Use default one: " + localRegistryPath);
         }
@@ -480,5 +469,9 @@ public class CategoryRegistryManager {
         } else {
             return CategoryRecognizerBuilder.class.getResource(CategoryRecognizerBuilder.DEFAULT_RE_PATH).toURI();
         }
+    }
+
+    public CustomDictionaryHolder getCustomDictionaryHolder(String contextName) {
+        return customDictionaryHolderMap.get(contextName);
     }
 }
