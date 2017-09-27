@@ -1,6 +1,5 @@
 package org.talend.dataquality.semantic.api;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.lucene.store.Directory;
@@ -11,49 +10,37 @@ public class CustomDictionaryHolder {
 
     private String contextName;
 
-    private Map<String, DQCategory> metadata = new LinkedHashMap<>();
+    private Map<String, DQCategory> metadata;
 
     private Directory customDirectory;
 
     private UserDefinedClassifier regexClassifier;
 
-    public CustomDictionaryHolder() {
+    private CategoryRegistryManager crm;
+
+    public CustomDictionaryHolder(CategoryRegistryManager crm, String contextName) {
+        this.crm = crm;
+        this.contextName = contextName;
     }
 
     public String getContextName() {
         return contextName;
     }
 
-    public void setContextName(String contextName) {
-        this.contextName = contextName;
-    }
-
     public Map<String, DQCategory> getMetadata() {
-        return metadata;
-    }
-
-    public void setMetadata(Map<String, DQCategory> metadata) {
-        this.metadata = metadata;
-    }
-
-    public Directory getSharedKeywordDirectory() {
-        return customDirectory;
+        if (metadata == null) {
+            return crm.getCategoryMetadataMap();
+        } else {
+            return metadata;
+        }
     }
 
     public Directory getCustomDirectory() {
         return customDirectory;
     }
 
-    public void setCustomDirectory(Directory customDirectory) {
-        this.customDirectory = customDirectory;
-    }
-
     public UserDefinedClassifier getRegexClassifier() {
         return regexClassifier;
-    }
-
-    public void setRegexClassifier(UserDefinedClassifier regexClassifier) {
-        this.regexClassifier = regexClassifier;
     }
 
 }

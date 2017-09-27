@@ -70,10 +70,7 @@ public class CategoryRecognizerBuilder {
     private Map<String, DQCategory> metadata;
 
     public static CategoryRecognizerBuilder newBuilder() {
-        if (INSTANCE == null) {
-            INSTANCE = new CategoryRecognizerBuilder();
-        }
-        return INSTANCE;
+        return new CategoryRecognizerBuilder();
     }
 
     public CategoryRecognizerBuilder metadata(Map<String, DQCategory> metadata) {

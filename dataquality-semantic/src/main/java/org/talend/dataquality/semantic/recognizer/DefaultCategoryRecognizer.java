@@ -54,21 +54,21 @@ class DefaultCategoryRecognizer implements CategoryRecognizer {
         this.metadata = metadata;
         this.keyMatcher = new FingerprintkeyMatcher();
 
-        if (customDictionary != null) {
-            final List<String> sharedCategories = new ArrayList<>();
-            final List<String> tenantCategories = new ArrayList<>();
-            for (DQCategory cat : metadata.values()) {
-                if (!cat.isDeleted()) {
-                    if (cat.isModified()) {
-                        tenantCategories.add(cat.getId());
-                    } else {
-                        sharedCategories.add(cat.getId());
-                    }
+        final List<String> sharedCategories = new ArrayList<>();
+        final List<String> customCategories = new ArrayList<>();
+        for (DQCategory cat : metadata.values()) {
+            if (!cat.isDeleted()) {
+                if (cat.isModified()) {
+                    customCategories.add(cat.getId());
+                } else {
+                    sharedCategories.add(cat.getId());
                 }
             }
+        }
 
-            sharedDictionary.setCategoriesToSearch(sharedCategories);
-            customDictionary.setCategoriesToSearch(tenantCategories);
+        sharedDictionary.setCategoriesToSearch(sharedCategories);
+        if (customDictionary != null) {
+            customDictionary.setCategoriesToSearch(customCategories);
         }
         dataDictFieldClassifier = new DataDictFieldClassifier(sharedDictionary, customDictionary, keyword);
     }

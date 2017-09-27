@@ -18,7 +18,9 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.common.inference.Analyzer;
@@ -27,6 +29,7 @@ import org.talend.dataquality.common.inference.Analyzers.Result;
 import org.talend.dataquality.common.inference.Metadata;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
+import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
 
 public class SemanticAnalyzerTest {
@@ -54,6 +57,9 @@ public class SemanticAnalyzerTest {
 
     final List<String> EXPECTED_CATEGORY_TAGADA = Arrays
             .asList(new String[] { "", SemanticCategoryEnum.LAST_NAME.name(), SemanticCategoryEnum.FIRST_NAME.name(), "", "" });
+
+    final List<String> EXPECTED_CATEGORY_TAGADA_CUSTOM = Arrays
+            .asList(new String[] { "", SemanticCategoryEnum.LAST_NAME.name(), SemanticCategoryEnum.LAST_NAME.name(), "", "" });
 
     final List<String[]> TEST_RECORDS_CITY_METADATA = new ArrayList<String[]>() {
 
@@ -112,6 +118,11 @@ public class SemanticAnalyzerTest {
                 .lucene();
     }
 
+    @After
+    public void reset() {
+        CategoryRegistryManager.reset();
+    }
+
     @Test
     public void testTagada() {
         SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(builder);
@@ -136,7 +147,11 @@ public class SemanticAnalyzerTest {
 
     @Test
     public void testTagadaWithCustomIndex() {
-        CategoryRegistryManager.setUsingLocalCategoryRegistry(true);
+        Map<String, DQCategory> customMetadata = CategoryRegistryManager.getInstance().getCustomDictionaryHolder("default")
+                .getMetadata();
+        customMetadata.get(SemanticCategoryEnum.FIRST_NAME.getTechnicalId()).setDeleted(true);
+
+        builder.metadata(customMetadata);
 
         SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(builder);
 
@@ -147,17 +162,15 @@ public class SemanticAnalyzerTest {
         }
         analyzer.end();
 
-        for (int i = 0; i < EXPECTED_CATEGORY_TAGADA.size(); i++) {
+        for (int i = 0; i < EXPECTED_CATEGORY_TAGADA_CUSTOM.size(); i++) {
             Result result = analyzer.getResult().get(i);
 
             if (result.exist(SemanticType.class)) {
                 final SemanticType semanticType = result.get(SemanticType.class);
                 final String suggestedCategory = semanticType.getSuggestedCategory();
-                assertEquals("Unexpected Category.", EXPECTED_CATEGORY_TAGADA.get(i), suggestedCategory);
+                assertEquals("Unexpected Category.", EXPECTED_CATEGORY_TAGADA_CUSTOM.get(i), suggestedCategory);
             }
         }
-
-        CategoryRegistryManager.reset();
     }
 
     @Test
