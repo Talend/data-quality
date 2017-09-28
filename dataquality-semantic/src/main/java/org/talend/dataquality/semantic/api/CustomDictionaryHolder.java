@@ -3,6 +3,8 @@ package org.talend.dataquality.semantic.api;
 import java.util.Map;
 
 import org.apache.lucene.store.Directory;
+import org.talend.dataquality.semantic.api.internal.CustomDocumentIndexAccess;
+import org.talend.dataquality.semantic.api.internal.CustomMetadataIndexAccess;
 import org.talend.dataquality.semantic.classifier.custom.UserDefinedClassifier;
 import org.talend.dataquality.semantic.model.DQCategory;
 
@@ -15,6 +17,10 @@ public class CustomDictionaryHolder {
     private Directory customDirectory;
 
     private UserDefinedClassifier regexClassifier;
+
+    private CustomMetadataIndexAccess customMetadataIndex;
+
+    private CustomDocumentIndexAccess customDocumentIndex;
 
     private CategoryRegistryManager crm;
 
@@ -43,4 +49,19 @@ public class CustomDictionaryHolder {
         return regexClassifier;
     }
 
+    public void createCategory(DQCategory category) {
+        customMetadataIndex.createCategory(category);
+    }
+
+    public void updateCategory(DQCategory category) {
+        customMetadataIndex.insertOrUpdateCategory(category);
+    }
+
+    public void deleteCategory(DQCategory category) {
+        customMetadataIndex.deleteCategory(category);
+    }
+
+    public void reloadCategoryMetadata() {
+        metadata = customMetadataIndex.readCategoryMedatada();
+    }
 }

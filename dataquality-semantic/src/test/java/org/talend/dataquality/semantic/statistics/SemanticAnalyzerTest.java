@@ -174,6 +174,38 @@ public class SemanticAnalyzerTest {
     }
 
     @Test
+    public void testTagadaWithLocalRegistry() {
+        CategoryRegistryManager.setUsingLocalCategoryRegistry(true);
+        Map<String, DQCategory> customMetadata = CategoryRegistryManager.getInstance().getCustomDictionaryHolder("default")
+                .getMetadata();
+        customMetadata.get(SemanticCategoryEnum.FIRST_NAME.getTechnicalId()).setDeleted(true);
+
+        builder.metadata(customMetadata);
+
+        SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(builder);
+
+        Analyzer<Result> analyzer = Analyzers.with(semanticAnalyzer);
+        analyzer.init();
+        for (String[] record : TEST_RECORDS_TAGADA) {
+            analyzer.analyze(record);
+        }
+        analyzer.end();
+
+        final List<String> EXPECTED_CATEGORIES = Arrays.asList(new String[] { "", SemanticCategoryEnum.LAST_NAME.name(),
+                SemanticCategoryEnum.LAST_NAME.name(), "", SemanticCategoryEnum.ANSWER.name() });
+
+        for (int i = 0; i < EXPECTED_CATEGORIES.size(); i++) {
+            Result result = analyzer.getResult().get(i);
+
+            if (result.exist(SemanticType.class)) {
+                final SemanticType semanticType = result.get(SemanticType.class);
+                final String suggestedCategory = semanticType.getSuggestedCategory();
+                assertEquals("Unexpected Category.", EXPECTED_CATEGORIES.get(i), suggestedCategory);
+            }
+        }
+    }
+
+    @Test
     public void firstNameToFRCommuneIgnoreCaseAndAccent() {
         SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(builder);
 
