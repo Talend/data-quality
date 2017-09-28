@@ -1,8 +1,12 @@
 package org.talend.dataquality.semantic.api;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
 import org.talend.dataquality.semantic.api.internal.CustomDocumentIndexAccess;
 import org.talend.dataquality.semantic.api.internal.CustomMetadataIndexAccess;
 import org.talend.dataquality.semantic.classifier.custom.UserDefinedClassifier;
@@ -10,7 +14,7 @@ import org.talend.dataquality.semantic.model.DQCategory;
 
 public class CustomDictionaryHolder {
 
-    private String contextName;
+    private static final Logger LOGGER = Logger.getLogger(CustomDictionaryHolder.class);
 
     private Map<String, DQCategory> metadata;
 
@@ -22,20 +26,20 @@ public class CustomDictionaryHolder {
 
     private CustomDocumentIndexAccess customDocumentIndex;
 
-    private CategoryRegistryManager crm;
-
-    public CustomDictionaryHolder(CategoryRegistryManager crm, String contextName) {
-        this.crm = crm;
-        this.contextName = contextName;
-    }
-
-    public String getContextName() {
-        return contextName;
+    public CustomDictionaryHolder(String contextName) {
+        File folder = new File(CategoryRegistryManager.getLocalRegistryPath() + "/" + contextName + "/prod/metadata");
+        if (folder.exists()) {
+            try {
+                customMetadataIndex = new CustomMetadataIndexAccess(FSDirectory.open(folder));
+            } catch (IOException e) {
+                LOGGER.error(e.getMessage(), e);
+            }
+        }
     }
 
     public Map<String, DQCategory> getMetadata() {
         if (metadata == null) {
-            return crm.getCategoryMetadataMap();
+            return CategoryRegistryManager.getInstance().getCategoryMetadataMap();
         } else {
             return metadata;
         }
@@ -62,6 +66,7 @@ public class CustomDictionaryHolder {
     }
 
     public void reloadCategoryMetadata() {
-        metadata = customMetadataIndex.readCategoryMedatada();
+        if (customMetadataIndex != null)
+            metadata = customMetadataIndex.readCategoryMedatada();
     }
 }

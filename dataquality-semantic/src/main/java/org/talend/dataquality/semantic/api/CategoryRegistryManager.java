@@ -88,9 +88,9 @@ public class CategoryRegistryManager {
     /**
      * Map between category ID and the object containing its metadata.
      */
-    private Map<String, DQCategory> sharedMetadata = new LinkedHashMap<>();
+    private final Map<String, DQCategory> sharedMetadata = new LinkedHashMap<>();
 
-    private UserDefinedClassifier udc;
+    private UserDefinedClassifier sharedRegexClassifier;
 
     private LocalDictionaryCache localDictionaryCache;
 
@@ -410,7 +410,7 @@ public class CategoryRegistryManager {
         }
 
         // load regexes from local registry
-        if (udc == null || refresh) {
+        if (sharedRegexClassifier == null || refresh) {
             final File regexRegistryFile = new File(
                     localRegistryPath + File.separator + SHARED_FOLDER_NAME + File.separator + PRODUCTION_FOLDER_NAME
                             + File.separator + REGEX_SUBFOLDER_NAME + File.separator + REGEX_CATEGRIZER_FILE_NAME);
@@ -431,9 +431,9 @@ public class CategoryRegistryManager {
                 fos.close();
             }
 
-            udc = UDCategorySerDeser.readJsonFile(regexRegistryFile.toURI());
+            sharedRegexClassifier = UDCategorySerDeser.readJsonFile(regexRegistryFile.toURI());
         }
-        return udc;
+        return sharedRegexClassifier;
     }
 
     /**
@@ -484,7 +484,7 @@ public class CategoryRegistryManager {
     public CustomDictionaryHolder getCustomDictionaryHolder(String contextName) {
         CustomDictionaryHolder cdh = customDictionaryHolderMap.get(contextName);
         if (cdh == null) {
-            cdh = new CustomDictionaryHolder(this, contextName);
+            cdh = new CustomDictionaryHolder(contextName);
             customDictionaryHolderMap.put(contextName, cdh);
         }
         return cdh;
