@@ -57,8 +57,8 @@ class DefaultCategoryRecognizer implements CategoryRecognizer {
         final List<String> sharedCategories = new ArrayList<>();
         final List<String> customCategories = new ArrayList<>();
         for (DQCategory cat : metadata.values()) {
-            if (!cat.isDeleted()) {
-                if (cat.isModified()) {
+            if (!cat.getDeleted()) {
+                if (cat.getModified()) {
                     customCategories.add(cat.getId());
                 } else {
                     sharedCategories.add(cat.getId());

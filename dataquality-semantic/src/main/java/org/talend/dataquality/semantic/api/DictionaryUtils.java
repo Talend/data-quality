@@ -111,10 +111,10 @@ public class DictionaryUtils {
                 doc.getField(DictionaryConstants.LABEL) == null ? "" : doc.getField(DictionaryConstants.LABEL).stringValue());
         dqCat.setType(CategoryType.valueOf(doc.getField(DictionaryConstants.TYPE).stringValue()));
         dqCat.setCompleteness(Boolean.valueOf(doc.getField(DictionaryConstants.COMPLETENESS).stringValue()));
-        if (doc.getField(DictionaryConstants.IS_MODIFIED) != null)
-            dqCat.setModified(Boolean.valueOf(doc.getField(DictionaryConstants.IS_MODIFIED).stringValue()));
-        if (doc.getField(DictionaryConstants.IS_DELETED) != null)
-            dqCat.setDeleted(Boolean.valueOf(doc.getField(DictionaryConstants.IS_DELETED).stringValue()));
+        if (doc.getField(DictionaryConstants.MODIFIED) != null)
+            dqCat.setModified(Boolean.valueOf(doc.getField(DictionaryConstants.MODIFIED).stringValue()));
+        if (doc.getField(DictionaryConstants.DELETED) != null)
+            dqCat.setDeleted(Boolean.valueOf(doc.getField(DictionaryConstants.DELETED).stringValue()));
         dqCat.setDescription(doc.getField(DictionaryConstants.DESCRIPTION) == null ? ""
                 : doc.getField(DictionaryConstants.DESCRIPTION).stringValue());
         if (doc.getField(DictionaryConstants.VALIDATION_MODE) != null)

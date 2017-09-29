@@ -61,7 +61,7 @@ public class DataDictFieldClassifier implements ISubCategoryClassifier {
 
     @Override
     public boolean validCategories(String data, DQCategory semanticType, Set<DQCategory> children) {
-        if (Boolean.TRUE.equals(semanticType.isModified()))
+        if (Boolean.TRUE.equals(semanticType.getModified()))
             return customDictionary.validCategories(data, semanticType, children);
         return sharedDictionary.validCategories(data, semanticType, children);
     }

@@ -67,9 +67,9 @@ public class DQCategory implements Serializable {
 
     private List<DQCategory> parents;
 
-    private Boolean isModified = Boolean.FALSE;
+    private Boolean modified = Boolean.FALSE;
 
-    private Boolean isDeleted = Boolean.FALSE;
+    private Boolean deleted = Boolean.FALSE;
 
     public DQCategory(String id) {
         this.id = id;
@@ -271,27 +271,27 @@ public class DQCategory implements Serializable {
         this.validationMode = validationMode;
     }
 
-    public Boolean isModified() {
-        return isModified;
+    public Boolean getModified() {
+        return modified;
     }
 
     public void setModified(Boolean modified) {
-        isModified = modified;
+        this.modified = modified;
     }
 
-    public Boolean isDeleted() {
-        return isDeleted;
+    public Boolean getDeleted() {
+        return deleted;
     }
 
     public void setDeleted(Boolean deleted) {
-        isDeleted = deleted;
+        this.deleted = deleted;
     }
 
     @Override
     public String toString() {
         return String.format(
-                "Category [ID=%s  Type=%s  Name=%-20s  Label=%-20s  Completeness=%-5s  Modified=%s Creator=%s Last Modifier=%s State=%-20s Last published=%s]",
-                id, type, name, label, completeness, isModified, creator, lastModifier, state, publishedAt);
+                "Category [ID=%s  Type=%s  Name=%-20s  Label=%-20s  Completeness=%s  Modified=%-5s  Creator=%s Last Modifier=%s State=%-20s Last published=%s]",
+                id, type, name, label, completeness, modified, creator, lastModifier, state, publishedAt);
     }
 
 }

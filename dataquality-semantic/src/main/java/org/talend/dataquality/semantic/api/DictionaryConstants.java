@@ -30,9 +30,9 @@ public class DictionaryConstants {
 
     public static final String VALIDATION_MODE = "validationMode";
 
-    public static final String IS_MODIFIED = "isModified";
+    public static final String MODIFIED = "modified";
 
-    public static final String IS_DELETED = "isDeleted";
+    public static final String DELETED = "deleted";
 
     private DictionaryConstants() {
 
