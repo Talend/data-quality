@@ -65,7 +65,7 @@ public class CategoryRegistryManager {
      * Whether the local category registry will be used.
      * Default value is false, which means only initial categories are loaded. This is mostly useful for unit tests.
      * More often, the value is set to true when the localRegistryPath is configured. see
-     * {@link CategoryRegistryManager.setLocalRegistryPath()}
+     * {@link CategoryRegistryManager#setLocalRegistryPath(String)}
      */
     private static boolean usingLocalCategoryRegistry = false;
 
@@ -84,6 +84,8 @@ public class CategoryRegistryManager {
     public static final String SHARED_FOLDER_NAME = "shared";
 
     public static final String PRODUCTION_FOLDER_NAME = "prod";
+
+    public static final String DEFAULT_CONTEXT_NAME = "t_default";
 
     /**
      * Map between category ID and the object containing its metadata.
@@ -164,24 +166,13 @@ public class CategoryRegistryManager {
     /**
      * Reload the category from local registry. This method is typically called following category or dictionary enrichments.
      */
-    public void reloadCategoriesFromRegistry() {
+    public void reloadCategoriesFromRegistry(String context) {
         LOGGER.info("Reload categories from local registry.");
-        File categorySubFolder = new File(localRegistryPath + File.separator + SHARED_FOLDER_NAME + File.separator
-                + PRODUCTION_FOLDER_NAME + File.separator + METADATA_SUBFOLDER_NAME);
-        if (categorySubFolder.exists()) {
-            sharedMetadata.clear();
-            try {
-                final Directory indexDir = FSDirectory.open(categorySubFolder);
-                final DirectoryReader reader = DirectoryReader.open(indexDir);
+        getCustomDictionaryHolder(context).reloadCategoryMetadata();
+    }
 
-                fillSharedMetadata(reader);
-
-                reader.close();
-                indexDir.close();
-            } catch (IOException e) {
-                LOGGER.error("Error while reloading categories from local registry.", e);
-            }
-        }
+    public void reloadCategoriesFromRegistry() {
+        reloadCategoriesFromRegistry(DEFAULT_CONTEXT_NAME);
     }
 
     private void loadRegisteredCategories() throws IOException, URISyntaxException {
@@ -488,5 +479,9 @@ public class CategoryRegistryManager {
             customDictionaryHolderMap.put(contextName, cdh);
         }
         return cdh;
+    }
+
+    public CustomDictionaryHolder getCustomDictionaryHolder() {
+        return getCustomDictionaryHolder(DEFAULT_CONTEXT_NAME);
     }
 }
