@@ -2,6 +2,8 @@ package org.talend.dataquality.semantic.api;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -9,8 +11,10 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.talend.dataquality.semantic.api.internal.CustomDocumentIndexAccess;
 import org.talend.dataquality.semantic.api.internal.CustomMetadataIndexAccess;
+import org.talend.dataquality.semantic.api.internal.CustomRegexClassifierAccess;
 import org.talend.dataquality.semantic.classifier.custom.UserDefinedClassifier;
 import org.talend.dataquality.semantic.model.DQCategory;
+import org.talend.dataquality.semantic.model.DQDocument;
 
 public class CustomDictionaryHolder {
 
@@ -18,55 +22,125 @@ public class CustomDictionaryHolder {
 
     private Map<String, DQCategory> metadata;
 
-    private Directory customDirectory;
+    private Directory dataDictDirectory;
 
     private UserDefinedClassifier regexClassifier;
 
-    private CustomMetadataIndexAccess customMetadataIndex;
+    private CustomMetadataIndexAccess customMetadataIndexAccess;
 
-    private CustomDocumentIndexAccess customDocumentIndex;
+    private CustomDocumentIndexAccess customDataDictIndexAccess;
+
+    private CustomRegexClassifierAccess customRegexClassifierAccess;
+
+    private String contextName;
 
     public CustomDictionaryHolder(String contextName) {
-        File folder = new File(CategoryRegistryManager.getLocalRegistryPath() + "/" + contextName + "/prod/metadata");
-        if (folder.exists()) {
+        this.contextName = contextName;
+    }
+
+    public Map<String, DQCategory> getMetadata() {
+        if (metadata == null) {
+            return CategoryRegistryManager.getInstance().getCategoryMetadataMap();
+        }
+        return metadata;
+    }
+
+    public Directory getDataDictDirectory() {
+        // allow to return NULL
+        return dataDictDirectory;
+    }
+
+    public UserDefinedClassifier getRegexClassifier() throws IOException {
+        // return shared regexClassifier if NULL
+        if (regexClassifier == null) {
+            return CategoryRegistryManager.getInstance().getRegexClassifier(false);
+        }
+        return regexClassifier;
+    }
+
+    private void ensureMetadataIndexAccess() {
+        if (metadata == null) {
+            // clone shared metadata
+            metadata = new HashMap<>(CategoryRegistryManager.getInstance().getCategoryMetadataMap());
+            String metadataIndexPath = CategoryRegistryManager.getLocalRegistryPath() + File.separator + contextName
+                    + File.separator + CategoryRegistryManager.PRODUCTION_FOLDER_NAME + File.separator
+                    + CategoryRegistryManager.METADATA_SUBFOLDER_NAME;
+            File folder = new File(metadataIndexPath);
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
             try {
-                customMetadataIndex = new CustomMetadataIndexAccess(FSDirectory.open(folder));
+                customMetadataIndexAccess = new CustomMetadataIndexAccess(FSDirectory.open(folder));
             } catch (IOException e) {
                 LOGGER.error(e.getMessage(), e);
             }
         }
     }
 
-    public Map<String, DQCategory> getMetadata() {
-        if (metadata == null) {
-            return CategoryRegistryManager.getInstance().getCategoryMetadataMap();
-        } else {
-            return metadata;
+    private void ensureDataDictIndexAccess() {
+        if (customDataDictIndexAccess == null) {
+            String dataDictIndexPath = CategoryRegistryManager.getLocalRegistryPath() + File.separator + contextName
+                    + File.separator + CategoryRegistryManager.PRODUCTION_FOLDER_NAME + File.separator
+                    + CategoryRegistryManager.DICTIONARY_SUBFOLDER_NAME;
+            File folder = new File(dataDictIndexPath);
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+            try {
+                dataDictDirectory = FSDirectory.open(folder);
+                customDataDictIndexAccess = new CustomDocumentIndexAccess(dataDictDirectory);
+            } catch (IOException e) {
+                LOGGER.error(e.getMessage(), e);
+            }
         }
     }
 
-    public Directory getCustomDirectory() {
-        return customDirectory;
-    }
-
-    public UserDefinedClassifier getRegexClassifier() {
-        return regexClassifier;
-    }
-
     public void createCategory(DQCategory category) {
-        customMetadataIndex.createCategory(category);
+        ensureMetadataIndexAccess();
+        customMetadataIndexAccess.createCategory(category);
+        customMetadataIndexAccess.commitChangesAndCloseWriter();
     }
 
     public void updateCategory(DQCategory category) {
-        customMetadataIndex.insertOrUpdateCategory(category);
+        ensureMetadataIndexAccess();
+        customMetadataIndexAccess.insertOrUpdateCategory(category);
+        customMetadataIndexAccess.commitChangesAndCloseWriter();
     }
 
     public void deleteCategory(DQCategory category) {
-        customMetadataIndex.deleteCategory(category);
+        ensureMetadataIndexAccess();
+        customMetadataIndexAccess.deleteCategory(category);
+        customMetadataIndexAccess.commitChangesAndCloseWriter();
     }
 
     public void reloadCategoryMetadata() {
-        if (customMetadataIndex != null)
-            metadata = customMetadataIndex.readCategoryMedatada();
+        if (customMetadataIndexAccess != null) {
+            metadata = customMetadataIndexAccess.readCategoryMedatada();
+        }
+    }
+
+    public void reloadRegexClassifer() {
+        if (customRegexClassifierAccess != null) {
+            // customRegexClassifierAccess.readRegexClassifier();
+        }
+    }
+
+    public void addDataDictDocument(List<DQDocument> documents) {
+        ensureDataDictIndexAccess();
+        customDataDictIndexAccess.createDocument(documents);
+        customDataDictIndexAccess.commitChangesAndCloseWriter();
+    }
+
+    public void close() {
+        try {
+            if (customMetadataIndexAccess != null) {
+                customMetadataIndexAccess.close();
+            }
+            if (customDataDictIndexAccess != null) {
+                customDataDictIndexAccess.close();
+            }
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
     }
 }

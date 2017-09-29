@@ -69,8 +69,15 @@ public class CategoryRecognizerBuilder {
 
     private Map<String, DQCategory> metadata;
 
+    private String contextName = CategoryRegistryManager.DEFAULT_CONTEXT_NAME;
+
     public static CategoryRecognizerBuilder newBuilder() {
         return new CategoryRecognizerBuilder();
+    }
+
+    public CategoryRecognizerBuilder contextName(String contextName) {
+        this.contextName = contextName;
+        return this;
     }
 
     public CategoryRecognizerBuilder metadata(Map<String, DQCategory> metadata) {
@@ -123,11 +130,11 @@ public class CategoryRecognizerBuilder {
         switch (mode) {
         case LUCENE:
             Map<String, DQCategory> meta = getCategoryMetadata();
-            LuceneIndex dict = getDataDictIndex();
+            LuceneIndex sharedDict = getSharedDataDictIndex();
             LuceneIndex customDict = getCustomDataDictIndex();
             LuceneIndex keyword = getKeywordIndex();
             UserDefinedClassifier regex = getRegexClassifier();
-            return new DefaultCategoryRecognizer(dict, customDict, keyword, regex, meta);
+            return new DefaultCategoryRecognizer(sharedDict, customDict, keyword, regex, meta);
         case ELASTIC_SEARCH:
             throw new IllegalArgumentException("Elasticsearch mode is not supported any more");
         default:
@@ -138,12 +145,12 @@ public class CategoryRecognizerBuilder {
 
     public Map<String, DQCategory> getCategoryMetadata() {
         if (metadata == null) {
-            metadata = CategoryRegistryManager.getInstance().getCategoryMetadataMap();
+            metadata = CategoryRegistryManager.getInstance().getCustomDictionaryHolder(contextName).getMetadata();
         }
         return metadata;
     }
 
-    private LuceneIndex getDataDictIndex() {
+    private LuceneIndex getSharedDataDictIndex() {
         if (dataDictIndex == null) {
             if (ddDirectory == null) {
                 if (ddPath == null) {
@@ -166,9 +173,17 @@ public class CategoryRecognizerBuilder {
     }
 
     private LuceneIndex getCustomDataDictIndex() {
-        if (ddCustomDirectory != null) {
-            dataDictCustomIndex = new LuceneIndex(ddCustomDirectory, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY);
-            ddCustomDirectory = null;
+        if (dataDictCustomIndex == null) {
+            if (ddCustomDirectory == null) {
+                // load from t_default context
+                Directory dir = CategoryRegistryManager.getInstance().getCustomDictionaryHolder(contextName)
+                        .getDataDictDirectory();
+                if (dir != null) {
+                    dataDictCustomIndex = new LuceneIndex(dir, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY);
+                }
+            } else {
+                dataDictCustomIndex = new LuceneIndex(ddCustomDirectory, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY);
+            }
         }
         return dataDictCustomIndex;
     }
@@ -199,7 +214,8 @@ public class CategoryRecognizerBuilder {
         if (regexClassifier == null) {
             if (regexPath == null) {
                 try {
-                    regexClassifier = CategoryRegistryManager.getInstance().getRegexClassifier(true); // always reload
+                    regexClassifier = CategoryRegistryManager.getInstance().getCustomDictionaryHolder(contextName)
+                            .getRegexClassifier();
                 } catch (IOException e) {
                     LOGGER.error("Failed to load provided regex classifiers", e);
                 }
@@ -232,11 +248,8 @@ public class CategoryRecognizerBuilder {
     }
 
     public void initIndex() {
-        if (dataDictIndex != null) {
-            dataDictIndex.initIndex();
-        }
-        if (keywordIndex != null) {
-            keywordIndex.initIndex();
+        if (dataDictCustomIndex != null) {
+            dataDictCustomIndex.initIndex();
         }
     }
 

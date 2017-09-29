@@ -7,38 +7,47 @@ import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.TextField;
-import org.apache.lucene.index.*;
-import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.index.IndexableField;
+import org.apache.lucene.index.MultiFields;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.util.Bits;
-import org.apache.lucene.util.Version;
+import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.api.DictionaryConstants;
 import org.talend.dataquality.semantic.api.DictionaryUtils;
 import org.talend.dataquality.semantic.model.DQCategory;
 
-public class CustomMetadataIndexAccess implements AutoCloseable {
+public class CustomMetadataIndexAccess extends AbstractCustomIndexAccess {
 
     private static final Logger LOGGER = Logger.getLogger(CustomMetadataIndexAccess.class);
 
-    protected IndexWriter luceneWriter;
-
-    protected DirectoryReader luceneReader;
-
-    protected IndexSearcher luceneSearcher;
-
-    private Directory directory;
-
     public CustomMetadataIndexAccess(Directory directory) {
-        this.directory = directory;
-        createSearcher();
-        createWriter();
+        super(directory);
+        init();
+    }
+
+    private void init() {
+        try {
+            createReader();
+            createSearcher();
+        } catch (IOException e) {
+            LOGGER.debug("Metadata index is not readable, trying to make a copy from shared metadata.");
+            try {
+                for (DQCategory dqCat : CategoryRegistryManager.getInstance().getCategoryMetadataMap().values()) {
+                    createCategory(dqCat);
+                }
+                commitChangesAndCloseWriter();
+                createReader();
+                createSearcher();
+            } catch (IOException e2) {
+                LOGGER.error(e2.getMessage(), e2);
+            }
+        }
     }
 
     public Map<String, DQCategory> readCategoryMedatada() {
@@ -63,11 +72,7 @@ public class CustomMetadataIndexAccess implements AutoCloseable {
         LOGGER.debug("createCategory: " + category);
         try {
             Document luceneDoc = DictionaryUtils.categoryToDocument(category);
-
-            if (!CollectionUtils.isEmpty(category.getChildren()))
-                for (DQCategory child : category.getChildren())
-                    luceneDoc.add(new TextField(DictionaryConstants.CHILD, child.getId(), Field.Store.YES));
-            luceneWriter.addDocument(luceneDoc);
+            getWriter().addDocument(luceneDoc);
         } catch (IOException | NullPointerException e) {
             LOGGER.error(e.getMessage(), e);
         }
@@ -85,7 +90,7 @@ public class CustomMetadataIndexAccess implements AutoCloseable {
                 if (!CollectionUtils.isEmpty(category.getChildren()))
                     for (DQCategory child : category.getChildren())
                         fields.add(new TextField(DictionaryConstants.CHILD, child.getId(), Field.Store.YES));
-                luceneWriter.updateDocument(term, fields);
+                getWriter().updateDocument(term, fields);
             } else {
                 createCategory(category);
             }
@@ -98,7 +103,7 @@ public class CustomMetadataIndexAccess implements AutoCloseable {
     public void deleteAll() {
         LOGGER.debug("delete all content");
         try {
-            luceneWriter.deleteAll();
+            getWriter().deleteAll();
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         }
@@ -108,72 +113,9 @@ public class CustomMetadataIndexAccess implements AutoCloseable {
         LOGGER.debug("deleteCategory: " + category);
         Term luceneId = new Term(DictionaryConstants.ID, category.getId());
         try {
-            luceneWriter.deleteDocuments(luceneId);
+            getWriter().deleteDocuments(luceneId);
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
-        }
-    }
-
-    /**
-     * Create the index writer
-     */
-    private void createWriter() {
-        if (luceneWriter == null) {
-            try {
-                final Analyzer analyzer = new StandardAnalyzer();
-                final IndexWriterConfig iwc = new IndexWriterConfig(Version.LATEST, analyzer);
-                iwc.setOpenMode(IndexWriterConfig.OpenMode.CREATE_OR_APPEND);
-                iwc.setWriteLockTimeout(5000000);
-                luceneWriter = new IndexWriter(directory, iwc);
-            } catch (IOException e) {
-                LOGGER.error(e.getMessage(), e);
-            }
-        }
-    }
-
-    /**
-     * Create the index searcher
-     */
-    private void createSearcher() {
-        if (luceneSearcher == null) {
-            try {
-                luceneReader = DirectoryReader.open(directory);
-                luceneSearcher = new IndexSearcher(luceneReader);
-            } catch (IOException e) {
-                LOGGER.error(e.getMessage(), e);
-            }
-        }
-    }
-
-    @Override
-    public void close() throws Exception {
-        if (luceneWriter != null) {
-            try {
-                luceneWriter.commit();
-                luceneWriter.close();
-            } catch (IOException e) {
-                LOGGER.error(e.getMessage(), e);
-            }
-        }
-        if (luceneReader != null) {
-            try {
-                luceneReader.close();
-            } catch (IOException e) {
-                LOGGER.error(e.getMessage(), e);
-            }
-        }
-        if (directory != null) {
-            directory.close();
-        }
-    }
-
-    public void commitChanges() {
-        if (luceneWriter != null) {
-            try {
-                luceneWriter.commit();
-            } catch (IOException e) {
-                LOGGER.error(e.getMessage(), e);
-            }
         }
     }
 }

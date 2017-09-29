@@ -290,8 +290,8 @@ public class DQCategory implements Serializable {
     @Override
     public String toString() {
         return String.format(
-                "Category [ID=%s  Type=%s  Name=%-20s  Label=%-20s  Completeness=%-5s  Description=%s Creator=%s Last Modifier=%s State=%-20s Last published=%s]",
-                id, type, name, label, completeness, description, creator, lastModifier, state, publishedAt);
+                "Category [ID=%s  Type=%s  Name=%-20s  Label=%-20s  Completeness=%-5s  Modified=%s Creator=%s Last Modifier=%s State=%-20s Last published=%s]",
+                id, type, name, label, completeness, isModified, creator, lastModifier, state, publishedAt);
     }
 
 }

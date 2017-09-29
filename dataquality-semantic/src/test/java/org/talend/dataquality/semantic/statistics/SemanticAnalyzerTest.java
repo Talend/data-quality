@@ -15,10 +15,7 @@ package org.talend.dataquality.semantic.statistics;
 import static org.junit.Assert.assertEquals;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.junit.After;
 import org.junit.Before;
@@ -28,8 +25,10 @@ import org.talend.dataquality.common.inference.Analyzers;
 import org.talend.dataquality.common.inference.Analyzers.Result;
 import org.talend.dataquality.common.inference.Metadata;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
+import org.talend.dataquality.semantic.api.CustomDictionaryHolder;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.model.DQCategory;
+import org.talend.dataquality.semantic.model.DQDocument;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
 
 public class SemanticAnalyzerTest {
@@ -55,11 +54,8 @@ public class SemanticAnalyzerTest {
         }
     };
 
-    final List<String> EXPECTED_CATEGORY_TAGADA = Arrays
-            .asList(new String[] { "", SemanticCategoryEnum.LAST_NAME.name(), SemanticCategoryEnum.FIRST_NAME.name(), "", "" });
-
-    final List<String> EXPECTED_CATEGORY_TAGADA_CUSTOM = Arrays
-            .asList(new String[] { "", SemanticCategoryEnum.LAST_NAME.name(), SemanticCategoryEnum.LAST_NAME.name(), "", "" });
+    final List<String> EXPECTED_CATEGORY_TAGADA = Arrays.asList(
+            new String[] { "", SemanticCategoryEnum.LAST_NAME.name(), SemanticCategoryEnum.FIRST_NAME.name(), "", "", "" });
 
     final List<String[]> TEST_RECORDS_CITY_METADATA = new ArrayList<String[]>() {
 
@@ -146,12 +142,14 @@ public class SemanticAnalyzerTest {
     }
 
     @Test
-    public void testTagadaWithCustomIndex() {
-        Map<String, DQCategory> customMetadata = CategoryRegistryManager.getInstance().getCustomDictionaryHolder("default")
-                .getMetadata();
-        customMetadata.get(SemanticCategoryEnum.FIRST_NAME.getTechnicalId()).setDeleted(true);
+    public void testTagadaWithCustomMetadata() {
+        CategoryRegistryManager.setUsingLocalCategoryRegistry(true);
+        CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder("t_test1");
+        builder.contextName("t_test1");
 
-        builder.metadata(customMetadata);
+        DQCategory firstNameCat = holder.getMetadata().get(SemanticCategoryEnum.FIRST_NAME.getTechnicalId());
+        firstNameCat.setDeleted(true);
+        holder.updateCategory(firstNameCat);
 
         SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(builder);
 
@@ -162,25 +160,36 @@ public class SemanticAnalyzerTest {
         }
         analyzer.end();
 
-        for (int i = 0; i < EXPECTED_CATEGORY_TAGADA_CUSTOM.size(); i++) {
+        final List<String> EXPECTED_CATEGORIES = Arrays.asList(
+                new String[] { "", SemanticCategoryEnum.LAST_NAME.name(), SemanticCategoryEnum.LAST_NAME.name(), "", "", "" });
+
+        for (int i = 0; i < EXPECTED_CATEGORIES.size(); i++) {
             Result result = analyzer.getResult().get(i);
 
             if (result.exist(SemanticType.class)) {
                 final SemanticType semanticType = result.get(SemanticType.class);
                 final String suggestedCategory = semanticType.getSuggestedCategory();
-                assertEquals("Unexpected Category.", EXPECTED_CATEGORY_TAGADA_CUSTOM.get(i), suggestedCategory);
+                assertEquals("Unexpected Category.", EXPECTED_CATEGORIES.get(i), suggestedCategory);
             }
         }
+        CategoryRegistryManager.getInstance().removeCustomDictionaryHolder("t_test1");
     }
 
     @Test
-    public void testTagadaWithLocalRegistry() {
+    public void testTagadaWithCustomDataDict() {
         CategoryRegistryManager.setUsingLocalCategoryRegistry(true);
-        Map<String, DQCategory> customMetadata = CategoryRegistryManager.getInstance().getCustomDictionaryHolder("default")
-                .getMetadata();
-        customMetadata.get(SemanticCategoryEnum.FIRST_NAME.getTechnicalId()).setDeleted(true);
+        CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder("t_test2");
+        builder.contextName("t_test2");
 
-        builder.metadata(customMetadata);
+        DQCategory answerCategory = holder.getMetadata().get(SemanticCategoryEnum.ANSWER.getTechnicalId());
+        answerCategory.setModified(true);
+        holder.updateCategory(answerCategory);
+
+        DQDocument newDoc = new DQDocument();
+        newDoc.setCategory(answerCategory);
+        newDoc.setId("the_doc_id");
+        newDoc.setValues(new HashSet<>(Arrays.asList("true", "false")));
+        holder.addDataDictDocument(Collections.singletonList(newDoc));
 
         SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(builder);
 
@@ -192,7 +201,7 @@ public class SemanticAnalyzerTest {
         analyzer.end();
 
         final List<String> EXPECTED_CATEGORIES = Arrays.asList(new String[] { "", SemanticCategoryEnum.LAST_NAME.name(),
-                SemanticCategoryEnum.LAST_NAME.name(), "", SemanticCategoryEnum.ANSWER.name() });
+                SemanticCategoryEnum.FIRST_NAME.name(), "", "", SemanticCategoryEnum.ANSWER.name() });
 
         for (int i = 0; i < EXPECTED_CATEGORIES.size(); i++) {
             Result result = analyzer.getResult().get(i);
@@ -203,6 +212,7 @@ public class SemanticAnalyzerTest {
                 assertEquals("Unexpected Category.", EXPECTED_CATEGORIES.get(i), suggestedCategory);
             }
         }
+        CategoryRegistryManager.getInstance().removeCustomDictionaryHolder("t_test2");
     }
 
     @Test

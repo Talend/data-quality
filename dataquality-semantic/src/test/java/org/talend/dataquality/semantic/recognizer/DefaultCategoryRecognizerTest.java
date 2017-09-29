@@ -87,7 +87,7 @@ public class DefaultCategoryRecognizerTest {
     }
 
     public void initTenantIndex(boolean addExistingValues) throws IOException, URISyntaxException {
-
+        builder = CategoryRecognizerBuilder.newBuilder();
         Map<String, DQCategory> metadata = builder.getCategoryMetadata();
 
         metadata.get(SemanticCategoryEnum.AIRPORT_CODE.getTechnicalId()).setModified(true);
@@ -117,7 +117,7 @@ public class DefaultCategoryRecognizerTest {
 
         writer.commit();
         writer.close();
-        recognizer = builder.ddCustomDirectory(ramDirectory).lucene().build();
+        recognizer = builder.metadata(metadata).ddCustomDirectory(ramDirectory).lucene().build();
     }
 
     /**

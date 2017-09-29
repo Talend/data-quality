@@ -22,6 +22,7 @@ import java.nio.file.Paths;
 import java.util.*;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
@@ -69,7 +70,9 @@ public class CategoryRegistryManager {
      */
     private static boolean usingLocalCategoryRegistry = false;
 
-    private static String localRegistryPath = System.getProperty("user.home") + "/.talend/dataquality/semantic";
+    private static final String DEFAULT_LOCAL_REGISTRY_PATH = System.getProperty("user.home") + "/.talend/dataquality/semantic";
+
+    private static String localRegistryPath = DEFAULT_LOCAL_REGISTRY_PATH;
 
     public static final String METADATA_SUBFOLDER_NAME = "metadata";
 
@@ -122,6 +125,7 @@ public class CategoryRegistryManager {
 
     public static void reset() {
         setUsingLocalCategoryRegistry(false);
+        localRegistryPath = DEFAULT_LOCAL_REGISTRY_PATH;
         instance = null;
     }
 
@@ -483,5 +487,19 @@ public class CategoryRegistryManager {
 
     public CustomDictionaryHolder getCustomDictionaryHolder() {
         return getCustomDictionaryHolder(DEFAULT_CONTEXT_NAME);
+    }
+
+    public void removeCustomDictionaryHolder(String contextName) {
+        CustomDictionaryHolder cdh = customDictionaryHolderMap.get(contextName);
+        if (cdh != null) {
+            cdh.close();
+            File folder = new File(localRegistryPath + File.separator + contextName);
+            try {
+                FileUtils.deleteDirectory(folder);
+            } catch (IOException e) {
+                LOGGER.error(e.getMessage(), e);
+            }
+            customDictionaryHolderMap.remove(contextName);
+        }
     }
 }
