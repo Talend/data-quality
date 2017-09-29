@@ -81,9 +81,9 @@ public class CategoryRegistryManager {
 
     public static final String REGEX_CATEGRIZER_FILE_NAME = "categorizer.json";
 
-    private static final String SHARED_FOLDER_NAME = "shared";
+    public static final String SHARED_FOLDER_NAME = "shared";
 
-    private static final String PRODUCTION_FOLDER_NAME = "prod";
+    public static final String PRODUCTION_FOLDER_NAME = "prod";
 
     /**
      * Map between category ID and the object containing its metadata.

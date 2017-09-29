@@ -15,19 +15,8 @@ package org.talend.dataquality.semantic.index;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.StringTokenizer;
+import java.nio.file.*;
+import java.util.*;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -196,7 +185,9 @@ public class ClassPathDirectory {
         public Directory get(URI uri) throws IOException {
             String jarFile = StringUtils.substringBefore(uri.toString(), "!"); //$NON-NLS-1$
 
-            String extractionRoot = CategoryRegistryManager.getLocalRegistryPath();
+            String extractionRoot = CategoryRegistryManager.getLocalRegistryPath() + File.separator
+                    + CategoryRegistryManager.SHARED_FOLDER_NAME + File.separator
+                    + CategoryRegistryManager.PRODUCTION_FOLDER_NAME;
             JARDirectory.JARDescriptor openedJar = new JARDirectory.JARDescriptor();
             // Extract all nested JARs
             StringTokenizer tokenizer = new StringTokenizer(uri.toString(), "!"); //$NON-NLS-1$

@@ -15,25 +15,12 @@ package org.talend.dataquality.semantic.index;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.nio.file.FileSystem;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
-import org.apache.lucene.store.BaseDirectory;
-import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.store.IOContext;
-import org.apache.lucene.store.IndexInput;
-import org.apache.lucene.store.IndexOutput;
-import org.apache.lucene.store.Lock;
-import org.apache.lucene.store.LockFactory;
+import org.apache.lucene.store.*;
 
 /**
  * Implementation of {@link BaseDirectory} which supports accessing Lucene index inside a jar. The inner index files are extracted
@@ -85,15 +72,14 @@ public class JARDirectory extends Directory {
         this.jarDescriptor = descriptor;
         this.indexDirectory = directory;
         try {
-            extractIndex("default"); // the default context name
+            extractIndex(); // the default context name
         } catch (IOException e) {
             LOGGER.error("Failed to extract index: " + e.getMessage(), e);
         }
     }
 
-    private void extractIndex(String contextName) throws IOException {
-        final String unzipFolderName = extractPath + File.separator + indexDirectory + File.separator + contextName
-                + File.separator;
+    private void extractIndex() throws IOException {
+        final String unzipFolderName = extractPath + File.separator + indexDirectory + File.separator;
         final File destinationFolder = Paths.get(unzipFolderName).toFile();
         LOGGER.info("Extracting index to temporary directory: " + destinationFolder.getAbsolutePath());
         if (destinationFolder.exists()) {
