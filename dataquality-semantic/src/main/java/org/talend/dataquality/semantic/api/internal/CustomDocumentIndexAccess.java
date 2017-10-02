@@ -5,8 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.lucene.index.DirectoryReader;
-import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.TermQuery;
@@ -18,33 +16,18 @@ public class CustomDocumentIndexAccess extends AbstractCustomIndexAccess {
 
     private static final Logger LOGGER = Logger.getLogger(CustomDocumentIndexAccess.class);
 
-    protected IndexWriter luceneWriter;
-
-    protected DirectoryReader luceneReader;
-
-    protected IndexSearcher luceneSearcher;
-
-    private Directory directory;
-
     public CustomDocumentIndexAccess(Directory directory) throws IOException {
         super(directory);
         init();
     }
 
     private void init() {
+        LOGGER.debug("Metadata index is not readable, trying to make a copy from shared metadata.");
         try {
-            createReader();
-            createSearcher();
+            getWriter().deleteAll();
+            commitChangesAndCloseWriter();
         } catch (IOException e) {
-            LOGGER.debug("Metadata index is not readable, trying to make a copy from shared metadata.");
-            try {
-                getWriter().deleteAll();
-                commitChangesAndCloseWriter();
-                createReader();
-                createSearcher();
-            } catch (IOException e2) {
-                LOGGER.error(e2.getMessage(), e2);
-            }
+            LOGGER.error(e.getMessage(), e);
         }
     }
 
@@ -72,13 +55,14 @@ public class CustomDocumentIndexAccess extends AbstractCustomIndexAccess {
     public void insertOrUpdateDocument(List<DQDocument> documents) throws IOException {
         for (DQDocument document : documents) {
             final Term term = new Term("docid", document.getId());
-            if (luceneSearcher.search(new TermQuery(term), 1).totalHits == 1) {
+            IndexSearcher searcher = mgr.acquire();
+            if (searcher.search(new TermQuery(term), 1).totalHits == 1) {
                 LOGGER.debug("updateDocument " + document);
                 getWriter().updateDocument(term, DictionaryUtils.dqDocumentToLuceneDocument(document).getFields());
             } else {
                 createDocument(Arrays.asList(document));
             }
-
+            mgr.release(searcher);
         }
     }
 

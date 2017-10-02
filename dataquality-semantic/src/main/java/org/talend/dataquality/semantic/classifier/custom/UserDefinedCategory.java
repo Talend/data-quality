@@ -16,10 +16,11 @@ import org.talend.dataquality.semantic.classifier.ISubCategory;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.filter.ISemanticFilter;
 import org.talend.dataquality.semantic.filter.impl.CharSequenceFilter;
+import org.talend.dataquality.semantic.filter.impl.CharSequenceFilter.CharSequenceFilterType;
+import org.talend.dataquality.semantic.model.*;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.talend.dataquality.semantic.model.MainCategory;
 
 /**
  * created by talend on 2015-07-28 Detailled comment.
@@ -168,5 +169,31 @@ public class UserDefinedCategory implements ISubCategory {
     @Override
     public String toString() {
         return getLabel();
+    }
+
+    public static final UserDefinedCategory fromDQCategory(DQCategory category) {
+        DQRegEx dqRegEx = category.getRegEx();
+        DQFilter dqFilter = dqRegEx.getFilter();
+        DQValidator dqValidator = dqRegEx.getValidator();
+
+        UserDefinedCategory regEx = new UserDefinedCategory(category.getName(), category.getLabel());
+        regEx.setId(category.getId());
+        regEx.setDescription(category.getDescription());
+        regEx.setMainCategory(dqRegEx.getMainCategory());
+
+        if (dqFilter != null) {
+            CharSequenceFilter filter = new CharSequenceFilter();
+            filter.setFilterParam(dqFilter.getFilterParam());
+            filter.setFilterType(CharSequenceFilterType.valueOf(dqFilter.getFilterType()));
+            regEx.setFilter(filter);
+        }
+
+        if (dqValidator != null) {
+            UserDefinedRegexValidator validator = new UserDefinedRegexValidator();
+            validator.setPatternString(dqValidator.getPatternString());
+            validator.setSubValidatorClassName(dqValidator.getSubValidatorClassName());
+            regEx.setValidator(validator);
+        }
+        return regEx;
     }
 }

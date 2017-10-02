@@ -8,7 +8,7 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
-import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.SearcherManager;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.util.Version;
 
@@ -16,21 +16,37 @@ public class AbstractCustomIndexAccess implements AutoCloseable {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractCustomIndexAccess.class);
 
-    private Directory directory;
+    protected Directory directory;
 
     protected IndexWriter luceneWriter;
 
     protected DirectoryReader luceneReader;
 
-    protected IndexSearcher luceneSearcher;
+    protected SearcherManager mgr;
 
     public AbstractCustomIndexAccess(Directory directory) {
         this.directory = directory;
     }
 
-    protected void createReader() throws IOException {
+    protected DirectoryReader getReader() {
         if (luceneReader == null) {
-            luceneReader = DirectoryReader.open(directory);
+            try {
+                luceneReader = DirectoryReader.open(directory);
+            } catch (IOException e) {
+                LOGGER.error(e.getMessage(), e);
+            }
+        }
+        return luceneReader;
+    }
+
+    protected void closeReader() {
+        if (luceneReader != null) {
+            try {
+                luceneReader.close();
+                luceneReader = null;
+            } catch (IOException e) {
+                LOGGER.error(e.getMessage(), e);
+            }
         }
     }
 
@@ -41,12 +57,6 @@ public class AbstractCustomIndexAccess implements AutoCloseable {
             luceneWriter = new IndexWriter(directory, iwc);
         }
         return luceneWriter;
-    }
-
-    protected void createSearcher() throws IOException {
-        if (luceneSearcher == null) {
-            luceneSearcher = new IndexSearcher(luceneReader);
-        }
     }
 
     protected void deleteAll() {
@@ -60,6 +70,9 @@ public class AbstractCustomIndexAccess implements AutoCloseable {
 
     @Override
     public void close() throws IOException {
+        if (mgr != null) {
+            mgr.close();
+        }
         if (luceneWriter != null) {
             try {
                 luceneWriter.commit();

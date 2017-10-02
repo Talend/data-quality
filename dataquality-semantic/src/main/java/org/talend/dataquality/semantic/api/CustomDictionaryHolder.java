@@ -12,6 +12,7 @@ import org.apache.lucene.store.FSDirectory;
 import org.talend.dataquality.semantic.api.internal.CustomDocumentIndexAccess;
 import org.talend.dataquality.semantic.api.internal.CustomMetadataIndexAccess;
 import org.talend.dataquality.semantic.api.internal.CustomRegexClassifierAccess;
+import org.talend.dataquality.semantic.classifier.custom.UserDefinedCategory;
 import org.talend.dataquality.semantic.classifier.custom.UserDefinedClassifier;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.model.DQDocument;
@@ -36,6 +37,10 @@ public class CustomDictionaryHolder {
 
     public CustomDictionaryHolder(String contextName) {
         this.contextName = contextName;
+    }
+
+    public String getContextName() {
+        return contextName;
     }
 
     public Map<String, DQCategory> getMetadata() {
@@ -117,11 +122,8 @@ public class CustomDictionaryHolder {
         if (customMetadataIndexAccess != null) {
             metadata = customMetadataIndexAccess.readCategoryMedatada();
         }
-    }
-
-    public void reloadRegexClassifer() {
         if (customRegexClassifierAccess != null) {
-            // customRegexClassifierAccess.readRegexClassifier();
+            regexClassifier = customRegexClassifierAccess.readUserDefinedClassifier();
         }
     }
 
@@ -142,5 +144,24 @@ public class CustomDictionaryHolder {
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         }
+    }
+
+    private void ensureRegexClassifierAccess() {
+        if (customRegexClassifierAccess == null) {
+            customRegexClassifierAccess = new CustomRegexClassifierAccess(this);
+            regexClassifier = customRegexClassifierAccess.readUserDefinedClassifier();
+        }
+    }
+
+    public void addRegexCategory(DQCategory category) {
+        ensureRegexClassifierAccess();
+        UserDefinedCategory regEx = UserDefinedCategory.fromDQCategory(category);
+        customRegexClassifierAccess.createRegex(regEx);
+        regexClassifier = customRegexClassifierAccess.readUserDefinedClassifier();
+
+        ensureMetadataIndexAccess();
+        customMetadataIndexAccess.createCategory(category);
+        customMetadataIndexAccess.commitChangesAndCloseWriter();
+        metadata = customMetadataIndexAccess.readCategoryMedatada();
     }
 }

@@ -13,6 +13,8 @@ import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.index.MultiFields;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.SearcherManager;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
@@ -32,25 +34,20 @@ public class CustomMetadataIndexAccess extends AbstractCustomIndexAccess {
     }
 
     private void init() {
+        LOGGER.debug("Metadata index is not readable, trying to make a copy from shared metadata.");
+        for (DQCategory dqCat : CategoryRegistryManager.getInstance().getCategoryMetadataMap().values()) {
+            createCategory(dqCat);
+        }
+        commitChangesAndCloseWriter();
         try {
-            createReader();
-            createSearcher();
+            mgr = new SearcherManager(directory, null);
         } catch (IOException e) {
-            LOGGER.debug("Metadata index is not readable, trying to make a copy from shared metadata.");
-            try {
-                for (DQCategory dqCat : CategoryRegistryManager.getInstance().getCategoryMetadataMap().values()) {
-                    createCategory(dqCat);
-                }
-                commitChangesAndCloseWriter();
-                createReader();
-                createSearcher();
-            } catch (IOException e2) {
-                LOGGER.error(e2.getMessage(), e2);
-            }
+            LOGGER.error(e.getMessage(), e);
         }
     }
 
     public Map<String, DQCategory> readCategoryMedatada() {
+        luceneReader = getReader();
         Map<String, DQCategory> metadata = new HashMap<>();
         Bits liveDocs = MultiFields.getLiveDocs(luceneReader);
         try {
@@ -65,6 +62,7 @@ public class CustomMetadataIndexAccess extends AbstractCustomIndexAccess {
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         }
+        closeReader();
         return metadata;
     }
 
@@ -83,7 +81,9 @@ public class CustomMetadataIndexAccess extends AbstractCustomIndexAccess {
         final Term searchTerm = new Term(DictionaryConstants.ID, category.getId());
         final TermQuery termQuery = new TermQuery(searchTerm);
         try {
-            TopDocs result = luceneSearcher.search(termQuery, 1);
+            IndexSearcher searcher = mgr.acquire();
+            TopDocs result = searcher.search(termQuery, 1);
+            mgr.release(searcher);
             if (result.totalHits == 1) {
                 final Term term = new Term(DictionaryConstants.ID, category.getId());
                 List<IndexableField> fields = DictionaryUtils.categoryToDocument(category).getFields();

@@ -27,8 +27,7 @@ import org.talend.dataquality.common.inference.Metadata;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.api.CustomDictionaryHolder;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
-import org.talend.dataquality.semantic.model.DQCategory;
-import org.talend.dataquality.semantic.model.DQDocument;
+import org.talend.dataquality.semantic.model.*;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
 
 public class SemanticAnalyzerTest {
@@ -213,6 +212,51 @@ public class SemanticAnalyzerTest {
             }
         }
         CategoryRegistryManager.getInstance().removeCustomDictionaryHolder("t_test2");
+    }
+
+    @Test
+    public void testTagadaWithCustomRegex() {
+        CategoryRegistryManager.setUsingLocalCategoryRegistry(true);
+        CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder("t_test3");
+        builder.contextName("t_test3");
+
+        DQValidator dqValidator = new DQValidator();
+        dqValidator.setPatternString("^(true|false)$");
+        DQRegEx dqRegEx = new DQRegEx();
+        dqRegEx.setMainCategory(MainCategory.Alpha);
+        dqRegEx.setValidator(dqValidator);
+        DQCategory dqCat = new DQCategory("the_id");
+        dqCat.setName("the_name");
+        dqCat.setLabel("the_label");
+        dqCat.setDescription("the_description");
+        dqCat.setRegEx(dqRegEx);
+        dqCat.setType(CategoryType.REGEX);
+        dqCat.setCompleteness(Boolean.TRUE);
+        dqCat.setModified(Boolean.TRUE);
+        holder.addRegexCategory(dqCat);
+
+        SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(builder);
+
+        Analyzer<Result> analyzer = Analyzers.with(semanticAnalyzer);
+        analyzer.init();
+        for (String[] record : TEST_RECORDS_TAGADA) {
+            analyzer.analyze(record);
+        }
+        analyzer.end();
+
+        final List<String> EXPECTED_CATEGORIES = Arrays.asList(new String[] { "", SemanticCategoryEnum.LAST_NAME.name(),
+                SemanticCategoryEnum.FIRST_NAME.name(), "", "", "the_name" });
+
+        for (int i = 0; i < EXPECTED_CATEGORIES.size(); i++) {
+            Result result = analyzer.getResult().get(i);
+
+            if (result.exist(SemanticType.class)) {
+                final SemanticType semanticType = result.get(SemanticType.class);
+                final String suggestedCategory = semanticType.getSuggestedCategory();
+                assertEquals("Unexpected Category.", EXPECTED_CATEGORIES.get(i), suggestedCategory);
+            }
+        }
+        CategoryRegistryManager.getInstance().removeCustomDictionaryHolder("t_test3");
     }
 
     @Test
