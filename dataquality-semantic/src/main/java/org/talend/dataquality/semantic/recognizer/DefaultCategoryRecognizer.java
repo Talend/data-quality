@@ -51,6 +51,8 @@ class DefaultCategoryRecognizer implements CategoryRecognizer {
     public DefaultCategoryRecognizer(final Index sharedDictionary, Index customDictionary, Index keyword,
             UserDefinedClassifier regex, Map<String, DQCategory> metadata) throws IOException {
         this.userDefineClassifier = regex;
+        this.userDefineClassifier.getClassifiers().removeIf(classifier -> metadata.get(classifier.getId()) != null
+                && Boolean.TRUE.equals(metadata.get(classifier.getId()).getDeleted()));
         this.metadata = metadata;
         this.keyMatcher = new FingerprintkeyMatcher();
 
