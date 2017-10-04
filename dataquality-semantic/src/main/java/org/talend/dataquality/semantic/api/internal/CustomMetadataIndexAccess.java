@@ -35,11 +35,13 @@ public class CustomMetadataIndexAccess extends AbstractCustomIndexAccess {
 
     private void init() {
         LOGGER.debug("Metadata index is not readable, trying to make a copy from shared metadata.");
-        for (DQCategory dqCat : CategoryRegistryManager.getInstance().getCategoryMetadataMap().values()) {
-            createCategory(dqCat);
-        }
-        commitChangesAndCloseWriter();
         try {
+            if (getWriter().maxDoc() == 0) {
+                for (DQCategory dqCat : CategoryRegistryManager.getInstance().getCategoryMetadataMap().values()) {
+                    createCategory(dqCat);
+                }
+                commitChangesAndCloseWriter();
+            }
             mgr = new SearcherManager(directory, null);
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
@@ -47,10 +49,10 @@ public class CustomMetadataIndexAccess extends AbstractCustomIndexAccess {
     }
 
     public Map<String, DQCategory> readCategoryMedatada() {
-        luceneReader = getReader();
         Map<String, DQCategory> metadata = new HashMap<>();
-        Bits liveDocs = MultiFields.getLiveDocs(luceneReader);
         try {
+            luceneReader = getReader();
+            Bits liveDocs = MultiFields.getLiveDocs(luceneReader);
             for (int i = 0; i < luceneReader.maxDoc(); i++) {
                 if (liveDocs != null && !liveDocs.get(i)) {
                     continue;

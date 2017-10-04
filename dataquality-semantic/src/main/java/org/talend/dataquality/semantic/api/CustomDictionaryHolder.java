@@ -2,7 +2,6 @@ package org.talend.dataquality.semantic.api;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,10 +36,47 @@ public class CustomDictionaryHolder {
 
     public CustomDictionaryHolder(String contextName) {
         this.contextName = contextName;
+        checkCustomFolders();
+    }
+
+    private void checkCustomFolders() {
+        File metadataFolder = new File(getMetadataFolderPath());
+        if (metadataFolder.exists()) {
+            LOGGER.info("Initialize custom metadata access for " + contextName);
+            ensureMetadataIndexAccess();
+            File dataDictFolder = new File(getDataDictFolderPath());
+            if (dataDictFolder.exists()) {
+                LOGGER.info("Initialize custom data dict access for " + contextName);
+                ensureDataDictIndexAccess();
+            }
+            File regexClassifierFile = new File(getRegexClassifierFolderPath());
+            if (regexClassifierFile.exists()) {
+                LOGGER.info("Initialize custom regex classifier access for " + contextName);
+                ensureRegexClassifierAccess();
+            }
+        }
     }
 
     public String getContextName() {
         return contextName;
+    }
+
+    private String getMetadataFolderPath() {
+        return CategoryRegistryManager.getLocalRegistryPath() + File.separator + contextName + File.separator
+                + CategoryRegistryManager.PRODUCTION_FOLDER_NAME + File.separator
+                + CategoryRegistryManager.METADATA_SUBFOLDER_NAME;
+    }
+
+    private String getDataDictFolderPath() {
+        return CategoryRegistryManager.getLocalRegistryPath() + File.separator + contextName + File.separator
+                + CategoryRegistryManager.PRODUCTION_FOLDER_NAME + File.separator
+                + CategoryRegistryManager.DICTIONARY_SUBFOLDER_NAME;
+    }
+
+    private String getRegexClassifierFolderPath() {
+        return CategoryRegistryManager.getLocalRegistryPath() + File.separator + contextName + File.separator
+                + CategoryRegistryManager.PRODUCTION_FOLDER_NAME + File.separator + CategoryRegistryManager.REGEX_SUBFOLDER_NAME
+                + File.separator + CategoryRegistryManager.REGEX_CATEGRIZER_FILE_NAME;
     }
 
     public Map<String, DQCategory> getMetadata() {
@@ -65,17 +101,14 @@ public class CustomDictionaryHolder {
 
     private void ensureMetadataIndexAccess() {
         if (metadata == null) {
-            // clone shared metadata
-            metadata = new HashMap<>(CategoryRegistryManager.getInstance().getCategoryMetadataMap());
-            String metadataIndexPath = CategoryRegistryManager.getLocalRegistryPath() + File.separator + contextName
-                    + File.separator + CategoryRegistryManager.PRODUCTION_FOLDER_NAME + File.separator
-                    + CategoryRegistryManager.METADATA_SUBFOLDER_NAME;
+            String metadataIndexPath = getMetadataFolderPath();
             File folder = new File(metadataIndexPath);
             if (!folder.exists()) {
                 folder.mkdirs();
             }
             try {
                 customMetadataIndexAccess = new CustomMetadataIndexAccess(FSDirectory.open(folder));
+                metadata = customMetadataIndexAccess.readCategoryMedatada();
             } catch (IOException e) {
                 LOGGER.error(e.getMessage(), e);
             }
@@ -84,9 +117,7 @@ public class CustomDictionaryHolder {
 
     private void ensureDataDictIndexAccess() {
         if (customDataDictIndexAccess == null) {
-            String dataDictIndexPath = CategoryRegistryManager.getLocalRegistryPath() + File.separator + contextName
-                    + File.separator + CategoryRegistryManager.PRODUCTION_FOLDER_NAME + File.separator
-                    + CategoryRegistryManager.DICTIONARY_SUBFOLDER_NAME;
+            String dataDictIndexPath = getDataDictFolderPath();
             File folder = new File(dataDictIndexPath);
             if (!folder.exists()) {
                 folder.mkdirs();
@@ -119,6 +150,7 @@ public class CustomDictionaryHolder {
     }
 
     public void reloadCategoryMetadata() {
+        checkCustomFolders();
         if (customMetadataIndexAccess != null) {
             metadata = customMetadataIndexAccess.readCategoryMedatada();
         }

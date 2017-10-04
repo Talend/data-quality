@@ -142,6 +142,8 @@ public class DictionaryUtils {
         doc.add(new StringField(DictionaryConstants.COMPLETENESS, String.valueOf(cat.getCompleteness().booleanValue()),
                 Field.Store.YES));
         doc.add(new TextField(DictionaryConstants.DESCRIPTION, cat.getDescription(), Field.Store.YES));
+        doc.add(new StringField(DictionaryConstants.MODIFIED, String.valueOf(cat.getModified()), Field.Store.YES));
+        doc.add(new StringField(DictionaryConstants.DELETED, String.valueOf(cat.getDeleted()), Field.Store.YES));
 
         if (cat.getValidationMode() != null)
             doc.add(new StringField(DictionaryConstants.VALIDATION_MODE, cat.getValidationMode().name(), Field.Store.YES));

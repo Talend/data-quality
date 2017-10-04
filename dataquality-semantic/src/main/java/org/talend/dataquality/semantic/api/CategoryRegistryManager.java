@@ -12,10 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.semantic.api;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
@@ -203,9 +200,13 @@ public class CategoryRegistryManager {
         loadBaseIndex(keywordSubFolder, KEYWORD_SUBFOLDER_NAME);
 
         // read local RE categories
-        final File regexRegistryFolder = new File(localRegistryPath + File.separator + SHARED_FOLDER_NAME + File.separator
-                + PRODUCTION_FOLDER_NAME + File.separator + REGEX_SUBFOLDER_NAME);
-        if (!regexRegistryFolder.exists()) {
+        final File regexRegistryFile = new File(localRegistryPath + File.separator + SHARED_FOLDER_NAME + File.separator
+                + PRODUCTION_FOLDER_NAME + File.separator + REGEX_SUBFOLDER_NAME + File.separator + REGEX_CATEGRIZER_FILE_NAME);
+        loadBaseRegex(regexRegistryFile);
+    }
+
+    private void loadBaseRegex(final File regexRegistryFile) throws IOException, FileNotFoundException {
+        if (!regexRegistryFile.exists()) {
             // load provided RE into registry
             InputStream is = CategoryRecognizer.class.getResourceAsStream(CategoryRecognizerBuilder.DEFAULT_RE_PATH);
             StringBuilder sb = new StringBuilder();
@@ -214,10 +215,10 @@ public class CategoryRegistryManager {
             }
             JSONObject obj = new JSONObject(sb.toString());
             JSONArray array = obj.getJSONArray("classifiers");
-            regexRegistryFolder.mkdirs();
+            regexRegistryFile.getParentFile().mkdirs();
             FileOutputStream fos = null;
             try {
-                fos = new FileOutputStream(regexRegistryFolder + File.separator + REGEX_CATEGRIZER_FILE_NAME);
+                fos = new FileOutputStream(regexRegistryFile);
                 IOUtils.write(array.toString(2), fos);
             } finally {
                 if (fos != null) {
@@ -411,19 +412,7 @@ public class CategoryRegistryManager {
                             + File.separator + REGEX_SUBFOLDER_NAME + File.separator + REGEX_CATEGRIZER_FILE_NAME);
 
             if (!regexRegistryFile.exists()) {
-                regexRegistryFile.getParentFile().mkdirs();
-                // load provided RE into registry
-                InputStream is = CategoryRecognizer.class.getResourceAsStream(REGEX_CATEGRIZER_FILE_NAME);
-                StringBuilder sb = new StringBuilder();
-                for (String line : IOUtils.readLines(is)) {
-                    sb.append(line);
-                }
-
-                JSONObject obj = new JSONObject(sb.toString());
-                JSONArray array = obj.getJSONArray("classifiers");
-                FileOutputStream fos = new FileOutputStream(regexRegistryFile);
-                IOUtils.write(array.toString(2), fos);
-                fos.close();
+                loadBaseRegex(regexRegistryFile);
             }
 
             sharedRegexClassifier = UDCategorySerDeser.readJsonFile(regexRegistryFile.toURI());

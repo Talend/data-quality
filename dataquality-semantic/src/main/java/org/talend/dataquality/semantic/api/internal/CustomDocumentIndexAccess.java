@@ -24,8 +24,9 @@ public class CustomDocumentIndexAccess extends AbstractCustomIndexAccess {
     private void init() {
         LOGGER.debug("Metadata index is not readable, trying to make a copy from shared metadata.");
         try {
-            getWriter().deleteAll();
-            commitChangesAndCloseWriter();
+            if (getWriter().maxDoc() == 0) {
+                commitChangesAndCloseWriter();
+            }
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         }

@@ -28,13 +28,9 @@ public class AbstractCustomIndexAccess implements AutoCloseable {
         this.directory = directory;
     }
 
-    protected DirectoryReader getReader() {
+    protected DirectoryReader getReader() throws IOException {
         if (luceneReader == null) {
-            try {
-                luceneReader = DirectoryReader.open(directory);
-            } catch (IOException e) {
-                LOGGER.error(e.getMessage(), e);
-            }
+            luceneReader = DirectoryReader.open(directory);
         }
         return luceneReader;
     }
