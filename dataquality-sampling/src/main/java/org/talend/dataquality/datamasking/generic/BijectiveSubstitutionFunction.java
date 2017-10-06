@@ -37,16 +37,16 @@ public class BijectiveSubstitutionFunction extends Function<String> {
         for (FieldDefinition definition : fieldDefinitionList) {
             switch (definition.getType()) {
             case DATEPATTERN:
-                if (definition.getMin().compareTo(new BigInteger("1000")) < 0
-                        || definition.getMin().compareTo(new BigInteger("9999")) > 0)
+                if (definition.getMin().compareTo(BigInteger.valueOf(1000)) < 0
+                        || definition.getMin().compareTo(BigInteger.valueOf(9999)) > 0)
                     throw new DQRuntimeException("The minimum value " + definition.getMin() + " must be between 1000 and 9999");
-                if (definition.getMax().compareTo(new BigInteger("1000")) < 0
-                        || definition.getMax().compareTo(new BigInteger("9999")) > 0)
+                if (definition.getMax().compareTo(BigInteger.valueOf(1000)) < 0
+                        || definition.getMax().compareTo(BigInteger.valueOf(9999)) > 0)
                     throw new DQRuntimeException("The maximum value " + definition.getMax() + " must be between 1000 and 9999");
                 fieldList.add(new FieldDate(definition.getMin().intValue(), definition.getMax().intValue()));
                 break;
             case INTERVAL:
-                if (definition.getMin().compareTo(new BigInteger("0")) < 0)
+                if (definition.getMin().compareTo(BigInteger.ZERO) < 0)
                     throw new DQRuntimeException("The minimum value " + definition.getMin() + " must be positive");
                 if (definition.getMin().compareTo(definition.getMax()) > 0)
                     throw new DQRuntimeException("The minimum value " + definition.getMin()

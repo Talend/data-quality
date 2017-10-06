@@ -61,7 +61,7 @@ public class GenerateUniqueRandomPatterns implements Serializable {
         this.fields = fields;
 
         // longestWidth init
-        longestWidth = new BigInteger("1");
+        longestWidth = BigInteger.ONE;
         for (int i = 0; i < getFieldsNumber(); i++) {
             BigInteger width = this.fields.get(i).getWidth();
             longestWidth = longestWidth.multiply(width);

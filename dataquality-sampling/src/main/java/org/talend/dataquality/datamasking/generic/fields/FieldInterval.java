@@ -37,20 +37,20 @@ public class FieldInterval extends AbstractField {
 
     @Override
     public BigInteger getWidth() {
-        return maxInterval.subtract(minInterval).add(new BigInteger("1"));
+        return maxInterval.subtract(minInterval).add(BigInteger.ONE);
     }
 
     @Override
     public BigInteger encode(String str) {
-        BigInteger longStr;
+        BigInteger bigInteger;
         try {
-            longStr = new BigInteger(str);
-            if (longStr.compareTo(minInterval) < 0 || longStr.compareTo(maxInterval) > 0)
+            bigInteger = new BigInteger(str);
+            if (bigInteger.compareTo(minInterval) < 0 || bigInteger.compareTo(maxInterval) > 0)
                 return new BigInteger("-1");
         } catch (NumberFormatException e) {
             return new BigInteger("-1");
         }
-        return longStr.subtract(minInterval);
+        return bigInteger.subtract(minInterval);
     }
 
     @Override
