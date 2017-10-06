@@ -3,6 +3,7 @@ package org.talend.dataquality.datamasking.generic;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -28,8 +29,8 @@ public class GenerateUniqueRandomPatternsTest {
         fields.add(new FieldEnum(enums, 1));
         enums = new ArrayList<String>(Arrays.asList("SF", "KI", "QG", "DU"));
         fields.add(new FieldEnum(enums, 2));
-        fields.add(new FieldInterval(0, 500));
-        fields.add(new FieldInterval(5, 20));
+        fields.add(new FieldInterval(BigInteger.ZERO, BigInteger.valueOf(500)));
+        fields.add(new FieldInterval(BigInteger.valueOf(5), BigInteger.valueOf(20)));
 
         pattern = new GenerateUniqueRandomPatterns(fields);
         pattern.setKey(new Random(454594).nextInt() % 10000 + 1000);
@@ -57,10 +58,13 @@ public class GenerateUniqueRandomPatternsTest {
     @Test
     public void testUnique() {
         Set<StringBuilder> uniqueSetTocheck = new HashSet<StringBuilder>();
-        for (long i = 0; i < pattern.getFields().get(0).getWidth(); i++) {
-            for (long j = 0; j < pattern.getFields().get(1).getWidth(); j++) {
-                for (long k = 0; k < pattern.getFields().get(2).getWidth(); k++) {
-                    for (long l = 0; l < pattern.getFields().get(3).getWidth(); l++) {
+        for (BigInteger i = BigInteger.ZERO; i.compareTo(pattern.getFields().get(0).getWidth()) < 0; i = i.add(BigInteger.ONE)) {
+            for (BigInteger j = BigInteger.ZERO; j.compareTo(pattern.getFields().get(1).getWidth()) < 0; j = j
+                    .add(BigInteger.ONE)) {
+                for (BigInteger k = BigInteger.ZERO; k.compareTo(pattern.getFields().get(2).getWidth()) < 0; k = k
+                        .add(BigInteger.ONE)) {
+                    for (BigInteger l = BigInteger.ZERO; l.compareTo(pattern.getFields().get(3).getWidth()) < 0; l = l
+                            .add(BigInteger.ONE)) {
                         StringBuilder uniqueMaskedNumber = pattern.generateUniqueString(new ArrayList<String>(
                                 Arrays.asList(pattern.getFields().get(0).decode(i), pattern.getFields().get(1).decode(j),
                                         pattern.getFields().get(2).decode(k), pattern.getFields().get(3).decode(l))));

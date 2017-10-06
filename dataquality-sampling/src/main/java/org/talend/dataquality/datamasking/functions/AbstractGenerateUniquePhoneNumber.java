@@ -4,6 +4,7 @@ import org.talend.dataquality.datamasking.generic.GenerateUniqueRandomPatterns;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -63,7 +64,7 @@ public abstract class AbstractGenerateUniquePhoneNumber extends Function<String>
     protected List<AbstractField> createFieldsListFromPattern() {
         List<AbstractField> fields = new ArrayList<AbstractField>();
         long max = (long) Math.pow(10, getDigitsNumberToMask()) - 1;
-        fields.add(new FieldInterval(0, max));
+        fields.add(new FieldInterval(BigInteger.ZERO, BigInteger.valueOf(max)));
         return fields;
     }
 

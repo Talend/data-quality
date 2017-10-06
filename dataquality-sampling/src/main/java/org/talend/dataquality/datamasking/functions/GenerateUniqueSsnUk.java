@@ -16,6 +16,7 @@ import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldEnum;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -48,7 +49,7 @@ public class GenerateUniqueSsnUk extends AbstractGenerateUniqueSsn {
                             firstField.add(twoLetters);
                     }
         fields.add(new FieldEnum(firstField, 2));
-        fields.add(new FieldInterval(0, 999999));
+        fields.add(new FieldInterval(BigInteger.ZERO, BigInteger.valueOf(999999)));
         List<String> thirdField = new ArrayList<String>();
         for (char letter = 'A'; letter <= 'D'; letter++)
             thirdField.add(String.valueOf(letter));

@@ -15,6 +15,7 @@ package org.talend.dataquality.datamasking.functions;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,8 +70,8 @@ public class GenerateUniqueSsnIndia extends AbstractGenerateUniqueSsn {
     protected List<AbstractField> createFieldsListFromPattern() {
         List<AbstractField> fields = new ArrayList<AbstractField>();
 
-        fields.add(new FieldInterval(1, 9));
-        fields.add(new FieldInterval(0, 9999999999L));
+        fields.add(new FieldInterval(BigInteger.ONE, BigInteger.valueOf(9)));
+        fields.add(new FieldInterval(BigInteger.ZERO, new BigInteger("9999999999")));
 
         checkSumSize = 1;
         return fields;

@@ -12,6 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.generic.fields;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -59,19 +60,19 @@ public class FieldEnum extends AbstractField {
     }
 
     @Override
-    public long getWidth() {
-        return enumValues.size();
+    public BigInteger getWidth() {
+        return BigInteger.valueOf(enumValues.size());
     }
 
     @Override
-    public Long encode(String str) {
-        return (long) enumValues.indexOf(str);
+    public BigInteger encode(String str) {
+        return BigInteger.valueOf(enumValues.indexOf(str));
     }
 
     @Override
-    public String decode(long number) {
-        if (number >= getWidth())
+    public String decode(BigInteger number) {
+        if (number.compareTo(getWidth()) >= 0)
             return "";
-        return enumValues.get((int) number);
+        return enumValues.get(number.intValue());
     }
 }

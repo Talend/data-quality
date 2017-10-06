@@ -12,6 +12,8 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.generic.fields;
 
+import java.math.BigInteger;
+
 /**
  * @author jteuladedenantes
  * 
@@ -22,11 +24,11 @@ public class FieldInterval extends AbstractField {
 
     private static final long serialVersionUID = 4713567446010547849L;
 
-    private long minInterval;
+    private BigInteger minInterval;
 
-    private long maxInterval;
+    private BigInteger maxInterval;
 
-    public FieldInterval(long minInterval, long maxInterval) {
+    public FieldInterval(BigInteger minInterval, BigInteger maxInterval) {
         super();
         length = String.valueOf(maxInterval).length();
         this.minInterval = minInterval;
@@ -34,28 +36,28 @@ public class FieldInterval extends AbstractField {
     }
 
     @Override
-    public long getWidth() {
-        return maxInterval - minInterval + 1;
+    public BigInteger getWidth() {
+        return maxInterval.subtract(minInterval).add(new BigInteger("1"));
     }
 
     @Override
-    public Long encode(String str) {
-        Long longStr;
+    public BigInteger encode(String str) {
+        BigInteger longStr;
         try {
-            longStr = Long.valueOf(str);
-            if (longStr < minInterval || longStr > maxInterval)
-                return -1L;
+            longStr = new BigInteger(str);
+            if (longStr.compareTo(minInterval) < 0 || longStr.compareTo(maxInterval) > 0)
+                return new BigInteger("-1");
         } catch (NumberFormatException e) {
-            return -1L;
+            return new BigInteger("-1");
         }
-        return longStr - minInterval;
+        return longStr.subtract(minInterval);
     }
 
     @Override
-    public String decode(long number) {
-        if (number >= getWidth())
+    public String decode(BigInteger number) {
+        if (number.compareTo(getWidth()) >= 0)
             return "";
-        String res = String.valueOf(number + minInterval);
+        String res = number.add(minInterval).toString();
         // we add the potential missing zeros
         while (res.length() < length)
             res = "0" + res;

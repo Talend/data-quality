@@ -13,6 +13,7 @@
 package org.talend.dataquality.datamasking.generic.fields;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 
 /**
  * @author jteuladedenantes
@@ -32,19 +33,19 @@ public abstract class AbstractField implements Serializable {
     /**
      * @return the number of different possible values in this field
      */
-    public abstract long getWidth();
+    public abstract BigInteger getWidth();
 
     /**
      * @param str, the string to encode
      * @return the position number related to this string, -1 if str doesn't exist in this field
      */
-    public abstract Long encode(String str);
+    public abstract BigInteger encode(String str);
 
     /**
      * @param number, the number to decode
      * @return the string related to this number, "" if number is longer than the width
      */
-    public abstract String decode(long number);
+    public abstract String decode(BigInteger number);
 
     /**
      * @return the number of characters in a field

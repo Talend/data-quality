@@ -13,6 +13,7 @@
 package org.talend.dataquality.datamasking.generic.fields;
 
 import java.lang.reflect.Array;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -97,12 +98,16 @@ public class FieldDate extends AbstractField {
     }
 
     @Override
-    public long getWidth() {
+    public BigInteger getWidth() {
+        return BigInteger.valueOf(numberDaysPerYear.get(numberDaysPerYear.size() - 1));
+    }
+
+    public long getWidthLong() {
         return numberDaysPerYear.get(numberDaysPerYear.size() - 1);
     }
 
     @Override
-    public Long encode(String str) {
+    public BigInteger encode(String str) {
 
         Long dayNumber = 0L;
         try {
@@ -112,15 +117,15 @@ public class FieldDate extends AbstractField {
 
             // Check if the date exists
             if (year < firstYear || year >= lastYear)
-                return -1L;
+                return BigInteger.valueOf(-1);
             if (month < 1 || month > 12)
-                return -1L;
+                return BigInteger.valueOf(-1);
             if (isLeapYear(year)) {
                 if (day < 1 || day > monthSizeLeapYear.get(month - 1))
-                    return -1L;
+                    return BigInteger.valueOf(-1);
             } else {
                 if (day < 1 || day > monthSize.get(month - 1))
-                    return -1L;
+                    return BigInteger.valueOf(-1);
             }
 
             dayNumber = (long) numberDaysPerYear.get(year - firstYear);
@@ -130,15 +135,16 @@ public class FieldDate extends AbstractField {
                 dayNumber++;
 
         } catch (NumberFormatException e) {
-            return -1L;
+            return BigInteger.valueOf(-1);
         }
 
-        return dayNumber;
+        return BigInteger.valueOf(dayNumber);
     }
 
     @Override
-    public String decode(long number) {
-        if (number >= getWidth() || number < 0)
+    public String decode(BigInteger numberBig) {
+        int number = numberBig.intValue();
+        if (number >= getWidthLong() || number < 0)
             return "";
 
         int year = findNearest(number, numberDaysPerYear);

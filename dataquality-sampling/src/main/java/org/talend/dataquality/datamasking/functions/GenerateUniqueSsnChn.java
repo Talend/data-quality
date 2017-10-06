@@ -14,6 +14,7 @@ package org.talend.dataquality.datamasking.functions;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -90,7 +91,7 @@ public class GenerateUniqueSsnChn extends AbstractGenerateUniqueSsn {
             LOGGER.error("The file of chinese regions is not correctly loaded " + e.getMessage(), e);
         }
         fields.add(new FieldDate());
-        fields.add(new FieldInterval(0, 999));
+        fields.add(new FieldInterval(BigInteger.ZERO, BigInteger.valueOf(999)));
         checkSumSize = 1;
         return fields;
     }

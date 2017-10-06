@@ -3,6 +3,7 @@ package org.talend.dataquality.datamasking.generic;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -36,16 +37,18 @@ public class BijectiveSubstitutionFunction extends Function<String> {
         for (FieldDefinition definition : fieldDefinitionList) {
             switch (definition.getType()) {
             case DATEPATTERN:
-                if (definition.getMin() < 1000 || definition.getMin() > 9999)
+                if (definition.getMin().compareTo(new BigInteger("1000")) < 0
+                        || definition.getMin().compareTo(new BigInteger("9999")) > 0)
                     throw new DQRuntimeException("The minimum value " + definition.getMin() + " must be between 1000 and 9999");
-                if (definition.getMax() < 1000 || definition.getMax() > 9999)
+                if (definition.getMax().compareTo(new BigInteger("1000")) < 0
+                        || definition.getMax().compareTo(new BigInteger("9999")) > 0)
                     throw new DQRuntimeException("The maximum value " + definition.getMax() + " must be between 1000 and 9999");
                 fieldList.add(new FieldDate(definition.getMin().intValue(), definition.getMax().intValue()));
                 break;
             case INTERVAL:
-                if (definition.getMin() < 0)
+                if (definition.getMin().compareTo(new BigInteger("0")) < 0)
                     throw new DQRuntimeException("The minimum value " + definition.getMin() + " must be positive");
-                if (definition.getMin() > definition.getMax())
+                if (definition.getMin().compareTo(definition.getMax()) > 0)
                     throw new DQRuntimeException("The minimum value " + definition.getMin()
                             + " has to be less than the maximum value " + definition.getMax());
                 fieldList.add(new FieldInterval(definition.getMin(), definition.getMax()));

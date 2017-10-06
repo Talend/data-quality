@@ -49,33 +49,29 @@ public class GenerateUniqueRandomPatterns implements Serializable {
     /**
      * The product of width fields, i.e. the combination of all possibles values
      */
-    private long longestWidth;
+    private BigInteger longestWidth;
 
     /**
      * BasedWidthsList is used to go from a base to an other
      */
-    private List<Long> basedWidthsList;
+    private List<BigInteger> basedWidthsList;
 
     public GenerateUniqueRandomPatterns(List<AbstractField> fields) {
         super();
         this.fields = fields;
 
         // longestWidth init
-        BigInteger longestWidthBig = new BigInteger("1");
+        longestWidth = new BigInteger("1");
         for (int i = 0; i < getFieldsNumber(); i++) {
-            long width = this.fields.get(i).getWidth();
-            longestWidthBig = longestWidthBig.multiply(BigInteger.valueOf(width));
+            BigInteger width = this.fields.get(i).getWidth();
+            longestWidth = longestWidth.multiply(width);
         }
-        if (longestWidthBig.compareTo(BigInteger.valueOf(WIDTH_THRESHOLD)) > 0)
-            throw new DQRuntimeException("The pattern is too large to be handled with this component");
-
-        longestWidth = longestWidthBig.longValue();
 
         // basedWidthsList init
-        basedWidthsList = new ArrayList<Long>();
-        basedWidthsList.add(1L);
+        basedWidthsList = new ArrayList<BigInteger>();
+        basedWidthsList.add(BigInteger.ONE);
         for (int i = getFieldsNumber() - 2; i >= 0; i--)
-            basedWidthsList.add(0, this.fields.get(i + 1).getWidth() * this.basedWidthsList.get(0));
+            basedWidthsList.add(0, this.fields.get(i + 1).getWidth().multiply(this.basedWidthsList.get(0)));
     }
 
     public List<AbstractField> getFields() {
@@ -104,18 +100,18 @@ public class GenerateUniqueRandomPatterns implements Serializable {
             return null;
 
         // encode the fields
-        List<Long> listToMask = new ArrayList<Long>();
-        long encodeNumber;
+        List<BigInteger> listToMask = new ArrayList<BigInteger>();
+        BigInteger encodeNumber;
         for (int i = 0; i < getFieldsNumber(); i++) {
             encodeNumber = fields.get(i).encode(strs.get(i));
-            if (encodeNumber == -1) {
+            if (encodeNumber.equals(BigInteger.valueOf(-1))) {
                 return null;
             }
             listToMask.add(encodeNumber);
         }
 
         // generate the unique random number from the old one
-        List<Long> uniqueMaskedNumberList = getUniqueRandomNumber(listToMask);
+        List<BigInteger> uniqueMaskedNumberList = getUniqueRandomNumber(listToMask);
 
         // decode the fields
         StringBuilder result = new StringBuilder("");
@@ -129,28 +125,28 @@ public class GenerateUniqueRandomPatterns implements Serializable {
      * @param listToMask, the numbers list for each field
      * @return uniqueMaskedNumberList, the masked list
      */
-    private List<Long> getUniqueRandomNumber(List<Long> listToMask) {
+    private List<BigInteger> getUniqueRandomNumber(List<BigInteger> listToMask) {
 
         // numberToMask is the number to masked created from listToMask
-        long numberToMask = 0L;
+        BigInteger numberToMask = BigInteger.ZERO;
         for (int i = 0; i < getFieldsNumber(); i++)
-            numberToMask += listToMask.get(i) * basedWidthsList.get(i);
+            numberToMask = numberToMask.add(listToMask.get(i).multiply(basedWidthsList.get(i)));
 
         if (key == null)
             setKey((new SecureRandom()).nextInt() % 10000 + 1000);
-        long coprimeNumber = findLargestCoprime(Math.abs(key));
+        BigInteger coprimeNumber = BigInteger.valueOf(findLargestCoprime(Math.abs(key)));
         // uniqueMaskedNumber is the number we masked
-        long uniqueMaskedNumber = (numberToMask * coprimeNumber) % longestWidth;
+        BigInteger uniqueMaskedNumber = (numberToMask.multiply(coprimeNumber)).mod(longestWidth);
 
         // uniqueMaskedNumberList is the unique list created from uniqueMaskedNumber
-        List<Long> uniqueMaskedNumberList = new ArrayList<Long>();
+        List<BigInteger> uniqueMaskedNumberList = new ArrayList<BigInteger>();
         for (int i = 0; i < getFieldsNumber(); i++) {
             // baseRandomNumber is the quotient of the Euclidean division between uniqueMaskedNumber and
             // basedWidthsList.get(i)
-            long baseRandomNumber = uniqueMaskedNumber / basedWidthsList.get(i);
+            BigInteger baseRandomNumber = uniqueMaskedNumber.divide(basedWidthsList.get(i));
             uniqueMaskedNumberList.add(baseRandomNumber);
             // we reiterate with the remainder of the Euclidean division
-            uniqueMaskedNumber %= basedWidthsList.get(i);
+            uniqueMaskedNumber = uniqueMaskedNumber.mod(basedWidthsList.get(i));
         }
 
         return uniqueMaskedNumberList;
@@ -161,17 +157,17 @@ public class GenerateUniqueRandomPatterns implements Serializable {
      * @return the largest coprime number with longestWidth less than key
      */
     private long findLargestCoprime(long key) {
-        if (pgcdModulo(key, longestWidth) == 1) {
+        if (pgcdModulo(BigInteger.valueOf(key), longestWidth).equals(BigInteger.ONE)) {
             return key;
         } else {
             return findLargestCoprime(key - 1);
         }
     }
 
-    private long pgcdModulo(long a, long b) {
-        if (b == 0)
+    private BigInteger pgcdModulo(BigInteger a, BigInteger b) {
+        if (b.equals(BigInteger.ZERO))
             return a;
-        return pgcdModulo(b, a % b);
+        return pgcdModulo(b, a.mod(b));
     }
 
     /**
