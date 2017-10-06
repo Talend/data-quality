@@ -1,15 +1,23 @@
 package org.talend.dataquality.semantic.api.internal;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.SearcherManager;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.store.Directory;
+import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.api.DictionaryUtils;
+import org.talend.dataquality.semantic.index.ClassPathDirectory;
+import org.talend.dataquality.semantic.index.DictionarySearcher;
+import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.model.DQDocument;
 
 public class CustomDocumentIndexAccess extends AbstractCustomIndexAccess {
@@ -27,6 +35,7 @@ public class CustomDocumentIndexAccess extends AbstractCustomIndexAccess {
             if (getWriter().maxDoc() == 0) {
                 commitChangesAndCloseWriter();
             }
+            mgr = new SearcherManager(directory, null);
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         }
@@ -78,6 +87,31 @@ public class CustomDocumentIndexAccess extends AbstractCustomIndexAccess {
             LOGGER.debug("deleteDocument " + document);
             Term luceneId = new Term("docid", document.getId());
             getWriter().deleteDocuments(luceneId);
+        }
+    }
+
+    /**
+     * @param dqCategory the category to copy
+     * copy base documents from shared directory to custom directory
+     */
+    public void copyBaseDocumentsFromSharedDirectory(DQCategory dqCategory) {
+        try {
+            Directory srcDir = ClassPathDirectory.open(CategoryRegistryManager.getInstance().getDictionaryURI());
+            DirectoryReader reader = DirectoryReader.open(srcDir);
+            for (int i = 0; i < reader.maxDoc(); i++) {
+                Document doc = reader.document(i);
+                String catName = doc.getField(DictionarySearcher.F_WORD).stringValue();
+                if (dqCategory.getName().equals(catName)) {
+                    getWriter().addDocument(
+                            DictionaryUtils.dqDocumentToLuceneDocument(DictionaryUtils.dictionaryEntryFromDocument(doc)));
+                }
+            }
+            commitChangesAndCloseWriter();
+            reader.close();
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        } catch (URISyntaxException e) {
+            LOGGER.error(e.getMessage(), e);
         }
     }
 

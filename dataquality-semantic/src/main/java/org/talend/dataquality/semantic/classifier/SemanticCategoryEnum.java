@@ -306,7 +306,7 @@ public enum SemanticCategoryEnum {
      * Run the program to check it the content of this enumeration is identical to the metadata in lucene index.
      */
     public static void main(String[] args) {
-        Map<String, DQCategory> idMap = CategoryRegistryManager.getInstance().getCategoryMetadataMap();
+        Map<String, DQCategory> idMap = CategoryRegistryManager.getInstance().getSharedCategoryMetadata();
 
         int count = 0;
         for (SemanticCategoryEnum catEnum : SemanticCategoryEnum.values()) {

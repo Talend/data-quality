@@ -27,19 +27,30 @@ import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
 import org.talend.dataquality.semantic.index.ClassPathDirectory;
 import org.talend.dataquality.semantic.index.DictionarySearcher;
+import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.model.DQDocument;
 
 public class LocalDictionaryCache {
 
     private static final Logger LOGGER = Logger.getLogger(LocalDictionaryCache.class);
 
-    private SearcherManager mgr;
+    private SearcherManager sharedSearcherManager;
 
-    LocalDictionaryCache(String contextName) {
+    private SearcherManager customSearcherMananger;
+
+    private CustomDictionaryHolder customDictionaryHolder;
+
+    LocalDictionaryCache(CustomDictionaryHolder customDictionaryHolder) {
+        this.customDictionaryHolder = customDictionaryHolder;
         try {
             URI ddPath = CategoryRegistryManager.getInstance().getDictionaryURI();
-            Directory dir = ClassPathDirectory.open(ddPath);
-            mgr = new SearcherManager(dir, null);
+            Directory sharedDir = ClassPathDirectory.open(ddPath);
+            sharedSearcherManager = new SearcherManager(sharedDir, null);
+
+            Directory customDir = customDictionaryHolder.getDataDictDirectory();
+            if (customDir != null) {
+                customSearcherMananger = new SearcherManager(customDir, null);
+            }
         } catch (IOException e) {
             LOGGER.error("Failed to read local dictionary cache! ", e);
         } catch (URISyntaxException e) {
@@ -47,17 +58,17 @@ public class LocalDictionaryCache {
         }
     }
 
-    private List<DQDocument> dqDocListFromTopDocs(String categoryName, TopDocs docs) throws IOException {
-        mgr.maybeRefresh();
-        IndexSearcher searcher = mgr.acquire();
+    private List<DQDocument> dqDocListFromTopDocs(String catId, String catName, TopDocs docs) throws IOException {
+        sharedSearcherManager.maybeRefresh();
+        IndexSearcher searcher = sharedSearcherManager.acquire();
         IndexReader reader = searcher.getIndexReader();
         List<DQDocument> dqDocList = new ArrayList<>();
         for (ScoreDoc scoreDoc : docs.scoreDocs) {
             Document luceneDoc = reader.document(scoreDoc.doc);
-            DQDocument dqDoc = DictionaryUtils.dictionaryEntryFromDocument(luceneDoc, categoryName);
+            DQDocument dqDoc = DictionaryUtils.dictionaryEntryFromDocument(luceneDoc, catId, catName);
             dqDocList.add(dqDoc);
         }
-        mgr.release(searcher);
+        sharedSearcherManager.release(searcher);
         return dqDocList;
     }
 
@@ -66,30 +77,31 @@ public class LocalDictionaryCache {
      */
     public List<DQDocument> listDocuments(String categoryName, int offset, int n) {
         try {
-            TopDocs docs = sendListDocumentsQuery(categoryName, offset, n);
-            return dqDocListFromTopDocs(categoryName, docs);
+            DQCategory dqCat = customDictionaryHolder.getCategoryMetadataByName(categoryName);
+            TopDocs docs = sendListDocumentsQuery(dqCat.getId(), offset, n);
+            return dqDocListFromTopDocs(dqCat.getId(), dqCat.getName(), docs);
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         }
         return Collections.emptyList();
     }
 
-    private Query getListDocumentsQuery(String categoryName) throws IOException {
-        return new TermQuery(new Term(DictionarySearcher.F_WORD, categoryName));
+    private Query getListDocumentsQuery(String categoryId) throws IOException {
+        return new TermQuery(new Term(DictionarySearcher.F_ID, categoryId));
     }
 
-    private TopDocs sendListDocumentsQuery(String categoryName, int offset, int n) throws IOException {
-        mgr.maybeRefresh();
-        IndexSearcher searcher = mgr.acquire();
+    private TopDocs sendListDocumentsQuery(String categoryId, int offset, int n) throws IOException {
+        sharedSearcherManager.maybeRefresh();
+        IndexSearcher searcher = sharedSearcherManager.acquire();
         TopDocs result;
         if (offset <= 0) {
-            result = searcher.search(getListDocumentsQuery(categoryName), n);
+            result = searcher.search(getListDocumentsQuery(categoryId), n);
         } else {
-            TopDocs topDocs = searcher.search(getListDocumentsQuery(categoryName), offset + n);
-            Query q = new TermQuery(new Term(DictionarySearcher.F_WORD, categoryName));
+            TopDocs topDocs = searcher.search(getListDocumentsQuery(categoryId), offset + n);
+            Query q = new TermQuery(new Term(DictionarySearcher.F_ID, categoryId));
             result = searcher.searchAfter(topDocs.scoreDocs[Math.min(topDocs.totalHits, offset) - 1], q, n);
         }
-        mgr.release(searcher);
+        sharedSearcherManager.release(searcher);
         return result;
     }
 
@@ -116,9 +128,10 @@ public class LocalDictionaryCache {
         if (input != null) {
             final String trimmedInput = input.trim();
             if (trimmedInput.length() >= 2) {
-                Set<String> values = doSuggestValues(categoryName, trimmedInput, num, true);
+                boolean isCategoryModified = customDictionaryHolder.getCategoryMetadataByName(categoryName).getModified();
+                Set<String> values = doSuggestValues(categoryName, trimmedInput, num, true, isCategoryModified);
                 if (values.isEmpty()) {
-                    return doSuggestValues(categoryName, trimmedInput, num, false);
+                    return doSuggestValues(categoryName, trimmedInput, num, false, isCategoryModified);
                 } else {
                     return values;
                 }
@@ -127,7 +140,8 @@ public class LocalDictionaryCache {
         return Collections.emptySet();
     }
 
-    private Set<String> doSuggestValues(String categoryName, String input, int num, boolean isPrefixSearch) {
+    private Set<String> doSuggestValues(String categoryName, String input, int num, boolean isPrefixSearch,
+            boolean searchCustomIndex) {
         String jointInput = DictionarySearcher.getJointTokens(input);
         String queryString = isPrefixSearch ? jointInput + "*" : "*" + jointInput + "*";
 
@@ -137,14 +151,17 @@ public class LocalDictionaryCache {
         final Query wildcardQuery = new WildcardQuery(new Term(DictionarySearcher.F_SYNTERM, queryString));
         booleanQuery.add(wildcardQuery, BooleanClause.Occur.MUST);
 
-        Set<String> results = new TreeSet<String>();
+        Set<String> results = new TreeSet<>();
 
         try {
-            mgr.maybeRefresh();
-            IndexSearcher searcher = mgr.acquire();
+            SearcherManager searcherManager = getSearcherManager(searchCustomIndex);
+            if (searchCustomIndex) {
+                searcherManager.maybeRefresh();
+            }
+            IndexSearcher searcher = getSearcherManager(searchCustomIndex).acquire();
             IndexReader reader = searcher.getIndexReader();
             TopDocs topDocs = searcher.search(booleanQuery, num);
-            mgr.release(searcher);
+            searcherManager.release(searcher);
             for (int i = 0; i < topDocs.scoreDocs.length; i++) {
                 Document doc = reader.document(topDocs.scoreDocs[i].doc);
                 IndexableField[] fields = doc.getFields(DictionarySearcher.F_RAW);
@@ -167,5 +184,27 @@ public class LocalDictionaryCache {
             LOGGER.trace(e.getMessage(), e);
         }
         return results;
+    }
+
+    private SearcherManager getSearcherManager(boolean searchCustomIndex) {
+        return searchCustomIndex ? customSearcherMananger : sharedSearcherManager;
+    }
+
+    public void close() {
+        if (sharedSearcherManager != null) {
+            try {
+                sharedSearcherManager.close();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        if (customSearcherMananger != null) {
+            try {
+                customSearcherMananger.close();
+            } catch (IOException e) {
+                LOGGER.error(e.getMessage(), e);
+            }
+        }
     }
 }

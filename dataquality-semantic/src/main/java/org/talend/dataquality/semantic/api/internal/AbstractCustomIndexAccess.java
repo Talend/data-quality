@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.analysis.util.CharArraySet;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
@@ -48,7 +49,7 @@ public class AbstractCustomIndexAccess implements AutoCloseable {
 
     protected IndexWriter getWriter() throws IOException {
         if (luceneWriter == null) {
-            final Analyzer analyzer = new StandardAnalyzer();
+            final Analyzer analyzer = new StandardAnalyzer(CharArraySet.EMPTY_SET);
             final IndexWriterConfig iwc = new IndexWriterConfig(Version.LATEST, analyzer);
             luceneWriter = new IndexWriter(directory, iwc);
         }

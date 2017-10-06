@@ -2,6 +2,8 @@ package org.talend.dataquality.semantic.api;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +15,7 @@ import org.talend.dataquality.semantic.api.internal.CustomMetadataIndexAccess;
 import org.talend.dataquality.semantic.api.internal.CustomRegexClassifierAccess;
 import org.talend.dataquality.semantic.classifier.custom.UserDefinedCategory;
 import org.talend.dataquality.semantic.classifier.custom.UserDefinedClassifier;
+import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.model.DQDocument;
 
@@ -31,6 +34,8 @@ public class CustomDictionaryHolder {
     private CustomDocumentIndexAccess customDataDictIndexAccess;
 
     private CustomRegexClassifierAccess customRegexClassifierAccess;
+
+    private LocalDictionaryCache localDictionaryCache;
 
     private String contextName;
 
@@ -81,7 +86,7 @@ public class CustomDictionaryHolder {
 
     public Map<String, DQCategory> getMetadata() {
         if (metadata == null) {
-            return CategoryRegistryManager.getInstance().getCategoryMetadataMap();
+            return CategoryRegistryManager.getInstance().getSharedCategoryMetadata();
         }
         return metadata;
     }
@@ -135,18 +140,30 @@ public class CustomDictionaryHolder {
         ensureMetadataIndexAccess();
         customMetadataIndexAccess.createCategory(category);
         customMetadataIndexAccess.commitChangesAndCloseWriter();
+        metadata = customMetadataIndexAccess.readCategoryMedatada();
     }
 
     public void updateCategory(DQCategory category) {
+        if (CategoryType.DICT.equals(category.getType())) {
+            DQCategory dqCat = getMetadata().get(category.getId());
+            if (dqCat != null && Boolean.FALSE.equals(dqCat.getModified())) {
+                // copy all existing documents from shared directory to custom directory
+                ensureDataDictIndexAccess();
+                customDataDictIndexAccess.copyBaseDocumentsFromSharedDirectory(dqCat);
+            }
+        }
+
         ensureMetadataIndexAccess();
         customMetadataIndexAccess.insertOrUpdateCategory(category);
         customMetadataIndexAccess.commitChangesAndCloseWriter();
+        metadata = customMetadataIndexAccess.readCategoryMedatada();
     }
 
     public void deleteCategory(DQCategory category) {
         ensureMetadataIndexAccess();
         customMetadataIndexAccess.deleteCategory(category);
         customMetadataIndexAccess.commitChangesAndCloseWriter();
+        metadata = customMetadataIndexAccess.readCategoryMedatada();
     }
 
     public void reloadCategoryMetadata() {
@@ -195,5 +212,88 @@ public class CustomDictionaryHolder {
         customMetadataIndexAccess.createCategory(category);
         customMetadataIndexAccess.commitChangesAndCloseWriter();
         metadata = customMetadataIndexAccess.readCategoryMedatada();
+    }
+
+    public LocalDictionaryCache getDictionaryCache() {
+        if (localDictionaryCache == null) {
+            localDictionaryCache = new LocalDictionaryCache(this);
+        }
+        return localDictionaryCache;
+    }
+
+    public void closeDictionaryCache() {
+        if (localDictionaryCache != null) {
+            localDictionaryCache.close();
+        }
+    }
+
+    /**
+     * List all categories.
+     * 
+     * @return collection of category objects
+     */
+    public Collection<DQCategory> listCategories() {
+        return getMetadata().values();
+    }
+
+    /**
+     * List all categories.
+     * 
+     * @param includeOpenCategories whether include incomplete categories
+     * @return collection of category objects
+     */
+    public Collection<DQCategory> listCategories(boolean includeOpenCategories) {
+        if (includeOpenCategories) {
+            return getMetadata().values();
+        } else {
+            List<DQCategory> catList = new ArrayList<>();
+            for (DQCategory dqCat : getMetadata().values()) {
+                if (dqCat.getCompleteness()) {
+                    catList.add(dqCat);
+                }
+            }
+            return catList;
+        }
+    }
+
+    /**
+     * List all categories of a given {@link CategoryType}.
+     * 
+     * @param type the given category type
+     * @return collection of category objects of the given type
+     */
+    public List<DQCategory> listCategories(CategoryType type) {
+        List<DQCategory> catList = new ArrayList<>();
+        for (DQCategory dqCat : getMetadata().values()) {
+            if (type.equals(dqCat.getType())) {
+                catList.add(dqCat);
+            }
+        }
+        return catList;
+    }
+
+    /**
+     * Get the category object by its technical ID.
+     * 
+     * @param catId the technical ID of the category
+     * @return the category object
+     */
+    public DQCategory getCategoryMetadataById(String catId) {
+        return getMetadata().get(catId);
+    }
+
+    /**
+     * Get the category object by its functional ID (aka. name).
+     * 
+     * @param catName the functional ID (aka. name)
+     * @return the category object
+     */
+    public DQCategory getCategoryMetadataByName(String catName) {
+        for (DQCategory cat : getMetadata().values()) {
+            if (cat.getName().equals(catName)) {
+                return cat;
+            }
+        }
+        return null;
     }
 }

@@ -17,6 +17,7 @@ import static org.junit.Assert.assertEquals;
 import java.net.URI;
 import java.util.*;
 
+import org.apache.commons.lang3.SerializationUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -142,9 +143,9 @@ public class SemanticAnalyzerTest {
 
     @Test
     public void testTagadaWithCustomMetadata() {
-        CategoryRegistryManager.setUsingLocalCategoryRegistry(true);
-        CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder("t_test1");
-        builder.contextName("t_test1");
+        CategoryRegistryManager.setLocalRegistryPath("target/test_crm");
+        CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder("t_custom_meta");
+        builder.contextName("t_custom_meta");
 
         DQCategory firstNameCat = holder.getMetadata().get(SemanticCategoryEnum.FIRST_NAME.getTechnicalId());
         firstNameCat.setDeleted(true);
@@ -171,21 +172,23 @@ public class SemanticAnalyzerTest {
                 assertEquals("Unexpected Category.", EXPECTED_CATEGORIES.get(i), suggestedCategory);
             }
         }
-        CategoryRegistryManager.getInstance().removeCustomDictionaryHolder("t_test1");
+        CategoryRegistryManager.getInstance().removeCustomDictionaryHolder("t_custom_meta");
     }
 
     @Test
     public void testTagadaWithCustomDataDict() {
-        CategoryRegistryManager.setUsingLocalCategoryRegistry(true);
-        CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder("t_test2");
-        builder.contextName("t_test2");
+        CategoryRegistryManager.setLocalRegistryPath("target/test_crm");
+        CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder("t_custom_dd");
+        builder.contextName("t_custom_dd");
 
         DQCategory answerCategory = holder.getMetadata().get(SemanticCategoryEnum.ANSWER.getTechnicalId());
-        answerCategory.setModified(true);
-        holder.updateCategory(answerCategory);
+        DQCategory categoryClone = SerializationUtils.clone(answerCategory); // make a clone instead of modifying the shared
+                                                                             // category metadata
+        categoryClone.setModified(true);
+        holder.updateCategory(categoryClone);
 
         DQDocument newDoc = new DQDocument();
-        newDoc.setCategory(answerCategory);
+        newDoc.setCategory(categoryClone);
         newDoc.setId("the_doc_id");
         newDoc.setValues(new HashSet<>(Arrays.asList("true", "false")));
         holder.addDataDictDocument(Collections.singletonList(newDoc));
@@ -211,14 +214,14 @@ public class SemanticAnalyzerTest {
                 assertEquals("Unexpected Category.", EXPECTED_CATEGORIES.get(i), suggestedCategory);
             }
         }
-        CategoryRegistryManager.getInstance().removeCustomDictionaryHolder("t_test2");
+        CategoryRegistryManager.getInstance().removeCustomDictionaryHolder("t_custom_dd");
     }
 
     @Test
     public void testTagadaWithCustomRegex() {
-        CategoryRegistryManager.setUsingLocalCategoryRegistry(true);
-        CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder("t_test3");
-        builder.contextName("t_test3");
+        CategoryRegistryManager.setLocalRegistryPath("target/test_crm");
+        CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder("t_custom_re");
+        builder.contextName("t_custom_re");
 
         DQValidator dqValidator = new DQValidator();
         dqValidator.setPatternString("^(true|false)$");
@@ -256,7 +259,7 @@ public class SemanticAnalyzerTest {
                 assertEquals("Unexpected Category.", EXPECTED_CATEGORIES.get(i), suggestedCategory);
             }
         }
-        CategoryRegistryManager.getInstance().removeCustomDictionaryHolder("t_test3");
+        CategoryRegistryManager.getInstance().removeCustomDictionaryHolder("t_custom_re");
     }
 
     @Test

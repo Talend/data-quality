@@ -94,22 +94,17 @@ public class CategoryRegistryManager {
 
     private UserDefinedClassifier sharedRegexClassifier;
 
-    private LocalDictionaryCache localDictionaryCache;
-
     private static final Object indexExtractionLock = new Object();
 
     private CategoryRegistryManager() {
-
-        if (sharedMetadata.isEmpty()) {
-            try {
-                if (usingLocalCategoryRegistry) {
-                    loadRegisteredCategories();
-                } else {
-                    loadInitialCategories();
-                }
-            } catch (IOException | URISyntaxException e) {
-                LOGGER.error(e.getMessage(), e);
+        try {
+            if (usingLocalCategoryRegistry) {
+                loadRegisteredCategories();
+            } else {
+                loadInitialCategories();
             }
+        } catch (IOException | URISyntaxException e) {
+            LOGGER.error(e.getMessage(), e);
         }
     }
 
@@ -139,9 +134,7 @@ public class CategoryRegistryManager {
         if (folder != null && folder.trim().length() > 0) {
             localRegistryPath = folder;
             usingLocalCategoryRegistry = true;
-            if (instance == null) {
-                instance = new CategoryRegistryManager();
-            }
+            instance = new CategoryRegistryManager();
         } else {
             LOGGER.warn("Cannot set an empty path as local registy location. Use default one: " + localRegistryPath);
         }
@@ -155,23 +148,33 @@ public class CategoryRegistryManager {
     }
 
     /**
-     * @return the {@link LocalDictionaryCache} corresponding to the current context.
+     * @return the {@link LocalDictionaryCache} corresponding to the default context.
      */
     public LocalDictionaryCache getDictionaryCache() {
-        if (localDictionaryCache == null) {
-            return new LocalDictionaryCache(SHARED_FOLDER_NAME);
-        }
-        return localDictionaryCache;
+        return getDictionaryCache(DEFAULT_CONTEXT_NAME);
     }
 
     /**
-     * Reload the category from local registry. This method is typically called following category or dictionary enrichments.
+     * @param contextName name of the context
+     * @return the {@link LocalDictionaryCache} corresponding to a given context.
+     */
+    public LocalDictionaryCache getDictionaryCache(String contextName) {
+        return getCustomDictionaryHolder(contextName).getDictionaryCache();
+    }
+
+    /**
+     * Reload the category from local registry for a given context. This method is typically called following category or
+     * dictionary enrichments.
      */
     public void reloadCategoriesFromRegistry(String context) {
         LOGGER.info("Reload categories from local registry.");
         getCustomDictionaryHolder(context).reloadCategoryMetadata();
     }
 
+    /**
+     * Reload the category from local registry for the default context. This method is typically called following category or
+     * dictionary enrichments.
+     */
     public void reloadCategoriesFromRegistry() {
         reloadCategoriesFromRegistry(DEFAULT_CONTEXT_NAME);
     }
@@ -302,7 +305,7 @@ public class CategoryRegistryManager {
      * @return collection of category objects
      */
     public Collection<DQCategory> listCategories() {
-        return sharedMetadata.values();
+        return getCustomDictionaryHolder().listCategories();
     }
 
     /**
@@ -312,17 +315,7 @@ public class CategoryRegistryManager {
      * @return collection of category objects
      */
     public Collection<DQCategory> listCategories(boolean includeOpenCategories) {
-        if (includeOpenCategories) {
-            return sharedMetadata.values();
-        } else {
-            List<DQCategory> catList = new ArrayList<>();
-            for (DQCategory dqCat : sharedMetadata.values()) {
-                if (dqCat.getCompleteness()) {
-                    catList.add(dqCat);
-                }
-            }
-            return catList;
-        }
+        return getCustomDictionaryHolder().listCategories(includeOpenCategories);
     }
 
     /**
@@ -332,67 +325,41 @@ public class CategoryRegistryManager {
      * @return collection of category objects of the given type
      */
     public List<DQCategory> listCategories(CategoryType type) {
-        List<DQCategory> catList = new ArrayList<>();
-        for (DQCategory dqCat : sharedMetadata.values()) {
-            if (type.equals(dqCat.getType())) {
-                catList.add(dqCat);
-            }
-        }
-        return catList;
-    }
-
-    /**
-     * Get the label of a category by its functional ID.
-     * 
-     * @param catId the category ID
-     * @return the category label
-     */
-    public String getCategoryLabel(String catId) {
-        if ("".equals(catId)) {
-            return "";
-        }
-        return getCategoryMetadataByName(catId).getLabel();
+        return getCustomDictionaryHolder().listCategories(type);
     }
 
     /**
      * Get the full map between category ID and category metadata.
      */
-    public Map<String, DQCategory> getCategoryMetadataMap() {
+    public Map<String, DQCategory> getSharedCategoryMetadata() {
         return sharedMetadata;
     }
 
     /**
-     * Get the category object by its technical ID.
+     * Get the full map between category ID and category metadata from the default context.
+     */
+    public Map<String, DQCategory> getCategoryMetadataMap() {
+        return getCustomDictionaryHolder().getMetadata();
+    }
+
+    /**
+     * Get the category object by its technical ID from the default context.
      * 
      * @param catId the technical ID of the category
      * @return the category object
      */
     public DQCategory getCategoryMetadataById(String catId) {
-        return sharedMetadata.get(catId);
+        return getCustomDictionaryHolder().getCategoryMetadataById(catId);
     }
 
     /**
-     * Get the category object by its functional ID (aka. name).
+     * Get the category object by its functional ID (aka. name) from the default context.
      * 
      * @param catName the functional ID (aka. name)
      * @return the category object
      */
     public DQCategory getCategoryMetadataByName(String catName) {
-        for (DQCategory cat : sharedMetadata.values()) {
-            if (cat.getName().equals(catName)) {
-                return cat;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Get the category IDs.
-     *
-     * @return the category IDs
-     */
-    public Set<String> getCategoryIds() {
-        return sharedMetadata.keySet();
+        return getCustomDictionaryHolder().getCategoryMetadataByName(catName);
     }
 
     /**

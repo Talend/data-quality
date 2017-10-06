@@ -159,32 +159,30 @@ public class DictionaryUtils {
     }
 
     public static DQDocument dictionaryEntryFromDocument(Document doc) {
+        String catId = doc.getField(DictionarySearcher.F_CATID).stringValue();
         String catName = doc.getField(DictionarySearcher.F_WORD).stringValue();
-        return dictionaryEntryFromDocument(doc, catName);
+        return dictionaryEntryFromDocument(doc, catId, catName);
     }
 
-    public static DQDocument dictionaryEntryFromDocument(Document doc, String knownCategoryName) {
+    public static DQDocument dictionaryEntryFromDocument(Document doc, String knownCatId, String knownCatName) {
         DQDocument dqDoc = new DQDocument();
-        DQCategory dqCat = null;
-        if (knownCategoryName != null) {
-            dqCat = CategoryRegistryManager.getInstance().getCategoryMetadataByName(knownCategoryName);
-        }
-        if (dqCat != null) {
-            String catId = doc.getField(DictionarySearcher.F_CATID).stringValue();
-            dqCat.setId(catId);
-            String catName = doc.getField(DictionarySearcher.F_WORD).stringValue();
-            dqCat.setName(catName);
-            dqDoc.setCategory(dqCat);
+        DQCategory dqCat = CategoryRegistryManager.getInstance().getCategoryMetadataById(knownCatId);
 
-            String docId = doc.getField(DictionarySearcher.F_ID).stringValue();
-            dqDoc.setId(docId);
-            IndexableField[] synTermFields = doc.getFields(DictionarySearcher.F_RAW);
-            Set<String> synSet = new LinkedHashSet<>();
-            for (IndexableField f : synTermFields) {
-                synSet.add(f.stringValue());
-            }
-            dqDoc.setValues(synSet);
+        if (dqCat == null) {
+            dqCat = new DQCategory();
+            dqCat.setId(knownCatId);
+            dqCat.setName(knownCatName);
         }
+        dqDoc.setCategory(dqCat);
+
+        String docId = doc.getField(DictionarySearcher.F_ID).stringValue();
+        dqDoc.setId(docId);
+        IndexableField[] synTermFields = doc.getFields(DictionarySearcher.F_RAW);
+        Set<String> synSet = new LinkedHashSet<>();
+        for (IndexableField f : synTermFields) {
+            synSet.add(f.stringValue());
+        }
+        dqDoc.setValues(synSet);
         return dqDoc;
     }
 

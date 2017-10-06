@@ -37,7 +37,7 @@ public class CustomMetadataIndexAccess extends AbstractCustomIndexAccess {
         LOGGER.debug("Metadata index is not readable, trying to make a copy from shared metadata.");
         try {
             if (getWriter().maxDoc() == 0) {
-                for (DQCategory dqCat : CategoryRegistryManager.getInstance().getCategoryMetadataMap().values()) {
+                for (DQCategory dqCat : CategoryRegistryManager.getInstance().getSharedCategoryMetadata().values()) {
                     createCategory(dqCat);
                 }
                 commitChangesAndCloseWriter();
