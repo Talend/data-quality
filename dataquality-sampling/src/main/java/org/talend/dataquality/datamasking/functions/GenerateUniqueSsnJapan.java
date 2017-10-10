@@ -33,7 +33,7 @@ public class GenerateUniqueSsnJapan extends AbstractGenerateUniqueSsn {
     @Override
     protected List<AbstractField> createFieldsListFromPattern() {
         List<AbstractField> fields = new ArrayList<AbstractField>();
-        fields.add(new FieldInterval(BigInteger.ONE, new BigInteger("999999999999")));
+        fields.add(new FieldInterval(BigInteger.ONE, BigInteger.valueOf(999999999999L)));
         return fields;
     }
 

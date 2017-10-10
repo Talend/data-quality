@@ -71,7 +71,7 @@ public class GenerateUniqueSsnIndia extends AbstractGenerateUniqueSsn {
         List<AbstractField> fields = new ArrayList<AbstractField>();
 
         fields.add(new FieldInterval(BigInteger.ONE, BigInteger.valueOf(9)));
-        fields.add(new FieldInterval(BigInteger.ZERO, new BigInteger("9999999999")));
+        fields.add(new FieldInterval(BigInteger.ZERO, BigInteger.valueOf(9999999999L)));
 
         checkSumSize = 1;
         return fields;

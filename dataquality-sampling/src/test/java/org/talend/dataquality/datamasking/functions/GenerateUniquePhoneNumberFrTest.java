@@ -34,9 +34,9 @@ public class GenerateUniquePhoneNumberFrTest {
     @Test
     public void testValidWithFormat() {
         output = gnf.generateMaskedRow("01.42.95.45.24");
-        assertEquals("01.42.64.32.92", output);
+        assertEquals("01.42.97.75.96", output);
         output = gnf.generateMaskedRow("(0033) 6 48 98 75 12");
-        assertEquals("(0033) 6 48 65 98 96", output);
+        assertEquals("(0033) 6 48 06 10 48", output);
     }
 
     @Test
@@ -44,7 +44,7 @@ public class GenerateUniquePhoneNumberFrTest {
         gnf.setKeepFormat(false);
         // with spaces
         output = gnf.generateMaskedRow("01.42.95.45.24");
-        assertEquals("0142643292", output);
+        assertEquals("0142977596", output);
     }
 
     @Test

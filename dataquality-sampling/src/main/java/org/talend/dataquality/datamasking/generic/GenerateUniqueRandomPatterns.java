@@ -133,7 +133,7 @@ public class GenerateUniqueRandomPatterns implements Serializable {
             numberToMask = numberToMask.add(listToMask.get(i).multiply(basedWidthsList.get(i)));
 
         if (key == null)
-            setKey((new SecureRandom()).nextInt() % 10000 + 1000);
+            setKey((new SecureRandom()).nextInt(Integer.MAX_VALUE - 1000000) + 1000000);
         BigInteger coprimeNumber = BigInteger.valueOf(findLargestCoprime(Math.abs(key)));
         // uniqueMaskedNumber is the number we masked
         BigInteger uniqueMaskedNumber = (numberToMask.multiply(coprimeNumber)).mod(longestWidth);
@@ -157,17 +157,11 @@ public class GenerateUniqueRandomPatterns implements Serializable {
      * @return the largest coprime number with longestWidth less than key
      */
     private long findLargestCoprime(long key) {
-        if (pgcdModulo(BigInteger.valueOf(key), longestWidth).equals(BigInteger.ONE)) {
+        if (BigInteger.valueOf(key).gcd(longestWidth).equals(BigInteger.ONE)) {
             return key;
         } else {
             return findLargestCoprime(key - 1);
         }
-    }
-
-    private BigInteger pgcdModulo(BigInteger a, BigInteger b) {
-        if (b.equals(BigInteger.ZERO))
-            return a;
-        return pgcdModulo(b, a.mod(b));
     }
 
     /**

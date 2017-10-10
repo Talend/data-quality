@@ -34,14 +34,14 @@ public class GenerateUniquePhoneNumberUkTest {
     @Test
     public void testValidWithFormat() {
         output = gnu.generateMaskedRow("07700 900343");
-        assertEquals("07707 375307", output);
+        assertEquals("07706 359939", output);
     }
 
     @Test
     public void testValidWithoutFormat() {
         gnu.setKeepFormat(false);
         output = gnu.generateMaskedRow("07700 900343");
-        assertEquals("07707375307", output);
+        assertEquals("07706359939", output);
     }
 
     @Test

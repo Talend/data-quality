@@ -1,5 +1,6 @@
 package org.talend.dataquality.datamasking.functions;
 
+import org.apache.spark.sql.sources.In;
 import org.talend.dataquality.datamasking.generic.GenerateUniqueRandomPatterns;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
@@ -30,7 +31,7 @@ public abstract class AbstractGenerateUniquePhoneNumber extends Function<String>
     public void setRandom(Random rand) {
         super.setRandom(rand);
         replaceNumeric.parse(null, false, rand);
-        phoneNumberPattern.setKey(Math.abs(rand.nextInt()) % 10000 + 1000);
+        phoneNumberPattern.setKey(rand.nextInt(Integer.MAX_VALUE - 1000000) + 1000000);
     }
 
     @Override

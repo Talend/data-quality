@@ -46,9 +46,9 @@ public class FieldInterval extends AbstractField {
         try {
             bigInteger = new BigInteger(str);
             if (bigInteger.compareTo(minInterval) < 0 || bigInteger.compareTo(maxInterval) > 0)
-                return new BigInteger("-1");
+                return BigInteger.valueOf(-1);
         } catch (NumberFormatException e) {
-            return new BigInteger("-1");
+            return BigInteger.valueOf(-1);
         }
         return bigInteger.subtract(minInterval);
     }

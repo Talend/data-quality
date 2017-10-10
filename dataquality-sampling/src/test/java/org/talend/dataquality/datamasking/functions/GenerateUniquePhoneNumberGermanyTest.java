@@ -34,14 +34,14 @@ public class GenerateUniquePhoneNumberGermanyTest {
     @Test
     public void testValidWithFormat() {
         output = gng.generateMaskedRow("(089) / 636-48018");
-        assertEquals("(089) / 749-23882", output);
+        assertEquals("(089) / 829-42714", output);
     }
 
     @Test
     public void testValidWithoutFormat() {
         gng.setKeepFormat(false);
         output = gng.generateMaskedRow("(089) / 636-48018");
-        assertEquals("08974923882", output);
+        assertEquals("08982942714", output);
     }
 
     @Test

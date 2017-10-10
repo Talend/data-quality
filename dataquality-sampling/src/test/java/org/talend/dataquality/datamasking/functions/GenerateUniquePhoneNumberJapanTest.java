@@ -34,14 +34,14 @@ public class GenerateUniquePhoneNumberJapanTest {
     @Test
     public void testValidWithFormat() {
         output = gnj.generateMaskedRow("49-92 8 7895");
-        assertEquals("49-01 0 9355", output);
+        assertEquals("49-33 6 4835", output);
     }
 
     @Test
     public void testValidWithoutFormat() {
         gnj.setKeepFormat(false);
         output = gnj.generateMaskedRow("49-92 8 7895");
-        assertEquals("490109355", output);
+        assertEquals("493364835", output);
     }
 
     @Test

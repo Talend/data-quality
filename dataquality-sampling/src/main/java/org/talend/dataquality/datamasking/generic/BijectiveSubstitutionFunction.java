@@ -46,7 +46,7 @@ public class BijectiveSubstitutionFunction extends Function<String> {
                 fieldList.add(new FieldDate(definition.getMin().intValue(), definition.getMax().intValue()));
                 break;
             case INTERVAL:
-                if (definition.getMin().compareTo(BigInteger.ZERO) < 0)
+                if (definition.getMin().signum() < 0)
                     throw new DQRuntimeException("The minimum value " + definition.getMin() + " must be positive");
                 if (definition.getMin().compareTo(definition.getMax()) > 0)
                     throw new DQRuntimeException("The minimum value " + definition.getMin()

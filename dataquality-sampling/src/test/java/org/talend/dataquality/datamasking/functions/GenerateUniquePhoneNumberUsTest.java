@@ -56,7 +56,7 @@ public class GenerateUniquePhoneNumberUsTest {
     @Test
     public void testGood1() {
         output = gnu.generateMaskedRow("35-6/42-5/9 865");
-        assertEquals("35-6/41-6/5 815", output);
+        assertEquals("35-6/45-0/7 585", output);
     }
 
     @Test
@@ -64,7 +64,7 @@ public class GenerateUniquePhoneNumberUsTest {
         gnu.setKeepFormat(false);
         // with spaces
         output = gnu.generateMaskedRow("356-425-9865");
-        assertEquals("3564165815", output);
+        assertEquals("3564507585", output);
     }
 
     @Test
