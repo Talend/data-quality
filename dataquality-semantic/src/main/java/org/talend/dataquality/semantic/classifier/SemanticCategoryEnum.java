@@ -12,12 +12,8 @@
 // ============================================================================
 package org.talend.dataquality.semantic.classifier;
 
-import java.util.Map;
-
 import org.apache.log4j.Logger;
-import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.model.CategoryType;
-import org.talend.dataquality.semantic.model.DQCategory;
 
 /**
  * Enumeration of all supported semantic categories.
@@ -301,46 +297,4 @@ public enum SemanticCategoryEnum {
             return null;
         }
     }
-
-    /**
-     * Run the program to check it the content of this enumeration is identical to the metadata in lucene index.
-     */
-    public static void main(String[] args) {
-        Map<String, DQCategory> idMap = CategoryRegistryManager.getInstance().getSharedCategoryMetadata();
-
-        int count = 0;
-        for (SemanticCategoryEnum catEnum : SemanticCategoryEnum.values()) {
-            DQCategory meta = idMap.get(catEnum.getTechnicalId());
-            if (meta != null) {
-                String enumString = catEnum.name() + "(\"" + meta.getId() + "\", \"" + catEnum.getDisplayName() + "\", \""
-                        + catEnum.getDescription() + "\", CategoryType." + catEnum.getCategoryType().name() + ", "
-                        + catEnum.getCompleteness() + "),";
-
-                String dqCatString = meta.getName() + "(\"" + meta.getId() + "\", \"" + meta.getLabel() + "\", \""
-                        + meta.getDescription() + "\", CategoryType." + meta.getType().name() + ", " + meta.getCompleteness()
-                        + "),";
-
-                if (!enumString.equals(dqCatString)) {
-                    System.err.println(">>> The enumeration item {" + catEnum.name()
-                            + "} differs from actual metadata. Please update one of them.");
-                }
-                System.out.println("Enum: " + enumString);
-                System.out.println("Meta: " + dqCatString + "\n");
-
-                count++;
-            }
-        }
-
-        for (DQCategory meta : idMap.values()) {
-            if (SemanticCategoryEnum.getCategoryById(meta.getName()) == null) {
-                System.err.println(">>> Could not find category {" + meta.getName() + "} in current enumeration. Please add it.");
-
-                String dqCatString = meta.getName() + "(\"" + meta.getId() + "\", \"" + meta.getLabel() + "\", \""
-                        + meta.getDescription() + "\", CategoryType." + meta.getType().name() + ", " + meta.getCompleteness()
-                        + "),";
-                System.err.println(dqCatString + "\n");
-            }
-        }
-    }
-
 }

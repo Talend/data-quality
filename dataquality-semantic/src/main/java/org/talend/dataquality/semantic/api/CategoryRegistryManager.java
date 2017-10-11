@@ -262,11 +262,11 @@ public class CategoryRegistryManager {
         // add the parent references in the child
         for (Map.Entry<String, Set<String>> entry : categoryToParents.entrySet()) {
             if (sharedMetadata.get(entry.getKey()) != null) {
-                List<DQCategory> parents = new ArrayList<>();
-                for (String child : entry.getValue()) {
-                    parents.add(new DQCategory(child));
+                List<DQCategory> parentCategoryList = new ArrayList<>();
+                for (String childCategoryId : entry.getValue()) {
+                    parentCategoryList.add(new DQCategory(childCategoryId));
                 }
-                sharedMetadata.get(entry.getKey()).setParents(parents);
+                sharedMetadata.get(entry.getKey()).setParents(parentCategoryList);
             }
         }
     }

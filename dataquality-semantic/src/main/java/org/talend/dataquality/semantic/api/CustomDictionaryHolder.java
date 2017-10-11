@@ -204,7 +204,7 @@ public class CustomDictionaryHolder {
 
     public void addRegexCategory(DQCategory category) {
         ensureRegexClassifierAccess();
-        UserDefinedCategory regEx = UserDefinedCategory.fromDQCategory(category);
+        UserDefinedCategory regEx = DictionaryUtils.regexClassifierfromDQCategory(category);
         customRegexClassifierAccess.createRegex(regEx);
         regexClassifier = customRegexClassifierAccess.readUserDefinedClassifier();
 

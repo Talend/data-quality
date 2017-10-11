@@ -47,9 +47,9 @@ public class CategoryRecognizerBuilder {
 
     private Mode mode;
 
-    private URI ddPath;
+    private URI dataDictPath;
 
-    private URI kwPath;
+    private URI keywordPath;
 
     private URI regexPath;
 
@@ -59,11 +59,11 @@ public class CategoryRecognizerBuilder {
 
     private LuceneIndex keywordIndex;
 
-    private Directory ddDirectory;
+    private Directory dataDictDirectory;
 
-    private Directory ddCustomDirectory;
+    private Directory customDataDictDirectory;
 
-    private Directory kwDirectory;
+    private Directory keywordDirectory;
 
     private UserDefinedClassifier regexClassifier;
 
@@ -85,28 +85,28 @@ public class CategoryRecognizerBuilder {
         return this;
     }
 
-    public CategoryRecognizerBuilder ddPath(URI ddPath) {
-        this.ddPath = ddPath;
+    public CategoryRecognizerBuilder ddPath(URI dataDictPath) {
+        this.dataDictPath = dataDictPath;
         return this;
     }
 
-    public CategoryRecognizerBuilder ddDirectory(Directory ddDirectory) {
-        this.ddDirectory = ddDirectory;
+    public CategoryRecognizerBuilder ddDirectory(Directory dataDictDirectory) {
+        this.dataDictDirectory = dataDictDirectory;
         return this;
     }
 
-    public CategoryRecognizerBuilder ddCustomDirectory(Directory ddCustomDirectory) {
-        this.ddCustomDirectory = ddCustomDirectory;
+    public CategoryRecognizerBuilder ddCustomDirectory(Directory customDataDictDirectory) {
+        this.customDataDictDirectory = customDataDictDirectory;
         return this;
     }
 
-    public CategoryRecognizerBuilder kwPath(URI kwPath) {
-        this.kwPath = kwPath;
+    public CategoryRecognizerBuilder kwPath(URI keywordPath) {
+        this.keywordPath = keywordPath;
         return this;
     }
 
-    public CategoryRecognizerBuilder kwDirectory(Directory kwDirectory) {
-        this.kwDirectory = kwDirectory;
+    public CategoryRecognizerBuilder kwDirectory(Directory keywordDirectory) {
+        this.keywordDirectory = keywordDirectory;
         return this;
     }
 
@@ -130,11 +130,11 @@ public class CategoryRecognizerBuilder {
         switch (mode) {
         case LUCENE:
             Map<String, DQCategory> meta = getCategoryMetadata();
-            LuceneIndex sharedDict = getSharedDataDictIndex();
-            LuceneIndex customDict = getCustomDataDictIndex();
+            LuceneIndex sharedDataDict = getSharedDataDictIndex();
+            LuceneIndex customDataDict = getCustomDataDictIndex();
             LuceneIndex keyword = getKeywordIndex();
             UserDefinedClassifier regex = getRegexClassifier();
-            return new DefaultCategoryRecognizer(sharedDict, customDict, keyword, regex, meta);
+            return new DefaultCategoryRecognizer(sharedDataDict, customDataDict, keyword, regex, meta);
         case ELASTIC_SEARCH:
             throw new IllegalArgumentException("Elasticsearch mode is not supported any more");
         default:
@@ -152,18 +152,18 @@ public class CategoryRecognizerBuilder {
 
     private LuceneIndex getSharedDataDictIndex() {
         if (dataDictIndex == null) {
-            if (ddDirectory == null) {
-                if (ddPath == null) {
+            if (dataDictDirectory == null) {
+                if (dataDictPath == null) {
                     try {
-                        ddPath = CategoryRecognizerBuilder.class.getResource(DEFAULT_DD_PATH).toURI();
+                        dataDictPath = CategoryRecognizerBuilder.class.getResource(DEFAULT_DD_PATH).toURI();
                     } catch (URISyntaxException e) {
                         LOGGER.error(e.getMessage(), e);
                     }
                 }
-                dataDictIndex = new LuceneIndex(ddPath, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY);
+                dataDictIndex = new LuceneIndex(dataDictPath, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY);
             } else {
-                if (ddPath == null) {
-                    dataDictIndex = new LuceneIndex(ddDirectory, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY);
+                if (dataDictPath == null) {
+                    dataDictIndex = new LuceneIndex(dataDictDirectory, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY);
                 } else {
                     throw new IllegalArgumentException("Please call either ddDirectory() or ddPath() but not both!");
                 }
@@ -174,7 +174,7 @@ public class CategoryRecognizerBuilder {
 
     private LuceneIndex getCustomDataDictIndex() {
         if (dataDictCustomIndex == null) {
-            if (ddCustomDirectory == null) {
+            if (customDataDictDirectory == null) {
                 // load from t_default context
                 Directory dir = CategoryRegistryManager.getInstance().getCustomDictionaryHolder(contextName)
                         .getDataDictDirectory();
@@ -182,7 +182,7 @@ public class CategoryRecognizerBuilder {
                     dataDictCustomIndex = new LuceneIndex(dir, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY);
                 }
             } else {
-                dataDictCustomIndex = new LuceneIndex(ddCustomDirectory, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY);
+                dataDictCustomIndex = new LuceneIndex(customDataDictDirectory, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY);
             }
         }
         return dataDictCustomIndex;
@@ -190,18 +190,18 @@ public class CategoryRecognizerBuilder {
 
     private LuceneIndex getKeywordIndex() {
         if (keywordIndex == null) {
-            if (kwDirectory == null) {
-                if (kwPath == null) {
+            if (keywordDirectory == null) {
+                if (keywordPath == null) {
                     try {
-                        kwPath = CategoryRecognizerBuilder.class.getResource(DEFAULT_KW_PATH).toURI();
+                        keywordPath = CategoryRecognizerBuilder.class.getResource(DEFAULT_KW_PATH).toURI();
                     } catch (URISyntaxException e) {
                         LOGGER.error(e.getMessage(), e);
                     }
                 }
-                keywordIndex = new LuceneIndex(kwPath, DictionarySearchMode.MATCH_SEMANTIC_KEYWORD);
+                keywordIndex = new LuceneIndex(keywordPath, DictionarySearchMode.MATCH_SEMANTIC_KEYWORD);
             } else {
-                if (kwPath == null) {
-                    keywordIndex = new LuceneIndex(kwDirectory, DictionarySearchMode.MATCH_SEMANTIC_KEYWORD);
+                if (keywordPath == null) {
+                    keywordIndex = new LuceneIndex(keywordDirectory, DictionarySearchMode.MATCH_SEMANTIC_KEYWORD);
                 } else {
                     throw new IllegalArgumentException("Please call either kwDirectory() or kwPath() but not both!");
                 }
@@ -237,14 +237,6 @@ public class CategoryRecognizerBuilder {
 
     public Mode getMode() {
         return mode;
-    }
-
-    public URI getDDPath() {
-        return ddPath;
-    }
-
-    public URI getKWPath() {
-        return kwPath;
     }
 
     public void initIndex() {

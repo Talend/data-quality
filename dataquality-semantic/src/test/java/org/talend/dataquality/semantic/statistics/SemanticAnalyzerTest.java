@@ -33,7 +33,7 @@ import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
 
 public class SemanticAnalyzerTest {
 
-    final List<String[]> TEST_RECORDS = new ArrayList<String[]>() {
+    private final List<String[]> TEST_RECORDS = new ArrayList<String[]>() {
 
         private static final long serialVersionUID = 1L;
 
@@ -44,7 +44,7 @@ public class SemanticAnalyzerTest {
         }
     };
 
-    final List<String[]> TEST_RECORDS_TAGADA = new ArrayList<String[]>() {
+    private final List<String[]> TEST_RECORDS_TAGADA = new ArrayList<String[]>() {
 
         private static final long serialVersionUID = 1L;
 
@@ -54,10 +54,10 @@ public class SemanticAnalyzerTest {
         }
     };
 
-    final List<String> EXPECTED_CATEGORY_TAGADA = Arrays.asList(
+    private final List<String> EXPECTED_CATEGORY_TAGADA = Arrays.asList(
             new String[] { "", SemanticCategoryEnum.LAST_NAME.name(), SemanticCategoryEnum.FIRST_NAME.name(), "", "", "" });
 
-    final List<String[]> TEST_RECORDS_CITY_METADATA = new ArrayList<String[]>() {
+    private final List<String[]> TEST_RECORDS_CITY_METADATA = new ArrayList<String[]>() {
 
         private static final long serialVersionUID = 1L;
 
@@ -85,10 +85,10 @@ public class SemanticAnalyzerTest {
         }
     };
 
-    final List<String> EXPECTED_FR_COMMUNE_CATEGORY_METADATA = Arrays
+    private final List<String> EXPECTED_FR_COMMUNE_CATEGORY_METADATA = Arrays
             .asList(new String[] { "", SemanticCategoryEnum.LAST_NAME.name() });
 
-    final List<String[]> TEST_RECORDS_PHONE_METADATA = new ArrayList<String[]>() {
+    private final List<String[]> TEST_RECORDS_PHONE_METADATA = new ArrayList<String[]>() {
 
         private static final long serialVersionUID = 1L;
 
@@ -100,7 +100,8 @@ public class SemanticAnalyzerTest {
         }
     };
 
-    final List<String> EXPECTED_PHONE_CATEGORY_METADATA = Arrays.asList(new String[] { SemanticCategoryEnum.PHONE.name() });
+    private final List<String> EXPECTED_PHONE_CATEGORY_METADATA = Arrays
+            .asList(new String[] { SemanticCategoryEnum.PHONE.name() });
 
     private CategoryRecognizerBuilder builder;
 

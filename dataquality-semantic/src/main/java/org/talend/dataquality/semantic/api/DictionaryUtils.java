@@ -30,11 +30,12 @@ import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
+import org.talend.dataquality.semantic.classifier.custom.UserDefinedCategory;
+import org.talend.dataquality.semantic.classifier.custom.UserDefinedRegexValidator;
+import org.talend.dataquality.semantic.filter.impl.CharSequenceFilter;
+import org.talend.dataquality.semantic.filter.impl.CharSequenceFilter.CharSequenceFilterType;
 import org.talend.dataquality.semantic.index.DictionarySearcher;
-import org.talend.dataquality.semantic.model.CategoryType;
-import org.talend.dataquality.semantic.model.DQCategory;
-import org.talend.dataquality.semantic.model.DQDocument;
-import org.talend.dataquality.semantic.model.ValidationMode;
+import org.talend.dataquality.semantic.model.*;
 
 public class DictionaryUtils {
 
@@ -192,5 +193,31 @@ public class DictionaryUtils {
             writer.addIndexes(srcDir);
             writer.commit();
         }
+    }
+
+    public static final UserDefinedCategory regexClassifierfromDQCategory(DQCategory category) {
+        DQRegEx dqRegEx = category.getRegEx();
+        DQFilter dqFilter = dqRegEx.getFilter();
+        DQValidator dqValidator = dqRegEx.getValidator();
+
+        UserDefinedCategory regEx = new UserDefinedCategory(category.getName(), category.getLabel());
+        regEx.setId(category.getId());
+        regEx.setDescription(category.getDescription());
+        regEx.setMainCategory(dqRegEx.getMainCategory());
+
+        if (dqFilter != null) {
+            CharSequenceFilter filter = new CharSequenceFilter();
+            filter.setFilterParam(dqFilter.getFilterParam());
+            filter.setFilterType(CharSequenceFilterType.valueOf(dqFilter.getFilterType()));
+            regEx.setFilter(filter);
+        }
+
+        if (dqValidator != null) {
+            UserDefinedRegexValidator validator = new UserDefinedRegexValidator();
+            validator.setPatternString(dqValidator.getPatternString());
+            validator.setSubValidatorClassName(dqValidator.getSubValidatorClassName());
+            regEx.setValidator(validator);
+        }
+        return regEx;
     }
 }

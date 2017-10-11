@@ -64,7 +64,7 @@ public class CustomDocumentIndexAccess extends AbstractCustomIndexAccess {
      */
     public void insertOrUpdateDocument(List<DQDocument> documents) throws IOException {
         for (DQDocument document : documents) {
-            final Term term = new Term("docid", document.getId());
+            final Term term = new Term(DictionarySearcher.F_ID, document.getId());
             IndexSearcher searcher = mgr.acquire();
             if (searcher.search(new TermQuery(term), 1).totalHits == 1) {
                 LOGGER.debug("updateDocument " + document);
@@ -85,7 +85,7 @@ public class CustomDocumentIndexAccess extends AbstractCustomIndexAccess {
         for (DQDocument document : documents) {
 
             LOGGER.debug("deleteDocument " + document);
-            Term luceneId = new Term("docid", document.getId());
+            Term luceneId = new Term(DictionarySearcher.F_ID, document.getId());
             getWriter().deleteDocuments(luceneId);
         }
     }
@@ -108,9 +108,7 @@ public class CustomDocumentIndexAccess extends AbstractCustomIndexAccess {
             }
             commitChangesAndCloseWriter();
             reader.close();
-        } catch (IOException e) {
-            LOGGER.error(e.getMessage(), e);
-        } catch (URISyntaxException e) {
+        } catch (IOException | URISyntaxException e) {
             LOGGER.error(e.getMessage(), e);
         }
     }
