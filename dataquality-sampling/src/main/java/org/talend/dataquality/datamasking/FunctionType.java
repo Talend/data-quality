@@ -90,6 +90,7 @@ public enum FunctionType {
     GENERATE_UNIQUE_SSN_GERMANY(GenerateUniqueSsnGermany.class),
     GENERATE_UNIQUE_SSN_INDIA(GenerateUniqueSsnIndia.class),
     GENERATE_UUID(GenerateUuid.class),
+    GENERATE_FROM_DICTIONARIES(GenerateFromDictionaries.class),
     KEEP_FIRST_AND_GENERATE(KeepFirstChars.class),
     KEEP_FIRST_AND_GENERATE_INT(KeepFirstCharsInteger.class),
     KEEP_FIRST_AND_GENERATE_LONG(KeepFirstCharsLong.class),
