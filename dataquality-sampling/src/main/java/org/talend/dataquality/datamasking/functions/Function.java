@@ -47,7 +47,7 @@ public abstract class Function<T> implements Serializable {
 
     protected boolean keepInvalidPattern = false;
 
-    protected boolean keeEmpty = false;
+    protected boolean keepEmpty = false;
 
     protected boolean keepFormat = false;
 
@@ -106,7 +106,7 @@ public abstract class Function<T> implements Serializable {
     }
 
     public void setKeepEmpty(boolean empty) {
-        this.keeEmpty = empty;
+        this.keepEmpty = empty;
     }
 
     public void setKeepInvalidPattern(boolean keepInvalidPattern) {
@@ -147,7 +147,7 @@ public abstract class Function<T> implements Serializable {
         }
     }
 
-    private String clean(String extraParameter) {
+    protected String clean(String extraParameter) {
         StringBuilder res = new StringBuilder(extraParameter.trim());
         while (res.length() > 0 && res.charAt(0) == ',')
             res.deleteCharAt(0);
@@ -161,7 +161,7 @@ public abstract class Function<T> implements Serializable {
             return null;
         }
 
-        if (t != null && keeEmpty && String.valueOf(t).trim().isEmpty())
+        if (t != null && keepEmpty && String.valueOf(t).trim().isEmpty())
             return t;
 
         return doGenerateMaskedField(t);

@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -208,4 +209,14 @@ public class LocalDictionaryCacheTest extends CategoryRegistryManagerAbstract {
         }
     }
 
+    @Test
+    public void testListDocuments() {
+        LocalDictionaryCache dict = CategoryRegistryManager.getInstance().getDictionaryCache();
+        List<DQDocument> listDocuments = dict.listDocuments(SemanticCategoryEnum.FR_COMMUNE.name(), 0, 50);
+        for (DQDocument dqDocument : listDocuments) {
+            // dqDocument.getValues().toArray()
+            System.out.println(dqDocument.toString());
+        }
+
+    }
 }
