@@ -413,9 +413,8 @@ public class RichRecord extends Record {
         if (isMerged || isMaster) {// Master records
             // Update group id.
             String finalGID = this.getGroupId();
-            if (StringUtils.isBlank(finalGID)) {
-                finalGID = computeGID(oldGID2New);
-            }
+            // The GID of master record should use recent GID too
+            finalGID = computeGID(oldGID2New);
             if (StringUtils.isBlank(finalGID)) {
                 finalGID = UUID.randomUUID().toString();
             }
