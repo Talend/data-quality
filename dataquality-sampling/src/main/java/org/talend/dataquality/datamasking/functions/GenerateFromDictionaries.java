@@ -17,6 +17,9 @@ import java.util.List;
 import java.util.Random;
 
 import org.apache.log4j.Logger;
+import org.talend.dataquality.semantic.api.CategoryRegistryManager;
+import org.talend.dataquality.semantic.api.LocalDictionaryCache;
+import org.talend.dataquality.semantic.model.DQDocument;
 
 /**
  * created by msjian on 2017.10.11.
@@ -41,8 +44,36 @@ public class GenerateFromDictionaries extends Function<String> {
     }
 
     @Override
-    public void parse(String extraParameter, boolean keepNullValues, Random rand) {
-        // TODO
+    public void parse(String semanticCategory, boolean keepNullValues, Random rand) {
+        if (semanticCategory != null) {
+            parameters = super.clean(semanticCategory).split(","); //$NON-NLS-1$
+            if (parameters.length == 1) {
+                LocalDictionaryCache dict = CategoryRegistryManager.getInstance().getDictionaryCache();
+                List<DQDocument> listDocuments = dict.listDocuments(semanticCategory, 0, 10);
+                List<String> aux = new ArrayList();
+                for (DQDocument dqDocument : listDocuments) {
+                    aux.addAll(dqDocument.getValues());
+                }
+                parameters = aux.toArray(new String[aux.size()]);
+            }
+            for (int i = 0; i < parameters.length; i++) {
+                parameters[i] = parameters[i].trim();
+            }
+
+        }
+
+        setKeepNull(keepNullValues);
+        if (rand != null) {
+            setRandom(rand);
+        }
+
+        for (int i = 0; i < parameters.length; ++i) {
+            try {
+                genericTokens.add(getOutput(parameters[i]));
+            } catch (NumberFormatException e) {
+                LOGGER.info("The parameter " + parameters[i] + " can't be parsed in the required type.");
+            }
+        }
     }
 
     protected String getOutput(String string) {

@@ -17,6 +17,9 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.talend.dataquality.datamasking.functions.DateVariance;
 import org.talend.dataquality.datamasking.functions.Function;
+import org.talend.dataquality.datamasking.functions.GenerateFromDictionaries;
+import org.talend.dataquality.semantic.api.CategoryRegistryManager;
+import org.talend.dataquality.semantic.model.CategoryType;
 
 public class SemanticMaskerFunctionFactory {
 
@@ -46,6 +49,16 @@ public class SemanticMaskerFunctionFactory {
                 LOGGER.debug(e.getMessage(), e);
             }
         }
+
+        if ("string".equals(dataType)) {
+            org.talend.dataquality.semantic.model.DQCategory category = CategoryRegistryManager.getInstance()
+                    .getCategoryMetadataByName(semanticCategory);
+            if (category != null && CategoryType.DICT.equals(category.getType())) {
+                function = new GenerateFromDictionaries();
+                function.parse(semanticCategory, true, null);
+            }
+        }
+
         if (function == null) {
             switch (dataType) {
             case "numeric":

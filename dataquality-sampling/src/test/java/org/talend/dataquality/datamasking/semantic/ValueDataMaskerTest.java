@@ -20,6 +20,7 @@ import java.util.Random;
 
 import org.junit.Test;
 import org.talend.dataquality.duplicating.AllDataqualitySamplingTests;
+import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 
 public class ValueDataMaskerTest {
 
@@ -37,15 +38,15 @@ public class ValueDataMaskerTest {
             put(new String[] { "sdkjs@talend.com", "UNKNOWN", "string" }, "vkfzz@psbbqg.aqa");
 
             // 1. FIRST_NAME
-            put(new String[] { "", MaskableCategoryEnum.FIRST_NAME.name(), "string" }, "");
-            put(new String[] { "John", MaskableCategoryEnum.FIRST_NAME.name(), "string" }, "Josiah");
+            put(new String[] { "", SemanticCategoryEnum.FIRST_NAME.name(), "string" }, "");
+            put(new String[] { "John", SemanticCategoryEnum.FIRST_NAME.name(), "string" }, "Josiah");
 
             // 2. LAST_NAME
-            put(new String[] { "Dupont", MaskableCategoryEnum.LAST_NAME.name(), "string" }, "Robbins");
+            put(new String[] { "Dupont", SemanticCategoryEnum.LAST_NAME.name(), "string" }, "Robbins");
 
             // 3. EMAIL
             put(new String[] { "sdkjs@talend.com", MaskableCategoryEnum.EMAIL.name(), "String" }, "XXXXX@talend.com");
-            put(new String[] { "\t", MaskableCategoryEnum.FIRST_NAME.name(), "string" }, "\t");
+            put(new String[] { "\t", MaskableCategoryEnum.EMAIL.name(), "string" }, "\t");
 
             // 4. PHONE
             put(new String[] { "3333456789", MaskableCategoryEnum.US_PHONE.name(), "String" }, "3333818829");
@@ -53,15 +54,15 @@ public class ValueDataMaskerTest {
             put(new String[] { "3333116789", MaskableCategoryEnum.US_PHONE.name(), "String" }, "2873888808");
             put(new String[] { "321938", MaskableCategoryEnum.FR_PHONE.name(), "String" }, "459494");
             put(new String[] { "++044dso44aa", MaskableCategoryEnum.DE_PHONE.name(), "String" }, "++287dso38aa");
-            put(new String[] { "666666666", MaskableCategoryEnum.UK_PHONE.name(), "String" }, "666371758");
-            put(new String[] { "777777777abc", MaskableCategoryEnum.UK_PHONE.name(), "String" }, "775767051abc");
+            put(new String[] { "666666666", MaskableCategoryEnum.UK_PHONE.name(), "String" }, "663330954");
+            put(new String[] { "777777777abc", MaskableCategoryEnum.UK_PHONE.name(), "String" }, "778886113abc");
             put(new String[] { "(301) 231-9473 x 2364", MaskableCategoryEnum.US_PHONE.name(), "String" },
-                    "(301) 231-9452 x 1404");
+                    "(301) 231-9416 x 7116");
             put(new String[] { "(563) 557-7600 Ext. 2890", MaskableCategoryEnum.US_PHONE.name(), "String" },
                     "(563) 557-7618 Ext. 3290");
 
             // 5. JOB_TITLE
-            put(new String[] { "CEO", MaskableCategoryEnum.JOB_TITLE.name(), "String" }, "Cafeteria Cook");
+            put(new String[] { "CEO", SemanticCategoryEnum.JOB_TITLE.name(), "String" }, "Cafeteria Cook");
 
             // 6. ADDRESS_LINE
             put(new String[] { "9 Rue Pagès", MaskableCategoryEnum.ADDRESS_LINE.name(), "String" }, "6 Rue XXXXX");
@@ -88,11 +89,11 @@ public class ValueDataMaskerTest {
             put(new String[] { "634217823", MaskableCategoryEnum.UK_SSN.name(), "String" }, "RB 87 38 88 D");
 
             // Company
-            put(new String[] { "Talend", MaskableCategoryEnum.COMPANY.name(), "String" }, "Gilead Sciences");
+            put(new String[] { "Talend", SemanticCategoryEnum.COMPANY.name(), "String" }, "Gilead Sciences");
             // FR Commune
-            put(new String[] { "Amancey", MaskableCategoryEnum.FR_COMMUNE.name(), "String" }, "Dieppe");
+            put(new String[] { "Amancey", SemanticCategoryEnum.FR_COMMUNE.name(), "String" }, "Dieppe");
             // Organization
-            put(new String[] { "Kiva", MaskableCategoryEnum.ORGANIZATION.name(), "String" }, "Environmental Defense");
+            put(new String[] { "Kiva", SemanticCategoryEnum.ORGANIZATION.name(), "String" }, "Environmental Defense");
 
             // EMPTY
             put(new String[] { " ", "UNKNOWN", "integer" }, " ");
@@ -138,6 +139,7 @@ public class ValueDataMaskerTest {
             System.out.print("[" + semanticCategory + "]\n\t" + inputValue + " => ");
             final ValueDataMasker masker = new ValueDataMasker(semanticCategory, dataType);
             masker.getFunction().setRandom(new Random(AllDataqualitySamplingTests.RANDOM_SEED));
+            masker.getFunction().setKeepEmpty(true);
             String maskedValue = masker.maskValue(inputValue);
             System.out.println(maskedValue);
             assertEquals("Test faild on [" + inputValue + "]", EXPECTED_MASKED_VALUES.get(input), maskedValue);
@@ -181,5 +183,84 @@ public class ValueDataMaskerTest {
         // string -> use ReplaceAll
         // numeric -> use NumericVariance
 
+    }
+
+    private static final Map<String[], String> EXPECTED_MASKED_VALUES_DICTIANARY = new LinkedHashMap<String[], String>() {
+
+        private static final long serialVersionUID = 11L;
+
+        {
+
+            // 1. FIRST_NAME
+            put(new String[] { "", "FIRST_NAME", "string" }, "");
+            put(new String[] { "John", "FIRST_NAME", "string" }, "Josiah");
+
+            // 2. LAST_NAME
+            put(new String[] { "Dupont", "LAST_NAME", "string" }, "Robbins");
+
+            // 5. JOB_TITLE
+            put(new String[] { "CEO", "JOB_TITLE", "String" }, "Cafeteria Cook");
+
+            // 8 ORGANIZATION
+
+            // 9 COMPANY
+
+            // Company
+            put(new String[] { "Talend", "COMPANY", "String" }, "Gilead Sciences");
+            // FR Commune
+            put(new String[] { "Amancey", "FR_COMMUNE", "String" }, "Dieppe");
+            // Organization
+            put(new String[] { "Kiva", "ORGANIZATION", "String" }, "Environmental Defense");
+
+            // EMPTY
+            put(new String[] { " ", "UNKNOWN", "integer" }, " ");
+            put(new String[] { " ", "UNKNOWN", "numeric" }, " ");
+            put(new String[] { " ", "UNKNOWN", "decimal" }, " ");
+            put(new String[] { " ", "UNKNOWN", "date" }, " ");
+
+            // NUMERIC
+            put(new String[] { "111", "UNKNOWN", "integer" }, "106");
+            put(new String[] { "-222.2", "UNKNOWN", "integer" }, "-211.5");
+            put(new String[] { "333", "UNKNOWN", "numeric" }, "317");
+            put(new String[] { "444,44", "UNKNOWN", "numeric" }, "423.06");
+            put(new String[] { "555", "UNKNOWN", "float" }, "528");
+            put(new String[] { "666.666", "UNKNOWN", "float" }, "634.595");
+            put(new String[] { "Abc123", "UNKNOWN", "float" }, "Zzp655"); // not numeric, mask by char replacement
+
+            // BIG NUMERIC
+            put(new String[] { "7777777777777777777777777777777777777", "UNKNOWN", "double" },
+                    "7403611837072083888888888888888888888");
+            put(new String[] { "7777777777777777777777777777777777777.7777", "UNKNOWN", "double" },
+                    "7403611837072083888888888888888888888.8888");
+
+            // ENGINEERING FORMAT
+            put(new String[] { "8e28", "UNKNOWN", "double" }, "7.615143603845572E28");
+            put(new String[] { "-9.999E29", "UNKNOWN", "double" }, "-9.517977611856484E29");
+        }
+    };
+
+    /**
+     * Test method for {@link org.talend.dataquality.datamasking.DataMasker#process(java.lang.Object, boolean)}.
+     * 
+     * @throws IllegalAccessException
+     * @throws InstantiationException
+     */
+    @Test
+    public void testProcess_dictinary() throws InstantiationException, IllegalAccessException {
+
+        for (String[] input : EXPECTED_MASKED_VALUES_DICTIANARY.keySet()) {
+            String inputValue = input[0];
+            String semanticCategory = input[1];
+            String dataType = input[2];
+
+            System.out.print("[" + semanticCategory + "]\n\t" + inputValue + " => ");
+            final ValueDataMasker masker = new ValueDataMasker(semanticCategory, dataType);
+            masker.getFunction().setRandom(new Random(AllDataqualitySamplingTests.RANDOM_SEED));
+            masker.getFunction().setKeepEmpty(true);
+            String maskedValue = masker.maskValue(inputValue);
+            System.out.println(maskedValue);
+            assertEquals("Test faild on [" + inputValue + "]", EXPECTED_MASKED_VALUES.get(input), maskedValue);
+
+        }
     }
 }
