@@ -31,9 +31,9 @@ import org.talend.dataquality.matchmerge.Attribute;
  */
 public class RichRecordTest {
 
-    private final String NEWGID = "c70d2961-dd21-42df-8eae-d52caface219";
+    private final String NEWGID = "c70d2961-dd21-42df-8eae-d52caface219"; //$NON-NLS-1$
 
-    private final String OLDGID = "610ba2eb-b7d7-4c06-b3b6-112159f2d8b0";
+    private final String OLDGID = "610ba2eb-b7d7-4c06-b3b6-112159f2d8b0"; //$NON-NLS-1$
 
     /**
      * DOC zshen Comment method "setUpBeforeClass".
@@ -113,15 +113,15 @@ public class RichRecordTest {
         mergedRecord.setOriginRow(generateOriginRow());
         mergedRecord.setMaster(true);
         mergedRecord.setMerged(true);
-        mergedRecord.setGroupId("43406727-20e4-442e-856c-cb08ed4e477e");
+        mergedRecord.setGroupId("43406727-20e4-442e-856c-cb08ed4e477e"); //$NON-NLS-1$
         mergedRecord.setRecordSize(3);
         mergedRecord.setGrpSize(2);
         mergedRecord.setGroupQuality(1.0d);
         Map<String, String> oldGID2new = new HashMap<>();
-        oldGID2new.put("43406727-20e4-442e-856c-cb08ed4e477e", "786cfafe-f746-4efe-9904-85e90f1cefb1");
-        oldGID2new.put("60fd9e8a-6055-4e8d-aefe-60acb699061e", "43406727-20e4-442e-856c-cb08ed4e477e");
-        List<DQAttribute<?>> outputRow = mergedRecord.getOutputRow(oldGID2new, true);
-        Assert.assertEquals("786cfafe-f746-4efe-9904-85e90f1cefb1", mergedRecord.getGID().getValue());
+        oldGID2new.put("43406727-20e4-442e-856c-cb08ed4e477e", "786cfafe-f746-4efe-9904-85e90f1cefb1"); //$NON-NLS-1$ //$NON-NLS-2$
+        oldGID2new.put("60fd9e8a-6055-4e8d-aefe-60acb699061e", "43406727-20e4-442e-856c-cb08ed4e477e"); //$NON-NLS-1$ //$NON-NLS-2$
+        mergedRecord.getOutputRow(oldGID2new, true);
+        Assert.assertEquals("786cfafe-f746-4efe-9904-85e90f1cefb1", mergedRecord.getGID().getValue()); //$NON-NLS-1$
     }
 
     /**
@@ -137,15 +137,15 @@ public class RichRecordTest {
         mergedRecord.setOriginRow(generateOriginRow());
         mergedRecord.setMaster(false);
         mergedRecord.setMerged(false);
-        mergedRecord.setGroupId("43406727-20e4-442e-856c-cb08ed4e477e");
+        mergedRecord.setGroupId("43406727-20e4-442e-856c-cb08ed4e477e"); //$NON-NLS-1$
         mergedRecord.setRecordSize(3);
         mergedRecord.setGrpSize(2);
         mergedRecord.setGroupQuality(1.0d);
         Map<String, String> oldGID2new = new HashMap<>();
-        oldGID2new.put("43406727-20e4-442e-856c-cb08ed4e477e", "786cfafe-f746-4efe-9904-85e90f1cefb1");
-        oldGID2new.put("60fd9e8a-6055-4e8d-aefe-60acb699061e", "43406727-20e4-442e-856c-cb08ed4e477e");
-        List<DQAttribute<?>> outputRow = mergedRecord.getOutputRow(oldGID2new, true);
-        Assert.assertEquals("786cfafe-f746-4efe-9904-85e90f1cefb1", mergedRecord.getGID().getValue());
+        oldGID2new.put("43406727-20e4-442e-856c-cb08ed4e477e", "786cfafe-f746-4efe-9904-85e90f1cefb1"); //$NON-NLS-1$ //$NON-NLS-2$
+        oldGID2new.put("60fd9e8a-6055-4e8d-aefe-60acb699061e", "43406727-20e4-442e-856c-cb08ed4e477e"); //$NON-NLS-1$ //$NON-NLS-2$
+        mergedRecord.getOutputRow(oldGID2new, true);
+        Assert.assertEquals("786cfafe-f746-4efe-9904-85e90f1cefb1", mergedRecord.getGID().getValue()); //$NON-NLS-1$
     }
 
     /**
