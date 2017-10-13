@@ -116,18 +116,27 @@ public class UserDefinedRegexValidatorTest {
     @Test
     public void testInvalidRegexString() {
         UserDefinedRegexValidator validator = new UserDefinedRegexValidator();
+        validator.setPatternString("1");
+        Assert.assertFalse(validator.isValid("B0YBKL9"));
+    }
+
+    @Test
+    public void testInvalidRegexStringNull() {
+        UserDefinedRegexValidator validator = new UserDefinedRegexValidator();
         try {
             validator.setPatternString(null);
         } catch (DQSemanticRuntimeException e) {
             Assert.assertEquals(e.getMessage(), "null argument of patternString is not allowed.");
         }
+    }
+
+    @Test
+    public void testInvalidRegexStringEmpty() {
+        UserDefinedRegexValidator validator = new UserDefinedRegexValidator();
         try {
             validator.setPatternString("");
         } catch (RuntimeException e) {
             Assert.assertEquals(e.getMessage(), "null argument of patternString is not allowed.");
         }
-        validator.setPatternString("1");
-        Assert.assertFalse(validator.isValid("B0YBKL9"));
     }
-
 }

@@ -40,15 +40,29 @@ public class ResizableListTest {
         new ResizableList<>(InvalidItem.class);
     }
 
-    @Test(expected = DQCommonRuntimeException.class)
-    public void testResize() throws Exception {
+    @Test
+    public void testResizeZero() throws Exception {
         assertEquals(0, list.size());
+        list.resize(0); // the original size is 0, so Resize to 0 should do nothing
+        assertEquals(0, list.size());
+    }
+
+    @Test
+    public void testResizeOne() throws Exception {
         list.resize(1); // Resize to 1 should add 1 item and 0 should be Item::index
         assertEquals(1, list.size());
         assertEquals(0, list.get(0).getIndex());
+    }
+
+    @Test
+    public void testResizeTwo() throws Exception {
         list.resize(2); // Resize to 2 should add 1 new item and 1 should be Item::index
         assertEquals(2, list.size());
         assertEquals(1, list.get(1).getIndex());
+    }
+
+    @Test(expected = DQCommonRuntimeException.class)
+    public void testResizeMinusOne() throws Exception {
         try {
             list.resize(-1);
         } catch (DQCommonRuntimeException e) {
