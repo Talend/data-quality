@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.log4j.Logger;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.api.LocalDictionaryCache;
 import org.talend.dataquality.semantic.model.DQDocument;
@@ -28,11 +27,9 @@ import org.talend.dataquality.semantic.model.DQDocument;
  */
 public class GenerateFromDictionaries extends Function<String> {
 
-    private static final long serialVersionUID = 1556057898878709265L;
+    private static final long serialVersionUID = 1476820256067746995L;
 
-    private static final Logger LOGGER = Logger.getLogger(GenerateFromDictionaries.class);
-
-    protected List<String> genericTokens = new ArrayList<String>();
+    protected List<String> genericTokens = new ArrayList<>();
 
     @Override
     protected String doGenerateMaskedField(String t) {
@@ -46,38 +43,17 @@ public class GenerateFromDictionaries extends Function<String> {
     @Override
     public void parse(String semanticCategory, boolean keepNullValues, Random rand) {
         if (semanticCategory != null) {
-            parameters = super.clean(semanticCategory).split(","); //$NON-NLS-1$
-            if (parameters.length == 1) {
-                LocalDictionaryCache dict = CategoryRegistryManager.getInstance().getDictionaryCache();
-                List<DQDocument> listDocuments = dict.listDocuments(semanticCategory, 0, 10);
-                List<String> aux = new ArrayList();
-                for (DQDocument dqDocument : listDocuments) {
-                    aux.addAll(dqDocument.getValues());
-                }
-                parameters = aux.toArray(new String[aux.size()]);
+            LocalDictionaryCache dict = CategoryRegistryManager.getInstance().getDictionaryCache();
+            List<DQDocument> listDocuments = dict.listDocuments(semanticCategory, 0, 100);
+            for (DQDocument dqDocument : listDocuments) {
+                genericTokens.addAll(dqDocument.getValues());
             }
-            for (int i = 0; i < parameters.length; i++) {
-                parameters[i] = parameters[i].trim();
-            }
-
         }
 
         setKeepNull(keepNullValues);
         if (rand != null) {
             setRandom(rand);
         }
-
-        for (int i = 0; i < parameters.length; ++i) {
-            try {
-                genericTokens.add(getOutput(parameters[i]));
-            } catch (NumberFormatException e) {
-                LOGGER.info("The parameter " + parameters[i] + " can't be parsed in the required type.");
-            }
-        }
-    }
-
-    protected String getOutput(String string) {
-        return string;
     }
 
 }
