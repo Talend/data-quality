@@ -20,6 +20,7 @@ import java.util.*;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.apache.lucene.store.AlreadyClosedException;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
@@ -141,8 +142,16 @@ public class ClassPathDirectory {
 
         @Override
         public synchronized Directory get(URI uri) throws IOException {
-            if (instances.get(uri) == null) {
+            Directory dir = instances.get(uri);
+            if (dir == null) {
                 instances.put(uri, provider.get(uri));
+            } else {
+                try {
+                    dir.listAll();
+                } catch (AlreadyClosedException e) {
+                    LOGGER.debug("Directory has already been closed. Re-extracting ...", e);
+                    instances.put(uri, provider.get(uri));
+                }
             }
             return instances.get(uri);
         }
@@ -214,7 +223,7 @@ public class ClassPathDirectory {
             openedJar.fileSystem = fs;
             openedJar.jarFileName = jarFile;
             String directory = StringUtils.substringAfterLast(uri.toString(), "!"); //$NON-NLS-1$
-            LOGGER.debug("Opening '" + jarFile + "' at directory '" + directory + "' ...");
+            LOGGER.debug("Creating JARDirectory for '" + directory + "' ...");
             final JARDirectory jarDirectory = new JARDirectory(extractionRoot, openedJar, directory);
             classPathDirectories.add(jarDirectory);
             return jarDirectory;
