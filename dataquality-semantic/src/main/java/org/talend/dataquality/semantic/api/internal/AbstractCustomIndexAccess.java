@@ -49,7 +49,7 @@ public class AbstractCustomIndexAccess implements AutoCloseable {
         }
     }
 
-    public IndexWriter getWriter() throws IOException {
+    public synchronized IndexWriter getWriter() throws IOException {
         if (luceneWriter == null) {
             final IndexWriterConfig iwc = new IndexWriterConfig(Version.LATEST, analyzer);
             luceneWriter = new IndexWriter(directory, iwc);

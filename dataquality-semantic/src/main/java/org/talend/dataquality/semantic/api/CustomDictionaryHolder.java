@@ -107,7 +107,7 @@ public class CustomDictionaryHolder {
         return regexClassifier;
     }
 
-    private void ensureMetadataIndexAccess() {
+    private synchronized void ensureMetadataIndexAccess() {
         if (metadata == null) {
             String metadataIndexPath = getMetadataFolderPath();
             File folder = new File(metadataIndexPath);
@@ -123,7 +123,7 @@ public class CustomDictionaryHolder {
         }
     }
 
-    private void ensureDataDictIndexAccess() {
+    private synchronized void ensureDataDictIndexAccess() {
         if (customDataDictIndexAccess == null) {
             String dataDictIndexPath = getDataDictFolderPath();
             File folder = new File(dataDictIndexPath);
@@ -198,7 +198,7 @@ public class CustomDictionaryHolder {
         }
     }
 
-    private void ensureRegexClassifierAccess() {
+    private synchronized void ensureRegexClassifierAccess() {
         if (customRegexClassifierAccess == null) {
             customRegexClassifierAccess = new CustomRegexClassifierAccess(this);
             regexClassifier = customRegexClassifierAccess.readUserDefinedClassifier();
