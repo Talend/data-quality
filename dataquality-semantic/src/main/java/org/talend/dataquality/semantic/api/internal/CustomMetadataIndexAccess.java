@@ -40,7 +40,7 @@ public class CustomMetadataIndexAccess extends AbstractCustomIndexAccess {
                 for (DQCategory dqCat : CategoryRegistryManager.getInstance().getSharedCategoryMetadata().values()) {
                     createCategory(dqCat);
                 }
-                commitChangesAndCloseWriter();
+                commitChanges();
             }
             mgr = new SearcherManager(directory, null);
         } catch (IOException e) {

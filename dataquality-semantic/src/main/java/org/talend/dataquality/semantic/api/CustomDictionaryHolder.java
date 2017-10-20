@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.talend.dataquality.semantic.api.internal.CustomDocumentIndexAccess;
@@ -139,7 +140,7 @@ public class CustomDictionaryHolder {
     public void createCategory(DQCategory category) {
         ensureMetadataIndexAccess();
         customMetadataIndexAccess.createCategory(category);
-        customMetadataIndexAccess.commitChangesAndCloseWriter();
+        customMetadataIndexAccess.commitChanges();
         metadata = customMetadataIndexAccess.readCategoryMedatada();
     }
 
@@ -155,14 +156,14 @@ public class CustomDictionaryHolder {
 
         ensureMetadataIndexAccess();
         customMetadataIndexAccess.insertOrUpdateCategory(category);
-        customMetadataIndexAccess.commitChangesAndCloseWriter();
+        customMetadataIndexAccess.commitChanges();
         metadata = customMetadataIndexAccess.readCategoryMedatada();
     }
 
     public void deleteCategory(DQCategory category) {
         ensureMetadataIndexAccess();
         customMetadataIndexAccess.deleteCategory(category);
-        customMetadataIndexAccess.commitChangesAndCloseWriter();
+        customMetadataIndexAccess.commitChanges();
         metadata = customMetadataIndexAccess.readCategoryMedatada();
     }
 
@@ -179,7 +180,7 @@ public class CustomDictionaryHolder {
     public void addDataDictDocument(List<DQDocument> documents) {
         ensureDataDictIndexAccess();
         customDataDictIndexAccess.createDocument(documents);
-        customDataDictIndexAccess.commitChangesAndCloseWriter();
+        customDataDictIndexAccess.commitChanges();
     }
 
     public void close() {
@@ -210,7 +211,7 @@ public class CustomDictionaryHolder {
 
         ensureMetadataIndexAccess();
         customMetadataIndexAccess.createCategory(category);
-        customMetadataIndexAccess.commitChangesAndCloseWriter();
+        customMetadataIndexAccess.commitChanges();
         metadata = customMetadataIndexAccess.readCategoryMedatada();
     }
 
@@ -295,5 +296,15 @@ public class CustomDictionaryHolder {
             }
         }
         return null;
+    }
+
+    public IndexWriter getCategoryIndexWriter() throws IOException {
+        ensureMetadataIndexAccess();
+        return customMetadataIndexAccess.getWriter();
+    }
+
+    public IndexWriter getDataDictIndexWriter() throws IOException {
+        ensureDataDictIndexAccess();
+        return customDataDictIndexAccess.getWriter();
     }
 }

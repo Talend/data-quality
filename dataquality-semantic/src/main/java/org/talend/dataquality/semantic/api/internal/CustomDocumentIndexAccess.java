@@ -33,7 +33,7 @@ public class CustomDocumentIndexAccess extends AbstractCustomIndexAccess {
         LOGGER.debug("Metadata index is not readable, trying to make a copy from shared metadata.");
         try {
             if (getWriter().maxDoc() == 0) {
-                commitChangesAndCloseWriter();
+                commitChanges();
             }
             mgr = new SearcherManager(directory, null);
         } catch (IOException e) {
@@ -106,7 +106,7 @@ public class CustomDocumentIndexAccess extends AbstractCustomIndexAccess {
                             DictionaryUtils.dqDocumentToLuceneDocument(DictionaryUtils.dictionaryEntryFromDocument(doc)));
                 }
             }
-            commitChangesAndCloseWriter();
+            commitChanges();
             reader.close();
         } catch (IOException | URISyntaxException e) {
             LOGGER.error(e.getMessage(), e);

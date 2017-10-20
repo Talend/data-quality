@@ -17,6 +17,8 @@ public class AbstractCustomIndexAccess implements AutoCloseable {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractCustomIndexAccess.class);
 
+    private final Analyzer analyzer = new StandardAnalyzer(CharArraySet.EMPTY_SET);
+
     protected Directory directory;
 
     protected IndexWriter luceneWriter;
@@ -47,9 +49,8 @@ public class AbstractCustomIndexAccess implements AutoCloseable {
         }
     }
 
-    protected IndexWriter getWriter() throws IOException {
+    public IndexWriter getWriter() throws IOException {
         if (luceneWriter == null) {
-            final Analyzer analyzer = new StandardAnalyzer(CharArraySet.EMPTY_SET);
             final IndexWriterConfig iwc = new IndexWriterConfig(Version.LATEST, analyzer);
             luceneWriter = new IndexWriter(directory, iwc);
         }
@@ -90,12 +91,10 @@ public class AbstractCustomIndexAccess implements AutoCloseable {
         }
     }
 
-    public void commitChangesAndCloseWriter() {
+    public void commitChanges() {
         if (luceneWriter != null) {
             try {
                 luceneWriter.commit();
-                luceneWriter.close();
-                luceneWriter = null;
             } catch (IOException e) {
                 LOGGER.error(e.getMessage(), e);
             }

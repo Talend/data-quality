@@ -34,8 +34,6 @@ public class CategoryRecognizerBuilder {
 
     private static final Logger LOGGER = Logger.getLogger(CategoryRecognizerBuilder.class);
 
-    private static CategoryRecognizerBuilder INSTANCE;
-
     public static final String DEFAULT_METADATA_PATH = "/" + CategoryRegistryManager.METADATA_SUBFOLDER_NAME + "/";
 
     public static final String DEFAULT_DD_PATH = "/" + CategoryRegistryManager.DICTIONARY_SUBFOLDER_NAME + "/";
@@ -145,7 +143,8 @@ public class CategoryRecognizerBuilder {
 
     public Map<String, DQCategory> getCategoryMetadata() {
         if (metadata == null) {
-            metadata = CategoryRegistryManager.getInstance().getCustomDictionaryHolder(contextName).getMetadata();
+            // always return latest metadata from registry without filling the metadata field
+            return CategoryRegistryManager.getInstance().getCustomDictionaryHolder(contextName).getMetadata();
         }
         return metadata;
     }
