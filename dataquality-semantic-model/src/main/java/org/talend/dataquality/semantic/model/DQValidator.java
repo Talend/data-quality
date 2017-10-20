@@ -20,6 +20,8 @@ public class DQValidator implements Serializable {
 
     private String subValidatorClassName;
 
+    private Boolean caseInsensitive = true;
+
     public String getPatternString() {
         return patternString;
     }
@@ -34,5 +36,13 @@ public class DQValidator implements Serializable {
 
     public void setSubValidatorClassName(String subValidatorClassName) {
         this.subValidatorClassName = subValidatorClassName;
+    }
+
+    public Boolean getCaseInsensitive() {
+        return caseInsensitive;
+    }
+
+    public void setCaseInsensitive(Boolean caseInsensitive) {
+        this.caseInsensitive = caseInsensitive;
     }
 }

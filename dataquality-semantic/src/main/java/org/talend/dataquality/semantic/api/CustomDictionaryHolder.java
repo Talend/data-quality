@@ -55,12 +55,10 @@ public class CustomDictionaryHolder {
                 LOGGER.info("Initialize custom data dict access for " + contextName);
                 ensureDataDictIndexAccess();
             }
-            File regexClassifierFile = new File(getRegexClassifierFolderPath());
-            if (regexClassifierFile.exists()) {
-                LOGGER.info("Initialize custom regex classifier access for " + contextName);
-                ensureRegexClassifierAccess();
-            }
         }
+        // make a copy of shared regex classifiers
+        LOGGER.info("Initialize custom regex classifier access for " + contextName);
+        ensureRegexClassifierAccess();
     }
 
     public String getContextName() {
