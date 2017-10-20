@@ -93,7 +93,9 @@ public class CustomDictionaryHolder {
     }
 
     public Directory getDataDictDirectory() {
-        // allow to return NULL
+        if (dataDictDirectory == null) {
+            ensureDataDictIndexAccess();
+        }
         return dataDictDirectory;
     }
 
