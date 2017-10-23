@@ -92,12 +92,12 @@ public class AbstractCustomIndexAccess implements AutoCloseable {
     }
 
     public void commitChanges() {
-        if (luceneWriter != null) {
-            try {
-                luceneWriter.commit();
-            } catch (IOException e) {
-                LOGGER.error(e.getMessage(), e);
+        try {
+            if (getWriter() != null) {
+                getWriter().commit();
             }
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
         }
     }
 }

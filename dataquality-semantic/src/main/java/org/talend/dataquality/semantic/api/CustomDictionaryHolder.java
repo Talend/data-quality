@@ -48,16 +48,13 @@ public class CustomDictionaryHolder {
     private void checkCustomFolders() {
         File metadataFolder = new File(getMetadataFolderPath());
         if (metadataFolder.exists()) {
-            LOGGER.info("Initialize custom metadata access for " + contextName);
             ensureMetadataIndexAccess();
             File dataDictFolder = new File(getDataDictFolderPath());
             if (dataDictFolder.exists()) {
-                LOGGER.info("Initialize custom data dict access for " + contextName);
                 ensureDataDictIndexAccess();
             }
         }
         // make a copy of shared regex classifiers
-        LOGGER.info("Initialize custom regex classifier access for " + contextName);
         ensureRegexClassifierAccess();
     }
 
@@ -107,6 +104,7 @@ public class CustomDictionaryHolder {
 
     private synchronized void ensureMetadataIndexAccess() {
         if (metadata == null) {
+            LOGGER.info("Initialize custom metadata access for " + contextName);
             String metadataIndexPath = getMetadataFolderPath();
             File folder = new File(metadataIndexPath);
             if (!folder.exists()) {
@@ -123,6 +121,7 @@ public class CustomDictionaryHolder {
 
     private synchronized void ensureDataDictIndexAccess() {
         if (customDataDictIndexAccess == null) {
+            LOGGER.info("Initialize custom data dict access for " + contextName);
             String dataDictIndexPath = getDataDictFolderPath();
             File folder = new File(dataDictIndexPath);
             if (!folder.exists()) {
@@ -198,6 +197,7 @@ public class CustomDictionaryHolder {
 
     private synchronized void ensureRegexClassifierAccess() {
         if (customRegexClassifierAccess == null) {
+            LOGGER.info("Initialize custom regex classifier access for " + contextName);
             customRegexClassifierAccess = new CustomRegexClassifierAccess(this);
             regexClassifier = customRegexClassifierAccess.readUserDefinedClassifier();
         }

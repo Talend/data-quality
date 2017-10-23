@@ -1,6 +1,7 @@
 package org.talend.dataquality.semantic.api.internal;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.TextField;
+import org.apache.lucene.index.IndexFileNames;
 import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.index.MultiFields;
 import org.apache.lucene.index.Term;
@@ -34,9 +36,10 @@ public class CustomMetadataIndexAccess extends AbstractCustomIndexAccess {
     }
 
     private void init() {
-        LOGGER.debug("Metadata index is not readable, trying to make a copy from shared metadata.");
         try {
-            if (getWriter().maxDoc() == 0) {
+            boolean isLuceneDir = Arrays.asList(directory.listAll()).contains(IndexFileNames.SEGMENTS_GEN);
+            if (!isLuceneDir || getReader().maxDoc() == 0) {
+                LOGGER.debug("Metadata index is not a lucene index or is empty, trying to make a copy from shared metadata.");
                 for (DQCategory dqCat : CategoryRegistryManager.getInstance().getSharedCategoryMetadata().values()) {
                     createCategory(dqCat);
                 }

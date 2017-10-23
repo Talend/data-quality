@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.index.IndexFileNames;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.SearcherManager;
@@ -30,9 +31,10 @@ public class CustomDocumentIndexAccess extends AbstractCustomIndexAccess {
     }
 
     private void init() {
-        LOGGER.debug("Metadata index is not readable, trying to make a copy from shared metadata.");
         try {
-            if (getWriter().maxDoc() == 0) {
+            boolean isLuceneDir = Arrays.asList(directory.listAll()).contains(IndexFileNames.SEGMENTS_GEN);
+            if (!isLuceneDir) {
+                LOGGER.debug("Document index is not a lucene index, trying to initialize an empty lucene index ");
                 commitChanges();
             }
             mgr = new SearcherManager(directory, null);

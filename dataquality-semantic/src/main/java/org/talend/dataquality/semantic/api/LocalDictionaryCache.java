@@ -47,14 +47,22 @@ public class LocalDictionaryCache {
             Directory sharedDir = ClassPathDirectory.open(ddPath);
             sharedSearcherManager = new SearcherManager(sharedDir, null);
 
+            initCustomDirectory();
+        } catch (IOException e) {
+            LOGGER.error("Failed to read local dictionary cache! ", e);
+        } catch (URISyntaxException e) {
+            LOGGER.error("Failed to parse index URI! ", e);
+        }
+    }
+
+    private void initCustomDirectory() {
+        try {
             Directory customDir = customDictionaryHolder.getDataDictDirectory();
             if (customDir != null) {
                 customSearcherMananger = new SearcherManager(customDir, null);
             }
         } catch (IOException e) {
             LOGGER.error("Failed to read local dictionary cache! ", e);
-        } catch (URISyntaxException e) {
-            LOGGER.error("Failed to parse index URI! ", e);
         }
     }
 
@@ -125,15 +133,19 @@ public class LocalDictionaryCache {
      * @return all dictionary values containing the input string
      */
     public Set<String> suggestValues(String categoryName, String input, int num) {
+        customDictionaryHolder.reloadCategoryMetadata();
         if (input != null) {
             final String trimmedInput = input.trim();
             if (trimmedInput.length() >= 2) {
-                boolean isCategoryModified = customDictionaryHolder.getCategoryMetadataByName(categoryName).getModified();
-                Set<String> values = doSuggestValues(categoryName, trimmedInput, num, true, isCategoryModified);
-                if (values.isEmpty()) {
-                    return doSuggestValues(categoryName, trimmedInput, num, false, isCategoryModified);
-                } else {
-                    return values;
+                final DQCategory dqCat = customDictionaryHolder.getCategoryMetadataByName(categoryName);
+                if (dqCat != null) {
+                    boolean isCategoryModified = dqCat.getModified();
+                    Set<String> values = doSuggestValues(categoryName, trimmedInput, num, true, isCategoryModified);
+                    if (values.isEmpty()) {
+                        return doSuggestValues(categoryName, trimmedInput, num, false, isCategoryModified);
+                    } else {
+                        return values;
+                    }
                 }
             }
         }
@@ -155,30 +167,29 @@ public class LocalDictionaryCache {
 
         try {
             SearcherManager searcherManager = getSearcherManager(searchCustomIndex);
-            if (searchCustomIndex) {
+            if (searcherManager != null) {
                 searcherManager.maybeRefresh();
-            }
-            IndexSearcher searcher = getSearcherManager(searchCustomIndex).acquire();
-            IndexReader reader = searcher.getIndexReader();
-            TopDocs topDocs = searcher.search(booleanQuery, num);
-            searcherManager.release(searcher);
-            for (int i = 0; i < topDocs.scoreDocs.length; i++) {
-                Document doc = reader.document(topDocs.scoreDocs[i].doc);
-                IndexableField[] fields = doc.getFields(DictionarySearcher.F_RAW);
-                for (IndexableField f : fields) {
-                    final String str = f.stringValue();
-                    if (isPrefixSearch) {
-                        if (StringUtils.startsWithIgnoreCase(str, input)
-                                || StringUtils.startsWithIgnoreCase(DictionarySearcher.getJointTokens(str), jointInput)) {
-                            results.add(str);
-                        }
-                    } else {// infix search
-                        if (StringUtils.containsIgnoreCase(str, input)
-                                || StringUtils.containsIgnoreCase(DictionarySearcher.getJointTokens(str), jointInput)) {
-                            results.add(str);
+                IndexSearcher searcher = searcherManager.acquire();
+                TopDocs topDocs = searcher.search(booleanQuery, num);
+                for (int i = 0; i < topDocs.scoreDocs.length; i++) {
+                    Document doc = searcher.doc(topDocs.scoreDocs[i].doc);
+                    IndexableField[] fields = doc.getFields(DictionarySearcher.F_RAW);
+                    for (IndexableField f : fields) {
+                        final String str = f.stringValue();
+                        if (isPrefixSearch) {
+                            if (StringUtils.startsWithIgnoreCase(str, input)
+                                    || StringUtils.startsWithIgnoreCase(DictionarySearcher.getJointTokens(str), jointInput)) {
+                                results.add(str);
+                            }
+                        } else {// infix search
+                            if (StringUtils.containsIgnoreCase(str, input)
+                                    || StringUtils.containsIgnoreCase(DictionarySearcher.getJointTokens(str), jointInput)) {
+                                results.add(str);
+                            }
                         }
                     }
                 }
+                searcherManager.release(searcher);
             }
         } catch (IOException e) {
             LOGGER.trace(e.getMessage(), e);
@@ -187,7 +198,14 @@ public class LocalDictionaryCache {
     }
 
     private SearcherManager getSearcherManager(boolean searchCustomIndex) {
-        return searchCustomIndex ? customSearcherMananger : sharedSearcherManager;
+        if (searchCustomIndex) {
+            if (customSearcherMananger == null) {
+                initCustomDirectory();
+            }
+            return customSearcherMananger;
+        } else {
+            return sharedSearcherManager;
+        }
     }
 
     public void close() {

@@ -106,6 +106,7 @@ public class LocalDictionaryCacheTest {
 
     @Test
     public void testSuggestValues() {
+        CategoryRegistryManager.setLocalRegistryPath("target/test_crm");
         LocalDictionaryCache dict = CategoryRegistryManager.getInstance().getDictionaryCache();
         for (String input : EXPECTED_SUGGESTIONS.keySet()) {
             Set<String> found = dict.suggestValues(SemanticCategoryEnum.FR_COMMUNE.name(), input);
@@ -116,6 +117,7 @@ public class LocalDictionaryCacheTest {
             }
         }
 
+        CategoryRegistryManager.reset();
     }
 
     @Test
