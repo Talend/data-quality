@@ -18,16 +18,11 @@ import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.util.*;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.index.DirectoryReader;
-import org.apache.lucene.index.MultiFields;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.Bits;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.talend.dataquality.semantic.classifier.custom.UDCategorySerDeser;
@@ -90,7 +85,7 @@ public class CategoryRegistryManager {
     /**
      * Map between category ID and the object containing its metadata.
      */
-    private final Map<String, DQCategory> sharedMetadata = new LinkedHashMap<>();
+    private Map<String, DQCategory> sharedMetadata = new LinkedHashMap<>();
 
     private UserDefinedClassifier sharedRegexClassifier;
 
@@ -186,10 +181,7 @@ public class CategoryRegistryManager {
                 + PRODUCTION_FOLDER_NAME + File.separator + METADATA_SUBFOLDER_NAME);
         loadBaseIndex(categorySubFolder, METADATA_SUBFOLDER_NAME);
         if (categorySubFolder.exists()) {
-            try (final DirectoryReader reader = DirectoryReader.open(FSDirectory.open(categorySubFolder))) {
-                fillSharedMetadata(reader);
-
-            }
+            sharedMetadata = CategoryMetadataUtils.loadMetadataFromIndex(FSDirectory.open(categorySubFolder));
         }
 
         // extract initial DD categories if not present
@@ -232,58 +224,7 @@ public class CategoryRegistryManager {
     }
 
     private void loadInitialCategories() throws IOException, URISyntaxException {
-        try (final DirectoryReader reader = DirectoryReader.open(ClassPathDirectory.open(getMetadataURI()))) {
-            fillSharedMetadata(reader);
-        }
-    }
-
-    /**
-     * Fill dqCategories which contains for each category ID, the metadata with all the children and the parents.
-     *
-     * @param reader
-     * @throws IOException
-     */
-    private void fillSharedMetadata(DirectoryReader reader) throws IOException {
-        Map<String, Set<String>> categoryToParents = new HashMap<>();
-        Bits liveDocs = MultiFields.getLiveDocs(reader);
-        // add the categories
-        for (int i = 0; i < reader.maxDoc(); i++) {
-            if (liveDocs != null && !liveDocs.get(i)) {
-                continue;
-            }
-            Document doc = reader.document(i);
-            DQCategory dqCat = DictionaryUtils.categoryFromDocument(doc);
-            sharedMetadata.put(dqCat.getId(), dqCat);
-            if (!CollectionUtils.isEmpty(dqCat.getChildren())) {
-                fillCategoryToParents(categoryToParents, dqCat);
-            }
-        }
-
-        // add the parent references in the child
-        for (Map.Entry<String, Set<String>> entry : categoryToParents.entrySet()) {
-            if (sharedMetadata.get(entry.getKey()) != null) {
-                List<DQCategory> parentCategoryList = new ArrayList<>();
-                for (String childCategoryId : entry.getValue()) {
-                    parentCategoryList.add(new DQCategory(childCategoryId));
-                }
-                sharedMetadata.get(entry.getKey()).setParents(parentCategoryList);
-            }
-        }
-    }
-
-    /**
-     * fill the map child -> parents
-     * 
-     * @param categoryToParents, the map child -> parents
-     * @param dqCat, the category used to create the reference child -> parents
-     */
-    private void fillCategoryToParents(Map<String, Set<String>> categoryToParents, DQCategory dqCat) {
-        for (DQCategory cat : dqCat.getChildren()) {
-            if (categoryToParents.get(cat.getId()) == null) {
-                categoryToParents.put(cat.getId(), new HashSet<String>());
-            }
-            categoryToParents.get(cat.getId()).add(dqCat.getId());
-        }
+        sharedMetadata = CategoryMetadataUtils.loadMetadataFromIndex(ClassPathDirectory.open(getMetadataURI()));
     }
 
     private void loadBaseIndex(final File destSubFolder, String sourceSubFolder) throws IOException, URISyntaxException {

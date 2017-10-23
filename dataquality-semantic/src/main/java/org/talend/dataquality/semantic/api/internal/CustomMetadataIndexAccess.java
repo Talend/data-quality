@@ -2,7 +2,6 @@ package org.talend.dataquality.semantic.api.internal;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,17 +12,16 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexFileNames;
 import org.apache.lucene.index.IndexableField;
-import org.apache.lucene.index.MultiFields;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.SearcherManager;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
-import org.apache.lucene.util.Bits;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.api.DictionaryConstants;
 import org.talend.dataquality.semantic.api.DictionaryUtils;
+import org.talend.dataquality.semantic.api.CategoryMetadataUtils;
 import org.talend.dataquality.semantic.model.DQCategory;
 
 public class CustomMetadataIndexAccess extends AbstractCustomIndexAccess {
@@ -52,23 +50,7 @@ public class CustomMetadataIndexAccess extends AbstractCustomIndexAccess {
     }
 
     public Map<String, DQCategory> readCategoryMedatada() {
-        Map<String, DQCategory> metadata = new HashMap<>();
-        try {
-            luceneReader = getReader();
-            Bits liveDocs = MultiFields.getLiveDocs(luceneReader);
-            for (int i = 0; i < luceneReader.maxDoc(); i++) {
-                if (liveDocs != null && !liveDocs.get(i)) {
-                    continue;
-                }
-                Document doc = luceneReader.document(i);
-                DQCategory entry = DictionaryUtils.categoryFromDocument(doc);
-                metadata.put(entry.getId(), entry);
-            }
-        } catch (IOException e) {
-            LOGGER.error(e.getMessage(), e);
-        }
-        closeReader();
-        return metadata;
+        return CategoryMetadataUtils.loadMetadataFromIndex(directory);
     }
 
     public void createCategory(DQCategory category) {
