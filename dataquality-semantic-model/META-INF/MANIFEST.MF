@@ -8,3 +8,4 @@ Export-Package: org.talend.dataquality.semantic.model
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Require-Bundle: org.apache.commons.lang3
+Import-Package: com.fasterxml.jackson.annotation;version="2.5.3"
