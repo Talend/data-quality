@@ -213,14 +213,13 @@ public class CategoryRecognizerBuilder {
         if (regexClassifier == null) {
             if (regexPath == null) {
                 try {
-                    regexClassifier = CategoryRegistryManager.getInstance().getCustomDictionaryHolder(contextName)
-                            .getRegexClassifier();
+                    return CategoryRegistryManager.getInstance().getCustomDictionaryHolder(contextName).getRegexClassifier();
                 } catch (IOException e) {
                     LOGGER.error("Failed to load provided regex classifiers", e);
                 }
             } else {
                 try {
-                    regexClassifier = UDCategorySerDeser.readJsonFile(regexPath);
+                    return UDCategorySerDeser.readJsonFile(regexPath);
                 } catch (IOException e) {
                     LOGGER.error("Failed to load regex classifiers from URI: " + regexPath, e);
                 }
