@@ -155,11 +155,14 @@ public class CategoryRecognizerBuilder {
                 if (dataDictPath == null) {
                     try {
                         dataDictPath = CategoryRecognizerBuilder.class.getResource(DEFAULT_DD_PATH).toURI();
+                        dataDictIndex = new LuceneIndex(dataDictPath, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY);
                     } catch (URISyntaxException e) {
                         LOGGER.error(e.getMessage(), e);
                     }
+                } else {
+                    dataDictDirectory = CategoryRegistryManager.getInstance().getSharedDataDictDirectory();
+                    dataDictIndex = new LuceneIndex(dataDictDirectory, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY);
                 }
-                dataDictIndex = new LuceneIndex(dataDictPath, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY);
             } else {
                 if (dataDictPath == null) {
                     dataDictIndex = new LuceneIndex(dataDictDirectory, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY);

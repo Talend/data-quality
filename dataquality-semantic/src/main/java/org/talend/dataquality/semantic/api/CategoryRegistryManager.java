@@ -89,6 +89,8 @@ public class CategoryRegistryManager {
 
     private UserDefinedClassifier sharedRegexClassifier;
 
+    private Directory sharedDataDictDirectory;
+
     private static final Object indexExtractionLock = new Object();
 
     private CategoryRegistryManager() {
@@ -274,6 +276,17 @@ public class CategoryRegistryManager {
      */
     public Map<String, DQCategory> getSharedCategoryMetadata() {
         return sharedMetadata;
+    }
+
+    public Directory getSharedDataDictDirectory() {
+        if (sharedDataDictDirectory == null) {
+            try {
+                sharedDataDictDirectory = ClassPathDirectory.open(getDictionaryURI());
+            } catch (URISyntaxException e) {
+                LOGGER.error(e.getMessage(), e);
+            }
+        }
+        return sharedDataDictDirectory;
     }
 
     /**
