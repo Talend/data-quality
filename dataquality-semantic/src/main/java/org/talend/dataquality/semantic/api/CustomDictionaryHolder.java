@@ -176,13 +176,23 @@ public class CustomDictionaryHolder {
         }
     }
 
+    public void beforeRepublish() {
+        closeDictionaryAccess();
+    }
+
+    public void afterRepublish() {
+        metadata = null;
+        regexClassifier = null;
+        reloadCategoryMetadata();
+    }
+
     public void addDataDictDocument(List<DQDocument> documents) {
         ensureDataDictIndexAccess();
         customDataDictIndexAccess.createDocument(documents);
         customDataDictIndexAccess.commitChanges();
     }
 
-    public void close() {
+    public void closeDictionaryAccess() {
         try {
             if (customMetadataIndexAccess != null) {
                 customMetadataIndexAccess.close();
@@ -192,6 +202,10 @@ public class CustomDictionaryHolder {
             }
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
+        } finally {
+            customMetadataIndexAccess = null;
+            customDataDictIndexAccess = null;
+            customRegexClassifierAccess = null;
         }
     }
 

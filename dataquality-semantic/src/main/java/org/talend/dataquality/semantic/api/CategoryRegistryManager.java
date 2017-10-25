@@ -402,7 +402,7 @@ public class CategoryRegistryManager {
     public void removeCustomDictionaryHolder(String contextName) {
         CustomDictionaryHolder cdh = customDictionaryHolderMap.get(contextName);
         if (cdh != null) {
-            cdh.close();
+            cdh.closeDictionaryAccess();
             File folder = new File(localRegistryPath + File.separator + contextName);
             try {
                 FileUtils.deleteDirectory(folder);

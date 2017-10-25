@@ -1,7 +1,6 @@
 package org.talend.dataquality.semantic.api.internal;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -10,7 +9,7 @@ import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.TextField;
-import org.apache.lucene.index.IndexFileNames;
+import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
@@ -18,10 +17,10 @@ import org.apache.lucene.search.SearcherManager;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
+import org.talend.dataquality.semantic.api.CategoryMetadataUtils;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.api.DictionaryConstants;
 import org.talend.dataquality.semantic.api.DictionaryUtils;
-import org.talend.dataquality.semantic.api.CategoryMetadataUtils;
 import org.talend.dataquality.semantic.model.DQCategory;
 
 public class CustomMetadataIndexAccess extends AbstractCustomIndexAccess {
@@ -35,7 +34,7 @@ public class CustomMetadataIndexAccess extends AbstractCustomIndexAccess {
 
     private void init() {
         try {
-            boolean isLuceneDir = Arrays.asList(directory.listAll()).contains(IndexFileNames.SEGMENTS_GEN);
+            boolean isLuceneDir = DirectoryReader.indexExists(directory);
             if (!isLuceneDir || getReader().maxDoc() == 0) {
                 LOGGER.debug("Metadata index is not a lucene index or is empty, trying to make a copy from shared metadata.");
                 for (DQCategory dqCat : CategoryRegistryManager.getInstance().getSharedCategoryMetadata().values()) {

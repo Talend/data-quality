@@ -19,7 +19,7 @@ public class CategoryMetadataUtils {
     /**
      * Fill dqCategories which contains for each category ID, the metadata with all the children and the parents.
      *
-     * @param reader
+     * @param directory
      * @throws IOException
      */
     public static Map<String, DQCategory> loadMetadataFromIndex(Directory directory) {
