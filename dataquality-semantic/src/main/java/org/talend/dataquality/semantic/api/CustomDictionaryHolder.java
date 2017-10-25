@@ -177,10 +177,20 @@ public class CustomDictionaryHolder {
     }
 
     public void beforeRepublish() {
-        closeDictionaryAccess();
+        try {
+            if (customMetadataIndexAccess != null) {
+                customMetadataIndexAccess.getWriter().close();
+            }
+            if (customDataDictIndexAccess != null) {
+                customDataDictIndexAccess.getWriter().close();
+            }
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
     }
 
     public void afterRepublish() {
+        closeDictionaryAccess();
         metadata = null;
         regexClassifier = null;
         reloadCategoryMetadata();
