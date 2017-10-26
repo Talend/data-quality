@@ -80,6 +80,8 @@ public class CategoryRegistryManager {
 
     public static final String PRODUCTION_FOLDER_NAME = "prod";
 
+    public static final String REPUBLISH_FOLDER_NAME = "republish";
+
     public static final String DEFAULT_CONTEXT_NAME = "t_default";
 
     /**

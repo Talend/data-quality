@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.store.Directory;
@@ -177,22 +178,10 @@ public class CustomDictionaryHolder {
     }
 
     public void beforeRepublish() {
-        try {
-            if (customMetadataIndexAccess != null) {
-                customMetadataIndexAccess.getWriter().close();
-            }
-            if (customDataDictIndexAccess != null) {
-                customDataDictIndexAccess.getWriter().close();
-            }
-        } catch (IOException e) {
-            LOGGER.error(e.getMessage(), e);
-        }
+        // nothing to do
     }
 
     public void afterRepublish() {
-        closeDictionaryAccess();
-        metadata = null;
-        regexClassifier = null;
         reloadCategoryMetadata();
     }
 
@@ -202,7 +191,7 @@ public class CustomDictionaryHolder {
         customDataDictIndexAccess.commitChanges();
     }
 
-    public void closeDictionaryAccess() {
+    void closeDictionaryAccess() {
         try {
             if (customMetadataIndexAccess != null) {
                 customMetadataIndexAccess.close();
@@ -330,5 +319,45 @@ public class CustomDictionaryHolder {
     public IndexWriter getDataDictIndexWriter() throws IOException {
         ensureDataDictIndexAccess();
         return customDataDictIndexAccess.getWriter();
+    }
+
+    /**
+     * copy the publish directory in the production directory once the republish is finished
+     * 
+     * @param luceneFolder
+     * @throws IOException
+     */
+    public synchronized void publishDirectory(String luceneFolder) throws IOException {
+        File stagingIndexes = new File(
+                luceneFolder + File.separator + contextName + File.separator + CategoryRegistryManager.REPUBLISH_FOLDER_NAME);
+        if (stagingIndexes.exists()) {
+            File productionIndexes = new File(luceneFolder + File.separator + contextName + File.separator
+                    + CategoryRegistryManager.PRODUCTION_FOLDER_NAME);
+
+            File backup = new File(productionIndexes.getPath() + ".old");
+            if (!backup.exists()) {
+                LOGGER.info("[Post Republish] backup prod");
+                FileUtils.copyDirectory(productionIndexes, backup);
+
+                try {
+                    LOGGER.info("[Post Republish] insert staging directory into prod");
+                    customMetadataIndexAccess.copyStagingContent(
+                            stagingIndexes.getAbsolutePath() + File.separator + CategoryRegistryManager.METADATA_SUBFOLDER_NAME);
+                    customDataDictIndexAccess.copyStagingContent(stagingIndexes.getAbsolutePath() + File.separator
+                            + CategoryRegistryManager.DICTIONARY_SUBFOLDER_NAME);
+                    customRegexClassifierAccess.copyStagingContent(
+                            stagingIndexes.getAbsolutePath() + File.separator + CategoryRegistryManager.REGEX_SUBFOLDER_NAME
+                                    + File.separator + CategoryRegistryManager.REGEX_CATEGRIZER_FILE_NAME);
+                } catch (Exception e) {
+                    LOGGER.error(e.getMessage(), e);
+                }
+
+                LOGGER.info("[Post Republish] delete backup");
+                FileUtils.deleteDirectory(backup);
+
+                LOGGER.info("[Post Republish] delete staging contents");
+                FileUtils.deleteDirectory(stagingIndexes);
+            }
+        }
     }
 }

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.api.CustomDictionaryHolder;
@@ -87,5 +88,9 @@ public class CustomRegexClassifierAccess {
             udc.addSubCategory(cat);
         }
         return udc;
+    }
+
+    public void copyStagingContent(String srcPath) throws IOException {
+        FileUtils.copyFile(new File(srcPath), regExFile);
     }
 }

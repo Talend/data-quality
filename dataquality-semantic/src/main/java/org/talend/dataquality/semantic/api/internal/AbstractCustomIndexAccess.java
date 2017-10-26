@@ -1,5 +1,6 @@
 package org.talend.dataquality.semantic.api.internal;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.apache.log4j.Logger;
@@ -11,6 +12,7 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.search.SearcherManager;
 import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
 public class AbstractCustomIndexAccess implements AutoCloseable {
@@ -57,7 +59,7 @@ public class AbstractCustomIndexAccess implements AutoCloseable {
         return luceneWriter;
     }
 
-    protected void deleteAll() {
+    public void deleteAll() {
         LOGGER.debug("delete all content");
         try {
             getWriter().deleteAll();
@@ -98,6 +100,15 @@ public class AbstractCustomIndexAccess implements AutoCloseable {
             }
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
+        }
+    }
+
+    public void copyStagingContent(String srcPath) throws IOException {
+        try (FSDirectory dir = FSDirectory.open(new File(srcPath));) {
+            IndexWriter writer = getWriter();
+            writer.deleteAll();
+            writer.addIndexes(dir);
+            writer.commit();
         }
     }
 }
