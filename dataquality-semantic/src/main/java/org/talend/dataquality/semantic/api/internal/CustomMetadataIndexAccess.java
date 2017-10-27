@@ -21,6 +21,7 @@ import org.talend.dataquality.semantic.api.CategoryMetadataUtils;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.api.DictionaryConstants;
 import org.talend.dataquality.semantic.api.DictionaryUtils;
+import org.talend.dataquality.semantic.index.DictionarySearcher;
 import org.talend.dataquality.semantic.model.DQCategory;
 
 /**
@@ -67,14 +68,14 @@ public class CustomMetadataIndexAccess extends AbstractCustomIndexAccess {
 
     public void insertOrUpdateCategory(DQCategory category) {
         LOGGER.debug("insertOrUpdateCategory: " + category);
-        final Term searchTerm = new Term(DictionaryConstants.ID, category.getId());
+        final Term searchTerm = new Term(DictionarySearcher.F_CATID, category.getId());
         final TermQuery termQuery = new TermQuery(searchTerm);
         try {
             IndexSearcher searcher = mgr.acquire();
             TopDocs result = searcher.search(termQuery, 1);
             mgr.release(searcher);
             if (result.totalHits == 1) {
-                final Term term = new Term(DictionaryConstants.ID, category.getId());
+                final Term term = new Term(DictionarySearcher.F_CATID, category.getId());
                 List<IndexableField> fields = DictionaryUtils.categoryToDocument(category).getFields();
                 if (!CollectionUtils.isEmpty(category.getChildren()))
                     for (DQCategory child : category.getChildren())
@@ -100,7 +101,7 @@ public class CustomMetadataIndexAccess extends AbstractCustomIndexAccess {
 
     public void deleteCategory(DQCategory category) {
         LOGGER.debug("deleteCategory: " + category);
-        Term luceneId = new Term(DictionaryConstants.ID, category.getId());
+        Term luceneId = new Term(DictionarySearcher.F_CATID, category.getId());
         try {
             getWriter().deleteDocuments(luceneId);
         } catch (IOException e) {

@@ -71,7 +71,7 @@ public class DictionaryUtils {
         String tempWord = word.trim();
         Document doc = new Document();
 
-        Field idTermField = new StringField(DictionarySearcher.F_ID, docId, Field.Store.YES);
+        Field idTermField = new StringField(DictionarySearcher.F_DOCID, docId, Field.Store.YES);
         doc.add(idTermField);
         Field catidTermField = new StringField(DictionarySearcher.F_CATID, catId, Field.Store.YES);
         doc.add(catidTermField);
@@ -106,7 +106,7 @@ public class DictionaryUtils {
 
     public static DQCategory categoryFromDocument(Document doc) {
         DQCategory dqCat = new DQCategory();
-        dqCat.setId(doc.getField(DictionaryConstants.ID).stringValue());
+        dqCat.setId(doc.getField(DictionarySearcher.F_CATID).stringValue());
         dqCat.setName(doc.getField(DictionaryConstants.NAME).stringValue());
         dqCat.setLabel(
                 doc.getField(DictionaryConstants.LABEL) == null ? "" : doc.getField(DictionaryConstants.LABEL).stringValue());
@@ -136,7 +136,7 @@ public class DictionaryUtils {
 
     public static Document categoryToDocument(DQCategory cat) {
         Document doc = new Document();
-        doc.add(new StringField(DictionaryConstants.ID, cat.getId(), Field.Store.YES));
+        doc.add(new StringField(DictionarySearcher.F_CATID, cat.getId(), Field.Store.YES));
         doc.add(new StringField(DictionaryConstants.NAME, cat.getName(), Field.Store.YES));
         doc.add(new TextField(DictionaryConstants.LABEL, cat.getLabel(), Field.Store.YES));
         doc.add(new StringField(DictionaryConstants.TYPE, cat.getType().name(), Field.Store.YES));
@@ -176,7 +176,7 @@ public class DictionaryUtils {
         }
         dqDoc.setCategory(dqCat);
 
-        String docId = doc.getField(DictionarySearcher.F_ID).stringValue();
+        String docId = doc.getField(DictionarySearcher.F_DOCID).stringValue();
         dqDoc.setId(docId);
         IndexableField[] synTermFields = doc.getFields(DictionarySearcher.F_RAW);
         Set<String> synSet = new LinkedHashSet<>();

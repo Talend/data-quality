@@ -27,7 +27,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
-import org.talend.dataquality.semantic.api.DictionaryConstants;
 import org.talend.dataquality.semantic.api.DictionaryUtils;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.index.ClassPathDirectory;
@@ -98,7 +97,7 @@ public class DefaultCategoryRecognizerTest {
         IndexWriterConfig writerConfig = new IndexWriterConfig(Version.LATEST, new StandardAnalyzer(CharArraySet.EMPTY_SET));
         IndexWriter writer = new IndexWriter(ramDirectory, writerConfig);
 
-        final Term searchTerm = new Term(DictionaryConstants.ID, SemanticCategoryEnum.AIRPORT_CODE.getTechnicalId());
+        final Term searchTerm = new Term(DictionarySearcher.F_CATID, SemanticCategoryEnum.AIRPORT_CODE.getTechnicalId());
 
         if (addExistingValues)
             for (ScoreDoc d : sharedLuceneDocumentSearcher.search(new TermQuery(searchTerm), Integer.MAX_VALUE).scoreDocs) {

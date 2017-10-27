@@ -68,7 +68,7 @@ public class CustomDocumentIndexAccess extends AbstractCustomIndexAccess {
      */
     public void insertOrUpdateDocument(List<DQDocument> documents) throws IOException {
         for (DQDocument document : documents) {
-            final Term term = new Term(DictionarySearcher.F_ID, document.getId());
+            final Term term = new Term(DictionarySearcher.F_DOCID, document.getId());
             IndexSearcher searcher = mgr.acquire();
             if (searcher.search(new TermQuery(term), 1).totalHits == 1) {
                 LOGGER.debug("updateDocument " + document);
@@ -89,7 +89,7 @@ public class CustomDocumentIndexAccess extends AbstractCustomIndexAccess {
         for (DQDocument document : documents) {
 
             LOGGER.debug("deleteDocument " + document);
-            Term luceneId = new Term(DictionarySearcher.F_ID, document.getId());
+            Term luceneId = new Term(DictionarySearcher.F_DOCID, document.getId());
             getWriter().deleteDocuments(luceneId);
         }
     }

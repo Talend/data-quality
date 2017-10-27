@@ -29,7 +29,7 @@ public abstract class AbstractDictionarySearcher {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractDictionarySearcher.class);
 
-    public static final String F_ID = "docid";//$NON-NLS-1$
+    public static final String F_DOCID = "docid";//$NON-NLS-1$
 
     public static final String F_WORD = "word";//$NON-NLS-1$
 
