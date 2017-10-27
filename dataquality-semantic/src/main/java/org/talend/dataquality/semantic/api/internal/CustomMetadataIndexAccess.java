@@ -23,6 +23,9 @@ import org.talend.dataquality.semantic.api.DictionaryConstants;
 import org.talend.dataquality.semantic.api.DictionaryUtils;
 import org.talend.dataquality.semantic.model.DQCategory;
 
+/**
+ * Low-level API for metadata lucene index.
+ */
 public class CustomMetadataIndexAccess extends AbstractCustomIndexAccess {
 
     private static final Logger LOGGER = Logger.getLogger(CustomMetadataIndexAccess.class);

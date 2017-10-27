@@ -30,6 +30,9 @@ import org.talend.dataquality.semantic.index.DictionarySearcher;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.model.DQDocument;
 
+/**
+ * API for dictionary value suggestion.
+ */
 public class LocalDictionaryCache {
 
     private static final Logger LOGGER = Logger.getLogger(LocalDictionaryCache.class);
@@ -213,8 +216,7 @@ public class LocalDictionaryCache {
             try {
                 sharedSearcherManager.close();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                LOGGER.error(e.getMessage(), e);
             }
         }
         if (customSearcherMananger != null) {

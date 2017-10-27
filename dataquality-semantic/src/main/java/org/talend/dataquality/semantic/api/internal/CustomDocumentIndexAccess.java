@@ -20,6 +20,9 @@ import org.talend.dataquality.semantic.index.DictionarySearcher;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.model.DQDocument;
 
+/**
+ * Low-level API for custom data dict lucene index
+ */
 public class CustomDocumentIndexAccess extends AbstractCustomIndexAccess {
 
     private static final Logger LOGGER = Logger.getLogger(CustomDocumentIndexAccess.class);

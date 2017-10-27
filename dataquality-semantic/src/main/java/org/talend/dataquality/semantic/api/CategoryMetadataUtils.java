@@ -12,6 +12,9 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.util.Bits;
 import org.talend.dataquality.semantic.model.DQCategory;
 
+/**
+ * Utility class for loading category metadata from index.
+ */
 public class CategoryMetadataUtils {
 
     private static final Logger LOGGER = Logger.getLogger(CategoryMetadataUtils.class);

@@ -21,6 +21,9 @@ import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.model.DQDocument;
 
+/**
+ * holder of tenant-specific categories, provides access to custom Metadata/DataDict/RegEx.
+ */
 public class CustomDictionaryHolder {
 
     private static final Logger LOGGER = Logger.getLogger(CustomDictionaryHolder.class);
@@ -39,10 +42,15 @@ public class CustomDictionaryHolder {
 
     private LocalDictionaryCache localDictionaryCache;
 
-    private String contextName;
+    private String tenantID;
 
-    public CustomDictionaryHolder(String contextName) {
-        this.contextName = contextName;
+    /**
+     * constructor
+     * 
+     * @param tenantID
+     */
+    public CustomDictionaryHolder(String tenantID) {
+        this.tenantID = tenantID;
         checkCustomFolders();
     }
 
@@ -59,28 +67,31 @@ public class CustomDictionaryHolder {
         ensureRegexClassifierAccess();
     }
 
-    public String getContextName() {
-        return contextName;
+    public String getTenantID() {
+        return tenantID;
     }
 
     private String getMetadataFolderPath() {
-        return CategoryRegistryManager.getLocalRegistryPath() + File.separator + contextName + File.separator
+        return CategoryRegistryManager.getLocalRegistryPath() + File.separator + tenantID + File.separator
                 + CategoryRegistryManager.PRODUCTION_FOLDER_NAME + File.separator
                 + CategoryRegistryManager.METADATA_SUBFOLDER_NAME;
     }
 
     private String getDataDictFolderPath() {
-        return CategoryRegistryManager.getLocalRegistryPath() + File.separator + contextName + File.separator
+        return CategoryRegistryManager.getLocalRegistryPath() + File.separator + tenantID + File.separator
                 + CategoryRegistryManager.PRODUCTION_FOLDER_NAME + File.separator
                 + CategoryRegistryManager.DICTIONARY_SUBFOLDER_NAME;
     }
 
     private String getRegexClassifierFolderPath() {
-        return CategoryRegistryManager.getLocalRegistryPath() + File.separator + contextName + File.separator
+        return CategoryRegistryManager.getLocalRegistryPath() + File.separator + tenantID + File.separator
                 + CategoryRegistryManager.PRODUCTION_FOLDER_NAME + File.separator + CategoryRegistryManager.REGEX_SUBFOLDER_NAME
                 + File.separator + CategoryRegistryManager.REGEX_CATEGRIZER_FILE_NAME;
     }
 
+    /**
+     * Getter for metadata
+     */
     public Map<String, DQCategory> getMetadata() {
         if (metadata == null) {
             return CategoryRegistryManager.getInstance().getSharedCategoryMetadata();
@@ -88,6 +99,9 @@ public class CustomDictionaryHolder {
         return metadata;
     }
 
+    /**
+     * Getter for Lucene Directory of Data Dict
+     */
     public Directory getDataDictDirectory() {
         if (dataDictDirectory == null) {
             ensureDataDictIndexAccess();
@@ -95,6 +109,9 @@ public class CustomDictionaryHolder {
         return dataDictDirectory;
     }
 
+    /**
+     * Getter for regex classifier
+     */
     public UserDefinedClassifier getRegexClassifier() throws IOException {
         // return shared regexClassifier if NULL
         if (regexClassifier == null) {
@@ -105,7 +122,7 @@ public class CustomDictionaryHolder {
 
     private synchronized void ensureMetadataIndexAccess() {
         if (metadata == null) {
-            LOGGER.info("Initialize custom metadata access for " + contextName);
+            LOGGER.info("Initialize custom metadata access for " + tenantID);
             String metadataIndexPath = getMetadataFolderPath();
             File folder = new File(metadataIndexPath);
             if (!folder.exists()) {
@@ -122,7 +139,7 @@ public class CustomDictionaryHolder {
 
     private synchronized void ensureDataDictIndexAccess() {
         if (customDataDictIndexAccess == null) {
-            LOGGER.info("Initialize custom data dict access for " + contextName);
+            LOGGER.info("Initialize custom data dict access for " + tenantID);
             String dataDictIndexPath = getDataDictFolderPath();
             File folder = new File(dataDictIndexPath);
             if (!folder.exists()) {
@@ -137,6 +154,11 @@ public class CustomDictionaryHolder {
         }
     }
 
+    /**
+     * Create a new category in index.
+     * 
+     * @param category
+     */
     public void createCategory(DQCategory category) {
         ensureMetadataIndexAccess();
         customMetadataIndexAccess.createCategory(category);
@@ -144,6 +166,11 @@ public class CustomDictionaryHolder {
         metadata = customMetadataIndexAccess.readCategoryMedatada();
     }
 
+    /**
+     * Update a category in index.
+     * 
+     * @param category
+     */
     public void updateCategory(DQCategory category) {
         if (CategoryType.DICT.equals(category.getType())) {
             DQCategory dqCat = getMetadata().get(category.getId());
@@ -160,6 +187,11 @@ public class CustomDictionaryHolder {
         metadata = customMetadataIndexAccess.readCategoryMedatada();
     }
 
+    /**
+     * Delete a category from index.
+     * 
+     * @param category
+     */
     public void deleteCategory(DQCategory category) {
         ensureMetadataIndexAccess();
         customMetadataIndexAccess.deleteCategory(category);
@@ -167,6 +199,9 @@ public class CustomDictionaryHolder {
         metadata = customMetadataIndexAccess.readCategoryMedatada();
     }
 
+    /**
+     * Relead category metadata from index.
+     */
     public void reloadCategoryMetadata() {
         checkCustomFolders();
         if (customMetadataIndexAccess != null) {
@@ -177,14 +212,23 @@ public class CustomDictionaryHolder {
         }
     }
 
+    /**
+     * Things to be done before receiving the republish events.
+     */
     public void beforeRepublish() {
         // nothing to do
     }
 
+    /**
+     * Things to be done after receiving the republish events.
+     */
     public void afterRepublish() {
         reloadCategoryMetadata();
     }
 
+    /**
+     * Add a document into Data Dict index.
+     */
     public void addDataDictDocument(List<DQDocument> documents) {
         ensureDataDictIndexAccess();
         customDataDictIndexAccess.createDocument(documents);
@@ -199,6 +243,7 @@ public class CustomDictionaryHolder {
             if (customDataDictIndexAccess != null) {
                 customDataDictIndexAccess.close();
             }
+            closeDictionaryCache();
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         } finally {
@@ -210,12 +255,15 @@ public class CustomDictionaryHolder {
 
     private synchronized void ensureRegexClassifierAccess() {
         if (customRegexClassifierAccess == null) {
-            LOGGER.info("Initialize custom regex classifier access for " + contextName);
+            LOGGER.info("Initialize custom regex classifier access for " + tenantID);
             customRegexClassifierAccess = new CustomRegexClassifierAccess(this);
             regexClassifier = customRegexClassifierAccess.readUserDefinedClassifier();
         }
     }
 
+    /**
+     * Add a regex category.
+     */
     public void addRegexCategory(DQCategory category) {
         ensureRegexClassifierAccess();
         UserDefinedCategory regEx = DictionaryUtils.regexClassifierfromDQCategory(category);
@@ -228,6 +276,9 @@ public class CustomDictionaryHolder {
         metadata = customMetadataIndexAccess.readCategoryMedatada();
     }
 
+    /**
+     * Get the dictionary cache for suggestion of dictionary values.
+     */
     public LocalDictionaryCache getDictionaryCache() {
         if (localDictionaryCache == null) {
             localDictionaryCache = new LocalDictionaryCache(this);
@@ -235,9 +286,13 @@ public class CustomDictionaryHolder {
         return localDictionaryCache;
     }
 
+    /**
+     * Close the dictionary cache instance
+     */
     public void closeDictionaryCache() {
         if (localDictionaryCache != null) {
             localDictionaryCache.close();
+            localDictionaryCache = null;
         }
     }
 
@@ -311,11 +366,17 @@ public class CustomDictionaryHolder {
         return null;
     }
 
-    public IndexWriter getCategoryIndexWriter() throws IOException {
+    /**
+     * Get IndexWriter for category metadata index.
+     */
+    public IndexWriter getMetadataIndexWriter() throws IOException {
         ensureMetadataIndexAccess();
         return customMetadataIndexAccess.getWriter();
     }
 
+    /**
+     * Get IndexWriter for data dict index.
+     */
     public IndexWriter getDataDictIndexWriter() throws IOException {
         ensureDataDictIndexAccess();
         return customDataDictIndexAccess.getWriter();
@@ -327,12 +388,12 @@ public class CustomDictionaryHolder {
      * @param luceneFolder
      * @throws IOException
      */
-    public synchronized void publishDirectory(String luceneFolder) throws IOException {
-        File stagingIndexes = new File(
-                luceneFolder + File.separator + contextName + File.separator + CategoryRegistryManager.REPUBLISH_FOLDER_NAME);
+    public synchronized void publishDirectory() throws IOException {
+        File stagingIndexes = new File(CategoryRegistryManager.getLocalRegistryPath() + File.separator + tenantID + File.separator
+                + CategoryRegistryManager.REPUBLISH_FOLDER_NAME);
         if (stagingIndexes.exists()) {
-            File productionIndexes = new File(luceneFolder + File.separator + contextName + File.separator
-                    + CategoryRegistryManager.PRODUCTION_FOLDER_NAME);
+            File productionIndexes = new File(CategoryRegistryManager.getLocalRegistryPath() + File.separator + tenantID
+                    + File.separator + CategoryRegistryManager.PRODUCTION_FOLDER_NAME);
 
             File backup = new File(productionIndexes.getPath() + ".old");
             if (!backup.exists()) {

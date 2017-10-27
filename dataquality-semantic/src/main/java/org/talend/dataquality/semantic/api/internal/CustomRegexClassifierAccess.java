@@ -17,6 +17,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * Low level API for operations on regex file.
+ */
 public class CustomRegexClassifierAccess {
 
     private final Logger LOGGER = Logger.getLogger(CustomRegexClassifierAccess.class);
@@ -26,7 +29,7 @@ public class CustomRegexClassifierAccess {
     private File regExFile;
 
     public CustomRegexClassifierAccess(CustomDictionaryHolder holder) {
-        String regexFilePath = CategoryRegistryManager.getLocalRegistryPath() + File.separator + holder.getContextName()
+        String regexFilePath = CategoryRegistryManager.getLocalRegistryPath() + File.separator + holder.getTenantID()
                 + File.separator + CategoryRegistryManager.PRODUCTION_FOLDER_NAME + File.separator
                 + CategoryRegistryManager.REGEX_SUBFOLDER_NAME + File.separator
                 + CategoryRegistryManager.REGEX_CATEGRIZER_FILE_NAME;

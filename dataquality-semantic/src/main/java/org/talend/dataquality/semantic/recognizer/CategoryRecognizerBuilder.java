@@ -68,14 +68,14 @@ public class CategoryRecognizerBuilder {
 
     private Map<String, DQCategory> metadata;
 
-    private String contextName = CategoryRegistryManager.DEFAULT_CONTEXT_NAME;
+    private String tenantID = CategoryRegistryManager.DEFAULT_TENANT_ID;
 
     public static CategoryRecognizerBuilder newBuilder() {
         return new CategoryRecognizerBuilder();
     }
 
-    public CategoryRecognizerBuilder contextName(String contextName) {
-        this.contextName = contextName;
+    public CategoryRecognizerBuilder tenantID(String tenantID) {
+        this.tenantID = tenantID;
         return this;
     }
 
@@ -145,7 +145,7 @@ public class CategoryRecognizerBuilder {
     public Map<String, DQCategory> getCategoryMetadata() {
         if (metadata == null) {
             // always return latest metadata from registry without filling the metadata field
-            return CategoryRegistryManager.getInstance().getCustomDictionaryHolder(contextName).getMetadata();
+            return CategoryRegistryManager.getInstance().getCustomDictionaryHolder(tenantID).getMetadata();
         }
         return metadata;
     }
@@ -178,9 +178,8 @@ public class CategoryRecognizerBuilder {
     private LuceneIndex getCustomDataDictIndex() {
         if (dataDictCustomIndex == null) {
             if (customDataDictDirectory == null) {
-                // load from t_default context
-                Directory dir = CategoryRegistryManager.getInstance().getCustomDictionaryHolder(contextName)
-                        .getDataDictDirectory();
+                // load from t_default tenant
+                Directory dir = CategoryRegistryManager.getInstance().getCustomDictionaryHolder(tenantID).getDataDictDirectory();
                 if (dir != null) {
                     dataDictCustomIndex = new LuceneIndex(dir, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY);
                 }
@@ -217,7 +216,7 @@ public class CategoryRecognizerBuilder {
         if (regexClassifier == null) {
             if (regexPath == null) {
                 try {
-                    return CategoryRegistryManager.getInstance().getCustomDictionaryHolder(contextName).getRegexClassifier();
+                    return CategoryRegistryManager.getInstance().getCustomDictionaryHolder(tenantID).getRegexClassifier();
                 } catch (IOException e) {
                     LOGGER.error("Failed to load provided regex classifiers", e);
                 }

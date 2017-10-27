@@ -15,6 +15,9 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
+/**
+ * Abstract class of custom index access
+ */
 public class AbstractCustomIndexAccess implements AutoCloseable {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractCustomIndexAccess.class);

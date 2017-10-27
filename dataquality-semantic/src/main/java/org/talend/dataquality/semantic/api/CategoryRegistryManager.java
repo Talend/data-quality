@@ -12,7 +12,10 @@
 // ============================================================================
 package org.talend.dataquality.semantic.api;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
@@ -36,15 +39,22 @@ import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
 /**
  * Singleton class providing API for local category registry management.
  * 
- * A local category registry is composed by the following subfolders:
+ * A local category registry is composed by the following folders:
  * <ul>
- * <li><b>category:</b> lucene index containing metadata of all categories</li>
- * <li><b>index/dictionary:</b> lucene index containing dictionary documents</li>
- * <li><b>index/keyword:</b> lucene index containing keyword documents</li>
+ * <li><b>shared/prod/:</b> shared dictionaries between tenants, provided by Talend</li>
+ * <li><b>t_id/prod/:</b> tenant specific dictionaries</li>
+ * </ul>
+ * 
+ * Inside each of the above folder, the following subfolders can be found:
+ * <ul>
+ * <li><b>metadata:</b> lucene index containing metadata of all categories. In the tenant specific folder, the metadata of
+ * all provided categories are copied from shared metadata.</li>
+ * <li><b>dictionary:</b> lucene index containing dictionary documents. In the tenant specific folder, we only include the
+ * user-defined data dictionaries, and make the copy for only the modified categories provided by Talend</li>
+ * <li><b>keyword:</b> lucene index containing keyword documents. This folder does not exist in tenant specific folder as the
+ * modification is not allowed for these categories</li>
  * <li><b>regex:</b> json file containing all categories that can be recognized by regex patterns and eventual subvalidators</li>
  * </ul>
- * In each of the above subfolders, there is still a level of subfolders representing different contexts. The default context name
- * is "default".
  */
 public class CategoryRegistryManager {
 
@@ -82,7 +92,7 @@ public class CategoryRegistryManager {
 
     public static final String REPUBLISH_FOLDER_NAME = "republish";
 
-    public static final String DEFAULT_CONTEXT_NAME = "t_default";
+    public static final String DEFAULT_TENANT_ID = "t_default";
 
     /**
      * Map between category ID and the object containing its metadata.
@@ -147,35 +157,37 @@ public class CategoryRegistryManager {
     }
 
     /**
-     * @return the {@link LocalDictionaryCache} corresponding to the default context.
+     * @return the {@link LocalDictionaryCache} corresponding to the default tenant ID.
      */
     public LocalDictionaryCache getDictionaryCache() {
-        return getDictionaryCache(DEFAULT_CONTEXT_NAME);
+        return getDictionaryCache(DEFAULT_TENANT_ID);
     }
 
     /**
-     * @param contextName name of the context
-     * @return the {@link LocalDictionaryCache} corresponding to a given context.
+     * @param tenantID the ID of the tenant
+     * @return the {@link LocalDictionaryCache} corresponding to a given tenant ID.
      */
-    public LocalDictionaryCache getDictionaryCache(String contextName) {
-        return getCustomDictionaryHolder(contextName).getDictionaryCache();
+    public LocalDictionaryCache getDictionaryCache(String tenantID) {
+        return getCustomDictionaryHolder(tenantID).getDictionaryCache();
     }
 
     /**
-     * Reload the category from local registry for a given context. This method is typically called following category or
+     * Reload the category from local registry for a given tenant ID. This method is typically called following category or
      * dictionary enrichments.
+     * 
+     * @param tenantID the ID of the tenant
      */
-    public void reloadCategoriesFromRegistry(String context) {
+    public void reloadCategoriesFromRegistry(String tenantID) {
         LOGGER.info("Reload categories from local registry.");
-        getCustomDictionaryHolder(context).reloadCategoryMetadata();
+        getCustomDictionaryHolder(tenantID).reloadCategoryMetadata();
     }
 
     /**
-     * Reload the category from local registry for the default context. This method is typically called following category or
+     * Reload the category from local registry for the default tenant. This method is typically called following category or
      * dictionary enrichments.
      */
     public void reloadCategoriesFromRegistry() {
-        reloadCategoriesFromRegistry(DEFAULT_CONTEXT_NAME);
+        reloadCategoriesFromRegistry(DEFAULT_TENANT_ID);
     }
 
     private void loadRegisteredCategories() throws IOException, URISyntaxException {
@@ -204,7 +216,7 @@ public class CategoryRegistryManager {
         loadBaseRegex(regexRegistryFile);
     }
 
-    private void loadBaseRegex(final File regexRegistryFile) throws IOException, FileNotFoundException {
+    private void loadBaseRegex(final File regexRegistryFile) throws IOException {
         if (!regexRegistryFile.exists()) {
             // load provided RE into registry
             InputStream is = CategoryRecognizer.class.getResourceAsStream(CategoryRecognizerBuilder.DEFAULT_RE_PATH);
@@ -280,6 +292,9 @@ public class CategoryRegistryManager {
         return sharedMetadata;
     }
 
+    /**
+     * Getter for sharedDataDictDirectory.
+     */
     public Directory getSharedDataDictDirectory() {
         if (sharedDataDictDirectory == null) {
             try {
@@ -292,14 +307,14 @@ public class CategoryRegistryManager {
     }
 
     /**
-     * Get the full map between category ID and category metadata from the default context.
+     * Get the full map between category ID and category metadata for the default tenant.
      */
     public Map<String, DQCategory> getCategoryMetadataMap() {
         return getCustomDictionaryHolder().getMetadata();
     }
 
     /**
-     * Get the category object by its technical ID from the default context.
+     * Get the category object by its technical ID for the default tenant.
      * 
      * @param catId the technical ID of the category
      * @return the category object
@@ -309,7 +324,7 @@ public class CategoryRegistryManager {
     }
 
     /**
-     * Get the category object by its functional ID (aka. name) from the default context.
+     * Get the category object by its functional ID (aka. name) for the default tenant.
      * 
      * @param catName the functional ID (aka. name)
      * @return the category object
@@ -346,7 +361,7 @@ public class CategoryRegistryManager {
     /**
      * get URI of local category metadata
      */
-    public URI getMetadataURI() throws URISyntaxException {
+    private URI getMetadataURI() throws URISyntaxException {
         if (usingLocalCategoryRegistry) {
             return Paths.get(localRegistryPath, SHARED_FOLDER_NAME, PRODUCTION_FOLDER_NAME, METADATA_SUBFOLDER_NAME).toUri();
         } else {
@@ -388,30 +403,43 @@ public class CategoryRegistryManager {
         }
     }
 
-    public CustomDictionaryHolder getCustomDictionaryHolder(String contextName) {
-        CustomDictionaryHolder cdh = customDictionaryHolderMap.get(contextName);
+    /**
+     * Get CustomDictioanryHolder instance for the given tenant ID.
+     * 
+     * @param tenantID the ID of the tenant.
+     */
+    public CustomDictionaryHolder getCustomDictionaryHolder(String tenantID) {
+        CustomDictionaryHolder cdh = customDictionaryHolderMap.get(tenantID);
         if (cdh == null) {
-            cdh = new CustomDictionaryHolder(contextName);
-            customDictionaryHolderMap.put(contextName, cdh);
+            cdh = new CustomDictionaryHolder(tenantID);
+            customDictionaryHolderMap.put(tenantID, cdh);
         }
         return cdh;
     }
 
+    /**
+     * Get CustomDictioanryHolder instance for the default tenant.
+     */
     public CustomDictionaryHolder getCustomDictionaryHolder() {
-        return getCustomDictionaryHolder(DEFAULT_CONTEXT_NAME);
+        return getCustomDictionaryHolder(DEFAULT_TENANT_ID);
     }
 
-    public void removeCustomDictionaryHolder(String contextName) {
-        CustomDictionaryHolder cdh = customDictionaryHolderMap.get(contextName);
+    /**
+     * Remove the CustomDictionaryHolder for a given tenant ID.
+     * 
+     * @param tenantID the ID of the tenant.
+     */
+    public void removeCustomDictionaryHolder(String tenantID) {
+        CustomDictionaryHolder cdh = customDictionaryHolderMap.get(tenantID);
         if (cdh != null) {
             cdh.closeDictionaryAccess();
-            File folder = new File(localRegistryPath + File.separator + contextName);
+            File folder = new File(localRegistryPath + File.separator + tenantID);
             try {
                 FileUtils.deleteDirectory(folder);
             } catch (IOException e) {
                 LOGGER.error(e.getMessage(), e);
             }
-            customDictionaryHolderMap.remove(contextName);
+            customDictionaryHolderMap.remove(tenantID);
         }
     }
 }

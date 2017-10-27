@@ -146,7 +146,7 @@ public class SemanticAnalyzerTest {
     public void testTagadaWithCustomMetadata() {
         CategoryRegistryManager.setLocalRegistryPath("target/test_crm");
         CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder("t_custom_meta");
-        builder.contextName("t_custom_meta");
+        builder.tenantID("t_custom_meta");
 
         DQCategory firstNameCat = holder.getMetadata().get(SemanticCategoryEnum.FIRST_NAME.getTechnicalId());
         firstNameCat.setDeleted(true);
@@ -180,7 +180,7 @@ public class SemanticAnalyzerTest {
     public void testTagadaWithCustomDataDict() {
         CategoryRegistryManager.setLocalRegistryPath("target/test_crm");
         CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder("t_custom_dd");
-        builder.contextName("t_custom_dd");
+        builder.tenantID("t_custom_dd");
 
         DQCategory answerCategory = holder.getMetadata().get(SemanticCategoryEnum.ANSWER.getTechnicalId());
         DQCategory categoryClone = SerializationUtils.clone(answerCategory); // make a clone instead of modifying the shared
@@ -222,7 +222,7 @@ public class SemanticAnalyzerTest {
     public void testTagadaWithCustomRegex() {
         CategoryRegistryManager.setLocalRegistryPath("target/test_crm");
         CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder("t_custom_re");
-        builder.contextName("t_custom_re");
+        builder.tenantID("t_custom_re");
 
         DQValidator dqValidator = new DQValidator();
         dqValidator.setPatternString("^(true|false)$");

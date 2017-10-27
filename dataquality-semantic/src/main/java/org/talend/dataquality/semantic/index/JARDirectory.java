@@ -72,7 +72,7 @@ public class JARDirectory extends Directory {
         this.jarDescriptor = descriptor;
         this.indexDirectory = directory;
         try {
-            extractIndex(); // the default context name
+            extractIndex();
         } catch (IOException e) {
             LOGGER.error("Failed to extract index: " + e.getMessage(), e);
         }
