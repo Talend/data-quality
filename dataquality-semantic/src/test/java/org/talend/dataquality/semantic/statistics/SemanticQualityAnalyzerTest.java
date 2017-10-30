@@ -41,36 +41,20 @@ import org.talend.dataquality.semantic.api.DictionaryUtils;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.index.ClassPathDirectory;
 import org.talend.dataquality.semantic.index.DictionarySearcher;
+import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.recognizer.CategoryFrequency;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
 
 public class SemanticQualityAnalyzerTest {
 
-    private static CategoryRecognizerBuilder builder;
+    public static final CategoryRegistryManager crm = CategoryRegistryManager.getInstance();
 
     private static final List<String[]> RECORDS_CRM_CUST = getRecords("crm_cust.csv");
 
     private static final List<String[]> RECORDS_CREDIT_CARDS = getRecords("credit_card_number_samples.csv");
 
     private static final List<String[]> RECORDS_PHONES = getRecords("phone_number.csv");
-
-    public static final CategoryRegistryManager crm = CategoryRegistryManager.getInstance();
-
-    private final String[] EXPECTED_CATEGORIES_DICT = new String[] { //
-            "", //
-            "CIVILITY", //
-            "FIRST_NAME", //
-            "LAST_NAME", //
-            "COUNTRY_CODE_ISO3", //
-            "ADDRESS_LINE", //
-            "FR_POSTAL_CODE", //
-            "CITY", //
-            "", //
-            "EMAIL", //
-            "", //
-            "", //
-    };
 
     private static final long[][] EXPECTED_VALIDITY_COUNT_DICT = new long[][] { //
             new long[] { 1000, 0, 0 }, //
@@ -87,12 +71,6 @@ public class SemanticQualityAnalyzerTest {
             new long[] { 1000, 0, 0 }, //
     };
 
-    private final String[] EXPECTED_CATEGORIES_REGEX = new String[] { //
-            "", //
-            "VISA_CARD", //
-            "DATA_URL", //
-    };
-
     private static final long[][] EXPECTED_VALIDITY_COUNT_REGEX_FOR_DISCOVERY = new long[][] { //
             new long[] { 30, 0, 0 }, //
             new long[] { 20, 10, 0 }, //
@@ -107,6 +85,49 @@ public class SemanticQualityAnalyzerTest {
 
     private static final long[][] EXPECTED_VALIDITY_COUNT_PHONE = new long[][] { //
             new long[] { 11, 0, 0 } };
+
+    private static CategoryRecognizerBuilder builder;
+
+    private final String[] EXPECTED_CATEGORIES_DICT = new String[] { //
+            "", //
+            "CIVILITY", //
+            "FIRST_NAME", //
+            "LAST_NAME", //
+            "COUNTRY_CODE_ISO3", //
+            "ADDRESS_LINE", //
+            "FR_POSTAL_CODE", //
+            "CITY", //
+            "", //
+            "EMAIL", //
+            "", //
+            "", //
+    };
+
+    private final String[] EXPECTED_CATEGORIES_REGEX = new String[] { //
+            "", //
+            "VISA_CARD", //
+            "DATA_URL", //
+    };
+
+    private static List<String[]> getRecords(String path) {
+        List<String[]> records = new ArrayList<String[]>();
+        try {
+            Reader reader = new FileReader(SemanticQualityAnalyzerTest.class.getResource(path).getPath());
+            CSVFormat csvFormat = CSVFormat.DEFAULT.withDelimiter(';').withFirstRecordAsHeader();
+            Iterable<CSVRecord> csvRecords = csvFormat.parse(reader);
+
+            for (CSVRecord csvRecord : csvRecords) {
+                String[] values = new String[csvRecord.size()];
+                for (int i = 0; i < csvRecord.size(); i++) {
+                    values[i] = csvRecord.get(i);
+                }
+                records.add(values);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return records;
+    }
 
     @Before
     public void setupBuilder() throws URISyntaxException {
@@ -166,6 +187,15 @@ public class SemanticQualityAnalyzerTest {
 
     }
 
+    @Test
+    public void testCompoundCategoryWithSharedChildrenAndCustomChildren() throws IOException, URISyntaxException {
+        long[][] expectedCount = new long[][] { new long[] { 2, 0, 0 } };
+        initCompound();
+        initTenantIndex(false);
+        testAnalysis(Arrays.asList(new String[] { "AAAA" }, new String[] { "Lagunillas" }), new String[] { "COMPOUND_NAME" },
+                expectedCount, expectedCount);
+    }
+
     public void testAnalysis(List<String[]> records, String[] expectedCategories, long[][] expectedValidityCountForDiscovery,
             long[][] expectedValidityCountForValidation) {
         Analyzer<Result> analyzers = Analyzers.with(//
@@ -219,26 +249,6 @@ public class SemanticQualityAnalyzerTest {
         }
     }
 
-    private static List<String[]> getRecords(String path) {
-        List<String[]> records = new ArrayList<String[]>();
-        try {
-            Reader reader = new FileReader(SemanticQualityAnalyzerTest.class.getResource(path).getPath());
-            CSVFormat csvFormat = CSVFormat.DEFAULT.withDelimiter(';').withFirstRecordAsHeader();
-            Iterable<CSVRecord> csvRecords = csvFormat.parse(reader);
-
-            for (CSVRecord csvRecord : csvRecords) {
-                String[] values = new String[csvRecord.size()];
-                for (int i = 0; i < csvRecord.size(); i++) {
-                    values[i] = csvRecord.get(i);
-                }
-                records.add(values);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return records;
-    }
-
     public void initTenantIndex(boolean addExistingValues) throws IOException, URISyntaxException {
 
         Map<String, DQCategory> metadata = builder.getCategoryMetadata();
@@ -272,6 +282,24 @@ public class SemanticQualityAnalyzerTest {
         writer.commit();
         writer.close();
         builder.ddCustomDirectory(ramDirectory).lucene().build();
+
+    }
+
+    public void initCompound() throws IOException, URISyntaxException {
+        Map<String, DQCategory> metadata = builder.getCategoryMetadata();
+        DQCategory compoundCategory = new DQCategory("COMPOUND_ID");
+        compoundCategory.setName("COMPOUND_NAME");
+        compoundCategory.setLabel("COMPOUND_LABEL");
+        compoundCategory.setCompleteness(true);
+        compoundCategory.setModified(true);
+        compoundCategory.setType(CategoryType.COMPOUND);
+        List<DQCategory> children = new ArrayList<>();
+        children.add(metadata.get(SemanticCategoryEnum.AIRPORT_CODE.getTechnicalId()));
+        children.add(metadata.get(SemanticCategoryEnum.AIRPORT.getTechnicalId()));
+        compoundCategory.setChildren(children);
+        metadata.put("COMPOUND_ID", compoundCategory);
+        metadata.get(SemanticCategoryEnum.AIRPORT_CODE.getTechnicalId()).setParents(Collections.singletonList(compoundCategory));
+        metadata.get(SemanticCategoryEnum.AIRPORT.getTechnicalId()).setParents(Collections.singletonList(compoundCategory));
 
     }
 
