@@ -1,6 +1,5 @@
 package org.talend.dataquality.datamasking.functions;
 
-import org.apache.spark.sql.sources.In;
 import org.talend.dataquality.datamasking.generic.GenerateUniqueRandomPatterns;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
