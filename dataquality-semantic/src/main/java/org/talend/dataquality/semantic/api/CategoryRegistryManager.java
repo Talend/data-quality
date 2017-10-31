@@ -19,7 +19,11 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -132,6 +136,10 @@ public class CategoryRegistryManager {
 
     public static void setUsingLocalCategoryRegistry(boolean b) {
         usingLocalCategoryRegistry = b;
+    }
+
+    static boolean isUsingLocalCategoryRegistry() {
+        return usingLocalCategoryRegistry;
     }
 
     /**

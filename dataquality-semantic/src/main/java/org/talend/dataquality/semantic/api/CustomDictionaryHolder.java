@@ -51,7 +51,9 @@ public class CustomDictionaryHolder {
      */
     public CustomDictionaryHolder(String tenantID) {
         this.tenantID = tenantID;
-        checkCustomFolders();
+        if (CategoryRegistryManager.isUsingLocalCategoryRegistry()) { // no need check tenant-specific folder for unit tests
+            checkCustomFolders();
+        }
     }
 
     private void checkCustomFolders() {
