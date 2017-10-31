@@ -39,61 +39,61 @@ public class ValueDataMaskerTest {
 
             // 1. FIRST_NAME
             put(new String[] { "", SemanticCategoryEnum.FIRST_NAME.name(), "string" }, "");
-            put(new String[] { "John", SemanticCategoryEnum.FIRST_NAME.name(), "string" }, "Josiah");
+            put(new String[] { "John", SemanticCategoryEnum.FIRST_NAME.name(), "string" }, "ACHILLES");
 
             // 2. LAST_NAME
-            put(new String[] { "Dupont", SemanticCategoryEnum.LAST_NAME.name(), "string" }, "Robbins");
+            put(new String[] { "Dupont", SemanticCategoryEnum.LAST_NAME.name(), "string" }, "BELL");
 
             // 3. EMAIL
-            put(new String[] { "sdkjs@talend.com", MaskableCategoryEnum.EMAIL.name(), "String" }, "XXXXX@talend.com");
+            put(new String[] { "sdkjs@talend.com", MaskableCategoryEnum.EMAIL.name(), "string" }, "XXXXX@talend.com");
             put(new String[] { "\t", MaskableCategoryEnum.EMAIL.name(), "string" }, "\t");
 
             // 4. PHONE
-            put(new String[] { "3333456789", MaskableCategoryEnum.US_PHONE.name(), "String" }, "3333818829");
+            put(new String[] { "3333456789", MaskableCategoryEnum.US_PHONE.name(), "string" }, "3333818829");
             // if we put two 1 at the fifth and sixth position, it's not a US valid number, so we replace all the digit
-            put(new String[] { "3333116789", MaskableCategoryEnum.US_PHONE.name(), "String" }, "2873888808");
-            put(new String[] { "321938", MaskableCategoryEnum.FR_PHONE.name(), "String" }, "459494");
-            put(new String[] { "++044dso44aa", MaskableCategoryEnum.DE_PHONE.name(), "String" }, "++287dso38aa");
-            put(new String[] { "666666666", MaskableCategoryEnum.UK_PHONE.name(), "String" }, "663330954");
-            put(new String[] { "777777777abc", MaskableCategoryEnum.UK_PHONE.name(), "String" }, "778886113abc");
-            put(new String[] { "(301) 231-9473 x 2364", MaskableCategoryEnum.US_PHONE.name(), "String" },
-                    "(301) 231-9416 x 7116");
-            put(new String[] { "(563) 557-7600 Ext. 2890", MaskableCategoryEnum.US_PHONE.name(), "String" },
+            put(new String[] { "3333116789", MaskableCategoryEnum.US_PHONE.name(), "string" }, "2873888808");
+            put(new String[] { "321938", MaskableCategoryEnum.FR_PHONE.name(), "string" }, "459494");
+            put(new String[] { "++044dso44aa", MaskableCategoryEnum.DE_PHONE.name(), "string" }, "++287dso38aa");
+            put(new String[] { "666666666", MaskableCategoryEnum.UK_PHONE.name(), "string" }, "666371758");
+            put(new String[] { "777777777abc", MaskableCategoryEnum.UK_PHONE.name(), "string" }, "775767051abc");
+            put(new String[] { "(301) 231-9473 x 2364", MaskableCategoryEnum.US_PHONE.name(), "string" },
+                    "(301) 231-9452 x 1404");
+            put(new String[] { "(563) 557-7600 Ext. 2890", MaskableCategoryEnum.US_PHONE.name(), "string" },
                     "(563) 557-7618 Ext. 3290");
 
             // 5. JOB_TITLE
-            put(new String[] { "CEO", SemanticCategoryEnum.JOB_TITLE.name(), "String" }, "Cafeteria Cook");
+            put(new String[] { "CEO", SemanticCategoryEnum.JOB_TITLE.name(), "string" }, "Civil Drafter");
 
             // 6. ADDRESS_LINE
-            put(new String[] { "9 Rue Pagès", MaskableCategoryEnum.ADDRESS_LINE.name(), "String" }, "6 Rue XXXXX");
+            put(new String[] { "9 Rue Pagès", MaskableCategoryEnum.ADDRESS_LINE.name(), "string" }, "6 Rue XXXXX");
 
             // 7 POSTAL_CODE
-            put(new String[] { "37218-1324", MaskableCategoryEnum.US_POSTAL_CODE.name(), "String" }, "32515-1655");
-            put(new String[] { "92150", MaskableCategoryEnum.FR_POSTAL_CODE.name(), "String" }, "32515");
-            put(new String[] { "63274", MaskableCategoryEnum.DE_POSTAL_CODE.name(), "String" }, "32515");
-            put(new String[] { "AT1 3BW", MaskableCategoryEnum.UK_POSTAL_CODE.name(), "String" }, "VK5 1ZP");
+            put(new String[] { "37218-1324", MaskableCategoryEnum.US_POSTAL_CODE.name(), "string" }, "32515-1655");
+            put(new String[] { "92150", MaskableCategoryEnum.FR_POSTAL_CODE.name(), "string" }, "32515");
+            put(new String[] { "63274", MaskableCategoryEnum.DE_POSTAL_CODE.name(), "string" }, "32515");
+            put(new String[] { "AT1 3BW", MaskableCategoryEnum.UK_POSTAL_CODE.name(), "string" }, "VK5 1ZP");
 
             // 8 ORGANIZATION
 
             // 9 COMPANY
 
             // 10 CREDIT_CARD
-            put(new String[] { "5300 1232 8732 8318", MaskableCategoryEnum.US_CREDIT_CARD.name(), "String" },
+            put(new String[] { "5300 1232 8732 8318", MaskableCategoryEnum.US_CREDIT_CARD.name(), "string" },
                     "5332 5151 6550 0021");
-            put(new String[] { "5300123287328318", MaskableCategoryEnum.MASTERCARD.name(), "String" }, "5332515165500021");
-            put(new String[] { "4300 1232 8732 8318", MaskableCategoryEnum.VISACARD.name(), "String" }, "4325 1516 5500 0249");
+            put(new String[] { "5300123287328318", MaskableCategoryEnum.MASTERCARD.name(), "string" }, "5332515165500021");
+            put(new String[] { "4300 1232 8732 8318", MaskableCategoryEnum.VISACARD.name(), "string" }, "4325 1516 5500 0249");
 
             // 11 SSN
-            put(new String[] { "728931789", MaskableCategoryEnum.US_SSN.name(), "String" }, "528-73-8888");
-            put(new String[] { "17612 38293 28232", MaskableCategoryEnum.FR_SSN.name(), "String" }, "2210622388880 15");
-            put(new String[] { "634217823", MaskableCategoryEnum.UK_SSN.name(), "String" }, "RB 87 38 88 D");
+            put(new String[] { "728931789", MaskableCategoryEnum.US_SSN.name(), "string" }, "528-73-8888");
+            put(new String[] { "17612 38293 28232", MaskableCategoryEnum.FR_SSN.name(), "string" }, "2210622388880 15");
+            put(new String[] { "634217823", MaskableCategoryEnum.UK_SSN.name(), "string" }, "RB 87 38 88 D");
 
             // Company
-            put(new String[] { "Talend", SemanticCategoryEnum.COMPANY.name(), "String" }, "Gilead Sciences");
+            put(new String[] { "Talend", SemanticCategoryEnum.COMPANY.name(), "string" }, "Automotive Navigation Data");
             // FR Commune
-            put(new String[] { "Amancey", SemanticCategoryEnum.FR_COMMUNE.name(), "String" }, "Dieppe");
+            put(new String[] { "Amancey", SemanticCategoryEnum.FR_COMMUNE.name(), "string" }, "Ceyzériat");
             // Organization
-            put(new String[] { "Kiva", SemanticCategoryEnum.ORGANIZATION.name(), "String" }, "Environmental Defense");
+            put(new String[] { "Kiva", SemanticCategoryEnum.ORGANIZATION.name(), "string" }, "Freedom Fighters (comics)");
 
             // EMPTY
             put(new String[] { " ", "UNKNOWN", "integer" }, " ");
