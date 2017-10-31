@@ -52,13 +52,13 @@ public class CategoryRecognizerBuilder {
 
     private URI regexPath;
 
-    private LuceneIndex dataDictIndex;
+    private LuceneIndex sharedDataDictIndex;
 
-    private LuceneIndex dataDictCustomIndex;
+    private LuceneIndex customDataDictIndex;
 
     private LuceneIndex keywordIndex;
 
-    private Directory dataDictDirectory;
+    private Directory sharedDataDictDirectory;
 
     private Directory customDataDictDirectory;
 
@@ -89,8 +89,8 @@ public class CategoryRecognizerBuilder {
         return this;
     }
 
-    public CategoryRecognizerBuilder ddDirectory(Directory dataDictDirectory) {
-        this.dataDictDirectory = dataDictDirectory;
+    public CategoryRecognizerBuilder ddDirectory(Directory sharedDataDictDirectory) {
+        this.sharedDataDictDirectory = sharedDataDictDirectory;
         return this;
     }
 
@@ -151,43 +151,28 @@ public class CategoryRecognizerBuilder {
     }
 
     private LuceneIndex getSharedDataDictIndex() {
-        if (dataDictIndex == null) {
-            if (dataDictDirectory == null) {
-                if (dataDictPath == null) {
-                    try {
-                        dataDictPath = CategoryRecognizerBuilder.class.getResource(DEFAULT_DD_PATH).toURI();
-                        dataDictIndex = new LuceneIndex(dataDictPath, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY);
-                    } catch (URISyntaxException e) {
-                        LOGGER.error(e.getMessage(), e);
-                    }
-                } else {
-                    dataDictDirectory = CategoryRegistryManager.getInstance().getSharedDataDictDirectory();
-                    dataDictIndex = new LuceneIndex(dataDictDirectory, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY);
-                }
-            } else {
-                if (dataDictPath == null) {
-                    dataDictIndex = new LuceneIndex(dataDictDirectory, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY);
-                } else {
-                    throw new IllegalArgumentException("Please call either ddDirectory() or ddPath() but not both!");
-                }
+        if (sharedDataDictIndex == null) {
+            if (sharedDataDictDirectory == null) {
+                sharedDataDictDirectory = CategoryRegistryManager.getInstance().getSharedDataDictDirectory();
             }
+            sharedDataDictIndex = new LuceneIndex(sharedDataDictDirectory, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY);
         }
-        return dataDictIndex;
+        return sharedDataDictIndex;
     }
 
     private LuceneIndex getCustomDataDictIndex() {
-        if (dataDictCustomIndex == null) {
+        if (customDataDictIndex == null) {
             if (customDataDictDirectory == null) {
                 // load from t_default tenant
                 Directory dir = CategoryRegistryManager.getInstance().getCustomDictionaryHolder(tenantID).getDataDictDirectory();
                 if (dir != null) {
-                    dataDictCustomIndex = new LuceneIndex(dir, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY);
+                    customDataDictIndex = new LuceneIndex(dir, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY);
                 }
             } else {
-                dataDictCustomIndex = new LuceneIndex(customDataDictDirectory, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY);
+                customDataDictIndex = new LuceneIndex(customDataDictDirectory, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY);
             }
         }
-        return dataDictCustomIndex;
+        return customDataDictIndex;
     }
 
     private LuceneIndex getKeywordIndex() {
@@ -241,11 +226,11 @@ public class CategoryRecognizerBuilder {
     }
 
     public void initIndex() {
-        if (dataDictCustomIndex != null) {
+        if (customDataDictIndex != null) {
             try {
-                dataDictCustomIndex.initIndex();
+                customDataDictIndex.initIndex();
             } catch (AlreadyClosedException e) {
-                dataDictCustomIndex = null;
+                customDataDictIndex = null;
                 customDataDictDirectory = null;
                 getCustomDataDictIndex();
             }
