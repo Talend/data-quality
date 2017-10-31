@@ -12,23 +12,35 @@
 // ============================================================================
 package org.talend.dataquality.semantic.api;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.search.*;
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.SearcherManager;
+import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.WildcardQuery;
 import org.apache.lucene.store.Directory;
 import org.talend.dataquality.semantic.index.ClassPathDirectory;
 import org.talend.dataquality.semantic.index.DictionarySearcher;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.model.DQDocument;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * API for dictionary value suggestion.
@@ -97,22 +109,25 @@ public class LocalDictionaryCache {
         return Collections.emptyList();
     }
 
-    private Query getListDocumentsQuery(String categoryId) throws IOException {
-        return new TermQuery(new Term(DictionarySearcher.F_CATID, categoryId));
-    }
-
     private TopDocs sendListDocumentsQuery(String categoryId, int offset, int n) throws IOException {
-        sharedSearcherManager.maybeRefresh();
-        IndexSearcher searcher = sharedSearcherManager.acquire();
+        DQCategory dqCat = customDictionaryHolder.getCategoryMetadataById(categoryId);
         TopDocs result;
+
+        Boolean searchCustomIndex = dqCat.getModified();
+        SearcherManager searcherManager = getSearcherManager(searchCustomIndex);
+        if (searchCustomIndex) {
+            sharedSearcherManager.maybeRefresh();
+        }
+
+        IndexSearcher searcher = searcherManager.acquire();
+        Query q = new TermQuery(new Term(DictionarySearcher.F_CATID, categoryId));
         if (offset <= 0) {
-            result = searcher.search(getListDocumentsQuery(categoryId), n);
+            result = searcher.search(q, n);
         } else {
-            TopDocs topDocs = searcher.search(getListDocumentsQuery(categoryId), offset + n);
-            Query q = new TermQuery(new Term(DictionarySearcher.F_CATID, categoryId));
+            TopDocs topDocs = searcher.search(q, offset + n);
             result = searcher.searchAfter(topDocs.scoreDocs[Math.min(topDocs.totalHits, offset) - 1], q, n);
         }
-        sharedSearcherManager.release(searcher);
+        searcherManager.release(searcher);
         return result;
     }
 
