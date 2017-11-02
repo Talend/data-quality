@@ -253,6 +253,7 @@
 				<version>2.0.1</version>
 				<configuration>
 					<configFile>talend_java_eclipse_formatter.xml</configFile>
+					<lineEnding>LF</lineEnding>
 					<encoding>UTF-8</encoding>
 				</configuration>
 				<dependencies>
