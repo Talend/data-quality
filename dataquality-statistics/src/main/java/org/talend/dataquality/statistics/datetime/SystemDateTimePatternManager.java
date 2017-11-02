@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 import java.time.temporal.TemporalAccessor;
 import java.time.temporal.TemporalQueries;
 import java.util.ArrayList;
@@ -210,13 +211,17 @@ public class SystemDateTimePatternManager {
     private static DateTimeFormatter getDateTimeFormatterByPattern(String customPattern, Locale locale) {
         String localeStr = locale.toString();
         DateTimeFormatter formatter = dateTimeFormatterCache.get(customPattern + localeStr);
-        if (formatter == null) {
+        if (formatter == null && !StringUtils.isEmpty(customPattern)) {
             try {
-                formatter = new DateTimeFormatterBuilder().parseCaseInsensitive().appendPattern(customPattern)
-                        .toFormatter(locale);
                 // TDQ-13936 add Chronology for specified Locale.
-                if (customPattern != null && customPattern.endsWith(PATTERN_SUFFIX_ERA)) {
-                    formatter = ChronologyParameterManager.getDateTimeFormatterWithChronology(formatter, locale);
+                if (customPattern.endsWith(PATTERN_SUFFIX_ERA)) {
+                    formatter = ChronologyParameterManager.getDateTimeFormatterWithChronology(customPattern, locale);
+                } else {
+                    // TDQ-14421 use ResolverStyle.STRICT to validate a date. such as "2017-02-29" should be
+                    // invalid.STRICT model for pattern without G,should replace 'y' with 'u'.see Java DOC.
+                    String customPatternStrict = customPattern.replace('y', 'u');
+                    formatter = new DateTimeFormatterBuilder().parseCaseInsensitive().appendPattern(customPatternStrict)
+                            .toFormatter(locale).withResolverStyle(ResolverStyle.STRICT);
                 }
             } catch (IllegalArgumentException e) {
                 LOGGER.debug(e.getMessage(), e);

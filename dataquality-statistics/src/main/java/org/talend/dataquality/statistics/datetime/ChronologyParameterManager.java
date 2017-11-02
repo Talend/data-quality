@@ -17,6 +17,8 @@ import java.time.chrono.JapaneseChronology;
 import java.time.chrono.MinguoChronology;
 import java.time.chrono.ThaiBuddhistChronology;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.ResolverStyle;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -99,19 +101,20 @@ public class ChronologyParameterManager {
      * @param locale
      * @return
      */
-    public static DateTimeFormatter getDateTimeFormatterWithChronology(DateTimeFormatter formatter, Locale locale) {
+    public static DateTimeFormatter getDateTimeFormatterWithChronology(String pattern, Locale locale) {
 
-        DateTimeFormatter formatterWithChronology = formatter;
+        DateTimeFormatter formatter = new DateTimeFormatterBuilder().parseCaseInsensitive().appendPattern(pattern)
+                .toFormatter(locale).withResolverStyle(ResolverStyle.STRICT);
         if (Locale.JAPANESE.equals(locale)) {
-            formatterWithChronology = formatter.withChronology(JapaneseChronology.INSTANCE);
+            return formatter.withChronology(JapaneseChronology.INSTANCE);
         } else if (Locale.TRADITIONAL_CHINESE.equals(locale)) {
-            formatterWithChronology = formatter.withChronology(MinguoChronology.INSTANCE);
+            return formatter.withChronology(MinguoChronology.INSTANCE);
         } else if ("ar".equals(locale.getLanguage())) { //$NON-NLS-1$
-            formatterWithChronology = formatter.withChronology(HijrahChronology.INSTANCE);
+            return formatter.withChronology(HijrahChronology.INSTANCE);
         } else if ("th".equals(locale.getLanguage())) { //$NON-NLS-1$
-            formatterWithChronology = formatter.withChronology(ThaiBuddhistChronology.INSTANCE).withLocale(locale);
+            return formatter.withChronology(ThaiBuddhistChronology.INSTANCE).withLocale(locale);
         }
-        return formatterWithChronology;
+        return formatter;
 
     }
 }

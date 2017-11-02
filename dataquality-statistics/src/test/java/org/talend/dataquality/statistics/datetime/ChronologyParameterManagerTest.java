@@ -19,7 +19,6 @@ import java.time.chrono.JapaneseChronology;
 import java.time.chrono.MinguoChronology;
 import java.time.chrono.ThaiBuddhistChronology;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.util.Locale;
 
 import org.junit.Test;
@@ -48,21 +47,19 @@ public class ChronologyParameterManagerTest {
     public void testgetDateTimeFormatterWithChronology() {
         String pattern = "yyyy-MM-dd G"; //$NON-NLS-1$
         Locale locale = Locale.JAPANESE;
-        DateTimeFormatter formatter = new DateTimeFormatterBuilder().parseCaseInsensitive().appendPattern(pattern)
-                .toFormatter(locale);
-        DateTimeFormatter dateTimeFormatter = ChronologyParameterManager.getDateTimeFormatterWithChronology(formatter, locale);
+        DateTimeFormatter dateTimeFormatter = ChronologyParameterManager.getDateTimeFormatterWithChronology(pattern, locale);
         assertEquals(JapaneseChronology.INSTANCE, dateTimeFormatter.getChronology());
 
         locale = Locale.TAIWAN;
-        dateTimeFormatter = ChronologyParameterManager.getDateTimeFormatterWithChronology(formatter, locale);
+        dateTimeFormatter = ChronologyParameterManager.getDateTimeFormatterWithChronology(pattern, locale);
         assertEquals(MinguoChronology.INSTANCE, dateTimeFormatter.getChronology());
 
         locale = new Locale("ar"); //$NON-NLS-1$
-        dateTimeFormatter = ChronologyParameterManager.getDateTimeFormatterWithChronology(formatter, locale);
+        dateTimeFormatter = ChronologyParameterManager.getDateTimeFormatterWithChronology(pattern, locale);
         assertEquals(HijrahChronology.INSTANCE, dateTimeFormatter.getChronology());
 
         locale = new Locale("th"); //$NON-NLS-1$
-        dateTimeFormatter = ChronologyParameterManager.getDateTimeFormatterWithChronology(formatter, locale);
+        dateTimeFormatter = ChronologyParameterManager.getDateTimeFormatterWithChronology(pattern, locale);
         assertEquals(ThaiBuddhistChronology.INSTANCE, dateTimeFormatter.getChronology());
     }
 
