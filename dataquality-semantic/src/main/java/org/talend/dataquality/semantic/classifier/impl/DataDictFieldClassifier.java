@@ -64,10 +64,12 @@ public class DataDictFieldClassifier implements ISubCategoryClassifier {
     public boolean validCategories(String data, DQCategory semanticType, Set<DQCategory> children) {
         boolean isValid = false;
         if (CollectionUtils.isEmpty(children)) { // if there are no children, it's easy
-            if (Boolean.TRUE.equals(semanticType.getModified()))
-                isValid = customDictionary.validCategories(data, semanticType, children);
-            else
-                isValid = sharedDictionary.validCategories(data, semanticType, children);
+            if (!Boolean.TRUE.equals(semanticType.getDeleted())) {
+                if (Boolean.TRUE.equals(semanticType.getModified()))
+                    isValid = customDictionary.validCategories(data, semanticType, children);
+                else
+                    isValid = sharedDictionary.validCategories(data, semanticType, children);
+            }
         } else {
             Set<DQCategory> customChildren = new HashSet<>();
             Set<DQCategory> sharedChildren = new HashSet<>();
