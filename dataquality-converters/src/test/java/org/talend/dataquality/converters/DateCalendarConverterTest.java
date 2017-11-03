@@ -12,7 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.converters;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -109,6 +109,8 @@ public class DateCalendarConverterTest {
     private static final String frenchDate = "01/sept./2015";
 
     private static final String expectedChineseDate = "01 九月 0104";
+
+    private static final String pattern7 = "yyyy-MM-dd G";
 
     @Test
     public void testConvert_IsoDateTo() {
@@ -252,7 +254,7 @@ public class DateCalendarConverterTest {
         assertEquals(null, new DateCalendarConverter(HijrahChronology.INSTANCE, ThaiBuddhistChronology.INSTANCE).convert(null));
 
         // test when the input is not a date
-        assertEquals("aa", new DateCalendarConverter(HijrahChronology.INSTANCE, HijrahChronology.INSTANCE).convert("aa")); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("", new DateCalendarConverter(HijrahChronology.INSTANCE, HijrahChronology.INSTANCE).convert("aa")); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals("", new DateCalendarConverter( //$NON-NLS-1$
                 pattern1, pattern, HijrahChronology.INSTANCE, HijrahChronology.INSTANCE).convert("aa")); //$NON-NLS-1$
 
@@ -353,5 +355,36 @@ public class DateCalendarConverterTest {
             }
         }
 
+    }
+
+    @Test
+    /**
+     * 
+     * Test invalid date such as 2017-02-30,it should not be parsed.
+     */
+    public void testConvertDateWithResolverStyleStrict() {
+        String ISODateValid = "2017-02-28"; //$NON-NLS-1$
+        String ISODateInValid = "2017-02-30"; //$NON-NLS-1$
+        assertEquals("", //$NON-NLS-1$
+                new DateCalendarConverter(IsoChronology.INSTANCE, ThaiBuddhistChronology.INSTANCE).convert(ISODateInValid));
+        assertEquals("", //$NON-NLS-1$
+                new DateCalendarConverter(IsoChronology.INSTANCE, MinguoChronology.INSTANCE).convert("2017-04-32")); //$NON-NLS-1$
+        assertEquals("", //$NON-NLS-1$
+                new DateCalendarConverter("yyyy-MM-dd G", pattern, IsoChronology.INSTANCE, ThaiBuddhistChronology.INSTANCE) //$NON-NLS-1$
+                        .convert("2017-02-30 AD")); //$NON-NLS-1$
+
+        assertEquals(ISODateValid,
+                new DateCalendarConverter(ThaiBuddhistChronology.INSTANCE, IsoChronology.INSTANCE).convert("2560-02-28")); //$NON-NLS-1$
+        assertEquals("", //$NON-NLS-1$
+                new DateCalendarConverter(ThaiBuddhistChronology.INSTANCE, IsoChronology.INSTANCE).convert("2560-02-30")); //$NON-NLS-1$
+
+        assertEquals(ISODateValid,
+                new DateCalendarConverter(MinguoChronology.INSTANCE, IsoChronology.INSTANCE).convert("0106-02-28")); //$NON-NLS-1$
+        assertEquals("", //$NON-NLS-1$
+                new DateCalendarConverter(MinguoChronology.INSTANCE, IsoChronology.INSTANCE).convert("0106-02-30")); //$NON-NLS-1$
+        assertEquals(ISODateValid,
+                new DateCalendarConverter(JapaneseChronology.INSTANCE, IsoChronology.INSTANCE).convert("0029-02-28")); //$NON-NLS-1$ 
+        assertEquals(ISODateValid, new DateCalendarConverter(pattern7, null, JapaneseChronology.INSTANCE, IsoChronology.INSTANCE)
+                .convert("0029-02-28 Heisei")); //$NON-NLS-1$ 
     }
 }
