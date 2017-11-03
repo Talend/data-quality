@@ -44,7 +44,7 @@ public class GenerateFromDictionaries extends Function<String> {
     public void parse(String semanticCategory, boolean keepNullValues, Random rand) {
         if (semanticCategory != null) {
             LocalDictionaryCache dict = CategoryRegistryManager.getInstance().getDictionaryCache();
-            List<DQDocument> listDocuments = dict.listDocuments(semanticCategory, 0, 100);
+            List<DQDocument> listDocuments = dict.listDocuments(semanticCategory, 0, Integer.MAX_VALUE);
             for (DQDocument dqDocument : listDocuments) {
                 genericTokens.addAll(dqDocument.getValues());
             }
