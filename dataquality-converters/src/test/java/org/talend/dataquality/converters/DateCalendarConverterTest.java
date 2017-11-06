@@ -52,6 +52,8 @@ public class DateCalendarConverterTest {
 
     private static final String JapaneseStr = "0008-10-29";//$NON-NLS-1$
 
+    private static final String JapaneseWithGStr = "0008-10-29 Heisei"; //$NON-NLS-1$
+
     private static final String MinguoStr = "0085-10-29"; //$NON-NLS-1$
 
     private static final String ThaiBuddhistStr = "2539-10-29"; //$NON-NLS-1$
@@ -80,7 +82,7 @@ public class DateCalendarConverterTest {
 
     private static final String IsoStr4 = "19961029"; //$NON-NLS-1$
 
-    private static final String JapaneseStr4 = "00081029";//$NON-NLS-1$
+    //    private static final String JapaneseStr4 = "00081029 Heisei";//$NON-NLS-1$
 
     private static final String pattern5 = "M/d/yyyy GGGGG"; //$NON-NLS-1$
 
@@ -98,19 +100,19 @@ public class DateCalendarConverterTest {
 
     private static final String HijrahStr2 = "1417 06 16"; //$NON-NLS-1$
 
-    private static final String patternEnglishDate = "dd/MMM/yyyy";
+    private static final String patternEnglishDate = "dd/MMM/yyyy"; //$NON-NLS-1$
 
-    private static final String patternFrenchDate = "dd/MMM/yyyy";
+    private static final String patternFrenchDate = "dd/MMM/yyyy"; //$NON-NLS-1$
 
-    private static final String patternChineseDate = "dd MMM yyyy";
+    private static final String patternChineseDate = "dd MMM yyyy"; //$NON-NLS-1$
 
-    private static final String englishDate = "01/Sep/2015";
+    private static final String englishDate = "01/Sep/2015"; //$NON-NLS-1$
 
-    private static final String frenchDate = "01/sept./2015";
+    private static final String frenchDate = "01/sept./2015"; //$NON-NLS-1$
 
-    private static final String expectedChineseDate = "01 九月 0104";
+    private static final String expectedChineseDate = "01 九月 0104"; //$NON-NLS-1$
 
-    private static final String pattern7 = "yyyy-MM-dd G";
+    private static final String pattern7 = "yyyy-MM-dd G"; //$NON-NLS-1$
 
     @Test
     public void testConvert_IsoDateTo() {
@@ -198,21 +200,26 @@ public class DateCalendarConverterTest {
     }
 
     @Test
+    /**
+     * 
+     * After TDQ-14421,We use ResolverStyle.STRICT to parse a date. for JapaneseChronology,it must be with Era such as "0008-10-29 Heisei" with pattern "yyyy-MM-dd G"
+     */
     public void testConvert_JapaneseDateTo() {
-        assertEquals(IsoStr, new DateCalendarConverter(JapaneseChronology.INSTANCE, IsoChronology.INSTANCE).convert(JapaneseStr));
-        assertEquals(HijrahStr,
-                new DateCalendarConverter(JapaneseChronology.INSTANCE, HijrahChronology.INSTANCE).convert(JapaneseStr));
-        assertEquals(MinguoStr,
-                new DateCalendarConverter(JapaneseChronology.INSTANCE, MinguoChronology.INSTANCE).convert(JapaneseStr));
+        assertEquals(IsoStr, new DateCalendarConverter(pattern7, null, JapaneseChronology.INSTANCE, IsoChronology.INSTANCE)
+                .convert(JapaneseWithGStr));
+        assertEquals(HijrahStr, new DateCalendarConverter(pattern7, null, JapaneseChronology.INSTANCE, HijrahChronology.INSTANCE)
+                .convert(JapaneseWithGStr));
+        assertEquals(MinguoStr, new DateCalendarConverter(pattern7, null, JapaneseChronology.INSTANCE, MinguoChronology.INSTANCE)
+                .convert(JapaneseWithGStr));
         assertEquals(ThaiBuddhistStr,
-                new DateCalendarConverter(JapaneseChronology.INSTANCE, ThaiBuddhistChronology.INSTANCE).convert(JapaneseStr));
+                new DateCalendarConverter(pattern7, null, JapaneseChronology.INSTANCE, ThaiBuddhistChronology.INSTANCE)
+                        .convert(JapaneseWithGStr));
 
         assertEquals(MinguoStr5,
-                new DateCalendarConverter(pattern4, pattern5, JapaneseChronology.INSTANCE, MinguoChronology.INSTANCE)
-                        .convert(JapaneseStr4));
-        assertEquals(MinguoStr5,
-                new DateCalendarConverter(pattern, pattern5, JapaneseChronology.INSTANCE, MinguoChronology.INSTANCE)
-                        .convert(JapaneseStr));
+                new DateCalendarConverter(pattern7, pattern5, JapaneseChronology.INSTANCE, MinguoChronology.INSTANCE)
+                        .convert(JapaneseWithGStr));
+        Assert.assertFalse(IsoStr
+                .equals(new DateCalendarConverter(JapaneseChronology.INSTANCE, IsoChronology.INSTANCE).convert(JapaneseStr)));
     }
 
     @Test
@@ -294,8 +301,8 @@ public class DateCalendarConverterTest {
                 new DateCalendarConverter(null, pattern6, null, JapaneseChronology.INSTANCE)
                         .formatDateToString(parseDateString3));
 
-        LocalDate parseDateString4 = new DateCalendarConverter(pattern, null, JapaneseChronology.INSTANCE, null)
-                .parseStringToDate("0023-08-19"); //$NON-NLS-1$
+        LocalDate parseDateString4 = new DateCalendarConverter(pattern7, null, JapaneseChronology.INSTANCE, null)
+                .parseStringToDate("0023-08-19 Heisei"); //$NON-NLS-1$
         assertEquals(date, parseDateString4);
         assertEquals("0023-08-19", //$NON-NLS-1$
                 new DateCalendarConverter(null, pattern, null, JapaneseChronology.INSTANCE).formatDateToString(parseDateString4));
@@ -382,7 +389,7 @@ public class DateCalendarConverterTest {
                 new DateCalendarConverter(MinguoChronology.INSTANCE, IsoChronology.INSTANCE).convert("0106-02-28")); //$NON-NLS-1$
         assertEquals("", //$NON-NLS-1$
                 new DateCalendarConverter(MinguoChronology.INSTANCE, IsoChronology.INSTANCE).convert("0106-02-30")); //$NON-NLS-1$
-        assertEquals(ISODateValid,
+        assertEquals("", //$NON-NLS-1$
                 new DateCalendarConverter(JapaneseChronology.INSTANCE, IsoChronology.INSTANCE).convert("0029-02-28")); //$NON-NLS-1$ 
         assertEquals(ISODateValid, new DateCalendarConverter(pattern7, null, JapaneseChronology.INSTANCE, IsoChronology.INSTANCE)
                 .convert("0029-02-28 Heisei")); //$NON-NLS-1$ 

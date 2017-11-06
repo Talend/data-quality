@@ -17,7 +17,6 @@ import java.time.LocalDate;
 import java.time.chrono.ChronoLocalDate;
 import java.time.chrono.Chronology;
 import java.time.chrono.IsoChronology;
-import java.time.chrono.JapaneseChronology;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DecimalStyle;
@@ -141,17 +140,14 @@ public class DateCalendarConverter {
         this.inputFormatPattern = inputFormatPattern == null ? DEFAULT_INPUT_PATTERN : inputFormatPattern;
         this.outputFormatPattern = outputFormatPattern == null ? DEFAULT_OUTPUT_PATTERN : outputFormatPattern;
 
-        // TDQ-14421 use ResolverStyle.STRICT except JapaneseChronology. such as "2017-02-29" should be
+        // TDQ-14421 use ResolverStyle.STRICT to validate a date. such as "2017-02-29" should be
         // invalid.STRICT model for pattern without G,should replace 'y' with 'u'.see Java DOC.
-        if (inputChronologyType != JapaneseChronology.INSTANCE && !this.inputFormatPattern.endsWith(PATTERN_SUFFIX_ERA)) {
+        if (!this.inputFormatPattern.endsWith(PATTERN_SUFFIX_ERA)) {
             this.inputFormatPattern = this.inputFormatPattern.replace('y', 'u');
         }
         this.inputDateTimeFormatter = new DateTimeFormatterBuilder().parseLenient().appendPattern(this.inputFormatPattern)
-                .toFormatter().withChronology(this.inputChronologyType)
+                .toFormatter().withChronology(this.inputChronologyType).withResolverStyle(ResolverStyle.STRICT)
                 .withDecimalStyle(DecimalStyle.of(Locale.getDefault(Locale.Category.FORMAT)));
-        if (inputChronologyType != JapaneseChronology.INSTANCE) {
-            this.inputDateTimeFormatter = this.inputDateTimeFormatter.withResolverStyle(ResolverStyle.STRICT);
-        }
 
         this.outputDateTimeFormatter = new DateTimeFormatterBuilder().parseLenient().appendPattern(this.outputFormatPattern)
                 .toFormatter().withChronology(this.outputChronologyType)
