@@ -10,12 +10,13 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.dataquality.datamasking.functions;
+package org.talend.dataquality.semantic.datamasking;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.talend.dataquality.datamasking.functions.Function;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.api.LocalDictionaryCache;
 import org.talend.dataquality.semantic.model.DQDocument;

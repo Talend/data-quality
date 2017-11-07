@@ -10,14 +10,17 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.dataquality.datamasking.semantic;
+package org.talend.dataquality.semantic.datamasking;
 
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.talend.dataquality.datamasking.functions.DateVariance;
 import org.talend.dataquality.datamasking.functions.Function;
-import org.talend.dataquality.datamasking.functions.GenerateFromDictionaries;
+import org.talend.dataquality.datamasking.semantic.DateFunctionAdapter;
+import org.talend.dataquality.datamasking.semantic.FluctuateNumericString;
+import org.talend.dataquality.datamasking.semantic.MaskableCategoryEnum;
+import org.talend.dataquality.datamasking.semantic.ReplaceCharactersWithGeneration;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.model.CategoryType;
 

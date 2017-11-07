@@ -7,9 +7,7 @@ Bundle-Vendor: .Talend SA.
 Require-Bundle: org.apache.log4j,
  org.apache.commons.io,
  org.apache.commons.lang,
- org.junit,
- org.talend.dataquality.semantic,
- org.talend.dataquality.semantic.model
+ org.junit
 Export-Package: org.talend.dataquality.datamasking,
  org.talend.dataquality.datamasking.functions,
  org.talend.dataquality.datamasking.generic,

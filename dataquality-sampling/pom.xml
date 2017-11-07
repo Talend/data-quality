@@ -83,17 +83,6 @@
 			<version>7.3.0</version>
 			<scope>test</scope>
 		</dependency>
-		
-		<dependency>
-            <groupId>org.talend.dataquality</groupId>
-            <artifactId>dataquality-semantic</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-		<dependency>
-            <groupId>org.talend.dataquality</groupId>
-            <artifactId>dataquality-semantic-model</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
 	</dependencies>
 
 </project>
