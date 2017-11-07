@@ -20,7 +20,7 @@ import java.util.Random;
 
 import org.junit.Test;
 import org.talend.dataquality.datamasking.semantic.MaskableCategoryEnum;
-import org.talend.dataquality.duplicating.AllDataqualitySamplingTests;
+import org.talend.dataquality.semantic.AllSemanticTests;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 
 public class ValueDataMaskerTest {
@@ -57,7 +57,8 @@ public class ValueDataMaskerTest {
             put(new String[] { "++044dso44aa", MaskableCategoryEnum.DE_PHONE.name(), "string" }, "++287dso38aa");
             put(new String[] { "666666666", MaskableCategoryEnum.UK_PHONE.name(), "string" }, "666371758");
             put(new String[] { "777777777abc", MaskableCategoryEnum.UK_PHONE.name(), "string" }, "775767051abc");
-            put(new String[] { "(301) 231-9473 x 2364", MaskableCategoryEnum.US_PHONE.name(), "string" }, "(301) 231-9452 x 1404");
+            put(new String[] { "(301) 231-9473 x 2364", MaskableCategoryEnum.US_PHONE.name(), "string" },
+                    "(301) 231-9452 x 1404");
             put(new String[] { "(563) 557-7600 Ext. 2890", MaskableCategoryEnum.US_PHONE.name(), "string" },
                     "(563) 557-7618 Ext. 3290");
 
@@ -138,7 +139,7 @@ public class ValueDataMaskerTest {
 
             System.out.print("[" + semanticCategory + "]\n\t" + inputValue + " => ");
             final ValueDataMasker masker = new ValueDataMasker(semanticCategory, dataType);
-            masker.getFunction().setRandom(new Random(AllDataqualitySamplingTests.RANDOM_SEED));
+            masker.getFunction().setRandom(new Random(AllSemanticTests.RANDOM_SEED));
             masker.getFunction().setKeepEmpty(true);
             String maskedValue = masker.maskValue(inputValue);
             System.out.println(maskedValue);

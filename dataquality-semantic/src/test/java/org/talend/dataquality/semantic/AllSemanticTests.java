@@ -43,4 +43,5 @@ import org.talend.dataquality.semantic.validator.impl.USPhoneNumberValidatorTest
         BroadcastRegexObjectTest.class, TdqCategoriesFactoryTest.class })
 public class AllSemanticTests {
 
+    public static final long RANDOM_SEED = 12345678;
 }
