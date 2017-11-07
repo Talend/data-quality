@@ -12,14 +12,13 @@
 // ============================================================================
 package org.talend.dataquality.semantic.datamasking;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
 
 import org.junit.Test;
-import org.talend.dataquality.datamasking.semantic.MaskableCategoryEnum;
 import org.talend.dataquality.semantic.AllSemanticTests;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 

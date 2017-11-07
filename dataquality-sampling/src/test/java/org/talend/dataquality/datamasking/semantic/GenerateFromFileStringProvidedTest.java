@@ -30,28 +30,28 @@ public class GenerateFromFileStringProvidedTest {
     public void testInit() {
         GenerateFromFileStringProvided gfls = new GenerateFromFileStringProvided();
 
-        gfls.parse(MaskableCategoryEnum.FR_COMMUNE.getParameter(), true, new Random(AllDataqualitySamplingTests.RANDOM_SEED));
+        gfls.parse("fr_commune.txt", true, new Random(AllDataqualitySamplingTests.RANDOM_SEED));
         Assert.assertEquals("Dieppe", gfls.generateMaskedRow("A")); //$NON-NLS-1$ //$NON-NLS-2$
         Assert.assertEquals("Savigny-sur-Orge", gfls.generateMaskedRow("A")); //$NON-NLS-1$ //$NON-NLS-2$
         Assert.assertEquals("Roanne", gfls.generateMaskedRow("A")); //$NON-NLS-1$ //$NON-NLS-2$
         Assert.assertEquals("  \t", gfls.generateMaskedRow("  \t")); // SPACE_SPACE_TAB //$NON-NLS-1$ //$NON-NLS-2$
 
-        gfls.parse(MaskableCategoryEnum.COMPANY.getParameter(), true, new Random(AllDataqualitySamplingTests.RANDOM_SEED));
+        gfls.parse("company.txt", true, new Random(AllDataqualitySamplingTests.RANDOM_SEED));
         Assert.assertEquals("Gilead Sciences", gfls.generateMaskedRow("A")); //$NON-NLS-1$ //$NON-NLS-2$
         Assert.assertEquals("Fresenius", gfls.generateMaskedRow("A")); //$NON-NLS-1$ //$NON-NLS-2$
         Assert.assertEquals("McDonald's", gfls.generateMaskedRow("A")); //$NON-NLS-1$ //$NON-NLS-2$
 
-        gfls.parse(MaskableCategoryEnum.FIRST_NAME.getParameter(), true, new Random(AllDataqualitySamplingTests.RANDOM_SEED));
+        gfls.parse("firstname.txt", true, new Random(AllDataqualitySamplingTests.RANDOM_SEED));
         Assert.assertEquals("Josiah", gfls.generateMaskedRow("A")); //$NON-NLS-1$ //$NON-NLS-2$
         Assert.assertEquals("Mason", gfls.generateMaskedRow("A")); //$NON-NLS-1$ //$NON-NLS-2$
         Assert.assertEquals("Cooper", gfls.generateMaskedRow("A")); //$NON-NLS-1$ //$NON-NLS-2$
 
-        gfls.parse(MaskableCategoryEnum.LAST_NAME.getParameter(), true, new Random(AllDataqualitySamplingTests.RANDOM_SEED));
+        gfls.parse("lastname.txt", true, new Random(AllDataqualitySamplingTests.RANDOM_SEED));
         Assert.assertEquals("Robbins", gfls.generateMaskedRow("A")); //$NON-NLS-1$ //$NON-NLS-2$
         Assert.assertEquals("Lambert", gfls.generateMaskedRow("A")); //$NON-NLS-1$ //$NON-NLS-2$
         Assert.assertEquals("Pierce", gfls.generateMaskedRow("A")); //$NON-NLS-1$ //$NON-NLS-2$
 
-        gfls.parse(MaskableCategoryEnum.ORGANIZATION.getParameter(), true, new Random(AllDataqualitySamplingTests.RANDOM_SEED));
+        gfls.parse("organization.txt", true, new Random(AllDataqualitySamplingTests.RANDOM_SEED));
         Assert.assertEquals("Environmental Defense", gfls.generateMaskedRow("A")); //$NON-NLS-1$ //$NON-NLS-2$
         Assert.assertEquals("United Nations Children's Fund (UNICEF)", gfls.generateMaskedRow("A")); //$NON-NLS-1$ //$NON-NLS-2$
         Assert.assertEquals("JFK Center for Performing Arts", gfls.generateMaskedRow("A")); //$NON-NLS-1$ //$NON-NLS-2$
