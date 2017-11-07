@@ -19,7 +19,6 @@ import org.talend.dataquality.datamasking.functions.DateVariance;
 import org.talend.dataquality.datamasking.functions.Function;
 import org.talend.dataquality.datamasking.semantic.DateFunctionAdapter;
 import org.talend.dataquality.datamasking.semantic.FluctuateNumericString;
-import org.talend.dataquality.datamasking.semantic.MaskableCategoryEnum;
 import org.talend.dataquality.datamasking.semantic.ReplaceCharactersWithGeneration;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.model.CategoryType;
