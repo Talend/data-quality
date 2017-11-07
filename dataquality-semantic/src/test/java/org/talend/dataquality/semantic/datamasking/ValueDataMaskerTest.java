@@ -10,15 +10,16 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.dataquality.datamasking.semantic;
+package org.talend.dataquality.semantic.datamasking;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
 
 import org.junit.Test;
+import org.talend.dataquality.datamasking.semantic.MaskableCategoryEnum;
 import org.talend.dataquality.duplicating.AllDataqualitySamplingTests;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 
@@ -39,10 +40,10 @@ public class ValueDataMaskerTest {
 
             // 1. FIRST_NAME
             put(new String[] { "", SemanticCategoryEnum.FIRST_NAME.name(), "string" }, "");
-            put(new String[] { "John", SemanticCategoryEnum.FIRST_NAME.name(), "string" }, "ACHILLES");
+            put(new String[] { "John", SemanticCategoryEnum.FIRST_NAME.name(), "string" }, "GABRIELA");
 
             // 2. LAST_NAME
-            put(new String[] { "Dupont", SemanticCategoryEnum.LAST_NAME.name(), "string" }, "BELL");
+            put(new String[] { "Dupont", SemanticCategoryEnum.LAST_NAME.name(), "string" }, "RANKIN");
 
             // 3. EMAIL
             put(new String[] { "sdkjs@talend.com", MaskableCategoryEnum.EMAIL.name(), "string" }, "XXXXX@talend.com");
@@ -56,13 +57,12 @@ public class ValueDataMaskerTest {
             put(new String[] { "++044dso44aa", MaskableCategoryEnum.DE_PHONE.name(), "string" }, "++287dso38aa");
             put(new String[] { "666666666", MaskableCategoryEnum.UK_PHONE.name(), "string" }, "666371758");
             put(new String[] { "777777777abc", MaskableCategoryEnum.UK_PHONE.name(), "string" }, "775767051abc");
-            put(new String[] { "(301) 231-9473 x 2364", MaskableCategoryEnum.US_PHONE.name(), "string" },
-                    "(301) 231-9452 x 1404");
+            put(new String[] { "(301) 231-9473 x 2364", MaskableCategoryEnum.US_PHONE.name(), "string" }, "(301) 231-9452 x 1404");
             put(new String[] { "(563) 557-7600 Ext. 2890", MaskableCategoryEnum.US_PHONE.name(), "string" },
                     "(563) 557-7618 Ext. 3290");
 
             // 5. JOB_TITLE
-            put(new String[] { "CEO", SemanticCategoryEnum.JOB_TITLE.name(), "string" }, "Civil Drafter");
+            put(new String[] { "CEO", SemanticCategoryEnum.JOB_TITLE.name(), "string" }, "Aviation Inspector");
 
             // 6. ADDRESS_LINE
             put(new String[] { "9 Rue Pagès", MaskableCategoryEnum.ADDRESS_LINE.name(), "string" }, "6 Rue XXXXX");
@@ -89,11 +89,11 @@ public class ValueDataMaskerTest {
             put(new String[] { "634217823", MaskableCategoryEnum.UK_SSN.name(), "string" }, "RB 87 38 88 D");
 
             // Company
-            put(new String[] { "Talend", SemanticCategoryEnum.COMPANY.name(), "string" }, "Automotive Navigation Data");
+            put(new String[] { "Talend", SemanticCategoryEnum.COMPANY.name(), "string" }, "G. R. Thanga Maligai");
             // FR Commune
-            put(new String[] { "Amancey", SemanticCategoryEnum.FR_COMMUNE.name(), "string" }, "Ceyzériat");
+            put(new String[] { "Amancey", SemanticCategoryEnum.FR_COMMUNE.name(), "string" }, "Flexbourg");
             // Organization
-            put(new String[] { "Kiva", SemanticCategoryEnum.ORGANIZATION.name(), "string" }, "Freedom Fighters (comics)");
+            put(new String[] { "Kiva", SemanticCategoryEnum.ORGANIZATION.name(), "string" }, "International Council for Science");
 
             // EMPTY
             put(new String[] { " ", "UNKNOWN", "integer" }, " ");

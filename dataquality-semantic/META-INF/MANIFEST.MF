@@ -33,7 +33,8 @@ Require-Bundle: org.apache.log4j,
  org.talend.dataquality.common,
  org.talend.libraries.apache.lucene4,
  org.talend.dataquality.semantic.model,
- org.talend.dataquality.record.linkage
+ org.talend.dataquality.record.linkage,
+ org.talend.dataquality.sampling
 Bundle-ClassPath: .,
  lib/commons-csv-1.3.jar,
  lib/json-20140107.jar

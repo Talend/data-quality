@@ -10,7 +10,7 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.dataquality.datamasking.semantic;
+package org.talend.dataquality.semantic.datamasking;
 
 import org.apache.log4j.Logger;
 import org.talend.dataquality.datamasking.FunctionType;
@@ -22,19 +22,19 @@ public enum MaskableCategoryEnum {
 
     ADDRESS_LINE("Address Line", FunctionType.MASK_ADDRESS),
     CITY("City", FunctionType.REPLACE_CHARACTERS_WITH_GENERATION),
-    COMPANY("Company", FunctionType.GENERATE_FROM_FILE_STRING_PROVIDED, "company.txt"), //$NON-NLS-2$
+    // COMPANY("Company", FunctionType.GENERATE_FROM_FILE_STRING_PROVIDED, "company.txt"), //$NON-NLS-2$
     EMAIL("Email", FunctionType.MASK_EMAIL),
-    FIRST_NAME("First Name", FunctionType.GENERATE_FROM_FILE_STRING_PROVIDED, "firstName.txt"), //$NON-NLS-1$//$NON-NLS-2$
-    LAST_NAME("Last Name", FunctionType.GENERATE_FROM_FILE_STRING_PROVIDED, "lastName.txt"), //$NON-NLS-1$//$NON-NLS-2$
-    FR_COMMUNE("FR Commune", FunctionType.GENERATE_FROM_FILE_STRING_PROVIDED, "commune.txt"), //$NON-NLS-2$
+    // FIRST_NAME("First Name", FunctionType.GENERATE_FROM_FILE_STRING_PROVIDED, "firstName.txt"), //$NON-NLS-1$//$NON-NLS-2$
+    // LAST_NAME("Last Name", FunctionType.GENERATE_FROM_FILE_STRING_PROVIDED, "lastName.txt"), //$NON-NLS-1$//$NON-NLS-2$
+    // FR_COMMUNE("FR Commune", FunctionType.GENERATE_FROM_FILE_STRING_PROVIDED, "commune.txt"), //$NON-NLS-2$
     FULL_NAME("Full Name", FunctionType.REPLACE_CHARACTERS_WITH_GENERATION),
     IPv4_ADDRESS("IPv4 Address", FunctionType.REPLACE_CHARACTERS_WITH_GENERATION),
     IPv6_ADDRESS("IPv6 Address", FunctionType.REPLACE_CHARACTERS_WITH_GENERATION),
-    JOB_TITLE("Job Title", FunctionType.GENERATE_FROM_FILE_STRING_PROVIDED, "jobTitle.txt"), //$NON-NLS-2$
+    // JOB_TITLE("Job Title", FunctionType.GENERATE_FROM_FILE_STRING_PROVIDED, "jobTitle.txt"), //$NON-NLS-2$
     GEO_COORDINATE("Geographic coordinate", FunctionType.REPLACE_CHARACTERS_WITH_GENERATION),
     GEO_COORDINATES_DEG("Geographic coordinates (degrees)", FunctionType.REPLACE_CHARACTERS_WITH_GENERATION),
     MAC_ADDRESS("MAC Address", FunctionType.REPLACE_CHARACTERS_WITH_GENERATION),
-    ORGANIZATION("Organization", FunctionType.GENERATE_FROM_FILE_STRING_PROVIDED, "organization.txt"), //$NON-NLS-2$
+    // ORGANIZATION("Organization", FunctionType.GENERATE_FROM_FILE_STRING_PROVIDED, "organization.txt"), //$NON-NLS-2$
     PASSPORT("Passport", FunctionType.REPLACE_CHARACTERS_WITH_GENERATION),
 
     US_PHONE("US Phone", FunctionType.GENERATE_UNIQUE_PHONE_NUMBER_US),
