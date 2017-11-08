@@ -80,7 +80,7 @@ public class DateCalendarConverter {
      */
     protected DateTimeFormatter outputDateTimeFormatter;
 
-    private final String PATTERN_SUFFIX_ERA = " G"; //$NON-NLS-1$
+    private static final String PATTERN_SUFFIX_ERA = "G"; //$NON-NLS-1$
 
     public DateCalendarConverter() {
         this(DEFAULT_INPUT_PATTERN, DEFAULT_OUTPUT_PATTERN, IsoChronology.INSTANCE, IsoChronology.INSTANCE, DEFAULT_INPUT_LOCALE,
@@ -142,7 +142,7 @@ public class DateCalendarConverter {
 
         // TDQ-14421 use ResolverStyle.STRICT to validate a date. such as "2017-02-29" should be
         // invalid.STRICT model for pattern without G,should replace 'y' with 'u'.see Java DOC.
-        if (!this.inputFormatPattern.endsWith(PATTERN_SUFFIX_ERA)) {
+        if (!this.inputFormatPattern.contains(PATTERN_SUFFIX_ERA)) {
             this.inputFormatPattern = this.inputFormatPattern.replace('y', 'u');
         }
         this.inputDateTimeFormatter = new DateTimeFormatterBuilder().parseLenient().appendPattern(this.inputFormatPattern)

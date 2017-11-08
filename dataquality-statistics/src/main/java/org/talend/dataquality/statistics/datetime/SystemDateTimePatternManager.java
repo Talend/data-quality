@@ -56,7 +56,7 @@ public class SystemDateTimePatternManager {
 
     private static Map<String, DateTimeFormatter> dateTimeFormatterCache = new HashMap<String, DateTimeFormatter>();
 
-    private static final String PATTERN_SUFFIX_ERA = " G"; //$NON-NLS-1$
+    private static final String PATTERN_SUFFIX_ERA = "G"; //$NON-NLS-1$
 
     static {
         try {
@@ -214,7 +214,7 @@ public class SystemDateTimePatternManager {
         if (formatter == null && !StringUtils.isEmpty(customPattern)) {
             try {
                 // TDQ-13936 add Chronology for specified Locale.
-                if (customPattern.endsWith(PATTERN_SUFFIX_ERA)) {
+                if (customPattern.contains(PATTERN_SUFFIX_ERA)) {
                     formatter = ChronologyParameterManager.getDateTimeFormatterWithChronology(customPattern, locale);
                 } else {
                     // TDQ-14421 use ResolverStyle.STRICT to validate a date. such as "2017-02-29" should be
