@@ -1,26 +1,41 @@
 package org.talend.dataquality.semantic.broadcast;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.lang3.SerializationUtils;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.MultiFields;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.util.Bits;
 import org.junit.Test;
+import org.talend.dataquality.common.inference.Analyzer;
+import org.talend.dataquality.common.inference.Analyzers;
+import org.talend.dataquality.common.inference.Analyzers.Result;
+import org.talend.dataquality.common.inference.ValueQualityStatistics;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
+import org.talend.dataquality.semantic.api.CustomDictionaryHolder;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.classifier.custom.UserDefinedClassifier;
 import org.talend.dataquality.semantic.index.DictionarySearcher;
 import org.talend.dataquality.semantic.model.DQCategory;
+import org.talend.dataquality.semantic.model.DQDocument;
+import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
+import org.talend.dataquality.semantic.statistics.SemanticQualityAnalyzer;
 
-import static org.junit.Assert.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class TdqCategoriesFactoryTest {
 
@@ -35,6 +50,66 @@ public class TdqCategoriesFactoryTest {
         for (DQCategory value : expectedCategories) {
             assertTrue("This category is not found in metadata: " + value, meta.values().contains(value));
         }
+    }
+
+    private final List<String[]> TEST_RECORDS_TAGADA = new ArrayList<String[]>() {
+
+        private static final long serialVersionUID = 1L;
+
+        {
+            add(new String[] { "1", "Williams", "John", "40", "10/09/1940", "false" });
+            add(new String[] { "2", "Bowie", "David", "67", "01/08/1947", "true" });
+            add(new String[] { "3", "Cruise", "Tom", "55", "03/07/1962", "FR" });
+        }
+    };
+
+    @Test
+    public void testCreateTdqCategoriesWithModifiedCategories() throws IOException {
+        CategoryRegistryManager.setLocalRegistryPath("target/test_broadcast");
+        CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder("t_custom_dd");
+        CategoryRecognizerBuilder builder = CategoryRecognizerBuilder.newBuilder().lucene();
+        builder.tenantID("t_custom_dd");
+
+        DQCategory answerCategory = holder.getMetadata().get(SemanticCategoryEnum.COUNTRY_CODE_ISO2.getTechnicalId());
+        DQCategory categoryClone = SerializationUtils.clone(answerCategory); // make a clone instead of modifying the shared
+                                                                             // category metadata
+        categoryClone.setModified(true);
+        holder.updateCategory(categoryClone);
+
+        DQDocument newDoc = new DQDocument();
+        newDoc.setCategory(categoryClone);
+        newDoc.setId("the_doc_id");
+        newDoc.setValues(new HashSet<>(Arrays.asList("true", "false")));
+        holder.addDataDictDocument(Collections.singletonList(newDoc));
+
+        TdqCategories tdqCategories = TdqCategoriesFactory.createTdqCategories();
+        CategoryRecognizerBuilder builderOnCluster = CategoryRecognizerBuilder.newBuilder().lucene()//
+                .metadata(tdqCategories.getCategoryMetadata().getMetadata())//
+                .ddDirectory(tdqCategories.getDictionary().asDirectory())//
+                .kwDirectory(tdqCategories.getKeyword().asDirectory()) //
+                .regexClassifier(tdqCategories.getRegex().getRegexClassifier());
+
+        final List<String> EXPECTED_CATEGORIES = Arrays.asList(new String[] { "", SemanticCategoryEnum.LAST_NAME.name(),
+                SemanticCategoryEnum.FIRST_NAME.name(), "", "", SemanticCategoryEnum.COUNTRY_CODE_ISO2.name() });
+
+        SemanticQualityAnalyzer semanticQualityAnalyzer = new SemanticQualityAnalyzer(builderOnCluster,
+                EXPECTED_CATEGORIES.toArray(new String[EXPECTED_CATEGORIES.size()]));
+
+        Analyzer<Result> analyzer = Analyzers.with(semanticQualityAnalyzer);
+        analyzer.init();
+        for (String[] record : TEST_RECORDS_TAGADA) {
+            analyzer.analyze(record);
+        }
+        analyzer.end();
+
+        Result result = analyzer.getResult().get(5); // result for the last column
+
+        if (result.exist(ValueQualityStatistics.class)) {
+            final ValueQualityStatistics valueQualityStats = result.get(ValueQualityStatistics.class);
+            assertEquals("Unexpected valid count!", 1L, valueQualityStats.getValidCount());
+            assertEquals("Unexpected invalid count!", 2L, valueQualityStats.getInvalidCount());
+        }
+        CategoryRegistryManager.getInstance().removeCustomDictionaryHolder("t_custom_dd");
     }
 
     @Test

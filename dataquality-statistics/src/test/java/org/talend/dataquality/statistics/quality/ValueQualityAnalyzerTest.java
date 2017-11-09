@@ -17,7 +17,6 @@ import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -88,13 +87,7 @@ public class ValueQualityAnalyzerTest {
     }
 
     private CategoryRecognizerBuilder createCategoryRecognizerBuilder() throws URISyntaxException {
-        final URI ddPath = this.getClass().getResource(CategoryRecognizerBuilder.DEFAULT_DD_PATH).toURI();
-        final URI kwPath = this.getClass().getResource(CategoryRecognizerBuilder.DEFAULT_KW_PATH).toURI();
-        final CategoryRecognizerBuilder builder = CategoryRecognizerBuilder.newBuilder() //
-                .ddPath(ddPath) //
-                .kwPath(kwPath) //
-                .lucene();
-        return builder;
+        return CategoryRecognizerBuilder.newBuilder().lucene();
     }
 
     @Test

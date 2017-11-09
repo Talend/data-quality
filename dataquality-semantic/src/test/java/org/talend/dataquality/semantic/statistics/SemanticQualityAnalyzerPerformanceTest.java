@@ -3,8 +3,11 @@ package org.talend.dataquality.semantic.statistics;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.io.*;
-import java.net.URI;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Reader;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +22,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.Analyzers;
-import org.talend.dataquality.common.inference.ValueQualityStatistics;
 import org.talend.dataquality.common.inference.Analyzers.Result;
+import org.talend.dataquality.common.inference.ValueQualityStatistics;
 import org.talend.dataquality.semantic.index.utils.DictionaryGenerationSpec;
 import org.talend.dataquality.semantic.index.utils.SemanticDictionaryGenerator;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
@@ -63,14 +66,7 @@ public class SemanticQualityAnalyzerPerformanceTest {
 
     @BeforeClass
     public static void setupBuilder() throws URISyntaxException {
-        final URI ddPath = SemanticQualityAnalyzerPerformanceTest.class.getResource(CategoryRecognizerBuilder.DEFAULT_DD_PATH)
-                .toURI();
-        final URI kwPath = SemanticQualityAnalyzerPerformanceTest.class.getResource(CategoryRecognizerBuilder.DEFAULT_KW_PATH)
-                .toURI();
-        builder = CategoryRecognizerBuilder.newBuilder() //
-                .ddPath(ddPath) //
-                .kwPath(kwPath) //
-                .lucene();
+        builder = CategoryRecognizerBuilder.newBuilder().lucene();
     }
 
     @Test

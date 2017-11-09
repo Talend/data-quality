@@ -13,7 +13,11 @@
 package org.talend.dataquality.semantic.statistics;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.NotImplementedException;
@@ -24,6 +28,8 @@ import org.talend.dataquality.semantic.exception.DQSemanticRuntimeException;
 import org.talend.dataquality.semantic.recognizer.CategoryFrequency;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizer;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
+import org.talend.dataquality.semantic.recognizer.DefaultCategoryRecognizer;
+import org.talend.dataquality.semantic.recognizer.DictionaryConstituents;
 
 /**
  * Semantic type infer executor. <br>
@@ -51,6 +57,14 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
     private Map<Metadata, List<String>> metadataMap;
 
     private float weight = DEFAULT_WEIGHT_VALUE;
+
+    private DictionaryConstituents constituents;
+
+    public SemanticAnalyzer(DictionaryConstituents constituents) {
+        this.constituents = constituents;
+        builder = null;
+        metadataMap = new HashMap<>();
+    }
 
     /**
      * @param builder the builder for creating lucene index access and regex classifiers
@@ -106,7 +120,9 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
         currentCount = 0;
         columnIdxToCategoryRecognizer.clear();
         results.clear();
-        builder.initIndex();
+        if (builder != null) {
+            builder.initIndex();
+        }
     }
 
     /**
@@ -138,7 +154,12 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
         }
         for (int idx = 0; idx < record.length; idx++) {
             try {
-                CategoryRecognizer recognizer = builder.build();
+                CategoryRecognizer recognizer;
+                if (constituents == null) {
+                    recognizer = builder.build();
+                } else {
+                    recognizer = new DefaultCategoryRecognizer(constituents);
+                }
                 columnIdxToCategoryRecognizer.put(idx, recognizer);
             } catch (IOException e) {
                 throw new IllegalArgumentException("Unable to configure category recognizer with builder.", e);

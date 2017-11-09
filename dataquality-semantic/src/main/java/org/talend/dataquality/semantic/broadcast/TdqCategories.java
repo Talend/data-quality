@@ -2,6 +2,10 @@ package org.talend.dataquality.semantic.broadcast;
 
 import java.io.Serializable;
 
+import org.talend.dataquality.semantic.index.DictionarySearchMode;
+import org.talend.dataquality.semantic.index.LuceneIndex;
+import org.talend.dataquality.semantic.recognizer.DictionaryConstituents;
+
 /**
  * A container object for DQ dictionaries.
  */
@@ -13,6 +17,8 @@ public class TdqCategories implements Serializable {
 
     private BroadcastIndexObject dictionary;
 
+    private BroadcastIndexObject customDictionary;
+
     private BroadcastIndexObject keyword;
 
     private BroadcastRegexObject regex;
@@ -20,10 +26,11 @@ public class TdqCategories implements Serializable {
     public TdqCategories() {
     }
 
-    public TdqCategories(BroadcastMetadataObject categoryMetadata, BroadcastIndexObject dictionary, BroadcastIndexObject keyword,
-            BroadcastRegexObject regex) {
+    public TdqCategories(BroadcastMetadataObject categoryMetadata, BroadcastIndexObject dictionary,
+            BroadcastIndexObject customDictionary, BroadcastIndexObject keyword, BroadcastRegexObject regex) {
         this.categoryMetadata = categoryMetadata;
         this.dictionary = dictionary;
+        this.customDictionary = customDictionary;
         this.keyword = keyword;
         this.regex = regex;
     }
@@ -44,6 +51,14 @@ public class TdqCategories implements Serializable {
         this.dictionary = dictionary;
     }
 
+    public BroadcastIndexObject getCustomDictionary() {
+        return customDictionary;
+    }
+
+    public void setCustomDictionary(BroadcastIndexObject customDictionary) {
+        this.customDictionary = customDictionary;
+    }
+
     public BroadcastIndexObject getKeyword() {
         return keyword;
     }
@@ -58,6 +73,14 @@ public class TdqCategories implements Serializable {
 
     public void setRegex(BroadcastRegexObject regex) {
         this.regex = regex;
+    }
+
+    public DictionaryConstituents asDictionaryConstituents() {
+        return new DictionaryConstituents(categoryMetadata.getMetadata(), //
+                new LuceneIndex(dictionary.asDirectory(), DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY), //
+                new LuceneIndex(customDictionary.asDirectory(), DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY), //
+                new LuceneIndex(keyword.asDirectory(), DictionarySearchMode.MATCH_SEMANTIC_KEYWORD), //
+                regex.getRegexClassifier());
     }
 
 }

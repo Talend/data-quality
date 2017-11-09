@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,12 +55,7 @@ public class AnalyzerPerformanceTest {
 
     @BeforeClass
     public static void setupBuilder() throws URISyntaxException {
-        final URI ddPath = AnalyzerPerformanceTest.class.getResource(CategoryRecognizerBuilder.DEFAULT_DD_PATH).toURI();
-        final URI kwPath = AnalyzerPerformanceTest.class.getResource(CategoryRecognizerBuilder.DEFAULT_KW_PATH).toURI();
-        builder = CategoryRecognizerBuilder.newBuilder() //
-                .ddPath(ddPath) //
-                .kwPath(kwPath) //
-                .lucene();
+        builder = CategoryRecognizerBuilder.newBuilder().lucene();
     }
 
     private Analyzer<Result> setupBaselineAnalyzers(DataTypeEnum[] types) {

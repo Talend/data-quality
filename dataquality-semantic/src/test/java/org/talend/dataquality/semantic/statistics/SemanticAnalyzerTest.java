@@ -14,8 +14,11 @@ package org.talend.dataquality.semantic.statistics;
 
 import static org.junit.Assert.assertEquals;
 
-import java.net.URI;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 
 import org.apache.commons.lang3.SerializationUtils;
 import org.junit.After;
@@ -28,7 +31,12 @@ import org.talend.dataquality.common.inference.Metadata;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.api.CustomDictionaryHolder;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
-import org.talend.dataquality.semantic.model.*;
+import org.talend.dataquality.semantic.model.CategoryType;
+import org.talend.dataquality.semantic.model.DQCategory;
+import org.talend.dataquality.semantic.model.DQDocument;
+import org.talend.dataquality.semantic.model.DQRegEx;
+import org.talend.dataquality.semantic.model.DQValidator;
+import org.talend.dataquality.semantic.model.MainCategory;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
 
 public class SemanticAnalyzerTest {
@@ -107,12 +115,7 @@ public class SemanticAnalyzerTest {
 
     @Before
     public void setUp() throws Exception {
-        final URI ddPath = this.getClass().getResource(CategoryRecognizerBuilder.DEFAULT_DD_PATH).toURI();
-        final URI kwPath = this.getClass().getResource(CategoryRecognizerBuilder.DEFAULT_KW_PATH).toURI();
-        builder = CategoryRecognizerBuilder.newBuilder() //
-                .ddPath(ddPath) //
-                .kwPath(kwPath) //
-                .lucene();
+        builder = CategoryRecognizerBuilder.newBuilder().lucene();
     }
 
     @After
@@ -122,7 +125,7 @@ public class SemanticAnalyzerTest {
 
     @Test
     public void testTagada() {
-        SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(builder);
+        SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(builder.getDictionaryConstituents());
 
         Analyzer<Result> analyzer = Analyzers.with(semanticAnalyzer);
         analyzer.init();

@@ -21,6 +21,10 @@ public class TdqCategoriesFactory {
 
     private static final Logger LOGGER = Logger.getLogger(TdqCategoriesFactory.class);
 
+    public static final TdqCategories createEmptyTdqCategories() {
+        return new TdqCategories(null, null, null, null, null);
+    }
+
     /**
      * Load categories from local lucene index and produce a TdqCategories object.
      * 
@@ -44,25 +48,33 @@ public class TdqCategoriesFactory {
                 selectedCategoryMap.put(dqCat.getId(), dqCat);
             }
         }
-        final BroadcastIndexObject dictionary;
+        final BroadcastIndexObject sharedDictionary;
+        final BroadcastIndexObject customDictionary;
         final BroadcastIndexObject keyword;
         final BroadcastRegexObject regex;
         final BroadcastMetadataObject meta;
         try {
             try (Directory ddDir = FSDirectory.open(new File(crm.getDictionaryURI()))) {
-                dictionary = new BroadcastIndexObject(ddDir, selectedCategoryMap.keySet());
-                LOGGER.debug("Returning dictionary at path '{" + crm.getDictionaryURI() + "}'.");
+                sharedDictionary = new BroadcastIndexObject(ddDir, selectedCategoryMap.keySet());
+                LOGGER.debug("Returning shared dictionary.");
             }
+
+            Directory customDataDictDir = crm.getCustomDictionaryHolder().getDataDictDirectory();
+            customDictionary = new BroadcastIndexObject(customDataDictDir, selectedCategoryMap.keySet());
+            LOGGER.debug("Returning custom dictionary.");
+
             try (Directory kwDir = FSDirectory.open(new File(crm.getKeywordURI()))) {
                 keyword = new BroadcastIndexObject(kwDir, selectedCategoryMap.keySet());
-                LOGGER.debug("Returning keywords at path '{" + crm.getRegexURI() + "}'.");
+                LOGGER.debug("Returning keywords at path.");
             }
-            UserDefinedClassifier classifiers = crm.getRegexClassifier(true);
+
+            UserDefinedClassifier classifiers = crm.getCustomDictionaryHolder().getRegexClassifier();
             regex = new BroadcastRegexObject(classifiers, selectedCategoryMap.keySet());
-            LOGGER.debug("Returning regexes at path '{" + crm.getRegexURI() + "}'.");
+            LOGGER.debug("Returning regexes.");
+
             meta = new BroadcastMetadataObject(selectedCategoryMap);
             LOGGER.debug("Returning category metadata.");
-            return new TdqCategories(meta, dictionary, keyword, regex);
+            return new TdqCategories(meta, sharedDictionary, customDictionary, keyword, regex);
         } catch (URISyntaxException | IOException e) {
             LOGGER.error(e.getMessage(), e);
         }

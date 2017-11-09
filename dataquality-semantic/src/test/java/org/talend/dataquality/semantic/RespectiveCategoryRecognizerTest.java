@@ -18,7 +18,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -736,11 +735,7 @@ public class RespectiveCategoryRecognizerTest {
 
     @BeforeClass
     public static void prepare() throws URISyntaxException, IOException {
-        CategoryRecognizerBuilder b = CategoryRecognizerBuilder.newBuilder();
-        // catRecognizer = b.es().host("localhost").port(9300).cluster("elasticsearch").build();
-        final URI ddPath = RespectiveCategoryRecognizerTest.class.getResource(CategoryRecognizerBuilder.DEFAULT_DD_PATH).toURI();
-        final URI kwPath = RespectiveCategoryRecognizerTest.class.getResource(CategoryRecognizerBuilder.DEFAULT_KW_PATH).toURI();
-        catRecognizer = b.lucene().ddPath(ddPath).kwPath(kwPath).build();
+        catRecognizer = CategoryRecognizerBuilder.newBuilder().lucene().build();
     }
 
     @Before

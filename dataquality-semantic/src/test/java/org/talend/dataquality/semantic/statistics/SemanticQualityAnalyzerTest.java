@@ -7,9 +7,13 @@ import static org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuild
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
@@ -131,12 +135,7 @@ public class SemanticQualityAnalyzerTest {
 
     @Before
     public void setupBuilder() throws URISyntaxException {
-        final URI ddPath = SemanticQualityAnalyzerTest.class.getResource(CategoryRecognizerBuilder.DEFAULT_DD_PATH).toURI();
-        final URI kwPath = SemanticQualityAnalyzerTest.class.getResource(CategoryRecognizerBuilder.DEFAULT_KW_PATH).toURI();
-        builder = CategoryRecognizerBuilder.newBuilder() //
-                .ddPath(ddPath) //
-                .kwPath(kwPath) //
-                .lucene();
+        builder = CategoryRecognizerBuilder.newBuilder().lucene();
     }
 
     @Test

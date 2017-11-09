@@ -6,7 +6,6 @@ import static org.junit.Assert.assertNotNull;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
@@ -130,12 +129,7 @@ public class BigFileAnalyzerPerformanceTest {
 
     @BeforeClass
     public static void setupBuilder() throws URISyntaxException {
-        final URI ddPath = BigFileAnalyzerPerformanceTest.class.getResource(CategoryRecognizerBuilder.DEFAULT_DD_PATH).toURI();
-        final URI kwPath = BigFileAnalyzerPerformanceTest.class.getResource(CategoryRecognizerBuilder.DEFAULT_KW_PATH).toURI();
-        builder = CategoryRecognizerBuilder.newBuilder() //
-                .ddPath(ddPath) //
-                .kwPath(kwPath) //
-                .lucene();
+        builder = CategoryRecognizerBuilder.newBuilder().lucene();
     }
 
     private Analyzer<Result> setupBaselineAnalyzers(DataTypeEnum[] types) {

@@ -13,8 +13,6 @@
 package org.talend.dataquality.semantic.sampling;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -96,10 +94,8 @@ public class CategoryInferenceManager {
         CategoryRecognizerBuilder b = CategoryRecognizerBuilder.newBuilder();
         // get the lucene index.
         try {
-            final URI ddPath = this.getClass().getResource(CategoryRecognizerBuilder.DEFAULT_DD_PATH).toURI();
-            final URI kwPath = this.getClass().getResource(CategoryRecognizerBuilder.DEFAULT_KW_PATH).toURI();
-            return b.lucene().ddPath(ddPath).kwPath(kwPath).build();
-        } catch (URISyntaxException | IOException e) {
+            return b.lucene().build();
+        } catch (IOException e) {
             throw new DQSemanticRuntimeException("Unable to find resources.", e);
         }
         // or get the ES index.

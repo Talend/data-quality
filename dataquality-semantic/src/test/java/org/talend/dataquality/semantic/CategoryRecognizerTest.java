@@ -16,7 +16,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Collection;
@@ -246,12 +245,7 @@ public class CategoryRecognizerTest {
 
     @BeforeClass
     public static void prepare() throws URISyntaxException, IOException {
-        CategoryRecognizerBuilder b = CategoryRecognizerBuilder.newBuilder();
-        // catRecognizer = b.es().host("localhost").port(9300).cluster("elasticsearch").build();
-        final URI ddPath = CategoryRecognizerTest.class.getResource(CategoryRecognizerBuilder.DEFAULT_DD_PATH).toURI();
-        final URI kwPath = CategoryRecognizerTest.class.getResource(CategoryRecognizerBuilder.DEFAULT_KW_PATH).toURI();
-        final URI rePath = CategoryRecognizerTest.class.getResource(CategoryRecognizerBuilder.DEFAULT_RE_PATH).toURI();
-        catRecognizer = b.lucene().ddPath(ddPath).kwPath(kwPath).regexPath(rePath).build();
+        catRecognizer = CategoryRecognizerBuilder.newBuilder().lucene().build();
     }
 
     @Before

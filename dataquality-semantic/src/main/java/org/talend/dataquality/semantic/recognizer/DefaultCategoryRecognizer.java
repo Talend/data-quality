@@ -13,7 +13,16 @@
 package org.talend.dataquality.semantic.recognizer;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -28,7 +37,7 @@ import org.talend.dataquality.semantic.model.MainCategory;
  * created by talend on 2015-07-28 Detailled comment.
  *
  */
-class DefaultCategoryRecognizer implements CategoryRecognizer {
+public class DefaultCategoryRecognizer implements CategoryRecognizer {
 
     private final List<CategoryFrequency> catList = new ArrayList<>();
 
@@ -47,6 +56,11 @@ class DefaultCategoryRecognizer implements CategoryRecognizer {
     private long total = 0;
 
     private FingerprintkeyMatcher keyMatcher;
+
+    public DefaultCategoryRecognizer(DictionaryConstituents constituents) throws IOException {
+        this(constituents.getSharedDataDict(), constituents.getCustomDataDict(), constituents.getKeyword(),
+                constituents.getRegexClassifier(), constituents.getMetadata());
+    }
 
     public DefaultCategoryRecognizer(final Index sharedDictionary, Index customDictionary, Index keyword,
             UserDefinedClassifier regex, Map<String, DQCategory> metadata) throws IOException {

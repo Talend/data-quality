@@ -13,11 +13,8 @@
 package org.talend.dataquality.statistics.semantic;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -47,14 +44,7 @@ public class ConcurrentAnalyzerTest extends SemanticStatisticsTestBase {
     @Test
     public void testThreadSafeConcurrentAccess() {
         try {
-            URI ddPath = this.getClass().getResource(CategoryRecognizerBuilder.DEFAULT_DD_PATH).toURI();
-            URI kwPath = this.getClass().getResource(CategoryRecognizerBuilder.DEFAULT_KW_PATH).toURI();
-            assertNotNull("Keyword dictionary not loaded", kwPath);
-            assertNotNull("data dictionary not loaded", ddPath);
-            final CategoryRecognizerBuilder builder = CategoryRecognizerBuilder.newBuilder() //
-                    .ddPath(ddPath) //
-                    .kwPath(kwPath) //
-                    .lucene();
+            final CategoryRecognizerBuilder builder = CategoryRecognizerBuilder.newBuilder().lucene();
             AnalyzerSupplier<Analyzer<SemanticType>> supplier = new AnalyzerSupplier<Analyzer<SemanticType>>() {
 
                 @Override
@@ -83,9 +73,6 @@ public class ConcurrentAnalyzerTest extends SemanticStatisticsTestBase {
                 worker.join();
             }
             assertEquals("ConcurrentAccess not failed", false, errorOccurred.get());
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-            fail("Problem while loading dictionaries");
         } catch (InterruptedException e) {
             e.printStackTrace();
             fail("Thread has been interrupted");
@@ -94,12 +81,7 @@ public class ConcurrentAnalyzerTest extends SemanticStatisticsTestBase {
 
     @Test
     public void testThreadUnsafeConcurrentAccess() throws Exception {
-        final URI ddPath = this.getClass().getResource(CategoryRecognizerBuilder.DEFAULT_DD_PATH).toURI();
-        final URI kwPath = this.getClass().getResource(CategoryRecognizerBuilder.DEFAULT_KW_PATH).toURI();
-        final CategoryRecognizerBuilder builder = CategoryRecognizerBuilder.newBuilder() //
-                .ddPath(ddPath) //
-                .kwPath(kwPath) //
-                .lucene();
+        final CategoryRecognizerBuilder builder = CategoryRecognizerBuilder.newBuilder().lucene();
         try (Analyzer<SemanticType> analyzer = new SemanticAnalyzer(builder)) {
             Runnable r = new Runnable() {
 

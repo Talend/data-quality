@@ -15,7 +15,6 @@ package org.talend.dataquality.statistics.semantic;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.net.URI;
 import java.util.List;
 
 import org.junit.After;
@@ -37,12 +36,7 @@ public class CompositeAnalyzerTest extends SemanticStatisticsTestBase {
 
     @Before
     public void setUp() throws Exception {
-        final URI ddPath = this.getClass().getResource(CategoryRecognizerBuilder.DEFAULT_DD_PATH).toURI();
-        final URI kwPath = this.getClass().getResource(CategoryRecognizerBuilder.DEFAULT_KW_PATH).toURI();
-        final CategoryRecognizerBuilder builder = CategoryRecognizerBuilder.newBuilder() //
-                .ddPath(ddPath) //
-                .kwPath(kwPath) //
-                .lucene();
+        final CategoryRecognizerBuilder builder = CategoryRecognizerBuilder.newBuilder().lucene();
         analyzer = Analyzers.with(new DataTypeAnalyzer(), new SemanticAnalyzer(builder));
     }
 

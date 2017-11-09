@@ -14,7 +14,6 @@ package org.talend.dataquality.semantic.statistics;
 
 import static org.junit.Assert.assertEquals;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -51,14 +50,7 @@ public class SemanticCompoundAnalyzerTest {
 
     @Before
     public void setUp() throws Exception {
-        final URI ddPath = this.getClass().getResource(CategoryRecognizerBuilder.DEFAULT_DD_PATH).toURI();
-        final URI kwPath = this.getClass().getResource(CategoryRecognizerBuilder.DEFAULT_KW_PATH).toURI();
-        final URI rePath = this.getClass().getResource(CategoryRecognizerBuilder.DEFAULT_RE_PATH).toURI();
-
-        builder = CategoryRecognizerBuilder.newBuilder() //
-                .ddPath(ddPath) //
-                .kwPath(kwPath).regexPath(rePath) //
-                .lucene();
+        builder = CategoryRecognizerBuilder.newBuilder().lucene();
     }
 
     @Test
