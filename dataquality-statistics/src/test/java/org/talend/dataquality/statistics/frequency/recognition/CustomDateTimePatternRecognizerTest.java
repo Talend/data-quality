@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.statistics.frequency.pattern.CompositePatternFrequencyAnalyzer;
@@ -75,16 +76,16 @@ public class CustomDateTimePatternRecognizerTest {
             private static final long serialVersionUID = 1L;
 
             {
-                put("yyyy-M-d", 4L);
+                put("uuuu-M-d", 4L);
                 put("", 2L);
-                put("dd/MM/yyyy", 2L);
-                put("d/M/yyyy", 1L);
-                put("M/d/yyyy", 1L);
+                put("dd/MM/uuuu", 2L);
+                put("d/M/uuuu", 1L);
+                put("M/d/uuuu", 1L);
                 put("aaa", 1L);
                 put("99 aaa Aaaaa", 1L);
-                put("M/d/yy", 1L);
-                put("MM/dd/yyyy", 1L);
-                put("=d/M/yy=", 1L);
+                put("M/d/uu", 1L);
+                put("MM/dd/uuuu", 1L);
+                put("=d/M/uu=", 1L);
 
             }
         };
@@ -102,5 +103,23 @@ public class CustomDateTimePatternRecognizerTest {
             assertEquals("Unexpected pattern count on pattern <" + key + ">", EXPECTED_PATTERN_MAP.get(key), topK.get(key));
         }
 
+    }
+
+    @Test
+    public void testaddCustomDateTimePatternReplaced() {
+        DateTimePatternRecognizer recognizer = new DateTimePatternRecognizer();
+        recognizer.addCustomDateTimePattern("yyyy-MM-dd");
+        Assert.assertTrue(recognizer.getCustomDateTimePattern().size() == 1);
+        assertEquals("uuuu-MM-dd", recognizer.getCustomDateTimePattern().get(0));
+    }
+
+    @Test
+    public void testaddCustomDateTimePatternNotReplaced() {
+        DateTimePatternRecognizer recognizer = new DateTimePatternRecognizer();
+        recognizer.addCustomDateTimePattern("uuuu-MM-dd");
+        recognizer.addCustomDateTimePattern("yyyy-MM-dd G");
+        Assert.assertTrue(recognizer.getCustomDateTimePattern().size() == 2);
+        Assert.assertTrue(recognizer.getCustomDateTimePattern().contains("uuuu-MM-dd"));
+        Assert.assertTrue(recognizer.getCustomDateTimePattern().contains("yyyy-MM-dd G"));
     }
 }

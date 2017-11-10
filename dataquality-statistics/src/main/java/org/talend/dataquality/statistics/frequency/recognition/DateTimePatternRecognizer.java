@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.talend.dataquality.statistics.datetime.CustomDateTimePatternManager;
+import org.talend.dataquality.statistics.datetime.SystemDateTimePatternManager;
 import org.talend.dataquality.statistics.type.DataTypeEnum;
 
 /**
@@ -31,11 +32,15 @@ public class DateTimePatternRecognizer extends AbstractPatternRecognizer {
     private List<String> customDateTimePatterns = new ArrayList<>();
 
     public void addCustomDateTimePattern(String pattern) {
-        this.customDateTimePatterns.add(pattern);
+        //TDQ-14421 replace 'y' with 'u' if the pattern without 'G'.
+        String correctPattern = SystemDateTimePatternManager.patternReplaceY(pattern);
+        this.customDateTimePatterns.add(correctPattern);
     }
 
     public void addCustomDateTimePatterns(List<String> patterns) {
-        this.customDateTimePatterns.addAll(patterns);
+        patterns.forEach(pattern -> {
+            addCustomDateTimePattern(pattern);
+        });
     }
 
     public List<String> getCustomDateTimePattern() {

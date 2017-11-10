@@ -198,7 +198,7 @@ public class SystemDateTimePatternManager {
             for (Entry<Pattern, String> entry : patternMap.entrySet()) {
                 Pattern parser = entry.getKey();
                 if (parser.matcher(value).find()) {
-                    resultSet.add(entry.getValue());
+                    resultSet.add(patternReplaceY(entry.getValue()));
                 }
             }
             if (!resultSet.isEmpty()) {
@@ -274,5 +274,20 @@ public class SystemDateTimePatternManager {
             }
         }
         return false;
+    }
+
+    /**
+     * TDQ-14421 when use ResolverStyle.STRICT to validate a date and the pattern without G,should replace 'y' with 'u'.so that "2017-02-29" will be
+     * invalid.STRICT model see Java DOC.
+     *
+     * @param pattern the original pattern.it might be from custom..
+     * @return
+     */
+    public static String patternReplaceY(String pattern) {
+        String replacedPattern = pattern;
+        if (!pattern.contains(PATTERN_SUFFIX_ERA)) {
+            replacedPattern = replacedPattern.replace('y', 'u');
+        }
+        return replacedPattern;
     }
 }

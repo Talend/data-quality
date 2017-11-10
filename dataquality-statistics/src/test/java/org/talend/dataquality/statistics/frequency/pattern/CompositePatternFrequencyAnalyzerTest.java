@@ -48,7 +48,7 @@ public class CompositePatternFrequencyAnalyzerTest {
         Assert.assertEquals(Collections.singleton("aaaa9999ィゥェ中国"), patternString1);
 
         Set<String> patternString4 = analyzer.getValuePatternSet("2008-01-01");
-        Assert.assertEquals(new HashSet<String>(Arrays.asList(new String[] { "yyyy-MM-dd" })), patternString4);
+        Assert.assertEquals(new HashSet<String>(Arrays.asList(new String[] { "uuuu-MM-dd" })), patternString4);
 
         Set<String> patternString5 = analyzer.getValuePatternSet("2008-1月-01");
         Assert.assertEquals(Collections.singleton("9999-9月-99"), patternString5);
@@ -73,7 +73,7 @@ public class CompositePatternFrequencyAnalyzerTest {
                 Assert.assertEquals(3, e.getValue(), 0);
                 isAtLeastOneAsssert = true;
             } else if (idx == 1) {
-                Assert.assertEquals("yyyy-MM-dd", e.getKey());
+                Assert.assertEquals("uuuu-MM-dd", e.getKey());
                 Assert.assertEquals(2, e.getValue(), 0);
                 isAtLeastOneAsssert = true;
             }
@@ -108,7 +108,7 @@ public class CompositePatternFrequencyAnalyzerTest {
                 Assert.assertEquals(3, e.getValue(), 0);
                 isAtLeastOneAsssert = true;
             } else if (idx == 1) {
-                Assert.assertEquals("yyyy-MM-dd", e.getKey());
+                Assert.assertEquals("uuuu-MM-dd", e.getKey());
                 Assert.assertEquals(2, e.getValue(), 0);
                 isAtLeastOneAsssert = true;
             }
@@ -166,7 +166,7 @@ public class CompositePatternFrequencyAnalyzerTest {
         Iterator<Entry<String, Long>> entrySet = freqTable.entrySet().iterator();
         if (entrySet.hasNext()) {
             Entry<String, Long> e = entrySet.next();
-            Assert.assertEquals("M/d/yy H:m", e.getKey());
+            Assert.assertEquals("M/d/uu H:m", e.getKey());
             Assert.assertEquals(4, e.getValue(), 0);
         } else {
             fail("no entry");
