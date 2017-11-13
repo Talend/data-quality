@@ -12,7 +12,6 @@
 // ============================================================================
 package org.talend.dataquality.statistics.datetime;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -50,16 +49,5 @@ public class SystemDateTimePatternManagerTest {
         pattern = "yyyy-MM-dd G"; //$NON-NLS-1$
         assertTrue(SystemDateTimePatternManager.isMatchDateTimePattern("2017-02-15 AD", pattern, Locale.CHINESE)); //$NON-NLS-1$
         assertTrue(SystemDateTimePatternManager.isMatchDateTimePattern("4714-11-12 BC", pattern, Locale.CHINESE)); //$NON-NLS-1$
-        pattern = "MMMM d, y GG";//$NON-NLS-1$
-        assertTrue(SystemDateTimePatternManager.isMatchDateTimePattern("March 15, 44 BC", pattern, Locale.US)); //$NON-NLS-1$
-        pattern = "MMMM d, u";//$NON-NLS-1$
-        assertTrue(SystemDateTimePatternManager.isMatchDateTimePattern("March 15, -43", pattern, Locale.US)); //$NON-NLS-1$
-    }
-
-    @Test
-    public void testpatternReplaceY() {
-        assertEquals("uuuu-MM-dd", SystemDateTimePatternManager.patternReplaceY("yyyy-MM-dd"));//$NON-NLS-1$ //$NON-NLS-2$
-        assertEquals("yyyy-MM-dd G", SystemDateTimePatternManager.patternReplaceY("yyyy-MM-dd G"));//$NON-NLS-1$ //$NON-NLS-2$
-        assertEquals("dd/MM/uuuu", SystemDateTimePatternManager.patternReplaceY("dd/MM/uuuu"));//$NON-NLS-1$ //$NON-NLS-2$
     }
 }

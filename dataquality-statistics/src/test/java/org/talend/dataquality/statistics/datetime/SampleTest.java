@@ -42,463 +42,463 @@ public class SampleTest {
 
         {
             put("3/22/99", new HashSet<String>(Arrays.asList(new String[] //
-            { "M/d/uu" })));
+            { "M/d/yy" })));
             put("22/03/99", new HashSet<String>(Arrays.asList(new String[] //
-            { "d/MM/uu", "dd/MM/uu" })));
+            { "d/MM/yy", "dd/MM/yy" })));
             put("22.03.99", new HashSet<String>(Arrays.asList(new String[] //
-            { "dd.MM.uu", "d.MM.uu" })));
+            { "dd.MM.yy", "d.MM.yy" })));
             put("99-03-22", new HashSet<String>(Arrays.asList(new String[] //
-            { "uu-MM-dd" })));
+            { "yy-MM-dd" })));
             put("99/03/22", new HashSet<String>(Arrays.asList(new String[] //
-            { "uu/MM/dd" })));
+            { "yy/MM/dd" })));
             put("99-3-22", new HashSet<String>(Arrays.asList(new String[] //
-            { "uu-M-d" })));
+            { "yy-M-d" })));
             put("Mar 22, 1999", new HashSet<String>(Arrays.asList(new String[] //
-            { "MMMM d, uuuu", "MMM d, uuuu" })));
+            { "MMMM d, yyyy", "MMM d, yyyy" })));
             put("22 mars 1999", new HashSet<String>(Arrays.asList(new String[] //
-            { "d MMMM uuuu", "d MMM uuuu", "dd MMMM uuuu" })));
+            { "d MMMM yyyy", "d MMM yyyy", "dd MMMM yyyy" })));
             put("22.03.1999", new HashSet<String>(Arrays.asList(new String[] //
-            { "d.MM.uuuu", "dd.MM.uuuu" })));
+            { "d.MM.yyyy", "dd.MM.yyyy" })));
             put("22-Mar-1999", new HashSet<String>(Arrays.asList(new String[] //
-            { "dd-MMM-uuuu", "d-MMM-uuuu" })));
+            { "dd-MMM-yyyy", "d-MMM-yyyy" })));
             put("22-mar-1999", new HashSet<String>(Arrays.asList(new String[] //
-            { "dd-MMM-uuuu", "d-MMM-uuuu" })));
+            { "dd-MMM-yyyy", "d-MMM-yyyy" })));
             put("22-Mar-1999", new HashSet<String>(Arrays.asList(new String[] //
-            { "dd-MMM-uuuu", "d-MMM-uuuu" })));
+            { "dd-MMM-yyyy", "d-MMM-yyyy" })));
             put("1999-03-22", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu-MM-dd" })));
+            { "yyyy-MM-dd" })));
             put("1999/03/22", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu/MM/dd" })));
+            { "yyyy/MM/dd" })));
             put("1999-3-22", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu-M-d" })));
+            { "yyyy-M-d" })));
             put("March 22, 1999", new HashSet<String>(Arrays.asList(new String[] //
-            { "MMMM d, uuuu" })));
+            { "MMMM d, yyyy" })));
             put("22 mars 1999", new HashSet<String>(Arrays.asList(new String[] //
-            { "d MMMM uuuu", "d MMM uuuu", "dd MMMM uuuu" })));
+            { "d MMMM yyyy", "d MMM yyyy", "dd MMMM yyyy" })));
             put("22. März 1999", new HashSet<String>(Arrays.asList(new String[] //
-            { "d. MMMM uuuu" })));
+            { "d. MMMM yyyy" })));
             put("22 March 1999", new HashSet<String>(Arrays.asList(new String[] //
-            { "d MMMM uuuu", "dd MMMM uuuu" })));
+            { "d MMMM yyyy", "dd MMMM yyyy" })));
             put("22 marzo 1999", new HashSet<String>(Arrays.asList(new String[] //
-            { "d MMMM uuuu", "dd MMMM uuuu" })));
+            { "d MMMM yyyy", "dd MMMM yyyy" })));
             put("March 22, 1999", new HashSet<String>(Arrays.asList(new String[] //
-            { "MMMM d, uuuu" })));
+            { "MMMM d, yyyy" })));
             put("22 mars 1999", new HashSet<String>(Arrays.asList(new String[] //
-            { "d MMMM uuuu", "d MMM uuuu", "dd MMMM uuuu" })));
+            { "d MMMM yyyy", "d MMM yyyy", "dd MMMM yyyy" })));
             put("1999年3月22日", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu'年'M'月'd'日'" })));
+            { "yyyy'年'M'月'd'日'" })));
             put("Monday, March 22, 1999", new HashSet<String>(Arrays.asList(new String[] //
-            { "EEEE, MMMM d, uuuu" })));
+            { "EEEE, MMMM d, yyyy" })));
             put("lundi 22 mars 1999", new HashSet<String>(Arrays.asList(new String[] //
-            { "EEEE d MMMM uuuu" })));
+            { "EEEE d MMMM yyyy" })));
             put("Montag, 22. März 1999", new HashSet<String>(Arrays.asList(new String[] //
-            { "EEEE, d. MMMM uuuu" })));
+            { "EEEE, d. MMMM yyyy" })));
             put("Monday, 22 March 1999", new HashSet<String>(Arrays.asList(new String[] //
-            { "EEEE, d MMMM uuuu" })));
+            { "EEEE, d MMMM yyyy" })));
             put("lunedì 22 marzo 1999", new HashSet<String>(Arrays.asList(new String[] //
-            { "EEEE d MMMM uuuu" })));
+            { "EEEE d MMMM yyyy" })));
             put("Monday, March 22, 1999", new HashSet<String>(Arrays.asList(new String[] //
-            { "EEEE, MMMM d, uuuu" })));
+            { "EEEE, MMMM d, yyyy" })));
             put("lundi 22 mars 1999", new HashSet<String>(Arrays.asList(new String[] //
-            { "EEEE d MMMM uuuu" })));
+            { "EEEE d MMMM yyyy" })));
             put("1999年3月22日 星期一", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu'年'M'月'd'日' EEEE" })));
+            { "yyyy'年'M'月'd'日' EEEE" })));
             put("3/22/99 5:06 AM", new HashSet<String>(Arrays.asList(new String[] //
-            { "M/d/uu h:mm a" })));
+            { "M/d/yy h:mm a" })));
             put("22/03/99 05:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "d/MM/uu H:mm", "dd/MM/uu HH:mm" })));
+            { "d/MM/yy H:mm", "dd/MM/yy HH:mm" })));
             put("22.03.99 05:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "dd.MM.uu HH:mm", "dd.MM.uu H:mm", "d.MM.uu H:mm" })));
+            { "dd.MM.yy HH:mm", "dd.MM.yy H:mm", "d.MM.yy H:mm" })));
             put("22/03/99 5.06", new HashSet<String>(Arrays.asList(new String[] //
-            { "dd/MM/uu H.mm" })));
+            { "dd/MM/yy H.mm" })));
             put("22/03/99 5:06 AM", new HashSet<String>(Arrays.asList(new String[] //
-            { "dd/MM/uu h:mm a" })));
+            { "dd/MM/yy h:mm a" })));
             put("99-03-22 05:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "uu-MM-dd HH:mm" })));
+            { "yy-MM-dd HH:mm" })));
             put("99/03/22 5:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "uu/MM/dd H:mm" })));
+            { "yy/MM/dd H:mm" })));
             put("99-3-22 上午5:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "uu-M-d ah:mm" })));
+            { "yy-M-d ah:mm" })));
             put("Mar 22, 1999 5:06:07 AM", new HashSet<String>(Arrays.asList(new String[] //
-            { "MMM d, uuuu h:mm:ss a" })));
+            { "MMM d, yyyy h:mm:ss a" })));
             put("22 mars 1999 05:06:07", new HashSet<String>(Arrays.asList(new String[] //
-            { "d MMM uuuu HH:mm:ss" })));
+            { "d MMM yyyy HH:mm:ss" })));
             put("22.03.1999 05:06:07", new HashSet<String>(Arrays.asList(new String[] //
-            { "dd.MM.uuuu H:mm:ss", "dd.MM.uuuu HH:mm:ss", "d.MM.uuuu H:mm:ss" })));
+            { "dd.MM.yyyy H:mm:ss", "dd.MM.yyyy HH:mm:ss", "d.MM.yyyy H:mm:ss" })));
             put("22-Mar-1999 05:06:07", new HashSet<String>(Arrays.asList(new String[] //
-            { "dd-MMM-uuuu HH:mm:ss" })));
+            { "dd-MMM-yyyy HH:mm:ss" })));
             put("22-mar-1999 5.06.07", new HashSet<String>(Arrays.asList(new String[] //
-            { "d-MMM-uuuu H.mm.ss" })));
+            { "d-MMM-yyyy H.mm.ss" })));
             put("22-Mar-1999 5:06:07 AM", new HashSet<String>(Arrays.asList(new String[] //
-            { "d-MMM-uuuu h:mm:ss a" })));
+            { "d-MMM-yyyy h:mm:ss a" })));
             put("1999-03-22 05:06:07", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu-MM-dd H:mm:ss", "uuuu-MM-dd HH:mm:ss" })));
+            { "yyyy-MM-dd H:mm:ss", "yyyy-MM-dd HH:mm:ss" })));
             put("1999/03/22 5:06:07", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu/MM/dd H:mm:ss" })));
+            { "yyyy/MM/dd H:mm:ss" })));
             put("1999-3-22 5:06:07", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu-M-d H:mm:ss" })));
+            { "yyyy-M-d H:mm:ss" })));
             put("March 22, 1999 5:06:07 AM CET", new HashSet<String>(Arrays.asList(new String[] //
-            { "MMMM d, uuuu h:mm:ss a z" })));
+            { "MMMM d, yyyy h:mm:ss a z" })));
             put("22 mars 1999 05:06:07 CET", new HashSet<String>(Arrays.asList(new String[] //
-            { "dd MMMM uuuu HH:mm:ss z", "d MMMM uuuu HH:mm:ss z" })));
+            { "dd MMMM yyyy HH:mm:ss z", "d MMMM yyyy HH:mm:ss z" })));
             put("22. März 1999 05:06:07 MEZ", new HashSet<String>(Arrays.asList(new String[] //
-            { "d. MMMM uuuu HH:mm:ss z" })));
+            { "d. MMMM yyyy HH:mm:ss z" })));
             put("22 March 1999 05:06:07 CET", new HashSet<String>(Arrays.asList(new String[] //
-            { "dd MMMM uuuu HH:mm:ss z", "d MMMM uuuu HH:mm:ss z" })));
+            { "dd MMMM yyyy HH:mm:ss z", "d MMMM yyyy HH:mm:ss z" })));
             put("22 marzo 1999 5.06.07 CET", new HashSet<String>(Arrays.asList(new String[] //
-            { "d MMMM uuuu H.mm.ss z" })));
+            { "d MMMM yyyy H.mm.ss z" })));
             put("March 22, 1999 5:06:07 CET AM", new HashSet<String>(Arrays.asList(new String[] //
-            { "MMMM d, uuuu h:mm:ss z a" })));
+            { "MMMM d, yyyy h:mm:ss z a" })));
             put("22 mars 1999 05:06:07 CET", new HashSet<String>(Arrays.asList(new String[] //
-            { "dd MMMM uuuu HH:mm:ss z", "d MMMM uuuu HH:mm:ss z" })));
+            { "dd MMMM yyyy HH:mm:ss z", "d MMMM yyyy HH:mm:ss z" })));
             put("1999/03/22 5:06:07 CET", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu/MM/dd H:mm:ss z" })));
+            { "yyyy/MM/dd H:mm:ss z" })));
             put("1999年3月22日 上午05时06分07秒", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu'年'M'月'd'日' ahh'时'mm'分'ss'秒'" })));
+            { "yyyy'年'M'月'd'日' ahh'时'mm'分'ss'秒'" })));
             put("Monday, March 22, 1999 5:06:07 AM CET", new HashSet<String>(Arrays.asList(new String[] //
-            { "EEEE, MMMM d, uuuu h:mm:ss a z" })));
+            { "EEEE, MMMM d, yyyy h:mm:ss a z" })));
             put("lundi 22 mars 1999 05 h 06 CET", new HashSet<String>(Arrays.asList(new String[] //
-            { "EEEE d MMMM uuuu HH' h 'mm z", "EEEE d MMMM uuuu H' h 'mm z" })));
+            { "EEEE d MMMM yyyy HH' h 'mm z", "EEEE d MMMM yyyy H' h 'mm z" })));
             put("Montag, 22. März 1999 05:06 Uhr MEZ", new HashSet<String>(Arrays.asList(new String[] //
-            { "EEEE, d. MMMM uuuu HH:mm' Uhr 'z" })));
+            { "EEEE, d. MMMM yyyy HH:mm' Uhr 'z" })));
             put("Monday, 22 March 1999 05:06:07 o'clock CET", new HashSet<String>(Arrays.asList(new String[] //
-            { "EEEE, d MMMM uuuu HH:mm:ss 'o''clock' z" })));
+            { "EEEE, d MMMM yyyy HH:mm:ss 'o''clock' z" })));
             put("lunedì 22 marzo 1999 5.06.07 CET", new HashSet<String>(Arrays.asList(new String[] //
-            { "EEEE d MMMM uuuu H.mm.ss z" })));
+            { "EEEE d MMMM yyyy H.mm.ss z" })));
             put("Monday, March 22, 1999 5:06:07 o'clock AM CET", new HashSet<String>(Arrays.asList(new String[] //
-            { "EEEE, MMMM d, uuuu h:mm:ss 'o''clock' a z" })));
+            { "EEEE, MMMM d, yyyy h:mm:ss 'o''clock' a z" })));
             put("lundi 22 mars 1999 5 h 06 CET", new HashSet<String>(Arrays.asList(new String[] //
-            { "EEEE d MMMM uuuu H' h 'mm z" })));
+            { "EEEE d MMMM yyyy H' h 'mm z" })));
             put("1999年3月22日 5時06分07秒 CET", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu'年'M'月'd'日' H'時'mm'分'ss'秒' z" })));
+            { "yyyy'年'M'月'd'日' H'時'mm'分'ss'秒' z" })));
             put("1999年3月22日 星期一 上午05时06分07秒 CET", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu'年'M'月'd'日' EEEE ahh'时'mm'分'ss'秒' z" })));
+            { "yyyy'年'M'月'd'日' EEEE ahh'时'mm'分'ss'秒' z" })));
             put("22/03/99 05:06:07", new HashSet<String>(Arrays.asList(new String[] //
-            { "dd/MM/uu HH:mm:ss" })));
+            { "dd/MM/yy HH:mm:ss" })));
             put("22.03.99 05:06:07", new HashSet<String>(Arrays.asList(new String[] //
-            { "dd.MM.uu HH:mm:ss" })));
+            { "dd.MM.yy HH:mm:ss" })));
             put("22.03.1999 05:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "dd.MM.uuuu HH:mm" })));
+            { "dd.MM.yyyy HH:mm" })));
             put("99/03/22 5:06:07", new HashSet<String>(Arrays.asList(new String[] //
-            { "uu/MM/dd H:mm:ss" })));
+            { "yy/MM/dd H:mm:ss" })));
             put("1999/03/22 5:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu/MM/dd H:mm" })));
+            { "yyyy/MM/dd H:mm" })));
             put("22/03/1999", new HashSet<String>(Arrays.asList(new String[] //
-            { "dd/MM/uuuu" })));
+            { "dd/MM/yyyy" })));
             put("22/03/1999 5:06 AM", new HashSet<String>(Arrays.asList(new String[] //
-            { "dd/MM/uuuu h:mm a" })));
+            { "dd/MM/yyyy h:mm a" })));
             put("22/03/1999 5:06:07 AM", new HashSet<String>(Arrays.asList(new String[] //
-            { "dd/MM/uuuu h:mm:ss a" })));
+            { "dd/MM/yyyy h:mm:ss a" })));
             put("22/03/1999 05:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "dd/MM/uuuu H:mm", "dd/MM/uuuu HH:mm" })));
+            { "dd/MM/yyyy H:mm", "dd/MM/yyyy HH:mm" })));
             put("22/03/1999 05:06:07", new HashSet<String>(Arrays.asList(new String[] //
-            { "dd/MM/uuuu HH:mm:ss", "dd/MM/uuuu H:mm:ss" })));
+            { "dd/MM/yyyy HH:mm:ss", "dd/MM/yyyy H:mm:ss" })));
             put("22/03/1999 5:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "dd/MM/uuuu H:mm" })));
+            { "dd/MM/yyyy H:mm" })));
             put("22/03/1999 5:06:07", new HashSet<String>(Arrays.asList(new String[] //
-            { "dd/MM/uuuu H:mm:ss" })));
+            { "dd/MM/yyyy H:mm:ss" })));
             put("22/3/1999", new HashSet<String>(Arrays.asList(new String[] //
-            { "d/M/uuuu" })));
+            { "d/M/yyyy" })));
             put("22/3/1999 5:06 AM", new HashSet<String>(Arrays.asList(new String[] //
-            { "d/M/uuuu h:mm a" })));
+            { "d/M/yyyy h:mm a" })));
             put("22/3/1999 5:06:07 AM", new HashSet<String>(Arrays.asList(new String[] //
-            { "d/M/uuuu h:mm:ss a" })));
+            { "d/M/yyyy h:mm:ss a" })));
             put("22/3/1999 05:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "d/M/uuuu HH:mm", "d/M/uuuu H:mm" })));
+            { "d/M/yyyy HH:mm", "d/M/yyyy H:mm" })));
             put("22/3/1999 05:06:07", new HashSet<String>(Arrays.asList(new String[] //
-            { "d/M/uuuu H:mm:ss", "d/M/uuuu HH:mm:ss" })));
+            { "d/M/yyyy H:mm:ss", "d/M/yyyy HH:mm:ss" })));
             put("22/3/1999 5:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "d/M/uuuu H:mm" })));
+            { "d/M/yyyy H:mm" })));
             put("22/3/1999 5:06:07", new HashSet<String>(Arrays.asList(new String[] //
-            { "d/M/uuuu H:mm:ss" })));
+            { "d/M/yyyy H:mm:ss" })));
             put("03/22/1999", new HashSet<String>(Arrays.asList(new String[] //
-            { "MM/dd/uuuu" })));
+            { "MM/dd/yyyy" })));
             put("03/22/1999 5:06 AM", new HashSet<String>(Arrays.asList(new String[] //
-            { "MM/dd/uuuu h:mm a" })));
+            { "MM/dd/yyyy h:mm a" })));
             put("03/22/1999 5:06:07 AM", new HashSet<String>(Arrays.asList(new String[] //
-            { "MM/dd/uuuu h:mm:ss a" })));
+            { "MM/dd/yyyy h:mm:ss a" })));
             put("03/22/1999 05:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "MM/dd/uuuu H:mm", "MM/dd/uuuu HH:mm" })));
+            { "MM/dd/yyyy H:mm", "MM/dd/yyyy HH:mm" })));
             put("03/22/1999 05:06:07", new HashSet<String>(Arrays.asList(new String[] //
-            { "MM/dd/uuuu HH:mm:ss", "MM/dd/uuuu H:mm:ss" })));
+            { "MM/dd/yyyy HH:mm:ss", "MM/dd/yyyy H:mm:ss" })));
             put("03/22/1999 5:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "MM/dd/uuuu H:mm" })));
+            { "MM/dd/yyyy H:mm" })));
             put("03/22/1999 5:06:07", new HashSet<String>(Arrays.asList(new String[] //
-            { "MM/dd/uuuu H:mm:ss" })));
+            { "MM/dd/yyyy H:mm:ss" })));
             put("3/22/1999", new HashSet<String>(Arrays.asList(new String[] //
-            { "M/d/uuuu" })));
+            { "M/d/yyyy" })));
             put("3/22/1999 5:06 AM", new HashSet<String>(Arrays.asList(new String[] //
-            { "M/d/uuuu h:mm a" })));
+            { "M/d/yyyy h:mm a" })));
             put("3/22/1999 5:06:07 AM", new HashSet<String>(Arrays.asList(new String[] //
-            { "M/d/uuuu h:mm:ss a" })));
+            { "M/d/yyyy h:mm:ss a" })));
             put("3/22/1999 05:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "M/d/uuuu HH:mm", "M/d/uuuu H:mm" })));
+            { "M/d/yyyy HH:mm", "M/d/yyyy H:mm" })));
             put("3/22/1999 05:06:07", new HashSet<String>(Arrays.asList(new String[] //
-            { "M/d/uuuu HH:mm:ss", "M/d/uuuu H:mm:ss" })));
+            { "M/d/yyyy HH:mm:ss", "M/d/yyyy H:mm:ss" })));
             put("3/22/1999 5:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "M/d/uuuu H:mm" })));
+            { "M/d/yyyy H:mm" })));
             put("3/22/1999 5:06:07", new HashSet<String>(Arrays.asList(new String[] //
-            { "M/d/uuuu H:mm:ss" })));
+            { "M/d/yyyy H:mm:ss" })));
             put("03-22-99", new HashSet<String>(Arrays.asList(new String[] //
-            { "MM-dd-uu" })));
+            { "MM-dd-yy" })));
             put("03-22-99 5:06 AM", new HashSet<String>(Arrays.asList(new String[] //
-            { "MM-dd-uu h:mm a" })));
+            { "MM-dd-yy h:mm a" })));
             put("03-22-99 5:06:07 AM", new HashSet<String>(Arrays.asList(new String[] //
-            { "MM-dd-uu h:mm:ss a" })));
+            { "MM-dd-yy h:mm:ss a" })));
             put("03-22-99 05:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "MM-dd-uu HH:mm", "MM-dd-uu H:mm" })));
+            { "MM-dd-yy HH:mm", "MM-dd-yy H:mm" })));
             put("03-22-99 05:06:07", new HashSet<String>(Arrays.asList(new String[] //
-            { "MM-dd-uu HH:mm:ss", "MM-dd-uu H:mm:ss" })));
+            { "MM-dd-yy HH:mm:ss", "MM-dd-yy H:mm:ss" })));
             put("03-22-99 5:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "MM-dd-uu H:mm" })));
+            { "MM-dd-yy H:mm" })));
             put("03-22-99 5:06:07", new HashSet<String>(Arrays.asList(new String[] //
-            { "MM-dd-uu H:mm:ss" })));
+            { "MM-dd-yy H:mm:ss" })));
             put("3-22-99", new HashSet<String>(Arrays.asList(new String[] //
-            { "M-d-uu" })));
+            { "M-d-yy" })));
             put("3-22-99 5:06 AM", new HashSet<String>(Arrays.asList(new String[] //
-            { "M-d-uu h:mm a" })));
+            { "M-d-yy h:mm a" })));
             put("3-22-99 5:06:07 AM", new HashSet<String>(Arrays.asList(new String[] //
-            { "M-d-uu h:mm:ss a" })));
+            { "M-d-yy h:mm:ss a" })));
             put("3-22-99 05:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "M-d-uu H:mm", "M-d-uu HH:mm" })));
+            { "M-d-yy H:mm", "M-d-yy HH:mm" })));
             put("3-22-99 05:06:07", new HashSet<String>(Arrays.asList(new String[] //
-            { "M-d-uu HH:mm:ss", "M-d-uu H:mm:ss" })));
+            { "M-d-yy HH:mm:ss", "M-d-yy H:mm:ss" })));
             put("3-22-99 5:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "M-d-uu H:mm" })));
+            { "M-d-yy H:mm" })));
             put("3-22-99 5:06:07", new HashSet<String>(Arrays.asList(new String[] //
-            { "M-d-uu H:mm:ss" })));
+            { "M-d-yy H:mm:ss" })));
             put("03-22-1999", new HashSet<String>(Arrays.asList(new String[] //
-            { "MM-dd-uuuu" })));
+            { "MM-dd-yyyy" })));
             put("03-22-1999 5:06 AM", new HashSet<String>(Arrays.asList(new String[] //
-            { "MM-dd-uuuu h:mm a" })));
+            { "MM-dd-yyyy h:mm a" })));
             put("03-22-1999 5:06:07 AM", new HashSet<String>(Arrays.asList(new String[] //
-            { "MM-dd-uuuu h:mm:ss a" })));
+            { "MM-dd-yyyy h:mm:ss a" })));
             put("03-22-1999 05:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "MM-dd-uuuu H:mm", "MM-dd-uuuu HH:mm" })));
+            { "MM-dd-yyyy H:mm", "MM-dd-yyyy HH:mm" })));
             put("03-22-1999 05:06:07", new HashSet<String>(Arrays.asList(new String[] //
-            { "MM-dd-uuuu H:mm:ss", "MM-dd-uuuu HH:mm:ss" })));
+            { "MM-dd-yyyy H:mm:ss", "MM-dd-yyyy HH:mm:ss" })));
             put("03-22-1999 5:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "MM-dd-uuuu H:mm" })));
+            { "MM-dd-yyyy H:mm" })));
             put("03-22-1999 5:06:07", new HashSet<String>(Arrays.asList(new String[] //
-            { "MM-dd-uuuu H:mm:ss" })));
+            { "MM-dd-yyyy H:mm:ss" })));
             put("3-22-1999", new HashSet<String>(Arrays.asList(new String[] //
-            { "M-d-uuuu" })));
+            { "M-d-yyyy" })));
             put("3-22-1999 5:06 AM", new HashSet<String>(Arrays.asList(new String[] //
-            { "M-d-uuuu h:mm a" })));
+            { "M-d-yyyy h:mm a" })));
             put("3-22-1999 5:06:07 AM", new HashSet<String>(Arrays.asList(new String[] //
-            { "M-d-uuuu h:mm:ss a" })));
+            { "M-d-yyyy h:mm:ss a" })));
             put("3-22-1999 05:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "M-d-uuuu H:mm", "M-d-uuuu HH:mm" })));
+            { "M-d-yyyy H:mm", "M-d-yyyy HH:mm" })));
             put("3-22-1999 05:06:07", new HashSet<String>(Arrays.asList(new String[] //
-            { "M-d-uuuu HH:mm:ss", "M-d-uuuu H:mm:ss" })));
+            { "M-d-yyyy HH:mm:ss", "M-d-yyyy H:mm:ss" })));
             put("3-22-1999 5:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "M-d-uuuu H:mm" })));
+            { "M-d-yyyy H:mm" })));
             put("3-22-1999 5:06:07", new HashSet<String>(Arrays.asList(new String[] //
-            { "M-d-uuuu H:mm:ss" })));
+            { "M-d-yyyy H:mm:ss" })));
             put("1999-03-22 5:06 AM", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu-MM-dd h:mm a" })));
+            { "yyyy-MM-dd h:mm a" })));
             put("1999-03-22 5:06:07 AM", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu-MM-dd h:mm:ss a" })));
+            { "yyyy-MM-dd h:mm:ss a" })));
             put("1999-03-22 05:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu-MM-dd HH:mm", "uuuu-MM-dd H:mm" })));
+            { "yyyy-MM-dd HH:mm", "yyyy-MM-dd H:mm" })));
             put("1999-03-22 5:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu-MM-dd H:mm" })));
+            { "yyyy-MM-dd H:mm" })));
             put("1999-03-22 5:06:07", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu-MM-dd H:mm:ss" })));
+            { "yyyy-MM-dd H:mm:ss" })));
             put("1999-3-22 5:06 AM", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu-M-d h:mm a" })));
+            { "yyyy-M-d h:mm a" })));
             put("1999-3-22 5:06:07 AM", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu-M-d h:mm:ss a" })));
+            { "yyyy-M-d h:mm:ss a" })));
             put("1999-3-22 05:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu-M-d HH:mm", "uuuu-M-d H:mm" })));
+            { "yyyy-M-d HH:mm", "yyyy-M-d H:mm" })));
             put("1999-3-22 05:06:07", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu-M-d HH:mm:ss", "uuuu-M-d H:mm:ss" })));
+            { "yyyy-M-d HH:mm:ss", "yyyy-M-d H:mm:ss" })));
             put("1999-3-22 5:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu-M-d H:mm" })));
+            { "yyyy-M-d H:mm" })));
             put("03/22/99", new HashSet<String>(Arrays.asList(new String[] //
-            { "MM/dd/uu" })));
+            { "MM/dd/yy" })));
             put("03/22/99 5:06 AM", new HashSet<String>(Arrays.asList(new String[] //
-            { "MM/dd/uu h:mm a" })));
+            { "MM/dd/yy h:mm a" })));
             put("03/22/99 5:06:07 AM", new HashSet<String>(Arrays.asList(new String[] //
-            { "MM/dd/uu h:mm:ss a" })));
+            { "MM/dd/yy h:mm:ss a" })));
             put("03/22/99 05:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "MM/dd/uu H:mm", "MM/dd/uu HH:mm" })));
+            { "MM/dd/yy H:mm", "MM/dd/yy HH:mm" })));
             put("03/22/99 05:06:07", new HashSet<String>(Arrays.asList(new String[] //
-            { "MM/dd/uu HH:mm:ss", "MM/dd/uu H:mm:ss" })));
+            { "MM/dd/yy HH:mm:ss", "MM/dd/yy H:mm:ss" })));
             put("03/22/99 5:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "MM/dd/uu H:mm" })));
+            { "MM/dd/yy H:mm" })));
             put("03/22/99 5:06:07", new HashSet<String>(Arrays.asList(new String[] //
-            { "MM/dd/uu H:mm:ss" })));
+            { "MM/dd/yy H:mm:ss" })));
             put("3/22/99 5:06:07 AM", new HashSet<String>(Arrays.asList(new String[] //
-            { "M/d/uu h:mm:ss a" })));
+            { "M/d/yy h:mm:ss a" })));
             put("3/22/99 05:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "M/d/uu HH:mm", "M/d/uu H:mm" })));
+            { "M/d/yy HH:mm", "M/d/yy H:mm" })));
             put("3/22/99 05:06:07", new HashSet<String>(Arrays.asList(new String[] //
-            { "M/d/uu HH:mm:ss", "M/d/uu H:mm:ss" })));
+            { "M/d/yy HH:mm:ss", "M/d/yy H:mm:ss" })));
             put("3/22/99 5:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "M/d/uu H:mm" })));
+            { "M/d/yy H:mm" })));
             put("3/22/99 5:06:07", new HashSet<String>(Arrays.asList(new String[] //
-            { "M/d/uu H:mm:ss" })));
+            { "M/d/yy H:mm:ss" })));
             put("Mar 22 1999", new HashSet<String>(Arrays.asList(new String[] //
-            { "MMM d uuuu", "MMMM d uuuu" })));
+            { "MMM d yyyy", "MMMM d yyyy" })));
             put("Mar.22.1999", new HashSet<String>(Arrays.asList(new String[] //
-            { "MMM.dd.uuuu" })));
+            { "MMM.dd.yyyy" })));
             put("March 22 1999", new HashSet<String>(Arrays.asList(new String[] //
-            { "MMMM d uuuu" })));
+            { "MMMM d yyyy" })));
             put("1999-03-22 05:06:07.0", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu-MM-dd HH:mm:ss.S" })));
+            { "yyyy-MM-dd HH:mm:ss.S" })));
             put("22/Mar/1999 5:06:07 +0100", new HashSet<String>(Arrays.asList(new String[] //
-            { "d/MMM/uuuu H:mm:ss Z" })));
+            { "d/MMM/yyyy H:mm:ss Z" })));
             put("22-Mar-99 05.06.07.000000888 AM", new HashSet<String>(Arrays.asList(new String[] //
-            { "dd-MMM-uu hh.mm.ss.nnnnnnnnn a" })));
+            { "dd-MMM-yy hh.mm.ss.nnnnnnnnn a" })));
             put("Mon Mar 22 05:06:07 CET 1999", new HashSet<String>(Arrays.asList(new String[] //
-            { "EEE MMM dd HH:mm:ss z uuuu" })));
+            { "EEE MMM dd HH:mm:ss z yyyy" })));
             put("22/Mar/99 5:06 AM", new HashSet<String>(Arrays.asList(new String[] //
-            { "dd/MMM/uu h:mm a" })));
+            { "dd/MMM/yy h:mm a" })));
             put("1999/3/22", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu/M/d" })));
+            { "yyyy/M/d" })));
             put("19990322+0100", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuuMMddZ" })));
+            { "yyyyMMddZ" })));
             put("19990322", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuuMMdd" })));
+            { "yyyyMMdd" })));
             put("1999-03-22 AD", new HashSet<String>(Arrays.asList(new String[] //
             { "yyyy-MM-dd G" })));
             put("1999-03-22+01:00", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu-MM-ddXXX" })));
+            { "yyyy-MM-ddXXX" })));
             put("1999-03-22T05:06:07.000[Europe/Paris]", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu-MM-dd'T'HH:mm:ss.SSS'['VV']'" })));
+            { "yyyy-MM-dd'T'HH:mm:ss.SSS'['VV']'" })));
             put("1999-03-22T05:06:07.000", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu-MM-dd'T'HH:mm:ss.SSS" })));
+            { "yyyy-MM-dd'T'HH:mm:ss.SSS" })));
             put("1999-03-22T05:06:07", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu-MM-dd'T'HH:mm:ss" })));
+            { "yyyy-MM-dd'T'HH:mm:ss" })));
             put("1999-03-22T05:06:07.000Z", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu-MM-dd'T'HH:mm:ss.SSS'Z'" })));
+            { "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'" })));
             put("1999-03-22T05:06:07.000+01:00", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu-MM-dd'T'HH:mm:ss.SSSXXX" })));
+            { "yyyy-MM-dd'T'HH:mm:ss.SSSXXX" })));
             put("1999-03-22T05:06:07+01:00", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu-MM-dd'T'HH:mm:ssXXX" })));
+            { "yyyy-MM-dd'T'HH:mm:ssXXX" })));
             put("1999-081+01:00", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu-DDDXXX" })));
+            { "yyyy-DDDXXX" })));
             put("1999W132", new HashSet<String>(Arrays.asList(new String[] //
             { "YYYY'W'wc" })));
             put("1999-W13-2", new HashSet<String>(Arrays.asList(new String[] //
             { "YYYY-'W'w-c" })));
             put("1999-03-22T05:06:07.000+01:00[Europe/Paris]", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu-MM-dd'T'HH:mm:ss.SSSXXX'['VV']'" })));
+            { "yyyy-MM-dd'T'HH:mm:ss.SSSXXX'['VV']'" })));
             put("1999-03-22T05:06:07+01:00[Europe/Paris]", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu-MM-dd'T'HH:mm:ssXXX'['VV']'" })));
+            { "yyyy-MM-dd'T'HH:mm:ssXXX'['VV']'" })));
             put("Mon, 22 Mar 1999 05:06:07 +0100", new HashSet<String>(Arrays.asList(new String[] //
-            { "EEE, d MMM uuuu HH:mm:ss Z" })));
+            { "EEE, d MMM yyyy HH:mm:ss Z" })));
             put("22 Mar 1999 05:06:07 +0100", new HashSet<String>(Arrays.asList(new String[] //
-            { "d MMM uuuu HH:mm:ss Z" })));
+            { "d MMM yyyy HH:mm:ss Z" })));
             put("22.3.99", new HashSet<String>(Arrays.asList(new String[] //
-            { "d.M.uu" })));
+            { "d.M.yy" })));
             put("22-03-99", new HashSet<String>(Arrays.asList(new String[] //
-            { "dd-MM-uu" })));
+            { "dd-MM-yy" })));
             put("22/03/99", new HashSet<String>(Arrays.asList(new String[] //
-            { "d/MM/uu", "dd/MM/uu" })));
+            { "d/MM/yy", "dd/MM/yy" })));
             put("22.03.99", new HashSet<String>(Arrays.asList(new String[] //
-            { "dd.MM.uu", "d.MM.uu" })));
+            { "dd.MM.yy", "d.MM.yy" })));
             put("22.3.1999", new HashSet<String>(Arrays.asList(new String[] //
-            { "d.M.uuuu" })));
+            { "d.M.yyyy" })));
             put("1999.03.22", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu.MM.dd" })));
+            { "yyyy.MM.dd" })));
             put("1999.03.22.", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu.MM.dd." })));
+            { "yyyy.MM.dd." })));
             put("99. 3. 22", new HashSet<String>(Arrays.asList(new String[] //
-            { "uu. M. d" })));
+            { "yy. M. d" })));
             put("99.3.22", new HashSet<String>(Arrays.asList(new String[] //
-            { "uu.M.d" })));
+            { "yy.M.d" })));
             put("99.22.3", new HashSet<String>(Arrays.asList(new String[] //
-            { "uu.d.M" })));
+            { "yy.d.M" })));
             put("22-3-99", new HashSet<String>(Arrays.asList(new String[] //
-            { "d-M-uu" })));
+            { "d-M-yy" })));
             put("22-03-1999", new HashSet<String>(Arrays.asList(new String[] //
-            { "dd-MM-uuuu" })));
+            { "dd-MM-yyyy" })));
             put("22.3.99.", new HashSet<String>(Arrays.asList(new String[] //
-            { "d.M.uu." })));
+            { "d.M.yy." })));
             put("22.03.1999", new HashSet<String>(Arrays.asList(new String[] //
-            { "d.MM.uuuu", "dd.MM.uuuu" })));
+            { "d.MM.yyyy", "dd.MM.yyyy" })));
             put("1999. 3. 22", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu. M. d" })));
+            { "yyyy. M. d" })));
             put("1999.22.3", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu.d.M" })));
+            { "yyyy.d.M" })));
             put("22.03.1999.", new HashSet<String>(Arrays.asList(new String[] //
-            { "dd.MM.uuuu." })));
+            { "dd.MM.yyyy." })));
             put("22.3.99 5.06", new HashSet<String>(Arrays.asList(new String[] //
-            { "d.M.uu H.mm" })));
+            { "d.M.yy H.mm" })));
             put("22.3.99 5:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "d.M.uu H:mm" })));
+            { "d.M.yy H:mm" })));
             put("22-03-99 05:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "dd-MM-uu HH:mm" })));
+            { "dd-MM-yy HH:mm" })));
             put("22/03/99 5:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "d/MM/uu H:mm" })));
+            { "d/MM/yy H:mm" })));
             put("22.03.99 5:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "dd.MM.uu H:mm", "d.MM.uu H:mm" })));
+            { "dd.MM.yy H:mm", "d.MM.yy H:mm" })));
             put("22.3.1999 5:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "d.M.uuuu H:mm" })));
+            { "d.M.yyyy H:mm" })));
             put("99/03/22 05:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "uu/MM/dd HH:mm", "uu/MM/dd H:mm" })));
+            { "yy/MM/dd HH:mm", "yy/MM/dd H:mm" })));
             put("05:06 22/03/99", new HashSet<String>(Arrays.asList(new String[] //
-            { "HH:mm dd/MM/uu" })));
+            { "HH:mm dd/MM/yy" })));
             put("1999.03.22 05:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu.MM.dd HH:mm" })));
+            { "yyyy.MM.dd HH:mm" })));
             put("1999.03.22. 5:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu.MM.dd. H:mm" })));
+            { "yyyy.MM.dd. H:mm" })));
             put("22.3.1999 05:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "d.M.uuuu HH:mm", "d.M.uuuu H:mm" })));
+            { "d.M.yyyy HH:mm", "d.M.yyyy H:mm" })));
             put("99.3.22 05.06", new HashSet<String>(Arrays.asList(new String[] //
-            { "uu.M.d HH.mm" })));
+            { "yy.M.d HH.mm" })));
             put("99.22.3 05:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "uu.d.M HH:mm" })));
+            { "yy.d.M HH:mm" })));
             put("22.3.99 05:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "d.M.uu H:mm", "d.M.uu HH:mm" })));
+            { "d.M.yy H:mm", "d.M.yy HH:mm" })));
             put("22-3-99 5:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "d-M-uu H:mm" })));
+            { "d-M-yy H:mm" })));
             put("22-03-1999 5:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "dd-MM-uuuu H:mm" })));
+            { "dd-MM-yyyy H:mm" })));
             put("22.03.99 5:06", new HashSet<String>(Arrays.asList(new String[] //
-            { "dd.MM.uu H:mm", "d.MM.uu H:mm" })));
+            { "dd.MM.yy H:mm", "d.MM.yy H:mm" })));
             put("99-03-22 5.06.PD", new HashSet<String>(Arrays.asList(new String[] //
-            { "uu-MM-dd h.mm.a" })));
+            { "yy-MM-dd h.mm.a" })));
             put("22.3.99. 05.06", new HashSet<String>(Arrays.asList(new String[] //
-            { "d.M.uu. HH.mm" })));
+            { "d.M.yy. HH.mm" })));
             put("05:06 22/03/1999", new HashSet<String>(Arrays.asList(new String[] //
-            { "HH:mm dd/MM/uuuu" })));
+            { "HH:mm dd/MM/yyyy" })));
             put("22.3.1999 5.06.07", new HashSet<String>(Arrays.asList(new String[] //
-            { "d.M.uuuu H.mm.ss" })));
+            { "d.M.yyyy H.mm.ss" })));
             put("22.3.1999 5:06:07", new HashSet<String>(Arrays.asList(new String[] //
-            { "d.M.uuuu H:mm:ss" })));
+            { "d.M.yyyy H:mm:ss" })));
             put("22-03-1999 05:06:07", new HashSet<String>(Arrays.asList(new String[] //
-            { "dd-MM-uuuu HH:mm:ss" })));
+            { "dd-MM-yyyy HH:mm:ss" })));
             put("22.03.1999 5:06:07", new HashSet<String>(Arrays.asList(new String[] //
-            { "dd.MM.uuuu H:mm:ss", "d.MM.uuuu H:mm:ss" })));
+            { "dd.MM.yyyy H:mm:ss", "d.MM.yyyy H:mm:ss" })));
             put("05:06:07 22/03/1999", new HashSet<String>(Arrays.asList(new String[] //
-            { "HH:mm:ss dd/MM/uuuu" })));
+            { "HH:mm:ss dd/MM/yyyy" })));
             put("1999.03.22 05:06:07", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu.MM.dd HH:mm:ss" })));
+            { "yyyy.MM.dd HH:mm:ss" })));
             put("1999.03.22. 5:06:07", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu.MM.dd. H:mm:ss" })));
+            { "yyyy.MM.dd. H:mm:ss" })));
             put("22.3.1999 05:06:07", new HashSet<String>(Arrays.asList(new String[] //
-            { "d.M.uuuu HH:mm:ss", "d.M.uuuu H:mm:ss" })));
+            { "d.M.yyyy HH:mm:ss", "d.M.yyyy H:mm:ss" })));
             put("1999-03-22 05.06.07", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu-MM-dd HH.mm.ss" })));
+            { "yyyy-MM-dd HH.mm.ss" })));
             put("1999.22.3 05:06:07", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu.d.M HH:mm:ss" })));
+            { "yyyy.d.M HH:mm:ss" })));
             put("22.3.1999 05:06:", new HashSet<String>(Arrays.asList(new String[] //
-            { "d.M.uuuu HH:mm:" })));
+            { "d.M.yyyy HH:mm:" })));
             put("22.03.1999 5:06:07", new HashSet<String>(Arrays.asList(new String[] //
-            { "dd.MM.uuuu H:mm:ss", "d.MM.uuuu H:mm:ss" })));
+            { "dd.MM.yyyy H:mm:ss", "d.MM.yyyy H:mm:ss" })));
             put("1999-03-22 5:06:07.PD", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu-MM-dd h:mm:ss.a" })));
+            { "yyyy-MM-dd h:mm:ss.a" })));
             put("22.03.1999. 05.06.07", new HashSet<String>(Arrays.asList(new String[] //
-            { "dd.MM.uuuu. HH.mm.ss" })));
+            { "dd.MM.yyyy. HH.mm.ss" })));
             put("05:06:07 22-03-1999", new HashSet<String>(Arrays.asList(new String[] //
-            { "HH:mm:ss dd-MM-uuuu" })));
+            { "HH:mm:ss dd-MM-yyyy" })));
             put("1999-03-22 5.06.07.PD CET", new HashSet<String>(Arrays.asList(new String[] //
-            { "uuuu-MM-dd h.mm.ss.a z" })));
+            { "yyyy-MM-dd h.mm.ss.a z" })));
             put("22.03.1999. 05.06.07 CET", new HashSet<String>(Arrays.asList(new String[] //
-            { "dd.MM.uuuu. HH.mm.ss z" })));
+            { "dd.MM.yyyy. HH.mm.ss z" })));
         }
     };
 

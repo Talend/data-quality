@@ -79,7 +79,7 @@ public class LatinExtendedCharPatternRecognizerTest {
         str2Pattern.put("2001-9-10 - 2009-09-08", "9999-9-99 - 9999-99-99");
         testRecognition(str2Pattern);
         str2Pattern.clear();
-        str2Pattern.put("2001-8-20", "uuuu-M-d");
+        str2Pattern.put("2001-8-20", "yyyy-M-d");
         testDateRecognition(str2Pattern);
     }
 
