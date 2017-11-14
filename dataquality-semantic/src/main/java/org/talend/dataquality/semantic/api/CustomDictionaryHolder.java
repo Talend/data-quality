@@ -404,14 +404,25 @@ public class CustomDictionaryHolder {
 
                 try {
                     LOGGER.info("[Post Republish] insert staging directory into prod");
-                    customMetadataIndexAccess.copyStagingContent(
+                    File metadataFolder = new File(
                             stagingIndexes.getAbsolutePath() + File.separator + CategoryRegistryManager.METADATA_SUBFOLDER_NAME);
-                    customDataDictIndexAccess.copyStagingContent(stagingIndexes.getAbsolutePath() + File.separator
+                    if (metadataFolder.exists()) {
+                        customMetadataIndexAccess.copyStagingContent(metadataFolder.getAbsolutePath());
+                    }
+
+                    File dictionaryFolder = new File(stagingIndexes.getAbsolutePath() + File.separator
                             + CategoryRegistryManager.DICTIONARY_SUBFOLDER_NAME);
-                    customRegexClassifierAccess.copyStagingContent(
+                    if (dictionaryFolder.exists()) {
+                        customDataDictIndexAccess.copyStagingContent(dictionaryFolder.getAbsolutePath());
+                    }
+
+                    File regexFile = new File(
                             stagingIndexes.getAbsolutePath() + File.separator + CategoryRegistryManager.REGEX_SUBFOLDER_NAME
                                     + File.separator + CategoryRegistryManager.REGEX_CATEGRIZER_FILE_NAME);
-                } catch (Exception e) {
+                    if (regexFile.exists()) {
+                        customRegexClassifierAccess.copyStagingContent(regexFile.getAbsolutePath());
+                    }
+                } catch (IOException e) {
                     LOGGER.error(e.getMessage(), e);
                 }
 
