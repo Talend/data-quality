@@ -208,10 +208,19 @@ public class SystemDateTimePatternManager {
         return resultSet;
     }
 
-    private static DateTimeFormatter getDateTimeFormatterByPattern(String customPattern, Locale locale) {
+    /**
+     * 
+     * @param customPattern A date pattern such as "yyyy-MM-dd G","dd/MM/uuuu"
+     * @param locale
+     * @return Return a DateTimeFormatter.
+     */
+    public static DateTimeFormatter getDateTimeFormatterByPattern(String customPattern, Locale locale) {
+        if (locale == null || StringUtils.isEmpty(customPattern)) {
+            return null;
+        }
         String localeStr = locale.toString();
         DateTimeFormatter formatter = dateTimeFormatterCache.get(customPattern + localeStr);
-        if (formatter == null && !StringUtils.isEmpty(customPattern)) {
+        if (formatter == null) {
             try {
                 // TDQ-13936 add Chronology for specified Locale.
                 if (customPattern.contains(PATTERN_SUFFIX_ERA)) {

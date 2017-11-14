@@ -12,11 +12,17 @@
 // ============================================================================
 package org.talend.dataquality.statistics.datetime;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.ResolverStyle;
+import java.time.temporal.TemporalAccessor;
 import java.util.Locale;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 public class SystemDateTimePatternManagerTest {
@@ -49,5 +55,24 @@ public class SystemDateTimePatternManagerTest {
         pattern = "yyyy-MM-dd G"; //$NON-NLS-1$
         assertTrue(SystemDateTimePatternManager.isMatchDateTimePattern("2017-02-15 AD", pattern, Locale.CHINESE)); //$NON-NLS-1$
         assertTrue(SystemDateTimePatternManager.isMatchDateTimePattern("4714-11-12 BC", pattern, Locale.CHINESE)); //$NON-NLS-1$
+        pattern = "MMMM d, y GG";//$NON-NLS-1$
+        assertTrue(SystemDateTimePatternManager.isMatchDateTimePattern("March 15, 44 BC", pattern, Locale.US)); //$NON-NLS-1$
+        pattern = "MMMM d, u";//$NON-NLS-1$
+        assertTrue(SystemDateTimePatternManager.isMatchDateTimePattern("March 15, -43", pattern, Locale.US)); //$NON-NLS-1$
     }
+    @Test
+    public void testgetDateTimeFormatterByPattern() {
+        DateTimeFormatter dateTimeFormatterByPattern =
+                SystemDateTimePatternManager.getDateTimeFormatterByPattern("dd/MM/yyyy", Locale.ENGLISH);
+        assertFalse(dateTimeFormatterByPattern == null);
+        assertTrue(dateTimeFormatterByPattern.getResolverStyle() == ResolverStyle.STRICT);
+        assertEquals("17/08/2015", dateTimeFormatterByPattern.format(LocalDate.of(2015, 8, 17)));
+        dateTimeFormatterByPattern =
+                SystemDateTimePatternManager.getDateTimeFormatterByPattern("yyyy-MM-dd G", Locale.US);
+        assertFalse(dateTimeFormatterByPattern == null);
+        assertEquals("2015-08-17 AD", dateTimeFormatterByPattern.format(LocalDate.of(2015, 8, 17)));
+        dateTimeFormatterByPattern = SystemDateTimePatternManager.getDateTimeFormatterByPattern("yyyy-MM-dd G", null);
+        assertTrue(dateTimeFormatterByPattern == null);
+    }
+
 }
