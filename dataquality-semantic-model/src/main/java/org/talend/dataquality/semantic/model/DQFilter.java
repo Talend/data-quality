@@ -16,6 +16,8 @@ import java.io.Serializable;
 
 public class DQFilter implements Serializable {
 
+    private static final long serialVersionUID = 970248862880439269L;
+
     private String filterParam;
 
     private String filterType;

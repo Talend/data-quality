@@ -16,6 +16,8 @@ import java.io.Serializable;
 
 public class DQRegEx implements Serializable {
 
+    private static final long serialVersionUID = -4979286653307821967L;
+
     private MainCategory mainCategory;
 
     private DQFilter filter;

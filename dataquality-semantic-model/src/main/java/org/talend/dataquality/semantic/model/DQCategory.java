@@ -21,6 +21,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class DQCategory implements Serializable {
 
+    private static final long serialVersionUID = 4593691452129397269L;
+
     private String id;
 
     private String name;

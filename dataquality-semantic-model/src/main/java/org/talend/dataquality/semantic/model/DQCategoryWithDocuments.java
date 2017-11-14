@@ -17,6 +17,8 @@ import java.util.List;
 
 public class DQCategoryWithDocuments implements Serializable {
 
+    private static final long serialVersionUID = -7844120899655436687L;
+
     private DQCategory category;
 
     private List<DQDocument> documents;

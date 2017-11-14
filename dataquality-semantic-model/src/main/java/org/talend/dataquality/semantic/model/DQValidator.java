@@ -16,6 +16,8 @@ import java.io.Serializable;
 
 public class DQValidator implements Serializable {
 
+    private static final long serialVersionUID = 2265314886790764196L;
+
     private String patternString;
 
     private String subValidatorClassName;

@@ -18,6 +18,8 @@ import java.util.Set;
 
 public class DQDocument implements Serializable {
 
+    private static final long serialVersionUID = 4167438961487139761L;
+
     private String id;
 
     private Set<String> values;
