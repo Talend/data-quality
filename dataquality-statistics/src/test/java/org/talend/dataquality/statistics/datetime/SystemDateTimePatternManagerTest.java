@@ -19,10 +19,8 @@ import static org.junit.Assert.assertTrue;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
-import java.time.temporal.TemporalAccessor;
 import java.util.Locale;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 public class SystemDateTimePatternManagerTest {
