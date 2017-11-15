@@ -58,15 +58,15 @@ public class SystemDateTimePatternManagerTest {
         pattern = "MMMM d, u";//$NON-NLS-1$
         assertTrue(SystemDateTimePatternManager.isMatchDateTimePattern("March 15, -43", pattern, Locale.US)); //$NON-NLS-1$
     }
+
     @Test
     public void testgetDateTimeFormatterByPattern() {
-        DateTimeFormatter dateTimeFormatterByPattern =
-                SystemDateTimePatternManager.getDateTimeFormatterByPattern("dd/MM/yyyy", Locale.ENGLISH);
+        DateTimeFormatter dateTimeFormatterByPattern = SystemDateTimePatternManager.getDateTimeFormatterByPattern("dd/MM/yyyy",
+                Locale.ENGLISH);
         assertFalse(dateTimeFormatterByPattern == null);
         assertTrue(dateTimeFormatterByPattern.getResolverStyle() == ResolverStyle.STRICT);
         assertEquals("17/08/2015", dateTimeFormatterByPattern.format(LocalDate.of(2015, 8, 17)));
-        dateTimeFormatterByPattern =
-                SystemDateTimePatternManager.getDateTimeFormatterByPattern("yyyy-MM-dd G", Locale.US);
+        dateTimeFormatterByPattern = SystemDateTimePatternManager.getDateTimeFormatterByPattern("yyyy-MM-dd G", Locale.US);
         assertFalse(dateTimeFormatterByPattern == null);
         assertEquals("2015-08-17 AD", dateTimeFormatterByPattern.format(LocalDate.of(2015, 8, 17)));
         dateTimeFormatterByPattern = SystemDateTimePatternManager.getDateTimeFormatterByPattern("yyyy-MM-dd G", null);
