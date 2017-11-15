@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 import java.time.temporal.TemporalAccessor;
 import java.time.temporal.TemporalQueries;
 import java.util.ArrayList;
@@ -55,7 +56,7 @@ public class SystemDateTimePatternManager {
 
     private static Map<String, DateTimeFormatter> dateTimeFormatterCache = new HashMap<String, DateTimeFormatter>();
 
-    private static final String PATTERN_SUFFIX_ERA = " G"; //$NON-NLS-1$
+    private static final String PATTERN_SUFFIX_ERA = "G"; //$NON-NLS-1$
 
     static {
         try {
@@ -207,16 +208,29 @@ public class SystemDateTimePatternManager {
         return resultSet;
     }
 
-    private static DateTimeFormatter getDateTimeFormatterByPattern(String customPattern, Locale locale) {
+    /**
+     * 
+     * @param customPattern A date pattern such as "yyyy-MM-dd G","dd/MM/uuuu"
+     * @param locale
+     * @return Return a DateTimeFormatter.
+     */
+    public static DateTimeFormatter getDateTimeFormatterByPattern(String customPattern, Locale locale) {
+        if (locale == null || StringUtils.isEmpty(customPattern)) {
+            return null;
+        }
         String localeStr = locale.toString();
         DateTimeFormatter formatter = dateTimeFormatterCache.get(customPattern + localeStr);
         if (formatter == null) {
             try {
-                formatter = new DateTimeFormatterBuilder().parseCaseInsensitive().appendPattern(customPattern)
-                        .toFormatter(locale);
                 // TDQ-13936 add Chronology for specified Locale.
-                if (customPattern != null && customPattern.endsWith(PATTERN_SUFFIX_ERA)) {
-                    formatter = ChronologyParameterManager.getDateTimeFormatterWithChronology(formatter, locale);
+                if (customPattern.contains(PATTERN_SUFFIX_ERA)) {
+                    formatter = ChronologyParameterManager.getDateTimeFormatterWithChronology(customPattern, locale);
+                } else {
+                    // TDQ-14421 use ResolverStyle.STRICT to validate a date. such as "2017-02-29" should be
+                    // invalid.STRICT model for pattern without G,should replace 'y' with 'u'.see Java DOC.
+                    String customPatternStrict = customPattern.replace('y', 'u');
+                    formatter = new DateTimeFormatterBuilder().parseCaseInsensitive().appendPattern(customPatternStrict)
+                            .toFormatter(locale).withResolverStyle(ResolverStyle.STRICT);
                 }
             } catch (IllegalArgumentException e) {
                 LOGGER.debug(e.getMessage(), e);
