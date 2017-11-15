@@ -150,7 +150,7 @@ public class CategoryRecognizerBuilder {
         return metadata;
     }
 
-    private LuceneIndex getSharedDataDictIndex() {
+    public LuceneIndex getSharedDataDictIndex() {
         if (sharedDataDictIndex == null) {
             if (sharedDataDictDirectory == null) {
                 sharedDataDictDirectory = CategoryRegistryManager.getInstance().getSharedDataDictDirectory();
@@ -160,7 +160,7 @@ public class CategoryRecognizerBuilder {
         return sharedDataDictIndex;
     }
 
-    private LuceneIndex getCustomDataDictIndex() {
+    public LuceneIndex getCustomDataDictIndex() {
         if (customDataDictIndex == null) {
             if (customDataDictDirectory == null) {
                 // load from t_default tenant
@@ -175,7 +175,7 @@ public class CategoryRecognizerBuilder {
         return customDataDictIndex;
     }
 
-    private LuceneIndex getKeywordIndex() {
+    public LuceneIndex getKeywordIndex() {
         if (keywordIndex == null) {
             if (keywordDirectory == null) {
                 if (keywordPath == null) {

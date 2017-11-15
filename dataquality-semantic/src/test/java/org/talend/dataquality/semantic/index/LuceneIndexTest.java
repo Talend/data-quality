@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.junit.Assert;
 import org.junit.Test;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
@@ -101,6 +102,20 @@ public class LuceneIndexTest {
                         resultMap.keySet().contains(match));
             }
         }
+
+    }
+
+    @Test
+    public void testFindMostSimilarFieldInCategory() throws URISyntaxException {
+        final URI ddPath = CategoryRegistryManager.getInstance().getDictionaryURI();
+        final LuceneIndex dataDictIndex = new LuceneIndex(ddPath, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY);
+
+        Assert.assertEquals("Talend",
+                dataDictIndex.findMostSimilarFieldInCategory("talend", SemanticCategoryEnum.COMPANY.getId(), 0.6));
+        Assert.assertEquals("Russian Federation",
+                dataDictIndex.findMostSimilarFieldInCategory("Russian Federatio", SemanticCategoryEnum.COUNTRY.getId(), 0.6));
+        Assert.assertEquals("Clermont-Ferrand",
+                dataDictIndex.findMostSimilarFieldInCategory("Clermont Ferrand", SemanticCategoryEnum.FR_COMMUNE.getId(), 0.7));
 
     }
 }
