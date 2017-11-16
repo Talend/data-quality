@@ -20,6 +20,7 @@ import java.time.chrono.IsoChronology;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DecimalStyle;
+import java.time.format.ResolverStyle;
 import java.time.temporal.TemporalAccessor;
 import java.util.Locale;
 
@@ -79,6 +80,8 @@ public class DateCalendarConverter {
      */
     protected DateTimeFormatter outputDateTimeFormatter;
 
+    private static final String PATTERN_SUFFIX_ERA = "G"; //$NON-NLS-1$
+
     public DateCalendarConverter() {
         this(DEFAULT_INPUT_PATTERN, DEFAULT_OUTPUT_PATTERN, IsoChronology.INSTANCE, IsoChronology.INSTANCE, DEFAULT_INPUT_LOCALE,
                 DEFAULT_OUTPUT_LOCALE);
@@ -137,8 +140,13 @@ public class DateCalendarConverter {
         this.inputFormatPattern = inputFormatPattern == null ? DEFAULT_INPUT_PATTERN : inputFormatPattern;
         this.outputFormatPattern = outputFormatPattern == null ? DEFAULT_OUTPUT_PATTERN : outputFormatPattern;
 
+        // TDQ-14421 use ResolverStyle.STRICT to validate a date. such as "2017-02-29" should be
+        // invalid.STRICT model for pattern without G,should replace 'y' with 'u'.see Java DOC.
+        if (!this.inputFormatPattern.contains(PATTERN_SUFFIX_ERA)) {
+            this.inputFormatPattern = this.inputFormatPattern.replace('y', 'u');
+        }
         this.inputDateTimeFormatter = new DateTimeFormatterBuilder().parseLenient().appendPattern(this.inputFormatPattern)
-                .toFormatter().withChronology(this.inputChronologyType)
+                .toFormatter().withChronology(this.inputChronologyType).withResolverStyle(ResolverStyle.STRICT)
                 .withDecimalStyle(DecimalStyle.of(Locale.getDefault(Locale.Category.FORMAT)));
 
         this.outputDateTimeFormatter = new DateTimeFormatterBuilder().parseLenient().appendPattern(this.outputFormatPattern)
