@@ -218,10 +218,9 @@ public class DateCalendarConverterTest {
                 MinguoChronology.INSTANCE, Locale.JAPAN, Locale.US).convert(JAPANESE_DATE_WITH_ERA));
         assertEquals(ISO_STR, new DateCalendarConverter(PATTERN_WITH_G, null, JapaneseChronology.INSTANCE, IsoChronology.INSTANCE,
                 Locale.US, Locale.US).convert("0008-10-29 Heisei"));
-        // Assert.assertFalse(ISO_STR.equals(
-        // new DateCalendarConverter(null, null, JapaneseChronology.INSTANCE, IsoChronology.INSTANCE, Locale.US,
-        // Locale.US)
-        // .convert(JAPANESE_STR)));
+        Assert.assertFalse(ISO_STR.equals(
+                new DateCalendarConverter(null, null, JapaneseChronology.INSTANCE, IsoChronology.INSTANCE, Locale.US, Locale.US)
+                        .convert(JAPANESE_STR)));
     }
 
     @Test
@@ -391,8 +390,8 @@ public class DateCalendarConverterTest {
                 new DateCalendarConverter(MinguoChronology.INSTANCE, IsoChronology.INSTANCE).convert("0106-02-28")); //$NON-NLS-1$
         assertEquals("", //$NON-NLS-1$
                 new DateCalendarConverter(MinguoChronology.INSTANCE, IsoChronology.INSTANCE).convert("0106-02-30")); //$NON-NLS-1$
-        //        assertEquals("", //$NON-NLS-1$
-        //                new DateCalendarConverter(JapaneseChronology.INSTANCE, IsoChronology.INSTANCE).convert("0029-02-28")); //$NON-NLS-1$ 
+        assertEquals("", //$NON-NLS-1$
+                new DateCalendarConverter(JapaneseChronology.INSTANCE, IsoChronology.INSTANCE).convert("0029-02-28")); //$NON-NLS-1$ 
         assertEquals(ISODateValid, new DateCalendarConverter(PATTERN_WITH_G, null, JapaneseChronology.INSTANCE,
                 IsoChronology.INSTANCE, Locale.US, Locale.US).convert("0029-02-28 Heisei")); //$NON-NLS-1$ 
     }
