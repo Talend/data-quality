@@ -56,10 +56,8 @@ public class DataTypeOccurences implements Serializable {
 
         if (count != 0) {
             // --- Any integer is a double
-            if (typeOccurences.containsKey(DataTypeEnum.DOUBLE)) {
-                final long integerOccurrences = typeOccurences.containsKey(DataTypeEnum.INTEGER)
-                        ? typeOccurences.get(DataTypeEnum.INTEGER) : 0;
-                final long doubleOccurrences = typeOccurences.get(DataTypeEnum.DOUBLE) + integerOccurrences;
+            if (typeOccurences.containsKey(DataTypeEnum.DOUBLE) && typeOccurences.containsKey(DataTypeEnum.INTEGER)) {
+                final long doubleOccurrences = typeOccurences.get(DataTypeEnum.DOUBLE) + typeOccurences.get(DataTypeEnum.INTEGER);
                 typeOccurences.put(DataTypeEnum.DOUBLE, doubleOccurrences);
             }
 
