@@ -13,13 +13,15 @@
 package org.talend.dataquality.email;
 
 /**
- * created by talend on 2014年12月29日 Detailled comment
+ * created by talend on 2014骞�12鏈�29鏃� Detailled comment
  *
  */
 public final class Constant {
 
     private Constant() {
         // nothing here
+        // test_pr_qiongli
+        // test_pr_qiongli_2nd_commit
     }
 
     public static final char LEFT_BRACKET = '<'; // $NON-NLS-1$
