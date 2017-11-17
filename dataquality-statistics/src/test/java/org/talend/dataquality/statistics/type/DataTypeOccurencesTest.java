@@ -12,6 +12,8 @@
 // ============================================================================
 package org.talend.dataquality.statistics.type;
 
+import org.junit.Test;
+
 import static org.junit.Assert.assertEquals;
 import static org.talend.dataquality.statistics.type.DataTypeEnum.BOOLEAN;
 import static org.talend.dataquality.statistics.type.DataTypeEnum.DATE;
@@ -20,8 +22,6 @@ import static org.talend.dataquality.statistics.type.DataTypeEnum.EMPTY;
 import static org.talend.dataquality.statistics.type.DataTypeEnum.INTEGER;
 import static org.talend.dataquality.statistics.type.DataTypeEnum.STRING;
 import static org.talend.dataquality.statistics.type.DataTypeEnum.TIME;
-
-import org.junit.Test;
 
 public class DataTypeOccurencesTest {
 
@@ -185,38 +185,6 @@ public class DataTypeOccurencesTest {
     }
 
     @Test
-    public void shouldReturnDoubleWhenTheIntegerRatioEqualsToThreshold() {
-        // given
-        DataTypeOccurences typeOccurrences = new DataTypeOccurences();
-
-        // when
-        typeOccurrences.increment(INTEGER);
-        typeOccurrences.increment(INTEGER);
-        typeOccurrences.increment(INTEGER);
-        typeOccurrences.increment(DOUBLE);
-        typeOccurrences.increment(DOUBLE);
-
-        // then
-        assertEquals(DOUBLE, typeOccurrences.getSuggestedType(0.6));
-    }
-
-    @Test
-    public void shouldReturnIntegerWhenTheIntegerRatioExceedsThreshold() {
-        // given
-        DataTypeOccurences typeOccurrences = new DataTypeOccurences();
-
-        // when
-        typeOccurrences.increment(INTEGER);
-        typeOccurrences.increment(INTEGER);
-        typeOccurrences.increment(INTEGER);
-        typeOccurrences.increment(DOUBLE);
-        typeOccurrences.increment(DOUBLE);
-
-        // then
-        assertEquals(INTEGER, typeOccurrences.getSuggestedType(0.55));
-    }
-
-    @Test
     public void shouldReturnStringWhenEachTypeAppearsOnce() {
         // given
         DataTypeOccurences typeOccurrences = new DataTypeOccurences();
@@ -267,7 +235,7 @@ public class DataTypeOccurencesTest {
         typeOccurrences.increment(STRING);
 
         // then
-        assertEquals(INTEGER, typeOccurrences.getSuggestedType());
+        assertEquals(DOUBLE, typeOccurrences.getSuggestedType());
     }
 
     @Test
@@ -287,25 +255,6 @@ public class DataTypeOccurencesTest {
 
         // then
         assertEquals(INTEGER, suggestedType);
-    }
-
-    @Test
-    public void shouldReturnDoubleWhenIntegerDoesNotExceedGivenThreshold() {
-        // given
-        DataTypeOccurences typeOccurrences = new DataTypeOccurences();
-
-        // when
-        typeOccurrences.increment(EMPTY);
-        typeOccurrences.increment(DOUBLE);
-        typeOccurrences.increment(DOUBLE);
-        typeOccurrences.increment(INTEGER);
-        typeOccurrences.increment(INTEGER);
-        typeOccurrences.increment(INTEGER);
-        typeOccurrences.increment(STRING);
-        DataTypeEnum suggestedType = typeOccurrences.getSuggestedType(0.1, 0.9);
-
-        // then
-        assertEquals(DOUBLE, suggestedType);
     }
 
     @Test
