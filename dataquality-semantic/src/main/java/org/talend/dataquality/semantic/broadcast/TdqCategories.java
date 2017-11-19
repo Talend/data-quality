@@ -76,6 +76,9 @@ public class TdqCategories implements Serializable {
     }
 
     public DictionaryConstituents asDictionaryConstituents() {
+        if (categoryMetadata == null) {
+            return null;
+        }
         return new DictionaryConstituents(categoryMetadata.getMetadata(), //
                 new LuceneIndex(dictionary.asDirectory(), DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY), //
                 new LuceneIndex(customDictionary.asDirectory(), DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY), //

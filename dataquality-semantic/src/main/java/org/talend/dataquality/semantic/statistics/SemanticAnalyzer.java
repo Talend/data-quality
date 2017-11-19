@@ -155,7 +155,7 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
         }
         for (int idx = 0; idx < record.length; idx++) {
             try {
-                CategoryRecognizer recognizer;
+                final CategoryRecognizer recognizer;
                 if (constituents == null) {
                     throw new NullPointerException("Dictionary constituents is Null.");
                 } else {

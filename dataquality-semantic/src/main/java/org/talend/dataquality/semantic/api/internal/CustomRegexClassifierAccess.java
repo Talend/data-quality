@@ -34,11 +34,7 @@ public class CustomRegexClassifierAccess {
                 + CategoryRegistryManager.REGEX_CATEGRIZER_FILE_NAME;
         regExFile = new File(regexFilePath);
         if (!regExFile.exists()) {
-            try {
-                writeRegExs(new ArrayList<>(holder.getRegexClassifier().getClassifiers()));
-            } catch (IOException e) {
-                LOGGER.error(e.getMessage(), e);
-            }
+            writeRegExs(new ArrayList<>(holder.getRegexClassifier().getClassifiers()));
         }
     }
 

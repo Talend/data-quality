@@ -35,6 +35,8 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.talend.daikon.multitenant.context.TenancyContextHolder;
+import org.talend.daikon.multitenant.core.Tenant;
 import org.talend.dataquality.semantic.classifier.custom.UDCategorySerDeser;
 import org.talend.dataquality.semantic.classifier.custom.UserDefinedClassifier;
 import org.talend.dataquality.semantic.index.ClassPathDirectory;
@@ -113,6 +115,8 @@ public class CategoryRegistryManager {
     private UserDefinedClassifier sharedRegexClassifier;
 
     private Directory sharedDataDictDirectory;
+
+    private Directory sharedKeywordDirectory;
 
     private CategoryRegistryManager() {
         try {
@@ -354,6 +358,20 @@ public class CategoryRegistryManager {
     }
 
     /**
+     * Getter for sharedKeywordDirectory.
+     */
+    public Directory getSharedKeywordDirectory() {
+        if (sharedKeywordDirectory == null) {
+            try {
+                sharedKeywordDirectory = ClassPathDirectory.open(getKeywordURI());
+            } catch (URISyntaxException e) {
+                LOGGER.error(e.getMessage(), e);
+            }
+        }
+        return sharedKeywordDirectory;
+    }
+
+    /**
      * Get the full map between category ID and category metadata for the default tenant.
      */
     public Map<String, DQCategory> getCategoryMetadataMap() {
@@ -469,7 +487,13 @@ public class CategoryRegistryManager {
      * Get CustomDictioanryHolder instance for the default tenant.
      */
     public CustomDictionaryHolder getCustomDictionaryHolder() {
-        return getCustomDictionaryHolder(DEFAULT_TENANT_ID);
+        Tenant tenant = TenancyContextHolder.getContext().getTenant();
+        if (tenant != null) {
+            LOGGER.info("Getting CustomDictionaryHolder for " + tenant.getIdentity().toString());
+            return getCustomDictionaryHolder(tenant.getIdentity().toString());
+        } else {
+            return getCustomDictionaryHolder(DEFAULT_TENANT_ID);
+        }
     }
 
     /**
