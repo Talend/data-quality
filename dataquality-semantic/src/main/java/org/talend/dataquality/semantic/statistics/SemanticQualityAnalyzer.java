@@ -13,7 +13,14 @@
 package org.talend.dataquality.semantic.statistics;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
@@ -28,6 +35,8 @@ import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizer;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
+import org.talend.dataquality.semantic.recognizer.DefaultCategoryRecognizer;
+import org.talend.dataquality.semantic.recognizer.DictionaryConstituents;
 import org.talend.dataquality.semantic.recognizer.LFUCache;
 
 /**
@@ -46,11 +55,21 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
 
     private final CategoryRecognizerBuilder builder;
 
+    private DictionaryConstituents constituents;
+
     private ISubCategoryClassifier regexClassifier;
 
     private ISubCategoryClassifier dataDictClassifier;
 
     private Map<String, DQCategory> metadata;
+
+    public SemanticQualityAnalyzer(DictionaryConstituents constituents, String[] types, boolean isStoreInvalidValues) {
+        this.constituents = constituents;
+        this.isStoreInvalidValues = isStoreInvalidValues;
+        builder = null;
+        init();
+        setTypes(types);
+    }
 
     public SemanticQualityAnalyzer(CategoryRecognizerBuilder builder, String[] types, boolean isStoreInvalidValues) {
         this.isStoreInvalidValues = isStoreInvalidValues;
@@ -87,10 +106,16 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
     @Override
     public void init() {
         try {
-            final CategoryRecognizer categoryRecognizer = builder.build();
-            regexClassifier = categoryRecognizer.getUserDefineClassifier();
-            dataDictClassifier = categoryRecognizer.getDataDictFieldClassifier();
-            metadata = builder.getCategoryMetadata();
+            final CategoryRecognizer recognizer;
+            if (constituents == null) {
+                recognizer = builder.build();
+                metadata = builder.getCategoryMetadata();
+            } else {
+                recognizer = new DefaultCategoryRecognizer(constituents);
+                metadata = constituents.getMetadata();
+            }
+            regexClassifier = recognizer.getUserDefineClassifier();
+            dataDictClassifier = recognizer.getDataDictFieldClassifier();
         } catch (IOException e) {
             LOG.error(e, e);
         }

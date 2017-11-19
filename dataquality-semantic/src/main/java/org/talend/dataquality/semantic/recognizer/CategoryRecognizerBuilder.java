@@ -182,11 +182,7 @@ public class CategoryRecognizerBuilder {
 
     private UserDefinedClassifier getRegexClassifier() {
         if (regexClassifier == null) {
-            try {
-                return CategoryRegistryManager.getInstance().getCustomDictionaryHolder(tenantID).getRegexClassifier();
-            } catch (IOException e) {
-                LOGGER.error("Failed to load provided regex classifiers", e);
-            }
+            return CategoryRegistryManager.getInstance().getCustomDictionaryHolder(tenantID).getRegexClassifier();
         }
         return regexClassifier;
     }

@@ -24,9 +24,12 @@ import org.talend.dataquality.semantic.api.internal.CustomMetadataIndexAccess;
 import org.talend.dataquality.semantic.api.internal.CustomRegexClassifierAccess;
 import org.talend.dataquality.semantic.classifier.custom.UserDefinedCategory;
 import org.talend.dataquality.semantic.classifier.custom.UserDefinedClassifier;
+import org.talend.dataquality.semantic.index.DictionarySearchMode;
+import org.talend.dataquality.semantic.index.LuceneIndex;
 import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.model.DQDocument;
+import org.talend.dataquality.semantic.recognizer.DictionaryConstituents;
 
 /**
  * holder of tenant-specific categories, provides access to custom Metadata/DataDict/RegEx.
@@ -122,10 +125,14 @@ public class CustomDictionaryHolder {
     /**
      * Getter for regex classifier
      */
-    public UserDefinedClassifier getRegexClassifier() throws IOException {
+    public UserDefinedClassifier getRegexClassifier() {
         // return shared regexClassifier if NULL
         if (regexClassifier == null) {
-            return CategoryRegistryManager.getInstance().getRegexClassifier(false);
+            try {
+                return CategoryRegistryManager.getInstance().getRegexClassifier(false);
+            } catch (IOException e) {
+                LOGGER.error(e.getMessage(), e);
+            }
         }
         return regexClassifier;
     }
@@ -596,5 +603,16 @@ public class CustomDictionaryHolder {
             }
         }
         reloadCategoryMetadata();
+    }
+
+    public DictionaryConstituents getDictionaryConstituents() {
+        return new DictionaryConstituents(getMetadata(), //
+                new LuceneIndex(CategoryRegistryManager.getInstance().getSharedDataDictDirectory(),
+                        DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY), //
+                new LuceneIndex(getDataDictDirectory(), DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY), //
+                new LuceneIndex(CategoryRegistryManager.getInstance().getSharedKeywordDirectory(),
+                        DictionarySearchMode.MATCH_SEMANTIC_KEYWORD), //
+                getRegexClassifier()//
+        );
     }
 }
