@@ -14,7 +14,6 @@ package org.talend.dataquality.semantic.statistics;
 
 import java.util.*;
 
-import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.recognizer.CategoryFrequency;
 
 /**
@@ -39,13 +38,6 @@ public class SemanticType {
         List<CategoryFrequency> frequencies = new ArrayList<>(categoryToCount.keySet());
         Collections.sort(frequencies, Collections.reverseOrder());
         return frequencies.get(0).getCategoryId();
-    }
-
-    private int getCategoryOrdinal(String categoryId) {
-        SemanticCategoryEnum cat = SemanticCategoryEnum.getCategoryById(categoryId);
-        if (cat == null)
-            return 0;
-        return cat.ordinal();
     }
 
     /**
