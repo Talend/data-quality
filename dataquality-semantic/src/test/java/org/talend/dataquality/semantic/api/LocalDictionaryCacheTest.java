@@ -31,76 +31,81 @@ public class LocalDictionaryCacheTest {
 
             put("Chalette", new String[] { "Chalette-sur-Voire", "Châlette-sur-Loing" });
             put("châlette", new String[] { "Chalette-sur-Voire", "Châlette-sur-Loing", });
-            put("loi", new String[] { "Loigny-la-Bataille", //
-                    "Loigné-sur-Mayenne", //
-                    "Loire-les-Marais", //
-                    "Loire-sur-Rhône", //
-                    "Loiron", //
-                    "Loiré", //
-                    "Loiré-sur-Nie", //
-                    "Loisail", //
-                    "Loisey", //
-                    "Loisia", //
-                    "Loisieux", //
-                    "Loisin", //
-                    "Loison", //
-                    "Loison-sous-Lens", //
-                    "Loison-sur-Créquoise", //
-                    "Loisy", //
-                    "Loisy-en-Brie", //
-                    "Loisy-sur-Marne", //
-                    "Loivre", //
-                    "Loix", //
+            put("loi",
+                    new String[] { "Loigny-la-Bataille", //
+                            "Loigné-sur-Mayenne", //
+                            "Loire-les-Marais", //
+                            "Loire-sur-Rhône", //
+                            "Loiron", //
+                            "Loiré", //
+                            "Loiré-sur-Nie", //
+                            "Loisail", //
+                            "Loisey", //
+                            "Loisia", //
+                            "Loisieux", //
+                            "Loisin", //
+                            "Loison", //
+                            "Loison-sous-Lens", //
+                            "Loison-sur-Créquoise", //
+                            "Loisy", //
+                            "Loisy-en-Brie", //
+                            "Loisy-sur-Marne", //
+                            "Loivre", //
+                            "Loix", //
             });
-            put("loin", new String[] { "Bagneaux-sur-Loing", //
-                    "Châlette-sur-Loing", //
-                    "Conflans-sur-Loing", //
-                    "Corgoloin", //
-                    "Dammarie-sur-Loing", //
-                    "Floing", //
-                    "Fontenay-sur-Loing", //
-                    "Gauchin-Verloingt", //
-                    "Grez-sur-Loing", //
-                    "La Madeleine-sur-Loing", //
-                    "Montigny-sur-Loing", //
-                    "Sainte-Colombe-sur-Loing", //
-                    "Souppes-sur-Loing", //
-                    "Villeloin-Coulangé", //
+            put("loin",
+                    new String[] { "Bagneaux-sur-Loing", //
+                            "Châlette-sur-Loing", //
+                            "Conflans-sur-Loing", //
+                            "Corgoloin", //
+                            "Dammarie-sur-Loing", //
+                            "Floing", //
+                            "Fontenay-sur-Loing", //
+                            "Gauchin-Verloingt", //
+                            "Grez-sur-Loing", //
+                            "La Madeleine-sur-Loing", //
+                            "Montigny-sur-Loing", //
+                            "Sainte-Colombe-sur-Loing", //
+                            "Souppes-sur-Loing", //
+                            "Villeloin-Coulangé", //
             });
-            put("loing", new String[] { "Bagneaux-sur-Loing", //
-                    "Châlette-sur-Loing", //
-                    "Conflans-sur-Loing", //
-                    "Dammarie-sur-Loing", //
-                    "Floing", //
-                    "Fontenay-sur-Loing", //
-                    "Gauchin-Verloingt", //
-                    "Grez-sur-Loing", //
-                    "La Madeleine-sur-Loing", //
-                    "Montigny-sur-Loing", //
-                    "Sainte-Colombe-sur-Loing", //
-                    "Souppes-sur-Loing", //
+            put("loing",
+                    new String[] { "Bagneaux-sur-Loing", //
+                            "Châlette-sur-Loing", //
+                            "Conflans-sur-Loing", //
+                            "Dammarie-sur-Loing", //
+                            "Floing", //
+                            "Fontenay-sur-Loing", //
+                            "Gauchin-Verloingt", //
+                            "Grez-sur-Loing", //
+                            "La Madeleine-sur-Loing", //
+                            "Montigny-sur-Loing", //
+                            "Sainte-Colombe-sur-Loing", //
+                            "Souppes-sur-Loing", //
             });
-            put("ur loin", new String[] { "Bagneaux-sur-Loing", //
-                    "Châlette-sur-Loing", //
-                    "Conflans-sur-Loing", //
-                    "Dammarie-sur-Loing", //
-                    "Fontenay-sur-Loing", //
-                    "Grez-sur-Loing", //
-                    "La Madeleine-sur-Loing", //
-                    "Montigny-sur-Loing", //
-                    "Sainte-Colombe-sur-Loing", //
-                    "Souppes-sur-Loing", //
+            put("ur loin",
+                    new String[] { "Bagneaux-sur-Loing", //
+                            "Châlette-sur-Loing", //
+                            "Conflans-sur-Loing", //
+                            "Dammarie-sur-Loing", //
+                            "Fontenay-sur-Loing", //
+                            "Grez-sur-Loing", //
+                            "La Madeleine-sur-Loing", //
+                            "Montigny-sur-Loing", //
+                            "Sainte-Colombe-sur-Loing", //
+                            "Souppes-sur-Loing", //
             });
-            put("ur-loin", new String[] { "Bagneaux-sur-Loing", //
-                    "Châlette-sur-Loing", //
-                    "Conflans-sur-Loing", //
-                    "Dammarie-sur-Loing", //
-                    "Fontenay-sur-Loing", //
-                    "Grez-sur-Loing", //
-                    "La Madeleine-sur-Loing", //
-                    "Montigny-sur-Loing", //
-                    "Sainte-Colombe-sur-Loing", //
-                    "Souppes-sur-Loing", //
+            put("ur-loin",
+                    new String[] { "Bagneaux-sur-Loing", //
+                            "Châlette-sur-Loing", //
+                            "Conflans-sur-Loing", //
+                            "Dammarie-sur-Loing", //
+                            "Fontenay-sur-Loing", //
+                            "Grez-sur-Loing", //
+                            "La Madeleine-sur-Loing", //
+                            "Montigny-sur-Loing", //
+                            "Sainte-Colombe-sur-Loing", //
+                            "Souppes-sur-Loing", //
             });
         }
     };
