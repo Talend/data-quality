@@ -81,9 +81,15 @@ public class LocalDictionaryCache {
         }
     }
 
-    private List<DQDocument> dqDocListFromTopDocs(String catId, String catName, TopDocs docs) throws IOException {
-        sharedSearcherManager.maybeRefresh();
-        IndexSearcher searcher = sharedSearcherManager.acquire();
+    private List<DQDocument> dqDocListFromTopDocs(String catId, String catName, TopDocs docs, boolean isModified)
+            throws IOException {
+        Boolean searchCustomIndex = isModified;
+        SearcherManager searcherManager = getSearcherManager(searchCustomIndex);
+        if (searchCustomIndex) {
+            sharedSearcherManager.maybeRefresh();
+        }
+
+        IndexSearcher searcher = searcherManager.acquire();
         IndexReader reader = searcher.getIndexReader();
         List<DQDocument> dqDocList = new ArrayList<>();
         for (ScoreDoc scoreDoc : docs.scoreDocs) {
@@ -91,7 +97,7 @@ public class LocalDictionaryCache {
             DQDocument dqDoc = DictionaryUtils.dictionaryEntryFromDocument(luceneDoc, catId, catName);
             dqDocList.add(dqDoc);
         }
-        sharedSearcherManager.release(searcher);
+        searcherManager.release(searcher);
         return dqDocList;
     }
 
@@ -102,7 +108,7 @@ public class LocalDictionaryCache {
         try {
             DQCategory dqCat = customDictionaryHolder.getCategoryMetadataByName(categoryName);
             TopDocs docs = sendListDocumentsQuery(dqCat.getId(), offset, n);
-            return dqDocListFromTopDocs(dqCat.getId(), dqCat.getName(), docs);
+            return dqDocListFromTopDocs(dqCat.getId(), dqCat.getName(), docs, dqCat.getModified());
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         }
