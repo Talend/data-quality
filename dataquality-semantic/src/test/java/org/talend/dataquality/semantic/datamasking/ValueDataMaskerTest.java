@@ -12,15 +12,23 @@
 // ============================================================================
 package org.talend.dataquality.semantic.datamasking;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
 
+import org.apache.commons.lang3.SerializationUtils;
 import org.junit.Test;
 import org.talend.dataquality.semantic.AllSemanticTests;
+import org.talend.dataquality.semantic.api.CategoryRegistryManager;
+import org.talend.dataquality.semantic.api.CustomDictionaryHolder;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
+import org.talend.dataquality.semantic.model.DQCategory;
+import org.talend.dataquality.semantic.model.DQDocument;
 
 public class ValueDataMaskerTest {
 
@@ -183,6 +191,62 @@ public class ValueDataMaskerTest {
         // string -> use ReplaceAll
         // numeric -> use NumericVariance
 
+    }
+
+    private static final Map<String[], String> EXPECTED_MASKED_VALUES_CUSTOM = new LinkedHashMap<String[], String>() {
+
+        private static final long serialVersionUID = 2L;
+
+        {
+            // custom dictionary
+            put(new String[] { "true", SemanticCategoryEnum.ANSWER.name(), "string" }, "Nein");
+            put(new String[] { "false", SemanticCategoryEnum.ANSWER.name(), "string" }, "Nein");
+            put(new String[] { "TRUE", SemanticCategoryEnum.ANSWER.name(), "string" }, "Nein");
+            put(new String[] { "FALSE", SemanticCategoryEnum.ANSWER.name(), "string" }, "Nein");
+        }
+    };
+
+    /**
+     * Test method for {@link org.talend.dataquality.datamasking.DataMasker#process(java.lang.Object, boolean)}.
+     * 
+     * @throws IllegalAccessException
+     * @throws InstantiationException
+     */
+    @Test
+    public void testProcess_Custom() throws InstantiationException, IllegalAccessException {
+        CategoryRegistryManager.setLocalRegistryPath("target/test_crm");
+        CategoryRegistryManager instance = CategoryRegistryManager.getInstance();
+        CustomDictionaryHolder holder = instance.getCustomDictionaryHolder("t_suggest");
+
+        DQCategory answerCategory = holder.getMetadata().get(SemanticCategoryEnum.ANSWER.getTechnicalId());
+        DQCategory categoryClone = SerializationUtils.clone(answerCategory); // make a clone instead of modifying the shared
+                                                                             // category metadata
+        categoryClone.setModified(true);
+        holder.updateCategory(categoryClone);
+
+        DQDocument newDoc = new DQDocument();
+        newDoc.setCategory(categoryClone);
+        newDoc.setId("the_doc_id");
+        newDoc.setValues(new HashSet<>(Arrays.asList("true", "false")));
+        holder.addDataDictDocument(Collections.singletonList(newDoc));
+
+        for (String[] input : EXPECTED_MASKED_VALUES_CUSTOM.keySet()) {
+            String inputValue = input[0];
+            String semanticCategory = input[1];
+            String dataType = input[2];
+
+            System.out.print("[" + semanticCategory + "]\n\t" + inputValue + " => ");
+            final ValueDataMasker masker = new ValueDataMasker(semanticCategory, dataType);
+            masker.getFunction().setRandom(new Random(AllSemanticTests.RANDOM_SEED));
+            masker.getFunction().setKeepEmpty(true);
+            String maskedValue = masker.maskValue(inputValue);
+            System.out.println(maskedValue);
+            assertEquals("Test faild on [" + inputValue + "]", EXPECTED_MASKED_VALUES_CUSTOM.get(input), maskedValue);
+
+        }
+
+        instance.removeCustomDictionaryHolder("t_suggest");
+        CategoryRegistryManager.reset();
     }
 
 }
