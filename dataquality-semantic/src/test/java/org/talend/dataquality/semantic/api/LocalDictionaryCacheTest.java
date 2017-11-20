@@ -232,21 +232,21 @@ public class LocalDictionaryCacheTest extends CategoryRegistryManagerAbstract {
         newDoc.setValues(new HashSet<>(Arrays.asList("true", "false")));
         holder.addDataDictDocument(Collections.singletonList(newDoc));
 
+        assertEquals(Boolean.TRUE, holder.getMetadata().get(SemanticCategoryEnum.ANSWER.getTechnicalId()).getModified());
+
         final LocalDictionaryCache dict = holder.getDictionaryCache();
-        for (DQCategory cat : instance.listCategories()) {
-            assertNotNull(cat.getName());
-            if (SemanticCategoryEnum.ANSWER.name().equals(cat.getName())) {
-                System.out.println(cat);
-                List<DQDocument> listDocuments = dict.listDocuments(cat.getName(), 0, 1000); // SemanticCategoryEnum.ANSWER.name()
-                List<String> aux = new ArrayList();
-                for (DQDocument dqDocument : listDocuments) {
-                    System.out.println(dqDocument.getValues());
-                    aux.addAll(dqDocument.getValues());
-                }
-                // assertEquals(20, aux.size());
-                System.out.println("Found " + aux.size() + " values in " + cat.getName() + " DQCategory.");
-            }
+
+        List<DQDocument> listDocuments = dict.listDocuments(SemanticCategoryEnum.ANSWER.name(), 0, 1000);
+        List<String> aux = new ArrayList();
+        for (DQDocument dqDocument : listDocuments) {
+            System.out.println(dqDocument.getValues());
+            aux.addAll(dqDocument.getValues());
         }
+        assertEquals(11, aux.size());
+        assertEquals(Boolean.TRUE, aux.contains("true"));
+        assertEquals(Boolean.TRUE, aux.contains("false"));
+
+        System.out.println("Found " + aux.size() + " values in " + SemanticCategoryEnum.ANSWER.name() + " DQCategory.");
 
         instance.removeCustomDictionaryHolder("t_suggest");
         CategoryRegistryManager.reset();

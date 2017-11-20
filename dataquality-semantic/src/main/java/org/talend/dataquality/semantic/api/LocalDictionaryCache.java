@@ -84,7 +84,10 @@ public class LocalDictionaryCache {
     private List<DQDocument> dqDocListFromTopDocs(String catId, String catName, TopDocs docs, boolean searchInCustom)
             throws IOException {
         SearcherManager searcherManager = getSearcherManager(searchInCustom);
-        searcherManager.maybeRefresh();
+        if (searchInCustom) {
+            searcherManager.maybeRefresh();
+        }
+
         IndexSearcher searcher = searcherManager.acquire();
         IndexReader reader = searcher.getIndexReader();
         List<DQDocument> dqDocList = new ArrayList<>();
