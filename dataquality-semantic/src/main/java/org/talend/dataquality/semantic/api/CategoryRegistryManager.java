@@ -27,6 +27,7 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
@@ -35,6 +36,8 @@ import org.json.JSONObject;
 import org.talend.dataquality.semantic.classifier.custom.UDCategorySerDeser;
 import org.talend.dataquality.semantic.classifier.custom.UserDefinedClassifier;
 import org.talend.dataquality.semantic.index.ClassPathDirectory;
+import org.talend.dataquality.semantic.index.DictionarySearchMode;
+import org.talend.dataquality.semantic.index.LuceneIndex;
 import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizer;
@@ -449,5 +452,26 @@ public class CategoryRegistryManager {
             }
             customDictionaryHolderMap.remove(tenantID);
         }
+    }
+
+    /**
+     * 
+     * @param input An input value
+     * @param categoryName Category name
+     * @param similarity A threshold value, the compared score must be >= similarity
+     * @return most similar value from customer dictionary or share dictionary
+     */
+    public String findMostSimilarValue(String input, String categoryName, Double similarity) {
+        DQCategory dqCategory = getCategoryMetadataByName(categoryName);
+        if (dqCategory == null) {
+            return StringUtils.EMPTY;
+        }
+        Directory dataDictDirectory = getSharedDataDictDirectory();
+        // find from custom if the Category is modified
+        if (dqCategory.getModified()) {
+            dataDictDirectory = getCustomDictionaryHolder().getDataDictDirectory();
+        }
+        LuceneIndex index = new LuceneIndex(dataDictDirectory, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY);
+        return index.findMostSimilarFieldInCategory(input, categoryName, similarity);
     }
 }

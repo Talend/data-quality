@@ -17,7 +17,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.lucene.store.AlreadyClosedException;
 import org.apache.lucene.store.Directory;
@@ -236,27 +235,6 @@ public class CategoryRecognizerBuilder {
                 getCustomDataDictIndex();
             }
         }
-    }
-
-    /**
-     * 
-     * @param input An input value
-     * @param category Category name
-     * @param similarity A threshold value, the compared score must be >= similarity
-     * @return most similar value from customer dictionary or share dictionary
-     */
-    public String findMostSimilarValue(String input, String category, Double similarity) {
-        String simValue = null;
-        // find the most similar value from customer dict firstly.
-        if (customDataDictIndex != null) {
-            initIndex();
-            simValue = customDataDictIndex.findMostSimilarFieldInCategory(input, category, similarity);
-        }
-        // if not found from customer dict, try to find it from share dict.
-        if (StringUtils.isEmpty(simValue) && this.sharedDataDictIndex != null) {
-            simValue = sharedDataDictIndex.findMostSimilarFieldInCategory(input, category, similarity);
-        }
-        return simValue;
     }
 
 }
