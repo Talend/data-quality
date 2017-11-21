@@ -12,17 +12,6 @@
 // ============================================================================
 package org.talend.dataquality.semantic;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -32,54 +21,64 @@ import org.talend.dataquality.semantic.recognizer.CategoryFrequency;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizer;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 /**
  * created by talend on 2015-07-28 Detailled comment.
- *
  */
 public class CategoryRecognizerTest {
-
-    private static Logger log = Logger.getLogger(CategoryRecognizerTest.class);
 
     private static final Map<String, Float> EXPECTED_FREQUECY_TABLE = new LinkedHashMap<String, Float>() {
 
         private static final long serialVersionUID = -5067273062214728849L;
 
         {
-            put("FIRST_NAME", 8.82F);
-            put("MONTH", 8.82F);
-            put("AIRPORT_CODE", 5.88F);
-            put("CITY", 5.88F);
-            put("FR_COMMUNE", 5.88F);
-            put("LAST_NAME", 5.88F);
-            put("EMAIL", 5.88F);
-            put("US_POSTAL_CODE", 5.88F);
-            put("ADDRESS_LINE", 5.88F);
-            put("FR_SSN", 5.88F);
-            put("PHONE", 5.88F);
-            put("FR_DEPARTEMENT", 2.94F);
-            put("COUNTRY", 2.94F);
-            put("COUNTRY_CODE_ISO3", 2.94F);
-            put("CONTINENT_CODE", 2.94F);
-            put("CURRENCY_CODE", 2.94F);
-            put("ANIMAL", 2.94F);
-            put("LANGUAGE_CODE_ISO3", 2.94F);
-            put("EN_MONTH", 2.94F);
-            put("DE_POSTAL_CODE", 2.94F);
-            put("FR_POSTAL_CODE", 2.94F);
-            put("FR_CODE_COMMUNE_INSEE", 2.94F);
-            put("COMPANY", 8.82F);
-            put("GENDER", 2.94F);
-            put("URL", 2.94F);
-            put("US_SSN", 2.94F);
-            put("ISBN_10", 2.94F);
-            put("DE_PHONE", 2.94F);
-            put("FR_PHONE", 2.94F);
-            put("FULL_NAME", 2.94F);
-            put("IBAN", 2.94F);
-            put("", 11.76F);
-        }
+            put("", 11.11F);
+            put("PHONE", 11.11F);
+            put("FIRST_NAME", 8.33F);
+            put("MONTH", 8.33F);
+            put("COMPANY", 8.33F);
+            put("AIRPORT_CODE", 5.55F);
+            put("LAST_NAME", 5.55F);
+            put("CITY", 5.55F);
+            put("FR_COMMUNE", 5.55F);
+            put("ADDRESS_LINE", 5.55F);
+            put("EMAIL", 5.55F);
+            put("FR_SSN", 5.55F);
+            put("US_POSTAL_CODE", 5.55F);
+            put("UK_PHONE", 5.55F);
+            put("ANIMAL", 2.77F);
+            put("CONTINENT_CODE", 2.77F);
+            put("COUNTRY", 2.77F);
+            put("COUNTRY_CODE_ISO3", 2.77F);
+            put("CURRENCY_CODE", 2.77F);
+            put("GENDER", 2.77F);
+            put("FR_DEPARTEMENT", 2.77F);
+            put("LANGUAGE_CODE_ISO3", 2.77F);
+            put("FULL_NAME", 2.77F);
+            put("EN_MONTH", 2.77F);
+            put("FR_PHONE", 2.77F);
+            put("FR_POSTAL_CODE", 2.77F);
+            put("FR_CODE_COMMUNE_INSEE", 2.77F);
+            put("US_SSN", 2.77F);
+            put("DE_PHONE", 2.77F);
+            put("DE_POSTAL_CODE", 2.77F);
+            put("ISBN_10", 2.77F);
+            put("URL", 2.77F);
+            put("IBAN", 2.77F);        }
 
     };
+
+    private static Logger log = Logger.getLogger(CategoryRecognizerTest.class);
 
     private static Map<String, String[]> EXPECTED_CAT_ID = new LinkedHashMap<String, String[]>() {
 
@@ -134,6 +133,8 @@ public class CategoryRecognizerTest {
             put("ISBN 9-787-11107-5", new String[] { SemanticCategoryEnum.ISBN_10.getId() });
             put("00496-873805924", new String[] { SemanticCategoryEnum.DE_PHONE.getId(), SemanticCategoryEnum.PHONE.getId() });
             put("00338.01345678", new String[] { SemanticCategoryEnum.FR_PHONE.getId(), SemanticCategoryEnum.PHONE.getId() });
+            put("07321 123456", new String[] { SemanticCategoryEnum.UK_PHONE.getId(), SemanticCategoryEnum.PHONE.getId() });
+            put("+44 1628 640160", new String[] { SemanticCategoryEnum.UK_PHONE.getId(), SemanticCategoryEnum.PHONE.getId() });
             put("132.2356", new String[] {});
             put("Mr. John Doe", new String[] { SemanticCategoryEnum.FULL_NAME.getId() });
             put("GB87 BARC 2065 8244 9716 55", new String[] { SemanticCategoryEnum.IBAN.getId() });
@@ -196,6 +197,9 @@ public class CategoryRecognizerTest {
             put("00338.01345678",
                     new String[] { SemanticCategoryEnum.FR_PHONE.getDisplayName(), SemanticCategoryEnum.PHONE.getDisplayName() });
             put("132.2356", new String[] {});
+            put("07321 123456",
+                    new String[] { SemanticCategoryEnum.UK_PHONE.getDisplayName(), SemanticCategoryEnum.PHONE.getDisplayName() });
+            put("+44 1628 640160", new String[] { SemanticCategoryEnum.UK_PHONE.getDisplayName(), SemanticCategoryEnum.PHONE.getDisplayName() });
             put("Mr. John Doe", new String[] { SemanticCategoryEnum.FULL_NAME.getDisplayName() });
             put("GB87 BARC 2065 8244 9716 55", new String[] { SemanticCategoryEnum.IBAN.getId() });
         }
