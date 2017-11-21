@@ -193,7 +193,7 @@ public class ValueDataMaskerTest {
 
     }
 
-    private static final Map<String[], String> EXPECTED_MASKED_VALUES_CUSTOM = new LinkedHashMap<String[], String>() {
+    private static final Map<String[], String> EXPECTED_MASKED_VALUES_EXIST = new LinkedHashMap<String[], String>() {
 
         private static final long serialVersionUID = 2L;
 
@@ -213,7 +213,7 @@ public class ValueDataMaskerTest {
      * @throws InstantiationException
      */
     @Test
-    public void testProcess_Custom() throws InstantiationException, IllegalAccessException {
+    public void testProcessModifyExistCategory() throws InstantiationException, IllegalAccessException {
         CategoryRegistryManager.setLocalRegistryPath("target/test_crm");
         CategoryRegistryManager instance = CategoryRegistryManager.getInstance();
         CustomDictionaryHolder holder = instance.getCustomDictionaryHolder("t_suggest");
@@ -230,7 +230,7 @@ public class ValueDataMaskerTest {
         newDoc.setValues(new HashSet<>(Arrays.asList("true", "false")));
         holder.addDataDictDocument(Collections.singletonList(newDoc));
 
-        for (String[] input : EXPECTED_MASKED_VALUES_CUSTOM.keySet()) {
+        for (String[] input : EXPECTED_MASKED_VALUES_EXIST.keySet()) {
             String inputValue = input[0];
             String semanticCategory = input[1];
             String dataType = input[2];
@@ -241,7 +241,7 @@ public class ValueDataMaskerTest {
             masker.getFunction().setKeepEmpty(true);
             String maskedValue = masker.maskValue(inputValue);
             System.out.println(maskedValue);
-            assertEquals("Test faild on [" + inputValue + "]", EXPECTED_MASKED_VALUES_CUSTOM.get(input), maskedValue);
+            assertEquals("Test faild on [" + inputValue + "]", EXPECTED_MASKED_VALUES_EXIST.get(input), maskedValue);
 
         }
 

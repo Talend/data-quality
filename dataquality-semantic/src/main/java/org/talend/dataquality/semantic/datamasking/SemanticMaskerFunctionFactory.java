@@ -52,7 +52,7 @@ public class SemanticMaskerFunctionFactory {
             }
         }
 
-        if ("string".equals(dataType)) {
+        if (function == null && "string".equals(dataType)) {
             org.talend.dataquality.semantic.model.DQCategory category = CategoryRegistryManager.getInstance()
                     .getCategoryMetadataByName(semanticCategory);
             if (category != null && CategoryType.DICT.equals(category.getType())) {
