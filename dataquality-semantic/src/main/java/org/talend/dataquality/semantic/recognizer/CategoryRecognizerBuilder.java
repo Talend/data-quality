@@ -17,6 +17,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.lucene.store.AlreadyClosedException;
 import org.apache.lucene.store.Directory;
@@ -150,7 +151,7 @@ public class CategoryRecognizerBuilder {
         return metadata;
     }
 
-    public LuceneIndex getSharedDataDictIndex() {
+    private LuceneIndex getSharedDataDictIndex() {
         if (sharedDataDictIndex == null) {
             if (sharedDataDictDirectory == null) {
                 sharedDataDictDirectory = CategoryRegistryManager.getInstance().getSharedDataDictDirectory();
@@ -160,7 +161,7 @@ public class CategoryRecognizerBuilder {
         return sharedDataDictIndex;
     }
 
-    public LuceneIndex getCustomDataDictIndex() {
+    private LuceneIndex getCustomDataDictIndex() {
         if (customDataDictIndex == null) {
             if (customDataDictDirectory == null) {
                 // load from t_default tenant
@@ -175,7 +176,7 @@ public class CategoryRecognizerBuilder {
         return customDataDictIndex;
     }
 
-    public LuceneIndex getKeywordIndex() {
+    private LuceneIndex getKeywordIndex() {
         if (keywordIndex == null) {
             if (keywordDirectory == null) {
                 if (keywordPath == null) {
@@ -235,6 +236,27 @@ public class CategoryRecognizerBuilder {
                 getCustomDataDictIndex();
             }
         }
+    }
+
+    /**
+     * 
+     * @param input An input value
+     * @param category Category name
+     * @param similarity A threshold value, the compared score must be >= similarity
+     * @return most similar value from customer dictionary or share dictionary
+     */
+    public String findMostSimilarValue(String input, String category, Double similarity) {
+        String simValue = null;
+        // find the most similar value from customer dict firstly.
+        if (customDataDictIndex != null) {
+            initIndex();
+            simValue = customDataDictIndex.findMostSimilarFieldInCategory(input, category, similarity);
+        }
+        // if not found from customer dict, try to find it from share dict.
+        if (StringUtils.isEmpty(simValue) && this.sharedDataDictIndex != null) {
+            simValue = sharedDataDictIndex.findMostSimilarFieldInCategory(input, category, similarity);
+        }
+        return simValue;
     }
 
 }
