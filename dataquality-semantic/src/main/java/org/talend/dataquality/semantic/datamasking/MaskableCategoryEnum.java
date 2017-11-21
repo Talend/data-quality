@@ -108,7 +108,7 @@ public enum MaskableCategoryEnum {
         try {
             return valueOf(catId);
         } catch (IllegalArgumentException e) {
-            LOG.warn(e.getMessage(), e);
+            LOG.warn(e.getMessage());
             return null;
         }
     }
