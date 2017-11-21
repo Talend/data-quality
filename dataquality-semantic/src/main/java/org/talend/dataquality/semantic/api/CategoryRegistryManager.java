@@ -18,8 +18,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -153,7 +155,7 @@ public class CategoryRegistryManager {
             usingLocalCategoryRegistry = true;
             instance = new CategoryRegistryManager();
         } else {
-            LOGGER.warn("Cannot set an empty path as local registy location. Use default one: " + localRegistryPath);
+            LOGGER.warn("Cannot set an empty path as local registry location. Use default one: " + localRegistryPath);
         }
     }
 
@@ -253,12 +255,43 @@ public class CategoryRegistryManager {
 
     private void loadBaseIndex(final File destSubFolder, String sourceSubFolder) throws IOException, URISyntaxException {
         synchronized (indexExtractionLock) {
+
+            // extract base index only if needed
             if (!destSubFolder.exists()) {
-                final URI indexSourceURI = this.getClass().getResource("/" + sourceSubFolder).toURI();
-                try (final Directory srcDir = ClassPathDirectory.open(indexSourceURI)) {
-                    if (usingLocalCategoryRegistry && !destSubFolder.exists()) {
-                        DictionaryUtils.rewriteIndex(srcDir, destSubFolder);
+
+                boolean baseIndexExtracted = false;
+
+                // because the classpath can have multiple 'metadata' packages (especially with spring boot uber jar packaging)
+                // we need to iterate over the potential resources
+                final List<URL> potentialResources = Collections
+                        .list(this.getClass().getClassLoader().getResources(sourceSubFolder));
+                for (URL url : potentialResources) {
+
+                    final URI uri = url.toURI();
+                    LOGGER.debug("trying to load base index from " + uri.toString());
+
+                    // try the potential resource one by one
+                    try (final Directory srcDir = ClassPathDirectory.open(uri)) {
+                        if (usingLocalCategoryRegistry && !destSubFolder.exists()) {
+                            DictionaryUtils.rewriteIndex(srcDir, destSubFolder);
+                            // if successful, let's not try the remaining ones
+                            LOGGER.info("base index loaded from " + uri.toString());
+                            baseIndexExtracted = true;
+                            break;
+                        }
+                    } catch (IllegalArgumentException iae) {
+                        // that's expected as multiple 'metadata' packages can exist within the classpath
+                        LOGGER.debug("could not load base index from " + uri.toString());
                     }
+                }
+
+                // if base index could not be loaded, let's make a nice error message
+                if (usingLocalCategoryRegistry && !destSubFolder.exists() && !baseIndexExtracted) {
+                    final StringBuilder error = new StringBuilder(100);
+                    error.append("Could not load base index out of theses locations : [\n");
+                    potentialResources.forEach(pr -> error.append('\t').append(pr.toString()).append('\n'));
+                    error.append(']');
+                    throw new IllegalArgumentException(error.toString());
                 }
             }
         }
