@@ -286,7 +286,7 @@ public class CategoryRegistryManager {
                 }
 
                 // if base index could not be loaded, let's make a nice error message
-                if (!baseIndexExtracted) {
+                if (usingLocalCategoryRegistry && !destSubFolder.exists() && !baseIndexExtracted) {
                     final StringBuilder error = new StringBuilder(100);
                     error.append("Could not load base index out of theses locations : [\n");
                     potentialResources.forEach(pr -> error.append('\t').append(pr.toString()).append('\n'));
