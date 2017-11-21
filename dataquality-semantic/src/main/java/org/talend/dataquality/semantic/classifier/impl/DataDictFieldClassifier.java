@@ -85,7 +85,7 @@ public class DataDictFieldClassifier implements ISubCategoryClassifier {
             // we look for in each dictionary
             if (CollectionUtils.isNotEmpty(customChildren))
                 isValid = customDictionary.validCategories(data, semanticType, customChildren);
-            if (!isValid && CollectionUtils.isNotEmpty(customChildren))
+            if (!isValid && CollectionUtils.isNotEmpty(sharedChildren))
                 isValid = sharedDictionary.validCategories(data, semanticType, sharedChildren);
         }
         return isValid;
