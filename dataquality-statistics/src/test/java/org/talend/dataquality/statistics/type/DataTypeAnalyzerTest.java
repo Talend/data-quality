@@ -12,19 +12,18 @@
 // ============================================================================
 package org.talend.dataquality.statistics.type;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.Collections;
-import java.util.List;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.Collections;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+
 /**
  * created by talend on 2015-07-28 Detailled comment.
- *
  */
 public class DataTypeAnalyzerTest extends DataTypeStatiticsTestBase {
 
@@ -147,7 +146,7 @@ public class DataTypeAnalyzerTest extends DataTypeStatiticsTestBase {
         for (String string : toTestMoreInteger) {
             analyzer.analyze(string);
         }
-        assertEquals(DataTypeEnum.INTEGER, analyzer.getResult().get(0).getSuggestedType());
+        assertEquals(DataTypeEnum.DOUBLE, analyzer.getResult().get(0).getSuggestedType());
 
     }
 
@@ -228,7 +227,7 @@ public class DataTypeAnalyzerTest extends DataTypeStatiticsTestBase {
         assertEquals(DataTypeEnum.DATE, result.get(4).getSuggestedType());
         assertEquals(DataTypeEnum.STRING, result.get(5).getSuggestedType());
         assertEquals(DataTypeEnum.DATE, result.get(6).getSuggestedType());
-        assertEquals(DataTypeEnum.INTEGER, result.get(7).getSuggestedType());
+        assertEquals(DataTypeEnum.DOUBLE, result.get(7).getSuggestedType());
         assertEquals(DataTypeEnum.DOUBLE, result.get(8).getSuggestedType());
     }
 
@@ -243,7 +242,7 @@ public class DataTypeAnalyzerTest extends DataTypeStatiticsTestBase {
         analyzer.end();
         final List<DataTypeOccurences> result = analyzer.getResult();
         // the ratio 0.57 exceeds the default integer threshold 0.5, return INTEGER
-        assertEquals(DataTypeEnum.INTEGER, result.get(0).getSuggestedType());
+        assertEquals(DataTypeEnum.DOUBLE, result.get(0).getSuggestedType());
         // the ratio 0.57 is smaller than the integer threshold, return DOUBLE
         assertEquals(DataTypeEnum.DOUBLE, result.get(0).getSuggestedType(0.6));
         // the ratio 0.57 exceeds the threshold 0.3, return INTEGER
@@ -272,8 +271,20 @@ public class DataTypeAnalyzerTest extends DataTypeStatiticsTestBase {
         }
         analyzer.end();
         final List<DataTypeOccurences> result = analyzer.getResult();
-        assertEquals(DataTypeEnum.DOUBLE, result.get(0).getSuggestedType(0.9));
+        assertEquals(DataTypeEnum.DOUBLE, result.get(0).getSuggestedType());
         assertEquals(DataTypeEnum.INTEGER, result.get(0).getSuggestedType(0.1));
+    }
+
+    @Test
+    public void testGetDataTypeWithOnlyInteger() {
+        DataTypeAnalyzer analyzer = createDataTypeanalyzer();
+        String[] records = new String[] { "1", "2", "" };
+        for (String record : records) {
+            analyzer.analyze(record);
+        }
+        analyzer.end();
+        final List<DataTypeOccurences> result = analyzer.getResult();
+        assertEquals(DataTypeEnum.INTEGER, result.get(0).getSuggestedType());
     }
 
     @Test
