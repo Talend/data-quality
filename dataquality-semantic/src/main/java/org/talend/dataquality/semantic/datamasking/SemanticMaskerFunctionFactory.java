@@ -22,6 +22,7 @@ import org.talend.dataquality.datamasking.semantic.FluctuateNumericString;
 import org.talend.dataquality.datamasking.semantic.ReplaceCharactersWithGeneration;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.model.CategoryType;
+import org.talend.dataquality.semantic.model.DQCategory;
 
 public class SemanticMaskerFunctionFactory {
 
@@ -53,8 +54,7 @@ public class SemanticMaskerFunctionFactory {
         }
 
         if (function == null && "string".equals(dataType)) {
-            org.talend.dataquality.semantic.model.DQCategory category = CategoryRegistryManager.getInstance()
-                    .getCategoryMetadataByName(semanticCategory);
+            DQCategory category = CategoryRegistryManager.getInstance().getCategoryMetadataByName(semanticCategory);
             if (category != null && CategoryType.DICT.equals(category.getType())) {
                 function = new GenerateFromDictionaries();
                 function.parse(semanticCategory, true, null);

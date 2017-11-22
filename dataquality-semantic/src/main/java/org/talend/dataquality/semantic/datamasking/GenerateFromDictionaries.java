@@ -30,12 +30,12 @@ public class GenerateFromDictionaries extends Function<String> {
 
     private static final long serialVersionUID = 1476820256067746995L;
 
-    protected List<String> genericTokens = new ArrayList<>();
+    protected List<String> valuesInDictionaries = new ArrayList<>();
 
     @Override
     protected String doGenerateMaskedField(String t) {
-        if (!genericTokens.isEmpty()) {
-            return genericTokens.get(rnd.nextInt(genericTokens.size()));
+        if (!valuesInDictionaries.isEmpty()) {
+            return valuesInDictionaries.get(rnd.nextInt(valuesInDictionaries.size()));
         } else {
             return EMPTY_STRING;
         }
@@ -47,7 +47,7 @@ public class GenerateFromDictionaries extends Function<String> {
             LocalDictionaryCache dict = CategoryRegistryManager.getInstance().getDictionaryCache();
             List<DQDocument> listDocuments = dict.listDocuments(semanticCategory, 0, Integer.MAX_VALUE);
             for (DQDocument dqDocument : listDocuments) {
-                genericTokens.addAll(dqDocument.getValues());
+                valuesInDictionaries.addAll(dqDocument.getValues());
             }
         }
 
