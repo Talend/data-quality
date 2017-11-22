@@ -30,7 +30,7 @@ public class GenerateFromFileStringProvidedTest {
     public void testInit() {
         GenerateFromFileStringProvided gfls = new GenerateFromFileStringProvided();
 
-        gfls.parse("fr_commune.txt", true, new Random(AllDataqualitySamplingTests.RANDOM_SEED));
+        gfls.parse("commune.txt", true, new Random(AllDataqualitySamplingTests.RANDOM_SEED));
         Assert.assertEquals("Dieppe", gfls.generateMaskedRow("A")); //$NON-NLS-1$ //$NON-NLS-2$
         Assert.assertEquals("Savigny-sur-Orge", gfls.generateMaskedRow("A")); //$NON-NLS-1$ //$NON-NLS-2$
         Assert.assertEquals("Roanne", gfls.generateMaskedRow("A")); //$NON-NLS-1$ //$NON-NLS-2$

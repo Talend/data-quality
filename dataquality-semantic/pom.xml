@@ -43,10 +43,10 @@
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
-            <groupId>org.talend.dataquality</groupId>
-            <artifactId>dataquality-sampling</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
+			<groupId>org.talend.dataquality</groupId>
+			<artifactId>dataquality-sampling</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
