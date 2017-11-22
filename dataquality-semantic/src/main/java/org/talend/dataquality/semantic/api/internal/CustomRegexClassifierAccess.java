@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class CustomRegexClassifierAccess {
 
-    private final Logger LOGGER = Logger.getLogger(CustomRegexClassifierAccess.class);
+    private static final Logger LOGGER = Logger.getLogger(CustomRegexClassifierAccess.class);
 
     private ObjectMapper mapper = new ObjectMapper();
 
@@ -43,19 +43,40 @@ public class CustomRegexClassifierAccess {
         }
     }
 
+    public CustomRegexClassifierAccess(String regexFilePath) {
+        regExFile = new File(regexFilePath);
+    }
+
     /**
-     * add the regEx to the lucene index and share it on HDFS
+     * insert or update the regEx to the lucene index and share it on HDFS
      *
      * @param regEx the document to add
      */
-    public void createRegex(ISubCategory regEx) {
-        LOGGER.debug("createRegex: " + regEx);
+    public void insertOrUpdateRegex(ISubCategory regEx) {
+        LOGGER.debug("insertOrUpdateRegex: " + regEx);
         List<ISubCategory> regExs = getRegExs();
         if (regExs == null)
             regExs = new ArrayList<>();
+        else
+            regExs.removeIf(expression -> expression.getId().equals(regEx.getId()));
 
         regExs.add(regEx);
 
+        writeRegExs(regExs);
+    }
+
+    /**
+     * delete the regEx to the lucene index and share it on HDFS
+     *
+     * @param regEx the document to add
+     */
+    public void deleteRegex(ISubCategory regEx) {
+        LOGGER.debug("insertOrUpdateRegex: " + regEx);
+        List<ISubCategory> regExs = getRegExs();
+        if (regExs == null)
+            regExs = new ArrayList<>();
+        else
+            regExs.removeIf(expression -> regEx.getId().equals(expression.getId()));
         writeRegExs(regExs);
     }
 

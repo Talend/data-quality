@@ -1,17 +1,22 @@
 package org.talend.dataquality.semantic.api;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.*;
-
-import org.apache.commons.lang3.SerializationUtils;
 import org.junit.Test;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.model.DQDocument;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class LocalDictionaryCacheTest {
 
@@ -104,66 +109,6 @@ public class LocalDictionaryCacheTest {
         }
     };
 
-    @Test
-    public void testSuggestValues() {
-        CategoryRegistryManager.setLocalRegistryPath("target/test_crm");
-        LocalDictionaryCache dict = CategoryRegistryManager.getInstance().getDictionaryCache();
-        for (String input : EXPECTED_SUGGESTIONS.keySet()) {
-            Set<String> found = dict.suggestValues(SemanticCategoryEnum.FR_COMMUNE.name(), input);
-
-            assertEquals("Unexpected result size for input: " + input, EXPECTED_SUGGESTIONS.get(input).length, found.size());
-            for (String expected : EXPECTED_SUGGESTIONS.get(input)) {
-                assertTrue("Expected result not found: " + expected, found.contains(expected));
-            }
-        }
-
-        CategoryRegistryManager.reset();
-    }
-
-    @Test
-    public void testSuggestValuesFromCustomDataDict() {
-        CategoryRegistryManager.setLocalRegistryPath("target/test_crm");
-        CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder("t_suggest");
-
-        DQCategory answerCategory = holder.getMetadata().get(SemanticCategoryEnum.ANSWER.getTechnicalId());
-        DQCategory categoryClone = SerializationUtils.clone(answerCategory); // make a clone instead of modifying the shared
-                                                                             // category metadata
-        categoryClone.setModified(true);
-        holder.updateCategory(categoryClone);
-
-        DQDocument newDoc = new DQDocument();
-        newDoc.setCategory(categoryClone);
-        newDoc.setId("the_doc_id");
-        newDoc.setValues(new HashSet<>(Arrays.asList("true", "false")));
-        holder.addDataDictDocument(Collections.singletonList(newDoc));
-
-        final LocalDictionaryCache dict = holder.getDictionaryCache();
-
-        final Map<String, String[]> EXPECTED_SUGGESTIONS_CUSTOM = new LinkedHashMap<String, String[]>() {
-
-            private static final long serialVersionUID = -1799392161895210253L;
-
-            {
-                put("TRUE", new String[] { "true" });
-                put("  False", new String[] { "false" });
-                put("nein", new String[] { "Nein" });
-            }
-        };
-
-        for (String input : EXPECTED_SUGGESTIONS_CUSTOM.keySet()) {
-            Set<String> found = dict.suggestValues(SemanticCategoryEnum.ANSWER.name(), input);
-
-            assertEquals("Unexpected result size for input: " + input, EXPECTED_SUGGESTIONS_CUSTOM.get(input).length,
-                    found.size());
-            for (String expected : EXPECTED_SUGGESTIONS_CUSTOM.get(input)) {
-                assertTrue("Expected result not found: " + expected, found.contains(expected));
-            }
-        }
-
-        CategoryRegistryManager.getInstance().removeCustomDictionaryHolder("t_suggest");
-        CategoryRegistryManager.reset();
-    }
-
     public static void main(String[] args) {
 
         for (DQCategory cat : CategoryRegistryManager.getInstance().listCategories()) {
@@ -201,6 +146,63 @@ public class LocalDictionaryCacheTest {
             e.printStackTrace();
         }
 
+    }
+
+    @Test
+    public void testSuggestValues() {
+        CategoryRegistryManager.setLocalRegistryPath("target/test_crm");
+        LocalDictionaryCache dict = CategoryRegistryManager.getInstance().getDictionaryCache();
+        for (String input : EXPECTED_SUGGESTIONS.keySet()) {
+            Set<String> found = dict.suggestValues(SemanticCategoryEnum.FR_COMMUNE.name(), input);
+
+            assertEquals("Unexpected result size for input: " + input, EXPECTED_SUGGESTIONS.get(input).length, found.size());
+            for (String expected : EXPECTED_SUGGESTIONS.get(input)) {
+                assertTrue("Expected result not found: " + expected, found.contains(expected));
+            }
+        }
+
+        CategoryRegistryManager.reset();
+    }
+
+    @Test
+    public void testSuggestValuesFromCustomDataDict() throws IOException {
+        CategoryRegistryManager.setLocalRegistryPath("target/test_crm");
+        CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder("t_suggest");
+
+        DQCategory answerCategory = holder.getMetadata().get(SemanticCategoryEnum.ANSWER.getTechnicalId());
+        holder.updateCategory(answerCategory);
+
+        DQDocument newDoc = new DQDocument();
+        newDoc.setCategory(answerCategory);
+        newDoc.setId("the_doc_id");
+        newDoc.setValues(new HashSet<>(Arrays.asList("true", "false")));
+        holder.addDataDictDocument(Collections.singletonList(newDoc));
+
+        final LocalDictionaryCache dict = holder.getDictionaryCache();
+
+        final Map<String, String[]> EXPECTED_SUGGESTIONS_CUSTOM = new LinkedHashMap<String, String[]>() {
+
+            private static final long serialVersionUID = -1799392161895210253L;
+
+            {
+                put("TRUE", new String[] { "true" });
+                put("  False", new String[] { "false" });
+                put("nein", new String[] { "Nein" });
+            }
+        };
+
+        for (String input : EXPECTED_SUGGESTIONS_CUSTOM.keySet()) {
+            Set<String> found = dict.suggestValues(SemanticCategoryEnum.ANSWER.name(), input);
+
+            assertEquals("Unexpected result size for input: " + input, EXPECTED_SUGGESTIONS_CUSTOM.get(input).length,
+                    found.size());
+            for (String expected : EXPECTED_SUGGESTIONS_CUSTOM.get(input)) {
+                assertTrue("Expected result not found: " + expected, found.contains(expected));
+            }
+        }
+
+        CategoryRegistryManager.getInstance().removeCustomDictionaryHolder("t_suggest");
+        CategoryRegistryManager.reset();
     }
 
 }

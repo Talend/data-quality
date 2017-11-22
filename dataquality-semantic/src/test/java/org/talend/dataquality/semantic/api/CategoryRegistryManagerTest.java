@@ -98,7 +98,7 @@ public class CategoryRegistryManagerTest {
     }
 
     @Test
-    public void testFindMostSimilarValueWithCustomDataDict() {
+    public void testFindMostSimilarValueWithCustomDataDict() throws IOException {
         CategoryRegistryManager.setLocalRegistryPath("target/test_crm");
         CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder();
 

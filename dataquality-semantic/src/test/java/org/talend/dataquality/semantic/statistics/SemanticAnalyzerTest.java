@@ -12,15 +12,6 @@
 // ============================================================================
 package org.talend.dataquality.semantic.statistics;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-
-import org.apache.commons.lang3.SerializationUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,6 +29,15 @@ import org.talend.dataquality.semantic.model.DQRegEx;
 import org.talend.dataquality.semantic.model.DQValidator;
 import org.talend.dataquality.semantic.model.MainCategory;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 public class SemanticAnalyzerTest {
 
@@ -180,19 +180,17 @@ public class SemanticAnalyzerTest {
     }
 
     @Test
-    public void testTagadaWithCustomDataDict() {
+    public void testTagadaWithCustomDataDict() throws IOException {
         CategoryRegistryManager.setLocalRegistryPath("target/test_crm");
         CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder("t_custom_dd");
         builder.tenantID("t_custom_dd");
 
         DQCategory answerCategory = holder.getMetadata().get(SemanticCategoryEnum.ANSWER.getTechnicalId());
-        DQCategory categoryClone = SerializationUtils.clone(answerCategory); // make a clone instead of modifying the shared
-                                                                             // category metadata
-        categoryClone.setModified(true);
-        holder.updateCategory(categoryClone);
+
+        holder.updateCategory(answerCategory);
 
         DQDocument newDoc = new DQDocument();
-        newDoc.setCategory(categoryClone);
+        newDoc.setCategory(answerCategory);
         newDoc.setId("the_doc_id");
         newDoc.setValues(new HashSet<>(Arrays.asList("true", "false")));
         holder.addDataDictDocument(Collections.singletonList(newDoc));
@@ -240,7 +238,7 @@ public class SemanticAnalyzerTest {
         dqCat.setType(CategoryType.REGEX);
         dqCat.setCompleteness(Boolean.TRUE);
         dqCat.setModified(Boolean.TRUE);
-        holder.addRegexCategory(dqCat);
+        holder.updateCategory(dqCat);
 
         SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(builder);
 

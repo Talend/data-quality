@@ -12,23 +12,9 @@
 // ============================================================================
 package org.talend.dataquality.semantic.api;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.SerializationUtils;
 import org.apache.log4j.Logger;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
@@ -44,15 +30,30 @@ import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizer;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Paths;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Singleton class providing API for local category registry management.
- * 
+ * <p>
  * A local category registry is composed by the following folders:
  * <ul>
  * <li><b>shared/prod/:</b> shared dictionaries between tenants, provided by Talend</li>
  * <li><b>t_id/prod/:</b> tenant specific dictionaries</li>
  * </ul>
- * 
+ * <p>
  * Inside each of the above folder, the following subfolders can be found:
  * <ul>
  * <li><b>metadata:</b> lucene index containing metadata of all categories. In the tenant specific folder, the metadata of
@@ -65,24 +66,6 @@ import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
  * </ul>
  */
 public class CategoryRegistryManager {
-
-    private static final Logger LOGGER = Logger.getLogger(CategoryRegistryManager.class);
-
-    private static CategoryRegistryManager instance;
-
-    private static final Map<String, CustomDictionaryHolder> customDictionaryHolderMap = new HashMap<>();
-
-    /**
-     * Whether the local category registry will be used.
-     * Default value is false, which means only initial categories are loaded. This is mostly useful for unit tests.
-     * More often, the value is set to true when the localRegistryPath is configured. see
-     * {@link CategoryRegistryManager#setLocalRegistryPath(String)}
-     */
-    private static boolean usingLocalCategoryRegistry = false;
-
-    private static final String DEFAULT_LOCAL_REGISTRY_PATH = System.getProperty("user.home") + "/.talend/dataquality/semantic";
-
-    private static String localRegistryPath = DEFAULT_LOCAL_REGISTRY_PATH;
 
     public static final String METADATA_SUBFOLDER_NAME = "metadata";
 
@@ -102,6 +85,26 @@ public class CategoryRegistryManager {
 
     public static final String DEFAULT_TENANT_ID = "t_default";
 
+    private static final Logger LOGGER = Logger.getLogger(CategoryRegistryManager.class);
+
+    private static final Map<String, CustomDictionaryHolder> customDictionaryHolderMap = new HashMap<>();
+
+    private static final String DEFAULT_LOCAL_REGISTRY_PATH = System.getProperty("user.home") + "/.talend/dataquality/semantic";
+
+    private static final Object indexExtractionLock = new Object();
+
+    private static CategoryRegistryManager instance;
+
+    /**
+     * Whether the local category registry will be used.
+     * Default value is false, which means only initial categories are loaded. This is mostly useful for unit tests.
+     * More often, the value is set to true when the localRegistryPath is configured. see
+     * {@link CategoryRegistryManager#setLocalRegistryPath(String)}
+     */
+    private static boolean usingLocalCategoryRegistry = false;
+
+    private static String localRegistryPath = DEFAULT_LOCAL_REGISTRY_PATH;
+
     /**
      * Map between category ID and the object containing its metadata.
      */
@@ -110,8 +113,6 @@ public class CategoryRegistryManager {
     private UserDefinedClassifier sharedRegexClassifier;
 
     private Directory sharedDataDictDirectory;
-
-    private static final Object indexExtractionLock = new Object();
 
     private CategoryRegistryManager() {
         try {
@@ -138,17 +139,24 @@ public class CategoryRegistryManager {
         instance = null;
     }
 
-    public static void setUsingLocalCategoryRegistry(boolean b) {
-        usingLocalCategoryRegistry = b;
-    }
-
     static boolean isUsingLocalCategoryRegistry() {
         return usingLocalCategoryRegistry;
     }
 
+    public static void setUsingLocalCategoryRegistry(boolean b) {
+        usingLocalCategoryRegistry = b;
+    }
+
+    /**
+     * @return the path of local registry.
+     */
+    public static String getLocalRegistryPath() {
+        return localRegistryPath;
+    }
+
     /**
      * Configure the local category registry path.
-     * 
+     *
      * @param folder the folder to contain the category registry.
      */
     public static void setLocalRegistryPath(String folder) {
@@ -159,13 +167,6 @@ public class CategoryRegistryManager {
         } else {
             LOGGER.warn("Cannot set an empty path as local registry location. Use default one: " + localRegistryPath);
         }
-    }
-
-    /**
-     * @return the path of local registry.
-     */
-    public static String getLocalRegistryPath() {
-        return localRegistryPath;
     }
 
     /**
@@ -186,7 +187,7 @@ public class CategoryRegistryManager {
     /**
      * Reload the category from local registry for a given tenant ID. This method is typically called following category or
      * dictionary enrichments.
-     * 
+     *
      * @param tenantID the ID of the tenant
      */
     public void reloadCategoriesFromRegistry(String tenantID) {
@@ -301,7 +302,7 @@ public class CategoryRegistryManager {
 
     /**
      * List all categories.
-     * 
+     *
      * @return collection of category objects
      */
     public Collection<DQCategory> listCategories() {
@@ -310,7 +311,7 @@ public class CategoryRegistryManager {
 
     /**
      * List all categories.
-     * 
+     *
      * @param includeOpenCategories whether include incomplete categories
      * @return collection of category objects
      */
@@ -320,7 +321,7 @@ public class CategoryRegistryManager {
 
     /**
      * List all categories of a given {@link CategoryType}.
-     * 
+     *
      * @param type the given category type
      * @return collection of category objects of the given type
      */
@@ -332,7 +333,10 @@ public class CategoryRegistryManager {
      * Get the full map between category ID and category metadata.
      */
     public Map<String, DQCategory> getSharedCategoryMetadata() {
-        return sharedMetadata;
+        HashMap<String, DQCategory> sharedMetadataCopy = new HashMap<>();
+        sharedMetadata.entrySet()
+                .forEach(entry -> sharedMetadataCopy.put(entry.getKey(), SerializationUtils.clone(entry.getValue())));
+        return sharedMetadataCopy;
     }
 
     /**
@@ -358,7 +362,7 @@ public class CategoryRegistryManager {
 
     /**
      * Get the category object by its technical ID for the default tenant.
-     * 
+     *
      * @param catId the technical ID of the category
      * @return the category object
      */
@@ -368,7 +372,7 @@ public class CategoryRegistryManager {
 
     /**
      * Get the category object by its functional ID (aka. name) for the default tenant.
-     * 
+     *
      * @param catName the functional ID (aka. name)
      * @return the category object
      */
@@ -378,7 +382,7 @@ public class CategoryRegistryManager {
 
     /**
      * get instance of UserDefinedClassifier
-     * 
+     *
      * @param refresh whether classifiers should be reloaded from local json file
      */
     public UserDefinedClassifier getRegexClassifier(boolean refresh) throws IOException {
@@ -448,7 +452,7 @@ public class CategoryRegistryManager {
 
     /**
      * Get CustomDictioanryHolder instance for the given tenant ID.
-     * 
+     *
      * @param tenantID the ID of the tenant.
      */
     public CustomDictionaryHolder getCustomDictionaryHolder(String tenantID) {
@@ -469,7 +473,7 @@ public class CategoryRegistryManager {
 
     /**
      * Remove the CustomDictionaryHolder for a given tenant ID.
-     * 
+     *
      * @param tenantID the ID of the tenant.
      */
     public void removeCustomDictionaryHolder(String tenantID) {

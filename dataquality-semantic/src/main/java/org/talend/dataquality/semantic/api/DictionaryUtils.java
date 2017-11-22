@@ -23,7 +23,11 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.util.CharArraySet;
-import org.apache.lucene.document.*;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.document.FieldType;
+import org.apache.lucene.document.StringField;
+import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexableField;
@@ -35,7 +39,13 @@ import org.talend.dataquality.semantic.classifier.custom.UserDefinedRegexValidat
 import org.talend.dataquality.semantic.filter.impl.CharSequenceFilter;
 import org.talend.dataquality.semantic.filter.impl.CharSequenceFilter.CharSequenceFilterType;
 import org.talend.dataquality.semantic.index.DictionarySearcher;
-import org.talend.dataquality.semantic.model.*;
+import org.talend.dataquality.semantic.model.CategoryType;
+import org.talend.dataquality.semantic.model.DQCategory;
+import org.talend.dataquality.semantic.model.DQDocument;
+import org.talend.dataquality.semantic.model.DQFilter;
+import org.talend.dataquality.semantic.model.DQRegEx;
+import org.talend.dataquality.semantic.model.DQValidator;
+import org.talend.dataquality.semantic.model.ValidationMode;
 
 public class DictionaryUtils {
 
@@ -134,23 +144,28 @@ public class DictionaryUtils {
         return dqCat;
     }
 
-    public static Document categoryToDocument(DQCategory cat) {
+    public static Document categoryToDocument(DQCategory category) {
         Document doc = new Document();
-        doc.add(new StringField(DictionarySearcher.F_CATID, cat.getId(), Field.Store.YES));
-        doc.add(new StringField(DictionaryConstants.NAME, cat.getName(), Field.Store.YES));
-        doc.add(new TextField(DictionaryConstants.LABEL, cat.getLabel(), Field.Store.YES));
-        doc.add(new StringField(DictionaryConstants.TYPE, cat.getType().name(), Field.Store.YES));
-        doc.add(new StringField(DictionaryConstants.COMPLETENESS, String.valueOf(cat.getCompleteness().booleanValue()),
+        doc.add(new StringField(DictionarySearcher.F_CATID, category.getId(), Field.Store.YES));
+        doc.add(new StringField(DictionaryConstants.NAME, category.getName(), Field.Store.YES));
+        doc.add(new TextField(DictionaryConstants.LABEL, category.getLabel() == null ? category.getName() : category.getLabel(),
                 Field.Store.YES));
-        doc.add(new TextField(DictionaryConstants.DESCRIPTION, cat.getDescription(), Field.Store.YES));
-        doc.add(new StringField(DictionaryConstants.MODIFIED, String.valueOf(cat.getModified()), Field.Store.YES));
-        doc.add(new StringField(DictionaryConstants.DELETED, String.valueOf(cat.getDeleted()), Field.Store.YES));
+        doc.add(new StringField(DictionaryConstants.TYPE, category.getType().name(), Field.Store.YES));
+        doc.add(new StringField(DictionaryConstants.COMPLETENESS, String.valueOf(category.getCompleteness().booleanValue()),
+                Field.Store.YES));
+        doc.add(new TextField(DictionaryConstants.DESCRIPTION, category.getDescription() == null ? "" : category.getDescription(),
+                Field.Store.YES));
+        if (category.getModified() != null)
 
-        if (cat.getValidationMode() != null)
-            doc.add(new StringField(DictionaryConstants.VALIDATION_MODE, cat.getValidationMode().name(), Field.Store.YES));
+            doc.add(new StringField(DictionaryConstants.MODIFIED, String.valueOf(category.getModified()), Field.Store.YES));
+        if (category.getDeleted() != null)
+            doc.add(new StringField(DictionaryConstants.DELETED, String.valueOf(category.getDeleted()), Field.Store.YES));
 
-        if (!CollectionUtils.isEmpty(cat.getChildren()))
-            for (DQCategory child : cat.getChildren())
+        if (category.getValidationMode() != null)
+            doc.add(new StringField(DictionaryConstants.VALIDATION_MODE, category.getValidationMode().name(), Field.Store.YES));
+
+        if (!CollectionUtils.isEmpty(category.getChildren()))
+            for (DQCategory child : category.getChildren())
                 doc.add(new StringField(DictionaryConstants.CHILD, child.getId(), Field.Store.YES));
         return doc;
     }

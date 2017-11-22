@@ -1,14 +1,7 @@
 package org.talend.dataquality.semantic.api.internal;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.index.Term;
@@ -19,10 +12,13 @@ import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.talend.dataquality.semantic.api.CategoryMetadataUtils;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
-import org.talend.dataquality.semantic.api.DictionaryConstants;
 import org.talend.dataquality.semantic.api.DictionaryUtils;
 import org.talend.dataquality.semantic.index.DictionarySearcher;
 import org.talend.dataquality.semantic.model.DQCategory;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Low-level API for metadata lucene index.
@@ -77,9 +73,6 @@ public class CustomMetadataIndexAccess extends AbstractCustomIndexAccess {
             if (result.totalHits == 1) {
                 final Term term = new Term(DictionarySearcher.F_CATID, category.getId());
                 List<IndexableField> fields = DictionaryUtils.categoryToDocument(category).getFields();
-                if (!CollectionUtils.isEmpty(category.getChildren()))
-                    for (DQCategory child : category.getChildren())
-                        fields.add(new TextField(DictionaryConstants.CHILD, child.getId(), Field.Store.YES));
                 getWriter().updateDocument(term, fields);
             } else {
                 createCategory(category);
@@ -88,15 +81,6 @@ public class CustomMetadataIndexAccess extends AbstractCustomIndexAccess {
             LOGGER.error(e.getMessage(), e);
         }
 
-    }
-
-    public void deleteAll() {
-        LOGGER.debug("delete all content");
-        try {
-            getWriter().deleteAll();
-        } catch (IOException e) {
-            LOGGER.error(e.getMessage(), e);
-        }
     }
 
     public void deleteCategory(DQCategory category) {

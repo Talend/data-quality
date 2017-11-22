@@ -1,12 +1,5 @@
 package org.talend.dataquality.semantic.recognizer;
 
-import static org.junit.Assert.assertEquals;
-import static org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder.DEFAULT_DD_PATH;
-
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.*;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.util.CharArraySet;
@@ -27,12 +20,24 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
+import org.talend.dataquality.semantic.api.CustomDictionaryHolder;
 import org.talend.dataquality.semantic.api.DictionaryUtils;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.index.ClassPathDirectory;
 import org.talend.dataquality.semantic.index.DictionarySearcher;
 import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
+import static org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder.DEFAULT_DD_PATH;
 
 public class DefaultCategoryRecognizerTest {
 
@@ -55,7 +60,11 @@ public class DefaultCategoryRecognizerTest {
      */
     @Before
     public void init() throws IOException {
+        CategoryRegistryManager.setLocalRegistryPath("target/test_crm");
+
         builder = CategoryRecognizerBuilder.newBuilder();
+        builder.tenantID("t_default_category");
+
         Map<String, DQCategory> metadata = builder.getCategoryMetadata();
         String randomId1 = "RANDOM_ID_1";
         String randomId2 = "RANDOM_ID_2";
