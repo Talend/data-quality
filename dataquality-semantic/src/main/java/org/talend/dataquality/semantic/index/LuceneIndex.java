@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexableField;
@@ -163,9 +162,15 @@ public class LuceneIndex implements Index {
      * @param similarity A threshold value, the compared score must be >= similarity
      * @return The most similar Filed which is the shortest distance
      */
-    public String findMostSimilarFieldInCategory(String input, String category, Double similarity) {
-        String mostSimilar = StringUtils.EMPTY;
-        double mostDistance = 0.0d;
+    public String findMostSimilarFieldInCategory(String input, String category, double similarity) {
+        if (input == null) {
+            return null;
+        }
+        if (category == null) {
+            return input;
+        }
+        String mostSimilarValue = input;
+        double highestSimilarity = 0.0d;
         try {
             TopDocs docs = searcher.findSimilarValuesInCategory(input, category);
             for (ScoreDoc scoreDoc : docs.scoreDocs) {
@@ -173,18 +178,17 @@ public class LuceneIndex implements Index {
                 IndexableField[] synFields = doc.getFields(DictionarySearcher.F_RAW);
                 for (IndexableField synField : synFields) {
                     String synFieldValue = synField.stringValue();
-                    double currentDistance = calculateOverallSimilarity(input, synFieldValue);
-                    if (currentDistance >= similarity && currentDistance > mostDistance) {
-                        mostDistance = currentDistance;
-                        mostSimilar = synFieldValue;
+                    double currentSimilarity = calculateOverallSimilarity(input, synFieldValue);
+                    if (currentSimilarity >= similarity && currentSimilarity > highestSimilarity) {
+                        highestSimilarity = currentSimilarity;
+                        mostSimilarValue = synFieldValue;
                     }
                 }
             }
-
         } catch (IOException e) {
-            LOG.error(e.getMessage());
+            LOG.error(e.getMessage(), e);
         }
-        return mostSimilar;
+        return mostSimilarValue;
     }
 
     private double calculateOverallSimilarity(String input, String field) throws IOException {

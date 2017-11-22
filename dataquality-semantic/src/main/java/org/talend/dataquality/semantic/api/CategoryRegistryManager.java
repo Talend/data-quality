@@ -27,7 +27,6 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
@@ -456,15 +455,15 @@ public class CategoryRegistryManager {
 
     /**
      * 
-     * @param input An input value
-     * @param categoryName Category name
-     * @param similarity A threshold value, the compared score must be >= similarity
+     * @param input the input value
+     * @param categoryName the category name
+     * @param similarity the threshold value, the compared score must be >= similarity
      * @return most similar value from customer dictionary or share dictionary
      */
-    public String findMostSimilarValue(String input, String categoryName, Double similarity) {
-        LuceneIndex index = getLuncenIndex(categoryName);
+    public String findMostSimilarValue(String input, String categoryName, double similarity) {
+        LuceneIndex index = getLuceneIndex(categoryName);
         if (index == null) {
-            return StringUtils.EMPTY;
+            return input;
         }
         return index.findMostSimilarFieldInCategory(input, categoryName, similarity);
     }
@@ -472,15 +471,16 @@ public class CategoryRegistryManager {
     /**
      * 
      * @param categoryName
-     * @return Get a custom or share LuncenIndex according to categoryName.null when category name is null
+     * @return Get a custom or shared LuncenIndex according to the category metadata
      */
-    public LuceneIndex getLuncenIndex(String categoryName) {
+    LuceneIndex getLuceneIndex(String categoryName) {
         DQCategory dqCategory = getCategoryMetadataByName(categoryName);
         if (dqCategory != null) {
-            Directory dataDictDirectory = getSharedDataDictDirectory();
-            // get a custom directory if the Category is modified
-            if (dqCategory.getModified()) {
+            Directory dataDictDirectory = null;
+            if (dqCategory.getModified()) { // get a custom directory if the Category is modified
                 dataDictDirectory = getCustomDictionaryHolder().getDataDictDirectory();
+            } else { // otherwise, get shared directory
+                dataDictDirectory = getSharedDataDictDirectory();
             }
             return new LuceneIndex(dataDictDirectory, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY);
         }
