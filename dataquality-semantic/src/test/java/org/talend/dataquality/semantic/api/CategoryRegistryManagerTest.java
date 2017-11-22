@@ -11,10 +11,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
+import org.junit.Assert;
 import org.junit.Test;
 import org.talend.dataquality.semantic.classifier.ISubCategory;
 import org.talend.dataquality.semantic.classifier.custom.UDCategorySerDeser;
 import org.talend.dataquality.semantic.classifier.custom.UserDefinedClassifier;
+import org.talend.dataquality.semantic.index.LuceneIndex;
 
 public class CategoryRegistryManagerTest {
 
@@ -57,6 +59,13 @@ public class CategoryRegistryManagerTest {
             FileUtils.deleteDirectory(new File(path));
             CategoryRegistryManager.reset();
         }
+    }
+
+    @Test
+    public void testGetLuncenIndex() {
+        String categoryName = "COUNTRY";
+        LuceneIndex luncenIndex = CategoryRegistryManager.getInstance().getLuncenIndex(categoryName);
+        Assert.assertNotNull(luncenIndex);
     }
 
 }

@@ -462,16 +462,28 @@ public class CategoryRegistryManager {
      * @return most similar value from customer dictionary or share dictionary
      */
     public String findMostSimilarValue(String input, String categoryName, Double similarity) {
-        DQCategory dqCategory = getCategoryMetadataByName(categoryName);
-        if (dqCategory == null) {
+        LuceneIndex index = getLuncenIndex(categoryName);
+        if (index == null) {
             return StringUtils.EMPTY;
         }
-        Directory dataDictDirectory = getSharedDataDictDirectory();
-        // find from custom if the Category is modified
-        if (dqCategory.getModified()) {
-            dataDictDirectory = getCustomDictionaryHolder().getDataDictDirectory();
-        }
-        LuceneIndex index = new LuceneIndex(dataDictDirectory, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY);
         return index.findMostSimilarFieldInCategory(input, categoryName, similarity);
+    }
+
+    /**
+     * 
+     * @param categoryName
+     * @return Get a custom or share LuncenIndex according to categoryName.null when category name is null
+     */
+    public LuceneIndex getLuncenIndex(String categoryName) {
+        DQCategory dqCategory = getCategoryMetadataByName(categoryName);
+        if (dqCategory != null) {
+            Directory dataDictDirectory = getSharedDataDictDirectory();
+            // get a custom directory if the Category is modified
+            if (dqCategory.getModified()) {
+                dataDictDirectory = getCustomDictionaryHolder().getDataDictDirectory();
+            }
+            return new LuceneIndex(dataDictDirectory, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY);
+        }
+        return null;
     }
 }
