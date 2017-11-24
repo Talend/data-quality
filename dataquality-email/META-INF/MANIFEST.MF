@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Emal Verification Library
 Bundle-SymbolicName: org.talend.dataquality.email;singleton:=true
-Bundle-Version: 4.0.0.SNAPSHOT
+Bundle-Version: 4.0.1.SNAPSHOT
 Bundle-Vendor: .Talend SA.
 Export-Package: org.talend.dataquality.email,
  org.talend.dataquality.email.CommonCheck,
