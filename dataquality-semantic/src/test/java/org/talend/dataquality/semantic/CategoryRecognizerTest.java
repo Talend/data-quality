@@ -12,8 +12,13 @@
 // ============================================================================
 package org.talend.dataquality.semantic;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.apache.log4j.Logger;
+import org.junit.Before;
+import org.junit.Test;
+import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
+import org.talend.dataquality.semantic.recognizer.CategoryFrequency;
+import org.talend.dataquality.semantic.recognizer.CategoryRecognizer;
+import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -22,20 +27,14 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
-import org.talend.dataquality.semantic.recognizer.CategoryFrequency;
-import org.talend.dataquality.semantic.recognizer.CategoryRecognizer;
-import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * created by talend on 2015-07-28 Detailled comment.
  *
  */
-public class CategoryRecognizerTest {
+public class CategoryRecognizerTest extends CategoryRegistryManagerAbstract {
 
     private static final Map<String, Float> EXPECTED_FREQUECY_TABLE = new LinkedHashMap<String, Float>() {
 
@@ -243,14 +242,9 @@ public class CategoryRecognizerTest {
 
     private static CategoryRecognizer catRecognizer;
 
-    @BeforeClass
-    public static void prepare() throws URISyntaxException, IOException {
-        catRecognizer = CategoryRecognizerBuilder.newBuilder().lucene().build();
-    }
-
     @Before
-    public void init() {
-        catRecognizer.reset();
+    public void init() throws URISyntaxException, IOException {
+        catRecognizer = CategoryRecognizerBuilder.newBuilder().lucene().build();
     }
 
     public void testProcess() {

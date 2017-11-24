@@ -12,7 +12,14 @@
 // ============================================================================
 package org.talend.dataquality.semantic;
 
-import static org.junit.Assert.assertEquals;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+import org.junit.Before;
+import org.junit.Test;
+import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
+import org.talend.dataquality.semantic.recognizer.CategoryRecognizer;
+import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,21 +32,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
-import org.talend.dataquality.semantic.recognizer.CategoryRecognizer;
-import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
+import static org.junit.Assert.assertEquals;
 
 /**
  * created by talend on 2015-07-28 Detailled comment.
  *
  */
-public class RespectiveCategoryRecognizerTest {
+public class RespectiveCategoryRecognizerTest extends CategoryRegistryManagerAbstract {
 
     final String commontChar = "//##//"; //$NON-NLS-1$
 
@@ -733,14 +732,9 @@ public class RespectiveCategoryRecognizerTest {
         }
     };
 
-    @BeforeClass
-    public static void prepare() throws URISyntaxException, IOException {
-        catRecognizer = CategoryRecognizerBuilder.newBuilder().lucene().build();
-    }
-
     @Before
-    public void init() {
-        catRecognizer.reset();
+    public void init() throws URISyntaxException, IOException {
+        catRecognizer = CategoryRecognizerBuilder.newBuilder().lucene().build();
     }
 
     // init email list

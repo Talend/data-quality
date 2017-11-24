@@ -16,11 +16,12 @@ import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
-import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.talend.dataquality.semantic.CategoryRegistryManagerAbstract;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
-import org.talend.dataquality.semantic.api.CustomDictionaryHolder;
 import org.talend.dataquality.semantic.api.DictionaryUtils;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.index.ClassPathDirectory;
@@ -39,7 +40,7 @@ import java.util.Map;
 import static org.junit.Assert.assertEquals;
 import static org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder.DEFAULT_DD_PATH;
 
-public class DefaultCategoryRecognizerTest {
+public class DefaultCategoryRecognizerTest extends CategoryRegistryManagerAbstract {
 
     private CategoryRecognizer recognizer;
 
@@ -60,7 +61,6 @@ public class DefaultCategoryRecognizerTest {
      */
     @Before
     public void init() throws IOException {
-        CategoryRegistryManager.setLocalRegistryPath("target/test_crm");
 
         builder = CategoryRecognizerBuilder.newBuilder();
         builder.tenantID("t_default_category");
@@ -206,11 +206,4 @@ public class DefaultCategoryRecognizerTest {
         recognizer.reset();
     }
 
-    @After
-    public void finish() {
-        if (builder != null) {
-            CategoryRegistryManager.reset();
-            builder.metadata(null);
-        }
-    }
 }

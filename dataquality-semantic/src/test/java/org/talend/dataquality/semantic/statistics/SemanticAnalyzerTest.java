@@ -14,11 +14,13 @@ package org.talend.dataquality.semantic.statistics;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.Analyzers;
 import org.talend.dataquality.common.inference.Analyzers.Result;
 import org.talend.dataquality.common.inference.Metadata;
+import org.talend.dataquality.semantic.CategoryRegistryManagerAbstract;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.api.CustomDictionaryHolder;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
@@ -39,7 +41,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class SemanticAnalyzerTest {
+public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
 
     private final List<String[]> TEST_RECORDS = new ArrayList<String[]>() {
 
@@ -118,11 +120,6 @@ public class SemanticAnalyzerTest {
         builder = CategoryRecognizerBuilder.newBuilder().lucene();
     }
 
-    @After
-    public void reset() {
-        CategoryRegistryManager.reset();
-    }
-
     @Test
     public void testTagada() {
         SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(builder.getDictionaryConstituents());
@@ -147,7 +144,6 @@ public class SemanticAnalyzerTest {
 
     @Test
     public void testTagadaWithCustomMetadata() {
-        CategoryRegistryManager.setLocalRegistryPath("target/test_crm");
         CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder("t_custom_meta");
         builder.tenantID("t_custom_meta");
 
@@ -181,7 +177,6 @@ public class SemanticAnalyzerTest {
 
     @Test
     public void testTagadaWithCustomDataDict() throws IOException {
-        CategoryRegistryManager.setLocalRegistryPath("target/test_crm");
         CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder("t_custom_dd");
         builder.tenantID("t_custom_dd");
 
@@ -221,7 +216,6 @@ public class SemanticAnalyzerTest {
 
     @Test
     public void testTagadaWithCustomRegex() {
-        CategoryRegistryManager.setLocalRegistryPath("target/test_crm");
         CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder("t_custom_re");
         builder.tenantID("t_custom_re");
 

@@ -1,7 +1,18 @@
 package org.talend.dataquality.semantic.api;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import org.apache.commons.lang3.SerializationUtils;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.talend.dataquality.semantic.CategoryRegistryManagerAbstract;
+import org.talend.dataquality.semantic.classifier.ISubCategory;
+import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
+import org.talend.dataquality.semantic.classifier.custom.UDCategorySerDeser;
+import org.talend.dataquality.semantic.classifier.custom.UserDefinedClassifier;
+import org.talend.dataquality.semantic.index.LuceneIndex;
+import org.talend.dataquality.semantic.model.DQCategory;
+import org.talend.dataquality.semantic.model.DQDocument;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -12,24 +23,13 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.SerializationUtils;
-import org.junit.Assert;
-import org.junit.Test;
-import org.talend.dataquality.semantic.classifier.ISubCategory;
-import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
-import org.talend.dataquality.semantic.classifier.custom.UDCategorySerDeser;
-import org.talend.dataquality.semantic.classifier.custom.UserDefinedClassifier;
-import org.talend.dataquality.semantic.index.LuceneIndex;
-import org.talend.dataquality.semantic.model.DQCategory;
-import org.talend.dataquality.semantic.model.DQDocument;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
-public class CategoryRegistryManagerTest {
+public class CategoryRegistryManagerTest extends CategoryRegistryManagerAbstract {
 
     @Test
     public void testGetRegexClassifier() throws IOException, URISyntaxException {
-        final String path = "target/test_crm";
-        CategoryRegistryManager.setLocalRegistryPath(path);
         CategoryRegistryManager crm = CategoryRegistryManager.getInstance();
         try {
 
@@ -61,9 +61,6 @@ public class CategoryRegistryManagerTest {
 
         } catch (Exception e) {
             fail("Failed due to exception: " + e.getMessage());
-        } finally {
-            FileUtils.deleteDirectory(new File(path));
-            CategoryRegistryManager.reset();
         }
     }
 
@@ -99,7 +96,6 @@ public class CategoryRegistryManagerTest {
 
     @Test
     public void testFindMostSimilarValueWithCustomDataDict() throws IOException {
-        CategoryRegistryManager.setLocalRegistryPath("target/test_crm");
         CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder();
 
         DQCategory answerCategory = holder.getMetadata().get(SemanticCategoryEnum.ANSWER.getTechnicalId());
@@ -117,8 +113,6 @@ public class CategoryRegistryManagerTest {
         String result = CategoryRegistryManager.getInstance().findMostSimilarValue("TRUEL", SemanticCategoryEnum.ANSWER.name(),
                 0.8);
         assertEquals("true", result);
-
-        CategoryRegistryManager.getInstance().removeCustomDictionaryHolder(CategoryRegistryManager.DEFAULT_TENANT_ID);
     }
 
     @Test

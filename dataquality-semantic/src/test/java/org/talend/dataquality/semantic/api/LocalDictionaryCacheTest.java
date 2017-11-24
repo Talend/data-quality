@@ -1,6 +1,9 @@
 package org.talend.dataquality.semantic.api;
 
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.talend.dataquality.semantic.CategoryRegistryManagerAbstract;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.model.DQDocument;
@@ -8,6 +11,7 @@ import org.talend.dataquality.semantic.model.DQDocument;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -18,7 +22,7 @@ import java.util.Set;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class LocalDictionaryCacheTest {
+public class LocalDictionaryCacheTest extends CategoryRegistryManagerAbstract {
 
     Map<String, String[]> EXPECTED_SUGGESTIONS = new LinkedHashMap<String, String[]>() {
 
@@ -150,7 +154,6 @@ public class LocalDictionaryCacheTest {
 
     @Test
     public void testSuggestValues() {
-        CategoryRegistryManager.setLocalRegistryPath("target/test_crm");
         LocalDictionaryCache dict = CategoryRegistryManager.getInstance().getDictionaryCache();
         for (String input : EXPECTED_SUGGESTIONS.keySet()) {
             Set<String> found = dict.suggestValues(SemanticCategoryEnum.FR_COMMUNE.name(), input);
@@ -161,13 +164,11 @@ public class LocalDictionaryCacheTest {
             }
         }
 
-        CategoryRegistryManager.reset();
     }
 
     @Test
     public void testSuggestValuesFromCustomDataDict() throws IOException {
-        CategoryRegistryManager.setLocalRegistryPath("target/test_crm");
-        CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder("t_suggest");
+        CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder();
 
         DQCategory answerCategory = holder.getMetadata().get(SemanticCategoryEnum.ANSWER.getTechnicalId());
         holder.updateCategory(answerCategory);
@@ -200,9 +201,6 @@ public class LocalDictionaryCacheTest {
                 assertTrue("Expected result not found: " + expected, found.contains(expected));
             }
         }
-
-        CategoryRegistryManager.getInstance().removeCustomDictionaryHolder("t_suggest");
-        CategoryRegistryManager.reset();
     }
 
 }
