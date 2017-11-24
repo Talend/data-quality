@@ -98,7 +98,7 @@ public class LocalDictionaryCache {
     }
 
     private Query getListDocumentsQuery(String categoryId) throws IOException {
-        return new TermQuery(new Term(DictionarySearcher.F_DOCID, categoryId));
+        return new TermQuery(new Term(DictionarySearcher.F_CATID, categoryId));
     }
 
     private TopDocs sendListDocumentsQuery(String categoryId, int offset, int n) throws IOException {
@@ -109,7 +109,7 @@ public class LocalDictionaryCache {
             result = searcher.search(getListDocumentsQuery(categoryId), n);
         } else {
             TopDocs topDocs = searcher.search(getListDocumentsQuery(categoryId), offset + n);
-            Query q = new TermQuery(new Term(DictionarySearcher.F_DOCID, categoryId));
+            Query q = new TermQuery(new Term(DictionarySearcher.F_CATID, categoryId));
             result = searcher.searchAfter(topDocs.scoreDocs[Math.min(topDocs.totalHits, offset) - 1], q, n);
         }
         sharedSearcherManager.release(searcher);
