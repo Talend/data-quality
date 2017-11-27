@@ -118,6 +118,11 @@ public class ValueDataMasker implements Serializable {
         return function.generateMaskedRow(input);
     }
 
+    /**
+     * update the extra param for function
+     * 
+     * @param extraParam
+     */
     public void resetExtraParameter(String extraParam) {
         function.parse(extraParam, true, null);
     }
