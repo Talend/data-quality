@@ -1,9 +1,7 @@
 package org.talend.dataquality.semantic.api;
 
 import org.apache.commons.lang3.SerializationUtils;
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.talend.dataquality.semantic.CategoryRegistryManagerAbstract;
 import org.talend.dataquality.semantic.classifier.ISubCategory;
@@ -108,7 +106,7 @@ public class CategoryRegistryManagerTest extends CategoryRegistryManagerAbstract
         newDoc.setCategory(categoryClone);
         newDoc.setId("the_doc_id");
         newDoc.setValues(new HashSet<>(Arrays.asList("true", "false")));
-        holder.addDataDictDocument(Collections.singletonList(newDoc));
+        holder.addDataDictDocuments(Collections.singletonList(newDoc));
 
         String result = CategoryRegistryManager.getInstance().findMostSimilarValue("TRUEL", SemanticCategoryEnum.ANSWER.name(),
                 0.8);

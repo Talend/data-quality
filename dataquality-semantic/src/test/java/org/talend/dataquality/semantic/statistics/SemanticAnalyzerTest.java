@@ -12,9 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.semantic.statistics;
 
-import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.Analyzers;
@@ -188,7 +186,7 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
         newDoc.setCategory(answerCategory);
         newDoc.setId("the_doc_id");
         newDoc.setValues(new HashSet<>(Arrays.asList("true", "false")));
-        holder.addDataDictDocument(Collections.singletonList(newDoc));
+        holder.addDataDictDocuments(Collections.singletonList(newDoc));
 
         SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(builder);
 

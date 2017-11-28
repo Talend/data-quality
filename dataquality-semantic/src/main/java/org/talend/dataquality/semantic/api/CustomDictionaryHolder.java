@@ -291,9 +291,9 @@ public class CustomDictionaryHolder {
      *
      * @param documents
      */
-    public void updateDataDictDocument(List<DQDocument> documents) throws IOException {
+    public void updateDataDictDocuments(List<DQDocument> documents) throws IOException {
         ensureDataDictIndexAccess();
-        operationDataDictDocument(documents, customDataDictIndexAccess::insertOrUpdateDocument);
+        operationDataDictDocuments(documents, customDataDictIndexAccess::insertOrUpdateDocument);
     }
 
     /**
@@ -301,9 +301,9 @@ public class CustomDictionaryHolder {
      *
      * @param documents
      */
-    public void addDataDictDocument(List<DQDocument> documents) throws IOException {
+    public void addDataDictDocuments(List<DQDocument> documents) throws IOException {
         ensureDataDictIndexAccess();
-        operationDataDictDocument(documents, customDataDictIndexAccess::createDocument);
+        operationDataDictDocuments(documents, customDataDictIndexAccess::createDocument);
     }
 
     /**
@@ -311,12 +311,12 @@ public class CustomDictionaryHolder {
      *
      * @param documents
      */
-    public void deleteDataDictDocument(List<DQDocument> documents) throws IOException {
+    public void deleteDataDictDocuments(List<DQDocument> documents) throws IOException {
         ensureDataDictIndexAccess();
-        operationDataDictDocument(documents, customDataDictIndexAccess::deleteDocument);
+        operationDataDictDocuments(documents, customDataDictIndexAccess::deleteDocument);
     }
 
-    private void operationDataDictDocument(List<DQDocument> documents, Consumer<List<DQDocument>> function) {
+    private void operationDataDictDocuments(List<DQDocument> documents, Consumer<List<DQDocument>> function) {
         String categoryId = documents.get(0).getCategory().getId();
         DQCategory category = getMetadata().get(categoryId);
         if (category != null && !Boolean.TRUE.equals(category.getModified()) && !Boolean.TRUE.equals(category.getDeleted()))
@@ -507,19 +507,12 @@ public class CustomDictionaryHolder {
     }
 
     /**
-     * Things to be done after receiving the republish events.
-     */
-    public void afterRepublish() {
-        reloadCategoryMetadata();
-    }
-
-    /**
      * Republish a document into Data Dict index.
      *
      * @param documents
      * @throws IOException
      */
-    public void republishDataDictDocument(List<DQDocument> documents) throws IOException {
+    public void republishDataDictDocuments(List<DQDocument> documents) throws IOException {
         ensureRepublishDataDictIndexAccess();
         customRepublishDataDictIndexAccess.createDocument(documents);
     }
@@ -600,5 +593,6 @@ public class CustomDictionaryHolder {
                 FileUtils.deleteDirectory(stagingIndexes);
             }
         }
+        reloadCategoryMetadata();
     }
 }
