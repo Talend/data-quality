@@ -26,7 +26,9 @@ import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.talend.dataquality.record.linkage.attribute.FingerprintkeyMatcher;
+import org.talend.dataquality.record.linkage.attribute.AbstractAttributeMatcher;
+import org.talend.dataquality.record.linkage.attribute.LevenshteinMatcher;
+import org.talend.dataquality.record.linkage.constant.TokenizedResolutionMethod;
 import org.talend.dataquality.semantic.classifier.custom.UserDefinedClassifier;
 import org.talend.dataquality.semantic.classifier.impl.DataDictFieldClassifier;
 import org.talend.dataquality.semantic.index.Index;
@@ -55,7 +57,11 @@ public class DefaultCategoryRecognizer implements CategoryRecognizer {
 
     private long total = 0;
 
-    private FingerprintkeyMatcher keyMatcher;
+    private AbstractAttributeMatcher defaultMatcher = new LevenshteinMatcher();
+
+    private boolean fingerPrintApply = true;
+
+    private boolean tokenizedApply = true;
 
     public DefaultCategoryRecognizer(DictionaryConstituents constituents) throws IOException {
         this(constituents.getSharedDataDict(), constituents.getCustomDataDict(), constituents.getKeyword(),
@@ -68,7 +74,6 @@ public class DefaultCategoryRecognizer implements CategoryRecognizer {
         this.userDefineClassifier.getClassifiers().removeIf(classifier -> metadata.get(classifier.getId()) != null
                 && Boolean.TRUE.equals(metadata.get(classifier.getId()).getDeleted()));
         this.metadata = metadata;
-        this.keyMatcher = new FingerprintkeyMatcher();
 
         final List<String> sharedCategories = new ArrayList<>();
         final List<String> customCategories = new ArrayList<>();
@@ -247,7 +252,11 @@ public class DefaultCategoryRecognizer implements CategoryRecognizer {
     public Collection<CategoryFrequency> getResult(String columnName, float weight) {
         for (CategoryFrequency category : categoryToFrequency.values()) {
 
-            final float scoreOnHeader = Double.valueOf(keyMatcher.getMatchingWeight(columnName, category.getCategoryName()))
+            if (tokenizedApply) {
+                defaultMatcher.setTokenMethod(TokenizedResolutionMethod.ANYORDER);
+            }
+            defaultMatcher.setFingerPrintApply(fingerPrintApply);
+            final float scoreOnHeader = Double.valueOf(defaultMatcher.getMatchingWeight(columnName, category.getCategoryName()))
                     .floatValue();
             category.score = Math.min(Math.round(category.count * 10000 / total) / 100F + scoreOnHeader * weight * 100, 100);
         }
@@ -261,4 +270,17 @@ public class DefaultCategoryRecognizer implements CategoryRecognizer {
         dataDictFieldClassifier.closeIndex();
         knownCategoryCache.clear();
     }
+
+    public void setDefaultMatcher(AbstractAttributeMatcher defaultMatcher) {
+        this.defaultMatcher = defaultMatcher;
+    }
+
+    public void setFingerPrintApply(boolean fingerPrintApply) {
+        this.fingerPrintApply = fingerPrintApply;
+    }
+
+    public void setTokenizedApply(boolean tokenizedApply) {
+        this.tokenizedApply = tokenizedApply;
+    }
+
 }

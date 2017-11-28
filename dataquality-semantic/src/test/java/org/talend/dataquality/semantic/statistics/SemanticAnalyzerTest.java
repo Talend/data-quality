@@ -120,24 +120,7 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
 
     @Test
     public void testTagada() {
-        SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(builder.getDictionaryConstituents());
-
-        Analyzer<Result> analyzer = Analyzers.with(semanticAnalyzer);
-        analyzer.init();
-        for (String[] record : TEST_RECORDS_TAGADA) {
-            analyzer.analyze(record);
-        }
-        analyzer.end();
-
-        for (int i = 0; i < EXPECTED_CATEGORY_TAGADA.size(); i++) {
-            Result result = analyzer.getResult().get(i);
-
-            if (result.exist(SemanticType.class)) {
-                final SemanticType semanticType = result.get(SemanticType.class);
-                final String suggestedCategory = semanticType.getSuggestedCategory();
-                assertEquals("Unexpected Category.", EXPECTED_CATEGORY_TAGADA.get(i), suggestedCategory);
-            }
-        }
+        testSemanticAnalyzer(TEST_RECORDS_TAGADA, null, EXPECTED_CATEGORY_TAGADA);
     }
 
     @Test
@@ -149,27 +132,11 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
         firstNameCat.setDeleted(true);
         holder.updateCategory(firstNameCat);
 
-        SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(builder);
-
-        Analyzer<Result> analyzer = Analyzers.with(semanticAnalyzer);
-        analyzer.init();
-        for (String[] record : TEST_RECORDS_TAGADA) {
-            analyzer.analyze(record);
-        }
-        analyzer.end();
-
         final List<String> EXPECTED_CATEGORIES = Arrays.asList(
                 new String[] { "", SemanticCategoryEnum.LAST_NAME.name(), SemanticCategoryEnum.LAST_NAME.name(), "", "", "" });
 
-        for (int i = 0; i < EXPECTED_CATEGORIES.size(); i++) {
-            Result result = analyzer.getResult().get(i);
+        testSemanticAnalyzer(TEST_RECORDS_TAGADA, null, EXPECTED_CATEGORIES);
 
-            if (result.exist(SemanticType.class)) {
-                final SemanticType semanticType = result.get(SemanticType.class);
-                final String suggestedCategory = semanticType.getSuggestedCategory();
-                assertEquals("Unexpected Category.", EXPECTED_CATEGORIES.get(i), suggestedCategory);
-            }
-        }
         CategoryRegistryManager.getInstance().removeCustomDictionaryHolder("t_custom_meta");
     }
 
@@ -188,27 +155,11 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
         newDoc.setValues(new HashSet<>(Arrays.asList("true", "false")));
         holder.addDataDictDocuments(Collections.singletonList(newDoc));
 
-        SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(builder);
-
-        Analyzer<Result> analyzer = Analyzers.with(semanticAnalyzer);
-        analyzer.init();
-        for (String[] record : TEST_RECORDS_TAGADA) {
-            analyzer.analyze(record);
-        }
-        analyzer.end();
-
         final List<String> EXPECTED_CATEGORIES = Arrays.asList(new String[] { "", SemanticCategoryEnum.LAST_NAME.name(),
                 SemanticCategoryEnum.FIRST_NAME.name(), "", "", SemanticCategoryEnum.ANSWER.name() });
 
-        for (int i = 0; i < EXPECTED_CATEGORIES.size(); i++) {
-            Result result = analyzer.getResult().get(i);
+        testSemanticAnalyzer(TEST_RECORDS_TAGADA, null, EXPECTED_CATEGORIES);
 
-            if (result.exist(SemanticType.class)) {
-                final SemanticType semanticType = result.get(SemanticType.class);
-                final String suggestedCategory = semanticType.getSuggestedCategory();
-                assertEquals("Unexpected Category.", EXPECTED_CATEGORIES.get(i), suggestedCategory);
-            }
-        }
         CategoryRegistryManager.getInstance().removeCustomDictionaryHolder("t_custom_dd");
     }
 
@@ -232,112 +183,35 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
         dqCat.setModified(Boolean.TRUE);
         holder.updateCategory(dqCat);
 
-        SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(builder);
-
-        Analyzer<Result> analyzer = Analyzers.with(semanticAnalyzer);
-        analyzer.init();
-        for (String[] record : TEST_RECORDS_TAGADA) {
-            analyzer.analyze(record);
-        }
-        analyzer.end();
-
         final List<String> EXPECTED_CATEGORIES = Arrays.asList(new String[] { "", SemanticCategoryEnum.LAST_NAME.name(),
                 SemanticCategoryEnum.FIRST_NAME.name(), "", "", "the_name" });
 
-        for (int i = 0; i < EXPECTED_CATEGORIES.size(); i++) {
-            Result result = analyzer.getResult().get(i);
+        testSemanticAnalyzer(TEST_RECORDS_TAGADA, null, EXPECTED_CATEGORIES);
 
-            if (result.exist(SemanticType.class)) {
-                final SemanticType semanticType = result.get(SemanticType.class);
-                final String suggestedCategory = semanticType.getSuggestedCategory();
-                assertEquals("Unexpected Category.", EXPECTED_CATEGORIES.get(i), suggestedCategory);
-            }
-        }
         CategoryRegistryManager.getInstance().removeCustomDictionaryHolder("t_custom_re");
     }
 
     @Test
-    public void firstNameToFRCommuneIgnoreCaseAndAccent() {
-        SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(builder);
-
-        Analyzer<Result> analyzer = Analyzers.with(semanticAnalyzer);
-
-        analyzer.init();
-        semanticAnalyzer.setMetadata(Metadata.HEADER_NAME, Arrays.asList("", "Läst name"));
-
-        // 85% last name
-        // 90% city
-        // and column name is city
-        for (String[] record : TEST_RECORDS_CITY_METADATA) {
-            analyzer.analyze(record);
-        }
-        analyzer.end();
-
-        List<Result> results = analyzer.getResult();
-        for (int i = 0; i < EXPECTED_FR_COMMUNE_CATEGORY_METADATA.size(); i++) {
-            Result result = results.get(i);
-
-            if (result.exist(SemanticType.class)) {
-                final SemanticType semanticType = result.get(SemanticType.class);
-                final String suggestedCategory = semanticType.getSuggestedCategory();
-                assertEquals("Unexpected Category.", EXPECTED_FR_COMMUNE_CATEGORY_METADATA.get(i), suggestedCategory);
-            }
-        }
-    }
-
-    @Test
     public void firstNameToFRCommune() {
-        SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(builder);
-
-        Analyzer<Result> analyzer = Analyzers.with(semanticAnalyzer);
-
-        analyzer.init();
-        semanticAnalyzer.setMetadata(Metadata.HEADER_NAME, Arrays.asList("", "Last Name"));
-
         // 85% last name
         // 90% city
         // and column name is city
-        for (String[] record : TEST_RECORDS_CITY_METADATA) {
-            analyzer.analyze(record);
-        }
-        analyzer.end();
-
-        List<Result> results = analyzer.getResult();
-        for (int i = 0; i < EXPECTED_FR_COMMUNE_CATEGORY_METADATA.size(); i++) {
-            Result result = results.get(i);
-
-            if (result.exist(SemanticType.class)) {
-                final SemanticType semanticType = result.get(SemanticType.class);
-                final String suggestedCategory = semanticType.getSuggestedCategory();
-                assertEquals("Unexpected Category.", EXPECTED_FR_COMMUNE_CATEGORY_METADATA.get(i), suggestedCategory);
-            }
-        }
+        testSemanticAnalyzer(TEST_RECORDS_CITY_METADATA, Arrays.asList("", "Last Name"), EXPECTED_FR_COMMUNE_CATEGORY_METADATA);
     }
 
     @Test
     public void metadataLastNameWithPhoneNumber() {
-        SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(builder);
+        testSemanticAnalyzer(TEST_RECORDS_PHONE_METADATA, Arrays.asList("Last Name"), EXPECTED_PHONE_CATEGORY_METADATA);
+    }
 
-        Analyzer<Result> analyzer = Analyzers.with(semanticAnalyzer);
-
-        analyzer.init();
-        semanticAnalyzer.setMetadata(Metadata.HEADER_NAME, Arrays.asList("Last Name"));
-
-        for (String[] record : TEST_RECORDS_PHONE_METADATA) {
-            analyzer.analyze(record);
-        }
-        analyzer.end();
-
-        List<Result> results = analyzer.getResult();
-        for (int i = 0; i < EXPECTED_PHONE_CATEGORY_METADATA.size(); i++) {
-            Result result = results.get(i);
-
-            if (result.exist(SemanticType.class)) {
-                final SemanticType semanticType = result.get(SemanticType.class);
-                final String suggestedCategory = semanticType.getSuggestedCategory();
-                assertEquals("Unexpected Category.", EXPECTED_PHONE_CATEGORY_METADATA.get(i), suggestedCategory);
-            }
-        }
+    @Test
+    public void semanticTypeNameFuzzyMatching() { // TDQ-14062: Fuzzy matching on the semantic type name
+        // 1. test levenshtein
+        testSemanticAnalyzer(TEST_RECORDS_CITY_METADATA, Arrays.asList("", "Lost Names"), EXPECTED_FR_COMMUNE_CATEGORY_METADATA);
+        // 2. test tokenization with any order
+        testSemanticAnalyzer(TEST_RECORDS_CITY_METADATA, Arrays.asList("", "Name Last"), EXPECTED_FR_COMMUNE_CATEGORY_METADATA);
+        // 3. test fingerprint
+        testSemanticAnalyzer(TEST_RECORDS_CITY_METADATA, Arrays.asList("", "läst namê"), EXPECTED_FR_COMMUNE_CATEGORY_METADATA);
     }
 
     @Test
@@ -380,13 +254,10 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
         builder.tenantID(tenantID);
 
         // Run the analysis for a first time
-        SemanticAnalyzer semanticAnalyzer1 = new SemanticAnalyzer(builder);
-        Analyzer<Result> analyzer1 = Analyzers.with(semanticAnalyzer1);
-        analyzer1.init();
-        for (String[] record : TEST_RECORDS_TAGADA) {
-            analyzer1.analyze(record);
-        }
-        analyzer1.end();
+        final List<String> EXPECTED_CATEGORIES_BEFORE_MODIF = Arrays.asList(
+                new String[] { "", SemanticCategoryEnum.LAST_NAME.name(), SemanticCategoryEnum.FIRST_NAME.name(), "", "", "" });
+
+        testSemanticAnalyzer(TEST_RECORDS_TAGADA, null, EXPECTED_CATEGORIES_BEFORE_MODIF);
 
         // Create a new category
         DQValidator dqValidator = new DQValidator();
@@ -405,32 +276,40 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
         holder.createCategory(dqCat);
 
         // Run the analysis for a second time
-        SemanticAnalyzer semanticAnalyzer2 = new SemanticAnalyzer(builder);
-        Analyzer<Result> analyzer2 = Analyzers.with(semanticAnalyzer2);
-        analyzer2.init();
-        for (String[] record : TEST_RECORDS_TAGADA) {
-            analyzer2.analyze(record);
-        }
-        analyzer2.end();
 
         // after fixing the issue, the expected category of last column must be "the_name" instead of ""
-        final List<String> EXPECTED_CATEGORIES = Arrays.asList(new String[] { "", SemanticCategoryEnum.LAST_NAME.name(),
-                SemanticCategoryEnum.FIRST_NAME.name(), "", "", "the_name" });
+        final List<String> EXPECTED_CATEGORIES_AFTER_MODIF = Arrays.asList(new String[] { "",
+                SemanticCategoryEnum.LAST_NAME.name(), SemanticCategoryEnum.FIRST_NAME.name(), "", "", "the_name" });
 
-        // Assertion
-        try {
-            for (int i = 0; i < EXPECTED_CATEGORIES.size(); i++) {
-                Result result = analyzer2.getResult().get(i);
+        testSemanticAnalyzer(TEST_RECORDS_TAGADA, null, EXPECTED_CATEGORIES_AFTER_MODIF);
 
-                if (result.exist(SemanticType.class)) {
-                    final SemanticType semanticType = result.get(SemanticType.class);
-                    final String suggestedCategory = semanticType.getSuggestedCategory();
+        CategoryRegistryManager.getInstance().removeCustomDictionaryHolder(tenantID);
+    }
 
-                    assertEquals("Unexpected Category.", EXPECTED_CATEGORIES.get(i), suggestedCategory);
-                }
+    private void testSemanticAnalyzer(List<String[]> testRecords, List<String> testMetadata, List<String> expectedCategories) {
+        SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(builder);
+
+        Analyzer<Result> analyzer = Analyzers.with(semanticAnalyzer);
+
+        analyzer.init();
+        if (testMetadata != null) {
+            semanticAnalyzer.setMetadata(Metadata.HEADER_NAME, testMetadata);
+        }
+
+        for (String[] record : testRecords) {
+            analyzer.analyze(record);
+        }
+        analyzer.end();
+
+        List<Result> results = analyzer.getResult();
+        for (int i = 0; i < expectedCategories.size(); i++) {
+            Result result = results.get(i);
+
+            if (result.exist(SemanticType.class)) {
+                final SemanticType semanticType = result.get(SemanticType.class);
+                final String suggestedCategory = semanticType.getSuggestedCategory();
+                assertEquals("Unexpected Category.", expectedCategories.get(i), suggestedCategory);
             }
-        } finally {
-            CategoryRegistryManager.getInstance().removeCustomDictionaryHolder(tenantID);
         }
     }
 
