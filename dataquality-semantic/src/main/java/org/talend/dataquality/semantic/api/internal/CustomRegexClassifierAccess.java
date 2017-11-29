@@ -1,10 +1,8 @@
 package org.talend.dataquality.semantic.api.internal;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
@@ -13,9 +11,10 @@ import org.talend.dataquality.semantic.classifier.ISubCategory;
 import org.talend.dataquality.semantic.classifier.custom.UserDefinedCategory;
 import org.talend.dataquality.semantic.classifier.custom.UserDefinedClassifier;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Low level API for operations on regex file.
@@ -45,6 +44,9 @@ public class CustomRegexClassifierAccess {
 
     public CustomRegexClassifierAccess(String regexFilePath) {
         regExFile = new File(regexFilePath);
+        if (!regExFile.exists()) {
+            writeRegExs(new ArrayList<>());
+        }
     }
 
     /**
