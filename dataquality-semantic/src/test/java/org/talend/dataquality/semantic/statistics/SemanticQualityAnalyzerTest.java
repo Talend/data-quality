@@ -26,7 +26,10 @@ import org.talend.dataquality.common.inference.Analyzers.Result;
 import org.talend.dataquality.common.inference.ValueQualityStatistics;
 import org.talend.dataquality.semantic.CategoryRegistryManagerAbstract;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
+import org.talend.dataquality.semantic.api.CustomDictionaryHolder;
 import org.talend.dataquality.semantic.api.DictionaryUtils;
+import org.talend.dataquality.semantic.broadcast.TdqCategories;
+import org.talend.dataquality.semantic.broadcast.TdqCategoriesFactory;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.index.ClassPathDirectory;
 import org.talend.dataquality.semantic.index.DictionarySearcher;
@@ -179,8 +182,17 @@ public class SemanticQualityAnalyzerTest extends CategoryRegistryManagerAbstract
         long[][] expectedCount = new long[][] { new long[] { 1, 0, 0 } };
         testAnalysis(Collections.singletonList(new String[] { "Berulle" }),
                 new String[] { SemanticCategoryEnum.FR_COMMUNE.getId() }, expectedCount, expectedCount);
-        CategoryRegistryManager.getInstance().getCategoryMetadataById(SemanticCategoryEnum.FR_COMMUNE.getTechnicalId())
-                .setDeleted(true);
+
+        TdqCategories tdqCategories = TdqCategoriesFactory.createTdqCategories();
+        builder = CategoryRecognizerBuilder.newBuilder().lucene()//
+                .metadata(tdqCategories.getCategoryMetadata().getMetadata())//
+                .ddDirectory(tdqCategories.getDictionary().asDirectory())//
+                .kwDirectory(tdqCategories.getKeyword().asDirectory()) //
+                .regexClassifier(tdqCategories.getRegex().getRegexClassifier());
+        CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder();
+
+        DQCategory category = holder.getCategoryMetadataById(SemanticCategoryEnum.FR_COMMUNE.getTechnicalId());
+        holder.deleteCategory(category);
         testAnalysis(Collections.singletonList(new String[] { "Berulle" }), new String[] { StringUtils.EMPTY }, expectedCount,
                 expectedCount);
 

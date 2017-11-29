@@ -80,7 +80,7 @@ public class TdqCategoriesFactoryTest {
         newDoc.setCategory(categoryClone);
         newDoc.setId("the_doc_id");
         newDoc.setValues(new HashSet<>(Arrays.asList("true", "false")));
-        holder.addDataDictDocument(Collections.singletonList(newDoc));
+        holder.addDataDictDocuments(Collections.singletonList(newDoc));
 
         TdqCategories tdqCategories = TdqCategoriesFactory.createTdqCategories();
         CategoryRecognizerBuilder builderOnCluster = CategoryRecognizerBuilder.newBuilder().lucene()//
