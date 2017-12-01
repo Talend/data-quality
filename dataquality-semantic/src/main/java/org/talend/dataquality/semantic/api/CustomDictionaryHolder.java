@@ -247,7 +247,7 @@ public class CustomDictionaryHolder {
      *
      * @param category
      */
-    public void deleteCategory(DQCategory category) throws IOException {
+    public void deleteCategory(DQCategory category) {
         category.setDeleted(true);
         ensureMetadataIndexAccess();
         String categoryId = category.getId();
@@ -291,7 +291,7 @@ public class CustomDictionaryHolder {
      *
      * @param documents
      */
-    public void updateDataDictDocuments(List<DQDocument> documents) throws IOException {
+    public void updateDataDictDocuments(List<DQDocument> documents) {
         ensureDataDictIndexAccess();
         operationDataDictDocuments(documents, customDataDictIndexAccess::insertOrUpdateDocument);
     }
@@ -301,7 +301,7 @@ public class CustomDictionaryHolder {
      *
      * @param documents
      */
-    public void addDataDictDocuments(List<DQDocument> documents) throws IOException {
+    public void addDataDictDocuments(List<DQDocument> documents) {
         ensureDataDictIndexAccess();
         operationDataDictDocuments(documents, customDataDictIndexAccess::createDocument);
     }
@@ -311,7 +311,7 @@ public class CustomDictionaryHolder {
      *
      * @param documents
      */
-    public void deleteDataDictDocuments(List<DQDocument> documents) throws IOException {
+    public void deleteDataDictDocuments(List<DQDocument> documents) {
         ensureDataDictIndexAccess();
         operationDataDictDocuments(documents, customDataDictIndexAccess::deleteDocument);
     }
@@ -497,7 +497,7 @@ public class CustomDictionaryHolder {
     /**
      * Things to be done before receiving the republish events.
      */
-    public void beforeRepublish() throws IOException {
+    public void beforeRepublish() {
         LOGGER.debug("Prepare publication folder");
         ensureRepublishMetadataIndexAccess();
         for (DQCategory category : CategoryRegistryManager.getInstance().getSharedCategoryMetadata().values()) {
@@ -512,7 +512,7 @@ public class CustomDictionaryHolder {
      * @param documents
      * @throws IOException
      */
-    public void republishDataDictDocuments(List<DQDocument> documents) throws IOException {
+    public void republishDataDictDocuments(List<DQDocument> documents) {
         ensureRepublishDataDictIndexAccess();
         customRepublishDataDictIndexAccess.createDocument(documents);
     }
