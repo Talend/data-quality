@@ -565,8 +565,10 @@ public class CustomDictionaryHolder {
 
             File backup = new File(productionIndexes.getPath() + ".old");
             if (!backup.exists()) {
-                LOGGER.info("[Post Republish] backup prod");
-                FileUtils.copyDirectory(productionIndexes, backup);
+                if (productionIndexes.exists()) {
+                    LOGGER.info("[Post Republish] backup prod");
+                    FileUtils.copyDirectory(productionIndexes, backup);
+                }
                 LOGGER.info("[Post Republish] insert staging directory into prod");
                 File metadataFolder = new File(stagingIndexes.getAbsolutePath() + File.separator + METADATA_SUBFOLDER_NAME);
                 if (metadataFolder.exists()) {
