@@ -12,6 +12,15 @@
 // ============================================================================
 package org.talend.dataquality.semantic.statistics;
 
+import static org.junit.Assert.assertEquals;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.common.inference.Analyzer;
@@ -29,15 +38,6 @@ import org.talend.dataquality.semantic.model.DQRegEx;
 import org.talend.dataquality.semantic.model.DQValidator;
 import org.talend.dataquality.semantic.model.MainCategory;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
 
 public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
 
@@ -370,6 +370,68 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
             return suggestedCategory;
         }
         return null;
+    }
+
+    @Test
+    public void testRefreshIndex_TDQ14562() {
+        final String tenantID = "t_tdq14562";
+        CategoryRegistryManager.setLocalRegistryPath("target/test_crm");
+        CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder(tenantID);
+        builder.tenantID(tenantID);
+
+        // Run the analysis for a first time
+        SemanticAnalyzer semanticAnalyzer1 = new SemanticAnalyzer(builder);
+        Analyzer<Result> analyzer1 = Analyzers.with(semanticAnalyzer1);
+        analyzer1.init();
+        for (String[] record : TEST_RECORDS_TAGADA) {
+            analyzer1.analyze(record);
+        }
+        analyzer1.end();
+
+        // Create a new category
+        DQValidator dqValidator = new DQValidator();
+        dqValidator.setPatternString("^(true|false)$");
+        DQRegEx dqRegEx = new DQRegEx();
+        dqRegEx.setMainCategory(MainCategory.Alpha);
+        dqRegEx.setValidator(dqValidator);
+        DQCategory dqCat = new DQCategory("the_id");
+        dqCat.setName("the_name");
+        dqCat.setLabel("the_label");
+        dqCat.setDescription("the_description");
+        dqCat.setRegEx(dqRegEx);
+        dqCat.setType(CategoryType.REGEX);
+        dqCat.setCompleteness(Boolean.TRUE);
+        dqCat.setModified(Boolean.TRUE);
+        holder.updateCategory(dqCat);
+
+        // Run the analysis for a second time
+        SemanticAnalyzer semanticAnalyzer2 = new SemanticAnalyzer(builder);
+        Analyzer<Result> analyzer2 = Analyzers.with(semanticAnalyzer2);
+        analyzer2.init();
+        for (String[] record : TEST_RECORDS_TAGADA) {
+            analyzer2.analyze(record);
+        }
+        analyzer2.end();
+
+        // FIXME after fixing the issue, the expected category of last column must be "the_name" instead of ""
+        final List<String> EXPECTED_CATEGORIES = Arrays.asList(
+                new String[] { "", SemanticCategoryEnum.LAST_NAME.name(), SemanticCategoryEnum.FIRST_NAME.name(), "", "", "" });
+
+        // Assertion
+        try {
+            for (int i = 0; i < EXPECTED_CATEGORIES.size(); i++) {
+                Result result = analyzer2.getResult().get(i);
+
+                if (result.exist(SemanticType.class)) {
+                    final SemanticType semanticType = result.get(SemanticType.class);
+                    final String suggestedCategory = semanticType.getSuggestedCategory();
+
+                    assertEquals("Unexpected Category.", EXPECTED_CATEGORIES.get(i), suggestedCategory);
+                }
+            }
+        } finally {
+            CategoryRegistryManager.getInstance().removeCustomDictionaryHolder(tenantID);
+        }
     }
 
 }
