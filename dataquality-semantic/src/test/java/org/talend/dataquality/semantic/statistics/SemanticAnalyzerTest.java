@@ -220,16 +220,17 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
         SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(builder);
 
         semanticAnalyzer.setLimit(0);
-        assertEquals("Unexpected Category.", SemanticCategoryEnum.COUNTRY.getId(), getSuggestedCategorys(semanticAnalyzer));
+
+        assertEquals("Unexpected Category.", SemanticCategoryEnum.COUNTRY.getId(), getSuggestedCategories(semanticAnalyzer));
 
         semanticAnalyzer.setLimit(1);
-        assertEquals("Unexpected Category.", SemanticCategoryEnum.ANIMAL.getId(), getSuggestedCategorys(semanticAnalyzer));
+        assertEquals("Unexpected Category.", SemanticCategoryEnum.ANIMAL.getId(), getSuggestedCategories(semanticAnalyzer));
 
         semanticAnalyzer.setLimit(3);
-        assertEquals("Unexpected Category.", SemanticCategoryEnum.COUNTRY.getId(), getSuggestedCategorys(semanticAnalyzer));
+        assertEquals("Unexpected Category.", SemanticCategoryEnum.COUNTRY.getId(), getSuggestedCategories(semanticAnalyzer));
     }
 
-    private String getSuggestedCategorys(SemanticAnalyzer semanticAnalyzer) {
+    private String getSuggestedCategories(SemanticAnalyzer semanticAnalyzer) {
         Analyzer<Result> analyzer = Analyzers.with(semanticAnalyzer);
         analyzer.init();
         for (String[] record : TEST_RECORDS) {
