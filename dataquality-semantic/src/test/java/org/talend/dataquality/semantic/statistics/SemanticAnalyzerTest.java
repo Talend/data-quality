@@ -402,7 +402,7 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
         dqCat.setType(CategoryType.REGEX);
         dqCat.setCompleteness(Boolean.TRUE);
         dqCat.setModified(Boolean.TRUE);
-        holder.updateCategory(dqCat);
+        holder.createCategory(dqCat);
 
         // Run the analysis for a second time
         SemanticAnalyzer semanticAnalyzer2 = new SemanticAnalyzer(builder);
@@ -413,9 +413,9 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
         }
         analyzer2.end();
 
-        // FIXME after fixing the issue, the expected category of last column must be "the_name" instead of ""
-        final List<String> EXPECTED_CATEGORIES = Arrays.asList(
-                new String[] { "", SemanticCategoryEnum.LAST_NAME.name(), SemanticCategoryEnum.FIRST_NAME.name(), "", "", "" });
+        // after fixing the issue, the expected category of last column must be "the_name" instead of ""
+        final List<String> EXPECTED_CATEGORIES = Arrays.asList(new String[] { "", SemanticCategoryEnum.LAST_NAME.name(),
+                SemanticCategoryEnum.FIRST_NAME.name(), "", "", "the_name" });
 
         // Assertion
         try {

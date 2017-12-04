@@ -17,7 +17,6 @@ import java.net.URISyntaxException;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.apache.lucene.store.AlreadyClosedException;
 import org.apache.lucene.store.Directory;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.classifier.custom.UserDefinedClassifier;
@@ -125,6 +124,11 @@ public class CategoryRecognizerBuilder {
             LuceneIndex keyword = getKeywordIndex();
             UserDefinedClassifier regex = getRegexClassifier();
             constituents = new DictionaryConstituents(meta, sharedDataDict, customDataDict, keyword, regex);
+        } else {
+            // update existing instance
+            constituents.setMetadata(getCategoryMetadata());
+            constituents.getCustomDataDict().initIndex();
+            constituents.setRegexClassifier(getRegexClassifier());
         }
         return constituents;
     }
@@ -194,17 +198,5 @@ public class CategoryRecognizerBuilder {
 
     public Mode getMode() {
         return mode;
-    }
-
-    public void initIndex() {
-        if (customDataDictIndex != null) {
-            try {
-                customDataDictIndex.initIndex();
-            } catch (AlreadyClosedException e) {
-                customDataDictIndex = null;
-                customDataDictDirectory = null;
-                getCustomDataDictIndex();
-            }
-        }
     }
 }
