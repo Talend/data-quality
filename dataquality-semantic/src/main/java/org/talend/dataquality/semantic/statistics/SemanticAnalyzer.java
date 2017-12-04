@@ -25,6 +25,7 @@ import org.apache.log4j.Logger;
 import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.Metadata;
 import org.talend.dataquality.common.inference.ResizableList;
+import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.exception.DQSemanticRuntimeException;
 import org.talend.dataquality.semantic.recognizer.CategoryFrequency;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizer;
@@ -88,9 +89,8 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
      * be taken into account for a weight of 0.1
      */
     public SemanticAnalyzer(CategoryRecognizerBuilder builder, int limit, float weight) {
+        CategoryRegistryManager.getInstance().reloadCategoriesFromRegistry();
         this.constituents = builder.getDictionaryConstituents();
-        LOGGER.error("metadata count: " + this.constituents.getMetadata().size());
-
         this.limit = limit;
         this.weight = weight;
         metadataMap = new HashMap<>();

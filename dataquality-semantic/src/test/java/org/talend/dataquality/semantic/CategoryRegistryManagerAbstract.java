@@ -12,7 +12,9 @@
 // ============================================================================
 package org.talend.dataquality.semantic;
 
+import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 
@@ -20,13 +22,13 @@ import static org.talend.dataquality.semantic.api.CategoryRegistryManager.DEFAUL
 
 public abstract class CategoryRegistryManagerAbstract {
 
-    @BeforeClass
-    public static void before() {
+    @Before
+    public void before() {
         CategoryRegistryManager.setLocalRegistryPath("target/test_crm" + System.currentTimeMillis());
     }
 
-    @AfterClass
-    public static void after() {
+    @After
+    public void after() {
         CategoryRegistryManager.reset();
         CategoryRegistryManager.getInstance().removeCustomDictionaryHolder(DEFAULT_TENANT_ID);
     }
