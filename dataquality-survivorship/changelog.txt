@@ -1,3 +1,7 @@
+V4.0.1 2017-12-08
+	- TDQ-14481 multi tenant index
+	- TDQ-14308 tRuleSurvivorship fails on DataProc (REST APIs) cluster
+
 V2.1.1 2017-09-11
 	(no change in this version)
 

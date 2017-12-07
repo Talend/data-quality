@@ -1,3 +1,14 @@
+V4.0.1 2017-12-08
+	- TDQ-14062 fuzzy matching on semantic type name
+	- TDQ-14481 multi tenant index
+	- TDQ-14484 broadcast dictionary to cluster
+	- TDQ-14412 fix compound validation for shared AND custom children categories
+	- TDQ-14111 Create new method for DP calling
+	- TDQ-13972 fix empty index case during publish after migration
+	- TDQ-14367 Support multi-tenant lucene index for on-premise apps
+	- TDQ 11439 search similar values
+	- TDQ 13885 change score calculation
+
 V1.7.1 2017-09-11
 	- TDQ-14268 data is not discovered when pure numeric value
 	- TDQ-13885 add a weight on header name when exact matching
