@@ -1,3 +1,6 @@
+V1.6.5 2017-12-07
+	(no change in this version)
+
 V1.6.4 2017-08-29
 	- TDQ-13046 take into account regex changes with tDataprepRun Spark
 	- TDQ-13949 compound category sorting

@@ -1,3 +1,6 @@
+V3.3.5 2017-12-07
+	(no change in this version)
+
 V3.3.4 2017-08-29
 	TDQ-12953 improve FirstNameStandardize class to get an accurate result.
     

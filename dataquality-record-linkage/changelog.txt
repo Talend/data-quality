@@ -1,3 +1,8 @@
+V3.3.5 2017-12-07
+	- TDQ-14229 tMatchGroup-tswoosh multiple pass doesn't get same GID in same group, and lost some items in Configuration Wizard dialog.
+	- TDQ-14296 certain input data cause tMatchGroup t-swoosh+multiple pass+separate output job NPE
+	- TDQ-14333 t-swoosh tMatchGroup: store on disk and Propagate original values both checked, job can not run.
+
 V3.3.4 2017-08-29
 	(no change in this version)
 

@@ -1,3 +1,6 @@
+V1.6.5 2017-12-07
+	- TDQ-14421 Dates such as April 31st or February 30th are considered valid
+
 V1.6.4 2017-08-29
 	(no change in this version)
 
