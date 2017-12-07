@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>org.talend.dataquality</groupId>
 		<artifactId>dataquality-libraries</artifactId>
-		<version>1.6.5-SNAPSHOT</version>
+		<version>1.6.5</version>
 		<relativePath>../dataquality-libraries</relativePath>
 	</parent>
 	<artifactId>dataquality-wordnet</artifactId>

@@ -7,7 +7,7 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>dataquality-libraries</artifactId>
-	<version>1.6.5-SNAPSHOT</version>
+	<version>1.6.5</version>
 	<packaging>pom</packaging>
 	<name>dataquality-libraries</name>
 	<description>Parent pom aggregating other library projects, devops tools</description>
@@ -23,21 +23,21 @@
 
 		<org.talend.daikon.version>0.17.0</org.talend.daikon.version>
 
-		<dataquality.libraries.version>1.6.5-SNAPSHOT</dataquality.libraries.version>
+		<dataquality.libraries.version>1.6.5</dataquality.libraries.version>
 
-		<dataquality.record.linkage.version>3.3.5-SNAPSHOT</dataquality.record.linkage.version>
+		<dataquality.record.linkage.version>3.3.5</dataquality.record.linkage.version>
 
-		<dataquality.sampling.version>2.4.5-SNAPSHOT</dataquality.sampling.version>
+		<dataquality.sampling.version>2.4.5</dataquality.sampling.version>
 
-		<dataquality.standardization.version>3.3.5-SNAPSHOT</dataquality.standardization.version>
+		<dataquality.standardization.version>3.3.5</dataquality.standardization.version>
 
-		<dataquality.wordnet.version>1.2.5-SNAPSHOT</dataquality.wordnet.version>
+		<dataquality.wordnet.version>1.2.5</dataquality.wordnet.version>
 
-		<dataquality.email.version>1.1.5-SNAPSHOT</dataquality.email.version>
+		<dataquality.email.version>1.1.5</dataquality.email.version>
 
-		<dataquality.survivorship.version>2.0.5-SNAPSHOT</dataquality.survivorship.version>
+		<dataquality.survivorship.version>2.0.5</dataquality.survivorship.version>
 
-		<dataquality.converters.version>1.0.5-SNAPSHOT</dataquality.converters.version>
+		<dataquality.converters.version>1.0.5</dataquality.converters.version>
 
 	</properties>
 
