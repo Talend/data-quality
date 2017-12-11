@@ -75,6 +75,7 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
         this(constituents, types, false);
     }
 
+    @Deprecated
     public SemanticQualityAnalyzer(CategoryRecognizerBuilder builder, String[] types, boolean isStoreInvalidValues) {
         this.isStoreInvalidValues = isStoreInvalidValues;
         this.builder = builder;
@@ -82,6 +83,7 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
         setTypes(types);
     }
 
+    @Deprecated
     public SemanticQualityAnalyzer(CategoryRecognizerBuilder builder, String... types) {
         this(builder, types, false);
     }
@@ -287,7 +289,7 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
     @Override
     public Analyzer<ValueQualityStatistics> merge(Analyzer<ValueQualityStatistics> analyzer) {
         int idx = 0;
-        SemanticQualityAnalyzer mergedValueQualityAnalyze = new SemanticQualityAnalyzer(this.builder, getTypes());
+        SemanticQualityAnalyzer mergedValueQualityAnalyze = new SemanticQualityAnalyzer(constituents, getTypes());
         ((ResizableList<ValueQualityStatistics>) mergedValueQualityAnalyze.getResult()).resize(results.size());
         for (ValueQualityStatistics qs : results) {
             ValueQualityStatistics mergedStats = mergedValueQualityAnalyze.getResult().get(idx);

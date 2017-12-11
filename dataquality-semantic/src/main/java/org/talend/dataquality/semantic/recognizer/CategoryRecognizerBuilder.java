@@ -33,15 +33,6 @@ public class CategoryRecognizerBuilder {
 
     private static final Logger LOGGER = Logger.getLogger(CategoryRecognizerBuilder.class);
 
-    public static final String DEFAULT_METADATA_PATH = "/" + CategoryRegistryManager.METADATA_SUBFOLDER_NAME + "/";
-
-    public static final String DEFAULT_DD_PATH = "/" + CategoryRegistryManager.DICTIONARY_SUBFOLDER_NAME + "/";
-
-    public static final String DEFAULT_KW_PATH = "/" + CategoryRegistryManager.KEYWORD_SUBFOLDER_NAME + "/";
-
-    public static final String DEFAULT_RE_PATH = "/" + CategoryRegistryManager.REGEX_SUBFOLDER_NAME + "/"
-            + CategoryRegistryManager.REGEX_CATEGRIZER_FILE_NAME;
-
     private Mode mode;
 
     private LuceneIndex sharedDataDictIndex;

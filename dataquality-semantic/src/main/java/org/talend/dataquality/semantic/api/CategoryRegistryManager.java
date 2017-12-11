@@ -44,8 +44,6 @@ import org.talend.dataquality.semantic.index.DictionarySearchMode;
 import org.talend.dataquality.semantic.index.LuceneIndex;
 import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
-import org.talend.dataquality.semantic.recognizer.CategoryRecognizer;
-import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
 
 /**
  * Singleton class providing API for local category registry management.
@@ -86,6 +84,14 @@ public class CategoryRegistryManager {
     public static final String REPUBLISH_FOLDER_NAME = "republish";
 
     public static final String DEFAULT_TENANT_ID = "t_default";
+
+    public static final String DEFAULT_METADATA_PATH = "/" + METADATA_SUBFOLDER_NAME + "/";
+
+    public static final String DEFAULT_DD_PATH = "/" + DICTIONARY_SUBFOLDER_NAME + "/";
+
+    public static final String DEFAULT_KW_PATH = "/" + KEYWORD_SUBFOLDER_NAME + "/";
+
+    public static final String DEFAULT_RE_PATH = "/" + REGEX_SUBFOLDER_NAME + "/" + REGEX_CATEGRIZER_FILE_NAME;
 
     private static final Logger LOGGER = Logger.getLogger(CategoryRegistryManager.class);
 
@@ -218,7 +224,7 @@ public class CategoryRegistryManager {
     private void loadBaseRegex(final File regexRegistryFile) throws IOException {
         if (!regexRegistryFile.exists()) {
             // load provided RE into registry
-            InputStream is = CategoryRecognizer.class.getResourceAsStream(CategoryRecognizerBuilder.DEFAULT_RE_PATH);
+            InputStream is = this.getClass().getResourceAsStream(DEFAULT_RE_PATH);
             StringBuilder sb = new StringBuilder();
             for (String line : IOUtils.readLines(is)) {
                 sb.append(line);
@@ -412,7 +418,7 @@ public class CategoryRegistryManager {
         if (usingLocalCategoryRegistry) {
             return Paths.get(localRegistryPath, SHARED_FOLDER_NAME, PRODUCTION_FOLDER_NAME, METADATA_SUBFOLDER_NAME).toUri();
         } else {
-            return CategoryRecognizerBuilder.class.getResource(CategoryRecognizerBuilder.DEFAULT_METADATA_PATH).toURI();
+            return this.getClass().getResource(DEFAULT_METADATA_PATH).toURI();
         }
     }
 
@@ -423,7 +429,7 @@ public class CategoryRegistryManager {
         if (usingLocalCategoryRegistry) {
             return Paths.get(localRegistryPath, SHARED_FOLDER_NAME, PRODUCTION_FOLDER_NAME, DICTIONARY_SUBFOLDER_NAME).toUri();
         } else {
-            return CategoryRecognizerBuilder.class.getResource(CategoryRecognizerBuilder.DEFAULT_DD_PATH).toURI();
+            return this.getClass().getResource(DEFAULT_DD_PATH).toURI();
         }
     }
 
@@ -434,7 +440,7 @@ public class CategoryRegistryManager {
         if (usingLocalCategoryRegistry) {
             return Paths.get(localRegistryPath, SHARED_FOLDER_NAME, PRODUCTION_FOLDER_NAME, KEYWORD_SUBFOLDER_NAME).toUri();
         } else {
-            return CategoryRecognizerBuilder.class.getResource(CategoryRecognizerBuilder.DEFAULT_KW_PATH).toURI();
+            return this.getClass().getResource(DEFAULT_KW_PATH).toURI();
         }
     }
 
@@ -446,7 +452,7 @@ public class CategoryRegistryManager {
             return Paths.get(localRegistryPath, SHARED_FOLDER_NAME, PRODUCTION_FOLDER_NAME, REGEX_SUBFOLDER_NAME,
                     REGEX_CATEGRIZER_FILE_NAME).toUri();
         } else {
-            return CategoryRecognizerBuilder.class.getResource(CategoryRecognizerBuilder.DEFAULT_RE_PATH).toURI();
+            return this.getClass().getResource(DEFAULT_RE_PATH).toURI();
         }
     }
 

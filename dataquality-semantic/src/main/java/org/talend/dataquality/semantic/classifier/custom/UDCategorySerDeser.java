@@ -23,7 +23,7 @@ import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
+import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -59,12 +59,12 @@ public class UDCategorySerDeser {
      */
     static UserDefinedClassifier readJsonFile() throws IOException {
         try {
-            InputStream inputStream = UDCategorySerDeser.class.getResourceAsStream(CategoryRecognizerBuilder.DEFAULT_RE_PATH);
+            InputStream inputStream = UDCategorySerDeser.class.getResourceAsStream(CategoryRegistryManager.DEFAULT_RE_PATH);
             return readJsonFile(inputStream);
         } catch (IOException e) {
             LOGGER.warn(e.getMessage(), e);
             URL url = new URL("platform:/plugin/" + BUNDLE_NAME //$NON-NLS-1$
-                    + CategoryRecognizerBuilder.DEFAULT_RE_PATH); // $NON-NLS-1$
+                    + CategoryRegistryManager.DEFAULT_RE_PATH); // $NON-NLS-1$
             InputStream inputStream = url.openConnection().getInputStream();
             return readJsonFile(inputStream);
         }
