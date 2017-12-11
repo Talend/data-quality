@@ -21,6 +21,13 @@ import org.apache.lucene.util.Version;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import org.talend.daikon.multitenant.context.TenancyContext;
+import org.talend.daikon.multitenant.context.TenancyContextHolder;
+import org.talend.daikon.multitenant.provider.DefaultTenant;
 import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.Analyzers;
 import org.talend.dataquality.common.inference.Analyzers.Result;
@@ -36,8 +43,11 @@ import org.talend.dataquality.semantic.index.ClassPathDirectory;
 import org.talend.dataquality.semantic.index.DictionarySearcher;
 import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
+import org.talend.dataquality.semantic.model.DQDocument;
 import org.talend.dataquality.semantic.recognizer.CategoryFrequency;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
+import org.talend.dataquality.semantic.recognizer.DictionaryConstituents;
+import org.talend.dataquality.semantic.recognizer.DictionaryConstituentsProviders;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -52,11 +62,13 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.when;
+import static org.powermock.api.mockito.PowerMockito.mock;
 import static org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder.DEFAULT_DD_PATH;
 
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({ TenancyContextHolder.class })
 public class SemanticQualityAnalyzerTest extends CategoryRegistryManagerAbstract {
-
-    public static final CategoryRegistryManager crm = CategoryRegistryManager.getInstance();
 
     private static final List<String[]> RECORDS_CRM_CUST = getRecords("crm_cust.csv");
 
@@ -94,7 +106,7 @@ public class SemanticQualityAnalyzerTest extends CategoryRegistryManagerAbstract
     private static final long[][] EXPECTED_VALIDITY_COUNT_PHONE = new long[][] { //
             new long[] { 11, 0, 0 } };
 
-    private static CategoryRecognizerBuilder builder;
+    private static DictionaryConstituents dictionaryConstituents;
 
     private final String[] EXPECTED_CATEGORIES_DICT = new String[] { //
             "", //
@@ -137,31 +149,40 @@ public class SemanticQualityAnalyzerTest extends CategoryRegistryManagerAbstract
         return records;
     }
 
-    @Before
-    public void setupBuilder() throws URISyntaxException {
-        builder = CategoryRecognizerBuilder.newBuilder().lucene();
+    public void mockWithTenant(String tenantID) {
+        PowerMockito.mockStatic(TenancyContextHolder.class);
+        TenancyContextHolder holder = mock(TenancyContextHolder.class);
+        TenancyContext tenancyContext = mock(TenancyContext.class);
+        DefaultTenant tenant = new DefaultTenant(tenantID, null);
+        when(holder.getContext()).thenReturn(tenancyContext);
+        when(tenancyContext.getTenant()).thenReturn(tenant);
+        dictionaryConstituents = new DictionaryConstituentsProviders.SingletonProvider().get();
     }
 
     @Test
     public void testSemanticQualityAnalyzerWithDictionaryCategory() {
+        mockWithTenant("testSemanticQualityAnalyzerWithDictionaryCategory");
         testAnalysis(RECORDS_CRM_CUST, EXPECTED_CATEGORIES_DICT, EXPECTED_VALIDITY_COUNT_DICT, EXPECTED_VALIDITY_COUNT_DICT);
     }
 
     @Test
     public void testSemanticQualityAnalyzerWithRegexCategory() {
+        mockWithTenant("testSemanticQualityAnalyzerWithRegexCategory");
         testAnalysis(RECORDS_CREDIT_CARDS, EXPECTED_CATEGORIES_REGEX, EXPECTED_VALIDITY_COUNT_REGEX_FOR_DISCOVERY,
                 EXPECTED_VALIDITY_COUNT_REGEX_FOR_VALIDATION);
     }
 
     @Test
     public void testSemanticQualityAnalyzerWithPhoneCategory() {
+        mockWithTenant("testSemanticQualityAnalyzerWithPhoneCategory");
         testAnalysis(RECORDS_PHONES, new String[] { "PHONE" }, EXPECTED_VALIDITY_COUNT_PHONE, EXPECTED_VALIDITY_COUNT_PHONE);
     }
 
     @Test
     public void testMultiTenantIndex() throws IOException, URISyntaxException {
+        mockWithTenant("testMultiTenantIndex");
         long[][] expectedCount = new long[][] { new long[] { 1, 0, 0 } };
-        initTenantIndex(true);
+        initTenantIndex(false);
         testAnalysis(Collections.singletonList(new String[] { "CDG" }),
                 new String[] { SemanticCategoryEnum.AIRPORT_CODE.getId() }, expectedCount, expectedCount);
         testAnalysis(Collections.singletonList(new String[] { "AAAA" }),
@@ -170,8 +191,9 @@ public class SemanticQualityAnalyzerTest extends CategoryRegistryManagerAbstract
 
     @Test
     public void testMultiTenantIndexWithoutExistingValues() throws IOException, URISyntaxException {
+        mockWithTenant("testMultiTenantIndexWithoutExistingValues");
         long[][] expectedCount = new long[][] { new long[] { 1, 0, 0 } };
-        initTenantIndex(false);
+        initTenantIndex(true);
         testAnalysis(Collections.singletonList(new String[] { "CDG" }), new String[] { StringUtils.EMPTY }, expectedCount,
                 expectedCount);
         testAnalysis(Collections.singletonList(new String[] { "AAAA" }),
@@ -180,20 +202,15 @@ public class SemanticQualityAnalyzerTest extends CategoryRegistryManagerAbstract
 
     @Test
     public void testMultiTenantIndexWithDeletedCategory() throws IOException, URISyntaxException {
+        mockWithTenant("testMultiTenantIndexWithDeletedCategory");
         long[][] expectedCount = new long[][] { new long[] { 1, 0, 0 } };
         testAnalysis(Collections.singletonList(new String[] { "Berulle" }),
                 new String[] { SemanticCategoryEnum.FR_COMMUNE.getId() }, expectedCount, expectedCount);
 
-        TdqCategories tdqCategories = TdqCategoriesFactory.createTdqCategories();
-        builder = CategoryRecognizerBuilder.newBuilder().lucene()//
-                .metadata(tdqCategories.getCategoryMetadata().getMetadata())//
-                .ddDirectory(tdqCategories.getDictionary().asDirectory())//
-                .kwDirectory(tdqCategories.getKeyword().asDirectory()) //
-                .regexClassifier(tdqCategories.getRegex().getRegexClassifier());
         CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder();
-
         DQCategory category = holder.getCategoryMetadataById(SemanticCategoryEnum.FR_COMMUNE.getTechnicalId());
         holder.deleteCategory(category);
+        dictionaryConstituents = new DictionaryConstituentsProviders.SingletonProvider().get();
         testAnalysis(Collections.singletonList(new String[] { "Berulle" }), new String[] { StringUtils.EMPTY }, expectedCount,
                 expectedCount);
 
@@ -201,9 +218,10 @@ public class SemanticQualityAnalyzerTest extends CategoryRegistryManagerAbstract
 
     @Test
     public void testCompoundCategoryWithSharedChildrenAndCustomChildren() throws IOException, URISyntaxException {
+        mockWithTenant("testCompoundCategoryWithSharedChildrenAndCustomChildren");
         long[][] expectedCount = new long[][] { new long[] { 2, 0, 0 } };
         initCompound();
-        initTenantIndex(false);
+        initTenantIndex(true);
         testAnalysis(Arrays.asList(new String[] { "AAAA" }, new String[] { "Lagunillas" }), new String[] { "COMPOUND_NAME" },
                 expectedCount, expectedCount);
     }
@@ -211,8 +229,8 @@ public class SemanticQualityAnalyzerTest extends CategoryRegistryManagerAbstract
     public void testAnalysis(List<String[]> records, String[] expectedCategories, long[][] expectedValidityCountForDiscovery,
             long[][] expectedValidityCountForValidation) {
         Analyzer<Result> analyzers = Analyzers.with(//
-                new SemanticAnalyzer(builder), //
-                new SemanticQualityAnalyzer(builder, expectedCategories)//
+                new SemanticAnalyzer(dictionaryConstituents), //
+                new SemanticQualityAnalyzer(dictionaryConstituents, expectedCategories)//
         );
 
         for (String[] record : records) {
@@ -237,7 +255,7 @@ public class SemanticQualityAnalyzerTest extends CategoryRegistryManagerAbstract
             for (CategoryFrequency cf : stats.getCategoryToCount().keySet()) {
                 if (expectedCategories[i].equals(cf.getCategoryId())) {
                     // System.out.println(stats.getCategoryToCount().get(cf));
-                    DQCategory cat = crm.getCategoryMetadataByName(cf.getCategoryId());
+                    DQCategory cat = CategoryRegistryManager.getInstance().getCategoryMetadataByName(cf.getCategoryId());
                     if (cat != null && cat.getCompleteness()) {
                         assertEquals("Unexpected SemanticType occurence on column " + i, expectedValidityCountForDiscovery[i][0],
                                 cf.getCount());
@@ -261,44 +279,40 @@ public class SemanticQualityAnalyzerTest extends CategoryRegistryManagerAbstract
         }
     }
 
-    public void initTenantIndex(boolean addExistingValues) throws IOException, URISyntaxException {
+    public void initTenantIndex(boolean removeCDG) throws IOException, URISyntaxException {
 
-        Map<String, DQCategory> metadata = builder.getCategoryMetadata();
+        Map<String, DQCategory> metadata = CategoryRegistryManager.getInstance().getCustomDictionaryHolder().getMetadata();
 
-        metadata.get(SemanticCategoryEnum.AIRPORT_CODE.getTechnicalId()).setModified(true);
+        DQCategory airportCategory = metadata.get(SemanticCategoryEnum.AIRPORT_CODE.getTechnicalId());
 
-        IndexSearcher sharedLuceneDocumentSearcher = new IndexSearcher(DirectoryReader
-                .open(ClassPathDirectory.open(CategoryRecognizerBuilder.class.getResource(DEFAULT_DD_PATH).toURI())));
+        if (removeCDG) {
+            DQDocument cdgDoc = new DQDocument();
+            cdgDoc.setId("5836fb7742b02a69874f8149");
+            cdgDoc.setCategory(airportCategory);
+            List<DQDocument> removeList = new ArrayList<>();
+            removeList.add(cdgDoc);
+            CategoryRegistryManager.getInstance().getCustomDictionaryHolder().deleteDataDictDocuments(removeList);
+        }
 
-        Directory ramDirectory = new RAMDirectory();
-        IndexWriterConfig writerConfig = new IndexWriterConfig(Version.LATEST, new StandardAnalyzer(CharArraySet.EMPTY_SET));
-        IndexWriter writer = new IndexWriter(ramDirectory, writerConfig);
+        DQDocument doc1 = new DQDocument();
+        doc1.setId("ID_DOCUMENT");
+        doc1.setCategory(airportCategory);
+        doc1.setValues(new HashSet<String>(Arrays.asList("AAAA", "BBBB")));
+        DQDocument doc2 = new DQDocument();
+        doc2.setId("ID_DOCUMENT2");
+        doc2.setCategory(airportCategory);
+        doc2.setValues(new HashSet<String>(Arrays.asList("CCCC", "DDDD")));
 
-        final Term searchTerm = new Term(DictionarySearcher.F_CATID, SemanticCategoryEnum.AIRPORT_CODE.getTechnicalId());
+        List<DQDocument> addList = new ArrayList<>();
+        addList.add(doc1);
+        addList.add(doc2);
+        CategoryRegistryManager.getInstance().getCustomDictionaryHolder().addDataDictDocuments(addList);
 
-        if (addExistingValues)
-            for (ScoreDoc d : sharedLuceneDocumentSearcher.search(new TermQuery(searchTerm), Integer.MAX_VALUE).scoreDocs) {
-                Document doc = sharedLuceneDocumentSearcher.getIndexReader().document(d.doc);
-                for (String value : doc.getValues(DictionarySearcher.F_RAW)) {
-                    List<String> tokens = DictionarySearcher.getTokensFromAnalyzer(value);
-                    doc.add(new StringField(DictionarySearcher.F_SYNTERM, StringUtils.join(tokens, ' '), Field.Store.NO));
-                }
-                writer.addDocument(doc);
-            }
-
-        writer.addDocument(DictionaryUtils.generateDocument("ID_DOCUMENT", SemanticCategoryEnum.AIRPORT_CODE.getTechnicalId(),
-                SemanticCategoryEnum.AIRPORT_CODE.getId(), new HashSet<String>(Arrays.asList("AAAA", "BBBB"))));
-        writer.addDocument(DictionaryUtils.generateDocument("ID_DOCUMENT2", SemanticCategoryEnum.AIRPORT_CODE.getTechnicalId(),
-                SemanticCategoryEnum.AIRPORT_CODE.getId(), new HashSet<String>(Arrays.asList("CCCC", "DDDD"))));
-
-        writer.commit();
-        writer.close();
-        builder.ddCustomDirectory(ramDirectory).lucene().build();
-
+        dictionaryConstituents = new DictionaryConstituentsProviders.SingletonProvider().get();
     }
 
     public void initCompound() throws IOException, URISyntaxException {
-        Map<String, DQCategory> metadata = builder.getCategoryMetadata();
+        Map<String, DQCategory> metadata = CategoryRegistryManager.getInstance().getSharedCategoryMetadata();
         DQCategory compoundCategory = new DQCategory("COMPOUND_ID");
         compoundCategory.setName("COMPOUND_NAME");
         compoundCategory.setLabel("COMPOUND_LABEL");
@@ -306,13 +320,17 @@ public class SemanticQualityAnalyzerTest extends CategoryRegistryManagerAbstract
         compoundCategory.setModified(true);
         compoundCategory.setType(CategoryType.COMPOUND);
         List<DQCategory> children = new ArrayList<>();
-        children.add(metadata.get(SemanticCategoryEnum.AIRPORT_CODE.getTechnicalId()));
-        children.add(metadata.get(SemanticCategoryEnum.AIRPORT.getTechnicalId()));
+        DQCategory child1 = metadata.get(SemanticCategoryEnum.AIRPORT_CODE.getTechnicalId());
+        child1.setParents(Collections.singletonList(compoundCategory));
+        children.add(child1);
+        DQCategory child2 = metadata.get(SemanticCategoryEnum.AIRPORT.getTechnicalId());
+        child2.setParents(Collections.singletonList(compoundCategory));
+        children.add(child2);
         compoundCategory.setChildren(children);
-        metadata.put("COMPOUND_ID", compoundCategory);
-        metadata.get(SemanticCategoryEnum.AIRPORT_CODE.getTechnicalId()).setParents(Collections.singletonList(compoundCategory));
-        metadata.get(SemanticCategoryEnum.AIRPORT.getTechnicalId()).setParents(Collections.singletonList(compoundCategory));
 
+        CategoryRegistryManager.getInstance().getCustomDictionaryHolder().createCategory(compoundCategory);
+        CategoryRegistryManager.getInstance().getCustomDictionaryHolder().updateCategory(child1);
+        CategoryRegistryManager.getInstance().getCustomDictionaryHolder().updateCategory(child2);
     }
 
 }

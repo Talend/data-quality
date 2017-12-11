@@ -22,14 +22,8 @@ import static org.talend.dataquality.semantic.api.CategoryRegistryManager.DEFAUL
 
 public abstract class CategoryRegistryManagerAbstract {
 
-    @Before
-    public void before() {
+    @BeforeClass
+    public static void before() {
         CategoryRegistryManager.setLocalRegistryPath("target/test_crm" + System.currentTimeMillis());
-    }
-
-    @After
-    public void after() {
-        CategoryRegistryManager.reset();
-        CategoryRegistryManager.getInstance().removeCustomDictionaryHolder(DEFAULT_TENANT_ID);
     }
 }

@@ -177,34 +177,16 @@ public class CategoryRegistryManager {
      * @return the {@link LocalDictionaryCache} corresponding to the default tenant ID.
      */
     public LocalDictionaryCache getDictionaryCache() {
-        return getDictionaryCache(DEFAULT_TENANT_ID);
-    }
-
-    /**
-     * @param tenantID the ID of the tenant
-     * @return the {@link LocalDictionaryCache} corresponding to a given tenant ID.
-     */
-    public LocalDictionaryCache getDictionaryCache(String tenantID) {
-        return getCustomDictionaryHolder(tenantID).getDictionaryCache();
+        return getCustomDictionaryHolder().getDictionaryCache();
     }
 
     /**
      * Reload the category from local registry for a given tenant ID. This method is typically called following category or
      * dictionary enrichments.
-     *
-     * @param tenantID the ID of the tenant
-     */
-    public void reloadCategoriesFromRegistry(String tenantID) {
-        LOGGER.info("Reload categories from local registry.");
-        getCustomDictionaryHolder(tenantID).reloadCategoryMetadata();
-    }
-
-    /**
-     * Reload the category from local registry for the default tenant. This method is typically called following category or
-     * dictionary enrichments.
      */
     public void reloadCategoriesFromRegistry() {
-        reloadCategoriesFromRegistry(DEFAULT_TENANT_ID);
+        LOGGER.info("Reload categories from local registry.");
+        getCustomDictionaryHolder().reloadCategoryMetadata();
     }
 
     private void loadRegisteredCategories() throws IOException, URISyntaxException {
@@ -469,11 +451,16 @@ public class CategoryRegistryManager {
     }
 
     /**
-     * Get CustomDictioanryHolder instance for the given tenant ID.
-     *
-     * @param tenantID the ID of the tenant.
+     * Get CustomDictioanryHolder instance for the default tenant.
      */
-    public synchronized CustomDictionaryHolder getCustomDictionaryHolder(String tenantID) {
+    public CustomDictionaryHolder getCustomDictionaryHolder() {
+        Tenant tenant = TenancyContextHolder.getContext().getTenant();
+        String tenantID;
+        if (tenant != null) {
+            tenantID = tenant.getIdentity().toString();
+        } else {
+            tenantID = DEFAULT_TENANT_ID;
+        }
         CustomDictionaryHolder cdh = customDictionaryHolderMap.get(tenantID);
         if (cdh == null) {
             LOGGER.info("Instantiate CustomDictionaryHolder for [" + tenantID + "]");
@@ -484,34 +471,23 @@ public class CategoryRegistryManager {
     }
 
     /**
-     * Get CustomDictioanryHolder instance for the default tenant.
+     * Remove the CustomDictionaryHolder for a given tenant ID.
      */
-    public CustomDictionaryHolder getCustomDictionaryHolder() {
+    public void removeCustomDictionaryHolder() {
         Tenant tenant = TenancyContextHolder.getContext().getTenant();
         if (tenant != null) {
-            LOGGER.info("Getting CustomDictionaryHolder for " + tenant.getIdentity().toString());
-            return getCustomDictionaryHolder(tenant.getIdentity().toString());
-        } else {
-            return getCustomDictionaryHolder(DEFAULT_TENANT_ID);
-        }
-    }
-
-    /**
-     * Remove the CustomDictionaryHolder for a given tenant ID.
-     *
-     * @param tenantID the ID of the tenant.
-     */
-    public void removeCustomDictionaryHolder(String tenantID) {
-        CustomDictionaryHolder cdh = customDictionaryHolderMap.get(tenantID);
-        if (cdh != null) {
-            cdh.closeDictionaryAccess();
-            File folder = new File(localRegistryPath + File.separator + tenantID);
-            try {
-                FileUtils.deleteDirectory(folder);
-            } catch (IOException e) {
-                LOGGER.error(e.getMessage(), e);
+            String tenantID = tenant.getIdentity().toString();
+            CustomDictionaryHolder cdh = customDictionaryHolderMap.get(tenantID);
+            if (cdh != null) {
+                cdh.closeDictionaryAccess();
+                File folder = new File(localRegistryPath + File.separator + tenantID);
+                try {
+                    FileUtils.deleteDirectory(folder);
+                } catch (IOException e) {
+                    LOGGER.error(e.getMessage(), e);
+                }
+                customDictionaryHolderMap.remove(tenantID);
             }
-            customDictionaryHolderMap.remove(tenantID);
         }
     }
 

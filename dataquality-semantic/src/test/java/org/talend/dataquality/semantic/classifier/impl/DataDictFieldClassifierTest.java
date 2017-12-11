@@ -7,12 +7,16 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.junit.Test;
+import org.talend.dataquality.semantic.CategoryRegistryManagerAbstract;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.classifier.ISubCategoryClassifier;
+import org.talend.dataquality.semantic.index.Index;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.model.ValidationMode;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizer;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
+import org.talend.dataquality.semantic.recognizer.DefaultCategoryRecognizer;
+import org.talend.dataquality.semantic.recognizer.DictionaryConstituents;
 
 public class DataDictFieldClassifierTest {
 
@@ -66,11 +70,11 @@ public class DataDictFieldClassifierTest {
 
     @Test
     public void testValidCategoriesBeverage() throws IOException {
-        CategoryRegistryManager crm = CategoryRegistryManager.getInstance();
-        CategoryRecognizer builder = CategoryRecognizerBuilder.newBuilder().lucene().build();
-        ISubCategoryClassifier ddClassifier = builder.getDataDictFieldClassifier();
+        CategoryRegistryManager.setLocalRegistryPath("target/testValidCategoriesBeverage");
+        Index ddClassifier = CategoryRegistryManager.getInstance().getCustomDictionaryHolder().getDictionaryConstituents()
+                .getSharedDataDict();
 
-        DQCategory category = crm.getCategoryMetadataByName("BEVERAGE");
+        DQCategory category = CategoryRegistryManager.getInstance().getCategoryMetadataByName("BEVERAGE");
         category.setCompleteness(Boolean.TRUE);
 
         for (String input : EXPECTED_VALIDATION_RESULTS_BEVERAGE.keySet()) {
@@ -87,16 +91,17 @@ public class DataDictFieldClassifierTest {
                     ddClassifier.validCategories(input, category, null));
         }
         category.setCompleteness(Boolean.FALSE);
-
     }
 
     @Test
     public void testValidCategoriesWithFrCommune() throws IOException {
-        CategoryRegistryManager crm = CategoryRegistryManager.getInstance();
-        CategoryRecognizer builder = CategoryRecognizerBuilder.newBuilder().lucene().build();
-        ISubCategoryClassifier ddClassifier = builder.getDataDictFieldClassifier();
+        CategoryRegistryManager.reset();
+        CategoryRegistryManager.setUsingLocalCategoryRegistry(false);
+        CategoryRegistryManager.setLocalRegistryPath("target/testValidCategoriesWithFrCommune");
+        Index ddClassifier = CategoryRegistryManager.getInstance().getCustomDictionaryHolder().getDictionaryConstituents()
+                .getSharedDataDict();
 
-        DQCategory category = crm.getCategoryMetadataByName("FR_COMMUNE");
+        DQCategory category = CategoryRegistryManager.getInstance().getCategoryMetadataByName("FR_COMMUNE");
 
         for (String input : EXPECTED_VALIDATION_RESULTS_FR_COMMUNE.keySet()) {
             category.setValidationMode(ValidationMode.SIMPLIFIED);

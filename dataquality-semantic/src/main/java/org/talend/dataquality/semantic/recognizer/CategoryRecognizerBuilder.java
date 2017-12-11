@@ -136,7 +136,7 @@ public class CategoryRecognizerBuilder {
     public Map<String, DQCategory> getCategoryMetadata() {
         if (metadata == null) {
             // always return latest metadata from registry without filling the metadata field
-            return CategoryRegistryManager.getInstance().getCustomDictionaryHolder(tenantID).getMetadata();
+            return CategoryRegistryManager.getInstance().getCustomDictionaryHolder().getMetadata();
         }
         return metadata;
     }
@@ -155,7 +155,7 @@ public class CategoryRecognizerBuilder {
         if (customDataDictIndex == null) {
             if (customDataDictDirectory == null) {
                 // load from t_default tenant
-                Directory dir = CategoryRegistryManager.getInstance().getCustomDictionaryHolder(tenantID).getDataDictDirectory();
+                Directory dir = CategoryRegistryManager.getInstance().getCustomDictionaryHolder().getDataDictDirectory();
                 if (dir != null) {
                     customDataDictIndex = new LuceneIndex(dir, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY);
                 }
@@ -182,7 +182,7 @@ public class CategoryRecognizerBuilder {
 
     private UserDefinedClassifier getRegexClassifier() {
         if (regexClassifier == null) {
-            return CategoryRegistryManager.getInstance().getCustomDictionaryHolder(tenantID).getRegexClassifier();
+            return CategoryRegistryManager.getInstance().getCustomDictionaryHolder().getRegexClassifier();
         }
         return regexClassifier;
     }

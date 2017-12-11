@@ -71,6 +71,10 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
         setTypes(types);
     }
 
+    public SemanticQualityAnalyzer(DictionaryConstituents constituents, String[] types) {
+        this(constituents, types, false);
+    }
+
     public SemanticQualityAnalyzer(CategoryRecognizerBuilder builder, String[] types, boolean isStoreInvalidValues) {
         this.isStoreInvalidValues = isStoreInvalidValues;
         this.builder = builder;
