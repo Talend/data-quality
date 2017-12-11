@@ -1,3 +1,6 @@
+V4.0.1 2017-12-08
+	- TDQ-14481 multi tenant index
+
 V3.4.1 2017-09-11
 	(no change in this version)
 

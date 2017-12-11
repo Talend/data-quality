@@ -1,3 +1,10 @@
+V4.0.1 2017-12-08
+	- TDQ-14481 multi tenant index
+	- TDQ-14484 broadcast dictionary to cluster
+	- TDQ-14367 Support multi-tenant lucene index for on-premise apps
+	- TDQ 11439 search similar values
+	- TDQ 13885 change score calculation
+
 V1.7.1 2017-09-11
 	(no change in this version)
 

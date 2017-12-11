@@ -1,8 +1,14 @@
+v4.0.1 2017-12-08
+	- TDQ-14481 multi tenant index
+	- TDQ-14296 fixed get error GID issue for tmatch group
+	- TDQ 14137 add support for survivorship for columns
+	- TDQ-14229 tMatchGroup-tswoosh multiple pass
+
 V3.4.1 2017-09-12
-    -TDQ-14134 
-    -TDQ-14136
-    -TDQ-14136
-    Add support for survivorship rules for columns 
+	- TDQ-14134 
+	- TDQ-14136
+	- TDQ-14136
+	Add support for survivorship rules for columns 
     
 
 V3.4.0 2017-08-24
