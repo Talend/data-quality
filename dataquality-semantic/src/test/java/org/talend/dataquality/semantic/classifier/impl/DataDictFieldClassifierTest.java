@@ -7,16 +7,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.junit.Test;
-import org.talend.dataquality.semantic.CategoryRegistryManagerAbstract;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
-import org.talend.dataquality.semantic.classifier.ISubCategoryClassifier;
 import org.talend.dataquality.semantic.index.Index;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.model.ValidationMode;
-import org.talend.dataquality.semantic.recognizer.CategoryRecognizer;
-import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
-import org.talend.dataquality.semantic.recognizer.DefaultCategoryRecognizer;
-import org.talend.dataquality.semantic.recognizer.DictionaryConstituents;
 
 public class DataDictFieldClassifierTest {
 

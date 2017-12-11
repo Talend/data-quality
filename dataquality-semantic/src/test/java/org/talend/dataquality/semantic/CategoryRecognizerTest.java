@@ -18,7 +18,9 @@ import org.junit.Test;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.recognizer.CategoryFrequency;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizer;
-import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
+import org.talend.dataquality.semantic.recognizer.DefaultCategoryRecognizer;
+import org.talend.dataquality.semantic.recognizer.DictionaryConstituents;
+import org.talend.dataquality.semantic.recognizer.DictionaryConstituentsProviders;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -244,29 +246,8 @@ public class CategoryRecognizerTest extends CategoryRegistryManagerAbstract {
 
     @Before
     public void init() throws URISyntaxException, IOException {
-        catRecognizer = CategoryRecognizerBuilder.newBuilder().lucene().build();
-    }
-
-    public void testProcess() {
-
-        catRecognizer.prepare();
-
-        for (String data : EXPECTED_CAT_ID.keySet()) {
-
-            System.out.println("-------------------------------");
-            String[] catNames = catRecognizer.process(data);
-            System.out.printf("%-30s  \t  %-20s\n", "[" + data + "]", Arrays.toString(catNames));
-
-            Collection<CategoryFrequency> result = catRecognizer.getResult();
-            for (CategoryFrequency frequencyTableItem : result) {
-
-                System.out.println("frequencyTableItem = " + frequencyTableItem.getCategoryId() + " / "
-                        + frequencyTableItem.getFrequency() + " %");
-
-            }
-
-        }
-
+        DictionaryConstituents dictionaryConstituents = new DictionaryConstituentsProviders.SingletonProvider().get();
+        catRecognizer = new DefaultCategoryRecognizer(dictionaryConstituents);
     }
 
     @Test

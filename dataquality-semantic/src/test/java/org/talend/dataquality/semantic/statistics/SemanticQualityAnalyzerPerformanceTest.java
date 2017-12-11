@@ -26,11 +26,12 @@ import org.talend.dataquality.common.inference.Analyzers.Result;
 import org.talend.dataquality.common.inference.ValueQualityStatistics;
 import org.talend.dataquality.semantic.index.utils.DictionaryGenerationSpec;
 import org.talend.dataquality.semantic.index.utils.SemanticDictionaryGenerator;
-import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
+import org.talend.dataquality.semantic.recognizer.DictionaryConstituents;
+import org.talend.dataquality.semantic.recognizer.DictionaryConstituentsProviders;
 
 public class SemanticQualityAnalyzerPerformanceTest {
 
-    private static CategoryRecognizerBuilder builder;
+    private static DictionaryConstituents dictionaryConstituents;
 
     private static int RECORD_LINES_NUMBER = 500000;
 
@@ -66,7 +67,7 @@ public class SemanticQualityAnalyzerPerformanceTest {
 
     @BeforeClass
     public static void setupBuilder() throws URISyntaxException {
-        builder = CategoryRecognizerBuilder.newBuilder().lucene();
+        dictionaryConstituents = new DictionaryConstituentsProviders.SingletonProvider().get();
     }
 
     @Test
@@ -81,7 +82,7 @@ public class SemanticQualityAnalyzerPerformanceTest {
 
     public void testAnalysis(List<String[]> records, String[] expectedCategories, long[][] expectedValidityCount) {
         Analyzer<Result> analyzers = Analyzers.with(//
-                new SemanticQualityAnalyzer(builder, expectedCategories)//
+                new SemanticQualityAnalyzer(dictionaryConstituents, expectedCategories)//
         );
 
         long time = System.currentTimeMillis();
