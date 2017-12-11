@@ -26,7 +26,7 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.junit.Before;
 import org.junit.Test;
-import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
+import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 
 public class ConcurrentDictionaryAccessTest {
 
@@ -41,7 +41,7 @@ public class ConcurrentDictionaryAccessTest {
 
     private DictionarySearcher newSemanticDictionarySearcher() {
         try {
-            final URI ddPath = this.getClass().getResource(CategoryRecognizerBuilder.DEFAULT_DD_PATH).toURI();
+            final URI ddPath = CategoryRegistryManager.getInstance().getDictionaryURI();
             final DictionarySearcher searcher = new DictionarySearcher(ddPath);
             searcher.setTopDocLimit(20);
             searcher.setSearchMode(DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY);

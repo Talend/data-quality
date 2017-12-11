@@ -18,7 +18,8 @@ import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.Analyzers;
 import org.talend.dataquality.semantic.CategoryRegistryManagerAbstract;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
-import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
+import org.talend.dataquality.semantic.recognizer.DictionaryConstituents;
+import org.talend.dataquality.semantic.recognizer.DictionaryConstituentsProviders;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,7 +29,7 @@ import static org.junit.Assert.assertEquals;
 
 public class SemanticCompoundAnalyzerTest extends CategoryRegistryManagerAbstract {
 
-    private CategoryRecognizerBuilder builder;
+    private DictionaryConstituents dictionaryConstituents;
 
     private static final String PHONE = "PHONE";
 
@@ -51,12 +52,12 @@ public class SemanticCompoundAnalyzerTest extends CategoryRegistryManagerAbstrac
 
     @Before
     public void setUp() throws Exception {
-        builder = CategoryRecognizerBuilder.newBuilder().lucene();
+        dictionaryConstituents = new DictionaryConstituentsProviders.SingletonProvider().get();
     }
 
     @Test
     public void testPhone() {
-        SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(builder);
+        SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(dictionaryConstituents);
 
         Analyzer<Analyzers.Result> analyzer = Analyzers.with(semanticAnalyzer);
         analyzer.init();

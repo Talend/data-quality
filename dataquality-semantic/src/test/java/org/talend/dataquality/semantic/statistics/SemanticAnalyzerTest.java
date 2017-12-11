@@ -46,7 +46,8 @@ import org.talend.dataquality.semantic.model.DQDocument;
 import org.talend.dataquality.semantic.model.DQRegEx;
 import org.talend.dataquality.semantic.model.DQValidator;
 import org.talend.dataquality.semantic.model.MainCategory;
-import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
+import org.talend.dataquality.semantic.recognizer.DictionaryConstituents;
+import org.talend.dataquality.semantic.recognizer.DictionaryConstituentsProviders;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ TenancyContextHolder.class })
@@ -122,12 +123,7 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
     private final List<String> EXPECTED_PHONE_CATEGORY_METADATA = Arrays
             .asList(new String[] { SemanticCategoryEnum.PHONE.name() });
 
-    private CategoryRecognizerBuilder builder;
-
-    @Before
-    public void setUp() throws Exception {
-        builder = CategoryRecognizerBuilder.newBuilder().lucene();
-    }
+    private DictionaryConstituents dictionaryConstituents;
 
     public void mockWithTenant(String tenantID) {
         PowerMockito.mockStatic(TenancyContextHolder.class);
@@ -136,6 +132,7 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
         DefaultTenant tenant = new DefaultTenant(tenantID, null);
         when(holder.getContext()).thenReturn(tenancyContext);
         when(tenancyContext.getTenant()).thenReturn(tenant);
+        dictionaryConstituents = new DictionaryConstituentsProviders.SingletonProvider().get();
     }
 
     @Test
@@ -152,6 +149,7 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
         DQCategory firstNameCat = holder.getMetadata().get(SemanticCategoryEnum.FIRST_NAME.getTechnicalId());
         firstNameCat.setDeleted(true);
         holder.updateCategory(firstNameCat);
+        dictionaryConstituents = new DictionaryConstituentsProviders.SingletonProvider().get();
 
         final List<String> EXPECTED_CATEGORIES = Arrays.asList(
                 new String[] { "", SemanticCategoryEnum.LAST_NAME.name(), SemanticCategoryEnum.LAST_NAME.name(), "", "", "" });
@@ -175,6 +173,7 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
         newDoc.setId("the_doc_id");
         newDoc.setValues(new HashSet<>(Arrays.asList("true", "false")));
         holder.addDataDictDocuments(Collections.singletonList(newDoc));
+        dictionaryConstituents = new DictionaryConstituentsProviders.SingletonProvider().get();
 
         final List<String> EXPECTED_CATEGORIES = Arrays.asList(new String[] { "", SemanticCategoryEnum.LAST_NAME.name(),
                 SemanticCategoryEnum.FIRST_NAME.name(), "", "", SemanticCategoryEnum.ANSWER.name() });
@@ -202,6 +201,7 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
         dqCat.setCompleteness(Boolean.TRUE);
         dqCat.setModified(Boolean.TRUE);
         holder.updateCategory(dqCat);
+        dictionaryConstituents = new DictionaryConstituentsProviders.SingletonProvider().get();
 
         final List<String> EXPECTED_CATEGORIES = Arrays.asList(new String[] { "", SemanticCategoryEnum.LAST_NAME.name(),
                 SemanticCategoryEnum.FIRST_NAME.name(), "", "", "the_name" });
@@ -216,16 +216,19 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
         // 85% last name
         // 90% city
         // and column name is city
+        mockWithTenant("firstNameToFRCommune");
         testSemanticAnalyzer(TEST_RECORDS_CITY_METADATA, Arrays.asList("", "Last Name"), EXPECTED_FR_COMMUNE_CATEGORY_METADATA);
     }
 
     @Test
     public void metadataLastNameWithPhoneNumber() {
+        mockWithTenant("metadataLastNameWithPhoneNumber");
         testSemanticAnalyzer(TEST_RECORDS_PHONE_METADATA, Arrays.asList("Last Name"), EXPECTED_PHONE_CATEGORY_METADATA);
     }
 
     @Test
     public void semanticTypeNameFuzzyMatching() { // TDQ-14062: Fuzzy matching on the semantic type name
+        mockWithTenant("semanticTypeNameFuzzyMatching");
         // 1. test levenshtein
         testSemanticAnalyzer(TEST_RECORDS_CITY_METADATA, Arrays.asList("", "Lost Names"), EXPECTED_FR_COMMUNE_CATEGORY_METADATA);
         // 2. test tokenization with any order
@@ -237,7 +240,8 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
     @Test
     public void testSetLimit() {
 
-        SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(builder);
+        mockWithTenant("testSetLimit");
+        SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(dictionaryConstituents);
 
         semanticAnalyzer.setLimit(0);
 
@@ -271,9 +275,7 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
     public void testRefreshIndex_TDQ14562() {
         final String tenantID = "t_tdq14562";
         mockWithTenant(tenantID);
-        CategoryRegistryManager.setLocalRegistryPath("target/test_crm");
         CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder();
-        //builder.tenantID(tenantID);
 
         // Run the analysis for a first time
         final List<String> EXPECTED_CATEGORIES_BEFORE_MODIF = Arrays.asList(
@@ -296,7 +298,7 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
         dqCat.setCompleteness(Boolean.TRUE);
         dqCat.setModified(Boolean.TRUE);
         holder.createCategory(dqCat);
-
+        dictionaryConstituents = new DictionaryConstituentsProviders.SingletonProvider().get();
         // Run the analysis for a second time
 
         // after fixing the issue, the expected category of last column must be "the_name" instead of ""
@@ -309,7 +311,7 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
     }
 
     private void testSemanticAnalyzer(List<String[]> testRecords, List<String> testMetadata, List<String> expectedCategories) {
-        SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(builder);
+        SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(dictionaryConstituents);
 
         Analyzer<Result> analyzer = Analyzers.with(semanticAnalyzer);
 

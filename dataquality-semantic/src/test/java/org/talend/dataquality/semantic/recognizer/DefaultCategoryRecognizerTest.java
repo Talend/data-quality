@@ -38,7 +38,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
-import static org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder.DEFAULT_DD_PATH;
 
 public class DefaultCategoryRecognizerTest extends CategoryRegistryManagerAbstract {
 
@@ -99,8 +98,8 @@ public class DefaultCategoryRecognizerTest extends CategoryRegistryManagerAbstra
         Map<String, DQCategory> metadata = builder.getCategoryMetadata();
 
         metadata.get(SemanticCategoryEnum.AIRPORT_CODE.getTechnicalId()).setModified(true);
-        IndexSearcher sharedLuceneDocumentSearcher = new IndexSearcher(DirectoryReader
-                .open(ClassPathDirectory.open(CategoryRecognizerBuilder.class.getResource(DEFAULT_DD_PATH).toURI())));
+        IndexSearcher sharedLuceneDocumentSearcher = new IndexSearcher(
+                DirectoryReader.open(ClassPathDirectory.open(CategoryRegistryManager.getInstance().getDictionaryURI())));
 
         Directory ramDirectory = new RAMDirectory();
         IndexWriterConfig writerConfig = new IndexWriterConfig(Version.LATEST, new StandardAnalyzer(CharArraySet.EMPTY_SET));

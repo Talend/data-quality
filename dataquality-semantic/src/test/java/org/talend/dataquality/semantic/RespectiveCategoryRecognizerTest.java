@@ -19,7 +19,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizer;
-import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
+import org.talend.dataquality.semantic.recognizer.DefaultCategoryRecognizer;
+import org.talend.dataquality.semantic.recognizer.DictionaryConstituents;
+import org.talend.dataquality.semantic.recognizer.DictionaryConstituentsProviders;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -734,7 +736,8 @@ public class RespectiveCategoryRecognizerTest extends CategoryRegistryManagerAbs
 
     @Before
     public void init() throws URISyntaxException, IOException {
-        catRecognizer = CategoryRecognizerBuilder.newBuilder().lucene().build();
+        DictionaryConstituents dictionaryConstituents = new DictionaryConstituentsProviders.SingletonProvider().get();
+        catRecognizer = new DefaultCategoryRecognizer(dictionaryConstituents);
     }
 
     // init email list
