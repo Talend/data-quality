@@ -24,7 +24,8 @@ import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.Analyzers;
 import org.talend.dataquality.common.inference.Analyzers.Result;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
-import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
+import org.talend.dataquality.semantic.recognizer.DictionaryConstituents;
+import org.talend.dataquality.semantic.recognizer.DictionaryConstituentsProviders;
 import org.talend.dataquality.semantic.statistics.SemanticAnalyzer;
 import org.talend.dataquality.semantic.statistics.SemanticType;
 import org.talend.dataquality.statistics.cardinality.CardinalityAnalyzer;
@@ -42,7 +43,7 @@ public class AnalyzerPerformanceTest {
 
     private static Logger log = LoggerFactory.getLogger(AnalyzerPerformanceTest.class);
 
-    private static CategoryRecognizerBuilder builder;
+    private static DictionaryConstituents dictionaryConstituents;
 
     private static final List<String[]> records_card_exceptions = getRecords("Card_Exceptions_Preparation.csv");
 
@@ -55,7 +56,7 @@ public class AnalyzerPerformanceTest {
 
     @BeforeClass
     public static void setupBuilder() throws URISyntaxException {
-        builder = CategoryRecognizerBuilder.newBuilder().lucene();
+        dictionaryConstituents = new DictionaryConstituentsProviders.SingletonProvider().get();
     }
 
     private Analyzer<Result> setupBaselineAnalyzers(DataTypeEnum[] types) {
@@ -67,7 +68,7 @@ public class AnalyzerPerformanceTest {
                 new DataTypeAnalyzer(), //
                 new DataTypeFrequencyAnalyzer(), //
                 new CompositePatternFrequencyAnalyzer(types), //
-                new SemanticAnalyzer(builder) //
+                new SemanticAnalyzer(dictionaryConstituents) //
         );
     }
 

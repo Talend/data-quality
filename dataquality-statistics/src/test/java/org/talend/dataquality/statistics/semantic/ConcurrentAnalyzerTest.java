@@ -26,7 +26,8 @@ import org.slf4j.LoggerFactory;
 import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.AnalyzerSupplier;
 import org.talend.dataquality.common.inference.ConcurrentAnalyzer;
-import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
+import org.talend.dataquality.semantic.recognizer.DictionaryConstituents;
+import org.talend.dataquality.semantic.recognizer.DictionaryConstituentsProviders;
 import org.talend.dataquality.semantic.statistics.SemanticAnalyzer;
 import org.talend.dataquality.semantic.statistics.SemanticType;
 
@@ -44,12 +45,12 @@ public class ConcurrentAnalyzerTest extends SemanticStatisticsTestBase {
     @Test
     public void testThreadSafeConcurrentAccess() {
         try {
-            final CategoryRecognizerBuilder builder = CategoryRecognizerBuilder.newBuilder().lucene();
+            final DictionaryConstituents dictionaryConstituents = new DictionaryConstituentsProviders.SingletonProvider().get();
             AnalyzerSupplier<Analyzer<SemanticType>> supplier = new AnalyzerSupplier<Analyzer<SemanticType>>() {
 
                 @Override
                 public Analyzer<SemanticType> get() {
-                    return new SemanticAnalyzer(builder);
+                    return new SemanticAnalyzer(dictionaryConstituents);
                 }
 
             };
@@ -81,8 +82,8 @@ public class ConcurrentAnalyzerTest extends SemanticStatisticsTestBase {
 
     @Test
     public void testThreadUnsafeConcurrentAccess() throws Exception {
-        final CategoryRecognizerBuilder builder = CategoryRecognizerBuilder.newBuilder().lucene();
-        try (Analyzer<SemanticType> analyzer = new SemanticAnalyzer(builder)) {
+        final DictionaryConstituents dictionaryConstituents = new DictionaryConstituentsProviders.SingletonProvider().get();
+        try (Analyzer<SemanticType> analyzer = new SemanticAnalyzer(dictionaryConstituents)) {
             Runnable r = new Runnable() {
 
                 @Override

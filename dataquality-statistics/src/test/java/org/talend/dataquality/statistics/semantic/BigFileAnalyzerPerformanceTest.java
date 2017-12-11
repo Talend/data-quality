@@ -20,7 +20,8 @@ import org.slf4j.LoggerFactory;
 import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.Analyzers;
 import org.talend.dataquality.common.inference.Analyzers.Result;
-import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
+import org.talend.dataquality.semantic.recognizer.DictionaryConstituents;
+import org.talend.dataquality.semantic.recognizer.DictionaryConstituentsProviders;
 import org.talend.dataquality.semantic.statistics.SemanticAnalyzer;
 import org.talend.dataquality.semantic.statistics.SemanticType;
 import org.talend.dataquality.statistics.type.DataTypeAnalyzer;
@@ -31,7 +32,7 @@ public class BigFileAnalyzerPerformanceTest {
 
     private static Logger log = LoggerFactory.getLogger(BigFileAnalyzerPerformanceTest.class);
 
-    private static CategoryRecognizerBuilder builder;
+    private static DictionaryConstituents dictionaryConstituents;
 
     private static final List<String[]> RECORDS_BIG_FILE = getRecords("big_file.csv");
 
@@ -129,19 +130,13 @@ public class BigFileAnalyzerPerformanceTest {
 
     @BeforeClass
     public static void setupBuilder() throws URISyntaxException {
-        builder = CategoryRecognizerBuilder.newBuilder().lucene();
+        dictionaryConstituents = new DictionaryConstituentsProviders.SingletonProvider().get();
     }
 
     private Analyzer<Result> setupBaselineAnalyzers(DataTypeEnum[] types) {
-        // Analysis.QUALITY, Analysis.CARDINALITY, Analysis.TYPE, Analysis.FREQUENCY, Analysis.PATTERNS,
-        // Analysis.SEMANTIC
         return Analyzers.with(//
-                // new DataTypeQualityAnalyzer(types), //
-                // new CardinalityAnalyzer(), //
                 new DataTypeAnalyzer(), //
-                // new DataTypeFrequencyAnalyzer(), //
-                // new CompositePatternFrequencyAnalyzer(types), //
-                new SemanticAnalyzer(builder) //
+                new SemanticAnalyzer(dictionaryConstituents) //
         );
     }
 

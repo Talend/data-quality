@@ -25,15 +25,14 @@ import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.dataquality.common.inference.ValueQualityStatistics;
-import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
-import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
+import org.talend.dataquality.semantic.recognizer.DictionaryConstituents;
+import org.talend.dataquality.semantic.recognizer.DictionaryConstituentsProviders;
 import org.talend.dataquality.semantic.statistics.SemanticQualityAnalyzer;
 import org.talend.dataquality.statistics.type.DataTypeEnum;
 
@@ -45,16 +44,11 @@ public class ValueQualityAnalyzerTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ValueQualityAnalyzerTest.class);
 
-    private static final String LOCAL_CATEGORY_REGISTRY_PATH = "target/test_registry";
+    private static DictionaryConstituents dictionaryConstituents;
 
     @BeforeClass
     public static void setCategoryRegistryPath() {
-        CategoryRegistryManager.setLocalRegistryPath(LOCAL_CATEGORY_REGISTRY_PATH);
-    }
-
-    @AfterClass
-    public static void tearDown() throws IOException {
-        CategoryRegistryManager.reset();
+        dictionaryConstituents = new DictionaryConstituentsProviders.SingletonProvider().get();
     }
 
     public static List<String[]> getRecords(InputStream inputStream, String separator) {
@@ -86,10 +80,6 @@ public class ValueQualityAnalyzerTest {
         return getRecords(inputStream, ";");
     }
 
-    private CategoryRecognizerBuilder createCategoryRecognizerBuilder() throws URISyntaxException {
-        return CategoryRecognizerBuilder.newBuilder().lucene();
-    }
-
     @Test
     public void testValueQualityAnalyzerWithoutSemanticQuality() throws URISyntaxException {
 
@@ -100,8 +90,7 @@ public class ValueQualityAnalyzerTest {
                 SemanticCategoryEnum.UNKNOWN.name(), SemanticCategoryEnum.UNKNOWN.name(), SemanticCategoryEnum.UNKNOWN.name(),
                 SemanticCategoryEnum.UNKNOWN.name(), SemanticCategoryEnum.UNKNOWN.name(), SemanticCategoryEnum.UNKNOWN.name(),
                 SemanticCategoryEnum.UNKNOWN.name() };
-        SemanticQualityAnalyzer semanticQualityAnalyzer = new SemanticQualityAnalyzer(createCategoryRecognizerBuilder(),
-                semanticTypes);
+        SemanticQualityAnalyzer semanticQualityAnalyzer = new SemanticQualityAnalyzer(dictionaryConstituents, semanticTypes);
 
         ValueQualityAnalyzer valueQualityAnalyzer = new ValueQualityAnalyzer(dataTypeQualityAnalyzer, semanticQualityAnalyzer);
         valueQualityAnalyzer.init();
@@ -188,7 +177,7 @@ public class ValueQualityAnalyzerTest {
         final String[] semanticTypes = new String[] { SemanticCategoryEnum.UNKNOWN.name(),
                 SemanticCategoryEnum.US_STATE_CODE.name(), SemanticCategoryEnum.CITY.name() };
 
-        final SemanticQualityAnalyzer semanticQualityAnalyzer = new SemanticQualityAnalyzer(createCategoryRecognizerBuilder(),
+        final SemanticQualityAnalyzer semanticQualityAnalyzer = new SemanticQualityAnalyzer(dictionaryConstituents,
                 semanticTypes);
 
         final ValueQualityAnalyzer valueQualityAnalyzer = new ValueQualityAnalyzer(dataTypeQualityAnalyzer,
