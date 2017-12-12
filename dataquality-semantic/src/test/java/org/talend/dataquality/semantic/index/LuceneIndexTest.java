@@ -84,9 +84,6 @@ public class LuceneIndexTest {
     @Test
     public void testFindSimilarFieldsInCategory() throws URISyntaxException {
 
-        // final URI ddPath = this.getClass().getResource("/index/dictionary").toURI();
-        // final LuceneIndex dataDictIndex = new LuceneIndex(ddPath, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY);
-
         final URI ddPath = CategoryRegistryManager.getInstance().getDictionaryURI();
         final LuceneIndex dataDictIndex = new LuceneIndex(ddPath, DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY);
 

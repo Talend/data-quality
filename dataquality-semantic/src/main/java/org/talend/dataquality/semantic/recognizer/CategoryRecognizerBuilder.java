@@ -29,6 +29,7 @@ import org.talend.dataquality.semantic.model.DQCategory;
  * created by talend on 2015-07-28 Detailled comment.
  *
  */
+@Deprecated
 public class CategoryRecognizerBuilder {
 
     private static final Logger LOGGER = Logger.getLogger(CategoryRecognizerBuilder.class);
