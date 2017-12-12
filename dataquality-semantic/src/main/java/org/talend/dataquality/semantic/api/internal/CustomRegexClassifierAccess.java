@@ -66,15 +66,15 @@ public class CustomRegexClassifierAccess {
     /**
      * delete the regEx to the lucene index and share it on HDFS
      *
-     * @param regEx the document to add
+     * @param regexId the id of regex to delete
      */
-    public void deleteRegex(ISubCategory regEx) {
-        LOGGER.debug("insertOrUpdateRegex: " + regEx);
+    public void deleteRegex(String regexId) {
+        LOGGER.debug("insertOrUpdateRegex: " + regexId);
         List<ISubCategory> regExs = getRegExs();
         if (regExs == null)
             regExs = new ArrayList<>();
         else
-            regExs.removeIf(expression -> regEx.getId().equals(expression.getId()));
+            regExs.removeIf(expression -> regexId.equals(expression.getId()));
         writeRegExs(regExs);
     }
 

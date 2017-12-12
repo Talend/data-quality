@@ -15,6 +15,7 @@ package org.talend.dataquality.semantic.statistics;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mock;
+import static org.talend.dataquality.semantic.TestUtils.mockWithTenant;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -125,16 +126,6 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
 
     private DictionaryConstituents dictionaryConstituents;
 
-    public void mockWithTenant(String tenantID) {
-        PowerMockito.mockStatic(TenancyContextHolder.class);
-        TenancyContextHolder holder = mock(TenancyContextHolder.class);
-        TenancyContext tenancyContext = mock(TenancyContext.class);
-        DefaultTenant tenant = new DefaultTenant(tenantID, null);
-        when(holder.getContext()).thenReturn(tenancyContext);
-        when(tenancyContext.getTenant()).thenReturn(tenant);
-        dictionaryConstituents = new DictionaryConstituentsProviders.SingletonProvider().get();
-    }
-
     @Test
     public void testTagada() {
         mockWithTenant("testTagada");
@@ -155,8 +146,6 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
                 new String[] { "", SemanticCategoryEnum.LAST_NAME.name(), SemanticCategoryEnum.LAST_NAME.name(), "", "", "" });
 
         testSemanticAnalyzer(TEST_RECORDS_TAGADA, null, EXPECTED_CATEGORIES);
-
-        CategoryRegistryManager.getInstance().removeCustomDictionaryHolder();
     }
 
     @Test
@@ -180,7 +169,6 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
 
         testSemanticAnalyzer(TEST_RECORDS_TAGADA, null, EXPECTED_CATEGORIES);
 
-        CategoryRegistryManager.getInstance().removeCustomDictionaryHolder();
     }
 
     @Test
@@ -208,7 +196,6 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
 
         testSemanticAnalyzer(TEST_RECORDS_TAGADA, null, EXPECTED_CATEGORIES);
 
-        CategoryRegistryManager.getInstance().removeCustomDictionaryHolder();
     }
 
     @Test
@@ -241,6 +228,7 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
     public void testSetLimit() {
 
         mockWithTenant("testSetLimit");
+        dictionaryConstituents = new DictionaryConstituentsProviders.SingletonProvider().get();
         SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(dictionaryConstituents);
 
         semanticAnalyzer.setLimit(0);
@@ -298,7 +286,6 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
         dqCat.setCompleteness(Boolean.TRUE);
         dqCat.setModified(Boolean.TRUE);
         holder.createCategory(dqCat);
-        dictionaryConstituents = new DictionaryConstituentsProviders.SingletonProvider().get();
         // Run the analysis for a second time
 
         // after fixing the issue, the expected category of last column must be "the_name" instead of ""
@@ -307,10 +294,10 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
 
         testSemanticAnalyzer(TEST_RECORDS_TAGADA, null, EXPECTED_CATEGORIES_AFTER_MODIF);
 
-        CategoryRegistryManager.getInstance().removeCustomDictionaryHolder();
     }
 
     private void testSemanticAnalyzer(List<String[]> testRecords, List<String> testMetadata, List<String> expectedCategories) {
+        dictionaryConstituents = new DictionaryConstituentsProviders.SingletonProvider().get();
         SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(dictionaryConstituents);
 
         Analyzer<Result> analyzer = Analyzers.with(semanticAnalyzer);

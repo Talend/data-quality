@@ -41,6 +41,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mock;
+import static org.talend.dataquality.semantic.TestUtils.mockWithTenant;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ TenancyContextHolder.class })
@@ -125,16 +126,6 @@ public class SemanticQualityAnalyzerTest extends CategoryRegistryManagerAbstract
         return records;
     }
 
-    public void mockWithTenant(String tenantID) {
-        PowerMockito.mockStatic(TenancyContextHolder.class);
-        TenancyContextHolder holder = mock(TenancyContextHolder.class);
-        TenancyContext tenancyContext = mock(TenancyContext.class);
-        DefaultTenant tenant = new DefaultTenant(tenantID, null);
-        when(holder.getContext()).thenReturn(tenancyContext);
-        when(tenancyContext.getTenant()).thenReturn(tenant);
-        dictionaryConstituents = new DictionaryConstituentsProviders.SingletonProvider().get();
-    }
-
     @Test
     public void testSemanticQualityAnalyzerWithDictionaryCategory() {
         mockWithTenant("testSemanticQualityAnalyzerWithDictionaryCategory");
@@ -204,6 +195,7 @@ public class SemanticQualityAnalyzerTest extends CategoryRegistryManagerAbstract
 
     public void testAnalysis(List<String[]> records, String[] expectedCategories, long[][] expectedValidityCountForDiscovery,
             long[][] expectedValidityCountForValidation) {
+        dictionaryConstituents = new DictionaryConstituentsProviders.SingletonProvider().get();
         Analyzer<Result> analyzers = Analyzers.with(//
                 new SemanticAnalyzer(dictionaryConstituents), //
                 new SemanticQualityAnalyzer(dictionaryConstituents, expectedCategories)//

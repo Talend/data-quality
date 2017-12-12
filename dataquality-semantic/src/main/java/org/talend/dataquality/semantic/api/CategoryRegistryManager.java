@@ -388,16 +388,14 @@ public class CategoryRegistryManager {
 
     /**
      * get instance of UserDefinedClassifier
-     *
-     * @param refresh whether classifiers should be reloaded from local json file
      */
-    public UserDefinedClassifier getRegexClassifier(boolean refresh) throws IOException {
+    public UserDefinedClassifier getRegexClassifier() throws IOException {
         if (!usingLocalCategoryRegistry) {
             return UDCategorySerDeser.getRegexClassifier();
         }
 
         // load regexes from local registry
-        if (sharedRegexClassifier == null || refresh) {
+        if (sharedRegexClassifier == null) {
             final File regexRegistryFile = new File(
                     localRegistryPath + File.separator + SHARED_FOLDER_NAME + File.separator + PRODUCTION_FOLDER_NAME
                             + File.separator + REGEX_SUBFOLDER_NAME + File.separator + REGEX_CATEGRIZER_FILE_NAME);
@@ -479,6 +477,7 @@ public class CategoryRegistryManager {
     /**
      * Remove the CustomDictionaryHolder for a given tenant ID.
      */
+    @Deprecated
     public void removeCustomDictionaryHolder() {
         Tenant tenant = TenancyContextHolder.getContext().getTenant();
         if (tenant != null) {

@@ -12,18 +12,15 @@
 // ============================================================================
 package org.talend.dataquality.semantic;
 
-import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
-
-import static org.talend.dataquality.semantic.api.CategoryRegistryManager.DEFAULT_TENANT_ID;
 
 public abstract class CategoryRegistryManagerAbstract {
 
     @BeforeClass
     public static void before() {
-        CategoryRegistryManager.setLocalRegistryPath("target/test_crm" + System.currentTimeMillis());
+        CategoryRegistryManager.setLocalRegistryPath("target/test_crm");
     }
+
 }

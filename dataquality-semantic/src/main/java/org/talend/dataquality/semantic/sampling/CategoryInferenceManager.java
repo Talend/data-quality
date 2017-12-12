@@ -20,10 +20,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.exception.DQSemanticRuntimeException;
 import org.talend.dataquality.semantic.recognizer.CategoryFrequency;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizer;
-import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
+import org.talend.dataquality.semantic.recognizer.DefaultCategoryRecognizer;
 
 /**
  * created by talend on 2015-07-28 Detailled comment.
@@ -91,15 +92,12 @@ public class CategoryInferenceManager {
     }
 
     private CategoryRecognizer newCategoryRecognizer() {
-        CategoryRecognizerBuilder b = CategoryRecognizerBuilder.newBuilder();
         // get the lucene index.
         try {
-            return b.lucene().build();
+            return new DefaultCategoryRecognizer(
+                    CategoryRegistryManager.getInstance().getCustomDictionaryHolder().getDictionaryConstituents());
         } catch (IOException e) {
             throw new DQSemanticRuntimeException("Unable to find resources.", e);
         }
-        // or get the ES index.
-        // TODO use ES index for category inference
-        // FIXME avoid instantiation of classifiers inside each categoryRecognizer for each column
     }
 }

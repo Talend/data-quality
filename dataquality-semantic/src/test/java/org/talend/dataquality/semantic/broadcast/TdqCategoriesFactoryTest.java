@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mock;
+import static org.talend.dataquality.semantic.TestUtils.mockWithTenant;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,15 +51,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ TenancyContextHolder.class })
 public class TdqCategoriesFactoryTest extends CategoryRegistryManagerAbstract {
-
-    public void mockWithTenant(String tenantID) {
-        PowerMockito.mockStatic(TenancyContextHolder.class);
-        TenancyContextHolder holder = mock(TenancyContextHolder.class);
-        TenancyContext tenancyContext = mock(TenancyContext.class);
-        DefaultTenant tenant = new DefaultTenant(tenantID, null);
-        when(holder.getContext()).thenReturn(tenancyContext);
-        when(tenancyContext.getTenant()).thenReturn(tenant);
-    }
 
     @Test
     public void testCreateTdqCategories() throws IOException {
@@ -124,7 +116,6 @@ public class TdqCategoriesFactoryTest extends CategoryRegistryManagerAbstract {
             assertEquals("Unexpected valid count!", 3L, valueQualityStats.getValidCount());
             assertEquals("Unexpected invalid count!", 0L, valueQualityStats.getInvalidCount());
         }
-        CategoryRegistryManager.getInstance().removeCustomDictionaryHolder();
     }
 
     @Test

@@ -38,7 +38,7 @@ public class CustomDictionaryHolder {
 
     private static final Logger LOGGER = Logger.getLogger(CustomDictionaryHolder.class);
 
-    private static final String TALEND = "Talend";
+    public static final String TALEND = "Talend";
 
     private static final String INITIALIZE_ACCESS = "Initialize %s %s access for [%s]";
 
@@ -129,7 +129,7 @@ public class CustomDictionaryHolder {
         // return shared regexClassifier if NULL
         if (regexClassifier == null) {
             try {
-                return CategoryRegistryManager.getInstance().getRegexClassifier(false);
+                return CategoryRegistryManager.getInstance().getRegexClassifier();
             } catch (IOException e) {
                 LOGGER.error(e.getMessage(), e);
             }
@@ -257,12 +257,14 @@ public class CustomDictionaryHolder {
     public void deleteCategory(DQCategory category) {
         category.setDeleted(true);
         ensureMetadataIndexAccess();
+        if (CategoryType.REGEX.equals(category.getType()))
+            ensureRegexClassifierAccess();
         String categoryId = category.getId();
 
         if (TALEND.equals(category.getCreator())) {
             customMetadataIndexAccess.insertOrUpdateCategory(category);
             if (CategoryType.REGEX.equals(category.getType()))
-                customRegexClassifierAccess.deleteRegex(DictionaryUtils.regexClassifierfromDQCategory(category));
+                customRegexClassifierAccess.deleteRegex(categoryId);
             else if (Boolean.TRUE.equals(category.getModified())) {
                 LOGGER.debug("deleteDocumentsByCategoryId " + categoryId);
                 ensureDataDictIndexAccess();
@@ -270,7 +272,7 @@ public class CustomDictionaryHolder {
             }
         } else {
             if (CategoryType.REGEX.equals(category.getType()))
-                customRegexClassifierAccess.deleteRegex(DictionaryUtils.regexClassifierfromDQCategory(category));
+                customRegexClassifierAccess.deleteRegex(categoryId);
             customMetadataIndexAccess.deleteCategory(category);
             LOGGER.debug("deleteDocumentsByCategoryId " + categoryId);
             ensureDataDictIndexAccess();

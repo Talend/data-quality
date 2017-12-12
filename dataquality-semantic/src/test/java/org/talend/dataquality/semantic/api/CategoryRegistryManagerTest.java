@@ -2,7 +2,15 @@ package org.talend.dataquality.semantic.api;
 
 import org.apache.commons.lang3.SerializationUtils;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import org.talend.daikon.multitenant.context.TenancyContext;
+import org.talend.daikon.multitenant.context.TenancyContextHolder;
+import org.talend.daikon.multitenant.provider.DefaultTenant;
 import org.talend.dataquality.semantic.CategoryRegistryManagerAbstract;
 import org.talend.dataquality.semantic.classifier.ISubCategory;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
@@ -11,6 +19,7 @@ import org.talend.dataquality.semantic.classifier.custom.UserDefinedClassifier;
 import org.talend.dataquality.semantic.index.LuceneIndex;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.model.DQDocument;
+import org.talend.dataquality.semantic.recognizer.DictionaryConstituentsProviders;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -23,43 +32,35 @@ import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.when;
+import static org.powermock.api.mockito.PowerMockito.mock;
+import static org.talend.dataquality.semantic.TestUtils.mockWithTenant;
 
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({ TenancyContextHolder.class })
 public class CategoryRegistryManagerTest extends CategoryRegistryManagerAbstract {
 
     @Test
     public void testGetRegexClassifier() throws IOException, URISyntaxException {
+        mockWithTenant("testGetRegexClassifier");
         CategoryRegistryManager crm = CategoryRegistryManager.getInstance();
-        try {
+        final UserDefinedClassifier udc = crm.getRegexClassifier();
+        final Set<ISubCategory> classifiers = udc.getClassifiers();
+        assertEquals("Unexpected size of classifiers", 47, classifiers.size());
 
-            final UserDefinedClassifier udc = crm.getRegexClassifier(false);
-            final Set<ISubCategory> classifiers = udc.getClassifiers();
-            assertEquals("Unexpected size of classifiers", 47, classifiers.size());
+        // getRegexClassifier before deletion
+        UserDefinedClassifier userDefinedClassifier = crm.getCustomDictionaryHolder().getRegexClassifier();
+        assertEquals("Unexpected size of classifiers", 47, userDefinedClassifier.getClassifiers().size());
 
-            // put less categories back into the file
-            final Set<ISubCategory> lessClassifiers = new HashSet<>();
-            for (ISubCategory classifier : classifiers) {
-                if (!"EMAIL".equals(classifier.getName())) {
-                    lessClassifiers.add(classifier);
-                }
-            }
+        DQCategory regexCategory = crm.getCategoryMetadataById(SemanticCategoryEnum.EMAIL.getTechnicalId());
+        regexCategory.setCreator(CustomDictionaryHolder.TALEND);
+        crm.getCustomDictionaryHolder().deleteCategory(regexCategory);
 
-            UserDefinedClassifier newUdc = new UserDefinedClassifier();
-            newUdc.setClassifiers(lessClassifiers);
+        crm.reloadCategoriesFromRegistry();
+        userDefinedClassifier = crm.getCustomDictionaryHolder().getRegexClassifier();
+        // getRegexClassifier after deletion
+        assertEquals("Unexpected size of classifiers", 46, userDefinedClassifier.getClassifiers().size());
 
-            final UDCategorySerDeser udcWriter = new UDCategorySerDeser();
-            udcWriter.writeToJsonFile(newUdc, new FileOutputStream(new File(crm.getRegexURI())));
-
-            // getRegexClassifier without reloading
-            final UserDefinedClassifier notTrulyReloaded = crm.getRegexClassifier(false);
-            assertEquals("Unexpected size of classifiers", 47, notTrulyReloaded.getClassifiers().size());
-
-            // reload and assert
-            final UserDefinedClassifier trulyReloaded = crm.getRegexClassifier(true);
-            assertEquals("Unexpected size of classifiers", 46, trulyReloaded.getClassifiers().size());
-
-        } catch (Exception e) {
-            fail("Failed due to exception: " + e.getMessage());
-        }
     }
 
     @Test
@@ -94,6 +95,7 @@ public class CategoryRegistryManagerTest extends CategoryRegistryManagerAbstract
 
     @Test
     public void testFindMostSimilarValueWithCustomDataDict() throws IOException {
+        mockWithTenant("testFindMostSimilarValueWithCustomDataDict");
         CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder();
 
         DQCategory answerCategory = holder.getMetadata().get(SemanticCategoryEnum.ANSWER.getTechnicalId());
@@ -114,10 +116,10 @@ public class CategoryRegistryManagerTest extends CategoryRegistryManagerAbstract
     }
 
     @Test
-    public void testGetLuncenIndex() {
+    public void testGetLuceneIndex() {
         String categoryName = "COUNTRY";
-        LuceneIndex lnceneIndex = CategoryRegistryManager.getInstance().getLuceneIndex(categoryName);
-        Assert.assertNotNull(lnceneIndex);
+        LuceneIndex luceneIndex = CategoryRegistryManager.getInstance().getLuceneIndex(categoryName);
+        Assert.assertNotNull(luceneIndex);
     }
 
 }
