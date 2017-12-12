@@ -29,7 +29,6 @@ import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.exception.DQSemanticRuntimeException;
 import org.talend.dataquality.semantic.recognizer.CategoryFrequency;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizer;
-import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
 import org.talend.dataquality.semantic.recognizer.DefaultCategoryRecognizer;
 import org.talend.dataquality.semantic.recognizer.DictionaryConstituents;
 
@@ -64,38 +63,6 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
 
     public SemanticAnalyzer(DictionaryConstituents constituents) {
         this.constituents = constituents;
-        metadataMap = new HashMap<>();
-    }
-
-    /**
-     * @param builder the builder for creating lucene index access and regex classifiers
-     */
-    @Deprecated
-    public SemanticAnalyzer(CategoryRecognizerBuilder builder) {
-        this(builder, 10000);
-    }
-
-    /**
-     * @param builder the builder for creating lucene index access and regex classifiers
-     * @param limit the limit of rows to handle
-     */
-    @Deprecated
-    public SemanticAnalyzer(CategoryRecognizerBuilder builder, int limit) {
-        this(builder, limit, DEFAULT_WEIGHT_VALUE);
-    }
-
-    /**
-     * @param builder the builder for creating lucene index access and regex classifiers
-     * @param limit the limit of rows to handle
-     * @param weight the weight of data discovery result for score calculation, default to 0.9, which means the metadata will also
-     * be taken into account for a weight of 0.1
-     */
-    @Deprecated
-    public SemanticAnalyzer(CategoryRecognizerBuilder builder, int limit, float weight) {
-        CategoryRegistryManager.getInstance().reloadCategoriesFromRegistry();
-        this.constituents = builder.getDictionaryConstituents();
-        this.limit = limit;
-        this.weight = weight;
         metadataMap = new HashMap<>();
     }
 

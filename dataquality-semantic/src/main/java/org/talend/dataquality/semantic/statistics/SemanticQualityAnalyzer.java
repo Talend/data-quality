@@ -34,7 +34,6 @@ import org.talend.dataquality.semantic.classifier.impl.DataDictFieldClassifier;
 import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizer;
-import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
 import org.talend.dataquality.semantic.recognizer.DefaultCategoryRecognizer;
 import org.talend.dataquality.semantic.recognizer.DictionaryConstituents;
 import org.talend.dataquality.semantic.recognizer.LFUCache;
@@ -53,8 +52,6 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
 
     private final Map<String, LFUCache<String, Boolean>> knownValidationCategoryCache = new HashMap<>();
 
-    private final CategoryRecognizerBuilder builder;
-
     private DictionaryConstituents constituents;
 
     private ISubCategoryClassifier regexClassifier;
@@ -66,26 +63,12 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
     public SemanticQualityAnalyzer(DictionaryConstituents constituents, String[] types, boolean isStoreInvalidValues) {
         this.constituents = constituents;
         this.isStoreInvalidValues = isStoreInvalidValues;
-        builder = null;
         init();
         setTypes(types);
     }
 
     public SemanticQualityAnalyzer(DictionaryConstituents constituents, String[] types) {
         this(constituents, types, false);
-    }
-
-    @Deprecated
-    public SemanticQualityAnalyzer(CategoryRecognizerBuilder builder, String[] types, boolean isStoreInvalidValues) {
-        this.isStoreInvalidValues = isStoreInvalidValues;
-        this.builder = builder;
-        init();
-        setTypes(types);
-    }
-
-    @Deprecated
-    public SemanticQualityAnalyzer(CategoryRecognizerBuilder builder, String... types) {
-        this(builder, types, false);
     }
 
     @Override
@@ -113,13 +96,10 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
     public void init() {
         try {
             final CategoryRecognizer recognizer;
-            if (constituents == null) {
-                recognizer = builder.build();
-                metadata = builder.getCategoryMetadata();
-            } else {
-                recognizer = new DefaultCategoryRecognizer(constituents);
-                metadata = constituents.getMetadata();
-            }
+
+            recognizer = new DefaultCategoryRecognizer(constituents);
+            metadata = constituents.getMetadata();
+
             regexClassifier = recognizer.getUserDefineClassifier();
             dataDictClassifier = recognizer.getDataDictFieldClassifier();
         } catch (IOException e) {
