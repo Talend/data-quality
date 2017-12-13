@@ -75,7 +75,7 @@ public class CustomRegexClassifierAccess {
             regExs = new ArrayList<>();
         else
             regExs.removeIf(expression -> regexId.equals(expression.getId()));
-        writeRegExs(regExs);
+        writeRegExs(regExs); //TODO is that if really necessary ? Do we need to write when regExs is null ?
     }
 
     private void writeRegExs(List<ISubCategory> regExs) {

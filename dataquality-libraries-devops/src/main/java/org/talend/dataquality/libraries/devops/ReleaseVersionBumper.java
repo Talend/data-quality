@@ -152,7 +152,7 @@ public class ReleaseVersionBumper {
             for (String line : lines) {
                 if (line.startsWith(BUNDLE_VERSION_STRING)) {
 
-                    IOUtils.write(BUNDLE_VERSION_STRING + TARGET_VERSION.replace("-",".") + "\n", fos);
+                    IOUtils.write(BUNDLE_VERSION_STRING + TARGET_VERSION.replace("-", ".") + "\n", fos);
                 } else {
                     IOUtils.write(line + "\n", fos);
                 }
