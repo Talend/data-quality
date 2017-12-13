@@ -423,7 +423,7 @@ public class CustomDictionaryHolder {
      * @return collection of category objects
      */
     public Collection<DQCategory> listCategories() {
-        return getMetadata().values();
+        return listCategories(true);
     }
 
     /**

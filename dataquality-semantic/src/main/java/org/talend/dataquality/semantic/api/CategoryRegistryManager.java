@@ -465,6 +465,11 @@ public class CategoryRegistryManager {
         } else {
             tenantID = DEFAULT_TENANT_ID;
         }
+        return getCustomDictionaryHolder(tenantID);
+
+    }
+
+    public CustomDictionaryHolder getCustomDictionaryHolder(String tenantID) {
         CustomDictionaryHolder cdh = customDictionaryHolderMap.get(tenantID);
         if (cdh == null) {
             LOGGER.info("Instantiate CustomDictionaryHolder for [" + tenantID + "]");
@@ -472,28 +477,6 @@ public class CategoryRegistryManager {
             customDictionaryHolderMap.put(tenantID, cdh);
         }
         return cdh;
-    }
-
-    /**
-     * Remove the CustomDictionaryHolder for a given tenant ID.
-     */
-    @Deprecated
-    public void removeCustomDictionaryHolder() {
-        Tenant tenant = TenancyContextHolder.getContext().getTenant();
-        if (tenant != null) {
-            String tenantID = tenant.getIdentity().toString();
-            CustomDictionaryHolder cdh = customDictionaryHolderMap.get(tenantID);
-            if (cdh != null) {
-                cdh.closeDictionaryAccess();
-                File folder = new File(localRegistryPath + File.separator + tenantID);
-                try {
-                    FileUtils.deleteDirectory(folder);
-                } catch (IOException e) {
-                    LOGGER.error(e.getMessage(), e);
-                }
-                customDictionaryHolderMap.remove(tenantID);
-            }
-        }
     }
 
     /**
