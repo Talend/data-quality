@@ -67,7 +67,7 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
         setTypes(types);
     }
 
-    public SemanticQualityAnalyzer(DictionaryConstituents constituents, String[] types) {
+    public SemanticQualityAnalyzer(DictionaryConstituents constituents, String... types) {
         this(constituents, types, false);
     }
 
