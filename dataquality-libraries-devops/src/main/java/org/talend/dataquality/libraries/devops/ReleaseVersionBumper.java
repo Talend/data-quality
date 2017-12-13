@@ -151,12 +151,7 @@ public class ReleaseVersionBumper {
 
             for (String line : lines) {
                 if (line.startsWith(BUNDLE_VERSION_STRING)) {
-                    String currentVersion = line.substring(BUNDLE_VERSION_STRING.length()).replace(MANIFEST_SNAPSHOT_SUFFIX, "");
-                    String modifiedVersion = currentVersion.substring(0, currentVersion.lastIndexOf('.')) + "." + microVersion;
-                    if (TARGET_VERSION.endsWith(SNAPSHOT_VERSION_SUFFIX)) {
-                        modifiedVersion += MANIFEST_SNAPSHOT_SUFFIX;
-                    }
-                    IOUtils.write(BUNDLE_VERSION_STRING + modifiedVersion.replace(SNAPSHOT_VERSION_SUFFIX, "") + "\n", fos);
+                    IOUtils.write(BUNDLE_VERSION_STRING + TARGET_VERSION + "\n", fos);
                 } else {
                     IOUtils.write(line + "\n", fos);
                 }
