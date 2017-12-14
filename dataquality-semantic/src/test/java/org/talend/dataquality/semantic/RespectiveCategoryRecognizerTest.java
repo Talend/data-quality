@@ -33,8 +33,8 @@ import org.junit.Test;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizer;
 import org.talend.dataquality.semantic.recognizer.DefaultCategoryRecognizer;
-import org.talend.dataquality.semantic.recognizer.DictionaryConstituents;
-import org.talend.dataquality.semantic.recognizer.DictionaryConstituentsProviders;
+import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
+import org.talend.dataquality.semantic.snapshot.StandardDictionarySnapshotProvider;
 
 /**
  * created by talend on 2015-07-28 Detailled comment.
@@ -736,8 +736,8 @@ public class RespectiveCategoryRecognizerTest extends CategoryRegistryManagerAbs
 
     @Before
     public void init() throws URISyntaxException, IOException {
-        DictionaryConstituents dictionaryConstituents = new DictionaryConstituentsProviders.SingletonProvider().get();
-        catRecognizer = new DefaultCategoryRecognizer(dictionaryConstituents);
+        DictionarySnapshot dictionarySnapshot = new StandardDictionarySnapshotProvider().get();
+        catRecognizer = new DefaultCategoryRecognizer(dictionarySnapshot);
     }
 
     // init email list

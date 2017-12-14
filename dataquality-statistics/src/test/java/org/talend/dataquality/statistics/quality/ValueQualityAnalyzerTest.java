@@ -31,8 +31,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.dataquality.common.inference.ValueQualityStatistics;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
-import org.talend.dataquality.semantic.recognizer.DictionaryConstituents;
-import org.talend.dataquality.semantic.recognizer.DictionaryConstituentsProviders;
+import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
+import org.talend.dataquality.semantic.snapshot.StandardDictionarySnapshotProvider;
 import org.talend.dataquality.semantic.statistics.SemanticQualityAnalyzer;
 import org.talend.dataquality.statistics.type.DataTypeEnum;
 
@@ -44,11 +44,11 @@ public class ValueQualityAnalyzerTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ValueQualityAnalyzerTest.class);
 
-    private static DictionaryConstituents dictionaryConstituents;
+    private static DictionarySnapshot dictionarySnapshot;
 
     @BeforeClass
     public static void setCategoryRegistryPath() {
-        dictionaryConstituents = new DictionaryConstituentsProviders.SingletonProvider().get();
+        dictionarySnapshot = new StandardDictionarySnapshotProvider().get();
     }
 
     public static List<String[]> getRecords(InputStream inputStream, String separator) {
@@ -90,7 +90,7 @@ public class ValueQualityAnalyzerTest {
                 SemanticCategoryEnum.UNKNOWN.name(), SemanticCategoryEnum.UNKNOWN.name(), SemanticCategoryEnum.UNKNOWN.name(),
                 SemanticCategoryEnum.UNKNOWN.name(), SemanticCategoryEnum.UNKNOWN.name(), SemanticCategoryEnum.UNKNOWN.name(),
                 SemanticCategoryEnum.UNKNOWN.name() };
-        SemanticQualityAnalyzer semanticQualityAnalyzer = new SemanticQualityAnalyzer(dictionaryConstituents, semanticTypes);
+        SemanticQualityAnalyzer semanticQualityAnalyzer = new SemanticQualityAnalyzer(dictionarySnapshot, semanticTypes);
 
         ValueQualityAnalyzer valueQualityAnalyzer = new ValueQualityAnalyzer(dataTypeQualityAnalyzer, semanticQualityAnalyzer);
         valueQualityAnalyzer.init();
@@ -177,8 +177,7 @@ public class ValueQualityAnalyzerTest {
         final String[] semanticTypes = new String[] { SemanticCategoryEnum.UNKNOWN.name(),
                 SemanticCategoryEnum.US_STATE_CODE.name(), SemanticCategoryEnum.CITY.name() };
 
-        final SemanticQualityAnalyzer semanticQualityAnalyzer = new SemanticQualityAnalyzer(dictionaryConstituents,
-                semanticTypes);
+        final SemanticQualityAnalyzer semanticQualityAnalyzer = new SemanticQualityAnalyzer(dictionarySnapshot, semanticTypes);
 
         final ValueQualityAnalyzer valueQualityAnalyzer = new ValueQualityAnalyzer(dataTypeQualityAnalyzer,
                 semanticQualityAnalyzer);

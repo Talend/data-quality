@@ -35,8 +35,8 @@ import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.model.DQDocument;
 import org.talend.dataquality.semantic.recognizer.CategoryFrequency;
-import org.talend.dataquality.semantic.recognizer.DictionaryConstituents;
-import org.talend.dataquality.semantic.recognizer.DictionaryConstituentsProviders;
+import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
+import org.talend.dataquality.semantic.snapshot.StandardDictionarySnapshotProvider;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ TenancyContextHolder.class })
@@ -78,7 +78,7 @@ public class SemanticQualityAnalyzerTest extends CategoryRegistryManagerAbstract
     private static final long[][] EXPECTED_VALIDITY_COUNT_PHONE = new long[][] { //
             new long[] { 11, 0, 0 } };
 
-    private static DictionaryConstituents dictionaryConstituents;
+    private static DictionarySnapshot dictionarySnapshot;
 
     private final String[] EXPECTED_CATEGORIES_DICT = new String[] { //
             "", //
@@ -172,7 +172,7 @@ public class SemanticQualityAnalyzerTest extends CategoryRegistryManagerAbstract
         CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder();
         DQCategory category = holder.getCategoryMetadataById(SemanticCategoryEnum.FR_COMMUNE.getTechnicalId());
         holder.deleteCategory(category);
-        dictionaryConstituents = new DictionaryConstituentsProviders.SingletonProvider().get();
+        dictionarySnapshot = new StandardDictionarySnapshotProvider().get();
         testAnalysis(Collections.singletonList(new String[] { "Berulle" }), new String[] { StringUtils.EMPTY }, expectedCount,
                 expectedCount);
 
@@ -190,10 +190,10 @@ public class SemanticQualityAnalyzerTest extends CategoryRegistryManagerAbstract
 
     public void testAnalysis(List<String[]> records, String[] expectedCategories, long[][] expectedValidityCountForDiscovery,
             long[][] expectedValidityCountForValidation) {
-        dictionaryConstituents = new DictionaryConstituentsProviders.SingletonProvider().get();
+        dictionarySnapshot = new StandardDictionarySnapshotProvider().get();
         Analyzer<Result> analyzers = Analyzers.with(//
-                new SemanticAnalyzer(dictionaryConstituents), //
-                new SemanticQualityAnalyzer(dictionaryConstituents, expectedCategories)//
+                new SemanticAnalyzer(dictionarySnapshot), //
+                new SemanticQualityAnalyzer(dictionarySnapshot, expectedCategories)//
         );
 
         for (String[] record : records) {
@@ -271,7 +271,7 @@ public class SemanticQualityAnalyzerTest extends CategoryRegistryManagerAbstract
         addList.add(doc2);
         CategoryRegistryManager.getInstance().getCustomDictionaryHolder().addDataDictDocuments(addList);
 
-        dictionaryConstituents = new DictionaryConstituentsProviders.SingletonProvider().get();
+        dictionarySnapshot = new StandardDictionarySnapshotProvider().get();
     }
 
     public void initCompound() throws IOException, URISyntaxException {

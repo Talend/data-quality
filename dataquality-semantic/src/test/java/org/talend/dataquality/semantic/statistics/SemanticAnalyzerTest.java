@@ -41,8 +41,8 @@ import org.talend.dataquality.semantic.model.DQDocument;
 import org.talend.dataquality.semantic.model.DQRegEx;
 import org.talend.dataquality.semantic.model.DQValidator;
 import org.talend.dataquality.semantic.model.MainCategory;
-import org.talend.dataquality.semantic.recognizer.DictionaryConstituents;
-import org.talend.dataquality.semantic.recognizer.DictionaryConstituentsProviders;
+import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
+import org.talend.dataquality.semantic.snapshot.StandardDictionarySnapshotProvider;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ TenancyContextHolder.class })
@@ -118,7 +118,7 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
     private final List<String> EXPECTED_PHONE_CATEGORY_METADATA = Arrays
             .asList(new String[] { SemanticCategoryEnum.PHONE.name() });
 
-    private DictionaryConstituents dictionaryConstituents;
+    private DictionarySnapshot dictionarySnapshot;
 
     @Test
     public void testTagada() {
@@ -134,7 +134,7 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
         DQCategory firstNameCat = holder.getMetadata().get(SemanticCategoryEnum.FIRST_NAME.getTechnicalId());
         firstNameCat.setDeleted(true);
         holder.updateCategory(firstNameCat);
-        dictionaryConstituents = new DictionaryConstituentsProviders.SingletonProvider().get();
+        dictionarySnapshot = new StandardDictionarySnapshotProvider().get();
 
         final List<String> EXPECTED_CATEGORIES = Arrays.asList(
                 new String[] { "", SemanticCategoryEnum.LAST_NAME.name(), SemanticCategoryEnum.LAST_NAME.name(), "", "", "" });
@@ -156,7 +156,7 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
         newDoc.setId("the_doc_id");
         newDoc.setValues(new HashSet<>(Arrays.asList("true", "false")));
         holder.addDataDictDocuments(Collections.singletonList(newDoc));
-        dictionaryConstituents = new DictionaryConstituentsProviders.SingletonProvider().get();
+        dictionarySnapshot = new StandardDictionarySnapshotProvider().get();
 
         final List<String> EXPECTED_CATEGORIES = Arrays.asList(new String[] { "", SemanticCategoryEnum.LAST_NAME.name(),
                 SemanticCategoryEnum.FIRST_NAME.name(), "", "", SemanticCategoryEnum.ANSWER.name() });
@@ -183,7 +183,7 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
         dqCat.setCompleteness(Boolean.TRUE);
         dqCat.setModified(Boolean.TRUE);
         holder.updateCategory(dqCat);
-        dictionaryConstituents = new DictionaryConstituentsProviders.SingletonProvider().get();
+        dictionarySnapshot = new StandardDictionarySnapshotProvider().get();
 
         final List<String> EXPECTED_CATEGORIES = Arrays.asList(new String[] { "", SemanticCategoryEnum.LAST_NAME.name(),
                 SemanticCategoryEnum.FIRST_NAME.name(), "", "", "the_name" });
@@ -222,8 +222,8 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
     public void testSetLimit() {
 
         mockWithTenant("testSetLimit");
-        dictionaryConstituents = new DictionaryConstituentsProviders.SingletonProvider().get();
-        SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(dictionaryConstituents);
+        dictionarySnapshot = new StandardDictionarySnapshotProvider().get();
+        SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(dictionarySnapshot);
 
         semanticAnalyzer.setLimit(0);
 
@@ -291,8 +291,8 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
     }
 
     private void testSemanticAnalyzer(List<String[]> testRecords, List<String> testMetadata, List<String> expectedCategories) {
-        dictionaryConstituents = new DictionaryConstituentsProviders.SingletonProvider().get();
-        SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(dictionaryConstituents);
+        dictionarySnapshot = new StandardDictionarySnapshotProvider().get();
+        SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(dictionarySnapshot);
 
         Analyzer<Result> analyzer = Analyzers.with(semanticAnalyzer);
 

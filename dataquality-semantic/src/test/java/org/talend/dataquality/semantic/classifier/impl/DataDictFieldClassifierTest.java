@@ -65,7 +65,7 @@ public class DataDictFieldClassifierTest {
     @Test
     public void testValidCategoriesBeverage() throws IOException {
         CategoryRegistryManager.setLocalRegistryPath("target/testValidCategoriesBeverage");
-        Index ddClassifier = CategoryRegistryManager.getInstance().getCustomDictionaryHolder().getDictionaryConstituents()
+        Index ddClassifier = CategoryRegistryManager.getInstance().getCustomDictionaryHolder().getDictionarySnapshot()
                 .getSharedDataDict();
 
         DQCategory category = CategoryRegistryManager.getInstance().getCategoryMetadataByName("BEVERAGE");
@@ -92,7 +92,7 @@ public class DataDictFieldClassifierTest {
         CategoryRegistryManager.reset();
         CategoryRegistryManager.setUsingLocalCategoryRegistry(false);
         CategoryRegistryManager.setLocalRegistryPath("target/testValidCategoriesWithFrCommune");
-        Index ddClassifier = CategoryRegistryManager.getInstance().getCustomDictionaryHolder().getDictionaryConstituents()
+        Index ddClassifier = CategoryRegistryManager.getInstance().getCustomDictionaryHolder().getDictionarySnapshot()
                 .getSharedDataDict();
 
         DQCategory category = CategoryRegistryManager.getInstance().getCategoryMetadataByName("FR_COMMUNE");

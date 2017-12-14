@@ -26,8 +26,8 @@ import org.slf4j.LoggerFactory;
 import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.AnalyzerSupplier;
 import org.talend.dataquality.common.inference.ConcurrentAnalyzer;
-import org.talend.dataquality.semantic.recognizer.DictionaryConstituents;
-import org.talend.dataquality.semantic.recognizer.DictionaryConstituentsProviders;
+import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
+import org.talend.dataquality.semantic.snapshot.StandardDictionarySnapshotProvider;
 import org.talend.dataquality.semantic.statistics.SemanticAnalyzer;
 import org.talend.dataquality.semantic.statistics.SemanticType;
 
@@ -45,12 +45,12 @@ public class ConcurrentAnalyzerTest extends SemanticStatisticsTestBase {
     @Test
     public void testThreadSafeConcurrentAccess() {
         try {
-            final DictionaryConstituents dictionaryConstituents = new DictionaryConstituentsProviders.SingletonProvider().get();
+            final DictionarySnapshot dictionarySnapshot = new StandardDictionarySnapshotProvider().get();
             AnalyzerSupplier<Analyzer<SemanticType>> supplier = new AnalyzerSupplier<Analyzer<SemanticType>>() {
 
                 @Override
                 public Analyzer<SemanticType> get() {
-                    return new SemanticAnalyzer(dictionaryConstituents);
+                    return new SemanticAnalyzer(dictionarySnapshot);
                 }
 
             };
@@ -82,8 +82,8 @@ public class ConcurrentAnalyzerTest extends SemanticStatisticsTestBase {
 
     @Test
     public void testThreadUnsafeConcurrentAccess() throws Exception {
-        final DictionaryConstituents dictionaryConstituents = new DictionaryConstituentsProviders.SingletonProvider().get();
-        try (Analyzer<SemanticType> analyzer = new SemanticAnalyzer(dictionaryConstituents)) {
+        final DictionarySnapshot dictionarySnapshot = new StandardDictionarySnapshotProvider().get();
+        try (Analyzer<SemanticType> analyzer = new SemanticAnalyzer(dictionarySnapshot)) {
             Runnable r = new Runnable() {
 
                 @Override

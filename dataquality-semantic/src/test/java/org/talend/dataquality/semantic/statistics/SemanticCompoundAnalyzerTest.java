@@ -24,12 +24,12 @@ import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.Analyzers;
 import org.talend.dataquality.semantic.CategoryRegistryManagerAbstract;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
-import org.talend.dataquality.semantic.recognizer.DictionaryConstituents;
-import org.talend.dataquality.semantic.recognizer.DictionaryConstituentsProviders;
+import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
+import org.talend.dataquality.semantic.snapshot.StandardDictionarySnapshotProvider;
 
 public class SemanticCompoundAnalyzerTest extends CategoryRegistryManagerAbstract {
 
-    private DictionaryConstituents dictionaryConstituents;
+    private DictionarySnapshot dictionarySnapshot;
 
     private static final String PHONE = "PHONE";
 
@@ -52,12 +52,12 @@ public class SemanticCompoundAnalyzerTest extends CategoryRegistryManagerAbstrac
 
     @Before
     public void setUp() throws Exception {
-        dictionaryConstituents = new DictionaryConstituentsProviders.SingletonProvider().get();
+        dictionarySnapshot = new StandardDictionarySnapshotProvider().get();
     }
 
     @Test
     public void testPhone() {
-        SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(dictionaryConstituents);
+        SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(dictionarySnapshot);
 
         Analyzer<Analyzers.Result> analyzer = Analyzers.with(semanticAnalyzer);
         analyzer.init();

@@ -24,6 +24,8 @@ import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.model.DQDocument;
+import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
+import org.talend.dataquality.semantic.snapshot.StandardDictionarySnapshotProvider;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ TenancyContextHolder.class })
@@ -31,7 +33,7 @@ public class DefaultCategoryRecognizerTest extends CategoryRegistryManagerAbstra
 
     private CategoryRecognizer recognizer;
 
-    DictionaryConstituents dictionaryConstituents;
+    DictionarySnapshot dictionarySnapshot;
 
     private static final String US_STATE_PHONE_FR_COMMUNE = "US_STATE_PHONE_FR_COMMUNE";
 
@@ -94,8 +96,8 @@ public class DefaultCategoryRecognizerTest extends CategoryRegistryManagerAbstra
         frCommuneCategory.getParents().add(northAmericaPhoneAndFRCommuneCategory);
         CategoryRegistryManager.getInstance().getCustomDictionaryHolder().updateCategory(frCommuneCategory);
 
-        dictionaryConstituents = new DictionaryConstituentsProviders.SingletonProvider().get();
-        recognizer = new DefaultCategoryRecognizer(dictionaryConstituents);
+        dictionarySnapshot = new StandardDictionarySnapshotProvider().get();
+        recognizer = new DefaultCategoryRecognizer(dictionarySnapshot);
 
     }
 
@@ -128,8 +130,8 @@ public class DefaultCategoryRecognizerTest extends CategoryRegistryManagerAbstra
         addList.add(doc2);
         CategoryRegistryManager.getInstance().getCustomDictionaryHolder().addDataDictDocuments(addList);
 
-        dictionaryConstituents = new DictionaryConstituentsProviders.SingletonProvider().get();
-        recognizer = new DefaultCategoryRecognizer(dictionaryConstituents);
+        dictionarySnapshot = new StandardDictionarySnapshotProvider().get();
+        recognizer = new DefaultCategoryRecognizer(dictionarySnapshot);
 
     }
 
@@ -216,8 +218,8 @@ public class DefaultCategoryRecognizerTest extends CategoryRegistryManagerAbstra
                 .getCategoryMetadataById(SemanticCategoryEnum.FIRST_NAME.getTechnicalId());
         CategoryRegistryManager.getInstance().getCustomDictionaryHolder().deleteCategory(dqCategory);
 
-        dictionaryConstituents = new DictionaryConstituentsProviders.SingletonProvider().get();
-        recognizer = new DefaultCategoryRecognizer(dictionaryConstituents);
+        dictionarySnapshot = new StandardDictionarySnapshotProvider().get();
+        recognizer = new DefaultCategoryRecognizer(dictionarySnapshot);
 
         recognizer.process("damien");
         checkResults(StringUtils.EMPTY);
@@ -230,8 +232,8 @@ public class DefaultCategoryRecognizerTest extends CategoryRegistryManagerAbstra
         for (int i = 0; i < resultArray.length; i++) {
             assertEquals(expectedCategories[i], resultArray[i].getCategoryId());
         }
-        dictionaryConstituents = new DictionaryConstituentsProviders.SingletonProvider().get();
-        recognizer = new DefaultCategoryRecognizer(dictionaryConstituents);
+        dictionarySnapshot = new StandardDictionarySnapshotProvider().get();
+        recognizer = new DefaultCategoryRecognizer(dictionarySnapshot);
     }
 
 }

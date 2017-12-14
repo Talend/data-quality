@@ -19,6 +19,7 @@ Export-Package: org.apache.commons.csv,
  org.talend.dataquality.semantic.index,
  org.talend.dataquality.semantic.recognizer,
  org.talend.dataquality.semantic.sampling,
+ org.talend.dataquality.semantic.snapshot,
  org.talend.dataquality.semantic.statistics,
  org.talend.dataquality.semantic.validator,
  org.talend.dataquality.semantic.validator.impl

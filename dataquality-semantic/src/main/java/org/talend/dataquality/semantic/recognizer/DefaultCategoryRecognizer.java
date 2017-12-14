@@ -34,6 +34,7 @@ import org.talend.dataquality.semantic.classifier.impl.DataDictFieldClassifier;
 import org.talend.dataquality.semantic.index.Index;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.model.MainCategory;
+import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
 
 /**
  * created by talend on 2015-07-28 Detailled comment.
@@ -63,9 +64,9 @@ public class DefaultCategoryRecognizer implements CategoryRecognizer {
 
     private boolean tokenizedApply = true;
 
-    public DefaultCategoryRecognizer(DictionaryConstituents constituents) throws IOException {
-        this(constituents.getSharedDataDict(), constituents.getCustomDataDict(), constituents.getKeyword(),
-                constituents.getRegexClassifier(), constituents.getMetadata());
+    public DefaultCategoryRecognizer(DictionarySnapshot dictionarySnapshot) throws IOException {
+        this(dictionarySnapshot.getSharedDataDict(), dictionarySnapshot.getCustomDataDict(), dictionarySnapshot.getKeyword(),
+                dictionarySnapshot.getRegexClassifier(), dictionarySnapshot.getMetadata());
     }
 
     public DefaultCategoryRecognizer(final Index sharedDictionary, Index customDictionary, Index keyword,

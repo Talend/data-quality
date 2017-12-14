@@ -93,7 +93,7 @@ public class TdqCategoriesFactoryTest extends CategoryRegistryManagerAbstract {
         final List<String> EXPECTED_CATEGORIES = Arrays.asList(new String[] { "", SemanticCategoryEnum.LAST_NAME.name(),
                 SemanticCategoryEnum.FIRST_NAME.name(), "", "", SemanticCategoryEnum.COUNTRY_CODE_ISO2.name() });
 
-        SemanticQualityAnalyzer semanticQualityAnalyzer = new SemanticQualityAnalyzer(tdqCategories.asDictionaryConstituents(),
+        SemanticQualityAnalyzer semanticQualityAnalyzer = new SemanticQualityAnalyzer(tdqCategories.asDictionarySnapshot(),
                 EXPECTED_CATEGORIES.toArray(new String[EXPECTED_CATEGORIES.size()]));
 
         Analyzer<Result> analyzer = Analyzers.with(semanticQualityAnalyzer);

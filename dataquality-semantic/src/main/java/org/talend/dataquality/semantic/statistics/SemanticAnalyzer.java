@@ -29,7 +29,7 @@ import org.talend.dataquality.semantic.exception.DQSemanticRuntimeException;
 import org.talend.dataquality.semantic.recognizer.CategoryFrequency;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizer;
 import org.talend.dataquality.semantic.recognizer.DefaultCategoryRecognizer;
-import org.talend.dataquality.semantic.recognizer.DictionaryConstituents;
+import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
 
 /**
  * Semantic type infer executor. <br>
@@ -58,12 +58,12 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
 
     private float weight = DEFAULT_WEIGHT_VALUE;
 
-    private DictionaryConstituents constituents;
+    private DictionarySnapshot dictionarySnapshot;
 
-    public SemanticAnalyzer(DictionaryConstituents constituents) {
-        if (constituents == null)
-            throw new NullPointerException("Dictionary constituents is Null.");
-        this.constituents = constituents;
+    public SemanticAnalyzer(DictionarySnapshot dictionarySnapshot) {
+        if (dictionarySnapshot == null)
+            throw new NullPointerException("Dictionary dictionarySnapshot is Null.");
+        this.dictionarySnapshot = dictionarySnapshot;
         metadataMap = new HashMap<>();
     }
 
@@ -93,8 +93,8 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
         currentCount = 0;
         columnIdxToCategoryRecognizer.clear();
         results.clear();
-        if (constituents != null) {
-            constituents.getCustomDataDict().initIndex();
+        if (dictionarySnapshot != null) {
+            dictionarySnapshot.getCustomDataDict().initIndex();
         }
     }
 
@@ -127,9 +127,9 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
         }
         for (int idx = 0; idx < record.length; idx++) {
             try {
-                columnIdxToCategoryRecognizer.put(idx, new DefaultCategoryRecognizer(constituents));
+                columnIdxToCategoryRecognizer.put(idx, new DefaultCategoryRecognizer(dictionarySnapshot));
             } catch (IOException e) {
-                throw new IllegalArgumentException("Unable to configure category recognizer with constituent.", e);
+                throw new IllegalArgumentException("Unable to configure category recognizer with dictionary snapshot.", e);
             }
         }
     }

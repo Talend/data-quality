@@ -29,7 +29,7 @@ import org.talend.dataquality.semantic.index.LuceneIndex;
 import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.model.DQDocument;
-import org.talend.dataquality.semantic.recognizer.DictionaryConstituents;
+import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
 
 /**
  * holder of tenant-specific categories, provides access to custom Metadata/DataDict/RegEx.
@@ -604,8 +604,8 @@ public class CustomDictionaryHolder {
         reloadCategoryMetadata();
     }
 
-    public DictionaryConstituents getDictionaryConstituents() {
-        return new DictionaryConstituents(getMetadata(), //
+    public DictionarySnapshot getDictionarySnapshot() {
+        return new DictionarySnapshot(getMetadata(), //
                 new LuceneIndex(CategoryRegistryManager.getInstance().getSharedDataDictDirectory(),
                         DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY), //
                 new LuceneIndex(getDataDictDirectory(), DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY), //

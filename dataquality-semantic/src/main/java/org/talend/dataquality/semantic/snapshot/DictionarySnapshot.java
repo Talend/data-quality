@@ -1,4 +1,4 @@
-package org.talend.dataquality.semantic.recognizer;
+package org.talend.dataquality.semantic.snapshot;
 
 import java.util.Map;
 
@@ -6,7 +6,11 @@ import org.talend.dataquality.semantic.classifier.custom.UserDefinedClassifier;
 import org.talend.dataquality.semantic.index.Index;
 import org.talend.dataquality.semantic.model.DQCategory;
 
-public class DictionaryConstituents {
+/**
+ * Used for discovery and validation
+ * contains information to access indexes for read only
+ */
+public class DictionarySnapshot {
 
     private Map<String, DQCategory> metadata;
 
@@ -18,13 +22,13 @@ public class DictionaryConstituents {
 
     private UserDefinedClassifier regexClassifier;
 
-    public DictionaryConstituents(Map<String, DQCategory> metadata, Index sharedDataDict, Index customDataDict, Index keyword,
+    public DictionarySnapshot(Map<String, DQCategory> metadata, Index sharedDataDict, Index customDataDict, Index keyword,
             UserDefinedClassifier regexClassifier) {
-        this.metadata = metadata;
+        this.metadata = metadata; // TODO do a copy
         this.sharedDataDict = sharedDataDict;
         this.customDataDict = customDataDict;
         this.keyword = keyword;
-        this.regexClassifier = regexClassifier;
+        this.regexClassifier = regexClassifier; // TODO do a copy
     }
 
     public Map<String, DQCategory> getMetadata() {

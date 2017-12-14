@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import org.talend.dataquality.semantic.index.DictionarySearchMode;
 import org.talend.dataquality.semantic.index.LuceneIndex;
-import org.talend.dataquality.semantic.recognizer.DictionaryConstituents;
+import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
 
 /**
  * A container object for DQ dictionaries.
@@ -75,8 +75,8 @@ public class TdqCategories implements Serializable {
         this.regex = regex;
     }
 
-    public DictionaryConstituents asDictionaryConstituents() {
-        return new DictionaryConstituents(categoryMetadata.getMetadata(), //
+    public DictionarySnapshot asDictionarySnapshot() {
+        return new DictionarySnapshot(categoryMetadata.getMetadata(), //
                 new LuceneIndex(dictionary.asDirectory(), DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY), //
                 new LuceneIndex(customDictionary.asDirectory(), DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY), //
                 new LuceneIndex(keyword.asDirectory(), DictionarySearchMode.MATCH_SEMANTIC_KEYWORD), //

@@ -35,7 +35,7 @@ import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizer;
 import org.talend.dataquality.semantic.recognizer.DefaultCategoryRecognizer;
-import org.talend.dataquality.semantic.recognizer.DictionaryConstituents;
+import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
 import org.talend.dataquality.semantic.recognizer.LFUCache;
 
 /**
@@ -52,21 +52,21 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
 
     private final Map<String, LFUCache<String, Boolean>> knownValidationCategoryCache = new HashMap<>();
 
-    private DictionaryConstituents constituents;
+    private DictionarySnapshot dictionarySnapshot;
 
     private ISubCategoryClassifier regexClassifier;
 
     private ISubCategoryClassifier dataDictClassifier;
 
-    public SemanticQualityAnalyzer(DictionaryConstituents constituents, String[] types, boolean isStoreInvalidValues) {
-        this.constituents = constituents;
+    public SemanticQualityAnalyzer(DictionarySnapshot dictionarySnapshot, String[] types, boolean isStoreInvalidValues) {
+        this.dictionarySnapshot = dictionarySnapshot;
         this.isStoreInvalidValues = isStoreInvalidValues;
         init();
         setTypes(types);
     }
 
-    public SemanticQualityAnalyzer(DictionaryConstituents constituents, String... types) {
-        this(constituents, types, false);
+    public SemanticQualityAnalyzer(DictionarySnapshot dictionarySnapshot, String... types) {
+        this(dictionarySnapshot, types, false);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
         List<String> idList = new ArrayList<>();
         for (String type : types) {
             DQCategory dqCat = null;
-            for (DQCategory tmpCat : constituents.getMetadata().values()) {
+            for (DQCategory tmpCat : dictionarySnapshot.getMetadata().values()) {
                 if (type.equals(tmpCat.getName())) {
                     tmpCat.setChildren(getChildrenCategories(tmpCat.getId()));
                     dqCat = tmpCat;
@@ -93,7 +93,7 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
     @Override
     public void init() {
         try {
-            final CategoryRecognizer recognizer = new DefaultCategoryRecognizer(constituents);
+            final CategoryRecognizer recognizer = new DefaultCategoryRecognizer(dictionarySnapshot);
             regexClassifier = recognizer.getUserDefineClassifier();
             dataDictClassifier = recognizer.getDataDictFieldClassifier();
         } catch (IOException e) {
@@ -147,7 +147,7 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
     }
 
     private void analyzeValue(String catId, String value, ValueQualityStatistics valueQuality) {
-        DQCategory category = constituents.getMetadata().get(catId);
+        DQCategory category = dictionarySnapshot.getMetadata().get(catId);
         if (category == null) {
             valueQuality.incrementValid();
             return;
@@ -234,7 +234,7 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
         String currentCategory;
         while (!catToSee.isEmpty()) {
             currentCategory = catToSee.pop();
-            DQCategory dqCategory = constituents.getMetadata().get(currentCategory);
+            DQCategory dqCategory = dictionarySnapshot.getMetadata().get(currentCategory);
             if (dqCategory != null)
                 if (!CollectionUtils.isEmpty(dqCategory.getChildren())) {
                     for (DQCategory child : dqCategory.getChildren()) {
@@ -263,7 +263,7 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
     @Override
     public Analyzer<ValueQualityStatistics> merge(Analyzer<ValueQualityStatistics> analyzer) {
         int idx = 0;
-        SemanticQualityAnalyzer mergedValueQualityAnalyze = new SemanticQualityAnalyzer(constituents, getTypes());
+        SemanticQualityAnalyzer mergedValueQualityAnalyze = new SemanticQualityAnalyzer(dictionarySnapshot, getTypes());
         ((ResizableList<ValueQualityStatistics>) mergedValueQualityAnalyze.getResult()).resize(results.size());
         for (ValueQualityStatistics qs : results) {
             ValueQualityStatistics mergedStats = mergedValueQualityAnalyze.getResult().get(idx);

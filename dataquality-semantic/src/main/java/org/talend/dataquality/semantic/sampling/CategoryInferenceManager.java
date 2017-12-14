@@ -95,7 +95,7 @@ public class CategoryInferenceManager {
         // get the lucene index.
         try {
             return new DefaultCategoryRecognizer(
-                    CategoryRegistryManager.getInstance().getCustomDictionaryHolder().getDictionaryConstituents());
+                    CategoryRegistryManager.getInstance().getCustomDictionaryHolder().getDictionarySnapshot());
         } catch (IOException e) {
             throw new DQSemanticRuntimeException("Unable to find resources.", e);
         }

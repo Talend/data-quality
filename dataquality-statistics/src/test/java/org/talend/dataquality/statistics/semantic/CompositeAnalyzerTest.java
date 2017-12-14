@@ -23,8 +23,8 @@ import org.junit.Test;
 import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.Analyzers;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
-import org.talend.dataquality.semantic.recognizer.DictionaryConstituents;
-import org.talend.dataquality.semantic.recognizer.DictionaryConstituentsProviders;
+import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
+import org.talend.dataquality.semantic.snapshot.StandardDictionarySnapshotProvider;
 import org.talend.dataquality.semantic.statistics.SemanticAnalyzer;
 import org.talend.dataquality.semantic.statistics.SemanticType;
 import org.talend.dataquality.statistics.type.DataTypeAnalyzer;
@@ -37,8 +37,8 @@ public class CompositeAnalyzerTest extends SemanticStatisticsTestBase {
 
     @Before
     public void setUp() throws Exception {
-        final DictionaryConstituents dictionaryConstituents = new DictionaryConstituentsProviders.SingletonProvider().get();
-        analyzer = Analyzers.with(new DataTypeAnalyzer(), new SemanticAnalyzer(dictionaryConstituents));
+        final DictionarySnapshot dictionarySnapshot = new StandardDictionarySnapshotProvider().get();
+        analyzer = Analyzers.with(new DataTypeAnalyzer(), new SemanticAnalyzer(dictionarySnapshot));
     }
 
     @After
