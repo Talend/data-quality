@@ -1,38 +1,14 @@
 package org.talend.dataquality.semantic.recognizer;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.analysis.util.CharArraySet;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.StringField;
-import org.apache.lucene.index.DirectoryReader;
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriterConfig;
-import org.apache.lucene.index.Term;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TermQuery;
-import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.RAMDirectory;
-import org.apache.lucene.util.Version;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import org.talend.daikon.multitenant.context.TenancyContext;
 import org.talend.daikon.multitenant.context.TenancyContextHolder;
-import org.talend.daikon.multitenant.provider.DefaultTenant;
 import org.talend.dataquality.semantic.CategoryRegistryManagerAbstract;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
-import org.talend.dataquality.semantic.api.DictionaryUtils;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
-import org.talend.dataquality.semantic.index.ClassPathDirectory;
-import org.talend.dataquality.semantic.index.DictionarySearcher;
 import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.model.DQDocument;
@@ -47,8 +23,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
-import static org.powermock.api.mockito.PowerMockito.mock;
 import static org.talend.dataquality.semantic.TestUtils.mockWithTenant;
 
 @RunWith(PowerMockRunner.class)
@@ -65,11 +39,11 @@ public class DefaultCategoryRecognizerTest extends CategoryRegistryManagerAbstra
 
     /**
      * BUILD THE FOLLOWING TREE:
-     *
+     * <p>
      * PHONE contains FR_PHONE, DE_PHONE, UK_PHONE, US_PHONE
      * US_STATE_PHONE contains US_STATE and PHONE
      * US_STATE_PHONE_FR_COMMUNE contains FR_COMMUNE and US_STATE_PHONE
-     * 
+     *
      * @throws IOException
      */
     public void init() throws IOException {
@@ -162,7 +136,7 @@ public class DefaultCategoryRecognizerTest extends CategoryRegistryManagerAbstra
     /**
      * check the order with the following priorities
      * "count" first, "level" next and "SemanticCategoryEnum.java ordinal" last
-     * 
+     *
      * @throws IOException
      * @throws URISyntaxException
      */

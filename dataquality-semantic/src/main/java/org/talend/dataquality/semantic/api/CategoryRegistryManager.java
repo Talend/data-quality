@@ -27,7 +27,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.log4j.Logger;
@@ -84,12 +83,6 @@ public class CategoryRegistryManager {
     public static final String REPUBLISH_FOLDER_NAME = "republish";
 
     public static final String DEFAULT_TENANT_ID = "t_default";
-
-    public static final String DEFAULT_METADATA_PATH = "/" + METADATA_SUBFOLDER_NAME + "/";
-
-    public static final String DEFAULT_DD_PATH = "/" + DICTIONARY_SUBFOLDER_NAME + "/";
-
-    public static final String DEFAULT_KW_PATH = "/" + KEYWORD_SUBFOLDER_NAME + "/";
 
     public static final String DEFAULT_RE_PATH = "/" + REGEX_SUBFOLDER_NAME + "/" + REGEX_CATEGRIZER_FILE_NAME;
 
@@ -413,11 +406,7 @@ public class CategoryRegistryManager {
      * get URI of local category metadata
      */
     private URI getMetadataURI() throws URISyntaxException {
-        if (usingLocalCategoryRegistry) {
-            return Paths.get(localRegistryPath, SHARED_FOLDER_NAME, PRODUCTION_FOLDER_NAME, METADATA_SUBFOLDER_NAME).toUri();
-        } else {
-            return this.getClass().getResource(DEFAULT_METADATA_PATH).toURI();
-        }
+        return this.getClass().getResource("/" + METADATA_SUBFOLDER_NAME + "/").toURI();
     }
 
     /**
@@ -427,7 +416,7 @@ public class CategoryRegistryManager {
         if (usingLocalCategoryRegistry) {
             return Paths.get(localRegistryPath, SHARED_FOLDER_NAME, PRODUCTION_FOLDER_NAME, DICTIONARY_SUBFOLDER_NAME).toUri();
         } else {
-            return this.getClass().getResource(DEFAULT_DD_PATH).toURI();
+            return this.getClass().getResource("/" + DICTIONARY_SUBFOLDER_NAME + "/").toURI();
         }
     }
 
@@ -438,7 +427,7 @@ public class CategoryRegistryManager {
         if (usingLocalCategoryRegistry) {
             return Paths.get(localRegistryPath, SHARED_FOLDER_NAME, PRODUCTION_FOLDER_NAME, KEYWORD_SUBFOLDER_NAME).toUri();
         } else {
-            return this.getClass().getResource(DEFAULT_KW_PATH).toURI();
+            return this.getClass().getResource("/" + KEYWORD_SUBFOLDER_NAME + "/").toURI();
         }
     }
 
@@ -459,12 +448,7 @@ public class CategoryRegistryManager {
      */
     public CustomDictionaryHolder getCustomDictionaryHolder() {
         Tenant tenant = TenancyContextHolder.getContext().getTenant();
-        String tenantID;
-        if (tenant != null) {
-            tenantID = tenant.getIdentity().toString();
-        } else {
-            tenantID = DEFAULT_TENANT_ID;
-        }
+        String tenantID = (tenant == null) ? DEFAULT_TENANT_ID : tenant.getIdentity().toString();
         return getCustomDictionaryHolder(tenantID);
 
     }

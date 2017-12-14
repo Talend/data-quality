@@ -16,11 +16,14 @@ import org.talend.dataquality.semantic.api.DictionaryUtils;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.model.DQDocument;
 
+import static org.talend.dataquality.semantic.api.CategoryRegistryManager.DICTIONARY_SUBFOLDER_NAME;
+import static org.talend.dataquality.semantic.api.CategoryRegistryManager.METADATA_SUBFOLDER_NAME;
+
 public class IndexRegenerator {
 
     public static void main(String[] args) throws IOException {
-        IndexRegenerator.regenerateCategoryIndex("src/main/resources" + CategoryRegistryManager.DEFAULT_METADATA_PATH);
-        IndexRegenerator.regenerateDictionaryIndex("src/main/resources" + CategoryRegistryManager.DEFAULT_DD_PATH);
+        IndexRegenerator.regenerateCategoryIndex("src/main/resources/" + METADATA_SUBFOLDER_NAME + "/");
+        IndexRegenerator.regenerateDictionaryIndex("src/main/resources/" + DICTIONARY_SUBFOLDER_NAME + "/");
     }
 
     public static void regenerateCategoryIndex(String path) throws IOException {

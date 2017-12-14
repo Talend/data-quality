@@ -58,8 +58,6 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
 
     private ISubCategoryClassifier dataDictClassifier;
 
-    private Map<String, DQCategory> metadata;
-
     public SemanticQualityAnalyzer(DictionaryConstituents constituents, String[] types, boolean isStoreInvalidValues) {
         this.constituents = constituents;
         this.isStoreInvalidValues = isStoreInvalidValues;
@@ -76,7 +74,7 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
         List<String> idList = new ArrayList<>();
         for (String type : types) {
             DQCategory dqCat = null;
-            for (DQCategory tmpCat : metadata.values()) {
+            for (DQCategory tmpCat : constituents.getMetadata().values()) {
                 if (type.equals(tmpCat.getName())) {
                     tmpCat.setChildren(getChildrenCategories(tmpCat.getId()));
                     dqCat = tmpCat;
@@ -95,11 +93,7 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
     @Override
     public void init() {
         try {
-            final CategoryRecognizer recognizer;
-
-            recognizer = new DefaultCategoryRecognizer(constituents);
-            metadata = constituents.getMetadata();
-
+            final CategoryRecognizer recognizer = new DefaultCategoryRecognizer(constituents);
             regexClassifier = recognizer.getUserDefineClassifier();
             dataDictClassifier = recognizer.getDataDictFieldClassifier();
         } catch (IOException e) {
@@ -153,7 +147,7 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
     }
 
     private void analyzeValue(String catId, String value, ValueQualityStatistics valueQuality) {
-        DQCategory category = metadata.get(catId);
+        DQCategory category = constituents.getMetadata().get(catId);
         if (category == null) {
             valueQuality.incrementValid();
             return;
@@ -240,7 +234,7 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
         String currentCategory;
         while (!catToSee.isEmpty()) {
             currentCategory = catToSee.pop();
-            DQCategory dqCategory = metadata.get(currentCategory);
+            DQCategory dqCategory = constituents.getMetadata().get(currentCategory);
             if (dqCategory != null)
                 if (!CollectionUtils.isEmpty(dqCategory.getChildren())) {
                     for (DQCategory child : dqCategory.getChildren()) {

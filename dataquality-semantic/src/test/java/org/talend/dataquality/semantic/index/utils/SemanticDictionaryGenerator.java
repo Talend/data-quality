@@ -26,14 +26,17 @@ import org.talend.dataquality.semantic.api.DictionaryUtils;
 import org.talend.dataquality.semantic.index.DictionarySearcher;
 import org.talend.dataquality.semantic.index.utils.optimizer.CategoryOptimizer;
 
+import static org.talend.dataquality.semantic.api.CategoryRegistryManager.DICTIONARY_SUBFOLDER_NAME;
+import static org.talend.dataquality.semantic.api.CategoryRegistryManager.KEYWORD_SUBFOLDER_NAME;
+
 /**
  * @deprecated DO NOT run this class directly, because the generated DD indexes will not contain catId and docId.
  */
 public class SemanticDictionaryGenerator {
 
-    protected static final String DD_PATH = "src/main/resources" + CategoryRegistryManager.DEFAULT_DD_PATH;
+    protected static final String DD_PATH = "src/main/resources/" + DICTIONARY_SUBFOLDER_NAME + "/";
 
-    protected static final String KW_PATH = "src/main/resources" + CategoryRegistryManager.DEFAULT_KW_PATH;
+    protected static final String KW_PATH = "src/main/resources/" + KEYWORD_SUBFOLDER_NAME + "/";
 
     protected static Pattern SPLITTER = Pattern.compile("\\|");
 
