@@ -22,10 +22,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.junit.Test;
+import org.talend.dataquality.semantic.model.MainCategory;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import org.talend.dataquality.semantic.model.MainCategory;
 
 /**
  * DOC qiongli class global comment. Detailled comment

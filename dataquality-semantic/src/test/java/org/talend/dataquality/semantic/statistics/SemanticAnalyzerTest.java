@@ -13,8 +13,6 @@
 package org.talend.dataquality.semantic.statistics;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
-import static org.powermock.api.mockito.PowerMockito.mock;
 import static org.talend.dataquality.semantic.TestUtils.mockWithTenant;
 
 import java.io.IOException;
@@ -24,15 +22,11 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import org.talend.daikon.multitenant.context.TenancyContext;
 import org.talend.daikon.multitenant.context.TenancyContextHolder;
-import org.talend.daikon.multitenant.provider.DefaultTenant;
 import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.Analyzers;
 import org.talend.dataquality.common.inference.Analyzers.Result;

@@ -1,17 +1,8 @@
 package org.talend.dataquality.semantic.api;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-import org.talend.daikon.multitenant.context.TenancyContext;
-import org.talend.daikon.multitenant.context.TenancyContextHolder;
-import org.talend.daikon.multitenant.provider.DefaultTenant;
-import org.talend.dataquality.semantic.CategoryRegistryManagerAbstract;
-import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
-import org.talend.dataquality.semantic.model.DQCategory;
-import org.talend.dataquality.semantic.model.DQDocument;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.talend.dataquality.semantic.TestUtils.mockWithTenant;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,11 +14,15 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.when;
-import static org.powermock.api.mockito.PowerMockito.mock;
-import static org.talend.dataquality.semantic.TestUtils.mockWithTenant;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import org.talend.daikon.multitenant.context.TenancyContextHolder;
+import org.talend.dataquality.semantic.CategoryRegistryManagerAbstract;
+import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
+import org.talend.dataquality.semantic.model.DQCategory;
+import org.talend.dataquality.semantic.model.DQDocument;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ TenancyContextHolder.class })

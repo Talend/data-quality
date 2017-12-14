@@ -12,6 +12,12 @@
 // ============================================================================
 package org.talend.dataquality.semantic.statistics;
 
+import static org.junit.Assert.assertEquals;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.common.inference.Analyzer;
@@ -20,12 +26,6 @@ import org.talend.dataquality.semantic.CategoryRegistryManagerAbstract;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.recognizer.DictionaryConstituents;
 import org.talend.dataquality.semantic.recognizer.DictionaryConstituentsProviders;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
 
 public class SemanticCompoundAnalyzerTest extends CategoryRegistryManagerAbstract {
 

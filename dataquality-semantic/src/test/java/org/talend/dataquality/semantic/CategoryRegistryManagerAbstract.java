@@ -12,7 +12,6 @@
 // ============================================================================
 package org.talend.dataquality.semantic;
 
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 
