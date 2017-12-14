@@ -12,21 +12,6 @@
 // ============================================================================
 package org.talend.dataquality.semantic.api;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.log4j.Logger;
@@ -43,6 +28,21 @@ import org.talend.dataquality.semantic.index.DictionarySearchMode;
 import org.talend.dataquality.semantic.index.LuceneIndex;
 import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Paths;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Singleton class providing API for local category registry management.
@@ -464,10 +464,9 @@ public class CategoryRegistryManager {
     }
 
     /**
-     * 
-     * @param input the input value
+     * @param input        the input value
      * @param categoryName the category name
-     * @param similarity the threshold value, the compared score must be >= similarity
+     * @param similarity   the threshold value, the compared score must be >= similarity
      * @return most similar value from customer dictionary or share dictionary
      */
     public String findMostSimilarValue(String input, String categoryName, double similarity) {
@@ -479,7 +478,6 @@ public class CategoryRegistryManager {
     }
 
     /**
-     * 
      * @param categoryName
      * @return Get a custom or shared LuncenIndex according to the category metadata
      */

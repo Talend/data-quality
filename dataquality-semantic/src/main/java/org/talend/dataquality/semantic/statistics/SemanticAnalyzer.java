@@ -12,14 +12,6 @@
 // ============================================================================
 package org.talend.dataquality.semantic.statistics;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.log4j.Logger;
 import org.talend.dataquality.common.inference.Analyzer;
@@ -31,11 +23,18 @@ import org.talend.dataquality.semantic.recognizer.CategoryRecognizer;
 import org.talend.dataquality.semantic.recognizer.DefaultCategoryRecognizer;
 import org.talend.dataquality.semantic.recognizer.DictionaryConstituents;
 
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
 /**
  * Semantic type infer executor. <br>
- * 
+ *
  * @see Analyzer
- * 
  */
 public class SemanticAnalyzer implements Analyzer<SemanticType> {
 
@@ -61,6 +60,8 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
     private DictionaryConstituents constituents;
 
     public SemanticAnalyzer(DictionaryConstituents constituents) {
+        if (constituents == null)
+            throw new NullPointerException("Dictionary constituents is Null.");
         this.constituents = constituents;
         metadataMap = new HashMap<>();
     }
@@ -68,7 +69,7 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
     /**
      * Set the maximum of records this semantic analyzer is expected to process. Any value <= 0 is considered as
      * "no limit". A value of 1 will only analyze first call to {@link #analyze(String...)}.
-     * 
+     *
      * @param limit A integer that indicate the maximum number of record this analyzer should process.
      */
     public void setLimit(int limit) {
@@ -79,7 +80,7 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
      * Set the weight of data discovery result for score calculation.
      *
      * @param weight the weight of data discovery result for score calculation, default to 0.9, which means the metadata will also
-     * be taken into account for a weight of 0.1
+     *               be taken into account for a weight of 0.1
      */
     public void setWeight(float weight) {
         this.weight = weight;
@@ -124,15 +125,9 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
         }
         for (int idx = 0; idx < record.length; idx++) {
             try {
-                final CategoryRecognizer recognizer;
-                if (constituents == null) {
-                    throw new NullPointerException("Dictionary constituents is Null.");
-                } else {
-                    recognizer = new DefaultCategoryRecognizer(constituents);
-                }
-                columnIdxToCategoryRecognizer.put(idx, recognizer);
+                columnIdxToCategoryRecognizer.put(idx, new DefaultCategoryRecognizer(constituents));
             } catch (IOException e) {
-                throw new IllegalArgumentException("Unable to configure category recognizer with builder.", e);
+                throw new IllegalArgumentException("Unable to configure category recognizer with constituent.", e);
             }
         }
     }
@@ -181,10 +176,11 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
 
     /**
      * Store metadata
-     * 
+     *
      * @param metadata metadata name
-     * @param values value associated to the metadata
+     * @param values   value associated to the metadata
      */
+
     public void setMetadata(Metadata metadata, List<String> values) {
         metadataMap.put(metadata, values);
     }

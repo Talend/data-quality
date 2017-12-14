@@ -1,10 +1,10 @@
 package org.talend.dataquality.semantic.broadcast;
 
-import java.io.Serializable;
-
 import org.talend.dataquality.semantic.index.DictionarySearchMode;
 import org.talend.dataquality.semantic.index.LuceneIndex;
 import org.talend.dataquality.semantic.recognizer.DictionaryConstituents;
+
+import java.io.Serializable;
 
 /**
  * A container object for DQ dictionaries.
@@ -76,9 +76,6 @@ public class TdqCategories implements Serializable {
     }
 
     public DictionaryConstituents asDictionaryConstituents() {
-        if (categoryMetadata == null) {
-            return null;
-        }
         return new DictionaryConstituents(categoryMetadata.getMetadata(), //
                 new LuceneIndex(dictionary.asDirectory(), DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY), //
                 new LuceneIndex(customDictionary.asDirectory(), DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY), //
