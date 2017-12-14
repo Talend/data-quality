@@ -2,7 +2,7 @@ package org.talend.dataquality.semantic.api.internal;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Matchers.any;
 import static org.powermock.api.mockito.PowerMockito.mock;
 import static org.powermock.api.mockito.PowerMockito.when;
 
@@ -59,6 +59,7 @@ public class CustomRegexClassifierAccessTest {
 
     @Test
     public void getRegExs() throws IOException {
+
         when(mapper.readValue(any(File.class), (TypeReference) any())).thenReturn(createSubCategoryRegExs());
 
         List<ISubCategory> regexs = access.getRegExs();
