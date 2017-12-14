@@ -55,13 +55,17 @@ import org.talend.dataquality.semantic.model.DQCategory;
  * <p>
  * Inside each of the above folder, the following subfolders can be found:
  * <ul>
- * <li><b>metadata:</b> lucene index containing metadata of all categories. In the tenant specific folder, the metadata of
+ * <li><b>metadata:</b> lucene index containing metadata of all categories. In the tenant specific folder, the metadata
+ * of
  * all provided categories are copied from shared metadata.</li>
- * <li><b>dictionary:</b> lucene index containing dictionary documents. In the tenant specific folder, we only include the
+ * <li><b>dictionary:</b> lucene index containing dictionary documents. In the tenant specific folder, we only include
+ * the
  * user-defined data dictionaries, and make the copy for only the modified categories provided by Talend</li>
- * <li><b>keyword:</b> lucene index containing keyword documents. This folder does not exist in tenant specific folder as the
+ * <li><b>keyword:</b> lucene index containing keyword documents. This folder does not exist in tenant specific folder
+ * as the
  * modification is not allowed for these categories</li>
- * <li><b>regex:</b> json file containing all categories that can be recognized by regex patterns and eventual subvalidators</li>
+ * <li><b>regex:</b> json file containing all categories that can be recognized by regex patterns and eventual
+ * subvalidators</li>
  * </ul>
  */
 public class CategoryRegistryManager {
@@ -84,7 +88,8 @@ public class CategoryRegistryManager {
 
     public static final String DEFAULT_TENANT_ID = "t_default";
 
-    public static final String DEFAULT_RE_PATH = "/" + REGEX_SUBFOLDER_NAME + "/" + REGEX_CATEGRIZER_FILE_NAME;
+    public static final String DEFAULT_RE_PATH = File.separator + REGEX_SUBFOLDER_NAME + File.separator
+            + REGEX_CATEGRIZER_FILE_NAME;
 
     private static final Logger LOGGER = Logger.getLogger(CategoryRegistryManager.class);
 
@@ -180,7 +185,8 @@ public class CategoryRegistryManager {
     }
 
     /**
-     * Reload the category from local registry for a given tenant ID. This method is typically called following category or
+     * Reload the category from local registry for a given tenant ID. This method is typically called following category
+     * or
      * dictionary enrichments.
      */
     public void reloadCategoriesFromRegistry() {
@@ -249,7 +255,8 @@ public class CategoryRegistryManager {
 
                 boolean baseIndexExtracted = false;
 
-                // because the classpath can have multiple 'metadata' packages (especially with spring boot uber jar packaging)
+                // because the classpath can have multiple 'metadata' packages (especially with spring boot uber jar
+                // packaging)
                 // we need to iterate over the potential resources
                 final List<URL> potentialResources = Collections
                         .list(this.getClass().getClassLoader().getResources(sourceSubFolder));
@@ -416,7 +423,7 @@ public class CategoryRegistryManager {
         if (usingLocalCategoryRegistry) {
             return Paths.get(localRegistryPath, SHARED_FOLDER_NAME, PRODUCTION_FOLDER_NAME, DICTIONARY_SUBFOLDER_NAME).toUri();
         } else {
-            return this.getClass().getResource("/" + DICTIONARY_SUBFOLDER_NAME + "/").toURI();
+            return this.getClass().getResource(File.separator + DICTIONARY_SUBFOLDER_NAME + File.separator).toURI();
         }
     }
 
@@ -427,7 +434,7 @@ public class CategoryRegistryManager {
         if (usingLocalCategoryRegistry) {
             return Paths.get(localRegistryPath, SHARED_FOLDER_NAME, PRODUCTION_FOLDER_NAME, KEYWORD_SUBFOLDER_NAME).toUri();
         } else {
-            return this.getClass().getResource("/" + KEYWORD_SUBFOLDER_NAME + "/").toURI();
+            return this.getClass().getResource(File.separator + KEYWORD_SUBFOLDER_NAME + File.separator).toURI();
         }
     }
 

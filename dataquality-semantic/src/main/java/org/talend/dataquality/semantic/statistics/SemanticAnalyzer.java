@@ -12,6 +12,14 @@
 // ============================================================================
 package org.talend.dataquality.semantic.statistics;
 
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.log4j.Logger;
 import org.talend.dataquality.common.inference.Analyzer;
@@ -22,14 +30,6 @@ import org.talend.dataquality.semantic.recognizer.CategoryFrequency;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizer;
 import org.talend.dataquality.semantic.recognizer.DefaultCategoryRecognizer;
 import org.talend.dataquality.semantic.recognizer.DictionaryConstituents;
-
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 /**
  * Semantic type infer executor. <br>
@@ -48,7 +48,8 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
 
     private final Map<Integer, CategoryRecognizer> columnIdxToCategoryRecognizer = new HashMap<>();
 
-    // Threshold of rows to be handled. in case we only want to analyze a given number of samples. Default value is 10000.
+    // Threshold of rows to be handled. in case we only want to analyze a given number of samples. Default value is
+    // 10000.
     private int limit = 10000;
 
     private int currentCount = 0;
@@ -79,8 +80,9 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
     /**
      * Set the weight of data discovery result for score calculation.
      *
-     * @param weight the weight of data discovery result for score calculation, default to 0.9, which means the metadata will also
-     *               be taken into account for a weight of 0.1
+     * @param weight the weight of data discovery result for score calculation, default to 0.9, which means the metadata
+     * will also
+     * be taken into account for a weight of 0.1
      */
     public void setWeight(float weight) {
         this.weight = weight;
@@ -167,7 +169,6 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
         throw new NotImplementedException("Merge function is not implemented.");
     }
 
-    @Override
     public void close() throws Exception {
         for (CategoryRecognizer catRecognizer : columnIdxToCategoryRecognizer.values()) {
             catRecognizer.end();
@@ -178,7 +179,7 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
      * Store metadata
      *
      * @param metadata metadata name
-     * @param values   value associated to the metadata
+     * @param values value associated to the metadata
      */
 
     public void setMetadata(Metadata metadata, List<String> values) {

@@ -1,10 +1,10 @@
 package org.talend.dataquality.semantic.broadcast;
 
+import java.io.Serializable;
+
 import org.talend.dataquality.semantic.index.DictionarySearchMode;
 import org.talend.dataquality.semantic.index.LuceneIndex;
 import org.talend.dataquality.semantic.recognizer.DictionaryConstituents;
-
-import java.io.Serializable;
 
 /**
  * A container object for DQ dictionaries.
