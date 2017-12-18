@@ -3,9 +3,12 @@ package org.talend.dataquality.semantic;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mock;
 
+import java.util.Optional;
+
 import org.powermock.api.mockito.PowerMockito;
 import org.talend.daikon.multitenant.context.TenancyContext;
 import org.talend.daikon.multitenant.context.TenancyContextHolder;
+import org.talend.daikon.multitenant.core.Tenant;
 import org.talend.daikon.multitenant.provider.DefaultTenant;
 
 public class TestUtils {
@@ -19,8 +22,8 @@ public class TestUtils {
         PowerMockito.mockStatic(TenancyContextHolder.class);
         TenancyContextHolder holder = mock(TenancyContextHolder.class);
         TenancyContext tenancyContext = mock(TenancyContext.class);
-        DefaultTenant tenant = new DefaultTenant(tenantID, null);
+        Optional<Tenant> optionalTenant = Optional.of(new DefaultTenant(tenantID, null));
         when(holder.getContext()).thenReturn(tenancyContext);
-        when(tenancyContext.getTenant()).thenReturn(tenant);
+        when(tenancyContext.getOptionalTenant()).thenReturn(optionalTenant);
     }
 }

@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.SerializationUtils;
@@ -454,8 +455,8 @@ public class CategoryRegistryManager {
      * Get CustomDictioanryHolder instance for the default tenant.
      */
     public CustomDictionaryHolder getCustomDictionaryHolder() {
-        Tenant tenant = TenancyContextHolder.getContext().getTenant();
-        String tenantID = (tenant == null) ? DEFAULT_TENANT_ID : tenant.getIdentity().toString();
+        Optional<Tenant> tenant = TenancyContextHolder.getContext().getOptionalTenant();
+        String tenantID = (tenant.isPresent()) ? tenant.get().getIdentity().toString() : DEFAULT_TENANT_ID;
         return getCustomDictionaryHolder(tenantID);
 
     }
