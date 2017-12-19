@@ -1,6 +1,7 @@
 package org.talend.dataquality.semantic.api;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.talend.dataquality.semantic.TestUtils.mockWithTenant;
 
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.SerializationUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -243,7 +245,7 @@ public class LocalDictionaryCacheTest extends CategoryRegistryManagerAbstract {
         newDoc.setCategory(categoryClone);
         newDoc.setId("the_doc_id");
         newDoc.setValues(new HashSet<>(Arrays.asList("true", "false")));
-        holder.addDataDictDocument(Collections.singletonList(newDoc));
+        holder.addDataDictDocuments(Collections.singletonList(newDoc));
 
         assertEquals(Boolean.TRUE, holder.getMetadata().get(SemanticCategoryEnum.ANSWER.getTechnicalId()).getModified());
 
@@ -261,7 +263,6 @@ public class LocalDictionaryCacheTest extends CategoryRegistryManagerAbstract {
 
         System.out.println("Found " + aux.size() + " values in " + SemanticCategoryEnum.ANSWER.name() + " DQCategory.");
 
-        instance.removeCustomDictionaryHolder("t_suggest");
         CategoryRegistryManager.reset();
     }
 }

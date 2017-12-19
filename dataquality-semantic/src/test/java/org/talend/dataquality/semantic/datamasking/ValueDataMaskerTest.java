@@ -12,7 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.semantic.datamasking;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -228,7 +228,7 @@ public class ValueDataMaskerTest {
         newDoc.setCategory(categoryClone);
         newDoc.setId("the_doc_id");
         newDoc.setValues(new HashSet<>(Arrays.asList("true", "false")));
-        holder.addDataDictDocument(Collections.singletonList(newDoc));
+        holder.addDataDictDocuments(Collections.singletonList(newDoc));
 
         for (String[] input : EXPECTED_MASKED_VALUES_EXIST.keySet()) {
             String inputValue = input[0];
@@ -245,7 +245,6 @@ public class ValueDataMaskerTest {
 
         }
 
-        instance.removeCustomDictionaryHolder("t_suggest");
         CategoryRegistryManager.reset();
     }
 
