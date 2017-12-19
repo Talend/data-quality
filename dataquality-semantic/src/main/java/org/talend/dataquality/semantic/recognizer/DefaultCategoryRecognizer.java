@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.talend.dataquality.record.linkage.attribute.AbstractAttributeMatcher;
 import org.talend.dataquality.record.linkage.attribute.LevenshteinMatcher;
 import org.talend.dataquality.record.linkage.constant.TokenizedResolutionMethod;
