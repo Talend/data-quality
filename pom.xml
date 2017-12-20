@@ -30,12 +30,14 @@
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <talend_snapshots>https://artifacts-oss.talend.com/nexus/content/repositories/TalendOpenSourceSnapshot/</talend_snapshots>
+        <talend_snapshots_deployment>https://artifacts-oss.talend.com/nexus/content/repositories/TalendOpenSourceSnapshot/</talend_snapshots_deployment>
     </properties>
 
     <distributionManagement>
         <snapshotRepository>
             <id>talend_nexus_deployment</id>
-            <url>https://artifacts-oss.talend.com/nexus/content/repositories/TalendOpenSourceSnapshot/</url>
+            <url>${talend_snapshots_deployment}/</url>
         </snapshotRepository>
         <repository>
             <id>talend_nexus_deployment</id>
@@ -46,7 +48,7 @@
     <repositories>
         <repository>
             <id>TalendOpenSourceSnapshot</id>
-            <url>https://artifacts-oss.talend.com/nexus/content/repositories/TalendOpenSourceSnapshot</url>
+            <url>${talend_snapshots}</url>
             <releases>
                 <enabled>false</enabled>
             </releases>
