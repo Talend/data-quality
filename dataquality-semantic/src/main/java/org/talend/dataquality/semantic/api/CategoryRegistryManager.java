@@ -461,7 +461,7 @@ public class CategoryRegistryManager {
 
     }
 
-    public CustomDictionaryHolder getCustomDictionaryHolder(String tenantID) {
+    public synchronized CustomDictionaryHolder getCustomDictionaryHolder(String tenantID) {
         CustomDictionaryHolder cdh = customDictionaryHolderMap.get(tenantID);
         if (cdh == null) {
             LOGGER.info("Instantiate CustomDictionaryHolder for [" + tenantID + "]");
