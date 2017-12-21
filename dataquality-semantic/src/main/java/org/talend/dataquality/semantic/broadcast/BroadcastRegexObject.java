@@ -34,6 +34,7 @@ public class BroadcastRegexObject implements Serializable {
 
     private UserDefinedClassifier regexClassifier;
 
+    // No argument constructor needed for Jackson Deserialization
     public BroadcastRegexObject() {
     }
 

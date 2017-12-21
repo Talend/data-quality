@@ -14,6 +14,7 @@ public class BroadcastMetadataObject implements Serializable {
 
     private Map<String, DQCategory> metadata;
 
+    // No argument constructor needed for Jackson Deserialization
     public BroadcastMetadataObject() {
     }
 

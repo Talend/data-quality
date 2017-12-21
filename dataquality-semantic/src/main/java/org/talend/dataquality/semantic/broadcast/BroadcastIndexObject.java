@@ -42,9 +42,10 @@ public class BroadcastIndexObject implements Serializable {
     // The serializable object
     private List<BroadcastDocumentObject> documentList;
 
-    // The lucene index created from the serializable object
-    private RAMDirectory ramDirectory;
+    // The lucene RAMDirectory to be constructed from the documentList, no need to serialize it during the broadcast.
+    private transient RAMDirectory ramDirectory;
 
+    // No argument constructor needed for Jackson Deserialization
     public BroadcastIndexObject() {
     }
 

@@ -7,7 +7,7 @@ import org.talend.dataquality.semantic.index.LuceneIndex;
 import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
 
 /**
- * A container object for DQ dictionaries.
+ * A container object for DQ dictionaries serialization.
  */
 public class TdqCategories implements Serializable {
 
@@ -23,6 +23,7 @@ public class TdqCategories implements Serializable {
 
     private BroadcastRegexObject regex;
 
+    // No argument constructor needed for Jackson Deserialization
     public TdqCategories() {
     }
 

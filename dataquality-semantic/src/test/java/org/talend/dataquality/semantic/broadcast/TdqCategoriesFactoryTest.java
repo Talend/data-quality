@@ -47,10 +47,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class TdqCategoriesFactoryTest extends CategoryRegistryManagerAbstract {
 
     @Test
-    public void testCreateTdqCategories() throws IOException {
+    public void testCreateFullTdqCategories() throws IOException {
         mockWithTenant("testCreateTdqCategories");
         Collection<DQCategory> expectedCategories = CategoryRegistryManager.getInstance().listCategories(false);
-        TdqCategories cats = TdqCategoriesFactory.createTdqCategories();
+        TdqCategories cats = TdqCategoriesFactory.createFullTdqCategories();
 
         Map<String, DQCategory> meta = cats.getCategoryMetadata().getMetadata();
         assertEquals("Unexpected metadata size!", 75, meta.values().size());
@@ -88,7 +88,7 @@ public class TdqCategoriesFactoryTest extends CategoryRegistryManagerAbstract {
         newDoc.setValues(new HashSet<>(Arrays.asList("true", "false")));
         holder.addDataDictDocuments(Collections.singletonList(newDoc));
 
-        TdqCategories tdqCategories = TdqCategoriesFactory.createTdqCategories();
+        TdqCategories tdqCategories = TdqCategoriesFactory.createFullTdqCategories();
 
         final List<String> EXPECTED_CATEGORIES = Arrays.asList(new String[] { "", SemanticCategoryEnum.LAST_NAME.name(),
                 SemanticCategoryEnum.FIRST_NAME.name(), "", "", SemanticCategoryEnum.COUNTRY_CODE_ISO2.name() });
