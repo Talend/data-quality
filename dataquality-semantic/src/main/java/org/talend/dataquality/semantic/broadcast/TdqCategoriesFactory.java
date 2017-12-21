@@ -43,7 +43,7 @@ public class TdqCategoriesFactory {
     /**
      * Load categories from local lucene index and produce a TdqCategories object.
      * 
-     * @param categories
+     * @param categoryNames
      * @return the serializable object
      */
     public static final TdqCategories createTdqCategories(Set<String> categoryNames) {
@@ -84,6 +84,6 @@ public class TdqCategoriesFactory {
         } catch (URISyntaxException | IOException e) {
             LOGGER.error(e.getMessage(), e);
         }
-        return null;
+        return createEmptyTdqCategories();
     }
 }
