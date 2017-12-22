@@ -2,7 +2,7 @@ package org.talend.dataquality.semantic.api;
 
 import static org.talend.dataquality.semantic.api.CategoryRegistryManager.DICTIONARY_SUBFOLDER_NAME;
 import static org.talend.dataquality.semantic.api.CategoryRegistryManager.METADATA_SUBFOLDER_NAME;
-import static org.talend.dataquality.semantic.api.CategoryRegistryManager.REGEX_CATEGRIZER_FILE_NAME;
+import static org.talend.dataquality.semantic.api.CategoryRegistryManager.REGEX_CATEGORIZER_FILE_NAME;
 import static org.talend.dataquality.semantic.api.CategoryRegistryManager.REGEX_SUBFOLDER_NAME;
 import static org.talend.dataquality.semantic.api.CategoryRegistryManager.REPUBLISH_FOLDER_NAME;
 
@@ -378,7 +378,7 @@ public class CustomDictionaryHolder {
         if (customRepublishRegexClassifierAccess == null) {
             LOGGER.info(String.format(INITIALIZE_ACCESS, REPUBLISH_FOLDER_NAME, REGEX_SUBFOLDER_NAME, tenantID));
             customRepublishRegexClassifierAccess = new CustomRegexClassifierAccess(
-                    getIndexFolderPath(false, REGEX_SUBFOLDER_NAME + File.separator + REGEX_CATEGRIZER_FILE_NAME));
+                    getIndexFolderPath(false, REGEX_SUBFOLDER_NAME + File.separator + REGEX_CATEGORIZER_FILE_NAME));
         }
     }
 
@@ -589,7 +589,7 @@ public class CustomDictionaryHolder {
                 }
 
                 File regexFile = new File(stagingIndexes.getAbsolutePath() + File.separator + REGEX_SUBFOLDER_NAME
-                        + File.separator + REGEX_CATEGRIZER_FILE_NAME);
+                        + File.separator + REGEX_CATEGORIZER_FILE_NAME);
                 if (regexFile.exists()) {
                     ensureRegexClassifierAccess();
                     customRegexClassifierAccess.copyStagingContent(regexFile.getAbsolutePath());

@@ -1,8 +1,10 @@
 package org.talend.dataquality.semantic.api.internal;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
@@ -11,10 +13,9 @@ import org.talend.dataquality.semantic.classifier.ISubCategory;
 import org.talend.dataquality.semantic.classifier.custom.UserDefinedCategory;
 import org.talend.dataquality.semantic.classifier.custom.UserDefinedClassifier;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Low level API for operations on regex file.
@@ -31,7 +32,7 @@ public class CustomRegexClassifierAccess {
         String regexFilePath = CategoryRegistryManager.getLocalRegistryPath() + File.separator + holder.getTenantID()
                 + File.separator + CategoryRegistryManager.PRODUCTION_FOLDER_NAME + File.separator
                 + CategoryRegistryManager.REGEX_SUBFOLDER_NAME + File.separator
-                + CategoryRegistryManager.REGEX_CATEGRIZER_FILE_NAME;
+                + CategoryRegistryManager.REGEX_CATEGORIZER_FILE_NAME;
         regExFile = new File(regexFilePath);
         if (!regExFile.exists()) {
             writeRegExs(new ArrayList<>(holder.getRegexClassifier().getClassifiers()));
@@ -75,7 +76,7 @@ public class CustomRegexClassifierAccess {
             regExs = new ArrayList<>();
         else
             regExs.removeIf(expression -> regexId.equals(expression.getId()));
-        writeRegExs(regExs); //TODO is that if really necessary ? Do we need to write when regExs is null ?
+        writeRegExs(regExs); // TODO is that if really necessary ? Do we need to write when regExs is null ?
     }
 
     private void writeRegExs(List<ISubCategory> regExs) {
