@@ -414,7 +414,11 @@ public class CategoryRegistryManager {
      * get URI of local category metadata
      */
     private URI getMetadataURI() throws URISyntaxException {
-        return this.getClass().getResource("/" + METADATA_SUBFOLDER_NAME + "/").toURI();
+        if (usingLocalCategoryRegistry) {
+            return Paths.get(localRegistryPath, SHARED_FOLDER_NAME, PRODUCTION_FOLDER_NAME, METADATA_SUBFOLDER_NAME).toUri();
+        } else {
+            return this.getClass().getResource("/" + METADATA_SUBFOLDER_NAME + "/").toURI();
+        }
     }
 
     /**
@@ -424,7 +428,7 @@ public class CategoryRegistryManager {
         if (usingLocalCategoryRegistry) {
             return Paths.get(localRegistryPath, SHARED_FOLDER_NAME, PRODUCTION_FOLDER_NAME, DICTIONARY_SUBFOLDER_NAME).toUri();
         } else {
-            return this.getClass().getResource(File.separator + DICTIONARY_SUBFOLDER_NAME + File.separator).toURI();
+            return this.getClass().getResource("/" + DICTIONARY_SUBFOLDER_NAME + "/").toURI();
         }
     }
 
@@ -435,7 +439,7 @@ public class CategoryRegistryManager {
         if (usingLocalCategoryRegistry) {
             return Paths.get(localRegistryPath, SHARED_FOLDER_NAME, PRODUCTION_FOLDER_NAME, KEYWORD_SUBFOLDER_NAME).toUri();
         } else {
-            return this.getClass().getResource(File.separator + KEYWORD_SUBFOLDER_NAME + File.separator).toURI();
+            return this.getClass().getResource("/" + KEYWORD_SUBFOLDER_NAME + "/").toURI();
         }
     }
 
