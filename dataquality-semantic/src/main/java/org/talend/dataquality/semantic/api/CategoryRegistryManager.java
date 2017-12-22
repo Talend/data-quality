@@ -89,8 +89,8 @@ public class CategoryRegistryManager {
 
     public static final String DEFAULT_TENANT_ID = "t_default";
 
-    public static final String DEFAULT_RE_PATH = File.separator + REGEX_SUBFOLDER_NAME + File.separator
-            + REGEX_CATEGORIZER_FILE_NAME;
+    // must use slash here
+    public static final String DEFAULT_RE_PATH = "/" + REGEX_SUBFOLDER_NAME + "/" + REGEX_CATEGORIZER_FILE_NAME;
 
     private static final Logger LOGGER = Logger.getLogger(CategoryRegistryManager.class);
 
@@ -417,6 +417,7 @@ public class CategoryRegistryManager {
         if (usingLocalCategoryRegistry) {
             return Paths.get(localRegistryPath, SHARED_FOLDER_NAME, PRODUCTION_FOLDER_NAME, METADATA_SUBFOLDER_NAME).toUri();
         } else {
+            // must use slash here
             return this.getClass().getResource("/" + METADATA_SUBFOLDER_NAME + "/").toURI();
         }
     }
@@ -428,6 +429,7 @@ public class CategoryRegistryManager {
         if (usingLocalCategoryRegistry) {
             return Paths.get(localRegistryPath, SHARED_FOLDER_NAME, PRODUCTION_FOLDER_NAME, DICTIONARY_SUBFOLDER_NAME).toUri();
         } else {
+            // must use slash here
             return this.getClass().getResource("/" + DICTIONARY_SUBFOLDER_NAME + "/").toURI();
         }
     }
@@ -439,6 +441,7 @@ public class CategoryRegistryManager {
         if (usingLocalCategoryRegistry) {
             return Paths.get(localRegistryPath, SHARED_FOLDER_NAME, PRODUCTION_FOLDER_NAME, KEYWORD_SUBFOLDER_NAME).toUri();
         } else {
+            // must use slash here
             return this.getClass().getResource("/" + KEYWORD_SUBFOLDER_NAME + "/").toURI();
         }
     }
