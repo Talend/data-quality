@@ -12,9 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.record.linkage.attribute;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 import org.talend.dataquality.record.linkage.constant.AttributeMatcherType;
@@ -30,8 +28,7 @@ public class MetaphoneMatcherTest {
 
     /**
      * Test method for
-     * {@link org.talend.dataquality.record.linkage.attribute.MetaphoneMatcher#getWeight(java.lang.String, java.lang.String)}
-     * .
+     * {@link org.talend.dataquality.record.linkage.attribute.MetaphoneMatcher#getWeight(java.lang.String, java.lang.String)} .
      */
     @Test
     public void testGetWeight() {
@@ -40,6 +37,11 @@ public class MetaphoneMatcherTest {
         String b = "Jon"; //$NON-NLS-1$
         double matchingWeight = metaphoneMatcher.getMatchingWeight(a, b);
         assertEquals(1.0d, matchingWeight, EPSILON);
+
+        a = " ";
+        matchingWeight = metaphoneMatcher.getMatchingWeight(a, a);
+        assertEquals("input strings are the same => result should be 1.", 1.0d, matchingWeight, EPSILON);
+
         a = "23";
         matchingWeight = metaphoneMatcher.getMatchingWeight(a, a);
         assertEquals("input strings are the same => result should be 1.", 1.0d, matchingWeight, EPSILON);

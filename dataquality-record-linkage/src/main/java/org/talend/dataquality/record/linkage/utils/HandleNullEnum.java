@@ -33,7 +33,6 @@ public enum HandleNullEnum {
     HandleNullEnum(String componentValue, String displayValue) {
         this.componentValue = componentValue;
         this.label = displayValue;
-
     }
 
     /**
@@ -66,7 +65,6 @@ public enum HandleNullEnum {
                 return element;
             }
         }
-
         return null;
     }
 

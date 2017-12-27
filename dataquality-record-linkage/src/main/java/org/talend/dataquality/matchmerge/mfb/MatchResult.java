@@ -81,7 +81,7 @@ public class MatchResult {
     public boolean isMatch() {
         int i = 0;
         for (Score score : scores) {
-            if (score.score < thresholds.get(i++)) {
+            if (score.score < getThresholds().get(i++)) {
                 return false;
             }
         }

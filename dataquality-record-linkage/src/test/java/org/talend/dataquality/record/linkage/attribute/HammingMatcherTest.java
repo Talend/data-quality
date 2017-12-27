@@ -12,8 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.record.linkage.attribute;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 import org.talend.dataquality.record.linkage.constant.AttributeMatcherType;
@@ -32,7 +31,6 @@ public class HammingMatcherTest {
      */
     @Test
     public void testGetMatchingWeight() {
-
         HammingMatcher hammingMatcher = new HammingMatcher();
         String a = "malequa"; //$NON-NLS-1$
         double matchingWeight1 = hammingMatcher.getMatchingWeight(a, a);
@@ -41,6 +39,9 @@ public class HammingMatcherTest {
         matchingWeight1 = hammingMatcher.getMatchingWeight(a, b);
         assertTrue("input strings are different => result should be between 0 and 1.",
                 matchingWeight1 < 1 && matchingWeight1 > 0);
+        String c = " "; //$NON-NLS-1$
+        matchingWeight1 = hammingMatcher.getMatchingWeight(c, c);
+        assertEquals("input strings are the same => result should be 1.", 1.0d, matchingWeight1, EPSILON);
 
         b = "molequz";
         double matchingWeight2 = hammingMatcher.getMatchingWeight(a, b);

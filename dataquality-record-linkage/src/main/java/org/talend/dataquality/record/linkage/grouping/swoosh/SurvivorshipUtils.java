@@ -282,7 +282,7 @@ public class SurvivorshipUtils {
         return null;
     }
 
-    public final static String[] NUMBERS = new String[] { NUMBER_ID + Integer.class.getSimpleName(),
+    private final static String[] NUMBERS = new String[] { NUMBER_ID + Integer.class.getSimpleName(),
             NUMBER_ID + Float.class.getSimpleName(), NUMBER_ID + Double.class.getSimpleName(),
             NUMBER_ID + Long.class.getSimpleName(), NUMBER_ID + Short.class.getSimpleName(),
             NUMBER_ID + BigDecimal.class.getSimpleName(), NUMBER_ID + Byte.class.getSimpleName() };

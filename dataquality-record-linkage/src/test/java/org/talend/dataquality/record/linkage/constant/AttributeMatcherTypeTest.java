@@ -12,9 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.record.linkage.constant;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
@@ -25,8 +23,8 @@ import org.junit.Test;
 public class AttributeMatcherTypeTest {
 
     /**
-     * Test method for {@link org.talend.dataquality.record.linkage.constant.AttributeMatcherType#get(java.lang.String)}
-     * . case1 all of normal case
+     * Test method for {@link org.talend.dataquality.record.linkage.constant.AttributeMatcherType#get(java.lang.String)} . case1
+     * all of normal case
      */
     @Test
     public void testGetCase1() {
@@ -56,8 +54,8 @@ public class AttributeMatcherTypeTest {
     }
 
     /**
-     * Test method for {@link org.talend.dataquality.record.linkage.constant.AttributeMatcherType#get(java.lang.String)}
-     * . case2 input is null or empty
+     * Test method for {@link org.talend.dataquality.record.linkage.constant.AttributeMatcherType#get(java.lang.String)} . case2
+     * input is null or empty
      */
     @Test
     public void testGetCase2() {
@@ -65,7 +63,16 @@ public class AttributeMatcherTypeTest {
         assertNull(attributeMatcherTypeByNull);
         AttributeMatcherType attributeMatcherTypeByEmpty = AttributeMatcherType.get(""); //$NON-NLS-1$
         assertNull(attributeMatcherTypeByEmpty);
-
     }
 
+    /**
+     * Test method for {@link org.talend.dataquality.record.linkage.constant.AttributeMatcherType#getAllTypes()} .
+     */
+    @Test
+    public void testGetAllTypes() {
+        String[] allTypes = AttributeMatcherType.getAllTypes();
+        assertNotNull(allTypes);
+        assertEquals(13, allTypes.length);
+        assertEquals(15, AttributeMatcherType.values().length);
+    }
 }

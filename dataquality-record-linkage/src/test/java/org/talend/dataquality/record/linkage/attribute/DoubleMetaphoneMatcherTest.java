@@ -12,9 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.record.linkage.attribute;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 import org.talend.dataquality.record.linkage.constant.AttributeMatcherType;
@@ -30,8 +28,7 @@ public class DoubleMetaphoneMatcherTest {
 
     /**
      * Test method for
-     * {@link org.talend.dataquality.record.linkage.attribute.MetaphoneMatcher#getWeight(java.lang.String, java.lang.String)}
-     * .
+     * {@link org.talend.dataquality.record.linkage.attribute.MetaphoneMatcher#getWeight(java.lang.String, java.lang.String)} .
      */
     @Test
     public void testGetWeight() {
@@ -46,6 +43,9 @@ public class DoubleMetaphoneMatcherTest {
         b = "64";
         matchingWeight = doubleMetaphoneMatcher.getMatchingWeight(a, b);
         assertNotSame("input strings are the same => result should NOT be 1.", 1.0d, matchingWeight);
+        String c = " "; //$NON-NLS-1$
+        matchingWeight = doubleMetaphoneMatcher.getMatchingWeight(c, c);
+        assertEquals("input strings are the same => result should be 1.", 0d, matchingWeight, EPSILON);
 
         // test long strings
         a = "JohnFit";
@@ -67,7 +67,6 @@ public class DoubleMetaphoneMatcherTest {
      */
     @Test
     public void testGetMatchType() {
-
         assertEquals(AttributeMatcherType.DOUBLE_METAPHONE, new DoubleMetaphoneMatcher().getMatchType());
         assertEquals("DOUBLE_METAPHONE", new DoubleMetaphoneMatcher().getMatchType().name()); //$NON-NLS-1$
         assertEquals("Double Metaphone", new DoubleMetaphoneMatcher().getMatchType().getLabel()); //$NON-NLS-1$

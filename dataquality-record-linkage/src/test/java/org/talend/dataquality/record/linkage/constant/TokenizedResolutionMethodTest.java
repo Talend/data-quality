@@ -12,7 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.record.linkage.constant;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
@@ -57,6 +57,7 @@ public class TokenizedResolutionMethodTest {
      * Test method for
      * {@org.talend.dataquality.record.linkage.constant.TokenizedResolutionMethod#getTypeByValue(java.lang.String)
      * 
+     * 
      * } case2: input
      * is null empty or some other words
      */
@@ -71,4 +72,14 @@ public class TokenizedResolutionMethodTest {
         assertEquals(TokenizedResolutionMethod.NO, TokenizedResolutionMethodByOtherWord);
     }
 
+    /**
+     * Test method for {@link org.talend.dataquality.record.linkage.constant.TokenizedResolutionMethod#getAllTypes()} .
+     */
+    @Test
+    public void testGetAllTypes() {
+        String[] allTypes = TokenizedResolutionMethod.getAllTypes();
+        assertNotNull(allTypes);
+        assertEquals(4, allTypes.length);
+        assertEquals(4, TokenizedResolutionMethod.values().length);
+    }
 }

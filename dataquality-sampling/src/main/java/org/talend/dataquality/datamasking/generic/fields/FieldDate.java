@@ -12,7 +12,6 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.generic.fields;
 
-import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -148,7 +147,7 @@ public class FieldDate extends AbstractField {
             return "";
 
         int year = findNearest(number, numberDaysPerYear);
-        long remainingDays = number - numberDaysPerYear.get(year);
+        long remainingDays = Integer.valueOf(number - numberDaysPerYear.get(year)).longValue();
         int month;
         int days;
         if (isLeapYear(year + firstYear)) {

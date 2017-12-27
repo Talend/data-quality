@@ -37,7 +37,6 @@ public class LCSMatcher extends AbstractAttributeMatcher {
      * java.lang.String)
      */
     public double getWeight(String string1, String string2) {
-
         final int lcs = longestSubstr(string1, string2);
         int maxLength = Math.max(string1.length(), string2.length());
         return ((double) lcs) / maxLength;

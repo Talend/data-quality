@@ -34,7 +34,14 @@ import org.talend.dataquality.record.linkage.grouping.swoosh.RichRecordTest;
 import org.talend.dataquality.record.linkage.record.CombinedRecordMatcherTest;
 import org.talend.dataquality.record.linkage.record.SimpleVSRRecordMatcherTest;
 import org.talend.dataquality.record.linkage.utils.AlgorithmSwitchTest;
+import org.talend.dataquality.record.linkage.utils.BlockingKeyAlgorithmEnumTest;
+import org.talend.dataquality.record.linkage.utils.BlockingKeyPostAlgorithmEnumTest;
+import org.talend.dataquality.record.linkage.utils.BlockingKeyPreAlgorithmEnumTest;
+import org.talend.dataquality.record.linkage.utils.CustomAttributeMatcherClassNameConvertTest;
+import org.talend.dataquality.record.linkage.utils.HandleNullEnumTest;
 import org.talend.dataquality.record.linkage.utils.QGramTokenizerTest;
+import org.talend.dataquality.record.linkage.utils.StringComparisonUtilTest;
+import org.talend.dataquality.record.linkage.utils.SurvivorShipAlgorithmEnumTest;
 import org.talend.dataquality.record.linkage.utils.SurvivorshipUtilsTest;
 import org.talend.windowkey.AlgoBoxTest;
 import org.talend.windowkey.FingerprintKeyerTest;
@@ -50,7 +57,9 @@ import org.talend.windowkey.NGramFingerprintKeyerTest;
         AlgorithmSwitchTest.class, QGramTokenizerTest.class, AlgoBoxTest.class, FingerprintKeyerTest.class,
         NGramFingerprintKeyerTest.class, SwooshRecordGroupingTest.class, MFBRecordMatcherTest.class,
         AnalysisSwooshMatchRecordGroupingTest.class, TSwooshGroupingTest.class, SurvivorshipUtilsTest.class, RichRecordTest.class,
-        GroupingCallBackTest.class, MultiPassGroupingCallBackTest.class })
+        GroupingCallBackTest.class, MultiPassGroupingCallBackTest.class, HandleNullEnumTest.class,
+        SurvivorShipAlgorithmEnumTest.class, CustomAttributeMatcherClassNameConvertTest.class, StringComparisonUtilTest.class,
+        BlockingKeyAlgorithmEnumTest.class, BlockingKeyPostAlgorithmEnumTest.class, BlockingKeyPreAlgorithmEnumTest.class })
 public class AllRecordLinkageTests {
 
 }

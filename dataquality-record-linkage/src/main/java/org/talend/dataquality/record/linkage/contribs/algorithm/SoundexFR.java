@@ -66,6 +66,7 @@ public class SoundexFR implements java.io.Serializable {
      * Creates a new Soundex encoder.
      */
     public SoundexFR() {
+        // Do nothing
     }
 
     /**

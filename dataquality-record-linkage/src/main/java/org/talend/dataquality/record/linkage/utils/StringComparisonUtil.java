@@ -102,6 +102,10 @@ public final class StringComparisonUtil implements Serializable {
      * @return the prefix length found of common characters at the begining of the strings
      */
     public static int getPrefixLength(final String string1, final String string2) {
+        if (string1 == null || string2 == null) {
+            return 0;
+        }
+
         final int n = Math.min(MINPREFIXTESTLENGTH, Math.min(string1.length(), string2.length()));
         // check for prefix similarity of length n
         for (int i = 0; i < n; i++) {

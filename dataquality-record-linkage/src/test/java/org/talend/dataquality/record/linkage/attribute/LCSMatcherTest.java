@@ -12,8 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.record.linkage.attribute;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 import org.talend.dataquality.record.linkage.constant.AttributeMatcherType;
@@ -27,16 +26,19 @@ public class LCSMatcherTest {
 
     /**
      * Test method for
-     * {@link org.talend.dataquality.record.linkage.attribute.LCSMatcher#getMatchingWeight(java.lang.String, java.lang.String)}
-     * .
+     * {@link org.talend.dataquality.record.linkage.attribute.LCSMatcher#getMatchingWeight(java.lang.String, java.lang.String)} .
      */
     @Test
     public void testGetMatchingWeight() {
-
         LCSMatcher lcsMatcher = new LCSMatcher();
-        String a = "malequa"; //$NON-NLS-1$
+        String a = " "; //$NON-NLS-1$
         double matchingWeight1 = lcsMatcher.getMatchingWeight(a, a);
         assertEquals("input strings are the same => result should be 1.", 1.0d, matchingWeight1, EPSILON);
+
+        a = "malequa"; //$NON-NLS-1$
+        matchingWeight1 = lcsMatcher.getMatchingWeight(a, a);
+        assertEquals("input strings are the same => result should be 1.", 1.0d, matchingWeight1, EPSILON);
+
         String b = "malequz"; //$NON-NLS-1$
         matchingWeight1 = lcsMatcher.getMatchingWeight(a, b);
         assertTrue("input strings are different => result should be 6/7",

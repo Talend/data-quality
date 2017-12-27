@@ -59,6 +59,8 @@ public class FirstNameStandardize {
      * <p>
      * For the first names with minus sign inside, ex: Jean-Baptiste, the matching is done for Jean and Baptiste separately, and
      * the number of tokens is also considered by Lucene.
+     * 
+     * @deprecated
      */
     @Deprecated
     private static final float MATCHING_SIMILARITY = 0.74f;
@@ -79,6 +81,16 @@ public class FirstNameStandardize {
         this.hitsPerPage = hitsPerPage;
     }
 
+    /**
+     * DOC msjian Comment method "standardize".
+     * 
+     * @param input
+     * @param fuzzyQuery
+     * @return
+     * @throws ParseException
+     * @throws IOException
+     * @deprecated
+     */
     @Deprecated
     private ScoreDoc[] standardize(String input, boolean fuzzyQuery) throws ParseException, IOException {
 
