@@ -76,7 +76,7 @@ public class FirstNameStandardizeTest {
     private static final String[][] expected_gender = { { "Philippe", "M", "PHILIPPE" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
             { "Hubert", "M", "HUBERT" }, { "Ghislain", "M", "GHISLAIN" }, { "Christian", "F", "CHRISTIAN" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
             { "Bernard", "M", "BERNARD" }, { "Michel", "M", "MICHEL" }, { "Nicole", "F", "NICOLE" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
-            { "Pierre", "M", "PIERRE" }, { "George", "M", "GEORGE" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
+            { "Pierre", "M", "PIERRE" }, { "George", "M", "GEORGE" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ 
             { "Jacques", "M", "JACQUES" }, { "Didier", "M", "DIDIER" }, { "Roger", "M", "ROGER" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
             { null, "M", "" }, { "", "F", "" }, { "M.", "M", "" }, { "M", "M", "" }, { "Philipp", "M", "PHILIPP" }, //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$//$NON-NLS-7$//$NON-NLS-8$//$NON-NLS-9$//$NON-NLS-10$//$NON-NLS-11$//$NON-NLS-12$//$NON-NLS-13$//$NON-NLS-14$
             { "Habert", "M", "HOBERT" } }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -113,7 +113,71 @@ public class FirstNameStandardizeTest {
             System.out.println("testReplaceName:\n" + res); //$NON-NLS-1$
             assertEquals("MICHEL", res); //$NON-NLS-1$
 
-            fnameStandardize.replaceNameWithCountryGenderInfo(inputName, "ITA", "F", true); //$NON-NLS-1$ //$NON-NLS-2$
+            res = fnameStandardize.replaceNameWithCountryInfo(inputName, "ITA", true); //$NON-NLS-1$ 
+            assertEquals("MICHELA", res); //$NON-NLS-1$
+
+            res = fnameStandardize.replaceNameWithCountryInfo(inputName, "", true); //$NON-NLS-1$ 
+            assertEquals("MICHEL", res); //$NON-NLS-1$
+
+            res = fnameStandardize.replaceNameWithCountryGenderInfo(inputName, "ITA", "F", true); //$NON-NLS-1$ //$NON-NLS-2$
+            assertEquals("MICHELA", res); //$NON-NLS-1$
+
+            res = fnameStandardize.replaceNameWithCountryGenderInfo(inputName, "", "F", true); //$NON-NLS-1$ //$NON-NLS-2$
+            assertEquals("MICHEL", res); //$NON-NLS-1$
+
+            res = fnameStandardize.replaceNameWithCountryGenderInfo(inputName, "ITA", "", true); //$NON-NLS-1$ //$NON-NLS-2$
+            assertEquals("MICHELA", res); //$NON-NLS-1$
+
+            res = fnameStandardize.replaceNameWithGenderInfo(inputName, "F", true); //$NON-NLS-1$ 
+            assertEquals("MICHEL", res); //$NON-NLS-1$
+
+            res = fnameStandardize.replaceNameWithGenderInfo(inputName, "", true); //$NON-NLS-1$ 
+            assertEquals("MICHEL", res); //$NON-NLS-1$
+
+            res = fnameStandardize.replaceNameWithGenderInfo(inputName, "M", true); //$NON-NLS-1$ 
+            assertEquals("MICHEL", res); //$NON-NLS-1$
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Test method for
+     * {@link org.talend.dataquality.standardization.query.FirstNameStandardize#replaceName(java.lang.String, boolean)}.
+     */
+    @Test
+    public void testReplaceNameWithBlankInputName() {
+        try {
+            // case1: when the input is ""
+            String inputName2 = ""; //$NON-NLS-1$
+            String res = fnameStandardize.replaceName(inputName2, true);
+            System.out.println("testReplaceName:\n" + res); //$NON-NLS-1$
+            assertEquals(inputName2, res);
+
+            res = fnameStandardize.replaceNameWithCountryInfo(inputName2, "ITA", true); //$NON-NLS-1$
+            assertEquals(inputName2, res);
+
+            res = fnameStandardize.replaceNameWithCountryGenderInfo(inputName2, "ITA", "F", true); //$NON-NLS-1$ //$NON-NLS-2$ 
+            assertEquals(inputName2, res);
+
+            res = fnameStandardize.replaceNameWithGenderInfo(inputName2, "F", true); //$NON-NLS-1$
+            assertEquals(inputName2, res);
+
+            // case2: when the input is null
+            String inputName3 = null;
+            res = fnameStandardize.replaceName(inputName3, true);
+            System.out.println("testReplaceName:\n" + res); //$NON-NLS-1$
+            assertEquals(inputName2, res);
+
+            res = fnameStandardize.replaceNameWithCountryInfo(inputName3, "ITA", true); //$NON-NLS-1$
+            assertEquals(inputName2, res);
+
+            res = fnameStandardize.replaceNameWithCountryGenderInfo(inputName3, "ITA", "F", true); //$NON-NLS-1$ //$NON-NLS-2$ 
+            assertEquals(inputName2, res);
+
+            res = fnameStandardize.replaceNameWithGenderInfo(inputName3, "F", true); //$NON-NLS-1$
+            assertEquals(inputName2, res);
+
         } catch (IOException e) {
             e.printStackTrace();
         }

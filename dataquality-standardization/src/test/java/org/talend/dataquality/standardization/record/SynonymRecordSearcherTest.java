@@ -14,9 +14,7 @@ package org.talend.dataquality.standardization.record;
 
 import static org.junit.Assert.*;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -24,7 +22,6 @@ import java.util.Random;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import org.apache.lucene.search.TopDocs;
 import org.junit.Test;
 import org.talend.dataquality.standardization.index.SynonymIndexBuilder;
@@ -37,8 +34,6 @@ import org.talend.dataquality.standardization.record.SynonymRecordSearcher.WordR
  * Test class.
  */
 public class SynonymRecordSearcherTest {
-
-    private static final Logger log = Logger.getLogger(SynonymRecordSearcherTest.class);
 
     private static final String[][][] WORDRESULTS = { //
             { { "11", "12", "13", "14", "15" }, { "21", "22", "23" }, { "31", "32", "33" }, { "41" } } // always //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$ //$NON-NLS-11$ //$NON-NLS-12$
