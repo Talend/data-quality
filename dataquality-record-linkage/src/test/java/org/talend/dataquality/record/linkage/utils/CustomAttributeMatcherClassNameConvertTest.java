@@ -23,7 +23,7 @@ import org.junit.Test;
  */
 public class CustomAttributeMatcherClassNameConvertTest {
 
-    private String classPath = "CustomMatcherTest.jar||MycustomMatch.jar||testCustomMatcher.myCustomMatcher";
+    private String classPath = "CustomMatcherTest.jar||MycustomMatch.jar||testCustomMatcher.myCustomMatcher"; //$NON-NLS-1$
 
     /**
      * Test method for
@@ -32,7 +32,7 @@ public class CustomAttributeMatcherClassNameConvertTest {
     @Test
     public void testGetClassName() {
         String className = CustomAttributeMatcherClassNameConvert.getClassName(classPath);
-        assertEquals("testCustomMatcher.myCustomMatcher", className);
+        assertEquals("testCustomMatcher.myCustomMatcher", className); //$NON-NLS-1$
     }
 
     /**
@@ -43,7 +43,7 @@ public class CustomAttributeMatcherClassNameConvertTest {
     @Test
     public void testGetClassNameAndAddQuot() {
         String className = CustomAttributeMatcherClassNameConvert.getClassNameAndAddQuot(classPath);
-        assertEquals(CustomAttributeMatcherClassNameConvert.QUOTE + "testCustomMatcher.myCustomMatcher"
+        assertEquals(CustomAttributeMatcherClassNameConvert.QUOTE + "testCustomMatcher.myCustomMatcher" //$NON-NLS-1$
                 + CustomAttributeMatcherClassNameConvert.QUOTE, className);
     }
 

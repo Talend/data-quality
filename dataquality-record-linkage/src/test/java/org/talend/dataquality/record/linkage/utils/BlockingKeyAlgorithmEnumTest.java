@@ -47,8 +47,8 @@ public class BlockingKeyAlgorithmEnumTest {
             assertNotNull(enumTypeByComponentValueNameLowerCase);
 
             // all of return type is same
-            assertTrue(enumByValue == enumTypeByComponentValueName);
-            assertTrue(enumByValueLowerCase == enumTypeByComponentValueNameLowerCase);
+            assertTrue(enumByValue.equals(enumTypeByComponentValueName));
+            assertTrue(enumByValueLowerCase.equals(enumTypeByComponentValueNameLowerCase));
 
         }
     }

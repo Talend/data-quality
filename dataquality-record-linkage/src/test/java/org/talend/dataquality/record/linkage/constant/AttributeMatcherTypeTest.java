@@ -45,11 +45,11 @@ public class AttributeMatcherTypeTest {
             assertNotNull(attributeMatcherTypeByUName);
             assertNotNull(attributeMatcherTypeByUComponentValue);
             // all of return type is same
-            assertTrue(attributeMatcherTypeByName == attributeMatcherTypeByComponentValue);
-            assertTrue(attributeMatcherTypeByLName == attributeMatcherTypeByLComponentValue);
-            assertTrue(attributeMatcherTypeByUName == attributeMatcherTypeByUComponentValue);
-            assertTrue(attributeMatcherTypeByUName == attributeMatcherTypeByName);
-            assertTrue(attributeMatcherTypeByUName == attributeMatcherTypeByLName);
+            assertTrue(attributeMatcherTypeByName.equals(attributeMatcherTypeByComponentValue));
+            assertTrue(attributeMatcherTypeByLName.equals(attributeMatcherTypeByLComponentValue));
+            assertTrue(attributeMatcherTypeByUName.equals(attributeMatcherTypeByUComponentValue));
+            assertTrue(attributeMatcherTypeByUName.equals(attributeMatcherTypeByName));
+            assertTrue(attributeMatcherTypeByUName.equals(attributeMatcherTypeByLName));
         }
     }
 
