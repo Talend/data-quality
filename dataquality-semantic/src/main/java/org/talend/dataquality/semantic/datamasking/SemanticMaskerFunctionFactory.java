@@ -10,13 +10,19 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.dataquality.datamasking.semantic;
+package org.talend.dataquality.semantic.datamasking;
 
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.talend.dataquality.datamasking.functions.DateVariance;
 import org.talend.dataquality.datamasking.functions.Function;
+import org.talend.dataquality.datamasking.semantic.DateFunctionAdapter;
+import org.talend.dataquality.datamasking.semantic.FluctuateNumericString;
+import org.talend.dataquality.datamasking.semantic.ReplaceCharactersWithGeneration;
+import org.talend.dataquality.semantic.api.CategoryRegistryManager;
+import org.talend.dataquality.semantic.model.CategoryType;
+import org.talend.dataquality.semantic.model.DQCategory;
 
 public class SemanticMaskerFunctionFactory {
 
@@ -46,6 +52,15 @@ public class SemanticMaskerFunctionFactory {
                 LOGGER.debug(e.getMessage(), e);
             }
         }
+
+        if (function == null && "string".equals(dataType)) {
+            DQCategory category = CategoryRegistryManager.getInstance().getCategoryMetadataByName(semanticCategory);
+            if (category != null && CategoryType.DICT.equals(category.getType())) {
+                function = new GenerateFromDictionaries();
+                function.parse(semanticCategory, true, null);
+            }
+        }
+
         if (function == null) {
             switch (dataType) {
             case "numeric":
