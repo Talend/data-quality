@@ -41,12 +41,12 @@ public class GenerateFromFileStringProvidedTest {
         Assert.assertEquals("Fresenius", gfls.generateMaskedRow("A")); //$NON-NLS-1$ //$NON-NLS-2$
         Assert.assertEquals("McDonald's", gfls.generateMaskedRow("A")); //$NON-NLS-1$ //$NON-NLS-2$
 
-        gfls.parse("firstname.txt", true, new Random(AllDataqualitySamplingTests.RANDOM_SEED));
+        gfls.parse("firstName.txt", true, new Random(AllDataqualitySamplingTests.RANDOM_SEED));
         Assert.assertEquals("Josiah", gfls.generateMaskedRow("A")); //$NON-NLS-1$ //$NON-NLS-2$
         Assert.assertEquals("Mason", gfls.generateMaskedRow("A")); //$NON-NLS-1$ //$NON-NLS-2$
         Assert.assertEquals("Cooper", gfls.generateMaskedRow("A")); //$NON-NLS-1$ //$NON-NLS-2$
 
-        gfls.parse("lastname.txt", true, new Random(AllDataqualitySamplingTests.RANDOM_SEED));
+        gfls.parse("lastName.txt", true, new Random(AllDataqualitySamplingTests.RANDOM_SEED));
         Assert.assertEquals("Robbins", gfls.generateMaskedRow("A")); //$NON-NLS-1$ //$NON-NLS-2$
         Assert.assertEquals("Lambert", gfls.generateMaskedRow("A")); //$NON-NLS-1$ //$NON-NLS-2$
         Assert.assertEquals("Pierce", gfls.generateMaskedRow("A")); //$NON-NLS-1$ //$NON-NLS-2$
