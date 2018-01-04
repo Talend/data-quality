@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Properties;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -48,15 +49,13 @@ import org.xml.sax.SAXException;
  * It's always recommended to verify all changed file before committing the changes.
  * 
  * Usage:
- * 1. put the expected snapshot or release version into the TARGET_VERSION field and run the current class as Java application.
+ * 1. put the expected snapshot or release version into the targetVersion field and run the current class as Java application.
  * 2. update the p2 dependency declaration in studio-se-master and studio-full-master repositories.
  * 3. Run {@link UpdateComponentDefinition} to update the components.
  * 
  * @author sizhaoliu
  */
 public class ReleaseVersionBumper {
-
-    private static final String TARGET_VERSION = "5.0.0-SNAPSHOT";
 
     private static final String DATAQUALITY_PREFIX = "dataquality.";
 
@@ -66,17 +65,25 @@ public class ReleaseVersionBumper {
 
     private static final String MANIFEST_SNAPSHOT_SUFFIX = ".SNAPSHOT";
 
+    private String targetVersion = "";
+
     private XPath xPath = XPathFactory.newInstance().newXPath();
 
     private Transformer xTransformer;
 
     private String microVersion;
 
-    private ReleaseVersionBumper() throws TransformerConfigurationException, TransformerFactoryConfigurationError {
+    private ReleaseVersionBumper() throws TransformerConfigurationException, TransformerFactoryConfigurationError, IOException {
+
+        Properties prop = new Properties();
+        prop.load(this.getClass().getClassLoader().getResourceAsStream("dataquality-libraries.properties"));
+
+        targetVersion = prop.getProperty("target.version");
+
         xTransformer = TransformerFactory.newInstance().newTransformer();
         xTransformer.setOutputProperty(OutputKeys.INDENT, "yes");
         xTransformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-        microVersion = TARGET_VERSION.substring(4);
+        microVersion = targetVersion.substring(4);
     }
 
     private void bumpPomVersion()
@@ -94,7 +101,7 @@ public class ReleaseVersionBumper {
 
             // replace version value of this project
             Node parentVersion = (Node) xPath.evaluate("/project/version", doc, XPathConstants.NODE);
-            parentVersion.setTextContent(TARGET_VERSION);
+            parentVersion.setTextContent(targetVersion);
 
             // replace property value of this project
             NodeList propertyNodes = ((Node) xPath.evaluate("/project/properties", doc, XPathConstants.NODE)).getChildNodes();
@@ -130,7 +137,7 @@ public class ReleaseVersionBumper {
 
             // replace parent version value
             Node parentVersion = (Node) xPath.evaluate("/project/parent/version", doc, XPathConstants.NODE);
-            parentVersion.setTextContent(TARGET_VERSION);
+            parentVersion.setTextContent(targetVersion);
 
             // re-write pom.xml file
             xTransformer.transform(new DOMSource(doc), new StreamResult(inputFile));
@@ -152,7 +159,7 @@ public class ReleaseVersionBumper {
             for (String line : lines) {
                 if (line.startsWith(BUNDLE_VERSION_STRING)) {
 
-                    IOUtils.write(BUNDLE_VERSION_STRING + TARGET_VERSION.replace("-", ".") + "\n", fos);
+                    IOUtils.write(BUNDLE_VERSION_STRING + targetVersion.replace("-", ".") + "\n", fos);
                 } else {
                     IOUtils.write(line + "\n", fos);
                 }
