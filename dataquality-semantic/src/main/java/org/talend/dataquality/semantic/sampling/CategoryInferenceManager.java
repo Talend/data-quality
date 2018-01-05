@@ -20,11 +20,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.log4j.Logger;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.exception.DQSemanticRuntimeException;
+import org.talend.dataquality.semantic.index.DictionarySearchMode;
+import org.talend.dataquality.semantic.index.LuceneIndex;
 import org.talend.dataquality.semantic.recognizer.CategoryFrequency;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizer;
 import org.talend.dataquality.semantic.recognizer.DefaultCategoryRecognizer;
+import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
 
 /**
  * created by talend on 2015-07-28 Detailled comment.
@@ -32,11 +36,28 @@ import org.talend.dataquality.semantic.recognizer.DefaultCategoryRecognizer;
  */
 public class CategoryInferenceManager {
 
+    private static final Logger LOGGER = Logger.getLogger(CategoryInferenceManager.class);
+
     // One recognizer per column, <Column index, Category recognizer>
     private Map<Integer, CategoryRecognizer> categoryRecognizers = new HashMap<>();
 
-    public Map<Integer, CategoryRecognizer> getCategoryRecognizers() {
-        return categoryRecognizers;
+    private DictionarySnapshot dictionarySnapshot;
+
+    /**
+     * Constructor
+     */
+    public CategoryInferenceManager() {
+        final CategoryRegistryManager crm = CategoryRegistryManager.getInstance();
+        try {
+            dictionarySnapshot = new DictionarySnapshot( //
+                    crm.getSharedCategoryMetadata(), //
+                    new LuceneIndex(crm.getSharedDataDictDirectory(), DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY), //
+                    null, // custom data dictionary not needed here
+                    new LuceneIndex(crm.getSharedKeywordDirectory(), DictionarySearchMode.MATCH_SEMANTIC_KEYWORD), //
+                    crm.getRegexClassifier());
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
     }
 
     /**
@@ -92,10 +113,9 @@ public class CategoryInferenceManager {
     }
 
     private CategoryRecognizer newCategoryRecognizer() {
-        // get the lucene index.
+        // create a new DefaultCategoryRecognizer per column, reusing the same dictionarySnapshot object.
         try {
-            return new DefaultCategoryRecognizer(
-                    CategoryRegistryManager.getInstance().getCustomDictionaryHolder().getDictionarySnapshot());
+            return new DefaultCategoryRecognizer(dictionarySnapshot);
         } catch (IOException e) {
             throw new DQSemanticRuntimeException("Unable to find resources.", e);
         }

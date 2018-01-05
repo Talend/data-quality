@@ -33,12 +33,17 @@ public interface CategoryRecognizer {
     ISubCategoryClassifier getUserDefineClassifier();
 
     /**
+     * get result of all recognized categories. called by semantic-aware analysis.
      *
      * @deprecated
      * Use getResult(String columnName, float weight) instead
      */
     Collection<CategoryFrequency> getResult();
 
+    /**
+     * get result of all recognized categories with the column name as parameter, which may increase the score if it matches the
+     * name of the category.
+     */
     Collection<CategoryFrequency> getResult(String columnName, float weight);
 
     void end();
