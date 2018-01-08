@@ -1,7 +1,6 @@
 package org.talend.dataquality.semantic.recognizer;
 
 import static org.junit.Assert.assertEquals;
-import static org.talend.dataquality.semantic.TestUtils.mockWithTenant;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -144,7 +143,6 @@ public class DefaultCategoryRecognizerTest extends CategoryRegistryManagerAbstra
      */
     @Test
     public void discoveryOrderForCompoundCategories() throws IOException, URISyntaxException {
-        mockWithTenant("discoveryOrderForCompoundCategories");
         init();
         recognizer.process("alabama");
         recognizer.process("1-844-224-4468");
@@ -156,7 +154,6 @@ public class DefaultCategoryRecognizerTest extends CategoryRegistryManagerAbstra
 
     @Test
     public void discoveryOrderWith2Phones() throws IOException, URISyntaxException {
-        mockWithTenant("discoveryOrderWith2Phones");
         init();
         recognizer.process("alabama");
         recognizer.process("0675982547");
@@ -170,7 +167,6 @@ public class DefaultCategoryRecognizerTest extends CategoryRegistryManagerAbstra
 
     @Test
     public void discoveryOrderWith2FRCommunes() throws IOException, URISyntaxException {
-        mockWithTenant("discoveryOrderWith2FRCommunes");
         init();
         recognizer.process("alabama");
         recognizer.process("la bernardiere");
@@ -181,7 +177,6 @@ public class DefaultCategoryRecognizerTest extends CategoryRegistryManagerAbstra
 
     @Test
     public void discoveryWithTenantIndex() throws IOException, URISyntaxException {
-        mockWithTenant("discoveryWithTenantIndex");
         init();
         recognizer.process("CDG");
         checkResults(SemanticCategoryEnum.AIRPORT_CODE.getId());
@@ -204,7 +199,6 @@ public class DefaultCategoryRecognizerTest extends CategoryRegistryManagerAbstra
 
     @Test
     public void discoveryWithTenantIndexFirstName() throws IOException, URISyntaxException {
-        mockWithTenant("discoveryWithTenantIndexFirstName");
         init();
         recognizer.process("damien");
         checkResults(SemanticCategoryEnum.FIRST_NAME.getId());
@@ -212,7 +206,6 @@ public class DefaultCategoryRecognizerTest extends CategoryRegistryManagerAbstra
 
     @Test
     public void discoveryWithTenantIndexAndDeletedCategory() throws IOException, URISyntaxException {
-        mockWithTenant("discoveryWithTenantIndexAndDeletedCategory");
         init();
         DQCategory dqCategory = CategoryRegistryManager.getInstance()
                 .getCategoryMetadataById(SemanticCategoryEnum.FIRST_NAME.getTechnicalId());

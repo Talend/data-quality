@@ -1,25 +1,38 @@
 package org.talend.dataquality.semantic.api;
 
 import static org.junit.Assert.assertEquals;
+import static org.talend.dataquality.semantic.TestUtils.mockWithTenant;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import org.talend.daikon.multitenant.context.TenancyContextHolder;
+import org.talend.dataquality.semantic.CategoryRegistryManagerAbstract;
 import org.talend.dataquality.semantic.classifier.ISubCategory;
 import org.talend.dataquality.semantic.filter.impl.CharSequenceFilter;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.model.DQFilter;
 import org.talend.dataquality.semantic.model.DQRegEx;
 
-public class CustomDictionaryHolderTest {
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({ TenancyContextHolder.class })
+public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract {
 
     private CustomDictionaryHolder holder;
 
+    @Rule
+    public TestName testName = new TestName();
+
     @Before
     public void setUp() {
-        holder = new CustomDictionaryHolder("aTenantID");
+        initializeCDH(testName.getMethodName());
     }
 
     @Test
@@ -31,6 +44,11 @@ public class CustomDictionaryHolderTest {
                 .filter(classifier -> classifier.getName().equals("RegExCategoryName")).collect(Collectors.toSet());
 
         assertEquals(1, filteredSet.size());
+    }
+
+    private void initializeCDH(String tenantID) {
+        mockWithTenant(tenantID);
+        holder = new CustomDictionaryHolder(tenantID);
     }
 
     private DQCategory createDQRegexCategory() {

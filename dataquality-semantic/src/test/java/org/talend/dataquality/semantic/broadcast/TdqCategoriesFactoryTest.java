@@ -3,7 +3,6 @@ package org.talend.dataquality.semantic.broadcast;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.talend.dataquality.semantic.TestUtils.mockWithTenant;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,7 +47,6 @@ public class TdqCategoriesFactoryTest extends CategoryRegistryManagerAbstract {
 
     @Test
     public void testCreateFullTdqCategories() throws IOException {
-        mockWithTenant("testCreateTdqCategories");
         Collection<DQCategory> expectedCategories = CategoryRegistryManager.getInstance().listCategories(false);
         TdqCategories cats = TdqCategoriesFactory.createFullTdqCategories();
 
@@ -73,7 +71,6 @@ public class TdqCategoriesFactoryTest extends CategoryRegistryManagerAbstract {
 
     @Test
     public void testCreateTdqCategoriesWithModifiedCategories() throws IOException {
-        mockWithTenant("testCreateTdqCategoriesWithModifiedCategories");
         CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder();
 
         DQCategory answerCategory = holder.getMetadata().get(SemanticCategoryEnum.COUNTRY_CODE_ISO2.getTechnicalId());
@@ -114,7 +111,6 @@ public class TdqCategoriesFactoryTest extends CategoryRegistryManagerAbstract {
 
     @Test
     public void testCreateTdqCategoriesWithSpecifiedDictionaryCategory() throws IOException {
-        mockWithTenant("testCreateTdqCategoriesWithSpecifiedDictionaryCategory");
         TdqCategories cats = TdqCategoriesFactory.createTdqCategories(
                 new HashSet<String>(Arrays.asList(new String[] { SemanticCategoryEnum.STREET_TYPE.name() })));
 
@@ -139,7 +135,6 @@ public class TdqCategoriesFactoryTest extends CategoryRegistryManagerAbstract {
 
     @Test
     public void testCreateTdqCategoriesWithSpecifiedRegexCategory() throws IOException {
-        mockWithTenant("testCreateTdqCategoriesWithSpecifiedRegexCategory");
         TdqCategories cats = TdqCategoriesFactory
                 .createTdqCategories(new HashSet<>(Arrays.asList(new String[] { SemanticCategoryEnum.EMAIL.name() })));
 
@@ -158,7 +153,6 @@ public class TdqCategoriesFactoryTest extends CategoryRegistryManagerAbstract {
 
     @Test
     public void testSerializable() throws Exception {
-        mockWithTenant("testSerializable");
         TdqCategories baseValue = TdqCategoriesFactory
                 .createTdqCategories(new HashSet<>(Arrays.asList(new String[] { SemanticCategoryEnum.EMAIL.name() })));
 

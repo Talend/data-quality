@@ -1,7 +1,6 @@
 package org.talend.dataquality.semantic.api;
 
 import static org.junit.Assert.assertEquals;
-import static org.talend.dataquality.semantic.TestUtils.mockWithTenant;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -31,7 +30,6 @@ public class CategoryRegistryManagerTest extends CategoryRegistryManagerAbstract
 
     @Test
     public void testGetRegexClassifier() throws IOException, URISyntaxException {
-        mockWithTenant("testGetRegexClassifier");
         CategoryRegistryManager crm = CategoryRegistryManager.getInstance();
         final UserDefinedClassifier udc = crm.getRegexClassifier();
         final Set<ISubCategory> classifiers = udc.getClassifiers();
@@ -84,7 +82,6 @@ public class CategoryRegistryManagerTest extends CategoryRegistryManagerAbstract
 
     @Test
     public void testFindMostSimilarValueWithCustomDataDict() throws IOException {
-        mockWithTenant("testFindMostSimilarValueWithCustomDataDict");
         CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder();
 
         DQCategory answerCategory = holder.getMetadata().get(SemanticCategoryEnum.ANSWER.getTechnicalId());

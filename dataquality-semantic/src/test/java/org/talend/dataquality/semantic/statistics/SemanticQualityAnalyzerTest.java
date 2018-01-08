@@ -2,7 +2,6 @@ package org.talend.dataquality.semantic.statistics;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.talend.dataquality.semantic.TestUtils.mockWithTenant;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -123,26 +122,22 @@ public class SemanticQualityAnalyzerTest extends CategoryRegistryManagerAbstract
 
     @Test
     public void testSemanticQualityAnalyzerWithDictionaryCategory() {
-        mockWithTenant("testSemanticQualityAnalyzerWithDictionaryCategory");
         testAnalysis(RECORDS_CRM_CUST, EXPECTED_CATEGORIES_DICT, EXPECTED_VALIDITY_COUNT_DICT, EXPECTED_VALIDITY_COUNT_DICT);
     }
 
     @Test
     public void testSemanticQualityAnalyzerWithRegexCategory() {
-        mockWithTenant("testSemanticQualityAnalyzerWithRegexCategory");
         testAnalysis(RECORDS_CREDIT_CARDS, EXPECTED_CATEGORIES_REGEX, EXPECTED_VALIDITY_COUNT_REGEX_FOR_DISCOVERY,
                 EXPECTED_VALIDITY_COUNT_REGEX_FOR_VALIDATION);
     }
 
     @Test
     public void testSemanticQualityAnalyzerWithPhoneCategory() {
-        mockWithTenant("testSemanticQualityAnalyzerWithPhoneCategory");
         testAnalysis(RECORDS_PHONES, new String[] { "PHONE" }, EXPECTED_VALIDITY_COUNT_PHONE, EXPECTED_VALIDITY_COUNT_PHONE);
     }
 
     @Test
     public void testMultiTenantIndex() throws IOException, URISyntaxException {
-        mockWithTenant("testMultiTenantIndex");
         long[][] expectedCount = new long[][] { new long[] { 1, 0, 0 } };
         initTenantIndex(false);
         testAnalysis(Collections.singletonList(new String[] { "CDG" }),
@@ -153,7 +148,6 @@ public class SemanticQualityAnalyzerTest extends CategoryRegistryManagerAbstract
 
     @Test
     public void testMultiTenantIndexWithoutExistingValues() throws IOException, URISyntaxException {
-        mockWithTenant("testMultiTenantIndexWithoutExistingValues");
         long[][] expectedCount = new long[][] { new long[] { 1, 0, 0 } };
         initTenantIndex(true);
         testAnalysis(Collections.singletonList(new String[] { "CDG" }), new String[] { StringUtils.EMPTY }, expectedCount,
@@ -164,7 +158,6 @@ public class SemanticQualityAnalyzerTest extends CategoryRegistryManagerAbstract
 
     @Test
     public void testMultiTenantIndexWithDeletedCategory() throws IOException, URISyntaxException {
-        mockWithTenant("testMultiTenantIndexWithDeletedCategory");
         long[][] expectedCount = new long[][] { new long[] { 1, 0, 0 } };
         testAnalysis(Collections.singletonList(new String[] { "Berulle" }),
                 new String[] { SemanticCategoryEnum.FR_COMMUNE.getId() }, expectedCount, expectedCount);
@@ -180,7 +173,6 @@ public class SemanticQualityAnalyzerTest extends CategoryRegistryManagerAbstract
 
     @Test
     public void testCompoundCategoryWithSharedChildrenAndCustomChildren() throws IOException, URISyntaxException {
-        mockWithTenant("testCompoundCategoryWithSharedChildrenAndCustomChildren");
         long[][] expectedCount = new long[][] { new long[] { 2, 0, 0 } };
         initCompound();
         initTenantIndex(true);

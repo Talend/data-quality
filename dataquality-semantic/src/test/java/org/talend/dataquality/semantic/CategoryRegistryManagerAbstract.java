@@ -12,7 +12,12 @@
 // ============================================================================
 package org.talend.dataquality.semantic;
 
+import static org.talend.dataquality.semantic.TestUtils.mockWithTenant;
+
+import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
+import org.junit.rules.TestName;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 
 public abstract class CategoryRegistryManagerAbstract {
@@ -20,6 +25,14 @@ public abstract class CategoryRegistryManagerAbstract {
     @BeforeClass
     public static void before() {
         CategoryRegistryManager.setLocalRegistryPath("target/test_crm");
+    }
+
+    @Rule
+    public TestName testName = new TestName();
+
+    @Before
+    public void setUp() {
+        mockWithTenant(testName.getMethodName());
     }
 
 }

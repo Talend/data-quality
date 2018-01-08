@@ -22,12 +22,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.Analyzers;
-import org.talend.dataquality.semantic.CategoryRegistryManagerAbstract;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
 import org.talend.dataquality.semantic.snapshot.StandardDictionarySnapshotProvider;
 
-public class SemanticCompoundAnalyzerTest extends CategoryRegistryManagerAbstract {
+public class SemanticCompoundAnalyzerTest {
 
     private DictionarySnapshot dictionarySnapshot;
 
@@ -51,7 +50,7 @@ public class SemanticCompoundAnalyzerTest extends CategoryRegistryManagerAbstrac
             SemanticCategoryEnum.DE_PHONE.name(), SemanticCategoryEnum.US_PHONE.name(), PHONE, PHONE });
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         dictionarySnapshot = new StandardDictionarySnapshotProvider().get();
     }
 

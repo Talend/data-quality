@@ -2,7 +2,6 @@ package org.talend.dataquality.semantic.api;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.talend.dataquality.semantic.TestUtils.mockWithTenant;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -172,7 +171,6 @@ public class LocalDictionaryCacheTest extends CategoryRegistryManagerAbstract {
 
     @Test
     public void testSuggestValuesFromCustomDataDict() throws IOException {
-        mockWithTenant("testSuggestValuesFromCustomDataDict");
         CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder();
 
         DQCategory answerCategory = holder.getMetadata().get(SemanticCategoryEnum.ANSWER.getTechnicalId());

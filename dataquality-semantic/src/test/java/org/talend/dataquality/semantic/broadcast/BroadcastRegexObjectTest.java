@@ -16,10 +16,16 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import org.talend.daikon.multitenant.context.TenancyContextHolder;
 import org.talend.dataquality.semantic.CategoryRegistryManagerAbstract;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.classifier.custom.UserDefinedClassifier;
 
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({ TenancyContextHolder.class })
 public class BroadcastRegexObjectTest extends CategoryRegistryManagerAbstract {
 
     @Test
