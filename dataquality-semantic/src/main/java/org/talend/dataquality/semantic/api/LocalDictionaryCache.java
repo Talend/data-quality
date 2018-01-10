@@ -15,7 +15,11 @@ package org.talend.dataquality.semantic.api;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -23,7 +27,15 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.search.*;
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.SearcherManager;
+import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.WildcardQuery;
 import org.apache.lucene.store.Directory;
 import org.talend.dataquality.semantic.index.ClassPathDirectory;
 import org.talend.dataquality.semantic.index.DictionarySearcher;
@@ -89,7 +101,8 @@ public class LocalDictionaryCache {
     public List<DQDocument> listDocuments(String categoryName, int offset, int n) {
         try {
             DQCategory dqCat = customDictionaryHolder.getCategoryMetadataByName(categoryName);
-            TopDocs docs = sendListDocumentsQuery(dqCat.getId(), offset, n);
+            boolean isCategoryModified = dqCat.getModified();
+            TopDocs docs = sendListDocumentsQuery(dqCat.getId(), offset, n, isCategoryModified);
             return dqDocListFromTopDocs(dqCat.getId(), dqCat.getName(), docs);
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
@@ -97,13 +110,14 @@ public class LocalDictionaryCache {
         return Collections.emptyList();
     }
 
-    private Query getListDocumentsQuery(String categoryId) throws IOException {
+    private Query getListDocumentsQuery(String categoryId) {
         return new TermQuery(new Term(DictionarySearcher.F_CATID, categoryId));
     }
 
-    private TopDocs sendListDocumentsQuery(String categoryId, int offset, int n) throws IOException {
-        sharedSearcherManager.maybeRefresh();
-        IndexSearcher searcher = sharedSearcherManager.acquire();
+    private TopDocs sendListDocumentsQuery(String categoryId, int offset, int n, boolean searchInCustom) throws IOException {
+        SearcherManager searcherManager = getSearcherManager(searchInCustom);
+        searcherManager.maybeRefresh();
+        IndexSearcher searcher = searcherManager.acquire();
         TopDocs result;
         if (offset <= 0) {
             result = searcher.search(getListDocumentsQuery(categoryId), n);
@@ -112,7 +126,7 @@ public class LocalDictionaryCache {
             Query q = new TermQuery(new Term(DictionarySearcher.F_CATID, categoryId));
             result = searcher.searchAfter(topDocs.scoreDocs[Math.min(topDocs.totalHits, offset) - 1], q, n);
         }
-        sharedSearcherManager.release(searcher);
+        searcherManager.release(searcher);
         return result;
     }
 

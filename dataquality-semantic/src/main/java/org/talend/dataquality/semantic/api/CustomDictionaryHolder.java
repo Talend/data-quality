@@ -387,7 +387,7 @@ public class CustomDictionaryHolder {
      *
      * @param category
      */
-    public void insertOrUpdateRegexCategory(DQCategory category) {
+    private void insertOrUpdateRegexCategory(DQCategory category) {
         ensureRegexClassifierAccess();
         UserDefinedCategory regEx = DictionaryUtils.regexClassifierfromDQCategory(category);
         customRegexClassifierAccess.insertOrUpdateRegex(regEx);
