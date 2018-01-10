@@ -30,24 +30,27 @@ public class GenerateFromDictionaries extends Function<String> {
 
     private static final long serialVersionUID = 1476820256067746995L;
 
-    protected List<String> valuesInDictionaries = new ArrayList<>();
+    private String maskResult = EMPTY_STRING;
 
     @Override
     protected String doGenerateMaskedField(String t) {
-        if (!valuesInDictionaries.isEmpty()) {
-            return valuesInDictionaries.get(rnd.nextInt(valuesInDictionaries.size()));
-        } else {
-            return EMPTY_STRING;
-        }
+        return maskResult;
     }
 
     @Override
     public void parse(String semanticCategory, boolean keepNullValues, Random rand) {
         if (semanticCategory != null) {
+            List<String> valuesInDictionaries = new ArrayList<>();
+            // in order to get the lastest dictionary Category values, so close first.
+            CategoryRegistryManager.getInstance().getCustomDictionaryHolder().closeDictionaryCache();
             LocalDictionaryCache dict = CategoryRegistryManager.getInstance().getDictionaryCache();
-            List<DQDocument> listDocuments = dict.listDocuments(semanticCategory, 0, Integer.MAX_VALUE);
+            List<DQDocument> listDocuments = dict.listDocuments(semanticCategory, 0, 1);
             for (DQDocument dqDocument : listDocuments) {
                 valuesInDictionaries.addAll(dqDocument.getValues());
+            }
+            if (!valuesInDictionaries.isEmpty()) {
+                // only use the first value to mask all.
+                this.maskResult = valuesInDictionaries.get(0);
             }
         }
 

@@ -21,7 +21,6 @@ import org.talend.dataquality.datamasking.FunctionType;
 public enum MaskableCategoryEnum {
 
     ADDRESS_LINE("Address Line", FunctionType.MASK_ADDRESS), //$NON-NLS-1$
-    CITY("City", FunctionType.REPLACE_CHARACTERS_WITH_GENERATION), //$NON-NLS-1$
     EMAIL("Email", FunctionType.MASK_EMAIL), //$NON-NLS-1$
     FULL_NAME("Full Name", FunctionType.REPLACE_CHARACTERS_WITH_GENERATION), //$NON-NLS-1$
     IPv4_ADDRESS("IPv4 Address", FunctionType.REPLACE_CHARACTERS_WITH_GENERATION), //$NON-NLS-1$
