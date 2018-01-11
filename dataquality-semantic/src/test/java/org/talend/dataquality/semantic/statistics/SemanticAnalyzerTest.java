@@ -22,10 +22,6 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-import org.talend.daikon.multitenant.context.TenancyContextHolder;
 import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.Analyzers;
 import org.talend.dataquality.common.inference.Analyzers.Result;
@@ -43,8 +39,6 @@ import org.talend.dataquality.semantic.model.MainCategory;
 import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
 import org.talend.dataquality.semantic.snapshot.StandardDictionarySnapshotProvider;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({ TenancyContextHolder.class })
 public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
 
     private final List<String[]> TEST_RECORDS = new ArrayList<String[]>() {

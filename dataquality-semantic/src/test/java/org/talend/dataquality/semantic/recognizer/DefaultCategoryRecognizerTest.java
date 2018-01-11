@@ -13,10 +13,6 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-import org.talend.daikon.multitenant.context.TenancyContextHolder;
 import org.talend.dataquality.semantic.CategoryRegistryManagerAbstract;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
@@ -26,8 +22,6 @@ import org.talend.dataquality.semantic.model.DQDocument;
 import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
 import org.talend.dataquality.semantic.snapshot.StandardDictionarySnapshotProvider;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({ TenancyContextHolder.class })
 public class DefaultCategoryRecognizerTest extends CategoryRegistryManagerAbstract {
 
     private CategoryRecognizer recognizer;

@@ -30,10 +30,6 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-import org.talend.daikon.multitenant.context.TenancyContextHolder;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizer;
 import org.talend.dataquality.semantic.recognizer.DefaultCategoryRecognizer;
@@ -44,8 +40,6 @@ import org.talend.dataquality.semantic.snapshot.StandardDictionarySnapshotProvid
  * created by talend on 2015-07-28 Detailled comment.
  *
  */
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({ TenancyContextHolder.class })
 public class RespectiveCategoryRecognizerTest extends CategoryRegistryManagerAbstract {
 
     final String commontChar = "//##//"; //$NON-NLS-1$

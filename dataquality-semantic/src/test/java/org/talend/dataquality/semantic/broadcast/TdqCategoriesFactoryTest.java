@@ -20,10 +20,6 @@ import org.apache.lucene.index.MultiFields;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.util.Bits;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-import org.talend.daikon.multitenant.context.TenancyContextHolder;
 import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.Analyzers;
 import org.talend.dataquality.common.inference.Analyzers.Result;
@@ -41,8 +37,6 @@ import org.talend.dataquality.semantic.statistics.SemanticQualityAnalyzer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({ TenancyContextHolder.class })
 public class TdqCategoriesFactoryTest extends CategoryRegistryManagerAbstract {
 
     @Test

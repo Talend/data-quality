@@ -18,8 +18,14 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.rules.TestName;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import org.talend.daikon.multitenant.context.TenancyContextHolder;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({ TenancyContextHolder.class })
 public abstract class CategoryRegistryManagerAbstract {
 
     @BeforeClass

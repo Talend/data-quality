@@ -1,44 +1,54 @@
 package org.talend.dataquality.semantic.api;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.powermock.api.mockito.PowerMockito.doNothing;
 import static org.talend.dataquality.semantic.TestUtils.mockWithTenant;
+import static org.talend.dataquality.semantic.api.CustomDictionaryHolder.TALEND;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.lucene.store.FSDirectory;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TestName;
-import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.MockitoAnnotations;
+import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-import org.talend.daikon.multitenant.context.TenancyContextHolder;
 import org.talend.dataquality.semantic.CategoryRegistryManagerAbstract;
+import org.talend.dataquality.semantic.api.internal.CustomMetadataIndexAccess;
+import org.talend.dataquality.semantic.api.internal.CustomRegexClassifierAccess;
 import org.talend.dataquality.semantic.classifier.ISubCategory;
 import org.talend.dataquality.semantic.filter.impl.CharSequenceFilter;
 import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
-import org.talend.dataquality.semantic.model.DQDocument;
 import org.talend.dataquality.semantic.model.DQFilter;
 import org.talend.dataquality.semantic.model.DQRegEx;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({ TenancyContextHolder.class })
+@PrepareForTest({ CustomDictionaryHolder.class, CategoryRegistryManager.class })
 public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract {
 
+    @InjectMocks
     private CustomDictionaryHolder holder;
 
-    @Rule
-    public TestName testName = new TestName();
+    private CustomMetadataIndexAccess customRepublishMetadataIndexAccess;
+
+    private CustomRegexClassifierAccess customRepublishRegexClassifierAccess;
 
     @Before
     public void setUp() {
+        MockitoAnnotations.initMocks(this);
         initializeCDH(this.getClass().getSimpleName() + "_" + testName.getMethodName());
     }
 
@@ -49,119 +59,107 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
     }
 
     @Test
-    public void createRegexCategory() {
-        holder.createCategory(createDQRegexCategory());
+    public void createRegexCategory() throws IOException {
+        holder.createCategory(createDQRegexCategory("1"));
         Set<ISubCategory> filteredSet = holder.getRegexClassifier().getClassifiers().stream()
                 .filter(classifier -> classifier.getName().equals("RegExCategoryName")).collect(Collectors.toSet());
         assertEquals(1, filteredSet.size());
     }
 
     @Test
-    public void republishRegex() throws IOException {
-        holder.beforeRepublish();
-        holder.republishCategory(createDQRegexCategory());
-        holder.publishDirectory();
-        assertEquals(1, holder.getRegexClassifier().getClassifiers().size());
+    public void republishRegex() {
+        initRepublishMocks();
+        holder.republishCategory(createDQRegexCategory("newCat"));
+        verify(customRepublishMetadataIndexAccess, times(0)).insertOrUpdateCategory(any(DQCategory.class));
+        verify(customRepublishMetadataIndexAccess, times(1)).createCategory(any(DQCategory.class));
+        verify(customRepublishRegexClassifierAccess, times(1)).insertOrUpdateRegex(any(ISubCategory.class));
+        verify(customRepublishMetadataIndexAccess, times(1)).commitChanges();
     }
 
     @Test
-    public void republishCompound() throws IOException {
-        int initialSize = holder.getMetadata().size();
-        holder.beforeRepublish();
+    public void republishCompound() {
+        initRepublishMocks();
         holder.republishCategory(createCompoundCategory("1", false));
-        holder.publishDirectory();
-        assertEquals(1, holder.getMetadata().size() - initialSize);
+        verify(customRepublishMetadataIndexAccess, times(0)).insertOrUpdateCategory(any(DQCategory.class));
+        verify(customRepublishMetadataIndexAccess, times(1)).createCategory(any(DQCategory.class));
+        verify(customRepublishRegexClassifierAccess, times(0)).insertOrUpdateRegex(any(ISubCategory.class));
+        verify(customRepublishMetadataIndexAccess, times(1)).commitChanges();
     }
 
     @Test
-    public void republishExistingCompound() throws IOException {
-        int initialSize = holder.getMetadata().size();
-        holder.beforeRepublish();
-        String categoryId = "58f9d2e8b45fc36367e8bc38";
-        holder.republishCategory(createCompoundCategory(categoryId, true));
-        holder.publishDirectory();
-        assertEquals(holder.getMetadata().size(), initialSize);
-        assert (holder.getCategoryMetadataById(categoryId).getModified());
-    }
-
-    @Test
-    public void republishExistingUnmodifiedCompound() throws IOException {
-        int initialSize = holder.getMetadata().size();
-        holder.beforeRepublish();
-        String categoryId = "58f9d2e8b45fc36367e8bc38";
-        holder.republishCategory(createCompoundCategory(categoryId, false));
-        holder.publishDirectory();
-        assertEquals(holder.getMetadata().size(), initialSize);
-        assert (!holder.getCategoryMetadataById(categoryId).getModified());
-    }
-
-    @Test
-    public void republishDict() throws IOException {
-        int initialSize = holder.getMetadata().size();
-        DQCategory category = createDictCategory("1", true);
-        List<DQDocument> documents = createDocuments(category);
-        holder.beforeRepublish();
+    public void republishExistingCompound() {
+        initRepublishMocks();
+        DQCategory category = createCompoundCategory("compoundCategory", true);
         holder.republishCategory(category);
-        holder.republishDataDictDocuments(documents);
-        holder.publishDirectory();
-
-        assertEquals(1, holder.getMetadata().size() - initialSize);
-        assertEquals(2, holder.getDictionaryCache().listDocuments("dictCategoryName", 0, 10).size());
+        verify(customRepublishMetadataIndexAccess, times(1)).insertOrUpdateCategory(any(DQCategory.class));
+        verify(customRepublishMetadataIndexAccess, times(0)).createCategory(any(DQCategory.class));
+        verify(customRepublishRegexClassifierAccess, times(0)).insertOrUpdateRegex(any(ISubCategory.class));
+        verify(customRepublishMetadataIndexAccess, times(1)).commitChanges();
+        assert (category.getModified());
     }
 
     @Test
-    public void republishExistingDict() throws IOException {
-        int initialSize = holder.getMetadata().size();
-
-        DQCategory category = createDictCategory("5836fb7642b02a69874f77e3", true); // Airport code
-        List<DQDocument> documents = createDocuments(category);
-        holder.beforeRepublish();
+    public void republishExistingUnmodifiedCompound() {
+        initRepublishMocks();
+        DQCategory category = createCompoundCategory("compoundCategory", false);
         holder.republishCategory(category);
-        holder.republishDataDictDocuments(documents);
-        holder.publishDirectory();
-
-        assertEquals(0, holder.getMetadata().size() - initialSize);
-        assertEquals(2, holder.getDictionaryCache().listDocuments("dictCategoryName", 0, 10).size());
+        verify(customRepublishMetadataIndexAccess, times(1)).insertOrUpdateCategory(any(DQCategory.class));
+        verify(customRepublishMetadataIndexAccess, times(0)).createCategory(any(DQCategory.class));
+        verify(customRepublishRegexClassifierAccess, times(0)).insertOrUpdateRegex(any(ISubCategory.class));
+        verify(customRepublishMetadataIndexAccess, times(1)).commitChanges();
+        assert (category.getModified()); // Not a Talend category, so must have modified to true
     }
 
     @Test
-    public void republishExistingUnmodifiedDict() throws IOException {
-        int initialSize = holder.getMetadata().size();
-
-        DQCategory category = createDictCategory("5836fb7642b02a69874f77e3", false); // Airport code
-        holder.beforeRepublish();
+    public void republishTalendDict() {
+        initRepublishMocks();
+        DQCategory category = createTalendDictCategory("dictCategory");
         holder.republishCategory(category);
-        holder.publishDirectory();
-
-        assertEquals(0, holder.getMetadata().size() - initialSize);
-        assertEquals(7830, holder.getDictionaryCache().listDocuments("dictCategoryName", 0, 10000).size());
+        verify(customRepublishMetadataIndexAccess, times(1)).insertOrUpdateCategory(any(DQCategory.class));
+        verify(customRepublishMetadataIndexAccess, times(0)).createCategory(any(DQCategory.class));
+        verify(customRepublishRegexClassifierAccess, times(0)).insertOrUpdateRegex(any(ISubCategory.class));
+        verify(customRepublishMetadataIndexAccess, times(1)).commitChanges();
+        assert (!category.getModified()); // Talend category, so must have modified to false
     }
 
-    private List<DQDocument> createDocuments(DQCategory category) {
-        List<DQDocument> documents = new ArrayList<>();
-        DQDocument doc1 = new DQDocument();
-        doc1.setId("doc1");
-        doc1.setCategory(category);
-        doc1.setValues(new HashSet<>(Arrays.asList("a", "b")));
-        documents.add(doc1);
-        DQDocument doc2 = new DQDocument();
-        doc2.setId("doc2");
-        doc2.setCategory(category);
-        doc2.setValues(new HashSet<>(Arrays.asList("c", "d")));
-        documents.add(doc2);
-        return documents;
+    private void initRepublishMocks() {
+        PowerMockito.mockStatic(CategoryRegistryManager.class);
+        CategoryRegistryManager crm = mock(CategoryRegistryManager.class);
+        when(CategoryRegistryManager.getInstance()).thenReturn(crm);
+        when(crm.getSharedCategoryMetadata()).thenReturn(mockMap());
+
+        customRepublishMetadataIndexAccess = PowerMockito.mock(CustomMetadataIndexAccess.class);
+        customRepublishRegexClassifierAccess = PowerMockito.mock(CustomRegexClassifierAccess.class);
+        try {
+            PowerMockito.whenNew(CustomMetadataIndexAccess.class).withArguments(any(FSDirectory.class))
+                    .thenReturn(customRepublishMetadataIndexAccess);
+            PowerMockito.whenNew(CustomRegexClassifierAccess.class).withArguments(anyString())
+                    .thenReturn(customRepublishRegexClassifierAccess);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        doNothing().when(customRepublishMetadataIndexAccess).insertOrUpdateCategory(any(DQCategory.class));
+        doNothing().when(customRepublishMetadataIndexAccess).createCategory(any(DQCategory.class));
+        doNothing().when(customRepublishRegexClassifierAccess).insertOrUpdateRegex(any(ISubCategory.class));
+        doNothing().when(customRepublishMetadataIndexAccess).commitChanges();
     }
 
-    private DQCategory createDictCategory(String categoryId, boolean isModified) {
+    private Map<String, DQCategory> mockMap() {
+        Map<String, DQCategory> map = new HashMap<>();
+        map.put("dictCategory", createTalendDictCategory("dictCategory"));
+        map.put("regexCategory", createDQRegexCategory("regexCategory"));
+        map.put("compoundCategory", createCompoundCategory("compoundCategory", false));
+        return map;
+    }
+
+    private DQCategory createTalendDictCategory(String categoryId) {
         DQCategory category = new DQCategory(categoryId);
         category.setLabel("dictCategoryLabel");
         category.setName("dictCategoryName");
         category.setType(CategoryType.DICT);
         category.setCompleteness(false);
-        if (isModified) {
-            category.setModified(true);
-            category.setLastModifier(holder.getTenantID());
-        }
+        category.setModified(false);
+        category.setLastModifier(TALEND);
         return category;
     }
 
@@ -171,10 +169,8 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
         category.setName("compoundCategoryName");
         category.setType(CategoryType.COMPOUND);
         category.setCompleteness(true);
-        if (isModified) {
-            category.setModified(true);
-            category.setLastModifier(holder.getTenantID());
-        }
+        category.setLastModifier(holder.getTenantID());
+        category.setModified(isModified);
         DQCategory child1 = new DQCategory("child1");
         DQCategory child2 = new DQCategory("child2");
         List<DQCategory> children = new ArrayList<>();
@@ -184,8 +180,8 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
         return category;
     }
 
-    private DQCategory createDQRegexCategory() {
-        DQCategory category = new DQCategory("1");
+    private DQCategory createDQRegexCategory(String categoryId) {
+        DQCategory category = new DQCategory(categoryId);
         category.setLabel("RegExCategoryLabel");
         category.setName("RegExCategoryName");
         category.setType(CategoryType.REGEX);

@@ -12,10 +12,6 @@ import java.util.Set;
 import org.apache.commons.lang3.SerializationUtils;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-import org.talend.daikon.multitenant.context.TenancyContextHolder;
 import org.talend.dataquality.semantic.CategoryRegistryManagerAbstract;
 import org.talend.dataquality.semantic.classifier.ISubCategory;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
@@ -24,8 +20,6 @@ import org.talend.dataquality.semantic.index.LuceneIndex;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.model.DQDocument;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({ TenancyContextHolder.class })
 public class CategoryRegistryManagerTest extends CategoryRegistryManagerAbstract {
 
     @Test

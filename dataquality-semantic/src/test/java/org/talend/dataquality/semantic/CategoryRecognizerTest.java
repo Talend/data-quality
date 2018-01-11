@@ -25,10 +25,6 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-import org.talend.daikon.multitenant.context.TenancyContextHolder;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.recognizer.CategoryFrequency;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizer;
@@ -40,8 +36,6 @@ import org.talend.dataquality.semantic.snapshot.StandardDictionarySnapshotProvid
  * created by talend on 2015-07-28 Detailled comment.
  *
  */
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({ TenancyContextHolder.class })
 public class CategoryRecognizerTest extends CategoryRegistryManagerAbstract {
 
     private static final Map<String, Float> EXPECTED_FREQUECY_TABLE = new LinkedHashMap<String, Float>() {
