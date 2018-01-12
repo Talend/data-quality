@@ -77,15 +77,15 @@ public class TdqCategoriesFactory {
     }
 
     /**
-     * Load the default categories and produce a TdqCategories object.
+     * Load the shared categories and produce a TdqCategories object.
      *
-     * @return the TdqCategories object containing all default categories for validation
+     * @return the TdqCategories object containing all shared categories which are used for validation
      */
-    public static final TdqCategories createDefaultTdqCategories() {
+    public static final TdqCategories createSharedTdqCategories() {
         final CategoryRegistryManager crm = CategoryRegistryManager.getInstance();
-        Map<String, DQCategory> selectedCategoryMap = crm.getCategoryMetadataMap().entrySet().stream() //
-                .filter(entry -> Boolean.TRUE.equals(entry.getValue().getCompleteness())) // keep only the categories which are
-                // used for validation
+        Map<String, DQCategory> selectedCategoryMap = crm.getSharedCategoryMetadata().entrySet().stream() //
+                // keep only the categories which are used for validation
+                .filter(entry -> Boolean.TRUE.equals(entry.getValue().getCompleteness())) //
                 .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
 
         return new TdqCategories( //

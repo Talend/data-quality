@@ -54,7 +54,7 @@ public class TdqCategoriesFactoryTest extends CategoryRegistryManagerAbstract {
 
     @Test
     public void testCreateDefaultTdqCategories() throws IOException {
-        TdqCategories cats = TdqCategoriesFactory.createDefaultTdqCategories();
+        TdqCategories cats = TdqCategoriesFactory.createSharedTdqCategories();
         assertEquals("Unexpected metadata size!", 75, cats.getCategoryMetadata().getMetadata().size());
         assertEquals("Unexpected document size in shared data dict!", 45829, cats.getDictionary().getDocumentList().size());
         assertEquals("Unexpected document size in custom data dict!", 0, cats.getCustomDictionary().getDocumentList().size());
