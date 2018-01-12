@@ -128,11 +128,7 @@ public class CustomDictionaryHolder {
     public UserDefinedClassifier getRegexClassifier() {
         // return shared regexClassifier if NULL
         if (regexClassifier == null) {
-            try {
-                return CategoryRegistryManager.getInstance().getRegexClassifier();
-            } catch (IOException e) {
-                LOGGER.error(e.getMessage(), e);
-            }
+            return CategoryRegistryManager.getInstance().getRegexClassifier();
         }
         return regexClassifier;
     }

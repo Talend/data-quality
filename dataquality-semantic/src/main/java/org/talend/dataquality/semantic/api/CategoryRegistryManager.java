@@ -390,24 +390,33 @@ public class CategoryRegistryManager {
     /**
      * get instance of UserDefinedClassifier
      */
-    public UserDefinedClassifier getRegexClassifier() throws IOException {
+    public UserDefinedClassifier getRegexClassifier() {
         if (!usingLocalCategoryRegistry) {
-            return UDCategorySerDeser.getRegexClassifier();
-        }
-
-        // load regexes from local registry
-        if (sharedRegexClassifier == null) {
-            final File regexRegistryFile = new File(
-                    localRegistryPath + File.separator + SHARED_FOLDER_NAME + File.separator + PRODUCTION_FOLDER_NAME
-                            + File.separator + REGEX_SUBFOLDER_NAME + File.separator + REGEX_CATEGORIZER_FILE_NAME);
-
-            if (!regexRegistryFile.exists()) {
-                loadBaseRegex(regexRegistryFile);
+            try {
+                return UDCategorySerDeser.getRegexClassifier();
+            } catch (IOException e) {
+                LOGGER.error(e.getMessage(), e);
             }
+        } else {
+            // load regexes from local registry
+            if (sharedRegexClassifier == null) {
+                final File regexRegistryFile = new File(
+                        localRegistryPath + File.separator + SHARED_FOLDER_NAME + File.separator + PRODUCTION_FOLDER_NAME
+                                + File.separator + REGEX_SUBFOLDER_NAME + File.separator + REGEX_CATEGORIZER_FILE_NAME);
 
-            sharedRegexClassifier = UDCategorySerDeser.readJsonFile(regexRegistryFile.toURI());
+                try {
+                    if (!regexRegistryFile.exists()) {
+                        loadBaseRegex(regexRegistryFile);
+                    }
+
+                    sharedRegexClassifier = UDCategorySerDeser.readJsonFile(regexRegistryFile.toURI());
+                } catch (IOException e) {
+                    LOGGER.error(e.getMessage(), e);
+                }
+            }
         }
         return sharedRegexClassifier;
+
     }
 
     /**

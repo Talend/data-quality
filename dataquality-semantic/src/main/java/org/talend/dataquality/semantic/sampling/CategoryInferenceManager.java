@@ -48,16 +48,12 @@ public class CategoryInferenceManager {
      */
     public CategoryInferenceManager() {
         final CategoryRegistryManager crm = CategoryRegistryManager.getInstance();
-        try {
-            dictionarySnapshot = new DictionarySnapshot( //
-                    crm.getSharedCategoryMetadata(), //
-                    new LuceneIndex(crm.getSharedDataDictDirectory(), DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY), //
-                    null, // custom data dictionary not needed here
-                    new LuceneIndex(crm.getSharedKeywordDirectory(), DictionarySearchMode.MATCH_SEMANTIC_KEYWORD), //
-                    crm.getRegexClassifier());
-        } catch (IOException e) {
-            LOGGER.error(e.getMessage(), e);
-        }
+        dictionarySnapshot = new DictionarySnapshot( //
+                crm.getSharedCategoryMetadata(), //
+                new LuceneIndex(crm.getSharedDataDictDirectory(), DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY), //
+                null, // custom data dictionary not needed here
+                new LuceneIndex(crm.getSharedKeywordDirectory(), DictionarySearchMode.MATCH_SEMANTIC_KEYWORD), //
+                crm.getRegexClassifier());
     }
 
     /**
