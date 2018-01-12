@@ -6,12 +6,15 @@ import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
+import org.talend.dataquality.semantic.classifier.custom.UDCategorySerDeser;
 import org.talend.dataquality.semantic.classifier.custom.UserDefinedClassifier;
 import org.talend.dataquality.semantic.model.DQCategory;
 
@@ -82,6 +85,31 @@ public class TdqCategoriesFactory {
             LOGGER.debug("Returning category metadata.");
             return new TdqCategories(meta, sharedDictionary, customDictionary, keyword, regex);
         } catch (URISyntaxException | IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+        return createEmptyTdqCategories();
+    }
+
+    /**
+     * Load the default categories and produce a TdqCategories object.
+     *
+     * @return the TdqCategories object containing all default categories for validation
+     */
+    public static final TdqCategories createDefaultTdqCategories() {
+        final CategoryRegistryManager crm = CategoryRegistryManager.getInstance();
+        Map<String, DQCategory> selectedCategoryMap = crm.getCategoryMetadataMap().entrySet().stream() //
+                .filter(entry -> Boolean.TRUE.equals(entry.getValue().getCompleteness())) // keep only the categories which are
+                // used for validation
+                .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
+
+        try {
+            return new TdqCategories( //
+                    new BroadcastMetadataObject(selectedCategoryMap), //
+                    new BroadcastIndexObject(crm.getSharedDataDictDirectory(), selectedCategoryMap.keySet()), //
+                    new BroadcastIndexObject(Collections.emptyList()), // custom data dictionary not needed
+                    new BroadcastIndexObject(crm.getSharedKeywordDirectory(), selectedCategoryMap.keySet()), //
+                    new BroadcastRegexObject(UDCategorySerDeser.getRegexClassifier(), selectedCategoryMap.keySet()));
+        } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         }
         return createEmptyTdqCategories();
