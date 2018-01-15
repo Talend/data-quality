@@ -14,11 +14,9 @@ package org.talend.dataquality.semantic.model;
 
 import java.util.List;
 
-public class DQDocumentAction {
+public class DQDocumentAction extends DQAction {
 
     private String id;
-
-    private Action action;
 
     private List<DQDocument> documents;
 
@@ -30,14 +28,6 @@ public class DQDocumentAction {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public Action getAction() {
-        return action;
-    }
-
-    public void setAction(Action action) {
-        this.action = action;
     }
 
     public List<DQDocument> getDocuments() {
