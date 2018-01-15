@@ -14,11 +14,9 @@ package org.talend.dataquality.semantic.model;
 
 import java.util.List;
 
-public class DQCategoryAction {
+public class DQCategoryAction extends DQAction {
 
     private String id;
-
-    private Action action;
 
     private List<DQCategory> categories;
 
@@ -30,14 +28,6 @@ public class DQCategoryAction {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public Action getAction() {
-        return action;
-    }
-
-    public void setAction(Action action) {
-        this.action = action;
     }
 
     public List<DQCategory> getCategories() {
