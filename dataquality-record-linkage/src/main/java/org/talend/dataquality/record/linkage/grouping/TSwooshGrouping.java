@@ -12,21 +12,22 @@
 // ============================================================================
 package org.talend.dataquality.record.linkage.grouping;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
 import org.talend.dataquality.matchmerge.Attribute;
 import org.talend.dataquality.matchmerge.MatchMergeAlgorithm;
 import org.talend.dataquality.matchmerge.Record;
-import org.talend.dataquality.matchmerge.mfb.MatchResult;
 import org.talend.dataquality.matchmerge.mfb.RecordGenerator;
 import org.talend.dataquality.matchmerge.mfb.RecordIterator.ValueGenerator;
+import org.talend.dataquality.record.linkage.constant.AttributeMatcherType;
 import org.talend.dataquality.record.linkage.grouping.swoosh.DQAttribute;
 import org.talend.dataquality.record.linkage.grouping.swoosh.DQMFB;
 import org.talend.dataquality.record.linkage.grouping.swoosh.DQMFBRecordMerger;
@@ -60,6 +61,9 @@ public class TSwooshGrouping<TYPE> {
     // Added TDQ-12057
     private boolean hasPassedOriginal = false;
 
+    // Added TDQ-14276 , used for format the date before toString
+    private SimpleDateFormat sdf = new SimpleDateFormat("", java.util.Locale.US);
+
     /**
      * DOC zhao TSwooshGrouping constructor comment.
      */
@@ -85,6 +89,7 @@ public class TSwooshGrouping<TYPE> {
     public void addToList(final TYPE[] inputRow, List<List<Map<java.lang.String, java.lang.String>>> multiMatchRules) {
         totalCount++;
         String attributeName;
+        String matchType;
         Map<java.lang.String, ValueGenerator> rcdMap = new LinkedHashMap<>();
         for (List<Map<java.lang.String, java.lang.String>> matchRule : multiMatchRules) {
             for (final Map<java.lang.String, java.lang.String> recordMap : matchRule) {
@@ -102,8 +107,13 @@ public class TSwooshGrouping<TYPE> {
 
                     @Override
                     public java.lang.String newValue() {
-                        TYPE value = inputRow[Integer.valueOf(recordMap.get(IRecordGrouping.COLUMN_IDX))];
-                        return value == null ? null : value.toString();
+                        Integer columnIndex = Integer.valueOf(recordMap.get(IRecordGrouping.COLUMN_IDX));
+                        TYPE value = inputRow[columnIndex];
+                        if (value != null && value instanceof Date) {
+                            return getFormatDate((Date) value, columnIndex);
+                        } else {
+                            return value == null ? null : value.toString();
+                        }
                     }
 
                     // Added TDQ-12057 : return the current column's values from the last original
@@ -148,6 +158,11 @@ public class TSwooshGrouping<TYPE> {
         rcdsGenerators.add(rcdGen);
     }
 
+    private String getFormatDate(Date obj, int index) {
+        sdf.applyPattern(recordGrouping.getColumnDatePatternMap().get(index + ""));
+        return sdf.format(obj);
+    }
+
     public void swooshMatch(IRecordMatcher combinedRecordMatcher, SurvivorShipAlgorithmParams survParams) {
         swooshMatch(combinedRecordMatcher, survParams,
                 new org.talend.dataquality.record.linkage.grouping.callback.GroupingCallBack<>(this.oldGID2New,
@@ -189,8 +204,10 @@ public class TSwooshGrouping<TYPE> {
             funcParams[idx] = func.getParameter();
             idx++;
         }
-        return new DQMFB(combinedRecordMatcher, new DQMFBRecordMerger("MFB", funcParams, //$NON-NLS-1$
-                surviorShipAlgos, survParams), callback);
+        DQMFBRecordMerger recordMerger = new DQMFBRecordMerger("MFB", funcParams, surviorShipAlgos, survParams); //$NON-NLS-1$
+        recordMerger.setColumnDatePatternMap(this.recordGrouping.getColumnDatePatternMap());
+
+        return new DQMFB(combinedRecordMatcher, recordMerger, callback);
     }
 
     // init the algorithm before do matching.

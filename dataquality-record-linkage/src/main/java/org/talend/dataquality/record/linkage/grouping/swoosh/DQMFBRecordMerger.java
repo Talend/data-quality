@@ -130,9 +130,18 @@ public class DQMFBRecordMerger extends MFBRecordMerger {
                 } else {
                     SurvivorShipAlgorithmEnum survAlgo = survivorshipFunc.getSurvivorShipAlgoEnum();
                     String parameter = survivorshipFunc.getParameter();
-                    String mergedValue = createMergeValue(record1.getSource(), record2.getSource(), parameter,
-                            record1.getTimestamp(), record2.getTimestamp(), survAlgo, leftValue, rightValue,
-                            mergedRows[colIdx].getValue(), mergedRows[colIdx].getValues());
+                    String mergedValue = null;
+                    switch (survAlgo) {
+                    case MOST_RECENT:
+                    case MOST_ANCIENT:
+                        mergedValue = compareAsDate(leftValue, rightValue, survAlgo, String.valueOf(colIdx),
+                                record1.getTimestamp(), record2.getTimestamp());
+                        break;
+                    default:
+                        mergedValue = createMergeValue(record1.getSource(), record2.getSource(), parameter,
+                                record1.getTimestamp(), record2.getTimestamp(), survAlgo, leftValue, rightValue,
+                                mergedRows[colIdx].getValue(), mergedRows[colIdx].getValues());
+                    }
                     if (mergedValue != null) {
                         mergedRows[colIdx].setValue(mergedValue);
                     }

@@ -669,4 +669,18 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
         this.isStoreOndisk = isStoreOndisk;
     }
 
+    /**
+     * TDQ-14276,used only for swoosh, when function is "Most Recent" or "Most Ancient"
+     * 
+     * @param columnMap <columnIndex,dataPattern>:
+     */
+    public void setColumnDatePatternMap(Map<String, String> columnMap) {
+        // will be implemented only in swoosh grouping
+    }
+
+    public Map<String, String> getColumnDatePatternMap() {
+        // will be implemented only in swoosh grouping
+        return null;
+    }
+
 }

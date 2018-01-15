@@ -12,7 +12,9 @@
 // ============================================================================
 package org.talend.dataquality.record.linkage.genkey;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +32,11 @@ public class BlockingKeyHandler {
     private List<Map<String, String>> blockKeyDefinitions = null;
 
     protected Map<String, String> columnIndexMap = null;
+
+    // Added TDQ-14276, <columnIndex, datePattern>
+    private Map<String, String> datePatternMap;
+
+    private SimpleDateFormat sdf = new SimpleDateFormat("", java.util.Locale.US);
 
     /**
      * Getter for inputData.
@@ -72,7 +79,13 @@ public class BlockingKeyHandler {
         String[] inputString = new String[inputObject.length];
         int index = 0;
         for (Object obj : inputObject) {
-            inputString[index++] = obj == null ? null : obj.toString();
+            if (datePatternMap != null && obj != null && obj instanceof Date) {
+                // Unified the date format. TDQ-14276
+                sdf.applyPattern(this.datePatternMap.get(String.valueOf(index)));
+                inputString[index++] = sdf.format(obj);
+            } else {
+                inputString[index++] = obj == null ? null : obj.toString();
+            }
         }
         Map<String, String> columnValueMap = new HashMap<String, String>();
         for (Entry<String, String> entry : columnIndexMap.entrySet()) {
@@ -125,6 +138,10 @@ public class BlockingKeyHandler {
             }
         }
         return returnList;
+    }
+
+    public void setColumnDatePatternMap(Map<String, String> columnMap) {
+        datePatternMap = columnMap;
     }
 
 }

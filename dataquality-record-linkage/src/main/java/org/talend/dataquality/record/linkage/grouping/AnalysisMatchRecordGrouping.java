@@ -13,7 +13,9 @@
 package org.talend.dataquality.record.linkage.grouping;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -45,6 +47,11 @@ public class AnalysisMatchRecordGrouping extends AbstractRecordGrouping<Object> 
     protected List<RichRecord> tmpMatchResult = new ArrayList<RichRecord>();
 
     protected MatchGroupResultConsumer matchResultConsumer = null;
+
+    // Added TDQ-14276, <columnIndex, datePattern>
+    private Map<String, String> datePatternMap;
+
+    private SimpleDateFormat sdf = new SimpleDateFormat("", java.util.Locale.US);
 
     @SuppressWarnings("deprecation")
     public AnalysisMatchRecordGrouping(MatchGroupResultConsumer matchResultConsumer) {
@@ -99,7 +106,13 @@ public class AnalysisMatchRecordGrouping extends AbstractRecordGrouping<Object> 
                 String[] inputStrRow = new String[inputRow.length];
                 int index = 0;
                 for (Object obj : inputRow) {
-                    inputStrRow[index++] = obj == null ? null : obj.toString();
+                    if (obj != null && obj instanceof Date) {
+                        // Unified the date format. TDQ-14276
+                        inputStrRow[index] = getFormatDate((Date) obj, index);
+                        index++;
+                    } else {
+                        inputStrRow[index++] = obj == null ? null : obj.toString();
+                    }
                 }
                 doGroup(inputStrRow);
             }
@@ -111,6 +124,11 @@ public class AnalysisMatchRecordGrouping extends AbstractRecordGrouping<Object> 
             // clean up state...
             Thread.currentThread().interrupt();
         }
+    }
+
+    private String getFormatDate(Date obj, int index) {
+        sdf.applyPattern(this.datePatternMap.get(index + ""));
+        return sdf.format(obj);
     }
 
     /**
@@ -235,4 +253,15 @@ public class AnalysisMatchRecordGrouping extends AbstractRecordGrouping<Object> 
         }
         outputRow(strRow);
     }
+
+    @Override
+    public void setColumnDatePatternMap(Map<String, String> columnMap) {
+        datePatternMap = columnMap;
+    }
+
+    @Override
+    public Map<String, String> getColumnDatePatternMap() {
+        return datePatternMap;
+    }
+
 }

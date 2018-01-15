@@ -13,8 +13,12 @@
 package org.talend.dataquality.matchmerge.mfb;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.talend.dataquality.matchmerge.Attribute;
@@ -30,6 +34,11 @@ public class MFBRecordMerger implements IRecordMerger {
     protected String[] parameters;
 
     protected final String mergedRecordSource;
+
+    // Added TDQ-14276, <columnIndex, datePattern>
+    protected Map<String, String> datePatternMap;
+
+    private SimpleDateFormat sdf = new SimpleDateFormat("", java.util.Locale.US);
 
     public MFBRecordMerger(String mergedRecordSource, String[] parameters, SurvivorShipAlgorithmEnum[] typeMergeTable) {
         this.mergedRecordSource = mergedRecordSource;
@@ -72,9 +81,18 @@ public class MFBRecordMerger implements IRecordMerger {
             if (leftValue == null && rightValue == null) {
                 mergedAttribute.setValue(null);
             } else {
-                String mergedValue = createMergeValue(record1.getSource(), record2.getSource(), parameters[i],
-                        record1.getTimestamp(), record2.getTimestamp(), typeMergeTable[i], leftValue, rightValue,
-                        mergedAttribute.getValue(), mergedAttribute.getValues());
+                String mergedValue = null;
+                switch (typeMergeTable[i]) {
+                case MOST_RECENT:
+                case MOST_ANCIENT:
+                    mergedValue = compareAsDate(leftValue, rightValue, typeMergeTable[i], String.valueOf(i),
+                            record1.getTimestamp(), record2.getTimestamp());
+                    break;
+                default:
+                    mergedValue = createMergeValue(record1.getSource(), record2.getSource(), parameters[i],
+                            record1.getTimestamp(), record2.getTimestamp(), typeMergeTable[i], leftValue, rightValue,
+                            mergedAttribute.getValue(), mergedAttribute.getValues());
+                }
                 if (mergedValue != null) {
                     mergedAttribute.setValue(mergedValue);
                 }
@@ -94,6 +112,70 @@ public class MFBRecordMerger implements IRecordMerger {
             mergedRecord.setGroupId(record2.getGroupId());
         }
         return mergedRecord;
+    }
+
+    /**
+     * use the Date to compare for MostRecent and Most Ancient. Added TDQ-14276
+     * 
+     * @param leftValue
+     * @param rightValue
+     * @param datePattern
+     * @param rightTimeStamp
+     * @param leftTimeStamp
+     * @param mostRecent
+     * @return
+     */
+    protected String compareAsDate(String leftValue, String rightValue, SurvivorShipAlgorithmEnum mostDate, String columnIndex,
+            long leftTimeStamp, long rightTimeStamp) {
+        try {
+            String datePattern = null;
+            if (datePatternMap == null) {
+                datePattern = "";
+            } else {
+                datePattern = datePatternMap.get(columnIndex) == null ? "" : datePatternMap.get(columnIndex);
+            }
+            Date leftDate = getFormatDateFromString(leftValue, datePattern);
+            Date rightDate = getFormatDateFromString(rightValue, datePattern);
+            switch (mostDate) {
+            case MOST_RECENT:
+                if (leftDate.compareTo(rightDate) > 0) {
+                    return leftValue;
+                } else {
+                    return rightValue;
+                }
+            case MOST_ANCIENT:
+                if (leftDate.compareTo(rightDate) < 0) {
+                    return leftValue;
+                } else {
+                    return rightValue;
+                }
+            default:
+                break;
+            }
+        } catch (ParseException e) {
+            switch (mostDate) {
+            case MOST_RECENT:
+                if (leftTimeStamp >= rightTimeStamp) {
+                    return leftValue;
+                } else {
+                    return rightValue;
+                }
+            case MOST_ANCIENT:
+                if (leftTimeStamp <= rightTimeStamp) {
+                    return leftValue;
+                } else {
+                    return rightValue;
+                }
+            default:
+                return "";
+            }
+        }
+        return "";
+    }
+
+    private Date getFormatDateFromString(String obj, String datePattern) throws ParseException {
+        sdf.applyPattern(datePattern);
+        return sdf.parse(obj);
     }
 
     /**
@@ -215,4 +297,9 @@ public class MFBRecordMerger implements IRecordMerger {
             return null;
         }
     }
+
+    public void setColumnDatePatternMap(Map<String, String> columnMap) {
+        datePatternMap = columnMap;
+    }
+
 }
