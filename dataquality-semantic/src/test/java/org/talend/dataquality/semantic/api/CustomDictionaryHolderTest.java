@@ -3,14 +3,22 @@ package org.talend.dataquality.semantic.api;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.doNothing;
 import static org.talend.dataquality.semantic.TestUtils.mockWithTenant;
+import static org.talend.dataquality.semantic.api.CategoryRegistryManager.DICTIONARY_SUBFOLDER_NAME;
+import static org.talend.dataquality.semantic.api.CategoryRegistryManager.METADATA_SUBFOLDER_NAME;
+import static org.talend.dataquality.semantic.api.CategoryRegistryManager.PRODUCTION_FOLDER_NAME;
+import static org.talend.dataquality.semantic.api.CategoryRegistryManager.REGEX_CATEGORIZER_FILE_NAME;
+import static org.talend.dataquality.semantic.api.CategoryRegistryManager.REGEX_SUBFOLDER_NAME;
+import static org.talend.dataquality.semantic.api.CategoryRegistryManager.REPUBLISH_FOLDER_NAME;
 import static org.talend.dataquality.semantic.api.CustomDictionaryHolder.TALEND;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +27,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,6 +36,7 @@ import org.mockito.MockitoAnnotations;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.talend.dataquality.semantic.CategoryRegistryManagerAbstract;
+import org.talend.dataquality.semantic.api.internal.CustomDocumentIndexAccess;
 import org.talend.dataquality.semantic.api.internal.CustomMetadataIndexAccess;
 import org.talend.dataquality.semantic.api.internal.CustomRegexClassifierAccess;
 import org.talend.dataquality.semantic.classifier.ISubCategory;
@@ -42,9 +52,11 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
     @InjectMocks
     private CustomDictionaryHolder holder;
 
-    private CustomMetadataIndexAccess customRepublishMetadataIndexAccess;
+    private CustomMetadataIndexAccess customMetadataIndexAccess;
 
-    private CustomRegexClassifierAccess customRepublishRegexClassifierAccess;
+    private CustomRegexClassifierAccess customRegexClassifierAccess;
+
+    private CustomDocumentIndexAccess customDataDictIndexAccess;
 
     @Before
     public void setUp() {
@@ -59,7 +71,7 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
     }
 
     @Test
-    public void createRegexCategory() throws IOException {
+    public void createRegexCategory() {
         holder.createCategory(createDQRegexCategory("1"));
         Set<ISubCategory> filteredSet = holder.getRegexClassifier().getClassifiers().stream()
                 .filter(classifier -> classifier.getName().equals("RegExCategoryName")).collect(Collectors.toSet());
@@ -67,81 +79,247 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
     }
 
     @Test
-    public void republishRegex() {
+    public void republishRegex() throws Exception {
         initRepublishMocks();
         holder.republishCategory(createDQRegexCategory("newCat"));
-        verify(customRepublishMetadataIndexAccess, times(0)).insertOrUpdateCategory(any(DQCategory.class));
-        verify(customRepublishMetadataIndexAccess, times(1)).createCategory(any(DQCategory.class));
-        verify(customRepublishRegexClassifierAccess, times(1)).insertOrUpdateRegex(any(ISubCategory.class));
-        verify(customRepublishMetadataIndexAccess, times(1)).commitChanges();
+        verify(customMetadataIndexAccess, times(0)).insertOrUpdateCategory(any(DQCategory.class));
+        verify(customMetadataIndexAccess, times(1)).createCategory(any(DQCategory.class));
+        verify(customRegexClassifierAccess, times(1)).insertOrUpdateRegex(any(ISubCategory.class));
+        verify(customMetadataIndexAccess, times(1)).commitChanges();
     }
 
     @Test
-    public void republishCompound() {
+    public void republishCompound() throws Exception {
         initRepublishMocks();
         holder.republishCategory(createCompoundCategory("1", false));
-        verify(customRepublishMetadataIndexAccess, times(0)).insertOrUpdateCategory(any(DQCategory.class));
-        verify(customRepublishMetadataIndexAccess, times(1)).createCategory(any(DQCategory.class));
-        verify(customRepublishRegexClassifierAccess, times(0)).insertOrUpdateRegex(any(ISubCategory.class));
-        verify(customRepublishMetadataIndexAccess, times(1)).commitChanges();
+        verify(customMetadataIndexAccess, times(0)).insertOrUpdateCategory(any(DQCategory.class));
+        verify(customMetadataIndexAccess, times(1)).createCategory(any(DQCategory.class));
+        verify(customRegexClassifierAccess, times(0)).insertOrUpdateRegex(any(ISubCategory.class));
+        verify(customMetadataIndexAccess, times(1)).commitChanges();
     }
 
     @Test
-    public void republishExistingCompound() {
+    public void republishExistingCompound() throws Exception {
         initRepublishMocks();
         DQCategory category = createCompoundCategory("compoundCategory", true);
         holder.republishCategory(category);
-        verify(customRepublishMetadataIndexAccess, times(1)).insertOrUpdateCategory(any(DQCategory.class));
-        verify(customRepublishMetadataIndexAccess, times(0)).createCategory(any(DQCategory.class));
-        verify(customRepublishRegexClassifierAccess, times(0)).insertOrUpdateRegex(any(ISubCategory.class));
-        verify(customRepublishMetadataIndexAccess, times(1)).commitChanges();
+        verify(customMetadataIndexAccess, times(1)).insertOrUpdateCategory(any(DQCategory.class));
+        verify(customMetadataIndexAccess, times(0)).createCategory(any(DQCategory.class));
+        verify(customRegexClassifierAccess, times(0)).insertOrUpdateRegex(any(ISubCategory.class));
+        verify(customMetadataIndexAccess, times(1)).commitChanges();
         assert (category.getModified());
     }
 
     @Test
-    public void republishExistingUnmodifiedCompound() {
+    public void republishExistingUnmodifiedCompound() throws Exception {
         initRepublishMocks();
         DQCategory category = createCompoundCategory("compoundCategory", false);
         holder.republishCategory(category);
-        verify(customRepublishMetadataIndexAccess, times(1)).insertOrUpdateCategory(any(DQCategory.class));
-        verify(customRepublishMetadataIndexAccess, times(0)).createCategory(any(DQCategory.class));
-        verify(customRepublishRegexClassifierAccess, times(0)).insertOrUpdateRegex(any(ISubCategory.class));
-        verify(customRepublishMetadataIndexAccess, times(1)).commitChanges();
+        verify(customMetadataIndexAccess, times(1)).insertOrUpdateCategory(any(DQCategory.class));
+        verify(customMetadataIndexAccess, times(0)).createCategory(any(DQCategory.class));
+        verify(customRegexClassifierAccess, times(0)).insertOrUpdateRegex(any(ISubCategory.class));
+        verify(customMetadataIndexAccess, times(1)).commitChanges();
         assert (category.getModified()); // Not a Talend category, so must have modified to true
     }
 
     @Test
-    public void republishTalendDict() {
+    public void republishTalendDict() throws Exception {
         initRepublishMocks();
         DQCategory category = createTalendDictCategory("dictCategory");
         holder.republishCategory(category);
-        verify(customRepublishMetadataIndexAccess, times(1)).insertOrUpdateCategory(any(DQCategory.class));
-        verify(customRepublishMetadataIndexAccess, times(0)).createCategory(any(DQCategory.class));
-        verify(customRepublishRegexClassifierAccess, times(0)).insertOrUpdateRegex(any(ISubCategory.class));
-        verify(customRepublishMetadataIndexAccess, times(1)).commitChanges();
+        verify(customMetadataIndexAccess, times(1)).insertOrUpdateCategory(any(DQCategory.class));
+        verify(customMetadataIndexAccess, times(0)).createCategory(any(DQCategory.class));
+        verify(customRegexClassifierAccess, times(0)).insertOrUpdateRegex(any(ISubCategory.class));
+        verify(customMetadataIndexAccess, times(1)).commitChanges();
         assert (!category.getModified()); // Talend category, so must have modified to false
     }
 
-    private void initRepublishMocks() {
+    @Test
+    public void publishDirectory() throws Exception {
+        initRepublishMocks();
+
+        String path = CategoryRegistryManager.getLocalRegistryPath() + File.separator + holder.getTenantID() + File.separator;
+        new File(path).delete();
+        String stagingPath = path + REPUBLISH_FOLDER_NAME;
+        String prodPath = path + PRODUCTION_FOLDER_NAME;
+        String backupPath = prodPath + ".old";
+
+        String metadataStagingPath = stagingPath + File.separator + METADATA_SUBFOLDER_NAME;
+        String dicoStagingPath = stagingPath + File.separator + DICTIONARY_SUBFOLDER_NAME;
+        String regexStagingPath = stagingPath + File.separator + REGEX_SUBFOLDER_NAME + File.separator
+                + REGEX_CATEGORIZER_FILE_NAME;
+
+        createRepos(stagingPath, prodPath, metadataStagingPath, dicoStagingPath, regexStagingPath);
+
+        holder.publishDirectory();
+
+        assert (!new File(stagingPath).exists());
+        assert (new File(prodPath).exists());
+        assert (!new File(backupPath).exists());
+        verify(customMetadataIndexAccess, times(1)).copyStagingContent(anyString());
+        verify(customDataDictIndexAccess, times(1)).copyStagingContent(anyString());
+        verify(customRegexClassifierAccess, times(1)).copyStagingContent(anyString());
+    }
+
+    @Test
+    public void publishDirectoryDoNothing() throws Exception {
+        initRepublishMocks();
+
+        String path = CategoryRegistryManager.getLocalRegistryPath() + File.separator + holder.getTenantID() + File.separator;
+        new File(path).delete();
+        String stagingPath = path + REPUBLISH_FOLDER_NAME;
+        String prodPath = path + PRODUCTION_FOLDER_NAME;
+        String backupPath = prodPath + ".old";
+
+        String metadataStagingPath = stagingPath + File.separator + METADATA_SUBFOLDER_NAME;
+        String dicoStagingPath = stagingPath + File.separator + DICTIONARY_SUBFOLDER_NAME;
+        String regexStagingPath = stagingPath + File.separator + REGEX_SUBFOLDER_NAME + File.separator
+                + REGEX_CATEGORIZER_FILE_NAME;
+
+        createRepos(stagingPath, prodPath, backupPath, metadataStagingPath, dicoStagingPath, regexStagingPath);
+
+        holder.publishDirectory();
+
+        assert (new File(stagingPath).exists());
+        assert (new File(prodPath).exists());
+        assert (new File(backupPath).exists());
+        verify(customMetadataIndexAccess, times(0)).copyStagingContent(anyString());
+        verify(customDataDictIndexAccess, times(0)).copyStagingContent(anyString());
+        verify(customRegexClassifierAccess, times(0)).copyStagingContent(anyString());
+    }
+
+    @Test
+    public void publishDirectoryWithOnlyStaging() throws Exception {
+        initRepublishMocks();
+
+        String path = CategoryRegistryManager.getLocalRegistryPath() + File.separator + holder.getTenantID() + File.separator;
+        new File(path).delete();
+        String stagingPath = path + REPUBLISH_FOLDER_NAME;
+        String prodPath = path + PRODUCTION_FOLDER_NAME;
+        String backupPath = prodPath + ".old";
+
+        String metadataStagingPath = stagingPath + File.separator + METADATA_SUBFOLDER_NAME;
+        String dicoStagingPath = stagingPath + File.separator + DICTIONARY_SUBFOLDER_NAME;
+        String regexStagingPath = stagingPath + File.separator + REGEX_SUBFOLDER_NAME + File.separator
+                + REGEX_CATEGORIZER_FILE_NAME;
+
+        createRepos(stagingPath, metadataStagingPath, dicoStagingPath, regexStagingPath);
+
+        holder.publishDirectory();
+
+        assert (!new File(stagingPath).exists());
+        assert (new File(prodPath).exists());
+        assert (!new File(backupPath).exists());
+        verify(customMetadataIndexAccess, times(0)).copyStagingContent(anyString());
+        verify(customDataDictIndexAccess, times(0)).copyStagingContent(anyString());
+        verify(customRegexClassifierAccess, times(0)).copyStagingContent(anyString());
+    }
+
+    @Test
+    public void publishDirectoryWithoutStaging() throws Exception {
+        initRepublishMocks();
+
+        String path = CategoryRegistryManager.getLocalRegistryPath() + File.separator + holder.getTenantID() + File.separator;
+        new File(path).delete();
+        String stagingPath = path + REPUBLISH_FOLDER_NAME;
+        String prodPath = path + PRODUCTION_FOLDER_NAME;
+        String backupPath = prodPath + ".old";
+
+        createRepos(prodPath);
+
+        holder.publishDirectory();
+
+        assert (!new File(stagingPath).exists());
+        assert (new File(prodPath).exists());
+        assert (!new File(backupPath).exists());
+        verify(customMetadataIndexAccess, times(0)).copyStagingContent(anyString());
+        verify(customDataDictIndexAccess, times(0)).copyStagingContent(anyString());
+        verify(customRegexClassifierAccess, times(0)).copyStagingContent(anyString());
+    }
+
+    @Test
+    public void publishDirectoryFailure() throws Exception {
+        initRepublishMocksForCrash();
+
+        String path = CategoryRegistryManager.getLocalRegistryPath() + File.separator + holder.getTenantID() + File.separator;
+        new File(path).delete();
+        String stagingPath = path + REPUBLISH_FOLDER_NAME;
+        String prodPath = path + PRODUCTION_FOLDER_NAME;
+        String backupPath = prodPath + ".old";
+
+        String metadataStagingPath = stagingPath + File.separator + METADATA_SUBFOLDER_NAME;
+        String dicoStagingPath = stagingPath + File.separator + DICTIONARY_SUBFOLDER_NAME;
+        String regexStagingPath = stagingPath + File.separator + REGEX_SUBFOLDER_NAME + File.separator
+                + REGEX_CATEGORIZER_FILE_NAME;
+
+        createRepos(stagingPath, prodPath, metadataStagingPath, dicoStagingPath, regexStagingPath);
+
+        holder.publishDirectory();
+
+        assert (!new File(stagingPath).exists());
+        assert (new File(prodPath).exists());
+        assert (!new File(backupPath).exists());
+        verify(customMetadataIndexAccess, times(1)).copyStagingContent(anyString());
+        verify(customDataDictIndexAccess, times(0)).copyStagingContent(anyString());
+        verify(customRegexClassifierAccess, times(0)).copyStagingContent(anyString());
+    }
+
+    private void createRepos(String... paths) {
+        for (String path : paths) {
+            new File(path).mkdirs();
+        }
+    }
+
+    private void initRepublishMocks() throws Exception {
         PowerMockito.mockStatic(CategoryRegistryManager.class);
         CategoryRegistryManager crm = mock(CategoryRegistryManager.class);
         when(CategoryRegistryManager.getInstance()).thenReturn(crm);
+        when(CategoryRegistryManager.getLocalRegistryPath()).thenReturn("target/test_crm");
         when(crm.getSharedCategoryMetadata()).thenReturn(mockMap());
 
-        customRepublishMetadataIndexAccess = PowerMockito.mock(CustomMetadataIndexAccess.class);
-        customRepublishRegexClassifierAccess = PowerMockito.mock(CustomRegexClassifierAccess.class);
-        try {
-            PowerMockito.whenNew(CustomMetadataIndexAccess.class).withArguments(any(FSDirectory.class))
-                    .thenReturn(customRepublishMetadataIndexAccess);
-            PowerMockito.whenNew(CustomRegexClassifierAccess.class).withArguments(anyString())
-                    .thenReturn(customRepublishRegexClassifierAccess);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        doNothing().when(customRepublishMetadataIndexAccess).insertOrUpdateCategory(any(DQCategory.class));
-        doNothing().when(customRepublishMetadataIndexAccess).createCategory(any(DQCategory.class));
-        doNothing().when(customRepublishRegexClassifierAccess).insertOrUpdateRegex(any(ISubCategory.class));
-        doNothing().when(customRepublishMetadataIndexAccess).commitChanges();
+        customMetadataIndexAccess = PowerMockito.mock(CustomMetadataIndexAccess.class);
+        customRegexClassifierAccess = PowerMockito.mock(CustomRegexClassifierAccess.class);
+        customDataDictIndexAccess = PowerMockito.mock(CustomDocumentIndexAccess.class);
+
+        PowerMockito.whenNew(CustomMetadataIndexAccess.class).withArguments(any(FSDirectory.class))
+                .thenReturn(customMetadataIndexAccess);
+        PowerMockito.whenNew(CustomRegexClassifierAccess.class).withArguments(anyString())
+                .thenReturn(customRegexClassifierAccess);
+        PowerMockito.whenNew(CustomDocumentIndexAccess.class).withArguments(any(Directory.class))
+                .thenReturn(customDataDictIndexAccess);
+
+        doNothing().when(customMetadataIndexAccess).insertOrUpdateCategory(any(DQCategory.class));
+        doNothing().when(customMetadataIndexAccess).createCategory(any(DQCategory.class));
+        doNothing().when(customRegexClassifierAccess).insertOrUpdateRegex(any(ISubCategory.class));
+        doNothing().when(customMetadataIndexAccess).commitChanges();
+        doNothing().when(customMetadataIndexAccess).copyStagingContent(anyString());
+        doNothing().when(customDataDictIndexAccess).copyStagingContent(anyString());
+    }
+
+    private void initRepublishMocksForCrash() throws Exception {
+        PowerMockito.mockStatic(CategoryRegistryManager.class);
+        CategoryRegistryManager crm = mock(CategoryRegistryManager.class);
+        when(CategoryRegistryManager.getInstance()).thenReturn(crm);
+        when(CategoryRegistryManager.getLocalRegistryPath()).thenReturn("target/test_crm");
+        when(crm.getSharedCategoryMetadata()).thenReturn(mockMap());
+
+        customMetadataIndexAccess = PowerMockito.mock(CustomMetadataIndexAccess.class);
+        customRegexClassifierAccess = PowerMockito.mock(CustomRegexClassifierAccess.class);
+        customDataDictIndexAccess = PowerMockito.mock(CustomDocumentIndexAccess.class);
+
+        PowerMockito.whenNew(CustomMetadataIndexAccess.class).withArguments(any(FSDirectory.class))
+                .thenReturn(customMetadataIndexAccess);
+        PowerMockito.whenNew(CustomRegexClassifierAccess.class).withArguments(anyString())
+                .thenReturn(customRegexClassifierAccess);
+        PowerMockito.whenNew(CustomDocumentIndexAccess.class).withArguments(any(Directory.class))
+                .thenReturn(customDataDictIndexAccess);
+
+        doNothing().when(customMetadataIndexAccess).insertOrUpdateCategory(any(DQCategory.class));
+        doNothing().when(customMetadataIndexAccess).createCategory(any(DQCategory.class));
+        doNothing().when(customRegexClassifierAccess).insertOrUpdateRegex(any(ISubCategory.class));
+        doNothing().when(customMetadataIndexAccess).commitChanges();
+        doThrow(IOException.class).when(customMetadataIndexAccess).copyStagingContent(anyString());
+        doNothing().when(customDataDictIndexAccess).copyStagingContent(anyString());
     }
 
     private Map<String, DQCategory> mockMap() {

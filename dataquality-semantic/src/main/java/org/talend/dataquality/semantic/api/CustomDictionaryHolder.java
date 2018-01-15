@@ -2,6 +2,7 @@ package org.talend.dataquality.semantic.api;
 
 import static org.talend.dataquality.semantic.api.CategoryRegistryManager.DICTIONARY_SUBFOLDER_NAME;
 import static org.talend.dataquality.semantic.api.CategoryRegistryManager.METADATA_SUBFOLDER_NAME;
+import static org.talend.dataquality.semantic.api.CategoryRegistryManager.PRODUCTION_FOLDER_NAME;
 import static org.talend.dataquality.semantic.api.CategoryRegistryManager.REGEX_CATEGORIZER_FILE_NAME;
 import static org.talend.dataquality.semantic.api.CategoryRegistryManager.REGEX_SUBFOLDER_NAME;
 import static org.talend.dataquality.semantic.api.CategoryRegistryManager.REPUBLISH_FOLDER_NAME;
@@ -98,8 +99,7 @@ public class CustomDictionaryHolder {
 
     private String getIndexFolderPath(boolean isProduction, String indexName) {
         return CategoryRegistryManager.getLocalRegistryPath() + File.separator + tenantID + File.separator
-                + (isProduction ? CategoryRegistryManager.PRODUCTION_FOLDER_NAME : REPUBLISH_FOLDER_NAME) + File.separator
-                + indexName;
+                + (isProduction ? PRODUCTION_FOLDER_NAME : REPUBLISH_FOLDER_NAME) + File.separator + indexName;
     }
 
     /**
@@ -561,43 +561,57 @@ public class CustomDictionaryHolder {
         closeRepublishDictionaryAccess();
         File stagingIndexes = new File(CategoryRegistryManager.getLocalRegistryPath() + File.separator + tenantID + File.separator
                 + REPUBLISH_FOLDER_NAME);
-        if (stagingIndexes.exists()) {
-            File productionIndexes = new File(CategoryRegistryManager.getLocalRegistryPath() + File.separator + tenantID
-                    + File.separator + CategoryRegistryManager.PRODUCTION_FOLDER_NAME);
+        if (!stagingIndexes.exists())
+            return;
 
-            File backup = new File(productionIndexes.getPath() + ".old");
-            if (!backup.exists()) {
-                if (productionIndexes.exists()) {
-                    LOGGER.info("[Post Republish] backup prod");
-                    FileUtils.copyDirectory(productionIndexes, backup);
-                }
-                LOGGER.info("[Post Republish] insert staging directory into prod");
-                File metadataFolder = new File(stagingIndexes.getAbsolutePath() + File.separator + METADATA_SUBFOLDER_NAME);
-                if (metadataFolder.exists()) {
-                    ensureMetadataIndexAccess();
-                    customMetadataIndexAccess.copyStagingContent(metadataFolder.getAbsolutePath());
-                }
+        File productionIndexes = new File(CategoryRegistryManager.getLocalRegistryPath() + File.separator + tenantID
+                + File.separator + PRODUCTION_FOLDER_NAME);
 
-                File dictionaryFolder = new File(stagingIndexes.getAbsolutePath() + File.separator + DICTIONARY_SUBFOLDER_NAME);
-                if (dictionaryFolder.exists()) {
-                    ensureDataDictIndexAccess();
-                    customDataDictIndexAccess.copyStagingContent(dictionaryFolder.getAbsolutePath());
-                }
+        File backup = new File(productionIndexes.getPath() + ".old");
+        if (backup.exists())
+            return;
 
-                File regexFile = new File(stagingIndexes.getAbsolutePath() + File.separator + REGEX_SUBFOLDER_NAME
-                        + File.separator + REGEX_CATEGORIZER_FILE_NAME);
-                if (regexFile.exists()) {
-                    ensureRegexClassifierAccess();
-                    customRegexClassifierAccess.copyStagingContent(regexFile.getAbsolutePath());
-                }
-                LOGGER.info("[Post Republish] delete backup");
+        if (productionIndexes.exists()) {
+            try {
+                copyStagingToProd(stagingIndexes, productionIndexes, backup);
+            } catch (IOException exception) {
+                FileUtils.copyDirectory(stagingIndexes, productionIndexes);
                 FileUtils.deleteDirectory(backup);
-
-                LOGGER.info("[Post Republish] delete staging contents");
-                FileUtils.deleteDirectory(stagingIndexes);
             }
+        } else {
+            FileUtils.copyDirectory(stagingIndexes, productionIndexes);
         }
+        LOGGER.info("[Post Republish] delete staging contents");
+        FileUtils.deleteDirectory(stagingIndexes);
+
         reloadCategoryMetadata();
+    }
+
+    private void copyStagingToProd(File stagingIndexes, File productionIndexes, File backup) throws IOException {
+        LOGGER.info("[Post Republish] backup prod");
+        FileUtils.copyDirectory(productionIndexes, backup);
+
+        LOGGER.info("[Post Republish] insert staging directory into prod");
+        File metadataFolder = new File(stagingIndexes.getAbsolutePath() + File.separator + METADATA_SUBFOLDER_NAME);
+        if (metadataFolder.exists()) {
+            ensureMetadataIndexAccess();
+            customMetadataIndexAccess.copyStagingContent(metadataFolder.getAbsolutePath());
+        }
+
+        File dictionaryFolder = new File(stagingIndexes.getAbsolutePath() + File.separator + DICTIONARY_SUBFOLDER_NAME);
+        if (dictionaryFolder.exists()) {
+            ensureDataDictIndexAccess();
+            customDataDictIndexAccess.copyStagingContent(dictionaryFolder.getAbsolutePath());
+        }
+
+        File regexFile = new File(stagingIndexes.getAbsolutePath() + File.separator + REGEX_SUBFOLDER_NAME + File.separator
+                + REGEX_CATEGORIZER_FILE_NAME);
+        if (regexFile.exists()) {
+            ensureRegexClassifierAccess();
+            customRegexClassifierAccess.copyStagingContent(regexFile.getAbsolutePath());
+        }
+        LOGGER.info("[Post Republish] delete backup");
+        FileUtils.deleteDirectory(backup);
     }
 
     public DictionarySnapshot getDictionarySnapshot() {
