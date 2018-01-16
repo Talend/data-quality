@@ -15,6 +15,7 @@ package org.talend.dataquality.semantic.datamasking;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import org.talend.dataquality.datamasking.functions.Function;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
@@ -30,27 +31,27 @@ public class GenerateFromDictionaries extends Function<String> {
 
     private static final long serialVersionUID = 1476820256067746995L;
 
-    private String maskResult = EMPTY_STRING;
+    protected List<String> valuesInDictionaries = new ArrayList<>();
 
     @Override
     protected String doGenerateMaskedField(String t) {
-        return maskResult;
+        if (!valuesInDictionaries.isEmpty()) {
+            return valuesInDictionaries.get(rnd.nextInt(valuesInDictionaries.size()));
+        } else {
+            return EMPTY_STRING;
+        }
     }
 
     @Override
     public void parse(String semanticCategory, boolean keepNullValues, Random rand) {
         if (semanticCategory != null) {
-            List<String> valuesInDictionaries = new ArrayList<>();
-            // in order to get the lastest dictionary Category values, so close first.
-            CategoryRegistryManager.getInstance().getCustomDictionaryHolder().closeDictionaryCache();
             LocalDictionaryCache dict = CategoryRegistryManager.getInstance().getDictionaryCache();
-            List<DQDocument> listDocuments = dict.listDocuments(semanticCategory, 0, 1);
+            List<DQDocument> listDocuments = dict.listDocuments(semanticCategory, 0, Integer.MAX_VALUE);
             for (DQDocument dqDocument : listDocuments) {
-                valuesInDictionaries.addAll(dqDocument.getValues());
-            }
-            if (!valuesInDictionaries.isEmpty()) {
-                // only use the first value to mask all.
-                this.maskResult = valuesInDictionaries.get(0);
+                Set<String> values = dqDocument.getValues();
+                if (values != null && !values.isEmpty()) {
+                    valuesInDictionaries.add(values.iterator().next());
+                }
             }
         }
 

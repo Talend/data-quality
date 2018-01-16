@@ -121,7 +121,9 @@ public class LocalDictionaryCache {
 
     private TopDocs sendListDocumentsQuery(String categoryId, int offset, int n, boolean searchInCustom) throws IOException {
         SearcherManager searcherManager = getSearcherManager(searchInCustom);
-        searcherManager.maybeRefresh();
+        if (searchInCustom) {
+            searcherManager.maybeRefresh();
+        }
         IndexSearcher searcher = searcherManager.acquire();
         TopDocs result;
         if (offset <= 0) {

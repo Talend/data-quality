@@ -12,7 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.semantic.datamasking;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -47,10 +47,10 @@ public class ValueDataMaskerTest {
 
             // 1. FIRST_NAME
             put(new String[] { "", SemanticCategoryEnum.FIRST_NAME.name(), "string" }, "");
-            put(new String[] { "John", SemanticCategoryEnum.FIRST_NAME.name(), "string" }, "ABBAS");
+            put(new String[] { "John", SemanticCategoryEnum.FIRST_NAME.name(), "string" }, "DIANA");
 
             // 2. LAST_NAME
-            put(new String[] { "Dupont", SemanticCategoryEnum.LAST_NAME.name(), "string" }, "WILLIAMS");
+            put(new String[] { "Dupont", SemanticCategoryEnum.LAST_NAME.name(), "string" }, "RANKIN");
 
             // 3. EMAIL
             put(new String[] { "sdkjs@talend.com", MaskableCategoryEnum.EMAIL.name(), "string" }, "XXXXX@talend.com");
@@ -70,7 +70,7 @@ public class ValueDataMaskerTest {
                     "(563) 557-7618 Ext. 3290");
 
             // 5. JOB_TITLE
-            put(new String[] { "CEO", SemanticCategoryEnum.JOB_TITLE.name(), "string" }, "Able Seamen");
+            put(new String[] { "CEO", SemanticCategoryEnum.JOB_TITLE.name(), "string" }, "Aviation Inspector");
 
             // 6. ADDRESS_LINE
             put(new String[] { "9 Rue Pagès", MaskableCategoryEnum.ADDRESS_LINE.name(), "string" }, "6 Rue XXXXX");
@@ -97,11 +97,11 @@ public class ValueDataMaskerTest {
             put(new String[] { "634217823", MaskableCategoryEnum.UK_SSN.name(), "string" }, "RB 87 38 88 D");
 
             // Company
-            put(new String[] { "Talend", SemanticCategoryEnum.COMPANY.name(), "string" }, "United States Heraldic Registry");
+            put(new String[] { "Talend", SemanticCategoryEnum.COMPANY.name(), "string" }, "G. R. Thanga Maligai");
             // FR Commune
-            put(new String[] { "Amancey", SemanticCategoryEnum.FR_COMMUNE.name(), "string" }, "L'Abergement-Clémenciat");
+            put(new String[] { "Amancey", SemanticCategoryEnum.FR_COMMUNE.name(), "string" }, "Flexbourg");
             // Organization
-            put(new String[] { "Kiva", SemanticCategoryEnum.ORGANIZATION.name(), "string" }, "Mrs. Earth");
+            put(new String[] { "Kiva", SemanticCategoryEnum.ORGANIZATION.name(), "string" }, "International Council for Science");
 
             // EMPTY
             put(new String[] { " ", "UNKNOWN", "integer" }, " ");
@@ -199,10 +199,10 @@ public class ValueDataMaskerTest {
 
         {
             // custom dictionary
-            put(new String[] { "true", SemanticCategoryEnum.ANSWER.name(), "string" }, "Oui");
-            put(new String[] { "false", SemanticCategoryEnum.ANSWER.name(), "string" }, "Oui");
-            put(new String[] { "TRUE", SemanticCategoryEnum.ANSWER.name(), "string" }, "Oui");
-            put(new String[] { "FALSE", SemanticCategoryEnum.ANSWER.name(), "string" }, "Oui");
+            put(new String[] { "true", SemanticCategoryEnum.ANSWER.name(), "string" }, "Sí");
+            put(new String[] { "false", SemanticCategoryEnum.ANSWER.name(), "string" }, "Sí");
+            put(new String[] { "TRUE", SemanticCategoryEnum.ANSWER.name(), "string" }, "Sí");
+            put(new String[] { "FALSE", SemanticCategoryEnum.ANSWER.name(), "string" }, "Sí");
         }
     };
 
@@ -216,7 +216,7 @@ public class ValueDataMaskerTest {
     public void testProcessModifyExistCategory() throws InstantiationException, IllegalAccessException {
         CategoryRegistryManager.setLocalRegistryPath("target/test_crm");
         CategoryRegistryManager instance = CategoryRegistryManager.getInstance();
-        CustomDictionaryHolder holder = instance.getCustomDictionaryHolder("t_suggest");
+        CustomDictionaryHolder holder = instance.getCustomDictionaryHolder("t_mask_data");
 
         DQCategory answerCategory = holder.getMetadata().get(SemanticCategoryEnum.ANSWER.getTechnicalId());
         DQCategory categoryClone = SerializationUtils.clone(answerCategory); // make a clone instead of modifying the shared
