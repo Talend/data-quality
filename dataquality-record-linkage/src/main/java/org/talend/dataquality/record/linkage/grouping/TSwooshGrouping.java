@@ -27,7 +27,6 @@ import org.talend.dataquality.matchmerge.MatchMergeAlgorithm;
 import org.talend.dataquality.matchmerge.Record;
 import org.talend.dataquality.matchmerge.mfb.RecordGenerator;
 import org.talend.dataquality.matchmerge.mfb.RecordIterator.ValueGenerator;
-import org.talend.dataquality.record.linkage.constant.AttributeMatcherType;
 import org.talend.dataquality.record.linkage.grouping.swoosh.DQAttribute;
 import org.talend.dataquality.record.linkage.grouping.swoosh.DQMFB;
 import org.talend.dataquality.record.linkage.grouping.swoosh.DQMFBRecordMerger;
@@ -89,7 +88,6 @@ public class TSwooshGrouping<TYPE> {
     public void addToList(final TYPE[] inputRow, List<List<Map<java.lang.String, java.lang.String>>> multiMatchRules) {
         totalCount++;
         String attributeName;
-        String matchType;
         Map<java.lang.String, ValueGenerator> rcdMap = new LinkedHashMap<>();
         for (List<Map<java.lang.String, java.lang.String>> matchRule : multiMatchRules) {
             for (final Map<java.lang.String, java.lang.String> recordMap : matchRule) {

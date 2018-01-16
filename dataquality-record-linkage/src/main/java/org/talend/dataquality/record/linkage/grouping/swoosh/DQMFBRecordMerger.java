@@ -141,6 +141,7 @@ public class DQMFBRecordMerger extends MFBRecordMerger {
                         mergedValue = createMergeValue(record1.getSource(), record2.getSource(), parameter,
                                 record1.getTimestamp(), record2.getTimestamp(), survAlgo, leftValue, rightValue,
                                 mergedRows[colIdx].getValue(), mergedRows[colIdx].getValues());
+                        break;
                     }
                     if (mergedValue != null) {
                         mergedRows[colIdx].setValue(mergedValue);

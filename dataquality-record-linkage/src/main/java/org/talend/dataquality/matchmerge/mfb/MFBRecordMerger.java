@@ -92,6 +92,7 @@ public class MFBRecordMerger implements IRecordMerger {
                     mergedValue = createMergeValue(record1.getSource(), record2.getSource(), parameters[i],
                             record1.getTimestamp(), record2.getTimestamp(), typeMergeTable[i], leftValue, rightValue,
                             mergedAttribute.getValue(), mergedAttribute.getValues());
+                    break;
                 }
                 if (mergedValue != null) {
                     mergedAttribute.setValue(mergedValue);
