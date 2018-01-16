@@ -561,57 +561,61 @@ public class CustomDictionaryHolder {
         closeRepublishDictionaryAccess();
         File stagingIndexes = new File(CategoryRegistryManager.getLocalRegistryPath() + File.separator + tenantID + File.separator
                 + REPUBLISH_FOLDER_NAME);
-        if (!stagingIndexes.exists())
-            return;
 
         File productionIndexes = new File(CategoryRegistryManager.getLocalRegistryPath() + File.separator + tenantID
                 + File.separator + PRODUCTION_FOLDER_NAME);
 
         File backup = new File(productionIndexes.getPath() + ".old");
-        if (backup.exists())
-            return;
-
-        if (productionIndexes.exists()) {
-            try {
-                copyStagingToProd(stagingIndexes, productionIndexes, backup);
-            } catch (IOException exception) {
+        // --- Don't do anything if a backup already exists (it means that there is currently a republish working) or if nothing to republish
+        if (!backup.exists() && stagingIndexes.exists()) {
+            if (productionIndexes.exists()) {
+                try {
+                    LOGGER.info("[Post Republish] backup prod");
+                    FileUtils.copyDirectory(productionIndexes, backup);
+                    copyStagingToProd(stagingIndexes, backup, productionIndexes);
+                } catch (IOException exception) { // --- Catch the error when copying from backup to prod
+                    LOGGER.error(exception.getMessage(), exception);
+                } finally { // --- whatever happened just before, we want to remove the backup directory
+                    LOGGER.info("[Post Republish] delete backup");
+                    FileUtils.deleteDirectory(backup);
+                }
+            } else {
                 FileUtils.copyDirectory(stagingIndexes, productionIndexes);
-                FileUtils.deleteDirectory(backup);
             }
-        } else {
-            FileUtils.copyDirectory(stagingIndexes, productionIndexes);
-        }
-        LOGGER.info("[Post Republish] delete staging contents");
-        FileUtils.deleteDirectory(stagingIndexes);
+            LOGGER.info("[Post Republish] delete staging contents");
+            FileUtils.deleteDirectory(stagingIndexes);
 
-        reloadCategoryMetadata();
+            reloadCategoryMetadata();
+        }
     }
 
-    private void copyStagingToProd(File stagingIndexes, File productionIndexes, File backup) throws IOException {
-        LOGGER.info("[Post Republish] backup prod");
-        FileUtils.copyDirectory(productionIndexes, backup);
+    private void copyStagingToProd(File stagingIndexes, File backup, File productionIndexes) throws IOException {
+        try {
+            LOGGER.info("[Post Republish] insert staging directory into prod");
+            File metadataFolder = new File(stagingIndexes.getAbsolutePath() + File.separator + METADATA_SUBFOLDER_NAME);
+            if (metadataFolder.exists()) {
+                ensureMetadataIndexAccess();
+                customMetadataIndexAccess.copyStagingContent(metadataFolder.getAbsolutePath());
+            }
 
-        LOGGER.info("[Post Republish] insert staging directory into prod");
-        File metadataFolder = new File(stagingIndexes.getAbsolutePath() + File.separator + METADATA_SUBFOLDER_NAME);
-        if (metadataFolder.exists()) {
-            ensureMetadataIndexAccess();
-            customMetadataIndexAccess.copyStagingContent(metadataFolder.getAbsolutePath());
-        }
+            File dictionaryFolder = new File(stagingIndexes.getAbsolutePath() + File.separator + DICTIONARY_SUBFOLDER_NAME);
+            if (dictionaryFolder.exists()) {
+                ensureDataDictIndexAccess();
+                customDataDictIndexAccess.copyStagingContent(dictionaryFolder.getAbsolutePath());
+            }
 
-        File dictionaryFolder = new File(stagingIndexes.getAbsolutePath() + File.separator + DICTIONARY_SUBFOLDER_NAME);
-        if (dictionaryFolder.exists()) {
-            ensureDataDictIndexAccess();
-            customDataDictIndexAccess.copyStagingContent(dictionaryFolder.getAbsolutePath());
+            File regexFile = new File(stagingIndexes.getAbsolutePath() + File.separator + REGEX_SUBFOLDER_NAME + File.separator
+                    + REGEX_CATEGORIZER_FILE_NAME);
+            if (regexFile.exists()) {
+                ensureRegexClassifierAccess();
+                customRegexClassifierAccess.copyStagingContent(regexFile.getAbsolutePath());
+            }
+        } catch (IOException exception) { // --- Catch the error when copying from staging to prod
+            LOGGER.error(exception.getMessage(), exception);
+            // --- Copy the backup to prod
+            FileUtils.cleanDirectory(productionIndexes);
+            FileUtils.copyDirectory(backup, productionIndexes);
         }
-
-        File regexFile = new File(stagingIndexes.getAbsolutePath() + File.separator + REGEX_SUBFOLDER_NAME + File.separator
-                + REGEX_CATEGORIZER_FILE_NAME);
-        if (regexFile.exists()) {
-            ensureRegexClassifierAccess();
-            customRegexClassifierAccess.copyStagingContent(regexFile.getAbsolutePath());
-        }
-        LOGGER.info("[Post Republish] delete backup");
-        FileUtils.deleteDirectory(backup);
     }
 
     public DictionarySnapshot getDictionarySnapshot() {
