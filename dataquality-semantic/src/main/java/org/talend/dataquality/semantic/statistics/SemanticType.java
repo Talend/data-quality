@@ -12,7 +12,11 @@
 // ============================================================================
 package org.talend.dataquality.semantic.statistics;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.talend.dataquality.semantic.recognizer.CategoryFrequency;
 
@@ -32,12 +36,19 @@ public class SemanticType {
     }
 
     /**
-     * Get suggested suggsted category.
+     * Get suggested category.
      */
     public String getSuggestedCategory() {
+        return getSuggestedCategories().get(0).getCategoryId();
+    }
+
+    /**
+     * Get suggested categories, order from best to worst.
+     */
+    public List<CategoryFrequency> getSuggestedCategories() {
         List<CategoryFrequency> frequencies = new ArrayList<>(categoryToCount.keySet());
         Collections.sort(frequencies, Collections.reverseOrder());
-        return frequencies.get(0).getCategoryId();
+        return frequencies;
     }
 
     /**
