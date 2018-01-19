@@ -1,3 +1,6 @@
+V4.0.3 2018-01-19
+    - TDP-3858 metadata serialization issue
+
 V4.0.2 2018-01-15
 	- TDQ-14703 use only one topic on Kafka
 
