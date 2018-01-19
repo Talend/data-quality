@@ -67,6 +67,7 @@ public class CustomMetadataIndexAccess extends AbstractCustomIndexAccess {
         final Term searchTerm = new Term(DictionarySearcher.F_CATID, category.getId());
         final TermQuery termQuery = new TermQuery(searchTerm);
         try {
+            mgr.maybeRefreshBlocking();
             IndexSearcher searcher = mgr.acquire();
             TopDocs result = searcher.search(termQuery, 1);
             mgr.release(searcher);
