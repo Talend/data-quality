@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Converters Library
 Bundle-SymbolicName: org.talend.dataquality.converters;singleton:=true
-Bundle-Version: 4.0.3
+Bundle-Version: 4.0.4.SNAPSHOT
 Bundle-Vendor: .Talend SA.
 Bundle-ClassPath: .
 Require-Bundle: org.apache.log4j,
