@@ -8,12 +8,11 @@ import java.util.Random;
 import org.talend.dataquality.datamasking.generic.GenerateUniqueRandomPatterns;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
-import org.talend.dataquality.datamasking.semantic.DataMaskFunction;
 
 /**
  * Created by jteuladedenantes on 21/09/16.
  */
-public abstract class AbstractGenerateUniquePhoneNumber extends DataMaskFunction {
+public abstract class AbstractGenerateUniquePhoneNumber extends Function<String> {
 
     private static final long serialVersionUID = -3495285699226639929L;
 
