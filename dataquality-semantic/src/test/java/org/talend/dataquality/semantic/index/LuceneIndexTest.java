@@ -51,7 +51,7 @@ public class LuceneIndexTest {
                     new String[] { "Vietnam", "Viêtnam", "Viet Nam", "Viêt-nam", "Viêt Nam" });
 
             put(new String[] { "Oil Gas Consumable Fuels", SemanticCategoryEnum.INDUSTRY.getId() }, //
-                    new String[] { "Oil, Gas & Consumable Fuels", "Gas Utilities" });
+                    new String[] { "Oil, Gas & Consumable Fuels" });
 
             put(new String[] { "Clermont Ferrand", SemanticCategoryEnum.FR_COMMUNE.getId() }, //
                     new String[] { "Clermont-Ferrand", "Clermont" });
