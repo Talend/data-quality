@@ -13,6 +13,7 @@
 package org.talend.dataquality.semantic.datamasking;
 
 import static org.junit.Assert.assertEquals;
+import static org.talend.dataquality.semantic.TestUtils.mockWithTenant;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -23,14 +24,22 @@ import java.util.Random;
 
 import org.apache.commons.lang3.SerializationUtils;
 import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.MockitoAnnotations;
+import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.talend.dataquality.semantic.AllSemanticTests;
+import org.talend.dataquality.semantic.CategoryRegistryManagerAbstract;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.api.CustomDictionaryHolder;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.model.DQDocument;
 
-public class ValueDataMaskerTest {
+@PrepareForTest({ CustomDictionaryHolder.class, CategoryRegistryManager.class })
+public class ValueDataMaskerTest extends CategoryRegistryManagerAbstract {
+
+    @InjectMocks
+    private CustomDictionaryHolder holder;
 
     private static final Map<String[], String> EXPECTED_MASKED_VALUES = new LinkedHashMap<String[], String>() {
 
@@ -178,9 +187,12 @@ public class ValueDataMaskerTest {
      */
     @Test
     public void testProcessModifyExistCategory() throws InstantiationException, IllegalAccessException {
-        CategoryRegistryManager.setLocalRegistryPath("target/test_datamasking");
+        String mockedTenantID = this.getClass().getSimpleName() + "_ModifiedIndex";
+        MockitoAnnotations.initMocks(this);
+        mockWithTenant(mockedTenantID);
+        CategoryRegistryManager.setUsingLocalCategoryRegistry(true);
         CategoryRegistryManager instance = CategoryRegistryManager.getInstance();
-        CustomDictionaryHolder holder = instance.getCustomDictionaryHolder(CategoryRegistryManager.DEFAULT_TENANT_ID);
+        CustomDictionaryHolder holder = instance.getCustomDictionaryHolder(mockedTenantID);
 
         DQCategory answerCategory = holder.getMetadata().get(SemanticCategoryEnum.ANSWER.getTechnicalId());
         DQCategory categoryClone = SerializationUtils.clone(answerCategory); // make a clone instead of modifying the shared
