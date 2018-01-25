@@ -17,12 +17,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import org.talend.dataquality.datamasking.semantic.DataMaskFunction;
+
 /**
  * created by jgonzalez on 19 juin 2015. This function will replace digits by other digits and everithing else by ”x”.
  * Moreover, there is a list of key words that won’t be transformed.
  *
  */
-public class MaskAddress extends Function<String> {
+public class MaskAddress extends DataMaskFunction {
 
     private static final long serialVersionUID = -4661073390672757141L;
 

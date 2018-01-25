@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import org.talend.dataquality.datamasking.functions.Function;
+import org.talend.dataquality.datamasking.semantic.DataMaskFunction;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.api.LocalDictionaryCache;
 import org.talend.dataquality.semantic.model.DQDocument;
@@ -27,7 +27,7 @@ import org.talend.dataquality.semantic.model.DQDocument;
  * TDQ-14147: data masking of a column with the content of its semantic type (dictionaries)
  *
  */
-public class GenerateFromDictionaries extends Function<String> {
+public class GenerateFromDictionaries extends DataMaskFunction {
 
     private static final long serialVersionUID = 1476820256067746995L;
 

@@ -137,8 +137,9 @@ public abstract class Function<T> implements Serializable {
                     LOGGER.debug(e2);
                 }
             }
-            for (int i = 0; i < parameters.length; i++)
+            for (int i = 0; i < parameters.length; i++) {
                 parameters[i] = parameters[i].trim();
+            }
 
         }
         setKeepNull(keepNullValues);
@@ -149,10 +150,12 @@ public abstract class Function<T> implements Serializable {
 
     protected String clean(String extraParameter) {
         StringBuilder res = new StringBuilder(extraParameter.trim());
-        while (res.length() > 0 && res.charAt(0) == ',')
+        while (res.length() > 0 && res.charAt(0) == ',') {
             res.deleteCharAt(0);
-        while (res.length() > 0 && res.charAt(res.length() - 1) == ',')
+        }
+        while (res.length() > 0 && res.charAt(res.length() - 1) == ',') {
             res.deleteCharAt(res.length() - 1);
+        }
         return res.toString();
     }
 
@@ -161,10 +164,31 @@ public abstract class Function<T> implements Serializable {
             return null;
         }
 
-        if (t != null && keepEmpty && String.valueOf(t).trim().isEmpty())
+        if (t != null && keepEmpty && String.valueOf(t).trim().isEmpty()) {
             return t;
+        }
 
         return doGenerateMaskedField(t);
+    }
+
+    /**
+     * 
+     * Generate mask data by input
+     * 
+     * @param t Input data
+     * @param isValid Input data is valid or not
+     * @return The data after mask
+     */
+    public T generateMaskedRow(T t, boolean isValid) {
+        if (t == null && keepNull) {
+            return null;
+        }
+
+        if (t != null && keepEmpty && String.valueOf(t).trim().isEmpty()) {
+            return t;
+        }
+
+        return doGenerateMaskedField(t, isValid);
     }
 
     /**
@@ -173,12 +197,15 @@ public abstract class Function<T> implements Serializable {
      * @return the res with spaces
      */
     protected String insertFormatInString(String strWithSpaces, StringBuilder resWithoutSpaces) {
-        if (strWithSpaces == null || resWithoutSpaces == null)
+        if (strWithSpaces == null || resWithoutSpaces == null) {
             return strWithSpaces;
-        for (int i = 0; i < strWithSpaces.length(); i++)
+        }
+        for (int i = 0; i < strWithSpaces.length(); i++) {
             if (strWithSpaces.charAt(i) == ' ' || strWithSpaces.charAt(i) == '/' || strWithSpaces.charAt(i) == '-'
-                    || strWithSpaces.charAt(i) == '.')
+                    || strWithSpaces.charAt(i) == '.') {
                 resWithoutSpaces.insert(i, strWithSpaces.charAt(i));
+            }
+        }
         return resWithoutSpaces.toString();
     }
 
@@ -195,10 +222,58 @@ public abstract class Function<T> implements Serializable {
     /**
      * DOC jgonzalez Comment method "generateMaskedRow". This method applies a
      * function on a field and returns the its new value.
+     * Note that valid data only return valid result else return invalid result.
      * 
      * @param t
      * The input value.
      * @return A new value after applying the function.
      */
-    protected abstract T doGenerateMaskedField(T t);
+    protected T doGenerateMaskedField(T t) {
+        return doGenerateMaskedField(t, isValidData(t));
+    }
+
+    /**
+     * This method applies a function on a field and returns the its new value.
+     * Note that valid data only return valid result else return invalid result.
+     * 
+     * @param t The input value.
+     * @param isValid mark input value is valid or not.
+     * @return A new value after applying the function.
+     */
+    protected T doGenerateMaskedField(T t, boolean isValid) {
+        if (isValid) {
+            return generateValidMaskData(t);
+        }
+        return generateInvalidMaskData(t);
+    }
+
+    /**
+     * Generate invalid mask data
+     * 
+     * @param t the data which need to be mask
+     * @return invalid mask data
+     */
+    protected T generateInvalidMaskData(T t) {
+        return null;
+    }
+
+    /**
+     * Judge input data is valid or not
+     * 
+     * @param t input data
+     * @return true if input data is valid else false
+     */
+    protected boolean isValidData(T t) {
+        return true;
+    }
+
+    /**
+     * Generate valid mask data
+     * 
+     * @param t the data which need to be mask
+     * @return valid mask data
+     */
+    protected T generateValidMaskData(T t) {
+        return doGenerateMaskedField(t);
+    }
 }

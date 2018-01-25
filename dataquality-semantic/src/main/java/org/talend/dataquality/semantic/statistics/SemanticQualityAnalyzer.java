@@ -35,8 +35,8 @@ import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizer;
 import org.talend.dataquality.semantic.recognizer.DefaultCategoryRecognizer;
-import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
 import org.talend.dataquality.semantic.recognizer.LFUCache;
+import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
 
 /**
  * created by talend on 2015-07-28 Detailled comment.
@@ -112,8 +112,7 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
      * <p>
      * TODO remove this method later
      * 
-     * Analyze record of Array of string type, this method is used in scala library which not support parameterized
-     * array type.
+     * Analyze record of Array of string type, this method is used in scala library which not support parameterized array type.
      * 
      * @param record
      * @return
@@ -164,7 +163,15 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
         }
     }
 
-    private boolean isValid(DQCategory category, String value) {
+    /**
+     * 
+     * Judege input value is valid or not
+     * 
+     * @param category category of input value
+     * @param value input value
+     * @return true if input value is valid esle false
+     */
+    public boolean isValid(DQCategory category, String value) {
         LFUCache<String, Boolean> categoryCache = knownValidationCategoryCache.get(category.getId());
 
         if (categoryCache == null) {
@@ -199,16 +206,19 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
         Set<DQCategory> regexChildrenCategories = new HashSet<>();
         Set<DQCategory> dictChildrenCategories = new HashSet<>();
         for (DQCategory cat : category.getChildren()) {
-            if (CategoryType.DICT.equals(cat.getType()))
+            if (CategoryType.DICT.equals(cat.getType())) {
                 dictChildrenCategories.add(cat);
-            else if (CategoryType.REGEX.equals(cat.getType()))
+            } else if (CategoryType.REGEX.equals(cat.getType())) {
                 regexChildrenCategories.add(cat);
+            }
         }
 
-        if (!CollectionUtils.isEmpty(regexChildrenCategories))
+        if (!CollectionUtils.isEmpty(regexChildrenCategories)) {
             validCat = regexClassifier.validCategories(value, category, regexChildrenCategories);
-        if (!validCat && !CollectionUtils.isEmpty(dictChildrenCategories))
+        }
+        if (!validCat && !CollectionUtils.isEmpty(dictChildrenCategories)) {
             validCat = dataDictClassifier.validCategories(value, category, dictChildrenCategories);
+        }
         return validCat;
     }
 
@@ -235,7 +245,7 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
         while (!catToSee.isEmpty()) {
             currentCategory = catToSee.pop();
             DQCategory dqCategory = dictionarySnapshot.getMetadata().get(currentCategory);
-            if (dqCategory != null)
+            if (dqCategory != null) {
                 if (!CollectionUtils.isEmpty(dqCategory.getChildren())) {
                     for (DQCategory child : dqCategory.getChildren()) {
                         if (!catAlreadySeen.contains(child.getId())) {
@@ -246,6 +256,7 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
                 } else if (!currentCategory.equals(id)) {
                     children.add(dqCategory);
                 }
+            }
         }
         return children;
     }

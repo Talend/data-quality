@@ -12,6 +12,8 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
+import org.talend.dataquality.datamasking.semantic.DataMaskFunction;
+
 /**
  * The class generates the American ssn number randomly.<br>
  * The first two characters has 72 different combinations. The the following characters, whether is 00, whether is 06,
@@ -19,7 +21,7 @@ package org.talend.dataquality.datamasking.functions;
  * following character has 9 combinations too. The end four characters, it can generate at least 5832 combinations. <br>
  * In totoal, it has 374 134 464 results.<br>
  */
-public class GenerateSsnUs extends Function<String> {
+public class GenerateSsnUs extends DataMaskFunction {
 
     private static final long serialVersionUID = -7651076296534530622L;
 
