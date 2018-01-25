@@ -77,7 +77,7 @@ public class TdqCategories implements Serializable {
     }
 
     public DictionarySnapshot asDictionarySnapshot() {
-        return new DictionarySnapshot(categoryMetadata.getMetadata(), //
+        return new DictionarySnapshot(categoryMetadata.getDQCategoryMap(), //
                 new LuceneIndex(dictionary.asDirectory(), DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY), //
                 new LuceneIndex(customDictionary.asDirectory(), DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY), //
                 new LuceneIndex(keyword.asDirectory(), DictionarySearchMode.MATCH_SEMANTIC_KEYWORD), //
