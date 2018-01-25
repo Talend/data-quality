@@ -12,7 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.semantic.datamasking;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -22,8 +22,6 @@ import java.util.Map;
 import java.util.Random;
 
 import org.apache.commons.lang3.SerializationUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.junit.Assert;
 import org.junit.Test;
 import org.talend.dataquality.semantic.AllSemanticTests;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
@@ -147,10 +145,6 @@ public class ValueDataMaskerTest {
             String inputValue = input[0];
             String semanticCategory = input[1];
             String dataType = input[2];
-            boolean isValidResult = true;
-            if (input.length > 3) {
-                isValidResult = Boolean.getBoolean(input[3]);
-            }
 
             System.out.print("[" + semanticCategory + "]\n\t" + inputValue + " => ");
             final ValueDataMasker masker = new ValueDataMasker(semanticCategory, dataType);
@@ -159,83 +153,8 @@ public class ValueDataMaskerTest {
             String maskedValue = masker.maskValue(inputValue);
             // System.out.println(maskedValue + " expect is [" + EXPECTED_MASKED_VALUES.get(input) + "] result is "
             // + maskedValue.equals(EXPECTED_MASKED_VALUES.get(input)));
-            if (isValidResult) {
-                assertEquals("Test faild on [" + inputValue + "]", EXPECTED_MASKED_VALUES.get(input),
-                        maskedValue.replaceAll("\n", "").replaceAll("\r", "").replaceAll("\b", ""));
-            } else {
-                checkInvalidResult(inputValue, EXPECTED_MASKED_VALUES.get(input));
-            }
+            assertEquals("Test faild on [" + inputValue + "]", EXPECTED_MASKED_VALUES.get(input), maskedValue);
         }
-
-        // Assert.assertNotEquals(city, masker.process(city));
-        // masker should generate a city name
-        // Assert the masked value is in a list of city names
-
-        // categories to mask
-        // First names, last names, email, IP address (v4, v6), localization, GPS coordinates, phone
-        // Job title , street, address, zipcode, organization, company, full name, credit card number, account number,
-        //
-
-        // for these categories, here are the default functions to use:
-        // first name -> another first name (from a fixed list loaded from a data file in a resource folder)
-        // last name -> another last name (from a fixed list)
-        // email -> mask local part (MaskEmail function)
-        // phone -> keep 3 first digits and replace last digits
-        // Job title -> another job title (from a fixed list)
-        // street -> use MaskAddress
-        // zipCode -> replace All digits
-        // organization -> another organization (from a fixed list)
-        // company -> another company (from a fixed list)
-        // credit card -> generate a new one
-        // account number -> generate a new one
-        //
-        // Assertions: masked data must never be identical to original data (don't use random seed for the random
-        // generator to check that)
-        //
-
-        // data types to mask
-        // date, string, numeric
-
-        // create a ValueDataMasker for data that have no semantic category
-        // use ValueDataMasker masker = SemanticCategoryMaskerFactory.createMasker(dataType);
-
-        // here are the default functions to use for the different types:
-        // date -> DateVariance with parameter 61 (meaning two months)
-        // string -> use ReplaceAll
-        // numeric -> use NumericVariance
-
-    }
-
-    /**
-     * Check invalid result
-     */
-    private void checkInvalidResult(String inputData, String expect) {
-        Random rnd = new Random();
-        if (StringUtils.isEmpty(expect)) {
-            Assert.assertEquals(expect, inputData);
-        } else {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < expect.length(); i++) {
-                char ch = expect.charAt(i);
-                if (Character.isUpperCase(ch)) {
-                    Assert.assertTrue("\"" + inputData.charAt(i) + "\"of \"" + inputData
-                            + "\" should be a Upper Case than expect result \"" + expect + "\"",
-                            Character.isUpperCase(inputData.charAt(i)));
-                } else if (Character.isLowerCase(ch)) {
-                    Assert.assertTrue("\"" + inputData.charAt(i) + "\"of \"" + inputData
-                            + "\" should be a Lower Case than expect result \"" + expect + "\"",
-                            Character.isLowerCase(inputData.charAt(i)));
-                } else if (Character.isDigit(ch)) {
-                    Assert.assertTrue("\"" + inputData.charAt(i) + "\"of \"" + inputData
-                            + "\" should be a digit than expect result \"" + expect + "\"",
-                            Character.isDigit(inputData.charAt(i)));
-                } else if (ch != inputData.charAt(i)) {
-                    Assert.assertEquals("\"" + inputData.charAt(i) + "\" should be a \"" + ch + "\"", ch,
-                            Character.isDigit(inputData.charAt(i)));
-                }
-            }
-        }
-
     }
 
     private static final Map<String[], String> EXPECTED_MASKED_VALUES_EXIST = new LinkedHashMap<String[], String>() {
@@ -280,12 +199,10 @@ public class ValueDataMaskerTest {
             String semanticCategory = input[1];
             String dataType = input[2];
 
-            System.out.print("[" + semanticCategory + "]\n\t" + inputValue + " => ");
             final ValueDataMasker masker = new ValueDataMasker(semanticCategory, dataType);
             masker.getFunction().setRandom(new Random(AllSemanticTests.RANDOM_SEED));
             masker.getFunction().setKeepEmpty(true);
             String maskedValue = masker.maskValue(inputValue);
-            System.out.println(maskedValue);
             assertEquals("Test faild on [" + inputValue + "]", EXPECTED_MASKED_VALUES_EXIST.get(input), maskedValue);
         }
         holder.deleteDataDictDocuments(Collections.singletonList(newDoc));
