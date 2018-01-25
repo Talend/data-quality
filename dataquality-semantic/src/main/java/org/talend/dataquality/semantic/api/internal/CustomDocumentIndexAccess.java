@@ -1,5 +1,10 @@
 package org.talend.dataquality.semantic.api.internal;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
@@ -15,11 +20,6 @@ import org.talend.dataquality.semantic.index.ClassPathDirectory;
 import org.talend.dataquality.semantic.index.DictionarySearcher;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.model.DQDocument;
-
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Low-level API for custom data dict lucene index
@@ -73,6 +73,7 @@ public class CustomDocumentIndexAccess extends AbstractCustomIndexAccess {
         try {
             for (DQDocument document : documents) {
                 final Term term = new Term(DictionarySearcher.F_DOCID, document.getId());
+                mgr.maybeRefreshBlocking();
                 IndexSearcher searcher = mgr.acquire();
                 if (searcher.search(new TermQuery(term), 1).totalHits == 1) {
                     LOGGER.debug("updateDocument " + document);
