@@ -1,5 +1,20 @@
 package org.talend.dataquality.semantic.statistics;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder.DEFAULT_DD_PATH;
+
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang3.StringUtils;
@@ -19,7 +34,6 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.Analyzers;
@@ -38,21 +52,6 @@ import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.recognizer.CategoryFrequency;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
-
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder.DEFAULT_DD_PATH;
 
 public class SemanticQualityAnalyzerTest extends CategoryRegistryManagerAbstract {
 
@@ -184,16 +183,18 @@ public class SemanticQualityAnalyzerTest extends CategoryRegistryManagerAbstract
         testAnalysis(Collections.singletonList(new String[] { "Berulle" }),
                 new String[] { SemanticCategoryEnum.FR_COMMUNE.getId() }, expectedCount, expectedCount);
 
-        TdqCategories tdqCategories = TdqCategoriesFactory.createTdqCategories();
-        builder = CategoryRecognizerBuilder.newBuilder().lucene()//
-                .metadata(tdqCategories.getCategoryMetadata().getMetadata())//
-                .ddDirectory(tdqCategories.getDictionary().asDirectory())//
-                .kwDirectory(tdqCategories.getKeyword().asDirectory()) //
-                .regexClassifier(tdqCategories.getRegex().getRegexClassifier());
         CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder();
 
         DQCategory category = holder.getCategoryMetadataById(SemanticCategoryEnum.FR_COMMUNE.getTechnicalId());
         holder.deleteCategory(category);
+
+        TdqCategories tdqCategories = TdqCategoriesFactory.createTdqCategories();
+        builder = CategoryRecognizerBuilder.newBuilder().lucene()//
+                .metadata(tdqCategories.getCategoryMetadata().getDQCategoryMap())//
+                .ddDirectory(tdqCategories.getDictionary().asDirectory())//
+                .kwDirectory(tdqCategories.getKeyword().asDirectory()) //
+                .regexClassifier(tdqCategories.getRegex().getRegexClassifier());
+
         testAnalysis(Collections.singletonList(new String[] { "Berulle" }), new String[] { StringUtils.EMPTY }, expectedCount,
                 expectedCount);
 
