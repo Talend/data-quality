@@ -8,7 +8,6 @@ import java.util.Map;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 import org.talend.dataquality.semantic.model.DQCategory;
-import org.talend.dataquality.semantic.model.DQCategoryForValidation;
 
 /**
  * A serializable object to hold all category metadata.
@@ -31,10 +30,10 @@ public class BroadcastMetadataObject implements Serializable {
             DQCategoryForValidation dqCategoryForValidation = new DQCategoryForValidation();
             try {
                 BeanUtils.copyProperties(dqCategoryForValidation, value);
+                metadata.put(value.getId(), dqCategoryForValidation);
             } catch (IllegalAccessException | InvocationTargetException e) {
                 LOGGER.error(e.getMessage(), e);
             }
-            metadata.put(value.getId(), dqCategoryForValidation);
         });
     }
 
@@ -44,10 +43,10 @@ public class BroadcastMetadataObject implements Serializable {
             DQCategory dqCategory = new DQCategory();
             try {
                 BeanUtils.copyProperties(dqCategory, value);
+                dqCategoryMap.put(value.getId(), dqCategory);
             } catch (IllegalAccessException | InvocationTargetException e) {
                 LOGGER.error(e.getMessage(), e);
             }
-            dqCategoryMap.put(value.getId(), dqCategory);
         });
         return dqCategoryMap;
     }

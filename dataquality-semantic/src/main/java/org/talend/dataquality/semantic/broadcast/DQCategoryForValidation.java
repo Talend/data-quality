@@ -10,11 +10,17 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.dataquality.semantic.model;
+package org.talend.dataquality.semantic.broadcast;
 
 import java.io.Serializable;
 import java.util.List;
 
+import org.talend.dataquality.semantic.model.CategoryType;
+import org.talend.dataquality.semantic.model.ValidationMode;
+
+/**
+ * Core semantic category metadata for validation.
+ */
 public class DQCategoryForValidation implements Serializable {
 
     private static final long serialVersionUID = 4995560372449434190L;
@@ -38,14 +44,6 @@ public class DQCategoryForValidation implements Serializable {
     private Boolean modified = Boolean.FALSE;
 
     private Boolean deleted = Boolean.FALSE;
-
-    public DQCategoryForValidation(String id) {
-        this.id = id;
-    }
-
-    public DQCategoryForValidation() {
-
-    }
 
     public String getId() {
         return id;
