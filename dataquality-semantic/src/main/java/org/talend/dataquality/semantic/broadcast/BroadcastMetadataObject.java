@@ -2,12 +2,17 @@ package org.talend.dataquality.semantic.broadcast;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.talend.dataquality.semantic.model.DQCategory;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * A serializable object to hold all category metadata.
@@ -30,6 +35,17 @@ public class BroadcastMetadataObject implements Serializable {
             DQCategoryForValidation dqCategoryForValidation = new DQCategoryForValidation();
             try {
                 BeanUtils.copyProperties(dqCategoryForValidation, value);
+                // clear children and refill
+                List<DQCategory> sourceChildren = value.getChildren();
+                if (!CollectionUtils.isEmpty(sourceChildren)) {
+                    List<DQCategoryForValidation> copyChildren = new ArrayList<>();
+                    for (DQCategory child : sourceChildren) {
+                        DQCategoryForValidation dqValidationCat = new DQCategoryForValidation();
+                        BeanUtils.copyProperties(dqValidationCat, child);
+                        copyChildren.add(dqValidationCat);
+                    }
+                    dqCategoryForValidation.setChildren(copyChildren);
+                }
                 metadata.put(value.getId(), dqCategoryForValidation);
             } catch (IllegalAccessException | InvocationTargetException e) {
                 LOGGER.error(e.getMessage(), e);
@@ -37,6 +53,7 @@ public class BroadcastMetadataObject implements Serializable {
         });
     }
 
+    @JsonIgnore
     public Map<String, DQCategory> getDQCategoryMap() {
         Map<String, DQCategory> dqCategoryMap = new HashMap<>();
         metadata.values().forEach(value -> {
