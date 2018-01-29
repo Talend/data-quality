@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
@@ -57,11 +56,11 @@ public class BroadcastMetadataObject implements Serializable {
     public Map<String, DQCategory> getDQCategoryMap() {
         Map<String, DQCategory> dqCategoryMap = new HashMap<>();
         metadata.values().forEach(value -> {
-            DQCategory dqCategory = new DQCategory();
             try {
-                BeanUtils.copyProperties(dqCategory, value);
+                DQCategory dqCategory = new DQCategory();
+                PropertyUtils.copyProperties(dqCategory, value);
                 dqCategoryMap.put(value.getId(), dqCategory);
-            } catch (IllegalAccessException | InvocationTargetException e) {
+            } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                 LOGGER.error(e.getMessage(), e);
             }
         });
