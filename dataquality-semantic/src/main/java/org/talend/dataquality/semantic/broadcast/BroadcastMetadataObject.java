@@ -2,12 +2,18 @@ package org.talend.dataquality.semantic.broadcast;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.talend.dataquality.semantic.model.DQCategory;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * A serializable object to hold all category metadata.
@@ -28,14 +34,26 @@ public class BroadcastMetadataObject implements Serializable {
         dqCategoryMap.values().forEach(value -> {
             DQCategoryForValidation dqCategoryForValidation = new DQCategoryForValidation();
             try {
-                BeanUtils.copyProperties(dqCategoryForValidation, value);
+                PropertyUtils.copyProperties(dqCategoryForValidation, value);
+                // clear children and refill
+                List<DQCategory> sourceChildren = value.getChildren();
+                if (!CollectionUtils.isEmpty(sourceChildren)) {
+                    List<DQCategoryForValidation> copyChildren = new ArrayList<>();
+                    for (DQCategory child : sourceChildren) {
+                        DQCategoryForValidation copyChild = new DQCategoryForValidation();
+                        PropertyUtils.copyProperties(copyChild, child);
+                        copyChildren.add(copyChild);
+                    }
+                    dqCategoryForValidation.setChildren(copyChildren);
+                }
                 metadata.put(value.getId(), dqCategoryForValidation);
-            } catch (IllegalAccessException | InvocationTargetException e) {
+            } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                 LOGGER.error(e.getMessage(), e);
             }
         });
     }
 
+    @JsonIgnore
     public Map<String, DQCategory> getDQCategoryMap() {
         Map<String, DQCategory> dqCategoryMap = new HashMap<>();
         metadata.values().forEach(value -> {

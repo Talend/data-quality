@@ -39,11 +39,16 @@ public class DQCategoryForValidation implements Serializable {
 
     private List<DQCategoryForValidation> children;
 
-    private List<DQCategoryForValidation> parents;
+    private Boolean modified;
 
-    private Boolean modified = Boolean.FALSE;
+    private Boolean deleted;
 
-    private Boolean deleted = Boolean.FALSE;
+    public DQCategoryForValidation() {
+    }
+
+    public DQCategoryForValidation(String id) {
+        this.id = id;
+    }
 
     public String getId() {
         return id;
@@ -99,14 +104,6 @@ public class DQCategoryForValidation implements Serializable {
 
     public void setChildren(List<DQCategoryForValidation> children) {
         this.children = children;
-    }
-
-    public List<DQCategoryForValidation> getParents() {
-        return parents;
-    }
-
-    public void setParents(List<DQCategoryForValidation> parents) {
-        this.parents = parents;
     }
 
     public Boolean getModified() {
