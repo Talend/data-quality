@@ -17,6 +17,8 @@ import java.net.URL;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class DQCategory implements Serializable {
 
     private static final long serialVersionUID = 4593691452129397269L;
@@ -69,8 +71,10 @@ public class DQCategory implements Serializable {
 
     private List<DQCategory> parents;
 
+    @JsonIgnore
     private Boolean modified = Boolean.FALSE;
 
+    @JsonIgnore
     private Boolean deleted = Boolean.FALSE;
 
     public DQCategory(String id) {
