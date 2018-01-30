@@ -56,17 +56,13 @@ import org.talend.dataquality.semantic.model.DQCategory;
  * <p>
  * Inside each of the above folder, the following subfolders can be found:
  * <ul>
- * <li><b>metadata:</b> lucene index containing metadata of all categories. In the tenant specific folder, the metadata
- * of
- * all provided categories are copied from shared metadata.</li>
- * <li><b>dictionary:</b> lucene index containing dictionary documents. In the tenant specific folder, we only include
- * the
+ * <li><b>metadata:</b> lucene index containing metadata of all categories. In the tenant specific folder, the metadata of all
+ * provided categories are copied from shared metadata.</li>
+ * <li><b>dictionary:</b> lucene index containing dictionary documents. In the tenant specific folder, we only include the
  * user-defined data dictionaries, and make the copy for only the modified categories provided by Talend</li>
- * <li><b>keyword:</b> lucene index containing keyword documents. This folder does not exist in tenant specific folder
- * as the
+ * <li><b>keyword:</b> lucene index containing keyword documents. This folder does not exist in tenant specific folder as the
  * modification is not allowed for these categories</li>
- * <li><b>regex:</b> json file containing all categories that can be recognized by regex patterns and eventual
- * subvalidators</li>
+ * <li><b>regex:</b> json file containing all categories that can be recognized by regex patterns and eventual subvalidators</li>
  * </ul>
  */
 public class CategoryRegistryManager {
@@ -472,9 +468,13 @@ public class CategoryRegistryManager {
      */
     public CustomDictionaryHolder getCustomDictionaryHolder() {
         Optional<Tenant> tenant = TenancyContextHolder.getContext().getOptionalTenant();
-        String tenantID = (tenant.isPresent()) ? tenant.get().getIdentity().toString() : DEFAULT_TENANT_ID;
-        return getCustomDictionaryHolder(tenantID);
-
+        if (tenant.isPresent()) {
+            Object identity = tenant.get().getIdentity();
+            if (identity != null && !"null".equals(String.valueOf(identity))) {
+                return getCustomDictionaryHolder(String.valueOf(identity));
+            }
+        }
+        return getCustomDictionaryHolder(DEFAULT_TENANT_ID);
     }
 
     public synchronized CustomDictionaryHolder getCustomDictionaryHolder(String tenantID) {
