@@ -17,7 +17,7 @@
 		<slf4j.version>1.7.12</slf4j.version>
 		<log4j.version>1.2.17</log4j.version>
 		<log4j2.version>2.4.1</log4j2.version>
-		<jackson.version>2.5.3</jackson.version>
+		<jackson.version>2.9.4</jackson.version>
 		<java.version>1.8</java.version>
 		<junit.version>4.12</junit.version>
 
@@ -60,6 +60,22 @@
 						<artifactId>jackson-databind</artifactId>
 					</exclusion>
 				</exclusions>
+			</dependency>
+
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-core</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-annotations</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-databind</artifactId>
+				<version>${jackson.version}</version>
 			</dependency>
 
 			<dependency>

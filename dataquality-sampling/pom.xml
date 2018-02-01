@@ -11,12 +11,6 @@
 	<name>dataquality-sampling</name>
 	<description>Reservoir sampling, data masking, data duplication</description>
 
-	<properties>
-		<scala.version>2.10.5</scala.version>
-		<scala.binary.version>2.10</scala.binary.version>
-		<spark.version>1.6.0</spark.version>
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>commons-lang</groupId>
@@ -48,23 +42,6 @@
 		<dependency>
 			<groupId>org.talend.daikon</groupId>
 			<artifactId>daikon</artifactId>
-		</dependency>
-
-		<!-- spark dependencies -->
-		<dependency>
-			<groupId>org.scala-lang</groupId>
-			<artifactId>scala-library</artifactId>
-			<version>${scala.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.spark</groupId>
-			<artifactId>spark-core_${scala.binary.version}</artifactId>
-			<version>${spark.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.spark</groupId>
-			<artifactId>spark-sql_${scala.binary.version}</artifactId>
-			<version>${spark.version}</version>
 		</dependency>
 
 		<dependency>
