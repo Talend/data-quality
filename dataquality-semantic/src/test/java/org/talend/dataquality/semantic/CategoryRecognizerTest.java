@@ -80,7 +80,7 @@ public class CategoryRecognizerTest extends CategoryRegistryManagerAbstract {
 
     };
 
-    private static Logger log = Logger.getLogger(CategoryRecognizerTest.class);
+    private static final Logger LOGGER = Logger.getLogger(CategoryRecognizerTest.class);
 
     private static Map<String, String[]> EXPECTED_CAT_ID = new LinkedHashMap<String, String[]>() {
 
@@ -271,7 +271,7 @@ public class CategoryRecognizerTest extends CategoryRegistryManagerAbstract {
 
         assertEquals(EXPECTED_FREQUECY_TABLE.size(), result.size());
         for (CategoryFrequency tableItem : result) {
-            log.debug("frequencyTableItem = " + tableItem.getCategoryId() + " / " + tableItem.getCount() + " / "
+            LOGGER.debug("frequencyTableItem = " + tableItem.getCategoryId() + " / " + tableItem.getCount() + " / "
                     + tableItem.getScore() + " %");
 
             System.out.println("put(\"" + tableItem.getCategoryId() + "\", " + tableItem.getScore() + "F);");

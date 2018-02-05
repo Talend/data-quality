@@ -102,7 +102,6 @@ public class DQDocument implements Serializable {
 
     @Override
     public String toString() {
-        return "DQDocument{" + "id='" + id + '\'' + ", categoryName=" + category.getName() + ", values='" + values + '\''
-                + ", creator='" + creator + '\'' + ", lastModifier='" + lastModifier + '\'' + ", state='" + state + '\'' + '}';
+        return String.format("DQDocument [ID=%s]", id);
     }
 }

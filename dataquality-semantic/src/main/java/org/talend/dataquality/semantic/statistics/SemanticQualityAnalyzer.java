@@ -46,7 +46,7 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
 
     private static final long serialVersionUID = -5951511723860660263L;
 
-    private static final Logger LOG = Logger.getLogger(SemanticQualityAnalyzer.class);
+    private static final Logger LOGGER = Logger.getLogger(SemanticQualityAnalyzer.class);
 
     private final ResizableList<ValueQualityStatistics> results = new ResizableList<>(ValueQualityStatistics.class);
 
@@ -97,7 +97,7 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
             regexClassifier = recognizer.getUserDefineClassifier();
             dataDictClassifier = recognizer.getDataDictFieldClassifier();
         } catch (IOException e) {
-            LOG.error(e, e);
+            LOGGER.error(e, e);
         }
         results.clear();
     }

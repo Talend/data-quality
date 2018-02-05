@@ -28,7 +28,7 @@ import org.apache.log4j.Logger;
  */
 public class PlatformPathUtil {
 
-    private static final Logger LOG = Logger.getLogger(PlatformPathUtil.class);
+    private static final Logger LOGGER = Logger.getLogger(PlatformPathUtil.class);
 
     private PlatformPathUtil() {
     }
@@ -41,7 +41,7 @@ public class PlatformPathUtil {
             // if the platform protocol is unknown, try to create a FileInputStream with local path
             return new FileInputStream(filePath);
         } catch (IOException e) {
-            LOG.error(e);
+            LOGGER.error(e);
         }
         return null;
     }
@@ -53,7 +53,7 @@ public class PlatformPathUtil {
         } catch (MalformedURLException e) {
             // if the platform protocol is unknown, return the input local path
         } catch (IOException e) {
-            LOG.error(e);
+            LOGGER.error(e);
         }
         return filePath;
     }
@@ -65,7 +65,7 @@ public class PlatformPathUtil {
         } catch (FileNotFoundException e) {
             // try to get the absolute path from exception message
             final String msg = e.getMessage();
-            LOG.warn(msg, e);
+            LOGGER.warn(msg, e);
             if (filePath.endsWith("/")) { //$NON-NLS-1$
                 filePath = filePath.substring(0, filePath.length() - 1);
             }

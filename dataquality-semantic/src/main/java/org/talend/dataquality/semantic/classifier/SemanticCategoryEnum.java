@@ -241,7 +241,7 @@ public enum SemanticCategoryEnum {
 
     private boolean completeness;
 
-    private static final Logger LOG = Logger.getLogger(SemanticCategoryEnum.class);
+    private static final Logger LOGGER = Logger.getLogger(SemanticCategoryEnum.class);
 
     /**
      * SemanticCategoryEnum constructor.
@@ -293,7 +293,7 @@ public enum SemanticCategoryEnum {
         try {
             return valueOf(catId);
         } catch (IllegalArgumentException e) {
-            LOG.debug(e.getMessage(), e);
+            LOGGER.debug(e.getMessage(), e);
             return null;
         }
     }

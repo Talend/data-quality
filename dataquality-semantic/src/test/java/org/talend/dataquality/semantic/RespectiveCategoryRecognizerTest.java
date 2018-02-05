@@ -48,8 +48,6 @@ public class RespectiveCategoryRecognizerTest extends CategoryRegistryManagerAbs
 
     final String validChar = "valid"; //$NON-NLS-1$
 
-    // private static Logger log = Logger.getLogger(RespectiveCategoryRecognizerTest.class);
-
     private static CategoryRecognizer catRecognizer;
 
     private static Map<String, List<Pair<String, Boolean>>> EXPECTED_MATCHING_RES_FOR_CATS = new LinkedHashMap<String, List<Pair<String, Boolean>>>() {

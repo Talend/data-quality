@@ -56,7 +56,7 @@ public enum MaskableCategoryEnum {
 
     private String parameter;
 
-    private static final Logger LOG = Logger.getLogger(MaskableCategoryEnum.class);
+    private static final Logger LOGGER = Logger.getLogger(MaskableCategoryEnum.class);
 
     /**
      * SemanticCategoryEnum constructor.
@@ -107,7 +107,7 @@ public enum MaskableCategoryEnum {
         try {
             return valueOf(catId);
         } catch (IllegalArgumentException e) {
-            LOG.warn(e.getMessage());
+            LOGGER.warn(e.getMessage());
             return null;
         }
     }

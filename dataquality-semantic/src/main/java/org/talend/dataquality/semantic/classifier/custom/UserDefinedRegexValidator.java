@@ -34,7 +34,7 @@ public class UserDefinedRegexValidator extends AbstractRegexSemanticValidator {
 
     private static final long serialVersionUID = -7832927422566889796L;
 
-    private static final Logger LOG = Logger.getLogger(UserDefinedRegexValidator.class);
+    private static final Logger LOGGER = Logger.getLogger(UserDefinedRegexValidator.class);
 
     private String patternString;
 
@@ -108,7 +108,7 @@ public class UserDefinedRegexValidator extends AbstractRegexSemanticValidator {
                     : Pattern.compile(patternString);
             caseSensitivePattern = Pattern.compile(patternString);
         } catch (IllegalArgumentException e) {
-            LOG.error("Invalid regular expression: " + this.patternString, e);
+            LOGGER.error("Invalid regular expression: " + this.patternString, e);
         }
     }
 
@@ -141,11 +141,11 @@ public class UserDefinedRegexValidator extends AbstractRegexSemanticValidator {
                 Class<?> subSemanticValidator = Class.forName(validatorName);
                 return (ISemanticSubValidator) subSemanticValidator.newInstance();
             } catch (ClassNotFoundException e) {
-                LOG.error(e, e);
+                LOGGER.error(e, e);
             } catch (InstantiationException e) {
-                LOG.error(e, e);
+                LOGGER.error(e, e);
             } catch (IllegalAccessException e) {
-                LOG.error(e, e);
+                LOGGER.error(e, e);
             }
             // exception caught => default subValidator
             // remove any existing subvalidator

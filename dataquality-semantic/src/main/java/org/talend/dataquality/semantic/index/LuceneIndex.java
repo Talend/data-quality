@@ -40,7 +40,7 @@ import org.talend.dataquality.semantic.model.DQCategory;
  */
 public class LuceneIndex implements Index {
 
-    private static final Logger LOG = Logger.getLogger(LuceneIndex.class);
+    private static final Logger LOGGER = Logger.getLogger(LuceneIndex.class);
 
     private final DictionarySearcher searcher;
 
@@ -88,7 +88,7 @@ public class LuceneIndex implements Index {
                 foundCategorySet.add(document.getField(DictionarySearcher.F_CATID).stringValue());
             }
         } catch (IOException e) {
-            LOG.error(e, e);
+            LOGGER.error(e, e);
         }
         return foundCategorySet;
     }
@@ -100,7 +100,7 @@ public class LuceneIndex implements Index {
             validCategory = searcher.validDocumentWithCategories(data, semanticType, children);
 
         } catch (IOException e) {
-            LOG.error(e, e);
+            LOGGER.error(e, e);
         }
         return validCategory;
     }
@@ -150,7 +150,7 @@ public class LuceneIndex implements Index {
             }
 
         } catch (IOException e) {
-            LOG.error(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
         return sortMapByValue(similarFieldMap);
     }
@@ -186,7 +186,7 @@ public class LuceneIndex implements Index {
                 }
             }
         } catch (IOException e) {
-            LOG.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
         }
         return mostSimilarValue;
     }

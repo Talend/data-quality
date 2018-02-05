@@ -17,7 +17,11 @@ import static org.junit.Assert.fail;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.log4j.Logger;
@@ -30,7 +34,7 @@ import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 
 public class ConcurrentDictionaryAccessTest {
 
-    private static final Logger log = Logger.getLogger(ConcurrentDictionaryAccessTest.class);
+    private static final Logger LOGGER = Logger.getLogger(ConcurrentDictionaryAccessTest.class);
 
     private AtomicBoolean errorOccurred = new AtomicBoolean();
 
@@ -128,7 +132,7 @@ public class ConcurrentDictionaryAccessTest {
                 if (!EXPECTED_CATEGORY.get(input).contains(cat)) {
                     errorOccurred.set(true);
                     if (isLogEnabled) {
-                        log.error(input + " is expected to be a " + cat + " but actually not");
+                        LOGGER.error(input + " is expected to be a " + cat + " but actually not");
                     }
                 }
             }
@@ -137,7 +141,7 @@ public class ConcurrentDictionaryAccessTest {
         } catch (Exception e) {
             errorOccurred.set(true);
             if (isLogEnabled) {
-                log.error(e.getMessage(), e);
+                LOGGER.error(e.getMessage(), e);
             }
         }
     }
