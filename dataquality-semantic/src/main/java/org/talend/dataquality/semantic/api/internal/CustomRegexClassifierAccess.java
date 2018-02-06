@@ -70,7 +70,7 @@ public class CustomRegexClassifierAccess {
      * @param regexId the id of regex to delete
      */
     public void deleteRegex(String regexId) {
-        LOGGER.debug("insertOrUpdateRegex: " + regexId);
+        LOGGER.debug("deleteRegex: " + regexId);
         List<ISubCategory> regExs = getRegExs();
         if (regExs == null)
             regExs = new ArrayList<>();

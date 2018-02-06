@@ -1,5 +1,9 @@
 package org.talend.dataquality.semantic.api.internal;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
@@ -15,10 +19,6 @@ import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.api.DictionaryUtils;
 import org.talend.dataquality.semantic.index.DictionarySearcher;
 import org.talend.dataquality.semantic.model.DQCategory;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Low-level API for metadata lucene index.
@@ -36,7 +36,7 @@ public class CustomMetadataIndexAccess extends AbstractCustomIndexAccess {
         try {
             boolean isLuceneDir = DirectoryReader.indexExists(directory);
             if (!isLuceneDir || getReader().maxDoc() == 0) {
-                LOGGER.debug("Metadata index is not a lucene index or is empty, trying to make a copy from shared metadata.");
+                LOGGER.info("Metadata index is not a lucene index or is empty, trying to make a copy from shared metadata.");
                 for (DQCategory dqCat : CategoryRegistryManager.getInstance().getSharedCategoryMetadata().values()) {
                     createCategory(dqCat);
                 }

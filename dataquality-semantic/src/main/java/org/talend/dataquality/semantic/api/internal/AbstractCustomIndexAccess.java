@@ -63,7 +63,7 @@ public class AbstractCustomIndexAccess implements AutoCloseable {
     }
 
     public void deleteAll() {
-        LOGGER.debug("delete all content");
+        LOGGER.info("delete all content");
         try {
             getWriter().deleteAll();
         } catch (IOException e) {

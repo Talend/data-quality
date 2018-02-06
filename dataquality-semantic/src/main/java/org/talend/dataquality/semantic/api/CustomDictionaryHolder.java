@@ -170,7 +170,7 @@ public class CustomDictionaryHolder {
 
     private synchronized void ensureRepublishDataDictIndexAccess() {
         if (customRepublishDataDictIndexAccess == null) {
-            LOGGER.info(String.format(INITIALIZE_ACCESS, REPUBLISH_FOLDER_NAME, DICTIONARY_SUBFOLDER_NAME, tenantID) + tenantID);
+            LOGGER.info(String.format(INITIALIZE_ACCESS, REPUBLISH_FOLDER_NAME, DICTIONARY_SUBFOLDER_NAME, tenantID));
             String dataDictIndexPath = getIndexFolderPath(false, DICTIONARY_SUBFOLDER_NAME);
             File folder = new File(dataDictIndexPath);
             if (!folder.exists()) {
@@ -261,13 +261,11 @@ public class CustomDictionaryHolder {
         if (TALEND.equals(category.getCreator())) {
             customMetadataIndexAccess.insertOrUpdateCategory(category);
             if (!CategoryType.REGEX.equals(category.getType()) && Boolean.TRUE.equals(category.getModified())) {
-                LOGGER.debug("deleteDocumentsByCategoryId " + categoryId);
                 ensureDataDictIndexAccess();
                 customDataDictIndexAccess.deleteDocumentsByCategoryId(categoryId);
             }
         } else {
             customMetadataIndexAccess.deleteCategory(category);
-            LOGGER.debug("deleteDocumentsByCategoryId " + categoryId);
             ensureDataDictIndexAccess();
             customDataDictIndexAccess.deleteDocumentsByCategoryId(categoryId);
         }
@@ -500,7 +498,7 @@ public class CustomDictionaryHolder {
      * Things to be done before receiving the republish events.
      */
     public void beforeRepublish() {
-        LOGGER.debug("Prepare publication folder");
+        LOGGER.info("Prepare publication folder");
         ensureRepublishMetadataIndexAccess();
         for (DQCategory category : CategoryRegistryManager.getInstance().getSharedCategoryMetadata().values()) {
             category.setDeleted(true);

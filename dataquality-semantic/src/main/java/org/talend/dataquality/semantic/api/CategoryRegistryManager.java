@@ -260,7 +260,7 @@ public class CategoryRegistryManager {
                 for (URL url : potentialResources) {
 
                     final URI uri = url.toURI();
-                    LOGGER.debug("trying to load base index from " + uri.toString());
+                    LOGGER.info("trying to load base index from " + uri.toString());
 
                     // try the potential resource one by one
                     try (final Directory srcDir = ClassPathDirectory.open(uri)) {

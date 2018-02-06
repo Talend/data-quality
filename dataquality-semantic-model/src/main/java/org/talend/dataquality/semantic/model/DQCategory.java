@@ -13,7 +13,6 @@
 package org.talend.dataquality.semantic.model;
 
 import java.io.Serializable;
-import java.net.URL;
 import java.util.Date;
 import java.util.List;
 
@@ -35,21 +34,11 @@ public class DQCategory implements Serializable {
 
     private CategoryPrivacyLevel privacyLevel;
 
-    private URL accessLink;// The Regex or the DD/KW access link
-
-    private List<URL> dataSources;// data sources where possible
-
     private String version;
 
     private String creator;
 
     private Date createdAt;
-
-    private String technicalDataType;
-
-    private List<String> countries;
-
-    private List<String> languages;
 
     private DQRegEx regEx;
 
@@ -117,22 +106,6 @@ public class DQCategory implements Serializable {
         this.privacyLevel = privacyLevel;
     }
 
-    public URL getAccessLink() {
-        return accessLink;
-    }
-
-    public void setAccessLink(URL accessLink) {
-        this.accessLink = accessLink;
-    }
-
-    public List<URL> getDataSources() {
-        return dataSources;
-    }
-
-    public void setDataSources(List<URL> dataSources) {
-        this.dataSources = dataSources;
-    }
-
     public String getVersion() {
         return version;
     }
@@ -147,30 +120,6 @@ public class DQCategory implements Serializable {
 
     public void setCreator(String creator) {
         this.creator = creator;
-    }
-
-    public String getTechnicalDataType() {
-        return technicalDataType;
-    }
-
-    public void setTechnicalDataType(String technicalDataType) {
-        this.technicalDataType = technicalDataType;
-    }
-
-    public List<String> getCountries() {
-        return countries;
-    }
-
-    public void setCountries(List<String> countries) {
-        this.countries = countries;
-    }
-
-    public List<String> getLanguages() {
-        return languages;
-    }
-
-    public void setLanguages(List<String> languages) {
-        this.languages = languages;
     }
 
     public DQRegEx getRegEx() {

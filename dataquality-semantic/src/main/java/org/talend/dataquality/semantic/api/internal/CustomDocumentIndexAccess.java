@@ -55,7 +55,7 @@ public class CustomDocumentIndexAccess extends AbstractCustomIndexAccess {
         List<Document> luceneDocuments = new ArrayList<>();
         for (DQDocument document : documents)
             luceneDocuments.add(DictionaryUtils.dqDocumentToLuceneDocument(document));
-        LOGGER.debug("createDocuments " + documents);
+        LOGGER.debug("create " + documents.size() + " documents");
         try {
             getWriter().addDocuments(luceneDocuments);
         } catch (IOException e) {
@@ -71,12 +71,12 @@ public class CustomDocumentIndexAccess extends AbstractCustomIndexAccess {
     public void insertOrUpdateDocument(List<DQDocument> documents) {
         List<DQDocument> documentsToCreate = new ArrayList<>();
         try {
+            LOGGER.debug("update " + documents.size() + " documents");
             for (DQDocument document : documents) {
                 final Term term = new Term(DictionarySearcher.F_DOCID, document.getId());
                 mgr.maybeRefreshBlocking();
                 IndexSearcher searcher = mgr.acquire();
                 if (searcher.search(new TermQuery(term), 1).totalHits == 1) {
-                    LOGGER.debug("updateDocument " + document);
                     getWriter().updateDocument(term, DictionaryUtils.dqDocumentToLuceneDocument(document).getFields());
                 } else {
                     documentsToCreate.add(document);
