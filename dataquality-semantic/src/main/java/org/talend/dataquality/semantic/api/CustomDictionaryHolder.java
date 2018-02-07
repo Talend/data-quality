@@ -498,7 +498,6 @@ public class CustomDictionaryHolder {
      * Things to be done before receiving the republish events.
      */
     public void beforeRepublish() {
-        LOGGER.info("Prepare publication folder");
         ensureRepublishMetadataIndexAccess();
         for (DQCategory category : CategoryRegistryManager.getInstance().getSharedCategoryMetadata().values()) {
             category.setDeleted(true);
