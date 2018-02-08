@@ -12,6 +12,8 @@
 // ============================================================================
 package org.talend.dataquality.semantic.recognizer;
 
+import static org.talend.dataquality.semantic.classifier.SemanticCategoryEnum.UNKNOWN;
+
 import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -257,8 +259,10 @@ public class DefaultCategoryRecognizer implements CategoryRecognizer {
                 defaultMatcher.setTokenMethod(TokenizedResolutionMethod.ANYORDER);
             }
             defaultMatcher.setFingerPrintApply(fingerPrintApply);
-            final float scoreOnHeader = Double.valueOf(defaultMatcher.getMatchingWeight(columnName, category.getCategoryName()))
-                    .floatValue();
+            float scoreOnHeader = 0;
+            if (columnName != null && !UNKNOWN.getDisplayName().equals(category.getCategoryName()))
+                scoreOnHeader = Double.valueOf(defaultMatcher.getMatchingWeight(columnName, category.getCategoryName()))
+                        .floatValue();
             category.score = Math.min(Math.round(category.count * 10000 / total) / 100F + scoreOnHeader * weight * 100, 100);
         }
 

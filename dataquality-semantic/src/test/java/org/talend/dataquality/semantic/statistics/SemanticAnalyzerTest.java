@@ -36,7 +36,7 @@ import org.talend.dataquality.semantic.model.DQDocument;
 import org.talend.dataquality.semantic.model.DQRegEx;
 import org.talend.dataquality.semantic.model.DQValidator;
 import org.talend.dataquality.semantic.model.MainCategory;
-import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
+import org.talend.dataquality.semantic.recognizer.CategoryFrequency;
 import org.talend.dataquality.semantic.snapshot.StandardDictionarySnapshotProvider;
 
 public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
@@ -108,10 +108,22 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
         }
     };
 
+    private final List<String[]> TEST_INVALID_RECORDS = new ArrayList<String[]>() {
+
+        private static final long serialVersionUID = 1L;
+
+        {
+            add(new String[] { "ggfd546gdf" });
+            add(new String[] { "grezre454gsd" });
+            add(new String[] { "+33123456789" });
+            add(new String[] { "+33123456789" });
+        }
+    };
+
     private final List<String> EXPECTED_PHONE_CATEGORY_METADATA = Arrays
             .asList(new String[] { SemanticCategoryEnum.PHONE.name() });
-
-    private DictionarySnapshot dictionarySnapshot;
+    
+    private List<Result> results;
 
     @Test
     public void testTagada() {
@@ -125,7 +137,6 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
         DQCategory firstNameCat = holder.getMetadata().get(SemanticCategoryEnum.FIRST_NAME.getTechnicalId());
         firstNameCat.setDeleted(true);
         holder.updateCategory(firstNameCat);
-        dictionarySnapshot = new StandardDictionarySnapshotProvider().get();
 
         final List<String> EXPECTED_CATEGORIES = Arrays.asList(
                 new String[] { "", SemanticCategoryEnum.LAST_NAME.name(), SemanticCategoryEnum.LAST_NAME.name(), "", "", "" });
@@ -146,7 +157,6 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
         newDoc.setId("the_doc_id");
         newDoc.setValues(new HashSet<>(Arrays.asList("true", "false")));
         holder.addDataDictDocuments(Collections.singletonList(newDoc));
-        dictionarySnapshot = new StandardDictionarySnapshotProvider().get();
 
         final List<String> EXPECTED_CATEGORIES = Arrays.asList(new String[] { "", SemanticCategoryEnum.LAST_NAME.name(),
                 SemanticCategoryEnum.FIRST_NAME.name(), "", "", SemanticCategoryEnum.ANSWER.name() });
@@ -172,7 +182,6 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
         dqCat.setCompleteness(Boolean.TRUE);
         dqCat.setModified(Boolean.TRUE);
         holder.updateCategory(dqCat);
-        dictionarySnapshot = new StandardDictionarySnapshotProvider().get();
 
         final List<String> EXPECTED_CATEGORIES = Arrays.asList(new String[] { "", SemanticCategoryEnum.LAST_NAME.name(),
                 SemanticCategoryEnum.FIRST_NAME.name(), "", "", "the_name" });
@@ -195,6 +204,30 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
     }
 
     @Test
+    public void testUnknownCategory() {
+        testSemanticAnalyzer(TEST_INVALID_RECORDS, null, Arrays.asList(SemanticCategoryEnum.FR_PHONE.name()));
+        for (Result result : results) {
+            if (result.exist(SemanticType.class)) {
+                final SemanticType semanticType = result.get(SemanticType.class);
+                for (CategoryFrequency categoryFrequency : semanticType.getSuggestedCategories())
+                    assertEquals(50, categoryFrequency.getScore(), 0.001);
+            }
+        }
+    }
+
+    @Test
+    public void testEmptyMetadata() {
+        testSemanticAnalyzer(TEST_INVALID_RECORDS, Arrays.asList(""), Arrays.asList(SemanticCategoryEnum.FR_PHONE.name()));
+        for (Result result : results) {
+            if (result.exist(SemanticType.class)) {
+                final SemanticType semanticType = result.get(SemanticType.class);
+                for (CategoryFrequency categoryFrequency : semanticType.getSuggestedCategories())
+                    assertEquals(50, categoryFrequency.getScore(), 0.001);
+            }
+        }
+    }
+
+    @Test
     public void semanticTypeNameFuzzyMatching() { // TDQ-14062: Fuzzy matching on the semantic type name
         // 1. test levenshtein
         testSemanticAnalyzer(TEST_RECORDS_CITY_METADATA, Arrays.asList("", "Lost Names"), EXPECTED_FR_COMMUNE_CATEGORY_METADATA);
@@ -206,8 +239,7 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
 
     @Test
     public void testSetLimit() {
-        dictionarySnapshot = new StandardDictionarySnapshotProvider().get();
-        SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(dictionarySnapshot);
+        SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(new StandardDictionarySnapshotProvider().get());
 
         semanticAnalyzer.setLimit(0);
 
@@ -273,8 +305,7 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
     }
 
     private void testSemanticAnalyzer(List<String[]> testRecords, List<String> testMetadata, List<String> expectedCategories) {
-        dictionarySnapshot = new StandardDictionarySnapshotProvider().get();
-        SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(dictionarySnapshot);
+        SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(new StandardDictionarySnapshotProvider().get());
 
         Analyzer<Result> analyzer = Analyzers.with(semanticAnalyzer);
 
@@ -288,7 +319,7 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
         }
         analyzer.end();
 
-        List<Result> results = analyzer.getResult();
+        results = analyzer.getResult();
         for (int i = 0; i < expectedCategories.size(); i++) {
             Result result = results.get(i);
 

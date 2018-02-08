@@ -148,7 +148,7 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
         for (Entry<Integer, CategoryRecognizer> entry : columnIdxToCategoryRecognizer.entrySet()) {
             Integer colIdx = entry.getKey();
 
-            String columnName = "";
+            String columnName = null;
             if (metadataMap.get(Metadata.HEADER_NAME) != null) {
                 List<String> metadata = metadataMap.get(Metadata.HEADER_NAME);
                 columnName = metadata.get(colIdx);
