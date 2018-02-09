@@ -122,8 +122,6 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
 
     private final List<String> EXPECTED_PHONE_CATEGORY_METADATA = Arrays
             .asList(new String[] { SemanticCategoryEnum.PHONE.name() });
-    
-    private List<Result> results;
 
     @Test
     public void testTagada() {
@@ -205,7 +203,8 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
 
     @Test
     public void testUnknownCategory() {
-        testSemanticAnalyzer(TEST_INVALID_RECORDS, null, Arrays.asList(SemanticCategoryEnum.FR_PHONE.name()));
+        List<Result> results = testSemanticAnalyzer(TEST_INVALID_RECORDS, null,
+                Arrays.asList(SemanticCategoryEnum.FR_PHONE.name()));
         for (Result result : results) {
             if (result.exist(SemanticType.class)) {
                 final SemanticType semanticType = result.get(SemanticType.class);
@@ -217,7 +216,8 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
 
     @Test
     public void testEmptyMetadata() {
-        testSemanticAnalyzer(TEST_INVALID_RECORDS, Arrays.asList(""), Arrays.asList(SemanticCategoryEnum.FR_PHONE.name()));
+        List<Result> results = testSemanticAnalyzer(TEST_INVALID_RECORDS, Arrays.asList(""),
+                Arrays.asList(SemanticCategoryEnum.FR_PHONE.name()));
         for (Result result : results) {
             if (result.exist(SemanticType.class)) {
                 final SemanticType semanticType = result.get(SemanticType.class);
@@ -301,10 +301,11 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
                 SemanticCategoryEnum.LAST_NAME.name(), SemanticCategoryEnum.FIRST_NAME.name(), "", "", "the_name" });
 
         testSemanticAnalyzer(TEST_RECORDS_TAGADA, null, EXPECTED_CATEGORIES_AFTER_MODIF);
-
+        holder.deleteCategory(dqCat);
     }
 
-    private void testSemanticAnalyzer(List<String[]> testRecords, List<String> testMetadata, List<String> expectedCategories) {
+    private List<Result> testSemanticAnalyzer(List<String[]> testRecords, List<String> testMetadata,
+            List<String> expectedCategories) {
         SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer(new StandardDictionarySnapshotProvider().get());
 
         Analyzer<Result> analyzer = Analyzers.with(semanticAnalyzer);
@@ -319,7 +320,7 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
         }
         analyzer.end();
 
-        results = analyzer.getResult();
+        List<Result> results = analyzer.getResult();
         for (int i = 0; i < expectedCategories.size(); i++) {
             Result result = results.get(i);
 
@@ -329,6 +330,7 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
                 assertEquals("Unexpected Category.", expectedCategories.get(i), suggestedCategory);
             }
         }
+        return results;
     }
 
 }
