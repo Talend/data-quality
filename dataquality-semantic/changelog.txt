@@ -1,3 +1,9 @@
+v5.0.0 2018-02-12
+	- TDQ-14482 and TDQ-14361, discovery and validation refactoring
+	- TDQ-14228 add RFC-3966 support in phone regexes
+	- TDQ-14668 update jackson library to 2.9.4
+	- TDQ-14739 create a DQCategoryForValidation class for the TDP full run on Streams
+
 V4.0.1 2017-12-08
 	- TDQ-14062 fuzzy matching on semantic type name
 	- TDQ-14481 multi tenant index

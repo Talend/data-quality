@@ -1,5 +1,9 @@
+v5.0.0 2018-02-12
+	- TDQ-14276 support "most recent" and "most ancient" in match analysis
+	- TDQ-14218 "shortest" function issue with NULL in data
+
 v4.0.2 2018-01-15
-        - TDQ-14276 support "most recent" and "most ancient" in matchAnalysis and tMatchGroup
+	- TDQ-14276 support "most recent" and "most ancient" in matchAnalysis and tMatchGroup
 
 v4.0.1 2017-12-08
 	- TDQ-14481 multi tenant index

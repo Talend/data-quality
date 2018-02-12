@@ -1,3 +1,8 @@
+v5.0.0 2018-02-12
+	- TDQ-14147 data masking with dictionaries
+	- TDQ-14536 only mask valid data with DICT
+	- TDQ-14668 upgrade jackson library to 2.9.4
+
 V4.0.1 2017-12-08
 	- TDQ-14481 multi tenant index
 	- TDQ-14367 Support multi-tenant lucene index for on-premise
