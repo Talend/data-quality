@@ -37,9 +37,9 @@ import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
  */
 public class CustomDictionaryHolder {
 
-    private static final Logger LOGGER = Logger.getLogger(CustomDictionaryHolder.class);
-
     public static final String TALEND = "Talend";
+
+    private static final Logger LOGGER = Logger.getLogger(CustomDictionaryHolder.class);
 
     private static final String INITIALIZE_ACCESS = "Initialize %s %s access for [%s]";
 
@@ -424,17 +424,13 @@ public class CustomDictionaryHolder {
      * @return collection of category objects
      */
     public Collection<DQCategory> listCategories(boolean includeOpenCategories) {
-        if (includeOpenCategories) {
-            return getMetadata().values();
-        } else {
-            List<DQCategory> catList = new ArrayList<>();
-            for (DQCategory dqCat : getMetadata().values()) {
-                if (dqCat.getCompleteness()) {
-                    catList.add(dqCat);
-                }
+        List<DQCategory> catList = new ArrayList<>();
+        for (DQCategory dqCat : getMetadata().values()) {
+            if (!Boolean.TRUE.equals(dqCat.getDeleted()) && (includeOpenCategories || dqCat.getCompleteness())) {
+                catList.add(dqCat);
             }
-            return catList;
         }
+        return catList;
     }
 
     /**
@@ -446,7 +442,7 @@ public class CustomDictionaryHolder {
     public List<DQCategory> listCategories(CategoryType type) {
         List<DQCategory> catList = new ArrayList<>();
         for (DQCategory dqCat : getMetadata().values()) {
-            if (type.equals(dqCat.getType())) {
+            if (!Boolean.TRUE.equals(dqCat.getDeleted()) && type.equals(dqCat.getType())) {
                 catList.add(dqCat);
             }
         }

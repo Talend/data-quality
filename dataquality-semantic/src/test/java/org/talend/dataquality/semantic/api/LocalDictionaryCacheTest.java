@@ -3,6 +3,7 @@ package org.talend.dataquality.semantic.api;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.talend.dataquality.semantic.api.CustomDictionaryHolder.TALEND;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.lang3.SerializationUtils;
 import org.junit.Test;
 import org.talend.dataquality.semantic.CategoryRegistryManagerAbstract;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
@@ -222,19 +222,24 @@ public class LocalDictionaryCacheTest extends CategoryRegistryManagerAbstract {
     }
 
     @Test
+    public void testListDeletedCategories() {
+        CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder();
+        DQCategory airportCode = holder.getMetadata().get(SemanticCategoryEnum.AIRPORT_CODE.getTechnicalId());
+        airportCode.setCreator(TALEND);
+        holder.deleteCategory(airportCode);
+
+        assertEquals(92, holder.listCategories().size());
+    }
+
+    @Test
     public void testListDocumentsFromCustomDataDict() {
-        CategoryRegistryManager.setLocalRegistryPath("target/test_crm");
-        CategoryRegistryManager instance = CategoryRegistryManager.getInstance();
-        CustomDictionaryHolder holder = instance.getCustomDictionaryHolder("t_suggest");
+        CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder();
 
         DQCategory answerCategory = holder.getMetadata().get(SemanticCategoryEnum.ANSWER.getTechnicalId());
-        DQCategory categoryClone = SerializationUtils.clone(answerCategory); // make a clone instead of modifying the shared
-                                                                             // category metadata
-        categoryClone.setModified(true);
-        holder.updateCategory(categoryClone);
+        holder.updateCategory(answerCategory);
 
         DQDocument newDoc = new DQDocument();
-        newDoc.setCategory(categoryClone);
+        newDoc.setCategory(answerCategory);
         newDoc.setId("the_doc_id");
         newDoc.setValues(new HashSet<>(Arrays.asList("true", "false")));
         holder.addDataDictDocuments(Collections.singletonList(newDoc));
@@ -254,7 +259,5 @@ public class LocalDictionaryCacheTest extends CategoryRegistryManagerAbstract {
         assertEquals(Boolean.TRUE, aux.contains("false"));
 
         System.out.println("Found " + aux.size() + " values in " + SemanticCategoryEnum.ANSWER.name() + " DQCategory.");
-
-        CategoryRegistryManager.reset();
     }
 }
