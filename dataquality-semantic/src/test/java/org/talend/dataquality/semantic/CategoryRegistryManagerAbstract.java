@@ -12,13 +12,11 @@
 // ============================================================================
 package org.talend.dataquality.semantic;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.talend.dataquality.semantic.api.CategoryRegistryManager;
-
 import static org.talend.dataquality.semantic.api.CategoryRegistryManager.DEFAULT_TENANT_ID;
+
+import org.junit.After;
+import org.junit.Before;
+import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 
 public abstract class CategoryRegistryManagerAbstract {
 

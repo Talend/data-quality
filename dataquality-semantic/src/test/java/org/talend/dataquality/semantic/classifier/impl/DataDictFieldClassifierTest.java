@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.junit.Test;
+import org.talend.dataquality.semantic.CategoryRegistryManagerAbstract;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.classifier.ISubCategoryClassifier;
 import org.talend.dataquality.semantic.model.DQCategory;
@@ -14,7 +15,7 @@ import org.talend.dataquality.semantic.model.ValidationMode;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizer;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizerBuilder;
 
-public class DataDictFieldClassifierTest {
+public class DataDictFieldClassifierTest extends CategoryRegistryManagerAbstract {
 
     private static final Map<String, Boolean[]> EXPECTED_VALIDATION_RESULTS_BEVERAGE = new LinkedHashMap<String, Boolean[]>() {
 
