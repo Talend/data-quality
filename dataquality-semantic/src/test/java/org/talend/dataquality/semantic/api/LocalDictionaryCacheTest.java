@@ -226,8 +226,8 @@ public class LocalDictionaryCacheTest extends CategoryRegistryManagerAbstract {
         CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder();
         DQCategory airportCode = holder.getMetadata().get(SemanticCategoryEnum.AIRPORT_CODE.getTechnicalId());
         airportCode.setCreator(TALEND);
+        assertEquals(93, holder.listCategories().size());
         holder.deleteCategory(airportCode);
-
         assertEquals(92, holder.listCategories().size());
     }
 

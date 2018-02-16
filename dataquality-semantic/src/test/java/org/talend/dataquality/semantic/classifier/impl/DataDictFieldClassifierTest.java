@@ -7,12 +7,13 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.junit.Test;
+import org.talend.dataquality.semantic.CategoryRegistryManagerAbstract;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.index.Index;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.model.ValidationMode;
 
-public class DataDictFieldClassifierTest {
+public class DataDictFieldClassifierTest extends CategoryRegistryManagerAbstract {
 
     private static final Map<String, Boolean[]> EXPECTED_VALIDATION_RESULTS_BEVERAGE = new LinkedHashMap<String, Boolean[]>() {
 
@@ -64,7 +65,6 @@ public class DataDictFieldClassifierTest {
 
     @Test
     public void testValidCategoriesBeverage() throws IOException {
-        CategoryRegistryManager.setLocalRegistryPath("target/testValidCategoriesBeverage");
         Index ddClassifier = CategoryRegistryManager.getInstance().getCustomDictionaryHolder().getDictionarySnapshot()
                 .getSharedDataDict();
 
@@ -89,9 +89,6 @@ public class DataDictFieldClassifierTest {
 
     @Test
     public void testValidCategoriesWithFrCommune() throws IOException {
-        CategoryRegistryManager.reset();
-        CategoryRegistryManager.setUsingLocalCategoryRegistry(false);
-        CategoryRegistryManager.setLocalRegistryPath("target/testValidCategoriesWithFrCommune");
         Index ddClassifier = CategoryRegistryManager.getInstance().getCustomDictionaryHolder().getDictionarySnapshot()
                 .getSharedDataDict();
 

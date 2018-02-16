@@ -38,9 +38,6 @@ import org.talend.dataquality.semantic.model.DQDocument;
 @PrepareForTest({ CustomDictionaryHolder.class, CategoryRegistryManager.class })
 public class ValueDataMaskerTest extends CategoryRegistryManagerAbstract {
 
-    @InjectMocks
-    private CustomDictionaryHolder holder;
-
     private static final Map<String[], String> EXPECTED_MASKED_VALUES = new LinkedHashMap<String[], String>() {
 
         private static final long serialVersionUID = 1L;
@@ -142,9 +139,25 @@ public class ValueDataMaskerTest extends CategoryRegistryManagerAbstract {
         }
     };
 
+    private static final Map<String[], String> EXPECTED_MASKED_VALUES_EXIST = new LinkedHashMap<String[], String>() {
+
+        private static final long serialVersionUID = 2L;
+
+        {
+            // custom dictionary
+            put(new String[] { "true", SemanticCategoryEnum.ANSWER.name(), "string" }, "true");
+            put(new String[] { "false", SemanticCategoryEnum.ANSWER.name(), "string" }, "true");
+            put(new String[] { "TRUE", SemanticCategoryEnum.ANSWER.name(), "string" }, "VKFZ");
+            put(new String[] { "FALSE", SemanticCategoryEnum.ANSWER.name(), "string" }, "VKFZZ");
+        }
+    };
+
+    @InjectMocks
+    private CustomDictionaryHolder holder;
+
     /**
      * Test method for {@link org.talend.dataquality.datamasking.DataMasker#process(java.lang.Object, boolean)}.
-     * 
+     *
      * @throws IllegalAccessException
      * @throws InstantiationException
      */
@@ -165,19 +178,6 @@ public class ValueDataMaskerTest extends CategoryRegistryManagerAbstract {
             assertEquals("Test faild on [" + inputValue + "]", EXPECTED_MASKED_VALUES.get(input), maskedValue);
         }
     }
-
-    private static final Map<String[], String> EXPECTED_MASKED_VALUES_EXIST = new LinkedHashMap<String[], String>() {
-
-        private static final long serialVersionUID = 2L;
-
-        {
-            // custom dictionary
-            put(new String[] { "true", SemanticCategoryEnum.ANSWER.name(), "string" }, "true");
-            put(new String[] { "false", SemanticCategoryEnum.ANSWER.name(), "string" }, "true");
-            put(new String[] { "TRUE", SemanticCategoryEnum.ANSWER.name(), "string" }, "VKFZ");
-            put(new String[] { "FALSE", SemanticCategoryEnum.ANSWER.name(), "string" }, "VKFZZ");
-        }
-    };
 
     /**
      * Test method for {@link org.talend.dataquality.datamasking.DataMasker#process(java.lang.Object, boolean)}.
@@ -218,7 +218,6 @@ public class ValueDataMaskerTest extends CategoryRegistryManagerAbstract {
             assertEquals("Test faild on [" + inputValue + "]", EXPECTED_MASKED_VALUES_EXIST.get(input), maskedValue);
         }
         holder.deleteDataDictDocuments(Collections.singletonList(newDoc));
-        CategoryRegistryManager.reset();
     }
 
 }
