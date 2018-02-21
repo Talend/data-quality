@@ -14,4 +14,5 @@ Require-Bundle: org.apache.log4j,
 Export-Package: org.talend.dataquality.common.exception,
  org.talend.dataquality.common.inference,
  org.talend.dataquality.common.regex
-Import-Package: org.slf4j
+Import-Package: com.fasterxml.jackson.annotation;version="[2.5.3,3.0.0)",
+ org.slf4j
