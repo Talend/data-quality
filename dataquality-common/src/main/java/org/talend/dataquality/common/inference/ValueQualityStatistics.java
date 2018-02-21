@@ -16,6 +16,8 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * created by talend on 2015-07-28 Detailled comment.
  *
@@ -48,18 +50,35 @@ public class ValueQualityStatistics implements Serializable {
         return validCount;
     }
 
+    public void setValidCount(long newCount) {
+        validCount = newCount;
+    }
+
     public long getEmptyCount() {
         return emptyCount;
+    }
+
+    public void setEmptyCount(long newCount) {
+        emptyCount = newCount;
     }
 
     public long getInvalidCount() {
         return invalidCount;
     }
 
+    public void setInvalidCount(long newCount) {
+        invalidCount = newCount;
+    }
+
     public long getUnknownCount() {
         return unknownCount;
     }
 
+    public void setUnknownCount(long newCount) {
+        unknownCount = newCount;
+    }
+
+    @JsonIgnore
     public long getCount() {
         return validCount + emptyCount + invalidCount + unknownCount;
     }
@@ -86,22 +105,6 @@ public class ValueQualityStatistics implements Serializable {
 
     public void appendUnknownValue(String value) {
         unknownValues.add(value);
-    }
-
-    public void setValidCount(long newCount) {
-        validCount = newCount;
-    }
-
-    public void setEmptyCount(long newCount) {
-        emptyCount = newCount;
-    }
-
-    public void setInvalidCount(long newCount) {
-        invalidCount = newCount;
-    }
-
-    public void setUnknownCount(long newCount) {
-        unknownCount = newCount;
     }
 
     @Override

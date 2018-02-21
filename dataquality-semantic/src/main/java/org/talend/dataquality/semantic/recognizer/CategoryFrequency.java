@@ -35,6 +35,12 @@ public class CategoryFrequency implements Comparable<CategoryFrequency>, Seriali
     float score;
 
     /**
+     * used for the deserialization
+     */
+    public CategoryFrequency() {
+    }
+
+    /**
      * CategoryFrequency constructor from a category.
      *
      * @param cat the category
@@ -89,8 +95,22 @@ public class CategoryFrequency implements Comparable<CategoryFrequency>, Seriali
         return categoryName;
     }
 
+    /**
+     * used for the deserialization
+     */
+    public void setCategoryId(String categoryId) {
+        this.categoryName = categoryId;
+    }
+
     public String getCategoryName() {
         return categoryLabel != null ? categoryLabel : categoryName;
+    }
+
+    /**
+     * used for the deserialization
+     */
+    public void setCategoryName(String categoryName) {
+        this.categoryLabel = categoryName;
     }
 
     /**
@@ -99,6 +119,13 @@ public class CategoryFrequency implements Comparable<CategoryFrequency>, Seriali
      */
     public float getFrequency() {
         return score;
+    }
+
+    /**
+     * used for the deserialization
+     */
+    public void setFrequency(float frequency) {
+        this.score = frequency;
     }
 
     public long getCount() {
