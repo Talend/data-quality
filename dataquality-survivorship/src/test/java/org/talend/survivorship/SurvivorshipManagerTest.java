@@ -1061,9 +1061,8 @@ public class SurvivorshipManagerTest {
     @Test
     public void testRunSessionNoOutputConflictColumn() {
 
-        manager =
-                new SurvivorshipManager(SampleData.RULE_PATH,
-                        SampleDataConflictMostCommon2Longest2MostRecent.PKG_NAME_CONFLICT_FRE_LONG_RECENT);
+        manager = new SurvivorshipManager(SampleData.RULE_PATH,
+                SampleDataConflictMostCommon2Longest2MostRecent.PKG_NAME_CONFLICT_FRE_LONG_RECENT);
 
         for (String str : SampleDataCheckOutputConflictColumn.COLUMNS_CONFLICT.keySet()) {
             Column column = new Column(str, SampleDataCheckOutputConflictColumn.COLUMNS_CONFLICT.get(str));
@@ -1096,9 +1095,8 @@ public class SurvivorshipManagerTest {
     @Test
     public void testRunSessionOutputLastConflictColumn() {
 
-        manager =
-                new SurvivorshipManager(SampleData.RULE_PATH,
-                        SampleDataConflictMostCommon2Longest2MostRecent.PKG_NAME_CONFLICT_FRE_LONG_RECENT);
+        manager = new SurvivorshipManager(SampleData.RULE_PATH,
+                SampleDataConflictMostCommon2Longest2MostRecent.PKG_NAME_CONFLICT_FRE_LONG_RECENT);
 
         for (String str : SampleDataCheckOutputConflictColumn.COLUMNS_CONFLICT.keySet()) {
             Column column = new Column(str, SampleDataCheckOutputConflictColumn.COLUMNS_CONFLICT.get(str));
