@@ -327,18 +327,16 @@ public class DataSet {
     }
 
     /**
-     * Clean up ConflictCol
+     * Clean up all ConflictCol if the conflict is resolved
      * 
      * @param conflictCol
      * @param survivoredRowNum
      */
     private void arrangeConflictCol(String conflictCol, SurvivedResult survivoredRowNum) {
-        List<Integer> orignalList = conflictDataMap.get().get(conflictCol);
-        for (int index : orignalList) {
-            if (survivoredRowNum.getRowNum() == index) {
+        if (survivoredRowNum.isResolved()) {
+            List<Integer> orignalList = conflictDataMap.get().get(conflictCol);
+            for (int index : orignalList) {
                 conflictList.get(index).remove(conflictCol);
-            } else {
-                conflictList.get(index).add(conflictCol);
             }
         }
     }
