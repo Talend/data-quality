@@ -12,7 +12,10 @@
 // ============================================================================
 package org.talend.survivorship;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -35,6 +38,7 @@ import org.talend.survivorship.model.DataSet;
 import org.talend.survivorship.model.Record;
 import org.talend.survivorship.model.RuleDefinition;
 import org.talend.survivorship.sample.SampleData;
+import org.talend.survivorship.sample.SampleDataCheckOutputConflictColumn;
 import org.talend.survivorship.sample.SampleDataConflict;
 import org.talend.survivorship.sample.SampleDataConflictCheckRule;
 import org.talend.survivorship.sample.SampleDataConflictFillEmpty;
@@ -889,8 +893,8 @@ public class SurvivorshipManagerTest {
         assertEquals("The resultDate should be Lili", "Lili", resultDate); //$NON-NLS-1$ //$NON-NLS-2$
         List<HashSet<String>> conflictList = manager.getConflictList();
         assertTrue("The conflictList should not be null", conflictList != null); //$NON-NLS-1$ 
-        assertTrue("The second row exist a conflict data which column name should be firstName", //$NON-NLS-1$
-                conflictList.get(1).contains("firstName")); //$NON-NLS-1$
+        //        assertTrue("The second row exist a conflict data which column name should be firstName", //$NON-NLS-1$
+        //                conflictList.get(1).contains("firstName")); //$NON-NLS-1$
         // group 2
         manager.initKnowledgeBase();
         manager.checkConflictRuleValid();
@@ -1049,6 +1053,80 @@ public class SurvivorshipManagerTest {
         assertEquals("The first one should be city1", "city1", manager.getDataSet().getColumnOrder().get(1).getName()); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals("The first one should be city2", "city2", manager.getDataSet().getColumnOrder().get(2).getName()); //$NON-NLS-1$ //$NON-NLS-2$
 
+    }
+
+    /**
+     * test case for TDQ-14225. It shouldn't output the CONFLICT when the conflict is resolved.
+     */
+    @Test
+    public void testRunSessionNoOutputConflictColumn() {
+
+        manager =
+                new SurvivorshipManager(SampleData.RULE_PATH,
+                        SampleDataConflictMostCommon2Longest2MostRecent.PKG_NAME_CONFLICT_FRE_LONG_RECENT);
+
+        for (String str : SampleDataCheckOutputConflictColumn.COLUMNS_CONFLICT.keySet()) {
+            Column column = new Column(str, SampleDataCheckOutputConflictColumn.COLUMNS_CONFLICT.get(str));
+            if (column.getName().equals("firstName")) { //$NON-NLS-1$
+                for (ConflictRuleDefinition element : SampleDataConflictMostCommon2Longest2MostRecent.RULES_CONFLICT_RESOLVE) {
+                    if (element.getReferenceColumn().equals("firstName")) {
+                        column.getConflictResolveList().add(element);
+                    }
+                }
+            }
+            manager.getColumnList().add(column);
+        }
+        for (RuleDefinition element : SampleDataConflictMostCommon2Longest2MostRecent.RULES_CONFLICT_FRE_LONG_RECENT) {
+            manager.addRuleDefinition(element);
+        }
+        manager.initKnowledgeBase();
+        manager.checkConflictRuleValid();
+        manager.runSession(SampleDataCheckOutputConflictColumn.SAMPLE_INPUT_1); //$NON-NLS-1$
+        // 5. Retrieve results
+        List<HashSet<String>> conflictList = manager.getConflictList();
+        assertEquals(4, conflictList.size());
+        for (HashSet<String> set : conflictList) {
+            assertTrue(set.isEmpty());
+        }
+    }
+
+    /**
+     * test case for TDQ-14225. only output the last time CONFLICT name
+     */
+    @Test
+    public void testRunSessionOutputLastConflictColumn() {
+
+        manager =
+                new SurvivorshipManager(SampleData.RULE_PATH,
+                        SampleDataConflictMostCommon2Longest2MostRecent.PKG_NAME_CONFLICT_FRE_LONG_RECENT);
+
+        for (String str : SampleDataCheckOutputConflictColumn.COLUMNS_CONFLICT.keySet()) {
+            Column column = new Column(str, SampleDataCheckOutputConflictColumn.COLUMNS_CONFLICT.get(str));
+            if (column.getName().equals("firstName")) { //$NON-NLS-1$
+                for (ConflictRuleDefinition element : SampleDataConflictMostCommon2Longest2MostRecent.RULES_CONFLICT_RESOLVE) {
+                    if (element.getReferenceColumn().equals("firstName")) {//$NON-NLS-1$
+                        column.getConflictResolveList().add(element);
+                    }
+                }
+            }
+            manager.getColumnList().add(column);
+        }
+        for (RuleDefinition element : SampleDataConflictMostCommon2Longest2MostRecent.RULES_CONFLICT_FRE_LONG_RECENT) {
+            manager.addRuleDefinition(element);
+        }
+        manager.initKnowledgeBase();
+        manager.checkConflictRuleValid();
+        manager.runSession(SampleDataCheckOutputConflictColumn.SAMPLE_INPUT_2); //$NON-NLS-1$
+
+        List<HashSet<String>> conflictList = manager.getConflictList();
+        assertTrue(conflictList.size() == 6);
+        assertTrue(conflictList.get(0).isEmpty());
+        assertTrue(conflictList.get(1).isEmpty());
+        String expectConflictName = "[firstName]";
+        assertEquals(expectConflictName, conflictList.get(2).toString());
+        assertEquals(expectConflictName, conflictList.get(3).toString());
+        assertEquals(expectConflictName, conflictList.get(4).toString());
+        assertEquals(expectConflictName, conflictList.get(5).toString());
     }
 
     /**
