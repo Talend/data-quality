@@ -127,14 +127,14 @@ public class ValueQualityAnalyzerTest {
             private static final long serialVersionUID = 1L;
 
             {
-                add(new String[] { "1", "UT", "Bonn" });
+                add(new String[] { "1", "UT", "Nantes" });
                 add(new String[] { "2", "MN", "Suresnes" });
-                add(new String[] { "3", "MO", "Beijing" });
-                add(new String[] { "4", "", "Washington" });
-                add(new String[] { "5", "IL", "Tokyo" });
+                add(new String[] { "3", "MO", "Paris" });
+                add(new String[] { "4", "", "Lyon" });
+                add(new String[] { "5", "IL", "Marseille" });
                 add(new String[] { "6", "ORZ", "" });
-                add(new String[] { "7", " ", "CityA" });
-                add(new String[] { "8", "LOL", "CityB" });
+                add(new String[] { "7", " ", "Toulouse" });
+                add(new String[] { "8", "LOL", "Lille" });
             }
         };
 
@@ -175,7 +175,7 @@ public class ValueQualityAnalyzerTest {
                 new DataTypeEnum[] { DataTypeEnum.INTEGER, DataTypeEnum.STRING, DataTypeEnum.STRING });
 
         final String[] semanticTypes = new String[] { SemanticCategoryEnum.UNKNOWN.name(),
-                SemanticCategoryEnum.US_STATE_CODE.name(), SemanticCategoryEnum.CITY.name() };
+                SemanticCategoryEnum.US_STATE_CODE.name(), SemanticCategoryEnum.FR_COMMUNE.name() };
 
         final SemanticQualityAnalyzer semanticQualityAnalyzer = new SemanticQualityAnalyzer(dictionarySnapshot, semanticTypes);
 

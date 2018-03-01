@@ -50,7 +50,6 @@ public class CategoryRecognizerTest extends CategoryRegistryManagerAbstract {
             put("COMPANY", 8.33F);
             put("AIRPORT_CODE", 5.55F);
             put("LAST_NAME", 5.55F);
-            put("CITY", 5.55F);
             put("FR_COMMUNE", 5.55F);
             put("ADDRESS_LINE", 5.55F);
             put("EMAIL", 5.55F);
@@ -88,11 +87,9 @@ public class CategoryRecognizerTest extends CategoryRegistryManagerAbstract {
 
         {
             put("CDG", new String[] { SemanticCategoryEnum.AIRPORT_CODE.getId() });
-            put("suresnes", new String[] { SemanticCategoryEnum.CITY.getId(), //
-                    SemanticCategoryEnum.FR_COMMUNE.getId() });
+            put("suresnes", new String[] { SemanticCategoryEnum.FR_COMMUNE.getId() });
             put("Paris",
-                    new String[] { SemanticCategoryEnum.CITY.getId(), //
-                            SemanticCategoryEnum.FIRST_NAME.getId(), //
+                    new String[] { SemanticCategoryEnum.FIRST_NAME.getId(), //
                             SemanticCategoryEnum.LAST_NAME.getId(), //
                             SemanticCategoryEnum.FR_COMMUNE.getId(), //
                             SemanticCategoryEnum.FR_DEPARTEMENT.getId() });
@@ -149,11 +146,9 @@ public class CategoryRecognizerTest extends CategoryRegistryManagerAbstract {
 
         {
             put("CDG", new String[] { SemanticCategoryEnum.AIRPORT_CODE.getDisplayName() });
-            put("suresnes", new String[] { SemanticCategoryEnum.CITY.getDisplayName(), //
-                    SemanticCategoryEnum.FR_COMMUNE.getDisplayName() });
+            put("suresnes", new String[] { SemanticCategoryEnum.FR_COMMUNE.getDisplayName() });
             put("Paris",
-                    new String[] { SemanticCategoryEnum.CITY.getDisplayName(), //
-                            SemanticCategoryEnum.FIRST_NAME.getDisplayName(), //
+                    new String[] { SemanticCategoryEnum.FIRST_NAME.getDisplayName(), //
                             SemanticCategoryEnum.LAST_NAME.getDisplayName(), //
                             SemanticCategoryEnum.FR_COMMUNE.getDisplayName(), //
                             SemanticCategoryEnum.FR_DEPARTEMENT.getDisplayName() });
@@ -215,10 +210,8 @@ public class CategoryRecognizerTest extends CategoryRegistryManagerAbstract {
         {
             put("KÄNGURU", new String[] { SemanticCategoryEnum.ANIMAL.getId() });
 
-            put("Rueil-Malmaison", new String[] { SemanticCategoryEnum.CITY.getId(), //
-                    SemanticCategoryEnum.FR_COMMUNE.getId() });
-            put("Buenos Aires", new String[] { SemanticCategoryEnum.CITY.getId(), SemanticCategoryEnum.AIRPORT.getId() });
-            put("Bruxelles(Jette)", new String[] { SemanticCategoryEnum.CITY.getId() });
+            put("Rueil-Malmaison", new String[] { SemanticCategoryEnum.FR_COMMUNE.getId() });
+            put("Buenos Aires", new String[] { SemanticCategoryEnum.AIRPORT.getId() });
 
             put("technical support", new String[] {});
             put("Software Engineer", new String[] { SemanticCategoryEnum.JOB_TITLE.getId() });
@@ -314,7 +307,7 @@ public class CategoryRecognizerTest extends CategoryRegistryManagerAbstract {
             System.out.println(cf);
         }
 
-        assertEquals(8, result.size());
+        assertEquals(7, result.size());
         CategoryFrequency categoryFrequency = result.iterator().next();
 
         assertEquals("US_STATE_CODE", categoryFrequency.getCategoryId());

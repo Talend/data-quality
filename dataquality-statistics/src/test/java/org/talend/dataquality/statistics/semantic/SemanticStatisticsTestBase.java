@@ -48,10 +48,10 @@ class SemanticStatisticsTestBase {
             add(new String[] { // dataset[0]
                     "", //
                     SemanticCategoryEnum.FIRST_NAME.getId(), //
-                    SemanticCategoryEnum.CITY.getId(), //
+                    SemanticCategoryEnum.LAST_NAME.getId(), //
                     SemanticCategoryEnum.US_STATE_CODE.getId(), //
                     "", //
-                    SemanticCategoryEnum.CITY.getId(), //
+                    SemanticCategoryEnum.AIRPORT.getId(), //
                     "", //
                     "", //
                     "" //
@@ -61,7 +61,7 @@ class SemanticStatisticsTestBase {
                     SemanticCategoryEnum.FIRST_NAME.getId(), //
                     SemanticCategoryEnum.LAST_NAME.getId(), //
                     "", //
-                    SemanticCategoryEnum.CITY.getId() //
+                    SemanticCategoryEnum.FR_COMMUNE.getId() //
             });
             add(new String[] { // dataset[2]
                     SemanticCategoryEnum.FIRST_NAME.getId(), //

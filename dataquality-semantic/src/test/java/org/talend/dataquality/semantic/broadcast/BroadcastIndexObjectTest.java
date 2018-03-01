@@ -138,7 +138,7 @@ public class BroadcastIndexObjectTest {
         URI uri = CategoryRegistryManager.getInstance().getDictionaryURI();
         final Directory cpDir = ClassPathDirectory.open(uri);
         final BroadcastIndexObject bio = new BroadcastIndexObject(cpDir, true);
-        assertEquals("Unexpected Document Size!", 250351, bio.getDocumentList().size());
+        assertEquals("Unexpected Document Size!", 145731, bio.getDocumentList().size());
     }
 
     @Test

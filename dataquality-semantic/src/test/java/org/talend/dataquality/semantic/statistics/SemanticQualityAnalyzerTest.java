@@ -81,7 +81,7 @@ public class SemanticQualityAnalyzerTest extends CategoryRegistryManagerAbstract
             "COUNTRY_CODE_ISO3", //
             "ADDRESS_LINE", //
             "FR_POSTAL_CODE", //
-            "CITY", //
+            "", //
             "", //
             "EMAIL", //
             "", //

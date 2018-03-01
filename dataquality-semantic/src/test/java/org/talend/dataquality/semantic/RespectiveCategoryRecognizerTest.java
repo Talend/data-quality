@@ -187,28 +187,6 @@ public class RespectiveCategoryRecognizerTest extends CategoryRegistryManagerAbs
                 }
             });
 
-            put(SemanticCategoryEnum.CITY.getId(), new ArrayList<Pair<String, Boolean>>() {
-
-                private static final long serialVersionUID = -6234013058013176603L;
-
-                {
-                    add(ImmutablePair.of("Paris", true));
-                    add(ImmutablePair.of("Ville-Lumière", true));
-                    add(ImmutablePair.of("巴黎", true)); // chinese
-                    add(ImmutablePair.of("パリ", true)); // japanese
-                    add(ImmutablePair.of("파리", true)); // korean
-                    add(ImmutablePair.of("Mancos", true));
-                    add(ImmutablePair.of("Kadoka", true));
-                    add(ImmutablePair.of("Caraway", true));
-                    add(ImmutablePair.of("Geraldine", true));
-
-                    add(ImmutablePair.of("SURESNES", true));
-                    add(ImmutablePair.of("敘雷訥", true));
-                    add(ImmutablePair.of("シュレンヌ", true));
-                    add(ImmutablePair.of("سورزن", true));
-                }
-            });
-
             put(SemanticCategoryEnum.CIVILITY.getId(), new ArrayList<Pair<String, Boolean>>() {
 
                 private static final long serialVersionUID = -7811408010567938892L;
