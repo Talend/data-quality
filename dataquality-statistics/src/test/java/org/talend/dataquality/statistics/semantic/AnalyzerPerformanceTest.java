@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.Analyzers;
 import org.talend.dataquality.common.inference.Analyzers.Result;
+import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
 import org.talend.dataquality.semantic.snapshot.StandardDictionarySnapshotProvider;
@@ -41,11 +42,13 @@ import org.talend.dataquality.statistics.type.DataTypeOccurences;
 
 public class AnalyzerPerformanceTest {
 
+    private static final List<String[]> records_card_exceptions = getRecords("Card_Exceptions_Preparation.csv");
+
+    private static final String TARGET_TEST_CRM_PATH = "target/test_crm";
+
     private static Logger log = LoggerFactory.getLogger(AnalyzerPerformanceTest.class);
 
     private static DictionarySnapshot dictionarySnapshot;
-
-    private static final List<String[]> records_card_exceptions = getRecords("Card_Exceptions_Preparation.csv");
 
     private final DataTypeEnum[] types_card_exceptions = new DataTypeEnum[] { //
             DataTypeEnum.INTEGER, DataTypeEnum.STRING, DataTypeEnum.STRING, DataTypeEnum.STRING, DataTypeEnum.STRING, //
@@ -56,7 +59,28 @@ public class AnalyzerPerformanceTest {
 
     @BeforeClass
     public static void setupBuilder() throws URISyntaxException {
+        CategoryRegistryManager.setLocalRegistryPath(TARGET_TEST_CRM_PATH);
         dictionarySnapshot = new StandardDictionarySnapshotProvider().get();
+    }
+
+    private static List<String[]> getRecords(String path) {
+        List<String[]> records = new ArrayList<String[]>();
+        try {
+            Reader reader = new FileReader(AnalyzerPerformanceTest.class.getResource(path).getPath());
+            CSVFormat csvFormat = CSVFormat.DEFAULT.withDelimiter(';').withFirstRecordAsHeader();
+            Iterable<CSVRecord> csvRecords = csvFormat.parse(reader);
+
+            for (CSVRecord csvRecord : csvRecords) {
+                String[] values = new String[csvRecord.size()];
+                for (int i = 0; i < csvRecord.size(); i++) {
+                    values[i] = csvRecord.get(i);
+                }
+                records.add(values);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return records;
     }
 
     private Analyzer<Result> setupBaselineAnalyzers(DataTypeEnum[] types) {
@@ -155,25 +179,5 @@ public class AnalyzerPerformanceTest {
         log.info("advanced analysis took " + (cpuAfter - cpuBefore) + " CPU time.");
         assertTrue("advanced analysis took " + (cpuAfter - cpuBefore) + " CPU time, which is slower than expected.",
                 (cpuAfter - cpuBefore) < 7e8);
-    }
-
-    private static List<String[]> getRecords(String path) {
-        List<String[]> records = new ArrayList<String[]>();
-        try {
-            Reader reader = new FileReader(AnalyzerPerformanceTest.class.getResource(path).getPath());
-            CSVFormat csvFormat = CSVFormat.DEFAULT.withDelimiter(';').withFirstRecordAsHeader();
-            Iterable<CSVRecord> csvRecords = csvFormat.parse(reader);
-
-            for (CSVRecord csvRecord : csvRecords) {
-                String[] values = new String[csvRecord.size()];
-                for (int i = 0; i < csvRecord.size(); i++) {
-                    values[i] = csvRecord.get(i);
-                }
-                records.add(values);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return records;
     }
 }

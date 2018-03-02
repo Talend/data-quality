@@ -20,12 +20,14 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.AnalyzerSupplier;
 import org.talend.dataquality.common.inference.ConcurrentAnalyzer;
+import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
 import org.talend.dataquality.semantic.snapshot.StandardDictionarySnapshotProvider;
 import org.talend.dataquality.semantic.statistics.SemanticAnalyzer;
@@ -33,9 +35,16 @@ import org.talend.dataquality.semantic.statistics.SemanticType;
 
 public class ConcurrentAnalyzerTest extends SemanticStatisticsTestBase {
 
+    private static final String TARGET_TEST_CRM_PATH = "target/test_crm";
+
     private static Logger log = LoggerFactory.getLogger(ConcurrentAnalyzerTest.class);
 
     private AtomicBoolean errorOccurred = new AtomicBoolean();
+
+    @BeforeClass
+    public static void before() {
+        CategoryRegistryManager.setLocalRegistryPath(TARGET_TEST_CRM_PATH);
+    }
 
     @Before
     public void setUp() throws Exception {

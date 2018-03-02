@@ -19,9 +19,11 @@ import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.Analyzers;
+import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
 import org.talend.dataquality.semantic.snapshot.StandardDictionarySnapshotProvider;
@@ -33,7 +35,14 @@ import org.talend.dataquality.statistics.type.DataTypeOccurences;
 
 public class CompositeAnalyzerTest extends SemanticStatisticsTestBase {
 
+    private static final String TARGET_TEST_CRM_PATH = "target/test_crm";
+
     Analyzer<Analyzers.Result> analyzer = null;
+
+    @BeforeClass
+    public static void before() {
+        CategoryRegistryManager.setLocalRegistryPath(TARGET_TEST_CRM_PATH);
+    }
 
     @Before
     public void setUp() throws Exception {
