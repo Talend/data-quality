@@ -25,12 +25,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.record.linkage.attribute.LevenshteinMatcher;
 import org.talend.dataquality.record.linkage.constant.TokenizedResolutionMethod;
 import org.talend.dataquality.semantic.model.DQCategory;
@@ -40,7 +41,7 @@ import org.talend.dataquality.semantic.model.DQCategory;
  */
 public class LuceneIndex implements Index {
 
-    private static final Logger LOGGER = Logger.getLogger(LuceneIndex.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LuceneIndex.class);
 
     private final DictionarySearcher searcher;
 
@@ -88,7 +89,7 @@ public class LuceneIndex implements Index {
                 foundCategorySet.add(document.getField(DictionarySearcher.F_CATID).stringValue());
             }
         } catch (IOException e) {
-            LOGGER.error(e, e);
+            LOGGER.error(e.getMessage(), e);
         }
         return foundCategorySet;
     }
@@ -100,7 +101,7 @@ public class LuceneIndex implements Index {
             validCategory = searcher.validDocumentWithCategories(data, semanticType, children);
 
         } catch (IOException e) {
-            LOGGER.error(e, e);
+            LOGGER.error(e.getMessage(), e);
         }
         return validCategory;
     }

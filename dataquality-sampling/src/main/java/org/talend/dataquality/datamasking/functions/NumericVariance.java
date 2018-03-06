@@ -14,7 +14,8 @@ package org.talend.dataquality.datamasking.functions;
 
 import java.util.Random;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * created by jgonzalez on 19 juin 2015. This function will modify the input data by multiplying it by a number between
@@ -25,7 +26,7 @@ public abstract class NumericVariance<T2> extends Function<T2> {
 
     private static final long serialVersionUID = -9042942041517353551L;
 
-    private static final Logger LOGGER = Logger.getLogger(NumericVariance.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(NumericVariance.class);
 
     protected int rate = 0;
 

@@ -8,7 +8,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class offers a shuffling service to manipulates the {@link ShuffleColumn} action and the
@@ -16,7 +17,7 @@ import org.apache.log4j.Logger;
  */
 public class ShufflingService {
 
-    private static final Logger LOGGER = Logger.getLogger(ShufflingService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ShufflingService.class);
 
     protected ConcurrentLinkedQueue<Future<List<List<Object>>>> concurrentQueue = new ConcurrentLinkedQueue<Future<List<List<Object>>>>();
 

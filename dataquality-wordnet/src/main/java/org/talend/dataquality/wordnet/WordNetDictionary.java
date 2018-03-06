@@ -19,7 +19,8 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import edu.mit.jwi.Dictionary;
 import edu.mit.jwi.IDictionary;
@@ -28,7 +29,7 @@ import edu.mit.jwi.item.POS;
 
 public class WordNetDictionary {
 
-    private static final Logger LOGGER = Logger.getLogger(WordNetDictionary.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(WordNetDictionary.class);
 
     private static IDictionary dict;
 

@@ -19,14 +19,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.datamasking.functions.Function;
 
 public class DateFunctionAdapter extends Function<String> {
 
     private static final long serialVersionUID = -2845447810365033162L;
 
-    private static final Logger LOG = Logger.getLogger(DateFunctionAdapter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DateFunctionAdapter.class);
 
     private Function<Date> function;
 

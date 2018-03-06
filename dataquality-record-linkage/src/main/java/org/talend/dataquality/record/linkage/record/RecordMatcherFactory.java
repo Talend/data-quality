@@ -15,7 +15,8 @@ package org.talend.dataquality.record.linkage.record;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.record.linkage.Messages;
 import org.talend.dataquality.record.linkage.attribute.AttributeMatcherFactory;
 import org.talend.dataquality.record.linkage.attribute.IAttributeMatcher;
@@ -28,7 +29,7 @@ import org.talend.dataquality.record.linkage.constant.RecordMatcherType;
  */
 public final class RecordMatcherFactory {
 
-    private static final Logger LOG = Logger.getLogger(RecordMatcherFactory.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RecordMatcherFactory.class);
 
     private static List<String> labels = new ArrayList<String>();
 
@@ -102,7 +103,7 @@ public final class RecordMatcherFactory {
 
         // set the weights chosen by the user
         if (!recMatcher.setAttributeWeights(attributeWeights)) {
-            LOG.warn(Messages.getString("RecordMatcherFactory.0", type.getLabel())); //$NON-NLS-1$ 
+            LOG.warn(Messages.getString("RecordMatcherFactory.0", type.getLabel())); //$NON-NLS-1$
             return null; // DO NOT CREATE AN INVALID MATCHER
         }
         return recMatcher;

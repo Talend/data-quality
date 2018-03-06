@@ -20,7 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.exception.DQSemanticRuntimeException;
 import org.talend.dataquality.semantic.index.DictionarySearchMode;
@@ -36,7 +37,7 @@ import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
  */
 public class CategoryInferenceManager {
 
-    private static final Logger LOGGER = Logger.getLogger(CategoryInferenceManager.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CategoryInferenceManager.class);
 
     // One recognizer per column, <Column index, Category recognizer>
     private Map<Integer, CategoryRecognizer> categoryRecognizers = new HashMap<>();

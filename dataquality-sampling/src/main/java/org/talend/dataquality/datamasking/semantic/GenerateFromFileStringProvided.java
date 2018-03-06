@@ -15,7 +15,8 @@ package org.talend.dataquality.datamasking.semantic;
 import java.io.IOException;
 import java.util.Random;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.datamasking.functions.GenerateFromFileString;
 import org.talend.dataquality.datamasking.functions.KeysLoader;
 
@@ -23,7 +24,7 @@ public class GenerateFromFileStringProvided extends GenerateFromFileString {
 
     private static final long serialVersionUID = 8936060786451303843L;
 
-    private static final Logger LOG = Logger.getLogger(GenerateFromFileStringProvided.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GenerateFromFileStringProvided.class);
 
     @Override
     public void parse(String extraParameter, boolean keepNullValues, Random rand) {

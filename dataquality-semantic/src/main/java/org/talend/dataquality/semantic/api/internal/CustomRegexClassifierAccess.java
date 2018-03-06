@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.api.CustomDictionaryHolder;
 import org.talend.dataquality.semantic.classifier.ISubCategory;
@@ -22,7 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class CustomRegexClassifierAccess {
 
-    private static final Logger LOGGER = Logger.getLogger(CustomRegexClassifierAccess.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CustomRegexClassifierAccess.class);
 
     private ObjectMapper mapper = new ObjectMapper();
 

@@ -17,7 +17,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Queue;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.matchmerge.MatchMergeAlgorithm;
 import org.talend.dataquality.matchmerge.Record;
 import org.talend.dataquality.matchmerge.SubString;
@@ -31,7 +32,7 @@ import org.talend.dataquality.record.linkage.utils.SurvivorShipAlgorithmEnum;
 
 public class MFB implements MatchMergeAlgorithm {
 
-    private static final Logger LOGGER = Logger.getLogger(MFB.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MFB.class);
 
     private final IRecordMatcher matcher;
 

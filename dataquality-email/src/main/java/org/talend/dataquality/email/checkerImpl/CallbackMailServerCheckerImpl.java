@@ -36,7 +36,8 @@ import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.email.api.EmailVerifyResult;
 import org.talend.dataquality.email.exception.TalendSMTPRuntimeException;
 
@@ -46,7 +47,7 @@ import org.talend.dataquality.email.exception.TalendSMTPRuntimeException;
  */
 public class CallbackMailServerCheckerImpl extends AbstractEmailChecker {
 
-    private static final Logger LOG = Logger.getLogger(CallbackMailServerCheckerImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CallbackMailServerCheckerImpl.class);
 
     private static String HEADER = "Email Indicator - "; //$NON-NLS-1$
 
@@ -267,7 +268,7 @@ public class CallbackMailServerCheckerImpl extends AbstractEmailChecker {
                     }
                     return false;
                 }
-                write(wtr, "EHLO " + domain); //$NON-NLS-1$  
+                write(wtr, "EHLO " + domain); //$NON-NLS-1$
 
                 res = getResponse(rdr);
                 if (res != 250) {
@@ -317,7 +318,7 @@ public class CallbackMailServerCheckerImpl extends AbstractEmailChecker {
                     try {
                         skt.close();
                     } catch (IOException e) {
-                        LOG.error(e);
+                        LOG.error(e.getMessage(), e);
                     }
                 }
             }

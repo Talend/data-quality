@@ -24,7 +24,8 @@ import java.time.format.ResolverStyle;
 import java.time.temporal.TemporalAccessor;
 import java.util.Locale;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * this class is used for Converting a date from one Chronology to another with the format pattern.<br/>
@@ -40,7 +41,7 @@ import org.apache.log4j.Logger;
  */
 public class DateCalendarConverter {
 
-    private static final Logger LOG = Logger.getLogger(DateCalendarConverter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DateCalendarConverter.class);
 
     public static final String DEFAULT_INPUT_PATTERN = "yyyy-MM-dd";//$NON-NLS-1$
 
@@ -187,13 +188,13 @@ public class DateCalendarConverter {
             try {
                 cDate = outputChronologyType.date(inputLocalDate);
             } catch (DateTimeException ex) {
-                LOG.error(ex, ex);
+                LOG.error(ex.getMessage(), ex);
                 cDate = inputLocalDate;
             }
             try {
                 return outputDateTimeFormatter.format(cDate);
             } catch (DateTimeException ex) {
-                LOG.error(ex, ex);
+                LOG.error(ex.getMessage(), ex);
                 return ""; //$NON-NLS-1$
             }
         } else {
@@ -216,7 +217,7 @@ public class DateCalendarConverter {
             ChronoLocalDate cDate = inputChronologyType.date(temporal);
             return LocalDate.from(cDate);
         } catch (Exception e) {
-            LOG.error(e, e);
+            LOG.error(e.getMessage(), e);
             return null;
         }
     }

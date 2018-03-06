@@ -9,7 +9,8 @@ import java.util.Map;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.semantic.model.DQCategory;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -21,7 +22,7 @@ public class BroadcastMetadataObject implements Serializable {
 
     private static final long serialVersionUID = 6228494634405067399L;
 
-    private static final Logger LOGGER = Logger.getLogger(BroadcastMetadataObject.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(BroadcastMetadataObject.class);
 
     private Map<String, DQCategoryForValidation> metadata;
 

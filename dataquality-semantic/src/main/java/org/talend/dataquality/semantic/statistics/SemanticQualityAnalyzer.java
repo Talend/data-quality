@@ -23,7 +23,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.QualityAnalyzer;
 import org.talend.dataquality.common.inference.ResizableList;
@@ -46,7 +47,7 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
 
     private static final long serialVersionUID = -5951511723860660263L;
 
-    private static final Logger LOGGER = Logger.getLogger(SemanticQualityAnalyzer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SemanticQualityAnalyzer.class);
 
     private final ResizableList<ValueQualityStatistics> results = new ResizableList<>(ValueQualityStatistics.class);
 
@@ -97,7 +98,7 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
             regexClassifier = recognizer.getUserDefineClassifier();
             dataDictClassifier = recognizer.getDataDictFieldClassifier();
         } catch (IOException e) {
-            LOGGER.error(e, e);
+            LOGGER.error(e.getMessage(), e);
         }
         results.clear();
     }

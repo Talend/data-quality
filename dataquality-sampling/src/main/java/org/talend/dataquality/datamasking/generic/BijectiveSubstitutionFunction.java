@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Random;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.datamasking.functions.Function;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldDate;
@@ -24,7 +26,7 @@ public class BijectiveSubstitutionFunction extends Function<String> {
 
     private static final long serialVersionUID = 8900059408697610292L;
 
-    private static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(BijectiveSubstitutionFunction.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(BijectiveSubstitutionFunction.class);
 
     private GenerateUniqueRandomPatterns uniqueGenericPattern;
 

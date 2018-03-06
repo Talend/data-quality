@@ -14,7 +14,8 @@ package org.talend.dataquality.semantic.datamasking;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.datamasking.functions.DateVariance;
 import org.talend.dataquality.datamasking.functions.Function;
 import org.talend.dataquality.datamasking.semantic.DateFunctionAdapter;
@@ -26,7 +27,7 @@ import org.talend.dataquality.semantic.model.DQCategory;
 
 public class SemanticMaskerFunctionFactory {
 
-    private static final Logger LOGGER = Logger.getLogger(SemanticMaskerFunctionFactory.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SemanticMaskerFunctionFactory.class);
 
     public static Function<String> createMaskerFunctionForSemanticCategory(String semanticCategory, String dataType) {
         return createMaskerFunctionForSemanticCategory(semanticCategory, dataType, null);

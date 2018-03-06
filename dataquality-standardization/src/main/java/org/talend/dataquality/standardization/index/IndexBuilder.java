@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -30,6 +29,8 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.MMapDirectory;
 import org.apache.lucene.util.Version;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.standardization.i18n.Messages;
 
 import com.talend.csv.CSVReader;
@@ -40,7 +41,7 @@ import com.talend.csv.CSVReader;
 // TODO move the main method and related methods into the test project.
 public class IndexBuilder {
 
-    private static final Logger LOG = Logger.getLogger(SynonymIndexBuilder.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SynonymIndexBuilder.class);
 
     private String directoryPath;
 
@@ -181,7 +182,7 @@ public class IndexBuilder {
         try {
             ib.initializeSynonymIndex("data/indexes/" + sourceFile, columnsToIndex);//$NON-NLS-1$
         } catch (IOException e) {
-            LOG.error(e);
+            LOG.error(e.getMessage(), e);
         }
     }
 
@@ -196,7 +197,7 @@ public class IndexBuilder {
         try {
             ib.initializeSynonymIndex("data/indexes/" + sourceFile, columnsToIndex);//$NON-NLS-1$
         } catch (IOException e) {
-            LOG.error(e);
+            LOG.error(e.getMessage(), e);
         }
     }
 

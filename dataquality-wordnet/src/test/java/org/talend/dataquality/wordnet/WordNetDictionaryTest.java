@@ -20,14 +20,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.apache.log4j.Logger;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class WordNetDictionaryTest {
 
-    private static final Logger LOGGER = Logger.getLogger(WordNetDictionaryTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(WordNetDictionaryTest.class);
 
     private static WordNetDictionary wordnet;
 

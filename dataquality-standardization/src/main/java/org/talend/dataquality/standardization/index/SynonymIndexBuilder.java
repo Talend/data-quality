@@ -18,7 +18,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.util.CharArraySet;
@@ -36,6 +35,8 @@ import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.standardization.i18n.Messages;
 
 /**
@@ -43,7 +44,7 @@ import org.talend.dataquality.standardization.i18n.Messages;
  */
 public class SynonymIndexBuilder {
 
-    private static final Logger LOG = Logger.getLogger(SynonymIndexBuilder.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SynonymIndexBuilder.class);
 
     private Directory indexDir;
 
@@ -98,7 +99,7 @@ public class SynonymIndexBuilder {
         try {
             indexDir = FSDirectory.open(file);
         } catch (IOException e) {
-            LOG.info(e);
+            LOG.info(e.getMessage(), e);
             error.set(false, Messages.getString("SynonymIndexBuilder.failLoad"));//$NON-NLS-1$
         }
     }
@@ -346,7 +347,7 @@ public class SynonymIndexBuilder {
                     CheckIndex check = new CheckIndex(directory);
                     status = check.checkIndex();
                 } catch (IOException e) {
-                    LOG.error(e);
+                    LOG.error(e.getMessage(), e);
                 } finally {
                     if (directory != null) {
                         directory.close();
@@ -393,9 +394,9 @@ public class SynonymIndexBuilder {
         try {
             this.getWriter().close();
         } catch (CorruptIndexException e) {
-            LOG.error(e);
+            LOG.error(e.getMessage(), e);
         } catch (IOException e) {
-            LOG.error(e);
+            LOG.error(e.getMessage(), e);
         }
     }
 
@@ -407,10 +408,10 @@ public class SynonymIndexBuilder {
             this.getWriter().commit();
         } catch (CorruptIndexException e) {
             error.set(false, e.getMessage());
-            LOG.error(e);
+            LOG.error(e.getMessage(), e);
         } catch (IOException e) {
             error.set(false, e.getMessage());
-            LOG.error(e);
+            LOG.error(e.getMessage(), e);
         }
     }
 
@@ -453,7 +454,7 @@ public class SynonymIndexBuilder {
         try {
             return this.getWriter().numDocs();
         } catch (IOException e) {
-            LOG.error(e);
+            LOG.error(e.getMessage(), e);
             return -1;
         }
     }

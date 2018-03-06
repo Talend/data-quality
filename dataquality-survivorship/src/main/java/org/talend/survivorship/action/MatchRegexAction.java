@@ -12,19 +12,19 @@
 // ============================================================================
 package org.talend.survivorship.action;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Create by zshen define a action which make sure input value is adapt the special regex
  */
 public class MatchRegexAction extends AbstractSurvivorshipAction {
 
-    private static final Logger LOGGER = Logger.getLogger("ExcludeValuesAction");
+    private static final Logger LOGGER = LoggerFactory.getLogger(MatchRegexAction.class);
 
     /*
      * (non-Javadoc)
@@ -47,7 +47,7 @@ public class MatchRegexAction extends AbstractSurvivorshipAction {
 
             }
         } catch (ScriptException e) {
-            LOGGER.log(Level.CONFIG, e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
             // no need implement
         }
         return false;

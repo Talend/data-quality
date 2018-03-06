@@ -30,11 +30,12 @@ import java.util.Optional;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.SerializationUtils;
-import org.apache.log4j.Logger;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.daikon.multitenant.context.TenancyContextHolder;
 import org.talend.daikon.multitenant.core.Tenant;
 import org.talend.dataquality.semantic.classifier.custom.UDCategorySerDeser;
@@ -88,7 +89,7 @@ public class CategoryRegistryManager {
     // must use slash here
     public static final String DEFAULT_RE_PATH = "/" + REGEX_SUBFOLDER_NAME + "/" + REGEX_CATEGORIZER_FILE_NAME;
 
-    private static final Logger LOGGER = Logger.getLogger(CategoryRegistryManager.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CategoryRegistryManager.class);
 
     private static final Map<String, CustomDictionaryHolder> customDictionaryHolderMap = new HashMap<>();
 

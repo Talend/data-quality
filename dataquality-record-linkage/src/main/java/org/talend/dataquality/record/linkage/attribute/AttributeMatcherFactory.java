@@ -15,7 +15,8 @@ package org.talend.dataquality.record.linkage.attribute;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.record.linkage.constant.AttributeMatcherType;
 
 /**
@@ -25,7 +26,7 @@ import org.talend.dataquality.record.linkage.constant.AttributeMatcherType;
  */
 public final class AttributeMatcherFactory {
 
-    private static final Logger LOG = Logger.getLogger(AttributeMatcherFactory.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AttributeMatcherFactory.class);
 
     private static List<String> labels = new ArrayList<String>();
 

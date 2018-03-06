@@ -13,7 +13,8 @@
 package org.talend.dataquality.email.checkerImpl;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.email.api.EmailVerifyResult;
 
 /**
@@ -22,7 +23,7 @@ import org.talend.dataquality.email.api.EmailVerifyResult;
  */
 public class LocalPartColumnContentCheckerImpl extends AbstractEmailChecker {
 
-    private static final Logger LOG = Logger.getLogger(LocalPartColumnContentCheckerImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LocalPartColumnContentCheckerImpl.class);
 
     private int nFOfFirst, nLOfFirst, nFOfLast, nLOfLast;
 

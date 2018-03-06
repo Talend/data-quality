@@ -15,7 +15,8 @@ package org.talend.dataquality.datamasking.functions;
 import java.util.Date;
 import java.util.Random;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * created by jgonzalez on 18 juin 2015. This function will modify the input date by adding or retieving a number of
@@ -26,7 +27,7 @@ public class DateVariance extends Function<Date> {
 
     private static final long serialVersionUID = 7723968828358381315L;
 
-    private static final Logger LOGGER = Logger.getLogger(DateVariance.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DateVariance.class);
 
     private static final Long NB_MS_PER_DAY = 86400000L;
 

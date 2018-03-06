@@ -22,9 +22,10 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.recognizer.CategoryFrequency;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizer;
@@ -79,7 +80,7 @@ public class CategoryRecognizerTest extends CategoryRegistryManagerAbstract {
 
     };
 
-    private static final Logger LOGGER = Logger.getLogger(CategoryRecognizerTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CategoryRecognizerTest.class);
 
     private static Map<String, String[]> EXPECTED_CAT_ID = new LinkedHashMap<String, String[]>() {
 

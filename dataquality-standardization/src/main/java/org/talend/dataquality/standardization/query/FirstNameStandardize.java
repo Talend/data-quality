@@ -19,7 +19,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.core.LowerCaseFilter;
@@ -42,6 +41,8 @@ import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.TopDocsCollector;
 import org.apache.lucene.search.TopFieldCollector;
 import org.apache.lucene.search.TopScoreDocCollector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.standardization.constant.PluginConstant;
 import org.talend.dataquality.standardization.exception.DQException;
 
@@ -50,7 +51,7 @@ import org.talend.dataquality.standardization.exception.DQException;
  */
 public class FirstNameStandardize {
 
-    private static final Logger LOG = Logger.getLogger(FirstNameStandardize.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FirstNameStandardize.class);
 
     /**
      * According to levenshtein algorithm, the following value means a distance of 1 is allowed to match a first name
@@ -104,7 +105,7 @@ public class FirstNameStandardize {
             try {
                 matches = getFuzzySearch(input).scoreDocs;
             } catch (Exception e) {
-                LOG.error(e, e);
+                LOG.error(e.getMessage(), e);
             }
         } else {
             Query q = new QueryParser(PluginConstant.FIRST_NAME_STANDARDIZE_NAME, analyzer).parse(input);

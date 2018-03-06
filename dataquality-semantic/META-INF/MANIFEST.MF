@@ -25,7 +25,8 @@ Export-Package: org.apache.commons.csv,
  org.talend.dataquality.semantic.validator,
  org.talend.dataquality.semantic.validator.impl
 Bundle-ActivationPolicy: lazy
-Require-Bundle: org.apache.log4j,
+Require-Bundle: org.slf4j.api,
+ org.eclipse.m2e.maven.runtime.slf4j.simple,
  org.talend.testutils;resolution:=optional,
  org.talend.daikon.multitenant-core,
  org.apache.commons.collections,

@@ -19,7 +19,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 
@@ -32,7 +33,7 @@ public class GenerateSsnChn extends Function<String> {
 
     private static final long serialVersionUID = 8845031997964609626L;
 
-    private static final Logger LOGGER = Logger.getLogger(GenerateSsnChn.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GenerateSsnChn.class);
 
     public static final List<Integer> monthSize = Collections
             .unmodifiableList(Arrays.asList(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31));

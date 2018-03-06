@@ -19,7 +19,8 @@ import java.util.Random;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * created by jgonzalez on 18 juin 2015. This class is an abstract class that
@@ -31,7 +32,7 @@ public abstract class Function<T> implements Serializable {
 
     private static final long serialVersionUID = 6333987486134315822L;
 
-    private static final Logger LOGGER = Logger.getLogger(Function.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Function.class);
 
     protected static final String EMPTY_STRING = ""; //$NON-NLS-1$
 
@@ -134,7 +135,7 @@ public abstract class Function<T> implements Serializable {
                     parameters = aux.toArray(new String[aux.size()]);
                 } catch (IOException | NullPointerException e2) { // otherwise, we just get the parameter
                     LOGGER.debug("The parameter is not a path to a file.");
-                    LOGGER.debug(e2);
+                    LOGGER.debug(e2.getMessage(), e2);
                 }
             }
             for (int i = 0; i < parameters.length; i++) {

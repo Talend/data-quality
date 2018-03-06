@@ -16,7 +16,8 @@ import java.text.MessageFormat;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Core of i18n management.<br/>
@@ -39,7 +40,7 @@ import org.apache.log4j.Logger;
  */
 public abstract class MessagesCore {
 
-    private static final Logger LOG = Logger.getLogger(MessagesCore.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MessagesCore.class);
 
     public static final String KEY_NOT_FOUND_PREFIX = "!!!"; //$NON-NLS-1$
 

@@ -15,7 +15,8 @@ package org.talend.dataquality.datamasking.generic.fields;
 import java.math.BigInteger;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.sampling.exception.DQRuntimeException;
 
 /**
@@ -27,7 +28,7 @@ public class FieldEnum extends AbstractField {
 
     private static final long serialVersionUID = 4434958606928963578L;
 
-    private static final Logger LOGGER = Logger.getLogger(FieldEnum.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(FieldEnum.class);
 
     /**
      * The exhaustive list of values

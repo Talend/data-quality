@@ -21,7 +21,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldDate;
 import org.talend.dataquality.datamasking.generic.fields.FieldEnum;
@@ -38,7 +39,7 @@ public class GenerateUniqueSsnChn extends AbstractGenerateUniqueSsn {
 
     private static final long serialVersionUID = 4514471121590047091L;
 
-    private static final Logger LOGGER = Logger.getLogger(GenerateUniqueSsnChn.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GenerateUniqueSsnChn.class);
 
     private static final List<Integer> keyWeight = Collections
             .unmodifiableList(Arrays.asList(7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2));

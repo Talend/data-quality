@@ -5,7 +5,6 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.Term;
@@ -14,6 +13,8 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.SearcherManager;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.store.Directory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.api.DictionaryUtils;
 import org.talend.dataquality.semantic.index.ClassPathDirectory;
@@ -26,7 +27,7 @@ import org.talend.dataquality.semantic.model.DQDocument;
  */
 public class CustomDocumentIndexAccess extends AbstractCustomIndexAccess {
 
-    private static final Logger LOGGER = Logger.getLogger(CustomDocumentIndexAccess.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CustomDocumentIndexAccess.class);
 
     public CustomDocumentIndexAccess(Directory directory) throws IOException {
         super(directory);
@@ -126,7 +127,7 @@ public class CustomDocumentIndexAccess extends AbstractCustomIndexAccess {
             IndexSearcher sharedLuceneDocumentSearcher = new IndexSearcher(reader);
             final Term searchTerm = new Term(DictionarySearcher.F_CATID, dqCategory.getId());
             for (ScoreDoc d : sharedLuceneDocumentSearcher.search(new TermQuery(searchTerm), Integer.MAX_VALUE).scoreDocs) {
-                //useful to add the synterm field in lucene index
+                // useful to add the synterm field in lucene index
                 DQDocument document = DictionaryUtils.dictionaryEntryFromDocument(sharedLuceneDocumentSearcher.doc(d.doc));
                 getWriter().addDocument(DictionaryUtils.dqDocumentToLuceneDocument(document));
             }

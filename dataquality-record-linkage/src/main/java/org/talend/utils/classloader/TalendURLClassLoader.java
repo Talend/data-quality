@@ -17,14 +17,15 @@ import java.net.URLClassLoader;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * DOC mzhao bug 11128, try to load by current thread loader.
  */
 public class TalendURLClassLoader extends URLClassLoader {
 
-    private static Logger LOG = Logger.getLogger(TalendURLClassLoader.class);
+    private static Logger LOG = LoggerFactory.getLogger(TalendURLClassLoader.class);
 
     private Map<String, Class<?>> classesMap = new HashMap<String, Class<?>>();
 
@@ -39,9 +40,12 @@ public class TalendURLClassLoader extends URLClassLoader {
 
     /**
      * 
-     * The classloader initiated by this contractor will load the class from urls class path , if not find it will use the given classloader to load it.
+     * The classloader initiated by this contractor will load the class from urls class path , if not find it will use the given
+     * classloader to load it.
+     * 
      * @param urls The url array used to load class.
-     * @param classLoader when the class is not found from class path of urls, this classloader will be employeed to load it again.
+     * @param classLoader when the class is not found from class path of urls, this classloader will be employeed to load it
+     * again.
      */
     public TalendURLClassLoader(URL[] urls, ClassLoader classLoader) {
         super(urls, classLoader);
@@ -56,8 +60,8 @@ public class TalendURLClassLoader extends URLClassLoader {
         if (cls == null) {
             try {
                 cls = super.findClass(className);
-            } catch (ClassNotFoundException cne) {
-                LOG.info(cne);
+            } catch (ClassNotFoundException cnfe) {
+                LOG.info(cnfe.getMessage(), cnfe);
                 // MOD mzhao 11128, try to load by current thread loader.e.g: when a class has a super class that needs
                 // to load by current loader other than url loader.
                 cls = getClass().getClassLoader().loadClass(className);

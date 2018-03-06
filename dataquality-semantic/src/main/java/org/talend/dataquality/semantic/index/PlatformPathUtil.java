@@ -20,7 +20,8 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * created by talend on 2015-07-28 Detailled comment.
@@ -28,7 +29,7 @@ import org.apache.log4j.Logger;
  */
 public class PlatformPathUtil {
 
-    private static final Logger LOGGER = Logger.getLogger(PlatformPathUtil.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PlatformPathUtil.class);
 
     private PlatformPathUtil() {
     }
@@ -41,7 +42,7 @@ public class PlatformPathUtil {
             // if the platform protocol is unknown, try to create a FileInputStream with local path
             return new FileInputStream(filePath);
         } catch (IOException e) {
-            LOGGER.error(e);
+            LOGGER.error(e.getMessage(), e);
         }
         return null;
     }
@@ -53,7 +54,7 @@ public class PlatformPathUtil {
         } catch (MalformedURLException e) {
             // if the platform protocol is unknown, return the input local path
         } catch (IOException e) {
-            LOGGER.error(e);
+            LOGGER.error(e.getMessage(), e);
         }
         return filePath;
     }

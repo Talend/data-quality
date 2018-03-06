@@ -20,8 +20,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.kie.api.definition.type.FactType;
 import org.kie.api.io.Resource;
@@ -34,6 +32,8 @@ import org.kie.internal.builder.KnowledgeBuilderErrors;
 import org.kie.internal.builder.KnowledgeBuilderFactory;
 import org.kie.internal.io.ResourceFactory;
 import org.kie.internal.runtime.StatefulKnowledgeSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.survivorship.action.handler.AbstractChainOfResponsibilityHandler;
 import org.talend.survivorship.action.handler.FunctionParameter;
 import org.talend.survivorship.action.handler.HandlerParameter;
@@ -62,7 +62,7 @@ import org.talend.survivorship.utils.ChainNodeMap;
  */
 public class SurvivorshipManager extends KnowledgeManager {
 
-    private static final Logger LOGGER = Logger.getLogger("SurvivorshipManager");
+    private static final Logger LOGGER = LoggerFactory.getLogger("SurvivorshipManager");
 
     /**
      * Base of executable knowledge.
@@ -325,11 +325,11 @@ public class SurvivorshipManager extends KnowledgeManager {
             }
         } catch (InstantiationException e) {
             // failed to create new recordInType instance
-            LOGGER.log(Level.CONFIG, e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
             System.err.println("!!! " + e.getMessage()); //$NON-NLS-1$
             return false;
         } catch (IllegalAccessException e) {
-            LOGGER.log(Level.CONFIG, e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
             // failed to create new recordInType instance
             System.err.println("!!! " + e.getMessage()); //$NON-NLS-1$
             return false;

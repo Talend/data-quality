@@ -16,7 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.email.checkerImpl.CallbackMailServerCheckerImpl;
 import org.talend.dataquality.email.checkerImpl.ListDomainsCheckerImpl;
 import org.talend.dataquality.email.checkerImpl.LocalPartColumnContentCheckerImpl;
@@ -31,7 +32,7 @@ import org.talend.dataquality.email.exception.TalendSMTPRuntimeException;
  */
 public class EmailVerify implements IEmailChecker {
 
-    private static final Logger LOG = Logger.getLogger(EmailVerify.class);
+    private static final Logger LOG = LoggerFactory.getLogger(EmailVerify.class);
 
     private List<IEmailChecker> checkers;
 

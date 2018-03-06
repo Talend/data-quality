@@ -15,17 +15,32 @@ package org.talend.dataquality.semantic.index;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queries.TermsFilter;
-import org.apache.lucene.search.*;
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.CachingWrapperFilter;
+import org.apache.lucene.search.FieldCacheTermsFilter;
+import org.apache.lucene.search.Filter;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.SearcherManager;
+import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.model.ValidationMode;
 
@@ -33,7 +48,7 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
 
     public static final String UNABLE_TO_OPEN_INDEX = "Unable to open synonym index.";
 
-    private static final Logger LOGGER = Logger.getLogger(DictionarySearcher.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DictionarySearcher.class);
 
     private SearcherManager mgr;
 
@@ -123,7 +138,7 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
             doc = searcher.doc(docNum);
             mgr.release(searcher);
         } catch (IOException e) {
-            LOGGER.error(e);
+            LOGGER.error(e.getMessage());
         }
         return doc;
     }

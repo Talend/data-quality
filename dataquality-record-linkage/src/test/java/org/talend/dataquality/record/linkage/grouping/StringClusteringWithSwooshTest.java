@@ -24,17 +24,16 @@ import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.record.linkage.constant.AttributeMatcherType;
 import org.talend.dataquality.record.linkage.constant.RecordMatcherType;
 import org.talend.dataquality.record.linkage.constant.TokenizedResolutionMethod;
 import org.talend.dataquality.record.linkage.genkey.BlockingKeyHandler;
 import org.talend.dataquality.record.linkage.grouping.swoosh.AnalysisSwooshMatchRecordGrouping;
-import org.talend.dataquality.record.linkage.grouping.swoosh.DQAttribute;
-import org.talend.dataquality.record.linkage.grouping.swoosh.RichRecord;
 import org.talend.dataquality.record.linkage.grouping.swoosh.SurvivorShipAlgorithmParams;
 import org.talend.dataquality.record.linkage.grouping.swoosh.SurvivorShipAlgorithmParams.SurvivorshipFunction;
 import org.talend.dataquality.record.linkage.utils.BlockingKeyAlgorithmEnum;
@@ -43,7 +42,7 @@ import org.talend.dataquality.record.linkage.utils.SurvivorShipAlgorithmEnum;
 
 public class StringClusteringWithSwooshTest {
 
-    private static Logger log = Logger.getLogger(StringClusteringWithSwooshTest.class);
+    private static Logger log = LoggerFactory.getLogger(StringClusteringWithSwooshTest.class);
 
     /**
      * The input data.
@@ -148,14 +147,14 @@ public class StringClusteringWithSwooshTest {
         // Assertions
 
         Object[] rds = resultConsumer.getResult();
-        //        for (Object[] rds : ) {
+        // for (Object[] rds : ) {
         if (rds[rds.length - 5].equals("5")) { //$NON-NLS-1$
             // Group quality.
             Assert.assertEquals(1, Double.valueOf(rds[rds.length - 2].toString()).doubleValue(), 0d);
             // Assert the merged value is the "most common" value.
             Assert.assertEquals("élément", rds[0].toString());
         }
-        //        }
+        // }
 
     }
 

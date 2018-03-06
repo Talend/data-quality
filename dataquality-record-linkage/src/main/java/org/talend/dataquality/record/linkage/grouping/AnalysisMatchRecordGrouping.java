@@ -19,7 +19,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.matchmerge.Attribute;
 import org.talend.dataquality.record.linkage.grouping.swoosh.DQAttribute;
 import org.talend.dataquality.record.linkage.grouping.swoosh.RichRecord;
@@ -36,7 +37,7 @@ public class AnalysisMatchRecordGrouping extends AbstractRecordGrouping<Object> 
      */
     private static final String ISMASTER = "true"; //$NON-NLS-1$
 
-    private static Logger LOG = Logger.getLogger(AnalysisMatchRecordGrouping.class);
+    private static Logger LOG = LoggerFactory.getLogger(AnalysisMatchRecordGrouping.class);
 
     private List<String[]> resultStrList = new ArrayList<String[]>();
 

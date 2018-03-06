@@ -17,9 +17,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.record.linkage.Messages;
-import org.talend.dataquality.record.linkage.attribute.DummyMatcher;
 import org.talend.dataquality.record.linkage.attribute.IAttributeMatcher;
 import org.talend.dataquality.record.linkage.constant.AttributeMatcherType;
 
@@ -28,7 +28,7 @@ import org.talend.dataquality.record.linkage.constant.AttributeMatcherType;
  */
 public abstract class AbstractRecordMatcher implements IRecordMatcher {
 
-    private static final Logger LOG = Logger.getLogger(AbstractRecordMatcher.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractRecordMatcher.class);
 
     protected int recordSize = 0;
 

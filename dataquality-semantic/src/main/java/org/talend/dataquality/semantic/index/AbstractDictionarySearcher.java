@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.core.LowerCaseFilter;
 import org.apache.lucene.analysis.miscellaneous.ASCIIFoldingFilter;
@@ -21,13 +20,15 @@ import org.apache.lucene.search.FuzzyQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by jteuladedenantes on 16/11/16.
  */
 public abstract class AbstractDictionarySearcher {
 
-    private static final Logger LOGGER = Logger.getLogger(AbstractDictionarySearcher.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractDictionarySearcher.class);
 
     public static final String F_DOCID = "docid";//$NON-NLS-1$
 
@@ -136,7 +137,7 @@ public abstract class AbstractDictionarySearcher {
             }
             result.close();
         } catch (IOException e) {
-            LOGGER.debug(e);
+            LOGGER.debug(e.getMessage(), e);
         }
         return termList;
     }

@@ -19,7 +19,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -30,6 +29,8 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.standardization.constant.PluginConstant;
 import org.talend.dataquality.standardization.exception.DQException;
 import org.talend.dataquality.standardization.index.IndexBuilder;
@@ -40,7 +41,7 @@ import org.talend.dataquality.standardization.query.FirstNameStandardize;
  */
 public class HandleLuceneImpl implements HandleLucene {
 
-    private static final Logger LOG = Logger.getLogger(HandleLuceneImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(HandleLuceneImpl.class);
 
     private static final int HITS_PER_PAGE = 10;
 
@@ -62,7 +63,7 @@ public class HandleLuceneImpl implements HandleLucene {
         try {
             idxBuilder.initializeIndex(filename, columnsToBeIndexed);
         } catch (IOException e) {
-            LOG.error(e, e);
+            LOG.error(e.getMessage(), e);
             return false;
         }
 
@@ -99,7 +100,7 @@ public class HandleLuceneImpl implements HandleLucene {
                     result = stdname.replaceNameWithGenderInfo(inputName, genderText, fuzzyQuery);
                 }
             } catch (Exception e) {
-                LOG.error(e, e);
+                LOG.error(e.getMessage(), e);
             }
 
         }
@@ -121,7 +122,7 @@ public class HandleLuceneImpl implements HandleLucene {
             docs = stdname.standardize(inputName, information2value, fuzzyQuery);
             treatSearchResult(searcher, inputName, docs);
         } catch (Exception e) {
-            LOG.error(e, e);
+            LOG.error(e.getMessage(), e);
         }
 
         if (searcher != null) {
@@ -140,9 +141,9 @@ public class HandleLuceneImpl implements HandleLucene {
                 String name = d.get("name");//$NON-NLS-1$
                 soreDoc.add(name);
             } catch (CorruptIndexException e) {
-                LOG.error(e, e);
+                LOG.error(e.getMessage(), e);
             } catch (IOException e) {
-                LOG.error(e, e);
+                LOG.error(e.getMessage(), e);
             }
         }
         String[] resultArray = new String[soreDoc.size()];
@@ -170,9 +171,9 @@ public class HandleLuceneImpl implements HandleLucene {
             IndexReader reader = DirectoryReader.open(dir);
             is = new IndexSearcher(reader);
         } catch (CorruptIndexException e) {
-            LOG.error(e, e);
+            LOG.error(e.getMessage(), e);
         } catch (IOException e) {
-            LOG.error(e, e);
+            LOG.error(e.getMessage(), e);
         }
         return is;
     }

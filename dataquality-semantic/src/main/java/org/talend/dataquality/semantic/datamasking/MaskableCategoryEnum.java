@@ -12,7 +12,8 @@
 // ============================================================================
 package org.talend.dataquality.semantic.datamasking;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.datamasking.FunctionType;
 
 /**
@@ -56,7 +57,7 @@ public enum MaskableCategoryEnum {
 
     private String parameter;
 
-    private static final Logger LOGGER = Logger.getLogger(MaskableCategoryEnum.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MaskableCategoryEnum.class);
 
     /**
      * SemanticCategoryEnum constructor.

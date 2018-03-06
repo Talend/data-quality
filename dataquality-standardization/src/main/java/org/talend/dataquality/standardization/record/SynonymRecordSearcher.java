@@ -20,9 +20,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.standardization.index.SynonymIndexSearcher;
 
 /**
@@ -32,7 +33,7 @@ import org.talend.dataquality.standardization.index.SynonymIndexSearcher;
  */
 public class SynonymRecordSearcher {
 
-    private static final Logger LOG = Logger.getLogger(SynonymRecordSearcher.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SynonymRecordSearcher.class);
 
     private SynonymIndexSearcher[] searchers;
 

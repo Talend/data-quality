@@ -3,7 +3,6 @@ package org.talend.dataquality.semantic.api.internal;
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.util.CharArraySet;
@@ -14,13 +13,15 @@ import org.apache.lucene.search.SearcherManager;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Abstract class of custom index access
  */
 public class AbstractCustomIndexAccess implements AutoCloseable {
 
-    private static final Logger LOGGER = Logger.getLogger(AbstractCustomIndexAccess.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractCustomIndexAccess.class);
 
     private final Analyzer analyzer = new StandardAnalyzer(CharArraySet.EMPTY_SET);
 

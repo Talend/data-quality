@@ -24,17 +24,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 
 public class ConcurrentDictionaryAccessTest {
 
-    private static final Logger LOGGER = Logger.getLogger(ConcurrentDictionaryAccessTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConcurrentDictionaryAccessTest.class);
 
     private AtomicBoolean errorOccurred = new AtomicBoolean();
 

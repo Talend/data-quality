@@ -16,10 +16,11 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.semantic.api.internal.CustomDocumentIndexAccess;
 import org.talend.dataquality.semantic.api.internal.CustomMetadataIndexAccess;
 import org.talend.dataquality.semantic.api.internal.CustomRegexClassifierAccess;
@@ -39,7 +40,7 @@ public class CustomDictionaryHolder {
 
     public static final String TALEND = "Talend";
 
-    private static final Logger LOGGER = Logger.getLogger(CustomDictionaryHolder.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CustomDictionaryHolder.class);
 
     private static final String INITIALIZE_ACCESS = "Initialize %s %s access for [%s]";
 
@@ -559,7 +560,8 @@ public class CustomDictionaryHolder {
                 + File.separator + PRODUCTION_FOLDER_NAME);
 
         File backup = new File(productionIndexes.getPath() + ".old");
-        // --- Don't do anything if a backup already exists (it means that there is currently a republish working) or if nothing to republish
+        // --- Don't do anything if a backup already exists (it means that there is currently a republish working) or if nothing
+        // to republish
         if (!backup.exists() && stagingIndexes.exists()) {
             if (productionIndexes.exists()) {
                 try {

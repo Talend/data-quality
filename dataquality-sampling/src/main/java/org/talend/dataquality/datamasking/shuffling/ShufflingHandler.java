@@ -6,7 +6,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class is a handler of {@link ShuffleColumn} who has an internal class implemented runnable to call the shuffle
@@ -14,7 +15,7 @@ import org.apache.log4j.Logger;
  */
 public class ShufflingHandler {
 
-    private static final Logger LOGGER = Logger.getLogger(ShufflingHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ShufflingHandler.class);
 
     protected ShufflingService shufflingService;
 

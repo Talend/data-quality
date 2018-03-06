@@ -15,7 +15,8 @@ package org.talend.dataquality.semantic.classifier.custom;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.semantic.exception.DQSemanticRuntimeException;
 import org.talend.dataquality.semantic.validator.AbstractRegexSemanticValidator;
 import org.talend.dataquality.semantic.validator.ISemanticSubValidator;
@@ -34,7 +35,7 @@ public class UserDefinedRegexValidator extends AbstractRegexSemanticValidator {
 
     private static final long serialVersionUID = -7832927422566889796L;
 
-    private static final Logger LOGGER = Logger.getLogger(UserDefinedRegexValidator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserDefinedRegexValidator.class);
 
     private String patternString;
 
@@ -140,12 +141,8 @@ public class UserDefinedRegexValidator extends AbstractRegexSemanticValidator {
             try {
                 Class<?> subSemanticValidator = Class.forName(validatorName);
                 return (ISemanticSubValidator) subSemanticValidator.newInstance();
-            } catch (ClassNotFoundException e) {
-                LOGGER.error(e, e);
-            } catch (InstantiationException e) {
-                LOGGER.error(e, e);
-            } catch (IllegalAccessException e) {
-                LOGGER.error(e, e);
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+                LOGGER.error(e.getMessage(), e);
             }
             // exception caught => default subValidator
             // remove any existing subvalidator

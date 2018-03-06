@@ -13,7 +13,8 @@
 package org.talend.dataquality.semantic.sampling;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * created by zhao on 2015-4-27 Semantic category bean which can be a bridge from UI to semantic API.
@@ -23,7 +24,7 @@ public class SemanticCategory {
 
     public static final SemanticCategory EMPTY = new SemanticCategory(StringUtils.EMPTY, StringUtils.EMPTY, 0L, 0.0);
 
-    private static final Logger LOGGER = Logger.getLogger(SemanticCategory.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SemanticCategory.class);
     // TODO private CategoryFrequency categoryFrequency;
 
     /**
@@ -150,7 +151,7 @@ public class SemanticCategory {
         try {
             return (SemanticCategory) super.clone();
         } catch (CloneNotSupportedException e) {
-            LOGGER.info(e);
+            LOGGER.info(e.getMessage(), e);
             return new SemanticCategory(this.semanticCategoryId, this.semanticName, this.count, this.frequency);
         }
     }

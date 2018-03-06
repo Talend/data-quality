@@ -17,11 +17,12 @@ import java.util.List;
 import java.util.Random;
 
 import org.apache.commons.math3.distribution.AbstractIntegerDistribution;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class AbstractDuplicator<TIn, TOut> {
 
-    private static final Logger LOG = Logger.getLogger(AbstractDuplicator.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractDuplicator.class);
 
     private RandomWrapper rnd;
 

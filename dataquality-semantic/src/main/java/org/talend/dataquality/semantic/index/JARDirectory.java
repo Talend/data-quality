@@ -15,12 +15,26 @@ package org.talend.dataquality.semantic.index;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.nio.file.*;
+import java.nio.file.FileSystem;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
-import org.apache.lucene.store.*;
+import org.apache.lucene.store.BaseDirectory;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.store.IOContext;
+import org.apache.lucene.store.IndexInput;
+import org.apache.lucene.store.IndexOutput;
+import org.apache.lucene.store.Lock;
+import org.apache.lucene.store.LockFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Implementation of {@link BaseDirectory} which supports accessing Lucene index inside a jar. The inner index files are extracted
@@ -28,7 +42,7 @@ import org.apache.lucene.store.*;
  */
 public class JARDirectory extends Directory {
 
-    private static final Logger LOGGER = Logger.getLogger(JARDirectory.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JARDirectory.class);
 
     private static final Object indexExtractionLock = new Object();
 

@@ -11,6 +11,7 @@ Export-Package: org.talend.dataquality.email,
  org.talend.dataquality.email.exception
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.apache.commons.lang,
- org.apache.log4j,
+ org.slf4j.api,
+ org.eclipse.m2e.maven.runtime.slf4j.simple,
  org.junit
 Bundle-ClassPath: .

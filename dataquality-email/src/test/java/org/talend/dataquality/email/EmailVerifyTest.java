@@ -24,11 +24,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.email.api.CheckerParams;
 import org.talend.dataquality.email.api.EmailVerify;
 import org.talend.dataquality.email.api.EmailVerifyResult;
@@ -52,7 +53,7 @@ public class EmailVerifyTest {
 
     final String validChar = "valid"; //$NON-NLS-1$
 
-    Logger log = Logger.getLogger(EmailVerifyTest.class);
+    private static final Logger log = LoggerFactory.getLogger(EmailVerifyTest.class);
 
     @Before
     public void setUp() throws Exception {
@@ -531,7 +532,8 @@ public class EmailVerifyTest {
         boolean startInvalid = false;
         emailVerify = emailVerify.addRegularRegexChecker(true, StringUtils.EMPTY);
         InputStream dateStream = this.getClass().getResourceAsStream("emailList.txt"); //$NON-NLS-1$
-        BufferedReader br = new BufferedReader(new InputStreamReader(dateStream, "UTF-8")); //$NON-NLS-1$//for Hindi language Double-byte type
+        BufferedReader br = new BufferedReader(new InputStreamReader(dateStream, "UTF-8")); //$NON-NLS-1$ //for Hindi language
+                                                                                            // Double-byte type
         String line;
         try {
             while ((line = br.readLine()) != null) {
@@ -552,10 +554,10 @@ public class EmailVerifyTest {
             }
 
         } catch (FileNotFoundException e) {
-            log.error(e, e);
+            log.error(e.getMessage(), e);
             Assert.fail(e.getMessage());
         } catch (IOException e) {
-            log.error(e, e);
+            log.error(e.getMessage(), e);
             Assert.fail(e.getMessage());
         } finally {
             br.close();

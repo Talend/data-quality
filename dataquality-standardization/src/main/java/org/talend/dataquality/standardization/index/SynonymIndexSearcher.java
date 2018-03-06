@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.core.LowerCaseFilter;
@@ -46,13 +45,15 @@ import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Bits;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author scorreia A class to create an index with synonyms.
  */
 public class SynonymIndexSearcher {
 
-    private static final Logger LOGGER = Logger.getLogger(SynonymIndexSearcher.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SynonymIndexSearcher.class);
 
     public enum SynonymSearchMode {
 
@@ -264,7 +265,7 @@ public class SynonymIndexSearcher {
             }
             mgr.release(searcher);
         } catch (IOException e) {
-            LOGGER.error(e);
+            LOGGER.error(e.getMessage(), e);
         }
         return -1;
     }
@@ -289,7 +290,7 @@ public class SynonymIndexSearcher {
                 return doc;
             }
         } catch (IOException e) {
-            LOGGER.error(e);
+            LOGGER.error(e.getMessage(), e);
         }
         return doc;
     }

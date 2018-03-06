@@ -17,7 +17,8 @@ import java.io.Serializable;
 import java.net.URI;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.semantic.classifier.ISubCategory;
 import org.talend.dataquality.semantic.classifier.custom.UDCategorySerDeser;
 import org.talend.dataquality.semantic.classifier.custom.UserDefinedClassifier;
@@ -30,7 +31,7 @@ public class BroadcastRegexObject implements Serializable {
 
     private static final long serialVersionUID = -7692833458780761739L;
 
-    private static final Logger LOGGER = Logger.getLogger(BroadcastRegexObject.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(BroadcastRegexObject.class);
 
     private UserDefinedClassifier regexClassifier;
 

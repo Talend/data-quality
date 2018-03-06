@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexableField;
@@ -14,6 +13,8 @@ import org.apache.lucene.search.SearcherManager;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.semantic.api.CategoryMetadataUtils;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.api.DictionaryUtils;
@@ -25,7 +26,7 @@ import org.talend.dataquality.semantic.model.DQCategory;
  */
 public class CustomMetadataIndexAccess extends AbstractCustomIndexAccess {
 
-    private static final Logger LOGGER = Logger.getLogger(CustomMetadataIndexAccess.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CustomMetadataIndexAccess.class);
 
     public CustomMetadataIndexAccess(Directory directory) {
         super(directory);

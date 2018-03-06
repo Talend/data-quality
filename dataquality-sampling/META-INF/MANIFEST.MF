@@ -4,7 +4,8 @@ Bundle-Name: Sampling Library
 Bundle-SymbolicName: org.talend.dataquality.sampling
 Bundle-Version: 5.0.1.SNAPSHOT
 Bundle-Vendor: .Talend SA.
-Require-Bundle: org.apache.log4j,
+Require-Bundle: org.slf4j.api,
+ org.eclipse.m2e.maven.runtime.slf4j.simple,
  org.apache.commons.io,
  org.apache.commons.lang,
  org.junit

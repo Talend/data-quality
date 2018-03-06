@@ -15,14 +15,26 @@ package org.talend.dataquality.semantic.index;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.nio.file.*;
-import java.util.*;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.StringTokenizer;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import org.apache.lucene.store.AlreadyClosedException;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 
 /**
@@ -35,7 +47,7 @@ import org.talend.dataquality.semantic.api.CategoryRegistryManager;
  */
 public class ClassPathDirectory {
 
-    private static final Logger LOGGER = Logger.getLogger(ClassPathDirectory.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ClassPathDirectory.class);
 
     private static JARDirectoryProvider provider = new SingletonProvider();
 

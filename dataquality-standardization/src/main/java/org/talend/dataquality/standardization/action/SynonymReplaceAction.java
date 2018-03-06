@@ -20,9 +20,10 @@ import java.util.Map;
 import java.util.Random;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.search.TopDocs;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.standardization.index.SynonymIndexSearcher;
 
 /**
@@ -30,7 +31,7 @@ import org.talend.dataquality.standardization.index.SynonymIndexSearcher;
  */
 public class SynonymReplaceAction implements ITalendStrConversionAction {
 
-    private static final Logger LOG = Logger.getLogger(SynonymReplaceAction.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SynonymReplaceAction.class);
 
     private Map<String, SynonymIndexSearcher> synonymSearcherMap;
 
@@ -70,7 +71,7 @@ public class SynonymReplaceAction implements ITalendStrConversionAction {
                     }
                 }
             } catch (IOException e) {
-                LOG.error(e, e);
+                LOG.error(e.getMessage(), e);
             }
         }
         return StringUtils.EMPTY;

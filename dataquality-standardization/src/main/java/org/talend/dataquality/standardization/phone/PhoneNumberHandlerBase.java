@@ -18,7 +18,8 @@ import java.util.Locale;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.i18n.phonenumbers.PhoneNumberToCarrierMapper;
 import com.google.i18n.phonenumbers.PhoneNumberToTimeZonesMapper;
@@ -33,7 +34,7 @@ import com.google.i18n.phonenumbers.geocoding.PhoneNumberOfflineGeocoder;
  */
 public class PhoneNumberHandlerBase {
 
-    private static final Logger LOG = Logger.getLogger(PhoneNumberHandlerBase.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PhoneNumberHandlerBase.class);
 
     private static PhoneNumberUtil GOOGLE_PHONE_UTIL = PhoneNumberUtil.getInstance();
 

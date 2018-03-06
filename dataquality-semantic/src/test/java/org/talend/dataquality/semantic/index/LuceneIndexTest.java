@@ -21,15 +21,16 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 
 public class LuceneIndexTest {
 
-    private static final Logger LOGGER = Logger.getLogger(LuceneIndexTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LuceneIndexTest.class);
 
     private Map<String[], String[]> EXPECTED_SIMILAR_VALUES = new LinkedHashMap<String[], String[]>() {
 

@@ -15,19 +15,20 @@ package org.talend.survivorship.action;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Create by zshen define a action which filter values that do not match the defined regex
  */
 public class ExcludeValuesAction extends AbstractSurvivorshipAction {
 
-    private static final Logger LOGGER = Logger.getLogger("ExcludeValuesAction");
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExcludeValuesAction.class);
 
     /*
      * (non-Javadoc)
@@ -49,7 +50,7 @@ public class ExcludeValuesAction extends AbstractSurvivorshipAction {
 
             }
         } catch (ScriptException e) {
-            LOGGER.log(Level.CONFIG, e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
             // no need implement
         }
         return false;

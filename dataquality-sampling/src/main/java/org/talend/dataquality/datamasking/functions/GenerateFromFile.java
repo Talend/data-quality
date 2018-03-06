@@ -12,11 +12,12 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
-import org.apache.log4j.Logger;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * created by jgonzalez on 19 juin 2015. This function works like GenerateFromList, the difference is that the parameter
@@ -27,7 +28,7 @@ public abstract class GenerateFromFile<T> extends Function<T> {
 
     private static final long serialVersionUID = 1556057898878709265L;
 
-    private static final Logger LOGGER = Logger.getLogger(GenerateFromFile.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GenerateFromFile.class);
 
     protected List<T> genericTokens = new ArrayList<T>();
 

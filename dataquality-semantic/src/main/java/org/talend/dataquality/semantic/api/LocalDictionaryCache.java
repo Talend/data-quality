@@ -22,7 +22,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexableField;
@@ -37,6 +36,8 @@ import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.WildcardQuery;
 import org.apache.lucene.store.Directory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.semantic.index.ClassPathDirectory;
 import org.talend.dataquality.semantic.index.DictionarySearcher;
 import org.talend.dataquality.semantic.model.DQCategory;
@@ -47,7 +48,7 @@ import org.talend.dataquality.semantic.model.DQDocument;
  */
 public class LocalDictionaryCache {
 
-    private static final Logger LOGGER = Logger.getLogger(LocalDictionaryCache.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LocalDictionaryCache.class);
 
     private SearcherManager sharedSearcherManager;
 

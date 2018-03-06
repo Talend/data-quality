@@ -26,10 +26,11 @@ import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.matchmerge.Attribute;
 import org.talend.dataquality.record.linkage.constant.RecordMatcherType;
 import org.talend.dataquality.record.linkage.grouping.swoosh.AnalysisSwooshMatchRecordGrouping;
@@ -41,7 +42,7 @@ import org.talend.dataquality.record.linkage.utils.SurvivorShipAlgorithmEnum;
 
 public class SwooshRecordGroupingTest {
 
-    private static Logger log = Logger.getLogger(SwooshRecordGroupingTest.class);
+    private static Logger log = LoggerFactory.getLogger(SwooshRecordGroupingTest.class);
 
     /**
      * The input data.

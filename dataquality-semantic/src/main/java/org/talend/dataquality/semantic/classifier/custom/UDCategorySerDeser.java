@@ -12,6 +12,8 @@
 // ============================================================================
 package org.talend.dataquality.semantic.classifier.custom;
 
+import static org.talend.dataquality.semantic.api.CategoryRegistryManager.DEFAULT_RE_PATH;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -19,24 +21,23 @@ import java.net.URI;
 import java.net.URL;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static org.talend.dataquality.semantic.api.CategoryRegistryManager.DEFAULT_RE_PATH;
-
 /**
  * DOC qiongli class global comment. Detailled comment
  */
 public class UDCategorySerDeser {
 
-    private static final Logger LOGGER = Logger.getLogger(UDCategorySerDeser.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UDCategorySerDeser.class);
 
     private static final String BUNDLE_NAME = "org.talend.dataquality.semantic"; //$NON-NLS-1$
 

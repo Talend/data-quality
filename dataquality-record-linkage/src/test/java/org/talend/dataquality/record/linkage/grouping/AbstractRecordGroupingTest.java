@@ -23,16 +23,17 @@ import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.record.linkage.constant.TokenizedResolutionMethod;
 import org.talend.dataquality.record.linkage.grouping.swoosh.RichRecord;
 
 public class AbstractRecordGroupingTest {
 
-    private static Logger log = Logger.getLogger(AbstractRecordGroupingTest.class);
+    private static Logger log = LoggerFactory.getLogger(AbstractRecordGroupingTest.class);
 
     /**
      * The input data.

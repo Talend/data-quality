@@ -18,7 +18,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * created by zshen on Nov 14, 2013 Detailled comment
@@ -30,7 +31,7 @@ public class CustomAttributeMatcherClassNameConvert {
 
     public static final char QUOTE = '\"';
 
-    private static final Logger LOG = Logger.getLogger(CustomAttributeMatcherClassNameConvert.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CustomAttributeMatcherClassNameConvert.class);
 
     /**
      * DOC zshen Comment method "getClassName".
@@ -91,7 +92,7 @@ public class CustomAttributeMatcherClassNameConvert {
             try {
                 jarURLs.add((new File(allElement)).toURI().toURL());
             } catch (MalformedURLException e) {
-                LOG.error(e, e);
+                LOG.error(e.getMessage(), e);
             }
         }
         return jarURLs.toArray(new URL[jarURLs.size()]);

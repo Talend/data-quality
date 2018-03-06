@@ -12,14 +12,15 @@
 // ============================================================================
 package org.talend.dataquality.matchmerge.mfb;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.matchmerge.Attribute;
 import org.talend.dataquality.matchmerge.MatchMergeAlgorithm;
 import org.talend.dataquality.matchmerge.Record;
 
 public class LoggerCallback implements MatchMergeAlgorithm.Callback {
 
-    protected static final Logger LOGGER = Logger.getLogger(MatchMergeAlgorithm.class);
+    protected static final Logger LOGGER = LoggerFactory.getLogger(MatchMergeAlgorithm.class);
 
     @Override
     public void onBeginRecord(Record record) {

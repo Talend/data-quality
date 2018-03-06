@@ -20,9 +20,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
@@ -37,7 +38,7 @@ public class BroadcastIndexObject implements Serializable {
 
     private static final long serialVersionUID = 7350930198992853600L;
 
-    private static final Logger LOGGER = Logger.getLogger(BroadcastIndexObject.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(BroadcastIndexObject.class);
 
     // The serializable object
     private List<BroadcastDocumentObject> documentList;

@@ -30,9 +30,10 @@ import java.time.chrono.MinguoChronology;
 import java.time.chrono.ThaiBuddhistChronology;
 import java.util.Locale;
 
-import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Test for class {@link DateCalendarConverter}.
@@ -42,7 +43,7 @@ import org.junit.Test;
  */
 public class DateCalendarConverterTest {
 
-    private static final Logger LOGGER = Logger.getLogger(DateCalendarConverterTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DateCalendarConverterTest.class);
 
     private static final String PATTERN = "yyyy-MM-dd"; //$NON-NLS-1$
 
@@ -202,7 +203,8 @@ public class DateCalendarConverterTest {
     @Test
     /**
      * 
-     * After TDQ-14421,We use ResolverStyle.STRICT to parse a date. for JapaneseChronology,it must be with Era such as "0008-10-29 Heisei" with pattern "yyyy-MM-dd G"
+     * After TDQ-14421,We use ResolverStyle.STRICT to parse a date. for JapaneseChronology,it must be with Era such as
+     * "0008-10-29 Heisei" with pattern "yyyy-MM-dd G"
      */
     public void testConvert_JapaneseDateTo() {
         assertEquals(ISO_STR, new DateCalendarConverter(PATTERN_WITH_G, null, JapaneseChronology.INSTANCE, IsoChronology.INSTANCE,
@@ -333,9 +335,9 @@ public class DateCalendarConverterTest {
                 try {
                     br = new BufferedReader(new InputStreamReader(dateStream, "UTF-8")); //$NON-NLS-1$ //for Hindi language
                                                                                          // Double-byte type
-                } catch (UnsupportedEncodingException e1) {
-                    LOGGER.error(e1, e1);
-                    Assert.fail(e1.getMessage());
+                } catch (UnsupportedEncodingException e) {
+                    LOGGER.error(e.getMessage(), e);
+                    Assert.fail(e.getMessage());
                 }
                 try {
                     long startTime = System.currentTimeMillis();
@@ -345,18 +347,18 @@ public class DateCalendarConverterTest {
                     }
                     long endTime = System.currentTimeMillis();
                     System.out.println("the execution time of " + sourceChronology.getId() + "-->" + targetChronology.getId() //$NON-NLS-1$ //$NON-NLS-2$
-                            + " 锛� " + (endTime - startTime) + "ms"); //$NON-NLS-1$ //$NON-NLS-2$
+                            + " : " + (endTime - startTime) + "ms"); //$NON-NLS-1$ //$NON-NLS-2$
                 } catch (FileNotFoundException e) {
-                    LOGGER.error(e, e);
+                    LOGGER.error(e.getMessage(), e);
                     Assert.fail(e.getMessage());
                 } catch (IOException e) {
-                    LOGGER.error(e, e);
+                    LOGGER.error(e.getMessage(), e);
                     Assert.fail(e.getMessage());
                 } finally {
                     try {
                         br.close();
                     } catch (IOException e) {
-                        LOGGER.error(e, e);
+                        LOGGER.error(e.getMessage(), e);
                         Assert.fail(e.getMessage());
                     }
                 }
@@ -391,8 +393,8 @@ public class DateCalendarConverterTest {
         assertEquals("", //$NON-NLS-1$
                 new DateCalendarConverter(MinguoChronology.INSTANCE, IsoChronology.INSTANCE).convert("0106-02-30")); //$NON-NLS-1$
         assertEquals("", //$NON-NLS-1$
-                new DateCalendarConverter(JapaneseChronology.INSTANCE, IsoChronology.INSTANCE).convert("0029-02-28")); //$NON-NLS-1$ 
+                new DateCalendarConverter(JapaneseChronology.INSTANCE, IsoChronology.INSTANCE).convert("0029-02-28")); //$NON-NLS-1$
         assertEquals(ISODateValid, new DateCalendarConverter(PATTERN_WITH_G, null, JapaneseChronology.INSTANCE,
-                IsoChronology.INSTANCE, Locale.US, Locale.US).convert("0029-02-28 Heisei")); //$NON-NLS-1$ 
+                IsoChronology.INSTANCE, Locale.US, Locale.US).convert("0029-02-28 Heisei")); //$NON-NLS-1$
     }
 }
