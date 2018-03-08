@@ -20,6 +20,7 @@ import java.util.Map;
 
 import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.ResizableList;
+import org.talend.dataquality.semantic.recognizer.LFUCache;
 
 /**
  * Type inference executor which provide several methods computing the types.<br>
@@ -39,6 +40,8 @@ public class DataTypeAnalyzer implements Analyzer<DataTypeOccurences> {
 
     /** Optional custom date patterns. */
     protected List<String> customDateTimePatterns = new ArrayList<>();
+
+    private final LFUCache<String, DataTypeEnum> knownDataTypeCache = new LFUCache<>(10, 1000, 0.01f);
 
     /**
      * Default empty constructor.
@@ -84,7 +87,16 @@ public class DataTypeAnalyzer implements Analyzer<DataTypeOccurences> {
         dataTypes.resize(record.length);
         for (int i = 0; i < record.length; i++) {
             final DataTypeOccurences dataType = dataTypes.get(i);
-            dataType.increment(TypeInferenceUtils.getDataType(record[i], customDateTimePatterns));
+
+            final String value = record[i];
+            final DataTypeEnum knownDataType = knownDataTypeCache.get(value);
+            if (knownDataType != null) {
+                dataType.increment(knownDataType);
+            } else {
+                DataTypeEnum type = TypeInferenceUtils.getDataType(value, customDateTimePatterns);
+                knownDataTypeCache.put(value, type);
+                dataType.increment(type);
+            }
         }
         return true;
     }

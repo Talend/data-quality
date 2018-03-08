@@ -13,7 +13,9 @@
 package org.talend.dataquality.statistics.quality;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -22,6 +24,7 @@ import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.QualityAnalyzer;
 import org.talend.dataquality.common.inference.ResizableList;
 import org.talend.dataquality.common.inference.ValueQualityStatistics;
+import org.talend.dataquality.semantic.recognizer.LFUCache;
 import org.talend.dataquality.statistics.datetime.CustomDateTimePatternManager;
 import org.talend.dataquality.statistics.type.DataTypeEnum;
 import org.talend.dataquality.statistics.type.TypeInferenceUtils;
@@ -39,6 +42,8 @@ public class DataTypeQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
     private final ResizableList<ValueQualityStatistics> results = new ResizableList<>(ValueQualityStatistics.class);
 
     private List<String> customDateTimePatterns = new ArrayList<>();
+
+    private final Map<DataTypeEnum, LFUCache<String, Boolean>> knownTypeValidationCache = new HashMap<>();
 
     public DataTypeQualityAnalyzer(DataTypeEnum[] types, boolean isStoreInvalidValues) {
         this.isStoreInvalidValues = isStoreInvalidValues;
@@ -71,18 +76,39 @@ public class DataTypeQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
             final ValueQualityStatistics valueQuality = results.get(i);
             if (TypeInferenceUtils.isEmpty(value)) {
                 valueQuality.incrementEmpty();
-            } else if (DataTypeEnum.DATE == getTypes()[i] && CustomDateTimePatternManager.isDate(value, customDateTimePatterns)) {
-                valueQuality.incrementValid();
-            } else if (DataTypeEnum.TIME == getTypes()[i] && CustomDateTimePatternManager.isTime(value, customDateTimePatterns)) {
-                valueQuality.incrementValid();
-            } else if (TypeInferenceUtils.isValid(getTypes()[i], value)) {
-                valueQuality.incrementValid();
+                continue; // go on with next cell of the record
+            }
+
+            // otherwise, try to see if the validity exists in the LFUCache
+            LFUCache<String, Boolean> knownValidityResults = knownTypeValidationCache.get(getTypes()[i]);
+            if (knownValidityResults == null) {
+                knownValidityResults = new LFUCache<>(10, 1000, 0.01f);
+                knownTypeValidationCache.put(getTypes()[i], knownValidityResults);
+            }
+            final Boolean validity = knownValidityResults.get(value);
+
+            if (validity != null) {
+                if (Boolean.TRUE.equals(validity)) {
+                    valueQuality.incrementValid();
+                } else {
+                    valueQuality.incrementInvalid();
+                }
             } else {
-                // while list analyzers
-                // analyzer.incrementValid or invalid...
-                // else
-                valueQuality.incrementInvalid();
-                processInvalidValue(valueQuality, value);
+                if (DataTypeEnum.DATE == getTypes()[i] && CustomDateTimePatternManager.isDate(value, customDateTimePatterns)) {
+                    valueQuality.incrementValid();
+                    knownValidityResults.put(value, true);
+                } else if (DataTypeEnum.TIME == getTypes()[i]
+                        && CustomDateTimePatternManager.isTime(value, customDateTimePatterns)) {
+                    valueQuality.incrementValid();
+                    knownValidityResults.put(value, true);
+                } else if (TypeInferenceUtils.isValid(getTypes()[i], value)) {
+                    valueQuality.incrementValid();
+                    knownValidityResults.put(value, true);
+                } else {
+                    valueQuality.incrementInvalid();
+                    knownValidityResults.put(value, false);
+                    processInvalidValue(valueQuality, value);
+                }
             }
         }
         return true;

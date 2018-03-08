@@ -25,7 +25,6 @@
 			<groupId>org.talend.dataquality</groupId>
 			<artifactId>dataquality-semantic</artifactId>
 			<version>${project.parent.version}</version>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>commons-lang</groupId>
