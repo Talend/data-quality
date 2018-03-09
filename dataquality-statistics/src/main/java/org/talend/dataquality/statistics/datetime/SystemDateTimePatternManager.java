@@ -58,6 +58,8 @@ public class SystemDateTimePatternManager {
 
     private static final String PATTERN_SUFFIX_ERA = "G"; //$NON-NLS-1$
 
+    private static final Pattern PATTERN_FILTER_DATE = Pattern.compile("[ \\-]\\d|\\d[./+W\\u5E74]\\d|^\\d{8}$"); //'\u5E74' stands for '年'
+
     static {
         try {
             // Load date patterns
@@ -109,6 +111,12 @@ public class SystemDateTimePatternManager {
         if (value.length() < 6 || value.length() > 64) {
             return false;
         }
+
+        // TDQ-14894: Improve Date discovery by listing the separators
+        if (!PATTERN_FILTER_DATE.matcher(value).find()) {
+            return false;
+        }
+
         return isDateTime(DATE_PATTERN_GROUP_LIST, value);
     }
 
