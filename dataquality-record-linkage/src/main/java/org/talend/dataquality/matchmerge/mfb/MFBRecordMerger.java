@@ -135,6 +135,12 @@ public class MFBRecordMerger implements IRecordMerger {
             } else {
                 datePattern = datePatternMap.get(columnIndex) == null ? "" : datePatternMap.get(columnIndex);
             }
+            if (leftValue == null) {
+                return rightValue;
+            } else if (rightValue == null) {
+                return leftValue;
+            }
+
             Date leftDate = getFormatDateFromString(leftValue, datePattern);
             Date rightDate = getFormatDateFromString(rightValue, datePattern);
             switch (mostDate) {
