@@ -3694,6 +3694,96 @@ public class SwooshRecordGroupingTest {
     }
 
     @Test
+    public void testDoMergeOnMostRecent_14276_MOST_RECENT_null() throws IOException {
+        InputStream in = this.getClass().getResourceAsStream("incoming_customers_swoosh2.txt"); //$NON-NLS-1$
+        BufferedReader bfr = new BufferedReader(new InputStreamReader(in));
+        List<String> listOfLines = IOUtils.readLines(bfr);
+        inputList = new ArrayList<String[]>();
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", java.util.Locale.US);
+        for (String line : listOfLines) {
+            String[] fields = StringUtils.splitPreserveAllTokens(line, columnDelimiter);
+            // when the date field is null, should not throw any exception, but just egnore it.
+            if ("5".equals(fields[0])) {
+                fields[5] = null;
+            }
+            inputList.add(fields);
+        }
+        recordGroup = new ComponentSwooshMatchRecordGrouping() {
+
+            @Override
+            protected void outputRow(Object[] row) {
+                groupingRecords.add(row);
+            }
+
+        };
+        recordGroup.setRecordLinkAlgorithm(RecordMatcherType.T_SwooshAlgorithm);
+        SurvivorShipAlgorithmParams survivorShipAlgorithmParams = new SurvivorShipAlgorithmParams();
+        SurvivorshipFunction func = survivorShipAlgorithmParams.new SurvivorshipFunction();
+        func.setParameter(""); //$NON-NLS-1$
+        func.setSurvivorShipAlgoEnum(SurvivorShipAlgorithmEnum.MOST_COMMON);
+        survivorShipAlgorithmParams.setSurviorShipAlgos(new SurvivorshipFunction[] { func });
+        recordGroup.setSurvivorShipAlgorithmParams(survivorShipAlgorithmParams);
+
+        // Set default survivorship functions.
+        Map<Integer, SurvivorshipFunction> defaultSurvRules = new HashMap<Integer, SurvivorshipFunction>();
+        SurvivorshipFunction survFunc5 = survivorShipAlgorithmParams.new SurvivorshipFunction();
+        survFunc5.setParameter(StringUtils.EMPTY);
+        survFunc5.setSurvivorShipAlgoEnum(SurvivorShipAlgorithmEnum.MOST_RECENT);
+        survFunc5.setSurvivorShipKey("6");
+        defaultSurvRules.put(5, survFunc5);
+
+        survivorShipAlgorithmParams.setDefaultSurviorshipRules(defaultSurvRules);
+
+        recordGroup.setColumnDelimiter(columnDelimiter);
+        recordGroup.setIsLinkToPrevious(Boolean.FALSE);
+        ((AbstractRecordGrouping) recordGroup).setOrginalInputColumnSize(9);
+
+        List<Map<String, String>> matchingRule = new ArrayList<Map<String, String>>();
+
+        Map<String, String> lnameRecords = createTmpMap(null, "0.9", null, "NAME", "1", "JARO_WINKLER", "NO", "1", null, null,
+                null);
+        matchingRule.add(lnameRecords);
+
+        recordGroup.addMatchRule(matchingRule);
+        try {
+            recordGroup.initialize();
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            log.error(e.getMessage(), e);
+            Assert.fail();
+        }
+
+        Map<String, String> dataMap = new HashMap<String, String>();
+        dataMap.put("5", "yyyy-MM-dd HH:mm:ss.SSS");
+        recordGroup.setColumnDatePatternMap(dataMap);
+
+        recordGroup.setIsOutputDistDetails(true);
+        recordGroup.setAcceptableThreshold(0.95f);
+        ((AbstractRecordGrouping) recordGroup).setOrginalInputColumnSize(8);
+
+        // loop on all input rows.
+        try {
+            for (String[] inputRow : inputList) {
+                recordGroup.doGroup(inputRow);
+            }
+            recordGroup.end();
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+        } catch (InterruptedException e) {
+            log.error(e.getMessage(), e);
+        }
+
+        // Assertions
+        Assert.assertTrue(groupingRecords.size() > 0);
+        for (Object[] rds : groupingRecords) {
+            if (rds[10].equals("true") && rds[0].equals("1")) { //$NON-NLS-1$
+                // Master record
+                // Most recent. "Wed Jan 13 11:05:20 CST 2016"
+                Assert.assertEquals("2016-03-03 11:15:20.111", rds[5]);
+            }
+        }
+    }
+
+    @Test
     public void testDoMergeOnMostRecent_14276_MOST_ANCIENT() throws IOException {
         InputStream in = this.getClass().getResourceAsStream("incoming_customers_swoosh2.txt"); //$NON-NLS-1$
         BufferedReader bfr = new BufferedReader(new InputStreamReader(in));
