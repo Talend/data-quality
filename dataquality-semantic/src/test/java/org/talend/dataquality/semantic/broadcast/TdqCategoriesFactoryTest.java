@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.lucene.document.Document;
@@ -155,6 +156,32 @@ public class TdqCategoriesFactoryTest extends CategoryRegistryManagerAbstract {
         UserDefinedClassifier udc = cats.getRegex().getRegexClassifier();
         assertEquals("Unexpected classifier count!", 1, udc.getClassifiers().size());
         assertEquals("Unexpected classifier name!", "EMAIL", udc.getClassifiers().iterator().next().getName());
+    }
+
+    private Set<String> getCategoriesFromBIO(BroadcastIndexObject broadcastIndexObject) {
+        return broadcastIndexObject.getDocumentList().stream().map(docObj -> docObj.getCategory()).collect(Collectors.toSet());
+    }
+
+    @Test
+    public void testAvoidDuplicateBroadcastUserModifiedCat() throws IOException {
+        // TDQ-14635: Optimize TDP full run (improvement 1)
+
+        // modified description of FR_COMMUNE
+        CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder();
+        DQCategory newFRCommuneCategory = holder.getMetadata().get(SemanticCategoryEnum.FR_COMMUNE.getTechnicalId());
+        newFRCommuneCategory.setDescription("new description for FR commune");
+        holder.updateCategory(newFRCommuneCategory);
+
+        TdqCategories cats = TdqCategoriesFactory.createTdqCategories(null);
+
+        final Set<String> sharedDictionaryCats = getCategoriesFromBIO(cats.getDictionary());
+        final Set<String> customDictionaryCats = getCategoriesFromBIO(cats.getCustomDictionary());
+
+        assertEquals("Shared dictionary shouldn't contain custom category: FR_COMMUNE", false,
+                sharedDictionaryCats.contains(SemanticCategoryEnum.FR_COMMUNE.getTechnicalId()));
+        assertEquals("Only one modified category: FR_COMMUNE", 1, customDictionaryCats.size());
+        assertEquals("Custom dictionary should contain user modified category: FR_COMMUNE", true,
+                customDictionaryCats.contains(SemanticCategoryEnum.FR_COMMUNE.getTechnicalId()));
     }
 
     @Test

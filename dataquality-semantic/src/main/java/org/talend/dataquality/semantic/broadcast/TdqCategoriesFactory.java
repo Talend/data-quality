@@ -2,6 +2,7 @@ package org.talend.dataquality.semantic.broadcast;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -48,28 +49,35 @@ public class TdqCategoriesFactory {
     public static final TdqCategories createTdqCategories(Set<String> categoryNames) {
         CategoryRegistryManager crm = CategoryRegistryManager.getInstance();
         final Map<String, DQCategory> selectedCategoryMap = new HashMap<>();
+        final Set<String> selectedCategoryIds;
+        final Set<String> unmodifiedSelectedCategoryIds = new HashSet<>();
         for (DQCategory dqCat : crm.listCategories(false)) {
             if (categoryNames == null || categoryNames.contains(dqCat.getName())) {
                 selectedCategoryMap.put(dqCat.getId(), dqCat);
+                if (!dqCat.getModified()) {
+                    unmodifiedSelectedCategoryIds.add(dqCat.getId());
+                }
             }
         }
+        selectedCategoryIds = selectedCategoryMap.keySet();
+
         final BroadcastIndexObject sharedDictionary;
         final BroadcastIndexObject customDictionary;
         final BroadcastIndexObject keyword;
         final BroadcastRegexObject regex;
         final BroadcastMetadataObject meta;
-        sharedDictionary = new BroadcastIndexObject(crm.getSharedDataDictDirectory(), selectedCategoryMap.keySet());
+        sharedDictionary = new BroadcastIndexObject(crm.getSharedDataDictDirectory(), unmodifiedSelectedCategoryIds);
         LOGGER.debug("Returning shared data dictionary.");
 
         Directory customDataDictDir = crm.getCustomDictionaryHolder().getDataDictDirectory();
-        customDictionary = new BroadcastIndexObject(customDataDictDir, selectedCategoryMap.keySet());
+        customDictionary = new BroadcastIndexObject(customDataDictDir, selectedCategoryIds);
         LOGGER.debug("Returning custom data dictionary.");
 
-        keyword = new BroadcastIndexObject(crm.getSharedKeywordDirectory(), selectedCategoryMap.keySet());
+        keyword = new BroadcastIndexObject(crm.getSharedKeywordDirectory(), selectedCategoryIds);
         LOGGER.debug("Returning shared keyword index.");
 
         UserDefinedClassifier classifiers = crm.getCustomDictionaryHolder().getRegexClassifier();
-        regex = new BroadcastRegexObject(classifiers, selectedCategoryMap.keySet());
+        regex = new BroadcastRegexObject(classifiers, selectedCategoryIds);
         LOGGER.debug("Returning regexes.");
 
         meta = new BroadcastMetadataObject(selectedCategoryMap);
