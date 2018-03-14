@@ -135,9 +135,9 @@ public class MFBRecordMerger implements IRecordMerger {
             } else {
                 datePattern = datePatternMap.get(columnIndex) == null ? "" : datePatternMap.get(columnIndex);
             }
-            if (leftValue == null) {
+            if (leftValue == null || "null".equals(leftValue)) {
                 return rightValue;
-            } else if (rightValue == null) {
+            } else if (rightValue == null || "null".equals(rightValue)) {
                 return leftValue;
             }
 

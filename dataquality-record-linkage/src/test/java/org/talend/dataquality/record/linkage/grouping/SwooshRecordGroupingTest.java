@@ -3706,6 +3706,9 @@ public class SwooshRecordGroupingTest {
             if ("5".equals(fields[0])) {
                 fields[5] = null;
             }
+            if ("6".equals(fields[0])) {
+                fields[5] = "null";
+            }
             inputList.add(fields);
         }
         recordGroup = new ComponentSwooshMatchRecordGrouping() {
