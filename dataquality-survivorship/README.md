@@ -1,17 +1,16 @@
-org.talend.dataquality.common
+org.talend.dataquality.survivorship
 ===================
 
-Data Quality Common Library is the low level library containing interfaces and common utility classes.
+Data Survivorship library.
 
-Changelog
 -------------
 
-More information can be found [here](https://github.com/Talend/data-quality/blob/master/dataquality-common/changelog.txt).
+More information can be found [here](https://github.com/Talend/data-quality/blob/master/dataquality-survivorship/changelog.txt).
 
 Where can I get the latest release?
 -----------------------------------
-You can download latest stable binaries from our [Release Repository](https://artifacts-oss.talend.com/nexus/content/repositories/TalendOpenSourceRelease/org/talend/dataquality/dataquality-common).
-or snapshot binaries from our [Snapshot Repository](https://artifacts-oss.talend.com/nexus/content/repositories/TalendOpenSourceSnapshot/org/talend/dataquality/dataquality-common).
+You can download latest stable binaries from our [Release Repository](https://artifacts-oss.talend.com/nexus/content/repositories/TalendOpenSourceRelease/org/talend/dataquality/dataquality-survivorship).
+or snapshot binaries from our [Snapshot Repository](https://artifacts-oss.talend.com/nexus/content/repositories/TalendOpenSourceSnapshot/org/talend/dataquality/dataquality-survivorship).
 
 Alternatively you can add the following repository into your pom.xml file:
 ```xml
@@ -27,7 +26,7 @@ And include the following dependency:
 ```xml
 <dependency>
   <groupId>org.talend.dataquality</groupId>
-  <artifactId>dataquality-common</artifactId>
+  <artifactId>dataquality-survivorship</artifactId>
   <version>LATEST</version>
 </dependency>
 ```
