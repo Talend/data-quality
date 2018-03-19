@@ -83,3 +83,48 @@ Additional Resources
 
 + [Talend Homepage](http://www.talend.com/)
 + [Talend Bugtracker (JIRA)](https://jira.talendforge.org/)
+
+Lucene index tree
+--------------------
+
+```bash
+.
+├── shared
+│   └── prod
+│       ├── dictionary
+│       │   ├── _0.cfe
+│       │   ├── _0.cfs
+│       │   └── _0.si
+│       ├── keyword
+│       │   ├── _0.cfe
+│       │   ├── _0.cfs
+│       │   └── _0.si
+│       └── metadata
+│           ├── _0.cfe
+│           ├── _0.cfs
+│           └── _0.si
+└── <tenantId>
+    ├── prod
+    │   ├── dictionary
+    │   │   ├── _0.cfe
+    │   │   ├── _0.cfs
+    │   │   └── _0.si
+    │   └── metadata
+    │       ├── _0.cfe
+    │       ├── _0.cfs
+    │       └── _0.si
+    └── republish
+        ├── dictionary
+        │   ├── _0.cfe
+        │   ├── _0.cfs
+        │   └── _0.si
+        └── metadata
+            ├── _0.cfe
+            ├── _0.cfs
+            └── _0.si
+```
+The directory "shared" is always used in reading, never in writing.
+
+We have as much "tenantId" directories as the number of tenants which modified the dictionary.
+
+The directory "republish" is created while a republish process, then it will replace the "prod" directory and will be deleted.
