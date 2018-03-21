@@ -264,11 +264,13 @@ public class CustomDictionaryHolder {
             if (!CategoryType.REGEX.equals(category.getType()) && Boolean.TRUE.equals(category.getModified())) {
                 ensureDataDictIndexAccess();
                 customDataDictIndexAccess.deleteDocumentsByCategoryId(categoryId);
+                customDataDictIndexAccess.commitChanges();
             }
         } else {
             customMetadataIndexAccess.deleteCategory(category);
             ensureDataDictIndexAccess();
             customDataDictIndexAccess.deleteDocumentsByCategoryId(categoryId);
+            customDataDictIndexAccess.commitChanges();
         }
         customMetadataIndexAccess.commitChanges();
         metadata = customMetadataIndexAccess.readCategoryMedatada();
