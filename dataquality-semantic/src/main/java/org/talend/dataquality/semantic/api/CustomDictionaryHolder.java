@@ -260,6 +260,7 @@ public class CustomDictionaryHolder {
                 LOGGER.debug("deleteDocumentsByCategoryId " + categoryId);
                 ensureDataDictIndexAccess();
                 customDataDictIndexAccess.deleteDocumentsByCategoryId(categoryId);
+                customDataDictIndexAccess.commitChanges();
             }
         } else {
             if (CategoryType.REGEX.equals(category.getType()))
@@ -268,6 +269,7 @@ public class CustomDictionaryHolder {
             LOGGER.debug("deleteDocumentsByCategoryId " + categoryId);
             ensureDataDictIndexAccess();
             customDataDictIndexAccess.deleteDocumentsByCategoryId(categoryId);
+            customDataDictIndexAccess.commitChanges();
         }
         customMetadataIndexAccess.commitChanges();
         metadata = customMetadataIndexAccess.readCategoryMedatada();
