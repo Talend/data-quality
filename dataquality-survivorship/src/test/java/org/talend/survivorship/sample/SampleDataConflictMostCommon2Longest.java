@@ -26,6 +26,6 @@ public class SampleDataConflictMostCommon2Longest {
 
     public static final ConflictRuleDefinition[] RULES_CONFLICT_RESOLVE = {
             new ConflictRuleDefinition(Order.CR, "longest_city", "city1", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.Longest, null, "city1", false, null, false) }; //$NON-NLS-1$
+                    Function.Longest, null, "city1", false, null, false, 0) }; //$NON-NLS-1$
 
 }

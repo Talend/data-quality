@@ -23,6 +23,9 @@ public class ConflictRuleDefinition extends RuleDefinition {
 
     private boolean disableRule;
 
+    // The init value is -1 mean that first index is start from 0
+    private int indexOrder = -1;
+
     /**
      * constructor of ConflictRuleDefinition .
      * 
@@ -55,6 +58,46 @@ public class ConflictRuleDefinition extends RuleDefinition {
      * @param targetColumn The name of target column
      * @param ignoreBlanks Whether ignore blanks case in the rule
      * @param fillColumn The name of fill column
+     * @param duplicateSurCheck Whether deal with duplicate case in the survived value
+     * @param executeIndex The index which current rule execute order
+     */
+    public ConflictRuleDefinition(Order order, String ruleName, String referenceColumn, Function function, String operation,
+            String targetColumn, boolean ignoreBlanks, String fillColumn, boolean duplicateSurCheck, int executeIndex) {
+        this(order, ruleName, referenceColumn, function, operation, targetColumn, ignoreBlanks, fillColumn, duplicateSurCheck);
+        this.indexOrder = executeIndex;
+    }
+
+    /**
+     * constructor of ConflictRuleDefinition .
+     * 
+     * @param order The type of rule
+     * @param ruleName The name of rule
+     * @param referenceColumn The name of reference column
+     * @param function The action of current rule
+     * @param operation The parameter of function
+     * @param targetColumn The name of target column
+     * @param ignoreBlanks Whether ignore blanks case in the rule
+     * @param fillColumn The name of fill column
+     * @param duplicateSurCheck Whether deal with duplicate case in the survived value
+     */
+    public ConflictRuleDefinition(Order order, String ruleName, String referenceColumn, Function function, String operation,
+            String targetColumn, boolean ignoreBlanks, boolean duplicateSurCheck, boolean disableRule, int executeIndex) {
+        this(order, ruleName, referenceColumn, function, operation, targetColumn, ignoreBlanks, duplicateSurCheck, disableRule);
+        this.indexOrder = executeIndex;
+    }
+
+    /**
+     * constructor of ConflictRuleDefinition .
+     * 
+     * @param order The type of rule
+     * @param ruleName The name of rule
+     * @param referenceColumn The name of reference column
+     * @param function The action of current rule
+     * @param operation The parameter of function
+     * @param targetColumn The name of target column
+     * @param ignoreBlanks Whether ignore blanks case in the rule
+     * @param fillColumn The name of fill column
+     * @param duplicateSurCheck Whether deal with duplicate case in the survived value
      * @param duplicateSurCheck Whether deal with duplicate case in the survived value
      */
     public ConflictRuleDefinition(Order order, String ruleName, String referenceColumn, Function function, String operation,
@@ -90,6 +133,24 @@ public class ConflictRuleDefinition extends RuleDefinition {
      */
     public boolean isDisableRule() {
         return this.disableRule;
+    }
+
+    /**
+     * Getter for indexOrder.
+     * 
+     * @return the indexOrder
+     */
+    public int getIndexOrder() {
+        return indexOrder;
+    }
+
+    /**
+     * Sets the indexOrder.
+     * 
+     * @param indexOrder the indexOrder to set
+     */
+    public void setIndexOrder(int indexOrder) {
+        this.indexOrder = indexOrder;
     }
 
 }

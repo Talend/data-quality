@@ -27,10 +27,10 @@ public class SampleDataConflictOtherColumn2MostCommon2Constant {
 
     public static final ConflictRuleDefinition[] RULES_CONFLICT_RESOLVE = {
             new ConflictRuleDefinition(Order.SEQ, "fillEmpty_lastName", "firstName", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.FillEmpty, null, "lastName", false, null, false), //$NON-NLS-1$
+                    Function.FillEmpty, null, "lastName", false, null, false, 0), //$NON-NLS-1$
             new ConflictRuleDefinition(Order.SEQ, "more_common_lastName", "lastName", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.ExcludeValues, "Green|Blue", "lastName", false, null, false), //$NON-NLS-1$ //$NON-NLS-2$
+                    Function.ExcludeValues, "Green|Blue", "lastName", false, null, false, 1), //$NON-NLS-1$ //$NON-NLS-2$
             new ConflictRuleDefinition(Order.SEQ, "more_common_lastName", "lastName", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.Longest, null, "lastName", false, null, false) }; //$NON-NLS-1$ 
+                    Function.Longest, null, "lastName", false, null, false, 2) }; //$NON-NLS-1$ 
 
 }

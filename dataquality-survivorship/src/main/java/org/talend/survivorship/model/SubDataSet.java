@@ -96,6 +96,15 @@ public class SubDataSet extends DataSet {
         return this.dataSetIndex;
     }
 
+    /**
+     * Getter for orignialDataSet.
+     * 
+     * @return the orignialDataSet
+     */
+    public DataSet getOrignialDataSet() {
+        return this.orignialDataSet;
+    }
+
     public void addFillAttributeMap(FilledAttribute filledAttribute) {
 
         getFillAttributeMap().put(filledAttribute.getOrignalAttribute(), filledAttribute);

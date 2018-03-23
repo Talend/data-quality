@@ -30,8 +30,8 @@ public class SampleDataConflictShortest2OtherColumnDuplicateSurvivedValue {
 
     public static final ConflictRuleDefinition[] RULES_CONFLICT_RESOLVE = {
             new ConflictRuleDefinition(Order.SEQ, "city1_removeDup_city2", "city2", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.RemoveDuplicate, null, "city1", false, null, false), //$NON-NLS-1$
+                    Function.RemoveDuplicate, null, "city1", false, null, false, 0), //$NON-NLS-1$
             new ConflictRuleDefinition(Order.SEQ, "city1_mappingTo_city2", "city2", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.SurviveAs, null, "city1", false, null, false) }; //$NON-NLS-1$
+                    Function.SurviveAs, null, "city1", false, null, false, 1) }; //$NON-NLS-1$
 
 }

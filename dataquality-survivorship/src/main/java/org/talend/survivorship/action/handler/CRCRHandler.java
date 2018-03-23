@@ -34,7 +34,15 @@ import org.talend.survivorship.model.SurvivedResult;
  */
 public class CRCRHandler extends AbstractChainOfResponsibilityHandler {
 
+    /**
+     * The index of conflicting row
+     */
     protected Map<Integer, String> conflictingRowNumbers = new HashMap<>();
+
+    /**
+     * Judge whether current handler need to execute.
+     */
+    private boolean missionCompleted = false;
 
     /**
      * CRCRHandler constructor.
@@ -63,7 +71,8 @@ public class CRCRHandler extends AbstractChainOfResponsibilityHandler {
     /*
      * (non-Javadoc)
      * 
-     * @see org.talend.survivorship.action.handler.AbstractChainResponsibilityHandler#handleRequest(java.lang.Object, int)
+     * @see org.talend.survivorship.action.handler.AbstractChainResponsibilityHandler#handleRequest(java.lang.Object,
+     * int)
      */
     @Override
     public void handleRequest(Object inputData, int rowNum) {
@@ -75,52 +84,97 @@ public class CRCRHandler extends AbstractChainOfResponsibilityHandler {
     /*
      * (non-Javadoc)
      * 
-     * @see org.talend.survivorship.action.handler.AbstractChainResponsibilityHandler#handleRequest(java.lang.Object, int,
+     * @see org.talend.survivorship.action.handler.AbstractChainResponsibilityHandler#handleRequest(java.lang.Object,
+     * int,
      * java.lang.String)
      */
     @Override
     public void handleRequest() {
-        // do process all of data and init next node
-        // 1.create new dataSet by new method of dataset class
+        // If current column is finished then don't need to do again and go to next one
+        if (!this.isMissionCompleted()) {
+            // do process all of data and init next node
+            // 1.create new dataSet by new method of dataset class
 
-        // ConflictDataIndexList is old data
-        List<Integer> conflictDataIndexList = this.getHandlerParameter().getConflictDataIndexList();
-        if (conflictDataIndexList == null) {
-            return;
-        }
-        // ConflictDataIndexList be clear
-        this.getHandlerParameter().updateDataSet();
-        if (this.getPreSuccessor() != null) {
-            ((SubDataSet) this.getHandlerParameter().getDataset()).getFillAttributeMap()
-                    .putAll(((SubDataSet) this.getPreSuccessor().getHandlerParameter().getDataset()).getFillAttributeMap());
-        }
-        for (Integer index : conflictDataIndexList) {
-            InputConvertResult inputData = getInputData(index);
-            if (this.canHandle(inputData.getInputData(), getHandlerParameter().getExpression(), index)) {
-                doHandle(index, getRealColName(index));
-                if (this.getSuccessor() != null) {
-                    // 3.generate new conflict data for next node
-                    // init ConflictDataIndexList for next one
-                    this.getHandlerParameter().addConfDataIndex(index);
+            // ConflictDataIndexList is old data
+            List<Integer> conflictDataIndexList = this.getHandlerParameter().getConflictDataIndexList();
+            if (conflictDataIndexList == null) {
+                return;
+            }
+            // ConflictDataIndexList be clear
+            this.getHandlerParameter().updateDataSet();
+            if (this.getPreSuccessor() != null) {
+                ((SubDataSet) this.getHandlerParameter().getDataset()).getFillAttributeMap()
+                        .putAll(((SubDataSet) this.getPreSuccessor().getHandlerParameter().getDataset()).getFillAttributeMap());
+            }
+            for (Integer index : conflictDataIndexList) {
+                InputConvertResult inputData = getInputData(index);
+                if (this.canHandle(inputData.getInputData(), getHandlerParameter().getExpression(), index)) {
+                    doHandle(index, getRealColName(index));
+                    if (this.getSuccessor() != null) {
+                        // 3.generate new conflict data for next node
+                        // init ConflictDataIndexList for next one
+                        this.getHandlerParameter().addConfDataIndex(index);
+                    }
                 }
             }
-        }
 
-        // 4.next handleRequest
-        if (this.getSuccessor() == null) {
-            return;
+            // 4.next handleRequest
+            if (this.getSuccessor() != null) {
+                List<Integer> newConflictDataIndexList = this.getHandlerParameter().getConflictDataIndexList();
+                // Current handler find nothing so that keep result and start neex one.
+                if (newConflictDataIndexList.size() <= 0) {
+                    this.getHandlerParameter().getConflictDataIndexList().addAll(conflictDataIndexList);
+                    this.getSuccessor().getHandlerParameter().getConflictDataIndexList().clear();
+                    // Current handler find a valid result
+                } else if (this.isValidResult()) {
+                    markMissionCompleted();
+                    // If we has get a valid result mark others and update reult immediately
+                    updateResult();
+                    // return;
+                    // Current handler find many valid result so that start next one
+                } else {
+                    this.getSuccessor().getHandlerParameter().getConflictDataIndexList().clear();
+                    this.getSuccessor().getHandlerParameter().getConflictDataIndexList().addAll(newConflictDataIndexList);
+                }
+            } else {
+                // If Current node is last one of current column then we need to update result
+                updateResult();
+            }
         }
-        List<Integer> newConflictDataIndexList = this.getHandlerParameter().getConflictDataIndexList();
-        if (newConflictDataIndexList.size() <= 0) {
-            this.getHandlerParameter().getConflictDataIndexList().addAll(conflictDataIndexList);
-            this.getSuccessor().getHandlerParameter().getConflictDataIndexList().clear();
-        } else if (newConflictDataIndexList.size() == 1) {
-            return;
-        } else {
-            this.getSuccessor().getHandlerParameter().getConflictDataIndexList().clear();
-            this.getSuccessor().getHandlerParameter().getConflictDataIndexList().addAll(newConflictDataIndexList);
+        if (this.getUiNextSuccessor() != null) {
+            this.getUiNextSuccessor().handleRequest();
         }
-        this.getSuccessor().handleRequest();
+    }
+
+    /**
+     * Update reult after execute all of rule on one column
+     */
+    private void updateResult() {
+        SurvivedResult survivoredRowNum = this.getSurvivedRowNum();
+        if (survivoredRowNum != null) {
+            String conflictCol = this.getHandlerParameter().getTargetColumn().getName();
+            DataSet originalSet = this.getHandlerParameter().getDataset();
+            if (originalSet instanceof SubDataSet) {
+                originalSet = ((SubDataSet) originalSet).getOrignialDataSet();
+            }
+            if (survivoredRowNum.isResolved()) {
+                originalSet.getConflictsOfSurvivor().remove(conflictCol);
+            }
+            Object survivedVlaue = originalSet.getValueAfterFiled(survivoredRowNum.getRowNum(), survivoredRowNum.getColumnName());
+            originalSet.getSurvivorMap().put(conflictCol, survivedVlaue);
+            originalSet.getSurvivorIndexMap().put(conflictCol, survivoredRowNum.getRowNum());
+            originalSet.arrangeConflictCol(conflictCol, survivoredRowNum);
+        }
+    }
+
+    /**
+     * Mark all of mission is finished
+     */
+    protected void markMissionCompleted() {
+        if (this.successor != null) {
+            getSuccessor().markMissionCompleted();
+        }
+        this.missionCompleted = true;
     }
 
     /**
@@ -212,7 +266,8 @@ public class CRCRHandler extends AbstractChainOfResponsibilityHandler {
      * (non-Javadoc)
      * 
      * @see
-     * org.talend.survivorship.action.handler.AbstractChainResponsibilityHandler#linkSuccessor(org.talend.survivorship.action.
+     * org.talend.survivorship.action.handler.AbstractChainResponsibilityHandler#linkSuccessor(org.talend.survivorship.
+     * action.
      * handler.AbstractChainResponsibilityHandler)
      */
     @Override
@@ -229,7 +284,8 @@ public class CRCRHandler extends AbstractChainOfResponsibilityHandler {
      * 
      * get row number of survivored value
      * 
-     * @return The row number and column name. Note that the column name is not target column alaways when current row has been
+     * @return The row number and column name. Note that the column name is not target column alaways when current row
+     * has been
      * fill by other column
      */
     public SurvivedResult getSurvivedRowNum() {
@@ -349,6 +405,16 @@ public class CRCRHandler extends AbstractChainOfResponsibilityHandler {
                     this.getHandlerParameter().getDataset().getValueAfterFiled(index, this.conflictingRowNumbers.get(index)));
         }
         return setContainer.size() == 1;
+    }
+
+    /**
+     * 
+     * Judge whether current handler need to execute.
+     * 
+     * @return True mission is not finished else mission is finished
+     */
+    public boolean isMissionCompleted() {
+        return missionCompleted;
     }
 
 }

@@ -29,7 +29,7 @@ public class SampleDataConflictMutilGroupConflictDisError {
 
     public static final ConflictRuleDefinition[] RULES_CONFLICT_RESOLVE = {
             new ConflictRuleDefinition(Order.CR, "CR1", "lastName", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.SurviveAs, null, "firstName", false, null, false), //$NON-NLS-1$
+                    Function.SurviveAs, null, "firstName", false, null, false, 0), //$NON-NLS-1$
             new ConflictRuleDefinition(Order.CR, "CR2", "lastName", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.MostCommon, null, "lastName", false, null, false) }; //$NON-NLS-1$
+                    Function.MostCommon, null, "lastName", false, null, false, 1) }; //$NON-NLS-1$
 }

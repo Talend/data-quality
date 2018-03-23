@@ -26,7 +26,7 @@ public class SampleDataConflictMutilGroupFillEmptyBy {
 
     public static final ConflictRuleDefinition[] RULES_CONFLICT_RESOLVE = {
             new ConflictRuleDefinition(Order.CR, "CR1", "lastName", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.FillEmpty, null, "firstName", false, null, false), //$NON-NLS-1$
+                    Function.FillEmpty, null, "firstName", false, null, false, 0), //$NON-NLS-1$
             new ConflictRuleDefinition(Order.CR, "CR2", "firstName", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.MostCommon, null, "firstName", false, null, false) }; //$NON-NLS-1$
+                    Function.MostCommon, null, "firstName", false, null, false, 1) }; //$NON-NLS-1$
 }
