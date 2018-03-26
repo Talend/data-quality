@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.talend.survivorship.action.ISurvivorshipAction;
+import org.talend.survivorship.action.handler.AbstractChainOfResponsibilityHandler;
 import org.talend.survivorship.action.handler.CRCRHandler;
 import org.talend.survivorship.action.handler.FunctionParameter;
 import org.talend.survivorship.action.handler.HandlerFactory;
@@ -220,8 +221,12 @@ public class DataSet {
                         FunctionParameter functionParameter = new FunctionParameter(action, expression, isIgnoreBlank, isDealDup);
                         CRCRHandler newCrcrHandler = HandlerFactory.getInstance().createCRCRHandler(new HandlerParameter(this,
                                 refColumn, tarColumn, cRuleName, this.getColumnIndexMap(), fillColumn, functionParameter));
+                        // If crcrHandler is exist already then put it into map else don't put it again just link it
+                        // with others
                         if (crcrHandler == null) {
-                            this.chainMap.put(columnName, newCrcrHandler);
+                            this.chainMap.put(columnName, newCrcrHandler, ruleDef.getIndexOrder());
+                        } else {
+                            this.chainMap.linkNodes(ruleDef.getIndexOrder(), newCrcrHandler);
                         }
                         crcrHandler = crcrHandler == null ? newCrcrHandler
                                 : (CRCRHandler) crcrHandler.linkSuccessor(newCrcrHandler);
@@ -299,30 +304,9 @@ public class DataSet {
         if (getColumnOrder() == null) {
             return;
         }
-        for (Column nextCol : getColumnOrder()) {
-            String nextColName = nextCol.getName();
-            if (conflictsOfSurvivor.contains(nextColName)) {
-
-                String conflictCol = nextColName;
-                CRCRHandler crcrHandler = (CRCRHandler) this.chainMap.get(conflictCol);
-                List<Integer> conflictDataIndexList = this.getConflictDataIndexList(conflictCol);
-                if (crcrHandler != null && conflictDataIndexList != null) {
-                    crcrHandler.handleRequest();
-                }
-                if (crcrHandler != null) {
-                    SurvivedResult survivoredRowNum = crcrHandler.getSurvivedRowNum();
-                    if (survivoredRowNum != null) {
-                        if (survivoredRowNum.isResolved()) {
-                            conflictsOfSurvivor.remove(conflictCol);
-                        }
-                        Object survivedVlaue = this.getValueAfterFiled(survivoredRowNum.getRowNum(),
-                                survivoredRowNum.getColumnName());
-                        survivorMap.put(conflictCol, survivedVlaue);
-                        survivorIndexMap.put(conflictCol, survivoredRowNum.getRowNum());
-                        arrangeConflictCol(conflictCol, survivoredRowNum);
-                    }
-                }
-            }
+        AbstractChainOfResponsibilityHandler firstNode = this.chainMap.getFirstNode();
+        if (firstNode != null) {
+            firstNode.handleRequest();
         }
     }
 
@@ -332,9 +316,12 @@ public class DataSet {
      * @param conflictCol
      * @param survivoredRowNum
      */
-    private void arrangeConflictCol(String conflictCol, SurvivedResult survivoredRowNum) {
+    public void arrangeConflictCol(String conflictCol, SurvivedResult survivoredRowNum) {
         if (survivoredRowNum.isResolved()) {
             List<Integer> orignalList = conflictDataMap.get().get(conflictCol);
+            if (orignalList == null) {
+                return;
+            }
             for (int index : orignalList) {
                 conflictList.get(index).remove(conflictCol);
             }

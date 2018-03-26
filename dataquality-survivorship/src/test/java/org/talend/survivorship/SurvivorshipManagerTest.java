@@ -12,10 +12,7 @@
 // ============================================================================
 package org.talend.survivorship;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -1080,7 +1077,7 @@ public class SurvivorshipManagerTest {
         }
         manager.initKnowledgeBase();
         manager.checkConflictRuleValid();
-        manager.runSession(SampleDataCheckOutputConflictColumn.SAMPLE_INPUT_1); //$NON-NLS-1$
+        manager.runSession(SampleDataCheckOutputConflictColumn.SAMPLE_INPUT_1);
         // 5. Retrieve results
         List<HashSet<String>> conflictList = manager.getConflictList();
         assertEquals(4, conflictList.size());
@@ -1114,7 +1111,7 @@ public class SurvivorshipManagerTest {
         }
         manager.initKnowledgeBase();
         manager.checkConflictRuleValid();
-        manager.runSession(SampleDataCheckOutputConflictColumn.SAMPLE_INPUT_2); //$NON-NLS-1$
+        manager.runSession(SampleDataCheckOutputConflictColumn.SAMPLE_INPUT_2);
 
         List<HashSet<String>> conflictList = manager.getConflictList();
         assertTrue(conflictList.size() == 6);

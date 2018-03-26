@@ -70,6 +70,28 @@ public class RuleDefinition {
     }
 
     /**
+     * @param order
+     * @param ruleName
+     * @param referenceColumn
+     * @param function
+     * @param targetColumn
+     * @param operator
+     * @param operationValue
+     * @param ignoreBlanks
+     * @param funParameter
+     */
+    public RuleDefinition(DefFunParameter funParameter, Order order, String ruleName, boolean ignoreBlanks) {
+        super();
+        this.order = order;
+        this.ruleName = ruleName;
+        this.referenceColumn = funParameter.getReferenceColumn();
+        this.function = funParameter.getFunction();
+        this.targetColumn = funParameter.getTargetColumn();
+        this.operation = funParameter.getOperation();
+        this.ignoreBlanks = ignoreBlanks;
+    }
+
+    /**
      * Getter for order.
      * 
      * @return the order

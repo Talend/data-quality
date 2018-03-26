@@ -13,6 +13,7 @@
 package org.talend.survivorship.utils;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.talend.survivorship.action.handler.AbstractChainOfResponsibilityHandler;
 
@@ -24,9 +25,49 @@ public class ChainNodeMap extends HashMap<String, AbstractChainOfResponsibilityH
 
     private static final long serialVersionUID = 1L;
 
+    private Map<Integer, AbstractChainOfResponsibilityHandler> orderMap = new HashMap<>();
+
     public void handleRequest(Object inputData, int rowNum) {
         for (String ruleName : this.keySet()) {
             this.get(ruleName).handleRequest(inputData, rowNum);
         }
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.util.HashMap#put(java.lang.Object, java.lang.Object)
+     */
+    public AbstractChainOfResponsibilityHandler put(String key, AbstractChainOfResponsibilityHandler value, int executeIndex) {
+        linkNodes(executeIndex, value);
+        return super.put(key, value);
+    }
+
+    /**
+     * Link node by ui order
+     * 
+     * @param executeIndex
+     * @param value
+     */
+    public void linkNodes(int executeIndex, AbstractChainOfResponsibilityHandler value) {
+        orderMap.put(executeIndex, value);
+        AbstractChainOfResponsibilityHandler preNode = orderMap.get(executeIndex - 1);
+        AbstractChainOfResponsibilityHandler nextNode = orderMap.get(executeIndex + 1);
+        if (preNode != null) {
+            preNode.linkUISuccessor(value);
+        }
+        if (nextNode != null) {
+            value.linkUISuccessor(nextNode);
+        }
+    }
+
+    /**
+     * 
+     * Get first rule node
+     * 
+     * @return
+     */
+    public AbstractChainOfResponsibilityHandler getFirstNode() {
+        return orderMap.get(0);
     }
 }

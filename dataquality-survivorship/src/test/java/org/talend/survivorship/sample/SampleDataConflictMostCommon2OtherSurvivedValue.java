@@ -13,6 +13,7 @@
 package org.talend.survivorship.sample;
 
 import org.talend.survivorship.model.ConflictRuleDefinition;
+import org.talend.survivorship.model.DefFunParameter;
 import org.talend.survivorship.model.RuleDefinition;
 import org.talend.survivorship.model.RuleDefinition.Function;
 import org.talend.survivorship.model.RuleDefinition.Order;
@@ -27,7 +28,7 @@ public class SampleDataConflictMostCommon2OtherSurvivedValue {
             new RuleDefinition(Order.SEQ, "most_common_city1", "city1", //$NON-NLS-1$
                     Function.MostCommon, null, "city1", false) }; //$NON-NLS-1$
 
-    public static final ConflictRuleDefinition[] RULES_CONFLICT_RESOLVE = {
-            new ConflictRuleDefinition(Order.CR, "more_recent_birthday", "firstName", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.SurviveAs, null, "city1", false, null, false) }; //$NON-NLS-1$
+    public static final ConflictRuleDefinition[] RULES_CONFLICT_RESOLVE = { new ConflictRuleDefinition(
+            new DefFunParameter("firstName", Function.SurviveAs, null, "city1", null), Order.CR, "more_recent_birthday", //$NON-NLS-1$ //$NON-NLS-2$
+            false, false, 0) };
 }

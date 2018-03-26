@@ -13,6 +13,7 @@
 package org.talend.survivorship.sample;
 
 import org.talend.survivorship.model.ConflictRuleDefinition;
+import org.talend.survivorship.model.DefFunParameter;
 import org.talend.survivorship.model.RuleDefinition;
 import org.talend.survivorship.model.RuleDefinition.Function;
 import org.talend.survivorship.model.RuleDefinition.Order;
@@ -25,8 +26,8 @@ public class SampleDataConflictMutilGroupFillEmptyBy {
             Function.MostCommon, null, "firstName", false) }; //$NON-NLS-1$
 
     public static final ConflictRuleDefinition[] RULES_CONFLICT_RESOLVE = {
-            new ConflictRuleDefinition(Order.CR, "CR1", "lastName", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.FillEmpty, null, "firstName", false, null, false), //$NON-NLS-1$
-            new ConflictRuleDefinition(Order.CR, "CR2", "firstName", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.MostCommon, null, "firstName", false, null, false) }; //$NON-NLS-1$
+            new ConflictRuleDefinition(new DefFunParameter("lastName", Function.FillEmpty, null, "firstName", null), Order.CR, //$NON-NLS-1$//$NON-NLS-2$
+                    "CR1", false, false, 0),
+            new ConflictRuleDefinition(new DefFunParameter("firstName", Function.MostCommon, null, "firstName", null), Order.CR, //$NON-NLS-1$//$NON-NLS-2$
+                    "CR2", false, false, 1) };
 }

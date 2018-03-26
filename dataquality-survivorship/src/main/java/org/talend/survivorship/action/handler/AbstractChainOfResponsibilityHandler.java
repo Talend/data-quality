@@ -33,6 +33,11 @@ public abstract class AbstractChainOfResponsibilityHandler {
      */
     protected AbstractChainOfResponsibilityHandler preSuccessor;
 
+    /**
+     * Next node on UI side(It is to decide the order which rules be executed )
+     */
+    protected AbstractChainOfResponsibilityHandler uiNextSuccessor;
+
     protected HandlerParameter handlerParameter;
 
     public AbstractChainOfResponsibilityHandler(AbstractChainOfResponsibilityHandler acrhandler) {
@@ -150,6 +155,25 @@ public abstract class AbstractChainOfResponsibilityHandler {
      */
     protected AbstractChainOfResponsibilityHandler getPreSuccessor() {
         return this.preSuccessor;
+    }
+
+    /**
+     * Sets the next ui successor.
+     * 
+     * @param nextHandler the successor to set
+     */
+    public AbstractChainOfResponsibilityHandler linkUISuccessor(AbstractChainOfResponsibilityHandler nextHandler) {
+        uiNextSuccessor = nextHandler;
+        return uiNextSuccessor;
+    }
+
+    /**
+     * Getter for uiNextSuccessor.
+     * 
+     * @return the uiNextSuccessor
+     */
+    public AbstractChainOfResponsibilityHandler getUiNextSuccessor() {
+        return this.uiNextSuccessor;
     }
 
 }

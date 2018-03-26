@@ -13,6 +13,7 @@
 package org.talend.survivorship.sample;
 
 import org.talend.survivorship.model.ConflictRuleDefinition;
+import org.talend.survivorship.model.DefFunParameter;
 import org.talend.survivorship.model.RuleDefinition;
 import org.talend.survivorship.model.RuleDefinition.Function;
 import org.talend.survivorship.model.RuleDefinition.Order;
@@ -28,9 +29,10 @@ public class SampleDataConflictOtherColumn2MostCommon2ConstantEmptyDuplicate {
                     Function.MostCommon, null, "lastName", false) }; //$NON-NLS-1$
 
     public static final ConflictRuleDefinition[] RULES_CONFLICT_RESOLVE = {
-            new ConflictRuleDefinition(Order.SEQ, "shortest_city2", "city2", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.Shortest, null, "firstName", false, null, false), //$NON-NLS-1$
-            new ConflictRuleDefinition(Order.SEQ, "exclusiveness_lastName", "lastName", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.ExcludeValues, "Green,Blue", "lastName", false, "firstName", true) }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            new ConflictRuleDefinition(new DefFunParameter("city2", Function.Shortest, null, "firstName", null), Order.SEQ, //$NON-NLS-1$//$NON-NLS-2$
+                    "shortest_city2", false, false, 0),
+            new ConflictRuleDefinition(
+                    new DefFunParameter("lastName", Function.ExcludeValues, "Green,Blue", "lastName", "firstName"), Order.SEQ, //$NON-NLS-1$//$NON-NLS-2$
+                    "exclusiveness_lastName", false, true, 1) };
 
 }

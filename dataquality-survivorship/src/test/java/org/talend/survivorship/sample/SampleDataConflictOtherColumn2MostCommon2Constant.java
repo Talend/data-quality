@@ -13,6 +13,7 @@
 package org.talend.survivorship.sample;
 
 import org.talend.survivorship.model.ConflictRuleDefinition;
+import org.talend.survivorship.model.DefFunParameter;
 import org.talend.survivorship.model.RuleDefinition;
 import org.talend.survivorship.model.RuleDefinition.Function;
 import org.talend.survivorship.model.RuleDefinition.Order;
@@ -26,11 +27,14 @@ public class SampleDataConflictOtherColumn2MostCommon2Constant {
                     Function.MostCommon, null, "lastName", false) }; //$NON-NLS-1$
 
     public static final ConflictRuleDefinition[] RULES_CONFLICT_RESOLVE = {
-            new ConflictRuleDefinition(Order.SEQ, "fillEmpty_lastName", "firstName", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.FillEmpty, null, "lastName", false, null, false), //$NON-NLS-1$
-            new ConflictRuleDefinition(Order.SEQ, "more_common_lastName", "lastName", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.ExcludeValues, "Green|Blue", "lastName", false, null, false), //$NON-NLS-1$ //$NON-NLS-2$
-            new ConflictRuleDefinition(Order.SEQ, "more_common_lastName", "lastName", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.Longest, null, "lastName", false, null, false) }; //$NON-NLS-1$ 
+            new ConflictRuleDefinition(new DefFunParameter("firstName", Function.FillEmpty, null, "lastName", null), Order.SEQ, //$NON-NLS-1$//$NON-NLS-2$
+                    "fillEmpty_lastName", //$NON-NLS-1$
+                    false, false, 0),
+            new ConflictRuleDefinition(new DefFunParameter("lastName", Function.ExcludeValues, "Green|Blue", "lastName", null), //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+                    Order.SEQ, "more_common_lastName", //$NON-NLS-1$
+                    false, false, 1),
+            new ConflictRuleDefinition(new DefFunParameter("lastName", Function.Longest, null, "lastName", null), Order.SEQ, //$NON-NLS-1$//$NON-NLS-2$
+                    "more_common_lastName", //$NON-NLS-1$
+                    false, false, 2) };
 
 }
