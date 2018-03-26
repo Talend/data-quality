@@ -28,7 +28,7 @@ public class ChainNodeMap extends HashMap<String, AbstractChainOfResponsibilityH
     private Map<Integer, AbstractChainOfResponsibilityHandler> orderMap = new HashMap<>();
 
     public void handleRequest(Object inputData, int rowNum) {
-        for (java.util.Map.Entry<String, AbstractChainOfResponsibilityHandler> entry : this.entrySet()) {
+        for (Entry<String, AbstractChainOfResponsibilityHandler> entry : this.entrySet()) {
             entry.getValue().handleRequest(inputData, rowNum);
         }
     }

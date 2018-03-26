@@ -61,9 +61,10 @@ public class ConflictRuleDefinition extends RuleDefinition {
      * @param duplicateSurCheck Whether deal with duplicate case in the survived value
      * @param executeIndex The index which current rule execute order
      */
-    public ConflictRuleDefinition(Order order, String ruleName, String referenceColumn, Function function, String operation,
-            String targetColumn, boolean ignoreBlanks, String fillColumn, boolean duplicateSurCheck, int executeIndex) {
-        this(order, ruleName, referenceColumn, function, operation, targetColumn, ignoreBlanks, fillColumn, duplicateSurCheck);
+    public ConflictRuleDefinition(DefFunParameter funParameter, Order order, String ruleName, boolean ignoreBlanks,
+            boolean duplicateSurCheck, int executeIndex) {
+        this(order, ruleName, funParameter.getReferenceColumn(), funParameter.getFunction(), funParameter.getOperation(),
+                funParameter.getTargetColumn(), ignoreBlanks, funParameter.getFillColumn(), duplicateSurCheck);
         this.indexOrder = executeIndex;
     }
 
@@ -80,9 +81,10 @@ public class ConflictRuleDefinition extends RuleDefinition {
      * @param fillColumn The name of fill column
      * @param duplicateSurCheck Whether deal with duplicate case in the survived value
      */
-    public ConflictRuleDefinition(Order order, String ruleName, String referenceColumn, Function function, String operation,
-            String targetColumn, boolean ignoreBlanks, boolean duplicateSurCheck, boolean disableRule, int executeIndex) {
-        this(order, ruleName, referenceColumn, function, operation, targetColumn, ignoreBlanks, duplicateSurCheck, disableRule);
+    public ConflictRuleDefinition(DefFunParameter funParameter, Order order, String ruleName, boolean ignoreBlanks,
+            boolean duplicateSurCheck, boolean disableRule, int executeIndex) {
+        this(order, ruleName, funParameter.getReferenceColumn(), funParameter.getFunction(), funParameter.getOperation(),
+                funParameter.getTargetColumn(), ignoreBlanks, duplicateSurCheck, disableRule);
         this.indexOrder = executeIndex;
     }
 

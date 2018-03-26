@@ -13,6 +13,7 @@
 package org.talend.survivorship.sample;
 
 import org.talend.survivorship.model.ConflictRuleDefinition;
+import org.talend.survivorship.model.DefFunParameter;
 import org.talend.survivorship.model.RuleDefinition;
 import org.talend.survivorship.model.RuleDefinition.Function;
 import org.talend.survivorship.model.RuleDefinition.Order;
@@ -28,19 +29,25 @@ public class SampleDataConflictExecuteRulesWithUIOrder {
                     Function.MostCommon, null, "city2", false) }; //$NON-NLS-1$
 
     public static final ConflictRuleDefinition[] RULES_CONFLICT_RESOLVE_SECOND_LONGEST_INVALID = {
-            new ConflictRuleDefinition(Order.SEQ, "longest_city1", "city1", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.Longest, null, "city1", false, null, false, 0), //$NON-NLS-1$
-            new ConflictRuleDefinition(Order.SEQ, "revmove_duplicate_city2", "city1", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.RemoveDuplicate, null, "city2", false, null, false, 1), //$NON-NLS-1$
-            new ConflictRuleDefinition(Order.SEQ, "longest_city2", "city2", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.Longest, null, "city2", false, null, false, 2) }; //$NON-NLS-1$
+            new ConflictRuleDefinition(new DefFunParameter("city1", Function.Longest, null, "city1", null), Order.SEQ, //$NON-NLS-1$//$NON-NLS-2$
+                    "longest_city1", //$NON-NLS-1$
+                    false, false, 0),
+            new ConflictRuleDefinition(new DefFunParameter("city1", Function.RemoveDuplicate, null, "city2", null), Order.SEQ, //$NON-NLS-1$//$NON-NLS-2$
+                    "revmove_duplicate_city2", //$NON-NLS-1$
+                    false, false, 1),
+            new ConflictRuleDefinition(new DefFunParameter("city2", Function.Longest, null, "city2", null), Order.SEQ, //$NON-NLS-1$//$NON-NLS-2$
+                    "longest_city2", //$NON-NLS-1$
+                    false, false, 2) };
 
     public static final ConflictRuleDefinition[] RULES_CONFLICT_RESOLVE_REMOVE_DUPLICATE_INVALID = {
-            new ConflictRuleDefinition(Order.SEQ, "revmove_duplicate_city2", "city1", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.RemoveDuplicate, null, "city2", false, null, false, 0), //$NON-NLS-1$
-            new ConflictRuleDefinition(Order.SEQ, "longest_city1", "city1", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.Longest, null, "city1", false, null, false, 1), //$NON-NLS-1$
-            new ConflictRuleDefinition(Order.SEQ, "shortest_city2", "city2", //$NON-NLS-1$ //$NON-NLS-2$
-                    Function.Shortest, null, "city2", false, null, false, 2), }; //$NON-NLS-1$          
+            new ConflictRuleDefinition(new DefFunParameter("city1", Function.RemoveDuplicate, null, "city2", null), Order.SEQ, //$NON-NLS-1$//$NON-NLS-2$
+                    "revmove_duplicate_city2", //$NON-NLS-1$
+                    false, false, 0),
+            new ConflictRuleDefinition(new DefFunParameter("city1", Function.Longest, null, "city1", null), Order.SEQ, //$NON-NLS-1$//$NON-NLS-2$
+                    "longest_city1", //$NON-NLS-1$
+                    false, false, 1),
+            new ConflictRuleDefinition(new DefFunParameter("city2", Function.Shortest, null, "city2", null), Order.SEQ, //$NON-NLS-1$//$NON-NLS-2$
+                    "shortest_city2", //$NON-NLS-1$
+                    false, false, 2), };
 
 }
