@@ -28,10 +28,8 @@ public class SampleDataConflictMostCommon2Longest2MostRecent {
 
     public static final ConflictRuleDefinition[] RULES_CONFLICT_RESOLVE = {
             new ConflictRuleDefinition(new DefFunParameter("firstName", Function.Longest, null, "firstName", null), Order.SEQ, //$NON-NLS-1$//$NON-NLS-2$
-                    "longest_firstName",
-                    false, false, 0),
+                    "longest_firstName", false, false, 0),
             new ConflictRuleDefinition(new DefFunParameter("birthday", Function.MostRecent, null, "firstName", null), Order.SEQ, //$NON-NLS-1$//$NON-NLS-2$
-                    "more_recent_birthday",
-                    false, false, 1) };
+                    "more_recent_birthday", false, false, 1) };
 
 }

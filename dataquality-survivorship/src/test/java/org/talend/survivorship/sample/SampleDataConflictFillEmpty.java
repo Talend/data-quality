@@ -28,8 +28,7 @@ public class SampleDataConflictFillEmpty {
     public static final ConflictRuleDefinition[] RULES_CONFLICT_RESOLVE = {
 
             new ConflictRuleDefinition(new DefFunParameter("firstName", Function.FillEmpty, null, "lastName", null), Order.CR, //$NON-NLS-1$//$NON-NLS-2$
-                    "CR1",
-                    false, false, 0),
+                    "CR1", false, false, 0),
             new ConflictRuleDefinition(new DefFunParameter("lastName", Function.Longest, null, "lastName", null), Order.CR, "CR2", //$NON-NLS-1$ //$NON-NLS-2$
                     false, false, 1) };
 }

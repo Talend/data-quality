@@ -48,6 +48,15 @@ public class SampleDataConflictExecuteRulesWithUIOrder {
                     false, false, 1),
             new ConflictRuleDefinition(new DefFunParameter("city2", Function.Shortest, null, "city2", null), Order.SEQ, //$NON-NLS-1$//$NON-NLS-2$
                     "shortest_city2", //$NON-NLS-1$
-                    false, false, 2), };
+                    false, false, 2) };
+
+    public static final ConflictRuleDefinition[] RULES_CONFLICT_RESOLVE_MATCH_REGEX_INVALID = {
+            new ConflictRuleDefinition(new DefFunParameter("city1", Function.MatchRegex, "beijing1", "city1", null), Order.SEQ, //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+                    "matchRegex_city1", //$NON-NLS-1$
+                    false, false, 0),
+
+            new ConflictRuleDefinition(new DefFunParameter("city1", Function.RemoveDuplicate, null, "city2", null), Order.SEQ, //$NON-NLS-1$//$NON-NLS-2$
+                    "revmove_duplicate_city2", //$NON-NLS-1$
+                    false, false, 1) };
 
 }

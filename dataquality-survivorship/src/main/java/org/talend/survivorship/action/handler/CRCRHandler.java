@@ -12,6 +12,7 @@
 // ============================================================================
 package org.talend.survivorship.action.handler;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -97,7 +98,7 @@ public class CRCRHandler extends AbstractChainOfResponsibilityHandler {
 
             // ConflictDataIndexList is old data
             List<Integer> conflictDataIndexList = this.getHandlerParameter().getConflictDataIndexList();
-            if (conflictDataIndexList == null) {
+            if (conflictDataIndexList == null || conflictDataIndexList.size() == 0) {
                 return;
             }
             // ConflictDataIndexList be clear
@@ -117,14 +118,14 @@ public class CRCRHandler extends AbstractChainOfResponsibilityHandler {
                     }
                 }
             }
-
             // 4.next handleRequest
             if (this.getSuccessor() != null) {
                 List<Integer> newConflictDataIndexList = this.getHandlerParameter().getConflictDataIndexList();
                 // Current handler find nothing so that keep result and start neex one.
-                if (newConflictDataIndexList.size() <= 0) {
+                if (newConflictDataIndexList != null && newConflictDataIndexList.size() <= 0) {
                     this.getHandlerParameter().getConflictDataIndexList().addAll(conflictDataIndexList);
-                    this.getSuccessor().getHandlerParameter().getConflictDataIndexList().clear();
+                    saveCurrentStatus(conflictDataIndexList);
+
                     // Current handler find a valid result
                 } else if (this.isValidResult()) {
                     markMissionCompleted();
@@ -133,8 +134,7 @@ public class CRCRHandler extends AbstractChainOfResponsibilityHandler {
                     // return;
                     // Current handler find many valid result so that start next one
                 } else {
-                    this.getSuccessor().getHandlerParameter().getConflictDataIndexList().clear();
-                    this.getSuccessor().getHandlerParameter().getConflictDataIndexList().addAll(newConflictDataIndexList);
+                    saveCurrentStatus(newConflictDataIndexList);
                 }
             } else {
                 // If Current node is last one of current column then we need to update result
@@ -143,6 +143,21 @@ public class CRCRHandler extends AbstractChainOfResponsibilityHandler {
         }
         if (this.getUiNextSuccessor() != null) {
             this.getUiNextSuccessor().handleRequest();
+        }
+    }
+
+    /**
+     * Save current status
+     * 
+     * @param conflictDataIndexList
+     */
+    private void saveCurrentStatus(List<Integer> conflictDataIndexList) {
+        List<Integer> tempList = new ArrayList<>();
+        tempList.addAll(conflictDataIndexList);
+        List<Integer> realConflictDataIndexList = this.getSuccessor().getHandlerParameter().getConflictDataIndexList();
+        if (realConflictDataIndexList != null) {
+            realConflictDataIndexList.clear();
+            realConflictDataIndexList.addAll(tempList);
         }
     }
 
