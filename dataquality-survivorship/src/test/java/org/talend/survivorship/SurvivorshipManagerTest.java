@@ -38,6 +38,7 @@ import org.talend.survivorship.sample.SampleData;
 import org.talend.survivorship.sample.SampleDataCheckOutputConflictColumn;
 import org.talend.survivorship.sample.SampleDataConflict;
 import org.talend.survivorship.sample.SampleDataConflictCheckRule;
+import org.talend.survivorship.sample.SampleDataConflictExecuteRulesWithUIOrder;
 import org.talend.survivorship.sample.SampleDataConflictFillEmpty;
 import org.talend.survivorship.sample.SampleDataConflictMostCommon2Longest;
 import org.talend.survivorship.sample.SampleDataConflictMostCommon2Longest2MostRecent;
@@ -291,7 +292,8 @@ public class SurvivorshipManagerTest {
      * 
      * @case2 most frequent->longest and with null
      * 
-     * For city1 column, after most common rule generate conflict beijing and shanghai then use Longest rule resolve conflict.
+     * For city1 column, after most common rule generate conflict beijing and shanghai then use Longest rule resolve
+     * conflict.
      * Rusult is shanghai
      */
     @Test
@@ -322,7 +324,8 @@ public class SurvivorshipManagerTest {
         Object cityObj = survivorMap.get("city1"); //$NON-NLS-1$
         assertTrue("The birthdayObj should not be null", cityObj != null); //$NON-NLS-1$
         String resultStr = (String) cityObj;
-        // Because we used longest rule to resolve conflict the frequency of shanghai is 2 and the frequency of beijing is 2.
+        // Because we used longest rule to resolve conflict the frequency of shanghai is 2 and the frequency of beijing
+        // is 2.
         // But length of beijing is 7 the length of shanghai is 8 so that we expect final result is shanghai
         assertEquals("The resultStr should be shanghai", "shanghai", //$NON-NLS-1$ //$NON-NLS-2$
                 resultStr);
@@ -816,6 +819,7 @@ public class SurvivorshipManagerTest {
             }
             manager.getColumnList().add(column);
         }
+
         for (RuleDefinition element : SampleDataConflictMutilGroupFillEmptyBy.RULES_CONFLICT) {
             manager.addRuleDefinition(element);
         }
@@ -1125,6 +1129,156 @@ public class SurvivorshipManagerTest {
     }
 
     /**
+     * Test method for {@link org.talend.survivorship.SurvivorshipManager#runSession(java.lang.String[][])}.
+     * 
+     * @case Execute rules with ui order(rather than as columns order)
+     * 
+     */
+
+    @Test
+    public void testRunSessionExecuteWithUIOrderRevmoveIsSecondOne() {
+
+        manager = new SurvivorshipManager(SampleData.RULE_PATH, SampleDataConflictExecuteRulesWithUIOrder.PKG_NAME_CONFLICT);
+
+        for (String str : SampleDataConflict.COLUMNS_CONFLICT.keySet()) {
+            Column column = new Column(str, SampleDataConflict.COLUMNS_CONFLICT.get(str));
+            if (column.getName().equals("city1") || column.getName().equals("city2")) { //$NON-NLS-1$ //$NON-NLS-2$
+                for (ConflictRuleDefinition element : SampleDataConflictExecuteRulesWithUIOrder.RULES_CONFLICT_RESOLVE_SECOND_LONGEST_INVALID) {
+                    if (column.getName().equals(element.getTargetColumn())) {
+                        column.getConflictResolveList().add(element);
+                    }
+                }
+            }
+            manager.getColumnList().add(column);
+        }
+        for (RuleDefinition element : SampleDataConflictExecuteRulesWithUIOrder.RULES_CONFLICT) {
+            manager.addRuleDefinition(element);
+        }
+        manager.initKnowledgeBase();
+        manager.checkConflictRuleValid();
+        manager.runSession(getTableValue("/org.talend.survivorship.conflict/conflicts.csv", 5, 9, 1)); //$NON-NLS-1$
+        // 5. Retrieve results
+        HashSet<String> conflictsOfSurvivor = manager.getConflictsOfSurvivor();
+        assertEquals("The size of conflictsOfSurvivor should be 0", 0, conflictsOfSurvivor.size()); //$NON-NLS-1$
+        Map<String, Object> survivorMap = manager.getSurvivorMap();
+        assertTrue("The SurvivorMap should not be null", survivorMap != null); //$NON-NLS-1$
+        Object city2 = survivorMap.get("city2"); //$NON-NLS-1$
+        assertTrue("The chity2 should not be null", city2 != null); //$NON-NLS-1$
+        String resultCity = (String) city2;
+
+        // 08-08-2000 is we expect after implement code because we use most recent to resolve conflict
+        assertEquals("The resultCity should be beijing", "beijing", //$NON-NLS-1$ //$NON-NLS-2$
+                resultCity);
+        Object city1 = survivorMap.get("city1"); //$NON-NLS-1$
+        assertTrue("The chity1 should not be null", city1 != null); //$NON-NLS-1$
+        resultCity = (String) city1;
+
+        // 08-08-2000 is we expect after implement code because we use most recent to resolve conflict
+        assertEquals("The resultCity should be shanghai", "shanghai", //$NON-NLS-1$ //$NON-NLS-2$
+                resultCity);
+    }
+
+    /**
+     * Test method for {@link org.talend.survivorship.SurvivorshipManager#runSession(java.lang.String[][])}.
+     * 
+     * @case Execute rules with ui order(rather than as columns order)
+     * 
+     */
+
+    @Test
+    public void testRunSessionExecuteWithUIOrderRevmoveIsFirstOne() {
+
+        manager = new SurvivorshipManager(SampleData.RULE_PATH, SampleDataConflictExecuteRulesWithUIOrder.PKG_NAME_CONFLICT);
+
+        for (String str : SampleDataConflict.COLUMNS_CONFLICT.keySet()) {
+            Column column = new Column(str, SampleDataConflict.COLUMNS_CONFLICT.get(str));
+            if (column.getName().equals("city1") || column.getName().equals("city2")) { //$NON-NLS-1$ //$NON-NLS-2$
+                for (ConflictRuleDefinition element : SampleDataConflictExecuteRulesWithUIOrder.RULES_CONFLICT_RESOLVE_REMOVE_DUPLICATE_INVALID) {
+                    if (column.getName().equals(element.getTargetColumn())) {
+                        column.getConflictResolveList().add(element);
+                    }
+                }
+            }
+            manager.getColumnList().add(column);
+        }
+        for (RuleDefinition element : SampleDataConflictExecuteRulesWithUIOrder.RULES_CONFLICT) {
+            manager.addRuleDefinition(element);
+        }
+        manager.initKnowledgeBase();
+        manager.checkConflictRuleValid();
+        manager.runSession(getTableValue("/org.talend.survivorship.conflict/conflicts.csv", 5, 9, 1)); //$NON-NLS-1$
+        // 5. Retrieve results
+        HashSet<String> conflictsOfSurvivor = manager.getConflictsOfSurvivor();
+        assertEquals("The size of conflictsOfSurvivor should be 0", 0, conflictsOfSurvivor.size()); //$NON-NLS-1$
+        Map<String, Object> survivorMap = manager.getSurvivorMap();
+        assertTrue("The SurvivorMap should not be null", survivorMap != null); //$NON-NLS-1$
+        Object city2 = survivorMap.get("city2"); //$NON-NLS-1$
+        assertTrue("The chity2 should not be null", city2 != null); //$NON-NLS-1$
+        String resultCity = (String) city2;
+
+        // 08-08-2000 is we expect after implement code because we use most recent to resolve conflict
+        assertEquals("The chity2 should be shanghai", "shanghai", //$NON-NLS-1$ //$NON-NLS-2$
+                resultCity);
+        Object city1 = survivorMap.get("city1"); //$NON-NLS-1$
+        assertTrue("The chity1 should not be null", city1 != null); //$NON-NLS-1$
+        resultCity = (String) city1;
+
+        // 08-08-2000 is we expect after implement code because we use most recent to resolve conflict
+        assertEquals("The resultCity should be shanghai", "shanghai", //$NON-NLS-1$ //$NON-NLS-2$
+                resultCity);
+    }
+
+    /**
+     * Test method for {@link org.talend.survivorship.SurvivorshipManager#runSession(java.lang.String[][])}.
+     * 
+     * @case Execute rules with ui order(rather than as columns order)
+     * 
+     */
+
+    @Test
+    public void testRunSessionExecuteWithUIOrderRevmoveFirstRuleIsInvalid() {
+
+        manager = new SurvivorshipManager(SampleData.RULE_PATH, SampleDataConflictExecuteRulesWithUIOrder.PKG_NAME_CONFLICT);
+
+        for (String str : SampleDataConflict.COLUMNS_CONFLICT.keySet()) {
+            Column column = new Column(str, SampleDataConflict.COLUMNS_CONFLICT.get(str));
+            if (column.getName().equals("city1") || column.getName().equals("city2")) { //$NON-NLS-1$ //$NON-NLS-2$
+                for (ConflictRuleDefinition element : SampleDataConflictExecuteRulesWithUIOrder.RULES_CONFLICT_RESOLVE_MATCH_REGEX_INVALID) {
+                    if (column.getName().equals(element.getTargetColumn())) {
+                        column.getConflictResolveList().add(element);
+                    }
+                }
+            }
+            manager.getColumnList().add(column);
+        }
+        for (RuleDefinition element : SampleDataConflictExecuteRulesWithUIOrder.RULES_CONFLICT) {
+            manager.addRuleDefinition(element);
+        }
+        manager.initKnowledgeBase();
+        manager.checkConflictRuleValid();
+        manager.runSession(getTableValue("/org.talend.survivorship.conflict/conflicts.csv", 5, 9, 1)); //$NON-NLS-1$
+        // 5. Retrieve results
+        HashSet<String> conflictsOfSurvivor = manager.getConflictsOfSurvivor();
+        assertEquals("The size of conflictsOfSurvivor should be 1", 1, conflictsOfSurvivor.size()); //$NON-NLS-1$
+        Map<String, Object> survivorMap = manager.getSurvivorMap();
+        assertTrue("The SurvivorMap should not be null", survivorMap != null); //$NON-NLS-1$
+        Object city2 = survivorMap.get("city2"); //$NON-NLS-1$
+        assertTrue("The chity2 should not be null", city2 != null); //$NON-NLS-1$
+        String resultCity = (String) city2;
+
+        // 08-08-2000 is we expect after implement code because we use most recent to resolve conflict
+        assertEquals("The chity2 should be beijing", "beijing", //$NON-NLS-1$ //$NON-NLS-2$
+                resultCity);
+        Object city1 = survivorMap.get("city1"); //$NON-NLS-1$
+        assertTrue("The chity1 should not be null", city1 != null); //$NON-NLS-1$
+        resultCity = (String) city1;
+
+        // 08-08-2000 is we expect after implement code because we use most recent to resolve conflict
+        assertEquals("The resultCity should be shanghai", "shanghai", //$NON-NLS-1$ //$NON-NLS-2$
+                resultCity);
+    }
+
+    /**
      * Create by zshen judge whether conflict value is right
      */
     private void assertResultIsFirstConflictedValue() {
@@ -1225,6 +1379,9 @@ public class SurvivorshipManagerTest {
                     y++;
                 }
                 index++;
+                if (index >= rowNum) {
+                    break;
+                }
             }
 
         } catch (FileNotFoundException e) {

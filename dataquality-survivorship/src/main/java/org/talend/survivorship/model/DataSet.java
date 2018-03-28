@@ -555,7 +555,12 @@ public class DataSet {
     public List<Integer> getConflictDataIndexList(String colName) {
         Map<String, List<Integer>> tempConflictDataMap = this.getConflictDataMap().get();
         if (tempConflictDataMap != null) {
-            return tempConflictDataMap.get(colName);
+            List<Integer> indexList = tempConflictDataMap.get(colName);
+            if (indexList == null) {
+                indexList = new ArrayList<>();
+                tempConflictDataMap.put(colName, indexList);
+            }
+            return indexList;
         } else {
             return null;
         }
