@@ -1,3 +1,10 @@
+v5.0.1 2018-03-28
+	- TDQ-14914 fix the deletion of Talend semantic type
+	- TDQ-14870 finish the running merges before commit
+	- TDQ-14836 remove CITY from shared dictionary
+	- TDQ-14635 for shared data dictionary broadcasting, include only the non modified categories 
+	- TDQ-15022 when deleting a semantic type, commit changes of documents in Lucene index
+
 v5.0.0 2018-02-12
 	- TDQ-14482 and TDQ-14361, discovery and validation refactoring
 	- TDQ-14228 add RFC-3966 support in phone regexes

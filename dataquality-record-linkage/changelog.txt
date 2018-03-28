@@ -1,3 +1,6 @@
+v5.0.1 2018-03-28
+	- TDQ-14964 check null when compare date
+
 v5.0.0 2018-02-12
 	- TDQ-14276 support "most recent" and "most ancient" in match analysis
 	- TDQ-14218 "shortest" function issue with NULL in data
