@@ -55,7 +55,7 @@ public class SampleDataConflictExecuteRulesWithUIOrder {
                     "matchRegex_city1", //$NON-NLS-1$
                     false, false, 0),
 
-            new ConflictRuleDefinition(new DefFunParameter("city1", Function.RemoveDuplicate, null, "city2", null), Order.SEQ, //$NON-NLS-1$//$NON-NLS-2$
+            new ConflictRuleDefinition(new DefFunParameter("city2", Function.RemoveDuplicate, null, "city1", null), Order.SEQ, //$NON-NLS-1$//$NON-NLS-2$
                     "revmove_duplicate_city2", //$NON-NLS-1$
                     false, false, 1) };
 

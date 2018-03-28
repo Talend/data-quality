@@ -1267,14 +1267,14 @@ public class SurvivorshipManagerTest {
         String resultCity = (String) city2;
 
         // 08-08-2000 is we expect after implement code because we use most recent to resolve conflict
-        assertEquals("The chity2 should be shanghai", "shanghai", //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("The chity2 should be beijing", "beijing", //$NON-NLS-1$ //$NON-NLS-2$
                 resultCity);
         Object city1 = survivorMap.get("city1"); //$NON-NLS-1$
         assertTrue("The chity1 should not be null", city1 != null); //$NON-NLS-1$
         resultCity = (String) city1;
 
         // 08-08-2000 is we expect after implement code because we use most recent to resolve conflict
-        assertEquals("The resultCity should be beijing", "beijing", //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("The resultCity should be shanghai", "shanghai", //$NON-NLS-1$ //$NON-NLS-2$
                 resultCity);
     }
 
