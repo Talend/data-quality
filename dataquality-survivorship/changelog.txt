@@ -1,8 +1,8 @@
-v5.0.2 2018-03-28
-	- TDQ-14225 output correct conflict column
+v5.0.2 2018-04-04
+	- TDQ-14225 output correct conflicting column
   
-v5.0.1 2018-03-23
-  - TDQ-14176 tRuleSurvivorship support to execute rule as ui order
+v5.0.1 2018-03-28
+	- TDQ-14176 execute rules by the order defined in the UI for tRuleSurvivorship  
     
 v5.0.0 2018-02-12
 	(no change in this version)

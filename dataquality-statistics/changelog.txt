@@ -1,3 +1,6 @@
+v5.0.2 2018-04-04
+	(no change in this version)
+
 v5.0.1 2018-03-28
 	- TDQ-14893 add LFU cache for technical type discovery
 	- TDQ-14894 add Date Pattern filter
