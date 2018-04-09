@@ -19,7 +19,6 @@ import org.talend.dataquality.standardization.index.CombinedQueryTest;
 import org.talend.dataquality.standardization.index.SynonymIndexBuilderTest;
 import org.talend.dataquality.standardization.index.SynonymIndexSearcherTest;
 import org.talend.dataquality.standardization.index.test.SynonymTest;
-import org.talend.dataquality.standardization.main.HandLuceneImplTest;
 import org.talend.dataquality.standardization.phone.PhoneNumberHandlerBaseTest;
 import org.talend.dataquality.standardization.phone.PhoneNumberTypeEnumTest;
 import org.talend.dataquality.standardization.query.FirstNameStandardizeTest;
@@ -29,9 +28,9 @@ import org.talend.dataquality.standardization.record.SynonymRecordSearcherTest;
  * DOC yyin class global comment. Detailled comment
  */
 @RunWith(Suite.class)
-@SuiteClasses({ SynonymRecordSearcherTest.class, FirstNameStandardizeTest.class, HandLuceneImplTest.class,
-        CombinedQueryTest.class, SynonymIndexBuilderTest.class, SynonymIndexSearcherTest.class, SynonymTest.class,
-        PhoneNumberHandlerBaseTest.class, PhoneNumberTypeEnumTest.class })
+@SuiteClasses({ SynonymRecordSearcherTest.class, FirstNameStandardizeTest.class, CombinedQueryTest.class,
+        SynonymIndexBuilderTest.class, SynonymIndexSearcherTest.class, SynonymTest.class, PhoneNumberHandlerBaseTest.class,
+        PhoneNumberTypeEnumTest.class })
 public class AllDQStandardizationTests {
 
 }
