@@ -56,7 +56,7 @@ import org.xml.sax.SAXException;
  */
 public class ReleaseVersionBumper {
 
-    private static final String TARGET_VERSION = "5.0.3-SNAPSHOT";
+    private static final String TARGET_VERSION = "5.1.0-SNAPSHOT";
 
     private static final String DATAQUALITY_PREFIX = "dataquality.";
 
