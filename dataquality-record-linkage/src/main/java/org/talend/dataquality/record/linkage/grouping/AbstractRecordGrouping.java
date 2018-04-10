@@ -148,23 +148,11 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
 
     /**
      * Set original input column size.except GID,MASTER,SCORE,GRP_SIZE,GRP_QUALITY,MATCHING_DISTANCES.
-     * 
+     *
      * @param prevOrginalColumnSize the prevOrginalColumnSize to set
      */
     public void setOrginalInputColumnSize(int originalInputColumnSize) {
         this.originalInputColumnSize = originalInputColumnSize;
-    }
-
-    /**
-     * Sets the isSeperateOutput.
-     * 
-     * @param isSeperateOutput the isSeperateOutput to set
-     * @deprecated Use {@link #setIsComputeGrpQuality(Boolean)} instead.
-     */
-    @Deprecated
-    @Override
-    public void setSeperateOutput(boolean isSeperateOutput) {
-        this.setIsComputeGrpQuality(isSeperateOutput);
     }
 
     public int getOriginalInputColumnSize() {
@@ -173,7 +161,7 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.dataquality.record.linkage.grouping.IRecordGrouping#setIsDisplayAttLabels(java.lang.Boolean)
      */
     @Override
@@ -496,7 +484,7 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.talend.dataquality.record.linkage.grouping.IRecordGrouping#setSurvivorShipAlgorithmParams(org.talend.dataquality
      * .record.linkage.grouping.swoosh.SurvivorShipAlgorithmParams)
@@ -511,9 +499,9 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
     }
 
     /**
-     * 
+     *
      * Output one row
-     * 
+     *
      * @param row
      */
     protected abstract void outputRow(TYPE[] row);
@@ -521,9 +509,9 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
     protected abstract void outputRow(RichRecord row);
 
     /**
-     * 
+     *
      * Output rich record content
-     * 
+     *
      * @param row one RichRecord instance which want to output
      */
     public void outputRichRecord(RichRecord row) {
@@ -532,7 +520,7 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.talend.dataquality.hadoop.group.IRecordGrouping#initialize()
      */
     @Override
@@ -635,7 +623,7 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
 
     /**
      * Getter for combinedRecordMatcher.
-     * 
+     *
      * @return the combinedRecordMatcher
      */
     public CombinedRecordMatcher getCombinedRecordMatcher() {
@@ -652,7 +640,7 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
 
     /**
      * Getter for survivorShipAlgorithmParams.
-     * 
+     *
      * @return the survivorShipAlgorithmParams
      */
     protected SurvivorShipAlgorithmParams getSurvivorShipAlgorithmParams() {
@@ -671,7 +659,7 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
 
     /**
      * TDQ-14276,used only for swoosh, when function is "Most Recent" or "Most Ancient"
-     * 
+     *
      * @param columnMap <columnIndex,dataPattern>:
      */
     public void setColumnDatePatternMap(Map<String, String> columnMap) {

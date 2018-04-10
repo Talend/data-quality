@@ -227,7 +227,7 @@ public class AbstractRecordGroupingTest {
             Assert.fail();
         }
         groupingRecords.clear();
-        recordGroup.setSeperateOutput(Boolean.TRUE);
+        recordGroup.setIsComputeGrpQuality(Boolean.TRUE);
         recordGroup.setIsOutputDistDetails(true);
         try {
             for (String[] inputRow : inputList) {
