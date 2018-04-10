@@ -55,18 +55,6 @@ public class ClassPathDirectory {
     }
 
     /**
-     * Set the location of index extraction for directories opened by jar URI.
-     * <p/>
-     * By default, if this method is not called, the index will be extracted to a sub-folder of java.io.tmpdir.
-     * 
-     * @deprecated use {@link CategoryRegistryManager.setLocalRegistryPath(folder)} instead
-     */
-    @Deprecated
-    public static void setLocalIndexFolder(String folder) {
-        CategoryRegistryManager.setLocalRegistryPath(folder);
-    }
-
-    /**
      * Allow external code to change behavior about extracted Lucene indexes (always extract a fresh copy or reuse
      * previous extract).
      * 
