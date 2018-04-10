@@ -175,23 +175,23 @@ public class AbstractRecordGroupingTest {
         for (String[] rds : groupingRecords) {
             if (rds[0].equals("26997914900")) { //$NON-NLS-1$
                 // The group size should be 1 for account 26997914900 after add a custom match rule, before is 5
-                Assert.assertEquals(1, Integer.valueOf(rds[rds.length - 4]).intValue());
+                Assert.assertEquals(1, Integer.valueOf(rds[rds.length - 5]).intValue());
             }
             if (rds[0].equals("13700177100")) { //$NON-NLS-1$
                 // The group size should be 1 for account 13700177100 after add a custom match rule, before is 6
-                Assert.assertEquals(1, Integer.valueOf(rds[rds.length - 4]).intValue());
+                Assert.assertEquals(1, Integer.valueOf(rds[rds.length - 5]).intValue());
             }
             if (rds[0].equals("12083684802")) { //$NON-NLS-1$
                 // The group size should be 1 for account 12083684802 after add a custom match rule, before is 4
-                Assert.assertEquals(1, Integer.valueOf(rds[rds.length - 4]).intValue());
+                Assert.assertEquals(1, Integer.valueOf(rds[rds.length - 5]).intValue());
             }
             if (rds[0].equals("13758354187")) { //$NON-NLS-1$
                 // The group size should be 1 for account 13758354187 after add a custom match rule, before is 2
-                Assert.assertEquals(1, Integer.valueOf(rds[rds.length - 4]).intValue());
+                Assert.assertEquals(1, Integer.valueOf(rds[rds.length - 5]).intValue());
             }
             if (rds[0].equals("15114446900")) { //$NON-NLS-1$
                 // The group size should be 1 for account 15114446900 after add a custom match rule, before is 2
-                Assert.assertEquals(1, Integer.valueOf(rds[rds.length - 4]).intValue());
+                Assert.assertEquals(1, Integer.valueOf(rds[rds.length - 5]).intValue());
             }
 
             for (String rd : rds) {
@@ -363,23 +363,23 @@ public class AbstractRecordGroupingTest {
         for (String[] rds : groupingRecords) {
             if (rds[0].equals("26997914900")) { //$NON-NLS-1$
                 // The group size should be 5 for account 26997914900
-                Assert.assertEquals(5, Integer.valueOf(rds[rds.length - 4]).intValue());
+                Assert.assertEquals(5, Integer.valueOf(rds[rds.length - 5]).intValue());
             }
             if (rds[0].equals("13700177100")) { //$NON-NLS-1$
                 // The group size should be 6 for account 13700177100
-                Assert.assertEquals(6, Integer.valueOf(rds[rds.length - 4]).intValue());
+                Assert.assertEquals(6, Integer.valueOf(rds[rds.length - 5]).intValue());
             }
             if (rds[0].equals("12083684802")) { //$NON-NLS-1$
                 // The group size should be 4 for account 12083684802
-                Assert.assertEquals(4, Integer.valueOf(rds[rds.length - 4]).intValue());
+                Assert.assertEquals(4, Integer.valueOf(rds[rds.length - 5]).intValue());
             }
             if (rds[0].equals("13758354187")) { //$NON-NLS-1$
                 // The group size should be 2 for account 13758354187
-                Assert.assertEquals(1, Integer.valueOf(rds[rds.length - 4]).intValue());
+                Assert.assertEquals(1, Integer.valueOf(rds[rds.length - 5]).intValue());
             }
             if (rds[0].equals("15114446900")) { //$NON-NLS-1$
                 // The group size should be 2 for account 15114446900
-                Assert.assertEquals(2, Integer.valueOf(rds[rds.length - 4]).intValue());
+                Assert.assertEquals(2, Integer.valueOf(rds[rds.length - 5]).intValue());
             }
 
             for (String rd : rds) {
@@ -481,23 +481,23 @@ public class AbstractRecordGroupingTest {
 
         for (String[] rds : groupingRecords) {
             if (rds[0].equals("26997914900")) { //$NON-NLS-1$
-                Assert.assertEquals(0, Integer.valueOf(rds[rds.length - 4]).intValue());
+                Assert.assertEquals(0, Integer.valueOf(rds[rds.length - 5]).intValue());
             }
             if (rds[0].equals("13700177100")) { //$NON-NLS-1$
-                Assert.assertEquals(0, Integer.valueOf(rds[rds.length - 4]).intValue());
+                Assert.assertEquals(0, Integer.valueOf(rds[rds.length - 5]).intValue());
             }
             if (rds[0].equals("12083684802")) { //$NON-NLS-1$
-                Assert.assertEquals(0, Integer.valueOf(rds[rds.length - 4]).intValue());
+                Assert.assertEquals(0, Integer.valueOf(rds[rds.length - 5]).intValue());
             }
             if (rds[0].equals("13758354187")) { //$NON-NLS-1$
-                Assert.assertEquals(0, Integer.valueOf(rds[rds.length - 4]).intValue());
+                Assert.assertEquals(0, Integer.valueOf(rds[rds.length - 5]).intValue());
             }
             if (rds[0].equals("15114446900")) { //$NON-NLS-1$
-                Assert.assertEquals(0, Integer.valueOf(rds[rds.length - 4]).intValue());
+                Assert.assertEquals(0, Integer.valueOf(rds[rds.length - 5]).intValue());
             }
             if (rds[0].equals("10389564000")) { //$NON-NLS-1$
                 // The group size should be 101 , all records in one group
-                Assert.assertEquals(101, Integer.valueOf(rds[rds.length - 4]).intValue());
+                Assert.assertEquals(101, Integer.valueOf(rds[rds.length - 5]).intValue());
             }
 
             for (String rd : rds) {
