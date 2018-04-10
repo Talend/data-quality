@@ -109,21 +109,6 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
     }
 
     /**
-     * @deprecated use {@link #analyze(String...)}
-     * <p>
-     * TODO remove this method later
-     * 
-     * Analyze record of Array of string type, this method is used in scala library which not support parameterized array type.
-     * 
-     * @param record
-     * @return
-     */
-    @Deprecated
-    public boolean analyzeArray(String[] record) {
-        return analyze(record);
-    }
-
-    /**
      * TODO use String[] as parameter for this method.
      */
     @Override
