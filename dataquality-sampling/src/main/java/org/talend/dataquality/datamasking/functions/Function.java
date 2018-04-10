@@ -58,19 +58,7 @@ public abstract class Function<T> implements Serializable {
 
     /**
      * setter for random
-     * 
-     * @param rand
-     * The RandomWrapper.
-     * @deprecated use {@link setRandom()} instead
-     */
-    @Deprecated
-    public void setRandomWrapper(Random rand) {
-        setRandom(rand);
-    }
-
-    /**
-     * setter for random
-     * 
+     *
      * @param rand
      * The java.util.Random instance.
      */
@@ -84,7 +72,7 @@ public abstract class Function<T> implements Serializable {
 
     /**
      * getter for random
-     * 
+     *
      * @return the random object
      */
     public Random getRandom() {
