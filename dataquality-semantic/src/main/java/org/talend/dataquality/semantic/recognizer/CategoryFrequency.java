@@ -14,7 +14,6 @@ package org.talend.dataquality.semantic.recognizer;
 
 import java.io.Serializable;
 
-import org.talend.dataquality.semantic.classifier.ISubCategory;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 
 /**
@@ -38,19 +37,6 @@ public class CategoryFrequency implements Comparable<CategoryFrequency>, Seriali
      * used for the deserialization
      */
     public CategoryFrequency() {
-    }
-
-    /**
-     * CategoryFrequency constructor from a category.
-     *
-     * @param cat the category
-     * 
-     * @deprecated
-     */
-    @Deprecated
-    public CategoryFrequency(ISubCategory cat) {
-        // do not use cat.getId() for the moment because it represents the mongoId
-        this(cat.getName(), cat.getName());
     }
 
     /**
