@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.dataquality.common.inference.Analyzer;
@@ -163,11 +162,6 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
         }
 
         return results;
-    }
-
-    @Override
-    public Analyzer<SemanticType> merge(Analyzer<SemanticType> another) {
-        throw new NotImplementedException("Merge function is not implemented.");
     }
 
     public void close() throws Exception {

@@ -14,9 +14,7 @@ package org.talend.dataquality.statistics.numeric.summary;
 
 import java.util.List;
 
-import org.apache.commons.lang.NotImplementedException;
 import org.talend.daikon.number.BigDecimalParser;
-import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.ResizableList;
 import org.talend.dataquality.statistics.numeric.NumericalStatisticsAnalyzer;
 import org.talend.dataquality.statistics.type.DataTypeEnum;
@@ -79,11 +77,6 @@ public class SummaryAnalyzer extends NumericalStatisticsAnalyzer<SummaryStatisti
     @Override
     public List<SummaryStatistics> getResult() {
         return summaryStats;
-    }
-
-    @Override
-    public Analyzer<SummaryStatistics> merge(Analyzer<SummaryStatistics> another) {
-        throw new NotImplementedException();
     }
 
 }

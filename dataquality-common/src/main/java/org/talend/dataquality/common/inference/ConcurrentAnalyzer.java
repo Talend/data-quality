@@ -95,12 +95,6 @@ public class ConcurrentAnalyzer<T> implements Analyzer<T> {
     }
 
     @Override
-    public Analyzer<T> merge(Analyzer<T> another) {
-        Analyzer<T> analyzer = threadLocal.get();
-        return analyzer.merge(another);
-    }
-
-    @Override
     public void close() throws Exception {
         // Return previously borrowed instance to pool
         threadLocal.remove();

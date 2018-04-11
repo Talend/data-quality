@@ -26,7 +26,6 @@ import org.apache.commons.lang.StringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.ValueQualityStatistics;
 import org.talend.dataquality.statistics.type.DataTypeEnum;
 
@@ -388,26 +387,6 @@ public class DataTypeQualityAnalyzerTest {
                 e.printStackTrace();
             }
         }
-
-    }
-
-    @Test
-    public void testMerge() {
-        DataTypeQualityAnalyzer qualityAnalyzer = new DataTypeQualityAnalyzer(DataTypeEnum.DOUBLE);
-        DataTypeQualityAnalyzer qualityAnalyzer2 = new DataTypeQualityAnalyzer(DataTypeEnum.DOUBLE);
-
-        populateAnalyzerHalfA(qualityAnalyzer);
-        populateAnalyzerHalfB(qualityAnalyzer2);
-
-        Analyzer<ValueQualityStatistics> mergedAnalyzer = qualityAnalyzer.merge(qualityAnalyzer2);
-        ValueQualityStatistics valueQuality = mergedAnalyzer.getResult().get(0);
-        // Valid and invalid
-        assertEquals(1, valueQuality.getInvalidCount());
-        assertEquals(5, valueQuality.getValidCount());
-        // Invalid values
-        Set<String> invalidValues = valueQuality.getInvalidValues();
-        assertEquals(1, invalidValues.size());
-        assertTrue(invalidValues.contains("str"));
 
     }
 

@@ -14,10 +14,8 @@ package org.talend.dataquality.statistics.numeric.quantile;
 
 import java.util.List;
 
-import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.math3.stat.descriptive.rank.Median;
 import org.talend.daikon.number.BigDecimalParser;
-import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.ResizableList;
 import org.talend.dataquality.statistics.numeric.NumericalStatisticsAnalyzer;
 import org.talend.dataquality.statistics.type.DataTypeEnum;
@@ -80,11 +78,6 @@ public class QuantileAnalyzer extends NumericalStatisticsAnalyzer<QuantileStatis
     @Override
     public List<QuantileStatistics> getResult() {
         return stats;
-    }
-
-    @Override
-    public Analyzer<QuantileStatistics> merge(Analyzer<QuantileStatistics> another) {
-        throw new NotImplementedException();
     }
 
 }

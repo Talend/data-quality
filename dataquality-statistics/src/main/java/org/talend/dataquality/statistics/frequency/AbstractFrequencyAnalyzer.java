@@ -14,7 +14,6 @@ package org.talend.dataquality.statistics.frequency;
 
 import java.util.List;
 
-import org.apache.commons.lang.NotImplementedException;
 import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.ResizableList;
 import org.talend.dataquality.statistics.frequency.impl.CMSFrequencyEvaluator;
@@ -77,11 +76,6 @@ public abstract class AbstractFrequencyAnalyzer<T extends AbstractFrequencyStati
 
     @Override
     public void end() {
-    }
-
-    @Override
-    public Analyzer<T> merge(Analyzer<T> another) {
-        throw new NotImplementedException();
     }
 
     @Override

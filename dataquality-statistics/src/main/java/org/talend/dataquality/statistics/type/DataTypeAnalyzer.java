@@ -14,9 +14,7 @@ package org.talend.dataquality.statistics.type;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.ResizableList;
@@ -113,34 +111,6 @@ public class DataTypeAnalyzer implements Analyzer<DataTypeOccurences> {
      */
     public List<DataTypeOccurences> getResult() {
         return dataTypes;
-    }
-
-    @Override
-    public Analyzer<DataTypeOccurences> merge(Analyzer<DataTypeOccurences> another) {
-        int idx = 0;
-        DataTypeAnalyzer mergedAnalyzer = new DataTypeAnalyzer();
-        for (DataTypeOccurences dt : dataTypes) {
-            mergedAnalyzer.getResult().add(idx, dt);
-            if (!another.getResult().isEmpty()) {
-                Map<DataTypeEnum, Long> typeFreqTable = dt.getTypeFrequencies();
-                Map<DataTypeEnum, Long> anotherTypeFreqTable = another.getResult().get(idx).getTypeFrequencies();
-                Iterator<DataTypeEnum> anotherDTIt = anotherTypeFreqTable.keySet().iterator();
-                while (anotherDTIt.hasNext()) {
-                    DataTypeEnum anotherDT = anotherDTIt.next();
-                    // Update the current map
-                    if (typeFreqTable.containsKey(anotherDT)) {
-                        mergedAnalyzer.getResult().get(idx).getTypeFrequencies().put(anotherDT,
-                                typeFreqTable.get(anotherDT) + anotherTypeFreqTable.get(anotherDT));
-                    } else {
-                        mergedAnalyzer.getResult().get(idx).getTypeFrequencies().put(anotherDT,
-                                anotherTypeFreqTable.get(anotherDT));
-                    }
-                }
-            }
-            idx++;
-        }
-        return mergedAnalyzer;
-
     }
 
     @Override
