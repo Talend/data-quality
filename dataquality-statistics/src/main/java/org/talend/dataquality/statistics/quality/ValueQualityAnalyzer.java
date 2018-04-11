@@ -19,7 +19,6 @@ import org.apache.commons.lang.NullArgumentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.dataquality.common.inference.Analyzer;
-import org.talend.dataquality.common.inference.Metadata;
 import org.talend.dataquality.common.inference.QualityAnalyzer;
 import org.talend.dataquality.common.inference.ValueQualityStatistics;
 import org.talend.dataquality.statistics.type.DataTypeEnum;
@@ -65,17 +64,7 @@ public class ValueQualityAnalyzer implements Analyzer<ValueQualityStatistics> {
     public ValueQualityAnalyzer(DataTypeEnum[] types, boolean isStoreInvalidValues) {
         this(new DataTypeQualityAnalyzer(types, isStoreInvalidValues), null, isStoreInvalidValues);
     }
-
-    /**
-     * @deprecated use
-     * {@link DataTypeQualityAnalyzer#DataTypeQualityAnalyzer(org.talend.datascience.common.inference.type.DataTypeEnum...)}
-     * @param types
-     */
-    @Deprecated
-    public ValueQualityAnalyzer(DataTypeEnum... types) {
-        this(new DataTypeQualityAnalyzer(types), null);
-    }
-
+    
     @Override
     public void init() {
         dataTypeQualityAnalyzer.init();
