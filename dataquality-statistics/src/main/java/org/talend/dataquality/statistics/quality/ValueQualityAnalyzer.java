@@ -64,7 +64,7 @@ public class ValueQualityAnalyzer implements Analyzer<ValueQualityStatistics> {
     public ValueQualityAnalyzer(DataTypeEnum[] types, boolean isStoreInvalidValues) {
         this(new DataTypeQualityAnalyzer(types, isStoreInvalidValues), null, isStoreInvalidValues);
     }
-    
+
     @Override
     public void init() {
         dataTypeQualityAnalyzer.init();

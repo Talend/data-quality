@@ -12,8 +12,6 @@
 // ============================================================================
 package org.talend.dataquality.statistics.type;
 
-import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 import static org.talend.dataquality.statistics.type.DataTypeEnum.BOOLEAN;
 import static org.talend.dataquality.statistics.type.DataTypeEnum.DATE;
@@ -22,6 +20,8 @@ import static org.talend.dataquality.statistics.type.DataTypeEnum.EMPTY;
 import static org.talend.dataquality.statistics.type.DataTypeEnum.INTEGER;
 import static org.talend.dataquality.statistics.type.DataTypeEnum.STRING;
 import static org.talend.dataquality.statistics.type.DataTypeEnum.TIME;
+
+import org.junit.Test;
 
 public class DataTypeOccurencesTest {
 
@@ -239,25 +239,6 @@ public class DataTypeOccurencesTest {
     }
 
     @Test
-    public void shouldReturnIntegerWhenIntegerExceedsGivenThreshold() {
-        // given
-        DataTypeOccurences typeOccurrences = new DataTypeOccurences();
-
-        // when
-        typeOccurrences.increment(EMPTY);
-        typeOccurrences.increment(DOUBLE);
-        typeOccurrences.increment(DOUBLE);
-        typeOccurrences.increment(INTEGER);
-        typeOccurrences.increment(INTEGER);
-        typeOccurrences.increment(INTEGER);
-        typeOccurrences.increment(STRING);
-        DataTypeEnum suggestedType = typeOccurrences.getSuggestedType(0.1, 0.5);
-
-        // then
-        assertEquals(INTEGER, suggestedType);
-    }
-
-    @Test
     public void shouldReturnStringWhenStringIsDominantType() {
         // given
         DataTypeOccurences typeOccurrences = new DataTypeOccurences();
@@ -271,7 +252,7 @@ public class DataTypeOccurencesTest {
         typeOccurrences.increment(STRING);
         typeOccurrences.increment(STRING);
         typeOccurrences.increment(STRING);
-        DataTypeEnum suggestedType = typeOccurrences.getSuggestedType(0.1, 0.9);
+        DataTypeEnum suggestedType = typeOccurrences.getSuggestedType();
 
         // then
         assertEquals(STRING, suggestedType);

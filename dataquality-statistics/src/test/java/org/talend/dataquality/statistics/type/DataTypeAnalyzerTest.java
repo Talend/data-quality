@@ -12,15 +12,15 @@
 // ============================================================================
 package org.talend.dataquality.statistics.type;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 
 /**
  * created by talend on 2015-07-28 Detailled comment.
@@ -243,10 +243,6 @@ public class DataTypeAnalyzerTest extends DataTypeStatiticsTestBase {
         final List<DataTypeOccurences> result = analyzer.getResult();
         // the ratio 0.57 exceeds the default integer threshold 0.5, return INTEGER
         assertEquals(DataTypeEnum.DOUBLE, result.get(0).getSuggestedType());
-        // the ratio 0.57 is smaller than the integer threshold, return DOUBLE
-        assertEquals(DataTypeEnum.DOUBLE, result.get(0).getSuggestedType(0.6));
-        // the ratio 0.57 exceeds the threshold 0.3, return INTEGER
-        assertEquals(DataTypeEnum.INTEGER, result.get(0).getSuggestedType(0.3));
     }
 
     @Test
@@ -259,7 +255,6 @@ public class DataTypeAnalyzerTest extends DataTypeStatiticsTestBase {
         analyzer.end();
         final List<DataTypeOccurences> result = analyzer.getResult();
         assertEquals(DataTypeEnum.DOUBLE, result.get(0).getSuggestedType());
-        assertEquals(DataTypeEnum.DOUBLE, result.get(0).getSuggestedType(0.9));
     }
 
     @Test
@@ -272,7 +267,6 @@ public class DataTypeAnalyzerTest extends DataTypeStatiticsTestBase {
         analyzer.end();
         final List<DataTypeOccurences> result = analyzer.getResult();
         assertEquals(DataTypeEnum.DOUBLE, result.get(0).getSuggestedType());
-        assertEquals(DataTypeEnum.INTEGER, result.get(0).getSuggestedType(0.1));
     }
 
     @Test
