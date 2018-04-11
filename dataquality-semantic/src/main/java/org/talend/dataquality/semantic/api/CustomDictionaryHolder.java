@@ -516,23 +516,25 @@ public class CustomDictionaryHolder {
     }
 
     /**
-     * republish a category
+     * republish categories
      *
-     * @param category
+     * @param categories
      */
-    public void republishCategory(DQCategory category) {
+    public void republishCategory(List<DQCategory> categories) {
         ensureRepublishMetadataIndexAccess();
-        category.setModified(true);
-        if (CategoryRegistryManager.getInstance().getSharedCategoryMetadata().containsKey(category.getId())) {
-            if (category.getLastModifier() == null || TALEND.equals(category.getLastModifier())) {
-                category.setModified(false);
-            }
-            customRepublishMetadataIndexAccess.insertOrUpdateCategory(category);
-        } else
-            customRepublishMetadataIndexAccess.createCategory(category);
+        for (DQCategory category : categories) {
+            category.setModified(true);
+            if (CategoryRegistryManager.getInstance().getSharedCategoryMetadata().containsKey(category.getId())) {
+                if (category.getLastModifier() == null || TALEND.equals(category.getLastModifier())) {
+                    category.setModified(false);
+                }
+                customRepublishMetadataIndexAccess.insertOrUpdateCategory(category);
+            } else
+                customRepublishMetadataIndexAccess.createCategory(category);
 
-        if (CategoryType.REGEX.equals(category.getType())) {
-            republishRegexCategory(category);
+            if (CategoryType.REGEX.equals(category.getType())) {
+                republishRegexCategory(category);
+            }
         }
         customRepublishMetadataIndexAccess.commitChanges();
     }
