@@ -18,6 +18,8 @@ public class DQPublicationAction extends DQAction {
 
     private String id;
 
+    private DQCategory category;
+
     private List<DQCategory> categories;
 
     private List<DQDocument> documents;
@@ -28,6 +30,14 @@ public class DQPublicationAction extends DQAction {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public DQCategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(DQCategory category) {
+        this.category = category;
     }
 
     public List<DQCategory> getCategories() {
