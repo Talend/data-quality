@@ -10,6 +10,7 @@ import static org.talend.dataquality.semantic.api.CategoryRegistryManager.REPUBL
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -516,11 +517,21 @@ public class CustomDictionaryHolder {
     }
 
     /**
+     * republish a category
+     *
+     * @param category
+     */
+    @Deprecated
+    public void republishCategory(DQCategory category) {
+        republishCategories(Arrays.asList(category));
+    }
+
+    /**
      * republish categories
      *
      * @param categories
      */
-    public void republishCategory(List<DQCategory> categories) {
+    public void republishCategories(List<DQCategory> categories) {
         ensureRepublishMetadataIndexAccess();
         for (DQCategory category : categories) {
             category.setModified(true);
