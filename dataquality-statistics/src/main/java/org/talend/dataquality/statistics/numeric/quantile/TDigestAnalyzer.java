@@ -14,9 +14,7 @@ package org.talend.dataquality.statistics.numeric.quantile;
 
 import java.util.List;
 
-import org.apache.commons.lang.NotImplementedException;
 import org.talend.daikon.number.BigDecimalParser;
-import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.ResizableList;
 import org.talend.dataquality.statistics.numeric.NumericalStatisticsAnalyzer;
 import org.talend.dataquality.statistics.type.DataTypeEnum;
@@ -98,11 +96,6 @@ public class TDigestAnalyzer extends NumericalStatisticsAnalyzer<TDigestQuantile
     @Override
     public List<TDigestQuantileStatistics> getResult() {
         return stats;
-    }
-
-    @Override
-    public Analyzer<TDigestQuantileStatistics> merge(Analyzer<TDigestQuantileStatistics> another) {
-        throw new NotImplementedException();
     }
 
 }

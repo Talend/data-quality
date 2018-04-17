@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,11 +84,6 @@ public class Analyzers implements Analyzer<Analyzers.Result> {
             }
         }
         return results;
-    }
-
-    @Override
-    public Analyzer<Result> merge(Analyzer<Result> another) {
-        throw new NotImplementedException();
     }
 
     @Override

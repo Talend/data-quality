@@ -18,7 +18,6 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.QualityAnalyzer;
 import org.talend.dataquality.common.inference.ResizableList;
 import org.talend.dataquality.common.inference.ValueQualityStatistics;
@@ -102,34 +101,6 @@ public class DataTypeQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
     @Override
     public List<ValueQualityStatistics> getResult() {
         return results;
-    }
-
-    @Override
-    public Analyzer<ValueQualityStatistics> merge(Analyzer<ValueQualityStatistics> another) {
-
-        if (another == null) {
-            LOG.warn("Another analyzer is null, have nothing to merge!");
-            return this;
-        }
-
-        int idx = 0;
-        DataTypeQualityAnalyzer mergedValueQualityAnalyze = new DataTypeQualityAnalyzer();
-        ((ResizableList<ValueQualityStatistics>) mergedValueQualityAnalyze.getResult()).resize(results.size());
-        for (ValueQualityStatistics qs : results) {
-            ValueQualityStatistics mergedStats = mergedValueQualityAnalyze.getResult().get(idx);
-            ValueQualityStatistics anotherStats = another.getResult().get(idx);
-            mergedStats.setValidCount(qs.getValidCount() + anotherStats.getValidCount());
-            mergedStats.setInvalidCount(qs.getInvalidCount() + anotherStats.getInvalidCount());
-            mergedStats.setEmptyCount(qs.getEmptyCount() + anotherStats.getEmptyCount());
-            if (!qs.getInvalidValues().isEmpty()) {
-                mergedStats.getInvalidValues().addAll(qs.getInvalidValues());
-            }
-            if (!anotherStats.getInvalidValues().isEmpty()) {
-                mergedStats.getInvalidValues().addAll(anotherStats.getInvalidValues());
-            }
-            idx++;
-        }
-        return mergedValueQualityAnalyze;
     }
 
     @Override

@@ -19,7 +19,6 @@ import org.apache.commons.lang.NullArgumentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.dataquality.common.inference.Analyzer;
-import org.talend.dataquality.common.inference.Metadata;
 import org.talend.dataquality.common.inference.QualityAnalyzer;
 import org.talend.dataquality.common.inference.ValueQualityStatistics;
 import org.talend.dataquality.statistics.type.DataTypeEnum;
@@ -64,16 +63,6 @@ public class ValueQualityAnalyzer implements Analyzer<ValueQualityStatistics> {
     @Deprecated
     public ValueQualityAnalyzer(DataTypeEnum[] types, boolean isStoreInvalidValues) {
         this(new DataTypeQualityAnalyzer(types, isStoreInvalidValues), null, isStoreInvalidValues);
-    }
-
-    /**
-     * @deprecated use
-     * {@link DataTypeQualityAnalyzer#DataTypeQualityAnalyzer(org.talend.datascience.common.inference.type.DataTypeEnum...)}
-     * @param types
-     */
-    @Deprecated
-    public ValueQualityAnalyzer(DataTypeEnum... types) {
-        this(new DataTypeQualityAnalyzer(types), null);
     }
 
     @Override
@@ -127,39 +116,6 @@ public class ValueQualityAnalyzer implements Analyzer<ValueQualityStatistics> {
             }
             return aggregatedResult;
         }
-    }
-
-    /**
-     * @param another value quality analyzer Note: 1. if another is null, return this; 2. the type of another should be
-     * ValueQualityAnalyzer.
-     */
-    @Override
-    public Analyzer<ValueQualityStatistics> merge(Analyzer<ValueQualityStatistics> another) {
-
-        if (another == null) {
-            log.warn("Another analyzer is null, have nothing to merge!");
-            return this;
-        }
-
-        if (!(another instanceof ValueQualityAnalyzer)) {
-            throw new IllegalArgumentException("Worng type error! Expected type is ValueQualityAnalyzer");
-        }
-
-        QualityAnalyzer<ValueQualityStatistics, DataTypeEnum[]> anotherDataTypeQualityAnalyzer = ((ValueQualityAnalyzer) another).dataTypeQualityAnalyzer;
-        QualityAnalyzer<ValueQualityStatistics, String[]> anotherSemanticQualityAnalyzer = ((ValueQualityAnalyzer) another).semanticQualityAnalyzer;
-
-        Analyzer<ValueQualityStatistics> mergedDataTypeQualityAnalyzer = this.dataTypeQualityAnalyzer
-                .merge(anotherDataTypeQualityAnalyzer);
-
-        Analyzer<ValueQualityStatistics> mergedSemanticQualityAnalyzer = null;
-        if (this.semanticQualityAnalyzer != null) {
-            mergedSemanticQualityAnalyzer = this.semanticQualityAnalyzer.merge(anotherSemanticQualityAnalyzer);
-        } else if (anotherSemanticQualityAnalyzer != null) {
-            mergedSemanticQualityAnalyzer = anotherSemanticQualityAnalyzer;
-        }
-
-        return new ValueQualityAnalyzer((QualityAnalyzer<ValueQualityStatistics, DataTypeEnum[]>) mergedDataTypeQualityAnalyzer,
-                (QualityAnalyzer<ValueQualityStatistics, String[]>) mergedSemanticQualityAnalyzer);
     }
 
     @Override

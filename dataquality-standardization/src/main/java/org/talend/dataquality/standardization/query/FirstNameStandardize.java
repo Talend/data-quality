@@ -26,21 +26,15 @@ import org.apache.lucene.analysis.standard.StandardFilter;
 import org.apache.lucene.analysis.standard.StandardTokenizer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.queryparser.classic.ParseException;
-import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.FuzzyQuery;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.Sort;
-import org.apache.lucene.search.SortField;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.TopDocsCollector;
-import org.apache.lucene.search.TopFieldCollector;
-import org.apache.lucene.search.TopScoreDocCollector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.dataquality.standardization.constant.PluginConstant;
@@ -53,67 +47,21 @@ public class FirstNameStandardize {
 
     private static final Logger LOG = LoggerFactory.getLogger(FirstNameStandardize.class);
 
-    /**
-     * According to levenshtein algorithm, the following value means a distance of 1 is allowed to match a first name
-     * containing 4 to 7 letters, while for those with 8 to 12 letters, 2 erroneous letters are allowed. a first name
-     * between 12 and 15 letters, allows a distance of 3, and so on ...
-     * <p>
-     * For the first names with minus sign inside, ex: Jean-Baptiste, the matching is done for Jean and Baptiste separately, and
-     * the number of tokens is also considered by Lucene.
-     * 
-     * @deprecated
-     */
-    @Deprecated
-    private static final float MATCHING_SIMILARITY = 0.74f;
-
     private int maxEdits = 1;
-
-    private Analyzer analyzer;
 
     private IndexSearcher searcher;
 
-    private int hitsPerPage;
-
-    public FirstNameStandardize(IndexSearcher indexSearcher, Analyzer analyzer, int hitsPerPage) throws IOException {
-        assert analyzer != null;
-        assert indexSearcher != null;
-        this.analyzer = analyzer;
-        this.searcher = indexSearcher;
-        this.hitsPerPage = hitsPerPage;
-    }
-
-    /**
-     * DOC msjian Comment method "standardize".
-     * 
-     * @param input
-     * @param fuzzyQuery
-     * @return
-     * @throws ParseException
-     * @throws IOException
-     * @deprecated
-     */
     @Deprecated
-    private ScoreDoc[] standardize(String input, boolean fuzzyQuery) throws ParseException, IOException {
-
-        if (input == null || input.length() == 0) {
-            return new ScoreDoc[0];
-        }
-        // MOD sizhaoliu 2012-7-4 TDQ-1576 tFirstnameMatch returns no firstname when several matches exist
-        // Do not use doc collector which contains an inner sort.
-        ScoreDoc[] matches = null;
-        if (fuzzyQuery) {
-            try {
-                matches = getFuzzySearch(input).scoreDocs;
-            } catch (Exception e) {
-                LOG.error(e.getMessage(), e);
-            }
-        } else {
-            Query q = new QueryParser(PluginConstant.FIRST_NAME_STANDARDIZE_NAME, analyzer).parse(input);
-            matches = searcher.search(q, 10).scoreDocs;
-        }
-        return matches;
+    public FirstNameStandardize(IndexSearcher indexSearcher, Analyzer analyzer, int hitsPerPage) throws IOException {
+        this(indexSearcher);
     }
 
+    public FirstNameStandardize(IndexSearcher indexSearcher) {
+        assert indexSearcher != null;
+        this.searcher = indexSearcher;
+    }
+
+    @Deprecated
     public void getFuzzySearch(String input, TopDocsCollector<?> collector) throws DQException {
         Query q = new FuzzyQuery(new Term(PluginConstant.FIRST_NAME_STANDARDIZE_NAME, input));
         Query qalias = new FuzzyQuery(new Term(PluginConstant.FIRST_NAME_STANDARDIZE_ALIAS, input));
@@ -127,21 +75,8 @@ public class FirstNameStandardize {
         }
     }
 
-    private TopDocs getFuzzySearch(String input) throws DQException {
-        // MOD sizhaoliu 2012-7-4 TDQ-1576 tFirstnameMatch returns no firstname when several matches exist
-        // The 2 letter prefix requires exact match while the word to search may not be lowercased as in the index.
-        // Extracted and documented MATCHING_SIMILARITY constant.
-        Query q = new FuzzyQuery(new Term("name", input.toLowerCase()), maxEdits);//$NON-NLS-1$
-        TopDocs matches;
-        try {
-            matches = searcher.search(q, 10);
-        } catch (IOException e) {
-            throw new DQException(e);
-        }
-        return matches;
-    }
-
     // FIXME this variable is only for tests
+    @Deprecated
     public static final boolean SORT_WITH_COUNT = true;
 
     private Query getTermQuery(String field, String text, boolean fuzzy) {
@@ -211,23 +146,10 @@ public class FirstNameStandardize {
         return matches.scoreDocs;
     }
 
-    @SuppressWarnings("unused")
-    private TopDocsCollector<?> createTopDocsCollector() throws IOException {
-        // TODO the goal is to sort the result in descending order according to the "count" field
-        if (SORT_WITH_COUNT) { // TODO enable this when it works correctly
-            SortField sortfield = new SortField(PluginConstant.FIRST_NAME_STANDARDIZE_COUNT, SortField.Type.INT);
-            Sort sort = new Sort(sortfield);
-            // results are sorted according to a score and then to the count value
-            return TopFieldCollector.create(sort, hitsPerPage, false, false, false, false);
-        } else {
-            return TopScoreDocCollector.create(hitsPerPage, false);
-        }
-    }
-
     /**
      * Method "replaceName".
      * 
-     * @param input a first name
+     * @param inputName a first name
      * @return the standardized first name
      * @throws Exception
      */

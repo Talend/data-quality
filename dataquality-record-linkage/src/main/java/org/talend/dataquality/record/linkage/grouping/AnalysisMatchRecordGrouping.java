@@ -59,7 +59,7 @@ public class AnalysisMatchRecordGrouping extends AbstractRecordGrouping<Object> 
         this.matchResultConsumer = matchResultConsumer;
         setColumnDelimiter(columnDelimiter);
         setIsOutputDistDetails(true);
-        setSeperateOutput(Boolean.TRUE);
+        setIsComputeGrpQuality(Boolean.TRUE);
     }
 
     public AnalysisMatchRecordGrouping() {

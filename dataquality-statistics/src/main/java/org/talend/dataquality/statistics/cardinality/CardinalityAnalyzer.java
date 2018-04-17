@@ -14,7 +14,6 @@ package org.talend.dataquality.statistics.cardinality;
 
 import java.util.List;
 
-import org.apache.commons.lang.NotImplementedException;
 import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.ResizableList;
 
@@ -44,11 +43,6 @@ public class CardinalityAnalyzer implements Analyzer<CardinalityStatistics> {
         }
         return true;
 
-    }
-
-    @Override
-    public Analyzer<CardinalityStatistics> merge(Analyzer<CardinalityStatistics> another) {
-        throw new NotImplementedException();
     }
 
     @Override

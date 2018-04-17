@@ -15,11 +15,9 @@ package org.talend.dataquality.standardization.index;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.core.LowerCaseFilter;
@@ -62,16 +60,7 @@ public class SynonymIndexSearcher {
         MATCH_ALL("MATCH_ALL"),
         MATCH_EXACT("MATCH_EXACT"),
         MATCH_ANY_FUZZY("MATCH_ANY_FUZZY"),
-        MATCH_ALL_FUZZY("MATCH_ALL_FUZZY"),
-
-        /**
-         * @deprecated moved to DictionarySearcher
-         */
-        MATCH_SEMANTIC_DICTIONARY("MATCH_SEMANTIC_DICTIONARY"), // Used only for searching semantic dictionary
-        /**
-         * @deprecated moved to DictionarySearcher
-         */
-        MATCH_SEMANTIC_KEYWORD("MATCH_SEMANTIC_KEYWORD");// Used only for searching semantic keyword
+        MATCH_ALL_FUZZY("MATCH_ALL_FUZZY");
 
         private String label;
 
@@ -139,7 +128,7 @@ public class SynonymIndexSearcher {
     /**
      * instantiate an index searcher. A call to the index initialization method such as {@link #openIndexInFS(URI)} is
      * required before using any other method.
-     * 
+     *
      * @deprecated avoid using this constructor
      */
     @Deprecated
@@ -229,12 +218,6 @@ public class SynonymIndexSearcher {
             break;
         case MATCH_ALL_FUZZY:
             query = createCombinedQueryFor(stringToSearch, true, true);
-            break;
-        case MATCH_SEMANTIC_DICTIONARY:
-            query = createQueryForSemanticDictionaryMatch(stringToSearch);
-            break;
-        case MATCH_SEMANTIC_KEYWORD:
-            query = createQueryForSemanticKeywordMatch(stringToSearch);
             break;
         default: // do the same as MATCH_ANY mode
             query = createCombinedQueryFor(stringToSearch, false, false);
@@ -486,47 +469,6 @@ public class SynonymIndexSearcher {
         combinedQuery.add(wordQuery, BooleanClause.Occur.SHOULD);
         combinedQuery.add(synQuery, BooleanClause.Occur.SHOULD);
         return combinedQuery;
-    }
-
-    /**
-     * @param input
-     * @return
-     * @throws IOException
-     * @deprecated moved to DictionarySearcher
-     */
-    @Deprecated
-    private Query createQueryForSemanticDictionaryMatch(String input) throws IOException {
-        List<String> tokens = getTokensFromAnalyzer(input);
-        // for dictionary search, ignore searching for input containing too many tokens
-        if (tokens.size() > MAX_TOKEN_COUNT_FOR_SEMANTIC_MATCH) {
-            return new TermQuery(new Term(F_SYNTERM, StringUtils.EMPTY));
-        }
-        Query synTermQuery = getTermQuery(F_SYNTERM, StringUtils.join(tokens, ' '), false);
-
-        return synTermQuery;
-    }
-
-    /**
-     * @param input
-     * @return
-     * @throws IOException
-     * @deprecated moved to DictionarySearcher
-     */
-    @Deprecated
-    private Query createQueryForSemanticKeywordMatch(String input) throws IOException {
-        BooleanQuery booleanQuery = new BooleanQuery();
-        List<String> tokens = getTokensFromAnalyzer(input);
-        // for keyword search, only search the beginning tokens from input
-        if (tokens.size() > MAX_TOKEN_COUNT_FOR_SEMANTIC_MATCH) {
-            for (int i = 0; i < MAX_TOKEN_COUNT_FOR_SEMANTIC_MATCH; i++) {
-                booleanQuery.add(getTermQuery(F_SYN, tokens.get(i), false), BooleanClause.Occur.SHOULD);
-            }
-        } else {
-            for (String token : tokens) {
-                booleanQuery.add(getTermQuery(F_SYN, token, false), BooleanClause.Occur.SHOULD);
-            }
-        }
-        return booleanQuery;
     }
 
     /**

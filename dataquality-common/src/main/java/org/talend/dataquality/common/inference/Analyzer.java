@@ -55,11 +55,4 @@ public interface Analyzer<T> extends Serializable, AutoCloseable {
      */
     List<T> getResult();
 
-    /**
-     * Merge this analyzer with another one.<br>
-     * 
-     * @return new analyzer with this and another analyzer merged together.
-     */
-    Analyzer<T> merge(Analyzer<T> another);
-
 }

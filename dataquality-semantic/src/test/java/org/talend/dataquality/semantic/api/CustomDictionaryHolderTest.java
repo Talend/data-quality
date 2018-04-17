@@ -21,6 +21,7 @@ import static org.talend.dataquality.semantic.api.CustomDictionaryHolder.TALEND;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -81,7 +82,7 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
     @Test
     public void republishRegex() throws Exception {
         initRepublishMocks();
-        holder.republishCategory(createDQRegexCategory("newCat"));
+        holder.republishCategories(Arrays.asList(createDQRegexCategory("newCat")));
         verify(customMetadataIndexAccess, times(0)).insertOrUpdateCategory(any(DQCategory.class));
         verify(customMetadataIndexAccess, times(1)).createCategory(any(DQCategory.class));
         verify(customRegexClassifierAccess, times(1)).insertOrUpdateRegex(any(ISubCategory.class));
@@ -91,7 +92,7 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
     @Test
     public void republishCompound() throws Exception {
         initRepublishMocks();
-        holder.republishCategory(createCompoundCategory("1", false));
+        holder.republishCategories(Arrays.asList(createCompoundCategory("1", false)));
         verify(customMetadataIndexAccess, times(0)).insertOrUpdateCategory(any(DQCategory.class));
         verify(customMetadataIndexAccess, times(1)).createCategory(any(DQCategory.class));
         verify(customRegexClassifierAccess, times(0)).insertOrUpdateRegex(any(ISubCategory.class));
@@ -102,7 +103,7 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
     public void republishExistingCompound() throws Exception {
         initRepublishMocks();
         DQCategory category = createCompoundCategory("compoundCategory", true);
-        holder.republishCategory(category);
+        holder.republishCategories(Arrays.asList(category));
         verify(customMetadataIndexAccess, times(1)).insertOrUpdateCategory(any(DQCategory.class));
         verify(customMetadataIndexAccess, times(0)).createCategory(any(DQCategory.class));
         verify(customRegexClassifierAccess, times(0)).insertOrUpdateRegex(any(ISubCategory.class));
@@ -114,7 +115,7 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
     public void republishExistingUnmodifiedCompound() throws Exception {
         initRepublishMocks();
         DQCategory category = createCompoundCategory("compoundCategory", false);
-        holder.republishCategory(category);
+        holder.republishCategories(Arrays.asList(category));
         verify(customMetadataIndexAccess, times(1)).insertOrUpdateCategory(any(DQCategory.class));
         verify(customMetadataIndexAccess, times(0)).createCategory(any(DQCategory.class));
         verify(customRegexClassifierAccess, times(0)).insertOrUpdateRegex(any(ISubCategory.class));
@@ -126,7 +127,7 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
     public void republishTalendDict() throws Exception {
         initRepublishMocks();
         DQCategory category = createTalendDictCategory("dictCategory");
-        holder.republishCategory(category);
+        holder.republishCategories(Arrays.asList(category));
         verify(customMetadataIndexAccess, times(1)).insertOrUpdateCategory(any(DQCategory.class));
         verify(customMetadataIndexAccess, times(0)).createCategory(any(DQCategory.class));
         verify(customRegexClassifierAccess, times(0)).insertOrUpdateRegex(any(ISubCategory.class));

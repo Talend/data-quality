@@ -126,15 +126,6 @@ public interface IRecordGrouping<T> {
     public void setIsOutputDistDetails(boolean isOutputDistDetails);
 
     /**
-     * Sets the isSeperateOutput.
-     * 
-     * @param isSeperateOutput the isSeperateOutput to set
-     * @deprecated Use {@link #setIsComputeGrpQuality(Boolean)} instead.
-     */
-    @Deprecated
-    public void setSeperateOutput(boolean isSeperateOutput);
-
-    /**
      * Set the column delimiter.
      * 
      * @param columnDelimiter
