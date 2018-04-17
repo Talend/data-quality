@@ -152,18 +152,6 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
         this.originalInputColumnSize = originalInputColumnSize;
     }
 
-    /**
-     * Sets the isSeperateOutput.
-     * 
-     * @param isSeperateOutput the isSeperateOutput to set
-     * @deprecated Use {@link #setIsComputeGrpQuality(Boolean)} instead.
-     */
-    @Deprecated
-    @Override
-    public void setSeperateOutput(boolean isSeperateOutput) {
-        this.setIsComputeGrpQuality(isSeperateOutput);
-    }
-
     /*
      * set if need to compute group quality.
      */
