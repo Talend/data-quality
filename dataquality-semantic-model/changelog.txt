@@ -1,3 +1,6 @@
+v5.0.3 2018-04-17
+    - TDQ-15129 optimize republish-all by using one kafka event for all categories
+
 v5.0.2 2018-04-04
     (no change in this version)
 
