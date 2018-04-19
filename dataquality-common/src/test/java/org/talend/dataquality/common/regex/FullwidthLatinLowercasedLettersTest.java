@@ -14,7 +14,6 @@ package org.talend.dataquality.common.regex;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.talend.dataquality.common.regex.FullwidthLatinLowercasedLetters;
 
 /**
  * DOC talend class global comment. Detailled comment

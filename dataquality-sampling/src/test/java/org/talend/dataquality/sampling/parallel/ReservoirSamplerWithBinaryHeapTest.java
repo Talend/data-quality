@@ -19,7 +19,6 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.duplicating.AllDataqualitySamplingTests;
-import org.talend.dataquality.sampling.parallel.ReservoirSamplerWithBinaryHeap;
 
 public class ReservoirSamplerWithBinaryHeapTest {
 

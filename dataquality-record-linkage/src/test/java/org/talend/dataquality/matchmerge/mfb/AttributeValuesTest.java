@@ -12,9 +12,9 @@
 // ============================================================================
 package org.talend.dataquality.matchmerge.mfb;
 
-import junit.framework.TestCase;
-
 import org.talend.dataquality.matchmerge.AttributeValues;
+
+import junit.framework.TestCase;
 
 public class AttributeValuesTest extends TestCase {
 

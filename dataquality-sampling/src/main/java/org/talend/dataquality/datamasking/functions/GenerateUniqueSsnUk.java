@@ -12,14 +12,14 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
-import org.talend.dataquality.datamasking.generic.fields.AbstractField;
-import org.talend.dataquality.datamasking.generic.fields.FieldEnum;
-import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
-
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import org.talend.dataquality.datamasking.generic.fields.AbstractField;
+import org.talend.dataquality.datamasking.generic.fields.FieldEnum;
+import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
 
 /**
  * @author jteuladedenantes

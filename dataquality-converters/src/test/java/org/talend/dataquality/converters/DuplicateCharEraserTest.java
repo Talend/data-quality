@@ -12,10 +12,10 @@
 // ============================================================================
 package org.talend.dataquality.converters;
 
-import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+
+import org.junit.Test;
 
 /**
  * Test for class {@link DuplicateCharEraser}.

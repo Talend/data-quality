@@ -1,8 +1,8 @@
 package org.talend.dataquality.datamasking.generic;
 
-import org.talend.dataquality.sampling.exception.DQRuntimeException;
-
 import java.math.BigInteger;
+
+import org.talend.dataquality.sampling.exception.DQRuntimeException;
 
 /**
  *

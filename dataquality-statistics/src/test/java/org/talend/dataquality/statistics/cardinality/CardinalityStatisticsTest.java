@@ -1,12 +1,11 @@
 package org.talend.dataquality.statistics.cardinality;
 
-import com.clearspring.analytics.stream.cardinality.CardinalityMergeException;
 import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.clearspring.analytics.stream.cardinality.HyperLogLog;
+import com.clearspring.analytics.stream.cardinality.CardinalityMergeException;
 
 /**
  * Created by afournier on 31/03/17.
