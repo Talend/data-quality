@@ -12,7 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.record.linkage.utils;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

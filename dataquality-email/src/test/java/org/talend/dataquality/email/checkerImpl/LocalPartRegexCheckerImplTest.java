@@ -12,7 +12,9 @@
 // ============================================================================
 package org.talend.dataquality.email.checkerImpl;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -175,7 +177,7 @@ public class LocalPartRegexCheckerImplTest {
 
         regularPattern = "a.<[._w-]?>w<tat?>"; //$NON-NLS-1$
         convertedPattern = localPartCheck.translateToRegex(regularPattern);
-        expectedRegex = "[a-z]\\.[._w-]?[a-z]+tat?"; //[a-z]\.\[\._w\-\]\?[a-z]+tat\?  //$NON-NLS-1$
+        expectedRegex = "[a-z]\\.[._w-]?[a-z]+tat?"; // [a-z]\.\[\._w\-\]\?[a-z]+tat\? //$NON-NLS-1$
         assertEquals(expectedRegex, convertedPattern);
     }
 }

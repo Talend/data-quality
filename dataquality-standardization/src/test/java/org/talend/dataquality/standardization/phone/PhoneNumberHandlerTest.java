@@ -1,6 +1,8 @@
 package org.talend.dataquality.standardization.phone;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Locale;
 
@@ -83,8 +85,8 @@ public class PhoneNumberHandlerTest {
 
     @Test
     public void testGetGeocoderDescriptionForNumber() {
-        assertEquals("Corvallis, OR", handler.getGeocoderDescriptionForNumber(US_NUM_1)); //$NON-NLS-1$ 
-        assertEquals("Corvallis, OR", handler.getGeocoderDescriptionForNumber(US_NUM_2)); //$NON-NLS-1$ 
+        assertEquals("Corvallis, OR", handler.getGeocoderDescriptionForNumber(US_NUM_1)); //$NON-NLS-1$
+        assertEquals("Corvallis, OR", handler.getGeocoderDescriptionForNumber(US_NUM_2)); //$NON-NLS-1$
         assertEquals(StringUtils.EMPTY, handler.getGeocoderDescriptionForNumber(US_NUM_3));
 
     }

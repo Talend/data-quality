@@ -12,7 +12,7 @@
 // ============================================================================
 package org.talend.windowkey;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
@@ -22,25 +22,25 @@ import org.junit.Test;
  */
 public class AlgoBoxTest {
 
-    private static final String QUO_STR = "\""; //$NON-NLS-1$ 
+    private static final String QUO_STR = "\""; //$NON-NLS-1$
 
-    private static final String SPACE_STR = " "; //$NON-NLS-1$ 
+    private static final String SPACE_STR = " "; //$NON-NLS-1$
 
-    private static final String NULL_STR = "null"; //$NON-NLS-1$ 
+    private static final String NULL_STR = "null"; //$NON-NLS-1$
 
-    private static final String BLANK_STR = ""; //$NON-NLS-1$ 
+    private static final String BLANK_STR = ""; //$NON-NLS-1$
 
-    private static final String TEST_STR = "test"; //$NON-NLS-1$ 
+    private static final String TEST_STR = "test"; //$NON-NLS-1$
 
     /**
      * Test method for {@link org.talend.windowkey#add_Left_Char(String, String)}
      */
     @Test
     public void testAdd_Left_Char() {
-        assertEquals("<test", AlgoBox.add_Left_Char(TEST_STR, "<")); //$NON-NLS-1$  //$NON-NLS-2$ 
+        assertEquals("<test", AlgoBox.add_Left_Char(TEST_STR, "<")); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals(TEST_STR, AlgoBox.add_Left_Char(TEST_STR, null));
         assertEquals(NULL_STR, AlgoBox.add_Left_Char(NULL_STR, BLANK_STR));
-        assertEquals("\\test", AlgoBox.add_Left_Char(TEST_STR, "\\")); //$NON-NLS-1$  //$NON-NLS-2$ 
+        assertEquals("\\test", AlgoBox.add_Left_Char(TEST_STR, "\\")); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals(QUO_STR, AlgoBox.add_Left_Char(null, QUO_STR));
     }
 
@@ -49,10 +49,10 @@ public class AlgoBoxTest {
      */
     @Test
     public void testAdd_Right_Char() {
-        assertEquals("test<", AlgoBox.add_Right_Char(TEST_STR, "<")); //$NON-NLS-1$ //$NON-NLS-2$ 
+        assertEquals("test<", AlgoBox.add_Right_Char(TEST_STR, "<")); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals(TEST_STR, AlgoBox.add_Right_Char(TEST_STR, null));
         assertEquals(NULL_STR, AlgoBox.add_Right_Char(NULL_STR, BLANK_STR));
-        assertEquals("test\\", AlgoBox.add_Right_Char(TEST_STR, "\\")); //$NON-NLS-1$ //$NON-NLS-2$ 
+        assertEquals("test\\", AlgoBox.add_Right_Char(TEST_STR, "\\")); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals(QUO_STR, AlgoBox.add_Right_Char(null, QUO_STR));
     }
 
@@ -138,11 +138,11 @@ public class AlgoBoxTest {
         assertEquals(BLANK_STR, AlgoBox.first_N_Char_EW(null, 1));
         assertEquals(TEST_STR, AlgoBox.first_N_Char_EW(TEST_STR, 4));
         assertEquals(TEST_STR, AlgoBox.first_N_Char_EW(TEST_STR, 5));
-        assertEquals("tt", AlgoBox.first_N_Char_EW("test\ntest", 1)); //$NON-NLS-1$ //$NON-NLS-2$ 
-        assertEquals("tete", AlgoBox.first_N_Char_EW("test\ttest", 2)); //$NON-NLS-1$ //$NON-NLS-2$ 
-        assertEquals("testes", AlgoBox.first_N_Char_EW("test\ftest", 3)); //$NON-NLS-1$ //$NON-NLS-2$ 
-        assertEquals("tete", AlgoBox.first_N_Char_EW("test test", 2)); //$NON-NLS-1$ //$NON-NLS-2$ 
-        assertEquals("testtest", AlgoBox.first_N_Char_EW("test\rtest", 4)); //$NON-NLS-1$ //$NON-NLS-2$ 
+        assertEquals("tt", AlgoBox.first_N_Char_EW("test\ntest", 1)); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("tete", AlgoBox.first_N_Char_EW("test\ttest", 2)); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("testes", AlgoBox.first_N_Char_EW("test\ftest", 3)); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("tete", AlgoBox.first_N_Char_EW("test test", 2)); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("testtest", AlgoBox.first_N_Char_EW("test\rtest", 4)); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals(BLANK_STR, AlgoBox.first_N_Char_EW(BLANK_STR, 1));
         assertEquals("n", AlgoBox.first_N_Char_EW(NULL_STR, 1)); //$NON-NLS-1$
         assertEquals(QUO_STR, AlgoBox.first_N_Char_EW(QUO_STR, 1));
@@ -155,9 +155,9 @@ public class AlgoBoxTest {
     public void testFirst_N_Consonants() {
         assertEquals(BLANK_STR, AlgoBox.first_N_Consonants(null, 1));
         assertEquals("tst", AlgoBox.first_N_Consonants(TEST_STR, 2000)); //$NON-NLS-1$
-        assertEquals("t", AlgoBox.first_N_Consonants("test\ntest", 1)); //$NON-NLS-1$ //$NON-NLS-2$ 
-        assertEquals("ts", AlgoBox.first_N_Consonants("test\ttest", 2)); //$NON-NLS-1$ //$NON-NLS-2$ 
-        assertEquals("tstts", AlgoBox.first_N_Consonants("test test", 5)); //$NON-NLS-1$ //$NON-NLS-2$ 
+        assertEquals("t", AlgoBox.first_N_Consonants("test\ntest", 1)); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("ts", AlgoBox.first_N_Consonants("test\ttest", 2)); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("tstts", AlgoBox.first_N_Consonants("test test", 5)); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals(BLANK_STR, AlgoBox.first_N_Consonants(BLANK_STR, 1));
         assertEquals(BLANK_STR, AlgoBox.first_N_Consonants(SPACE_STR, 1));
         assertEquals("n", AlgoBox.first_N_Consonants(NULL_STR, 1)); //$NON-NLS-1$
@@ -171,9 +171,9 @@ public class AlgoBoxTest {
     public void testFirst_N_Vowels() {
         assertEquals(BLANK_STR, AlgoBox.first_N_Vowels(null, 1));
         assertEquals("e", AlgoBox.first_N_Vowels(TEST_STR, 2000)); //$NON-NLS-1$
-        assertEquals("e", AlgoBox.first_N_Vowels("test\ntest", 1)); //$NON-NLS-1$ //$NON-NLS-2$ 
-        assertEquals("ee", AlgoBox.first_N_Vowels("test\ttest", 2)); //$NON-NLS-1$ //$NON-NLS-2$ 
-        assertEquals("ee", AlgoBox.first_N_Vowels("test test", 5)); //$NON-NLS-1$ //$NON-NLS-2$ 
+        assertEquals("e", AlgoBox.first_N_Vowels("test\ntest", 1)); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("ee", AlgoBox.first_N_Vowels("test\ttest", 2)); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("ee", AlgoBox.first_N_Vowels("test test", 5)); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals(BLANK_STR, AlgoBox.first_N_Vowels(BLANK_STR, 1));
         assertEquals(BLANK_STR, AlgoBox.first_N_Vowels(SPACE_STR, 1));
         assertEquals("u", AlgoBox.first_N_Vowels(NULL_STR, 1)); //$NON-NLS-1$
@@ -187,9 +187,9 @@ public class AlgoBoxTest {
     public void testLast_N_Char() {
         assertEquals(BLANK_STR, AlgoBox.last_N_Char(null, 1));
         assertEquals("test", AlgoBox.last_N_Char(TEST_STR, 2000)); //$NON-NLS-1$
-        assertEquals("t", AlgoBox.last_N_Char("test\ntest", 1)); //$NON-NLS-1$ //$NON-NLS-2$ 
-        assertEquals("st", AlgoBox.last_N_Char("test\ttest", 2)); //$NON-NLS-1$ //$NON-NLS-2$ 
-        assertEquals(" test", AlgoBox.last_N_Char("test test", 5)); //$NON-NLS-1$ //$NON-NLS-2$ 
+        assertEquals("t", AlgoBox.last_N_Char("test\ntest", 1)); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("st", AlgoBox.last_N_Char("test\ttest", 2)); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals(" test", AlgoBox.last_N_Char("test test", 5)); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals(BLANK_STR, AlgoBox.last_N_Char(BLANK_STR, 1));
         assertEquals(SPACE_STR, AlgoBox.last_N_Char(SPACE_STR, 1));
         assertEquals("l", AlgoBox.last_N_Char(NULL_STR, 1)); //$NON-NLS-1$
@@ -203,9 +203,9 @@ public class AlgoBoxTest {
     public void testLowerCase() {
         assertEquals(null, AlgoBox.lowerCase(null));
         assertEquals("test", AlgoBox.lowerCase(TEST_STR)); //$NON-NLS-1$
-        assertEquals("test\ntest", AlgoBox.lowerCase("Test\ntest")); //$NON-NLS-1$ //$NON-NLS-2$ 
-        assertEquals("test\ttest", AlgoBox.lowerCase("Test\ttest")); //$NON-NLS-1$ //$NON-NLS-2$ 
-        assertEquals("test test123", AlgoBox.lowerCase("Test test123")); //$NON-NLS-1$ //$NON-NLS-2$ 
+        assertEquals("test\ntest", AlgoBox.lowerCase("Test\ntest")); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("test\ttest", AlgoBox.lowerCase("Test\ttest")); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("test test123", AlgoBox.lowerCase("Test test123")); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals(BLANK_STR, AlgoBox.lowerCase(BLANK_STR));
         assertEquals(SPACE_STR, AlgoBox.lowerCase(SPACE_STR));
         assertEquals(NULL_STR, AlgoBox.lowerCase("Null")); //$NON-NLS-1$
@@ -256,8 +256,8 @@ public class AlgoBoxTest {
         assertEquals(BLANK_STR, AlgoBox.pick_Char(null, "test")); //$NON-NLS-1$
         assertEquals(BLANK_STR, AlgoBox.pick_Char(TEST_STR, "test")); //$NON-NLS-1$
         assertEquals("bcdf", AlgoBox.pick_Char("abcdef", "1;2-4;5")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-        assertEquals("etest", AlgoBox.pick_Char(TEST_STR, "1-2;40;0-5")); //$NON-NLS-1$  //$NON-NLS-2$
-        assertEquals("e", AlgoBox.pick_Char("Test test", "1-2")); //$NON-NLS-1$  //$NON-NLS-2$  //$NON-NLS-3$
+        assertEquals("etest", AlgoBox.pick_Char(TEST_STR, "1-2;40;0-5")); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("e", AlgoBox.pick_Char("Test test", "1-2")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         assertEquals(BLANK_STR, AlgoBox.pick_Char(SPACE_STR, BLANK_STR));
         assertEquals(BLANK_STR, AlgoBox.pick_Char(TEST_STR, SPACE_STR));
         assertEquals(BLANK_STR, AlgoBox.pick_Char(QUO_STR, "1")); //$NON-NLS-1$

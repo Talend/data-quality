@@ -1,10 +1,18 @@
 package org.talend.dataquality.semantic.index.utils;
 
+import static org.talend.dataquality.semantic.api.CategoryRegistryManager.DICTIONARY_SUBFOLDER_NAME;
+import static org.talend.dataquality.semantic.api.CategoryRegistryManager.KEYWORD_SUBFOLDER_NAME;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.apache.commons.csv.CSVFormat;
@@ -21,13 +29,9 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
-import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.api.DictionaryUtils;
 import org.talend.dataquality.semantic.index.DictionarySearcher;
 import org.talend.dataquality.semantic.index.utils.optimizer.CategoryOptimizer;
-
-import static org.talend.dataquality.semantic.api.CategoryRegistryManager.DICTIONARY_SUBFOLDER_NAME;
-import static org.talend.dataquality.semantic.api.CategoryRegistryManager.KEYWORD_SUBFOLDER_NAME;
 
 /**
  * @deprecated DO NOT run this class directly, because the generated DD indexes will not contain catId and docId.

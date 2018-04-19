@@ -12,7 +12,8 @@
 // ============================================================================
 package org.talend.dataquality.email.checkerImpl;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -37,7 +38,7 @@ public class RegularRegexCheckerImplTest {
         assertTrue(regularCheck.check(email));
         email = "gégé@laposte.fr"; //$NON-NLS-1$
         assertTrue(regularCheck.check(email));
-        //email = "sidbpl@cebpl.caisse-epargne.fr"; //$NON-NLS-1$
+        // email = "sidbpl@cebpl.caisse-epargne.fr"; //$NON-NLS-1$
         // assertTrue(regularCheck.check(email));
     }
 

@@ -12,7 +12,10 @@
 // ============================================================================
 package org.talend.survivorship;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -810,7 +813,7 @@ public class SurvivorshipManagerTest {
 
         for (String str : SampleDataConflict.COLUMNS_CONFLICT.keySet()) {
             Column column = new Column(str, SampleDataConflict.COLUMNS_CONFLICT.get(str));
-            if (column.getName().equals("firstName")) { //$NON-NLS-1$ 
+            if (column.getName().equals("firstName")) { //$NON-NLS-1$
                 for (ConflictRuleDefinition element : SampleDataConflictMutilGroupFillEmptyBy.RULES_CONFLICT_RESOLVE) {
                     if (column.getName().equals(element.getTargetColumn())) {
                         column.getConflictResolveList().add(element);
@@ -867,7 +870,7 @@ public class SurvivorshipManagerTest {
 
         for (String str : SampleDataConflict.COLUMNS_CONFLICT.keySet()) {
             Column column = new Column(str, SampleDataConflict.COLUMNS_CONFLICT.get(str));
-            if (column.getName().equals("firstName") || column.getName().equals("lastName")) { //$NON-NLS-1$ //$NON-NLS-2$ 
+            if (column.getName().equals("firstName") || column.getName().equals("lastName")) { //$NON-NLS-1$ //$NON-NLS-2$
                 for (ConflictRuleDefinition element : SampleDataConflictMutilGroupConflictDisError.RULES_CONFLICT_RESOLVE) {
                     if (column.getName().equals(element.getTargetColumn())) {
                         column.getConflictResolveList().add(element);
@@ -893,9 +896,9 @@ public class SurvivorshipManagerTest {
         String resultDate = firstNameObj.toString();
         assertEquals("The resultDate should be Lili", "Lili", resultDate); //$NON-NLS-1$ //$NON-NLS-2$
         List<HashSet<String>> conflictList = manager.getConflictList();
-        assertTrue("The conflictList should not be null", conflictList != null); //$NON-NLS-1$ 
-        //        assertTrue("The second row exist a conflict data which column name should be firstName", //$NON-NLS-1$
-        //                conflictList.get(1).contains("firstName")); //$NON-NLS-1$
+        assertTrue("The conflictList should not be null", conflictList != null); //$NON-NLS-1$
+        // assertTrue("The second row exist a conflict data which column name should be firstName", //$NON-NLS-1$
+        // conflictList.get(1).contains("firstName")); //$NON-NLS-1$
         // group 2
         manager.initKnowledgeBase();
         manager.checkConflictRuleValid();
@@ -911,7 +914,7 @@ public class SurvivorshipManagerTest {
         resultDate = firstNameObj.toString();
         assertEquals("The resultDate should be Lili", "Lili", resultDate); //$NON-NLS-1$ //$NON-NLS-2$
         conflictList = manager.getConflictList();
-        assertTrue("The conflictList should not be null", conflictList != null); //$NON-NLS-1$ 
+        assertTrue("The conflictList should not be null", conflictList != null); //$NON-NLS-1$
         assertTrue("The second row exist a conflict data which column name should be lastName", //$NON-NLS-1$
                 conflictList.get(1).contains("lastName")); //$NON-NLS-1$
     }

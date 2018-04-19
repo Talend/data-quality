@@ -12,7 +12,11 @@
 // ============================================================================
 package org.talend.dataquality.standardization.phone;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Locale;
 
@@ -179,7 +183,7 @@ public class PhoneNumberHandlerBaseTest {
      */
     @Test
     public void testFormatE164() {
-        assertEquals(StringUtils.EMPTY, phoneNumberHandlerBase.formatE164(null, REGCODE_FR)); //$NON-NLS-1$
+        assertEquals(StringUtils.EMPTY, phoneNumberHandlerBase.formatE164(null, REGCODE_FR)); // $NON-NLS-1$
         assertEquals("+33656965822", phoneNumberHandlerBase.formatE164(FR_NUM_1, REGCODE_FR)); //$NON-NLS-1$
         assertEquals("+33147554323", phoneNumberHandlerBase.formatE164(FR_NUM_2, REGCODE_FR)); //$NON-NLS-1$
         assertEquals("+33662965822", phoneNumberHandlerBase.formatE164(FR_NUM_5, REGCODE_FR)); //$NON-NLS-1$
@@ -201,7 +205,7 @@ public class PhoneNumberHandlerBaseTest {
      */
     @Test
     public void testFormatInternational() {
-        assertEquals(StringUtils.EMPTY, phoneNumberHandlerBase.formatInternational(null, REGCODE_FR)); //$NON-NLS-1$
+        assertEquals(StringUtils.EMPTY, phoneNumberHandlerBase.formatInternational(null, REGCODE_FR)); // $NON-NLS-1$
 
         assertEquals("+33 6 56 96 58 22", phoneNumberHandlerBase.formatInternational(FR_NUM_1, REGCODE_FR)); //$NON-NLS-1$
         assertEquals("+33 1 47 55 43 23", phoneNumberHandlerBase.formatInternational(FR_NUM_2, REGCODE_FR)); //$NON-NLS-1$
@@ -224,7 +228,7 @@ public class PhoneNumberHandlerBaseTest {
      */
     @Test
     public void testFormatNational() {
-        assertEquals(StringUtils.EMPTY, phoneNumberHandlerBase.formatNational(null, REGCODE_FR)); //$NON-NLS-1$
+        assertEquals(StringUtils.EMPTY, phoneNumberHandlerBase.formatNational(null, REGCODE_FR)); // $NON-NLS-1$
 
         assertEquals("06 56 96 58 22", phoneNumberHandlerBase.formatNational(FR_NUM_1, REGCODE_FR)); //$NON-NLS-1$
         assertEquals("01 47 55 43 23", phoneNumberHandlerBase.formatNational(FR_NUM_2, REGCODE_FR)); //$NON-NLS-1$
@@ -246,7 +250,7 @@ public class PhoneNumberHandlerBaseTest {
      */
     @Test
     public void testFormatRFC396() {
-        assertEquals(StringUtils.EMPTY, phoneNumberHandlerBase.formatRFC396(null, REGCODE_FR)); //$NON-NLS-1$
+        assertEquals(StringUtils.EMPTY, phoneNumberHandlerBase.formatRFC396(null, REGCODE_FR)); // $NON-NLS-1$
 
         assertEquals("tel:+33-6-56-96-58-22", phoneNumberHandlerBase.formatRFC396(FR_NUM_1, REGCODE_FR)); //$NON-NLS-1$
         assertEquals("tel:+33-1-47-55-43-23", phoneNumberHandlerBase.formatRFC396(FR_NUM_2, REGCODE_FR)); //$NON-NLS-1$
@@ -332,7 +336,7 @@ public class PhoneNumberHandlerBaseTest {
 
         assertEquals(StringUtils.EMPTY, phoneNumberHandlerBase.getCarrierNameForNumber(FR_NUM_3, REGCODE_FR, Locale.UK));
         assertEquals("Bouygues", phoneNumberHandlerBase.getCarrierNameForNumber(FR_NUM_5, REGCODE_FR, Locale.UK)); //$NON-NLS-1$
-        assertEquals("Bouygues", phoneNumberHandlerBase.getCarrierNameForNumber(FR_NUM_5, REGCODE_FR, Locale.FRENCH)); //$NON-NLS-1$ 
+        assertEquals("Bouygues", phoneNumberHandlerBase.getCarrierNameForNumber(FR_NUM_5, REGCODE_FR, Locale.FRENCH)); //$NON-NLS-1$
 
         assertEquals(StringUtils.EMPTY, phoneNumberHandlerBase.getCarrierNameForNumber(US_NUM_1, REGCODE_US, Locale.UK));
 
@@ -343,38 +347,38 @@ public class PhoneNumberHandlerBaseTest {
 
     @Test
     public void testgetGeocoderDescriptionForNumber() {
-        assertEquals(StringUtils.EMPTY, //$NON-NLS-1$
+        assertEquals(StringUtils.EMPTY, // $NON-NLS-1$
                 phoneNumberHandlerBase.getGeocoderDescriptionForNumber(null, REGCODE_CN, Locale.SIMPLIFIED_CHINESE));
 
         assertEquals("北京市", //$NON-NLS-1$
                 phoneNumberHandlerBase.getGeocoderDescriptionForNumber(CN_NUM_3, REGCODE_CN, Locale.SIMPLIFIED_CHINESE));
-        assertEquals("Beijing", phoneNumberHandlerBase.getGeocoderDescriptionForNumber(CN_NUM_3, REGCODE_CN, Locale.UK)); //$NON-NLS-1$//
+        assertEquals("Beijing", phoneNumberHandlerBase.getGeocoderDescriptionForNumber(CN_NUM_3, REGCODE_CN, Locale.UK)); //$NON-NLS-1$ //
         assertEquals("江西省九江市", //$NON-NLS-1$
                 phoneNumberHandlerBase.getGeocoderDescriptionForNumber(CN_NUM_4, REGCODE_CN, Locale.SIMPLIFIED_CHINESE));
         assertEquals("Jiujiang, Jiangxi", //$NON-NLS-1$
                 phoneNumberHandlerBase.getGeocoderDescriptionForNumber(CN_NUM_4, REGCODE_CN, Locale.UK));
 
-        assertEquals("France", phoneNumberHandlerBase.getGeocoderDescriptionForNumber(FR_NUM_1, REGCODE_FR, Locale.FRANCE)); //$NON-NLS-1$ 
-        assertEquals("Paris", phoneNumberHandlerBase.getGeocoderDescriptionForNumber(FR_NUM_2, REGCODE_FR, Locale.FRANCE)); //$NON-NLS-1$ 
+        assertEquals("France", phoneNumberHandlerBase.getGeocoderDescriptionForNumber(FR_NUM_1, REGCODE_FR, Locale.FRANCE)); //$NON-NLS-1$
+        assertEquals("Paris", phoneNumberHandlerBase.getGeocoderDescriptionForNumber(FR_NUM_2, REGCODE_FR, Locale.FRANCE)); //$NON-NLS-1$
         assertEquals(StringUtils.EMPTY,
                 phoneNumberHandlerBase.getGeocoderDescriptionForNumber(FR_NUM_3, REGCODE_FR, Locale.FRANCE));
         assertEquals(StringUtils.EMPTY,
                 phoneNumberHandlerBase.getGeocoderDescriptionForNumber(FR_NUM_4, REGCODE_FR, Locale.FRANCE));
-        assertEquals("France", phoneNumberHandlerBase.getGeocoderDescriptionForNumber(FR_NUM_5, REGCODE_FR, Locale.FRANCE)); //$NON-NLS-1$ 
+        assertEquals("France", phoneNumberHandlerBase.getGeocoderDescriptionForNumber(FR_NUM_5, REGCODE_FR, Locale.FRANCE)); //$NON-NLS-1$
 
-        assertEquals("Corvallis, OR", phoneNumberHandlerBase.getGeocoderDescriptionForNumber(US_NUM_1, REGCODE_US, Locale.US)); //$NON-NLS-1$ 
-        assertEquals("Corvallis, OR", phoneNumberHandlerBase.getGeocoderDescriptionForNumber(US_NUM_2, REGCODE_US, Locale.US)); //$NON-NLS-1$ 
+        assertEquals("Corvallis, OR", phoneNumberHandlerBase.getGeocoderDescriptionForNumber(US_NUM_1, REGCODE_US, Locale.US)); //$NON-NLS-1$
+        assertEquals("Corvallis, OR", phoneNumberHandlerBase.getGeocoderDescriptionForNumber(US_NUM_2, REGCODE_US, Locale.US)); //$NON-NLS-1$
         assertEquals(StringUtils.EMPTY, phoneNumberHandlerBase.getGeocoderDescriptionForNumber(US_NUM_3, REGCODE_US, Locale.US));
-        assertEquals("Corvallis, OR", phoneNumberHandlerBase.getGeocoderDescriptionForNumber(US_NUM_4, REGCODE_US, Locale.US)); //$NON-NLS-1$ 
+        assertEquals("Corvallis, OR", phoneNumberHandlerBase.getGeocoderDescriptionForNumber(US_NUM_4, REGCODE_US, Locale.US)); //$NON-NLS-1$
         assertEquals(StringUtils.EMPTY, phoneNumberHandlerBase.getGeocoderDescriptionForNumber(US_NUM_5, REGCODE_US, Locale.US));
         assertEquals(StringUtils.EMPTY, phoneNumberHandlerBase.getGeocoderDescriptionForNumber(US_NUM_6, REGCODE_US, Locale.US));
-        assertEquals("Pennsylvania", phoneNumberHandlerBase.getGeocoderDescriptionForNumber(US_NUM_7, REGCODE_US, Locale.US)); //$NON-NLS-1$ 
+        assertEquals("Pennsylvania", phoneNumberHandlerBase.getGeocoderDescriptionForNumber(US_NUM_7, REGCODE_US, Locale.US)); //$NON-NLS-1$
 
-        assertEquals("München", phoneNumberHandlerBase.getGeocoderDescriptionForNumber(DE_NUM_1, REGCODE_DE, Locale.GERMANY)); //$NON-NLS-1$ 
-        assertEquals("Munich", phoneNumberHandlerBase.getGeocoderDescriptionForNumber(DE_NUM_1, REGCODE_DE, Locale.ENGLISH)); //$NON-NLS-1$ 
+        assertEquals("München", phoneNumberHandlerBase.getGeocoderDescriptionForNumber(DE_NUM_1, REGCODE_DE, Locale.GERMANY)); //$NON-NLS-1$
+        assertEquals("Munich", phoneNumberHandlerBase.getGeocoderDescriptionForNumber(DE_NUM_1, REGCODE_DE, Locale.ENGLISH)); //$NON-NLS-1$
         assertEquals(StringUtils.EMPTY,
                 phoneNumberHandlerBase.getGeocoderDescriptionForNumber(DE_NUM_2, REGCODE_DE, Locale.GERMANY));
-        assertEquals("München", phoneNumberHandlerBase.getGeocoderDescriptionForNumber(DE_NUM_3, REGCODE_DE, Locale.GERMANY)); //$NON-NLS-1$ 
+        assertEquals("München", phoneNumberHandlerBase.getGeocoderDescriptionForNumber(DE_NUM_3, REGCODE_DE, Locale.GERMANY)); //$NON-NLS-1$
         assertEquals("Nußbach Pfalz", //$NON-NLS-1$
                 phoneNumberHandlerBase.getGeocoderDescriptionForNumber(DE_NUM_4, REGCODE_DE, Locale.GERMANY));
         assertEquals("Nussbach Pfalz", //$NON-NLS-1$
@@ -395,7 +399,7 @@ public class PhoneNumberHandlerBaseTest {
     @Test
     public void testGetTimeZonesForNumber() {
         assertEquals(PhoneNumberToTimeZonesMapper.getUnknownTimeZone(),
-                phoneNumberHandlerBase.getTimeZonesForNumber(null, null).get(0)); //$NON-NLS-1$
+                phoneNumberHandlerBase.getTimeZonesForNumber(null, null).get(0)); // $NON-NLS-1$
 
         assertEquals(2, phoneNumberHandlerBase.getTimeZonesForNumber(CN_NUM_1, REGCODE_CN).size());
         assertEquals("[Asia/Shanghai, Asia/Urumqi]", //$NON-NLS-1$

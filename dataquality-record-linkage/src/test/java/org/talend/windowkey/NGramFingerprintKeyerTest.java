@@ -12,7 +12,7 @@
 // ============================================================================
 package org.talend.windowkey;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
