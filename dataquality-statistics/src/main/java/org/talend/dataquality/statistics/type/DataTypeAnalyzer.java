@@ -15,10 +15,12 @@ package org.talend.dataquality.statistics.type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.ResizableList;
 import org.talend.dataquality.semantic.recognizer.LFUCache;
+import org.talend.dataquality.statistics.datetime.SystemDateTimePatternManager;
 
 /**
  * Type inference executor which provide several methods computing the types.<br>
@@ -35,6 +37,8 @@ public class DataTypeAnalyzer implements Analyzer<DataTypeOccurences> {
     private static final long serialVersionUID = 373694310453353502L;
 
     private final ResizableList<DataTypeOccurences> dataTypes = new ResizableList<>(DataTypeOccurences.class);
+
+    private final ResizableList<OrderedArrayList> dateTypes = new ResizableList<>(OrderedArrayList.class);
 
     /** Optional custom date patterns. */
     protected List<String> customDateTimePatterns = new ArrayList<>();
@@ -59,6 +63,7 @@ public class DataTypeAnalyzer implements Analyzer<DataTypeOccurences> {
 
     public void init() {
         dataTypes.clear();
+        dateTypes.clear();
     }
 
     /**
@@ -83,20 +88,41 @@ public class DataTypeAnalyzer implements Analyzer<DataTypeOccurences> {
             return true;
         }
         dataTypes.resize(record.length);
+        dateTypes.resize(record.length);
         for (int i = 0; i < record.length; i++) {
             final DataTypeOccurences dataType = dataTypes.get(i);
-
             final String value = record[i];
             final DataTypeEnum knownDataType = knownDataTypeCache.get(value);
             if (knownDataType != null) {
                 dataType.increment(knownDataType);
             } else {
-                DataTypeEnum type = TypeInferenceUtils.getDataType(value, customDateTimePatterns);
+                DataTypeEnum type = TypeInferenceUtils.getNativeDataType(value);
+                //STRING means we didn't find any native data types
+                if (DataTypeEnum.STRING.equals(type))
+                    type = analyzeDateTimeValue(value, dateTypes.get(i));
                 knownDataTypeCache.put(value, type);
                 dataType.increment(type);
             }
         }
         return true;
+    }
+
+    private DataTypeEnum analyzeDateTimeValue(String value, OrderedArrayList<String> orderedPatterns) {
+        DataTypeEnum type = DataTypeEnum.DATE;
+        boolean isNotFound = true;
+        for (int j = 0; j < orderedPatterns.size() && isNotFound; j++)
+            if (SystemDateTimePatternManager.isMatchDateTimePattern(value, orderedPatterns.get(j).getLeft(),
+                    Locale.getDefault())) {
+                orderedPatterns.increment(j);
+                isNotFound = false;
+            }
+        if (isNotFound) {
+            type = TypeInferenceUtils.getDateTimeDataType(value, customDateTimePatterns);
+            if (DataTypeEnum.DATE.equals(type))
+                SystemDateTimePatternManager.datePatternReplace(value)
+                        .forEach(pattern -> orderedPatterns.addAndIncrement(pattern));
+        }
+        return type;
     }
 
     public void end() {

@@ -264,7 +264,7 @@ public class SystemDateTimePatternManager {
         return false;
     }
 
-    static boolean isMatchDateTimePattern(String value, String pattern, Locale locale) {
+    public static boolean isMatchDateTimePattern(String value, String pattern, Locale locale) {
         if (pattern == null) {
             return false;
         }
