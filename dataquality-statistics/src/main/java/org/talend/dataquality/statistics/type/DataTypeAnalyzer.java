@@ -38,7 +38,7 @@ public class DataTypeAnalyzer implements Analyzer<DataTypeOccurences> {
 
     private final ResizableList<DataTypeOccurences> dataTypes = new ResizableList<>(DataTypeOccurences.class);
 
-    private final ResizableList<OrderedArrayList> dateTypes = new ResizableList<>(OrderedArrayList.class);
+    private final ResizableList<SortedList> dateTypes = new ResizableList<>(SortedList.class);
 
     /** Optional custom date patterns. */
     protected List<String> customDateTimePatterns = new ArrayList<>();
@@ -107,7 +107,7 @@ public class DataTypeAnalyzer implements Analyzer<DataTypeOccurences> {
         return true;
     }
 
-    private DataTypeEnum analyzeDateTimeValue(String value, OrderedArrayList<String> orderedPatterns) {
+    private DataTypeEnum analyzeDateTimeValue(String value, SortedList<String> orderedPatterns) {
         DataTypeEnum type = DataTypeEnum.DATE;
         boolean isNotFound = true;
         for (int j = 0; j < orderedPatterns.size() && isNotFound; j++)
