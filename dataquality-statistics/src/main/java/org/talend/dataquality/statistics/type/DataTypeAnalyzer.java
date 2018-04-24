@@ -127,7 +127,7 @@ public class DataTypeAnalyzer implements Analyzer<DataTypeOccurences> {
             if (isMatchCustomPatterns(value, customDateTimePatterns, Locale.US))
                 type = DataTypeEnum.DATE;
             else {
-                Optional<Pair<Pattern, String>> foundPattern = SystemDateTimePatternManager.findDatePattern(value);
+                Optional<Pair<Pattern, String>> foundPattern = SystemDateTimePatternManager.findOneDatePattern(value);
                 if (foundPattern.isPresent()) {
                     orderedPatterns.addNewValue(foundPattern.get());
                     type = DataTypeEnum.DATE;

@@ -107,7 +107,7 @@ public class SystemDateTimePatternManager {
      */
     public static boolean isDate(String value) {
         if (checkDatesPreconditions(value))
-            return findDateTimePattern(DATE_PATTERN_GROUP_LIST, value).isPresent();
+            return findOneDateTimePattern(DATE_PATTERN_GROUP_LIST, value).isPresent();
         return false;
     }
 
@@ -115,11 +115,11 @@ public class SystemDateTimePatternManager {
      * Whether the given string value is a date or not and the pattern associated
      *
      * @param value to check
-     * @return the pair pattern, regex is it's a regex, null otherwise
+     * @return the pair pattern, regex if it's a regex, null otherwise
      */
-    public static Optional<Pair<Pattern, String>> findDatePattern(String value) {
+    public static Optional<Pair<Pattern, String>> findOneDatePattern(String value) {
         if (checkDatesPreconditions(value))
-            return findDateTimePattern(DATE_PATTERN_GROUP_LIST, value);
+            return findOneDateTimePattern(DATE_PATTERN_GROUP_LIST, value);
         return Optional.empty();
     }
 
@@ -130,14 +130,9 @@ public class SystemDateTimePatternManager {
      * @return true if the value is type "Time", false otherwise.
      */
     public static boolean isTime(String value) {
-        if (StringUtils.isEmpty(value)) {
-            return false;
-        }
         // The length of date strings must not be less than 4, and must not exceed 24.
-        if (value.length() < 4 || value.length() > 24) {
-            return false;
-        }
-        return findDateTimePattern(TIME_PATTERN_GROUP_LIST, value).isPresent();
+        return StringUtils.isNotEmpty(value) && value.length() >= 4 && value.length() <= 24 && checkEnoughDigits(value)
+                && findOneDateTimePattern(TIME_PATTERN_GROUP_LIST, value).isPresent();
     }
 
     /**
@@ -149,41 +144,36 @@ public class SystemDateTimePatternManager {
      */
     private static boolean checkDatesPreconditions(String value) {
         return (StringUtils.isNotEmpty(value) && value.length() >= 6 && value.length() <= 64
-                && PATTERN_FILTER_DATE.matcher(value).find());
+                && PATTERN_FILTER_DATE.matcher(value).find() && checkEnoughDigits(value));
     }
 
-    private static Optional<Pair<Pattern, String>> findDateTimePattern(List<Map<Pattern, String>> patternGroupList,
-            String value) {
-        // at least 3 digit
-        boolean hasEnoughDigits = false;
+    /**
+     * The value must have at least 3 digits
+     * @param value
+     * @return true is the value contains at least 3 digits
+     */
+    private static boolean checkEnoughDigits(String value) {
         int digitCount = 0;
         for (int i = 0; i < value.length(); i++) {
             char ch = value.charAt(i);
             if (ch >= '0' && ch <= '9') {
                 digitCount++;
                 if (digitCount > 2) {
-                    hasEnoughDigits = true;
-                    break;
+                    return true;
                 }
             }
         }
-        if (hasEnoughDigits) {
-            // Check the value with a list of regex patterns
-            for (Map<Pattern, String> patternMap : patternGroupList) {
-                for (Entry<Pattern, String> entry : patternMap.entrySet()) {
-                    Pattern parser = entry.getKey();
-                    try {
-                        if (parser.matcher(value).find()) {
-                            String dateFormat = entry.getValue();
-                            if (isMatchDateTimePattern(value, dateFormat, SYSTEM_LOCALE)) {
-                                return Optional.of(Pair.of(parser, entry.getValue()));
-                            }
-                        }
-                    } catch (Exception e) {
-                        LOGGER.debug(e.getMessage(), e);
-                        // ignore
-                    }
-                }
+        return false;
+    }
+
+    private static Optional<Pair<Pattern, String>> findOneDateTimePattern(List<Map<Pattern, String>> patternGroupList,
+            String value) {
+        // Check the value with a list of regex patterns
+        for (Map<Pattern, String> patternMap : patternGroupList) {
+            for (Entry<Pattern, String> entry : patternMap.entrySet()) {
+                Pattern parser = entry.getKey();
+                if (parser.matcher(value).find() && isMatchDateTimePattern(value, entry.getValue(), SYSTEM_LOCALE))
+                    return Optional.of(Pair.of(parser, entry.getValue()));
             }
         }
         return Optional.empty();
