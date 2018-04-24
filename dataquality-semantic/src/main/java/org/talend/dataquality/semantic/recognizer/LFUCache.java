@@ -54,6 +54,10 @@ public class LFUCache<K, V> implements Map<K, V> {
 
     private final float evictionFactor;
 
+    public LFUCache() {
+        this(10, 1000, 0.01f);
+    }
+
     public LFUCache(int initialCacheSize, int maxCacheSize, float evictionFactor) {
         if (evictionFactor <= 0 || evictionFactor >= 1) {
             throw new IllegalArgumentException("Eviction factor must be greater than 0 and lesser than or equal to 1");

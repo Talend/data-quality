@@ -41,14 +41,14 @@ public class DataTypeAnalyzer implements Analyzer<DataTypeOccurences> {
 
     private static final long serialVersionUID = 373694310453353502L;
 
-    private final ResizableList<DataTypeOccurences> dataTypes = new ResizableList<>(DataTypeOccurences.class);
+    private final ResizableList<DataTypeOccurences> dataTypeResults = new ResizableList<>(DataTypeOccurences.class);
 
-    private final ResizableList<SortedList> dateTypes = new ResizableList<>(SortedList.class);
+    private final ResizableList<SortedList> frequentDatePatterns = new ResizableList<>(SortedList.class);
 
     /** Optional custom date patterns. */
     protected List<String> customDateTimePatterns = new ArrayList<>();
 
-    private final LFUCache<String, DataTypeEnum> knownDataTypeCache = new LFUCache<>(10, 1000, 0.01f);
+    private final ResizableList<LFUCache> knownDataTypeCaches = new ResizableList<>(LFUCache.class);
 
     /**
      * Default empty constructor.
@@ -67,8 +67,9 @@ public class DataTypeAnalyzer implements Analyzer<DataTypeOccurences> {
     }
 
     public void init() {
-        dataTypes.clear();
-        dateTypes.clear();
+        dataTypeResults.clear();
+        frequentDatePatterns.clear();
+        knownDataTypeCaches.clear();
     }
 
     /**
@@ -92,10 +93,12 @@ public class DataTypeAnalyzer implements Analyzer<DataTypeOccurences> {
         if (record == null) {
             return true;
         }
-        dataTypes.resize(record.length);
-        dateTypes.resize(record.length);
+        dataTypeResults.resize(record.length);
+        frequentDatePatterns.resize(record.length);
+        knownDataTypeCaches.resize(record.length);
         for (int i = 0; i < record.length; i++) {
-            final DataTypeOccurences dataType = dataTypes.get(i);
+            final DataTypeOccurences dataType = dataTypeResults.get(i);
+            final LFUCache<String, DataTypeEnum> knownDataTypeCache = knownDataTypeCaches.get(i);
             final String value = record[i];
             final DataTypeEnum knownDataType = knownDataTypeCache.get(value);
             if (knownDataType != null) {
@@ -104,7 +107,7 @@ public class DataTypeAnalyzer implements Analyzer<DataTypeOccurences> {
                 DataTypeEnum type = TypeInferenceUtils.getNativeDataType(value);
                 //STRING means we didn't find any native data types
                 if (DataTypeEnum.STRING.equals(type))
-                    type = analyzeDateTimeValue(value, dateTypes.get(i));
+                    type = analyzeDateTimeValue(value, frequentDatePatterns.get(i));
                 knownDataTypeCache.put(value, type);
                 dataType.increment(type);
             }
@@ -149,7 +152,7 @@ public class DataTypeAnalyzer implements Analyzer<DataTypeOccurences> {
      * @return A map for <b>each</b> column. Each map contains the type occurrence count.
      */
     public List<DataTypeOccurences> getResult() {
-        return dataTypes;
+        return dataTypeResults;
     }
 
     @Override

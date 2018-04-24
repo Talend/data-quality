@@ -20,15 +20,16 @@ import org.apache.commons.lang3.tuple.MutablePair;
 
 /**
  * This class links a frequency to an object K.
- * Next we will sort the objects K according to this frequency.
  * The first elements are the most frequent.
- * 
+ * When you increment the frequency of a value, it will keep the list sorted.
+ *
  * @param <K>
  */
 public class SortedList<K> extends ArrayList<MutablePair<K, Integer>> {
 
     /**
-     * Add a new value to the list
+     * Add a new value to the list.
+     * Careful not to add an existing value.
      * @param value to add
      */
     public boolean addNewValue(K value) {
