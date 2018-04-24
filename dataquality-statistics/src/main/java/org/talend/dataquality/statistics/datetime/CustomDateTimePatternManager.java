@@ -54,7 +54,7 @@ public final class CustomDateTimePatternManager {
         return SystemDateTimePatternManager.isTime(value);
     }
 
-    private static boolean isMatchCustomPatterns(String value, List<String> customPatterns, Locale locale) {
+    public static boolean isMatchCustomPatterns(String value, List<String> customPatterns, Locale locale) {
         for (String pattern : customPatterns) {
             if (SystemDateTimePatternManager.isMatchDateTimePattern(value, pattern, locale)) {
                 return true;

@@ -12,11 +12,16 @@
 // ============================================================================
 package org.talend.dataquality.statistics.type;
 
+import static org.talend.dataquality.statistics.datetime.CustomDateTimePatternManager.isMatchCustomPatterns;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
+import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.ResizableList;
 import org.talend.dataquality.semantic.recognizer.LFUCache;
@@ -28,7 +33,7 @@ import org.talend.dataquality.statistics.datetime.SystemDateTimePatternManager;
  * 1. {{@link #init()}, called once.<br>
  * 2. {{@link Analyzer#analyze(String...)} , called as many iterations as required.<br>
  * 3. {{@link #getResult()} , called once.<br>
- * 
+ *
  * <b>Important note:</b> This class is <b>NOT</b> thread safe.
  *
  */
@@ -54,7 +59,7 @@ public class DataTypeAnalyzer implements Analyzer<DataTypeOccurences> {
 
     /**
      * Create a DataTypeAnalyzer with the given custom date patterns.
-     * 
+     *
      * @param customDateTimePatterns the patterns to use.
      */
     public DataTypeAnalyzer(List<String> customDateTimePatterns) {
@@ -69,7 +74,7 @@ public class DataTypeAnalyzer implements Analyzer<DataTypeOccurences> {
     /**
      * Analyze record of Array of string type, this method is used in scala library which not support parameterized
      * array type.
-     * 
+     *
      * @param record
      * @return
      */
@@ -107,20 +112,28 @@ public class DataTypeAnalyzer implements Analyzer<DataTypeOccurences> {
         return true;
     }
 
-    private DataTypeEnum analyzeDateTimeValue(String value, SortedList<String> orderedPatterns) {
-        DataTypeEnum type = DataTypeEnum.DATE;
-        boolean isNotFound = true;
-        for (int j = 0; j < orderedPatterns.size() && isNotFound; j++)
-            if (SystemDateTimePatternManager.isMatchDateTimePattern(value, orderedPatterns.get(j).getLeft(),
-                    Locale.getDefault())) {
+    private DataTypeEnum analyzeDateTimeValue(String value, SortedList<Pair<Pattern, String>> orderedPatterns) {
+        DataTypeEnum type = DataTypeEnum.STRING;
+        for (int j = 0; j < orderedPatterns.size() && DataTypeEnum.STRING.equals(type); j++) {
+            Pair<Pattern, String> cachedPattern = orderedPatterns.get(j).getLeft();
+            if (cachedPattern.getLeft().matcher(value).find() && SystemDateTimePatternManager.isMatchDateTimePattern(value,
+                    cachedPattern.getRight(), Locale.getDefault())) {
                 orderedPatterns.increment(j);
-                isNotFound = false;
+                type = DataTypeEnum.DATE;
             }
-        if (isNotFound) {
-            type = TypeInferenceUtils.getDateTimeDataType(value, customDateTimePatterns);
-            if (DataTypeEnum.DATE.equals(type))
-                SystemDateTimePatternManager.datePatternReplace(value)
-                        .forEach(pattern -> orderedPatterns.addNewValue(pattern));
+        }
+        if (DataTypeEnum.STRING.equals(type)) {
+            // use custom patterns first
+            if (isMatchCustomPatterns(value, customDateTimePatterns, Locale.US))
+                type = DataTypeEnum.DATE;
+            else {
+                Optional<Pair<Pattern, String>> foundPattern = SystemDateTimePatternManager.findDatePattern(value);
+                if (foundPattern.isPresent()) {
+                    orderedPatterns.addNewValue(foundPattern.get());
+                    type = DataTypeEnum.DATE;
+                } else if (SystemDateTimePatternManager.isTime(value))
+                    type = DataTypeEnum.TIME;
+            }
         }
         return type;
     }

@@ -29,11 +29,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -104,20 +106,21 @@ public class SystemDateTimePatternManager {
      * @return true if the value is a date.
      */
     public static boolean isDate(String value) {
-        if (StringUtils.isEmpty(value)) {
-            return false;
-        }
-        // The length of date strings must not be less than 6, and must not exceed 64.
-        if (value.length() < 6 || value.length() > 64) {
-            return false;
-        }
+        if (checkDatesPreconditions(value))
+            return findDateTimePattern(DATE_PATTERN_GROUP_LIST, value).isPresent();
+        return false;
+    }
 
-        // TDQ-14894: Improve Date discovery by listing the separators
-        if (!PATTERN_FILTER_DATE.matcher(value).find()) {
-            return false;
-        }
-
-        return isDateTime(DATE_PATTERN_GROUP_LIST, value);
+    /**
+     * Whether the given string value is a date or not and the pattern associated
+     *
+     * @param value to check
+     * @return the pair pattern, regex is it's a regex, null otherwise
+     */
+    public static Optional<Pair<Pattern, String>> findDatePattern(String value) {
+        if (checkDatesPreconditions(value))
+            return findDateTimePattern(DATE_PATTERN_GROUP_LIST, value);
+        return Optional.empty();
     }
 
     /**
@@ -134,28 +137,37 @@ public class SystemDateTimePatternManager {
         if (value.length() < 4 || value.length() > 24) {
             return false;
         }
-        return isDateTime(TIME_PATTERN_GROUP_LIST, value);
+        return findDateTimePattern(TIME_PATTERN_GROUP_LIST, value).isPresent();
     }
 
-    private static boolean isDateTime(List<Map<Pattern, String>> patternGroupList, String value) {
-        if (StringUtils.isNotEmpty(value)) {
-            // at least 3 digit
-            boolean hasEnoughDigits = false;
-            int digitCount = 0;
-            for (int i = 0; i < value.length(); i++) {
-                char ch = value.charAt(i);
-                if (ch >= '0' && ch <= '9') {
-                    digitCount++;
-                    if (digitCount > 2) {
-                        hasEnoughDigits = true;
-                        break;
-                    }
+    /**
+     * Not empty
+     * The length of date strings must not be less than 6, and must not exceed 64.
+     * TDQ-14894: Improve Date discovery by listing the separators
+     * @param value
+     * @return true is the value valids the preconditions
+     */
+    private static boolean checkDatesPreconditions(String value) {
+        return (StringUtils.isNotEmpty(value) && value.length() >= 6 && value.length() <= 64
+                && PATTERN_FILTER_DATE.matcher(value).find());
+    }
+
+    private static Optional<Pair<Pattern, String>> findDateTimePattern(List<Map<Pattern, String>> patternGroupList,
+            String value) {
+        // at least 3 digit
+        boolean hasEnoughDigits = false;
+        int digitCount = 0;
+        for (int i = 0; i < value.length(); i++) {
+            char ch = value.charAt(i);
+            if (ch >= '0' && ch <= '9') {
+                digitCount++;
+                if (digitCount > 2) {
+                    hasEnoughDigits = true;
+                    break;
                 }
             }
-            if (!hasEnoughDigits) {
-                return false;
-            }
-
+        }
+        if (hasEnoughDigits) {
             // Check the value with a list of regex patterns
             for (Map<Pattern, String> patternMap : patternGroupList) {
                 for (Entry<Pattern, String> entry : patternMap.entrySet()) {
@@ -164,7 +176,7 @@ public class SystemDateTimePatternManager {
                         if (parser.matcher(value).find()) {
                             String dateFormat = entry.getValue();
                             if (isMatchDateTimePattern(value, dateFormat, SYSTEM_LOCALE)) {
-                                return true;
+                                return Optional.of(Pair.of(parser, entry.getValue()));
                             }
                         }
                     } catch (Exception e) {
@@ -174,7 +186,7 @@ public class SystemDateTimePatternManager {
                 }
             }
         }
-        return false;
+        return Optional.empty();
     }
 
     /**
