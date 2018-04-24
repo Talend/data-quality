@@ -251,7 +251,18 @@ public class PhoneNumberHandlerBase {
      * @return
      */
     public static String extractRegionCode(Object phoneData) {
-        PhoneNumber phoneNumber = parseToPhoneNumber(phoneData, null);
+        return extractRegionCode(phoneData, null);
+    }
+
+    /**
+     *
+     * get a region code from an phone number.
+     *
+     * @param phoneData a phone number String or number.
+     * @return
+     */
+    public static String extractRegionCode(Object phoneData, String regionCode) {
+        PhoneNumber phoneNumber = parseToPhoneNumber(phoneData, regionCode);
         if (phoneNumber != null) {
             return GOOGLE_PHONE_UTIL.getRegionCodeForNumber(phoneNumber);
         }
@@ -332,6 +343,14 @@ public class PhoneNumberHandlerBase {
             return unknowTimeZoneLs;
         }
         return PhoneNumberToTimeZonesMapper.getInstance().getTimeZonesForNumber(number);
+    }
+
+    public static List<String> getTimeZonesForNumber(Object data, String regionCode, boolean withUnknownTimeZone) {
+        List<String> timezones = getTimeZonesForNumber(data, regionCode);
+        if (withUnknownTimeZone || !timezones.contains(PhoneNumberToTimeZonesMapper.getUnknownTimeZone()))
+            return timezones;
+        else
+            return new ArrayList<>();
     }
 
 }
