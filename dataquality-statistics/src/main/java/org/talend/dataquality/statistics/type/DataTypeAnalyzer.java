@@ -120,7 +120,7 @@ public class DataTypeAnalyzer implements Analyzer<DataTypeOccurences> {
             type = TypeInferenceUtils.getDateTimeDataType(value, customDateTimePatterns);
             if (DataTypeEnum.DATE.equals(type))
                 SystemDateTimePatternManager.datePatternReplace(value)
-                        .forEach(pattern -> orderedPatterns.addAndIncrement(pattern));
+                        .forEach(pattern -> orderedPatterns.addNewValue(pattern));
         }
         return type;
     }

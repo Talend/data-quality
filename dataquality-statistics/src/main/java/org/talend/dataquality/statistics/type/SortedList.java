@@ -28,20 +28,11 @@ import org.apache.commons.lang3.tuple.MutablePair;
 public class SortedList<K> extends ArrayList<MutablePair<K, Integer>> {
 
     /**
-     * Add a new value to the list if the values doesn't exist.
-     * Increment the frenquency of the existing value otherwise.
+     * Add a new value to the list
      * @param value to add
      */
-    public void addAndIncrement(K value) {
-        //Find the index where is the value
-        int currentIndex = 0;
-        while (currentIndex < size() && !value.equals(get(currentIndex).getLeft()))
-            currentIndex++;
-
-        if (currentIndex < size()) //found value
-            increment(currentIndex);
-        else //not found value
-            add(MutablePair.of(value, 0));
+    public boolean addNewValue(K value) {
+        return add(MutablePair.of(value, 0));
     }
 
     /**
@@ -64,5 +55,4 @@ public class SortedList<K> extends ArrayList<MutablePair<K, Integer>> {
         if (currentIndex + 1 != foundIndex)
             Collections.swap(this, currentIndex + 1, foundIndex);
     }
-
 }

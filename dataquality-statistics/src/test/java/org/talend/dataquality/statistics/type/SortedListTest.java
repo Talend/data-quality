@@ -26,20 +26,10 @@ public class SortedListTest {
     }
 
     @Test
-    public void testaddAndIncrement() {
-        sortedList.addAndIncrement("value1");
-        sortedList.addAndIncrement("value2");
-        sortedList.addAndIncrement("value3");
-        Assert.assertEquals(sortedList.get(0).left, "value1");
-        sortedList.addAndIncrement("value2");
-        Assert.assertEquals(sortedList.get(0).left, "value2");
-    }
-
-    @Test
     public void testIncrement() {
-        sortedList.addAndIncrement("value1");
-        sortedList.addAndIncrement("value2");
-        sortedList.addAndIncrement("value3");
+        sortedList.addNewValue("value1");
+        sortedList.addNewValue("value2");
+        sortedList.addNewValue("value3");
         Assert.assertEquals(sortedList.get(0).left, "value1");
         sortedList.increment(2);
         Assert.assertEquals(sortedList.get(0).left, "value3");
