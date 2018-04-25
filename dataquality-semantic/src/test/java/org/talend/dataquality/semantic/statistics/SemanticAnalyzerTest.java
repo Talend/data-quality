@@ -228,6 +228,21 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
     }
 
     @Test
+    public void testThresholdMetadata() {
+        String countryName = SemanticCategoryEnum.COUNTRY.name();
+        List<Result> results = testSemanticAnalyzer(TEST_RECORDS, Arrays.asList("Country"),
+                Collections.singletonList(countryName));
+        results.forEach(result -> result.get(SemanticType.class).getSuggestedCategories().stream()
+                .filter(categoryFrequency -> countryName.equals(categoryFrequency.getCategoryId()))
+                .forEach(categoryFrequency -> assertEquals(76.66, categoryFrequency.getScore(), 0.01)));
+        results = testSemanticAnalyzer(TEST_RECORDS, Arrays.asList("invalidName"), Collections.singletonList(countryName));
+        results.forEach(result -> result.get(SemanticType.class).getSuggestedCategories().stream()
+                .filter(categoryFrequency -> countryName.equals(categoryFrequency.getCategoryId()))
+                .forEach(categoryFrequency -> assertEquals(66.66, categoryFrequency.getScore(), 0.01)));
+
+    }
+
+    @Test
     public void semanticTypeNameFuzzyMatching() { // TDQ-14062: Fuzzy matching on the semantic type name
         // 1. test levenshtein
         testSemanticAnalyzer(TEST_RECORDS_CITY_METADATA, Arrays.asList("", "Lost Names"), EXPECTED_FR_COMMUNE_CATEGORY_METADATA);

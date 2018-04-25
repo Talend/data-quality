@@ -254,6 +254,7 @@ public class DefaultCategoryRecognizer implements CategoryRecognizer {
     @Override
     public Collection<CategoryFrequency> getResult(String columnName, float weight) {
         for (CategoryFrequency category : categoryToFrequency.values()) {
+            category.score = Math.round(category.count * 10000 / total) / 100F;
 
             if (tokenizedApply) {
                 defaultMatcher.setTokenMethod(TokenizedResolutionMethod.ANYORDER);
@@ -263,7 +264,9 @@ public class DefaultCategoryRecognizer implements CategoryRecognizer {
             if (columnName != null && !UNKNOWN.getDisplayName().equals(category.getCategoryName()))
                 scoreOnHeader = Double.valueOf(defaultMatcher.getMatchingWeight(columnName, category.getCategoryName()))
                         .floatValue();
-            category.score = Math.min(Math.round(category.count * 10000 / total) / 100F + scoreOnHeader * weight * 100, 100);
+            if (scoreOnHeader > 0.7)
+                category.score += scoreOnHeader * weight * 100;
+            category.score = Math.min(category.score, 100);
         }
 
         Collections.sort(catList, Collections.reverseOrder());
