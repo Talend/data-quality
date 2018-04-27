@@ -49,15 +49,11 @@ public class SystemDateTimePatternManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SystemDateTimePatternManager.class);
 
-    private static Locale DEFAULT_LOCALE = Locale.US;
+    private static final List<Map<Pattern, String>> DATE_PATTERN_GROUP_LIST = new ArrayList<>();
 
-    private static Locale SYSTEM_LOCALE = Locale.getDefault();
+    private static final List<Map<Pattern, String>> TIME_PATTERN_GROUP_LIST = new ArrayList<>();
 
-    private static List<Map<Pattern, String>> DATE_PATTERN_GROUP_LIST = new ArrayList<Map<Pattern, String>>();
-
-    private static List<Map<Pattern, String>> TIME_PATTERN_GROUP_LIST = new ArrayList<Map<Pattern, String>>();
-
-    private static Map<String, DateTimeFormatter> dateTimeFormatterCache = new HashMap<String, DateTimeFormatter>();
+    private static final Map<String, DateTimeFormatter> dateTimeFormatterCache = new HashMap<>();
 
     private static final String PATTERN_SUFFIX_ERA = "G"; //$NON-NLS-1$
 
@@ -70,7 +66,6 @@ public class SystemDateTimePatternManager {
         loadPatterns("DateRegexesGrouped.txt", DATE_PATTERN_GROUP_LIST);
         // Load time patterns
         loadPatterns("TimeRegexes.txt", TIME_PATTERN_GROUP_LIST);
-
     }
 
     private static Set<Locale> getDistinctLanguagesLocales() {
@@ -84,7 +79,7 @@ public class SystemDateTimePatternManager {
         InputStream stream = SystemDateTimePatternManager.class.getResourceAsStream(patternFileName);
         try {
             List<String> lines = IOUtils.readLines(stream, "UTF-8");
-            Map<Pattern, String> currentGroupMap = new LinkedHashMap<Pattern, String>();
+            Map<Pattern, String> currentGroupMap = new LinkedHashMap<>();
             patternParsers.add(currentGroupMap);
             for (String line : lines) {
                 if (!"".equals(line.trim())) { // Not empty

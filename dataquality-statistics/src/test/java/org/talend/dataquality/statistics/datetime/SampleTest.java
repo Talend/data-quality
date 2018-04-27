@@ -25,7 +25,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -575,12 +574,6 @@ public class SampleTest {
                 // + expectedPattern);
                 // System.out.println(SystemDateTimePatternManager.datePatternReplace(sample));
 
-                String locale = sampleLine[2];
-                locale = locale.replaceAll("_", "-");
-                Locale local = Locale.forLanguageTag(locale);
-
-                // SystemDateTimePatternManager.renewCache();
-                setFinalStatic(SystemDateTimePatternManager.class.getDeclaredField("SYSTEM_LOCALE"), local);
                 setFinalStatic(SystemDateTimePatternManager.class.getDeclaredField("dateTimeFormatterCache"),
                         new HashMap<String, DateTimeFormatter>());
 
@@ -602,12 +595,6 @@ public class SampleTest {
                 // String locale = sampleLine[2];
                 // System.out.println(SystemDateTimePatternManager.isTime(sample) + "\t" + locale + "\t" + sample + "\t"
                 // + expectedPattern);
-
-                String locale = sampleLine[2];
-                locale = locale.replaceAll("_", "-");
-                Locale local = Locale.forLanguageTag(locale);
-
-                setFinalStatic(SystemDateTimePatternManager.class.getDeclaredField("SYSTEM_LOCALE"), local);
 
                 assertTrue(sample + " is expected to be a valid time but actually not.",
                         SystemDateTimePatternManager.isTime(sample));

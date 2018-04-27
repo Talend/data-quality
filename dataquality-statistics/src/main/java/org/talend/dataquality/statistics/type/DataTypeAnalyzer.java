@@ -117,28 +117,28 @@ public class DataTypeAnalyzer implements Analyzer<DataTypeOccurences> {
     }
 
     private DataTypeEnum analyzeDateTimeValue(String value, SortedList<Pair<Pattern, DateTimeFormatter>> orderedPatterns) {
-        DataTypeEnum type = DataTypeEnum.STRING;
-        for (int j = 0; j < orderedPatterns.size() && DataTypeEnum.STRING.equals(type); j++) {
+        for (int j = 0; j < orderedPatterns.size(); j++) {
             Pair<Pattern, DateTimeFormatter> cachedPattern = orderedPatterns.get(j).getLeft();
             if (cachedPattern.getLeft().matcher(value).find()
                     && SystemDateTimePatternManager.isMatchDateTimePattern(value, cachedPattern.getRight())) {
                 orderedPatterns.increment(j);
-                type = DataTypeEnum.DATE;
+                return DataTypeEnum.DATE;
             }
         }
-        if (DataTypeEnum.STRING.equals(type)) {
-            // use custom patterns first
-            if (isMatchCustomPatterns(value, customDateTimePatterns, Locale.US))
+        DataTypeEnum type = DataTypeEnum.STRING;
+
+        // use custom patterns first
+        if (isMatchCustomPatterns(value, customDateTimePatterns, Locale.US))
+            type = DataTypeEnum.DATE;
+        else {
+            Optional<Pair<Pattern, DateTimeFormatter>> foundPattern = SystemDateTimePatternManager.findOneDatePattern(value);
+            if (foundPattern.isPresent()) {
+                orderedPatterns.addNewValue(foundPattern.get());
                 type = DataTypeEnum.DATE;
-            else {
-                Optional<Pair<Pattern, DateTimeFormatter>> foundPattern = SystemDateTimePatternManager.findOneDatePattern(value);
-                if (foundPattern.isPresent()) {
-                    orderedPatterns.addNewValue(foundPattern.get());
-                    type = DataTypeEnum.DATE;
-                } else if (SystemDateTimePatternManager.isTime(value))
-                    type = DataTypeEnum.TIME;
-            }
+            } else if (SystemDateTimePatternManager.isTime(value))
+                type = DataTypeEnum.TIME;
         }
+
         return type;
     }
 

@@ -98,12 +98,7 @@ public class CustomDateTimePatternManagerTest {
 
                 String[] sampleLine = line.trim().split("\t");
                 String sample = sampleLine[0];
-                String locale = sampleLine[1];
-                locale = locale.replaceAll("_", "-");
-                Locale local = Locale.forLanguageTag(locale);
 
-                // SystemDateTimePatternManager.renewCache();
-                setFinalStatic(SystemDateTimePatternManager.class.getDeclaredField("SYSTEM_LOCALE"), local);
                 setFinalStatic(SystemDateTimePatternManager.class.getDeclaredField("dateTimeFormatterCache"),
                         new HashMap<String, DateTimeFormatter>());
 
