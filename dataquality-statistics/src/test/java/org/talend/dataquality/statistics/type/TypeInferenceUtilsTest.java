@@ -222,7 +222,7 @@ public class TypeInferenceUtilsTest {
     public void testIsDateWithCustomAndWrongLocale() throws Exception {
         String date = "Feb.12.2014=";
         assertFalse(TypeInferenceUtils.isDate(date));
-        assertTrue(TypeInferenceUtils.isDate(date, Collections.singletonList("MMM.dd.yyyy="), Locale.FRANCE));
+        assertFalse(TypeInferenceUtils.isDate(date, Collections.singletonList("MMM.dd.yyyy="), Locale.FRANCE));
     }
 
     @Test

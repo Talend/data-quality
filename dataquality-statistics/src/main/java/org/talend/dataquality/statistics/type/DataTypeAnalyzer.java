@@ -14,6 +14,7 @@ package org.talend.dataquality.statistics.type;
 
 import static org.talend.dataquality.statistics.datetime.CustomDateTimePatternManager.isMatchCustomPatterns;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -115,12 +116,12 @@ public class DataTypeAnalyzer implements Analyzer<DataTypeOccurences> {
         return true;
     }
 
-    private DataTypeEnum analyzeDateTimeValue(String value, SortedList<Pair<Pattern, String>> orderedPatterns) {
+    private DataTypeEnum analyzeDateTimeValue(String value, SortedList<Pair<Pattern, DateTimeFormatter>> orderedPatterns) {
         DataTypeEnum type = DataTypeEnum.STRING;
         for (int j = 0; j < orderedPatterns.size() && DataTypeEnum.STRING.equals(type); j++) {
-            Pair<Pattern, String> cachedPattern = orderedPatterns.get(j).getLeft();
-            if (cachedPattern.getLeft().matcher(value).find() && SystemDateTimePatternManager.isMatchDateTimePattern(value,
-                    cachedPattern.getRight(), Locale.getDefault())) {
+            Pair<Pattern, DateTimeFormatter> cachedPattern = orderedPatterns.get(j).getLeft();
+            if (cachedPattern.getLeft().matcher(value).find()
+                    && SystemDateTimePatternManager.isMatchDateTimePattern(value, cachedPattern.getRight())) {
                 orderedPatterns.increment(j);
                 type = DataTypeEnum.DATE;
             }
@@ -130,7 +131,7 @@ public class DataTypeAnalyzer implements Analyzer<DataTypeOccurences> {
             if (isMatchCustomPatterns(value, customDateTimePatterns, Locale.US))
                 type = DataTypeEnum.DATE;
             else {
-                Optional<Pair<Pattern, String>> foundPattern = SystemDateTimePatternManager.findOneDatePattern(value);
+                Optional<Pair<Pattern, DateTimeFormatter>> foundPattern = SystemDateTimePatternManager.findOneDatePattern(value);
                 if (foundPattern.isPresent()) {
                     orderedPatterns.addNewValue(foundPattern.get());
                     type = DataTypeEnum.DATE;

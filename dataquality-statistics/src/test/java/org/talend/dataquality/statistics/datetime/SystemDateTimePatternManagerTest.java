@@ -51,8 +51,10 @@ public class SystemDateTimePatternManagerTest {
         pattern = "dd/MM/yyy"; //$NON-NLS-1$
         assertTrue(SystemDateTimePatternManager.isMatchDateTimePattern("30/01/2017", pattern, Locale.US)); //$NON-NLS-1$
         pattern = "yyyy-MM-dd G"; //$NON-NLS-1$
-        assertTrue(SystemDateTimePatternManager.isMatchDateTimePattern("2017-02-15 AD", pattern, Locale.CHINESE)); //$NON-NLS-1$
-        assertTrue(SystemDateTimePatternManager.isMatchDateTimePattern("4714-11-12 BC", pattern, Locale.CHINESE)); //$NON-NLS-1$
+        assertFalse(SystemDateTimePatternManager.isMatchDateTimePattern("2017-02-15 AD", pattern, Locale.CHINESE)); //$NON-NLS-1$
+        assertTrue(SystemDateTimePatternManager.isMatchDateTimePattern("2017-02-15 AD", pattern)); //$NON-NLS-1$
+        assertFalse(SystemDateTimePatternManager.isMatchDateTimePattern("4714-11-12 BC", pattern, Locale.CHINESE)); //$NON-NLS-1$
+        assertTrue(SystemDateTimePatternManager.isMatchDateTimePattern("4714-11-12 BC", pattern)); //$NON-NLS-1$
         pattern = "MMMM d, y GG";//$NON-NLS-1$
         assertTrue(SystemDateTimePatternManager.isMatchDateTimePattern("March 15, 44 BC", pattern, Locale.US)); //$NON-NLS-1$
         pattern = "MMMM d, u";//$NON-NLS-1$
