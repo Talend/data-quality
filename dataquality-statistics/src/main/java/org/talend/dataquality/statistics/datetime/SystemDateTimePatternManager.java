@@ -63,7 +63,7 @@ public class SystemDateTimePatternManager {
 
     private static final Pattern PATTERN_FILTER_DATE = Pattern.compile("[ \\-]\\d|\\d[./+W\\u5E74]\\d|^\\d{8}$"); //'\u5E74' stands for '年'
 
-    private static final List<Locale> LOCALES = getDistinctLanguagesLocales();
+    private static final Set<Locale> LOCALES = getDistinctLanguagesLocales();
 
     static {
         // Load date patterns
@@ -73,15 +73,10 @@ public class SystemDateTimePatternManager {
 
     }
 
-    private static List<Locale> getDistinctLanguagesLocales() {
-        Set<String> languages = new HashSet<>();
-        List<Locale> locales = new ArrayList<>();
-        for (Locale locale : DateFormat.getAvailableLocales()) {
-            if (!languages.contains(locale.getLanguage())) {
-                locales.add(locale);
-                languages.add(locale.getLanguage());
-            }
-        }
+    private static Set<Locale> getDistinctLanguagesLocales() {
+        Set<Locale> locales = new HashSet<>();
+        for (Locale locale : DateFormat.getAvailableLocales())
+            locales.add(Locale.forLanguageTag(locale.getLanguage()));
         return locales;
     }
 
@@ -184,7 +179,7 @@ public class SystemDateTimePatternManager {
             for (Entry<Pattern, String> entry : patternMap.entrySet()) {
                 Pattern parser = entry.getKey();
                 if (parser.matcher(value).find()) {
-                    Optional<DateTimeFormatter> dateTimeFormatter = getDateTimeFormatter(value, entry.getValue());
+                    Optional<DateTimeFormatter> dateTimeFormatter = validateWithPatternInAnyLocale(value, entry.getValue());
                     return dateTimeFormatter.isPresent() ? Optional.of(Pair.of(parser, dateTimeFormatter.get()))
                             : Optional.empty();
                 }
@@ -265,7 +260,7 @@ public class SystemDateTimePatternManager {
         return formatter;
     }
 
-    private static boolean validateWithDateTimeFormatter(String value, DateTimeFormatter formatter) {
+    public static boolean isMatchDateTimePattern(String value, DateTimeFormatter formatter) {
         if (formatter != null) {
             try {
                 final TemporalAccessor temporal = formatter.parse(value);
@@ -281,25 +276,19 @@ public class SystemDateTimePatternManager {
     }
 
     public static boolean isMatchDateTimePattern(String value, String pattern, Locale locale) {
-        return validateWithDateTimeFormatter(value, getDateTimeFormatterByPattern(pattern, locale));
+        return isMatchDateTimePattern(value, getDateTimeFormatterByPattern(pattern, locale));
     }
 
-    public static boolean isMatchDateTimePattern(String value, DateTimeFormatter dateTimeFormatter) {
-        return validateWithDateTimeFormatter(value, dateTimeFormatter);
+    static boolean isMatchDateTimePattern(String value, String pattern) {
+        return validateWithPatternInAnyLocale(value, pattern).isPresent();
     }
 
-    public static boolean isMatchDateTimePattern(String value, String pattern) {
-        return getDateTimeFormatter(value, pattern).isPresent();
-    }
-
-    public static Optional<DateTimeFormatter> getDateTimeFormatter(String value, String pattern) {
-        DateTimeFormatter dateTimeFormatterByPattern;
-        int i = 0;
-
-        do {
-            dateTimeFormatterByPattern = getDateTimeFormatterByPattern(pattern, LOCALES.get(i++));
-        } while (i < LOCALES.size() && !validateWithDateTimeFormatter(value, dateTimeFormatterByPattern));
-
-        return i < LOCALES.size() ? Optional.of(dateTimeFormatterByPattern) : Optional.empty();
+    private static Optional<DateTimeFormatter> validateWithPatternInAnyLocale(String value, String pattern) {
+        for (Locale locale : LOCALES) {
+            DateTimeFormatter dateTimeFormatterByPattern = getDateTimeFormatterByPattern(pattern, locale);
+            if (isMatchDateTimePattern(value, dateTimeFormatterByPattern))
+                return Optional.of(dateTimeFormatterByPattern);
+        }
+        return Optional.empty();
     }
 }

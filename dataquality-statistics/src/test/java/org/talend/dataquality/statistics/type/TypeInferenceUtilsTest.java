@@ -223,6 +223,7 @@ public class TypeInferenceUtilsTest {
         String date = "Feb.12.2014=";
         assertFalse(TypeInferenceUtils.isDate(date));
         assertFalse(TypeInferenceUtils.isDate(date, Collections.singletonList("MMM.dd.yyyy="), Locale.FRANCE));
+        assertTrue(TypeInferenceUtils.isDate(date, Collections.singletonList("MMM.dd.yyyy="), Locale.US));
     }
 
     @Test

@@ -218,12 +218,16 @@ public class CustomDateTimePatternManagerTest {
             sb.append(CustomDateTimePatternManager.isDate(dates[i], pattern, Locale.CHINA)).append("\t");
             sb.append("\n");
 
-            assertEquals(dates[i], EXPECTED_IS_DATE_DEFAULT[i], CustomDateTimePatternManager.isDate(dates[i], pattern));
-            assertEquals(dates[i], EXPECTED_IS_DATE_US[i], CustomDateTimePatternManager.isDate(dates[i], pattern, Locale.US));
-            assertEquals(dates[i], EXPECTED_IS_DATE_FR[i], CustomDateTimePatternManager.isDate(dates[i], pattern, Locale.FRANCE));
-            assertEquals(dates[i], EXPECTED_IS_DATE_DE[i],
-                    CustomDateTimePatternManager.isDate(dates[i], pattern, Locale.GERMANY));
-            assertEquals(dates[i], EXPECTED_IS_DATE_CN[i], CustomDateTimePatternManager.isDate(dates[i], pattern, Locale.CHINA));
+            assertEquals("The validity of the date " + dates[i] + " is expected to be " + EXPECTED_IS_DATE_DEFAULT[i],
+                    EXPECTED_IS_DATE_DEFAULT[i], CustomDateTimePatternManager.isDate(dates[i], pattern));
+            assertEquals("The validity of the date " + dates[i] + " is expected to be " + EXPECTED_IS_DATE_US[i],
+                    EXPECTED_IS_DATE_US[i], CustomDateTimePatternManager.isDate(dates[i], pattern, Locale.US));
+            assertEquals("The validity of the date " + dates[i] + " is expected to be " + EXPECTED_IS_DATE_FR[i],
+                    EXPECTED_IS_DATE_FR[i], CustomDateTimePatternManager.isDate(dates[i], pattern, Locale.FRANCE));
+            assertEquals("The validity of the date " + dates[i] + " is expected to be " + EXPECTED_IS_DATE_DE[i],
+                    EXPECTED_IS_DATE_DE[i], CustomDateTimePatternManager.isDate(dates[i], pattern, Locale.GERMANY));
+            assertEquals("The validity of the date " + dates[i] + " is expected to be " + EXPECTED_IS_DATE_CN[i],
+                    EXPECTED_IS_DATE_CN[i], CustomDateTimePatternManager.isDate(dates[i], pattern, Locale.CHINA));
         }
 
         LOGGER.info(sb.toString());
