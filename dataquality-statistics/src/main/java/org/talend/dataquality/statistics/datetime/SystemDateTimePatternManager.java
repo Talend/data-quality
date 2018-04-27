@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -57,7 +58,8 @@ public class SystemDateTimePatternManager {
 
     private static final String PATTERN_SUFFIX_ERA = "G"; //$NON-NLS-1$
 
-    private static final Pattern PATTERN_FILTER_DATE = Pattern.compile("[ \\-]\\d|\\d[./+W\\u5E74]\\d|^\\d{8}$"); //'\u5E74' stands for '年'
+    private static final Pattern PATTERN_FILTER_DATE//
+            = Pattern.compile("[ \\-]\\d|\\d[./+W\\u5E74]\\d|^\\d{8}$"); // '\u5E74' stands for '年'
 
     private static final Set<Locale> LOCALES = getDistinctLanguagesLocales();
 
@@ -69,9 +71,13 @@ public class SystemDateTimePatternManager {
     }
 
     private static Set<Locale> getDistinctLanguagesLocales() {
-        Set<Locale> locales = new HashSet<>();
-        for (Locale locale : DateFormat.getAvailableLocales())
+        Set<Locale> locales = new LinkedHashSet<>();
+        for (String lang : new String[] { "en", "fr", "de", "it", "es", "ja", "zh" }) {
+            locales.add(Locale.forLanguageTag(lang));
+        }
+        for (Locale locale : DateFormat.getAvailableLocales()) {
             locales.add(Locale.forLanguageTag(locale.getLanguage()));
+        }
         return locales;
     }
 
@@ -140,6 +146,7 @@ public class SystemDateTimePatternManager {
      * Not empty
      * The length of date strings must not be less than 6, and must not exceed 64.
      * TDQ-14894: Improve Date discovery by listing the separators
+     * 
      * @param value
      * @return true is the value valids the preconditions
      */
@@ -150,6 +157,7 @@ public class SystemDateTimePatternManager {
 
     /**
      * The value must have at least 3 digits
+     * 
      * @param value
      * @return true is the value contains at least 3 digits
      */
@@ -249,6 +257,9 @@ public class SystemDateTimePatternManager {
             } catch (IllegalArgumentException e) {
                 LOGGER.debug(e.getMessage(), e);
                 return null;
+            }
+            if (!dateTimeFormatterCache.containsKey(customPattern + localeStr)) {
+                System.out.println(dateTimeFormatterCache.size() + " " + customPattern + " " + localeStr);
             }
             dateTimeFormatterCache.put(customPattern + localeStr, formatter);
         }
