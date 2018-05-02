@@ -13,6 +13,7 @@
 package org.talend.dataquality.standardization.phone;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -350,7 +351,7 @@ public class PhoneNumberHandlerBase {
         if (withUnknownTimeZone || !timezones.contains(PhoneNumberToTimeZonesMapper.getUnknownTimeZone()))
             return timezones;
         else
-            return new ArrayList<>();
+            return Collections.emptyList();
     }
 
 }
