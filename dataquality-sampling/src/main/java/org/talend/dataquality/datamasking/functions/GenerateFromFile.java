@@ -35,16 +35,36 @@ public abstract class GenerateFromFile<T> extends Function<T> {
     @Override
     public void parse(String extraParameter, boolean keepNullValues, Random rand) {
         super.parse(extraParameter, keepNullValues, rand);
-        for (int i = 0; i < parameters.length; ++i) {
+        for (String parameter : parameters) {
             try {
-                genericTokens.add(getOutput(parameters[i]));
+                genericTokens.add(getOutput(parameter));
             } catch (NumberFormatException e) {
-                LOGGER.info("The parameter " + parameters[i] + " can't be parsed in the required type.");
+                LOGGER.info("The parameter " + parameter + " can't be parsed in the required type.");
             }
         }
     }
 
     protected abstract T getOutput(String string);
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.talend.dataquality.datamasking.functions.Function#resetParameter()
+     */
+    @Override
+    protected void resetParameterTo(String errorMessage) {
+        parameters = new String[] { errorMessage };
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.talend.dataquality.datamasking.functions.Function#isNeedCheckPath()
+     */
+    @Override
+    protected boolean isNeedCheckPath() {
+        return true;
+    }
 
     @Override
     protected T doGenerateMaskedField(T t) {

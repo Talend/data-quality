@@ -26,6 +26,11 @@ public class GenerateFromFileStringProvided extends GenerateFromFileString {
 
     private static final Logger LOG = LoggerFactory.getLogger(GenerateFromFileStringProvided.class);
 
+    /**
+     * The code should't come here if yes a file name will be appand to genericTokens in the parent method.
+     * That is not we want.
+     */
+    // TODO We need to remove this method after known we can
     @Override
     public void parse(String extraParameter, boolean keepNullValues, Random rand) {
         super.parse(extraParameter, keepNullValues, rand);
