@@ -158,7 +158,7 @@ public abstract class TypoUnicodePatternRecognizer extends AbstractPatternRecogn
         IDEOGRAPHIC("[Ideogram]", "[IdeogramSeq]", "[alnum(CJK)]"),
         NUMERIC("[digit]", "[number]", null),
         UPPER_CASE("[Char]", "[WORD]", "[Word]"),
-        NOT_UPPER_CASE("[char]", "[word]", "[wORD]");
+        NOT_UPPER_CASE("[char]", "[word]", null);
 
         /**
          * Pattern for a single character type
@@ -209,9 +209,6 @@ public abstract class TypoUnicodePatternRecognizer extends AbstractPatternRecogn
                 while (pos < ca.length && isAlphabeticButNotIdeographic(ca, pos)
                         && !Character.isUpperCase(Character.codePointAt(ca, pos))) {
                     pos++;
-                }
-                if (pos == (start + 1)) {
-                    pos += exploreSpecial(ca, pos);
                 }
                 break;
             default:

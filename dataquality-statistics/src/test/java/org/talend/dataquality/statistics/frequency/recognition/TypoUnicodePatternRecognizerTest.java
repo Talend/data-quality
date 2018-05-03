@@ -12,7 +12,7 @@ public class TypoUnicodePatternRecognizerTest {
     public void testWithCaseRecognition() {
         String str = "C'est un TEXTE Test d'obSERVatIon des 8 pATTERNS possibles (sur plus de 10)";
         Assert.assertEquals(
-                "[Char]'[word] [word] [WORD] [Word] [char]'[word][WORD][word][Word] [word] [digit] [wORD] [word] ([word] [word] [word] [number])",
+                "[Char]'[word] [word] [WORD] [Word] [char]'[word][WORD][word][Word] [word] [digit] [char][WORD] [word] ([word] [word] [word] [number])",
                 TypoUnicodePatternRecognizer.withCase().getValuePattern(str).toArray()[0]);
     }
 
@@ -27,18 +27,20 @@ public class TypoUnicodePatternRecognizerTest {
 
         str = "someWordsINwORDS";
         Assert.assertEquals("[word]", TypoUnicodePatternRecognizer.noCase().getValuePattern(str).toArray()[0]);
-        Assert.assertEquals("[word][Word][WORD][wORD]",
+        Assert.assertEquals("[word][Word][WORD][char][WORD]",
                 TypoUnicodePatternRecognizer.withCase().getValuePattern(str).toArray()[0]);
 
         // The recursivity in the "exploreSpecial" method of the enum makes it to Recognize only one "Word" or "wORD" if
         // capital and small letters alternates in the sequence
         str = "WoWoWo";
         Assert.assertEquals("[word]", TypoUnicodePatternRecognizer.noCase().getValuePattern(str).toArray()[0]);
-        Assert.assertEquals("[Word]", TypoUnicodePatternRecognizer.withCase().getValuePattern(str).toArray()[0]);
+        Assert.assertEquals("[Word][Word][Word]", TypoUnicodePatternRecognizer.withCase().getValuePattern(str).toArray()[0]);
 
         str = "wOwOwO";
         Assert.assertEquals("[word]", TypoUnicodePatternRecognizer.noCase().getValuePattern(str).toArray()[0]);
-        Assert.assertEquals("[wORD]", TypoUnicodePatternRecognizer.withCase().getValuePattern(str).toArray()[0]);
+        Assert.assertEquals("[char][Word][Word][Char]",
+                TypoUnicodePatternRecognizer.withCase().getValuePattern(str).toArray()[0]);
+
     }
 
     @Test
