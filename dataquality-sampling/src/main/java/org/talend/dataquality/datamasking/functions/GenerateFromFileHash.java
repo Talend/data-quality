@@ -36,11 +36,11 @@ public abstract class GenerateFromFileHash<T> extends Function<T> {
     @Override
     public void parse(String extraParameter, boolean keepNullValues, Random rand) {
         super.parse(extraParameter, keepNullValues, rand);
-        for (int i = 0; i < parameters.length; ++i) {
+        for (String parameter : parameters) {
             try {
-                genericTokens.add(getOutput(parameters[i]));
+                genericTokens.add(getOutput(parameter));
             } catch (NumberFormatException e) {
-                LOGGER.info("The parameter " + parameters[i] + " can't be parsed in the required type.");
+                LOGGER.info("The parameter " + parameter + " can't be parsed in the required type.");
             }
         }
     }
@@ -56,6 +56,26 @@ public abstract class GenerateFromFileHash<T> extends Function<T> {
         } else {
             return getDefaultOutput();
         }
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.talend.dataquality.datamasking.functions.Function#resetParameterTo(java.lang.String)
+     */
+    @Override
+    protected void resetParameterTo(String errorMessage) {
+        parameters = new String[] { errorMessage };
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.talend.dataquality.datamasking.functions.Function#isNeedCheckPath()
+     */
+    @Override
+    protected boolean isNeedCheckPath() {
+        return true;
     }
 
     protected abstract T getOutput(String string);

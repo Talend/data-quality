@@ -129,13 +129,15 @@ public abstract class Function<T> implements Serializable {
     public void parse(String extraParameter, boolean keepNullValues, Random rand) {
         if (extraParameter != null) {
             parameters = clean(extraParameter).split(","); //$NON-NLS-1$
-            if (parameters.length == 1) { // check if it's a path to a readable file
+            if (parameters.length == 1 && isNeedCheckPath()) { // check if it's a path to a readable file
                 try {
                     List<String> aux = KeysLoader.loadKeys(parameters[0].trim());
                     parameters = aux.toArray(new String[aux.size()]);
                 } catch (IOException | NullPointerException e2) { // otherwise, we just get the parameter
-                    LOGGER.debug("The parameter is not a path to a file.");
-                    LOGGER.debug(e2.getMessage(), e2);
+                    LOGGER.error("The parameter is not a path to a file.");
+                    LOGGER.error(e2.getMessage(), e2);
+                    resetParameterTo(e2.getMessage().length() == 0 ? "Empty is not a path to a file." : e2.getMessage());
+
                 }
             }
             for (int i = 0; i < parameters.length; i++) {
@@ -147,6 +149,23 @@ public abstract class Function<T> implements Serializable {
         if (rand != null) {
             setRandom(rand);
         }
+    }
+
+    /**
+     * Reset the parameter
+     */
+    protected void resetParameterTo(String errorMessage) {
+        // no need do anything
+    }
+
+    /**
+     * 
+     * Judge whether current function need to check parameter as a path
+     * 
+     * @return
+     */
+    protected boolean isNeedCheckPath() {
+        return false;
     }
 
     protected String clean(String extraParameter) {
