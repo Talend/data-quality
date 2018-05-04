@@ -30,8 +30,7 @@ public class TypoUnicodePatternRecognizerTest {
         Assert.assertEquals("[word][Word][WORD][char][WORD]",
                 TypoUnicodePatternRecognizer.withCase().getValuePattern(str).toArray()[0]);
 
-        // The recursivity in the "exploreSpecial" method of the enum makes it to Recognize only one "Word" or "wORD" if
-        // capital and small letters alternates in the sequence
+        // If capital and small letters alternate in the sequence, we recognize a new pattern "Word" or "wORD" each time (cf TDQ-15225)
         str = "WoWoWo";
         Assert.assertEquals("[word]", TypoUnicodePatternRecognizer.noCase().getValuePattern(str).toArray()[0]);
         Assert.assertEquals("[Word][Word][Word]", TypoUnicodePatternRecognizer.withCase().getValuePattern(str).toArray()[0]);
