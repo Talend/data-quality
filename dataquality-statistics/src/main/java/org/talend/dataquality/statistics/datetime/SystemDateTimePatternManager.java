@@ -258,9 +258,6 @@ public class SystemDateTimePatternManager {
                 LOGGER.debug(e.getMessage(), e);
                 return null;
             }
-            if (!dateTimeFormatterCache.containsKey(customPattern + localeStr)) {
-                System.out.println(dateTimeFormatterCache.size() + " " + customPattern + " " + localeStr);
-            }
             dateTimeFormatterCache.put(customPattern + localeStr, formatter);
         }
         return formatter;
@@ -281,12 +278,8 @@ public class SystemDateTimePatternManager {
         return false;
     }
 
-    public static boolean isMatchDateTimePattern(String value, String pattern, Locale locale) {
+    static boolean isMatchDateTimePattern(String value, String pattern, Locale locale) {
         return isMatchDateTimePattern(value, getDateTimeFormatterByPattern(pattern, locale));
-    }
-
-    static boolean isMatchDateTimePattern(String value, String pattern) {
-        return validateWithPatternInAnyLocale(value, pattern).isPresent();
     }
 
     private static Optional<DateTimeFormatter> validateWithPatternInAnyLocale(String value, String pattern) {
