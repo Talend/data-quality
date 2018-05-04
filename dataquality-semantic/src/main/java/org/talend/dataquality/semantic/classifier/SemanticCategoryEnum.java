@@ -15,8 +15,6 @@ package org.talend.dataquality.semantic.classifier;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.talend.dataquality.semantic.model.CategoryType;
 
 /**
@@ -244,9 +242,7 @@ public enum SemanticCategoryEnum {
     private CategoryType categoryType;
 
     private boolean completeness;
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(SemanticCategoryEnum.class);
-
+    
     private static Set<String> DEFAULT_CATEGORY_NAMES = new HashSet<>();
 
     static {
