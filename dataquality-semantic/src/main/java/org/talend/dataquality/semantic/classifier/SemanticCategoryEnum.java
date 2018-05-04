@@ -242,7 +242,7 @@ public enum SemanticCategoryEnum {
     private CategoryType categoryType;
 
     private boolean completeness;
-    
+
     private static Set<String> DEFAULT_CATEGORY_NAMES = new HashSet<>();
 
     static {
