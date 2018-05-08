@@ -94,4 +94,14 @@ public class MaskAddress extends Function<String> {
         return true;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.talend.dataquality.datamasking.functions.Function#isBothValidForFileOrNot()
+     */
+    @Override
+    protected boolean isBothValidForFileOrNot() {
+        return true;
+    }
+
 }

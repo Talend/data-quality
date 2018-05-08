@@ -122,9 +122,14 @@ public abstract class Function<T> implements Serializable {
                     List<String> aux = KeysLoader.loadKeys(parameters[0].trim());
                     parameters = aux.toArray(new String[aux.size()]);
                 } catch (IOException | NullPointerException e2) { // otherwise, we just get the parameter
-                    LOGGER.error("The parameter is not a path to a file.");
-                    LOGGER.error(e2.getMessage(), e2);
-                    resetParameterTo(e2.getMessage().length() == 0 ? "Empty is not a path to a file." : e2.getMessage());
+                    if (this.isBothValidForFileOrNot()) {
+                        LOGGER.warn("The parameter is not a path to a file."); //$NON-NLS-1$
+                        LOGGER.warn(e2.getMessage(), e2);
+                    } else {
+                        LOGGER.error("The parameter is not a path to a file."); //$NON-NLS-1$
+                        LOGGER.error(e2.getMessage(), e2);
+                        resetParameterTo(e2.getMessage().length() == 0 ? "Empty is not a path to a file." : e2.getMessage()); //$NON-NLS-1$
+                    }
 
                 }
             }
@@ -153,6 +158,16 @@ public abstract class Function<T> implements Serializable {
      * @return
      */
     protected boolean isNeedCheckPath() {
+        return false;
+    }
+
+    /**
+     * 
+     * Judge whether the parameter can be both file and value
+     * 
+     * @return
+     */
+    protected boolean isBothValidForFileOrNot() {
         return false;
     }
 
