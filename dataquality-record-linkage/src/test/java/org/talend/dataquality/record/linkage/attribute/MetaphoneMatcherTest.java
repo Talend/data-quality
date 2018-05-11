@@ -65,6 +65,24 @@ public class MetaphoneMatcherTest {
 
     }
 
+    @Test
+    public void testGetWeightWithOneNull() {
+        MetaphoneMatcher metaphoneMatcher = new MetaphoneMatcher();
+        String a = null; //$NON-NLS-1$
+        String b = "Jon"; //$NON-NLS-1$
+        double matchingWeight = metaphoneMatcher.getMatchingWeight(a, b);
+        assertEquals(0.0d, matchingWeight, EPSILON);
+    }
+
+    @Test
+    public void testGetWeightWithEverythingNull() {
+        MetaphoneMatcher metaphoneMatcher = new MetaphoneMatcher();
+        String a = null; //$NON-NLS-1$
+        String b = null; //$NON-NLS-1$
+        double matchingWeight = metaphoneMatcher.getMatchingWeight(a, b);
+        assertEquals(1.0d, matchingWeight, EPSILON);
+    }
+
     /**
      * Test method for {@link org.talend.dataquality.record.linkage.attribute.MetaphoneMatcher#getMatchType()}.
      */
