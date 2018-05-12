@@ -33,8 +33,6 @@ public class DataTypeQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
 
     private static final long serialVersionUID = -5951511723860660263L;
 
-    private static final Logger LOG = LoggerFactory.getLogger(DataTypeQualityAnalyzer.class);
-
     private final ResizableList<ValueQualityStatistics> results = new ResizableList<>(ValueQualityStatistics.class);
 
     private List<String> customDateTimePatterns = new ArrayList<>();

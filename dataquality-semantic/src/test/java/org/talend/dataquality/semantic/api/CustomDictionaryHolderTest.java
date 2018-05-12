@@ -1,6 +1,7 @@
 package org.talend.dataquality.semantic.api;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doThrow;
@@ -31,12 +32,16 @@ import java.util.stream.Collectors;
 
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.talend.dataquality.semantic.CategoryRegistryManagerAbstract;
 import org.talend.dataquality.semantic.api.internal.CustomDocumentIndexAccess;
 import org.talend.dataquality.semantic.api.internal.CustomMetadataIndexAccess;
@@ -49,10 +54,10 @@ import org.talend.dataquality.semantic.model.DQDocument;
 import org.talend.dataquality.semantic.model.DQFilter;
 import org.talend.dataquality.semantic.model.DQRegEx;
 
+@RunWith(PowerMockRunner.class)
 @PrepareForTest({ CustomDictionaryHolder.class, CategoryRegistryManager.class })
 public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract {
 
-    @InjectMocks
     private CustomDictionaryHolder holder;
 
     private CustomMetadataIndexAccess customMetadataIndexAccess;
@@ -110,7 +115,7 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
         verify(customMetadataIndexAccess, times(0)).createCategory(any(DQCategory.class));
         verify(customRegexClassifierAccess, times(0)).insertOrUpdateRegex(any(ISubCategory.class));
         verify(customMetadataIndexAccess, times(1)).commitChanges();
-        assert (category.getModified());
+        Assert.assertTrue(category.getModified());
     }
 
     @Test
@@ -122,7 +127,7 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
         verify(customMetadataIndexAccess, times(0)).createCategory(any(DQCategory.class));
         verify(customRegexClassifierAccess, times(0)).insertOrUpdateRegex(any(ISubCategory.class));
         verify(customMetadataIndexAccess, times(1)).commitChanges();
-        assert (category.getModified()); // Not a Talend category, so must have modified to true
+        Assert.assertTrue(category.getModified()); // Not a Talend category, so must have modified to true
     }
 
     @Test
@@ -134,7 +139,7 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
         verify(customMetadataIndexAccess, times(0)).createCategory(any(DQCategory.class));
         verify(customRegexClassifierAccess, times(0)).insertOrUpdateRegex(any(ISubCategory.class));
         verify(customMetadataIndexAccess, times(1)).commitChanges();
-        assert (!category.getModified()); // Talend category, so must have modified to false
+        Assert.assertTrue(!category.getModified()); // Talend category, so must have modified to false
     }
 
     @Test
@@ -143,7 +148,8 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
         DQDocument document = createDQDocument("dictCategory");
         holder.republishDataDictDocuments(Arrays.asList(document));
         verify(customDataDictIndexAccess, times(1)).createDocument(any(List.class));
-        assert (new File("target/test_crm/CustomDictionaryHolderTest_republishDataDictDocuments/republish/dictionary").exists());
+        Assert.assertTrue(
+                new File("target/test_crm/CustomDictionaryHolderTest_republishDataDictDocuments/republish/dictionary").exists());
     }
 
     @Test
@@ -165,12 +171,13 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
 
         holder.publishDirectory();
 
-        assert (!new File(stagingPath).exists());
-        assert (new File(prodPath).exists());
-        assert (!new File(backupPath).exists());
         verify(customMetadataIndexAccess, times(1)).copyStagingContent(anyString());
         verify(customDataDictIndexAccess, times(1)).copyStagingContent(anyString());
         verify(customRegexClassifierAccess, times(1)).copyStagingContent(anyString());
+
+        Assert.assertTrue(!new File(stagingPath).exists());
+        Assert.assertTrue(new File(prodPath).exists());
+        Assert.assertTrue(!new File(backupPath).exists());
     }
 
     @Test
@@ -192,12 +199,13 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
 
         holder.publishDirectory();
 
-        assert (new File(stagingPath).exists());
-        assert (new File(prodPath).exists());
-        assert (new File(backupPath).exists());
         verify(customMetadataIndexAccess, times(0)).copyStagingContent(anyString());
         verify(customDataDictIndexAccess, times(0)).copyStagingContent(anyString());
         verify(customRegexClassifierAccess, times(0)).copyStagingContent(anyString());
+
+        Assert.assertTrue(new File(stagingPath).exists());
+        Assert.assertTrue(new File(prodPath).exists());
+        Assert.assertTrue(new File(backupPath).exists());
     }
 
     @Test
@@ -219,12 +227,13 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
 
         holder.publishDirectory();
 
-        assert (!new File(stagingPath).exists());
-        assert (new File(prodPath).exists());
-        assert (!new File(backupPath).exists());
         verify(customMetadataIndexAccess, times(0)).copyStagingContent(anyString());
         verify(customDataDictIndexAccess, times(0)).copyStagingContent(anyString());
         verify(customRegexClassifierAccess, times(0)).copyStagingContent(anyString());
+
+        Assert.assertTrue(!new File(stagingPath).exists());
+        Assert.assertTrue(new File(prodPath).exists());
+        Assert.assertTrue(!new File(backupPath).exists());
     }
 
     @Test
@@ -241,9 +250,9 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
 
         holder.publishDirectory();
 
-        assert (!new File(stagingPath).exists());
-        assert (new File(prodPath).exists());
-        assert (!new File(backupPath).exists());
+        Assert.assertTrue(!new File(stagingPath).exists());
+        Assert.assertTrue(new File(prodPath).exists());
+        Assert.assertTrue(!new File(backupPath).exists());
         verify(customMetadataIndexAccess, times(0)).copyStagingContent(anyString());
         verify(customDataDictIndexAccess, times(0)).copyStagingContent(anyString());
         verify(customRegexClassifierAccess, times(0)).copyStagingContent(anyString());
@@ -268,9 +277,9 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
 
         holder.publishDirectory();
 
-        assert (!new File(stagingPath).exists());
-        assert (new File(prodPath).exists());
-        assert (!new File(backupPath).exists());
+        Assert.assertTrue(!new File(stagingPath).exists());
+        Assert.assertTrue(new File(prodPath).exists());
+        Assert.assertTrue(!new File(backupPath).exists());
         verify(customMetadataIndexAccess, times(1)).copyStagingContent(anyString());
         verify(customDataDictIndexAccess, times(0)).copyStagingContent(anyString());
         verify(customRegexClassifierAccess, times(0)).copyStagingContent(anyString());

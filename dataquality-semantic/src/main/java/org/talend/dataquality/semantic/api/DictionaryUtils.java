@@ -78,14 +78,13 @@ public class DictionaryUtils {
      * @return
      */
     public static Document generateDocument(String docId, String catId, String word, Set<String> values) {
-        String tempWord = word.trim();
         Document doc = new Document();
 
         Field idTermField = new StringField(DictionarySearcher.F_DOCID, docId, Field.Store.YES);
         doc.add(idTermField);
         Field catidTermField = new StringField(DictionarySearcher.F_CATID, catId, Field.Store.YES);
         doc.add(catidTermField);
-        Field wordTermField = new StringField(DictionarySearcher.F_WORD, tempWord, Field.Store.YES);
+        Field wordTermField = new StringField(DictionarySearcher.F_WORD, word.trim(), Field.Store.YES);
         doc.add(wordTermField);
         for (String value : values) {
             if (value != null) {
@@ -191,8 +190,7 @@ public class DictionaryUtils {
         }
         dqDoc.setCategory(dqCat);
 
-        String docId = doc.getField(DictionarySearcher.F_DOCID).stringValue();
-        dqDoc.setId(docId);
+        dqDoc.setId(doc.getField(DictionarySearcher.F_DOCID).stringValue());
         IndexableField[] synTermFields = doc.getFields(DictionarySearcher.F_RAW);
         Set<String> synSet = new LinkedHashSet<>();
         for (IndexableField f : synTermFields) {

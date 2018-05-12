@@ -80,6 +80,12 @@ public class CustomRegexClassifierAccessTest {
         assertNull(access.getRegExs());
     }
 
+    @Test
+    public void deleteRegExWithoutRegExs() {
+        access.deleteRegex("1");
+        assertNull(access.getRegExs());
+    }
+
     private List<ISubCategory> createSubCategoryRegExs() {
         List<ISubCategory> regeExs = new ArrayList<>();
 

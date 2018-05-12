@@ -90,4 +90,14 @@ public class LFUCacheTest {
         lfu.clear();
         Assert.assertEquals(Collections.emptyMap(), lfu);
     }
+
+    @Test
+    public void testLFUWithLowFrequency() {
+        LFUCache<String, String> lfu = new LFUCache<>(50, 1, 0.01f);
+
+        String firstname = RECORDS_FIRST_NAME.get(0)[1];
+        lfu.put(firstname, "FIRST_NAME");
+        String get = lfu.get(firstname);
+        Assert.assertEquals("FIRST_NAME", get);
+    }
 }

@@ -244,6 +244,18 @@
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<executions>
 					<execution>
+						<id>default-instrument</id>
+						<goals>
+							<goal>instrument</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>default-restore-instrumented-classes</id>
+						<goals>
+							<goal>restore-instrumented-classes</goal>
+						</goals>
+					</execution>
+					<execution>
 						<id>default-prepare-agent</id>
 						<goals>
 							<goal>prepare-agent</goal>

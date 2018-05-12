@@ -31,8 +31,6 @@ public class ValueQualityAnalyzer implements Analyzer<ValueQualityStatistics> {
 
     private static final long serialVersionUID = -5951511723860660263L;
 
-    private static Logger log = LoggerFactory.getLogger(ValueQualityAnalyzer.class);
-
     private final QualityAnalyzer<ValueQualityStatistics, DataTypeEnum[]> dataTypeQualityAnalyzer;
 
     private final QualityAnalyzer<ValueQualityStatistics, String[]> semanticQualityAnalyzer;

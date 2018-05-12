@@ -34,6 +34,11 @@ public class PlatformPathUtil {
     private PlatformPathUtil() {
     }
 
+    /**
+     * @deprecated
+     * @throws FileNotFoundException
+     */
+    @Deprecated
     public static InputStream getInputStreamByPlatformURL(String bundleName, String filePath) throws FileNotFoundException {
         try {
             URL url = new URL("platform:/plugin/" + bundleName + "/" + filePath); //$NON-NLS-1$ //$NON-NLS-2$
@@ -47,6 +52,10 @@ public class PlatformPathUtil {
         return null;
     }
 
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public static String getFilePathByPlatformURL(String bundleName, String filePath) {
         try {
             URL url = new URL("platform:/plugin/" + bundleName + filePath); //$NON-NLS-1$

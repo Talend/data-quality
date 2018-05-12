@@ -45,8 +45,6 @@ import org.talend.dataquality.standardization.exception.DQException;
  */
 public class FirstNameStandardize {
 
-    private static final Logger LOG = LoggerFactory.getLogger(FirstNameStandardize.class);
-
     private int maxEdits = 1;
 
     private IndexSearcher searcher;

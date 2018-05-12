@@ -44,17 +44,6 @@ public class AbstractCustomIndexAccess implements AutoCloseable {
         return luceneReader;
     }
 
-    protected void closeReader() {
-        if (luceneReader != null) {
-            try {
-                luceneReader.close();
-                luceneReader = null;
-            } catch (IOException e) {
-                LOGGER.error(e.getMessage(), e);
-            }
-        }
-    }
-
     public synchronized IndexWriter getWriter() throws IOException {
         if (luceneWriter == null) {
             final IndexWriterConfig iwc = new IndexWriterConfig(Version.LATEST, analyzer);
@@ -63,6 +52,10 @@ public class AbstractCustomIndexAccess implements AutoCloseable {
         return luceneWriter;
     }
 
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public void deleteAll() {
         LOGGER.info("delete all content");
         try {
