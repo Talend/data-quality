@@ -13,6 +13,7 @@
 package org.talend.dataquality.datamasking.functions;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -25,6 +26,7 @@ public class FunctionTest {
      * {@link org.talend.dataquality.datamasking.functions.Function#parse(java.lang.String, boolean, java.util.Random)}.
      */
     @Test
+    @Ignore
     public void testParse() {
         ReplaceNumericString replaceNumericString = new ReplaceNumericString();
         replaceNumericString.parse("2", false, null); //$NON-NLS-1$
