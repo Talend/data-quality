@@ -19,12 +19,16 @@ import com.atilika.kuromoji.TokenizerBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Tokenizer {
+public class AsianTokenizer {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Tokenizer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AsianTokenizer.class);
 
     public enum DictionaryJP {
-        IPADIC, JUMANDIC, NAIST_JDIC, UNIDIC, UNIDIC_KANAACCENT
+        IPADIC,
+        JUMANDIC,
+        NAIST_JDIC,
+        UNIDIC,
+        UNIDIC_KANAACCENT
     }
 
     /**
@@ -34,27 +38,27 @@ public class Tokenizer {
      * @return List of tokens
      */
     public static List<String> tokenizeJP(String text, DictionaryJP dict) {
-        TokenizerBase tokenizer = null;
+        TokenizerBase tokenizer;
         switch (dict) {
-            case IPADIC:
-                tokenizer = new com.atilika.kuromoji.ipadic.Tokenizer();
-                break;
-            case JUMANDIC:
-                tokenizer = new com.atilika.kuromoji.jumandic.Tokenizer();
-                break;
-            case NAIST_JDIC:
-                tokenizer = new com.atilika.kuromoji.naist.jdic.Tokenizer();
-                break;
-            case UNIDIC:
-                tokenizer = new com.atilika.kuromoji.unidic.Tokenizer();
-                break;
-            case UNIDIC_KANAACCENT:
-                tokenizer = new com.atilika.kuromoji.unidic.kanaaccent.Tokenizer();
-                break;
-            default:
-                LOGGER.warn("Unknown dictionary: " + dict + ", use mecab-ipadic instead.");
-                tokenizer = new com.atilika.kuromoji.ipadic.Tokenizer();
-                break;
+        case IPADIC:
+            tokenizer = new com.atilika.kuromoji.ipadic.Tokenizer();
+            break;
+        case JUMANDIC:
+            tokenizer = new com.atilika.kuromoji.jumandic.Tokenizer();
+            break;
+        case NAIST_JDIC:
+            tokenizer = new com.atilika.kuromoji.naist.jdic.Tokenizer();
+            break;
+        case UNIDIC:
+            tokenizer = new com.atilika.kuromoji.unidic.Tokenizer();
+            break;
+        case UNIDIC_KANAACCENT:
+            tokenizer = new com.atilika.kuromoji.unidic.kanaaccent.Tokenizer();
+            break;
+        default:
+            LOGGER.warn("Unknown dictionary: " + dict + ", use mecab-ipadic instead.");
+            tokenizer = new com.atilika.kuromoji.ipadic.Tokenizer();
+            break;
         }
 
         return tokenizer.tokenize(text).stream().map(token -> token.getSurface()).collect(Collectors.toList());
@@ -66,7 +70,7 @@ public class Tokenizer {
      * @return List of tokens
      */
     public static List<String> tokenizeJP(String text) {
-        return Tokenizer.tokenizeJP(text, DictionaryJP.IPADIC);
+        return AsianTokenizer.tokenizeJP(text, DictionaryJP.IPADIC);
     }
 
 }
