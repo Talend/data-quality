@@ -13,7 +13,6 @@
 package org.talend.dataquality.datamasking.functions;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -26,7 +25,6 @@ public class FunctionTest {
      * {@link org.talend.dataquality.datamasking.functions.Function#parse(java.lang.String, boolean, java.util.Random)}.
      */
     @Test
-    @Ignore
     public void testParse() {
         ReplaceNumericString replaceNumericString = new ReplaceNumericString();
         replaceNumericString.parse("2", false, null); //$NON-NLS-1$
@@ -41,11 +39,15 @@ public class FunctionTest {
 
         generateFromFileString = new GenerateFromFileString();
         generateFromFileString.parse("", false, null); //$NON-NLS-1$
+        String expectResultWin = "Empty is not a path to a file."; //$NON-NLS-1$
+        String expectResultLinux = "(No such file or directory)"; //$NON-NLS-1$
+        String parameterResult = generateFromFileString.parameters[0];
+        String tokensResult = generateFromFileString.genericTokens.get(0);
         Assert.assertEquals("Parameters length should be 1", 1, generateFromFileString.parameters.length); //$NON-NLS-1$
-        Assert.assertEquals("Parameters should not be empty", "Empty is not a path to a file.", //$NON-NLS-1$ //$NON-NLS-2$
-                generateFromFileString.parameters[0]);
-        Assert.assertEquals("genericTokens should not be empty", "Empty is not a path to a file.", //$NON-NLS-1$ //$NON-NLS-2$
-                generateFromFileString.genericTokens.get(0));
+        Assert.assertTrue("Parameters should not be empty", //$NON-NLS-1$
+                expectResultWin.equals(parameterResult) || expectResultLinux.equals(parameterResult));
+        Assert.assertTrue("genericTokens should not be empty", //$NON-NLS-1$
+                expectResultWin.equals(tokensResult) || expectResultLinux.equals(tokensResult));
     }
 
 }
