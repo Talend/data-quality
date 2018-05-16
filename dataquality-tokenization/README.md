@@ -1,7 +1,7 @@
 org.talend.dataquality.tokenization
 ===================
 
-Content validation API based on tokenization dictionary
+Asian Languages tokenization API
 
 -------------
 
