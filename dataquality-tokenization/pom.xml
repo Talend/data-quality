@@ -76,7 +76,7 @@
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
-						<Include-Resource>{maven-resources},lib=lib,licenses=licenses</Include-Resource>
+						<Include-Resource>{maven-resources},licenses=licenses</Include-Resource>
 					</instructions>
 				</configuration>
 			</plugin>
