@@ -72,6 +72,7 @@ public class SystemDateTimePatternManager {
 
     private static Set<Locale> getDistinctLanguagesLocales() {
         Set<Locale> locales = new LinkedHashSet<>();
+        // we add these specific languages first because they are the most frequent.
         for (String lang : new String[] { "en", "fr", "de", "it", "es", "ja", "zh" }) {
             locales.add(Locale.forLanguageTag(lang));
         }

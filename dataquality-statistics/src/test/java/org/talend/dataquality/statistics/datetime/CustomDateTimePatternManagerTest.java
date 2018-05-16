@@ -230,7 +230,7 @@ public class CustomDateTimePatternManagerTest {
 
     @Test
     public void testSpecialCases() {
-        assertEquals(Collections.singleton("MMMM d yyyy"),
+        assertEquals(new HashSet<>(Arrays.asList("MMM d yyyy", "MMMM d yyyy")),
                 CustomDateTimePatternManager.replaceByDateTimePattern("July 14 2015", "M/d/yy H:m"));
 
     }

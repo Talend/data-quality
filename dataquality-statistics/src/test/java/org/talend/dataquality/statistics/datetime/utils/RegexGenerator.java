@@ -60,7 +60,7 @@ public class RegexGenerator {
             put("yy", "[0-9]{2}");
             put("y", "[0-9]{2,4}"); // TO CHECK
             put("MMMM", "(\\p{L}{3,10})");
-            put("MMM", "(([A-Z]\\p{L}{2})|([a-z]\\p{L}{2,3}\\.?))");// this line must be after the replacement of 'a'
+            put("MMM", "(\\p{L}{2,4}\\.?)"); // this line must be after the replacement of 'a'
             put("MM", "(0[1-9]|1[0-2])");
             put("M", "([1-9]|1[0-2])");
             put("dd", "(0[1-9]|[1-2][0-9]|3[0-1])");

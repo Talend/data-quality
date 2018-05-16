@@ -232,6 +232,12 @@ public class TypeInferenceUtilsTest {
         assertTrue(TypeInferenceUtils.isDate(dateStr));
     }
 
+    @Test
+    public void testIsJapaneseDateddMMMyyyy() {
+        assertTrue(TypeInferenceUtils.isDate("22-五月-1999"));
+        assertFalse(TypeInferenceUtils.isDate("22-明天-1999"));
+    }
+
     private List<String> loadData(String path) throws IOException {
         List<String> values = IOUtils.readLines(this.getClass().getResourceAsStream(path), "UTF-8");
         return values;
