@@ -400,9 +400,12 @@ public class PhoneNumberHandlerBaseTest {
     @Test
     public void testGetCountryCodeForPhoneNumber() {
         assertEquals(0, phoneNumberHandlerBase.getCountryCodeForPhoneNumber(new Phonenumber.PhoneNumber()));
-        assertEquals(33, phoneNumberHandlerBase.getCountryCodeForPhoneNumber(phoneNumberHandlerBase.parseToPhoneNumber(FR_NUM_1, null))); //$NON-NLS-1$
-        assertEquals(1, phoneNumberHandlerBase.getCountryCodeForPhoneNumber(phoneNumberHandlerBase.parseToPhoneNumber(US_NUM_1, null))); //$NON-NLS-1$
-        assertEquals(49, phoneNumberHandlerBase.getCountryCodeForPhoneNumber(phoneNumberHandlerBase.parseToPhoneNumber(DE_NUM_1, null))); //$NON-NLS-1$
+        assertEquals(33,
+                phoneNumberHandlerBase.getCountryCodeForPhoneNumber(phoneNumberHandlerBase.parseToPhoneNumber(FR_NUM_1, null))); // $NON-NLS-1$
+        assertEquals(1,
+                phoneNumberHandlerBase.getCountryCodeForPhoneNumber(phoneNumberHandlerBase.parseToPhoneNumber(US_NUM_1, null))); // $NON-NLS-1$
+        assertEquals(49,
+                phoneNumberHandlerBase.getCountryCodeForPhoneNumber(phoneNumberHandlerBase.parseToPhoneNumber(DE_NUM_1, null))); // $NON-NLS-1$
     }
 
     @Test
@@ -451,24 +454,24 @@ public class PhoneNumberHandlerBaseTest {
         assertEquals(1, phoneNumberHandlerBase.getTimeZonesForNumber(FR_NUM_1, REGCODE_FR, false).size());
         assertEquals("[Europe/Paris]", phoneNumberHandlerBase.getTimeZonesForNumber(FR_NUM_1, REGCODE_FR, false).toString()); //$NON-NLS-1$
         assertEquals("[Europe/Paris]", phoneNumberHandlerBase.getTimeZonesForNumber(FR_NUM_2, REGCODE_FR, false).toString()); //$NON-NLS-1$
-        assertEquals(0, phoneNumberHandlerBase.getTimeZonesForNumber(FR_NUM_3, REGCODE_FR, false).size()); //$NON-NLS-1$
-        assertEquals(0, phoneNumberHandlerBase.getTimeZonesForNumber(FR_NUM_4, REGCODE_FR, false).size()); //$NON-NLS-1$
+        assertEquals(0, phoneNumberHandlerBase.getTimeZonesForNumber(FR_NUM_3, REGCODE_FR, false).size()); // $NON-NLS-1$
+        assertEquals(0, phoneNumberHandlerBase.getTimeZonesForNumber(FR_NUM_4, REGCODE_FR, false).size()); // $NON-NLS-1$
         assertEquals("[Europe/Paris]", phoneNumberHandlerBase.getTimeZonesForNumber(FR_NUM_5, REGCODE_FR, false).toString()); //$NON-NLS-1$
 
         assertEquals("[America/Los_Angeles]", //$NON-NLS-1$
                 phoneNumberHandlerBase.getTimeZonesForNumber(US_NUM_1, REGCODE_US, false).toString());
         assertEquals("[America/Los_Angeles]", //$NON-NLS-1$
                 phoneNumberHandlerBase.getTimeZonesForNumber(US_NUM_2, REGCODE_US, false).toString());
-        assertEquals(0, phoneNumberHandlerBase.getTimeZonesForNumber(US_NUM_3, REGCODE_US, false).size()); //$NON-NLS-1$
+        assertEquals(0, phoneNumberHandlerBase.getTimeZonesForNumber(US_NUM_3, REGCODE_US, false).size()); // $NON-NLS-1$
         assertEquals("[America/Los_Angeles]", //$NON-NLS-1$
                 phoneNumberHandlerBase.getTimeZonesForNumber(US_NUM_4, REGCODE_US, false).toString());
-        assertEquals(0, phoneNumberHandlerBase.getTimeZonesForNumber(US_NUM_5, REGCODE_US, false).size()); //$NON-NLS-1$
-        assertEquals(0, phoneNumberHandlerBase.getTimeZonesForNumber(US_NUM_6, REGCODE_US, false).size()); //$NON-NLS-1$
+        assertEquals(0, phoneNumberHandlerBase.getTimeZonesForNumber(US_NUM_5, REGCODE_US, false).size()); // $NON-NLS-1$
+        assertEquals(0, phoneNumberHandlerBase.getTimeZonesForNumber(US_NUM_6, REGCODE_US, false).size()); // $NON-NLS-1$
 
         assertEquals("[Europe/Berlin]", phoneNumberHandlerBase.getTimeZonesForNumber(DE_NUM_1, REGCODE_US, false).toString()); //$NON-NLS-1$
-        assertEquals(0, phoneNumberHandlerBase.getTimeZonesForNumber(DE_NUM_2, REGCODE_US, false).size()); //$NON-NLS-1$
-        assertEquals(0, phoneNumberHandlerBase.getTimeZonesForNumber(DE_NUM_3, REGCODE_US, false).size()); //$NON-NLS-1$
-        assertEquals(0, phoneNumberHandlerBase.getTimeZonesForNumber(DE_NUM_4, REGCODE_US, false).size()); //$NON-NLS-1$
+        assertEquals(0, phoneNumberHandlerBase.getTimeZonesForNumber(DE_NUM_2, REGCODE_US, false).size()); // $NON-NLS-1$
+        assertEquals(0, phoneNumberHandlerBase.getTimeZonesForNumber(DE_NUM_3, REGCODE_US, false).size()); // $NON-NLS-1$
+        assertEquals(0, phoneNumberHandlerBase.getTimeZonesForNumber(DE_NUM_4, REGCODE_US, false).size()); // $NON-NLS-1$
 
     }
 
