@@ -15,20 +15,20 @@ Mar 22, 1999	MMM d, yyyy	en_US	MEDIUM	false
 1999/03/22	yyyy/MM/dd	ja_JP	MEDIUM	false
 1999-3-22	yyyy-M-d	zh_CN	MEDIUM	false
 March 22, 1999	MMMM d, yyyy	en_US	LONG	false
+March 22, 1999	MMMM d, yyyy	en_CA	LONG	false
+22 mars 1999	d MMMM yyyy	fr_CA	LONG	false
+22 marzo 1999	d MMMM yyyy	it_IT	LONG	false
 22 mars 1999	d MMMM yyyy	fr_FR	LONG	false
 22. März 1999	d. MMMM yyyy	de_DE	LONG	false
 22 March 1999	dd MMMM yyyy	en_GB	LONG	false
-22 marzo 1999	d MMMM yyyy	it_IT	LONG	false
-March 22, 1999	MMMM d, yyyy	en_CA	LONG	false
-22 mars 1999	d MMMM yyyy	fr_CA	LONG	false
 1999年3月22日	yyyy'年'M'月'd'日'	zh_CN	LONG	false
 Monday, March 22, 1999	EEEE, MMMM d, yyyy	en_US	FULL	false
+Monday, March 22, 1999	EEEE, MMMM d, yyyy	en_CA	FULL	false
+lundi 22 mars 1999	EEEE d MMMM yyyy	fr_CA	FULL	false
+lunedì 22 marzo 1999	EEEE d MMMM yyyy	it_IT	FULL	false
 lundi 22 mars 1999	EEEE d MMMM yyyy	fr_FR	FULL	false
 Montag, 22. März 1999	EEEE, d. MMMM yyyy	de_DE	FULL	false
 Monday, 22 March 1999	EEEE, d MMMM yyyy	en_GB	FULL	false
-lunedì 22 marzo 1999	EEEE d MMMM yyyy	it_IT	FULL	false
-Monday, March 22, 1999	EEEE, MMMM d, yyyy	en_CA	FULL	false
-lundi 22 mars 1999	EEEE d MMMM yyyy	fr_CA	FULL	false
 1999年3月22日 星期一	yyyy'年'M'月'd'日' EEEE	zh_CN	FULL	false
 3/22/99 5:06 AM	M/d/yy h:mm a	en_US	SHORT	true
 22/03/99 05:06	dd/MM/yy HH:mm	fr_FR	SHORT	true
@@ -48,12 +48,12 @@ Mar 22, 1999 5:06:07 AM	MMM d, yyyy h:mm:ss a	en_US	MEDIUM	true
 1999/03/22 5:06:07	yyyy/MM/dd H:mm:ss	ja_JP	MEDIUM	true
 1999-3-22 5:06:07	yyyy-M-d H:mm:ss	zh_CN	MEDIUM	true
 March 22, 1999 5:06:07 AM CET	MMMM d, yyyy h:mm:ss a z	en_US	LONG	true
+22 mars 1999 05:06:07 CET	d MMMM yyyy HH:mm:ss z	fr_CA	LONG	true
 22 mars 1999 05:06:07 CET	d MMMM yyyy HH:mm:ss z	fr_FR	LONG	true
 22. März 1999 05:06:07 MEZ	d. MMMM yyyy HH:mm:ss z	de_DE	LONG	true
 22 March 1999 05:06:07 CET	dd MMMM yyyy HH:mm:ss z	en_GB	LONG	true
 22 marzo 1999 5.06.07 CET	d MMMM yyyy H.mm.ss z	it_IT	LONG	true
 March 22, 1999 5:06:07 CET AM	MMMM d, yyyy h:mm:ss z a	en_CA	LONG	true
-22 mars 1999 05:06:07 CET	d MMMM yyyy HH:mm:ss z	fr_CA	LONG	true
 1999/03/22 5:06:07 CET	yyyy/MM/dd H:mm:ss z	ja_JP	LONG	true
 1999年3月22日 上午05时06分07秒	yyyy'年'M'月'd'日' ahh'时'mm'分'ss'秒'	zh_CN	LONG	true
 Monday, March 22, 1999 5:06:07 AM CET	EEEE, MMMM d, yyyy h:mm:ss a z	en_US	FULL	true

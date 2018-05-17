@@ -8,26 +8,19 @@ en_US	MMM d, yyyy
 fr_FR	d MMM yyyy
 de_DE	dd.MM.yyyy
 en_GB	dd-MMM-yyyy
-it_IT	d-MMM-yyyy
-en_CA	d-MMM-yyyy
+it_IT, en_CA	d-MMM-yyyy
 fr_CA	yyyy-MM-dd
 ja_JP	yyyy/MM/dd
 zh_CN	yyyy-M-d
-en_US	MMMM d, yyyy
-fr_FR	d MMMM yyyy
+en_US, en_CA	MMMM d, yyyy
+fr_CA, it_IT, fr_FR	d MMMM yyyy
 de_DE	d. MMMM yyyy
 en_GB	dd MMMM yyyy
-it_IT	d MMMM yyyy
-en_CA	MMMM d, yyyy
-fr_CA	d MMMM yyyy
 zh_CN	yyyy'年'M'月'd'日'
-en_US	EEEE, MMMM d, yyyy
-fr_FR	EEEE d MMMM yyyy
+en_US, en_CA	EEEE, MMMM d, yyyy
+fr_CA, it_IT, fr_FR	EEEE d MMMM yyyy
 de_DE	EEEE, d. MMMM yyyy
 en_GB	EEEE, d MMMM yyyy
-it_IT	EEEE d MMMM yyyy
-en_CA	EEEE, MMMM d, yyyy
-fr_CA	EEEE d MMMM yyyy
 zh_CN	yyyy'年'M'月'd'日' EEEE
 en_US	M/d/yy h:mm a
 fr_FR	dd/MM/yy HH:mm
@@ -47,12 +40,11 @@ fr_CA	yyyy-MM-dd HH:mm:ss
 ja_JP	yyyy/MM/dd H:mm:ss
 zh_CN	yyyy-M-d H:mm:ss
 en_US	MMMM d, yyyy h:mm:ss a z
-fr_FR	d MMMM yyyy HH:mm:ss z
+fr_CA, fr_FR	d MMMM yyyy HH:mm:ss z
 de_DE	d. MMMM yyyy HH:mm:ss z
 en_GB	dd MMMM yyyy HH:mm:ss z
 it_IT	d MMMM yyyy H.mm.ss z
 en_CA	MMMM d, yyyy h:mm:ss z a
-fr_CA	d MMMM yyyy HH:mm:ss z
 ja_JP	yyyy/MM/dd H:mm:ss z
 zh_CN	yyyy'年'M'月'd'日' ahh'时'mm'分'ss'秒'
 en_US	EEEE, MMMM d, yyyy h:mm:ss a z

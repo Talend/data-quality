@@ -57,7 +57,7 @@ public class StandardDatetimeFormatLister {
         String pattern = DateTimeFormatterBuilder.getLocalizedDateTimePattern(//
                 isDateRequired ? dateStyle : null, isTimeRequired ? timeStyle : null, IsoChronology.INSTANCE, locale);//
         LocaledPattern lp = new LocaledPattern(pattern, locale, dateStyle.name(), isTimeRequired);
-        String formattedDateTime = ZONED_DATE_TIME.format(DateTimeFormatter.ofPattern(pattern, lp.locale));
+        String formattedDateTime = ZONED_DATE_TIME.format(DateTimeFormatter.ofPattern(pattern, lp.localeSet.iterator().next()));
         System.out.format("%-40s\t%s\n", lp, formattedDateTime);
     }
 

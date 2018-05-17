@@ -27,6 +27,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.IOUtils;
 import org.talend.dataquality.statistics.datetime.SystemDateTimePatternManager;
@@ -196,28 +197,7 @@ public class PatternListGenerator {
             return;
         }
 
-        if (!knownPatternList.contains(pattern)) {
-
-            LocaledPattern lp = new LocaledPattern(pattern, locale, dateStyle.name(), isTimeRequired);
-            knownLocaledPatternList.add(lp);
-            knownPatternList.add(pattern); // update list of pattern strings without locale
-            if (PRINT_DETAILED_RESULTS) {
-                System.out.println(lp);
-            }
-        } else {
-            if (pattern.contains("MMMM") || pattern.contains("MMM")) {
-                if (PRINT_DETAILED_RESULTS) {
-                    System.out.print("!!!duplicated pattern with different locale!!! ");
-                }
-                LocaledPattern lp = new LocaledPattern(pattern, locale, dateStyle.name(), isTimeRequired);
-                knownLocaledPatternList.add(lp);
-                if (PRINT_DETAILED_RESULTS) {
-                    System.out.println(lp);
-                }
-
-            }
-
-        }
+        addLocaledPattern(new LocaledPattern(pattern, locale, dateStyle.name(), isTimeRequired));
     }
 
     private static void processAdditionalDateTimePatternsByLocales() {
@@ -405,13 +385,19 @@ public class PatternListGenerator {
 
             datePatternFileTextBuilder.append(lp).append("\n");
 
+            Set<Locale> localeSetWithoutUS = lp.getLocaleSet().stream().filter(l -> !Locale.US.equals(l))
+                    .collect(Collectors.toSet());
             String regex = regexGenerator.convertPatternToRegex(lp.pattern);
-            dateRegexFileTextBuilder.append(lp.getPattern()).append("\t^").append(regex).append("$\n");
-            dateSampleFileTextBuilder.append(ZONED_DATE_TIME.format(DateTimeFormatter.ofPattern(lp.getPattern(), lp.getLocale())))
-                    .append("\t").append(lp.getPattern())//
-                    .append("\t").append(lp.getLocale())//
-                    .append("\t").append(lp.getFormatStyle())//
-                    .append("\t").append(lp.isWithTime()).append("\n");
+            dateRegexFileTextBuilder.append(lp.getPattern()).append("\t^").append(regex).append("$");
+            dateRegexFileTextBuilder.append("\t").append(localeSetWithoutUS).append("\n");
+
+            for (Locale l : lp.getLocaleSet()) {
+                dateSampleFileTextBuilder.append(ZONED_DATE_TIME.format(DateTimeFormatter.ofPattern(lp.getPattern(), l)))
+                        .append("\t").append(lp.getPattern())//
+                        .append("\t").append(l)//
+                        .append("\t").append(lp.getFormatStyle())//
+                        .append("\t").append(lp.isWithTime()).append("\n");
+            }
         }
 
         // Date Formats
@@ -440,6 +426,19 @@ public class PatternListGenerator {
             if (PRINT_DETAILED_RESULTS) {
                 System.out.println(lp);
             }
+        } else {
+            if (lp.pattern.contains("MMMM") || lp.pattern.contains("MMM") || //
+                    lp.pattern.contains("EEEE") || lp.pattern.contains("EEE")) {
+                for (LocaledPattern tmp : knownLocaledPatternList) {
+                    if (tmp.pattern.equals(lp.pattern)) {
+                        tmp.addLocale(lp.localeSet);
+                        if (PRINT_DETAILED_RESULTS) {
+                            System.out.print(tmp + "  ");
+                            System.out.println("!!!duplicated pattern with different locale!!! ");
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -463,11 +462,13 @@ public class PatternListGenerator {
             String regex = regexGenerator.convertPatternToRegex(lp.pattern);
             timeRegexFileTextBuilder.append(lp.getPattern()).append("\t^").append(regex).append("$\n");
 
-            timeSampleFileTextBuilder.append(ZONED_DATE_TIME.format(DateTimeFormatter.ofPattern(lp.getPattern(), lp.getLocale())))
-                    .append("\t").append(lp.getPattern())//
-                    .append("\t").append(lp.getLocale())//
-                    .append("\t").append(lp.getFormatStyle())//
-                    .append("\t").append(lp.isWithTime()).append("\n");
+            for (Locale l : lp.getLocaleSet()) {
+                timeSampleFileTextBuilder.append(ZONED_DATE_TIME.format(DateTimeFormatter.ofPattern(lp.getPattern(), l)))
+                        .append("\t").append(lp.getPattern())//
+                        .append("\t").append(l)//
+                        .append("\t").append(lp.getFormatStyle())//
+                        .append("\t").append(lp.isWithTime()).append("\n");
+            }
         }
 
         // Time Formats
@@ -500,7 +501,7 @@ class LocaledPattern {
 
     String pattern;
 
-    Locale locale;
+    Set<Locale> localeSet = new HashSet<>();
 
     String formatStyle;
 
@@ -510,17 +511,21 @@ class LocaledPattern {
 
     public LocaledPattern(String pattern, Locale locale, String formatStyle, boolean withTime) {
         this.pattern = pattern;
-        this.locale = locale;
+        this.localeSet.add(locale);
         this.formatStyle = formatStyle;
         this.withTime = withTime;
+    }
+
+    public void addLocale(Set<Locale> locales) {
+        this.localeSet.addAll(locales);
     }
 
     public String getPattern() {
         return pattern;
     }
 
-    public Locale getLocale() {
-        return locale;
+    public Set<Locale> getLocaleSet() {
+        return localeSet;
     }
 
     public String getFormatStyle() {
@@ -537,8 +542,8 @@ class LocaledPattern {
 
     @Override
     public String toString() {
-        return locale + "\t" + pattern + (groupId == 0 ? "" : "\t" + groupId);
-
+        String localeString = localeSet.toString();
+        return localeString.substring(1, localeString.length() - 1) + "\t" + pattern + (groupId == 0 ? "" : "\t" + groupId);
     }
 
 }

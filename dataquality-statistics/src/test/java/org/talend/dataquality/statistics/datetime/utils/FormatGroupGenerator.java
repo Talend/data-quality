@@ -33,7 +33,7 @@ import org.talend.dataquality.statistics.datetime.SystemDateTimePatternManager;
  */
 public class FormatGroupGenerator {
 
-    private static DateTimeFormatCode calculateFormatCode(String format, String regex) {
+    private static DateTimeFormatCode calculateFormatCode(String format, String regex, String locales) {
 
         String dateSeparator = "?", timeSeparator = "?";
         StringBuilder code = new StringBuilder();
@@ -110,7 +110,7 @@ public class FormatGroupGenerator {
         if (timeSeparator.equals(String.valueOf('\''))) {
             timeSeparator = "?";
         }
-        return new DateTimeFormatCode(format, regex, code.toString(), dateSeparator, timeSeparator);
+        return new DateTimeFormatCode(format, regex, code.toString(), dateSeparator, timeSeparator, locales);
     }
 
     public static void generateDateRegexGroups() throws IOException {
@@ -119,17 +119,20 @@ public class FormatGroupGenerator {
                 .replace("target" + File.separator + "classes", "src" + File.separator + "main" + File.separator + "resources"));
         List<String> lines = IOUtils.readLines(stream);
         Map<String, String> formatRegexMap = new LinkedHashMap<String, String>();
+        Map<String, String> formatLocaleMap = new LinkedHashMap<String, String>();
         for (String line : lines) {
             if (!"".equals(line.trim())) {
                 String[] lineArray = line.trim().split("\t");
                 String format = lineArray[0];
                 String regex = lineArray[1];
+                String locales = lineArray[2];
                 formatRegexMap.put(format, regex);
+                formatLocaleMap.put(format, locales);
             }
         }
         List<DateTimeFormatCode> formatCodes = new ArrayList<DateTimeFormatCode>();
         for (String format : formatRegexMap.keySet()) {
-            formatCodes.add(calculateFormatCode(format, formatRegexMap.get(format)));
+            formatCodes.add(calculateFormatCode(format, formatRegexMap.get(format), formatLocaleMap.get(format)));
         }
         // sortDateTimeFormatCode(formatCodes);
 
@@ -194,16 +197,24 @@ class DateTimeFormatCode {
 
     String timeSeparator;
 
-    public DateTimeFormatCode(String format, String regex, String code, String dateSeparator, String timeSeparator) {
+    String locales;
+
+    public DateTimeFormatCode(String format, String regex, String code, String dateSeparator, String timeSeparator,
+            String locales) {
         this.format = format;
         this.regex = regex;
         this.code = code;
         this.dateSeparator = dateSeparator;
         this.timeSeparator = timeSeparator;
+        this.locales = locales;
     }
 
     @Override
     public String toString() {
-        return format + "\t" + regex;
+        if (!(format.contains("MMMM") || format.contains("MMM") || //
+                format.contains("EEEE") || format.contains("EEE"))) {
+            locales = "[]";
+        }
+        return format + "\t" + regex + "\t" + locales.substring(1, locales.length() - 1);
     }
 }
