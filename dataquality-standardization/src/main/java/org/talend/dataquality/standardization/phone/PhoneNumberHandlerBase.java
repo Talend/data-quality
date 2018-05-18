@@ -59,7 +59,7 @@ public class PhoneNumberHandlerBase {
             final CharSequence cs = data.toString();
             phonenumber = GOOGLE_PHONE_UTIL.parse(cs, regionCode);
         } catch (Exception e) {
-            LOG.error("Phone number parsing exception with " + data, e); //$NON-NLS-1$
+            LOG.info("Phone number parsing exception with " + data, e); //$NON-NLS-1$
             return null;
         }
         return phonenumber;

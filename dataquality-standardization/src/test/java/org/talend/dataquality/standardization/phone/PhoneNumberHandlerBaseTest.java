@@ -272,7 +272,7 @@ public class PhoneNumberHandlerBaseTest {
      */
     @Test
     public void testGetSupportedRegions() {
-        assertEquals(244, phoneNumberHandlerBase.getSupportedRegions().size());
+        assertEquals(245, phoneNumberHandlerBase.getSupportedRegions().size());
 
     }
 
@@ -413,10 +413,10 @@ public class PhoneNumberHandlerBaseTest {
         assertEquals(PhoneNumberToTimeZonesMapper.getUnknownTimeZone(),
                 phoneNumberHandlerBase.getTimeZonesForNumber(null, null).get(0)); // $NON-NLS-1$
 
-        assertEquals(2, phoneNumberHandlerBase.getTimeZonesForNumber(CN_NUM_1, REGCODE_CN).size());
-        assertEquals("[Asia/Shanghai, Asia/Urumqi]", //$NON-NLS-1$
+        assertEquals(1, phoneNumberHandlerBase.getTimeZonesForNumber(CN_NUM_1, REGCODE_CN).size());
+        assertEquals("[Asia/Shanghai]", //$NON-NLS-1$
                 phoneNumberHandlerBase.getTimeZonesForNumber(CN_NUM_1, REGCODE_CN).toString());
-        assertEquals("[Asia/Shanghai, Asia/Urumqi]", //$NON-NLS-1$
+        assertEquals("[Asia/Shanghai]", //$NON-NLS-1$
                 phoneNumberHandlerBase.getTimeZonesForNumber(CN_NUM_2, REGCODE_CN).toString());
         assertEquals("[Asia/Shanghai]", phoneNumberHandlerBase.getTimeZonesForNumber(CN_NUM_4, REGCODE_CN).toString()); //$NON-NLS-1$
 
@@ -444,10 +444,10 @@ public class PhoneNumberHandlerBaseTest {
     @Test
     public void testGetTimeZonesForNumberWithoutUnknown() {
 
-        assertEquals(2, phoneNumberHandlerBase.getTimeZonesForNumber(CN_NUM_1, REGCODE_CN, false).size());
-        assertEquals("[Asia/Shanghai, Asia/Urumqi]", //$NON-NLS-1$
+        assertEquals(1, phoneNumberHandlerBase.getTimeZonesForNumber(CN_NUM_1, REGCODE_CN, false).size());
+        assertEquals("[Asia/Shanghai]", //$NON-NLS-1$
                 phoneNumberHandlerBase.getTimeZonesForNumber(CN_NUM_1, REGCODE_CN, false).toString());
-        assertEquals("[Asia/Shanghai, Asia/Urumqi]", //$NON-NLS-1$
+        assertEquals("[Asia/Shanghai]", //$NON-NLS-1$
                 phoneNumberHandlerBase.getTimeZonesForNumber(CN_NUM_2, REGCODE_CN, false).toString());
         assertEquals("[Asia/Shanghai]", phoneNumberHandlerBase.getTimeZonesForNumber(CN_NUM_4, REGCODE_CN, false).toString()); //$NON-NLS-1$
 
