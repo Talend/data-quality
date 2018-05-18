@@ -180,14 +180,19 @@ public class SystemDateTimePatternManager {
             String value) {
         // Check the value with a list of regex patterns
         for (Map<Pattern, String> patternMap : patternGroupList) {
+            boolean isFoundRegex = false;
             for (Entry<Pattern, String> entry : patternMap.entrySet()) {
                 Pattern parser = entry.getKey();
                 if (parser.matcher(value).find()) {
+                    isFoundRegex = true;
                     Optional<DateTimeFormatter> dateTimeFormatter = validateWithPatternInAnyLocale(value, entry.getValue());
-                    return dateTimeFormatter.isPresent() ? Optional.of(Pair.of(parser, dateTimeFormatter.get()))
-                            : Optional.empty();
+                    if (dateTimeFormatter.isPresent())
+                        return Optional.of(Pair.of(parser, dateTimeFormatter.get()));
                 }
+
             }
+            if (isFoundRegex)
+                break;
         }
         return Optional.empty();
     }

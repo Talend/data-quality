@@ -59,8 +59,8 @@ public class RegexGenerator {
             put("yyyy", "[0-9]{4}");
             put("yy", "[0-9]{2}");
             put("y", "[0-9]{2,4}"); // TO CHECK
-            put("MMMM", "(\\p{L}{3,10})");
-            put("MMM", "(\\p{L}{2,4}\\.?)"); // this line must be after the replacement of 'a'
+            put("MMMM", "((\\p{L}{3,10})|(([1-9]|1[0-2]|\\p{Lo})\\p{Lo}))");
+            put("MMM", "((\\p{L}{3,4}\\.?)|(([1-9]|1[0-2]|\\p{Lo})\\p{Lo}))"); // this line must be after the replacement of 'a'
             put("MM", "(0[1-9]|1[0-2])");
             put("M", "([1-9]|1[0-2])");
             put("dd", "(0[1-9]|[1-2][0-9]|3[0-1])");
@@ -68,7 +68,7 @@ public class RegexGenerator {
 
             // can use \\p{L} starting from here
             put("EEEE", "(\\p{L}{3,10})");// TO CHECK
-            put("EEE", "(\\p{L}{3,5})");
+            put("EEE", "(\\p{L}{1,5})");
 
             put("VV", "\\p{L}{4,10}\\/\\p{L}{4,15}");
 
