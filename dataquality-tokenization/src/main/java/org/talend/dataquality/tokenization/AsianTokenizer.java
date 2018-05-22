@@ -24,11 +24,21 @@ public class AsianTokenizer {
     private static final Logger LOGGER = LoggerFactory.getLogger(AsianTokenizer.class);
 
     public enum DictionaryJP {
-        IPADIC,
-        JUMANDIC,
-        NAIST_JDIC,
-        UNIDIC,
-        UNIDIC_KANAACCENT
+        IPADIC("ipadic"),
+        JUMANDIC("jumandic"),
+        NAIST_JDIC("naist.jdic"),
+        UNIDIC("unidic"),
+        UNIDIC_KANAACCENT("unidic.kanaaccent");
+
+        private final String dictName;
+
+        public String getDictName() {
+            return dictName;
+        }
+
+        DictionaryJP(String dictName) {
+            this.dictName = dictName;
+        }
     }
 
     /**
@@ -37,30 +47,19 @@ public class AsianTokenizer {
      * @param dict
      * @return List of tokens
      */
-    public static List<String> tokenizeJP(String text, DictionaryJP dict) {
-        TokenizerBase tokenizer;
-        switch (dict) {
-        case IPADIC:
-            tokenizer = new com.atilika.kuromoji.ipadic.Tokenizer();
-            break;
-        case JUMANDIC:
-            tokenizer = new com.atilika.kuromoji.jumandic.Tokenizer();
-            break;
-        case NAIST_JDIC:
-            tokenizer = new com.atilika.kuromoji.naist.jdic.Tokenizer();
-            break;
-        case UNIDIC:
-            tokenizer = new com.atilika.kuromoji.unidic.Tokenizer();
-            break;
-        case UNIDIC_KANAACCENT:
-            tokenizer = new com.atilika.kuromoji.unidic.kanaaccent.Tokenizer();
-            break;
-        default:
+    public static List<String> tokenizeJP(String text, DictionaryJP dict)
+            throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+
+        String dictName;
+
+        if (dict == null) {
             LOGGER.warn("Unknown dictionary: " + dict + ", use mecab-ipadic instead.");
-            tokenizer = new com.atilika.kuromoji.ipadic.Tokenizer();
-            break;
+            dictName = DictionaryJP.IPADIC.getDictName();
+        } else {
+            dictName = dict.getDictName();
         }
 
+        TokenizerBase tokenizer = (TokenizerBase) Class.forName("com.atilika.kuromoji." + dictName + ".Tokenizer").newInstance();
         return tokenizer.tokenize(text).stream().map(token -> token.getSurface()).collect(Collectors.toList());
     }
 
@@ -69,7 +68,8 @@ public class AsianTokenizer {
      * @param text
      * @return List of tokens
      */
-    public static List<String> tokenizeJP(String text) {
+    public static List<String> tokenizeJP(String text)
+            throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         return AsianTokenizer.tokenizeJP(text, DictionaryJP.IPADIC);
     }
 

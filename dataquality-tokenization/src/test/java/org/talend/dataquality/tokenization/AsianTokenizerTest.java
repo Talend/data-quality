@@ -24,7 +24,7 @@ import org.junit.Test;
 public class AsianTokenizerTest {
 
     @Test
-    public void testTokenizeJP() {
+    public void testTokenizeJP() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         final Map<String, List<String>> textsWithExpectedTokens = new HashMap<String, List<String>>() {
 
             {
