@@ -13,6 +13,7 @@
 package org.talend.dataquality.semantic.datamasking;
 
 import java.util.List;
+import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,6 +91,9 @@ public class SemanticMaskerFunctionFactory {
             throw new IllegalArgumentException("No masking function available for the current column! SemanticCategory: "
                     + semanticCategory + " DataType: " + dataType);
         }
+        // setRandom must be call because of there is some special class declaration init operation in the method(e.g
+        // AbstractGenerateUniquePhoneNumber)
+        function.setRandom(new Random());
         return function;
     }
 
