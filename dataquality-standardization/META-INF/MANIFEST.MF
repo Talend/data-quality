@@ -11,7 +11,7 @@ Require-Bundle: org.slf4j.api,
  org.apache.commons.io,
  org.apache.commons.lang,
  org.junit,
- org.talend.testutils
+ org.talend.testutils;resolution:=optional
 Bundle-ClassPath: .
 Export-Package: org.talend.dataquality.standardization,
  org.talend.dataquality.standardization.action,
