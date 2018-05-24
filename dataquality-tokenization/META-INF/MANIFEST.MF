@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Semantic Library
+Bundle-SymbolicName: org.talend.dataquality.tokenization;singleton:=true
+Bundle-Version: 6.0.0.SNAPSHOT
+Bundle-Vendor: .Talend SA.
+Export-Package: org.talend.dataquality.tokenization
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.junit,
+ org.slf4j.api,
+ org.eclipse.m2e.maven.runtime.slf4j.simple
+Bundle-ClassPath: .,
+ lib/kuromoji-core-0.9.0.jar
+Eclipse-BundleShape: dir

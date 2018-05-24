@@ -19,32 +19,43 @@
 		<!-- Japanese morphological analyzer -->
 		<dependency>
 			<groupId>com.atilika.kuromoji</groupId>
+			<artifactId>kuromoji-core</artifactId>
+			<version>${kuromoji.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.atilika.kuromoji</groupId>
 			<artifactId>kuromoji-ipadic</artifactId>
 			<version>${kuromoji.version}</version>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>com.atilika.kuromoji</groupId>
 			<artifactId>kuromoji-jumandic</artifactId>
 			<version>${kuromoji.version}</version>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>com.atilika.kuromoji</groupId>
 			<artifactId>kuromoji-naist-jdic</artifactId>
 			<version>${kuromoji.version}</version>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>com.atilika.kuromoji</groupId>
 			<artifactId>kuromoji-unidic</artifactId>
 			<version>${kuromoji.version}</version>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>com.atilika.kuromoji</groupId>
 			<artifactId>kuromoji-unidic-kanaaccent</artifactId>
 			<version>${kuromoji.version}</version>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>
