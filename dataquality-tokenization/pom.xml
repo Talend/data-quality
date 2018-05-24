@@ -7,7 +7,7 @@
 		<relativePath>../dataquality-libraries</relativePath>
 	</parent>
 	<artifactId>dataquality-tokenization</artifactId>
-	<packaging>jar</packaging>
+	<packaging>bundle</packaging>
 	<name>dataquality-tokenization</name>
 	<description>Asian languages tokenization API</description>
 
@@ -87,7 +87,7 @@
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
-						<Include-Resource>{maven-resources},licenses=licenses</Include-Resource>
+						<Include-Resource>{maven-resources},lib=lib,licenses=licenses</Include-Resource>
 					</instructions>
 				</configuration>
 			</plugin>
