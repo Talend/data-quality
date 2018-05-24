@@ -1,6 +1,6 @@
 package org.talend.dataquality.datamasking.functions;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.util.Locale;
 import java.util.Random;
@@ -51,6 +51,22 @@ public class GenerateUniquePhoneNumberUsTest {
         assertEquals("", output);
         output = gnu.generateMaskedRow("AHDBNSKD");
         assertEquals("AHDBNSKD", output);
+    }
+
+    @Test
+    public void testKeepInvalidResult() {
+        AbstractGenerateUniquePhoneNumber newGnu = new GenerateUniquePhoneNumberUs();
+        newGnu.setKeepInvalidPattern(false);
+        newGnu.parse("invalid", false, new Random(42));
+        output = newGnu.generateMaskedRow("626");
+        Assert.assertTrue("After mask 626 should not get empty result", !output.isEmpty());
+        output = newGnu.generateMaskedRow("(845)");
+        Assert.assertTrue("After mask (845) should not get empty result", !output.isEmpty());
+        newGnu.setKeepInvalidPattern(true);
+        output = newGnu.generateMaskedRow("626");
+        Assert.assertEquals("The result should be 626", "626", output);
+        output = newGnu.generateMaskedRow("(845)");
+        Assert.assertEquals("The result should be (845)", "(845)", output);
     }
 
     @Test
