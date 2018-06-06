@@ -19,11 +19,11 @@ import com.atilika.kuromoji.TokenizerBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AsianTokenizer {
+public class TextTokenizer {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AsianTokenizer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TextTokenizer.class);
 
-    public enum DictionaryJP {
+    public enum KuromojiDict {
         IPADIC("ipadic"),
         JUMANDIC("jumandic"),
         NAIST_JDIC("naist.jdic"),
@@ -36,7 +36,7 @@ public class AsianTokenizer {
             return dictName;
         }
 
-        DictionaryJP(String dictName) {
+        KuromojiDict(String dictName) {
             this.dictName = dictName;
         }
     }
@@ -47,14 +47,14 @@ public class AsianTokenizer {
      * @param dict
      * @return List of tokens
      */
-    public static List<String> tokenizeJP(String text, DictionaryJP dict)
+    public static List<String> tokenize(String text, KuromojiDict dict)
             throws ClassNotFoundException, InstantiationException, IllegalAccessException {
 
         String dictName;
 
         if (dict == null) {
             LOGGER.warn("Unknown dictionary: " + dict + ", use mecab-ipadic instead.");
-            dictName = DictionaryJP.IPADIC.getDictName();
+            dictName = KuromojiDict.IPADIC.getDictName();
         } else {
             dictName = dict.getDictName();
         }
@@ -68,9 +68,9 @@ public class AsianTokenizer {
      * @param text
      * @return List of tokens
      */
-    public static List<String> tokenizeJP(String text)
+    public static List<String> tokenize(String text)
             throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-        return AsianTokenizer.tokenizeJP(text, DictionaryJP.IPADIC);
+        return TextTokenizer.tokenize(text, KuromojiDict.IPADIC);
     }
 
 }

@@ -1,0 +1,3 @@
+V6.0.0
+    - TDQ-14572: Support Japanese Tokenization 2018-05-17
+    - TDQ-15345: Rename dataquality-tokenization to dataquality-text-japanese 2018-06-06

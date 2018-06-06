@@ -1,16 +1,16 @@
 org.talend.dataquality.tokenization
 ===================
 
-Asian Languages tokenization API
+Japanese text analysis API
 
 -------------
 
-More information can be found [here](https://github.com/Talend/data-quality/blob/master/dataquality-tokenization/changelog.txt).
+More information can be found [here](https://github.com/Talend/data-quality/blob/master/dataquality-text-japanese/changelog.txt).
 
 Where can I get the latest release?
 -----------------------------------
-You can download latest stable binaries from our [Release Repository](https://artifacts-oss.talend.com/nexus/content/repositories/TalendOpenSourceRelease/org/talend/dataquality/dataquality-tokenization).
-or snapshot binaries from our [Snapshot Repository](https://artifacts-oss.talend.com/nexus/content/repositories/TalendOpenSourceSnapshot/org/talend/dataquality/dataquality-tokenization).
+You can download latest stable binaries from our [Release Repository](https://artifacts-oss.talend.com/nexus/content/repositories/TalendOpenSourceRelease/org/talend/dataquality/dataquality-text-japanese).
+or snapshot binaries from our [Snapshot Repository](https://artifacts-oss.talend.com/nexus/content/repositories/TalendOpenSourceSnapshot/org/talend/dataquality/dataquality-text-japanese).
 
 Alternatively you can add the following repository into your pom.xml file:
 ```xml
@@ -26,7 +26,7 @@ And include the following dependency:
 ```xml
 <dependency>
   <groupId>org.talend.dataquality</groupId>
-  <artifactId>dataquality-tokenization</artifactId>
+  <artifactId>dataquality-text-japanese</artifactId>
   <version>LATEST</version>
 </dependency>
 ```

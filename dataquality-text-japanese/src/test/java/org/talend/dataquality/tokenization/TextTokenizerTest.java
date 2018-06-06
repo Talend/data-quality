@@ -21,10 +21,10 @@ import java.util.Map;
 
 import org.junit.Test;
 
-public class AsianTokenizerTest {
+public class TextTokenizerTest {
 
     @Test
-    public void testTokenizeJP() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+    public void testTokenize() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         final Map<String, List<String>> textsWithExpectedTokens = new HashMap<String, List<String>>() {
 
             {
@@ -34,10 +34,10 @@ public class AsianTokenizerTest {
         };
 
         for (String text : textsWithExpectedTokens.keySet()) {
-            assertEquals(textsWithExpectedTokens.get(text), AsianTokenizer.tokenizeJP(text));
+            assertEquals(textsWithExpectedTokens.get(text), TextTokenizer.tokenize(text));
 
-            for (AsianTokenizer.DictionaryJP dict : AsianTokenizer.DictionaryJP.values()) {
-                assertEquals(textsWithExpectedTokens.get(text), AsianTokenizer.tokenizeJP(text, dict));
+            for (TextTokenizer.KuromojiDict dict : TextTokenizer.KuromojiDict.values()) {
+                assertEquals(textsWithExpectedTokens.get(text), TextTokenizer.tokenize(text, dict));
             }
         }
     }

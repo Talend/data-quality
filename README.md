@@ -17,7 +17,7 @@ This repository contains the source files of Talend Data Quality libraries.
 | [dataquality-standardization](dataquality-standardization)| *Standardization library based on Apache Lucene*                     |
 | [dataquality-statistics](dataquality-statistics)          | *API for data analysis and statistics (require JDK1.8)*              |
 | [dataquality-wordnet](dataquality-wordnet)                | *Content validation API based on WordNet dictionary*                 |
-| [dataquality-tokenization](dataquality-tokenization)      | *API for east Asian languages tokenization*                 |
+| [dataquality-text-japanese](dataquality-text-japanese)      | *API for japanese text analysis*                 |
 
 
 ## Product Download

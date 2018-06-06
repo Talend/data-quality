@@ -38,7 +38,7 @@
 		<module>../dataquality-email</module>
 		<module>../dataquality-survivorship</module>
 		<module>../dataquality-converters</module>
-		<module>../dataquality-tokenization</module>
+		<module>../dataquality-text-japanese</module>
 	</modules>
 
 	<dependencyManagement>

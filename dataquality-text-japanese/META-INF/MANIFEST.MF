@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Tokenization Library
-Bundle-SymbolicName: org.talend.dataquality.tokenization;singleton:=true
+Bundle-Name: Japanese text analysis Library
+Bundle-SymbolicName: org.talend.dataquality.text.japanese;singleton:=true
 Bundle-Version: 6.0.0.SNAPSHOT
 Bundle-Vendor: .Talend SA.
-Export-Package: org.talend.dataquality.tokenization
+Export-Package: org.talend.dataquality.text.japanese
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.junit,
  org.slf4j.api,
