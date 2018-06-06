@@ -38,6 +38,8 @@ public class DQCategory implements Serializable {
 
     private String creator;
 
+    private String creatorName;
+
     private Date createdAt;
 
     private DQRegEx regEx;
@@ -46,11 +48,15 @@ public class DQCategory implements Serializable {
 
     private String lastModifier;
 
+    private String lastModifierName;
+
     private Boolean completeness;
 
     private Date publishedAt;
 
     private String lastPublisher;
+
+    private String lastPublisherName;
 
     private ValidationMode validationMode;
 
@@ -122,6 +128,14 @@ public class DQCategory implements Serializable {
         this.creator = creator;
     }
 
+    public String getCreatorName() {
+        return creatorName;
+    }
+
+    public void setCreatorName(String creatorName) {
+        this.creatorName = creatorName;
+    }
+
     public DQRegEx getRegEx() {
         return regEx;
     }
@@ -170,6 +184,14 @@ public class DQCategory implements Serializable {
         this.lastModifier = lastModifier;
     }
 
+    public String getLastModifierName() {
+        return lastModifierName;
+    }
+
+    public void setLastModifierName(String lastModifierName) {
+        this.lastModifierName = lastModifierName;
+    }
+
     public Date getPublishedAt() {
         return publishedAt;
     }
@@ -184,6 +206,14 @@ public class DQCategory implements Serializable {
 
     public void setLastPublisher(String lastPublisher) {
         this.lastPublisher = lastPublisher;
+    }
+
+    public String getLastPublisherName() {
+        return lastPublisherName;
+    }
+
+    public void setLastPublisherName(String lastPublisherName) {
+        this.lastPublisherName = lastPublisherName;
     }
 
     public CategoryState getState() {
