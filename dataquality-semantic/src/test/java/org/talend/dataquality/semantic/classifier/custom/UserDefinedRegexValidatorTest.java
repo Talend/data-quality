@@ -12,13 +12,19 @@
 // ============================================================================
 package org.talend.dataquality.semantic.classifier.custom;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
+
+import java.io.IOException;
+import java.util.Set;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.talend.dataquality.semantic.classifier.ISubCategory;
+import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.exception.DQSemanticRuntimeException;
+import org.talend.dataquality.semantic.validator.ISemanticValidator;
 
 public class UserDefinedRegexValidatorTest {
 
@@ -141,145 +147,98 @@ public class UserDefinedRegexValidatorTest {
     }
 
     @Test
-    public void testIsValidURL() {
+    public void testIsValidURL() throws IOException {
+        // this testcase is to test SemanticCategoryEnum.URL's Validator can
         // TDQ-14551: Support URLs with Asian characters
-        // TDQ-14551: protocal://username:password@hostname
-        String url0 = "https://www.talend.com";
-        String url00 = "https://www.talend.com:8580";
-        String url000 = "https://www.talend.com:8580/fr_di_introduction_metadatabridge.html?region=FR&type=visual";
-        String url1 = "http://user@www.talend.com";
-        String url11 = "http://user@www.talend.com:8580";
-        String url2 = "ftp://user:pass@www.talend.com";
-        String url22 = "ftp://user:pass@www.talend.com:8080";
-        String url222 = "ftp://user:pass@www.talend.com:8080/metadata.html";
-        String url03 = "https://例子.卷筒纸";
-        String url04 = "http://引き割り.引き割り";
-        String url05 = "http://하하하하.하하하하";
-        String url3 = "ftp://user@例子.中華人民共和國";
-        String url4 = "ftp://user:pass@引き割り.引き割り";
-        String url44 = "ftp://user:pass@引き割り.引き割り/metadata.html";
-        String url5 = "http://user:pass@하하하하.하하하하";
-        String url6 = "http://例子:pass@例子.卷筒纸";
-        String url66 = "http://例子:例子@例子.卷筒纸";
-        String url7 = "http://user:引き割り@引き割り.引き割り";
-        String url77 = "ftp://user:pass@引き割り.引き割り/引き割metadata.html";
-        String url8 = "http://하하:하하@하하하하.하하하하";
-        String url88 = "http://하하:하하@하하하하.하하하하/하하하하.html";
-        String url888 = "https://用户:pass@例子.卷筒纸:8580/fr_di_introduction_metadatabridge.html?region=FR&type=visual";
+        // and will test URL step by step, the order is testIsValidURLPrepare1,2,3,4 and this.
 
-        UserDefinedRegexValidator validator = new UserDefinedRegexValidator();
-        validator.setPatternString(
-                "^(((?:ht|f)tps?)\\:\\/\\/)((([a-zA-Z0-9\\-\\._]|[\\u2E80-\\uFFFD])+(:[a-zA-Z0-9\\-\\._]+|:[\\u2E80-\\uFFFD]+)?@)?((?:([a-zA-Z0-9\\-\\._]|[\\u2E80-\\uFFFD])+(?:\\.([a-zA-Z0-9\\-\\._]|[\\u2E80-\\uFFFD])+)+)|localhost)(\\/?)([\\u2E80-\\uFFFD]*|[a-zA-Z0-9\\-\\.\\,\\'\\/\\+\\&%\\$_\\\\]*)?([\\d\\w\\.\\/\\%\\+\\-\\=\\&\\?\\:\\\"\\'\\,\\|\\~\\;#\\\\]*))$");
+        // protocal://username:password@hostname
+        String[] urls = { "https://www.talend.com", "https://www.talend.com:8580",
+                "https://www.talend.com:8580/fr_di_introduction_metadatabridge.html?region=FR&type=visual",
+                "http://user@www.talend.com", "http://user@www.talend.com:8580", "ftp://user:pass@www.talend.com",
+                "ftp://user:pass@www.talend.com:8080", "ftp://user:pass@www.talend.com:8080/metadata.html", "https://例子.卷筒纸",
+                "http://引き割り.引き割り", "http://하하하하.하하하하", "ftp://user@例子.中華人民共和國", "ftp://user:pass@引き割り.引き割り",
+                "ftp://user:pass@引き割り.引き割り/metadata.html", "http://user:pass@하하하하.하하하하", "http://例子:pass@例子.卷筒纸",
+                "http://例子:例子@例子.卷筒纸", "http://user:引き割り@引き割り.引き割り", "ftp://user:pass@引き割り.引き割り/引き割metadata.html",
+                "http://하하:하하@하하하하.하하하하", "http://하하:하하@하하하하.하하하하/하하하하.html",
+                "https://用户:pass@例子.卷筒纸:8580/fr_di_introduction_metadatabridge.html?region=FR&type=visual" };
 
-        Assert.assertTrue(validator.isValid(url0));
-        Assert.assertTrue(validator.isValid(url00));
-        Assert.assertTrue(validator.isValid(url000));
-        Assert.assertTrue(validator.isValid(url1));
-        Assert.assertTrue(validator.isValid(url11));
-        Assert.assertTrue(validator.isValid(url2));
-        Assert.assertTrue(validator.isValid(url22));
-        Assert.assertTrue(validator.isValid(url222));
-        Assert.assertTrue(validator.isValid(url03));
-        Assert.assertTrue(validator.isValid(url04));
-        Assert.assertTrue(validator.isValid(url05));
-        Assert.assertTrue(validator.isValid(url3));
-        Assert.assertTrue(validator.isValid(url4));
-        Assert.assertTrue(validator.isValid(url44));
-        Assert.assertTrue(validator.isValid(url5));
-        Assert.assertTrue(validator.isValid(url6));
-        Assert.assertTrue(validator.isValid(url66));
-        Assert.assertTrue(validator.isValid(url7));
-        Assert.assertTrue(validator.isValid(url77));
-        Assert.assertTrue(validator.isValid(url8));
-        Assert.assertTrue(validator.isValid(url88));
-        Assert.assertTrue(validator.isValid(url888));
+        ISemanticValidator validator = null;
+        UserDefinedClassifier userDefinedClassifier = new UDCategorySerDeser().readJsonFile();
+        Set<ISubCategory> classifiers = userDefinedClassifier.getClassifiers();
+        for (ISubCategory iSubCategory : classifiers) {
+            String name = iSubCategory.getLabel();
+            if (SemanticCategoryEnum.URL.getDisplayName().equals(name)) {
+                validator = iSubCategory.getValidator();
+                break;
+            }
+        }
+        if (validator != null) {
+            for (String url : urls) {
+                Assert.assertTrue(validator.isValid(url));
+            }
+            Assert.assertFalse(validator.isValid("abc"));
+            Assert.assertFalse(validator.isValid("123.html"));
+            Assert.assertFalse(validator.isValid("http://@123.html"));
+        }
     }
 
     @Test
-    public void testIsValidURL2() {
+    public void testIsValidURLPrepare4() {
         // TDQ-14551: Support URLs with Asian characters
-        // TDQ-14551: username:password@hostname
-        String url0 = "www.talend.com";
-        String url1 = "user@www.talend.com";
-        String url2 = "user:pass@www.talend.com";
-        String url03 = "例子.卷筒纸";
-        String url04 = "引き割り.引き割り";
-        String url05 = "하하하하.하하하하";
-        String url3 = "user@例子.卷筒纸";
-        String url4 = "user:pass@引き割り.引き割り";
-        String url5 = "user:pass@하하하하.하하하하";
-        String url6 = "例子:pass@例子.卷筒纸";
-        String url7 = "user:引き割り@引き割り.引き割り";
-        String url8 = "하하:하하@하하하하.하하하하";
+        // username:password@hostname
+        String[] logins = { "www.talend.com", "user@www.talend.com", "user:pass@www.talend.com", "例子.卷筒纸", "引き割り.引き割り",
+                "하하하하.하하하하", "user@例子.卷筒纸", "user:pass@引き割り.引き割り", "user:pass@하하하하.하하하하", "例子:pass@例子.卷筒纸", "user:引き割り@引き割り.引き割り",
+                "하하:하하@하하하하.하하하하" };
         UserDefinedRegexValidator validator = new UserDefinedRegexValidator();
         validator.setPatternString(
-                "^(([a-zA-Z0-9\\-\\._]|[\\u2E80-\\uFFFD])+(:[a-zA-Z0-9\\-\\._]+|[\\u2E80-\\uFFFD]+)?@)?((?:([a-zA-Z0-9\\-\\._]|[\\u2E80-\\uFFFD])+(?:\\.([a-zA-Z0-9\\-\\._]|[\\u2E80-\\uFFFD])+)+)|localhost)(\\/?)([a-zA-Z0-9\\-\\.\\,\\'\\/\\+\\&%\\$_\\\\]*)?([\\d\\w\\.\\/\\%\\+\\-\\=\\&\\?\\:\\\"\\'\\,\\|\\~\\;#\\\\]*)$");
-        Assert.assertTrue(validator.isValid(url0));
-        Assert.assertTrue(validator.isValid(url1));
-        Assert.assertTrue(validator.isValid(url2));
-        Assert.assertTrue(validator.isValid(url03));
-        Assert.assertTrue(validator.isValid(url04));
-        Assert.assertTrue(validator.isValid(url05));
-        Assert.assertTrue(validator.isValid(url3));
-        Assert.assertTrue(validator.isValid(url4));
-        Assert.assertTrue(validator.isValid(url5));
-        Assert.assertTrue(validator.isValid(url6));
-        Assert.assertFalse(validator.isValid(url7));
-        Assert.assertFalse(validator.isValid(url8));
+                "^((([a-zA-Z0-9\\-\\._]|[\\u2E80-\\uFFFD])+(:[a-zA-Z0-9\\-\\._]+|:[\\u2E80-\\uFFFD]+)?@)?((?:([a-zA-Z0-9\\-\\._]|[\\u2E80-\\uFFFD])+(?:\\.([a-zA-Z0-9\\-\\._]|[\\u2E80-\\uFFFD])+)+)|localhost)(\\/?)([\\u2E80-\\uFFFD]*|[a-zA-Z0-9\\-\\.\\,\\'\\/\\+\\&%\\$_\\\\]*)?([\\d\\w\\.\\/\\%\\+\\-\\=\\&\\?\\:\\\"\\'\\,\\|\\~\\;#\\\\]*))$");
+
+        for (String login : logins) {
+            Assert.assertTrue(validator.isValid(login));
+        }
+        Assert.assertFalse(validator.isValid("."));
+        Assert.assertFalse(validator.isValid("@a"));
     }
 
     @Test
-    public void testIsValidURL3() {
+    public void testIsValidURLPrepare3() {
         // TDQ-14551: Support URLs with Asian characters
-        // TDQ-14551: username:password@
-        String url0 = "";
-        String url1 = "user:pass@";
-        String url2 = "user@";
-        String url3 = "例子:例子@";
-        String url4 = "例子:pass@";
-        String url5 = "user:引き割り@";
-        String url6 = "하하:하하@";
-        String url7 = "하하@";
+        // username:password@
+        String[] logins = { "", "user:pass@", "user@", "例子:例子@", "例子:pass@", "user:引き割り@", "하하:하하@", "하하@" };
 
         UserDefinedRegexValidator validator = new UserDefinedRegexValidator();
         validator.setPatternString("(([a-zA-Z0-9\\-\\._]|[\\u2E80-\\uFFFD])+(:[a-zA-Z0-9\\-\\._]+|[\\u2E80-\\uFFFD]+)?@)?");
-        Assert.assertTrue(validator.isValid(url0));
-        Assert.assertTrue(validator.isValid(url1));
-        Assert.assertTrue(validator.isValid(url2));
-        Assert.assertTrue(validator.isValid(url3));
-        Assert.assertTrue(validator.isValid(url4));
-        Assert.assertTrue(validator.isValid(url5));
-        Assert.assertTrue(validator.isValid(url6));
-        Assert.assertTrue(validator.isValid(url7));
+        for (String login : logins) {
+            Assert.assertTrue(validator.isValid(login));
+        }
     }
 
     @Test
-    public void testIsValidURL4() {
+    public void testIsValidURLPrepare2() {
         // TDQ-14551: Support URLs with Asian characters
-        // TDQ-14551: protocal
-        String url1 = "https://";
-        String url2 = "ftp://";
-        String url3 = "http://";
+        // protocal
+        String[] protocals = { "https://", "ftp://", "http://" };
         UserDefinedRegexValidator validator = new UserDefinedRegexValidator();
         validator.setPatternString("^((?:ht|f)tps?)\\:\\/\\/$");
-        Assert.assertTrue(validator.isValid(url1));
-        Assert.assertTrue(validator.isValid(url2));
-        Assert.assertTrue(validator.isValid(url3));
+        for (String protocal : protocals) {
+            Assert.assertTrue(validator.isValid(protocal));
+        }
+        Assert.assertFalse(validator.isValid("1234"));
+        Assert.assertFalse(validator.isValid("abc"));
     }
 
     @Test
-    public void testIsValidURL5() {
+    public void testIsValidURLPrepare1() {
         // TDQ-14551: Support URLs with Asian characters
-        // TDQ-14551: host or username or password with Asian characters
-        String url0 = "呵呵";
-        String url1 = "中華人民共和國";
-        String url2 = "引き割り";
-        String url3 = "하하하하";
+        // host or username or password with Asian characters
+        String[] asianCharacters = { "呵呵", "中華人民共和國", "引き割り", "하하하하" };
         UserDefinedRegexValidator validator = new UserDefinedRegexValidator();
         validator.setPatternString("[\\u2E80-\\uFFFD]+");
-        Assert.assertTrue(validator.isValid(url0));
-        Assert.assertTrue(validator.isValid(url1));
-        Assert.assertTrue(validator.isValid(url2));
-        Assert.assertTrue(validator.isValid(url3));
+
+        for (String asianCharacter : asianCharacters) {
+            Assert.assertTrue(validator.isValid(asianCharacter));
+        }
+        Assert.assertFalse(validator.isValid("מבשרת"));
     }
 }
