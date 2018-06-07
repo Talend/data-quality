@@ -180,6 +180,14 @@ public class UserDefinedRegexValidatorTest {
             Assert.assertFalse(validator.isValid("abc"));
             Assert.assertFalse(validator.isValid("123.html"));
             Assert.assertFalse(validator.isValid("http://@123.html"));
+            Assert.assertFalse(validator.isValid("www.talend.com"));
+            Assert.assertFalse(validator.isValid("user:pass@www.talend.com"));
+            Assert.assertFalse(validator.isValid("例子.卷筒纸"));
+            Assert.assertFalse(validator.isValid("user@例子.卷筒纸"));
+            Assert.assertFalse(validator.isValid("用户:pass@例子.卷筒纸"));
+            Assert.assertFalse(validator.isValid("引き割り.引き割り"));
+            Assert.assertFalse(validator.isValid("例子.卷筒纸@引き割り.引き割り"));
+            Assert.assertFalse(validator.isValid("하하:하하@하하하하.하하하하"));
         }
     }
 
