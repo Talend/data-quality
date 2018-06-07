@@ -153,14 +153,14 @@ public class UserDefinedRegexValidatorTest {
         // and will test URL step by step, the order is testIsValidURLPrepare1,2,3,4 and this.
 
         // protocal://username:password@hostname
-        String[] urls = { "https://www.talend.com", "https://www.talend.com:8580",
+        String[] urls = { "https://www.talend.com", "https://www.talend.com:8580/",
                 "https://www.talend.com:8580/fr_di_introduction_metadatabridge.html?region=FR&type=visual",
-                "http://user@www.talend.com", "http://user@www.talend.com:8580", "ftp://user:pass@www.talend.com",
+                "http://user@www.talend.com/", "http://user@www.talend.com:8580", "ftp://user:pass@www.talend.com",
                 "ftp://user:pass@www.talend.com:8080", "ftp://user:pass@www.talend.com:8080/metadata.html", "https://例子.卷筒纸",
-                "http://引き割り.引き割り", "http://하하하하.하하하하", "ftp://user@例子.中華人民共和國", "ftp://user:pass@引き割り.引き割り",
-                "ftp://user:pass@引き割り.引き割り/metadata.html", "http://user:pass@하하하하.하하하하", "http://例子:pass@例子.卷筒纸",
-                "http://例子:例子@例子.卷筒纸", "http://user:引き割り@引き割り.引き割り", "ftp://user:pass@引き割り.引き割り/引き割metadata.html",
-                "http://하하:하하@하하하하.하하하하", "http://하하:하하@하하하하.하하하하/하하하하.html",
+                "http://引き割り.引き割り", "https://baike.baidu.com/item/中文", "http://하하하하.하하하하/", "ftp://user@例子.中華人民共和國",
+                "ftp://user:pass@引き割り.引き割り", "ftp://user:pass@引き割り.引き割り/metadata.html", "http://user:pass@하하하하.하하하하",
+                "http://例子:pass@例子.卷筒纸", "http://例子:例子@例子.卷筒纸", "http://user:引き割り@引き割り.引き割り",
+                "ftp://user:pass@引き割り.引き割り/引き割metadata.html", "http://하하:하하@하하하하.하하하하", "http://하하:하하@하하하하.하하하하/하하하하.html",
                 "https://用户:pass@例子.卷筒纸:8580/fr_di_introduction_metadatabridge.html?region=FR&type=visual" };
 
         ISemanticValidator validator = null;
@@ -183,7 +183,6 @@ public class UserDefinedRegexValidatorTest {
         }
     }
 
-    @Test
     public void testIsValidURLPrepare4() {
         // TDQ-14551: Support URLs with Asian characters
         // username:password@hostname
@@ -201,7 +200,6 @@ public class UserDefinedRegexValidatorTest {
         Assert.assertFalse(validator.isValid("@a"));
     }
 
-    @Test
     public void testIsValidURLPrepare3() {
         // TDQ-14551: Support URLs with Asian characters
         // username:password@
@@ -214,7 +212,6 @@ public class UserDefinedRegexValidatorTest {
         }
     }
 
-    @Test
     public void testIsValidURLPrepare2() {
         // TDQ-14551: Support URLs with Asian characters
         // protocal
@@ -228,7 +225,6 @@ public class UserDefinedRegexValidatorTest {
         Assert.assertFalse(validator.isValid("abc"));
     }
 
-    @Test
     public void testIsValidURLPrepare1() {
         // TDQ-14551: Support URLs with Asian characters
         // host or username or password with Asian characters
