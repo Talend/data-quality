@@ -20,11 +20,13 @@ import org.slf4j.LoggerFactory;
  * created by zhao on 2015-4-27 Semantic category bean which can be a bridge from UI to semantic API.
  *
  */
-public class SemanticCategory {
+public class SemanticCategory implements Cloneable {
 
+    // implement Cloneable because it alaways be clone TDQ-15357
     public static final SemanticCategory EMPTY = new SemanticCategory(StringUtils.EMPTY, StringUtils.EMPTY, 0L, 0.0);
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SemanticCategory.class);
+
     // TODO private CategoryFrequency categoryFrequency;
 
     /**
