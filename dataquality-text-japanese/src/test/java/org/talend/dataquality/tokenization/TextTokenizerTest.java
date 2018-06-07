@@ -35,10 +35,14 @@ public class TextTokenizerTest {
 
         for (String text : textsWithExpectedTokens.keySet()) {
             assertEquals(textsWithExpectedTokens.get(text), TextTokenizer.tokenize(text));
+        }
 
-            for (TextTokenizer.KuromojiDict dict : TextTokenizer.KuromojiDict.values()) {
-                assertEquals(textsWithExpectedTokens.get(text), TextTokenizer.tokenize(text, dict));
+        for (TextTokenizer.KuromojiDict dict : TextTokenizer.KuromojiDict.values()) {
+            TextTokenizer.init(dict);
+            for (String text : textsWithExpectedTokens.keySet()) {
+                assertEquals(textsWithExpectedTokens.get(text), TextTokenizer.tokenize(text));
             }
         }
+
     }
 }

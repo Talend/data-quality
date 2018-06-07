@@ -23,6 +23,10 @@ public class TextTokenizer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TextTokenizer.class);
 
+    private static TokenizerBase tokenizer;
+
+    private static String dictName;
+
     public enum KuromojiDict {
         IPADIC("ipadic"),
         JUMANDIC("jumandic"),
@@ -41,26 +45,13 @@ public class TextTokenizer {
         }
     }
 
-    /**
-     *
-     * @param text
-     * @param dict
-     * @return List of tokens
-     */
-    public static List<String> tokenize(String text, KuromojiDict dict)
-            throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-
-        String dictName;
-
-        if (dict == null) {
-            LOGGER.warn("Unknown dictionary: " + dict + ", use mecab-ipadic instead.");
-            dictName = KuromojiDict.IPADIC.getDictName();
-        } else {
+    public static void init(KuromojiDict dict) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+        if (dict.getDictName() != dictName) {
+            tokenizer = null; // clear tokenizer
+            LOGGER.info("Initialise tokenizer with the dictionary: mecab-" + dict.dictName);
+            tokenizer = (TokenizerBase) Class.forName("com.atilika.kuromoji." + dict.dictName + ".Tokenizer").newInstance();
             dictName = dict.getDictName();
         }
-
-        TokenizerBase tokenizer = (TokenizerBase) Class.forName("com.atilika.kuromoji." + dictName + ".Tokenizer").newInstance();
-        return tokenizer.tokenize(text).stream().map(token -> token.getSurface()).collect(Collectors.toList());
     }
 
     /**
@@ -70,7 +61,13 @@ public class TextTokenizer {
      */
     public static List<String> tokenize(String text)
             throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-        return TextTokenizer.tokenize(text, KuromojiDict.IPADIC);
+
+        if (tokenizer == null) {
+            // if the tokenizer haven't been initialized, then init with the default dictionary IPADIC
+            LOGGER.warn("The tokenizer haven't been initialized! Use default dictionary: mecab-ipadic.");
+            init(KuromojiDict.IPADIC);
+        }
+        return tokenizer.tokenize(text).stream().map(token -> token.getSurface()).collect(Collectors.toList());
     }
 
 }
