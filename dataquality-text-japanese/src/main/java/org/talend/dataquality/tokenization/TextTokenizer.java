@@ -62,7 +62,6 @@ public class TextTokenizer {
             LOGGER.warn("The tokenizer haven't been initialized! Use default dictionary: mecab-ipadic.");
             init(KuromojiDict.IPADIC);
         }
-        // tokenizer.tokenize(text).stream().map(token -> token.getSurface()).collect(Collectors.toList());
         return tokenizer.tokenize(text).stream().map(token -> token.getSurface());
     }
 
