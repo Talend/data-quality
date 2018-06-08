@@ -24,7 +24,7 @@ import org.junit.Test;
 public class TextTokenizerTest {
 
     @Test
-    public void testTokenize() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+    public void testGetListTokens() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         final Map<String, List<String>> textsWithExpectedTokens = new HashMap<String, List<String>>() {
 
             {
@@ -33,14 +33,40 @@ public class TextTokenizerTest {
             }
         };
 
-        for (String text : textsWithExpectedTokens.keySet()) {
-            assertEquals(textsWithExpectedTokens.get(text), TextTokenizer.tokenize(text));
+        for (String text : textsWithExpectedTokens.keySet()) { // case: without init dict
+            assertEquals(textsWithExpectedTokens.get(text), TextTokenizer.getListTokens(text));
         }
 
-        for (TextTokenizer.KuromojiDict dict : TextTokenizer.KuromojiDict.values()) {
+        for (TextTokenizer.KuromojiDict dict : TextTokenizer.KuromojiDict.values()) { // case: with init dict
             TextTokenizer.init(dict);
             for (String text : textsWithExpectedTokens.keySet()) {
-                assertEquals(textsWithExpectedTokens.get(text), TextTokenizer.tokenize(text));
+                assertEquals(textsWithExpectedTokens.get(text), TextTokenizer.getListTokens(text));
+            }
+        }
+
+    }
+
+    @Test
+    public void testGetTokenizedString() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+        final Map<String, String> textsWithExpectedTokens = new HashMap<String, String>() {
+
+            {
+                put("お寿司が食べたい。", "お 寿司 が 食べ たい 。");
+                put("おsushiが食べたい。", "お sushi が 食べ たい 。"); // japanese-english text
+            }
+        };
+        final String delimiter = " ";
+
+        for (String text : textsWithExpectedTokens.keySet()) { // case: without init dict
+            assertEquals(textsWithExpectedTokens.get(text), TextTokenizer.getTokenizedString(text)); //default delimiter
+            assertEquals(textsWithExpectedTokens.get(text), TextTokenizer.getTokenizedString(text, delimiter));
+        }
+
+        for (TextTokenizer.KuromojiDict dict : TextTokenizer.KuromojiDict.values()) { // case: with init dict
+            TextTokenizer.init(dict);
+            for (String text : textsWithExpectedTokens.keySet()) {
+                assertEquals(textsWithExpectedTokens.get(text), TextTokenizer.getTokenizedString(text)); //default delimiter
+                assertEquals(textsWithExpectedTokens.get(text), TextTokenizer.getTokenizedString(text, delimiter));
             }
         }
 

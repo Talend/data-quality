@@ -9,7 +9,7 @@
 	<artifactId>dataquality-text-japanese</artifactId>
 	<packaging>bundle</packaging>
 	<name>dataquality-text-japanese</name>
-	<description>Asian languages tokenization API</description>
+	<description>API for japanese text analysis</description>
 
 	<properties>
 		<kuromoji.version>0.9.0</kuromoji.version>
