@@ -10,7 +10,7 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.dataquality.tokenization;
+package org.talend.dataquality.jp.tokenization;
 
 import static org.junit.Assert.assertEquals;
 
