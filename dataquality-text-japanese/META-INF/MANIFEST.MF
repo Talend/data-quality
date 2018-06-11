@@ -4,11 +4,10 @@ Bundle-Name: Japanese text analysis Library
 Bundle-SymbolicName: org.talend.dataquality.text.japanese;singleton:=true
 Bundle-Version: 6.0.0.SNAPSHOT
 Bundle-Vendor: .Talend SA.
-Export-Package: org.talend.dataquality.text.japanese
+Export-Package: org.talend.dataquality.tokenization
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.junit,
  org.slf4j.api,
- org.apache.commons.lang3,
  org.eclipse.m2e.maven.runtime.slf4j.simple
 Bundle-ClassPath: .,
  lib/kuromoji-core-0.9.0.jar
