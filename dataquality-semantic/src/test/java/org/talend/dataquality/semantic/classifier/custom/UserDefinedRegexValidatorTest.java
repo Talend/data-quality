@@ -165,7 +165,10 @@ public class UserDefinedRegexValidatorTest {
                 "https://用户:pass@例子.卷筒纸:8580/fr_di_introduction_metadatabridge.html?region=FR&type=visual",
                 "http://www.baidu.com/s?wd=", "http://www.baidu.com/s?wd=春节", "http://hehe:例子@吉田あいうえお.卷筒纸",
                 "http://𠁁𠁂𠁃@www.talend.com", "ftp://𠀀𠀁𠀂𠀃𠀄:𠁁𠁂𠁃@www.talend.com", "ftp://𠀀𠀁𠀂𠀃𠀄:𠁁𠁂𠁃@𠁁𠁂.𠀂𠀃𠀄",
-                "http://site.com/Μία_Σελίδα", "ftp://Σελίδα@site.com/Μία_Σελίδα", "http://site.com/מבשרת" };
+                "http://site.com/Μία_Σελίδα", "ftp://Σελίδα@site.com/Μία_Σελίδα", "http://site.com/מבשרת",
+                "https://www.talend.com.cn", "https://www.talend-cn.com", "https://www.talend_cn.com",
+                "ftp://user-cn:pass@www.talend.com:8080", "ftp://user_cn:pass@www.talend.com:8080",
+                "ftp://user:pass_cn@www.talend-cn.com:8080", "ftp://user:pass-cn@www.talend_cn.com:8080" };
 
         String[] invalidURLs = { "", "-", "abc", "123.html", "http://@123.html", "www.talend.com", "user:pass@www.talend.com",
                 "例子.卷筒纸", "user@例子.卷筒纸", "用户:pass@例子.卷筒纸", "引き割り.引き割り", "例子.卷筒纸@引き割り.引き割り", "하하:하하@하하하하.하하하하" };
