@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.util.CharArraySet;
 import org.apache.lucene.document.Document;
@@ -24,7 +23,7 @@ public class LuceneIndex {
     public static void createLuceneIndex(String folder) throws IOException {
         final File testFolder = new File(folder);
         if (testFolder.exists()) {
-            FileUtils.deleteDirectory(testFolder);
+            FileUtils.forceDeleteOnExit(testFolder);
         }
         try {
             FSDirectory testDir = FSDirectory.open(testFolder);

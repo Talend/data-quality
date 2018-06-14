@@ -12,7 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.semantic;
 
-import static org.talend.dataquality.semantic.TestUtils.mockWithTenant;
+import static org.talend.dataquality.semantic.TestUtils.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,7 +45,7 @@ public abstract class CategoryRegistryManagerAbstract {
 
     @AfterClass
     public static void after() throws IOException {
-        FileUtils.deleteDirectory(new File(TARGET_TEST_CRM_PATH));
+        FileUtils.forceDeleteOnExit(new File(TARGET_TEST_CRM_PATH));
     }
 
     @Before
