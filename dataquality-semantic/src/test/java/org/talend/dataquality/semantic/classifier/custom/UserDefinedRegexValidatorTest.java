@@ -170,10 +170,12 @@ public class UserDefinedRegexValidatorTest {
                 "http://site.com/Μία_Σελίδα", "ftp://Σελίδα@site.com/Μία_Σελίδα", "http://site.com/מבשרת",
                 "https://www.talend.com.cn", "https://www.talend-cn.com", "https://www.talend_cn.com",
                 "ftp://user-cn:pass@www.talend.com:8080", "ftp://user_cn:pass@www.talend.com:8080",
-                "ftp://user:pass_cn@www.talend-cn.com:8080", "ftp://user:pass-cn@www.talend_cn.com:8080" };
+                "ftp://user:pass_cn@www.talend-cn.com:8080", "ftp://user:pass-cn@www.talend_cn.com:8080",
+                "sftp://user:pass@引き割り.引き割り" };
 
-        String[] invalidURLs = { "", "-", "abc", "123.html", "http://@123.html", "www.talend.com", "user:pass@www.talend.com",
-                "例子.卷筒纸", "user@例子.卷筒纸", "用户:pass@例子.卷筒纸", "引き割り.引き割り", "例子.卷筒纸@引き割り.引き割り", "하하:하하@하하하하.하하하하" };
+        String[] invalidURLs = { "https://.....com", "http://____.___", "", "-", "abc", "123.html", "http://@123.html",
+                "www.talend.com", "user:pass@www.talend.com", "例子.卷筒纸", "user@例子.卷筒纸", "用户:pass@例子.卷筒纸", "引き割り.引き割り",
+                "例子.卷筒纸@引き割り.引き割り", "하하:하하@하하하하.하하하하" };
 
         ISemanticValidator validator = null;
         UserDefinedClassifier userDefinedClassifier = new UDCategorySerDeser().readJsonFile();
@@ -230,9 +232,9 @@ public class UserDefinedRegexValidatorTest {
     public void testIsValidURLPrepare2() {
         // TDQ-14551: Support URLs with Any other characters
         // protocal
-        String[] protocals = { "https://", "ftp://", "http://" };
+        String[] protocals = { "https://", "ftp://", "http://", "sftp://" };
         UserDefinedRegexValidator validator = new UserDefinedRegexValidator();
-        validator.setPatternString("^((?:ht|f)tps?)\\:\\/\\/$");
+        validator.setPatternString("^((?:ht|s?f)tps?)\\:\\/\\/$");
         for (String protocal : protocals) {
             Assert.assertTrue(validator.isValid(protocal));
         }
