@@ -189,10 +189,10 @@ public class UserDefinedRegexValidatorTest {
         }
         if (validator != null) {
             for (String validURL : validURLs) {
-                Assert.assertTrue(validator.isValid(validURL));
+                Assert.assertTrue("Invalid URL expected to be valid: " + validURL, validator.isValid(validURL));
             }
             for (String invalidURL : invalidURLs) {
-                Assert.assertFalse(validator.isValid(invalidURL));
+                Assert.assertFalse("Valid URL expected to be invalid: " + invalidURL, validator.isValid(invalidURL));
             }
         }
     }
