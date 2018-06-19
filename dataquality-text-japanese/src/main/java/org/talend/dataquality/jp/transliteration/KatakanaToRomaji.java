@@ -188,6 +188,8 @@ public class KatakanaToRomaji {
                     t.append(getRomajiByType(s.substring(i, i + 1), type));
                 } else if (s.charAt(i) == 'ッ') {
                     t.append(getRomajiByType(s.substring(i + 1, i + 2), type).charAt(0));
+                } else if (s.charAt(i) == 'ー') {
+                    t.replace(t.length() - 1, t.length(), addMacronMark(t.charAt(t.length() - 1)));
                 } else {
                     t.append(s.charAt(i));
                 }
@@ -195,8 +197,7 @@ public class KatakanaToRomaji {
                 if (KATAKANA_TO_ROMAJI.containsKey(s.substring(i, i + 1))) {
                     t.append(getRomajiByType(s.substring(i, i + 1), type));
                 } else if (s.charAt(i) == 'ー') { // handle chōonpu: see https://en.wikipedia.org/wiki/Ch%C5%8Donpu
-                    final String macronLetter = String.valueOf(addMacronMark(t.charAt(t.length() - 1)));
-                    t.replace(t.length() - 1, t.length(), macronLetter);
+                    t.replace(t.length() - 1, t.length(), addMacronMark(t.charAt(t.length() - 1)));
                 } else {
                     t.append(s.charAt(i));
                 }
@@ -219,21 +220,21 @@ public class KatakanaToRomaji {
         }
     }
 
-    private static char addMacronMark(char c) {
+    private static String addMacronMark(char c) {
         switch (c) {
         case 'a':
-            return 'ā';
+            return "ā";
         case 'i':
-            return 'ī';
+            return "ī";
         case 'u':
-            return 'ū';
+            return "ū";
         case 'e':
-            return 'ē';
+            return "ē";
         case 'o':
-            return 'ō';
+            return "ō";
         default: {
             LOGGER.warn("Unknown chōonpu " + c);
-            return '¯';
+            return "¯";
         }
         }
     }
