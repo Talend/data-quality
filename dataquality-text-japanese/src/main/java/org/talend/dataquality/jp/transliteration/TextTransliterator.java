@@ -30,41 +30,24 @@ public class TextTransliterator {
 
     private static final int PRONUNCIATION_ID = 8;
 
+    private static final String KUROMOJI_NA_FEATURE = "*";
+
     private static TextTokenizer textTokenizer;
 
-    public enum TransliterateType {
-        HIRAGANA("Hiragana"),
-        KATAKANA_READING("Katakana-reading"),
-        KATAKANA_PRONUNCIATION("Katakana-pronunciation"),
-        HEPBURN("Hepburn-romanization"),
-        KUNREI_SHIKI("Kunrei-shiki-romanization"),
-        NIHON_SHIKI("Nihon-shiki-romanization");
-
-        private final String typeName;
-
-        public String getTypeName() {
-            return typeName;
-        }
-
-        TransliterateType(String typeName) {
-            this.typeName = typeName;
-        }
+    private TextTransliterator() {
     }
 
-    private TextTransliterator() {
+    private static class LazyHolder {
+
+        private static final TextTransliterator INSTANCE = new TextTransliterator();
+    }
+
+    public static TextTransliterator getInstance() {
         try {
             textTokenizer = TextTokenizer.getInstance();
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
         }
-    }
-
-    private static class LazyHolder {
-
-        static final TextTransliterator INSTANCE = new TextTransliterator();
-    }
-
-    public static TextTransliterator getInstance() {
         return LazyHolder.INSTANCE;
     }
 
@@ -100,7 +83,7 @@ public class TextTransliterator {
         return tokenize.stream().map(tokenBase -> {
             final String[] features = tokenBase.getAllFeaturesArray();
             final String katakana = toKatakanaPronunciation ? features[PRONUNCIATION_ID] : features[READING_ID];
-            return katakana.equals("*") ? tokenBase.getSurface() : katakana;
+            return KUROMOJI_NA_FEATURE.equals(katakana) ? tokenBase.getSurface() : katakana;
         });
     }
 

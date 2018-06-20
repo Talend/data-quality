@@ -35,7 +35,7 @@ public class TextTokenizer {
 
     private static class LazyHolder {
 
-        static final TextTokenizer INSTANCE = new TextTokenizer();
+        private static final TextTokenizer INSTANCE = new TextTokenizer();
     }
 
     public static TextTokenizer getInstance() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
@@ -45,17 +45,13 @@ public class TextTokenizer {
 
     public static TextTokenizer getInstance(KuromojiDict dict)
             throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-        init(dict);
-        return LazyHolder.INSTANCE;
-    }
-
-    private static void init(KuromojiDict dict) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         final String dictName = dict.getDictName();
         if (tokenizer == null || dictName != TextTokenizer.dictName) {
             LOGGER.info("Initialise tokenizer with the dictionary: mecab-" + dictName);
             tokenizer = (TokenizerBase) Class.forName("com.atilika.kuromoji." + dictName + ".Tokenizer").newInstance();
             TextTokenizer.dictName = dictName;
         }
+        return LazyHolder.INSTANCE;
     }
 
     /**

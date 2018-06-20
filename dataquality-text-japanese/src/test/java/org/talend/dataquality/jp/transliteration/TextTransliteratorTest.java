@@ -12,14 +12,12 @@
 // ============================================================================
 package org.talend.dataquality.jp.transliteration;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
 
 public class TextTransliteratorTest {
 
@@ -44,8 +42,8 @@ public class TextTransliteratorTest {
         expactedTextList.add("ニッポン ガタ ノ カオ モジ 👨 ‍ 🎨 『 ワライ 』(≧▽≦) フジサン ／^ o ^＼");
 
         for (int i = 0; i < testTextList.size(); i++) {
-            final String katakanaReading = transliterator.transliterate(testTextList.get(i),
-                    TextTransliterator.TransliterateType.KATAKANA_READING, delimiter);
+            final String katakanaReading = transliterator.transliterate(testTextList.get(i), TransliterateType.KATAKANA_READING,
+                    delimiter);
             assertEquals(expactedTextList.get(i), katakanaReading);
         }
     }
@@ -60,7 +58,7 @@ public class TextTransliteratorTest {
 
         for (int i = 0; i < testTextList.size(); i++) {
             final String katakanaPronunciation = transliterator.transliterate(testTextList.get(i),
-                    TextTransliterator.TransliterateType.KATAKANA_PRONUNCIATION);
+                    TransliterateType.KATAKANA_PRONUNCIATION);
             assertEquals(expactedTextList.get(i), katakanaPronunciation);
         }
     }
@@ -74,8 +72,7 @@ public class TextTransliteratorTest {
         expactedTextList.add("にっぽん がた の かお もじ 👨 ‍ 🎨 『 わらい 』(≧▽≦) ふじさん ／^ o ^＼");
 
         for (int i = 0; i < testTextList.size(); i++) {
-            final String hiragana = transliterator.transliterate(testTextList.get(i),
-                    TextTransliterator.TransliterateType.HIRAGANA);
+            final String hiragana = transliterator.transliterate(testTextList.get(i), TransliterateType.HIRAGANA);
             assertEquals(expactedTextList.get(i), hiragana);
         }
     }
@@ -89,8 +86,7 @@ public class TextTransliteratorTest {
         expactedTextList.add("nippon gata no kao moji 👨 ‍ 🎨 『 warai 』(≧▽≦) fujisan ／^ o ^＼");
 
         for (int i = 0; i < testTextList.size(); i++) {
-            final String hepburn = transliterator.transliterate(testTextList.get(i),
-                    TextTransliterator.TransliterateType.HEPBURN);
+            final String hepburn = transliterator.transliterate(testTextList.get(i), TransliterateType.HEPBURN);
             assertEquals(expactedTextList.get(i), hepburn);
         }
     }
@@ -104,8 +100,7 @@ public class TextTransliteratorTest {
         expactedTextList.add("nippon gata no kao mozi 👨 ‍ 🎨 『 warai 』(≧▽≦) huzisan ／^ o ^＼");
 
         for (int i = 0; i < testTextList.size(); i++) {
-            final String kunrei_shiki = transliterator.transliterate(testTextList.get(i),
-                    TextTransliterator.TransliterateType.KUNREI_SHIKI);
+            final String kunrei_shiki = transliterator.transliterate(testTextList.get(i), TransliterateType.KUNREI_SHIKI);
             assertEquals(expactedTextList.get(i), kunrei_shiki);
         }
     }
@@ -119,8 +114,7 @@ public class TextTransliteratorTest {
         expactedTextList.add("nippon gata no kao mozi 👨 ‍ 🎨 『 warai 』(≧▽≦) huzisan ／^ o ^＼");
 
         for (int i = 0; i < testTextList.size(); i++) {
-            final String nihon_shiki = transliterator.transliterate(testTextList.get(i),
-                    TextTransliterator.TransliterateType.NIHON_SHIKI);
+            final String nihon_shiki = transliterator.transliterate(testTextList.get(i), TransliterateType.NIHON_SHIKI);
             assertEquals(expactedTextList.get(i), nihon_shiki);
         }
     }

@@ -28,9 +28,9 @@ public class KatakanaToHiragana {
     private static int toHiragana(int cp) {
         char c = (char) cp;
         if (isFullWidthKatakana(c)) {
-            return (c - 0x60);
+            return (c - 0x60); // code point difference between full-width katakana and hiragana
         } else if (isHalfWidthKatakana(c)) {
-            return (c - 0xcf25);
+            return (c - 0xcf25); // code point difference between half-width katakana and hiragana
         }
         return cp;
     }

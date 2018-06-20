@@ -24,7 +24,7 @@ public class KatakanaToRomaji {
     private static final Logger LOGGER = LoggerFactory.getLogger(KatakanaToRomaji.class);
 
     private static final Map<String, String[]> KATAKANA_TO_ROMAJI = new HashMap<>();
-    // https://en.wikipedia.org/wiki/Romanization_of_Japanese#Differences_among_romanizations
+    // see https://en.wikipedia.org/wiki/Romanization_of_Japanese#Differences_among_romanizations
     static {
         KATAKANA_TO_ROMAJI.put("ア", new String[] { "a" });
         KATAKANA_TO_ROMAJI.put("イ", new String[] { "i" });
@@ -173,50 +173,51 @@ public class KatakanaToRomaji {
         KATAKANA_TO_ROMAJI.put("ツィ", new String[] { "tsi" });
     }
 
-    protected static Stream<String> convert(Stream<String> katakanaStream, TextTransliterator.TransliterateType type) {
-        return katakanaStream.map(x -> toRomoji(x, type));
+    protected static Stream<String> convert(Stream<String> katakanaStream, TransliterateType type) {
+        return katakanaStream.map(x -> toRomaji(x, type));
     }
 
-    private static String toRomoji(String s, TextTransliterator.TransliterateType type) {
+    private static String toRomaji(String s, TransliterateType type) {
         StringBuilder t = new StringBuilder();
         for (int i = 0; i < s.length(); i++) {
-            if (i <= s.length() - 2) {
-                if (KATAKANA_TO_ROMAJI.containsKey(s.substring(i, i + 2))) {
-                    t.append(getRomajiByType(s.substring(i, i + 2), type));
-                    i++;
-                } else if (KATAKANA_TO_ROMAJI.containsKey(s.substring(i, i + 1))) {
-                    t.append(getRomajiByType(s.substring(i, i + 1), type));
-                } else if (s.charAt(i) == 'ッ') {
+            if (i <= s.length() - 2 && KATAKANA_TO_ROMAJI.containsKey(s.substring(i, i + 2))) {// 2 katakanas combination
+                // lookup priority: 2 katakanas combination > single katakana (i.e. ショ > シ)
+                t.append(getRomajiByType(s.substring(i, i + 2), type));
+                i++;
+            } else if (KATAKANA_TO_ROMAJI.containsKey(s.substring(i, i + 1))) { // single katakana
+                t.append(getRomajiByType(s.substring(i, i + 1), type));
+            } else if (s.charAt(i) == 'ー') { // handle chōonpu: see https://en.wikipedia.org/wiki/Ch%C5%8Donpu
+                if (t.length() >= 1) {
+                    t.replace(t.length() - 1, t.length(), addMacronMark(t.charAt(t.length() - 1)));
+                } else {
+                    LOGGER.warn("Token: " + s + " shouldn't start with the chōonpu symbol (¯)");
+                }
+            } else if (s.charAt(i) == 'ッ') { // handle sokuon: see https://en.wikipedia.org/wiki/Sokuon
+                if (i <= s.length() - 2) {
                     t.append(getRomajiByType(s.substring(i + 1, i + 2), type).charAt(0));
-                } else if (s.charAt(i) == 'ー') {
-                    t.replace(t.length() - 1, t.length(), addMacronMark(t.charAt(t.length() - 1)));
                 } else {
-                    t.append(s.charAt(i));
+                    LOGGER.warn("Token: " + s + " shouldn't end by the sokuon symbol (小さなつ)");
                 }
-            } else {
-                if (KATAKANA_TO_ROMAJI.containsKey(s.substring(i, i + 1))) {
-                    t.append(getRomajiByType(s.substring(i, i + 1), type));
-                } else if (s.charAt(i) == 'ー') { // handle chōonpu: see https://en.wikipedia.org/wiki/Ch%C5%8Donpu
-                    t.replace(t.length() - 1, t.length(), addMacronMark(t.charAt(t.length() - 1)));
-                } else {
-                    t.append(s.charAt(i));
-                }
+            } else { // punctuation or other character
+                t.append(s.charAt(i));
             }
         }
         return t.toString();
     }
 
-    private static String getRomajiByType(String key, TextTransliterator.TransliterateType type) {
-        final String[] romojis = KATAKANA_TO_ROMAJI.get(key);
-        if (type.equals(TextTransliterator.TransliterateType.HEPBURN)) {
-            return romojis[0];
-        } else if (type.equals(TextTransliterator.TransliterateType.NIHON_SHIKI)) {
-            return romojis.length > 1 ? romojis[1] : romojis[0];
-        } else if (type.equals(TextTransliterator.TransliterateType.KUNREI_SHIKI)) {
-            return romojis[romojis.length - 1];
-        } else {
+    private static String getRomajiByType(String key, TransliterateType type) {
+        final String[] romajis = KATAKANA_TO_ROMAJI.get(key);
+        switch (type) {
+        case HEPBURN:
+            return romajis[0];
+        case NIHON_SHIKI:
+            return romajis.length > 1 ? romajis[1] : romajis[0];
+        case KUNREI_SHIKI:
+            return romajis[romajis.length - 1];
+        default: {
             LOGGER.warn("Unknown romanization type: " + type + ". Use Hepburn-romanization instead");
-            return romojis[0];
+            return romajis[0];
+        }
         }
     }
 
