@@ -4,7 +4,9 @@ Bundle-Name: Japanese text analysis Library
 Bundle-SymbolicName: org.talend.dataquality.text.japanese;singleton:=true
 Bundle-Version: 6.0.0.SNAPSHOT
 Bundle-Vendor: .Talend SA.
-Export-Package: org.talend.dataquality.jp.tokenization
+Export-Package: org.talend.dataquality.jp.common,
+ org.talend.dataquality.jp.tokenization,
+ org.talend.dataquality.jp.transliteration
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.junit,
  org.slf4j.api,
