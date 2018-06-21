@@ -233,6 +233,7 @@
 						<_removeheaders>JAVA_1_5_HOME,JAVA_1_6_HOME,JAVA_1_7_HOME,JAVA_1_8_HOME</_removeheaders>
 						<_include>META-INF/MANIFEST.MF</_include>
 						<Built-By>.Talend SA.</Built-By>
+						<Import-Package/>
 						<Private-Package/>
 						<Include-Resource>{maven-resources},changelog.txt,LICENSE.txt</Include-Resource>
 					</instructions>
