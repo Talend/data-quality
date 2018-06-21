@@ -163,7 +163,8 @@ public class UserDefinedRegexValidatorTest {
                 "http://引き割り.引き割り", "https://baike.baidu.com/item/中文", "http://하하하하.하하하하/", "ftp://user@例子.中華人民共和國",
                 "ftp://user:pass@引き割り.引き割り", "ftp://user:pass@引き割り.引き割り/metadata.html", "http://user:pass@하하하하.하하하하",
                 "http://例子:pass@例子.卷筒纸", "http://例子:例子@例子.卷筒纸", "http://user:引き割り@引き割り.引き割り",
-                "ftp://user:pass@引き割り.引き割り/引き割metadata.html", "http://하하:하하@하하하하.하하하하", "http://하하:하하@하하하하.하하하하/하하하하.html",
+                "ftp://user:pass@引き割り.引き割り/metadata.html", "https://user:pass@引き割り.引き割り:8080/metadata.html",
+                "http://하하:하하@하하하하.하하하하", "http://하하:하하@하하하하.하하하하/하하하하.html",
                 "https://用户:pass@例子.卷筒纸:8580/fr_di_introduction_metadatabridge.html?region=FR&type=visual",
                 "http://www.baidu.com/s?wd=", "http://www.baidu.com/s?wd=春节", "http://hehe:例子@吉田あいうえお.卷筒纸",
                 "http://𠁁𠁂𠁃@www.talend.com", "ftp://𠀀𠀁𠀂𠀃𠀄:𠁁𠁂𠁃@www.talend.com", "ftp://𠀀𠀁𠀂𠀃𠀄:𠁁𠁂𠁃@𠁁𠁂.𠀂𠀃𠀄",
@@ -171,11 +172,13 @@ public class UserDefinedRegexValidatorTest {
                 "https://www.talend.com.cn", "https://www.talend-cn.com", "https://www.talend_cn.com",
                 "ftp://user-cn:pass@www.talend.com:8080", "ftp://user_cn:pass@www.talend.com:8080",
                 "ftp://user:pass_cn@www.talend-cn.com:8080", "ftp://user:pass-cn@www.talend_cn.com:8080",
-                "sftp://user:pass@引き割り.引き割り" };
+                "sftp://user:pass@引き割り.引き割り", "http://localhost", "http://localhost:8580", "http://localhost:8580/index.html",
+                "http://aa:bb@localhost:8580/index.html", "http://用户:密码@localhost:8580/index.html" };
 
         String[] invalidURLs = { "https://.....com", "http://____.___", "", "-", "abc", "123.html", "http://@123.html",
                 "www.talend.com", "user:pass@www.talend.com", "例子.卷筒纸", "user@例子.卷筒纸", "用户:pass@例子.卷筒纸", "引き割り.引き割り",
-                "例子.卷筒纸@引き割り.引き割り", "하하:하하@하하하하.하하하하" };
+                "例子.卷筒纸@引き割り.引き割り", "하하:하하@하하하하.하하하하", "https://引き割り.引き割り:8080/引き割metadata.html",
+                "ftp://login:motdepasse@adresse:443/nomdufichier" };
 
         ISemanticValidator validator = null;
         UserDefinedClassifier userDefinedClassifier = new UDCategorySerDeser().readJsonFile();
