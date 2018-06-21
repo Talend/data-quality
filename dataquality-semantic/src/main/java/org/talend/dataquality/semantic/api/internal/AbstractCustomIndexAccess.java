@@ -52,10 +52,6 @@ public class AbstractCustomIndexAccess implements AutoCloseable {
         return luceneWriter;
     }
 
-    /**
-     * @deprecated
-     */
-    @Deprecated
     public void deleteAll() {
         LOGGER.info("delete all content");
         try {

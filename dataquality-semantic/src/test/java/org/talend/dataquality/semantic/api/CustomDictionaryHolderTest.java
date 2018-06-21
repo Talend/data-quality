@@ -1,7 +1,6 @@
 package org.talend.dataquality.semantic.api;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doThrow;
@@ -10,6 +9,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.doNothing;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
+import static org.powermock.api.mockito.PowerMockito.whenNew;
 import static org.talend.dataquality.semantic.TestUtils.mockWithTenant;
 import static org.talend.dataquality.semantic.api.CategoryRegistryManager.DICTIONARY_SUBFOLDER_NAME;
 import static org.talend.dataquality.semantic.api.CategoryRegistryManager.METADATA_SUBFOLDER_NAME;
@@ -36,10 +37,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.talend.dataquality.semantic.CategoryRegistryManagerAbstract;
@@ -60,15 +59,19 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
 
     private CustomDictionaryHolder holder;
 
+    @Mock
     private CustomMetadataIndexAccess customMetadataIndexAccess;
 
+    @Mock
     private CustomRegexClassifierAccess customRegexClassifierAccess;
 
-    private CustomDocumentIndexAccess customDataDictIndexAccess;
+    @Mock
+    private CustomDocumentIndexAccess customDocumentIndexAccess;
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
+
         initializeCDH(this.getClass().getSimpleName() + "_" + testName.getMethodName());
     }
 
@@ -147,7 +150,7 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
         initRepublishMocks();
         DQDocument document = createDQDocument("dictCategory");
         holder.republishDataDictDocuments(Arrays.asList(document));
-        verify(customDataDictIndexAccess, times(1)).createDocument(any(List.class));
+        verify(customDocumentIndexAccess, times(1)).createDocument(any(List.class));
         Assert.assertTrue(
                 new File("target/test_crm/CustomDictionaryHolderTest_republishDataDictDocuments/republish/dictionary").exists());
     }
@@ -172,7 +175,7 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
         holder.publishDirectory();
 
         verify(customMetadataIndexAccess, times(1)).copyStagingContent(anyString());
-        verify(customDataDictIndexAccess, times(1)).copyStagingContent(anyString());
+        verify(customDocumentIndexAccess, times(1)).copyStagingContent(anyString());
         verify(customRegexClassifierAccess, times(1)).copyStagingContent(anyString());
 
         Assert.assertTrue(!new File(stagingPath).exists());
@@ -200,7 +203,7 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
         holder.publishDirectory();
 
         verify(customMetadataIndexAccess, times(0)).copyStagingContent(anyString());
-        verify(customDataDictIndexAccess, times(0)).copyStagingContent(anyString());
+        verify(customDocumentIndexAccess, times(0)).copyStagingContent(anyString());
         verify(customRegexClassifierAccess, times(0)).copyStagingContent(anyString());
 
         Assert.assertTrue(new File(stagingPath).exists());
@@ -228,7 +231,7 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
         holder.publishDirectory();
 
         verify(customMetadataIndexAccess, times(0)).copyStagingContent(anyString());
-        verify(customDataDictIndexAccess, times(0)).copyStagingContent(anyString());
+        verify(customDocumentIndexAccess, times(0)).copyStagingContent(anyString());
         verify(customRegexClassifierAccess, times(0)).copyStagingContent(anyString());
 
         Assert.assertTrue(!new File(stagingPath).exists());
@@ -254,7 +257,7 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
         Assert.assertTrue(new File(prodPath).exists());
         Assert.assertTrue(!new File(backupPath).exists());
         verify(customMetadataIndexAccess, times(0)).copyStagingContent(anyString());
-        verify(customDataDictIndexAccess, times(0)).copyStagingContent(anyString());
+        verify(customDocumentIndexAccess, times(0)).copyStagingContent(anyString());
         verify(customRegexClassifierAccess, times(0)).copyStagingContent(anyString());
     }
 
@@ -281,7 +284,7 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
         Assert.assertTrue(new File(prodPath).exists());
         Assert.assertTrue(!new File(backupPath).exists());
         verify(customMetadataIndexAccess, times(1)).copyStagingContent(anyString());
-        verify(customDataDictIndexAccess, times(0)).copyStagingContent(anyString());
+        verify(customDocumentIndexAccess, times(0)).copyStagingContent(anyString());
         verify(customRegexClassifierAccess, times(0)).copyStagingContent(anyString());
     }
 
@@ -294,7 +297,7 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
         holder.closeRepublishDictionaryAccess();
 
         verify(customMetadataIndexAccess, times(1)).close();
-        verify(customDataDictIndexAccess, times(1)).close();
+        verify(customDocumentIndexAccess, times(1)).close();
     }
 
     private void createRepos(String... paths) {
@@ -304,55 +307,38 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
     }
 
     private void initRepublishMocks() throws Exception {
-        PowerMockito.mockStatic(CategoryRegistryManager.class);
-        CategoryRegistryManager crm = mock(CategoryRegistryManager.class);
-        when(CategoryRegistryManager.getInstance()).thenReturn(crm);
-        when(CategoryRegistryManager.getLocalRegistryPath()).thenReturn("target/test_crm");
-        when(crm.getSharedCategoryMetadata()).thenReturn(mockMap());
-
-        customMetadataIndexAccess = PowerMockito.mock(CustomMetadataIndexAccess.class);
-        customRegexClassifierAccess = PowerMockito.mock(CustomRegexClassifierAccess.class);
-        customDataDictIndexAccess = PowerMockito.mock(CustomDocumentIndexAccess.class);
-
-        PowerMockito.whenNew(CustomMetadataIndexAccess.class).withArguments(any(FSDirectory.class))
-                .thenReturn(customMetadataIndexAccess);
-        PowerMockito.whenNew(CustomRegexClassifierAccess.class).withArguments(anyString())
-                .thenReturn(customRegexClassifierAccess);
-        PowerMockito.whenNew(CustomDocumentIndexAccess.class).withArguments(any(Directory.class))
-                .thenReturn(customDataDictIndexAccess);
-
+        initMocksInjection();
         doNothing().when(customMetadataIndexAccess).insertOrUpdateCategory(any(DQCategory.class));
         doNothing().when(customMetadataIndexAccess).createCategory(any(DQCategory.class));
         doNothing().when(customRegexClassifierAccess).insertOrUpdateRegex(any(ISubCategory.class));
         doNothing().when(customMetadataIndexAccess).commitChanges();
         doNothing().when(customMetadataIndexAccess).copyStagingContent(anyString());
-        doNothing().when(customDataDictIndexAccess).copyStagingContent(anyString());
+        doNothing().when(customDocumentIndexAccess).copyStagingContent(anyString());
     }
 
     private void initRepublishMocksForCrash() throws Exception {
-        PowerMockito.mockStatic(CategoryRegistryManager.class);
-        CategoryRegistryManager crm = mock(CategoryRegistryManager.class);
-        when(CategoryRegistryManager.getInstance()).thenReturn(crm);
-        when(CategoryRegistryManager.getLocalRegistryPath()).thenReturn("target/test_crm");
-        when(crm.getSharedCategoryMetadata()).thenReturn(mockMap());
-
-        customMetadataIndexAccess = PowerMockito.mock(CustomMetadataIndexAccess.class);
-        customRegexClassifierAccess = PowerMockito.mock(CustomRegexClassifierAccess.class);
-        customDataDictIndexAccess = PowerMockito.mock(CustomDocumentIndexAccess.class);
-
-        PowerMockito.whenNew(CustomMetadataIndexAccess.class).withArguments(any(FSDirectory.class))
-                .thenReturn(customMetadataIndexAccess);
-        PowerMockito.whenNew(CustomRegexClassifierAccess.class).withArguments(anyString())
-                .thenReturn(customRegexClassifierAccess);
-        PowerMockito.whenNew(CustomDocumentIndexAccess.class).withArguments(any(Directory.class))
-                .thenReturn(customDataDictIndexAccess);
-
+        initMocksInjection();
         doNothing().when(customMetadataIndexAccess).insertOrUpdateCategory(any(DQCategory.class));
         doNothing().when(customMetadataIndexAccess).createCategory(any(DQCategory.class));
         doNothing().when(customRegexClassifierAccess).insertOrUpdateRegex(any(ISubCategory.class));
         doNothing().when(customMetadataIndexAccess).commitChanges();
         doThrow(IOException.class).when(customMetadataIndexAccess).copyStagingContent(anyString());
-        doNothing().when(customDataDictIndexAccess).copyStagingContent(anyString());
+        doNothing().when(customDocumentIndexAccess).copyStagingContent(anyString());
+    }
+
+    private void initMocksInjection() throws Exception {
+        mockStatic(CategoryRegistryManager.class);
+        CategoryRegistryManager crm = mock(CategoryRegistryManager.class);
+        when(CategoryRegistryManager.getInstance()).thenReturn(crm);
+        when(CategoryRegistryManager.getLocalRegistryPath()).thenReturn("target/test_crm");
+        when(crm.getSharedCategoryMetadata()).thenReturn(mockMap());
+
+        whenNew(CustomMetadataIndexAccess.class).withArguments(any(FSDirectory.class))
+                .thenReturn(customMetadataIndexAccess);
+        whenNew(CustomRegexClassifierAccess.class).withArguments(anyString())
+                .thenReturn(customRegexClassifierAccess);
+        whenNew(CustomDocumentIndexAccess.class).withArguments(any(Directory.class))
+                .thenReturn(customDocumentIndexAccess);
     }
 
     private Map<String, DQCategory> mockMap() {
@@ -417,5 +403,16 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
         document.setValues(Collections.singleton("value1"));
 
         return document;
+    }
+
+    @Test
+    public void delete() throws Exception {
+        initMocksInjection();
+
+        holder.delete();
+
+        verify(customDocumentIndexAccess, times(1)).deleteAll();
+        verify(customMetadataIndexAccess, times(1)).deleteAll();
+        verify(customRegexClassifierAccess, times(1)).deleteIndex();
     }
 }
