@@ -81,7 +81,7 @@ public class StringService extends AbstractService {
                 if (value == null || (ignoreBlanks && "".equals(value.trim()))) { //$NON-NLS-1$
                     continue;
                 }
-                int length = value.length();
+                int length = value.codePointCount(0, value.length());
                 if (length > max) {
                     // max value changed so that orginal max value change to second max value
                     secondLongestValues.clear();

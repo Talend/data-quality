@@ -74,13 +74,14 @@ public abstract class CharactersOperation<T> extends Function<T> {
         String str = t.toString();
         StringBuilder sb = new StringBuilder();
 
-        int beginAux = Math.min(Math.max(beginIndex, str.length() - endNumberToReplace), str.length());
-        int endAux = Math.max(Math.min(endIndex, str.length() - endNumberToKeep), 0);
-        sb.append(str.substring(0, beginAux));
+        int strCPCount = str.codePointCount(0, str.length());
+        int beginAux = Math.min(Math.max(beginIndex, strCPCount - endNumberToReplace), strCPCount);
+        int endAux = Math.max(Math.min(endIndex, strCPCount - endNumberToKeep), 0);
+        sb.append(str.substring(0, str.offsetByCodePoints(0, beginAux)));
         if (!toRemove)
             for (char c : str.substring(beginAux, endAux).toCharArray())
                 sb.append(replaceChar(c));
-        sb.append(str.substring(endAux));
+        sb.append(str.substring(str.offsetByCodePoints(0, endAux)));
         if (sb.length() == 0)
             return getDefaultOutput();
         return getOutput(sb.toString());

@@ -62,4 +62,12 @@ public class LCSMatcherTest {
         assertEquals("LCS", new LCSMatcher().getMatchType().toString()); //$NON-NLS-1$
     }
 
+    @Test
+    public void testGetWeight() {
+        LCSMatcher lcsMatcher = new LCSMatcher();
+        double weight = lcsMatcher.getWeight("abcd", "abcfg");
+        assertTrue(weight == 0.6d);
+        weight = lcsMatcher.getWeight("𠀀𠀁", "𠀀𠀁我ab");
+        assertTrue(weight == 0.4d);
+    }
 }

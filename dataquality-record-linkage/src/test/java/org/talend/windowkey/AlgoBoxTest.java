@@ -32,6 +32,8 @@ public class AlgoBoxTest {
 
     private static final String TEST_STR = "test"; //$NON-NLS-1$
 
+    private final String MIXTD_SURROGATEPAIR = "𠀀𠀐我𠀑ab";
+
     /**
      * Test method for {@link org.talend.windowkey#add_Left_Char(String, String)}
      */
@@ -130,6 +132,13 @@ public class AlgoBoxTest {
         assertEquals(QUO_STR, AlgoBox.first_N_Char(QUO_STR, 1));
     }
 
+    @Test
+    public void testFirst_N_Char_surrogatePair() {
+        assertEquals(MIXTD_SURROGATEPAIR, AlgoBox.first_N_Char(MIXTD_SURROGATEPAIR, 10));
+        assertEquals("𠀀𠀐", AlgoBox.first_N_Char(MIXTD_SURROGATEPAIR, 2));
+        assertEquals("𠀀𠀐我𠀑a", AlgoBox.first_N_Char(MIXTD_SURROGATEPAIR, 5));
+    }
+
     /**
      * Test method for {@link org.talend.windowkey#first_N_Char_EW(String, int)}
      */
@@ -194,6 +203,13 @@ public class AlgoBoxTest {
         assertEquals(SPACE_STR, AlgoBox.last_N_Char(SPACE_STR, 1));
         assertEquals("l", AlgoBox.last_N_Char(NULL_STR, 1)); //$NON-NLS-1$
         assertEquals(QUO_STR, AlgoBox.last_N_Char(QUO_STR, 1));
+    }
+
+    @Test
+    public void testLast_N_Char_surrogatePair() {
+        assertEquals(MIXTD_SURROGATEPAIR, AlgoBox.last_N_Char(MIXTD_SURROGATEPAIR, 100)); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("𠀑ab", AlgoBox.last_N_Char(MIXTD_SURROGATEPAIR, 3)); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("𠀐我𠀑ab", AlgoBox.last_N_Char(MIXTD_SURROGATEPAIR, 5)); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     /**
@@ -263,6 +279,17 @@ public class AlgoBoxTest {
         assertEquals(BLANK_STR, AlgoBox.pick_Char(QUO_STR, "1")); //$NON-NLS-1$
     }
 
+    @Test
+    public void testPick_SurrogatePair() {
+        // String surrogatePairs = "\uD840\uDC00 \uD835\uDD6B \uD841\uDC01";
+        assertEquals(BLANK_STR, AlgoBox.pick_Char(MIXTD_SURROGATEPAIR, BLANK_STR));
+        assertEquals("𠀐", AlgoBox.pick_Char(MIXTD_SURROGATEPAIR, "1"));
+        assertEquals("我", AlgoBox.pick_Char(MIXTD_SURROGATEPAIR, "2"));
+        assertEquals("𠀑", AlgoBox.pick_Char(MIXTD_SURROGATEPAIR, "3"));
+        assertEquals("a", AlgoBox.pick_Char(MIXTD_SURROGATEPAIR, "4"));
+
+    }
+
     /**
      * Test method for {@link org.talend.windowkey#removeDiacriticalMarks(String)}
      */
@@ -330,6 +357,12 @@ public class AlgoBoxTest {
         assertEquals(BLANK_STR, AlgoBox.subStr(TEST_STR, SPACE_STR));
         assertEquals("est", AlgoBox.subStr(TEST_STR, "1;100")); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals("cd", AlgoBox.subStr("abcdef", "2;4")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+    }
+
+    @Test
+    public void testSubStr_surrogatePair() {
+        assertEquals("𠀐我", AlgoBox.subStr(MIXTD_SURROGATEPAIR, "1;3")); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("我𠀑a", AlgoBox.subStr(MIXTD_SURROGATEPAIR, "2;5")); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     /**

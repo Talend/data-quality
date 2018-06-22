@@ -68,10 +68,12 @@ public class SubstringAttributeMatcher implements IAttributeMatcher, ITokenizati
 
     private static String getSubString(String string, int beginIndex, int endIndex) {
         String substring;
-        if (endIndex <= string.length()) {
-            substring = string.substring(beginIndex, endIndex);
+        int cpCount = string.codePointCount(0, string.length());
+        int beginIndexOffset = string.offsetByCodePoints(0, beginIndex);
+        if (endIndex <= cpCount) {
+            substring = string.substring(beginIndexOffset, string.offsetByCodePoints(0, endIndex));
         } else {
-            substring = string.substring(beginIndex);
+            substring = string.substring(beginIndexOffset);
         }
         return substring;
     }

@@ -54,48 +54,49 @@ public class TextLengthStatistics implements Serializable {
         }
 
         // Min
+        int valueCPCount = value.codePointCount(0, value.length());
         if (minTextLength == null) {
-            minTextLength = value.length();
-        } else if (minTextLength > value.length()) {
-            minTextLength = value.length();
+            minTextLength = valueCPCount;
+        } else if (minTextLength > valueCPCount) {
+            minTextLength = valueCPCount;
         }
         // Min ignore blank
         if (value.trim().length() != 0) {
             if (minTextLengthIgnoreBlank == null) {
-                minTextLengthIgnoreBlank = value.length();
-            } else if (minTextLengthIgnoreBlank > value.length()) {
-                minTextLengthIgnoreBlank = value.length();
+                minTextLengthIgnoreBlank = valueCPCount;
+            } else if (minTextLengthIgnoreBlank > valueCPCount) {
+                minTextLengthIgnoreBlank = valueCPCount;
             }
         }
 
         // Max
         if (maxTextLength == null) {
-            maxTextLength = value.length();
-        } else if (maxTextLength < value.length()) {
-            maxTextLength = value.length();
+            maxTextLength = valueCPCount;
+        } else if (maxTextLength < valueCPCount) {
+            maxTextLength = valueCPCount;
         }
         // Max ignore blank
         if (value.trim().length() != 0) {
             if (maxTextLengthIgnoreBlank == null) {
-                maxTextLengthIgnoreBlank = value.length();
-            } else if (maxTextLengthIgnoreBlank < value.length()) {
-                maxTextLengthIgnoreBlank = value.length();
+                maxTextLengthIgnoreBlank = valueCPCount;
+            } else if (maxTextLengthIgnoreBlank < valueCPCount) {
+                maxTextLengthIgnoreBlank = valueCPCount;
             }
         }
 
         // sum
         if (sumTextLength == null) {
-            sumTextLength = value.length();
+            sumTextLength = valueCPCount;
         } else {
-            sumTextLength += value.length();
+            sumTextLength += valueCPCount;
         }
 
         // sum ignore blank
         if (value.trim().length() != 0) {
             if (sumTextLengthIgnoreBlank == null) {
-                sumTextLengthIgnoreBlank = value.length();
+                sumTextLengthIgnoreBlank = valueCPCount;
             } else {
-                sumTextLengthIgnoreBlank += value.length();
+                sumTextLengthIgnoreBlank += valueCPCount;
             }
         }
 
