@@ -129,11 +129,13 @@ public abstract class AbstractAttributeMatcher implements IAttributeMatcher, ITo
      */
     private int getInitialSimilarity(String str1, String str2) {
         String strShort = str1, strLong = str2;
-        if (strShort.length() > strLong.length()) {
+        long shortCPCount = strShort.codePoints().count();
+        long longCPCount = strLong.codePoints().count();
+        if (shortCPCount > longCPCount) {
             strShort = str2;
             strLong = str1;
         }
-        if (strShort.length() == 1 || (strShort.length() == 2 && ".".equals(strShort.substring(1, 2)))) {
+        if (longCPCount == 1 || (longCPCount == 2 && ".".equals(strShort.substring(1, 2)))) {
             if (strShort.charAt(0) == strLong.charAt(0))
                 return 1;
             else

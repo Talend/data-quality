@@ -89,7 +89,8 @@ public class BijectiveSubstitutionFunction extends Function<String> {
 
         String strWithoutSpaces = super.removeFormatInString(str);
         // check if the pattern is valid
-        if (strWithoutSpaces.isEmpty() || strWithoutSpaces.length() != uniqueGenericPattern.getFieldsCharsLength()) {
+        if (strWithoutSpaces.isEmpty()
+                || strWithoutSpaces.codePointCount(0, strWithoutSpaces.length()) != uniqueGenericPattern.getFieldsCharsLength()) {
             if (keepInvalidPattern)
                 return str;
             else
@@ -116,7 +117,9 @@ public class BijectiveSubstitutionFunction extends Function<String> {
         int currentPos = 0;
         for (AbstractField f : uniqueGenericPattern.getFields()) {
             int length = f.getLength();
-            strs.add(str.substring(currentPos, currentPos + length));
+            int beginCPOffset = str.offsetByCodePoints(0, currentPos);
+            int endCPOffset = str.offsetByCodePoints(0, currentPos + length);
+            strs.add(str.substring(beginCPOffset, endCPOffset));
             currentPos += length;
         }
 

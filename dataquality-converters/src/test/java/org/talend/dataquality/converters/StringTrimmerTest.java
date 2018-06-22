@@ -135,6 +135,16 @@ public class StringTrimmerTest {
 
     }
 
+    @Test
+    public void testRemoveTrailingAndLeadingWhitespaces_surrogatePair() {
+        StringTrimmer stringTrimmer = new StringTrimmer();
+        // Normal chinese characters
+        assertEquals("我们", stringTrimmer.removeTrailingAndLeading("我们", " "));
+        // Surrogate pair characters
+        assertEquals("𠀀𠀁", stringTrimmer.removeTrailingAndLeading("𠀀𠀁 ", " "));
+        assertEquals("𠀀𠀁", stringTrimmer.removeTrailingAndLeading(" 𠀀𠀁 ", " "));
+    }
+
     private void runPerfTests(String[] ex, int runNumber) {
         // call string trimmer
         StringTrimmer stringTrimmer = new StringTrimmer();

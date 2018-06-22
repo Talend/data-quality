@@ -38,7 +38,7 @@ public class LCSMatcher extends AbstractAttributeMatcher {
      */
     public double getWeight(String string1, String string2) {
         final int lcs = longestSubstr(string1, string2);
-        int maxLength = Math.max(string1.length(), string2.length());
+        long maxLength = Math.max(string1.codePoints().count(), string2.codePoints().count());
         return ((double) lcs) / maxLength;
     }
 
@@ -54,16 +54,18 @@ public class LCSMatcher extends AbstractAttributeMatcher {
         int[] p = new int[n];
         int[] d = new int[n];
 
-        for (int i = 0; i < m; ++i) {
-            for (int j = 0; j < n; ++j) {
+        for (int i = 0; i < m;) {
+            int sCP = s.codePointAt(i);
+            for (int j = 0; j < n;) {
+                int tCP = t.codePointAt(j);
                 // calculate cost/score
-                if (s.charAt(i) != t.charAt(j)) {
+                if (sCP != tCP) {
                     cost = 0;
                 } else {
                     if ((i == 0) || (j == 0)) {
                         cost = 1;
                     } else {
-                        cost = p[j - 1] + 1;
+                        cost = p[j - Character.charCount(tCP)] + 1;
                     }
                 }
                 d[j] = cost;
@@ -71,10 +73,12 @@ public class LCSMatcher extends AbstractAttributeMatcher {
                 if (cost > maxLen) {
                     maxLen = cost;
                 }
+                j += Character.charCount(tCP);
             }
             int[] swap = p;
             p = d;
             d = swap;
+            i += Character.charCount(sCP);
         }
 
         return maxLen;
