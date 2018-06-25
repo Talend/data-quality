@@ -14,7 +14,7 @@ package org.talend.dataquality.jp.numbers;
 
 import java.math.BigDecimal;
 
-public class JapaneseNumberNormalization {
+public class JapaneseNumberNormalizer {
 
     private static char NO_NUMERAL = Character.MAX_VALUE;
 
@@ -28,6 +28,7 @@ public class JapaneseNumberNormalization {
             numerals[i] = NO_NUMERAL;
         }
         numerals['〇'] = 0; // 〇 U+3007 0
+        numerals['零'] = 0; // 零 U+96F6 0
         numerals['一'] = 1; // 一 U+4E00 1
         numerals['二'] = 2; // 二 U+4E8C 2
         numerals['三'] = 3; // 三 U+4E09 3
@@ -55,18 +56,19 @@ public class JapaneseNumberNormalization {
     /**
      * Normalizes a Japanese number
      *
-     * @param number number or normalize
+     * @param numberNotTrimmed number to normalize
      * @return normalized number, or number to normalize on error (no op)
      */
     public String normalizeNumber(String numberNotTrimmed) {
         // Small adaptation of the lib, because whitespaces were not handled
         String number = numberNotTrimmed.replaceAll("\\s+", "");
         try {
-            BigDecimal normalizedNumber = parseNumber(new NumberBuffer(number));
+            NumberBuffer numberBuffer = new NumberBuffer(number);
+            BigDecimal normalizedNumber = parseNumber(numberBuffer);
             if (normalizedNumber == null) {
-                return number;
+                return numberNotTrimmed;
             }
-            return normalizedNumber.stripTrailingZeros().toPlainString();
+            return numberBuffer.prefix + normalizedNumber.stripTrailingZeros().toPlainString() + numberBuffer.suffix;
         } catch (NumberFormatException | ArithmeticException e) {
             // Return the source number in case of error, i.e. malformed input
             return number;
@@ -81,6 +83,19 @@ public class JapaneseNumberNormalization {
      */
     private BigDecimal parseNumber(NumberBuffer buffer) {
         BigDecimal sum = BigDecimal.ZERO;
+        boolean isNegative = false;
+        if (buffer.string.length() > 0 && isNegativeSign(buffer.charAt(0))) {
+            isNegative = true;
+            buffer.advance();
+        }
+
+        // Remove prefix and suffix that are not numeric values
+        computePrefix(buffer);
+        computeSuffix(buffer);
+        // check that remaining string is numeric
+        if (!isNumeric(buffer))
+            return null;
+
         BigDecimal result = parseLargePair(buffer);
 
         if (result == null) {
@@ -92,7 +107,35 @@ public class JapaneseNumberNormalization {
             result = parseLargePair(buffer);
         }
 
+        if (isNegative)
+            sum = sum.negate();
         return sum;
+    }
+
+    private boolean isNumeric(NumberBuffer buffer) {
+        while (buffer.position < buffer.string.length()) {
+            if (!isNumeric(buffer.charAt(buffer.position)))
+                return false;
+            buffer.advance();
+        }
+        buffer.position = 0;
+        return true;
+    }
+
+    private void computePrefix(NumberBuffer buffer) {
+        int start = buffer.position;
+        while (buffer.position < buffer.string.length() && !isNumeric(buffer.charAt(buffer.position)))
+            buffer.advance();
+
+        buffer.setPrefix(start, buffer.position);
+    }
+
+    private void computeSuffix(NumberBuffer buffer) {
+        buffer.position = buffer.string.length();
+        while (buffer.position > 0 && !isNumeric(buffer.charAt(buffer.position - 1))) {
+            buffer.back();
+        }
+        buffer.setSuffix(buffer.position);
     }
 
     /**
@@ -346,7 +389,7 @@ public class JapaneseNumberNormalization {
      */
     private boolean isDecimalPoint(char c) {
         return c == '.' // U+002E FULL STOP 
-                || c == '．'; // U+FF0E FULLWIDTH FULL STOP
+                || c == '．' || c == '点' || c == '點'; // U+FF0E FULLWIDTH FULL STOP
     }
 
     /**
@@ -360,6 +403,19 @@ public class JapaneseNumberNormalization {
                 || c == '，'; // U+FF0C FULLWIDTH COMMA
     }
 
+    private boolean isKanjiExponent(char c) {
+        return exponents[c] != 0;
+    }
+
+    private boolean isNegativeSign(char c) {
+        return c == '-' || c == '負';
+    }
+
+    private boolean isNumeric(char c) {
+        return isArabicNumeral(c) || isDecimalPoint(c) || isKanjiNumeral(c) || isKanjiExponent(c) || isNegativeSign(c)
+                || isThousandSeparator(c);
+    }
+
     /**
      * Buffer that holds a Japanese number string and a position index used as a parsed-to marker
      */
@@ -369,9 +425,15 @@ public class JapaneseNumberNormalization {
 
         private String string;
 
+        private String prefix;
+
+        private String suffix;
+
         public NumberBuffer(String string) {
             this.string = string;
             this.position = 0;
+            this.prefix = "";
+            this.suffix = "";
         }
 
         public char charAt(int index) {
@@ -386,8 +448,24 @@ public class JapaneseNumberNormalization {
             position++;
         }
 
+        public void back() {
+            position--;
+        }
+
         public int position() {
             return position;
+        }
+
+        public void setPrefix(int start, int endPosition) {
+            prefix = string.substring(start, endPosition);
+            string = string.substring(endPosition);
+            position = 0;
+        }
+
+        public void setSuffix(int startPosition) {
+            suffix = string.substring(startPosition);
+            string = string.substring(0, startPosition);
+            position = 0;
         }
     }
 }
