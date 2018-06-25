@@ -133,7 +133,7 @@ public class AlgoBoxTest {
     }
 
     @Test
-    public void testFirst_N_Char_surrogatePair() {
+    public void testFirst_N_CharSurrogatePair() {
         assertEquals(MIXTD_SURROGATEPAIR, AlgoBox.first_N_Char(MIXTD_SURROGATEPAIR, 10));
         assertEquals("𠀀𠀐", AlgoBox.first_N_Char(MIXTD_SURROGATEPAIR, 2));
         assertEquals("𠀀𠀐我𠀑a", AlgoBox.first_N_Char(MIXTD_SURROGATEPAIR, 5));
@@ -206,7 +206,7 @@ public class AlgoBoxTest {
     }
 
     @Test
-    public void testLast_N_Char_surrogatePair() {
+    public void testLast_N_CharSurrogatePair() {
         assertEquals(MIXTD_SURROGATEPAIR, AlgoBox.last_N_Char(MIXTD_SURROGATEPAIR, 100)); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals("𠀑ab", AlgoBox.last_N_Char(MIXTD_SURROGATEPAIR, 3)); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals("𠀐我𠀑ab", AlgoBox.last_N_Char(MIXTD_SURROGATEPAIR, 5)); //$NON-NLS-1$ //$NON-NLS-2$
@@ -280,7 +280,7 @@ public class AlgoBoxTest {
     }
 
     @Test
-    public void testPick_SurrogatePair() {
+    public void testPickSurrogatePair() {
         // String surrogatePairs = "\uD840\uDC00 \uD835\uDD6B \uD841\uDC01";
         assertEquals(BLANK_STR, AlgoBox.pick_Char(MIXTD_SURROGATEPAIR, BLANK_STR));
         assertEquals("𠀐", AlgoBox.pick_Char(MIXTD_SURROGATEPAIR, "1"));
@@ -360,7 +360,7 @@ public class AlgoBoxTest {
     }
 
     @Test
-    public void testSubStr_surrogatePair() {
+    public void testSubStrSurrogatePair() {
         assertEquals("𠀐我", AlgoBox.subStr(MIXTD_SURROGATEPAIR, "1;3")); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals("我𠀑a", AlgoBox.subStr(MIXTD_SURROGATEPAIR, "2;5")); //$NON-NLS-1$ //$NON-NLS-2$
     }

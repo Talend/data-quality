@@ -365,7 +365,9 @@ public class CRCRHandler extends AbstractChainOfResponsibilityHandler {
             if (result.equals(targetInputData)) {
                 continue;
             }
-            if (finalResult.toString().length() < targetInputData.toString().length()) {
+            long finalResultCPCount = finalResult.toString().codePoints().count();
+            long targetInputDataCPCount = targetInputData.toString().codePoints().count();
+            if (finalResultCPCount < targetInputDataCPCount) {
                 finalResult = targetInputData;
             }
 

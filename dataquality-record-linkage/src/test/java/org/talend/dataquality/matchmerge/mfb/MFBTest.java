@@ -291,7 +291,7 @@ public class MFBTest extends TestCase {
         testSimilar(8, COUNT, AttributeMatcherType.LEVENSHTEIN);
     }
 
-    public void testcreateMergeValue() throws Exception {
+    public void testcreateMergeValueWithLongest() throws Exception {
         MFBRecordMerger mFBRecordMerger = new MFBRecordMerger("", new String[0], new SurvivorShipAlgorithmEnum[0]);
         String left = "abcde";
         String right = "abc";
