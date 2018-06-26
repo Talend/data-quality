@@ -35,6 +35,11 @@ public class TextTransliterator {
     private static TextTokenizer textTokenizer;
 
     private TextTransliterator() {
+        try {
+            textTokenizer = TextTokenizer.getInstance();
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+        }
     }
 
     private static class LazyHolder {
@@ -43,11 +48,6 @@ public class TextTransliterator {
     }
 
     public static TextTransliterator getInstance() {
-        try {
-            textTokenizer = TextTokenizer.getInstance();
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage());
-        }
         return LazyHolder.INSTANCE;
     }
 

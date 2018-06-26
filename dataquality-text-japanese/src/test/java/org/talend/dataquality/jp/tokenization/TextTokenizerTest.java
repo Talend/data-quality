@@ -41,15 +41,8 @@ public class TextTokenizerTest {
     public void testGetListTokens() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
 
         final TextTokenizer defaultTextTokenizer = TextTokenizer.getInstance();
-        for (String text : textsWithExpectedTokens.keySet()) { // case: getInstance with default dict
+        for (String text : textsWithExpectedTokens.keySet()) {
             assertEquals(textsWithExpectedTokens.get(text), defaultTextTokenizer.getListTokens(text));
-        }
-
-        for (KuromojiDict dict : KuromojiDict.values()) { // case: getInstance with dict
-            final TextTokenizer textTokenizer = TextTokenizer.getInstance(dict);
-            for (String text : textsWithExpectedTokens.keySet()) {
-                assertEquals(textsWithExpectedTokens.get(text), textTokenizer.getListTokens(text));
-            }
         }
 
     }
@@ -60,17 +53,9 @@ public class TextTokenizerTest {
         final String delimiter = " ";
 
         final TextTokenizer defaultTextTokenizer = TextTokenizer.getInstance();
-        for (String text : textsWithExpectedTokenizedString.keySet()) { // case: getInstance with default dict
+        for (String text : textsWithExpectedTokenizedString.keySet()) {
             assertEquals(textsWithExpectedTokenizedString.get(text), defaultTextTokenizer.getTokenizedString(text));
             assertEquals(textsWithExpectedTokenizedString.get(text), defaultTextTokenizer.getTokenizedString(text, delimiter));
-        }
-
-        for (KuromojiDict dict : KuromojiDict.values()) { // case: getInstance with dict
-            final TextTokenizer textTokenizer = TextTokenizer.getInstance(dict);
-            for (String text : textsWithExpectedTokenizedString.keySet()) {
-                assertEquals(textsWithExpectedTokenizedString.get(text), textTokenizer.getTokenizedString(text));
-                assertEquals(textsWithExpectedTokenizedString.get(text), textTokenizer.getTokenizedString(text, delimiter));
-            }
         }
 
     }
