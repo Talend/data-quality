@@ -2,13 +2,8 @@ package org.talend.dataquality.semantic.api.internal;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Stream;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -121,19 +116,5 @@ public class CustomRegexClassifierAccess {
 
     public void copyStagingContent(String srcPath) throws IOException {
         FileUtils.copyFile(new File(srcPath), regExFile);
-    }
-
-    public boolean deleteIndex() {
-        try {
-            final Path path = Paths.get(regExFile.getParent());
-            try (Stream<Path> walk = Files.walk(path)){
-                return walk.sorted(Comparator.reverseOrder())
-                        .map(Path::toFile)
-                        .allMatch(File::delete);
-            }
-        } catch (IOException e) {
-            LOGGER.error(e.getMessage(), e);
-            return false;
-        }
     }
 }

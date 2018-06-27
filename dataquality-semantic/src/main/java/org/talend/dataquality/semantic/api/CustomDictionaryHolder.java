@@ -621,14 +621,13 @@ public class CustomDictionaryHolder {
         );
     }
 
-    public void delete(){
-        ensureDocumentDictIndexAccess();
-        customDocumentIndexAccess.deleteAll();
-
-        ensureMetadataIndexAccess();
-        customMetadataIndexAccess.deleteAll();
-
-        ensureRegexClassifierAccess();
-        customRegexClassifierAccess.deleteIndex();
+    public void delete() {
+        LOGGER.info("Delete data for tenant " + tenantID);
+        File rootFolder = new File(CategoryRegistryManager.getLocalRegistryPath() + File.separator + tenantID);
+        try {
+            FileUtils.deleteDirectory(rootFolder);
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
     }
 }

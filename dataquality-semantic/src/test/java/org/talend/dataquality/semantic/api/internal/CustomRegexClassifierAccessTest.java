@@ -86,15 +86,6 @@ public class CustomRegexClassifierAccessTest {
         assertEquals(1, access.getRegExs().size());
     }
 
-    @Test
-    public void deleteIndex() {
-        createSubCategoryRegExs();
-
-        access.deleteIndex();
-
-        assertNull(access.getRegExs());
-    }
-
     private void createSubCategoryRegExs() {
         UserDefinedCategory category = new UserDefinedCategory("categoryName");
         category.setId("1");

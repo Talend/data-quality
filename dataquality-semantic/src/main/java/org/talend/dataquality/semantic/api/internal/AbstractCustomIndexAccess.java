@@ -52,15 +52,6 @@ public class AbstractCustomIndexAccess implements AutoCloseable {
         return luceneWriter;
     }
 
-    public void deleteAll() {
-        LOGGER.info("delete all content");
-        try {
-            getWriter().deleteAll();
-        } catch (IOException e) {
-            LOGGER.error(e.getMessage(), e);
-        }
-    }
-
     @Override
     public void close() throws IOException {
         if (mgr != null) {
