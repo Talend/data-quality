@@ -40,10 +40,11 @@ public class JaroMatcher extends AbstractAttributeMatcher {
      */
     @Override
     public double getWeight(String string1, String string2) {
+        int str1CPCount = string1.codePointCount(0, string1.length());
+        int str2CPCount = string2.codePointCount(0, string2.length());
 
         // get half the length of the string rounded up - (this is the distance used for acceptable transpositions)
-        final int halflen = ((Math.min(string1.length(), string2.length())) / 2)
-                + ((Math.min(string1.length(), string2.length())) % 2);
+        final int halflen = ((Math.min(str1CPCount, str2CPCount)) / 2) + ((Math.min(str1CPCount, str2CPCount)) % 2);
 
         // get common characters
         final StringBuilder common1 = StringComparisonUtil.getCommonCharacters(string1, string2, halflen);
@@ -58,18 +59,20 @@ public class JaroMatcher extends AbstractAttributeMatcher {
         if (common1.length() != common2.length()) {
             return 0.0f;
         }
+        int common1CPCount = common1.codePointCount(0, common1.length());
+        int common2CPCount = common2.codePointCount(0, common2.length());
 
         // get the number of transpositions
         int transpositions = 0;
-        for (int i = 0; i < common1.length(); i++) {
-            if (common1.charAt(i) != common2.charAt(i))
+        for (int i = 0; i < common1CPCount; i++) {
+            if (common1.codePointAt(i) != common2.codePointAt(i))
                 transpositions++;
         }
         transpositions /= 2.0f;
 
         // calculate jaro metric
-        return (common1.length() / ((float) string1.length()) + common2.length() / ((float) string2.length())
-                + (common1.length() - transpositions) / ((float) common1.length())) / 3.0f;
+        return (common1CPCount / ((float) str1CPCount) + common2CPCount / ((float) str2CPCount)
+                + (common1CPCount - transpositions) / ((float) common1CPCount)) / 3.0f;
     }
 
 }
