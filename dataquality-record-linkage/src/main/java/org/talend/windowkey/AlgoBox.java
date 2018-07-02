@@ -241,9 +241,11 @@ public class AlgoBox {
 
         while (tok.hasMoreTokens()) {
             String word = tok.nextToken();
-            int len_word = word.length();
-            for (int i = 0; i < nb && i < len_word; i++) {
-                sb.append(word.charAt(i));
+            int wordCount = word.codePointCount(0, word.length());
+            for (int i = 0; i < nb && i < wordCount; i++) {
+                int startOffset = word.offsetByCodePoints(0, i);
+                String substring = word.substring(startOffset, word.offsetByCodePoints(startOffset, 1));
+                sb.append(substring);
             }
         }
 
@@ -263,7 +265,7 @@ public class AlgoBox {
 
         while (tok.hasMoreTokens()) {
             String word = tok.nextToken();
-            sb.append(word.charAt(0));
+            sb.append(word.substring(0, word.offsetByCodePoints(0, 1)));
         }
 
         return sb.toString();
