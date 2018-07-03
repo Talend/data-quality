@@ -41,6 +41,10 @@ public class StringComparisonUtilTest {
 
     private String str9 = "𠀠"; //$NON-NLS-1$
 
+    private String str10 = "𠀐𠀐𠀐"; //$NON-NLS-1$
+
+    private String str11 = "𠀐"; //$NON-NLS-1$
+
     /**
      * Test method for
      * {@link org.talend.dataquality.record.linkage.utils.StringComparisonUtil#difference(java.lang.String,java.lang.String)} .
@@ -58,6 +62,9 @@ public class StringComparisonUtilTest {
         // TDQ-15079: Support Chinese　and surrogate pair characters
         assertEquals(2, StringComparisonUtil.difference(str6, str7));
         assertEquals(1, StringComparisonUtil.difference(str8, str9));
+        assertEquals(0, StringComparisonUtil.difference(str8, str10));
+        assertEquals(0, StringComparisonUtil.difference(str8, str11));
+        assertEquals(1, StringComparisonUtil.difference(str10, str11));
     }
 
     /**

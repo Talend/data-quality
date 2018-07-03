@@ -51,7 +51,7 @@ public final class StringComparisonUtil implements Serializable {
         int lengthToMatch = Math.min(str1CPCount, str2CPCount);
         int diff = 0;
         for (int i = 0; i < lengthToMatch; i++) {
-            if ((char) str1.codePointAt(i) == (char) str2.codePointAt(i)) {
+            if (str1.codePointAt(i) == str2.codePointAt(i)) {
                 diff++;
             }
         }
@@ -78,7 +78,7 @@ public final class StringComparisonUtil implements Serializable {
         long str1CPCount = string1.codePoints().count();
         long str2CPCount = string2.codePoints().count();
         for (int i = 0; i < str1CPCount; i++) {
-            final char ch = (char) string1.codePointAt(i);
+            final int ch = string1.codePointAt(i);
             // set boolean for quick loop exit if found
             boolean foundIt = false;
             // compare char with range of characters to either side
@@ -86,7 +86,7 @@ public final class StringComparisonUtil implements Serializable {
             // against second string and it now gives the same results
             for (int j = Math.max(0, i - distanceSep); !foundIt && j < Math.min(i + distanceSep + 1, str2CPCount); j++) {
                 // check if found
-                if ((char) copy.codePointAt(j) == ch) {
+                if (copy.codePointAt(j) == ch) {
                     foundIt = true;
                     // append character found
                     returnCommons.appendCodePoint(copy.codePointAt(j));
