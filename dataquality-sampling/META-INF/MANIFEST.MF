@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Sampling Library
 Bundle-SymbolicName: org.talend.dataquality.sampling
-Bundle-Version: 6.0.0.SNAPSHOT
+Bundle-Version: 6.0.0
 Bundle-Vendor: .Talend SA.
 Require-Bundle: org.slf4j.api,
  org.eclipse.m2e.maven.runtime.slf4j.simple,

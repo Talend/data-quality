@@ -1,3 +1,13 @@
+v6.0.0 2018-07-03
+    - TDQ-14227 Add setRandom method to avoid mask action make invalid
+    - TDQ-14001 improve pattern regex to valid asian languages
+    - TDQ-14221 update google libphonenumber and log to info
+    - TDQ-14001 check all Locales for Date discovery
+    - TDQ-14996 Make functionTest support to linux case
+    - TDQ-15171 fix build by ignoring a failing UT from TDQ-14996
+    - TDQ-14996 Datamasking not work with the function "Replace by
+    - TDQ-15013 remove deprecated methods
+
 v5.0.2 2018-04-04
     (no change in this version)
 

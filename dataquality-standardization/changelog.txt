@@ -1,3 +1,11 @@
+v6.0.0 2018-07-03
+    - TDQ-15012 add dependencies in manifest
+    - TDQ-14221 update google libphonenumber and log to info
+    - TDQ-14221 extract informations for an international phone number
+    - TDQ-11891 extract phone informations
+    - TDQ-15013 remove deprecated methods
+    - TDQ-15013 remove csv and main packages in standardization project
+
 v5.0.2 2018-04-04
     (no change in this version)
 

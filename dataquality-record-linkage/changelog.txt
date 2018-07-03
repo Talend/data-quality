@@ -1,3 +1,8 @@
+v6.0.0 2018-07-03
+    - TDQ-15012 add dq unit tests
+    - TDQ-14598 Remove the "COMPUTE_GRP_QUALITY" in tmatchgroup
+    - TDQ-15013 remove deprecated methods
+
 v5.0.2 2018-04-04
     (no change in this version)
 
