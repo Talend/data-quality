@@ -65,7 +65,7 @@ public class UpdateComponentDefinition {
             put("org.talend.dataquality.standardization", DQ_LIB_VERSION);
             put("org.talend.dataquality.email", DQ_LIB_VERSION);
             put("org.talend.dataquality.survivorship", DQ_LIB_VERSION);
-            put("org.talend.dataquality.tokenization", DQ_LIB_VERSION);
+            put("org.talend.dataquality.text.japanese", DQ_LIB_VERSION);
         }
     };
 
