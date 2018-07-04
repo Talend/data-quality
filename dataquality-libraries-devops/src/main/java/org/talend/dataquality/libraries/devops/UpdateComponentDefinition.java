@@ -19,8 +19,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.slf4j.Logger;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.LoggerFactory;
 
 /**
  * Java application for updating DQ library versions used in studio components.
@@ -34,7 +36,7 @@ import org.apache.commons.io.IOUtils;
  */
 public class UpdateComponentDefinition {
 
-    // Don't use a LOGGER in this class. Otherwise, there are SL4J problems in jenkins
+    private static final Logger LOGGER = LoggerFactory.getLogger(UpdateComponentDefinition.class);
 
     // the location of local git repo, supposing the data-quality repo is cloned in the same folder of tdq-studio-ee
     private static final String GIT_REPO_ROOT = "../..";
@@ -90,12 +92,12 @@ public class UpdateComponentDefinition {
                 }
 
                 if (needUpdate) {
-                    System.out.println("Updating: " + compoDefFile.getName());
+                    LOGGER.info("Updating: " + compoDefFile.getName());
                     FileOutputStream fos = new FileOutputStream(compoDefFile);
                     for (String line : lines) {
                         for (String depName : DEP_VERSION_MAP.keySet()) {
                             if (line.contains(depName)) {
-                                System.out.println(depName);
+                                LOGGER.info(depName);
                                 // MODULE field
                                 line = line.replaceAll(depName + "-\\d.\\d.\\d(-SNAPSHOT)?(.jar)?\"", depName + "-"
                                         + DEP_VERSION_MAP.get(depName) + (USE_SNAPSHOT_VERSION ? "-SNAPSHOT" : "") + "$2\"");
@@ -113,7 +115,7 @@ public class UpdateComponentDefinition {
 
                 }
             } catch (IOException e) {
-                System.out.println(e.getMessage());
+                LOGGER.error(e.getMessage(), e);
             }
 
         }
@@ -127,7 +129,7 @@ public class UpdateComponentDefinition {
 
         for (String provider : PROVIDERS) {
             String componentRootPath = projectRoot + TDQ_STUDIO_EE_ROOT + MAIN_PLUGINS_FOLDER + provider + COMPONENTS_FOLDER;
-            System.out.println("\nProvider: " + provider);
+            LOGGER.info("\nProvider: " + provider);
             File componentRoot = new File(componentRootPath);
             if (componentRoot.isDirectory()) {
                 File[] files = componentRoot.listFiles();
