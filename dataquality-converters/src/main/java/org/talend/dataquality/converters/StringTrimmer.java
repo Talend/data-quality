@@ -65,10 +65,10 @@ public class StringTrimmer {
         char currentCharacter = inputStr.charAt(startIndex);
         while (startIndex < endIndex
                 && (currentCharacter <= ' ' || WHITESPACE_CHARS_SUPERIOR_ASCII_SPACE.contains(currentCharacter))) {
-            currentCharacter = inputStr.charAt(++startIndex);
+            if (++startIndex == endIndex)
+                return "";
+            currentCharacter = inputStr.charAt(startIndex);
         }
-        if (startIndex == endIndex)
-            return "";
         do {
             currentCharacter = inputStr.charAt(--endIndex);
         } while (currentCharacter <= ' ' || WHITESPACE_CHARS_SUPERIOR_ASCII_SPACE.contains(currentCharacter));
@@ -132,10 +132,10 @@ public class StringTrimmer {
         int endIndex = inputStr.length();
         char currentCharacter = inputStr.charAt(startIndex);
         while (startIndex < endIndex && (currentCharacter == removeCharacter)) {
-            currentCharacter = inputStr.charAt(++startIndex);
+            if (++startIndex == endIndex)
+                return "";
+            currentCharacter = inputStr.charAt(startIndex);
         }
-        if (startIndex == endIndex)
-            return "";
         do {
             currentCharacter = inputStr.charAt(--endIndex);
         } while (currentCharacter == removeCharacter);

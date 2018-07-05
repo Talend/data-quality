@@ -85,6 +85,8 @@ public class StringTrimmerTest {
         assertEquals("a b c", stringTrimmer.removeTrailingAndLeading(" a b c ")); //$NON-NLS-1$ //$NON-NLS-2$
 
         // test for other characters
+        assertEquals("", stringTrimmer.removeTrailingAndLeading("aaa", "a")); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("", stringTrimmer.removeTrailingAndLeading("\t", "\t")); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals(expected, stringTrimmer.removeTrailingAndLeading("\t" + expected, "\t")); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals(expected, stringTrimmer.removeTrailingAndLeading(expected + "\t", "\t")); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals(expected, stringTrimmer.removeTrailingAndLeading('\u0009' + expected, "\t")); //$NON-NLS-1$
@@ -119,6 +121,16 @@ public class StringTrimmerTest {
             inputData = inputData + removechar;
         }
         assertEquals(expected, stringTrimmer.removeTrailingAndLeadingWhitespaces(inputData));
+        inputData = ""; //$NON-NLS-1$
+        for (String removechar : WHITESPACE_CHARS) {
+            inputData = inputData + removechar;
+        }
+        inputData = inputData + expected + " ";
+        assertEquals(expected, stringTrimmer.removeTrailingAndLeadingWhitespaces(inputData));
+        assertEquals("", stringTrimmer.removeTrailingAndLeadingWhitespaces("  ")); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("a", stringTrimmer.removeTrailingAndLeadingWhitespaces(" a ")); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("a", stringTrimmer.removeTrailingAndLeadingWhitespaces("a ")); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("a", stringTrimmer.removeTrailingAndLeadingWhitespaces(" a")); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     @Test
