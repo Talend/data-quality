@@ -19,9 +19,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.slf4j.Logger;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -47,7 +47,7 @@ public class UpdateComponentDefinition {
 
     private static final String COMPONENTS_FOLDER = "/components";
 
-    private static final String DQ_LIB_VERSION = "6.0.0";
+    private static final String DQ_LIB_VERSION = "6.1.0";
 
     private static final String[] PROVIDERS = new String[] { //
             "/org.talend.designer.components.tdqprovider", //
@@ -68,6 +68,7 @@ public class UpdateComponentDefinition {
             put("org.talend.dataquality.email", DQ_LIB_VERSION);
             put("org.talend.dataquality.survivorship", DQ_LIB_VERSION);
             put("org.talend.dataquality.text.japanese", DQ_LIB_VERSION);
+            put("org.talend.dataquality.statistics", DQ_LIB_VERSION);
         }
     };
 
