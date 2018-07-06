@@ -131,6 +131,7 @@ public class StringTrimmerTest {
         assertEquals("a", stringTrimmer.removeTrailingAndLeadingWhitespaces(" a ")); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals("a", stringTrimmer.removeTrailingAndLeadingWhitespaces("a ")); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals("a", stringTrimmer.removeTrailingAndLeadingWhitespaces(" a")); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("a", stringTrimmer.removeTrailingAndLeadingWhitespaces("   a   ")); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     @Test
