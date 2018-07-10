@@ -1,3 +1,6 @@
+v6.0.1 2018-07-10
+	(no change in this version)
+
 v6.0.0 2018-07-03
     - TDQ-14227 Add setRandom method to avoid mask action make invalid
     - TDQ-14001 improve pattern regex to valid asian languages

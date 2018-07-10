@@ -1,3 +1,6 @@
+v6.0.1 2018-07-10
+    - TDP-5857 On CSV file with empty column, action "Remove trailing and leading characters" on whitespaces badly applied after actions generating leading/trailing whitespace
+
 v6.0.0 2018-07-03
 	(no change in this version)
 
