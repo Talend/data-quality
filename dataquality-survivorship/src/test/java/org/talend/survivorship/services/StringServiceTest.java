@@ -152,7 +152,7 @@ public class StringServiceTest {
     }
 
     @Test
-    public void testIsShortestValue_surrogatePiar() {
+    public void testIsShortestValueSurrogatePiar() {
         List<Column> columnList = generateColumnList();
         DataSet dataSet = new DataSet(columnList);
         String[][] data = new String[][] { { "𠀀", "cook" }, { "Ar", "bell" }, { "Chloe", "cook" }, { "David", "bell" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$

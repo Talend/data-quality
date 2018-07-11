@@ -81,7 +81,7 @@ public class TextLengthAnalyzerTest {
     }
 
     @Test
-    public void testAnalyze_surrogatePair() {
+    public void testAnalyzeSurrogatePair() {
         String[] data = new String[] { "𠀀", "Avr", "ab" };
         for (String value : data) {
             analyzer.analyze(value);
