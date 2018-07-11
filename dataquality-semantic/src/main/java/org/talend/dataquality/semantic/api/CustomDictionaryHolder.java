@@ -55,7 +55,7 @@ public class CustomDictionaryHolder {
 
     private CustomMetadataIndexAccess customMetadataIndexAccess;
 
-    private CustomDocumentIndexAccess customDataDictIndexAccess;
+    private CustomDocumentIndexAccess customDocumentIndexAccess;
 
     private CustomRegexClassifierAccess customRegexClassifierAccess;
 
@@ -88,7 +88,7 @@ public class CustomDictionaryHolder {
             ensureMetadataIndexAccess();
             File dataDictFolder = new File(getIndexFolderPath(true, DICTIONARY_SUBFOLDER_NAME));
             if (dataDictFolder.exists()) {
-                ensureDataDictIndexAccess();
+                ensureDocumentDictIndexAccess();
             }
             // make a copy of shared regex classifiers
             ensureRegexClassifierAccess();
@@ -119,7 +119,7 @@ public class CustomDictionaryHolder {
      */
     public Directory getDataDictDirectory() {
         if (dataDictDirectory == null) {
-            ensureDataDictIndexAccess();
+            ensureDocumentDictIndexAccess();
         }
         return dataDictDirectory;
     }
@@ -152,9 +152,9 @@ public class CustomDictionaryHolder {
         }
     }
 
-    private synchronized void ensureDataDictIndexAccess() {
+    private synchronized void ensureDocumentDictIndexAccess() {
         ensureMetadataIndexAccess();
-        if (customDataDictIndexAccess == null) {
+        if (customDocumentIndexAccess == null) {
             LOGGER.info(String.format(INITIALIZE_ACCESS, CUSTOM, DICTIONARY_SUBFOLDER_NAME, tenantID));
             String dataDictIndexPath = getIndexFolderPath(true, DICTIONARY_SUBFOLDER_NAME);
             File folder = new File(dataDictIndexPath);
@@ -163,7 +163,7 @@ public class CustomDictionaryHolder {
             }
             try {
                 dataDictDirectory = FSDirectory.open(folder);
-                customDataDictIndexAccess = new CustomDocumentIndexAccess(dataDictDirectory);
+                customDocumentIndexAccess = new CustomDocumentIndexAccess(dataDictDirectory);
             } catch (IOException e) {
                 LOGGER.error(e.getMessage(), e);
             }
@@ -242,8 +242,8 @@ public class CustomDictionaryHolder {
         DQCategory dqCat = getMetadata().get(categoryId);
         if (dqCat != null && !Boolean.TRUE.equals(dqCat.getModified()) && !Boolean.TRUE.equals(dqCat.getDeleted())) {
             // copy all existing documents from shared directory to custom directory
-            ensureDataDictIndexAccess();
-            customDataDictIndexAccess.copyBaseDocumentsFromSharedDirectory(dqCat);
+            ensureDocumentDictIndexAccess();
+            customDocumentIndexAccess.copyBaseDocumentsFromSharedDirectory(dqCat);
         }
     }
 
@@ -263,15 +263,15 @@ public class CustomDictionaryHolder {
         if (TALEND.equals(category.getCreator())) {
             customMetadataIndexAccess.insertOrUpdateCategory(category);
             if (!CategoryType.REGEX.equals(category.getType()) && Boolean.TRUE.equals(category.getModified())) {
-                ensureDataDictIndexAccess();
-                customDataDictIndexAccess.deleteDocumentsByCategoryId(categoryId);
-                customDataDictIndexAccess.commitChanges();
+                ensureDocumentDictIndexAccess();
+                customDocumentIndexAccess.deleteDocumentsByCategoryId(categoryId);
+                customDocumentIndexAccess.commitChanges();
             }
         } else {
             customMetadataIndexAccess.deleteCategory(category);
-            ensureDataDictIndexAccess();
-            customDataDictIndexAccess.deleteDocumentsByCategoryId(categoryId);
-            customDataDictIndexAccess.commitChanges();
+            ensureDocumentDictIndexAccess();
+            customDocumentIndexAccess.deleteDocumentsByCategoryId(categoryId);
+            customDocumentIndexAccess.commitChanges();
         }
         customMetadataIndexAccess.commitChanges();
         metadata = customMetadataIndexAccess.readCategoryMedatada();
@@ -296,8 +296,8 @@ public class CustomDictionaryHolder {
      * @param documents
      */
     public void updateDataDictDocuments(List<DQDocument> documents) {
-        ensureDataDictIndexAccess();
-        operationDataDictDocuments(documents, customDataDictIndexAccess::insertOrUpdateDocument);
+        ensureDocumentDictIndexAccess();
+        operationDataDictDocuments(documents, customDocumentIndexAccess::insertOrUpdateDocument);
     }
 
     /**
@@ -306,8 +306,8 @@ public class CustomDictionaryHolder {
      * @param documents
      */
     public void addDataDictDocuments(List<DQDocument> documents) {
-        ensureDataDictIndexAccess();
-        operationDataDictDocuments(documents, customDataDictIndexAccess::createDocument);
+        ensureDocumentDictIndexAccess();
+        operationDataDictDocuments(documents, customDocumentIndexAccess::createDocument);
     }
 
     /**
@@ -316,8 +316,8 @@ public class CustomDictionaryHolder {
      * @param documents
      */
     public void deleteDataDictDocuments(List<DQDocument> documents) {
-        ensureDataDictIndexAccess();
-        operationDataDictDocuments(documents, customDataDictIndexAccess::deleteDocument);
+        ensureDocumentDictIndexAccess();
+        operationDataDictDocuments(documents, customDocumentIndexAccess::deleteDocument);
     }
 
     private void operationDataDictDocuments(List<DQDocument> documents, Consumer<List<DQDocument>> function) {
@@ -326,7 +326,7 @@ public class CustomDictionaryHolder {
         if (category != null && !Boolean.TRUE.equals(category.getModified()) && !Boolean.TRUE.equals(category.getDeleted()))
             updateCategory(category);
         function.accept(documents);
-        customDataDictIndexAccess.commitChanges();
+        customDocumentIndexAccess.commitChanges();
     }
 
     void closeRepublishDictionaryAccess() {
@@ -472,8 +472,8 @@ public class CustomDictionaryHolder {
      * Get IndexWriter for data dict index.
      */
     public IndexWriter getDataDictIndexWriter() throws IOException {
-        ensureDataDictIndexAccess();
-        return customDataDictIndexAccess.getWriter();
+        ensureDocumentDictIndexAccess();
+        return customDocumentIndexAccess.getWriter();
     }
 
     /**
@@ -592,8 +592,8 @@ public class CustomDictionaryHolder {
 
             File dictionaryFolder = new File(stagingIndexes.getAbsolutePath() + File.separator + DICTIONARY_SUBFOLDER_NAME);
             if (dictionaryFolder.exists()) {
-                ensureDataDictIndexAccess();
-                customDataDictIndexAccess.copyStagingContent(dictionaryFolder.getAbsolutePath());
+                ensureDocumentDictIndexAccess();
+                customDocumentIndexAccess.copyStagingContent(dictionaryFolder.getAbsolutePath());
             }
 
             File regexFile = new File(stagingIndexes.getAbsolutePath() + File.separator + REGEX_SUBFOLDER_NAME + File.separator
@@ -619,5 +619,15 @@ public class CustomDictionaryHolder {
                         DictionarySearchMode.MATCH_SEMANTIC_KEYWORD), //
                 getRegexClassifier()//
         );
+    }
+
+    public void delete() {
+        LOGGER.info("Delete data for tenant " + tenantID);
+        File rootFolder = new File(CategoryRegistryManager.getLocalRegistryPath() + File.separator + tenantID);
+        try {
+            FileUtils.deleteDirectory(rootFolder);
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
     }
 }

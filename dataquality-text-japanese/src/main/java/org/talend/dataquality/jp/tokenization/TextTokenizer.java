@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -12,97 +12,34 @@
 // ============================================================================
 package org.talend.dataquality.jp.tokenization;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import com.atilika.kuromoji.TokenizerBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.talend.dataquality.jp.common.KuromojiDict;
 
-public class TextTokenizer {
+import com.atilika.kuromoji.TokenizerBase;
+
+public class TextTokenizer extends TextTokenizerBase {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TextTokenizer.class);
 
-    private static TokenizerBase tokenizer;
-
-    private static String dictName;
-
-    public enum KuromojiDict {
-        IPADIC("ipadic"),
-        JUMANDIC("jumandic"),
-        NAIST_JDIC("naist.jdic"),
-        UNIDIC("unidic"),
-        UNIDIC_KANAACCENT("unidic.kanaaccent");
-
-        private final String dictName;
-
-        public String getDictName() {
-            return dictName;
-        }
-
-        KuromojiDict(String dictName) {
-            this.dictName = dictName;
+    private TextTokenizer() {
+        // TextTokenizer with dictionary IPADIC
+        final String dictName = KuromojiDict.IPADIC.getDictName();
+        LOGGER.info("Initialise tokenizer with the dictionary: mecab-" + dictName);
+        try {
+            tokenizer = (TokenizerBase) Class.forName("com.atilika.kuromoji." + dictName + ".Tokenizer").newInstance();
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
         }
     }
 
-    public static void init(KuromojiDict dict) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-        if (tokenizer == null || dict.getDictName() != dictName) {
-            LOGGER.info("Initialise tokenizer with the dictionary: mecab-" + dict.dictName);
-            tokenizer = (TokenizerBase) Class.forName("com.atilika.kuromoji." + dict.dictName + ".Tokenizer").newInstance();
-            dictName = dict.getDictName();
-        }
+    private static class LazyHolder {
+
+        private static final TextTokenizer INSTANCE = new TextTokenizer();
     }
 
-    private static Stream<String> tokenize(String text)
-            throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-
-        if (tokenizer == null) {
-            // if the tokenizer haven't been initialized, then init with the default dictionary IPADIC
-            LOGGER.warn("The tokenizer haven't been initialized! Use default dictionary: mecab-ipadic.");
-            init(KuromojiDict.IPADIC);
-        }
-        return tokenizer.tokenize(text).stream().map(token -> token.getSurface());
-    }
-
-    /**
-     *
-     * @param text
-     * @return List of tokens
-     * @throws ClassNotFoundException
-     * @throws InstantiationException
-     * @throws IllegalAccessException
-     */
-    public static List<String> getListTokens(String text)
-            throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-        return tokenize(text).collect(Collectors.toList());
-    }
-
-    /**
-     *
-     * @param text
-     * @param delimiter
-     * @return tokenized string with delimiter
-     * @throws ClassNotFoundException
-     * @throws InstantiationException
-     * @throws IllegalAccessException
-     */
-    public static String getTokenizedString(String text, String delimiter)
-            throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-        return tokenize(text).collect(Collectors.joining(delimiter));
-    }
-
-    /**
-     *
-     * @param text
-     * @return tokenized string with space as delimiter
-     * @throws ClassNotFoundException
-     * @throws InstantiationException
-     * @throws IllegalAccessException
-     */
-    public static String getTokenizedString(String text)
-            throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-        return getTokenizedString(text, " ");
+    public static TextTokenizer getInstance() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+        return LazyHolder.INSTANCE;
     }
 
 }

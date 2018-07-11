@@ -49,7 +49,7 @@ public abstract class CategoryRegistryManagerAbstract {
     }
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         mockWithTenant(this.getClass().getSimpleName() + "_" + testName.getMethodName());
     }
 

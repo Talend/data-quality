@@ -1,3 +1,8 @@
+v6.0.0 2018-07-03
+    - TDQ-15223 Add delete documents, categories and regexs for deprovisioning
+    - TDQ-13977 update DQCategory model with the display name
+    - TDQ-15129 optimize republish-all by using one kafka event for all categories
+
 v5.0.2 2018-04-04
     (no change in this version)
 

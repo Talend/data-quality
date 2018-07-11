@@ -8,13 +8,13 @@ import static org.powermock.api.mockito.PowerMockito.when;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.mockito.internal.util.reflection.Whitebox;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -35,7 +35,7 @@ public class CustomRegexClassifierAccessTest {
 
     private CustomRegexClassifierAccess access;
 
-    private ObjectMapper mapper;
+    private ObjectMapper mapperMock;
 
     @Before
     public void setUp() throws Exception {
@@ -43,12 +43,10 @@ public class CustomRegexClassifierAccessTest {
         CategoryRegistryManager manager = mock(CategoryRegistryManager.class);
         when(manager.getLocalRegistryPath()).thenReturn("./target");
 
-        mapper = Mockito.mock(ObjectMapper.class);
-
-        PowerMockito.whenNew(ObjectMapper.class).withNoArguments().thenReturn(mapper);
+        mapperMock = Mockito.mock(ObjectMapper.class);
 
         ObjectWriter writer = mock(ObjectWriter.class);
-        when(mapper.writerWithDefaultPrettyPrinter()).thenReturn(writer);
+        when(mapperMock.writerWithDefaultPrettyPrinter()).thenReturn(writer);
 
         CustomDictionaryHolder holder = Mockito.mock(CustomDictionaryHolder.class);
         Mockito.when(holder.getRegexClassifier()).thenReturn(new UserDefinedClassifier());
@@ -58,43 +56,43 @@ public class CustomRegexClassifierAccessTest {
     }
 
     @Test
-    public void getRegExs() throws IOException {
-
-        when(mapper.readValue(any(File.class), (TypeReference) any())).thenReturn(createSubCategoryRegExs());
-
+    public void getRegExs() {
+        createSubCategoryRegExs();
         List<ISubCategory> regexs = access.getRegExs();
         assertEquals(2, regexs.size());
     }
 
     @Test
     public void getRegExsEmptyFile() throws IOException {
-        when(mapper.readValue(any(File.class), (TypeReference) any())).thenThrow(JsonMappingException.class);
+        Whitebox.setInternalState(access, "mapper", mapperMock);
+        when(mapperMock.readValue(any(File.class), any(TypeReference.class))).thenThrow(JsonMappingException.class);
 
         assertNull(access.getRegExs());
     }
 
     @Test
     public void getRegExsErrorFile() throws IOException {
-        when(mapper.readValue(any(File.class), (TypeReference) any())).thenThrow(IOException.class);
+        Whitebox.setInternalState(access, "mapper", mapperMock);
+        when(mapperMock.readValue(any(File.class), any(TypeReference.class))).thenThrow(IOException.class);
 
         assertNull(access.getRegExs());
     }
 
     @Test
     public void deleteRegExWithoutRegExs() {
+        createSubCategoryRegExs();
         access.deleteRegex("1");
-        assertNull(access.getRegExs());
+
+        assertEquals(1, access.getRegExs().size());
     }
 
-    private List<ISubCategory> createSubCategoryRegExs() {
-        List<ISubCategory> regeExs = new ArrayList<>();
-
+    private void createSubCategoryRegExs() {
         UserDefinedCategory category = new UserDefinedCategory("categoryName");
+        category.setId("1");
         UserDefinedCategory category2 = new UserDefinedCategory("categoryName2");
+        category2.setId("2");
 
-        regeExs.add(category);
-        regeExs.add(category2);
-
-        return regeExs;
+        access.insertOrUpdateRegex(category);
+        access.insertOrUpdateRegex(category2);
     }
 }

@@ -12,7 +12,6 @@
 // ============================================================================
 package org.talend.survivorship;
 
-import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
@@ -113,48 +112,25 @@ public class SurvivorshipManager extends KnowledgeManager {
 
         int pos = rulePath.lastIndexOf('/');
         boolean isClassPathResource = false;
-        if (pos > 0 && pos < rulePath.length() + 1) {
+        ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+        URL survivorshipUrl = contextClassLoader.getResource("metadata/survivorship");
+        // After TUP-16660, each job is a standalone maven project.The "metadata/survivorship" in "src/main/resources"
+        // will be built to Zip or Jar file.So whatever run in studio/jobServer/OSGI/TIC,it should include the rules.
+        if (survivorshipUrl != null) {
+            rulePath = "";
+            isClassPathResource = true;
+        } else {// running job in studio,same reason for calling toUpperCase()
+            System.err.println("The survivorship rules aren't in Classpath!");
             String projectName = rulePath.substring(pos + 1);
-            if (projectName != null) {
-                String itemsFolder = "items/"; //$NON-NLS-1$
-                File f = new File(itemsFolder);
-                ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
-                URL resource = contextClassLoader.getResource(itemsFolder);
-                if (f.exists()) { // running exported job
-                    // since path is case sensitive in linux, call toLowerCase() here to correct the spelling.
-                    rulePath = itemsFolder + projectName.toLowerCase();
-                    f = new File(rulePath + "/metadata/survivorship/"); //$NON-NLS-1$
-                    if (!f.exists()) {
-                        System.err.println("[INFO] This error may appear if you did not export the dependencies of the job."); //$NON-NLS-1$
-                    }
-                } else if (resource != null) {// running exported OSGI bundle or on TIC.the 'items' folder is in jar file.
-                    isClassPathResource = true;
-                    rulePath = resource.getFile().concat(projectName.toLowerCase());
-                    if (null == getClass().getResource(rulePath + "/metadata/survivorship/")) { //$NON-NLS-1$
-                        System.err.println("[INFO] This error may appear if you did not export the dependencies of the job."); //$NON-NLS-1$
-                    }
-                } else {
-                    itemsFolder = "jobox/work/" + getJobName() + "_" + getJobVersion() + "/" + getJobName() + "/items/"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-                    f = new File(itemsFolder);
-                    if (f.exists()) {
-                        // since path is case sensitive in linux, call toLowerCase() here to correct the spelling.
-                        rulePath = itemsFolder + projectName.toLowerCase();
-                        f = new File(rulePath + "/metadata/survivorship/"); //$NON-NLS-1$
-                        if (!f.exists()) {
-                            System.err.println("[INFO] This error may appear if you did not export the dependencies of the job."); //$NON-NLS-1$
-                        }
-                    } else { // running job in studio
-                        // same reason for calling toUpperCase()
-                        rulePath = rulePath.substring(0, pos + 1).concat(projectName.toUpperCase());
-                    }
-                }
-            }
+            rulePath = rulePath.substring(0, pos + 1).concat(projectName.toUpperCase());
         }
         String packagePath;
         // TDQ-12588 for a real spark mode, the rule files are uploaded to spark node in javajet.
         if ("Real_spark_relative_path".equals(rulePath)) { //$NON-NLS-1$
             rulePath = ""; //$NON-NLS-1$
             packagePath = ""; //$NON-NLS-1$
+        } else if (isClassPathResource) {
+            packagePath = "metadata/survivorship/" + packageName + "/"; //$NON-NLS-1$ //$NON-NLS-2$
         } else {
             packagePath = rulePath + "/metadata/survivorship/" + packageName + "/"; //$NON-NLS-1$ //$NON-NLS-2$
         }

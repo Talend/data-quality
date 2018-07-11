@@ -55,25 +55,25 @@ public class StringTrimmer {
      * @param inputStr - the input text.
      * @return String
      */
-    public String removeTrailingAndLeadingWhitespaces(String inputStr) {
+    public String removeTrailingAndLeadingWhitespaces(final String inputStr) {
         if (StringUtils.isEmpty(inputStr)) {
-            return inputStr;
-        }
-
-        int startIndex = 0;
-        int endIndex = inputStr.length();
-        char currentCharacter = inputStr.charAt(startIndex);
-        while (startIndex < endIndex
-                && (currentCharacter <= ' ' || WHITESPACE_CHARS_SUPERIOR_ASCII_SPACE.contains(currentCharacter))) {
-            currentCharacter = inputStr.charAt(++startIndex);
-        }
-        if (startIndex == endIndex)
             return "";
-        do {
-            currentCharacter = inputStr.charAt(--endIndex);
-        } while (currentCharacter <= ' ' || WHITESPACE_CHARS_SUPERIOR_ASCII_SPACE.contains(currentCharacter));
+        }
 
-        return inputStr.substring(startIndex, endIndex + 1);
+        int len = inputStr.length();
+        int startIndex = 0;/* avoid getfield opcode */
+
+        while ((startIndex < len) && (mustBeRemoved(inputStr.charAt(startIndex)))) {
+            startIndex++;
+        }
+        while ((startIndex < len) && (mustBeRemoved(inputStr.charAt(len - 1)))) {
+            len--;
+        }
+        return ((startIndex > 0) || (len < inputStr.length())) ? inputStr.substring(startIndex, len) : inputStr;
+    }
+
+    private boolean mustBeRemoved(final char c) {
+        return c <= ' ' || (WHITESPACE_CHARS_SUPERIOR_ASCII_SPACE.contains(c));
     }
 
     /**
@@ -93,7 +93,7 @@ public class StringTrimmer {
     /**
      * Remove trailing and leading characters.
      *
-     * @param inputStr - the input text.
+     * @param inputStr  - the input text.
      * @param removeStr - the remove string.
      * @return String.
      */
@@ -125,21 +125,19 @@ public class StringTrimmer {
      */
     public String removeTrailingAndLeading(String inputStr, Character removeCharacter) {
         if (StringUtils.isEmpty(inputStr)) {
-            return inputStr;
-        }
-
-        int startIndex = 0;
-        int endIndex = inputStr.length();
-        char currentCharacter = inputStr.charAt(startIndex);
-        while (startIndex < endIndex && (currentCharacter == removeCharacter)) {
-            currentCharacter = inputStr.charAt(++startIndex);
-        }
-        if (startIndex == endIndex)
             return "";
-        do {
-            currentCharacter = inputStr.charAt(--endIndex);
-        } while (currentCharacter == removeCharacter);
+        }
 
-        return inputStr.substring(startIndex, endIndex + 1);
+        int len = inputStr.length();
+        int startIndex = 0;
+        char[] val = inputStr.toCharArray(); /* avoid getfield opcode */
+
+        while ((startIndex < len) && (removeCharacter == (val[startIndex]))) {
+            startIndex++;
+        }
+        while ((startIndex < len) && (removeCharacter == (val[len - 1]))) {
+            len--;
+        }
+        return ((startIndex > 0) || (len < inputStr.length())) ? inputStr.substring(startIndex, len) : inputStr;
     }
 }

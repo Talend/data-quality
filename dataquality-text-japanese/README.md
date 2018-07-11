@@ -1,4 +1,4 @@
-org.talend.dataquality.tokenization
+org.talend.dataquality.text.japanese
 ===================
 
 Japanese text analysis API

@@ -1,3 +1,15 @@
+v6.0.0 2018-07-03
+    - TDQ-15223 Add delete documents, categories and regexs for deprovisioning
+    - TDQ-14551 fix URL check values with Asian characters valid
+    - TDQ-15357 implements cloneable interface because support clone is needed.
+    - TDQ-14227 Add setRandom method to avoid mask action make invalid phone number to empty
+    - TDQ-15123 add a threshold for the metadata matching in the disco…
+    - TDQ-15015 use lucene search API to avoid read all documents
+    - TDQ-14987 improve date discovery
+    - TDQ-15129 optimize republish-all by using one kafka event for all categories
+    - TDQ-15013 remove deprecated methods
+
+
 v5.0.2 2018-04-04
 	(no change in this version)
 

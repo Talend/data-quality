@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2018 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
+import org.talend.dataquality.jp.common.KuromojiDict;
 
 public class TextTokenizerTest {
 
@@ -39,15 +40,9 @@ public class TextTokenizerTest {
     @Test
     public void testGetListTokens() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
 
-        for (String text : textsWithExpectedTokens.keySet()) { // case: without init dict
-            assertEquals(textsWithExpectedTokens.get(text), TextTokenizer.getListTokens(text));
-        }
-
-        for (TextTokenizer.KuromojiDict dict : TextTokenizer.KuromojiDict.values()) { // case: with init dict
-            TextTokenizer.init(dict);
-            for (String text : textsWithExpectedTokens.keySet()) {
-                assertEquals(textsWithExpectedTokens.get(text), TextTokenizer.getListTokens(text));
-            }
+        final TextTokenizer defaultTextTokenizer = TextTokenizer.getInstance();
+        for (String text : textsWithExpectedTokens.keySet()) {
+            assertEquals(textsWithExpectedTokens.get(text), defaultTextTokenizer.getListTokens(text));
         }
 
     }
@@ -57,17 +52,10 @@ public class TextTokenizerTest {
 
         final String delimiter = " ";
 
-        for (String text : textsWithExpectedTokenizedString.keySet()) { // case: without init dict
-            assertEquals(textsWithExpectedTokenizedString.get(text), TextTokenizer.getTokenizedString(text));
-            assertEquals(textsWithExpectedTokenizedString.get(text), TextTokenizer.getTokenizedString(text, delimiter));
-        }
-
-        for (TextTokenizer.KuromojiDict dict : TextTokenizer.KuromojiDict.values()) { // case: with init dict
-            TextTokenizer.init(dict);
-            for (String text : textsWithExpectedTokenizedString.keySet()) {
-                assertEquals(textsWithExpectedTokenizedString.get(text), TextTokenizer.getTokenizedString(text));
-                assertEquals(textsWithExpectedTokenizedString.get(text), TextTokenizer.getTokenizedString(text, delimiter));
-            }
+        final TextTokenizer defaultTextTokenizer = TextTokenizer.getInstance();
+        for (String text : textsWithExpectedTokenizedString.keySet()) {
+            assertEquals(textsWithExpectedTokenizedString.get(text), defaultTextTokenizer.getTokenizedString(text));
+            assertEquals(textsWithExpectedTokenizedString.get(text), defaultTextTokenizer.getTokenizedString(text, delimiter));
         }
 
     }
