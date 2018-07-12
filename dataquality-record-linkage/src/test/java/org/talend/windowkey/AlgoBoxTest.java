@@ -128,6 +128,7 @@ public class AlgoBoxTest {
         assertEquals(BLANK_STR, AlgoBox.first_N_Char(BLANK_STR, 1));
         assertEquals("n", AlgoBox.first_N_Char(NULL_STR, 1)); //$NON-NLS-1$
         assertEquals(QUO_STR, AlgoBox.first_N_Char(QUO_STR, 1));
+        assertEquals("   ", AlgoBox.first_N_Char("   abc", 3)); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     /**
@@ -146,6 +147,8 @@ public class AlgoBoxTest {
         assertEquals(BLANK_STR, AlgoBox.first_N_Char_EW(BLANK_STR, 1));
         assertEquals("n", AlgoBox.first_N_Char_EW(NULL_STR, 1)); //$NON-NLS-1$
         assertEquals(QUO_STR, AlgoBox.first_N_Char_EW(QUO_STR, 1));
+        assertEquals("ab", AlgoBox.first_N_Char_EW("   abc", 2)); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("a", AlgoBox.first_N_Char_EW("   abc", 1)); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     /**

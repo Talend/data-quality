@@ -20,13 +20,13 @@ import org.talend.dataquality.record.linkage.Messages;
  * The names of the available record matchers.
  */
 public enum RecordMatcherType {
-    simpleVSRMatcher(Messages.getString("RecordMatcherType.simpleVSRMatcher")), //$NON-NLS-1$
+    simpleVSRMatcher("simpleVSRMatcher"), //$NON-NLS-1$
 
     /**
      * The rename of T_SwooshAlgorithm name should be propagate to value of {
      * {@link RecordMatchingIndicatorImpl#T_SWOOSH_ALG_NAME}
      */
-    T_SwooshAlgorithm(Messages.getString("RecordMatcherType.T_SwooshAlgorithm")); //$NON-NLS-1$ 
+    T_SwooshAlgorithm("T_SwooshAlgorithm"); //$NON-NLS-1$ 
 
     private final String label;
 
@@ -40,7 +40,7 @@ public enum RecordMatcherType {
      * @return the label
      */
     public String getLabel() {
-        return this.label;
+        return Messages.getString("RecordMatcherType." + this.label);//$NON-NLS-1$ 
     }
 
     /*
@@ -50,7 +50,7 @@ public enum RecordMatcherType {
      */
     @Override
     public String toString() {
-        return label;
+        return getLabel();
     }
 
 }
