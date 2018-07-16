@@ -168,11 +168,10 @@ public class CompositePatternFrequencyAnalyzerTest {
         }
         patternAnalyzer.end();
         Map<String, Long> freqTable = patternAnalyzer.getResult().get(0).getTopK(10);
-        Iterator<Entry<String, Long>> entrySet = freqTable.entrySet().iterator();
-        if (entrySet.hasNext()) {
-            Entry<String, Long> e = entrySet.next();
-            Assert.assertEquals("M/d/yy H:m", e.getKey());
-            Assert.assertEquals(4, e.getValue(), 0);
+
+        Long pattern = freqTable.get("M/d/yy H:m");
+        if (pattern != null) {
+            Assert.assertEquals(4, pattern, 0);
         } else {
             fail("no entry");
         }
