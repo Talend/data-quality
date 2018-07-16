@@ -15,6 +15,7 @@ package org.talend.dataquality.statistics.datetime;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
+import java.text.DateFormatSymbols;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
@@ -22,6 +23,7 @@ import java.time.format.ResolverStyle;
 import java.time.temporal.TemporalAccessor;
 import java.time.temporal.TemporalQueries;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -33,8 +35,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -52,6 +56,28 @@ public class SystemDateTimePatternManager {
 
     private static final List<Map<Pattern, String>> DATE_PATTERN_GROUP_LIST = new ArrayList<>();
 
+    /**
+     * give for each months words, the locales associated
+     */
+    private static final Map<String, Set<Locale>> MONTHS = new HashMap<>();
+
+    private static final Map<String, Set<Locale>> SHORT_MONTHS = new HashMap<>();
+
+    private static final Map<String, Set<Locale>> WEEKDAYS = new HashMap<>();
+
+    private static final Map<String, Set<Locale>> SHORT_WEEKDAYS = new HashMap<>();
+
+    private static final Map<String, Set<Locale>> AM_PM = new HashMap<>();
+
+    private static final Map<String, Set<Locale>> ERAS = new HashMap<>();
+
+    /**
+     * give for each patterns, the list of words to check
+     * For example the pattern "EEEE, MMMM d, yyyy h:mm:ss a z" is associated to the list [MONTHS; WEEKDAYS; AM_PM]
+     *
+     */
+    private static final Map<String, List<Map<String, Set<Locale>>>> PATTERN_TO_LANGUAGES_DATES_WORDS = new HashMap<>();
+
     private static final List<Map<Pattern, String>> TIME_PATTERN_GROUP_LIST = new ArrayList<>();
 
     private static final Map<String, DateTimeFormatter> dateTimeFormatterCache = new HashMap<>();
@@ -64,10 +90,37 @@ public class SystemDateTimePatternManager {
     private static final Set<Locale> LOCALES = getDistinctLanguagesLocales();
 
     static {
+        loadLanguagesDatesWords();
         // Load date patterns
         loadPatterns("DateRegexesGrouped.txt", DATE_PATTERN_GROUP_LIST);
         // Load time patterns
         loadPatterns("TimeRegexes.txt", TIME_PATTERN_GROUP_LIST);
+
+    }
+
+    private static void loadLanguagesDatesWords() {
+        for (Locale locale : getDistinctLanguagesLocales()) {
+            final DateFormatSymbols dfs = new DateFormatSymbols(locale);
+            buildWordsToLocales(MONTHS, Arrays.asList(dfs.getMonths()), locale);
+            buildWordsToLocales(SHORT_MONTHS, Arrays.asList(dfs.getShortMonths()), locale);
+            buildWordsToLocales(WEEKDAYS, Arrays.asList(dfs.getWeekdays()), locale);
+            buildWordsToLocales(SHORT_WEEKDAYS, Arrays.asList(dfs.getShortWeekdays()), locale);
+            buildWordsToLocales(AM_PM, Arrays.asList(dfs.getAmPmStrings()), locale);
+            buildWordsToLocales(ERAS, Arrays.asList(dfs.getEras()), locale);
+        }
+    }
+
+    private static void buildWordsToLocales(final Map<String, Set<Locale>> structureToFill, final List<String> languagesWords,
+            Locale currentLocale) {
+        for (String languageWord : languagesWords) {
+            String lowerCaseLanguageWord = languageWord.toLowerCase();
+            Set<Locale> locales = structureToFill.get(lowerCaseLanguageWord);
+            if (locales == null) {
+                locales = new HashSet<>();
+                structureToFill.put(lowerCaseLanguageWord, locales);
+            }
+            locales.add(currentLocale);
+        }
     }
 
     private static Set<Locale> getDistinctLanguagesLocales() {
@@ -98,6 +151,7 @@ public class SystemDateTimePatternManager {
                         String format = lineArray[0];
                         Pattern pattern = Pattern.compile(lineArray[1]);
                         currentGroupMap.put(pattern, format);
+                        loadPatternToLanguagesDatesWords(format);
                     }
                 }
             }
@@ -105,6 +159,23 @@ public class SystemDateTimePatternManager {
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         }
+    }
+
+    private static void loadPatternToLanguagesDatesWords(String format) {
+        List<Map<String, Set<Locale>>> languagesWordsList = new ArrayList<>();
+        if (format.contains("MMMM"))
+            languagesWordsList.add(MONTHS);
+        else if (format.contains("MMM"))
+            languagesWordsList.add(SHORT_MONTHS);
+        if (format.contains("EEEE"))
+            languagesWordsList.add(WEEKDAYS);
+        else if (format.contains("EEE"))
+            languagesWordsList.add(SHORT_WEEKDAYS);
+        if (format.contains("G"))
+            languagesWordsList.add(ERAS);
+        if (format.contains("a"))
+            languagesWordsList.add(AM_PM);
+        PATTERN_TO_LANGUAGES_DATES_WORDS.put(format, languagesWordsList);
     }
 
     /**
@@ -182,12 +253,13 @@ public class SystemDateTimePatternManager {
         for (Map<Pattern, String> patternMap : patternGroupList) {
             boolean isFoundRegex = false;
             for (Entry<Pattern, String> entry : patternMap.entrySet()) {
-                Pattern parser = entry.getKey();
-                if (parser.matcher(value).find()) {
+                Matcher matcher = entry.getKey().matcher(value);
+                if (matcher.find()) {
                     isFoundRegex = true;
-                    Optional<DateTimeFormatter> dateTimeFormatter = validateWithPatternInAnyLocale(value, entry.getValue());
+                    Optional<DateTimeFormatter> dateTimeFormatter = validateWithPatternInAnyLocale(value, entry.getValue(),
+                            matcher);
                     if (dateTimeFormatter.isPresent())
-                        return Optional.of(Pair.of(parser, dateTimeFormatter.get()));
+                        return Optional.of(Pair.of(entry.getKey(), dateTimeFormatter.get()));
                 }
 
             }
@@ -223,15 +295,17 @@ public class SystemDateTimePatternManager {
         }
         HashSet<String> resultSet = new HashSet<>();
         for (Map<Pattern, String> patternMap : patternGroupList) {
+            boolean isFoundRegex = false;
             for (Entry<Pattern, String> entry : patternMap.entrySet()) {
-                Pattern parser = entry.getKey();
-                if (parser.matcher(value).find()) {
-                    resultSet.add(entry.getValue());
+                Matcher matcher = entry.getKey().matcher(value);
+                if (matcher.find()) {
+                    isFoundRegex = true;
+                    validateWithPatternInAnyLocale(value, entry.getValue(), matcher)
+                            .ifPresent(opt -> resultSet.add(entry.getValue()));
                 }
             }
-            if (!resultSet.isEmpty()) {
-                return resultSet;
-            }
+            if (isFoundRegex || !resultSet.isEmpty())
+                break;
         }
         return resultSet;
     }
@@ -284,16 +358,86 @@ public class SystemDateTimePatternManager {
         return false;
     }
 
-    static boolean isMatchDateTimePattern(String value, String pattern, Locale locale) {
-        return isMatchDateTimePattern(value, getDateTimeFormatterByPattern(pattern, locale));
+    public static boolean isMatchDateTimePattern(String value, String pattern, Locale locale) {
+        return findDateTimeFormatter(value, pattern, locale).isPresent();
     }
 
-    private static Optional<DateTimeFormatter> validateWithPatternInAnyLocale(String value, String pattern) {
-        for (Locale locale : LOCALES) {
-            DateTimeFormatter dateTimeFormatterByPattern = getDateTimeFormatterByPattern(pattern, locale);
-            if (isMatchDateTimePattern(value, dateTimeFormatterByPattern))
-                return Optional.of(dateTimeFormatterByPattern);
+    public static boolean isMatchDateTimePattern(String value, String pattern) {
+        return findDateTimeFormatter(value, pattern, LOCALES).isPresent();
+    }
+
+    private static Optional<DateTimeFormatter> findDateTimeFormatter(String value, String pattern, Set<Locale> locales) {
+        for (Locale locale : locales) {
+            final Optional<DateTimeFormatter> dateTimeFormatter = findDateTimeFormatter(value, pattern, locale);
+            if (dateTimeFormatter.isPresent())
+                return dateTimeFormatter;
         }
+        return Optional.empty();
+    }
+
+    /**
+     * validate a pattern with all existing locales
+     * @param value to validate
+     * @param pattern to use (for example dd/MM/yy)
+     * @param matcher the regex matcher
+     * @return the date time format if found
+     */
+    public static Optional<DateTimeFormatter> validateWithPatternInAnyLocale(String value, String pattern, Matcher matcher) {
+        List<Map<String, Set<Locale>>> wordToLocal = PATTERN_TO_LANGUAGES_DATES_WORDS.get(pattern);
+        if (CollectionUtils.isNotEmpty(wordToLocal)) {
+            if (matcher.groupCount() == wordToLocal.size()) {
+                Set<Locale> locales = findLocales(wordToLocal, matcher);
+                if (CollectionUtils.isNotEmpty(locales)) {
+                    return findDateTimeFormatter(value, pattern, locales);
+                }
+            }
+        } else {
+            return findDateTimeFormatter(value, pattern, Locale.getDefault());
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * find the set of locales from a pattern matcher and the list of words
+     * @param wordToLocalList
+     * @param matcher
+     * @return the set of locales
+     */
+    private static Set<Locale> findLocales(List<Map<String, Set<Locale>>> wordToLocalList, Matcher matcher) {
+        int groupIndex = 1;
+        Set<Locale> locales = new HashSet<>();
+        //we iterate over all matcher groups
+        while (groupIndex <= matcher.groupCount()) {
+            Set<Locale> tmpLocales = null;
+            String group = matcher.group(groupIndex++).toLowerCase();
+            // for each group, we search for the right map of words
+            for (Map<String, Set<Locale>> wordToLocal : wordToLocalList) {
+                tmpLocales = wordToLocal.get(group);
+                if (tmpLocales != null) { //found
+                    if (CollectionUtils.isEmpty(locales))
+                        locales = tmpLocales;
+                    else
+                        locales.retainAll(tmpLocales); //we do the intersection between the sets "locales" and "tmpLocales"
+                    break; //we don't have to iterate anymore
+                }
+            }
+            if (CollectionUtils.isEmpty(tmpLocales) || CollectionUtils.isEmpty(locales)) //group not found
+                return Collections.emptySet();
+        }
+        return locales;
+    }
+
+    /**
+     * find the date time formatter is the pattern matches with the specified local
+     * @param value
+     * @param pattern
+     * @param locale
+     * @return the date time formatter
+     */
+    private static Optional<DateTimeFormatter> findDateTimeFormatter(String value, String pattern, Locale locale) {
+        DateTimeFormatter dateTimeFormatterByPattern = getDateTimeFormatterByPattern(pattern, locale);
+        if (isMatchDateTimePattern(value, dateTimeFormatterByPattern))
+            return Optional.of(dateTimeFormatterByPattern);
         return Optional.empty();
     }
 }

@@ -60,7 +60,7 @@ public class SampleTest {
             put("99-3-22", new HashSet<String>(Arrays.asList(new String[] //
             { "yy-M-d" })));
             put("Mar 22, 1999", new HashSet<String>(Arrays.asList(new String[] //
-            { "MMMM d, yyyy", "MMM d, yyyy" })));
+            { "MMM d, yyyy" })));
             put("22 mars 1999", new HashSet<String>(Arrays.asList(new String[] //
             { "d MMMM yyyy", "d MMM yyyy", "dd MMMM yyyy" })));
             put("22.03.1999", new HashSet<String>(Arrays.asList(new String[] //
@@ -346,7 +346,7 @@ public class SampleTest {
             put("3/22/99 5:06:07", new HashSet<String>(Arrays.asList(new String[] //
             { "M/d/yy H:mm:ss" })));
             put("Mar 22 1999", new HashSet<String>(Arrays.asList(new String[] //
-            { "MMM d yyyy", "MMMM d yyyy" })));
+            { "MMM d yyyy" })));
             put("Mar.22.1999", new HashSet<String>(Arrays.asList(new String[] //
             { "MMM.dd.yyyy" })));
             put("March 22 1999", new HashSet<String>(Arrays.asList(new String[] //
