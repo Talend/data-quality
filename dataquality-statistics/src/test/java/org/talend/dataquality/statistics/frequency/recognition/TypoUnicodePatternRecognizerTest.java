@@ -105,7 +105,6 @@ public class TypoUnicodePatternRecognizerTest {
      */
     public void testJapanese() {
         String str = "こんにちは123 こんにちは？你好/Hello!";
-        // String str = "ソファー!";
         Assert.assertEquals("[alnum] [word]？[IdeogramSeq]/[word]!",
                 TypoUnicodePatternRecognizer.noCase().getValuePattern(str).toArray()[0]);
         Assert.assertEquals("[word][number] [word]？[IdeogramSeq]/[Word]!",
