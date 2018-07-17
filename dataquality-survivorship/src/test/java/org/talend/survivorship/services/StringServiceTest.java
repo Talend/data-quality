@@ -151,6 +151,22 @@ public class StringServiceTest {
         ss.init();
     }
 
+    @Test
+    public void testIsShortestValueSurrogatePiar() {
+        List<Column> columnList = generateColumnList();
+        DataSet dataSet = new DataSet(columnList);
+        String[][] data = new String[][] { { "𠀀", "cook" }, { "Ar", "bell" }, { "Chloe", "cook" }, { "David", "bell" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
+                { "Eric", "cook" }, { "Faith", "adam" } }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+        dataSet.initData(data);
+        StringService ss = new StringService(dataSet);
+        ss.putAttributeValues("firstName", false); //$NON-NLS-1$
+        Assert.assertEquals("𠀀 should be shortest value on the column firstName", true, //$NON-NLS-1$
+                ss.isShortestValue("𠀀", "firstName", false)); //$NON-NLS-1$
+        Assert.assertEquals("Ar should not be shortest value on the column lastName", false, //$NON-NLS-1$
+                ss.isShortestValue("Ar", "firstName", false)); //$NON-NLS-1$
+        ss.init();
+    }
+
     /**
      * Test method for
      * {@link org.talend.survivorship.services.StringService#isSecondShortestValue(java.lang.Object, java.lang.String, boolean)}.

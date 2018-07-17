@@ -20,6 +20,7 @@ import org.talend.dataquality.matchmerge.mfb.MFBRecordMatcherTest;
 import org.talend.dataquality.record.linkage.attribute.AbstractAttributeMatcherTest;
 import org.talend.dataquality.record.linkage.attribute.DoubleMetaphoneMatcherTest;
 import org.talend.dataquality.record.linkage.attribute.HammingMatcherTest;
+import org.talend.dataquality.record.linkage.attribute.JaroMatcherTest;
 import org.talend.dataquality.record.linkage.attribute.LevenshteinMatcherTest;
 import org.talend.dataquality.record.linkage.attribute.MetaphoneMatcherTest;
 import org.talend.dataquality.record.linkage.attribute.SoundexMatcherTest;
@@ -62,7 +63,7 @@ import org.talend.windowkey.NGramFingerprintKeyerTest;
         GroupingCallBackTest.class, MultiPassGroupingCallBackTest.class, HandleNullEnumTest.class,
         SurvivorShipAlgorithmEnumTest.class, CustomAttributeMatcherClassNameConvertTest.class, StringComparisonUtilTest.class,
         BlockingKeyAlgorithmEnumTest.class, BlockingKeyPostAlgorithmEnumTest.class, BlockingKeyPreAlgorithmEnumTest.class,
-        MatchAnalysisConstantTest.class, RecordMatcherTypeTest.class })
+        MatchAnalysisConstantTest.class, RecordMatcherTypeTest.class, JaroMatcherTest.class })
 public class AllRecordLinkageTests {
 
 }

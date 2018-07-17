@@ -111,6 +111,9 @@ public class StringTrimmerTest {
         assertEquals("bc", stringTrimmer.removeTrailingAndLeading(" abc", " a")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         assertEquals(" a", stringTrimmer.removeTrailingAndLeading(" abc", "bc")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         assertEquals("ab", stringTrimmer.removeTrailingAndLeading("cabc", "c")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        // surrogate pair
+        assertEquals("𠀀𠀁b", stringTrimmer.removeTrailingAndLeading("a𠀀𠀁ba", "a")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        assertEquals("a𠀁b", stringTrimmer.removeTrailingAndLeading("𠀀a𠀁b", "𠀀")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
 
     @Test
@@ -146,6 +149,16 @@ public class StringTrimmerTest {
             }
         }
 
+    }
+
+    @Test
+    public void testRemoveTrailingAndLeadingWhitespacesSurrogatePair() {
+        StringTrimmer stringTrimmer = new StringTrimmer();
+        // Normal chinese characters
+        assertEquals("我们", stringTrimmer.removeTrailingAndLeading("我们", " "));
+        // Surrogate pair characters
+        assertEquals("𠀀𠀁", stringTrimmer.removeTrailingAndLeading("𠀀𠀁 ", " "));
+        assertEquals("𠀀𠀁", stringTrimmer.removeTrailingAndLeading(" 𠀀𠀁 ", " "));
     }
 
     private void runPerfTests(String[] ex, int runNumber) {

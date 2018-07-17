@@ -106,7 +106,11 @@ public class AlgoBox {
 
                 } else if (len_arr_2 == 1) {
                     if (Integer.parseInt(arr_2[0]) < sInput.length()) {
-                        sb.append(sInput.charAt(Integer.parseInt(arr_2[0])));
+                        // support surrogate pair.replace charAt with subString
+                        int index = Integer.parseInt(arr_2[0]);
+                        int startOffset = sInput.offsetByCodePoints(0, index);
+                        String substring = sInput.substring(startOffset, sInput.offsetByCodePoints(startOffset, 1));
+                        sb.append(substring);
                     }
 
                 } else {
@@ -180,12 +184,13 @@ public class AlgoBox {
                 int beginIndex = Integer.parseInt(pattern.substring(0, pattern.indexOf(";"))); //$NON-NLS-1$
                 int endIndex = Integer.parseInt(pattern.substring(pattern.indexOf(";") + 1)); //$NON-NLS-1$
 
-                if (sInput.length() < endIndex) {
-                    endIndex = sInput.length();
+                int sInputCPCount = sInput.codePointCount(0, sInput.length());
+                if (sInputCPCount < endIndex) {
+                    endIndex = sInputCPCount;
                 }
 
                 if (beginIndex <= endIndex) {
-                    return sInput.substring(beginIndex, endIndex);
+                    return sInput.substring(sInput.offsetByCodePoints(0, beginIndex), sInput.offsetByCodePoints(0, endIndex));
                 }
             }
         }
@@ -203,10 +208,11 @@ public class AlgoBox {
             return sInput;
         }
 
-        if (sInput.length() < nb) {
-            nb = sInput.length();
+        int sInputCPCount = sInput.codePointCount(0, sInput.length());
+        if (sInputCPCount < nb) {
+            nb = sInputCPCount;
         }
-        return sInput.substring(0, nb);
+        return sInput.substring(0, sInput.offsetByCodePoints(0, nb));
     }
 
     // last N characters of the string
@@ -216,11 +222,11 @@ public class AlgoBox {
         if (sInput == null || "".equals(sInput)) { //$NON-NLS-1$
             return ""; //$NON-NLS-1$
         }
-        int s_len = sInput.length();
+        int s_len = sInput.codePointCount(0, sInput.length());
         if (s_len < nb) {
             nb = s_len;
         }
-        return sInput.substring(s_len - nb);
+        return sInput.substring(sInput.offsetByCodePoints(0, s_len - nb));
     }
 
     // N first characters of each word
@@ -235,9 +241,11 @@ public class AlgoBox {
 
         while (tok.hasMoreTokens()) {
             String word = tok.nextToken();
-            int len_word = word.length();
-            for (int i = 0; i < nb && i < len_word; i++) {
-                sb.append(word.charAt(i));
+            int wordCount = word.codePointCount(0, word.length());
+            for (int i = 0; i < nb && i < wordCount; i++) {
+                int startOffset = word.offsetByCodePoints(0, i);
+                String substring = word.substring(startOffset, word.offsetByCodePoints(startOffset, 1));
+                sb.append(substring);
             }
         }
 
@@ -257,7 +265,7 @@ public class AlgoBox {
 
         while (tok.hasMoreTokens()) {
             String word = tok.nextToken();
-            sb.append(word.charAt(0));
+            sb.append(word.substring(0, word.offsetByCodePoints(0, 1)));
         }
 
         return sb.toString();

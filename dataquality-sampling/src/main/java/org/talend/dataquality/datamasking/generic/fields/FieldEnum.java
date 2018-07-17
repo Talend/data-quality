@@ -38,8 +38,9 @@ public class FieldEnum extends AbstractField {
     public FieldEnum(List<String> enumValues) {
         int maxLen = 0;
         for (String value : enumValues) {
-            if (value.length() > maxLen) {
-                maxLen = value.length();
+            int valueCPCount = value.codePointCount(0, value.length());
+            if (valueCPCount > maxLen) {
+                maxLen = valueCPCount;
             }
         }
         initialize(enumValues, maxLen);
@@ -51,12 +52,14 @@ public class FieldEnum extends AbstractField {
 
     private void initialize(List<String> enumValues, int length) {
         this.length = length;
-        for (String value : enumValues)
-            if (value.length() != this.length) {
-                LOGGER.error("The field <" + value + "> with a length = " + value.length() + " should have a length = " + length);
+        for (String value : enumValues) {
+            int valueCPCount = value.codePointCount(0, value.length());
+            if (valueCPCount != this.length) {
+                LOGGER.error("The field <" + value + "> with a length = " + valueCPCount + " should have a length = " + length);
                 throw new DQRuntimeException(
-                        "The value <" + value + "> with a length = " + value.length() + " should have a length = " + length);
+                        "The value <" + value + "> with a length = " + valueCPCount + " should have a length = " + length);
             }
+        }
         this.enumValues = enumValues;
     }
 

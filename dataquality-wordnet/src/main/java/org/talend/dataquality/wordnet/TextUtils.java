@@ -15,6 +15,9 @@ package org.talend.dataquality.wordnet;
 public class TextUtils {
 
     public static String cutText(String input) {
+        if (input == null) {
+            return "";
+        }
         StringBuilder sb = new StringBuilder();
         int len = input.length();
         if (len > 0) {

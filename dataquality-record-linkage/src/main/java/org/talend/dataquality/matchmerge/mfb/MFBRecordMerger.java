@@ -200,8 +200,8 @@ public class MFBRecordMerger implements IRecordMerger {
         } else if (rightValue == null) {
             return leftValue;
         }
-        int leftValueLength = leftValue.length();
-        int rightValueLength = rightValue.length();
+        long leftValueLength = leftValue.codePoints().count();
+        long rightValueLength = rightValue.codePoints().count();
         switch (survivorShipAlgorithmEnum) {
         case CONCATENATE:
             if (StringUtils.isEmpty(parameter)) {

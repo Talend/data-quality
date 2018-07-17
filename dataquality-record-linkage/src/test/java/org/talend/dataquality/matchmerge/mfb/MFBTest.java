@@ -17,6 +17,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import junit.framework.TestCase;
+
 import org.talend.dataquality.matchmerge.Attribute;
 import org.talend.dataquality.matchmerge.MatchMergeAlgorithm;
 import org.talend.dataquality.matchmerge.Record;
@@ -28,8 +30,6 @@ import org.talend.dataquality.record.linkage.record.IRecordMatcher;
 import org.talend.dataquality.record.linkage.record.IRecordMerger;
 import org.talend.dataquality.record.linkage.record.SimpleVSRRecordMatcher;
 import org.talend.dataquality.record.linkage.utils.SurvivorShipAlgorithmEnum;
-
-import junit.framework.TestCase;
 
 public class MFBTest extends TestCase {
 
@@ -289,6 +289,21 @@ public class MFBTest extends TestCase {
         testSimilar(2, COUNT, AttributeMatcherType.LEVENSHTEIN);
         testSimilar(4, COUNT, AttributeMatcherType.LEVENSHTEIN);
         testSimilar(8, COUNT, AttributeMatcherType.LEVENSHTEIN);
+    }
+
+    public void testcreateMergeValueWithLongest() throws Exception {
+        MFBRecordMerger mFBRecordMerger = new MFBRecordMerger("", new String[0], new SurvivorShipAlgorithmEnum[0]);
+        String left = "abcde";
+        String right = "abc";
+        String mergeValue = mFBRecordMerger.createMergeValue("MFB", "MFB", null, 1, 0, SurvivorShipAlgorithmEnum.LONGEST, left,
+                right, null, null);
+        assertEquals(left, mergeValue);
+        // test surrogate pair
+        left = "你好吗";
+        right = "𠀐𠀑";
+        mergeValue = mFBRecordMerger.createMergeValue("MFB", "MFB", null, 1, 0, SurvivorShipAlgorithmEnum.LONGEST, left, right,
+                null, null);
+        assertEquals(left, mergeValue);
     }
 
 }

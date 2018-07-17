@@ -33,6 +33,18 @@ public class StringComparisonUtilTest {
 
     private String str5 = "bcd"; //$NON-NLS-1$
 
+    private String str6 = "拓蓝科技"; //$NON-NLS-1$
+
+    private String str7 = "拓蓝"; //$NON-NLS-1$
+
+    private String str8 = "𠀠𠀡𠀢"; //$NON-NLS-1$
+
+    private String str9 = "𠀠"; //$NON-NLS-1$
+
+    private String str10 = "𠀐𠀐𠀐"; //$NON-NLS-1$
+
+    private String str11 = "𠀐"; //$NON-NLS-1$
+
     /**
      * Test method for
      * {@link org.talend.dataquality.record.linkage.utils.StringComparisonUtil#difference(java.lang.String,java.lang.String)} .
@@ -47,6 +59,12 @@ public class StringComparisonUtilTest {
         assertEquals(0, StringComparisonUtil.difference(str1, str5));
         assertEquals(0, StringComparisonUtil.difference(" ", "")); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals(1, StringComparisonUtil.difference(" ", "  ")); //$NON-NLS-1$ //$NON-NLS-2$
+        // TDQ-15079: Support Chinese　and surrogate pair characters
+        assertEquals(2, StringComparisonUtil.difference(str6, str7));
+        assertEquals(1, StringComparisonUtil.difference(str8, str9));
+        assertEquals(0, StringComparisonUtil.difference(str8, str10));
+        assertEquals(0, StringComparisonUtil.difference(str8, str11));
+        assertEquals(1, StringComparisonUtil.difference(str10, str11));
     }
 
     /**
@@ -61,6 +79,9 @@ public class StringComparisonUtilTest {
         assertEquals("ab", StringComparisonUtil.getCommonCharacters(str1, str4, 1).toString()); //$NON-NLS-1$
         assertEquals("bc", StringComparisonUtil.getCommonCharacters(str1, str5, 1).toString()); //$NON-NLS-1$
         assertEquals(" ", StringComparisonUtil.getCommonCharacters(" ", "  ", 1).toString()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        // TDQ-15079: Support Chinese　and surrogate pair characters
+        assertEquals(str7, StringComparisonUtil.getCommonCharacters(str6, str7, 1).toString());
+        assertEquals(str9, StringComparisonUtil.getCommonCharacters(str8, str9, 1).toString());
     }
 
     /**
@@ -78,6 +99,9 @@ public class StringComparisonUtilTest {
         assertEquals(0, StringComparisonUtil.getPrefixLength(str1, str5));
         assertEquals(0, StringComparisonUtil.getPrefixLength(" ", "")); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals(1, StringComparisonUtil.getPrefixLength(" ", "  ")); //$NON-NLS-1$ //$NON-NLS-2$
+        // TDQ-15079: Support Chinese　and surrogate pair characters
+        assertEquals(2, StringComparisonUtil.getPrefixLength(str6, str7));
+        assertEquals(1, StringComparisonUtil.getPrefixLength(str8, str9));
     }
 
 }

@@ -32,6 +32,8 @@ public class AlgoBoxTest {
 
     private static final String TEST_STR = "test"; //$NON-NLS-1$
 
+    private final String MIXTD_SURROGATEPAIR = "𠀀𠀐我𠀑ab"; //$NON-NLS-1$
+
     /**
      * Test method for {@link org.talend.windowkey#add_Left_Char(String, String)}
      */
@@ -114,6 +116,9 @@ public class AlgoBoxTest {
         assertEquals(BLANK_STR, AlgoBox.first_Char_EW(BLANK_STR));
         assertEquals("n", AlgoBox.first_Char_EW(NULL_STR)); //$NON-NLS-1$
         assertEquals(QUO_STR, AlgoBox.first_Char_EW(QUO_STR));
+        // TDQ-15079: Support Chinese　and surrogate pair characters
+        assertEquals("拓", AlgoBox.first_Char_EW("拓蓝科技")); //$NON-NLS-1$//$NON-NLS-2$
+        assertEquals("𠀀", AlgoBox.first_Char_EW(MIXTD_SURROGATEPAIR)); //$NON-NLS-1$
     }
 
     /**
@@ -129,6 +134,9 @@ public class AlgoBoxTest {
         assertEquals("n", AlgoBox.first_N_Char(NULL_STR, 1)); //$NON-NLS-1$
         assertEquals(QUO_STR, AlgoBox.first_N_Char(QUO_STR, 1));
         assertEquals("   ", AlgoBox.first_N_Char("   abc", 3)); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals(MIXTD_SURROGATEPAIR, AlgoBox.first_N_Char(MIXTD_SURROGATEPAIR, 10));
+        assertEquals("𠀀𠀐", AlgoBox.first_N_Char(MIXTD_SURROGATEPAIR, 2)); //$NON-NLS-1$
+        assertEquals("𠀀𠀐我𠀑a", AlgoBox.first_N_Char(MIXTD_SURROGATEPAIR, 5)); //$NON-NLS-1$
     }
 
     /**
@@ -149,6 +157,9 @@ public class AlgoBoxTest {
         assertEquals(QUO_STR, AlgoBox.first_N_Char_EW(QUO_STR, 1));
         assertEquals("ab", AlgoBox.first_N_Char_EW("   abc", 2)); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals("a", AlgoBox.first_N_Char_EW("   abc", 1)); //$NON-NLS-1$ //$NON-NLS-2$
+        // TDQ-15079: Support Chinese　and surrogate pair characters
+        assertEquals("拓科", AlgoBox.first_N_Char_EW("拓蓝\r科技", 1)); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("𠀀𠀐𠀑a", AlgoBox.first_N_Char_EW("𠀀𠀐我\t𠀑ab", 2)); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     /**
@@ -164,7 +175,6 @@ public class AlgoBoxTest {
         assertEquals(BLANK_STR, AlgoBox.first_N_Consonants(BLANK_STR, 1));
         assertEquals(BLANK_STR, AlgoBox.first_N_Consonants(SPACE_STR, 1));
         assertEquals("n", AlgoBox.first_N_Consonants(NULL_STR, 1)); //$NON-NLS-1$
-        assertEquals(BLANK_STR, AlgoBox.first_N_Consonants(QUO_STR, 1));
     }
 
     /**
@@ -197,6 +207,11 @@ public class AlgoBoxTest {
         assertEquals(SPACE_STR, AlgoBox.last_N_Char(SPACE_STR, 1));
         assertEquals("l", AlgoBox.last_N_Char(NULL_STR, 1)); //$NON-NLS-1$
         assertEquals(QUO_STR, AlgoBox.last_N_Char(QUO_STR, 1));
+        assertEquals(QUO_STR, AlgoBox.last_N_Char(QUO_STR, 1));
+        // TDQ-15079: Support Chinese　and surrogate pair characters
+        assertEquals(MIXTD_SURROGATEPAIR, AlgoBox.last_N_Char(MIXTD_SURROGATEPAIR, 100)); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("𠀑ab", AlgoBox.last_N_Char(MIXTD_SURROGATEPAIR, 3)); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("𠀐我𠀑ab", AlgoBox.last_N_Char(MIXTD_SURROGATEPAIR, 5)); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     /**
@@ -264,6 +279,12 @@ public class AlgoBoxTest {
         assertEquals(BLANK_STR, AlgoBox.pick_Char(SPACE_STR, BLANK_STR));
         assertEquals(BLANK_STR, AlgoBox.pick_Char(TEST_STR, SPACE_STR));
         assertEquals(BLANK_STR, AlgoBox.pick_Char(QUO_STR, "1")); //$NON-NLS-1$
+        // TDQ-15079: Support Chinese　and surrogate pair characters
+        assertEquals(BLANK_STR, AlgoBox.pick_Char(MIXTD_SURROGATEPAIR, BLANK_STR));
+        assertEquals("𠀐", AlgoBox.pick_Char(MIXTD_SURROGATEPAIR, "1")); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("我", AlgoBox.pick_Char(MIXTD_SURROGATEPAIR, "2")); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("𠀑", AlgoBox.pick_Char(MIXTD_SURROGATEPAIR, "3")); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("a", AlgoBox.pick_Char(MIXTD_SURROGATEPAIR, "4")); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     /**
@@ -333,6 +354,12 @@ public class AlgoBoxTest {
         assertEquals(BLANK_STR, AlgoBox.subStr(TEST_STR, SPACE_STR));
         assertEquals("est", AlgoBox.subStr(TEST_STR, "1;100")); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals("cd", AlgoBox.subStr("abcdef", "2;4")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+    }
+
+    @Test
+    public void testSubStrSurrogatePair() {
+        assertEquals("𠀐我", AlgoBox.subStr(MIXTD_SURROGATEPAIR, "1;3")); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("我𠀑a", AlgoBox.subStr(MIXTD_SURROGATEPAIR, "2;5")); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     /**
