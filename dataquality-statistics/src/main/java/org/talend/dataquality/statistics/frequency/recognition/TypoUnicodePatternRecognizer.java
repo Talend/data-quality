@@ -35,7 +35,6 @@ import org.talend.dataquality.statistics.type.DataTypeEnum;
  * presented in {@link TypoUnicodePatternRecognizer}.
  * <br>
  * <li>[Word] : A character string beginning by a capital letter followed only by small letters.</li>
- * <li>[wORD] : A character string beginning by a small letter followed only by capital letters.</li>
  * <li>[WORD] : A character string only composed with capital letters.</li>
  * <li>[word] : A character string only composed with small letters.</li>
  * <li>[Char] : A single capital letter comprised between non alphabetic characters and ideographs.</li>
