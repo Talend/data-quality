@@ -26,10 +26,11 @@ public class KatakanaToHiragana {
     }
 
     private static String handleChoonpu(String katakanaToken) {
-        if (katakanaToken.indexOf('ー') >= 0) {// handle Chōonpu, see: https://en.wikipedia.org/wiki/Ch%C5%8Donpu
+        final int id1stChoonpu = katakanaToken.indexOf('ー');
+        if (id1stChoonpu >= 0) {// handle Chōonpu, see: https://en.wikipedia.org/wiki/Ch%C5%8Donpu
             char[] kanaChars = katakanaToken.toCharArray();
-            for (int i = 1; i < kanaChars.length; i++) { // search 'ー' from the 2nd char till the last char
-                if (kanaChars[i] == 'ー') {
+            for (int i = id1stChoonpu; i < kanaChars.length; i++) { // from the 1st 'ー' till the last char
+                if (i > 0 && kanaChars[i] == 'ー') {
                     final char preChar = kanaChars[i - 1]; // get the char before 'ー'
                     if (KatakanaToRomaji.KATAKANA_TO_ROMAJI.containsKey("" + preChar)) {
                         final String s = KatakanaToRomaji.KATAKANA_TO_ROMAJI.get("" + preChar)[0];
