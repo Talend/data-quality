@@ -13,6 +13,7 @@
 package org.talend.windowkey;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -34,6 +35,12 @@ public class AlgoBoxTest {
 
     private final String MIXTD_SURROGATEPAIR = "𠀀𠀐我𠀑ab"; //$NON-NLS-1$
 
+    private static final String JAPANESE1_STR = "リンゴ"; //$NON-NLS-1$
+
+    private static final String JAPANESE2_STR = "リンゴを食べる"; //$NON-NLS-1$
+
+    private static final String JAPANESE3_STR = "リンゴ を 食べる"; //$NON-NLS-1$
+
     /**
      * Test method for {@link org.talend.windowkey#add_Left_Char(String, String)}
      */
@@ -44,6 +51,7 @@ public class AlgoBoxTest {
         assertEquals(NULL_STR, AlgoBox.add_Left_Char(NULL_STR, BLANK_STR));
         assertEquals("\\test", AlgoBox.add_Left_Char(TEST_STR, "\\")); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals(QUO_STR, AlgoBox.add_Left_Char(null, QUO_STR));
+        assertEquals("<リンゴ", AlgoBox.add_Left_Char(JAPANESE1_STR, "<")); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     /**
@@ -56,6 +64,7 @@ public class AlgoBoxTest {
         assertEquals(NULL_STR, AlgoBox.add_Right_Char(NULL_STR, BLANK_STR));
         assertEquals("test\\", AlgoBox.add_Right_Char(TEST_STR, "\\")); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals(QUO_STR, AlgoBox.add_Right_Char(null, QUO_STR));
+        assertEquals("リンゴ<", AlgoBox.add_Right_Char(JAPANESE1_STR, "<")); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     /**
@@ -68,6 +77,7 @@ public class AlgoBoxTest {
         assertEquals(BLANK_STR, AlgoBox.colognePhonetic(BLANK_STR));
         assertEquals("65", AlgoBox.colognePhonetic(NULL_STR)); //$NON-NLS-1$
         assertEquals(BLANK_STR, AlgoBox.colognePhonetic(QUO_STR));
+        assertEquals(BLANK_STR, AlgoBox.colognePhonetic(JAPANESE1_STR));
     }
 
     /**
@@ -80,6 +90,7 @@ public class AlgoBoxTest {
         assertEquals(null, AlgoBox.doublemetaphone(BLANK_STR));
         assertEquals("NL", AlgoBox.doublemetaphone(NULL_STR)); //$NON-NLS-1$
         assertEquals(BLANK_STR, AlgoBox.doublemetaphone(QUO_STR));
+        assertEquals(BLANK_STR, AlgoBox.doublemetaphone(JAPANESE1_STR));
     }
 
     /**
@@ -92,6 +103,7 @@ public class AlgoBoxTest {
         assertEquals(BLANK_STR, AlgoBox.exact(BLANK_STR));
         assertEquals(NULL_STR, AlgoBox.exact(NULL_STR));
         assertEquals(QUO_STR, AlgoBox.exact(QUO_STR));
+        assertEquals(JAPANESE1_STR, AlgoBox.exact(JAPANESE1_STR));
     }
 
     /**
@@ -104,6 +116,7 @@ public class AlgoBoxTest {
         assertEquals(BLANK_STR, AlgoBox.fingerPrintKey(BLANK_STR));
         assertEquals(NULL_STR, AlgoBox.fingerPrintKey(NULL_STR));
         assertEquals(BLANK_STR, AlgoBox.fingerPrintKey(QUO_STR));
+        assertEquals(JAPANESE1_STR, AlgoBox.fingerPrintKey(JAPANESE1_STR));
     }
 
     /**
@@ -119,6 +132,9 @@ public class AlgoBoxTest {
         // TDQ-15079: Support Chinese　and surrogate pair characters
         assertEquals("拓", AlgoBox.first_Char_EW("拓蓝科技")); //$NON-NLS-1$//$NON-NLS-2$
         assertEquals("𠀀", AlgoBox.first_Char_EW(MIXTD_SURROGATEPAIR)); //$NON-NLS-1$
+        assertEquals("リ", AlgoBox.first_Char_EW(JAPANESE1_STR)); //$NON-NLS-1$
+        assertEquals("リ", AlgoBox.first_Char_EW(JAPANESE2_STR)); //$NON-NLS-1$
+        assertEquals("リを食", AlgoBox.first_Char_EW(JAPANESE3_STR)); //$NON-NLS-1$
     }
 
     /**
@@ -137,6 +153,9 @@ public class AlgoBoxTest {
         assertEquals(MIXTD_SURROGATEPAIR, AlgoBox.first_N_Char(MIXTD_SURROGATEPAIR, 10));
         assertEquals("𠀀𠀐", AlgoBox.first_N_Char(MIXTD_SURROGATEPAIR, 2)); //$NON-NLS-1$
         assertEquals("𠀀𠀐我𠀑a", AlgoBox.first_N_Char(MIXTD_SURROGATEPAIR, 5)); //$NON-NLS-1$
+        assertEquals("リ", AlgoBox.first_N_Char(JAPANESE1_STR, 1)); //$NON-NLS-1$
+        assertEquals("リン", AlgoBox.first_N_Char(JAPANESE2_STR, 2)); //$NON-NLS-1$
+        assertEquals("リンゴ を", AlgoBox.first_N_Char(JAPANESE3_STR, 5)); //$NON-NLS-1$
     }
 
     /**
@@ -160,6 +179,9 @@ public class AlgoBoxTest {
         // TDQ-15079: Support Chinese　and surrogate pair characters
         assertEquals("拓科", AlgoBox.first_N_Char_EW("拓蓝\r科技", 1)); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals("𠀀𠀐𠀑a", AlgoBox.first_N_Char_EW("𠀀𠀐我\t𠀑ab", 2)); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("リ", AlgoBox.first_N_Char_EW(JAPANESE1_STR, 1)); //$NON-NLS-1$
+        assertEquals("リン", AlgoBox.first_N_Char_EW(JAPANESE2_STR, 2)); //$NON-NLS-1$
+        assertEquals("リンを食べ", AlgoBox.first_N_Char_EW(JAPANESE3_STR, 2)); //$NON-NLS-1$
     }
 
     /**
@@ -175,6 +197,7 @@ public class AlgoBoxTest {
         assertEquals(BLANK_STR, AlgoBox.first_N_Consonants(BLANK_STR, 1));
         assertEquals(BLANK_STR, AlgoBox.first_N_Consonants(SPACE_STR, 1));
         assertEquals("n", AlgoBox.first_N_Consonants(NULL_STR, 1)); //$NON-NLS-1$
+        assertEquals(BLANK_STR, AlgoBox.first_N_Consonants(JAPANESE1_STR, 1));
     }
 
     /**
@@ -191,6 +214,7 @@ public class AlgoBoxTest {
         assertEquals(BLANK_STR, AlgoBox.first_N_Vowels(SPACE_STR, 1));
         assertEquals("u", AlgoBox.first_N_Vowels(NULL_STR, 1)); //$NON-NLS-1$
         assertEquals(BLANK_STR, AlgoBox.first_N_Vowels(QUO_STR, 1));
+        assertEquals(BLANK_STR, AlgoBox.first_N_Vowels(JAPANESE1_STR, 1));
     }
 
     /**
@@ -209,9 +233,12 @@ public class AlgoBoxTest {
         assertEquals(QUO_STR, AlgoBox.last_N_Char(QUO_STR, 1));
         assertEquals(QUO_STR, AlgoBox.last_N_Char(QUO_STR, 1));
         // TDQ-15079: Support Chinese　and surrogate pair characters
-        assertEquals(MIXTD_SURROGATEPAIR, AlgoBox.last_N_Char(MIXTD_SURROGATEPAIR, 100)); //$NON-NLS-1$ //$NON-NLS-2$
-        assertEquals("𠀑ab", AlgoBox.last_N_Char(MIXTD_SURROGATEPAIR, 3)); //$NON-NLS-1$ //$NON-NLS-2$
-        assertEquals("𠀐我𠀑ab", AlgoBox.last_N_Char(MIXTD_SURROGATEPAIR, 5)); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals(MIXTD_SURROGATEPAIR, AlgoBox.last_N_Char(MIXTD_SURROGATEPAIR, 100));
+        assertEquals("𠀑ab", AlgoBox.last_N_Char(MIXTD_SURROGATEPAIR, 3)); //$NON-NLS-1$ 
+        assertEquals("𠀐我𠀑ab", AlgoBox.last_N_Char(MIXTD_SURROGATEPAIR, 5)); //$NON-NLS-1$ 
+        assertEquals("ゴ", AlgoBox.last_N_Char(JAPANESE1_STR, 1)); //$NON-NLS-1$
+        assertEquals("べる", AlgoBox.last_N_Char(JAPANESE2_STR, 2)); //$NON-NLS-1$
+        assertEquals(" 食べる", AlgoBox.last_N_Char(JAPANESE3_STR, 4)); //$NON-NLS-1$
     }
 
     /**
@@ -228,6 +255,7 @@ public class AlgoBoxTest {
         assertEquals(SPACE_STR, AlgoBox.lowerCase(SPACE_STR));
         assertEquals(NULL_STR, AlgoBox.lowerCase("Null")); //$NON-NLS-1$
         assertEquals(QUO_STR, AlgoBox.lowerCase(QUO_STR));
+        assertEquals(JAPANESE1_STR, AlgoBox.lowerCase(JAPANESE1_STR));
     }
 
     /**
@@ -244,12 +272,12 @@ public class AlgoBoxTest {
         assertEquals(SPACE_STR, AlgoBox.metaphone(SPACE_STR));
         assertEquals("NL", AlgoBox.metaphone("Null")); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals(QUO_STR, AlgoBox.metaphone(QUO_STR));
+        assertEquals(BLANK_STR, AlgoBox.metaphone(JAPANESE1_STR));
     }
 
     /**
      * Test method for {@link org.talend.windowkey#nGramKey(String)}
      */
-    @SuppressWarnings("nls")
     @Test
     public void testNGramKey() {
         assertEquals(null, AlgoBox.nGramKey(null));
@@ -261,6 +289,7 @@ public class AlgoBoxTest {
         assertEquals(BLANK_STR, AlgoBox.nGramKey(SPACE_STR));
         assertEquals("llnuul", AlgoBox.nGramKey(NULL_STR)); //$NON-NLS-1$
         assertEquals(BLANK_STR, AlgoBox.nGramKey(QUO_STR));
+        assertEquals("リンンゴ", AlgoBox.nGramKey(JAPANESE1_STR)); //$NON-NLS-1$
     }
 
     /**
@@ -285,6 +314,7 @@ public class AlgoBoxTest {
         assertEquals("我", AlgoBox.pick_Char(MIXTD_SURROGATEPAIR, "2")); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals("𠀑", AlgoBox.pick_Char(MIXTD_SURROGATEPAIR, "3")); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals("a", AlgoBox.pick_Char(MIXTD_SURROGATEPAIR, "4")); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("ン", AlgoBox.pick_Char(JAPANESE1_STR, "1")); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     /**
@@ -299,6 +329,7 @@ public class AlgoBoxTest {
         assertEquals("Test test", AlgoBox.removeDiacriticalMarks("Test test")); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals(SPACE_STR, AlgoBox.removeDiacriticalMarks(SPACE_STR));
         assertEquals(QUO_STR, AlgoBox.removeDiacriticalMarks(QUO_STR));
+        assertEquals(JAPANESE1_STR, AlgoBox.removeDiacriticalMarks(JAPANESE1_STR));
     }
 
     /**
@@ -313,6 +344,7 @@ public class AlgoBoxTest {
         assertEquals("test test12", AlgoBox.removeDMAndLowerCase("Test test12")); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals(SPACE_STR, AlgoBox.removeDMAndLowerCase(SPACE_STR));
         assertEquals(QUO_STR, AlgoBox.removeDMAndLowerCase(QUO_STR));
+        assertEquals(JAPANESE1_STR, AlgoBox.removeDMAndLowerCase(JAPANESE1_STR));
     }
 
     /**
@@ -327,6 +359,7 @@ public class AlgoBoxTest {
         assertEquals("TESTDTESTMTEST TEST", AlgoBox.removeDMAndUpperCase("TestDtestMTest test")); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals(SPACE_STR, AlgoBox.removeDMAndUpperCase(SPACE_STR));
         assertEquals(QUO_STR, AlgoBox.removeDMAndUpperCase(QUO_STR));
+        assertEquals(JAPANESE1_STR, AlgoBox.removeDMAndUpperCase(JAPANESE1_STR));
     }
 
     /**
@@ -340,6 +373,11 @@ public class AlgoBoxTest {
         assertEquals("T232", AlgoBox.soundex("Test test")); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals(BLANK_STR, AlgoBox.soundex(SPACE_STR));
         assertEquals(BLANK_STR, AlgoBox.soundex(QUO_STR));
+        try {
+            AlgoBox.soundex(JAPANESE1_STR);
+        } catch (Exception e) {
+            assertTrue(e instanceof IllegalArgumentException);
+        }
     }
 
     /**
@@ -354,12 +392,9 @@ public class AlgoBoxTest {
         assertEquals(BLANK_STR, AlgoBox.subStr(TEST_STR, SPACE_STR));
         assertEquals("est", AlgoBox.subStr(TEST_STR, "1;100")); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals("cd", AlgoBox.subStr("abcdef", "2;4")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-    }
-
-    @Test
-    public void testSubStrSurrogatePair() {
         assertEquals("𠀐我", AlgoBox.subStr(MIXTD_SURROGATEPAIR, "1;3")); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals("我𠀑a", AlgoBox.subStr(MIXTD_SURROGATEPAIR, "2;5")); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("ゴを", AlgoBox.subStr(JAPANESE2_STR, "2;4")); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     /**
@@ -376,6 +411,7 @@ public class AlgoBoxTest {
         assertEquals(SPACE_STR, AlgoBox.upperCase(SPACE_STR));
         assertEquals("NULL ", AlgoBox.upperCase("Null ")); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals(QUO_STR, AlgoBox.upperCase(QUO_STR));
+        assertEquals(JAPANESE1_STR, AlgoBox.upperCase(JAPANESE1_STR));
     }
 
     /**
@@ -388,5 +424,6 @@ public class AlgoBoxTest {
         assertEquals(TEST_STR, AlgoBox.useDefault(null, TEST_STR));
         assertEquals(TEST_STR, AlgoBox.useDefault(TEST_STR, SPACE_STR));
         assertEquals("Test test12", AlgoBox.useDefault("Test test12", NULL_STR)); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals(JAPANESE1_STR, AlgoBox.useDefault(JAPANESE1_STR, JAPANESE2_STR));
     }
 }
