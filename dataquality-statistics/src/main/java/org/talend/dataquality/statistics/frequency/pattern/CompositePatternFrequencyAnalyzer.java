@@ -17,7 +17,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.talend.dataquality.common.inference.ResizableList;
+import org.talend.dataquality.semantic.recognizer.LFUCache;
 import org.talend.dataquality.statistics.frequency.AbstractFrequencyAnalyzer;
 import org.talend.dataquality.statistics.frequency.AbstractFrequencyStatistics;
 import org.talend.dataquality.statistics.frequency.recognition.AbstractPatternRecognizer;
@@ -40,6 +42,8 @@ public class CompositePatternFrequencyAnalyzer extends AbstractFrequencyAnalyzer
     private static final long serialVersionUID = -4658709249927616622L;
 
     private List<AbstractPatternRecognizer> patternFreqRecognizers = new ArrayList<AbstractPatternRecognizer>();
+
+    private final ResizableList<LFUCache> knownPatternCaches = new ResizableList<>(LFUCache.class);
 
     private DataTypeEnum[] types; // types of columns
 
@@ -71,22 +75,31 @@ public class CompositePatternFrequencyAnalyzer extends AbstractFrequencyAnalyzer
         if (freqTableStatistics == null || freqTableStatistics.isEmpty()) {
             initFreqTableList(record.length);
         }
+        knownPatternCaches.resize(record.length);
         for (int i = 0; i < record.length; i++) {
-            AbstractFrequencyStatistics freqStats = freqTableStatistics.get(i);
-
-            if (types.length > 0) {
-                analyzeField(record[i], freqStats, types[i]);
+            final LFUCache<String, Set<String>> knownPatternCache = knownPatternCaches.get(i);
+            final Set<String> knownPatterns = knownPatternCache.get(record[i]);
+            final AbstractFrequencyStatistics freqStats = freqTableStatistics.get(i);
+            if (CollectionUtils.isNotEmpty(knownPatterns)) {
+                knownPatterns.forEach(knownPattern -> freqStats.add(knownPattern));
             } else {
-                analyzeField(record[i], freqStats, null);
+                if (types.length > 0) {
+                    analyzeField(record[i], freqStats, types[i], knownPatternCache);
+                } else {
+                    analyzeField(record[i], freqStats, null, knownPatternCache);
+                }
             }
         }
         return true;
     }
 
-    protected void analyzeField(String field, AbstractFrequencyStatistics freqStats, DataTypeEnum type) {
-        for (String pattern : getValuePatternSet(field, type)) {
+    protected void analyzeField(String field, AbstractFrequencyStatistics freqStats, DataTypeEnum type,
+            LFUCache<String, Set<String>> knownPatternCache) {
+        Set<String> patternSet = getValuePatternSet(field, type);
+        for (String pattern : patternSet) {
             freqStats.add(pattern);
         }
+        knownPatternCache.put(field, patternSet);
     }
 
     @Override
