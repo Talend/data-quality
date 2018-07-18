@@ -141,7 +141,8 @@ public class TextTransliteratorTest {
         tests.put("モールス信号 ・・ ・ー ーー ・・・ ーーー ・ー・ ー・ー", // Mōrusu shingō ... (Morse code ...)
                 "もおるす しんごう   ゛ ゛   ゛ー   ーー   ゛ ゛ ゛   ーーー   ゛ー゛   ー゛ー");
 
-        tests.keySet()
-                .forEach(text -> assertEquals(transliterator.transliterate(text, TransliterateType.HIRAGANA), tests.get(text)));
+        for (Map.Entry<String, String> t : tests.entrySet()) {
+            assertEquals(t.getValue(), transliterator.transliterate(t.getKey(), TransliterateType.HIRAGANA));
+        }
     }
 }
