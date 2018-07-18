@@ -15,7 +15,9 @@ package org.talend.dataquality.jp.transliteration;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 
@@ -31,6 +33,7 @@ public class TextTransliteratorTest {
         testTextList.add("東京は夜の七時"); //chōonpu:東京; Multi-pronunciation Kana: は
         testTextList.add("くノ一 female ninja"); //mixed hiragana, katakana, kanji, english
         testTextList.add("日本型の顔文字👨‍🎨『笑い』(≧▽≦)富士山／^o^＼"); //emoticon
+        testTextList.add("縮む"); //to shrink
     }
 
     @Test
@@ -40,6 +43,7 @@ public class TextTransliteratorTest {
         expactedTextList.add("トウキョウ ハ ヨル ノ ナナ ジ");
         expactedTextList.add("ク ノ イチ   female   ninja");
         expactedTextList.add("ニッポン ガタ ノ カオ モジ 👨 ‍ 🎨 『 ワライ 』(≧▽≦) フジサン ／^ o ^＼");
+        expactedTextList.add("チヂム");
 
         for (int i = 0; i < testTextList.size(); i++) {
             final String katakanaReading = transliterator.transliterate(testTextList.get(i), TransliterateType.KATAKANA_READING,
@@ -55,6 +59,7 @@ public class TextTransliteratorTest {
         expactedTextList.add("トーキョー ワ ヨル ノ ナナ ジ");
         expactedTextList.add("ク ノ イチ   female   ninja");
         expactedTextList.add("ニッポン ガタ ノ カオ モジ 👨 ‍ 🎨 『 ワライ 』(≧▽≦) フジサン ／^ o ^＼");
+        expactedTextList.add("チジム");
 
         for (int i = 0; i < testTextList.size(); i++) {
             final String katakanaPronunciation = transliterator.transliterate(testTextList.get(i),
@@ -70,6 +75,7 @@ public class TextTransliteratorTest {
         expactedTextList.add("とうきょう は よる の なな じ");
         expactedTextList.add("く の いち   female   ninja");
         expactedTextList.add("にっぽん がた の かお もじ 👨 ‍ 🎨 『 わらい 』(≧▽≦) ふじさん ／^ o ^＼");
+        expactedTextList.add("ちぢむ");
 
         for (int i = 0; i < testTextList.size(); i++) {
             final String hiragana = transliterator.transliterate(testTextList.get(i), TransliterateType.HIRAGANA);
@@ -84,6 +90,7 @@ public class TextTransliteratorTest {
         expactedTextList.add("tōkyō wa yoru no nana ji");
         expactedTextList.add("ku no ichi   female   ninja");
         expactedTextList.add("nippon gata no kao moji 👨 ‍ 🎨 『 warai 』(≧▽≦) fujisan ／^ o ^＼");
+        expactedTextList.add("chijimu");
 
         for (int i = 0; i < testTextList.size(); i++) {
             final String hepburn = transliterator.transliterate(testTextList.get(i), TransliterateType.HEPBURN);
@@ -98,6 +105,7 @@ public class TextTransliteratorTest {
         expactedTextList.add("tōkyō wa yoru no nana zi");
         expactedTextList.add("ku no iti   female   ninja");
         expactedTextList.add("nippon gata no kao mozi 👨 ‍ 🎨 『 warai 』(≧▽≦) huzisan ／^ o ^＼");
+        expactedTextList.add("tizimu");
 
         for (int i = 0; i < testTextList.size(); i++) {
             final String kunrei_shiki = transliterator.transliterate(testTextList.get(i), TransliterateType.KUNREI_SHIKI);
@@ -112,10 +120,28 @@ public class TextTransliteratorTest {
         expactedTextList.add("tōkyō wa yoru no nana zi");
         expactedTextList.add("ku no iti   female   ninja");
         expactedTextList.add("nippon gata no kao mozi 👨 ‍ 🎨 『 warai 』(≧▽≦) huzisan ／^ o ^＼");
+        expactedTextList.add("tizimu");
 
         for (int i = 0; i < testTextList.size(); i++) {
             final String nihon_shiki = transliterator.transliterate(testTextList.get(i), TransliterateType.NIHON_SHIKI);
             assertEquals(expactedTextList.get(i), nihon_shiki);
         }
+    }
+
+    @Test
+    public void testChoonpuHiragana() {
+        Map<String, String> tests = new HashMap<>();
+        tests.put("ローマ字", "ろおまじ"); // Rōmaji (Roman letters)
+        tests.put("エレベーター", "えれべえたあ"); // Erebētā (Elevator)
+        tests.put("モーターカー", "もおたあかあ"); // Mōtākā (Motor car)
+        tests.put("スポーツカーシリーズ", "すぽおつかあ しりいず"); // Supōtsukā shirīzu (Sports car series)
+        tests.put("クーデター", "くうでたあ"); // Kūdetā (Coup d'etat)
+        tests.put("ラーメン", "らあめん"); // Rāmen
+        tests.put("らーめん", "ら ー めん"); // Rāmen (kuromoji return tokens: ら| ー| めん)
+        tests.put("モールス信号 ・・ ・ー ーー ・・・ ーーー ・ー・ ー・ー", // Mōrusu shingō ... (Morse code ...)
+                "もおるす しんごう   ゛ ゛   ゛ー   ーー   ゛ ゛ ゛   ーーー   ゛ー゛   ー゛ー");
+
+        tests.keySet()
+                .forEach(text -> assertEquals(transliterator.transliterate(text, TransliterateType.HIRAGANA), tests.get(text)));
     }
 }

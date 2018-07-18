@@ -23,7 +23,7 @@ public class KatakanaToRomaji {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(KatakanaToRomaji.class);
 
-    private static final Map<String, String[]> KATAKANA_TO_ROMAJI = new HashMap<>();
+    protected static final Map<String, String[]> KATAKANA_TO_ROMAJI = new HashMap<>();
     // see https://en.wikipedia.org/wiki/Romanization_of_Japanese#Differences_among_romanizations
     static {
         KATAKANA_TO_ROMAJI.put("ア", new String[] { "a" });
