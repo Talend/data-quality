@@ -12,12 +12,16 @@
 // ============================================================================
 package org.talend.dataquality.statistics.datetime;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 
 /**
  * Customized date time pattern manager.
@@ -89,15 +93,21 @@ public final class CustomDateTimePatternManager {
             }
         }
         // otherwise, replace with system date pattern manager.
-        resultPatternSet.addAll(systemPatternReplace(value));
+        resultPatternSet.addAll(systemPatternReplace(value).getLeft());
         return resultPatternSet;
     }
 
-    private static Set<String> systemPatternReplace(String value) {
-        Set<String> resultPatternSet = new HashSet<>();
-        resultPatternSet.addAll(SystemDateTimePatternManager.datePatternReplace(value));
-        if (resultPatternSet.isEmpty()) {
-            resultPatternSet.addAll(SystemDateTimePatternManager.timePatternReplace(value));
+    public static Pair<Set<String>, Map<Pattern, String>> replaceByDateTimePatternWithGroup(String value) {
+        Pair<Set<String>, Map<Pattern, String>> resultPatternSet = systemPatternReplace(value);
+
+        return resultPatternSet;
+    }
+
+    private static Pair<Set<String>, Map<Pattern, String>> systemPatternReplace(String value) {
+        Pair<Set<String>, Map<Pattern, String>> resultPatternSet = SystemDateTimePatternManager
+                .datePatternReplaceWithGroup(value);
+        if (resultPatternSet.getRight().isEmpty()) {
+            resultPatternSet = SystemDateTimePatternManager.timePatternReplaceWithGroup(value);
         }
         return resultPatternSet;
     }
