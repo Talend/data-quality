@@ -41,7 +41,6 @@ public class CustomDateTimePatternRecognizerTest {
         ArrayList<AbstractPatternRecognizer> recognizers = new ArrayList<AbstractPatternRecognizer>();
         recognizers.add(new EmptyPatternRecognizer());
         DateTimePatternRecognizer recognizer = new DateTimePatternRecognizer();
-        recognizer.addCustomDateTimePattern("=d/M/yy=");
         recognizers.add(recognizer);
         recognizers.add(new LatinExtendedCharPatternRecognizer());
         recognizers.add(new EastAsianCharPatternRecognizer());
@@ -84,7 +83,7 @@ public class CustomDateTimePatternRecognizerTest {
                 put("99 aaa Aaaaa", 1L);
                 put("M/d/yy", 1L);
                 put("MM/dd/yyyy", 1L);
-                put("=d/M/yy=", 1L);
+                put("=99/9/99=", 1L);
 
             }
         };

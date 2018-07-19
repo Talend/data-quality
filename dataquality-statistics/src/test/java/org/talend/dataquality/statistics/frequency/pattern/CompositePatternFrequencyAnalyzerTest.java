@@ -13,7 +13,6 @@
 package org.talend.dataquality.statistics.frequency.pattern;
 
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -28,7 +27,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.statistics.frequency.AbstractFrequencyAnalyzer;
-import org.talend.dataquality.statistics.frequency.recognition.DateTimePatternRecognizer;
 import org.talend.dataquality.statistics.quality.DataTypeQualityAnalyzer;
 import org.talend.dataquality.statistics.type.DataTypeEnum;
 
@@ -149,32 +147,6 @@ public class CompositePatternFrequencyAnalyzerTest {
         }
         Assert.assertTrue(isAtLeastOneAsssert);
 
-    }
-
-    @Test
-    public void testCustomDatePatternAnalyzer() {
-        DateTimePatternRecognizer datetimePatternAnalyzer = new DateTimePatternRecognizer();
-        final String[] data = new String[] { "11/19/07 2:54", "7/6/09 16:46", "2015-08-20", "2012-02-12", "2/8/15 15:57",
-                "4/15/11 4:24", "2001年", "12:00.000000 1?1?7" };
-
-        // Set customized pattern and analyze again
-        datetimePatternAnalyzer.addCustomDateTimePattern("M/d/yy H:m");
-
-        CompositePatternFrequencyAnalyzer patternAnalyzer = new CompositePatternFrequencyAnalyzer(
-                Collections.singletonList(datetimePatternAnalyzer));
-        patternAnalyzer.init();
-        for (String value : data) {
-            patternAnalyzer.analyze(value);
-        }
-        patternAnalyzer.end();
-        Map<String, Long> freqTable = patternAnalyzer.getResult().get(0).getTopK(10);
-
-        Long pattern = freqTable.get("M/d/yy H:m");
-        if (pattern != null) {
-            Assert.assertEquals(4, pattern, 0);
-        } else {
-            fail("no entry");
-        }
     }
 
     @Test

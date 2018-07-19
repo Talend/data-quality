@@ -276,6 +276,16 @@ public class SystemDateTimePatternManager {
      * @return date pattern string.
      */
     public static Set<String> datePatternReplace(String value) {
+        return dateTimePatternReplace(DATE_PATTERN_GROUP_LIST, value).getLeft();
+    }
+
+    /**
+     * Replace the value with date pattern string.
+     *
+     * @param value
+     * @return
+     */
+    public static Pair<Set<String>, Map<Pattern, String>> datePatternReplaceWithGroup(String value) {
         return dateTimePatternReplace(DATE_PATTERN_GROUP_LIST, value);
     }
 
@@ -286,12 +296,23 @@ public class SystemDateTimePatternManager {
      * @return
      */
     public static Set<String> timePatternReplace(String value) {
+        return dateTimePatternReplace(TIME_PATTERN_GROUP_LIST, value).getLeft();
+    }
+
+    /**
+     * Replace the value with time pattern string.
+     *
+     * @param value
+     * @return
+     */
+    public static Pair<Set<String>, Map<Pattern, String>> timePatternReplaceWithGroup(String value) {
         return dateTimePatternReplace(TIME_PATTERN_GROUP_LIST, value);
     }
 
-    private static Set<String> dateTimePatternReplace(List<Map<Pattern, String>> patternGroupList, String value) {
+    private static Pair<Set<String>, Map<Pattern, String>> dateTimePatternReplace(List<Map<Pattern, String>> patternGroupList,
+            String value) {
         if (StringUtils.isEmpty(value)) {
-            return Collections.singleton(StringUtils.EMPTY);
+            return Pair.of(Collections.singleton(StringUtils.EMPTY), Collections.emptyMap());
         }
         HashSet<String> resultSet = new HashSet<>();
         for (Map<Pattern, String> patternMap : patternGroupList) {
@@ -304,10 +325,10 @@ public class SystemDateTimePatternManager {
                             .ifPresent(opt -> resultSet.add(entry.getValue()));
                 }
             }
-            if (isFoundRegex || !resultSet.isEmpty())
-                break;
+            if (isFoundRegex)
+                return Pair.of(resultSet, patternMap);
         }
-        return resultSet;
+        return Pair.of(resultSet, Collections.emptyMap());
     }
 
     /**
