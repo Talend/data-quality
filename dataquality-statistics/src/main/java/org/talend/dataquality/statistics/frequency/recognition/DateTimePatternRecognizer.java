@@ -18,12 +18,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.talend.dataquality.statistics.datetime.CustomDateTimePatternManager;
@@ -69,13 +69,12 @@ public class DateTimePatternRecognizer extends AbstractPatternRecognizer {
         if (stringToRecognize != null && stringToRecognize.length() > 6) {
             if (findValueInFrequentDatePatterns(stringToRecognize, result))
                 return result;
-            final Pair<Set<String>, Map<Pattern, String>> datePatternAfterReplace = CustomDateTimePatternManager
+            final Pair<Map<String, Locale>, Map<Pattern, String>> datePatternAfterReplace = CustomDateTimePatternManager
                     .replaceByDateTimePatternWithGroup(stringToRecognize);
 
-            result.setResult(
-                    CollectionUtils.isNotEmpty(datePatternAfterReplace.getLeft()) ? datePatternAfterReplace.getLeft()
-                            : Collections.singleton(stringToRecognize),
-                    CollectionUtils.isNotEmpty(datePatternAfterReplace.getLeft()));
+            result.setResult(MapUtils.isNotEmpty(datePatternAfterReplace.getLeft()) ? datePatternAfterReplace.getLeft()
+                            : Collections.singletonMap(stringToRecognize, null),
+                    MapUtils.isNotEmpty(datePatternAfterReplace.getLeft()));
             if (MapUtils.isNotEmpty(datePatternAfterReplace.getRight()))
                 frequentDatePatterns.addNewValue(datePatternAfterReplace.getRight());
 

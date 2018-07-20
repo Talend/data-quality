@@ -93,18 +93,18 @@ public final class CustomDateTimePatternManager {
             }
         }
         // otherwise, replace with system date pattern manager.
-        resultPatternSet.addAll(systemPatternReplace(value).getLeft());
+        resultPatternSet.addAll(systemPatternReplace(value).getLeft().keySet());
         return resultPatternSet;
     }
 
-    public static Pair<Set<String>, Map<Pattern, String>> replaceByDateTimePatternWithGroup(String value) {
-        Pair<Set<String>, Map<Pattern, String>> resultPatternSet = systemPatternReplace(value);
+    public static Pair<Map<String, Locale>, Map<Pattern, String>> replaceByDateTimePatternWithGroup(String value) {
+        Pair<Map<String, Locale>, Map<Pattern, String>> resultPatternSet = systemPatternReplace(value);
 
         return resultPatternSet;
     }
 
-    private static Pair<Set<String>, Map<Pattern, String>> systemPatternReplace(String value) {
-        Pair<Set<String>, Map<Pattern, String>> resultPatternSet = SystemDateTimePatternManager
+    private static Pair<Map<String, Locale>, Map<Pattern, String>> systemPatternReplace(String value) {
+        Pair<Map<String, Locale>, Map<Pattern, String>> resultPatternSet = SystemDateTimePatternManager
                 .datePatternReplaceWithGroup(value);
         if (resultPatternSet.getRight().isEmpty()) {
             resultPatternSet = SystemDateTimePatternManager.timePatternReplaceWithGroup(value);
