@@ -16,15 +16,9 @@ import java.util.List;
 
 import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.ResizableList;
-import org.talend.dataquality.statistics.frequency.impl.CMSFrequencyEvaluator;
-import org.talend.dataquality.statistics.frequency.impl.EFrequencyAlgorithm;
-import org.talend.dataquality.statistics.frequency.impl.NaiveFrequencyEvaluator;
-import org.talend.dataquality.statistics.frequency.impl.SSFrequencyEvaluator;
 
 /**
- * Frequency analyzer which delegate the computation to {@link NaiveFrequencyEvaluator} , {@link SSFrequencyEvaluator}
- * and {@link CMSFrequencyEvaluator} by specify the algorithm of {@link EFrequencyAlgorithm#NAIVE} ,
- * {@link EFrequencyAlgorithm#SPACE_SAVER} and {@link EFrequencyAlgorithm#COUNT_MIN_SKETCH}
+ * Frequency analyzer
  * 
  * @author mzhao
  *
@@ -33,18 +27,7 @@ public abstract class AbstractFrequencyAnalyzer<T extends AbstractFrequencyStati
 
     private static final long serialVersionUID = 5073865267265592024L;
 
-    protected ResizableList<T> freqTableStatistics = null;
-
-    protected EFrequencyAlgorithm algorithm = EFrequencyAlgorithm.NAIVE;
-
-    /**
-     * Set the algorithm used to compute the frequency table.
-     * 
-     * @param algorithm
-     */
-    public void setAlgorithm(EFrequencyAlgorithm algorithm) {
-        this.algorithm = algorithm;
-    }
+    protected ResizableList<T> freqTableStatistics;
 
     protected abstract void initFreqTableList(int size);
 
@@ -64,13 +47,13 @@ public abstract class AbstractFrequencyAnalyzer<T extends AbstractFrequencyStati
             initFreqTableList(record.length);
         }
         for (int i = 0; i < record.length; i++) {
-            AbstractFrequencyStatistics freqStats = freqTableStatistics.get(i);
+            T freqStats = freqTableStatistics.get(i);
             analyzeField(record[i], freqStats);
         }
         return true;
     }
 
-    protected void analyzeField(String field, AbstractFrequencyStatistics freqStats) {
+    protected void analyzeField(String field, T freqStats) {
         freqStats.add(field);
     }
 
@@ -84,7 +67,7 @@ public abstract class AbstractFrequencyAnalyzer<T extends AbstractFrequencyStati
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() {
 
     }
 

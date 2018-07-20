@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -47,14 +48,14 @@ public class CompositePatternFrequencyAnalyzerTest {
     public void testAsciiAndAsiaChars() {
         CompositePatternFrequencyAnalyzer analyzer = new CompositePatternFrequencyAnalyzer();
 
-        Set<String> patternString1 = analyzer.getValuePatternSet("abcd1234ィゥェ中国");
-        Assert.assertEquals(Collections.singleton("aaaa9999KKKCC"), patternString1);
+        Map<String, Locale> patternString1 = analyzer.getValuePatternSet("abcd1234ィゥェ中国");
+        Assert.assertEquals(Collections.singleton("aaaa9999KKKCC"), patternString1.keySet());
 
-        Set<String> patternString4 = analyzer.getValuePatternSet("2008-01-01");
-        Assert.assertEquals(new HashSet<String>(Arrays.asList(new String[] { "yyyy-MM-dd" })), patternString4);
+        Map<String, Locale> patternString4 = analyzer.getValuePatternSet("2008-01-01");
+        Assert.assertEquals(new HashSet<String>(Arrays.asList(new String[] { "yyyy-MM-dd" })), patternString4.keySet());
 
-        Set<String> patternString5 = analyzer.getValuePatternSet("2008-1月-01");
-        Assert.assertEquals(Collections.singleton("9999-9C-99"), patternString5);
+        Map<String, Locale> patternString5 = analyzer.getValuePatternSet("2008-1月-01");
+        Assert.assertEquals(Collections.singleton("9999-9C-99"), patternString5.keySet());
 
     }
 

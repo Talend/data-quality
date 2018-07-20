@@ -292,7 +292,7 @@ public class SystemDateTimePatternManager {
      */
     @Deprecated
     public static Set<String> datePatternReplace(String value) {
-        return getDateTimePatterns(DATE_PATTERN_GROUP_LIST, value, new SortedList<>());
+        return getDateTimePatterns(DATE_PATTERN_GROUP_LIST, value, new SortedList<>()).keySet();
     }
 
     /**
@@ -302,7 +302,7 @@ public class SystemDateTimePatternManager {
      * @param frequentDatePatternsCache
      * @return the list of found patterns AND the group with the pattern and the regex for the cache
      */
-    public static Set<String> getDatePatterns(String value, SortedList<Map<Pattern, String>> frequentDatePatternsCache) {
+    public static Map<String, Locale> getDatePatterns(String value, SortedList<Map<Pattern, String>> frequentDatePatternsCache) {
         return getDateTimePatterns(DATE_PATTERN_GROUP_LIST, value, frequentDatePatternsCache);
     }
 
@@ -313,7 +313,7 @@ public class SystemDateTimePatternManager {
      * @return
      */
     @Deprecated
-    public static Set<String> timePatternReplace(String value) {
+    public static Map<String, Locale> timePatternReplace(String value) {
         return getDateTimePatterns(TIME_PATTERN_GROUP_LIST, value, new SortedList<>());
     }
 
@@ -323,53 +323,54 @@ public class SystemDateTimePatternManager {
      * @param value
      * @return
      */
-    public static Set<String> getTimePatterns(String value) {
+    public static Map<String, Locale> getTimePatterns(String value) {
         return getDateTimePatterns(TIME_PATTERN_GROUP_LIST, value, new SortedList<>());
     }
 
-    private static Set<String> getDateTimePatterns(List<Map<Pattern, String>> patternGroupList, String value,
+    private static Map<String, Locale> getDateTimePatterns(List<Map<Pattern, String>> patternGroupList, String value,
             SortedList<Map<Pattern, String>> frequentDatePatternsCache) {
         if (StringUtils.isEmpty(value)) {
-            return Collections.singleton(StringUtils.EMPTY);
+            return Collections.singletonMap(StringUtils.EMPTY, null);
         }
-        Optional<Set<String>> foundFrequentDatePatterns = findValueInFrequentDatePatternsCache(value, frequentDatePatternsCache);
+        Optional<Map<String, Locale>> foundFrequentDatePatterns = findValueInFrequentDatePatternsCache(value,
+                frequentDatePatternsCache);
         if (foundFrequentDatePatterns.isPresent())
             return foundFrequentDatePatterns.get();
-        HashSet<String> resultSet = new HashSet<>();
+        Map<String, Locale> resultMap = new HashMap<>();
         if (CollectionUtils.isNotEmpty(patternGroupList)) {
             for (Map<Pattern, String> patternMap : patternGroupList) {
-                if (isFoundRegex(value, patternMap, resultSet)) {
+                if (isFoundRegex(value, patternMap, resultMap)) {
                     frequentDatePatternsCache.addNewValue(patternMap);
-                    return resultSet;
+                    return resultMap;
                 }
             }
         }
-        return resultSet;
+        return resultMap;
     }
 
-    private static Optional<Set<String>> findValueInFrequentDatePatternsCache(String value,
+    private static Optional<Map<String, Locale>> findValueInFrequentDatePatternsCache(String value,
             SortedList<Map<Pattern, String>> frequentDatePatternsCache) {
         if (CollectionUtils.isNotEmpty(frequentDatePatternsCache)) {
-            Set<String> resultSet = new HashSet<>();
+            Map<String, Locale> resultMap = new HashMap<>();
             for (int j = 0; j < frequentDatePatternsCache.size(); j++) {
                 Map<Pattern, String> cachedPattern = frequentDatePatternsCache.get(j).getLeft();
-                if (isFoundRegex(value, cachedPattern, resultSet)) {
+                if (isFoundRegex(value, cachedPattern, resultMap)) {
                     frequentDatePatternsCache.increment(j);
-                    return Optional.of(resultSet);
+                    return Optional.of(resultMap);
                 }
             }
         }
         return Optional.empty();
     }
 
-    private static boolean isFoundRegex(String value, Map<Pattern, String> groupPattern, Set<String> resultSet) {
+    private static boolean isFoundRegex(String value, Map<Pattern, String> groupPattern, Map<String, Locale> resultMap) {
         boolean isFoundRegex = false;
         for (Entry<Pattern, String> entry : groupPattern.entrySet()) {
             Matcher matcher = entry.getKey().matcher(value);
             if (matcher.find()) {
                 isFoundRegex = true;
                 validateWithPatternInAnyLocale(value, entry.getValue(), matcher)
-                        .ifPresent(opt -> resultSet.add(entry.getValue()));
+                        .ifPresent(opt -> resultMap.put(entry.getValue(), opt.getLocale()));
             }
         }
         return isFoundRegex;

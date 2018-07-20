@@ -12,14 +12,6 @@
 // ============================================================================
 package org.talend.dataquality.statistics.frequency;
 
-import java.util.Map;
-
-import org.talend.dataquality.statistics.frequency.impl.AbstractFrequencyEvaluator;
-import org.talend.dataquality.statistics.frequency.impl.CMSFrequencyEvaluator;
-import org.talend.dataquality.statistics.frequency.impl.EFrequencyAlgorithm;
-import org.talend.dataquality.statistics.frequency.impl.NaiveFrequencyEvaluator;
-import org.talend.dataquality.statistics.frequency.impl.SSFrequencyEvaluator;
-
 /**
  * Frequency statistics bean which delegate the computation to evaluator.
  * 
@@ -27,58 +19,4 @@ import org.talend.dataquality.statistics.frequency.impl.SSFrequencyEvaluator;
  *
  */
 public class DataTypeFrequencyStatistics extends AbstractFrequencyStatistics {
-
-    private AbstractFrequencyEvaluator evaluator = new NaiveFrequencyEvaluator();
-
-    /**
-     * Set the algorithm used to compute the frequency table.
-     * 
-     * @param algorithm
-     */
-    @Override
-    public void setAlgorithm(EFrequencyAlgorithm algorithm) {
-        switch (algorithm) {
-        case NAIVE:
-            evaluator = new NaiveFrequencyEvaluator();
-            break;
-        case SPACE_SAVER:
-            evaluator = new SSFrequencyEvaluator();
-            break;
-        case COUNT_MIN_SKETCH:
-            evaluator = new CMSFrequencyEvaluator();
-            break;
-        }
-    }
-
-    /**
-     * Get top k frequency table.
-     * 
-     * @param topk
-     * @return
-     */
-    @Override
-    public Map<String, Long> getTopK(int topk) {
-        return evaluator.getTopK(topk);
-    }
-
-    /**
-     * Get frequencies of given item
-     * 
-     * @param item
-     * @return frequencies.
-     */
-    @Override
-    public long getFrequency(String item) {
-        return evaluator.getFrequency(item);
-    }
-
-    @Override
-    public void setParameter(Map<String, String> params) {
-        evaluator.setParameters(params);
-    }
-
-    @Override
-    public void add(String value) {
-        evaluator.add(value);
-    }
 }

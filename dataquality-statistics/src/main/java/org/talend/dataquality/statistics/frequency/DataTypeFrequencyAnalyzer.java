@@ -16,15 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.talend.dataquality.common.inference.ResizableList;
-import org.talend.dataquality.statistics.frequency.impl.CMSFrequencyEvaluator;
-import org.talend.dataquality.statistics.frequency.impl.EFrequencyAlgorithm;
-import org.talend.dataquality.statistics.frequency.impl.NaiveFrequencyEvaluator;
-import org.talend.dataquality.statistics.frequency.impl.SSFrequencyEvaluator;
 
 /**
- * Frequency analyzer which delegate the computation to {@link NaiveFrequencyEvaluator} , {@link SSFrequencyEvaluator}
- * and {@link CMSFrequencyEvaluator} by specify the algorithm of {@link EFrequencyAlgorithm#NAIVE} ,
- * {@link EFrequencyAlgorithm#SPACE_SAVER} and {@link EFrequencyAlgorithm#COUNT_MIN_SKETCH}
+ * Frequency analyzer
  * 
  * @author mzhao
  *
@@ -38,7 +32,6 @@ public class DataTypeFrequencyAnalyzer extends AbstractFrequencyAnalyzer<DataTyp
         List<DataTypeFrequencyStatistics> freqTableList = new ArrayList<>();
         for (int i = 0; i < size; i++) {
             DataTypeFrequencyStatistics freqTable = new DataTypeFrequencyStatistics();
-            freqTable.setAlgorithm(algorithm);
             freqTableList.add(freqTable);
         }
         freqTableStatistics = new ResizableList<>(freqTableList);

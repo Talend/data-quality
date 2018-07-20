@@ -12,7 +12,9 @@
 // ============================================================================
 package org.talend.dataquality.statistics.frequency.recognition;
 
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -26,12 +28,16 @@ import java.util.Set;
  */
 public class RecognitionResult {
 
-    private Set<String> patternString = new HashSet<String>();
+    private Map<String, Locale> patternToLocale = new HashMap<>();
 
     private boolean isComplete = false;
 
     public Set<String> getPatternStringSet() {
-        return patternString;
+        return patternToLocale.keySet();
+    }
+
+    public Map<String, Locale> getPatternToLocale() {
+        return patternToLocale;
     }
 
     /**
@@ -51,7 +57,20 @@ public class RecognitionResult {
      * @param isComplete
      */
     protected void setResult(Set<String> patternString, boolean isComplete) {
-        this.patternString = patternString;
+        patternToLocale = new HashMap<>();
+        patternString.forEach(p -> patternToLocale.put(p, null));
+        this.isComplete = isComplete;
+    }
+
+    /**
+     * Set the result with the replaced pattern string and the locale associated and the indicator of whether the pattern replacement is complete
+     * or not.
+     *
+     * @param patternToLocale
+     * @param isComplete
+     */
+    protected void setResult(Map<String, Locale> patternToLocale, boolean isComplete) {
+        this.patternToLocale = patternToLocale;
         this.isComplete = isComplete;
     }
 }

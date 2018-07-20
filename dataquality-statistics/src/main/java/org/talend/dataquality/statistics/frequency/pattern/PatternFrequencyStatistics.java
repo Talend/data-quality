@@ -12,74 +12,39 @@
 // ============================================================================
 package org.talend.dataquality.statistics.frequency.pattern;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import org.talend.dataquality.statistics.frequency.AbstractFrequencyStatistics;
-import org.talend.dataquality.statistics.frequency.impl.AbstractFrequencyEvaluator;
-import org.talend.dataquality.statistics.frequency.impl.CMSFrequencyEvaluator;
-import org.talend.dataquality.statistics.frequency.impl.EFrequencyAlgorithm;
-import org.talend.dataquality.statistics.frequency.impl.NaiveFrequencyEvaluator;
-import org.talend.dataquality.statistics.frequency.impl.SSFrequencyEvaluator;
 
 /**
  * Frequency statistics bean which delegate the computation to evaluator.
  * 
- * @author mzhao
+ * @author jteuladedenantes
  *
  */
 public class PatternFrequencyStatistics extends AbstractFrequencyStatistics {
 
-    private AbstractFrequencyEvaluator evaluator = new NaiveFrequencyEvaluator();
+    private Map<String, Set<Locale>> pattern2locales = new HashMap<>();
 
-    /**
-     * Set the algorithm used to compute the frequency table.
-     * 
-     * @param algorithm
-     */
-    @Override
-    public void setAlgorithm(EFrequencyAlgorithm algorithm) {
-        switch (algorithm) {
-        case NAIVE:
-            evaluator = new NaiveFrequencyEvaluator();
-            break;
-        case SPACE_SAVER:
-            evaluator = new SSFrequencyEvaluator();
-            break;
-        case COUNT_MIN_SKETCH:
-            evaluator = new CMSFrequencyEvaluator();
-            break;
-        }
+    public void add(String pattern, Locale locale) {
+        super.add(pattern);
+        Set<Locale> locales = pattern2locales.get(pattern);
+        if (locales == null)
+            locales = new HashSet<>();
+        locales.add(locale);
+        pattern2locales.put(pattern, locales);
     }
 
-    /**
-     * Get top k frequency table.
-     * 
-     * @param topk
-     * @return
-     */
-    @Override
-    public Map<String, Long> getTopK(int topk) {
-        return evaluator.getTopK(topk);
+    public void add(Map.Entry<String, Locale> patternAndLocale) {
+        this.add(patternAndLocale.getKey(), patternAndLocale.getValue());
     }
 
-    /**
-     * Get frequencies of given item
-     * 
-     * @param item
-     * @return frequencies.
-     */
-    @Override
-    public long getFrequency(String item) {
-        return evaluator.getFrequency(item);
+    public Set<Locale> getLocales(String pattern) {
+        return pattern2locales.get(pattern);
     }
 
-    @Override
-    public void setParameter(Map<String, String> params) {
-        evaluator.setParameters(params);
-    }
-
-    @Override
-    public void add(String value) {
-        evaluator.add(value);
-    }
 }

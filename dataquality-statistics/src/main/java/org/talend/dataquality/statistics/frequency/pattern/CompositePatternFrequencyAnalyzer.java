@@ -13,15 +13,16 @@
 package org.talend.dataquality.statistics.frequency.pattern;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Locale;
+import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.talend.dataquality.common.inference.ResizableList;
 import org.talend.dataquality.semantic.recognizer.LFUCache;
 import org.talend.dataquality.statistics.frequency.AbstractFrequencyAnalyzer;
-import org.talend.dataquality.statistics.frequency.AbstractFrequencyStatistics;
 import org.talend.dataquality.statistics.frequency.recognition.AbstractPatternRecognizer;
 import org.talend.dataquality.statistics.frequency.recognition.DateTimePatternRecognizer;
 import org.talend.dataquality.statistics.frequency.recognition.EmptyPatternRecognizer;
@@ -41,7 +42,7 @@ public class CompositePatternFrequencyAnalyzer extends AbstractFrequencyAnalyzer
 
     private static final long serialVersionUID = -4658709249927616622L;
 
-    private List<AbstractPatternRecognizer> patternFreqRecognizers = new ArrayList<AbstractPatternRecognizer>();
+    private List<AbstractPatternRecognizer> patternFreqRecognizers = new ArrayList<>();
 
     private final ResizableList<LFUCache> knownPatternCaches = new ResizableList<>(LFUCache.class);
 
@@ -72,16 +73,16 @@ public class CompositePatternFrequencyAnalyzer extends AbstractFrequencyAnalyzer
         if (record == null) {
             return true;
         }
-        if (freqTableStatistics == null || freqTableStatistics.isEmpty()) {
+        if (CollectionUtils.isEmpty(freqTableStatistics)) {
             initFreqTableList(record.length);
         }
         knownPatternCaches.resize(record.length);
         for (int i = 0; i < record.length; i++) {
-            final LFUCache<String, Set<String>> knownPatternCache = knownPatternCaches.get(i);
-            final Set<String> knownPatterns = knownPatternCache.get(record[i]);
-            final AbstractFrequencyStatistics freqStats = freqTableStatistics.get(i);
-            if (CollectionUtils.isNotEmpty(knownPatterns)) {
-                knownPatterns.forEach(knownPattern -> freqStats.add(knownPattern));
+            final LFUCache<String, Map<String, Locale>> knownPatternCache = knownPatternCaches.get(i);
+            final Map<String, Locale> knownPatterns = knownPatternCache.get(record[i]);
+            final PatternFrequencyStatistics freqStats = freqTableStatistics.get(i);
+            if (MapUtils.isNotEmpty(knownPatterns)) {
+                knownPatterns.entrySet().forEach(knownPattern -> freqStats.add(knownPattern));
             } else {
                 if (types.length > 0) {
                     analyzeField(record[i], freqStats, types[i], knownPatternCache);
@@ -93,19 +94,19 @@ public class CompositePatternFrequencyAnalyzer extends AbstractFrequencyAnalyzer
         return true;
     }
 
-    protected void analyzeField(String field, AbstractFrequencyStatistics freqStats, DataTypeEnum type,
-            LFUCache<String, Set<String>> knownPatternCache) {
-        Set<String> patternSet = getValuePatternSet(field, type);
-        for (String pattern : patternSet) {
-            freqStats.add(pattern);
+    protected void analyzeField(String field, PatternFrequencyStatistics freqStats, DataTypeEnum type,
+            LFUCache<String, Map<String, Locale>> knownPatternCache) {
+        Map<String, Locale> patternSet = getValuePatternSet(field, type);
+        for (Map.Entry<String, Locale> patternAndLocale : patternSet.entrySet()) {
+            freqStats.add(patternAndLocale);
         }
         knownPatternCache.put(field, patternSet);
     }
 
     @Override
-    protected void analyzeField(String field, AbstractFrequencyStatistics freqStats) {
-        for (String pattern : getValuePatternSet(field)) {
-            freqStats.add(pattern);
+    protected void analyzeField(String field, PatternFrequencyStatistics freqStats) {
+        for (Map.Entry<String, Locale> patternAndLocale : getValuePatternSet(field).entrySet()) {
+            freqStats.add(patternAndLocale);
         }
     }
 
@@ -116,7 +117,7 @@ public class CompositePatternFrequencyAnalyzer extends AbstractFrequencyAnalyzer
      * @param originalValue the string to be replaced by its pattern string
      * @return the recognition result bean.
      */
-    Set<String> getValuePatternSet(String originalValue) {
+    Map<String, Locale> getValuePatternSet(String originalValue) {
         return getValuePatternSet(originalValue, null);
     }
 
@@ -128,22 +129,22 @@ public class CompositePatternFrequencyAnalyzer extends AbstractFrequencyAnalyzer
      * @param type the data type
      * @return the recognition result bean.
      */
-    Set<String> getValuePatternSet(String originalValue, DataTypeEnum type) {
-        Set<String> resultSet = new HashSet<String>();
+    Map<String, Locale> getValuePatternSet(String originalValue, DataTypeEnum type) {
+        Map<String, Locale> resultMap = new HashMap<>();
         String patternString = originalValue;
         for (AbstractPatternRecognizer recognizer : patternFreqRecognizers) {
             RecognitionResult result = recognizer.recognize(patternString, type);
-            resultSet = result.getPatternStringSet();
+            resultMap = result.getPatternToLocale();
             if (result.isComplete()) {
                 break;
             } else {
-                if (!resultSet.isEmpty()) {
-                    patternString = resultSet.iterator().next();
+                if (!resultMap.isEmpty()) {
+                    patternString = resultMap.keySet().iterator().next();
                 }
             }
         }
         // value is not recognized completely.
-        return resultSet;
+        return resultMap;
     }
 
     @Override
@@ -151,7 +152,6 @@ public class CompositePatternFrequencyAnalyzer extends AbstractFrequencyAnalyzer
         List<PatternFrequencyStatistics> freqTableList = new ArrayList<>();
         for (int i = 0; i < size; i++) {
             PatternFrequencyStatistics freqTable = new PatternFrequencyStatistics();
-            freqTable.setAlgorithm(algorithm);
             freqTableList.add(freqTable);
         }
         freqTableStatistics = new ResizableList<>(freqTableList);

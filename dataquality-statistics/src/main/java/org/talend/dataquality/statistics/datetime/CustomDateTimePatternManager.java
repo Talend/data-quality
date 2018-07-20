@@ -104,7 +104,7 @@ public final class CustomDateTimePatternManager {
             }
         }
         // otherwise, replace with system date pattern manager.
-        resultPatternSet.addAll(getPatterns(value, new SortedList<>()));
+        resultPatternSet.addAll(getPatterns(value, new SortedList<>()).keySet());
         return resultPatternSet;
     }
 
@@ -114,8 +114,8 @@ public final class CustomDateTimePatternManager {
      * @param frequentDatePatternsCache
      * @return the list of found patterns AND the group with the pattern and the regex for the cache
      */
-    public static Set<String> getPatterns(String value, SortedList<Map<Pattern, String>> frequentDatePatternsCache) {
-        Set<String> resultPatternSet = SystemDateTimePatternManager.getDatePatterns(value, frequentDatePatternsCache);
+    public static Map<String, Locale> getPatterns(String value, SortedList<Map<Pattern, String>> frequentDatePatternsCache) {
+        Map<String, Locale> resultPatternSet = SystemDateTimePatternManager.getDatePatterns(value, frequentDatePatternsCache);
         if (resultPatternSet.isEmpty()) {
             resultPatternSet = SystemDateTimePatternManager.getTimePatterns(value);
         }

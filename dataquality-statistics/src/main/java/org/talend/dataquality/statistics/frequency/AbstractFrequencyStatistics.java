@@ -12,13 +12,10 @@
 // ============================================================================
 package org.talend.dataquality.statistics.frequency;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
-
-import org.talend.dataquality.statistics.frequency.impl.AbstractFrequencyEvaluator;
-import org.talend.dataquality.statistics.frequency.impl.CMSFrequencyEvaluator;
-import org.talend.dataquality.statistics.frequency.impl.EFrequencyAlgorithm;
-import org.talend.dataquality.statistics.frequency.impl.NaiveFrequencyEvaluator;
-import org.talend.dataquality.statistics.frequency.impl.SSFrequencyEvaluator;
+import java.util.stream.Collectors;
 
 /**
  * Frequency statistics bean which delegate the computation to evaluator.
@@ -28,61 +25,22 @@ import org.talend.dataquality.statistics.frequency.impl.SSFrequencyEvaluator;
  */
 public abstract class AbstractFrequencyStatistics {
 
-    private AbstractFrequencyEvaluator evaluator = new NaiveFrequencyEvaluator();
-
-    /**
-     * Set the algorithm used to compute the frequency table.
-     * 
-     * @param algorithm
-     */
-    public void setAlgorithm(EFrequencyAlgorithm algorithm) {
-        switch (algorithm) {
-        case NAIVE:
-            evaluator = new NaiveFrequencyEvaluator();
-            break;
-        case SPACE_SAVER:
-            evaluator = new SSFrequencyEvaluator();
-            break;
-        case COUNT_MIN_SKETCH:
-            evaluator = new CMSFrequencyEvaluator();
-            break;
-        }
-    }
-
-    /**
-     * Get top k frequency table.
-     * 
-     * @param topk
-     * @return
-     */
-    public Map<String, Long> getTopK(int topk) {
-        return evaluator.getTopK(topk);
-    }
-
-    /**
-     * Get frequencies of given item
-     * 
-     * @param item
-     * @return frequencies.
-     */
-    public long getFrequency(String item) {
-        return evaluator.getFrequency(item);
-    }
-
-    /**
-     * Parameters set as:<br>
-     * {@link CMSFrequencyEvaluator#EPS }<br>
-     * {@link CMSFrequencyEvaluator#SEED}<br>
-     * {@link CMSFrequencyEvaluator#CONFIDENCE}<br>
-     * {@link SSFrequencyEvaluator#CAPACITY}
-     * 
-     * @param params
-     */
-    public void setParameter(Map<String, String> params) {
-        evaluator.setParameters(params);
-    }
+    private Map<String, Long> value2freq = new HashMap<>();
 
     public void add(String value) {
-        evaluator.add(value);
+        Long freq = value2freq.get(value);
+        if (freq == null) {
+            freq = 0l;
+        }
+        value2freq.put(value, freq + 1);
+    }
+
+    public Map<String, Long> getTopK(int topk) {
+        return value2freq.entrySet().stream().sorted(Map.Entry.<String, Long> comparingByValue().reversed()).limit(topk)
+                .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue(), (v1, v2) -> v2, LinkedHashMap::new));
+    }
+
+    public long getFrequency(String item) {
+        return value2freq.get(item);
     }
 }
