@@ -38,7 +38,7 @@ public class MaskAddressTest {
     @Test
     public void testEmpty() {
         ma.setKeepEmpty(true);
-        output = ma.generateMaskedRow("");
+        output = ma.generateMaskedRow(""); //$NON-NLS-1$
         assertEquals("", output); //$NON-NLS-1$
     }
 
@@ -47,6 +47,13 @@ public class MaskAddressTest {
         String input = "5 rue de l'oise"; //$NON-NLS-1$
         output = ma.generateMaskedRow(input);
         assertEquals("6 rue XX XXXXXX", output); //$NON-NLS-1$
+    }
+
+    @Test
+    public void testGoodWithSurrogatePair() {
+        String input = "中崎𠀀𠀁𠀂𠀃𠀄123"; //$NON-NLS-1$
+        output = ma.generateMaskedRow(input);
+        assertEquals("XXXXXXX616", output); //$NON-NLS-1$
     }
 
     @Test
@@ -61,7 +68,7 @@ public class MaskAddressTest {
     @Test
     public void testParseWillNotImpactResult() throws URISyntaxException {
         ma.parse("5 rue de l'oise", false, new Random(42)); //$NON-NLS-1$
-        output = ma.generateMaskedRow("5 rue de l'oise");
+        output = ma.generateMaskedRow("5 rue de l'oise"); //$NON-NLS-1$
         assertEquals("6 rue XX XXXXXX", output); //$NON-NLS-1$
         assertEquals("5 rue de l'oise", ma.parameters[0]); //$NON-NLS-1$
     }

@@ -50,8 +50,12 @@ public class MaskAddress extends Function<String> {
                 if (keys.contains(tmp)) {
                     sb.append(tmp + " "); //$NON-NLS-1$
                 } else {
-                    for (int i = 0; i < tmp.length(); ++i) {
-                        if (Character.isDigit(tmp.charAt(i))) {
+                    int cp = 0;
+                    // one surrogate pair character will take two unicode point so that we just judge first one and if it is
+                    // surrogate pair we make index+2
+                    for (int i = 0; i < tmp.length(); i += Character.charCount(cp)) {
+                        cp = tmp.codePointAt(i);
+                        if (Character.isDigit(cp)) {
                             sb.append(rnd.nextInt(8) + 1);
                         } else {
                             sb.append("X"); //$NON-NLS-1$
