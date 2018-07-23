@@ -290,6 +290,7 @@ public class AlgoBoxTest {
         assertEquals("llnuul", AlgoBox.nGramKey(NULL_STR)); //$NON-NLS-1$
         assertEquals(BLANK_STR, AlgoBox.nGramKey(QUO_STR));
         assertEquals("リンンゴ", AlgoBox.nGramKey(JAPANESE1_STR)); //$NON-NLS-1$
+        assertEquals("べるを食ゴをリンンゴ食べ𠀀𠀁𠀂𠀃", AlgoBox.nGramKey("𠀀𠀁𠀂𠀃 リンゴ を 食べる")); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     /**
@@ -302,6 +303,7 @@ public class AlgoBoxTest {
         assertEquals(BLANK_STR, AlgoBox.pick_Char(BLANK_STR, "test")); //$NON-NLS-1$
         assertEquals(BLANK_STR, AlgoBox.pick_Char(null, "test")); //$NON-NLS-1$
         assertEquals(BLANK_STR, AlgoBox.pick_Char(TEST_STR, "test")); //$NON-NLS-1$
+        assertEquals(BLANK_STR, AlgoBox.pick_Char(TEST_STR, "tes")); //$NON-NLS-1$
         assertEquals("bcdf", AlgoBox.pick_Char("abcdef", "1;2-4;5")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         assertEquals("etest", AlgoBox.pick_Char(TEST_STR, "1-2;40;0-5")); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals("e", AlgoBox.pick_Char("Test test", "1-2")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -315,6 +317,7 @@ public class AlgoBoxTest {
         assertEquals("𠀑", AlgoBox.pick_Char(MIXTD_SURROGATEPAIR, "3")); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals("a", AlgoBox.pick_Char(MIXTD_SURROGATEPAIR, "4")); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals("ン", AlgoBox.pick_Char(JAPANESE1_STR, "1")); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals(BLANK_STR, AlgoBox.pick_Char(JAPANESE1_STR, "リ")); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     /**
