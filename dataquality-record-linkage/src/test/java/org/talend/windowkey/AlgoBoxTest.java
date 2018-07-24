@@ -290,7 +290,7 @@ public class AlgoBoxTest {
         assertEquals("llnuul", AlgoBox.nGramKey(NULL_STR)); //$NON-NLS-1$
         assertEquals(BLANK_STR, AlgoBox.nGramKey(QUO_STR));
         assertEquals("リンンゴ", AlgoBox.nGramKey(JAPANESE1_STR)); //$NON-NLS-1$
-        assertEquals("べるを食ゴをリンンゴ食べ𠀀𠀁𠀂𠀃", AlgoBox.nGramKey("𠀀𠀁𠀂𠀃 リンゴ を 食べる")); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("べるを食ゴをリンンゴ食べ𠀀𠀁𠀁𠀂𠀂𠀃𠀃リ", AlgoBox.nGramKey("𠀀𠀁𠀂𠀃 リンゴ を 食べる")); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     /**
