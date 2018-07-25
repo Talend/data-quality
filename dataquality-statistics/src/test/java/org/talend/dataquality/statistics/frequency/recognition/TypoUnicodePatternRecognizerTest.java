@@ -117,6 +117,24 @@ public class TypoUnicodePatternRecognizerTest {
     }
 
     @Test
+    public void testSurrogatePair() {
+        String str = "𠀐";
+        Assert.assertEquals("[Ideogram]", TypoUnicodePatternRecognizer.noCase().getValuePattern(str).toArray()[0]);
+        str = "𠀐𠀑我𠀒𠀓";
+        Assert.assertEquals("[IdeogramSeq]", TypoUnicodePatternRecognizer.noCase().getValuePattern(str).toArray()[0]);
+        str = "𠀐𠀑我𠀒𠀓 我Abc";
+        Assert.assertEquals("[IdeogramSeq] [Ideogram][word]",
+                TypoUnicodePatternRecognizer.noCase().getValuePattern(str).toArray()[0]);
+        Assert.assertEquals("[IdeogramSeq] [Ideogram][Word]",
+                TypoUnicodePatternRecognizer.withCase().getValuePattern(str).toArray()[0]);
+        str = "𠀐12//𠀑我?𠀑";
+        Assert.assertEquals("[alnum(CJK)]//[IdeogramSeq]?[Ideogram]",
+                TypoUnicodePatternRecognizer.noCase().getValuePattern(str).toArray()[0]);
+        Assert.assertEquals("[Ideogram][number]//[IdeogramSeq]?[Ideogram]",
+                TypoUnicodePatternRecognizer.withCase().getValuePattern(str).toArray()[0]);
+    }
+
+    @Test
     public void testArabic() {
         // Arabic text fro the Coran. We can see that the text is read from right to left. (see the last point).
         String str = "يَجِبُ عَلَى الإنْسَانِ أن يَكُونَ أمِيْنَاً وَصَادِقَاً مَعَ نَفْسِهِ وَمَعَ أَهْلِهِ وَجِيْرَانِهِ وَأَنْ يَبْذُلَ كُلَّ جُهْدٍ فِي إِعْلاءِ شَأْنِ الوَطَنِ وَأَنْ يَعْمَلَ عَلَى مَا يَجْلِبُ السَّعَادَةَ لِلنَّاسِ . ولَن يَتِمَّ لَهُ ذلِك إِلا بِأَنْ يُقَدِّمَ المَنْفَعَةَ العَامَّةَ عَلَى المَنْفَعَةِ الخَاصَّةِ وَهذَا مِثَالٌ لِلتَّضْحِيَةِ .";
