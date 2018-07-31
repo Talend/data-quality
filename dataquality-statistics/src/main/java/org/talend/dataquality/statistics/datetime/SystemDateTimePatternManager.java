@@ -286,7 +286,7 @@ public class SystemDateTimePatternManager {
      * @return date pattern string.
      */
     public static Set<String> datePatternReplace(String value) {
-        return dateTimePatternReplace(DATE_PATTERN_GROUP_LIST, value).getLeft();
+        return dateTimePatternReplace(DATE_PATTERN_GROUP_LIST, value).getLeft().keySet();
     }
 
     /**
@@ -295,7 +295,7 @@ public class SystemDateTimePatternManager {
      * @param value
      * @return
      */
-    public static Pair<Set<String>, Map<Pattern, String>> datePatternReplaceWithGroup(String value) {
+    public static Pair<Map<String, Locale>, Map<Pattern, String>> datePatternReplaceWithGroup(String value) {
         return dateTimePatternReplace(DATE_PATTERN_GROUP_LIST, value);
     }
 
@@ -306,7 +306,7 @@ public class SystemDateTimePatternManager {
      * @return
      */
     public static Set<String> timePatternReplace(String value) {
-        return dateTimePatternReplace(TIME_PATTERN_GROUP_LIST, value).getLeft();
+        return dateTimePatternReplace(TIME_PATTERN_GROUP_LIST, value).getLeft().keySet();
     }
 
     /**
@@ -315,16 +315,16 @@ public class SystemDateTimePatternManager {
      * @param value
      * @return
      */
-    public static Pair<Set<String>, Map<Pattern, String>> timePatternReplaceWithGroup(String value) {
+    public static Pair<Map<String, Locale>, Map<Pattern, String>> timePatternReplaceWithGroup(String value) {
         return dateTimePatternReplace(TIME_PATTERN_GROUP_LIST, value);
     }
 
-    private static Pair<Set<String>, Map<Pattern, String>> dateTimePatternReplace(List<Map<Pattern, String>> patternGroupList,
+    private static Pair<Map<String, Locale>, Map<Pattern, String>> dateTimePatternReplace(List<Map<Pattern, String>> patternGroupList,
             String value) {
         if (StringUtils.isEmpty(value)) {
-            return Pair.of(Collections.singleton(StringUtils.EMPTY), Collections.emptyMap());
+            return Pair.of(Collections.singletonMap(StringUtils.EMPTY, null), Collections.emptyMap());
         }
-        HashSet<String> resultSet = new HashSet<>();
+        Map<String, Locale> resultSet = new HashMap<>();
         for (Map<Pattern, String> patternMap : patternGroupList) {
             boolean isFoundRegex = false;
             for (Entry<Pattern, String> entry : patternMap.entrySet()) {
@@ -332,7 +332,7 @@ public class SystemDateTimePatternManager {
                 if (matcher.find()) {
                     isFoundRegex = true;
                     validateWithPatternInAnyLocale(value, entry.getValue(), matcher)
-                            .ifPresent(opt -> resultSet.add(entry.getValue()));
+                            .ifPresent(opt -> resultSet.put(entry.getValue(),opt.getLocale()));
                 }
             }
             if (isFoundRegex)
