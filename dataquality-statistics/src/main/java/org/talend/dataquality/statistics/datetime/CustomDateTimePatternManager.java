@@ -12,7 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.statistics.datetime;
 
-import org.apache.commons.lang3.tuple.Pair;
+import org.talend.dataquality.statistics.type.SortedList;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -104,20 +104,20 @@ public final class CustomDateTimePatternManager {
             }
         }
         // otherwise, replace with system date pattern manager.
-        resultPatternSet.addAll(getPatternsAndAssociatedGroup(value).getLeft());
+        resultPatternSet.addAll(getPatterns(value, new SortedList<>()));
         return resultPatternSet;
     }
 
     /**
      * Find the patterns for a given value
      * @param value
+     * @param frequentDatePatternsCache
      * @return the list of found patterns AND the group with the pattern and the regex for the cache
      */
-    public static Pair<Set<String>, Map<Pattern, String>> getPatternsAndAssociatedGroup(String value) {
-        Pair<Set<String>, Map<Pattern, String>> resultPatternSet = SystemDateTimePatternManager
-                .getDatePatternsAndAssociatedGroup(value);
-        if (resultPatternSet.getRight().isEmpty()) {
-            resultPatternSet = SystemDateTimePatternManager.getTimePatternsAndAssociatedGroup(value);
+    public static Set<String> getPatterns(String value, SortedList<Map<Pattern, String>> frequentDatePatternsCache) {
+        Set<String> resultPatternSet = SystemDateTimePatternManager.getDatePatterns(value, frequentDatePatternsCache);
+        if (resultPatternSet.isEmpty()) {
+            resultPatternSet = SystemDateTimePatternManager.getTimePatterns(value);
         }
         return resultPatternSet;
     }

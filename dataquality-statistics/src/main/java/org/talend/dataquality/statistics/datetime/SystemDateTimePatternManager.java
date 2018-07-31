@@ -45,6 +45,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.talend.dataquality.statistics.type.SortedList;
 
 /**
  * Date and time patterns manager with system default definitions.
@@ -291,17 +292,18 @@ public class SystemDateTimePatternManager {
      */
     @Deprecated
     public static Set<String> datePatternReplace(String value) {
-        return getDateTimePatternsAndAssociatedGroup(DATE_PATTERN_GROUP_LIST, value).getLeft();
+        return getDateTimePatterns(DATE_PATTERN_GROUP_LIST, value, new SortedList<>());
     }
 
     /**
      * Replace the value with date pattern string.
      *
      * @param value
+     * @param frequentDatePatternsCache
      * @return the list of found patterns AND the group with the pattern and the regex for the cache
      */
-    public static Pair<Set<String>, Map<Pattern, String>> getDatePatternsAndAssociatedGroup(String value) {
-        return getDateTimePatternsAndAssociatedGroup(DATE_PATTERN_GROUP_LIST, value);
+    public static Set<String> getDatePatterns(String value, SortedList<Map<Pattern, String>> frequentDatePatternsCache) {
+        return getDateTimePatterns(DATE_PATTERN_GROUP_LIST, value, frequentDatePatternsCache);
     }
 
     /**
@@ -312,7 +314,7 @@ public class SystemDateTimePatternManager {
      */
     @Deprecated
     public static Set<String> timePatternReplace(String value) {
-        return getDateTimePatternsAndAssociatedGroup(TIME_PATTERN_GROUP_LIST, value).getLeft();
+        return getDateTimePatterns(TIME_PATTERN_GROUP_LIST, value, new SortedList<>());
     }
 
     /**
@@ -321,30 +323,56 @@ public class SystemDateTimePatternManager {
      * @param value
      * @return
      */
-    public static Pair<Set<String>, Map<Pattern, String>> getTimePatternsAndAssociatedGroup(String value) {
-        return getDateTimePatternsAndAssociatedGroup(TIME_PATTERN_GROUP_LIST, value);
+    public static Set<String> getTimePatterns(String value) {
+        return getDateTimePatterns(TIME_PATTERN_GROUP_LIST, value, new SortedList<>());
     }
 
-    private static Pair<Set<String>, Map<Pattern, String>> getDateTimePatternsAndAssociatedGroup(List<Map<Pattern, String>> patternGroupList,
-                                                                                                 String value) {
+    private static Set<String> getDateTimePatterns(List<Map<Pattern, String>> patternGroupList, String value,
+            SortedList<Map<Pattern, String>> frequentDatePatternsCache) {
         if (StringUtils.isEmpty(value)) {
-            return Pair.of(Collections.singleton(StringUtils.EMPTY), Collections.emptyMap());
+            return Collections.singleton(StringUtils.EMPTY);
         }
+        Optional<Set<String>> foundFrequentDatePatterns = findValueInFrequentDatePatternsCache(value, frequentDatePatternsCache);
+        if (foundFrequentDatePatterns.isPresent())
+            return foundFrequentDatePatterns.get();
         HashSet<String> resultSet = new HashSet<>();
-        for (Map<Pattern, String> patternMap : patternGroupList) {
-            boolean isFoundRegex = false;
-            for (Entry<Pattern, String> entry : patternMap.entrySet()) {
-                Matcher matcher = entry.getKey().matcher(value);
-                if (matcher.find()) {
-                    isFoundRegex = true;
-                    validateWithPatternInAnyLocale(value, entry.getValue(), matcher)
-                            .ifPresent(opt -> resultSet.add(entry.getValue()));
+        if (CollectionUtils.isNotEmpty(patternGroupList)) {
+            for (Map<Pattern, String> patternMap : patternGroupList) {
+                if (isFoundRegex(value, patternMap, resultSet)) {
+                    frequentDatePatternsCache.addNewValue(patternMap);
+                    return resultSet;
                 }
             }
-            if (isFoundRegex)
-                return Pair.of(resultSet, patternMap);
         }
-        return Pair.of(resultSet, Collections.emptyMap());
+        return resultSet;
+    }
+
+    private static Optional<Set<String>> findValueInFrequentDatePatternsCache(String value,
+            SortedList<Map<Pattern, String>> frequentDatePatternsCache) {
+        if (CollectionUtils.isNotEmpty(frequentDatePatternsCache)) {
+            Set<String> resultSet = new HashSet<>();
+            for (int j = 0; j < frequentDatePatternsCache.size(); j++) {
+                Map<Pattern, String> cachedPattern = frequentDatePatternsCache.get(j).getLeft();
+                if (isFoundRegex(value, cachedPattern, resultSet)) {
+                    frequentDatePatternsCache.increment(j);
+                    return Optional.of(resultSet);
+                }
+            }
+        }
+        return Optional.empty();
+    }
+
+    private static boolean isFoundRegex(String value, Map<Pattern, String> groupPattern, Set<String> resultSet) {
+        boolean isFoundRegex = false;
+        for (Entry<Pattern, String> entry : groupPattern.entrySet()) {
+            Matcher matcher = entry.getKey().matcher(value);
+            if (matcher.find()) {
+                isFoundRegex = true;
+                validateWithPatternInAnyLocale(value, entry.getValue(), matcher)
+                        .ifPresent(opt -> resultSet.add(entry.getValue()));
+            }
+        }
+        return isFoundRegex;
     }
 
     /**
@@ -421,7 +449,7 @@ public class SystemDateTimePatternManager {
      * @param matcher the regex matcher
      * @return the date time format if found
      */
-    public static Optional<DateTimeFormatter> validateWithPatternInAnyLocale(String value, String pattern, Matcher matcher) {
+    private static Optional<DateTimeFormatter> validateWithPatternInAnyLocale(String value, String pattern, Matcher matcher) {
         List<String> wordGroups = PATTERN_TO_WORD_GROUPS.get(pattern);
         if (CollectionUtils.isNotEmpty(wordGroups)) {
             if (matcher.groupCount() == wordGroups.size()) {
