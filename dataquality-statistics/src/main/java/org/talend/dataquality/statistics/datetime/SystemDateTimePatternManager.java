@@ -37,6 +37,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
@@ -55,28 +56,33 @@ public class SystemDateTimePatternManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(SystemDateTimePatternManager.class);
 
     private static final List<Map<Pattern, String>> DATE_PATTERN_GROUP_LIST = new ArrayList<>();
+    
+    private static final String MONTHS = "MONTHS";
+
+    private static final String SHORT_MONTHS = "SHORT_MONTHS";
+
+    private static final String WEEKDAYS = "WEEKDAYS";
+
+    private static final String SHORT_WEEKDAYS = "SHORT_WEEKDAYS";
+
+    private static final String AM_PM = "AM_PM";
+
+    private static final String ERAS = "ERAS";
 
     /**
-     * give for each months words, the locales associated
+     * give for a worg group, the list of words and their locales
+     * The word groups available are MONTHS, SHORT_MONTHS, WEEKDAYS, SHORT_WEEKDAYS, AM_PM and ERAS
+     * For example, "MONTHS" -> < february -> [en] ; février -> [fr] >
      */
-    private static final Map<String, Set<Locale>> MONTHS = new HashMap<>();
-
-    private static final Map<String, Set<Locale>> SHORT_MONTHS = new HashMap<>();
-
-    private static final Map<String, Set<Locale>> WEEKDAYS = new HashMap<>();
-
-    private static final Map<String, Set<Locale>> SHORT_WEEKDAYS = new HashMap<>();
-
-    private static final Map<String, Set<Locale>> AM_PM = new HashMap<>();
-
-    private static final Map<String, Set<Locale>> ERAS = new HashMap<>();
+    private static final Map<String, Map<String, Set<Locale>>> WORD_GROUPS_TO_LANGUAGES_DATES_WORDS = new HashMap<>();
 
     /**
-     * give for each patterns, the list of words to check
-     * For example the pattern "EEEE, MMMM d, yyyy h:mm:ss a z" is associated to the list [MONTHS; WEEKDAYS; AM_PM]
+     * give for each patterns, the list of word groups to check.
+     * The word groups available are MONTHS, SHORT_MONTHS, WEEKDAYS, SHORT_WEEKDAYS, AM_PM and ERAS
+     * For example the pattern "EEEE, MMMM d, yyyy h:mm:ss a z" is associated to the list ["MONTHS"; "WEEKDAYS"; "AM_PM"]
      *
      */
-    private static final Map<String, List<Map<String, Set<Locale>>>> PATTERN_TO_LANGUAGES_DATES_WORDS = new HashMap<>();
+    private static final Map<String, List<String>> PATTERN_TO_WORD_GROUPS = new HashMap<>();
 
     private static final List<Map<Pattern, String>> TIME_PATTERN_GROUP_LIST = new ArrayList<>();
 
@@ -110,14 +116,18 @@ public class SystemDateTimePatternManager {
         }
     }
 
-    private static void buildWordsToLocales(final Map<String, Set<Locale>> structureToFill, final List<String> languagesWords,
-            Locale currentLocale) {
+    private static void buildWordsToLocales(final String wordGroup, final List<String> languagesWords, Locale currentLocale) {
+        Map<String, Set<Locale>> languagesDatesWords = WORD_GROUPS_TO_LANGUAGES_DATES_WORDS.get(wordGroup);
+        if (languagesDatesWords == null) {
+            languagesDatesWords = new HashMap<>();
+            WORD_GROUPS_TO_LANGUAGES_DATES_WORDS.put(wordGroup, languagesDatesWords);
+        }
         for (String languageWord : languagesWords) {
             String lowerCaseLanguageWord = languageWord.toLowerCase();
-            Set<Locale> locales = structureToFill.get(lowerCaseLanguageWord);
+            Set<Locale> locales = languagesDatesWords.get(lowerCaseLanguageWord);
             if (locales == null) {
                 locales = new HashSet<>();
-                structureToFill.put(lowerCaseLanguageWord, locales);
+                languagesDatesWords.put(lowerCaseLanguageWord, locales);
             }
             locales.add(currentLocale);
         }
@@ -162,7 +172,7 @@ public class SystemDateTimePatternManager {
     }
 
     private static void loadPatternToLanguagesDatesWords(String format) {
-        List<Map<String, Set<Locale>>> languagesWordsList = new ArrayList<>();
+        List<String> languagesWordsList = new ArrayList<>();
         if (format.contains("MMMM"))
             languagesWordsList.add(MONTHS);
         else if (format.contains("MMM"))
@@ -175,7 +185,7 @@ public class SystemDateTimePatternManager {
             languagesWordsList.add(ERAS);
         if (format.contains("a"))
             languagesWordsList.add(AM_PM);
-        PATTERN_TO_LANGUAGES_DATES_WORDS.put(format, languagesWordsList);
+        PATTERN_TO_WORD_GROUPS.put(format, languagesWordsList);
     }
 
     /**
@@ -404,16 +414,18 @@ public class SystemDateTimePatternManager {
      * @return the date time format if found
      */
     public static Optional<DateTimeFormatter> validateWithPatternInAnyLocale(String value, String pattern, Matcher matcher) {
-        List<Map<String, Set<Locale>>> wordToLocal = PATTERN_TO_LANGUAGES_DATES_WORDS.get(pattern);
-        if (CollectionUtils.isNotEmpty(wordToLocal)) {
-            if (matcher.groupCount() == wordToLocal.size()) {
-                Set<Locale> locales = findLocales(wordToLocal, matcher);
+        List<String> wordGroups = PATTERN_TO_WORD_GROUPS.get(pattern);
+        if (CollectionUtils.isNotEmpty(wordGroups)) {
+            if (matcher.groupCount() == wordGroups.size()) {
+                List<Map<String, Set<Locale>>> languagesDatesWords = wordGroups.stream()
+                        .map(wordGroup -> WORD_GROUPS_TO_LANGUAGES_DATES_WORDS.get(wordGroup)).collect(Collectors.toList());
+                Set<Locale> locales = findLocales(languagesDatesWords, matcher);
                 if (CollectionUtils.isNotEmpty(locales)) {
                     return findDateTimeFormatter(value, pattern, locales);
                 }
             }
         } else {
-            return findDateTimeFormatter(value, pattern, Locale.getDefault());
+            return findDateTimeFormatter(value, pattern);
         }
         return Optional.empty();
     }
@@ -460,5 +472,9 @@ public class SystemDateTimePatternManager {
         if (isMatchDateTimePattern(value, dateTimeFormatterByPattern))
             return Optional.of(dateTimeFormatterByPattern);
         return Optional.empty();
+    }
+
+    private static Optional<DateTimeFormatter> findDateTimeFormatter(String value, String pattern) {
+        return findDateTimeFormatter(value, pattern, Locale.getDefault());
     }
 }
