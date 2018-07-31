@@ -56,7 +56,7 @@ public class SystemDateTimePatternManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(SystemDateTimePatternManager.class);
 
     private static final List<Map<Pattern, String>> DATE_PATTERN_GROUP_LIST = new ArrayList<>();
-    
+
     private static final String MONTHS = "MONTHS";
 
     private static final String SHORT_MONTHS = "SHORT_MONTHS";
@@ -123,13 +123,15 @@ public class SystemDateTimePatternManager {
             WORD_GROUPS_TO_LANGUAGES_DATES_WORDS.put(wordGroup, languagesDatesWords);
         }
         for (String languageWord : languagesWords) {
-            String lowerCaseLanguageWord = languageWord.toLowerCase();
-            Set<Locale> locales = languagesDatesWords.get(lowerCaseLanguageWord);
-            if (locales == null) {
-                locales = new HashSet<>();
-                languagesDatesWords.put(lowerCaseLanguageWord, locales);
+            if (StringUtils.isNotEmpty(languageWord)) {
+                String lowerCaseLanguageWord = languageWord.toLowerCase();
+                Set<Locale> locales = languagesDatesWords.get(lowerCaseLanguageWord);
+                if (locales == null) {
+                    locales = new HashSet<>();
+                    languagesDatesWords.put(lowerCaseLanguageWord, locales);
+                }
+                locales.add(currentLocale);
             }
-            locales.add(currentLocale);
         }
     }
 
@@ -140,7 +142,9 @@ public class SystemDateTimePatternManager {
             locales.add(Locale.forLanguageTag(lang));
         }
         for (Locale locale : DateFormat.getAvailableLocales()) {
-            locales.add(Locale.forLanguageTag(locale.getLanguage()));
+            if (StringUtils.isNotEmpty(locale.getLanguage())) {
+                locales.add(Locale.forLanguageTag(locale.getLanguage()));
+            }
         }
         return locales;
     }
@@ -285,18 +289,19 @@ public class SystemDateTimePatternManager {
      * @param value
      * @return date pattern string.
      */
+    @Deprecated
     public static Set<String> datePatternReplace(String value) {
-        return dateTimePatternReplace(DATE_PATTERN_GROUP_LIST, value).getLeft();
+        return getDateTimePatternsAndAssociatedGroup(DATE_PATTERN_GROUP_LIST, value).getLeft();
     }
 
     /**
      * Replace the value with date pattern string.
      *
      * @param value
-     * @return
+     * @return the list of found patterns AND the group with the pattern and the regex for the cache
      */
-    public static Pair<Set<String>, Map<Pattern, String>> datePatternReplaceWithGroup(String value) {
-        return dateTimePatternReplace(DATE_PATTERN_GROUP_LIST, value);
+    public static Pair<Set<String>, Map<Pattern, String>> getDatePatternsAndAssociatedGroup(String value) {
+        return getDateTimePatternsAndAssociatedGroup(DATE_PATTERN_GROUP_LIST, value);
     }
 
     /**
@@ -305,8 +310,9 @@ public class SystemDateTimePatternManager {
      * @param value
      * @return
      */
+    @Deprecated
     public static Set<String> timePatternReplace(String value) {
-        return dateTimePatternReplace(TIME_PATTERN_GROUP_LIST, value).getLeft();
+        return getDateTimePatternsAndAssociatedGroup(TIME_PATTERN_GROUP_LIST, value).getLeft();
     }
 
     /**
@@ -315,12 +321,12 @@ public class SystemDateTimePatternManager {
      * @param value
      * @return
      */
-    public static Pair<Set<String>, Map<Pattern, String>> timePatternReplaceWithGroup(String value) {
-        return dateTimePatternReplace(TIME_PATTERN_GROUP_LIST, value);
+    public static Pair<Set<String>, Map<Pattern, String>> getTimePatternsAndAssociatedGroup(String value) {
+        return getDateTimePatternsAndAssociatedGroup(TIME_PATTERN_GROUP_LIST, value);
     }
 
-    private static Pair<Set<String>, Map<Pattern, String>> dateTimePatternReplace(List<Map<Pattern, String>> patternGroupList,
-            String value) {
+    private static Pair<Set<String>, Map<Pattern, String>> getDateTimePatternsAndAssociatedGroup(List<Map<Pattern, String>> patternGroupList,
+                                                                                                 String value) {
         if (StringUtils.isEmpty(value)) {
             return Pair.of(Collections.singleton(StringUtils.EMPTY), Collections.emptyMap());
         }
@@ -389,10 +395,12 @@ public class SystemDateTimePatternManager {
         return false;
     }
 
+    @Deprecated
     public static boolean isMatchDateTimePattern(String value, String pattern, Locale locale) {
         return findDateTimeFormatter(value, pattern, locale).isPresent();
     }
 
+    @Deprecated
     public static boolean isMatchDateTimePattern(String value, String pattern) {
         return findDateTimeFormatter(value, pattern, LOCALES).isPresent();
     }

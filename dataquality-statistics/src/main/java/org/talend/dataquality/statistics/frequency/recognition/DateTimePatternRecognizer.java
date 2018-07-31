@@ -70,7 +70,7 @@ public class DateTimePatternRecognizer extends AbstractPatternRecognizer {
             if (findValueInFrequentDatePatterns(stringToRecognize, result))
                 return result;
             final Pair<Set<String>, Map<Pattern, String>> datePatternAfterReplace = CustomDateTimePatternManager
-                    .replaceByDateTimePatternWithGroup(stringToRecognize);
+                    .getPatternsAndAssociatedGroup(stringToRecognize);
 
             result.setResult(
                     CollectionUtils.isNotEmpty(datePatternAfterReplace.getLeft()) ? datePatternAfterReplace.getLeft()
