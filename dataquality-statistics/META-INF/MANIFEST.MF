@@ -6,6 +6,7 @@ Bundle-Version: 6.1.0.SNAPSHOT
 Bundle-Vendor: .Talend SA.
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.slf4j.api,
+ org.apache.commons.collections,
  org.apache.commons.io,
  org.apache.commons.lang,
  org.apache.commons.lang3,
