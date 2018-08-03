@@ -25,7 +25,7 @@ import org.talend.dataquality.statistics.frequency.AbstractFrequencyStatistics;
 import org.talend.dataquality.statistics.frequency.recognition.AbstractPatternRecognizer;
 import org.talend.dataquality.statistics.frequency.recognition.DateTimePatternRecognizer;
 import org.talend.dataquality.statistics.frequency.recognition.EmptyPatternRecognizer;
-import org.talend.dataquality.statistics.frequency.recognition.LatinExtendedCharPatternRecognizer;
+import org.talend.dataquality.statistics.frequency.recognition.GenericCharPatternRecognizer;
 import org.talend.dataquality.statistics.frequency.recognition.RecognitionResult;
 import org.talend.dataquality.statistics.type.DataTypeEnum;
 
@@ -54,7 +54,7 @@ public class CompositePatternFrequencyAnalyzer extends AbstractFrequencyAnalyzer
     public CompositePatternFrequencyAnalyzer(DataTypeEnum[] types) {
         patternFreqRecognizers.add(new EmptyPatternRecognizer());
         patternFreqRecognizers.add(new DateTimePatternRecognizer());
-        patternFreqRecognizers.add(new LatinExtendedCharPatternRecognizer());
+        patternFreqRecognizers.add(new GenericCharPatternRecognizer());
         this.types = types;
     }
 

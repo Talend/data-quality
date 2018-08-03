@@ -48,13 +48,13 @@ public class CompositePatternFrequencyAnalyzerTest {
         CompositePatternFrequencyAnalyzer analyzer = new CompositePatternFrequencyAnalyzer();
 
         Set<String> patternString1 = analyzer.getValuePatternSet("abcd1234ィゥェ中国");
-        Assert.assertEquals(Collections.singleton("aaaa9999ィゥェ中国"), patternString1);
+        Assert.assertEquals(Collections.singleton("aaaa9999KKKCC"), patternString1);
 
         Set<String> patternString4 = analyzer.getValuePatternSet("2008-01-01");
         Assert.assertEquals(new HashSet<String>(Arrays.asList(new String[] { "yyyy-MM-dd" })), patternString4);
 
         Set<String> patternString5 = analyzer.getValuePatternSet("2008-1月-01");
-        Assert.assertEquals(Collections.singleton("9999-9月-99"), patternString5);
+        Assert.assertEquals(Collections.singleton("9999-9C-99"), patternString5);
 
     }
 

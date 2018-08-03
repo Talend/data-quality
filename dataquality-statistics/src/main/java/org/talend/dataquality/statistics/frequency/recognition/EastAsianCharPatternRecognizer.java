@@ -26,6 +26,7 @@ import org.talend.dataquality.statistics.type.DataTypeEnum;
  * @since 1.3.0
  * @author mzhao
  */
+@Deprecated
 public class EastAsianCharPatternRecognizer extends AbstractPatternRecognizer {
 
     private final ChainResponsibilityHandler createEastAsiaPatternHandler = HandlerFactory.createEastAsiaPatternHandler();
