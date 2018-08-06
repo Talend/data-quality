@@ -10,7 +10,7 @@ Require-Bundle: org.slf4j.api,
  org.talend.libraries.google.libphonumber,
  org.apache.commons.io,
  org.apache.commons.lang,
- org.junit,
+ org.junit;resolution:=optional,
  org.talend.testutils;resolution:=optional
 Bundle-ClassPath: .
 Export-Package: org.talend.dataquality.standardization,

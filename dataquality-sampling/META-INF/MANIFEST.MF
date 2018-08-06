@@ -8,7 +8,7 @@ Require-Bundle: org.slf4j.api,
  org.eclipse.m2e.maven.runtime.slf4j.simple,
  org.apache.commons.io,
  org.apache.commons.lang,
- org.junit
+ org.junit;resolution:=optional
 Export-Package: org.talend.dataquality.datamasking,
  org.talend.dataquality.datamasking.functions,
  org.talend.dataquality.datamasking.generic,

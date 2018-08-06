@@ -9,7 +9,7 @@ Export-Package: org.talend.dataquality.jp.common,
  org.talend.dataquality.jp.transliteration,
  org.talend.dataquality.jp.numbers
 Bundle-ActivationPolicy: lazy
-Require-Bundle: org.junit,
+Require-Bundle: org.junit;resolution:=optional,
  org.slf4j.api,
  org.eclipse.m2e.maven.runtime.slf4j.simple
 Bundle-ClassPath: .,

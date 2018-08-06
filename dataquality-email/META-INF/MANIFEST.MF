@@ -13,5 +13,5 @@ Bundle-ActivationPolicy: lazy
 Require-Bundle: org.apache.commons.lang,
  org.slf4j.api,
  org.eclipse.m2e.maven.runtime.slf4j.simple,
- org.junit
+ org.junit;resolution:=optional
 Bundle-ClassPath: .

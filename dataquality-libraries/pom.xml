@@ -230,6 +230,7 @@
 					</archive>
 					<instructions>
 						<_nouses>true</_nouses>
+						<_noee>true</_noee>
 						<_removeheaders>JAVA_1_5_HOME,JAVA_1_6_HOME,JAVA_1_7_HOME,JAVA_1_8_HOME</_removeheaders>
 						<_include>META-INF/MANIFEST.MF</_include>
 						<Built-By>.Talend SA.</Built-By>

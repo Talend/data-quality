@@ -11,7 +11,7 @@ Require-Bundle: org.slf4j.api,
  org.apache.commons.io,
  org.apache.commons.lang,
  org.apache.commons.pool,
- org.junit
+ org.junit;resolution:=optional
 Export-Package: org.talend.dataquality.common.exception,
  org.talend.dataquality.common.inference,
  org.talend.dataquality.common.regex

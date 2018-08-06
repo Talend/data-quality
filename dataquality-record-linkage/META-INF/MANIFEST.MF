@@ -8,7 +8,7 @@ Require-Bundle: org.slf4j.api,
  org.apache.commons.codec,
  org.apache.commons.collections,
  org.apache.commons.io,
- org.junit
+ org.junit;resolution:=optional
 Bundle-Vendor: .Talend SA.
 Export-Package: org.talend.dataquality.matchmerge,
  org.talend.dataquality.matchmerge.mfb,

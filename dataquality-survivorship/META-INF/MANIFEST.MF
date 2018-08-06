@@ -8,7 +8,7 @@ Bundle-Vendor: .Talend SA.
 Require-Bundle: org.drools.eclipse,
  org.slf4j.api,
  org.eclipse.m2e.maven.runtime.slf4j.simple,
- org.junit
+ org.junit;resolution:=optional
 Export-Package: org.talend.survivorship,
  org.talend.survivorship.action,
  org.talend.survivorship.action.handler,
