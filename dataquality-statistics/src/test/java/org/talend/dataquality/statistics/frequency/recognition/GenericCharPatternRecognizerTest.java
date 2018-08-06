@@ -55,7 +55,7 @@ public class GenericCharPatternRecognizerTest {
 
         // Assert correctness of Ascii character replacement.
         String chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞß0123456789"; //$NON-NLS-1$
-        String replChars = "aaaaaaaaaaaaaaaaaaaaaaaaaaAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA9999999999"; //$NON-NLS-1$
+        String replChars = "aaaaaaaaaaaaaaaaaaaaaaaaaaAAAAAAAAAAAAAAAAAAAAAAAAAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa9999999999"; //$NON-NLS-1$
         checkPattern(chars, replChars, true, recognizer);
 
         // Assert incomplete when the chars including a none-ascii character "ィ".
@@ -63,7 +63,7 @@ public class GenericCharPatternRecognizerTest {
 
         // Assert incomplete when the chars including a none-ascii character "-".
         checkPattern("abc-d", "aaa-a", false, recognizer);
-        checkPattern("Straße", "AaaaAa", true, recognizer);
+        checkPattern("Straße", "Aaaaaa", true, recognizer);
         checkPattern("トンキン", "KKKK", true, recognizer);
         checkPattern("とうきょう", "HHHhH", true, recognizer);
         checkPattern("서울", "GG", true, recognizer);

@@ -72,7 +72,7 @@ public class GenericCharPatternRecognizer extends AbstractPatternRecognizer {
         buildInterval(0xFF66, 0xFF9F, 'K'); //KATAKANA
 
         buildInterval(0x4e00, 0x9faf, 'C'); //KANJI
-        
+
         buildInterval(0xAC00, 0xD7AF, 'G'); //HANGUL SYLLABLES
 
         Collections.sort(beginIntervals); // important for the dichotomic search
