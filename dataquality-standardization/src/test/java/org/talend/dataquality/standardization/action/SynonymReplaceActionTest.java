@@ -34,46 +34,38 @@ public class SynonymReplaceActionTest {
 
     @Before
     public void setUp() throws Exception {
-
-        try {
-            SearcherManager mgr = new SearcherManager(createLuceneDirectory(), null);
-            PowerMockito.whenNew(SearcherManager.class).withAnyArguments().thenReturn(mgr);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        SearcherManager mgr = new SearcherManager(createLuceneDirectory(), null);
+        PowerMockito.whenNew(SearcherManager.class).withAnyArguments().thenReturn(mgr);
     }
 
-    private Directory createLuceneDirectory() {
+    private Directory createLuceneDirectory() throws IOException {
         RAMDirectory testDir = new RAMDirectory();
-        try {
-            IndexWriter writer = new IndexWriter(testDir,
-                    new IndexWriterConfig(Version.LATEST, new StandardAnalyzer(CharArraySet.EMPTY_SET)));
 
-            Document doc = new Document();
+        IndexWriter writer = new IndexWriter(testDir,
+                new IndexWriterConfig(Version.LATEST, new StandardAnalyzer(CharArraySet.EMPTY_SET)));
 
-            doc.add(new StringField(SynonymIndexSearcher.F_WORD, "Germany", Field.Store.YES));
-            String[] synonyms = new String[] { "Germany", "Allemagne", "Deutschland", "德国" };
-            for (String syn : synonyms) {
-                doc.add(new StringField(SynonymIndexSearcher.F_SYN, syn, Field.Store.YES));
-                doc.add(new StringField(SynonymIndexSearcher.F_SYNTERM, syn.toLowerCase(), Field.Store.NO));
-            }
+        Document doc = new Document();
 
-            writer.addDocument(doc);
-            writer.commit();
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        doc.add(new StringField(SynonymIndexSearcher.F_WORD, "Germany", Field.Store.YES));
+        String[] synonyms = new String[] { "Germany", "Allemagne", "Deutschland", "德国" };
+        for (String syn : synonyms) {
+            doc.add(new StringField(SynonymIndexSearcher.F_SYN, syn, Field.Store.YES));
+            doc.add(new StringField(SynonymIndexSearcher.F_SYNTERM, syn.toLowerCase(), Field.Store.NO));
         }
+
+        writer.addDocument(doc);
+        writer.commit();
+        writer.close();
         return testDir;
     }
 
     @Test
-    public void runWithoutResult() throws IOException {
+    public void runWithoutResult() {
         Assert.assertEquals(StringUtils.EMPTY, action.run("string", 1, "the_index_path", new Random(123L)));
     }
 
     @Test
-    public void runWithResult() throws IOException {
+    public void runWithResult() {
         Assert.assertEquals("Allemagne", action.run("Germany", 1, "the_index_path", new Random(1L)));
         Assert.assertEquals("Deutschland", action.run("Germany", 1, "the_index_path", new Random(2L)));
         Assert.assertEquals("德国", action.run("Germany", 1, "the_index_path", new Random(3L)));
