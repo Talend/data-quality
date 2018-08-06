@@ -27,8 +27,8 @@ import org.talend.dataquality.statistics.type.DataTypeEnum;
 /**
  * * Recognize ascii characters given predefined list of Ascii characters and its pattern mappings.
  * 
- * @since 1.3.0
- * @author mzhao
+ * @since 6.1.0
+ * @author jteuladedenantes
  */
 public class GenericCharPatternRecognizer extends AbstractPatternRecognizer {
 
@@ -54,9 +54,9 @@ public class GenericCharPatternRecognizer extends AbstractPatternRecognizer {
         buildInterval('0', '9', '9');
         buildInterval('A', 'Z', 'A');
         buildInterval('À', 'Ö', 'A');
-        buildInterval('Ø', 'ß', 'A');
+        buildInterval('Ø', 'Þ', 'A');
         buildInterval('a', 'z', 'a');
-        buildInterval('à', 'ö', 'a');
+        buildInterval('ß', 'ö', 'a');
         buildInterval('ø', 'ÿ', 'a');
 
         buildInterval('h', 0x3041, 0x3043, 0x3045, 0x3047, 0x3049, 0x3063, 0x3083, 0x3085, 0x3087, 0x308E, 0x3095, 0x3096); //HIRAGANA SMALL
@@ -117,11 +117,11 @@ public class GenericCharPatternRecognizer extends AbstractPatternRecognizer {
 
     /**
      * Whether the patternString contains the predefined alpha character.
-     * 
+     *
      * @param patternString
      * @return
      */
-    public boolean containsAlphabetic(String patternString) {
+    public boolean containsAlpha(String patternString) {
         return charsPattern.matcher(patternString).find();
     }
 
