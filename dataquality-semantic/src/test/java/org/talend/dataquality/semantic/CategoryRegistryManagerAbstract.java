@@ -18,10 +18,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Rule;
+import org.junit.*;
 import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -45,11 +42,15 @@ public abstract class CategoryRegistryManagerAbstract {
 
     @AfterClass
     public static void after() throws IOException {
-        FileUtils.deleteDirectory(new File(TARGET_TEST_CRM_PATH));
     }
 
     @Before
     public void setUp() throws Exception {
+        File tenantFolder = new File(
+                TARGET_TEST_CRM_PATH + "/" + this.getClass().getSimpleName() + "_" + testName.getMethodName());
+        if (tenantFolder.exists()) {
+            FileUtils.deleteDirectory(tenantFolder);
+        }
         mockWithTenant(this.getClass().getSimpleName() + "_" + testName.getMethodName());
     }
 
