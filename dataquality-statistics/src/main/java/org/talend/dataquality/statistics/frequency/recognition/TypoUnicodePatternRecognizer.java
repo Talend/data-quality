@@ -194,14 +194,7 @@ public abstract class TypoUnicodePatternRecognizer extends AbstractPatternRecogn
             switch (this) {
             case IDEOGRAPHIC:
                 while (pos < ca.length && Character.isIdeographic(Character.codePointAt(ca, pos))) {
-                    if (Character.isSurrogate(ca[pos])) {
-                        pos += 2;
-                        if (!isIncludeSurrPair) {
-                            isIncludeSurrPair = true;
-                        }
-                    } else {
-                        pos++;
-                    }
+                    pos += increaseIdeographicPos(ca[pos]);
                 }
                 break;
             case NUMERIC:
@@ -241,14 +234,7 @@ public abstract class TypoUnicodePatternRecognizer extends AbstractPatternRecogn
                 break;
             case IDEOGRAPHIC:
                 while (pos < ca.length && Character.isIdeographic(Character.codePointAt(ca, pos))) {
-                    if (Character.isSurrogate(ca[pos])) {
-                        pos += 2;
-                        if (!isIncludeSurrPair) {
-                            isIncludeSurrPair = true;
-                        }
-                    } else {
-                        pos++;
-                    }
+                    pos += increaseIdeographicPos(ca[pos]);
                 }
                 break;
             case NUMERIC:
@@ -323,6 +309,16 @@ public abstract class TypoUnicodePatternRecognizer extends AbstractPatternRecogn
             } else {
                 return patternSequence;
             }
+        }
+
+        private int increaseIdeographicPos(char currentChar) {
+            if (!Character.isSurrogate(currentChar)) {
+                return 1;
+            }
+            // it is a surrogate pair character
+            isIncludeSurrPair = true;
+            return 2;
+
         }
     }
 
