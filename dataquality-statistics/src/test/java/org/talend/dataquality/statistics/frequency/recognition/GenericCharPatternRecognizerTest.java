@@ -45,7 +45,7 @@ public class GenericCharPatternRecognizerTest {
 
         // Assert blank and compare the result instance
         RecognitionResult result2 = recognizer.recognize(" ");
-        Assert.assertFalse(result2.isComplete());
+        Assert.assertTrue(result2.isComplete());
         Assert.assertEquals(Collections.singleton(" "), result2.getPatternStringSet());
 
         // Assert null
@@ -62,7 +62,7 @@ public class GenericCharPatternRecognizerTest {
         checkPattern("abcィd", "aaaKa", true, recognizer);
 
         // Assert incomplete when the chars including a none-ascii character "-".
-        checkPattern("abc-d", "aaa-a", false, recognizer);
+        checkPattern("abc-d", "aaa-a", true, recognizer);
         checkPattern("Straße", "Aaaaaa", true, recognizer);
         checkPattern("トンキン", "KKKK", true, recognizer);
         checkPattern("とうきょう", "HHHhH", true, recognizer);
@@ -86,7 +86,7 @@ public class GenericCharPatternRecognizerTest {
             GenericCharPatternRecognizer recognizer) {
 
         RecognitionResult result6 = recognizer.recognize(searchedCharacters);
-        Assert.assertFalse(isComplete ^ result6.isComplete());
+        Assert.assertEquals(isComplete, result6.isComplete());
         Assert.assertEquals(Collections.singleton(expectedCharacters), result6.getPatternStringSet());
 
     }

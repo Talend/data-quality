@@ -9,11 +9,12 @@ Bundle-ClassPath: .
 Require-Bundle: org.slf4j.api,
  org.eclipse.m2e.maven.runtime.slf4j.simple,
  org.apache.commons.io,
- org.apache.commons.lang,
+ org.apache.commons.lang3,
  org.apache.commons.pool,
  org.junit;resolution:=optional
 Export-Package: org.talend.dataquality.common.exception,
  org.talend.dataquality.common.inference,
+ org.talend.dataquality.common.pattern,
  org.talend.dataquality.common.regex
 Import-Package: com.fasterxml.jackson.annotation;version="[2.5.3,3.0.0)",
  org.slf4j
