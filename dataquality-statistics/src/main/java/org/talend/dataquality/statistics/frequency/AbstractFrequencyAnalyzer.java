@@ -59,6 +59,7 @@ public abstract class AbstractFrequencyAnalyzer<T extends AbstractFrequencyStati
 
     @Override
     public void end() {
+        // do nothing
     }
 
     @Override
@@ -68,7 +69,7 @@ public abstract class AbstractFrequencyAnalyzer<T extends AbstractFrequencyStati
 
     @Override
     public void close() {
-
+        // do nothing
     }
 
 }

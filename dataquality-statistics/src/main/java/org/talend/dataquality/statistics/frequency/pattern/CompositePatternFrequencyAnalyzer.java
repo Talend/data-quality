@@ -129,7 +129,7 @@ public class CompositePatternFrequencyAnalyzer extends AbstractFrequencyAnalyzer
      * @param type the data type
      * @return the recognition result bean.
      */
-    Map<String, Locale> getValuePatternSet(String originalValue, DataTypeEnum type) {
+    private Map<String, Locale> getValuePatternSet(String originalValue, DataTypeEnum type) {
         Map<String, Locale> resultMap = new HashMap<>();
         String patternString = originalValue;
         for (AbstractPatternRecognizer recognizer : patternFreqRecognizers) {
