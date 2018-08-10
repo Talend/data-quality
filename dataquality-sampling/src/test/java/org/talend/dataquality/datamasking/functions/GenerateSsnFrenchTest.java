@@ -29,15 +29,18 @@ public class GenerateSsnFrenchTest {
 
     private GenerateSsnFr gnf = new GenerateSsnFr();
 
-    @Before
-    public void setUp() throws Exception {
+    @Test
+    public void testGood() {
         gnf.setRandom(new Random(42));
+        output = gnf.generateMaskedRow(null);
+        assertEquals(output, "2490145075272 83"); //$NON-NLS-1$
     }
 
     @Test
-    public void testGood() {
+    public void testControlKeyWithOneDigit() {
+        gnf.setRandom(new Random(50));
         output = gnf.generateMaskedRow(null);
-        assertEquals(output, "2490145075272 83"); //$NON-NLS-1$
+        assertEquals(output, "2160663447007 02"); //$NON-NLS-1$
     }
 
     @Test

@@ -53,6 +53,8 @@ public class GenerateSsnFr extends Function<String> {
         int controlKey = 97 - ssn.mod(MOD97).intValue();
 
         result.append(" "); //$NON-NLS-1$
+        if (controlKey < 10)
+            result.append("0");
         result.append(controlKey);
 
         return result.toString();
