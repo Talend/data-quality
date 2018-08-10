@@ -53,12 +53,12 @@ public class ValueDataMaskerTest extends CategoryRegistryManagerAbstract {
 
             // 1. FIRST_NAME
             put(new String[] { "", SemanticCategoryEnum.FIRST_NAME.name(), "string" }, "");
-            put(new String[] { "John", SemanticCategoryEnum.FIRST_NAME.name(), "string" }, "Vkfz");// Rsgy
-            put(new String[] { "PRUDENCE", SemanticCategoryEnum.FIRST_NAME.name(), "string", }, "DIANA");
-            put(new String[] { "XUE", SemanticCategoryEnum.FIRST_NAME.name(), "string", }, "DIANA");
+            put(new String[] { "John", SemanticCategoryEnum.FIRST_NAME.name(), "string" }, "GABRIELA");// Rsgy
+            put(new String[] { "PRUDENCE", SemanticCategoryEnum.FIRST_NAME.name(), "string", }, "GABRIELA");
+            put(new String[] { "XUE", SemanticCategoryEnum.FIRST_NAME.name(), "string", }, "GABRIELA");
 
             // 2. LAST_NAME
-            put(new String[] { "Dupont", SemanticCategoryEnum.LAST_NAME.name(), "string" }, "Vkfzzp");
+            put(new String[] { "Dupont", SemanticCategoryEnum.LAST_NAME.name(), "string" }, "RANKIN");
             put(new String[] { "SMITH", SemanticCategoryEnum.LAST_NAME.name(), "string" }, "RANKIN");
 
             // 3. EMAIL
@@ -84,7 +84,7 @@ public class ValueDataMaskerTest extends CategoryRegistryManagerAbstract {
             put(new String[] { "CEO", SemanticCategoryEnum.JOB_TITLE.name(), "string" }, "Aviation Inspector");
 
             // 6. ADDRESS_LINE
-            put(new String[] { "9 Rue Pagès", MaskableCategoryEnum.ADDRESS_LINE.name(), "string" }, "3 Kfz Zpsbb");
+            put(new String[] { "9 Rue Pagès", MaskableCategoryEnum.ADDRESS_LINE.name(), "string" }, "6 Rue XXXXX");
 
             // 7 POSTAL_CODE
             // use regex function
@@ -115,7 +115,7 @@ public class ValueDataMaskerTest extends CategoryRegistryManagerAbstract {
             // FR Commune
             put(new String[] { "Amancey", SemanticCategoryEnum.FR_COMMUNE.name(), "string" }, "Flexbourg");
             // Organization
-            put(new String[] { "Kiva", SemanticCategoryEnum.ORGANIZATION.name(), "string" }, "Vkfz");
+            put(new String[] { "Kiva", SemanticCategoryEnum.ORGANIZATION.name(), "string" }, "International Council for Science");
 
             // EMPTY
             put(new String[] { " ", "UNKNOWN", "integer" }, " ");
@@ -339,10 +339,10 @@ public class ValueDataMaskerTest extends CategoryRegistryManagerAbstract {
 
         {
             // custom dictionary
-            put(new String[] { "true", SemanticCategoryEnum.ANSWER.name(), "string" }, "true");
-            put(new String[] { "false", SemanticCategoryEnum.ANSWER.name(), "string" }, "true");
-            put(new String[] { "TRUE", SemanticCategoryEnum.ANSWER.name(), "string" }, "VKFZ");
-            put(new String[] { "FALSE", SemanticCategoryEnum.ANSWER.name(), "string" }, "VKFZZ");
+//            put(new String[] { "true", "NEW_CAT_NAME", "string" }, "false");
+//            put(new String[] { "false", "NEW_CAT_NAME", "string" }, "false");
+            put(new String[] { "TRUE", "NEW_CAT_NAME", "string" }, "VKFZ");
+            put(new String[] { "FALSE", "NEW_CAT_NAME", "string" }, "VKFZZ");
         }
     };
 
@@ -388,8 +388,9 @@ public class ValueDataMaskerTest extends CategoryRegistryManagerAbstract {
      * @throws IllegalAccessException
      * @throws InstantiationException
      */
-    public void testProcessModifyExistCategory() throws InstantiationException, IllegalAccessException {
-        String mockedTenantID = this.getClass().getSimpleName() + "_ModifiedIndex";
+    @Test
+    public void testProcessCustomCategory() throws InstantiationException, IllegalAccessException {
+        String mockedTenantID = this.getClass().getSimpleName() + "_CustomIndex";
         MockitoAnnotations.initMocks(this);
         mockWithTenant(mockedTenantID);
         CategoryRegistryManager.setUsingLocalCategoryRegistry(true);
@@ -400,7 +401,10 @@ public class ValueDataMaskerTest extends CategoryRegistryManagerAbstract {
         DQCategory categoryClone = SerializationUtils.clone(answerCategory); // make a clone instead of modifying the
                                                                              // shared
                                                                              // category metadata
+        categoryClone.setId("NEW_CAT_ID");
+        categoryClone.setName("NEW_CAT_NAME");
         categoryClone.setModified(true);
+        categoryClone.setCompleteness(true);
         holder.updateCategory(categoryClone);
 
         DQDocument newDoc = new DQDocument();

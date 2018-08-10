@@ -38,6 +38,22 @@ public class DictionarySnapshot {
         return metadata;
     }
 
+    /**
+     *
+     * @param categoryName
+     * @return null for the unknown category name otherwise return DQCategory
+     */
+    public DQCategory getDQCategoryByName(String categoryName) {
+        DQCategory dqCategory = null;
+        for (DQCategory dqCat : getMetadata().values()) {
+            if (dqCat.getName().equals(categoryName)) {
+                dqCategory = dqCat;
+                break;
+            }
+        }
+        return dqCategory;
+    }
+
     public Index getSharedDataDict() {
         return sharedDataDict;
     }

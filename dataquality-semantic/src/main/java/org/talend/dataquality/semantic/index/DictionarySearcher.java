@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -25,6 +26,7 @@ import java.util.Set;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queries.TermsFilter;
 import org.apache.lucene.search.BooleanClause;
@@ -34,6 +36,7 @@ import org.apache.lucene.search.FieldCacheTermsFilter;
 import org.apache.lucene.search.Filter;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.SearcherManager;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
@@ -341,5 +344,33 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
         TopDocs topDocs = searcher.search(combinedQuery, 50);
         mgr.release(searcher);
         return topDocs;
+    }
+
+    public List<Document> listDocumentsByCategoryId(String catId, int offset, int n) {
+        try {
+            final IndexSearcher searcher = mgr.acquire();
+            final IndexReader reader = searcher.getIndexReader();
+            Document doc = reader.document(0);
+            Term catTerm = new Term(DictionarySearcher.F_CATID, catId);
+            Query catQuery = new TermQuery(catTerm);
+            TopDocs topDocs;
+            if (offset <= 0) {
+                topDocs = searcher.search(catQuery, n);
+            } else {
+                TopDocs docs = searcher.search(catQuery, offset + n);
+                Query q = new TermQuery(new Term(DictionarySearcher.F_CATID, catId));
+                topDocs = searcher.searchAfter(docs.scoreDocs[Math.min(docs.totalHits, offset) - 1], q, n);
+            }
+            List<Document> listDocs = new ArrayList<>();
+            for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
+                Document luceneDoc = reader.document(scoreDoc.doc);
+                listDocs.add(luceneDoc);
+            }
+            mgr.release(searcher);
+            return listDocs;
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+        return Collections.emptyList();
     }
 }

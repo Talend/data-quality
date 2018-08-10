@@ -13,14 +13,19 @@
 package org.talend.dataquality.semantic.datamasking;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
-import java.util.Set;
+import java.util.stream.Collectors;
 
+import org.apache.lucene.document.Document;
 import org.talend.dataquality.datamasking.functions.Function;
-import org.talend.dataquality.semantic.api.CategoryRegistryManager;
-import org.talend.dataquality.semantic.api.LocalDictionaryCache;
-import org.talend.dataquality.semantic.model.DQDocument;
+import org.talend.dataquality.semantic.index.DictionarySearcher;
+import org.talend.dataquality.semantic.index.Index;
+import org.talend.dataquality.semantic.index.LuceneIndex;
+import org.talend.dataquality.semantic.model.DQCategory;
+import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
 
 /**
  * created by msjian on 2017.10.11.
@@ -31,10 +36,29 @@ public class GenerateFromDictionaries extends Function<String> {
 
     private static final long serialVersionUID = 1476820256067746995L;
 
-    protected List<String> valuesInDictionaries = new ArrayList<>();
+    protected List<String> valuesInDictionaries = null;
+
+    private DictionarySnapshot dictionarySnapshot;
+
+    private String semanticCategoryId;
 
     @Override
     protected String doGenerateMaskedField(String t) {
+        if (valuesInDictionaries == null) {
+            if (dictionarySnapshot != null) {
+                Map<String, DQCategory> meta = dictionarySnapshot.getMetadata();
+                DQCategory cat = dictionarySnapshot.getMetadata().get(semanticCategoryId);
+                valuesInDictionaries = new ArrayList<>();
+                if (cat != null) {
+                    if (!cat.getModified()) {
+                        valuesInDictionaries.addAll(getValuesFromIndex(dictionarySnapshot.getSharedDataDict()));
+                    } else {
+                        valuesInDictionaries.addAll(getValuesFromIndex(dictionarySnapshot.getCustomDataDict()));
+                    }
+                }
+            }
+        }
+
         if (!valuesInDictionaries.isEmpty()) {
             return valuesInDictionaries.get(rnd.nextInt(valuesInDictionaries.size()));
         } else {
@@ -42,18 +66,16 @@ public class GenerateFromDictionaries extends Function<String> {
         }
     }
 
+    private List<String> getValuesFromIndex(Index index) {
+        List<Document> listLuceneDocs = ((LuceneIndex) index).getSearcher().listDocumentsByCategoryId(semanticCategoryId, 0,
+                Integer.MAX_VALUE);
+        return listLuceneDocs.stream().flatMap(doc -> Arrays.asList(doc.getValues(DictionarySearcher.F_RAW)).stream())
+                .collect(Collectors.toList());
+    }
+
     @Override
-    public void parse(String semanticCategory, boolean keepNullValues, Random rand) {
-        if (semanticCategory != null) {
-            LocalDictionaryCache dict = CategoryRegistryManager.getInstance().getDictionaryCache();
-            List<DQDocument> listDocuments = dict.listDocuments(semanticCategory, 0, Integer.MAX_VALUE);
-            for (DQDocument dqDocument : listDocuments) {
-                Set<String> values = dqDocument.getValues();
-                if (values != null && !values.isEmpty()) {
-                    valuesInDictionaries.add(values.iterator().next());
-                }
-            }
-        }
+    public void parse(String semanticCategoryId, boolean keepNullValues, Random rand) {
+        this.semanticCategoryId = semanticCategoryId;
 
         setKeepNull(keepNullValues);
         if (rand != null) {
@@ -61,4 +83,7 @@ public class GenerateFromDictionaries extends Function<String> {
         }
     }
 
+    public void setDictionarySnapshot(DictionarySnapshot dictionarySnapshot) {
+        this.dictionarySnapshot = dictionarySnapshot;
+    }
 }

@@ -18,6 +18,7 @@ import java.util.List;
 import org.talend.dataquality.datamasking.functions.Function;
 import org.talend.dataquality.datamasking.semantic.ReplaceCharacterHelper;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
+import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
 import org.talend.dataquality.semantic.snapshot.StandardDictionarySnapshotProvider;
@@ -51,18 +52,45 @@ public class ValueDataMasker implements Serializable {
     }
 
     /**
+     *
      * ValueDataMasker constructor.
-     * 
+     *
      * @param semanticCategory the semantic domain information
      * @param dataType the data type information
      * @param params extra parameters such as date time pattern list
      */
     public ValueDataMasker(String semanticCategory, String dataType, List<String> params) {
-        function = SemanticMaskerFunctionFactory.createMaskerFunctionForSemanticCategory(semanticCategory, dataType, params);
-        category = CategoryRegistryManager.getInstance().getCategoryMetadataByName(semanticCategory);
+        this(semanticCategory, dataType, params, null);
+
+    }
+
+    /**
+     *
+     * ValueDataMasker constructor.
+     *
+     * @param semanticCategory the semantic domain information
+     * @param dataType the data type information
+     * @param params extra parameters such as date time pattern list
+     * @param dictionarySnapshot the dictionary snapshot
+     */
+    public ValueDataMasker(String semanticCategory, String dataType, List<String> params, DictionarySnapshot dictionarySnapshot) {
+        this.function = SemanticMaskerFunctionFactory.createMaskerFunctionForSemanticCategory(semanticCategory, dataType, params,
+                dictionarySnapshot);
+
+        category = dictionarySnapshot != null ? dictionarySnapshot.getDQCategoryByName(semanticCategory)
+                : CategoryRegistryManager.getInstance().getCategoryMetadataByName(semanticCategory);
+
         if (category != null) {
-            DictionarySnapshot dictionarySnapshot = new StandardDictionarySnapshotProvider().get();
-            semanticQualityAnalyzer = new SemanticQualityAnalyzer(dictionarySnapshot, new String[] {});
+            if (dictionarySnapshot == null) {
+                dictionarySnapshot = new StandardDictionarySnapshotProvider().get();
+            }
+            if (category.getCompleteness()) {
+                semanticQualityAnalyzer = new SemanticQualityAnalyzer(dictionarySnapshot, new String[] {});
+            }
+
+            if (this.function instanceof GenerateFromDictionaries) {
+                ((GenerateFromDictionaries) function).setDictionarySnapshot(dictionarySnapshot);
+            }
         }
     }
 

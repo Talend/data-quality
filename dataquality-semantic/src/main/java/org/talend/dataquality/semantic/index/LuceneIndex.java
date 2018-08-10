@@ -45,6 +45,10 @@ public class LuceneIndex implements Index {
 
     private final DictionarySearcher searcher;
 
+    public DictionarySearcher getSearcher() {
+        return searcher;
+    }
+
     private final LevenshteinMatcher levenshtein = new LevenshteinMatcher();
 
     public LuceneIndex(URI indexPath, DictionarySearchMode searchMode) {

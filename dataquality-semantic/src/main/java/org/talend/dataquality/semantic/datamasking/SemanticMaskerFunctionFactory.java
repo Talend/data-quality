@@ -27,18 +27,19 @@ import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.classifier.custom.UserDefinedClassifier;
 import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
+import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
 
 public class SemanticMaskerFunctionFactory {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SemanticMaskerFunctionFactory.class);
 
     public static Function<String> createMaskerFunctionForSemanticCategory(String semanticCategory, String dataType) {
-        return createMaskerFunctionForSemanticCategory(semanticCategory, dataType, null);
+        return createMaskerFunctionForSemanticCategory(semanticCategory, dataType, null, null);
     }
 
     @SuppressWarnings("unchecked")
     public static Function<String> createMaskerFunctionForSemanticCategory(String semanticCategory, String dataType,
-            List<String> params) {
+            List<String> params, DictionarySnapshot dictionarySnapshot) {
         Function<String> function = null;
         final MaskableCategoryEnum cat = MaskableCategoryEnum.getCategoryById(semanticCategory);
         if (cat != null) {
@@ -58,11 +59,12 @@ public class SemanticMaskerFunctionFactory {
         }
 
         if (function == null) {
-            DQCategory category = CategoryRegistryManager.getInstance().getCategoryMetadataByName(semanticCategory);
+            DQCategory category = dictionarySnapshot != null ? dictionarySnapshot.getDQCategoryByName(semanticCategory)
+                    : CategoryRegistryManager.getInstance().getCategoryMetadataByName(semanticCategory);
             if (category != null) {
                 if (CategoryType.DICT.equals(category.getType())) {
                     function = new GenerateFromDictionaries();
-                    function.parse(semanticCategory, true, null);
+                    function.parse(category.getId(), true, null);
                 } else if (CategoryType.REGEX.equals(category.getType())) {
                     UserDefinedClassifier userDefinedClassifier = new UserDefinedClassifier();
                     String patternString = userDefinedClassifier.getPatternStringByCategoryId(category.getId());
