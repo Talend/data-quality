@@ -304,7 +304,7 @@ public abstract class TypoUnicodePatternRecognizer extends AbstractPatternRecogn
             if (isSpecial) {
                 return specialPattern;
             }
-            if (seqLength == 1 || seqLength == 2 && isIncludeSurrPair) {
+            if (seqLength == 1 || (seqLength == 2 && isIncludeSurrPair)) {
                 return patternUnit;
             } else {
                 return patternSequence;
