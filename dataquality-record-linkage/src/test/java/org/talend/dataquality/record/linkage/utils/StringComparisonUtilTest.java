@@ -65,6 +65,8 @@ public class StringComparisonUtilTest {
         assertEquals(0, StringComparisonUtil.difference(str8, str10));
         assertEquals(0, StringComparisonUtil.difference(str8, str11));
         assertEquals(1, StringComparisonUtil.difference(str10, str11));
+        assertEquals(2, StringComparisonUtil.difference("𠀠𠀡𠀢", "𠀠𠀡a"));
+        assertEquals(3, StringComparisonUtil.difference("𠀐𠀑𠀒𠀓𠀔", "𠀐𠀑a𠀓b"));
     }
 
     /**
@@ -82,6 +84,8 @@ public class StringComparisonUtilTest {
         // TDQ-15079: Support Chinese　and surrogate pair characters
         assertEquals(str7, StringComparisonUtil.getCommonCharacters(str6, str7, 1).toString());
         assertEquals(str9, StringComparisonUtil.getCommonCharacters(str8, str9, 1).toString());
+        assertEquals("𠀠𠀡", StringComparisonUtil.getCommonCharacters("𠀠𠀡𠀢", "𠀠a𠀡", 2).toString());
+        assertEquals("𠀐𠀑𠀒", StringComparisonUtil.getCommonCharacters("𠀐𠀑𠀒𠀓𠀔", "a𠀐𠀒c𠀑", 3).toString());
     }
 
     /**
@@ -102,6 +106,9 @@ public class StringComparisonUtilTest {
         // TDQ-15079: Support Chinese　and surrogate pair characters
         assertEquals(2, StringComparisonUtil.getPrefixLength(str6, str7));
         assertEquals(1, StringComparisonUtil.getPrefixLength(str8, str9));
+        assertEquals(2, StringComparisonUtil.getPrefixLength("𠀐𠀑𠀒𠀓𠀔", "𠀐𠀑𠀠𠀡𠀢𠀣"));
+        assertEquals(1, StringComparisonUtil.getPrefixLength("𠀐𠀑𠀒𠀓𠀔", "𠀐a"));
+        assertEquals(0, StringComparisonUtil.getPrefixLength("我𠀑𠀒𠀓𠀔", "𠀐𠀑𠀒ab"));
     }
 
 }

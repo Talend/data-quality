@@ -56,7 +56,7 @@ public class JaroMatcher extends AbstractAttributeMatcher {
         }
 
         // check for same length common strings returning 0.0f is not the same
-        if (common1.length() != common2.length()) {
+        if (common1.codePoints().count() != common2.codePoints().count()) {
             return 0.0f;
         }
         int common1CPCount = common1.codePointCount(0, common1.length());
@@ -64,8 +64,10 @@ public class JaroMatcher extends AbstractAttributeMatcher {
 
         // get the number of transpositions
         int transpositions = 0;
-        for (int i = 0; i < common1CPCount; i++) {
-            if (common1.codePointAt(i) != common2.codePointAt(i))
+        int cp1;
+        for (int i = 0; i < common1.length(); i += Character.charCount(cp1)) {
+            cp1 = common1.codePointAt(i);
+            if (cp1 != common2.codePointAt(i))
                 transpositions++;
         }
         transpositions /= 2.0f;

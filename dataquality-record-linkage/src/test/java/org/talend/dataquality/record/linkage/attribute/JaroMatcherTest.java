@@ -66,11 +66,6 @@ public class JaroMatcherTest {
         b = "拓蓝"; //$NON-NLS-1$
         matchingWeight = jaroMatcher.getMatchingWeight(a, b);
         assertEquals(0.8333333134651184d, matchingWeight, EPSILON);
-
-        a = "𠀠𠀡𠀢"; //$NON-NLS-1$
-        b = "𠀠"; //$NON-NLS-1$
-        matchingWeight = jaroMatcher.getMatchingWeight(a, b);
-        assertEquals(0.7777778506278992d, matchingWeight, EPSILON);
     }
 
     /**
@@ -82,6 +77,19 @@ public class JaroMatcherTest {
         assertEquals("JARO", new JaroMatcher().getMatchType().name()); //$NON-NLS-1$
         assertEquals("Jaro", new JaroMatcher().getMatchType().getLabel()); //$NON-NLS-1$
         assertEquals("JARO", new JaroMatcher().getMatchType().toString()); //$NON-NLS-1$
+    }
+
+    @Test
+    public void testGetWeightSurrogate() {
+        JaroMatcher matcher = new JaroMatcher();
+        double weight = matcher.getMatchingWeight("𠀠𠀡𠀢", "𠀠");
+        assertEquals(0.7777778506278992d, weight, EPSILON);
+        weight = matcher.getWeight("𠀐𠀑𠀔", "𠀐𠀑𠀔");
+        assertEquals(1.0d, weight, 0);
+        weight = matcher.getWeight("𠀐𠀑a", "𠀒𠀓𠀔");
+        assertEquals(0d, weight, 0);
+        weight = matcher.getWeight("𠀐𠀑a", "𠀒𠀑c");
+        assertEquals(0.5555555820465088d, weight, 0);
     }
 
 }
