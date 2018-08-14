@@ -4,11 +4,6 @@ Bundle-Name: Sampling Library
 Bundle-SymbolicName: org.talend.dataquality.sampling
 Bundle-Version: 6.1.0.SNAPSHOT
 Bundle-Vendor: .Talend SA.
-Require-Bundle: org.slf4j.api,
- org.eclipse.m2e.maven.runtime.slf4j.simple,
- org.apache.commons.io,
- org.apache.commons.lang,
- org.junit;resolution:=optional
 Export-Package: org.talend.dataquality.datamasking,
  org.talend.dataquality.datamasking.functions,
  org.talend.dataquality.datamasking.generic,
@@ -22,6 +17,12 @@ Export-Package: org.talend.dataquality.datamasking,
 Bundle-ClassPath: .
 Import-Package: com.google.i18n.phonenumbers,
  org.apache.commons.codec.language,
+ org.apache.commons.io,
+ org.apache.commons.lang,
  org.apache.commons.lang3.tuple,
  org.apache.commons.math3.distribution,
+ org.junit;version="4.11.0";resolution:=optional,
+ org.junit.runner;version="4.11.0";resolution:=optional,
+ org.junit.runners;version="4.11.0";resolution:=optional,
+ org.slf4j;version="[1.7.0,2.0.0)",
  org.talend.daikon.number;version="[0.14.0,1.0.0)"
