@@ -17,7 +17,7 @@ Export-Package: org.talend.dataquality.datamasking,
 Bundle-ClassPath: .
 Import-Package: com.google.i18n.phonenumbers,
  org.apache.commons.codec.language,
- org.apache.commons.io;version="[1.4.0,2.0.0)",
+ org.apache.commons.io;version="[2.2.0,3.0.0)",
  org.apache.commons.lang,
  org.apache.commons.lang3.tuple,
  org.apache.commons.math3.distribution,
