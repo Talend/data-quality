@@ -93,6 +93,7 @@ public class DateTimePatternManager {
      * @param customDatePatterns the list of custom date patterns.
      * @return true if the value is a date.
      */
+    @Deprecated
     public static boolean isDate(String value, List<String> customDatePatterns) {
         return isDate(value, customDatePatterns, DEFAULT_LOCALE);
     }
@@ -105,6 +106,7 @@ public class DateTimePatternManager {
      * @param locale the locale to use.
      * @return true if the value is a date.
      */
+    @Deprecated
     public static boolean isDate(String value, List<String> customDatePatterns, Locale locale) {
         for (String customPattern : customDatePatterns) {
             if (isMatchCustomPattern(value, customPattern, locale)) {
@@ -128,13 +130,15 @@ public class DateTimePatternManager {
      * Whether the given string value is a date or not using the default jvm locale.
      *
      * @param value the value to check if it's a date.
-     * @param customDatePatterns the list of custom date patterns.
+     * @param customTimePatterns the list of custom date patterns.
      * @return true if the value is a date.
      */
+    @Deprecated
     public static boolean isTime(String value, List<String> customTimePatterns) {
         return isTime(value, customTimePatterns, DEFAULT_LOCALE);
     }
 
+    @Deprecated
     public static boolean isTime(String value, List<String> customTimePatterns, Locale locale) {
         for (String customPattern : customTimePatterns) {
             if (isMatchCustomPattern(value, customPattern, locale)) {
@@ -201,18 +205,22 @@ public class DateTimePatternManager {
         return false;
     }
 
+    @Deprecated
     public static String replaceByDateTimePattern(String value, String customPattern) {
         return replaceByDateTimePattern(value, customPattern, DEFAULT_LOCALE);
     }
 
+    @Deprecated
     public static String replaceByDateTimePattern(String value, String customPattern, Locale locale) {
         return replaceByDateTimePattern(value, Collections.singletonList(customPattern), locale);
     }
 
+    @Deprecated
     public static String replaceByDateTimePattern(String value, List<String> customPatterns) {
         return replaceByDateTimePattern(value, customPatterns, DEFAULT_LOCALE);
     }
 
+    @Deprecated
     public static String replaceByDateTimePattern(String value, List<String> customPatterns, Locale locale) {
         for (String customPattern : customPatterns) {
             if (isMatchCustomPattern(value, customPattern, locale)) {

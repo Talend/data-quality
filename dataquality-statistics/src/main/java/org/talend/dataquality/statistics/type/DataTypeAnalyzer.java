@@ -12,13 +12,9 @@
 // ============================================================================
 package org.talend.dataquality.statistics.type;
 
-import static org.talend.dataquality.statistics.datetime.CustomDateTimePatternManager.isMatchCustomPatterns;
-
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -55,7 +51,6 @@ public class DataTypeAnalyzer implements Analyzer<DataTypeOccurences> {
      * Default empty constructor.
      */
     public DataTypeAnalyzer() {
-        this(Collections.<String> emptyList());
     }
 
     /**
@@ -63,6 +58,7 @@ public class DataTypeAnalyzer implements Analyzer<DataTypeOccurences> {
      *
      * @param customDateTimePatterns the patterns to use.
      */
+    @Deprecated
     public DataTypeAnalyzer(List<String> customDateTimePatterns) {
         this.customDateTimePatterns.addAll(customDateTimePatterns);
     }
@@ -127,17 +123,12 @@ public class DataTypeAnalyzer implements Analyzer<DataTypeOccurences> {
         }
         DataTypeEnum type = DataTypeEnum.STRING;
 
-        // use custom patterns first
-        if (isMatchCustomPatterns(value, customDateTimePatterns, Locale.US))
+        Optional<Pair<Pattern, DateTimeFormatter>> foundPattern = SystemDateTimePatternManager.findOneDatePattern(value);
+        if (foundPattern.isPresent()) {
+            orderedPatterns.addNewValue(foundPattern.get());
             type = DataTypeEnum.DATE;
-        else {
-            Optional<Pair<Pattern, DateTimeFormatter>> foundPattern = SystemDateTimePatternManager.findOneDatePattern(value);
-            if (foundPattern.isPresent()) {
-                orderedPatterns.addNewValue(foundPattern.get());
-                type = DataTypeEnum.DATE;
-            } else if (SystemDateTimePatternManager.isTime(value))
-                type = DataTypeEnum.TIME;
-        }
+        } else if (SystemDateTimePatternManager.isTime(value))
+            type = DataTypeEnum.TIME;
 
         return type;
     }

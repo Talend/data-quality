@@ -13,7 +13,6 @@
 package org.talend.dataquality.statistics.type;
 
 import java.math.BigInteger;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
@@ -151,6 +150,7 @@ public class TypeInferenceUtils {
      * @param customDatePatterns optional custom date patterns to use before the registered ones.
      * @return true if the value is a date type, false otherwise.
      */
+    @Deprecated
     public static boolean isDate(String value, List<String> customDatePatterns) {
         return CustomDateTimePatternManager.isDate(value, customDatePatterns);
     }
@@ -165,6 +165,7 @@ public class TypeInferenceUtils {
      * @param locale the locale to use to parse the date.
      * @return true if the value is a date type, false otherwise.
      */
+    @Deprecated
     public static boolean isDate(String value, List<String> customDatePatterns, Locale locale) {
         return CustomDateTimePatternManager.isDate(value, customDatePatterns, locale);
     }
@@ -216,9 +217,21 @@ public class TypeInferenceUtils {
     }
 
     public static DataTypeEnum getDataType(String value) {
-        return getDataType(value, Collections.emptyList());
+        DataTypeEnum dataTypeEnum = getNativeDataType(value);
+        //STRING means we didn't find any native data types
+        if (DataTypeEnum.STRING.equals(dataTypeEnum)) {
+            if (isDate(value)) {
+                // 5. detect date
+                dataTypeEnum = DataTypeEnum.DATE;
+            } else if (isTime(value)) {
+                // 6. detect date
+                dataTypeEnum = DataTypeEnum.TIME;
+            }
+        }
+        return dataTypeEnum;
     }
 
+    @Deprecated
     public static DataTypeEnum getDataType(String value, List<String> customDateTimePatterns) {
         DataTypeEnum dataTypeEnum = getNativeDataType(value);
         //STRING means we didn't find any native data types

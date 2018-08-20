@@ -205,28 +205,6 @@ public class TypeInferenceUtilsTest {
     }
 
     @Test
-    public void testIsDateWithCustom() throws Exception {
-        String date = "Feb.12.2014=";
-        assertFalse(TypeInferenceUtils.isDate(date));
-        assertTrue(TypeInferenceUtils.isDate(date, Collections.singletonList("MMM.dd.yyyy=")));
-    }
-
-    @Test
-    public void testIsDateWithCustomAndLocale() throws Exception {
-        String date = "févr..12.2014=";
-        assertFalse(TypeInferenceUtils.isDate(date));
-        assertTrue(TypeInferenceUtils.isDate(date, Collections.singletonList("MMM.dd.yyyy="), Locale.FRANCE));
-    }
-
-    @Test
-    public void testIsDateWithCustomAndWrongLocale() throws Exception {
-        String date = "Feb.12.2014=";
-        assertFalse(TypeInferenceUtils.isDate(date));
-        assertFalse(TypeInferenceUtils.isDate(date, Collections.singletonList("MMM.dd.yyyy="), Locale.FRANCE));
-        assertTrue(TypeInferenceUtils.isDate(date, Collections.singletonList("MMM.dd.yyyy="), Locale.US));
-    }
-
-    @Test
     public void testIsDateddMMMyyyy() {
         String dateStr = "15-Sep-2014";
         assertTrue(TypeInferenceUtils.isDate(dateStr));

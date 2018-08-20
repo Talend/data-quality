@@ -37,14 +37,17 @@ public class DateTimePatternRecognizer extends AbstractPatternRecognizer {
 
     private final SortedList<Map<Pattern, String>> frequentDatePatterns = new SortedList<>();
 
+    @Deprecated
     public void addCustomDateTimePattern(String pattern) {
         this.customDateTimePatterns.add(pattern);
     }
 
+    @Deprecated
     public void addCustomDateTimePatterns(List<String> patterns) {
         this.customDateTimePatterns.addAll(patterns);
     }
 
+    @Deprecated
     public List<String> getCustomDateTimePattern() {
         return customDateTimePatterns;
     }

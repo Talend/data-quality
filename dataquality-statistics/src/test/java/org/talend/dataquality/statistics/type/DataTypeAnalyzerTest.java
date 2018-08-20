@@ -14,7 +14,6 @@ package org.talend.dataquality.statistics.type;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.junit.After;
@@ -43,7 +42,7 @@ public class DataTypeAnalyzerTest extends DataTypeStatiticsTestBase {
     }
 
     @Test
-    public void testEmptyRecords() throws Exception {
+    public void testEmptyRecords() {
         DataTypeAnalyzer analyzer = createDataTypeanalyzer();
         analyzer.analyze();
         assertEquals(0, analyzer.getResult().size());
@@ -55,7 +54,7 @@ public class DataTypeAnalyzerTest extends DataTypeStatiticsTestBase {
     }
 
     @Test
-    public void testAnalysisResize() throws Exception {
+    public void testAnalysisResize() {
         DataTypeAnalyzer analyzer = createDataTypeanalyzer();
         analyzer.analyze("aaaa");
         assertEquals(1, analyzer.getResult().size());
@@ -64,7 +63,7 @@ public class DataTypeAnalyzerTest extends DataTypeStatiticsTestBase {
     }
 
     @Test
-    public void testString() throws Exception {
+    public void testString() {
         DataTypeAnalyzer analyzer = createDataTypeanalyzer();
         // One string
         analyzer.analyze("aaaa");
@@ -81,7 +80,7 @@ public class DataTypeAnalyzerTest extends DataTypeStatiticsTestBase {
     }
 
     @Test
-    public void testInteger() throws Exception {
+    public void testInteger() {
         DataTypeAnalyzer analyzer = createDataTypeanalyzer();
         // One integer
         analyzer.analyze("0");
@@ -99,7 +98,7 @@ public class DataTypeAnalyzerTest extends DataTypeStatiticsTestBase {
 
     @Test
     @Ignore
-    public void testIncorrectCharDetection() throws Exception {
+    public void testIncorrectCharDetection() {
         DataTypeAnalyzer analyzer = createDataTypeanalyzer();
         // One character
         analyzer.analyze("M");
@@ -117,7 +116,7 @@ public class DataTypeAnalyzerTest extends DataTypeStatiticsTestBase {
     }
 
     @Test
-    public void testBoolean() throws Exception {
+    public void testBoolean() {
         DataTypeAnalyzer analyzer = createDataTypeanalyzer();
         // One boolean
         analyzer.analyze("true");
@@ -134,7 +133,7 @@ public class DataTypeAnalyzerTest extends DataTypeStatiticsTestBase {
     }
 
     @Test
-    public void testMixedDoubleInteger() throws Exception {
+    public void testMixedDoubleInteger() {
         DataTypeAnalyzer analyzer = createDataTypeanalyzer();
         String[] toTestMoreDouble = { "1.2", "3.4E-10", "1" };
         for (String string : toTestMoreDouble) {
@@ -160,7 +159,7 @@ public class DataTypeAnalyzerTest extends DataTypeStatiticsTestBase {
     }
 
     @Test
-    public void testMultipleColumns() throws Exception {
+    public void testMultipleColumns() {
         DataTypeAnalyzer analyzer = createDataTypeanalyzer();
         analyzer.analyze("true", "aaaa");
         analyzer.analyze("true", "bbbb");
@@ -199,7 +198,7 @@ public class DataTypeAnalyzerTest extends DataTypeStatiticsTestBase {
     }
 
     @Test
-    public void testDateColumn() throws Exception {
+    public void testDateColumn() {
         DataTypeAnalyzer analyzer = createDataTypeanalyzer();
         analyzer.analyze("10-Oct-2015");
         analyzer.analyze("11-Oct-2015");
@@ -280,34 +279,4 @@ public class DataTypeAnalyzerTest extends DataTypeStatiticsTestBase {
         final List<DataTypeOccurences> result = analyzer.getResult();
         assertEquals(DataTypeEnum.INTEGER, result.get(0).getSuggestedType());
     }
-
-    @Test
-    public void testCustomDataPattern() {
-
-        DataTypeAnalyzer analyzer = new DataTypeAnalyzer();
-
-        String[] testColumn = new String[] { "1", "2", "2015?08?20", "2012?02?12", "12/2/99" };
-
-        // Before set Custom Data Pattern: yyyy?mm?dd
-        // the type of testColumn is INTEGER, since "2015?08?20" & "2012?02?12" can't be recognised as date
-        for (String record : testColumn) {
-            analyzer.analyze(record);
-        }
-        analyzer.end();
-        final List<DataTypeOccurences> resultBeforeSetCustomP = analyzer.getResult();
-        assertEquals(DataTypeEnum.STRING, resultBeforeSetCustomP.get(0).getSuggestedType());
-
-        // After set Custom Data Pattern: yyyy?mm?dd, "2015?08?20" & "2012?02?12" can be recognised as date
-        // the type of testColumn is DATE
-        analyzer = new DataTypeAnalyzer(Collections.singletonList("yyyy?MM?dd"));
-        analyzer.init();
-        for (String record : testColumn) {
-            analyzer.analyze(record);
-        }
-        analyzer.end();
-        final List<DataTypeOccurences> resultAfterSetCustomP = analyzer.getResult();
-        assertEquals(DataTypeEnum.DATE, resultAfterSetCustomP.get(0).getSuggestedType());
-
-    }
-
 }
