@@ -20,7 +20,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,10 +32,6 @@ public class CompositePatternFrequencyAnalyzerTest {
     @Before
     public void setUp() {
         patternFreqAnalyzer = new CompositePatternFrequencyAnalyzer();
-    }
-
-    @After
-    public void tearDown() {
     }
 
     @Test
