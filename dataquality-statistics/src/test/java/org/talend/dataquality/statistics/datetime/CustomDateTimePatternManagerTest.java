@@ -34,6 +34,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Deprecated
 public class CustomDateTimePatternManagerTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CustomDateTimePatternManagerTest.class);

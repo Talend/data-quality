@@ -135,7 +135,7 @@ public class TypeInferenceUtils {
      *
      * @param value the value to be detected.
      * @return true if the value is a date type, false otherwise.
-     * @see TypeInferenceUtils#isDate(String, List)
+     * @see SystemDateTimePatternManager#isDate(String)
      */
     public static boolean isDate(String value) {
         return SystemDateTimePatternManager.isDate(value);

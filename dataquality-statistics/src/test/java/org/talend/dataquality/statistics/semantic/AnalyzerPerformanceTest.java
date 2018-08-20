@@ -52,7 +52,7 @@ public class AnalyzerPerformanceTest {
 
     private final DataTypeEnum[] types_card_exceptions = new DataTypeEnum[] { //
             DataTypeEnum.INTEGER, DataTypeEnum.STRING, DataTypeEnum.STRING, DataTypeEnum.STRING, DataTypeEnum.STRING, //
-            DataTypeEnum.INTEGER, DataTypeEnum.STRING, DataTypeEnum.INTEGER, DataTypeEnum.INTEGER, DataTypeEnum.TIME, //
+            DataTypeEnum.INTEGER, DataTypeEnum.STRING, DataTypeEnum.INTEGER, DataTypeEnum.INTEGER, DataTypeEnum.STRING, //
             DataTypeEnum.INTEGER, DataTypeEnum.STRING, DataTypeEnum.STRING, DataTypeEnum.STRING, DataTypeEnum.STRING, //
             DataTypeEnum.INTEGER, DataTypeEnum.STRING, DataTypeEnum.DATE, DataTypeEnum.DATE, DataTypeEnum.STRING,//
     };

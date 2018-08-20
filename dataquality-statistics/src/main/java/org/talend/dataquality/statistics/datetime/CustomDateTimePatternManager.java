@@ -25,21 +25,21 @@ import java.util.regex.Pattern;
 
 /**
  * Customized date time pattern manager.
+ * NOT USED ANYMORE
+ * USE SystemDateTimePatternManager
  * 
  * @author mzhao
  *
  */
+@Deprecated
 public final class CustomDateTimePatternManager {
 
-    @Deprecated
     private static final Locale DEFAULT_LOCALE = Locale.US;
 
-    @Deprecated
     public static boolean isDate(String value, List<String> customPatterns) {
         return isDate(value, customPatterns, DEFAULT_LOCALE);
     }
 
-    @Deprecated
     public static boolean isDate(String value, List<String> customPatterns, Locale locale) {
         // use custom patterns first
         if (isMatchCustomPatterns(value, customPatterns, locale)) {
@@ -49,12 +49,10 @@ public final class CustomDateTimePatternManager {
         return SystemDateTimePatternManager.isDate(value);
     }
 
-    @Deprecated
     public static boolean isTime(String value, List<String> customPatterns) {
         return isTime(value, customPatterns, DEFAULT_LOCALE);
     }
 
-    @Deprecated
     public static boolean isTime(String value, List<String> customPatterns, Locale locale) {
         // use custom patterns first
         if (isMatchCustomPatterns(value, customPatterns, locale)) {
@@ -64,7 +62,6 @@ public final class CustomDateTimePatternManager {
         return SystemDateTimePatternManager.isTime(value);
     }
 
-    @Deprecated
     public static boolean isMatchCustomPatterns(String value, List<String> customPatterns, Locale locale) {
         return customPatterns.stream()
                 .filter(pattern -> SystemDateTimePatternManager.isMatchDateTimePattern(value, pattern, locale)).findAny()
@@ -72,29 +69,24 @@ public final class CustomDateTimePatternManager {
     }
 
     // for junit only
-    @Deprecated
     static Set<String> replaceByDateTimePattern(String value, String customPattern) {
         return replaceByDateTimePattern(value, customPattern, DEFAULT_LOCALE);
     }
 
-    @Deprecated
     static Set<String> replaceByDateTimePattern(String value, String customPattern, Locale locale) {
         return replaceByDateTimePattern(value, Collections.singletonList(customPattern), locale);
     }
 
-    @Deprecated
     public static Set<String> replaceByDateTimePattern(String value, List<String> customPatterns) {
         return replaceByDateTimePattern(value, customPatterns,
                 customPattern -> SystemDateTimePatternManager.isMatchDateTimePattern(value, customPattern));
     }
 
-    @Deprecated
     public static Set<String> replaceByDateTimePattern(String value, List<String> customPatterns, Locale locale) {
         return replaceByDateTimePattern(value, customPatterns,
                 customPattern -> SystemDateTimePatternManager.isMatchDateTimePattern(value, customPattern, locale));
     }
 
-    @Deprecated
     private static Set<String> replaceByDateTimePattern(String value, List<String> customPatterns,
             Predicate<String> isMatchDateTimePattern) {
         Set<String> resultPatternSet = new HashSet<>();

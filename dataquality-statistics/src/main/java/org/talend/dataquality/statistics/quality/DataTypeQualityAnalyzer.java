@@ -12,20 +12,16 @@
 // ============================================================================
 package org.talend.dataquality.statistics.quality;
 
-import java.time.format.DateTimeFormatter;
+import static org.talend.dataquality.statistics.datetime.SystemDateTimePatternManager.isDate;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import org.talend.dataquality.common.inference.QualityAnalyzer;
 import org.talend.dataquality.common.inference.ResizableList;
 import org.talend.dataquality.common.inference.ValueQualityStatistics;
 import org.talend.dataquality.semantic.recognizer.LFUCache;
-import org.talend.dataquality.statistics.datetime.CustomDateTimePatternManager;
-import org.talend.dataquality.statistics.datetime.SystemDateTimePatternManager;
 import org.talend.dataquality.statistics.type.DataTypeEnum;
 import org.talend.dataquality.statistics.type.SortedList;
 import org.talend.dataquality.statistics.type.TypeInferenceUtils;
@@ -92,11 +88,7 @@ public class DataTypeQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
             } else {
                 if (TypeInferenceUtils.isEmpty(value)) {
                     valueQuality.incrementEmpty();
-                } else if (DataTypeEnum.DATE == getTypes()[i] && isValidDate(value, frequentDatePatterns.get(i))) {
-                    valueQuality.incrementValid();
-                    knownDataTypeCache.put(value, Boolean.TRUE);
-                } else if (DataTypeEnum.TIME == getTypes()[i]
-                        && CustomDateTimePatternManager.isTime(value, customDateTimePatterns)) {
+                } else if (DataTypeEnum.DATE == getTypes()[i] && isDate(value, frequentDatePatterns.get(i))) {
                     valueQuality.incrementValid();
                     knownDataTypeCache.put(value, Boolean.TRUE);
                 } else if (TypeInferenceUtils.isValid(getTypes()[i], value)) {
@@ -114,21 +106,6 @@ public class DataTypeQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
             }
         }
         return true;
-    }
-
-    private boolean isValidDate(String value, SortedList<Pair<Pattern, DateTimeFormatter>> orderedPatterns) {
-        for (int j = 0; j < orderedPatterns.size(); j++) {
-            Pair<Pattern, DateTimeFormatter> cachedPattern = orderedPatterns.get(j).getLeft();
-            if (cachedPattern.getLeft().matcher(value).find()
-                    && SystemDateTimePatternManager.isMatchDateTimePattern(value, cachedPattern.getRight())) {
-                orderedPatterns.increment(j);
-                return true;
-            }
-        }
-
-        Optional<Pair<Pattern, DateTimeFormatter>> foundPattern = SystemDateTimePatternManager.findOneDatePattern(value);
-        foundPattern.ifPresent(pattern -> orderedPatterns.addNewValue(pattern));
-        return foundPattern.isPresent();
     }
 
     private void processInvalidValue(ValueQualityStatistics valueQuality, String invalidValue) {

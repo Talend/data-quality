@@ -12,17 +12,14 @@
 // ============================================================================
 package org.talend.dataquality.statistics.type;
 
-import java.time.format.DateTimeFormatter;
+import static org.talend.dataquality.statistics.datetime.SystemDateTimePatternManager.isDate;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.regex.Pattern;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.ResizableList;
 import org.talend.dataquality.semantic.recognizer.LFUCache;
-import org.talend.dataquality.statistics.datetime.SystemDateTimePatternManager;
 
 /**
  * Type inference executor which provide several methods computing the types.<br>
@@ -103,34 +100,13 @@ public class DataTypeAnalyzer implements Analyzer<DataTypeOccurences> {
             } else {
                 DataTypeEnum type = TypeInferenceUtils.getNativeDataType(value);
                 //STRING means we didn't find any native data types
-                if (DataTypeEnum.STRING.equals(type))
-                    type = analyzeDateTimeValue(value, frequentDatePatterns.get(i));
+                if (DataTypeEnum.STRING.equals(type) && isDate(value, frequentDatePatterns.get(i)))
+                    type = DataTypeEnum.DATE;
                 knownDataTypeCache.put(value, type);
                 dataType.increment(type);
             }
         }
         return true;
-    }
-
-    private DataTypeEnum analyzeDateTimeValue(String value, SortedList<Pair<Pattern, DateTimeFormatter>> orderedPatterns) {
-        for (int j = 0; j < orderedPatterns.size(); j++) {
-            Pair<Pattern, DateTimeFormatter> cachedPattern = orderedPatterns.get(j).getLeft();
-            if (cachedPattern.getLeft().matcher(value).find()
-                    && SystemDateTimePatternManager.isMatchDateTimePattern(value, cachedPattern.getRight())) {
-                orderedPatterns.increment(j);
-                return DataTypeEnum.DATE;
-            }
-        }
-        DataTypeEnum type = DataTypeEnum.STRING;
-
-        Optional<Pair<Pattern, DateTimeFormatter>> foundPattern = SystemDateTimePatternManager.findOneDatePattern(value);
-        if (foundPattern.isPresent()) {
-            orderedPatterns.addNewValue(foundPattern.get());
-            type = DataTypeEnum.DATE;
-        } else if (SystemDateTimePatternManager.isTime(value))
-            type = DataTypeEnum.TIME;
-
-        return type;
     }
 
     public void end() {

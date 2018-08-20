@@ -211,7 +211,7 @@ public class SystemDateTimePatternManager {
      * @param value to check
      * @return the pair pattern, regex if it's a regex, null otherwise
      */
-    public static Optional<Pair<Pattern, DateTimeFormatter>> findOneDatePattern(String value) {
+    private static Optional<Pair<Pattern, DateTimeFormatter>> findOneDatePattern(String value) {
         if (checkDatesPreconditions(value))
             return findOneDateTimePattern(DATE_PATTERN_GROUP_LIST, value);
         return Optional.empty();
@@ -409,7 +409,7 @@ public class SystemDateTimePatternManager {
         return formatter;
     }
 
-    public static boolean isMatchDateTimePattern(String value, DateTimeFormatter formatter) {
+    private static boolean isMatchDateTimePattern(String value, DateTimeFormatter formatter) {
         if (formatter != null) {
             try {
                 final TemporalAccessor temporal = formatter.parse(value);
@@ -422,6 +422,20 @@ public class SystemDateTimePatternManager {
             }
         }
         return false;
+    }
+
+    public static boolean isDate(String value, SortedList<Pair<Pattern, DateTimeFormatter>> orderedPatterns) {
+        for (int j = 0; j < orderedPatterns.size(); j++) {
+            Pair<Pattern, DateTimeFormatter> cachedPattern = orderedPatterns.get(j).getLeft();
+            if (cachedPattern.getLeft().matcher(value).find() && isMatchDateTimePattern(value, cachedPattern.getRight())) {
+                orderedPatterns.increment(j);
+                return true;
+            }
+        }
+
+        Optional<Pair<Pattern, DateTimeFormatter>> foundPattern = findOneDatePattern(value);
+        foundPattern.ifPresent(pattern -> orderedPatterns.addNewValue(pattern));
+        return foundPattern.isPresent();
     }
 
     @Deprecated

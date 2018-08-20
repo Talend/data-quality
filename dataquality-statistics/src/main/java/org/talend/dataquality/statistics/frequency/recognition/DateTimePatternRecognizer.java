@@ -12,6 +12,8 @@
 // ============================================================================
 package org.talend.dataquality.statistics.frequency.recognition;
 
+import static org.talend.dataquality.statistics.datetime.SystemDateTimePatternManager.getDatePatterns;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -21,7 +23,6 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.apache.commons.collections.MapUtils;
-import org.talend.dataquality.statistics.datetime.CustomDateTimePatternManager;
 import org.talend.dataquality.statistics.type.DataTypeEnum;
 import org.talend.dataquality.statistics.type.SortedList;
 
@@ -65,8 +66,7 @@ public class DateTimePatternRecognizer extends AbstractPatternRecognizer {
             return result;
         }
         if (stringToRecognize != null && stringToRecognize.length() > 6) {
-            final Map<String, Locale> datePatternAfterReplace = CustomDateTimePatternManager.getPatterns(stringToRecognize,
-                    frequentDatePatterns);
+            final Map<String, Locale> datePatternAfterReplace = getDatePatterns(stringToRecognize, frequentDatePatterns);
 
             result.setResult(MapUtils.isNotEmpty(datePatternAfterReplace) ? datePatternAfterReplace
                     : Collections.singletonMap(stringToRecognize, null), MapUtils.isNotEmpty(datePatternAfterReplace));
