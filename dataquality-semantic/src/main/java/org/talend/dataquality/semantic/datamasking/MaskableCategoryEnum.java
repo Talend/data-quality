@@ -26,22 +26,15 @@ public enum MaskableCategoryEnum {
     FULL_NAME("Full Name", FunctionType.REPLACE_CHARACTERS_WITH_GENERATION), //$NON-NLS-1$
     IPv4_ADDRESS("IPv4 Address", FunctionType.REPLACE_CHARACTERS_WITH_GENERATION), //$NON-NLS-1$
     IPv6_ADDRESS("IPv6 Address", FunctionType.REPLACE_CHARACTERS_WITH_GENERATION), //$NON-NLS-1$
-    GEO_COORDINATE("Geographic coordinate", FunctionType.REPLACE_CHARACTERS_WITH_GENERATION), //$NON-NLS-1$
     GEO_COORDINATES_DEG("Geographic coordinates (degrees)", FunctionType.REPLACE_CHARACTERS_WITH_GENERATION), //$NON-NLS-1$
-    MAC_ADDRESS("MAC Address", FunctionType.REPLACE_CHARACTERS_WITH_GENERATION), //$NON-NLS-1$
-    PASSPORT("Passport", FunctionType.REPLACE_CHARACTERS_WITH_GENERATION), //$NON-NLS-1$
 
     US_PHONE("US Phone", FunctionType.GENERATE_UNIQUE_PHONE_NUMBER_US), //$NON-NLS-1$
     FR_PHONE("FR Phone", FunctionType.GENERATE_UNIQUE_PHONE_NUMBER_FRENCH), //$NON-NLS-1$
     UK_PHONE("UK Phone", FunctionType.GENERATE_UNIQUE_PHONE_NUMBER_UK), //$NON-NLS-1$
     DE_PHONE("DE Phone", FunctionType.GENERATE_UNIQUE_PHONE_NUMBER_GERMANY), //$NON-NLS-1$
 
-    US_POSTAL_CODE("US Postal Code", FunctionType.REPLACE_CHARACTERS_WITH_GENERATION), //$NON-NLS-1$
-    FR_POSTAL_CODE("FR Postal Code", FunctionType.REPLACE_CHARACTERS_WITH_GENERATION), //$NON-NLS-1$
     DE_POSTAL_CODE("DE Postal Code", FunctionType.REPLACE_CHARACTERS_WITH_GENERATION), //$NON-NLS-1$
     UK_POSTAL_CODE("UK Postal Code", FunctionType.REPLACE_CHARACTERS_WITH_GENERATION), //$NON-NLS-1$
-    BE_POSTAL_CODE("BE Postal Code", FunctionType.REPLACE_CHARACTERS_WITH_GENERATION), //$NON-NLS-1$
-    FR_CODE_COMMUNE_INSEE("FR Insee Code", FunctionType.REPLACE_CHARACTERS_WITH_GENERATION), //$NON-NLS-1$
 
     US_SSN("US Social Security Number", FunctionType.GENERATE_SSN_US), //$NON-NLS-1$
     FR_SSN("FR Social Security Number", FunctionType.GENERATE_SSN_FRENCH), //$NON-NLS-1$
@@ -49,7 +42,8 @@ public enum MaskableCategoryEnum {
 
     MASTERCARD("Mastercard Credit Card", FunctionType.GENERATE_CREDIT_CARD_FORMAT_STRING), //$NON-NLS-1$
     US_CREDIT_CARD("AmEx Credit Card", FunctionType.GENERATE_CREDIT_CARD_FORMAT_STRING), //$NON-NLS-1$
-    VISACARD("Visa Credit Card", FunctionType.GENERATE_CREDIT_CARD_FORMAT_STRING); //$NON-NLS-1$
+    VISACARD("Visa Credit Card", FunctionType.GENERATE_CREDIT_CARD_FORMAT_STRING), //$NON-NLS-1$
+    SEDOL("Stock Exchange Daily Official List", FunctionType.REPLACE_CHARACTERS_WITH_GENERATION); //$NON-NLS-1$
 
     private String displayName;
 

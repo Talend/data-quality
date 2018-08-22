@@ -80,6 +80,7 @@ import org.talend.dataquality.datamasking.functions.ReplaceNumericIntegerTest;
 import org.talend.dataquality.datamasking.functions.ReplaceNumericLongTest;
 import org.talend.dataquality.datamasking.functions.ReplaceNumericStringTest;
 import org.talend.dataquality.datamasking.functions.SetToNullTest;
+import org.talend.dataquality.datamasking.semantic.GenerateFromRegexTest;
 
 /**
  * created by jgonzalez on 20 août 2015 Detailled comment
@@ -105,7 +106,8 @@ import org.talend.dataquality.datamasking.functions.SetToNullTest;
         ReplaceLastCharsIntegerTest.class, ReplaceLastCharsLongTest.class, ReplaceLastCharsStringTest.class,
         ReplaceNumericIntegerTest.class, ReplaceNumericLongTest.class, ReplaceNumericStringTest.class, SetToNullTest.class,
         MaskEmailLocalPartByXTest.class, MaskEmailLocalPartRandomlyTest.class, MaskFullEmailDomainByXTest.class,
-        MaskFullEmailDomainRandomlyTest.class, MaskTopEmailDomainByXTest.class, MaskTopEmailDomainRandomlyTest.class })
+        MaskFullEmailDomainRandomlyTest.class, MaskTopEmailDomainByXTest.class, MaskTopEmailDomainRandomlyTest.class,
+        GenerateFromRegexTest.class })
 public class AllTests {
     /*
      * Bloc intentionnaly left empty

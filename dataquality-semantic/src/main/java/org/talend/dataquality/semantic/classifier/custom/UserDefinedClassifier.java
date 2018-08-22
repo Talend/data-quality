@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.classifier.ISubCategory;
 import org.talend.dataquality.semantic.classifier.ISubCategoryClassifier;
 import org.talend.dataquality.semantic.classifier.impl.AbstractSubCategoryClassifier;
@@ -89,16 +90,19 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
     @Override
     public boolean validCategories(String str, DQCategory semanticType, Set<DQCategory> children) {
         MainCategory mainCategory = MainCategory.getMainCategory(str);
-        if (mainCategory == MainCategory.NULL || mainCategory == MainCategory.BLANK)
+        if (mainCategory == MainCategory.NULL || mainCategory == MainCategory.BLANK) {
             return false;
-        if (CollectionUtils.isEmpty(children))
+        }
+        if (CollectionUtils.isEmpty(children)) {
             return validCategories(str, mainCategory, semanticType);
+        }
         return validChildrenCategories(str, mainCategory, children);
 
     }
 
     /**
-     * if there are children, we valid a COMPOUND category, so we have to valid the string with the children categories list
+     * if there are children, we valid a COMPOUND category, so we have to valid the string with the children categories
+     * list
      * 
      * @param str, the string to valid
      * @param mainCategory
@@ -108,15 +112,18 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
     private boolean validChildrenCategories(String str, MainCategory mainCategory, Set<DQCategory> children) {
         int cpt = 0;
         final Set<String> childrenId = new HashSet<>();
-        for (DQCategory child : children)
+        for (DQCategory child : children) {
             childrenId.add(child.getId());
+        }
         for (ISubCategory classifier : potentialSubCategories) {
             if (childrenId.contains(classifier.getId())) {
                 cpt++;
-                if (isValid(str, mainCategory, (UserDefinedCategory) classifier, true))
+                if (isValid(str, mainCategory, (UserDefinedCategory) classifier, true)) {
                     return true;
-                if (cpt == children.size())
+                }
+                if (cpt == children.size()) {
                     return false;
+                }
             }
         }
         return false;
@@ -125,8 +132,9 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
 
     private boolean validCategories(String str, MainCategory mainCategory, DQCategory semanticType) {
         for (ISubCategory classifier : potentialSubCategories) {
-            if (semanticType.getId().equals(classifier.getId()))
+            if (semanticType.getId().equals(classifier.getId())) {
                 return isValid(str, mainCategory, (UserDefinedCategory) classifier, true);
+            }
 
         }
         return false;
@@ -149,8 +157,9 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
         Set<String> catSet = new HashSet<>();
         if (mainCategory != MainCategory.NULL && mainCategory != MainCategory.BLANK) {
             for (ISubCategory classifier : potentialSubCategories) {
-                if (isValid(str, mainCategory, (UserDefinedCategory) classifier, false))
+                if (isValid(str, mainCategory, (UserDefinedCategory) classifier, false)) {
                     catSet.add(classifier.getId());
+                }
             }
         }
         return catSet;
@@ -162,12 +171,15 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
         // if the MainCategory is different, ignor it and continue;AlphaNumeric rule should contain pure Alpha and
         // Numeric.
         if (mainCategory == MainCategory.Alpha || mainCategory == MainCategory.Numeric) {
-            if (classifierCategory != mainCategory && classifierCategory != MainCategory.AlphaNumeric)
+            if (!classifierCategory.equals(mainCategory) && !classifierCategory.equals(MainCategory.AlphaNumeric)) {
                 return false;
-        } else if (classifierCategory != mainCategory)
+            }
+        } else if (!classifierCategory.equals(mainCategory)) {
             return false;
-        if (invalidFilter(str, classifier.getFilter()))
+        }
+        if (invalidFilter(str, classifier.getFilter())) {
             return false;
+        }
         return validValidator(str, classifier.getValidator(), caseSensitive);
 
     }
@@ -178,6 +190,28 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
 
     private boolean validValidator(String str, ISemanticValidator validator, boolean caseSensitive) {
         return validator != null && validator.isValid(str, caseSensitive);
+    }
+
+    /**
+     * 
+     * Method "getPatternStringByCategoryId" get pattern string by the id of category
+     * 
+     * @param categoryId the id of category
+     * @return null if categoryId is null or the categoryid is not exist else string of pattern
+     */
+    public String getPatternStringByCategoryId(String categoryId) {
+        if (categoryId == null) {
+            return null;
+        }
+        UserDefinedClassifier regexClassifier = CategoryRegistryManager.getInstance().getCustomDictionaryHolder()
+                .getRegexClassifier();
+        Set<ISubCategory> classifiers = regexClassifier.getClassifiers();
+        for (ISubCategory category : classifiers) {
+            if (categoryId.equals(category.getId())) {
+                return ((UserDefinedCategory) category).getValidator().getPatternString();
+            }
+        }
+        return null;
     }
 
 }

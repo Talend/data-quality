@@ -18,11 +18,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.lucene.document.Document;
@@ -118,8 +118,7 @@ public class LuceneIndex implements Index {
         });
 
         Map<String, Double> sortedMap = new LinkedHashMap<>();
-        for (Iterator<Map.Entry<String, Double>> it = list.iterator(); it.hasNext();) {
-            Map.Entry<String, Double> entry = it.next();
+        for (Entry<String, Double> entry : list) {
             sortedMap.put(entry.getKey(), entry.getValue());
         }
         return sortedMap;

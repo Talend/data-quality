@@ -12,10 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.semantic.classifier.custom;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -111,7 +108,7 @@ public class UserDefinedClassifierTest {
         }
     }
 
-    private final String TLD_NAME_URL = "http://data.iana.org/TLD/tlds-alpha-by-domain.txt";
+    private final String TLD_NAME_URL = "http://data.iana.org/TLD/tlds-alpha-by-domain.txt"; //$NON-NLS-1$
 
     private final int MAX_TLD_LENGTH = 24;
 
@@ -195,7 +192,7 @@ public class UserDefinedClassifierTest {
             put("12345", new String[] { "583edc44ec06957a34fa645e", "583edc44ec06957a34fa643c", "583edc44ec06957a34fa647c", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
                     "583edc44ec06957a34fa6488" }); //$NON-NLS-1$
             put("2A345", new String[] { "583edc44ec06957a34fa645e" }); //$NON-NLS-1$ //$NON-NLS-2$
-            put("12345-6789", new String[] { "583edc44ec06957a34fa6488" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            put("12345-6789", new String[] { "583edc44ec06957a34fa6488" }); //$NON-NLS-1$ //$NON-NLS-2$ 
             put("Talend", new String[] {}); //$NON-NLS-1$
             put("9 rue pages, 92150 suresnes", new String[] {}); //$NON-NLS-1$
             put("avenue des champs elysees", new String[] {}); //$NON-NLS-1$
@@ -206,20 +203,20 @@ public class UserDefinedClassifierTest {
             put("New Hampshire", new String[] { "583edc44ec06957a34fa6470" });//$NON-NLS-1$ //$NON-NLS-2$
             put("Arizona", new String[] { "583edc44ec06957a34fa6470" });//$NON-NLS-1$ //$NON-NLS-2$
             put("Alabama", new String[] { "583edc44ec06957a34fa6470" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("F", new String[] {});//$NON-NLS-1$ //$NON-NLS-2$
-            put("M", new String[] {});//$NON-NLS-1$ //$NON-NLS-2$
-            put("Male", new String[] {});//$NON-NLS-1$ //$NON-NLS-2$
-            put("female", new String[] {});//$NON-NLS-1$ //$NON-NLS-2$
+            put("F", new String[] {});//$NON-NLS-1$ 
+            put("M", new String[] {});//$NON-NLS-1$ 
+            put("Male", new String[] {});//$NON-NLS-1$ 
+            put("female", new String[] {});//$NON-NLS-1$ 
 
             put("http://www.talend.com", new String[] { "583edc44ec06957a34fa6434" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("www.talend.com", new String[] { "583edc44ec06957a34fa642c" });//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            put("www.talend.com", new String[] { "583edc44ec06957a34fa642c" });//$NON-NLS-1$ //$NON-NLS-2$ 
             put("talend.com", new String[] { "583edc44ec06957a34fa642c" });//$NON-NLS-1$ //$NON-NLS-2$
             put("talend.com", new String[] { "583edc44ec06957a34fa642c" });//$NON-NLS-1$ //$NON-NLS-2$
             put("talend.veryLongTDL", new String[] { "583edc44ec06957a34fa642c" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("talend.TDLlongerThan25Characters", new String[] {});//$NON-NLS-1$ //$NON-NLS-2$
+            put("talend.TDLlongerThan25Characters", new String[] {});//$NON-NLS-1$ 
             put("talendSmallerThan63Charactersxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.com", //$NON-NLS-1$
                     new String[] { "583edc44ec06957a34fa642c" });//$NON-NLS-1$
-            put("talendLongerThan63Charactersxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.com", new String[] {});//$NON-NLS-1$ //$NON-NLS-2$
+            put("talendLongerThan63Charactersxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.com", new String[] {});//$NON-NLS-1$ 
 
             put("1 81 04 95 201 569 62", new String[] { "583edc44ec06957a34fa6444" });//$NON-NLS-1$ //$NON-NLS-2$
             put("1810495201569", new String[] { "583edc44ec06957a34fa6444" });//$NON-NLS-1$ //$NON-NLS-2$
@@ -250,18 +247,18 @@ public class UserDefinedClassifierTest {
             put("00496-8738059275", new String[] { "583edc44ec06957a34fa643e" });//$NON-NLS-1$ //$NON-NLS-2$
             put("00338.01345678", new String[] { "583edc44ec06957a34fa646c" });//$NON-NLS-1$ //$NON-NLS-2$
 
-            put("John Doe", new String[] {});//$NON-NLS-1$ //$NON-NLS-2$
-            put("Georges W. Bush", new String[] {});//$NON-NLS-1$ //$NON-NLS-2$
-            put("Georges W. Bush Jr.", new String[] {});//$NON-NLS-1$ //$NON-NLS-2$
-            put("Georges W. Bush, Jr.", new String[] {});//$NON-NLS-1$ //$NON-NLS-2$
-            put("Georges W. Bush II", new String[] {});//$NON-NLS-1$ //$NON-NLS-2$
-            put("Georges W. Bush III", new String[] {});//$NON-NLS-1$ //$NON-NLS-2$
-            put("Georges W. Bush IV", new String[] {});//$NON-NLS-1$ //$NON-NLS-2$
-            put("Georges Bush IV", new String[] {});//$NON-NLS-1$ //$NON-NLS-2$
-            put("Jean-Michel Louis", new String[] {});//$NON-NLS-1$ //$NON-NLS-2$
-            put("David F Walker", new String[] {});//$NON-NLS-1$ //$NON-NLS-2$
-            put("J. S. Smith, Jr.", new String[] {});//$NON-NLS-1$ //$NON-NLS-2$
-            put("Catherine Zeta-Jones", new String[] {});//$NON-NLS-1$ //$NON-NLS-2$
+            put("John Doe", new String[] {});//$NON-NLS-1$ 
+            put("Georges W. Bush", new String[] {});//$NON-NLS-1$ 
+            put("Georges W. Bush Jr.", new String[] {});//$NON-NLS-1$ 
+            put("Georges W. Bush, Jr.", new String[] {});//$NON-NLS-1$ 
+            put("Georges W. Bush II", new String[] {});//$NON-NLS-1$ 
+            put("Georges W. Bush III", new String[] {});//$NON-NLS-1$ 
+            put("Georges W. Bush IV", new String[] {});//$NON-NLS-1$ 
+            put("Georges Bush IV", new String[] {});//$NON-NLS-1$ 
+            put("Jean-Michel Louis", new String[] {});//$NON-NLS-1$ 
+            put("David F Walker", new String[] {});//$NON-NLS-1$ 
+            put("J. S. Smith, Jr.", new String[] {});//$NON-NLS-1$ 
+            put("Catherine Zeta-Jones", new String[] {});//$NON-NLS-1$ 
 
             put("#990000", new String[] { "583edc44ec06957a34fa6476" });//$NON-NLS-1$ //$NON-NLS-2$
             put("#AAAAAA", new String[] { "583edc44ec06957a34fa6476" });//$NON-NLS-1$ //$NON-NLS-2$
@@ -277,13 +274,13 @@ public class UserDefinedClassifierTest {
             put("30.082993", new String[] { "583edc44ec06957a34fa6436" }); //$NON-NLS-1$ //$NON-NLS-2$
             put("N 0:59:59.99,E 0:59:59.99", new String[] { "583edc44ec06957a34fa6462" }); //$NON-NLS-1$ //$NON-NLS-2$
 
-            put("00:00", new String[] {}); //$NON-NLS-1$ //$NON-NLS-2$
-            put("12:00", new String[] {}); //$NON-NLS-1$ //$NON-NLS-2$
-            put("11:23", new String[] {}); //$NON-NLS-1$ //$NON-NLS-2$
-            put("15:53", new String[] {}); //$NON-NLS-1$ //$NON-NLS-2$
-            put("23:59", new String[] {}); //$NON-NLS-1$ //$NON-NLS-2$
+            put("00:00", new String[] {}); //$NON-NLS-1$ 
+            put("12:00", new String[] {}); //$NON-NLS-1$ 
+            put("11:23", new String[] {}); //$NON-NLS-1$ 
+            put("15:53", new String[] {}); //$NON-NLS-1$ 
+            put("23:59", new String[] {}); //$NON-NLS-1$ 
 
-            put("Monday", new String[] { "583edc44ec06957a34fa643a" }); //$NON-NLS-1$ //<$NON-NLS-2$
+            put("Monday", new String[] { "583edc44ec06957a34fa643a" }); //$NON-NLS-1$ //$NON-NLS-2$
             put("MonDay", new String[] { "583edc44ec06957a34fa643a" }); //$NON-NLS-1$ //$NON-NLS-2$
             put("MOnDay", new String[] { "583edc44ec06957a34fa643a" }); //$NON-NLS-1$ //$NON-NLS-2$
             put("MOn", new String[] { "583edc44ec06957a34fa643a" }); //$NON-NLS-1$ //$NON-NLS-2$
@@ -295,7 +292,7 @@ public class UserDefinedClassifierTest {
             put("25:59", new String[] {}); // does not match TIME (as expected) //$NON-NLS-1$
 
             put("0067340", new String[] { "583edc44ec06957a34fa6484" }); //$NON-NLS-1$ //$NON-NLS-2$
-            put("4155586", new String[] { "583edc44ec06957a34fa6484", "583edc44ec06957a34fa645c" }); //$NON-NLS-1$ //$NON-NLS-2$
+            put("4155586", new String[] { "583edc44ec06957a34fa6484", "583edc44ec06957a34fa645c" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
             put("(541) 754-3010", new String[] { "583edc44ec06957a34fa645c" }); //$NON-NLS-1$ //$NON-NLS-2$
             put("B01HL06", new String[] { "583edc44ec06957a34fa6484" }); //$NON-NLS-1$ //$NON-NLS-2$
 
@@ -318,12 +315,12 @@ public class UserDefinedClassifierTest {
                     new String[] { "583edc44ec06957a34fa645a" }); //$NON-NLS-1$
 
             put("data:text/html;charset=US-ASCII,%3Ch1%3EHello!%3C%2Fh1%3E", new String[] { "583edc44ec06957a34fa6464" }); //$NON-NLS-1$ //$NON-NLS-2$
-            put("data:TEXT/html;charset=US-ASCII,%3Ch1%3EHello!%3C%2Fh1%3E", new String[] { "583edc44ec06957a34fa6464" });
+            put("data:TEXT/html;charset=US-ASCII,%3Ch1%3EHello!%3C%2Fh1%3E", new String[] { "583edc44ec06957a34fa6464" }); //$NON-NLS-1$ //$NON-NLS-2$
             put("data:text/html;charset=,%3Ch1%3EHello!%3C%2Fh1%3E", new String[] { "583edc44ec06957a34fa6464" }); //$NON-NLS-1$ //$NON-NLS-2$
             put("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAABlBMVEUAAAD///+l2Z/dAAAA", //$NON-NLS-1$
                     new String[] { "583edc44ec06957a34fa6464" }); //$NON-NLS-1$
             put("data:,Hello World!", new String[] { "583edc44ec06957a34fa6464" }); //$NON-NLS-1$ //$NON-NLS-2$
-            put("FR7630001007941234567890185", new String[] { "583edc44ec06957a34fa6460" });
+            put("FR7630001007941234567890185", new String[] { "583edc44ec06957a34fa6460" }); //$NON-NLS-1$ //$NON-NLS-2$
         }
     };
 
@@ -401,7 +398,7 @@ public class UserDefinedClassifierTest {
 
     @Test
     public void checkLongestTLD() {
-        String outputFilename = "TLD.txt";
+        String outputFilename = "TLD.txt"; //$NON-NLS-1$
 
         downloadFile(TLD_NAME_URL, outputFilename);
         File file = new File(outputFilename);
@@ -410,8 +407,8 @@ public class UserDefinedClassifierTest {
             String line = null;
             while ((line = reader.readLine()) != null) {
                 int length = line.trim().length();
-                if (!line.startsWith("#") && length > 0) { // the comments don't count
-                    assertTrue("Expected MAX_LENGTH of web domain is " + String.valueOf(MAX_TLD_LENGTH),
+                if (!line.startsWith("#") && length > 0) { // the comments don't count //$NON-NLS-1$
+                    assertTrue("Expected MAX_LENGTH of web domain is " + String.valueOf(MAX_TLD_LENGTH), //$NON-NLS-1$
                             length <= MAX_TLD_LENGTH);
                 }
             }
@@ -504,5 +501,27 @@ public class UserDefinedClassifierTest {
                         + userDefinedClassifier.getClassifiers().size(),
                 sizeBefore + 1, sizeAfter);
 
+    }
+
+    /**
+     * Test method for
+     * {@link org.talend.dataquality.semantic.classifier.custom.UserDefinedClassifier#getPatternStringByCategoryId(java.lang.String)}
+     * .
+     */
+    @Test
+    public void testGetPatternStringByCategoryId() {
+        UserDefinedClassifier userDefinedClassifier = new UserDefinedClassifier();
+        String patternString = userDefinedClassifier.getPatternStringByCategoryId("583edc44ec06957a34fa643c"); //$NON-NLS-1$
+        assertEquals("The string of pattern is not we want", "^(F-|FRA?(-| ))?(0[1-9]|[1-9][0-9])[0-9]{3}$", //$NON-NLS-1$//$NON-NLS-2$
+                patternString);
+        // CategoryId is not exist case
+        userDefinedClassifier = new UserDefinedClassifier();
+        patternString = userDefinedClassifier.getPatternStringByCategoryId("aaaaaaaaaaaaaaa"); //$NON-NLS-1$
+        assertNull("patternString should be null", patternString); //$NON-NLS-1$
+
+        // CategoryId is null case
+        userDefinedClassifier = new UserDefinedClassifier();
+        patternString = userDefinedClassifier.getPatternStringByCategoryId(null);
+        assertNull("patternString should be null", patternString); //$NON-NLS-1$
     }
 }

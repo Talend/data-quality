@@ -18,7 +18,6 @@ import java.util.List;
 import org.talend.dataquality.datamasking.functions.Function;
 import org.talend.dataquality.datamasking.semantic.ReplaceCharacterHelper;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
-import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
 import org.talend.dataquality.semantic.snapshot.StandardDictionarySnapshotProvider;
@@ -61,7 +60,7 @@ public class ValueDataMasker implements Serializable {
     public ValueDataMasker(String semanticCategory, String dataType, List<String> params) {
         function = SemanticMaskerFunctionFactory.createMaskerFunctionForSemanticCategory(semanticCategory, dataType, params);
         category = CategoryRegistryManager.getInstance().getCategoryMetadataByName(semanticCategory);
-        if (category != null && CategoryType.DICT.equals(category.getType())) {
+        if (category != null) {
             DictionarySnapshot dictionarySnapshot = new StandardDictionarySnapshotProvider().get();
             semanticQualityAnalyzer = new SemanticQualityAnalyzer(dictionarySnapshot, new String[] {});
         }
