@@ -43,22 +43,23 @@ public class MaskAddress extends Function<String> {
         StringBuilder sb = new StringBuilder(EMPTY_STRING);
         if (str != null && !EMPTY_STRING.equals(str) && !(" ").equals(str)) { //$NON-NLS-1$
             String[] address = str.split(",| "); //$NON-NLS-1$
+            boolean isOnlyKeyOrDigit = isOnlyKeyOrDigit(address);
             for (String tmp : address) {
-                if (keys.contains(tmp.toUpperCase())) {
+                if (keys.contains(tmp.toUpperCase()) && !isOnlyKeyOrDigit) {
                     sb.append(tmp + " "); //$NON-NLS-1$
                 } else {
-                    int cp = 0;
+                    int cp;
                     // one surrogate pair character will take two unicode point so that we just judge first one and if it is
                     // surrogate pair we make index+2
                     for (int i = 0; i < tmp.length(); i += Character.charCount(cp)) {
                         cp = tmp.codePointAt(i);
                         if (Character.isDigit(cp)) {
-                            sb.append(rnd.nextInt(8) + 1);
+                            sb.append(rnd.nextInt(9) + 1);
                         } else {
                             sb.append("X"); //$NON-NLS-1$
                         }
                     }
-                    sb.append(" "); //$NON-NLS-1$
+                    sb.append(" "); //$NON-NLS-1$ma
                 }
             }
             return sb.deleteCharAt(sb.length() - 1).toString();
@@ -67,12 +68,30 @@ public class MaskAddress extends Function<String> {
         }
     }
 
+    private boolean isOnlyKeyOrDigit(String[] address) {
+        for (String tmp : address) {
+            if (!keys.contains(tmp.toUpperCase())) {
+                int cp;
+                // one surrogate pair character will take two unicode point so that we just judge first one and if it is
+                // surrogate pair we make index+2
+                for (int i = 0; i < tmp.length(); i += Character.charCount(cp)) {
+                    cp = tmp.codePointAt(i);
+                    if (!Character.isDigit(cp)) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
     @Override
     public void parse(String extraParameter, boolean keepNullValues, Random rand) {
         super.parse(extraParameter, keepNullValues, rand);
-        for (String element : parameters) {
-            keys.add(element.toUpperCase());
-        }
+        if (!ERROR_MESSAGE.equals(parameters[0])) // If only one element, it means that it's a path and not a list of size >= 2
+            for (String element : parameters) {
+                keys.add(element.toUpperCase());
+            }
     }
 
     /*

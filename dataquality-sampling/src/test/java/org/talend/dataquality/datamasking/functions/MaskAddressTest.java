@@ -46,21 +46,21 @@ public class MaskAddressTest {
     public void testGood() {
         String input = "5 rue de l'oise"; //$NON-NLS-1$
         output = ma.generateMaskedRow(input);
-        assertEquals("6 rue XX XXXXXX", output); //$NON-NLS-1$
+        assertEquals("9 rue XX XXXXXX", output); //$NON-NLS-1$
     }
 
     @Test
     public void testGood2() {
         String input = "5 Golden State Freeway"; //$NON-NLS-1$
         output = ma.generateMaskedRow(input);
-        assertEquals("6 XXXXXX XXXXX Freeway", output); //$NON-NLS-1$
+        assertEquals("9 XXXXXX XXXXX Freeway", output); //$NON-NLS-1$
     }
 
     @Test
     public void testGoodWithSurrogatePair() {
         String input = "中崎𠀀𠀁𠀂𠀃𠀄123"; //$NON-NLS-1$
         output = ma.generateMaskedRow(input);
-        assertEquals("XXXXXXX616", output); //$NON-NLS-1$
+        assertEquals("XXXXXXX941", output); //$NON-NLS-1$
     }
 
     @Test
@@ -69,14 +69,14 @@ public class MaskAddressTest {
         ma.parse(path, false, new Random(42));
         String input = "5 rue de l'oise et facebook"; //$NON-NLS-1$
         output = ma.generateMaskedRow(input);
-        assertEquals("6 rue XX XXXXXX XX facebook", output); //$NON-NLS-1$
+        assertEquals("9 rue XX XXXXXX XX facebook", output); //$NON-NLS-1$
     }
 
     @Test
     public void testParseWillNotImpactResult() throws URISyntaxException {
         ma.parse("5 rue de l'oise", false, new Random(42)); //$NON-NLS-1$
         output = ma.generateMaskedRow("5 rue de l'oise"); //$NON-NLS-1$
-        assertEquals("6 rue XX XXXXXX", output); //$NON-NLS-1$
+        assertEquals("9 rue XX XXXXXX", output); //$NON-NLS-1$
         assertEquals("5 rue de l'oise", ma.parameters[0]); //$NON-NLS-1$
     }
 
