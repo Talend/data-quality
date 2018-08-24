@@ -14,6 +14,7 @@ package org.talend.dataquality.statistics.frequency.recognition;
 
 import java.util.Collections;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.talend.dataquality.common.pattern.TextPatternUtil;
