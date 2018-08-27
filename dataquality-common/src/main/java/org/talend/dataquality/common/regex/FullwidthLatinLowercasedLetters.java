@@ -19,7 +19,9 @@ import java.util.regex.Pattern;
  */
 public class FullwidthLatinLowercasedLetters extends ChainResponsibilityHandler {
 
-    private Pattern pattern = Pattern.compile("[\\uFF41-\\uFF5A]");
+    public static final String range = "\\uFF41-\\uFF5A";
+
+    private Pattern pattern = Pattern.compile("[" + range + "]");
 
     /*
      * (non-Javadoc)

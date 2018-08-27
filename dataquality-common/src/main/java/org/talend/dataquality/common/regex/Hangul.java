@@ -19,7 +19,9 @@ import java.util.regex.Pattern;
  */
 public class Hangul extends ChainResponsibilityHandler {
 
-    private Pattern pattern = Pattern.compile("[\\uAC00-\\uD7AF]");
+    public static final String range = "\\uAC00-\\uD7AF";
+
+    private Pattern pattern = Pattern.compile("[" + range + "]");
 
     /*
      * (non-Javadoc)

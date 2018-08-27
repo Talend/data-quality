@@ -19,8 +19,9 @@ import java.util.regex.Pattern;
  */
 public class HiraganaSmall extends ChainResponsibilityHandler {
 
-    private Pattern pattern = Pattern
-            .compile("[\\u3041\\u3043\\u3045\\u3047\\u3049\\u3063\\u3083\\u3085\\u3087\\u308E\\u3095\\u3096]");
+    public static final String range = "\\u3041\\u3043\\u3045\\u3047\\u3049\\u3063\\u3083\\u3085\\u3087\\u308E\\u3095\\u3096";
+
+    private Pattern pattern = Pattern.compile("[" + range + "]");
 
     /*
      * (non-Javadoc)

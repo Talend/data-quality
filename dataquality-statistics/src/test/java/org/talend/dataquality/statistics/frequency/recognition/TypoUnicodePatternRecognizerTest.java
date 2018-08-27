@@ -157,6 +157,16 @@ public class TypoUnicodePatternRecognizerTest {
                 TypoUnicodePatternRecognizer.withCase().getValuePattern(str).toArray()[0]);
 
     }
+    @Test
+    public void testAncientGreek2() {
+        // Ancient Greek Text. The Recognizer make the difference between Upper and Lower case.
+        String str = "ʹ"+'\u0030';
+        System.out.println(str);
+        Assert.assertEquals(
+                "[Word] [word]· [word] [word] [word] [word] [word].[Char] [word], [word] [word] [word] [word],[word] [word] [word] [word] [word] [word] [word] [word], [word] [word] [word] [word] [word], [word] [word] [word] [word] [word] [word].",
+                TypoUnicodePatternRecognizer.withCase().getValuePattern(str).toArray()[0]);
+
+    }
 
     @Test
     public void testMixLatinChinese() {

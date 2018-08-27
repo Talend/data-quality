@@ -19,7 +19,9 @@ import java.util.regex.Pattern;
  */
 public class FullwidthLatinNumbers extends ChainResponsibilityHandler {
 
-    private Pattern pattern = Pattern.compile("[\\uFF10-\\uFF19]");
+    public static final String range = "\\uFF10-\\uFF19";
+
+    private Pattern pattern = Pattern.compile("[" + range + "]");
 
     /*
      * (non-Javadoc)

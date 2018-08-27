@@ -22,7 +22,9 @@ import java.util.regex.Pattern;
  */
 public class LatinLetters extends ChainResponsibilityHandler {
 
-    private Pattern pattern = Pattern.compile("[\\u0041-\\u005A|\\u00C0-\\u00D6|\\u00D8-\\u00DF]");
+    public static final String range = "\\u0041-\\u005A|\\u00C0-\\u00D6|\\u00D8-\\u00DF";
+
+    private Pattern pattern = Pattern.compile("[" + range + "]");
 
     /*
      * (non-Javadoc)

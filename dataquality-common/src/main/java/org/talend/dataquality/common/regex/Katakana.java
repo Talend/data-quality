@@ -19,7 +19,9 @@ import java.util.regex.Pattern;
  */
 public class Katakana extends ChainResponsibilityHandler {
 
-    private Pattern pattern = Pattern.compile("[\\u30A1-\\u30FA|\\uFF66-\\uFF9F]");
+    public static final String range = "\\u30A1-\\u30FA|\\uFF66-\\uFF9F";
+
+    private Pattern pattern = Pattern.compile("[" + range + "]");
 
     /*
      * (non-Javadoc)
