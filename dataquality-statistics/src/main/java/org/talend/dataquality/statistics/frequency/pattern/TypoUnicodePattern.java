@@ -159,8 +159,8 @@ public enum TypoUnicodePattern {
 
     private static class Constants {
 
-        private static final String JAPANESE_SYLLABARY =
-                Hiragana.range + HiraganaSmall.range + Katakana.range + KatakanaSmall.range;
+        private static final String JAPANESE_SYLLABARY = Hiragana.range + HiraganaSmall.range + Katakana.range
+                + KatakanaSmall.range;
 
         private static final String IDEOGRAMS = Hangul.range + Kanji.range;
     }

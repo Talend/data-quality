@@ -14,8 +14,7 @@ public class TypoUnicodePatternToRegex {
         StringBuilder sb = new StringBuilder();
         for (String current : splitPattern(pattern)) {
             Optional<TypoUnicodePattern> typoUnicodePattern = TypoUnicodePattern.get(current);
-            String regex = typoUnicodePattern
-                    .map(it -> caseSensitive ? it.getCaseSensitive() : it.getCaseInsensitive())
+            String regex = typoUnicodePattern.map(it -> caseSensitive ? it.getCaseSensitive() : it.getCaseInsensitive())
                     .orElse(current);
             sb.append(regex);
         }

@@ -9,8 +9,8 @@ import static org.junit.Assert.*;
 
 public class TypoUnicodePatternToRegexTest {
 
-    private static final String JAPANESE_SYLLABARY =
-            Hiragana.range + HiraganaSmall.range + Katakana.range + KatakanaSmall.range;
+    private static final String JAPANESE_SYLLABARY = Hiragana.range + HiraganaSmall.range + Katakana.range + KatakanaSmall.range;
+
     private static final String END_WORD_REGEX = "]+";
 
     private TypoUnicodePatternToRegex service = new TypoUnicodePatternToRegex();
@@ -111,9 +111,11 @@ public class TypoUnicodePatternToRegexTest {
         final String example = "aaa8";
         final String pattern = "[alnum]";
 
-        assertCaseInsensitiveContain(pattern, LatinLettersSmall.range, LatinLetters.range, LatinAsciiDigits.range, END_WORD_REGEX);
+        assertCaseInsensitiveContain(pattern, LatinLettersSmall.range, LatinLetters.range, LatinAsciiDigits.range,
+                END_WORD_REGEX);
         assertCaseInsensitiveRegexMatche(example, pattern);
-        assertCaseInsensitiveContain(pattern, LatinLettersSmall.range, LatinLetters.range, LatinAsciiDigits.range, END_WORD_REGEX);
+        assertCaseInsensitiveContain(pattern, LatinLettersSmall.range, LatinLetters.range, LatinAsciiDigits.range,
+                END_WORD_REGEX);
         assertCaseSensitiveRegexMatche(example, pattern);
     }
 
@@ -166,17 +168,16 @@ public class TypoUnicodePatternToRegexTest {
         final String example = "10+*";
         final String pattern = "[number]+*";
 
-        assertCaseInsensitiveContain(pattern, "\\+","\\*");
+        assertCaseInsensitiveContain(pattern, "\\+", "\\*");
         assertCaseInsensitiveRegexMatche(example, pattern);
-        assertCaseSensitiveContain(pattern, "\\+","\\*");
+        assertCaseSensitiveContain(pattern, "\\+", "\\*");
         assertCaseSensitiveRegexMatche(example, pattern);
     }
 
     @Test
     public void defaultText() {
         final String example = "C'est un TEXTE Test d'obSERVatIon des 8 pATTERNS possibles (sur plus de 10)";
-        final String pattern =
-                "[Char]'[word] [word] [WORD] [Word] [char]'[word][WORD][word][Word] [word] [digit] [char][WORD] [word] ([word] [word] [word] [number])";
+        final String pattern = "[Char]'[word] [word] [WORD] [Word] [char]'[word][WORD][word][Word] [word] [digit] [char][WORD] [word] ([word] [word] [word] [number])";
 
         assertCaseInsensitiveRegexMatche(example, pattern);
         assertCaseSensitiveRegexMatche(example, pattern);
@@ -219,8 +220,8 @@ public class TypoUnicodePatternToRegexTest {
 
     @Test
     public void chineseText() {
-        final String example = "木兰辞\n" + "\n" + "唧唧复唧唧，木兰当户织。\n" + "不闻机杼声，唯闻女叹息。\n" + "问女何所思？问女何所忆？\n"
-                + "女亦无所思，女亦无所忆。\n" + "昨夜见军帖，可汗大点兵，\n" + "军书十二卷，卷卷有爷名。\n" + "阿爷无大儿，木兰无长兄，\n" + "愿为市鞍马，从此替爷征。";
+        final String example = "木兰辞\n" + "\n" + "唧唧复唧唧，木兰当户织。\n" + "不闻机杼声，唯闻女叹息。\n" + "问女何所思？问女何所忆？\n" + "女亦无所思，女亦无所忆。\n"
+                + "昨夜见军帖，可汗大点兵，\n" + "军书十二卷，卷卷有爷名。\n" + "阿爷无大儿，木兰无长兄，\n" + "愿为市鞍马，从此替爷征。";
         final String pattern = "[IdeogramSeq]\n" + "\n[IdeogramSeq]，[IdeogramSeq]。\n" + "[IdeogramSeq]，[IdeogramSeq]。\n"
                 + "[IdeogramSeq]？[IdeogramSeq]？\n" + "[IdeogramSeq]，[IdeogramSeq]。\n" + "[IdeogramSeq]，[IdeogramSeq]，\n"
                 + "[IdeogramSeq]，[IdeogramSeq]。\n" + "[IdeogramSeq]，[IdeogramSeq]，\n" + "[IdeogramSeq]，[IdeogramSeq]。";
