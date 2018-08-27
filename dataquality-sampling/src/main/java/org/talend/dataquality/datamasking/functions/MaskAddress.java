@@ -44,15 +44,15 @@ public class MaskAddress extends Function<String> {
         if (str != null && !EMPTY_STRING.equals(str) && !(" ").equals(str)) { //$NON-NLS-1$
             String[] address = str.split(",| "); //$NON-NLS-1$
             boolean isOnlyKeyOrDigit = isOnlyKeyOrDigit(address);
-            for (String tmp : address) {
-                if (keys.contains(tmp.toUpperCase()) && !isOnlyKeyOrDigit) {
-                    sb.append(tmp + " "); //$NON-NLS-1$
+            for (String word : address) {
+                if (keys.contains(word.toUpperCase()) && !isOnlyKeyOrDigit) {
+                    sb.append(word + " "); //$NON-NLS-1$
                 } else {
                     int cp;
                     // one surrogate pair character will take two unicode point so that we just judge first one and if it is
                     // surrogate pair we make index+2
-                    for (int i = 0; i < tmp.length(); i += Character.charCount(cp)) {
-                        cp = tmp.codePointAt(i);
+                    for (int i = 0; i < word.length(); i += Character.charCount(cp)) {
+                        cp = word.codePointAt(i);
                         if (Character.isDigit(cp)) {
                             sb.append(rnd.nextInt(9) + 1);
                         } else {
@@ -69,13 +69,13 @@ public class MaskAddress extends Function<String> {
     }
 
     private boolean isOnlyKeyOrDigit(String[] address) {
-        for (String tmp : address) {
-            if (!keys.contains(tmp.toUpperCase())) {
+        for (String word : address) {
+            if (!keys.contains(word.toUpperCase())) {
                 int cp;
                 // one surrogate pair character will take two unicode point so that we just judge first one and if it is
                 // surrogate pair we make index+2
-                for (int i = 0; i < tmp.length(); i += Character.charCount(cp)) {
-                    cp = tmp.codePointAt(i);
+                for (int i = 0; i < word.length(); i += Character.charCount(cp)) {
+                    cp = word.codePointAt(i);
                     if (!Character.isDigit(cp)) {
                         return false;
                     }
