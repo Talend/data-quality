@@ -19,9 +19,7 @@ import java.util.regex.Pattern;
  */
 public class Kanji extends ChainResponsibilityHandler {
 
-    public static final String range = "\\p{script=Han}";
-
-    private Pattern pattern = Pattern.compile("[" + range + "]");
+    private Pattern pattern = Pattern.compile("[\\p{script=Han}]");
 
     /*
      * (non-Javadoc)

@@ -22,9 +22,7 @@ import java.util.regex.Pattern;
  */
 public class LatinAsciiDigits extends ChainResponsibilityHandler {
 
-    public static final String range = "\\u0030-\\u0039";
-
-    private Pattern pattern = Pattern.compile("[" + range + "]");
+    private Pattern pattern = Pattern.compile("[\\u0030-\\u0039]");
 
     /*
      * (non-Javadoc)

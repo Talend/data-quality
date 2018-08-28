@@ -3,175 +3,258 @@ package org.talend.dataquality.statistics.frequency.pattern;
 import org.junit.Test;
 import org.talend.dataquality.common.regex.*;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static org.junit.Assert.*;
 
 public class TypoUnicodePatternToRegexTest {
 
-    private static final String JAPANESE_SYLLABARY = Hiragana.range + HiraganaSmall.range + Katakana.range + KatakanaSmall.range;
-
-    private static final String END_WORD_REGEX = "]+";
-
     private TypoUnicodePatternToRegex service = new TypoUnicodePatternToRegex();
 
-    private void print(char c) {
-        System.out.println("\\u" + Integer.toHexString(c | 0x10000).substring(1));
-    }
-
     @Test
-    public void lowerLatinChar() {
-        final String example = "a";
+    public void lowerLatinCharInsensitive() {
         final String pattern = "[char]";
 
-        assertCaseInsensitiveContain(pattern, LatinLettersSmall.range, LatinLetters.range);
-        assertCaseInsensitiveRegexMatche(example, pattern);
-
-        assertCaseSensitiveContain(pattern, LatinLettersSmall.range);
-        assertCaseSensitiveRegexMatche(example, pattern);
+        String regex = service.toRegex(pattern, false);
+        assertMatches("a", regex);
+        assertMatches("b", regex);
+        assertMatches("B", regex);
+        assertNoMatches("0", regex);
+        assertNoMatches("袁", regex);
     }
 
     @Test
-    public void upperLatinChar() {
-        final String example = "A";
+    public void lowerLatinCharSensitive() {
+        final String pattern = "[char]";
+        String regex = service.toRegex(pattern, true);
+        assertMatches("a", regex);
+        assertMatches("b", regex);
+        assertNoMatches("B", regex);
+        assertNoMatches("0", regex);
+    }
+
+    @Test
+    public void upperLatinCharInsensitive() {
         final String pattern = "[Char]";
 
-        assertCaseInsensitiveContain(pattern, LatinLettersSmall.range, LatinLetters.range);
-        assertCaseInsensitiveRegexMatche(example, pattern);
-        assertCaseSensitiveContain(pattern, LatinLetters.range);
-        assertCaseSensitiveRegexMatche(example, pattern);
+        String regex = service.toRegex(pattern, false);
+        assertMatches("A", regex);
+        assertMatches("B", regex);
+        assertMatches("b", regex);
+        assertNoMatches("0", regex);
     }
 
     @Test
-    public void lowerLatinWord() {
-        final String example = "wowowo";
+    public void upperLatinCharSensitive() {
+        final String pattern = "[Char]";
+        String regex = service.toRegex(pattern, true);
+        assertMatches("A", regex);
+        assertMatches("B", regex);
+        assertNoMatches("b", regex);
+        assertNoMatches("0", regex);
+    }
+
+    @Test
+    public void lowerLatinWordInsensitive() {
         final String pattern = "[word]";
 
-        assertCaseInsensitiveContain(pattern, LatinLettersSmall.range, LatinLetters.range, END_WORD_REGEX);
-        assertCaseInsensitiveRegexMatche(example, pattern);
-        assertCaseSensitiveContain(pattern, LatinLettersSmall.range, END_WORD_REGEX);
-        assertCaseSensitiveRegexMatche(example, pattern);
+        String regex = service.toRegex(pattern, false);
+        assertMatches("Aa", regex);
+        assertMatches("vba", regex);
+        assertNoMatches("A", regex);
+        assertNoMatches("vba0", regex);
+        assertMatches("abcdefghijklmnopqrstuvwxyzàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿß", regex);
+        assertMatches("ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞ", regex);
     }
 
     @Test
-    public void twoLatinWordsSeparatedBySpace() {
-        final String example = "wowowo yolo";
+    public void lowerLatinWordSensitive() {
+        final String pattern = "[word]";
+
+        String regex = service.toRegex(pattern, true);
+        assertNoMatches("Aa", regex);
+        assertMatches("vba", regex);
+        assertNoMatches("A", regex);
+        assertNoMatches("vba0", regex);
+        assertMatches("abcdefghijklmnopqrstuvwxyzàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿß", regex);
+        assertNoMatches("ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞ", regex);
+    }
+
+    @Test
+    public void twoLatinWordsSeparatedBySpaceInsensitive() {
         final String pattern = "[word] [word]";
 
-        assertCaseSensitiveContain(pattern, LatinLettersSmall.range, END_WORD_REGEX, " ");
-        assertCaseSensitiveRegexMatche(example, pattern);
+        String regex = service.toRegex(pattern, false);
+        assertMatches("rainbow dash", regex);
+        assertMatches("Big McIntosh", regex);
+        assertNoMatches("too many spaces", regex);
+        assertNoMatches("double  spaces", regex);
     }
 
     @Test
-    public void upperLatinWord() {
-        final String example = "WOWOWO";
+    public void twoLatinWordsSeparatedBySpaceSensitive() {
+        final String pattern = "[word] [word]";
+
+        String regex = service.toRegex(pattern, true);
+        assertMatches("rainbow dash", regex);
+        assertNoMatches("Big McIntosh", regex);
+        assertNoMatches("too many spaces", regex);
+    }
+
+    @Test
+    public void upperLatinWordInsensitive() {
         final String pattern = "[WORD]";
 
-        assertCaseInsensitiveContain(pattern, LatinLettersSmall.range, LatinLetters.range, END_WORD_REGEX);
-        assertCaseInsensitiveRegexMatche(example, pattern);
-        assertCaseSensitiveContain(pattern, LatinLetters.range, END_WORD_REGEX);
-        assertCaseSensitiveRegexMatche(example, pattern);
+        String regex = service.toRegex(pattern, false);
+        assertMatches("WOWOWO", regex);
+        assertMatches("vba", regex);
+        assertMatches("Aa", regex);
+        assertNoMatches("A", regex);
+        assertNoMatches("vba0", regex);
+        assertMatches("abcdefghijklmnopqrstuvwxyzàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿß", regex);
+        assertMatches("ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞ", regex);
     }
 
     @Test
-    public void latinWord() {
-        final String example = "Test";
+    public void upperLatinWordSensitive() {
+        final String pattern = "[WORD]";
+
+        String regex = service.toRegex(pattern, true);
+        assertMatches("WOWOWO", regex);
+        assertNoMatches("vba", regex);
+        assertNoMatches("Aa", regex);
+        assertNoMatches("A", regex);
+        assertNoMatches("vba0", regex);
+        assertNoMatches("abcdefghijklmnopqrstuvwxyzàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿß", regex);
+        assertMatches("ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞŸ", regex);
+    }
+
+    @Test
+    public void latinWordInsensitive() {
         final String pattern = "[Word]";
 
-        assertCaseInsensitiveContain(pattern, LatinLettersSmall.range, LatinLetters.range, END_WORD_REGEX);
-        assertCaseInsensitiveRegexMatche(example, pattern);
-        assertCaseSensitiveContain(pattern, LatinLettersSmall.range, LatinLetters.range, END_WORD_REGEX);
-        assertCaseSensitiveRegexMatche(example, pattern);
+        String regex = service.toRegex(pattern, false);
+        assertEquals(regex, service.toRegex(pattern, true));
+
+        assertMatches("WOWOWO", regex);
+        assertMatches("vba", regex);
+        assertMatches("Aa", regex);
+        assertNoMatches("A", regex);
+        assertNoMatches("vba0", regex);
     }
+
 
     @Test
     public void number() {
-        final String example = "42";
         final String pattern = "[number]";
 
-        assertCaseInsensitiveContain(pattern, LatinAsciiDigits.range, END_WORD_REGEX);
-        assertCaseInsensitiveRegexMatche(example, pattern);
-        assertCaseSensitiveContain(pattern, LatinAsciiDigits.range, END_WORD_REGEX);
-        assertCaseSensitiveRegexMatche(example, pattern);
+        String regex = service.toRegex(pattern, false);
+        assertEquals(regex, service.toRegex(pattern, true));
+
+        assertMatches("42", regex);
+        assertNoMatches("0", regex);
+        assertNoMatches("vba0", regex);
     }
 
     @Test
     public void digit() {
-        final String example = "9";
         final String pattern = "[digit]";
+        String regex = service.toRegex(pattern, false);
+        assertEquals(regex, service.toRegex(pattern, true));
 
-        assertCaseInsensitiveContain(pattern, LatinAsciiDigits.range);
-        assertCaseInsensitiveRegexMatche(example, pattern);
-        assertCaseInsensitiveContain(pattern, LatinAsciiDigits.range);
-        assertCaseSensitiveRegexMatche(example, pattern);
+        assertMatches("9", regex);
+        assertNoMatches("1337", regex);
+        assertNoMatches("vba0", regex);
     }
 
     @Test
     public void latinAlphanumeric() {
-        final String example = "aaa8";
         final String pattern = "[alnum]";
 
-        assertCaseInsensitiveContain(pattern, LatinLettersSmall.range, LatinLetters.range, LatinAsciiDigits.range,
-                END_WORD_REGEX);
-        assertCaseInsensitiveRegexMatche(example, pattern);
-        assertCaseInsensitiveContain(pattern, LatinLettersSmall.range, LatinLetters.range, LatinAsciiDigits.range,
-                END_WORD_REGEX);
-        assertCaseSensitiveRegexMatche(example, pattern);
+        String regex = service.toRegex(pattern, false);
+        assertEquals(regex, service.toRegex(pattern, true));
+
+        assertMatches("aaa8", regex);
+        assertNoMatches("9", regex);
+        assertNoMatches("a", regex);
+        assertNoMatches(".aaa", regex);
+        assertNoMatches("a袁", regex);
+        assertNoMatches("ac袁", regex);
     }
 
     @Test
     public void twoPatternSeparatedByDot() {
-        final String example = "42.pony";
-        final String pattern = "[number].[word]";
+        final String pattern = "[number].[Word]";
 
-        assertCaseInsensitiveContain(pattern, "\\.");
-        assertCaseInsensitiveRegexMatche(example, pattern);
-        assertCaseSensitiveContain(pattern, "\\.");
-        assertCaseSensitiveRegexMatche(example, pattern);
+        String regex = service.toRegex(pattern, false);
+        assertEquals(regex, service.toRegex(pattern, true));
+
+        assertMatches("42.pony", regex);
+        assertNoMatches("42!pony", regex);
+        assertNoMatches("42Ppony", regex);
+        assertNoMatches(".42.pony", regex);
+        assertNoMatches("42..pony", regex);
     }
 
     @Test
     public void patternWithParenthesis() {
-        final String example = "(10)";
         final String pattern = "([number])";
+        String regex = service.toRegex(pattern, false);
+        assertEquals(regex, service.toRegex(pattern, true));
 
-        assertCaseInsensitiveContain(pattern, "\\(", "\\)");
-        assertCaseInsensitiveRegexMatche(example, pattern);
-        assertCaseSensitiveContain(pattern, "\\(", "\\)");
-        assertCaseSensitiveRegexMatche(example, pattern);
+        assertMatches("(42)", regex);
+        assertMatches("(1337)", regex);
+        assertNoMatches("()42", regex);
+        assertNoMatches("()", regex);
+        assertNoMatches("(4)", regex);
+        assertNoMatches("42", regex);
     }
 
     @Test
     public void patternWithBrackets() {
-        final String example = "[10]";
         final String pattern = "[[number]]";
 
-        assertCaseInsensitiveContain(pattern, "\\[", "\\]");
-        assertCaseInsensitiveRegexMatche(example, pattern);
-        assertCaseSensitiveContain(pattern, "\\[", "\\]");
-        assertCaseSensitiveRegexMatche(example, pattern);
+        String regex = service.toRegex(pattern, false);
+        assertEquals(regex, service.toRegex(pattern, true));
+
+        assertMatches("[42]", regex);
+        assertMatches("[1337]", regex);
+        assertNoMatches("[]42", regex);
+        assertNoMatches("[]", regex);
+        assertNoMatches("[4]", regex);
+        assertNoMatches("42", regex);
     }
 
     @Test
     public void patternWithQuestionMark() {
-        final String example = "10?";
         final String pattern = "[number]?";
 
-        assertCaseInsensitiveContain(pattern, "\\?");
-        assertCaseInsensitiveRegexMatche(example, pattern);
-        assertCaseSensitiveContain(pattern, "\\?");
-        assertCaseSensitiveRegexMatche(example, pattern);
+        String regex = service.toRegex(pattern, false);
+        assertEquals(regex, service.toRegex(pattern, true));
+
+        assertMatches("42?", regex);
+        assertMatches("1337?", regex);
+        assertNoMatches("?42", regex);
+        assertNoMatches("?", regex);
+        assertNoMatches("4?", regex);
+        assertNoMatches("42", regex);
     }
 
     @Test
     public void patternWithPlusAndStar() {
-        final String example = "10+*";
+
         final String pattern = "[number]+*";
 
-        assertCaseInsensitiveContain(pattern, "\\+", "\\*");
-        assertCaseInsensitiveRegexMatche(example, pattern);
-        assertCaseSensitiveContain(pattern, "\\+", "\\*");
-        assertCaseSensitiveRegexMatche(example, pattern);
+        String regex = service.toRegex(pattern, false);
+        assertEquals(regex, service.toRegex(pattern, true));
+
+        assertMatches("42+*", regex);
+        assertMatches("1337+*", regex);
+        assertNoMatches("+*42", regex);
+        assertNoMatches("+*", regex);
+        assertNoMatches("4+*", regex);
+        assertNoMatches("42", regex);
     }
 
     @Test
@@ -179,8 +262,17 @@ public class TypoUnicodePatternToRegexTest {
         final String example = "C'est un TEXTE Test d'obSERVatIon des 8 pATTERNS possibles (sur plus de 10)";
         final String pattern = "[Char]'[word] [word] [WORD] [Word] [char]'[word][WORD][word][Word] [word] [digit] [char][WORD] [word] ([word] [word] [word] [number])";
 
-        assertCaseInsensitiveRegexMatche(example, pattern);
-        assertCaseSensitiveRegexMatche(example, pattern);
+
+        String insensitive = service.toRegex(pattern, false);
+        assertMatches(example, insensitive);
+        assertMatches(example.toLowerCase(), insensitive);
+        assertMatches(example.toUpperCase(), insensitive);
+
+        String sensitive = service.toRegex(pattern, true);
+        assertMatches(example, sensitive);
+        assertNoMatches(example.toLowerCase(), sensitive);
+        assertNoMatches(example.toUpperCase(), sensitive);
+
     }
 
     @Test
@@ -188,34 +280,59 @@ public class TypoUnicodePatternToRegexTest {
         final String example = "Example123@protonmail.com";
         final String pattern = "[alnum]@[word].[word]";
 
-        assertCaseInsensitiveRegexMatche(example, pattern);
-        assertCaseSensitiveRegexMatche(example, pattern);
+        String insensitive = service.toRegex(pattern, false);
+        assertMatches(example, insensitive);
+        assertMatches(example.toLowerCase(), insensitive);
+        assertMatches(example.toUpperCase(), insensitive);
+
+        String sensitive = service.toRegex(pattern, true);
+        assertMatches(example, sensitive);
+        assertMatches(example.toLowerCase(), sensitive);
+        assertNoMatches(example.toUpperCase(), sensitive);
     }
 
     @Test
     public void chineseIdeogram() {
-        final String example = "袁";
-        final String patternNoCase = "[Ideogram]";
+        final String pattern = "[Ideogram]";
 
-        assertCaseInsensitiveRegexMatche(example, patternNoCase);
+        String regex = service.toRegex(pattern, false);
+        assertEquals(regex, service.toRegex(pattern, true));
+
+        assertMatches("袁", regex);
+        assertMatches("蘭", regex);
+        assertNoMatches("9", regex);
+        assertNoMatches("a", regex);
+        assertNoMatches(".aaa", regex);
+        assertNoMatches("a袁", regex);
+        assertNoMatches("ac袁", regex);
     }
 
     @Test
     public void chineseAlphanumeric() {
-        final String example = "花木蘭88";
-        final String patternNoCase = "[alnum(CJK)]";
+        final String pattern = "[alnum(CJK)]";
 
-        assertCaseInsensitiveRegexMatche(example, patternNoCase);
+        String regex = service.toRegex(pattern, false);
+        assertEquals(regex, service.toRegex(pattern, true));
+
+        assertMatches("花木蘭88", regex);
+        assertMatches("花木蘭88袁", regex);
+        assertNoMatches("pony42", regex);
+        assertNoMatches("a", regex);
+        assertNoMatches(".aaa", regex);
+        assertNoMatches("a袁", regex);
+        assertNoMatches("ac袁", regex);
     }
 
     @Test
     public void chinese() {
         final String example = "袁 花木蘭88";
         final String patternNoCase = "[Ideogram] [alnum(CJK)]";
-        assertCaseInsensitiveRegexMatche(example, patternNoCase);
+
+        testCaseInsensitivePattern(example, patternNoCase);
 
         final String patternCase = "[Ideogram] [IdeogramSeq][number]";
-        assertCaseInsensitiveRegexMatche(example, patternCase);
+
+        testCaseInsensitivePattern(example, patternCase);
     }
 
     @Test
@@ -226,7 +343,7 @@ public class TypoUnicodePatternToRegexTest {
                 + "[IdeogramSeq]？[IdeogramSeq]？\n" + "[IdeogramSeq]，[IdeogramSeq]。\n" + "[IdeogramSeq]，[IdeogramSeq]，\n"
                 + "[IdeogramSeq]，[IdeogramSeq]。\n" + "[IdeogramSeq]，[IdeogramSeq]，\n" + "[IdeogramSeq]，[IdeogramSeq]。";
 
-        assertCaseInsensitiveRegexMatche(example, pattern);
+        testCaseInsensitivePattern(example, pattern);
     }
 
     @Test
@@ -234,107 +351,234 @@ public class TypoUnicodePatternToRegexTest {
         final String example = "不亦1說乎？有";
         final String pattern = "[alnum(CJK)]？[Ideogram]";
 
-        assertCaseInsensitiveRegexMatche(example, pattern);
+        testCaseInsensitivePattern(example, pattern);
     }
 
     @Test
     public void japaneseAlphanumeric() {
         final String example = "こんにちは123";
-        final String patternNoCase = "[alnum]";
-        assertCaseInsensitiveRegexMatche(example, patternNoCase);
+        final String pattern = "[alnum]";
+
+        testCaseInsensitivePattern(example, pattern);
     }
 
     @Test
     public void japaneseWord() {
         final String example = "こんにちは";
-        final String patternNoCase = "[word]";
-        assertCaseInsensitiveRegexMatche(example, patternNoCase);
+        final String pattern = "[word]";
+
+        String regex = service.toRegex(pattern, false);
+        assertMatches(example, regex);
+
+        String regexCase = service.toRegex(pattern, true);
+        assertMatches(example, regexCase);
     }
 
     @Test
-    public void japanese() {
+    public void japaneseNoCase() {
         final String example = "こんにちは123 こんにちは？你好/Hello!";
         final String patternNoCase = "[alnum] [word]？[IdeogramSeq]/[word]!";
-        assertCaseInsensitiveRegexMatche(example, patternNoCase);
 
-        final String patternCase = "[word][number] [word]？[IdeogramSeq]/[Word]!";
-        assertCaseInsensitiveRegexMatche(example, patternCase);
+        String regex = service.toRegex(patternNoCase, false);
+        assertMatches(example, regex);
+
+        String regexCase = service.toRegex(patternNoCase, true);
+        assertNoMatches(example, regexCase);
     }
 
     @Test
-    public void japaneseCJK() {
+    public void japaneseCase() {
+        final String example = "こんにちは123 こんにちは？你好/Hello!";
+        final String patternCase = "[word][number] [word]？[IdeogramSeq]/[Word]!";
+        assertCaseInsensitiveRegexMatche(example, patternCase);
+
+        String regex = service.toRegex(patternCase, false);
+        assertMatches(example, regex);
+
+        String regexCase = service.toRegex(patternCase, true);
+        assertMatches(example, regexCase);
+    }
+
+    @Test
+    public void japaneseCJKNoCase() {
         final String example = "日本語123 日本語？你好/Hello!";
         final String patternNoCase = "[alnum(CJK)] [IdeogramSeq]？[IdeogramSeq]/[word]!";
-        assertCaseInsensitiveRegexMatche(example, patternNoCase);
+        String regex = service.toRegex(patternNoCase, false);
+        assertMatches(example, regex);
 
+        String regexCase = service.toRegex(patternNoCase, true);
+        assertNoMatches(example, regexCase);
+    }
+
+    @Test
+    public void japaneseCJKCase() {
+        final String example = "日本語123 日本語？你好/Hello!";
         final String patternCase = "[IdeogramSeq][number] [IdeogramSeq]？[IdeogramSeq]/[Word]!";
-        assertCaseInsensitiveRegexMatche(example, patternCase);
+
+        String regex = service.toRegex(patternCase, false);
+        assertMatches(example, regex);
+
+        String regexCase = service.toRegex(patternCase, true);
+        assertMatches(example, regexCase);
     }
 
     @Test
     public void surrogatePair() {
-        assertCaseInsensitiveRegexMatche("𠀐", "[Ideogram]");
-        assertCaseInsensitiveRegexMatche("𠀐𠀑我𠀒𠀓", "[IdeogramSeq]");
-        assertCaseInsensitiveRegexMatche("𠀐𠀑我𠀒𠀓 我Abc", "[IdeogramSeq] [Ideogram][word]");
-        assertCaseInsensitiveRegexMatche("𠀐12//𠀑我?𠀑", "[alnum(CJK)]//[IdeogramSeq]?[Ideogram]");
-        assertCaseInsensitiveRegexMatche("𠀐12//𠀑我?𠀑", "[Ideogram][number]//[IdeogramSeq]?[Ideogram]");
+        testCaseInsensitivePattern("𠀐", "[Ideogram]");
+        testCaseInsensitivePattern("𠀐𠀑我𠀒𠀓", "[IdeogramSeq]");
+        testCaseInsensitivePattern("𠀐𠀑我𠀒𠀓 我Abc", "[IdeogramSeq] [Ideogram][Word]");
+        testCaseInsensitivePattern("𠀐12//𠀑我?𠀑", "[alnum(CJK)]//[IdeogramSeq]?[Ideogram]");
+        testCaseInsensitivePattern("𠀐12//𠀑我?𠀑", "[Ideogram][number]//[IdeogramSeq]?[Ideogram]");
     }
 
     @Test
     public void arabic() {
-        assertCaseInsensitiveRegexMatche(
-                "يَجِبُ عَلَى الإنْسَانِ أن يَكُونَ أمِيْنَاً وَصَادِقَاً مَعَ نَفْسِهِ وَمَعَ أَهْلِهِ وَجِيْرَانِهِ وَأَنْ يَبْذُلَ كُلَّ جُهْدٍ فِي إِعْلاءِ شَأْنِ الوَطَنِ وَأَنْ يَعْمَلَ عَلَى مَا يَجْلِبُ السَّعَادَةَ لِلنَّاسِ . ولَن يَتِمَّ لَهُ ذلِك إِلا بِأَنْ يُقَدِّمَ المَنْفَعَةَ العَامَّةَ عَلَى المَنْفَعَةِ الخَاصَّةِ وَهذَا مِثَالٌ لِلتَّضْحِيَةِ .",
-                "[word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] . [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] .");
-        assertCaseInsensitiveRegexMatche(
-                "يَجِبُ عَلَى الإنْسَانِ أن يَكُونَ أمِيْنَاً وَصَادِقَاً مَعَ نَفْسِهِ وَمَعَ أَهْلِهِ وَجِيْرَانِهِ وَأَنْ يَبْذُلَ كُلَّ جُهْدٍ فِي إِعْلاءِ شَأْنِ الوَطَنِ وَأَنْ يَعْمَلَ عَلَى مَا يَجْلِبُ السَّعَادَةَ لِلنَّاسِ . ولَن يَتِمَّ لَهُ ذلِك إِلا بِأَنْ يُقَدِّمَ المَنْفَعَةَ العَامَّةَ عَلَى المَنْفَعَةِ الخَاصَّةِ وَهذَا مِثَالٌ لِلتَّضْحِيَةِ .",
-                "[word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] . [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] .");
+        final String example =
+                "يَجِبُ عَلَى الإنْسَانِ أن يَكُونَ أمِيْنَاً وَصَادِقَاً مَعَ نَفْسِهِ وَمَعَ أَهْلِهِ وَجِيْرَانِهِ وَأَنْ يَبْذُلَ كُلَّ جُهْدٍ فِي إِعْلاءِ شَأْنِ الوَطَنِ وَأَنْ يَعْمَلَ عَلَى مَا يَجْلِبُ السَّعَادَةَ لِلنَّاسِ . ولَن يَتِمَّ لَهُ ذلِك إِلا بِأَنْ يُقَدِّمَ المَنْفَعَةَ العَامَّةَ عَلَى المَنْفَعَةِ الخَاصَّةِ وَهذَا مِثَالٌ لِلتَّضْحِيَةِ .";
+        final String pattern = "[word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] . [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] [word] .";
+
+        String regex = service.toRegex(pattern, false);
+        assertMatches(example, regex);
+
+        String regexCase = service.toRegex(pattern, true);
+        assertMatches(example, regexCase);
+    }
+
+    @Test
+    public void ancientGreekWordInsenitive() {
+        final String pattern = "[Word]";
+
+        String regex = service.toRegex(pattern, false);
+        assertEquals(regex, service.toRegex(pattern, true));
+
+        assertMatches("Ἰοὺ", regex);
+        assertMatches("ἰοὺ", regex);
+        assertMatches("ἸΟῪ", regex);
+    }
+
+    @Test
+    public void ancientGreekLowerWordInsensitive() {
+        final String pattern = "[word]";
+
+        String regex = service.toRegex(pattern, false);
+
+        assertMatches("Ἰοὺ", regex);
+        assertMatches("ἰοὺ", regex);
+        assertMatches("ἸΟῪ", regex);
+        assertMatches("πάντʼ", regex);
+    }
+
+    @Test
+    public void ancientGreekLowerWord() {
+        final String pattern = "[word]";
+
+        String regex = service.toRegex(pattern, true);
+
+        assertNoMatches("Ἰοὺ", regex);
+        assertMatches("ἰοὺ", regex);
+        assertNoMatches("ἸΟῪ", regex);
+        assertMatches("πάντʼ", regex);
+    }
+
+    @Test
+    public void ancientGreekUpperWordInsensitive() {
+        final String pattern = "[WORD]";
+
+        String regex = service.toRegex(pattern, false);
+
+        assertMatches("Ἰοὺ", regex);
+        assertMatches("ἰοὺ", regex);
+        assertMatches("ἸΟῪ", regex);
+        assertMatches("πάντʼ", regex);
+    }
+
+    @Test
+    public void ancientGreekUpperWord() {
+        final String pattern = "[WORD]";
+
+        String regex = service.toRegex(pattern, true);
+
+        assertNoMatches("Ἰοὺ", regex);
+        assertNoMatches("ἰοὺ", regex);
+        assertMatches("ἸΟῪ", regex);
+        assertNoMatches("πάντʼ", regex);
+    }
+
+    @Test
+    public void ancientGreekChar() {
+        final String pattern = "[char]";
+
+        String regex = service.toRegex(pattern, true);
+
+        assertMatches("ʼ", regex);
+        assertMatches("ἰ", regex);
+        assertNoMatches("Ἰ", regex);
+    }
+
+    @Test
+    public void ancientGreekCharInsensitive() {
+        final String pattern = "[char]";
+
+        String regex = service.toRegex(pattern, false);
+
+        assertMatches("ʼ", regex);
+        assertMatches("ἰ", regex);
+        assertMatches("Ἰ", regex);
+    }
+
+    @Test
+    public void ancientGreekUpperChar() {
+        final String pattern = "[Char]";
+
+        String regex = service.toRegex(pattern, true);
+
+        assertMatches("ʼ", regex);
+        assertNoMatches("ἰ", regex);
+        assertMatches("Ἰ", regex);
+        assertMatches("Ὦ", regex);
+    }
+
+    @Test
+    public void ancientGreekUpperCharInsensitive() {
+        final String pattern = "[Char]";
+
+        String regex = service.toRegex(pattern, false);
+
+        assertMatches("ʼ", regex);
+        assertMatches("ἰ", regex);
+        assertMatches("Ἰ", regex);
+        assertMatches("Ὦ", regex);
     }
 
     @Test
     public void ancientGreek() {
-        assertCaseSensitiveRegexMatche("Ἰοὺ", "[Word]");
-        assertCaseSensitiveRegexMatche("ἰού", "[word]");
-        assertCaseSensitiveRegexMatche("Ὦ", "[Char]");
-        assertCaseSensitiveRegexMatche("ʼ", "[char]");
-        assertCaseSensitiveRegexMatche("πάντʼ", "[word]");
-        assertCaseSensitiveRegexMatche(
-                "Ἰοὺ ἰού· τὰ πάντʼ ἂν ἐξήκοι σαφῆ.Ὦ φῶς, τελευταῖόν σε προσϐλέψαιμι νῦν,ὅστις πέφασμαι φύς τʼ ἀφʼ ὧν οὐ χρῆν, ξὺν οἷς τʼοὐ χρῆν ὁμιλῶν, οὕς τέ μʼ οὐκ ἔδει κτανών.",
-                "[Word] [word]· [word] [word] [word] [word] [word].[Char] [word], [word] [word] [word] [word],[word] [word] [word] [word] [word] [word] [word] [word], [word] [word] [word] [word] [word], [word] [word] [word] [word] [word] [word].");
+        final String example = "Ἰοὺ ἰού· τὰ πάντʼ ἂν ἐξήκοι σαφῆ.Ὦ φῶς, τελευταῖόν σε προσϐλέψαιμι νῦν,ὅστις πέφασμαι φύς τʼ ἀφʼ ὧν οὐ χρῆν, ξὺν οἷς τʼοὐ χρῆν ὁμιλῶν, οὕς τέ μʼ οὐκ ἔδει κτανών.";
+        final String pattern = "[Word] [word]· [word] [word] [word] [word] [word].[Char] [word], [word] [word] [word] [word],[word] [word] [word] [word] [word] [word] [word] [word], [word] [word] [word] [word] [word], [word] [word] [word] [word] [word] [word].";
+
+        String regex = service.toRegex(pattern, false);
+
+        assertMatches(example, regex);
     }
 
-    @Test
-    public void latin() {
-        assertCaseSensitiveRegexMatche("ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞß", "[WORD]");
-        assertCaseInsensitiveRegexMatche("abcdefghijklmnopqrstuvwxyzàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþß", "[WORD]");
-        assertCaseSensitiveRegexMatche("ABCDEFGHIJKLMNOPQRSTUVwxyzàáâãäåæçèéêëìÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞß", "[Word]");
-        assertCaseInsensitiveRegexMatche("abcdefghijklmnopqrsTUVWXYZÀÁÂÃÄÅÆÇÈéêëìíîïðñòóôõöøùúûüýþß", "[Word]");
-        assertCaseSensitiveRegexMatche("abcdefghijklmnopqrstuvwxyzàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ", "[word]");
-        assertCaseInsensitiveRegexMatche("ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞß", "[word]");
-    }
-
-    private String assertCaseInsensitiveRegexMatche(String example, String pattern) {
+    private void assertCaseInsensitiveRegexMatche(String example, String pattern) {
         String regex = service.toRegex(pattern, false);
         assertTrue(Pattern.compile(regex).matcher(example).matches());
-        return regex;
     }
 
-    private String assertCaseSensitiveRegexMatche(String example, String pattern) {
-        String regex = service.toRegex(pattern, true);
-        assertTrue(Pattern.compile(regex).matcher(example).matches());
-        return regex;
+
+    private void assertMatches(String example, String regex) {
+        Matcher matcher = Pattern.compile(regex).matcher(example);
+        assertTrue(String.format("Regex %s won't match %s", regex, example), matcher.matches());
     }
 
-    private void assertCaseInsensitiveContain(String pattern, String... ranges) {
+    private void assertNoMatches(String example, String regex) {
+        Matcher matcher = Pattern.compile(regex).matcher(example);
+        assertFalse(String.format("Regex %s match %s", regex, example), matcher.matches());
+    }
+
+    private void testCaseInsensitivePattern(String example, String pattern) {
         String regex = service.toRegex(pattern, false);
-        for (String range : ranges) {
-            assertTrue(regex + " must contain " + range, regex.contains(range));
-        }
-    }
-
-    private void assertCaseSensitiveContain(String pattern, String... ranges) {
-        String regex = service.toRegex(pattern, true);
-        for (String range : ranges) {
-            assertTrue(regex + " must contain " + range, regex.contains(range));
-        }
+        assertEquals(regex, service.toRegex(pattern, true));
+        assertMatches(example, regex);
     }
 }

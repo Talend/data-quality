@@ -19,9 +19,7 @@ import java.util.regex.Pattern;
  */
 public class Hiragana extends ChainResponsibilityHandler {
 
-    public static final String range = "\\u3041-\\u3096||\\u3099-\\u309F";
-
-    private Pattern pattern = Pattern.compile("[" + range + "]");
+    private Pattern pattern = Pattern.compile("[\\u3041-\\u3096||\\u3099-\\u309F]");
 
     /*
      * (non-Javadoc)

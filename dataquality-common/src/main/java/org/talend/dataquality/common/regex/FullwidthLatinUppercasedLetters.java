@@ -19,9 +19,7 @@ import java.util.regex.Pattern;
  */
 public class FullwidthLatinUppercasedLetters extends ChainResponsibilityHandler {
 
-    public static final String range = "\\uFF21-\\uFF3A";
-
-    private Pattern pattern = Pattern.compile("[" + range + "]");
+    private Pattern pattern = Pattern.compile("[\\uFF21-\\uFF3A]");
 
     /*
      * (non-Javadoc)

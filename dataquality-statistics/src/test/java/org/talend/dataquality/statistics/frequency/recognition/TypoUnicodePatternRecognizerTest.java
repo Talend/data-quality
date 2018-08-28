@@ -157,7 +157,7 @@ public class TypoUnicodePatternRecognizerTest {
                 TypoUnicodePatternRecognizer.withCase().getValuePattern(str).toArray()[0]);
 
     }
-    
+
     @Test
     public void testMixLatinChinese() {
 

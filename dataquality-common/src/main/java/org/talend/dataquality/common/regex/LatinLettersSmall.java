@@ -15,16 +15,14 @@ package org.talend.dataquality.common.regex;
 import java.util.regex.Pattern;
 
 /**
- * Regex replacement for latin characters "abcdefghijklmnopqrstuvwxyzàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ"
+ * Regex replacement for latin characters "abcdefghijklmnopqrstuvwxyzàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿß"
  * 
  * @author mzhao
  *
  */
 public class LatinLettersSmall extends ChainResponsibilityHandler {
 
-    public static final String range = "\\u0061-\\u007a|\\u00E0-\\u00F6|\\u00F8-\\u00FF";
-
-    private Pattern pattern = Pattern.compile("[" + range + "]");
+    private Pattern pattern = Pattern.compile("[\\u0061-\\u007a|\\u00DF-\\u00F6|\\u00F8-\\u00FF]");
 
     /*
      * (non-Javadoc)
