@@ -45,11 +45,7 @@ public class SemanticMaskerFunctionFactory {
         if (cat != null) {
             try {
                 function = (Function<String>) cat.getFunctionType().getClazz().newInstance();
-                if (cat.getParameter() == null) {
-                    function.parse("X", true, null); //$NON-NLS-1$
-                } else {
-                    function.parse(cat.getParameter(), true, null);
-                }
+                function.parse(cat.getParameter(), true, null);
                 function.setKeepFormat(true);
             } catch (InstantiationException e) {
                 LOGGER.debug(e.getMessage(), e);

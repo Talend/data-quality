@@ -88,7 +88,7 @@ public class MaskAddress extends Function<String> {
     @Override
     public void parse(String extraParameter, boolean keepNullValues, Random rand) {
         super.parse(extraParameter, keepNullValues, rand);
-        if (!ERROR_MESSAGE.equals(parameters[0])) // If only one element, it means that it's a path and not a list of size >= 2
+        if (parameters != null && parameters.length > 0 && !ERROR_MESSAGE.equals(parameters[0])) // If only one element, it means that it's a path and not a list of size >= 2
             for (String element : parameters) {
                 keys.add(element.toUpperCase());
             }
