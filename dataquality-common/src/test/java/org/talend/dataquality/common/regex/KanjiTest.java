@@ -133,9 +133,11 @@ public class KanjiTest {
         Kanji kanji = new Kanji();
         FullwidthLatinLowercasedLetters fullwidthLatinLowercasedLetters = new FullwidthLatinLowercasedLetters();
         kanji.linkSuccessor(fullwidthLatinLowercasedLetters);
+
         String input = "⺀々〇〡〻㐀一豈ab123"; //$NON-NLS-1$
         String handleRequest = kanji.handleRequest(input);
-        Assert.assertEquals("CCCCCCCCab123", handleRequest); //$NON-NLS-1$
+        // Non-letter kanji must not be recognized as 'C'
+        Assert.assertEquals("⺀々〇〡〻㐀CCab123", handleRequest); //$NON-NLS-1$
     }
 
 }

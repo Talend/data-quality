@@ -43,7 +43,7 @@ public class ReplaceNumericIntegerTest {
     public void testNullParameter() {
         rni.parse(null, false, new Random(42));
         output = rni.generateMaskedRow(input);
-        assertEquals(830, output);
+        assertEquals(38, output);
     }
 
     @Test

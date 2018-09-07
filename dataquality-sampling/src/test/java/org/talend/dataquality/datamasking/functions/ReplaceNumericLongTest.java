@@ -43,7 +43,7 @@ public class ReplaceNumericLongTest {
     public void testEmptyParameter() {
         rnl.parse(" ", false, new Random(42));
         output = rnl.generateMaskedRow(input);
-        assertEquals(output, 830);
+        assertEquals(output, 38);
     }
 
     @Test

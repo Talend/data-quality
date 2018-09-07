@@ -14,12 +14,14 @@ package org.talend.dataquality.common.regex;
 
 import java.util.regex.Pattern;
 
+import org.talend.dataquality.common.pattern.CharPatternToRegexEnum;
+
 /**
  * DOC talend class global comment. Detailled comment
  */
 public class Kanji extends ChainResponsibilityHandler {
 
-    private Pattern pattern = Pattern.compile("[\\p{script=Han}]");
+    private Pattern pattern = Pattern.compile(CharPatternToRegexEnum.KANJI.getPattern());
 
     /*
      * (non-Javadoc)

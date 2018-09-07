@@ -50,7 +50,7 @@ public class ReplaceNumericStringTest {
     public void testEmptyParameter() {
         rns.parse(" ", false, new Random(42));
         output = rns.generateMaskedRow(input);
-        assertEquals("abc830def", output); //$NON-NLS-1$
+        assertEquals("abc038def", output); //$NON-NLS-1$
     }
 
     @Test

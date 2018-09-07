@@ -50,7 +50,7 @@ public class ReplaceFirstCharsStringTest {
     public void testDummyGood() {
         rfcs.parse("7", false, new Random(42));
         output = rfcs.generateMaskedRow(input);
-        assertEquals("830807", output);
+        assertEquals("038405", output);
     }
 
     @Test

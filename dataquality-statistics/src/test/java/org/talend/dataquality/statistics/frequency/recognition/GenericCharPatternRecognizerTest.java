@@ -59,7 +59,7 @@ public class GenericCharPatternRecognizerTest {
         checkPattern(chars, replChars, true, recognizer);
 
         // Assert incomplete when the chars including a none-ascii character "ィ".
-        checkPattern("abcィd", "aaaKa", true, recognizer);
+        checkPattern("abcィd", "aaaka", true, recognizer);
 
         // Assert incomplete when the chars including a none-ascii character "-".
         checkPattern("abc-d", "aaa-a", true, recognizer);

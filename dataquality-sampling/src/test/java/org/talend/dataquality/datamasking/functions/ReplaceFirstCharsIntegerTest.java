@@ -36,14 +36,14 @@ public class ReplaceFirstCharsIntegerTest {
     public void testGood() {
         rfci.parse("3", false, new Random(42));
         output = rfci.generateMaskedRow(input);
-        assertEquals(830456, output); // $NON-NLS-1$
+        assertEquals(38456, output); // $NON-NLS-1$
     }
 
     @Test
     public void testDummyGood() {
         rfci.parse("154", false, new Random(42));
         output = rfci.generateMaskedRow(input);
-        assertEquals(830807, output); // $NON-NLS-1$
+        assertEquals(38405, output); // $NON-NLS-1$
     }
 
     @Test

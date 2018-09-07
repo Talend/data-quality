@@ -34,7 +34,7 @@ public class ReplaceLastCharsStringTest {
     public void testGood() {
         rlcs.parse("3", false, new Random(42));
         output = rlcs.generateMaskedRow(input);
-        assertEquals(output, "123830");
+        assertEquals(output, "123038");
     }
 
     @Test
@@ -48,6 +48,6 @@ public class ReplaceLastCharsStringTest {
     public void testDummyGood() {
         rlcs.parse("7", false, new Random(42));
         output = rlcs.generateMaskedRow(input);
-        assertEquals(output, "830807");
+        assertEquals(output, "038405");
     }
 }

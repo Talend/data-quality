@@ -14,6 +14,8 @@ package org.talend.dataquality.common.regex;
 
 import java.util.regex.Pattern;
 
+import org.talend.dataquality.common.pattern.CharPatternToRegexEnum;
+
 /**
  * Regex replacement for latin characters "0123456789"
  * 
@@ -22,7 +24,7 @@ import java.util.regex.Pattern;
  */
 public class LatinAsciiDigits extends ChainResponsibilityHandler {
 
-    private Pattern pattern = Pattern.compile("[\\u0030-\\u0039]");
+    private Pattern pattern = Pattern.compile(CharPatternToRegexEnum.DIGIT.getPattern());
 
     /*
      * (non-Javadoc)

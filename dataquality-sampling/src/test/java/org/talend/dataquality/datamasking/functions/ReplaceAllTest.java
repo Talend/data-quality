@@ -69,7 +69,7 @@ public class ReplaceAllTest {
     public void testNoParameter() {
         ra.parse(" ", false, new Random(42));
         output = ra.generateMaskedRow(input);
-        assertEquals("a30ma rnq 7", output); //$NON-NLS-1$
+        assertEquals("ñ38ñï xài 9", output); //$NON-NLS-1$
     }
 
 }

@@ -14,12 +14,14 @@ package org.talend.dataquality.common.regex;
 
 import java.util.regex.Pattern;
 
+import org.talend.dataquality.common.pattern.CharPatternToRegexEnum;
+
 /**
  * DOC talend class global comment. Detailled comment
  */
 public class FullwidthLatinUppercasedLetters extends ChainResponsibilityHandler {
 
-    private Pattern pattern = Pattern.compile("[\\uFF21-\\uFF3A]");
+    private Pattern pattern = Pattern.compile(CharPatternToRegexEnum.FULLWIDTH_UPPER_LATIN.getPattern());
 
     /*
      * (non-Javadoc)

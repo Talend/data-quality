@@ -48,7 +48,7 @@ public class GenerateUniquePhoneNumberGermanyTest {
     public void testInvalid() {
         // without a number
         output = gng.generateMaskedRow("35686");
-        assertEquals("42445", output);
+        assertEquals("34647", output);
         gng.setKeepInvalidPattern(true);
         // with a letter
         output = gng.generateMaskedRow("35686");

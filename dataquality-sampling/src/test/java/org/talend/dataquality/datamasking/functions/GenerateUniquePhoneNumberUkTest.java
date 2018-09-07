@@ -48,7 +48,7 @@ public class GenerateUniquePhoneNumberUkTest {
     public void testInvalid() {
         // without a number
         output = gnu.generateMaskedRow("35686");
-        assertEquals("42445", output);
+        assertEquals("34647", output);
         gnu.setKeepInvalidPattern(true);
         // with a letter
         output = gnu.generateMaskedRow("35686");

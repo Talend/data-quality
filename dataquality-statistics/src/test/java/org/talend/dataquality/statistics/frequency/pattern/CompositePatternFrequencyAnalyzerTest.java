@@ -39,10 +39,10 @@ public class CompositePatternFrequencyAnalyzerTest {
         CompositePatternFrequencyAnalyzer analyzer = new CompositePatternFrequencyAnalyzer();
 
         Map<String, Locale> patternString1 = analyzer.getValuePatternSet("abcd1234ィゥェ中国");
-        Assert.assertEquals(Collections.singleton("aaaa9999KKKCC"), patternString1.keySet());
+        Assert.assertEquals(Collections.singleton("aaaa9999kkkCC"), patternString1.keySet());
 
         Map<String, Locale> patternString4 = analyzer.getValuePatternSet("2008-01-01");
-        Assert.assertEquals(new HashSet<String>(Arrays.asList(new String[] { "yyyy-MM-dd" })), patternString4.keySet());
+        Assert.assertEquals(new HashSet<>(Arrays.asList(new String[] { "yyyy-MM-dd" })), patternString4.keySet());
 
         Map<String, Locale> patternString5 = analyzer.getValuePatternSet("2008-1月-01");
         Assert.assertEquals(Collections.singleton("9999-9C-99"), patternString5.keySet());

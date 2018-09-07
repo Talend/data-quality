@@ -34,13 +34,13 @@ public class ReplaceLastCharsIntegerTest {
     public void testGood() {
         rlci.parse("3", false, new Random(42));
         output = rlci.generateMaskedRow(input).toString();
-        assertEquals(output, "123830"); //$NON-NLS-1$
+        assertEquals(output, "123038"); //$NON-NLS-1$
     }
 
     @Test
     public void testDummyGood() {
         rlci.parse("7", false, new Random(42));
         output = rlci.generateMaskedRow(input).toString();
-        assertEquals(output, "830807"); //$NON-NLS-1$
+        assertEquals(output, "38405"); //$NON-NLS-1$
     }
 }

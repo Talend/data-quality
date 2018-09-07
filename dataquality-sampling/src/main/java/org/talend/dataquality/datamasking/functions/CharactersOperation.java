@@ -14,6 +14,8 @@ package org.talend.dataquality.datamasking.functions;
 
 import java.util.Random;
 
+import org.talend.dataquality.common.pattern.TextPatternUtil;
+
 /**
  * @author jteuladedenantes
  * 
@@ -92,14 +94,7 @@ public abstract class CharactersOperation<T> extends Function<T> {
             return c;
         if (charToReplace != null)
             return charToReplace;
-        if (Character.isDigit(c))
-            return Character.forDigit(rnd.nextInt(9), 10);
-        if (Character.isUpperCase(c))
-            return UPPER.charAt(rnd.nextInt(26));
-        if (Character.isLowerCase(c))
-            return LOWER.charAt(rnd.nextInt(26));
-        return c;
-
+        return TextPatternUtil.replaceCharacter(c, rnd);
     }
 
     /**

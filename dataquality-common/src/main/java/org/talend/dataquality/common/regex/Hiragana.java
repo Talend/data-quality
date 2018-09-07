@@ -14,12 +14,14 @@ package org.talend.dataquality.common.regex;
 
 import java.util.regex.Pattern;
 
+import org.talend.dataquality.common.pattern.CharPatternToRegexEnum;
+
 /**
  * DOC talend class global comment. Detailled comment
  */
 public class Hiragana extends ChainResponsibilityHandler {
 
-    private Pattern pattern = Pattern.compile("[\\u3041-\\u3096||\\u3099-\\u309F]");
+    private Pattern pattern = Pattern.compile(CharPatternToRegexEnum.UPPER_HIRAGANA.getPattern());
 
     /*
      * (non-Javadoc)

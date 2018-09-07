@@ -14,12 +14,14 @@ package org.talend.dataquality.common.regex;
 
 import java.util.regex.Pattern;
 
+import org.talend.dataquality.common.pattern.CharPatternToRegexEnum;
+
 /**
  * DOC talend class global comment. Detailled comment
  */
 public class Hangul extends ChainResponsibilityHandler {
 
-    private Pattern pattern = Pattern.compile("[\\uAC00-\\uD7AF]");
+    private Pattern pattern = Pattern.compile(CharPatternToRegexEnum.HANGUL.getPattern());
 
     /*
      * (non-Javadoc)

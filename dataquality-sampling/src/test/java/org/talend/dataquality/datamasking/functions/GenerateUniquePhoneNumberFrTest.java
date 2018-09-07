@@ -51,7 +51,7 @@ public class GenerateUniquePhoneNumberFrTest {
     public void testInvalid() {
         // without a number
         output = gnf.generateMaskedRow("35686");
-        assertEquals("30807", output);
+        assertEquals("38405", output);
         gnf.setKeepInvalidPattern(true);
         // with a letter
         output = gnf.generateMaskedRow("35686");

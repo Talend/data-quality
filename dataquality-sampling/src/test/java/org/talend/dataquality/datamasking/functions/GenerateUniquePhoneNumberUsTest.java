@@ -1,6 +1,7 @@
 package org.talend.dataquality.datamasking.functions;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import java.util.Locale;
 import java.util.Random;
@@ -88,7 +89,7 @@ public class GenerateUniquePhoneNumberUsTest {
         gnu.setKeepInvalidPattern(false);
         // with two 1 at the fifth and the sixth position
         output = gnu.generateMaskedRow("465 311 9856");
-        assertEquals("308 075 2722", output);
+        assertEquals("384 055 8932", output);
     }
 
     @Test

@@ -34,7 +34,7 @@ public class KeepFirstCharsLongTest {
     public void testGood() {
         kfag.parse("3", false, new Random(42));
         output = kfag.generateMaskedRow(input).toString();
-        assertEquals(output, "123830"); //$NON-NLS-1$
+        assertEquals(output, "123038"); //$NON-NLS-1$
     }
 
     @Test

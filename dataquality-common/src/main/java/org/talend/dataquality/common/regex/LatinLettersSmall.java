@@ -14,15 +14,17 @@ package org.talend.dataquality.common.regex;
 
 import java.util.regex.Pattern;
 
+import org.talend.dataquality.common.pattern.CharPatternToRegexEnum;
+
 /**
- * Regex replacement for latin characters "abcdefghijklmnopqrstuvwxyzàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ"
+ * Regex replacement for latin characters "abcdefghijklmnopqrstuvwxyzàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿß"
  * 
  * @author mzhao
  *
  */
 public class LatinLettersSmall extends ChainResponsibilityHandler {
 
-    private Pattern pattern = Pattern.compile("[\\u0061-\\u007a|\\u00E0-\\u00F6|\\u00F8-\\u00FF]");
+    private Pattern pattern = Pattern.compile(CharPatternToRegexEnum.LOWER_LATIN.getPattern());
 
     /*
      * (non-Javadoc)

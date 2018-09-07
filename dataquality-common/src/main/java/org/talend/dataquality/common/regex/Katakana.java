@@ -14,12 +14,14 @@ package org.talend.dataquality.common.regex;
 
 import java.util.regex.Pattern;
 
+import org.talend.dataquality.common.pattern.CharPatternToRegexEnum;
+
 /**
  * DOC talend class global comment. Detailled comment
  */
 public class Katakana extends ChainResponsibilityHandler {
 
-    private Pattern pattern = Pattern.compile("[\\u30A1-\\u30FA|\\uFF66-\\uFF9F]");
+    private Pattern pattern = Pattern.compile(CharPatternToRegexEnum.UPPER_KATAKANA.getPattern());
 
     /*
      * (non-Javadoc)

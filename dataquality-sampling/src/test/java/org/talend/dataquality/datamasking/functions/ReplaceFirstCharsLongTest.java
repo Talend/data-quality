@@ -36,14 +36,14 @@ public class ReplaceFirstCharsLongTest {
     public void testGood() {
         rfcl.parse("3", false, new Random(42));
         output = rfcl.generateMaskedRow(input);
-        assertEquals(830456L, output); // $NON-NLS-1$
+        assertEquals(38456, output); // $NON-NLS-1$
     }
 
     @Test
     public void testDummyGood() {
         rfcl.parse("7", false, new Random(42));
         output = rfcl.generateMaskedRow(input);
-        assertEquals(830807L, output); // $NON-NLS-1$
+        assertEquals(38405, output); // $NON-NLS-1$
     }
 
     @Test

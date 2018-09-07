@@ -34,7 +34,7 @@ public class KeepFirstCharsIntegerTest {
     public void testGood() {
         kfag.parse("3", false, new Random(42));
         output = kfag.generateMaskedRow(input);
-        assertEquals(123830, output); // $NON-NLS-1$
+        assertEquals(123038, output); // $NON-NLS-1$
     }
 
     @Test
