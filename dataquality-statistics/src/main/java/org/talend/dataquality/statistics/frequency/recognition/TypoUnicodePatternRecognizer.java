@@ -112,7 +112,6 @@ public abstract class TypoUnicodePatternRecognizer extends AbstractPatternRecogn
             result.setResult(Collections.singleton(stringToRecognize), false);
             return result;
         }
-        boolean isComplete = true;
         // convert the string to recognize into a char array, in order to use Character class.
         char[] ca = stringToRecognize.toCharArray();
         // Initialize the patternSeq String builder to a new StringBuilder as it is a new String to Recognize.
@@ -135,11 +134,10 @@ public abstract class TypoUnicodePatternRecognizer extends AbstractPatternRecogn
             }
             if (loopStart == runningPos) {
                 patternSeq.append(ca[loopStart]);
-                isComplete = false;
                 runningPos++;
             }
         }
-        result.setResult(Collections.singleton(patternSeq.toString()), isComplete);
+        result.setResult(Collections.singleton(patternSeq.toString()), true);
         return result;
     }
 
