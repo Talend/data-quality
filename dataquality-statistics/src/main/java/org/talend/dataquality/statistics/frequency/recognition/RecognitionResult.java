@@ -41,9 +41,9 @@ public class RecognitionResult {
     }
 
     /**
-     * Whether the given string is recognized completely
+     * Whether the recognition is complete and should stop in a composite recognizer.
      * 
-     * @return true if the recognition complete.
+     * @return true if the recognition pattern match with the Pattern Recognizer used.
      */
     public boolean isComplete() {
         return isComplete;
