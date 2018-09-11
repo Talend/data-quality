@@ -350,7 +350,6 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
         try {
             final IndexSearcher searcher = mgr.acquire();
             final IndexReader reader = searcher.getIndexReader();
-            Document doc = reader.document(0);
             Term catTerm = new Term(DictionarySearcher.F_CATID, catId);
             Query catQuery = new TermQuery(catTerm);
             TopDocs topDocs;

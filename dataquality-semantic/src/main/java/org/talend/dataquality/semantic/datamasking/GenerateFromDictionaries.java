@@ -15,7 +15,6 @@ package org.talend.dataquality.semantic.datamasking;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -44,17 +43,14 @@ public class GenerateFromDictionaries extends Function<String> {
 
     @Override
     protected String doGenerateMaskedField(String t) {
-        if (valuesInDictionaries == null) {
-            if (dictionarySnapshot != null) {
-                Map<String, DQCategory> meta = dictionarySnapshot.getMetadata();
-                DQCategory cat = dictionarySnapshot.getMetadata().get(semanticCategoryId);
-                valuesInDictionaries = new ArrayList<>();
-                if (cat != null) {
-                    if (!cat.getModified()) {
-                        valuesInDictionaries.addAll(getValuesFromIndex(dictionarySnapshot.getSharedDataDict()));
-                    } else {
-                        valuesInDictionaries.addAll(getValuesFromIndex(dictionarySnapshot.getCustomDataDict()));
-                    }
+        if (valuesInDictionaries == null && dictionarySnapshot != null) {
+            DQCategory cat = dictionarySnapshot.getMetadata().get(semanticCategoryId);
+            valuesInDictionaries = new ArrayList<>();
+            if (cat != null) {
+                if (!cat.getModified()) {
+                    valuesInDictionaries.addAll(getValuesFromIndex(dictionarySnapshot.getSharedDataDict()));
+                } else {
+                    valuesInDictionaries.addAll(getValuesFromIndex(dictionarySnapshot.getCustomDataDict()));
                 }
             }
         }

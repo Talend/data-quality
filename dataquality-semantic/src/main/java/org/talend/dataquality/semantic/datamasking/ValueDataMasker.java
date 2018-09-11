@@ -18,7 +18,6 @@ import java.util.List;
 import org.talend.dataquality.datamasking.functions.Function;
 import org.talend.dataquality.datamasking.semantic.ReplaceCharacterHelper;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
-import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
 import org.talend.dataquality.semantic.snapshot.StandardDictionarySnapshotProvider;
@@ -81,15 +80,14 @@ public class ValueDataMasker implements Serializable {
                 : CategoryRegistryManager.getInstance().getCategoryMetadataByName(semanticCategory);
 
         if (category != null) {
-            if (dictionarySnapshot == null) {
-                dictionarySnapshot = new StandardDictionarySnapshotProvider().get();
-            }
+            DictionarySnapshot dictionary = dictionarySnapshot != null ? dictionarySnapshot
+                    : new StandardDictionarySnapshotProvider().get();
             if (category.getCompleteness()) {
-                semanticQualityAnalyzer = new SemanticQualityAnalyzer(dictionarySnapshot, new String[] {});
+                semanticQualityAnalyzer = new SemanticQualityAnalyzer(dictionary, new String[] {});
             }
 
             if (this.function instanceof GenerateFromDictionaries) {
-                ((GenerateFromDictionaries) function).setDictionarySnapshot(dictionarySnapshot);
+                ((GenerateFromDictionaries) function).setDictionarySnapshot(dictionary);
             }
         }
     }
