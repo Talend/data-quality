@@ -1,6 +1,6 @@
 package org.talend.dataquality.common.pattern;
 
-public class CharPatternToRegexConstants {
+class CharPatternToRegexConstants {
 
     static final String DIGIT = "([\\x{30}-\\x{39}])";
 

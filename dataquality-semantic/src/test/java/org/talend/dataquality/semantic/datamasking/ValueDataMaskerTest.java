@@ -341,8 +341,8 @@ public class ValueDataMaskerTest extends CategoryRegistryManagerAbstract {
             // custom dictionary
             put(new String[] { "true", "NEW_CAT_NAME", "string" }, "false");
             put(new String[] { "false", "NEW_CAT_NAME", "string" }, "false");
-            put(new String[] { "TRUE", "NEW_CAT_NAME", "string" }, "VKFZ");
-            put(new String[] { "FALSE", "NEW_CAT_NAME", "string" }, "VKFZZ");
+            put(new String[] { "TRUE", "NEW_CAT_NAME", "string" }, "LÄÇÚ");
+            put(new String[] { "FALSE", "NEW_CAT_NAME", "string" }, "LÄÇÚZ");
         }
     };
 
@@ -422,7 +422,7 @@ public class ValueDataMaskerTest extends CategoryRegistryManagerAbstract {
             masker.getFunction().setRandom(new Random(AllSemanticTests.RANDOM_SEED));
             masker.getFunction().setKeepEmpty(true);
             String maskedValue = masker.maskValue(inputValue);
-            assertEquals("Test faild on [" + inputValue + "]", EXPECTED_MASKED_VALUES_EXIST.get(input), maskedValue);
+            assertEquals("Test failed on [" + inputValue + "]", EXPECTED_MASKED_VALUES_EXIST.get(input), maskedValue);
         }
         holder.deleteDataDictDocuments(Collections.singletonList(newDoc));
     }

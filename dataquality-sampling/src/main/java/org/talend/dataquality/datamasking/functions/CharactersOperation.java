@@ -109,7 +109,7 @@ public abstract class CharactersOperation<T> extends Function<T> {
      * @param the character c to ckeck
      * @return true if c type is ok
      */
-    protected boolean isGoodType(Integer c) {
+    protected boolean isGoodType(Integer codePoint) {
         return true;
     }
 

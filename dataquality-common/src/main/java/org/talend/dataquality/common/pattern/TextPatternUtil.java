@@ -15,8 +15,7 @@ public class TextPatternUtil {
      */
     public static String findPattern(String stringToRecognize) {
         StringBuilder sb = new StringBuilder();
-        int n = stringToRecognize.length();
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < stringToRecognize.length(); i++) {
             Integer codePoint = stringToRecognize.codePointAt(i);
             sb.append(Character.toChars(findReplaceCodePoint(codePoint)));
             if (Character.isHighSurrogate(stringToRecognize.charAt(i)))
@@ -43,9 +42,9 @@ public class TextPatternUtil {
     public static Integer replaceCharacter(Integer codePointToReplace, Random random) {
         for (CharPatternToRegexEnum charPatternToRegexEnum : CharPatternToRegexEnum.values()) {
             if (charPatternToRegexEnum.contains(codePointToReplace)) {
-                int length = charPatternToRegexEnum.getSize();
+                int length = charPatternToRegexEnum.getCodePointSize();
                 int position = random.nextInt(length);
-                return charPatternToRegexEnum.getCodePoint(position);
+                return charPatternToRegexEnum.getCodePointAt(position);
             }
         }
         return codePointToReplace;

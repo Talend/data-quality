@@ -66,27 +66,32 @@ public enum CharPatternToRegexEnum {
         codePointList = new ArrayList<>();
 
         for (String subPattern : pattern.substring(1, pattern.length() - 1).split("\\|")) {
-            if (subPattern.contains("-")) {
+            if (isInterval(subPattern)) {
                 String[] startEnd = subPattern.split("-");
-                Integer start = getCodePoint(startEnd[0].substring(1));
-                Integer end = getCodePoint(startEnd[1].substring(0, startEnd[1].length() - 1));
+                Integer start = getCodePointAt(startEnd[0].substring(1));
+                Integer end = getCodePointAt(startEnd[1].substring(0, startEnd[1].length() - 1));
                 for (int i = start; i <= end; i++) {
-                    if (codePointSet.contains(i))
-                        throw new IllegalArgumentException("Pattern " + subPattern + " is in conflict with another pattern");
-                    codePointSet.add(i);
-                    codePointList.add(i);
+                    fillSetAndList(i, subPattern);
                 }
             } else {
-                Integer codePoint = getCodePoint(subPattern);
-                if (codePointSet.contains(codePoint))
-                    throw new IllegalArgumentException("Pattern " + subPattern + " is in conflict with another pattern");
-                codePointSet.add(codePoint);
-                codePointList.add(codePoint);
+                Integer codePoint = getCodePointAt(subPattern);
+                fillSetAndList(codePoint, subPattern);
             }
         }
     }
 
-    private Integer getCodePoint(String s) {
+    private void fillSetAndList(int i, String subPattern) {
+        if (codePointSet.contains(i))
+            throw new IllegalArgumentException("Pattern " + subPattern + " is in conflict with another pattern");
+        codePointSet.add(i);
+        codePointList.add(i);
+    }
+
+    private boolean isInterval(String subPattern) {
+        return subPattern.contains("-");
+    }
+
+    private Integer getCodePointAt(String s) {
         return Integer.parseInt(s.substring(3, s.length() - 1), 16);
     }
 
@@ -98,15 +103,15 @@ public enum CharPatternToRegexEnum {
         return pattern;
     }
 
-    public boolean contains(Integer c) {
-        return codePointSet.contains(c);
+    public boolean contains(Integer codePoint) {
+        return codePointSet.contains(codePoint);
     }
 
-    public Integer getCodePoint(int position) {
+    public Integer getCodePointAt(int position) {
         return codePointList.get(position);
     }
 
-    public int getSize() {
+    public int getCodePointSize() {
         return codePointList.size();
     }
 }

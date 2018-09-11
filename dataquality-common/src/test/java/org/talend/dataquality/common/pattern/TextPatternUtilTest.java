@@ -6,11 +6,17 @@ import static org.junit.Assert.assertTrue;
 import java.util.Random;
 import java.util.regex.Pattern;
 
+import org.junit.Before;
 import org.junit.Test;
 
 public class TextPatternUtilTest {
 
-    private int globalCount = 0;
+    private int globalCount;
+
+    @Before
+    public void init() {
+        globalCount = 0;
+    }
 
     @Test
     public void testFindPattern() {
@@ -21,6 +27,7 @@ public class TextPatternUtilTest {
         checkPattern("とうきょう", "HHHhH");
         checkPattern("서울", "GG");
         checkPattern("北京", "CC");
+        checkPattern("\uD840\uDC00", "C");
     }
 
     private void checkPattern(String input, String expectedOutput) {
@@ -31,46 +38,39 @@ public class TextPatternUtilTest {
     public void replaceCharacterLowerLatin() {
         Random random = new Random();
         CharPatternToRegexEnum charPatternToRegexEnum = CharPatternToRegexEnum.LOWER_LATIN;
-        int start = globalCount;
         replaceCharMatch((int) 'a', (int) 'z', charPatternToRegexEnum, random);
         replaceCharMatch((int) 'ß', (int) 'ö', charPatternToRegexEnum, random);
         replaceCharMatch((int) 'ø', (int) 'ÿ', charPatternToRegexEnum, random);
-        int end = globalCount;
-        assertEquals(String.format("Pattern %s has a size issue", charPatternToRegexEnum), end - start,
-                charPatternToRegexEnum.getSize());
+        assertEquals(String.format("Pattern %s has a size issue", charPatternToRegexEnum), globalCount,
+                charPatternToRegexEnum.getCodePointSize());
     }
 
     @Test
     public void replaceCharacterUpperLatin() {
         Random random = new Random();
         CharPatternToRegexEnum charPatternToRegexEnum = CharPatternToRegexEnum.UPPER_LATIN;
-        int start = globalCount;
         replaceCharMatch((int) 'A', (int) 'Z', charPatternToRegexEnum, random);
         replaceCharMatch((int) 'À', (int) 'Ö', charPatternToRegexEnum, random);
         replaceCharMatch((int) 'Ø', (int) 'Þ', charPatternToRegexEnum, random);
-        int end = globalCount;
-        assertEquals(String.format("Pattern %s has a size issue", charPatternToRegexEnum), end - start,
-                charPatternToRegexEnum.getSize());
+        assertEquals(String.format("Pattern %s has a size issue", charPatternToRegexEnum), globalCount,
+                charPatternToRegexEnum.getCodePointSize());
     }
 
     @Test
     public void replaceCharacterLowerHiragana() {
         Random random = new Random();
         CharPatternToRegexEnum charPatternToRegexEnum = CharPatternToRegexEnum.LOWER_HIRAGANA;
-        int start = globalCount;
         int[] characters = { 0x3041, 0x3043, 0x3045, 0x3047, 0x3049, 0x3063, 0x3083, 0x3085, 0x3087, 0x308E, 0x3095, 0x3096 };
         for (int position : characters)
             replaceCharMatch(position, charPatternToRegexEnum, random);
-        int end = globalCount;
-        assertEquals(String.format("Pattern %s has a size issue", charPatternToRegexEnum), end - start,
-                charPatternToRegexEnum.getSize());
+        assertEquals(String.format("Pattern %s has a size issue", charPatternToRegexEnum), globalCount,
+                charPatternToRegexEnum.getCodePointSize());
     }
 
     @Test
     public void replaceCharacterUpperHiragana() {
         Random random = new Random();
         CharPatternToRegexEnum charPatternToRegexEnum = CharPatternToRegexEnum.UPPER_HIRAGANA;
-        int start = globalCount;
         int[] characters = { 0x3042, 0x3044, 0x3046, 0x3048, 0x3084, 0x3086 };
         for (int position : characters)
             replaceCharMatch(position, charPatternToRegexEnum, random);
@@ -79,32 +79,28 @@ public class TextPatternUtilTest {
         replaceCharMatch(0x3064, 0x3082, charPatternToRegexEnum, random);
         replaceCharMatch(0x3088, 0x308D, charPatternToRegexEnum, random);
         replaceCharMatch(0x308F, 0x3094, charPatternToRegexEnum, random);
-        int end = globalCount;
-        assertEquals(String.format("Pattern %s has a size issue", charPatternToRegexEnum), end - start,
-                charPatternToRegexEnum.getSize());
+        assertEquals(String.format("Pattern %s has a size issue", charPatternToRegexEnum), globalCount,
+                charPatternToRegexEnum.getCodePointSize());
     }
 
     @Test
     public void replaceCharacterLowerKatakana() {
         Random random = new Random();
         CharPatternToRegexEnum charPatternToRegexEnum = CharPatternToRegexEnum.LOWER_KATAKANA;
-        int start = globalCount;
         int[] characters = { 0x30A1, 0x30A3, 0x30A5, 0x30A7, 0x30A9, 0x30C3, 0x30E3, 0x30E5, 0x30E7, 0x30EE, 0x30F5, 0x30F6 };
         for (int position : characters)
             replaceCharMatch(position, charPatternToRegexEnum, random);
 
         replaceCharMatch(0x31F0, 0x31FF, charPatternToRegexEnum, random);
         replaceCharMatch(0xFF67, 0xFF6F, charPatternToRegexEnum, random);
-        int end = globalCount;
-        assertEquals(String.format("Pattern %s has a size issue", charPatternToRegexEnum), end - start,
-                charPatternToRegexEnum.getSize());
+        assertEquals(String.format("Pattern %s has a size issue", charPatternToRegexEnum), globalCount,
+                charPatternToRegexEnum.getCodePointSize());
     }
 
     @Test
     public void replaceCharacterUpperKatakana() {
         Random random = new Random();
         CharPatternToRegexEnum charPatternToRegexEnum = CharPatternToRegexEnum.UPPER_KATAKANA;
-        int start = globalCount;
         int[] characters = { 0x30A2, 0x30A4, 0x30A6, 0x30A8, 0x30E4, 0x30E6, 0xFF66 };
         for (int position : characters)
             replaceCharMatch(position, charPatternToRegexEnum, random);
@@ -115,16 +111,14 @@ public class TextPatternUtilTest {
         replaceCharMatch(0x30EF, 0x30F4, charPatternToRegexEnum, random);
         replaceCharMatch(0x30F7, 0x30FA, charPatternToRegexEnum, random);
         replaceCharMatch(0xFF71, 0xFF9D, charPatternToRegexEnum, random);
-        int end = globalCount;
-        assertEquals(String.format("Pattern %s has a size issue", charPatternToRegexEnum), end - start,
-                charPatternToRegexEnum.getSize());
+        assertEquals(String.format("Pattern %s has a size issue", charPatternToRegexEnum), globalCount,
+                charPatternToRegexEnum.getCodePointSize());
     }
 
     @Test
     public void replaceCharacterKanji() {
         Random random = new Random();
         CharPatternToRegexEnum charPatternToRegexEnum = CharPatternToRegexEnum.KANJI;
-        int start = globalCount;
         replaceCharMatch(0x4E00, 0x9FEF, charPatternToRegexEnum, random);
         replaceCharMatch(0x3400, 0x4DB5, charPatternToRegexEnum, random); // Extension A
         replaceCharMatch(0x20000, 0x2A6D6, charPatternToRegexEnum, random); // Extension B
@@ -143,20 +137,29 @@ public class TextPatternUtilTest {
         replaceCharMatch(0x3021, 0x3029, charPatternToRegexEnum, random); // Symbol and punctuation added for TDQ-11343
         replaceCharMatch(0x3038, 0x303B, charPatternToRegexEnum, random); // Symbol and punctuation added for TDQ-11343
 
-        int end = globalCount;
-        assertEquals(String.format("Pattern %s has a size issue", charPatternToRegexEnum), end - start,
-                charPatternToRegexEnum.getSize());
+        assertEquals(String.format("Pattern %s has a size issue", charPatternToRegexEnum), globalCount,
+                charPatternToRegexEnum.getCodePointSize());
     }
 
     @Test
     public void replaceCharacterHangul() {
         Random random = new Random();
         CharPatternToRegexEnum charPatternToRegexEnum = CharPatternToRegexEnum.HANGUL;
-        int start = globalCount;
         replaceCharMatch(0xAC00, 0xD7AF, charPatternToRegexEnum, random);
-        int end = globalCount;
-        assertEquals(String.format("Pattern %s has a size issue", charPatternToRegexEnum), end - start,
-                charPatternToRegexEnum.getSize());
+        assertEquals(String.format("Pattern %s has a size issue", charPatternToRegexEnum), globalCount,
+                charPatternToRegexEnum.getCodePointSize());
+    }
+
+    @Test
+    public void replaceUnrecognizedCharacters() {
+        Random random = new Random();
+        String input = "@&+-/_";
+        for (int i = 0; i < input.length(); i++) {
+            Integer codePoint = input.codePointAt(i);
+            Integer replaceCodePoint = TextPatternUtil.replaceCharacter(codePoint, random);
+            String errorMessage = "Character " + input.charAt(i) + " does not have the codepoint " + replaceCodePoint;
+            assertTrue(errorMessage, codePoint == replaceCodePoint);
+        }
     }
 
     private void replaceCharMatch(Integer codePoint, CharPatternToRegexEnum charPatternToRegexEnum, Random random) {
@@ -170,8 +173,8 @@ public class TextPatternUtilTest {
             Integer output = TextPatternUtil.replaceCharacter(codePoint, random);
             String correspondingString = String.valueOf(Character.toChars(output));
             globalCount++;
-            assertTrue(String.format("Pattern %s won't match %s", pattern, correspondingString),
-                    pattern.matcher(String.valueOf(correspondingString)).find());
+            String errorMessage = String.format("Pattern %s won't match %s", pattern, correspondingString);
+            assertTrue(errorMessage, pattern.matcher(correspondingString).find());
         }
     }
 }
