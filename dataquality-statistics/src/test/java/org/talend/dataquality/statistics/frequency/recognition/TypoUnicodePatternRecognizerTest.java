@@ -194,7 +194,6 @@ public class TypoUnicodePatternRecognizerTest {
 
     @Test
     public void testArabic() {
-        // Arabic text fro the Coran. The text is read from right to left and the pattern from left to right.
         String str = "ومنذ العمل بنظام التحكيم الدولي في مصر عام 1994 خسرت"
                 + " القاهرة 76 قضية من إجمالي 78 قضية مع مستثمرين أجانب.";
         RecognitionResult result = TypoUnicodePatternRecognizer.noCase().recognize(str);
