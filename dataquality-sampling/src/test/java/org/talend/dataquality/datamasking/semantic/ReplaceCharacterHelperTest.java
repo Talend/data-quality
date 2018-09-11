@@ -24,13 +24,17 @@ public class ReplaceCharacterHelperTest {
     @Test
     public void testReplaceCharacters() {
         assertEquals("", ReplaceCharacterHelper.replaceCharacters("", new Random()));
-        String replaceCharacters = ReplaceCharacterHelper.replaceCharacters("HelloWord", new Random(42));
-        assertTrue(replaceCharacters.length() == 9); //$NON-NLS-1$
+        String input = "HelloWord";
+        String replaceCharacters = ReplaceCharacterHelper.replaceCharacters(input, new Random(42));
+        assertTrue(replaceCharacters.length() == input.length()); //$NON-NLS-1$
+        assertTrue(replaceCharacters.codePoints().count() == input.codePoints().count());
+    }
 
-        replaceCharacters = ReplaceCharacterHelper.replaceCharacters("He𠀐𠀑Woあい", new Random(42));
-        assertTrue(replaceCharacters.length() == 10);
-        assertTrue(replaceCharacters.codePoints().count() == 8);
-        assertTrue(replaceCharacters.contains("𠀐𠀑"));
+    @Test
+    public void replaceSurrogate() {
+        String input = "He𠀐𠀑Woあい";
+        String replaceCharacters = ReplaceCharacterHelper.replaceCharacters(input, new Random(42));
+        assertTrue(replaceCharacters.codePoints().count() == input.codePoints().count());
     }
 
 }

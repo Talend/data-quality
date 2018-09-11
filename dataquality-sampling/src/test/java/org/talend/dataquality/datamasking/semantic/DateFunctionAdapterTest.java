@@ -41,7 +41,7 @@ public class DateFunctionAdapterTest {
         assertEquals("2015/05/23 22:25:11", function.generateMaskedRow("2015/6/15 10:00:00"));
         assertEquals("14.2.1999", function.generateMaskedRow("22.3.1999"));
         assertEquals("5000*24*70", function.generateMaskedRow("2015*11*15")); // replace chars when no date pattern is applicable
-        assertEquals("Vbrs-Kqc-260", function.generateMaskedRow("Vkfz-Zps-550"));
+        assertEquals("Læýu-Ìqë-260", function.generateMaskedRow("Vkfz-Zps-550"));
     }
 
 }

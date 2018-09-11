@@ -38,10 +38,10 @@ public enum CharPatternToRegexEnum {
     private String pattern;
 
     // Useful for quick contain
-    private Set<Character> characterSet;
+    private Set<Integer> codePointSet;
 
     // Useful for quick get
-    private List<Character> characterList;
+    private List<Integer> codePointList;
 
     private static final Map<Character, CharPatternToRegexEnum> lookup = new HashMap<>();
 
@@ -62,28 +62,32 @@ public enum CharPatternToRegexEnum {
     }
 
     private void buildCharacters(String pattern) {
-        characterSet = new HashSet<>();
-        characterList = new ArrayList<>();
+        codePointSet = new HashSet<>();
+        codePointList = new ArrayList<>();
 
         for (String subPattern : pattern.substring(1, pattern.length() - 1).split("\\|")) {
             if (subPattern.contains("-")) {
                 String[] startEnd = subPattern.split("-");
-                char start = getChar(startEnd[0]);
-                char end = getChar(startEnd[1]);
+                Integer start = getCodePoint(startEnd[0].substring(1));
+                Integer end = getCodePoint(startEnd[1].substring(0, startEnd[1].length() - 1));
                 for (int i = start; i <= end; i++) {
-                    characterSet.add((char) i);
-                    characterList.add((char) i);
+                    if (codePointSet.contains(i))
+                        throw new IllegalArgumentException("Pattern " + subPattern + " is in conflict with another pattern");
+                    codePointSet.add(i);
+                    codePointList.add(i);
                 }
             } else {
-                char character = getChar(subPattern);
-                characterSet.add(character);
-                characterList.add(character);
+                Integer codePoint = getCodePoint(subPattern);
+                if (codePointSet.contains(codePoint))
+                    throw new IllegalArgumentException("Pattern " + subPattern + " is in conflict with another pattern");
+                codePointSet.add(codePoint);
+                codePointList.add(codePoint);
             }
         }
     }
 
-    private char getChar(String s) {
-        return (char) Integer.parseInt(s.substring(2), 16);
+    private Integer getCodePoint(String s) {
+        return Integer.parseInt(s.substring(3, s.length() - 1), 16);
     }
 
     public Character getReplaceChar() {
@@ -94,15 +98,15 @@ public enum CharPatternToRegexEnum {
         return pattern;
     }
 
-    public boolean contains(char c) {
-        return characterSet.contains(c);
+    public boolean contains(Integer c) {
+        return codePointSet.contains(c);
     }
 
-    public char getCharacter(int position) {
-        return characterList.get(position);
+    public Integer getCodePoint(int position) {
+        return codePointList.get(position);
     }
 
     public int getSize() {
-        return characterList.size();
+        return codePointList.size();
     }
 }

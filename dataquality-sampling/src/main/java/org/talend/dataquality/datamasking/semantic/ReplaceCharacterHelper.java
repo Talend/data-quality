@@ -3,7 +3,7 @@ package org.talend.dataquality.datamasking.semantic;
 import java.util.Random;
 
 import org.apache.commons.lang.StringUtils;
-import org.talend.dataquality.datamasking.functions.Function;
+import org.talend.dataquality.common.pattern.TextPatternUtil;
 
 public class ReplaceCharacterHelper {
 
@@ -13,16 +13,10 @@ public class ReplaceCharacterHelper {
         } else {
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < input.length(); i++) {
-                char ch = input.charAt(i);
-                if (Character.isUpperCase(ch)) {
-                    sb.append(Function.UPPER.charAt(rnd.nextInt(26)));
-                } else if (Character.isLowerCase(ch)) {
-                    sb.append(Function.LOWER.charAt(rnd.nextInt(26)));
-                } else if (Character.isDigit(ch)) {
-                    sb.append(rnd.nextInt(10));
-                } else {
-                    sb.append(ch);
-                }
+                Integer codePoint = input.codePointAt(i);
+                sb.append(Character.toChars(TextPatternUtil.replaceCharacter(codePoint, rnd)));
+                if (Character.isHighSurrogate(input.charAt(i)))
+                    i++;
             }
             return sb.toString();
         }
