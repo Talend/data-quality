@@ -47,7 +47,6 @@ import org.talend.dataquality.statistics.type.DataTypeEnum;
  * Some examples :
  * <br>
  * <li>"A character is NOT a Word" will have the following pattern : [Char] [word] [word] [WORD] [char] [Word]</li>
- * <li>"someWordsINwORDS" will have the following pattern : [word][Word][WORD][wORD]</li>
  * <li>"Example123@protonmail.com" will have the following pattern : [Word][number]@[word].[word]</li>
  * <li>"anotherExample8@yopmail.com" will have the following pattern : [word][Word][digit]@[word].[word]</li>
  * <li>"袁 花木蘭88" will have the following pattern : [Ideogram] [IdeogramSeq][number]</li>
