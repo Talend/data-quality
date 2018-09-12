@@ -28,6 +28,8 @@ public class TextPatternUtilTest {
         checkPattern("서울", "GG");
         checkPattern("北京", "CC");
         checkPattern("\uD840\uDC00", "C");
+        checkPattern("\uD840\uDC40\uD840\uDFD3\uD841\uDC01\uD840\uDFD3", "CCCC");
+
     }
 
     private void checkPattern(String input, String expectedOutput) {

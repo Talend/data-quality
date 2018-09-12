@@ -37,4 +37,11 @@ public class ReplaceCharacterHelperTest {
         assertTrue(replaceCharacters.codePoints().count() == input.codePoints().count());
     }
 
+    @Test
+    public void replaceSurrogates() {
+        String input = "\uD840\uDC40\uD840\uDFD3\uD841\uDC01\uD840\uDFD3";
+        String replaceCharacters = ReplaceCharacterHelper.replaceCharacters(input, new Random(42));
+        assertTrue(replaceCharacters.codePoints().count() == input.codePoints().count());
+    }
+
 }

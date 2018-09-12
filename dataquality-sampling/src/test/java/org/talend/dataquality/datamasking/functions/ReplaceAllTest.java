@@ -40,6 +40,13 @@ public class ReplaceAllTest {
     }
 
     @Test
+    public void testSurrogate() {
+        ra.parse("", false, new Random(42));
+        output = ra.generateMaskedRow("\uD840\uDC40\uD840\uDFD3\uD841\uDC01\uD840\uDFD3");
+        assertEquals(4, output.codePoints().count()); //$NON-NLS-1$
+    }
+
+    @Test
     public void testEmpty() {
         ra.setKeepEmpty(true);
         output = ra.generateMaskedRow("");

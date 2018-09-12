@@ -81,12 +81,9 @@ public abstract class CharactersOperation<T> extends Function<T> {
         int endAux = Math.max(Math.min(endIndex, strCPCount - endNumberToKeep), 0);
         sb.append(str, 0, str.offsetByCodePoints(0, beginAux));
         if (!toRemove) {
-            String stringToReplace = str.substring(beginAux, endAux);
-            for (int i = 0; i < stringToReplace.length(); i++) {
-                Integer codePoint = stringToReplace.codePointAt(i);
+            for (int i = beginAux; i < endAux; i++) {
+                Integer codePoint = str.codePointAt(str.offsetByCodePoints(0, i));
                 sb.append(Character.toChars(replaceChar(codePoint)));
-                if (Character.isHighSurrogate(stringToReplace.charAt(i)))
-                    i++;
             }
         }
         sb.append(str.substring(str.offsetByCodePoints(0, endAux)));
