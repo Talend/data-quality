@@ -7,37 +7,43 @@ public class PatternMatcherTest {
 
     @Test
     public void matcherPatternDateDayFirst() {
-        Assert.assertTrue(PatternMatcher.matchCharacterPattern("08/08/2018", "dd/MM/yyyy"));
+        Assert.assertTrue(PatternMatcher.matchCharDatePattern("08/08/2018", "dd/MM/yyyy"));
     }
 
     @Test
     public void matcherPatternDateMonthFirst() {
-        Assert.assertTrue(PatternMatcher.matchCharacterPattern("08/08/2018", "MM/dd/yyyy"));
+        String input = "08/08/2018";
+        Assert.assertFalse(PatternMatcher.matchCharDatePattern(input, "99/99/9999"));
+        Assert.assertFalse(PatternMatcher.matchCharDatePattern(input, "yyyy/MM/dd"));
+        Assert.assertTrue(PatternMatcher.matchCharDatePattern(input, "MM/dd/yyyy"));
     }
 
     @Test
-    public void matcherPatternDate() {
-        Assert.assertFalse(PatternMatcher.matchCharacterPattern("08/08/2018", "yyyy/MM/dd"));
+    public void matcherPatternNotDate() {
+        Assert.assertTrue(PatternMatcher.matchCharDatePattern("32/13/2018", "99/99/9999"));
+        Assert.assertFalse(PatternMatcher.matchCharDatePattern("32/13/2018", "dd/MM/yyyy"));
     }
 
     @Test
     public void matcherPatternName() {
-        Assert.assertTrue(PatternMatcher.matchCharacterPattern("Toronto", "Aaaaaaa"));
+        Assert.assertTrue(PatternMatcher.matchCharDatePattern("Toronto", "Aaaaaaa"));
     }
 
     @Test
     public void matcherPatternEmpty() {
-        Assert.assertTrue(PatternMatcher.matchCharacterPattern("", ""));
+        Assert.assertTrue(PatternMatcher.matchCharDatePattern("", ""));
+        Assert.assertFalse(PatternMatcher.matchCharDatePattern("", "9"));
+
     }
 
     @Test
     public void matcherPatternNull() {
-        Assert.assertFalse(PatternMatcher.matchCharacterPattern(null, "whatEver"));
+        Assert.assertFalse(PatternMatcher.matchCharDatePattern(null, "whatEver"));
     }
 
     @Test
     public void matcherPatternNameWithNumber() {
-        Assert.assertTrue(PatternMatcher.matchCharacterPattern("Toronto1234", "Aaaaaaa9999"));
+        Assert.assertTrue(PatternMatcher.matchCharDatePattern("Toronto1234", "Aaaaaaa9999"));
     }
 
     @Test
@@ -47,7 +53,7 @@ public class PatternMatcherTest {
 
     @Test
     public void matcherPatternWordSensitive() {
-        Assert.assertTrue(PatternMatcher.matchWordPattern("Toronto1234", "[alnum]", true));
+        Assert.assertTrue(PatternMatcher.matchWordPattern("Toronto1234", "[Word][number]", true));
     }
 
     @Test
