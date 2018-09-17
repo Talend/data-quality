@@ -1,9 +1,17 @@
 package org.talend.dataquality.statistics.frequency.recognition;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.util.*;
+import org.talend.daikon.pattern.word.WordPattern;
+import org.talend.daikon.pattern.word.WordPatternToRegex;
 
 /**
  * Created by afournier on 06/04/17.
@@ -13,6 +21,131 @@ public class TypoUnicodePatternRecognizerTest {
     private TypoUnicodePatternRecognizer noCaseRecognizer = TypoUnicodePatternRecognizer.noCase();
 
     private TypoUnicodePatternRecognizer withCaseRecognizer = TypoUnicodePatternRecognizer.withCase();
+
+    @Test
+    public void checkIsoAllCodepoints() {
+
+        List<Integer> issues = new ArrayList<>();
+        for (int codePoint = 0; codePoint < Character.MAX_CODE_POINT; codePoint++) {
+            String string = String.valueOf(Character.toChars(codePoint));
+
+            String wordPattern = withCaseRecognizer.recognize(string).getPatternStringSet().iterator().next();
+            String regex = WordPatternToRegex.toRegex(wordPattern, true);
+            Pattern pattern = Pattern.compile(regex);
+            String errorMessage = "Code point " + codePoint + " (used for " + string + " hex code "
+                    + Integer.toHexString(codePoint) + ") does not match " + regex;
+            Assert.assertTrue(errorMessage, pattern.matcher(string).matches());
+            if (!pattern.matcher(string).matches())
+                issues.add(codePoint);
+        }
+        display(issues);
+
+    }
+
+    @Test
+    public void checkRangesUpper() {
+
+        List<Integer> issues = new ArrayList<>();
+        Pattern pattern = Pattern.compile(WordPattern.UPPER_CHAR.getCaseSensitive());
+        for (int codePoint = 0; codePoint < Character.MAX_CODE_POINT; codePoint++) {
+            String string = String.valueOf(Character.toChars(codePoint));
+            boolean matchPattern = pattern.matcher(string).matches();
+            boolean recognizeString = TypoUnicodePatternRecognizer.isUpper(codePoint);
+            Assert.assertTrue(matchPattern == recognizeString);
+            if (matchPattern != recognizeString)
+                issues.add(codePoint);
+        }
+
+        display(issues);
+    }
+
+    @Test
+    public void checkRangesIdeographic() {
+
+        List<Integer> issues = new ArrayList<>();
+        Pattern pattern = Pattern.compile(WordPattern.IDEOGRAM.getCaseSensitive());
+        for (int codePoint = 0; codePoint < Character.MAX_CODE_POINT; codePoint++) {
+            String string = String.valueOf(Character.toChars(codePoint));
+            boolean matchPattern = pattern.matcher(string).matches();
+            boolean recognizeString = TypoUnicodePatternRecognizer.isIdeographic(codePoint);
+            Assert.assertTrue(matchPattern == recognizeString);
+            if (matchPattern != recognizeString)
+                issues.add(codePoint);
+        }
+        display(issues);
+    }
+
+    @Test
+    public void checkRangesChar() {
+
+        List<Integer> issues = new ArrayList<>();
+        Pattern pattern = Pattern.compile(WordPattern.LOWER_CHAR.getCaseInsensitive());
+        for (int codePoint = 0; codePoint < Character.MAX_CODE_POINT; codePoint++) {
+            String string = String.valueOf(Character.toChars(codePoint));
+            boolean matchPattern = pattern.matcher(string).matches();
+            boolean recognizeString = TypoUnicodePatternRecognizer.isLetter(codePoint);
+            Assert.assertTrue(matchPattern == recognizeString);
+            if (matchPattern != recognizeString)
+                issues.add(codePoint);
+        }
+        display(issues);
+    }
+
+    @Test
+    public void checkRangesLower() {
+
+        List<Integer> issues = new ArrayList<>();
+        Pattern pattern = Pattern.compile(WordPattern.LOWER_CHAR.getCaseSensitive());
+        for (int codePoint = 0; codePoint < Character.MAX_CODE_POINT; codePoint++) {
+            String string = String.valueOf(Character.toChars(codePoint));
+            boolean matchPattern = pattern.matcher(string).matches();
+            boolean recognizeString = TypoUnicodePatternRecognizer.isLower(codePoint);
+            Assert.assertTrue(matchPattern == recognizeString);
+            if (matchPattern != recognizeString)
+                issues.add(codePoint);
+        }
+        display(issues);
+    }
+
+    @Test
+    public void checkRangesDigit() {
+
+        List<Integer> issues = new ArrayList<>();
+        Pattern pattern = Pattern.compile(WordPattern.DIGIT.getCaseSensitive());
+        for (int codePoint = 0; codePoint < Character.MAX_CODE_POINT; codePoint++) {
+            String string = String.valueOf(Character.toChars(codePoint));
+            boolean matchPattern = pattern.matcher(string).matches();
+            boolean recognizeString = TypoUnicodePatternRecognizer.isDigit(codePoint);
+            Assert.assertTrue(matchPattern == recognizeString);
+            if (matchPattern != recognizeString)
+                issues.add(codePoint);
+        }
+        display(issues);
+    }
+
+    private void display(List<Integer> issues) {
+        if (CollectionUtils.isEmpty(issues))
+            return;
+        int start = issues.get(0).intValue();
+        for (int i = 1; i < issues.size(); i++) {
+            if (issues.get(i).intValue() == issues.get(i - 1).intValue() + 1) {
+                if (i == issues.size() - 1)
+                    System.out.print(start + " " + Integer.toHexString(start) + "  -  " + issues.get(i).intValue() + " "
+                            + Integer.toHexString(issues.get(i).intValue()) + " (" + (issues.get(i).intValue() - start + 1)
+                            + " codepoints)\n");
+            } else {
+                System.out.print(start + " " + Integer.toHexString(start) + "  -  " + issues.get(i - 1).intValue() + " "
+                        + Integer.toHexString(issues.get(i - 1).intValue()) + " (" + (issues.get(i - 1).intValue() - start + 1)
+                        + " codepoints)\n");
+                start = issues.get(i).intValue();
+            }
+        }
+        if (start == issues.get(issues.size() - 1).intValue())
+            System.out.print(start + " " + Integer.toHexString(start) + "  -  " + start + " " + Integer.toHexString(start)
+                    + " (1 codepoint)\n");
+
+        System.out.println("Issue with " + issues.size() + " codepoints");
+    }
 
     @Test
     public void testLatinNoCase() {
@@ -76,7 +209,7 @@ public class TypoUnicodePatternRecognizerTest {
      */
     public void testJapaneseNoCase() {
         Map<String, String> str2Pattern = new HashMap<>();
-        str2Pattern.put("こんにちは123 こんにちは？你好/Hello!", "[alnum] [word]？[IdeogramSeq]/[word]!");
+        str2Pattern.put("こんにちは123 ？你好/Hello!", "こんにちは[number] ？[IdeogramSeq]/[word]!");
         str2Pattern.put("日本語123 日本語？你好/Hello!", "[alnum(CJK)] [IdeogramSeq]？[IdeogramSeq]/[word]!");
         checkPatterns(str2Pattern, noCaseRecognizer);
     }
@@ -87,7 +220,7 @@ public class TypoUnicodePatternRecognizerTest {
      */
     public void testJapaneseWithCase() {
         Map<String, String> str2Pattern = new HashMap<>();
-        str2Pattern.put("こんにちは123 こんにちは？你好/Hello!", "[word][number] [word]？[IdeogramSeq]/[Word]!");
+        str2Pattern.put("こんにちは123 ？你好/Hello!", "こんにちは[number] ？[IdeogramSeq]/[Word]!");
         str2Pattern.put("日本語123 日本語？你好/Hello!", "[IdeogramSeq][number] [IdeogramSeq]？[IdeogramSeq]/[Word]!");
         checkPatterns(str2Pattern, withCaseRecognizer);
     }
@@ -111,25 +244,14 @@ public class TypoUnicodePatternRecognizerTest {
     }
 
     @Test
-    /**
-     * Arabic does not have capital letters. The shape of letters change depending on the position in the word.
-     */
-    public void testArabic() {
-        checkPattern(
-                "ومنذ العمل بنظام التحكيم الدولي في مصر عام 1994 خسرت" + " القاهرة 76 قضية من إجمالي 78 قضية مع مستثمرين أجانب.",
-                "[word] [word] [word] [word] [word] [word] [word] [word] [number] [word] "
-                        + "[word] [number] [word] [word] [word] [number] [word] [word] [word] [word].",
+    public void testAncientGreekNoCase() {
+        checkPattern("Ἰοὺ ἰού· τὰ πάντʼ ἂν ἐξήκοι σαφῆ.", "[word] [word]· [word] [word]ʼ [word] [word] [word].",
                 noCaseRecognizer);
     }
 
     @Test
-    public void testAncientGreekNoCase() {
-        checkPattern("Ἰοὺ ἰού· τὰ πάντʼ ἂν ἐξήκοι σαφῆ.", "[word] [word]· [word] [word] [word] [word] [word].", noCaseRecognizer);
-    }
-
-    @Test
     public void testAncientGreekWithCase() {
-        checkPattern("Ἰοὺ ἰού· τὰ πάντʼ ἂν ἐξήκοι σαφῆ.", "[Word] [word]· [word] [word] [word] [word] [word].",
+        checkPattern("Ἰοὺ ἰού· τὰ πάντʼ ἂν ἐξήκοι σαφῆ.", "[Word] [word]· [word] [word]ʼ [word] [word] [word].",
                 withCaseRecognizer);
     }
 
