@@ -6,15 +6,16 @@ Bundle-Version: 6.1.0.SNAPSHOT
 Bundle-Vendor: .Talend SA.
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
-Require-Bundle: org.slf4j.api,
- org.eclipse.m2e.maven.runtime.slf4j.simple,
- org.apache.commons.io,
- org.apache.commons.lang3,
- org.apache.commons.pool,
- org.junit;resolution:=optional
 Export-Package: org.talend.dataquality.common.exception,
  org.talend.dataquality.common.inference,
  org.talend.dataquality.common.pattern,
  org.talend.dataquality.common.regex
 Import-Package: com.fasterxml.jackson.annotation;version="[2.5.3,3.0.0)",
+ org.apache.commons.io,
+ org.apache.commons.lang3,
+ org.apache.commons.pool,
+ org.apache.commons.pool.impl,
+ org.junit;version="4.11.0";resolution:=optional,
+ org.junit.runner;version="4.11.0";resolution:=optional,
+ org.junit.runners;version="4.11.0";resolution:=optional,
  org.slf4j

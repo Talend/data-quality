@@ -28,3 +28,4 @@ Import-Package: com.google.i18n.phonenumbers,
  org.junit.runners;version="4.11.0";resolution:=optional,
  org.slf4j;version="[1.7.0,2.0.0)",
  org.talend.daikon.number;version="[0.14.0,1.0.0)"
+Require-Bundle: org.talend.dataquality.common
