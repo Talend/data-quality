@@ -149,7 +149,7 @@ public abstract class TypoUnicodePatternRecognizer extends AbstractPatternRecogn
                 seqLength = exploreNextPattern(pe, ca, runningPos);
                 if (seqLength > 0) {
                     patternSeq.append(pe.getPattern(seqLength));
-                    runningPos += seqLength; // TODO why not break ?
+                    runningPos += seqLength; // Iterate through all possible patterns until all the string has been explored
                 }
             }
             if (loopStart == runningPos) {
