@@ -319,13 +319,6 @@ public abstract class TypoUnicodePatternRecognizer extends AbstractPatternRecogn
         }
     }
 
-    public boolean matchPattern(String value, String pattern) {
-        if (value == null)
-            return false;
-        Set<String> patterns = getValuePattern(value);
-        return patterns.contains(pattern);
-    }
-
     static class WithCase extends TypoUnicodePatternRecognizer {
 
         @Override
