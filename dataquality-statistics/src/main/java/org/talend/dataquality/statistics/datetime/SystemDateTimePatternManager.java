@@ -438,6 +438,14 @@ public class SystemDateTimePatternManager {
         return foundPattern.isPresent();
     }
 
+    public static Set<String> getDatePatterns() {
+        Set<String> patterns = new HashSet<>();
+        for (Map<Pattern, String> datePatternGroup : DATE_PATTERN_GROUP_LIST)
+            for (String pattern : datePatternGroup.values())
+                patterns.add(pattern);
+        return patterns;
+    }
+
     @Deprecated
     public static boolean isMatchDateTimePattern(String value, String pattern, Locale locale) {
         return findDateTimeFormatter(value, pattern, locale).isPresent();

@@ -1,23 +1,17 @@
 package org.talend.dataquality.statistics.frequency.recognition;
 
+import static org.talend.dataquality.statistics.datetime.SystemDateTimePatternManager.getDatePatterns;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.talend.dataquality.datamasking.semantic.DatePatternHelper;
-
 public class PatternMatcher {
 
-    static List<AbstractPatternRecognizer> patternRecognizerList;
+    private static List<AbstractPatternRecognizer> patternRecognizerList;
 
-    static DateTimePatternRecognizer dateTimePatternRecognizer;
-
-    static EmptyPatternRecognizer emptyPatternRecognizer;
-
-    static GenericCharPatternRecognizer genericCharPatternRecognizer;
-
-    static Set<String> datePatterns;
+    private static Set<String> datePatterns;
 
     private PatternMatcher() {
 
@@ -25,14 +19,11 @@ public class PatternMatcher {
 
     static {
         //this list should be synchronized with the one used in CompositePatternFrequencyAnalyzer
-        dateTimePatternRecognizer = new DateTimePatternRecognizer();
-        emptyPatternRecognizer = new EmptyPatternRecognizer();
-        genericCharPatternRecognizer = new GenericCharPatternRecognizer();
         patternRecognizerList = new ArrayList<>();
         patternRecognizerList.add(new EmptyPatternRecognizer());
         patternRecognizerList.add(new DateTimePatternRecognizer());
         patternRecognizerList.add(new GenericCharPatternRecognizer());
-        datePatterns = DatePatternHelper.getDatePatterns();
+        datePatterns = getDatePatterns();
     }
 
     public static boolean matchCharDatePattern(String value, String pattern) {
@@ -44,7 +35,7 @@ public class PatternMatcher {
         for (AbstractPatternRecognizer patternRecognizer : patternRecognizerList)
             patterns.addAll(patternRecognizer.getValuePattern(value));
 
-        // --- a value that match a date pattern but with a non-date pattern must not match
+        // --- a value matching both a date pattern and a char pattern should not match with the char pattern
         if (!isDatePattern(pattern) && containsDatePattern(patterns))
             return false;
 

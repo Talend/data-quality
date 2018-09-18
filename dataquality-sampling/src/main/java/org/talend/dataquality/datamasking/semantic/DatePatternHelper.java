@@ -15,12 +15,10 @@ package org.talend.dataquality.datamasking.semantic;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
@@ -85,13 +83,5 @@ public class DatePatternHelper {
             }
         }
         return StringUtils.EMPTY;
-    }
-
-    public static Set<String> getDatePatterns() {
-        Set<String> patterns = new HashSet<>();
-        for (Map<Pattern, String> datePatternGroup : DATE_PATTERN_GROUP_LIST)
-            for (String pattern : datePatternGroup.values())
-                patterns.add(pattern);
-        return patterns;
     }
 }
