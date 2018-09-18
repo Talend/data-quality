@@ -48,22 +48,22 @@ public class PatternMatcherTest {
 
     @Test
     public void matcherPatternWordNotSensitive() {
-        Assert.assertTrue(PatternMatcher.matchWordPattern("Toronto1234", "[alnum]"));
+        Assert.assertTrue(PatternMatcher.matchWordPattern("Toronto1234", "[alnum]", false));
     }
 
     @Test
     public void matcherPatternWordSensitive() {
-        Assert.assertTrue(PatternMatcher.matchWordPattern("Toronto1234", "[Word][number]", true));
+        Assert.assertTrue(PatternMatcher.matchWordPattern("Toronto1234", "[Word][number]"));
     }
 
     @Test
     public void matcherPatternEmail() {
-        Assert.assertTrue(PatternMatcher.matchWordPattern("user.lastname@talend.com", "[word].[word]@[word].[word]"));
+        Assert.assertTrue(PatternMatcher.matchWordPattern("user.lastname@talend.com", "[word].[word]@[word].[word]", false));
     }
 
     @Test
     public void matcherPatternSensitive() {
-        Assert.assertTrue(PatternMatcher.matchWordPattern("user.Lastname", "[word].[Word]", true));
+        Assert.assertTrue(PatternMatcher.matchWordPattern("user.Lastname", "[word].[Word]"));
     }
 
 }
