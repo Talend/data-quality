@@ -32,8 +32,9 @@ public class TypoUnicodePatternRecognizerTest {
             String wordPattern = withCaseRecognizer.recognize(string).getPatternStringSet().iterator().next();
             String regex = WordPatternToRegex.toRegex(wordPattern, true);
             Pattern pattern = Pattern.compile(regex);
-            String errorMessage = "Code point " + codePoint + " (used for " + string + " hex code "
-                    + Integer.toHexString(codePoint) + ") does not match " + regex;
+            String errorMessage = "Code point " + codePoint + " (used for " + string + " with hex code "
+                    + Integer.toHexString(codePoint) + ") does not match " + regex + " (associated wordPattern is "
+                    + (WordPattern.get(wordPattern) == null ? string : WordPattern.get(wordPattern).name()) + ")";
             Assert.assertTrue(errorMessage, pattern.matcher(string).matches());
             if (!pattern.matcher(string).matches())
                 issues.add(codePoint);

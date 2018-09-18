@@ -118,10 +118,6 @@ public abstract class TypoUnicodePatternRecognizer extends AbstractPatternRecogn
         return new NoCase();
     }
 
-    private static boolean isAlphabeticButNotIdeographic(char[] ca, int pos) {
-        return Character.isLetter(Character.codePointAt(ca, pos)) && !Character.isIdeographic(Character.codePointAt(ca, pos));
-    }
-
     /**
      * This method explore a String and extract the patterns associated to it.
      *
@@ -222,17 +218,17 @@ public abstract class TypoUnicodePatternRecognizer extends AbstractPatternRecogn
             switch (this) {
             case IDEOGRAPHIC:
                 while (pos < ca.length && isIdeographic(Character.codePointAt(ca, pos))) {
-                    pos += increaseIdeographicPos(ca[pos]);
+                    pos += getCodepointSize(ca[pos]);
                 }
                 break;
             case NUMERIC:
                 while (pos < ca.length && isDigit(Character.codePointAt(ca, pos))) {
-                    pos += increaseIdeographicPos(ca[pos]);
+                    pos += getCodepointSize(ca[pos]);
                 }
                 break;
             case UPPER_CASE:
                 while (pos < ca.length && isUpper(Character.codePointAt(ca, pos))) {
-                    pos += increaseIdeographicPos(ca[pos]);
+                    pos += getCodepointSize(ca[pos]);
                 }
                 if (pos == (start + 1)) {
                     pos += exploreSpecial(ca, pos);
@@ -240,7 +236,7 @@ public abstract class TypoUnicodePatternRecognizer extends AbstractPatternRecogn
                 break;
             case NOT_UPPER_CASE:
                 while (pos < ca.length && isLower(Character.codePointAt(ca, pos))) {
-                    pos += increaseIdeographicPos(ca[pos]);
+                    pos += getCodepointSize(ca[pos]);
                 }
                 break;
             default:
@@ -256,17 +252,17 @@ public abstract class TypoUnicodePatternRecognizer extends AbstractPatternRecogn
             switch (this) {
             case ALPHABETIC:
                 while (pos < ca.length && isLetter(Character.codePointAt(ca, pos))) {
-                    pos += increaseIdeographicPos(ca[pos]);
+                    pos += getCodepointSize(ca[pos]);
                 }
                 break;
             case IDEOGRAPHIC:
                 while (pos < ca.length && isIdeographic(Character.codePointAt(ca, pos))) {
-                    pos += increaseIdeographicPos(ca[pos]);
+                    pos += getCodepointSize(ca[pos]);
                 }
                 break;
             case NUMERIC:
                 while (pos < ca.length && isDigit(Character.codePointAt(ca, pos))) {
-                    pos += increaseIdeographicPos(ca[pos]);
+                    pos += getCodepointSize(ca[pos]);
                 }
                 break;
             default:
@@ -337,7 +333,7 @@ public abstract class TypoUnicodePatternRecognizer extends AbstractPatternRecogn
             }
         }
 
-        private int increaseIdeographicPos(char currentChar) {
+        private int getCodepointSize(char currentChar) {
             if (!Character.isSurrogate(currentChar)) {
                 return 1;
             }
@@ -367,13 +363,6 @@ public abstract class TypoUnicodePatternRecognizer extends AbstractPatternRecogn
 
     static boolean isDigit(int codePoint) {
         return Character.isDigit(codePoint);
-    }
-
-    public boolean matchPattern(String value, String pattern) {
-        if (value == null)
-            return false;
-        Set<String> patterns = getValuePattern(value);
-        return patterns.contains(pattern);
     }
 
     static class WithCase extends TypoUnicodePatternRecognizer {
