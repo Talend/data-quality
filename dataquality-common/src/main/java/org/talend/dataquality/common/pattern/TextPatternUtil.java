@@ -2,6 +2,8 @@ package org.talend.dataquality.common.pattern;
 
 import java.util.Random;
 
+import org.talend.daikon.pattern.character.CharPattern;
+
 /**
  * Helper class for text pattern recognition
  */
@@ -25,26 +27,26 @@ public class TextPatternUtil {
     }
 
     private static Integer findReplaceCodePoint(Integer codePoint) {
-        for (CharPatternToRegexEnum charPatternToRegexEnum : CharPatternToRegexEnum.values()) {
-            if (charPatternToRegexEnum.contains(codePoint))
-                return (int) charPatternToRegexEnum.getReplaceChar();
+        for (CharPattern charPattern : CharPattern.values()) {
+            if (charPattern.contains(codePoint))
+                return (int) charPattern.getReplaceChar();
         }
         return codePoint;
     }
 
     /**
-     * Replaces a character by a character in the same pattern (according to class CharPatternToRegexEnum)
+     * Replaces a character by a character in the same pattern (according to class CharPattern)
      * If the character is not present in any pattern, then it is kept at it is
      * @param codePointToReplace
      * @param random
      * @return
      */
     public static Integer replaceCharacter(Integer codePointToReplace, Random random) {
-        for (CharPatternToRegexEnum charPatternToRegexEnum : CharPatternToRegexEnum.values()) {
-            if (charPatternToRegexEnum.contains(codePointToReplace)) {
-                int length = charPatternToRegexEnum.getCodePointSize();
+        for (CharPattern charPattern : CharPattern.values()) {
+            if (charPattern.contains(codePointToReplace)) {
+                int length = charPattern.getCodePointSize();
                 int position = random.nextInt(length);
-                return charPatternToRegexEnum.getCodePointAt(position);
+                return charPattern.getCodePointAt(position);
             }
         }
         return codePointToReplace;

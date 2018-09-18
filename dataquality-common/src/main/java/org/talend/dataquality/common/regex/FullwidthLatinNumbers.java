@@ -14,14 +14,14 @@ package org.talend.dataquality.common.regex;
 
 import java.util.regex.Pattern;
 
-import org.talend.dataquality.common.pattern.CharPatternToRegexEnum;
+import org.talend.daikon.pattern.character.CharPattern;
 
 /**
  * DOC talend class global comment. Detailled comment
  */
 public class FullwidthLatinNumbers extends ChainResponsibilityHandler {
 
-    private Pattern pattern = Pattern.compile(CharPatternToRegexEnum.FULLWIDTH_DIGIT.getPattern());
+    private Pattern pattern = Pattern.compile(CharPattern.FULLWIDTH_DIGIT.getPattern());
 
     /*
      * (non-Javadoc)

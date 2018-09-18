@@ -14,14 +14,14 @@ package org.talend.dataquality.common.regex;
 
 import java.util.regex.Pattern;
 
-import org.talend.dataquality.common.pattern.CharPatternToRegexEnum;
+import org.talend.daikon.pattern.character.CharPattern;
 
 /**
  * DOC talend class global comment. Detailled comment
  */
 public class Hiragana extends ChainResponsibilityHandler {
 
-    private Pattern pattern = Pattern.compile(CharPatternToRegexEnum.UPPER_HIRAGANA.getPattern());
+    private Pattern pattern = Pattern.compile(CharPattern.UPPER_HIRAGANA.getPattern());
 
     /*
      * (non-Javadoc)

@@ -14,14 +14,14 @@ package org.talend.dataquality.common.regex;
 
 import java.util.regex.Pattern;
 
-import org.talend.dataquality.common.pattern.CharPatternToRegexEnum;
+import org.talend.daikon.pattern.character.CharPattern;
 
 /**
  * DOC talend class global comment. Detailled comment
  */
 public class FullwidthLatinUppercasedLetters extends ChainResponsibilityHandler {
 
-    private Pattern pattern = Pattern.compile(CharPatternToRegexEnum.FULLWIDTH_UPPER_LATIN.getPattern());
+    private Pattern pattern = Pattern.compile(CharPattern.FULLWIDTH_UPPER_LATIN.getPattern());
 
     /*
      * (non-Javadoc)

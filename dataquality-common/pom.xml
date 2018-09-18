@@ -18,6 +18,11 @@
 			<artifactId>jackson-annotations</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.talend.daikon</groupId>
+			<artifactId>daikon</artifactId>
+		</dependency>
+
 		<!-- apache commons -->
 		<dependency>
 			<groupId>commons-io</groupId>
