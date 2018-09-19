@@ -11,7 +11,7 @@ Export-Package: org.talend.dataquality.common.exception,
  org.talend.dataquality.common.pattern,
  org.talend.dataquality.common.regex
 Import-Package: com.fasterxml.jackson.annotation;version="[2.5.3,3.0.0)",
- org.apache.commons.io,
+ org.apache.commons.io;version="[2.2.0,3.0.0)",
  org.apache.commons.lang3,
  org.apache.commons.pool,
  org.apache.commons.pool.impl,
