@@ -18,4 +18,5 @@ Import-Package: com.fasterxml.jackson.annotation;version="[2.5.3,3.0.0)",
  org.junit;version="4.11.0";resolution:=optional,
  org.junit.runner;version="4.11.0";resolution:=optional,
  org.junit.runners;version="4.11.0";resolution:=optional,
- org.slf4j
+ org.slf4j,
+ org.talend.daikon.pattern.character;version="[0.26.0,1.0.0)"
