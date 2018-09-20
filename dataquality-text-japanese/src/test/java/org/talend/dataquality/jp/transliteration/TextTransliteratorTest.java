@@ -139,7 +139,7 @@ public class TextTransliteratorTest {
         tests.put("ラーメン", "らあめん"); // Rāmen
         tests.put("らーめん", "ら ー めん"); // Rāmen (kuromoji return tokens: ら| ー| めん)
         tests.put("モールス信号 ・・ ・ー ーー ・・・ ーーー ・ー・ ー・ー", // Mōrusu shingō ... (Morse code ...)
-                "もおるす しんごう   ゛ ゛   ゛ー   ーー   ゛ ゛ ゛   ーーー   ゛ー゛   ー゛ー");
+                "もおるす しんごう   ・ ・   ・ー   ーー   ・ ・ ・   ーーー   ・ー・   ー・ー");
 
         for (Map.Entry<String, String> t : tests.entrySet()) {
             assertEquals(t.getValue(), transliterator.transliterate(t.getKey(), TransliterateType.HIRAGANA));
