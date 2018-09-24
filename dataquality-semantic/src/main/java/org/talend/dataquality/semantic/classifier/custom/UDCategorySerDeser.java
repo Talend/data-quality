@@ -19,18 +19,19 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.net.URL;
+import java.util.List;
 
 import org.apache.commons.io.IOUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
  * DOC qiongli class global comment. Detailled comment
@@ -100,11 +101,14 @@ public class UDCategorySerDeser {
         final String content = IOUtils.toString(ins);
         IOUtils.closeQuietly(ins);
         try {
-            JSONArray array = new JSONArray(content);
-            JSONObject obj = new JSONObject();
-            obj.put("classifiers", array);
-            return readJsonFile(obj.toString());
-        } catch (JSONException e) {
+            ObjectMapper mapper = new ObjectMapper();
+            List<UserDefinedCategory> list = mapper.readValue(content, new TypeReference<List<UserDefinedCategory>>() {
+            });
+            JsonNode arrayNode = mapper.valueToTree(list);
+            ObjectNode objNode = mapper.createObjectNode();
+            objNode.set("classifiers", arrayNode);
+            return readJsonFile(objNode.toString());
+        } catch (Exception e) {
             LOGGER.trace(e.getMessage(), e);
             // try another format with "classifier" node.
             return readJsonFile(content);

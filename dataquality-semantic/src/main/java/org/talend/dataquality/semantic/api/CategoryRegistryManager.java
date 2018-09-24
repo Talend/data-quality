@@ -32,8 +32,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.daikon.multitenant.context.TenancyContextHolder;
@@ -45,6 +43,10 @@ import org.talend.dataquality.semantic.index.DictionarySearchMode;
 import org.talend.dataquality.semantic.index.LuceneIndex;
 import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
+
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Singleton class providing API for local category registry management.
@@ -226,13 +228,18 @@ public class CategoryRegistryManager {
             for (String line : IOUtils.readLines(is)) {
                 sb.append(line);
             }
-            JSONObject obj = new JSONObject(sb.toString());
-            JSONArray array = obj.getJSONArray("classifiers");
             regexRegistryFile.getParentFile().mkdirs();
             FileOutputStream fos = null;
             try {
+                ObjectMapper mapper = new ObjectMapper();
+                JsonNode objNode = mapper.readTree(sb.toString());
+                JsonNode array = objNode.get("classifiers");
                 fos = new FileOutputStream(regexRegistryFile);
-                IOUtils.write(array.toString(2), fos);
+                IOUtils.write(array.toString(), fos);
+            } catch (JsonMappingException jsonE) {
+                LOGGER.error(jsonE.getMessage(), jsonE);
+            } catch (IOException e) {
+                LOGGER.error(e.getMessage(), e);
             } finally {
                 if (fos != null) {
                     fos.close();
