@@ -12,13 +12,16 @@
 // ============================================================================
 package org.talend.dataquality.semantic;
 
-import static org.talend.dataquality.semantic.TestUtils.*;
+import static org.talend.dataquality.semantic.TestUtils.mockWithTenant;
 
 import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
-import org.junit.*;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;

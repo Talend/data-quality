@@ -90,7 +90,7 @@ public class GenerateSsnChn extends Function<String> {
         // Birth rank
         result.append(dd);
         for (int i = 0; i < 3; ++i) {
-            result.append(rnd.nextInt(10));
+            result.append(nextRandomDigit());
         }
 
         // Checksum

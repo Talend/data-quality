@@ -241,4 +241,8 @@ public abstract class Function<T> implements Serializable {
      * @return A new value after applying the function.
      */
     protected abstract T doGenerateMaskedField(T t);
+
+    protected int nextRandomDigit() {
+        return rnd.nextInt(10);
+    }
 }

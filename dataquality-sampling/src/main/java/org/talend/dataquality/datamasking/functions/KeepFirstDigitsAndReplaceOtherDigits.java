@@ -31,7 +31,7 @@ public class KeepFirstDigitsAndReplaceOtherDigits extends Function<String> {
                 if (integerParam > totalDigit)
                     totalDigit++;
                 else
-                    sb.setCharAt(i, Character.forDigit(rnd.nextInt(9), 10));
+                    sb.setCharAt(i, Character.forDigit(nextRandomDigit(), 10));
             }
         }
 

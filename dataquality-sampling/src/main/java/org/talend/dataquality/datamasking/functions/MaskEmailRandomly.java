@@ -17,8 +17,7 @@ public abstract class MaskEmailRandomly extends MaskEmail {
      * DOC qzhao Comment method "choosePropriateDomainIndex".<br>
      * 
      * Chooses a appropriate index in the replacements where the item is different with the original input<br>
-     * 
-     * @param originalDomain
+     *
      * @return
      */
     protected int chooseAppropriateDomainIndex(String str) {

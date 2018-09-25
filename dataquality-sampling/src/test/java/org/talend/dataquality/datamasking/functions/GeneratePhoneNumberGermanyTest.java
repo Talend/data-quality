@@ -12,12 +12,15 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.talend.dataquality.utils.MockRandom;
 
 /**
  * created by jgonzalez on 20 août 2015 Detailled comment
@@ -37,25 +40,26 @@ public class GeneratePhoneNumberGermanyTest {
     @Test
     public void testGood() {
         output = gpng.generateMaskedRow(null);
-        assertEquals(output, "069 30807527"); //$NON-NLS-1$
+        assertEquals("069 38405589", output); //$NON-NLS-1$
     }
 
     @Test
     public void testEmpty() {
         gpng.setKeepEmpty(true);
         output = gpng.generateMaskedRow("");
-        assertEquals("", output); //$NON-NLS-1$
+        assertEquals(output, ""); //$NON-NLS-1$
     }
 
     @Test
     public void testCheck() {
-        boolean res = true;
+        boolean res;
         gpng.setRandom(new Random());
         for (int i = 0; i < 10; ++i) {
             String tmp = gpng.generateMaskedRow(null);
-            res = (tmp.substring(0, 3).equals("030") || tmp.substring(0, 3).equals("040") || tmp.substring(0, 3).equals("069") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-                    || tmp.substring(0, 3).equals("089")); //$NON-NLS-1$
-            assertEquals("invalid pĥone number " + tmp, res, true); //$NON-NLS-1$
+            String prefix = tmp.substring(0, 3);
+            res = ("030".equals(prefix) || "040".equals(prefix) || "069".equals(prefix) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                    || "089".equals(prefix)); //$NON-NLS-1$
+            assertTrue("invalid pĥone number " + tmp, res); //$NON-NLS-1$
         }
     }
 
@@ -63,7 +67,17 @@ public class GeneratePhoneNumberGermanyTest {
     public void testNull() {
         gpng.setKeepNull(true);
         output = gpng.generateMaskedRow(null);
-        assertEquals(output, null);
+        assertNull(output);
     }
 
+    @Test
+    public void allDigitCanBeGenereted() {
+        MockRandom random = new MockRandom();
+        gpng.setRandom(random);
+        output = gpng.generateMaskedRow(null);
+        assertEquals("030 12345678", output);
+        random.setNext(1);
+        output = gpng.generateMaskedRow(null);
+        assertEquals("040 23456789", output);
+    }
 }

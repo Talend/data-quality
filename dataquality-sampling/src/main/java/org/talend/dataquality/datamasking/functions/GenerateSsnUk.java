@@ -44,11 +44,11 @@ public class GenerateSsnUk extends Function<String> {
 
     @Override
     protected String doGenerateMaskedField(String str) {
-        StringBuilder result = new StringBuilder(EMPTY_STRING);
+        StringBuilder result = new StringBuilder();
         StringBuilder prefix;
         char tmp;
         do {
-            prefix = new StringBuilder(EMPTY_STRING);
+            prefix = new StringBuilder();
             tmp = first.charAt(rnd.nextInt(20));
             prefix.append(tmp);
             tmp = second.charAt(rnd.nextInt(19));
@@ -58,7 +58,7 @@ public class GenerateSsnUk extends Function<String> {
         result.append(" "); //$NON-NLS-1$
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 2; ++j) {
-                result.append(rnd.nextInt(9));
+                result.append(nextRandomDigit());
             }
             result.append(" "); //$NON-NLS-1$
         }

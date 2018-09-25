@@ -24,27 +24,28 @@ public class GeneratePhoneNumberUS extends Function<String> {
     protected String doGenerateMaskedField(String str) {
         StringBuilder result = new StringBuilder(EMPTY_STRING);
         result.append(rnd.nextInt(8) + 2);
-        result.append(rnd.nextInt(9));
-        int tmp;
-        do {
-            tmp = rnd.nextInt(9);
-        } while (tmp == result.charAt(1) - 48);
-        result.append(tmp);
+        result.append(nextRandomDigit());
+        result.append(nextDigitWithExclusion(result.charAt(1)));
         result.append("-"); //$NON-NLS-1$
         result.append(rnd.nextInt(8) + 2);
-        result.append(rnd.nextInt(9));
+        result.append(nextRandomDigit());
         if (result.charAt(5) == 1) {
-            do {
-                tmp = rnd.nextInt(9);
-            } while (tmp == 1);
-            result.append(tmp);
+            result.append(nextDigitWithExclusion('1'));
         } else {
-            result.append(rnd.nextInt(9));
+            result.append(nextRandomDigit());
         }
         result.append("-"); //$NON-NLS-1$
         for (int i = 0; i < 4; ++i) {
-            result.append(rnd.nextInt(9));
+            result.append(nextRandomDigit());
         }
         return result.toString();
+    }
+
+    private int nextDigitWithExclusion(char exclusion) {
+        int tmp;
+        do {
+            tmp = nextRandomDigit();
+        } while (tmp == exclusion - 48);
+        return tmp;
     }
 }

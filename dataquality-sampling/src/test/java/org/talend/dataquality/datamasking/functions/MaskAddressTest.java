@@ -19,6 +19,7 @@ import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.talend.dataquality.utils.MockRandom;
 
 /**
  * created by jgonzalez on 29 juin 2015 Detailled comment
@@ -73,7 +74,7 @@ public class MaskAddressTest {
     }
 
     @Test
-    public void testParseWillNotImpactResult() throws URISyntaxException {
+    public void testParseWillNotImpactResult() {
         ma.parse("5 rue de l'oise", false, new Random(42)); //$NON-NLS-1$
         output = ma.generateMaskedRow("5 rue de l'oise"); //$NON-NLS-1$
         assertEquals("9 rue XX XXXXXX", output); //$NON-NLS-1$
@@ -87,4 +88,11 @@ public class MaskAddressTest {
         assertEquals(output, "XXX XX XXXXXXX"); //$NON-NLS-1$
     }
 
+    @Test
+    public void allDigitCanBeGenereted() {
+        String input = "9876543210 Golden State Freeway"; //$NON-NLS-1$
+        ma.setRandom(new MockRandom());
+        output = ma.generateMaskedRow(input);
+        assertEquals("1234567891 XXXXXX XXXXX Freeway", output);
+    }
 }

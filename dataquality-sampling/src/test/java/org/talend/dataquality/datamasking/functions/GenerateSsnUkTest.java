@@ -13,11 +13,14 @@
 package org.talend.dataquality.datamasking.functions;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.talend.dataquality.utils.MockRandom;
 
 /**
  * created by jgonzalez on 20 août 2015 Detailled comment
@@ -44,7 +47,7 @@ public class GenerateSsnUkTest {
     @Test
     public void testGood() {
         output = gsuk.generateMaskedRow(null);
-        assertEquals(output, "HH 08 07 52 C"); //$NON-NLS-1$
+        assertEquals("HH 84 05 58 C", output); //$NON-NLS-1$
     }
 
     @Test
@@ -55,7 +58,7 @@ public class GenerateSsnUkTest {
             String tmp = gsuk.generateMaskedRow(null);
             res = Function.UPPER.substring(0, 4).indexOf(tmp.charAt(tmp.length() - 1)) != -1
                     && !GenerateSsnUk.getForbid().contains(tmp.substring(0, 2));
-            assertEquals("wrong number : " + tmp, res, true); //$NON-NLS-1$
+            assertTrue("wrong number : " + tmp, res); //$NON-NLS-1$
         }
     }
 
@@ -63,6 +66,17 @@ public class GenerateSsnUkTest {
     public void testNull() {
         gsuk.keepNull = true;
         output = gsuk.generateMaskedRow(null);
-        assertEquals(output, null);
+        assertNull(output);
+    }
+
+    @Test
+    public void allDigitCanBeGenereted() {
+        MockRandom random = new MockRandom();
+        gsuk.setRandom(random);
+        output = gsuk.generateMaskedRow(null);
+        assertEquals("AZ 23 45 67 A", output);
+        random.setNext(3);
+        output = gsuk.generateMaskedRow(null);
+        assertEquals("RT 56 78 90 D", output);
     }
 }

@@ -25,7 +25,7 @@ public class GenerateSsnGermany extends Function<String> {
     protected String doGenerateMaskedField(String str) {
         StringBuilder result = new StringBuilder(EMPTY_STRING);
         for (int i = 0; i < 11; ++i) {
-            result.append(rnd.nextInt(9));
+            result.append(nextRandomDigit());
         }
         return result.toString();
     }

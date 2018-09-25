@@ -25,35 +25,30 @@ public class GenerateSsnUs extends Function<String> {
 
     @Override
     protected String doGenerateMaskedField(String str) {
-        StringBuilder result = new StringBuilder(EMPTY_STRING);
-        result.append(rnd.nextInt(8));
-        result.append(rnd.nextInt(9));
-        if (result.charAt(0) == '0' && result.charAt(1) == '0' || result.charAt(0) == '6' && result.charAt(1) == '6') {
-            int tmp;
-            do {
-                tmp = rnd.nextInt(9);
-            } while ((char) tmp == result.charAt(0));
-            result.append(tmp);
-        } else {
-            result.append(rnd.nextInt(9));
-        }
+        StringBuilder result = new StringBuilder();
+        result.append(generateFirstGroup());
         result.append("-"); //$NON-NLS-1$
-        result.append(rnd.nextInt(9));
-        if (result.charAt(4) == '0') {
-            result.append(rnd.nextInt(8) + 1);
-        } else {
-            result.append(rnd.nextInt(9));
-        }
+        result.append(generateSecondGroup());
         result.append("-"); //$NON-NLS-1$
-        for (int i = 0; i < 3; ++i) {
-            result.append(rnd.nextInt(9));
-        }
-        if (result.charAt(7) == '0' && result.charAt(8) == '0' && result.charAt(9) == '0') {
-            result.append(rnd.nextInt(8) + 1);
-        } else {
-            result.append(rnd.nextInt(9));
-        }
+        result.append(generateThirdGroup());
         return result.toString();
     }
 
+    private String generateFirstGroup() {
+        int firstNumber;
+        do {
+            firstNumber = rnd.nextInt(900);
+        } while (firstNumber == 0 || firstNumber == 666);
+        return String.format("%03d", firstNumber);
+    }
+
+    private String generateSecondGroup() {
+        int secondNumber = rnd.nextInt(99) + 1;
+        return String.format("%02d", secondNumber);
+    }
+
+    private String generateThirdGroup() {
+        int value = rnd.nextInt(9999) + 1;
+        return String.format("%04d", value);
+    }
 }

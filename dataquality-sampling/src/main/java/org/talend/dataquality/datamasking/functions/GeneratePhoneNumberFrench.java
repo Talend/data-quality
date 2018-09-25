@@ -25,7 +25,7 @@ public class GeneratePhoneNumberFrench extends Function<String> {
         StringBuilder result = new StringBuilder("+33 "); //$NON-NLS-1$
         result.append(rnd.nextInt(9) + 1);
         for (int i = 0; i < 8; i++) {
-            result.append(rnd.nextInt(9));
+            result.append(nextRandomDigit());
         }
         return result.toString();
     }

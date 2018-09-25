@@ -13,11 +13,13 @@
 package org.talend.dataquality.datamasking.functions;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.talend.dataquality.utils.MockRandom;
 
 /**
  * created by jgonzalez on 20 août 2015 Detailled comment
@@ -44,13 +46,21 @@ public class GenerateSsnJapanTest {
     @Test
     public void testGood() {
         output = gnj.generateMaskedRow(null);
-        assertEquals(output, "830807527228"); //$NON-NLS-1$
+        assertEquals("038405589322", output); //$NON-NLS-1$
     }
 
     @Test
     public void testNull() {
         gnj.keepNull = true;
         output = gnj.generateMaskedRow(null);
-        assertEquals(output, null);
+        assertNull(output);
+    }
+
+    @Test
+    public void allDigitCanBeGenereted() {
+        MockRandom random = new MockRandom();
+        gnj.setRandom(random);
+        output = gnj.generateMaskedRow(null);
+        assertEquals("012345678901", output);
     }
 }

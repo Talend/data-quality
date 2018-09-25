@@ -41,7 +41,7 @@ public class GeneratePhoneNumberGermany extends Function<String> {
             break;
         }
         for (int i = 0; i < 8; ++i) {
-            result.append(rnd.nextInt(9));
+            result.append(nextRandomDigit());
         }
         return result.toString();
     }

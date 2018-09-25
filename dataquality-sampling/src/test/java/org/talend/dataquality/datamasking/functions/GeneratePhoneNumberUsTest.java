@@ -13,11 +13,14 @@
 package org.talend.dataquality.datamasking.functions;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.talend.dataquality.utils.MockRandom;
 
 /**
  * created by jgonzalez on 19 août 2015 Detailled comment
@@ -44,17 +47,17 @@ public class GeneratePhoneNumberUsTest {
     @Test
     public void testGood() {
         output = gpnus.generateMaskedRow(null);
-        assertEquals(output, "730-207-5272"); //$NON-NLS-1$
+        assertEquals("738-205-5893", output); //$NON-NLS-1$
     }
 
     @Test
     public void testCheck() {
-        boolean res = true;
+        boolean res;
         gpnus.setRandom(new Random());
         for (int i = 0; i < 10; ++i) {
             String tmp = gpnus.generateMaskedRow(null);
             res = (tmp.charAt(0) != '0' && tmp.charAt(1) != tmp.charAt(2) && tmp.charAt(4) != '0');
-            assertEquals("invalid pĥone number " + tmp, res, true); //$NON-NLS-1$
+            assertTrue("invalid pĥone number " + tmp, res); //$NON-NLS-1$
         }
     }
 
@@ -62,6 +65,18 @@ public class GeneratePhoneNumberUsTest {
     public void testNull() {
         gpnus.keepNull = true;
         output = gpnus.generateMaskedRow(null);
-        assertEquals(output, null);
+        assertNull(output);
+    }
+
+    @Test
+    public void allDigitCanBeGenereted() {
+        MockRandom random = new MockRandom();
+        gpnus.setRandom(random);
+        output = gpnus.generateMaskedRow(null);
+        assertEquals("212-545-6789", output);
+        output = gpnus.generateMaskedRow(null);
+        assertEquals("412-745-6789", output);
+        output = gpnus.generateMaskedRow(null);
+        assertEquals("612-945-6789", output);
     }
 }

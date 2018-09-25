@@ -13,6 +13,8 @@
 package org.talend.dataquality.datamasking.functions;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Random;
 
@@ -54,7 +56,7 @@ public class GenerateSsnChnTest {
         for (int i = 0; i < 10; ++i) {
             String tmp = gnf.generateMaskedRow(null);
             res = !(tmp.charAt(0) == '9');
-            assertEquals("wrong number : " + tmp, res, true); //$NON-NLS-1$
+            assertTrue("wrong number : " + tmp, res); //$NON-NLS-1$
         }
     }
 
@@ -67,7 +69,7 @@ public class GenerateSsnChnTest {
             String tmp = gnf.generateMaskedRow(null);
             int yyyy = Integer.valueOf(tmp.substring(6, 10));
             res = (yyyy >= 1900 && yyyy < 2100);
-            assertEquals("wrong year : " + yyyy, res, true); //$NON-NLS-1$
+            assertTrue("wrong year : " + yyyy, res); //$NON-NLS-1$
         }
     }
 
@@ -75,6 +77,6 @@ public class GenerateSsnChnTest {
     public void testNull() {
         gnf.keepNull = true;
         output = gnf.generateMaskedRow(null);
-        assertEquals(null, output);
+        assertNull(output);
     }
 }

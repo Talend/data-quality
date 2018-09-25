@@ -12,14 +12,14 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Random;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 /**
  * created by jgonzalez on 29 juin 2015 Detailled comment
@@ -486,4 +486,5 @@ public class NumericVarianceIntegerTest {
                 .getClass().getSimpleName().equals("Integer")); //$NON-NLS-1$
         Assert.assertEquals("Current result should be Integer.MAX_VALUE but it is " + invoke.toString(), -2099999979, invoke); //$NON-NLS-1$
     }
+
 }

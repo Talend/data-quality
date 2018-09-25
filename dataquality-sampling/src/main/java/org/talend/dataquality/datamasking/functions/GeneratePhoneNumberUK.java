@@ -24,11 +24,11 @@ public class GeneratePhoneNumberUK extends Function<String> {
     protected String doGenerateMaskedField(String str) {
         StringBuilder result = new StringBuilder("020 3"); //$NON-NLS-1$
         for (int i = 0; i < 3; ++i) {
-            result.append(rnd.nextInt(9));
+            result.append(nextRandomDigit());
         }
         result.append(" "); //$NON-NLS-1$
         for (int i = 0; i < 4; ++i) {
-            result.append(rnd.nextInt(9));
+            result.append(nextRandomDigit());
         }
         return result.toString();
     }

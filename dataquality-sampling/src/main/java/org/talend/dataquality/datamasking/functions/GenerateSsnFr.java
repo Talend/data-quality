@@ -46,7 +46,7 @@ public class GenerateSsnFr extends Function<String> {
         }
         result.append(ll);
         for (int i = 0; i < 6; ++i) {
-            result.append(rnd.nextInt(9));
+            result.append(nextRandomDigit());
         }
 
         BigInteger ssn = new BigInteger(result.toString());

@@ -12,16 +12,23 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.mockito.Mockito;
+import org.talend.dataquality.utils.MockRandom;
 
 import java.util.Random;
 
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyInt;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * created by jgonzalez on 20 août 2015 Detailled comment
- *
  */
 public class GenerateSsnUsTest {
 
@@ -44,24 +51,79 @@ public class GenerateSsnUsTest {
     @Test
     public void testGood() {
         output = gsus.generateMaskedRow(null);
-        assertEquals(output, "530-80-7527"); //$NON-NLS-1$
-    }
-
-    @Test
-    public void testCheck() {
-        gsus.setRandom(new Random());
-        boolean res = true;
-        for (int i = 0; i < 10; ++i) {
-            String tmp = gsus.generateMaskedRow(null);
-            res = (tmp.charAt(0) != '9' && tmp.charAt(4) == '0' ? tmp.charAt(5) != '0' : tmp.charAt(5) != '9');
-            assertEquals("wrong number : " + tmp, res, true); //$NON-NLS-1$
-        }
+        assertEquals("530-49-7984", output); //$NON-NLS-1$
     }
 
     @Test
     public void testNull() {
         gsus.keepNull = true;
         output = gsus.generateMaskedRow(null);
-        assertEquals(output, null);
+        assertNull(output);
+    }
+
+    @Test
+    public void firstGroupCantBeTripleZero() {
+        Random random = Mockito.mock(Random.class);
+        Mockito.when(random.nextInt(anyInt())).thenReturn(0, 1);
+        gsus.setRandom(random);
+        output = gsus.generateMaskedRow(null);
+        assertThat(output).startsWith("001");
+    }
+
+    @Test
+    public void firstGroupCantBeTripleSix() {
+        Random random = Mockito.mock(Random.class);
+        Mockito.when(random.nextInt(anyInt())).thenReturn(666, 444);
+        gsus.setRandom(random);
+        output = gsus.generateMaskedRow(null);
+        assertThat(output).startsWith("444");
+    }
+
+    @Test
+    public void firstGroupCantBe9xx() {
+        MockRandom random = new MockRandom();
+        random.setNext(900);
+        gsus.setRandom(random);
+        output = gsus.generateMaskedRow(null);
+        assertThat(output).startsWith("001");
+    }
+
+    @Test
+    public void secondGroupCantBeDoubleZero() {
+        Random random = Mockito.mock(Random.class);
+        Mockito.when(random.nextInt(anyInt())).thenReturn(111, // first group
+                0);
+        gsus.setRandom(random);
+        output = gsus.generateMaskedRow(null);
+        assertThat(output).doesNotContain("-00-");
+    }
+
+    @Test
+    public void secondGroupContainsOnlyTwoDigits() {
+        MockRandom random = new MockRandom();
+        random.setNext(98);
+        gsus.setRandom(random);
+        output = gsus.generateMaskedRow(null);
+        assertThat(output.split("-")[1]).hasSize(2);
+    }
+
+    @Test
+    public void secondGroupCantBeFourZero() {
+        Random random = Mockito.mock(Random.class);
+        Mockito.when(random.nextInt(anyInt())).thenReturn(1, // first group
+                1, // second group
+                0);
+        gsus.setRandom(random);
+        output = gsus.generateMaskedRow(null);
+        assertThat(output).doesNotContain("-0000");
+    }
+
+    @Test
+    public void secondGroupContainsOnlyFourDigits() {
+        MockRandom random = new MockRandom();
+        random.setNext(9997);
+        gsus.setRandom(random);
+        output = gsus.generateMaskedRow(null);
+        assertThat(output).contains("-0001");
     }
 }

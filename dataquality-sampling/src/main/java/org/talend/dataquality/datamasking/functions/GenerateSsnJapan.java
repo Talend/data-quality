@@ -23,9 +23,9 @@ public class GenerateSsnJapan extends Function<String> {
 
     @Override
     protected String doGenerateMaskedField(String str) {
-        StringBuilder result = new StringBuilder(EMPTY_STRING);
+        StringBuilder result = new StringBuilder();
         for (int i = 0; i < 12; ++i) {
-            result.append(rnd.nextInt(9));
+            result.append(nextRandomDigit());
         }
         return result.toString();
     }

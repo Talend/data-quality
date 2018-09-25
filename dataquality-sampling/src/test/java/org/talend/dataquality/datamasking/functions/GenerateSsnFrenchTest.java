@@ -13,11 +13,15 @@
 package org.talend.dataquality.datamasking.functions;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.talend.dataquality.utils.MockRandom;
 
 /**
  * created by jgonzalez on 20 août 2015 Detailled comment
@@ -33,14 +37,15 @@ public class GenerateSsnFrenchTest {
     public void testGood() {
         gnf.setRandom(new Random(42));
         output = gnf.generateMaskedRow(null);
-        assertEquals(output, "2490145075272 83"); //$NON-NLS-1$
+        assertEquals("2490145055893 62", output); //$NON-NLS-1$
     }
 
     @Test
     public void testControlKeyWithOneDigit() {
-        gnf.setRandom(new Random(50));
+        gnf.setRandom(new Random(38));
         output = gnf.generateMaskedRow(null);
-        assertEquals(output, "2160663447007 02"); //$NON-NLS-1$
+        assertEquals('0', output.charAt(14));
+        assertEquals("2781181756480 07", output); //$NON-NLS-1$
     }
 
     @Test
@@ -57,7 +62,7 @@ public class GenerateSsnFrenchTest {
         for (int i = 0; i < 10; ++i) {
             String tmp = gnf.generateMaskedRow(null);
             res = (tmp.charAt(0) == '1' || tmp.charAt(0) == '2');
-            assertEquals("wrong number : " + tmp, res, true); //$NON-NLS-1$
+            assertTrue("wrong number : " + tmp, res); //$NON-NLS-1$
         }
     }
 
@@ -65,6 +70,14 @@ public class GenerateSsnFrenchTest {
     public void testNull() {
         gnf.keepNull = true;
         output = gnf.generateMaskedRow(null);
-        assertEquals(output, null);
+        assertNull(output);
+    }
+
+    @Test
+    public void allDigitCanBeGenereted() {
+        MockRandom random = new MockRandom();
+        gnf.setRandom(random);
+        output = gnf.generateMaskedRow(null);
+        assertEquals("1020304456789 67", output);
     }
 }
