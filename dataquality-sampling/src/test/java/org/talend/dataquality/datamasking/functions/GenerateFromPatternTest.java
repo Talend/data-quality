@@ -35,28 +35,42 @@ public class GenerateFromPatternTest {
     }
 
     @Test
-    public void testGood() {
+    public void standardPattern() {
         gfp.parameters = "aaAA99".split(","); //$NON-NLS-1$ //$NON-NLS-2$
         output = gfp.generateMaskedRow(null);
-        assertEquals(output, "ahWM07"); //$NON-NLS-1$
+        assertEquals(output, "ñjÖÛ05"); //$NON-NLS-1$
     }
 
     @Test
-    public void testGood2() {
+    public void patternWithReference() {
         gfp.parameters = "aaAA99\\1, @gmail.com".split(","); //$NON-NLS-1$ //$NON-NLS-2$
         output = gfp.generateMaskedRow(null);
-        assertEquals(output, "ahWM07@gmail.com"); //$NON-NLS-1$
+        assertEquals(output, "ñjÖÛ05@gmail.com"); //$NON-NLS-1$
     }
 
     @Test
-    public void testBad() {
+    public void patternWithReferences() {
+        gfp.parameters = "\\1aA9\\2hHkK\\3C\\4G,latin:,;japanese:,;chinese:,;korean:".split(","); //$NON-NLS-1$ //$NON-NLS-2$
+        output = gfp.generateMaskedRow(null);
+        assertEquals(output, "latin:ñT8;japanese:ょぷョル;chinese:\uD869\uDC99;korean:죿"); //$NON-NLS-1$
+    }
+
+    @Test
+    public void patternWithWrongReference() {
+        gfp.parameters = "aaAA99\\, @gmail.com".split(","); //$NON-NLS-1$ //$NON-NLS-2$
+        output = gfp.generateMaskedRow(null);
+        assertEquals(output, "ñjÖÛ05\\"); //$NON-NLS-1$
+    }
+
+    @Test
+    public void wrongPattern() {
         gfp.parameters = Function.EMPTY_STRING.split(","); //$NON-NLS-1$
         output = gfp.generateMaskedRow(null);
         assertEquals(output, Function.EMPTY_STRING);
     }
 
     @Test
-    public void testNull() {
+    public void nullPattern() {
         gfp.keepNull = true;
         output = gfp.generateMaskedRow(null);
         assertEquals(output, null);

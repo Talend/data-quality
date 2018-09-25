@@ -12,6 +12,8 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
+import org.talend.dataquality.common.pattern.TextPatternUtil;
+
 /**
  * created by jgonzalez on 17 juil. 2015 Detailled comment
  *
@@ -23,34 +25,32 @@ public class GenerateFromPattern extends Function<String> {
     @Override
     protected String doGenerateMaskedField(String str) {
         StringBuilder result = new StringBuilder(EMPTY_STRING);
-        int count = 0;
-        if (parameters != null)
-            for (int i = 0; i < parameters[0].length(); ++i, ++count) {
-                if (count < parameters[0].length()) {
-                    switch (parameters[0].charAt(count)) {
-                    case 'A':
-                        result.append(UPPER.charAt(rnd.nextInt(26)));
-                        break;
-                    case 'a':
-                        result.append(LOWER.charAt(rnd.nextInt(26)));
-                        break;
-                    case '9':
-                        result.append(rnd.nextInt(9));
-                        break;
-                    case '\\':
-                        if (parameters[0].charAt(count + 1) - 48 <= parameters.length) {
-                            result.append(parameters[parameters[0].charAt(count + 1) - 48].trim());
-                        }
-                        count++;
-                        break;
-                    default:
-                        if (!Character.isLetterOrDigit(parameters[0].charAt(count))) {
-                            result.append(parameters[0].charAt(count));
-                        }
-                        break;
-                    }
+        if (parameters == null)
+            return "";
+
+        String pattern = parameters[0];
+        for (int i = 0; i < pattern.length(); i++) {
+            int codePoint = pattern.codePointAt(i);
+            switch (codePoint) {
+            case '\\':
+                if (i == pattern.length() - 1) {
+                    result.append('\\');
+                    break;
                 }
+                char nextChar = pattern.charAt(i + 1);
+                if (nextChar > '0' && nextChar - '0' <= parameters.length) {
+                    result.append(parameters[nextChar - '0'].trim());
+                    i++;
+                } else
+                    result.append('\\');
+                break;
+            default:
+                result.append(TextPatternUtil.replacePatternCharacter(codePoint, rnd));
+                break;
             }
+            if (Character.isHighSurrogate(pattern.charAt(i)))
+                i++;
+        }
         return result.toString();
     }
 }
