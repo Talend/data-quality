@@ -107,7 +107,7 @@ public class ValueDataMaskerTest extends CategoryRegistryManagerAbstract {
 
             // 11 SSN
             put(new String[] { "728931789", MaskableCategoryEnum.US_SSN.name(), "string" }, "325151655");
-            put(new String[] { "17612 38293 28232", MaskableCategoryEnum.FR_SSN.name(), "string" }, "2210622388880 15");
+            put(new String[] { "17612 38293 28232", MaskableCategoryEnum.FR_SSN.name(), "string" }, "2210622516550 94");
             put(new String[] { "634217823", MaskableCategoryEnum.UK_SSN.name(), "string" }, "325151655");
 
             // Company
@@ -346,17 +346,12 @@ public class ValueDataMaskerTest extends CategoryRegistryManagerAbstract {
         }
     };
 
-    @InjectMocks
-    private CustomDictionaryHolder holder;
-
     /**
      * Test method for {@link org.talend.dataquality.datamasking.DataMasker#process(java.lang.Object, boolean)}.
      *
-     * @throws IllegalAccessException
-     * @throws InstantiationException
      */
     @Test
-    public void testProcess() throws InstantiationException, IllegalAccessException {
+    public void testProcess() {
 
         for (String[] input : EXPECTED_MASKED_VALUES.keySet()) {
             String inputValue = input[0];
@@ -376,8 +371,6 @@ public class ValueDataMaskerTest extends CategoryRegistryManagerAbstract {
             }
             masker.getFunction().setKeepEmpty(true);
             String maskedValue = masker.maskValue(inputValue);
-            // System.out.println(maskedValue + " expect is [" + EXPECTED_MASKED_VALUES.get(input) + "] result is "
-            // + maskedValue.equals(EXPECTED_MASKED_VALUES.get(input)));
             assertEquals("Test faild on [" + inputValue + "]", EXPECTED_MASKED_VALUES.get(input), maskedValue);
         }
     }
@@ -389,7 +382,7 @@ public class ValueDataMaskerTest extends CategoryRegistryManagerAbstract {
      * @throws InstantiationException
      */
     @Test
-    public void testProcessCustomCategory() throws InstantiationException, IllegalAccessException {
+    public void testProcessCustomCategory() {
         String mockedTenantID = this.getClass().getSimpleName() + "_CustomIndex";
         MockitoAnnotations.initMocks(this);
         mockWithTenant(mockedTenantID);
