@@ -21,7 +21,7 @@ import org.talend.daikon.pattern.character.CharPattern;
  */
 public class Hangul extends ChainResponsibilityHandler {
 
-    private Pattern pattern = Pattern.compile(CharPattern.HANGUL.getPattern());
+    private Pattern pattern = Pattern.compile(CharPattern.HANGUL.getPattern().getRegex());
 
     /*
      * (non-Javadoc)

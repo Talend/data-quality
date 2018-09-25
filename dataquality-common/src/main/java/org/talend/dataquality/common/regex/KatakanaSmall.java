@@ -21,7 +21,7 @@ import org.talend.daikon.pattern.character.CharPattern;
  */
 public class KatakanaSmall extends ChainResponsibilityHandler {
 
-    private Pattern pattern = Pattern.compile(CharPattern.LOWER_KATAKANA.getPattern());
+    private Pattern pattern = Pattern.compile(CharPattern.LOWER_KATAKANA.getPattern().getRegex());
 
     /*
      * (non-Javadoc)

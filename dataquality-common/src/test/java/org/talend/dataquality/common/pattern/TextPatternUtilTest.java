@@ -162,7 +162,7 @@ public class TextPatternUtilTest {
     }
 
     private void replaceCharMatch(Integer cpRangeStart, Integer cpRangeEnd, CharPattern charPattern, Random random) {
-        Pattern pattern = Pattern.compile(charPattern.getPattern());
+        Pattern pattern = Pattern.compile(charPattern.getPattern().getRegex());
         for (Integer codePoint = cpRangeStart; codePoint <= cpRangeEnd; codePoint++) {
             Integer output = TextPatternUtil.replaceCharacter(codePoint, random);
             String correspondingString = String.valueOf(Character.toChars(output));

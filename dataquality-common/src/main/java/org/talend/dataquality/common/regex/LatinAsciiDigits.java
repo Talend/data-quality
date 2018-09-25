@@ -24,7 +24,7 @@ import org.talend.daikon.pattern.character.CharPattern;
  */
 public class LatinAsciiDigits extends ChainResponsibilityHandler {
 
-    private Pattern pattern = Pattern.compile(CharPattern.DIGIT.getPattern());
+    private Pattern pattern = Pattern.compile(CharPattern.DIGIT.getPattern().getRegex());
 
     /*
      * (non-Javadoc)

@@ -21,7 +21,7 @@ import org.talend.daikon.pattern.character.CharPattern;
  */
 public class Kanji extends ChainResponsibilityHandler {
 
-    private Pattern pattern = Pattern.compile(CharPattern.KANJI.getPattern());
+    private Pattern pattern = Pattern.compile(CharPattern.KANJI.getPattern().getRegex());
 
     /*
      * (non-Javadoc)

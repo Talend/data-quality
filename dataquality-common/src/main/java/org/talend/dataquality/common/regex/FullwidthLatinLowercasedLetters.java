@@ -21,7 +21,7 @@ import org.talend.daikon.pattern.character.CharPattern;
  */
 public class FullwidthLatinLowercasedLetters extends ChainResponsibilityHandler {
 
-    private Pattern pattern = Pattern.compile(CharPattern.FULLWIDTH_LOWER_LATIN.getPattern());
+    private Pattern pattern = Pattern.compile(CharPattern.FULLWIDTH_LOWER_LATIN.getPattern().getRegex());
 
     /*
      * (non-Javadoc)

@@ -21,7 +21,7 @@ import org.talend.daikon.pattern.character.CharPattern;
  */
 public class HiraganaSmall extends ChainResponsibilityHandler {
 
-    private Pattern pattern = Pattern.compile(CharPattern.LOWER_HIRAGANA.getPattern());
+    private Pattern pattern = Pattern.compile(CharPattern.LOWER_HIRAGANA.getPattern().getRegex());
 
     /*
      * (non-Javadoc)
