@@ -46,7 +46,7 @@ public class GenerateBetweenStringTest {
     public void testCheck() {
         gbs.parse("0,100", false, new Random()); //$NON-NLS-1$
         boolean res = true;
-        for (int i = 0; i < 10; ++i) {
+        for (int i = 0; i < 10; i++) {
             String tmp = gbs.generateMaskedRow(null);
             Integer value = StringUtils.isBlank(tmp) ? 0 : Integer.parseInt(tmp);
             res = (value <= 100 && value >= 0);

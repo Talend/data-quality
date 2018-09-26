@@ -13,13 +13,11 @@
 package org.talend.dataquality.datamasking.functions;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Random;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.utils.MockRandom;
 
@@ -59,7 +57,7 @@ public class GenerateSsnFrenchTest {
     public void testCheck() {
         gnf.setRandom(new Random());
         boolean res = true;
-        for (int i = 0; i < 10; ++i) {
+        for (int i = 0; i < 10; i++) {
             String tmp = gnf.generateMaskedRow(null);
             res = (tmp.charAt(0) == '1' || tmp.charAt(0) == '2');
             assertTrue("wrong number : " + tmp, res); //$NON-NLS-1$
@@ -74,7 +72,7 @@ public class GenerateSsnFrenchTest {
     }
 
     @Test
-    public void allDigitCanBeGenereted() {
+    public void allDigitCanBeGenerated() {
         MockRandom random = new MockRandom();
         gnf.setRandom(random);
         output = gnf.generateMaskedRow(null);

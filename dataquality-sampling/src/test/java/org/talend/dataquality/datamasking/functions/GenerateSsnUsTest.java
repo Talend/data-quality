@@ -13,7 +13,6 @@
 package org.talend.dataquality.datamasking.functions;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.talend.dataquality.utils.MockRandom;
@@ -21,9 +20,7 @@ import org.talend.dataquality.utils.MockRandom;
 import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyInt;
 import static org.assertj.core.api.Assertions.*;
 

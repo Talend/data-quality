@@ -54,7 +54,7 @@ public class GeneratePhoneNumberUkTest {
     public void testCheck() {
         boolean res = true;
         gpnuk.setRandom(new Random());
-        for (int i = 0; i < 10; ++i) {
+        for (int i = 0; i < 10; i++) {
             String tmp = gpnuk.generateMaskedRow(null);
             res = (tmp.substring(0, 5).equals("020 3")); //$NON-NLS-1$
             assertTrue("invalid pĥone number " + tmp, res); //$NON-NLS-1$
@@ -69,7 +69,7 @@ public class GeneratePhoneNumberUkTest {
     }
 
     @Test
-    public void allDigitCanBeGenereted() {
+    public void allDigitCanBeGenerated() {
         MockRandom random = new MockRandom();
         gpnuk.setRandom(random);
         output = gpnuk.generateMaskedRow(null);

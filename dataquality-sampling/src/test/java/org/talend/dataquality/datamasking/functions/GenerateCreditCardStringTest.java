@@ -51,7 +51,7 @@ public class GenerateCreditCardStringTest {
     public void testCheck() {
         gccs.setRandom(new Random());
         boolean res = true;
-        for (int i = 0; i < 10; ++i) {
+        for (int i = 0; i < 10; i++) {
             String tmp = gccs.generateMaskedRow(null);
             res = GenerateCreditCard.luhnTest(new StringBuilder(tmp));
             assertEquals("Wrong number : " + tmp, res, true); //$NON-NLS-1$

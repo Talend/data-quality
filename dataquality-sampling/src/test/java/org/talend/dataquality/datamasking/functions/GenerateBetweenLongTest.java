@@ -46,7 +46,7 @@ public class GenerateBetweenLongTest {
         gbl.setRandom(new Random());
         gbl.parameters = "0,100".split(","); //$NON-NLS-1$ //$NON-NLS-2$
         boolean res = true;
-        for (int i = 0; i < 10; ++i) {
+        for (int i = 0; i < 10; i++) {
             long tmp = gbl.generateMaskedRow(null);
             res = (tmp <= 100 && tmp >= 0);
             assertEquals("Wrong number : " + tmp, res, true); //$NON-NLS-1$

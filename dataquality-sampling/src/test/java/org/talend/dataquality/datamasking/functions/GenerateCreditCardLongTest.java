@@ -44,7 +44,7 @@ public class GenerateCreditCardLongTest {
     public void testCheck() {
         gccl.setRandom(new Random());
         boolean res = true;
-        for (int i = 0; i < 10; ++i) {
+        for (int i = 0; i < 10; i++) {
             Long tmp = gccl.generateMaskedRow(null);
             res = GenerateCreditCard.luhnTest(new StringBuilder(tmp.toString()));
             assertEquals("Wrong number : " + tmp, res, true); //$NON-NLS-1$

@@ -77,7 +77,7 @@ public abstract class GenerateCreditCard<T2> extends Function<T2> {
             res.append(tmp);
         }
 
-        for (int i = 0; i < 10; ++i) {
+        for (int i = 0; i < 10; i++) {
             res.setCharAt(res.length() - 1, DIGITS.charAt(i));
             if (luhnTest(res)) {
                 break;
@@ -101,7 +101,7 @@ public abstract class GenerateCreditCard<T2> extends Function<T2> {
             res.append(tmp);
         }
 
-        for (int i = 0; i < 10; ++i) {
+        for (int i = 0; i < 10; i++) {
             res.setCharAt(res.length() - 1, DIGITS.charAt(i));
             if (luhnTest(res)) {
                 break;
@@ -143,7 +143,7 @@ public abstract class GenerateCreditCard<T2> extends Function<T2> {
             res.append(tmp);
         }
 
-        for (int i = 0; i < 10; ++i) {
+        for (int i = 0; i < 10; i++) {
             res.setCharAt(res.length() - 1, DIGITS.charAt(i));
             if (luhnTest(res)) {
                 break;

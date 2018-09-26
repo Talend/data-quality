@@ -30,7 +30,7 @@ public class KeepFirstDigitsAndReplaceOtherDigitsTest {
     }
 
     @Test
-    public void allDigitCanBeGenereted() {
+    public void allDigitCanBeGenerated() {
         kfag.parse("10", false, new MockRandom());
         output = kfag.generateMaskedRow("01234567899876543210");
         assertEquals("01234567890123456789", output);

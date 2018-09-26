@@ -57,7 +57,7 @@ public class GenerateSsnGermanyTest {
     }
 
     @Test
-    public void allDigitCanBeGenereted() {
+    public void allDigitCanBeGenerated() {
         MockRandom random = new MockRandom();
         gng.setRandom(random);
         output = gng.generateMaskedRow(null);

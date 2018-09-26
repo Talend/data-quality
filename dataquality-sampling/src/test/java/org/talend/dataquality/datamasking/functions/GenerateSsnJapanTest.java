@@ -57,7 +57,7 @@ public class GenerateSsnJapanTest {
     }
 
     @Test
-    public void allDigitCanBeGenereted() {
+    public void allDigitCanBeGenerated() {
         MockRandom random = new MockRandom();
         gnj.setRandom(random);
         output = gnj.generateMaskedRow(null);

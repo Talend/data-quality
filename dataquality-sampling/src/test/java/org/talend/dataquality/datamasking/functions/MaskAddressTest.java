@@ -89,7 +89,7 @@ public class MaskAddressTest {
     }
 
     @Test
-    public void allDigitCanBeGenereted() {
+    public void allDigitCanBeGenerated() {
         String input = "9876543210 Golden State Freeway"; //$NON-NLS-1$
         ma.setRandom(new MockRandom());
         output = ma.generateMaskedRow(input);

@@ -54,7 +54,7 @@ public class GeneratePhoneNumberFrenchTest {
     public void testCheck() {
         boolean res;
         gpn.setRandom(new Random());
-        for (int i = 0; i < 10; ++i) {
+        for (int i = 0; i < 10; i++) {
             String tmp = gpn.generateMaskedRow(null);
             int digit = Integer.valueOf(tmp.charAt(4) + "");
             res = (digit >= 1 && digit <= 9);
@@ -70,7 +70,7 @@ public class GeneratePhoneNumberFrenchTest {
     }
 
     @Test
-    public void allDigitCanBeGenereted() {
+    public void allDigitCanBeGenerated() {
         MockRandom random = new MockRandom();
         gpn.setRandom(random);
         output = gpn.generateMaskedRow(null);

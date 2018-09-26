@@ -54,7 +54,7 @@ public class GenerateSsnUkTest {
     public void testCheck() {
         gsuk.setRandom(new Random());
         boolean res = true;
-        for (int i = 0; i < 10; ++i) {
+        for (int i = 0; i < 10; i++) {
             String tmp = gsuk.generateMaskedRow(null);
             res = Function.UPPER.substring(0, 4).indexOf(tmp.charAt(tmp.length() - 1)) != -1
                     && !GenerateSsnUk.getForbid().contains(tmp.substring(0, 2));
@@ -70,7 +70,7 @@ public class GenerateSsnUkTest {
     }
 
     @Test
-    public void allDigitCanBeGenereted() {
+    public void allDigitCanBeGenerated() {
         MockRandom random = new MockRandom();
         gsuk.setRandom(random);
         output = gsuk.generateMaskedRow(null);

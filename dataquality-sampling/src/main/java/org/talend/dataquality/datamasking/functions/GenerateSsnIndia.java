@@ -44,7 +44,7 @@ public class GenerateSsnIndia extends Function<String> {
     protected String doGenerateMaskedField(String str) {
         StringBuilder result = new StringBuilder(EMPTY_STRING);
         result.append(1 + rnd.nextInt(9));
-        for (int i = 0; i < 10; ++i) {
+        for (int i = 0; i < 10; i++) {
             result.append(rnd.nextInt(10));
         }
 

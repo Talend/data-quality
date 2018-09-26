@@ -69,7 +69,7 @@ public class GenerateCreditCardFormatStringTest {
     public void testCheck() {
         gccfs.setRandom(new Random());
         boolean res = true;
-        for (int i = 0; i < 10; ++i) {
+        for (int i = 0; i < 10; i++) {
             String tmp = gccfs.generateMaskedRow("4120356987563"); //$NON-NLS-1$
             res = GenerateCreditCard.luhnTest(new StringBuilder(tmp));
             assertEquals("Wrong number : " + tmp, res, true); //$NON-NLS-1$

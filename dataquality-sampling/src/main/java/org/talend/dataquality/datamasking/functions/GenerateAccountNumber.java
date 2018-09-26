@@ -108,7 +108,7 @@ public abstract class GenerateAccountNumber extends Function<String> {
     protected StringBuilder generateAmericanAccountNumber(String number) {
         StringBuilder sb = new StringBuilder(number.substring(0, 9)); // $NON-NLS-1$ //
         // //$NON-NLS-2$
-        for (int i = 0; i < 10; ++i) {
+        for (int i = 0; i < 10; i++) {
             sb.append(String.valueOf(rnd.nextInt(10)));
         }
         return sb;
@@ -198,7 +198,7 @@ public abstract class GenerateAccountNumber extends Function<String> {
      */
     public StringBuilder generateIban() {
         StringBuilder sb = new StringBuilder("FR00"); //$NON-NLS-1$
-        for (int i = 0; i < 10; ++i) {
+        for (int i = 0; i < 10; i++) {
             sb.append(String.valueOf(rnd.nextInt(10)));
         }
         for (int i = 0; i < 11; ++i) {

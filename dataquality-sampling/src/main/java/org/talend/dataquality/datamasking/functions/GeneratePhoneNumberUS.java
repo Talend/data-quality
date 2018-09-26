@@ -45,7 +45,7 @@ public class GeneratePhoneNumberUS extends Function<String> {
         int tmp;
         do {
             tmp = nextRandomDigit();
-        } while (tmp == exclusion - 48);
+        } while (tmp == exclusion - '0');
         return tmp;
     }
 }

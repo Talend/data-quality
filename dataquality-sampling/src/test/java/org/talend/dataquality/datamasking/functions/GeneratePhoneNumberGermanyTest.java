@@ -54,7 +54,7 @@ public class GeneratePhoneNumberGermanyTest {
     public void testCheck() {
         boolean res;
         gpng.setRandom(new Random());
-        for (int i = 0; i < 10; ++i) {
+        for (int i = 0; i < 10; i++) {
             String tmp = gpng.generateMaskedRow(null);
             String prefix = tmp.substring(0, 3);
             res = ("030".equals(prefix) || "040".equals(prefix) || "069".equals(prefix) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -71,7 +71,7 @@ public class GeneratePhoneNumberGermanyTest {
     }
 
     @Test
-    public void allDigitCanBeGenereted() {
+    public void allDigitCanBeGenerated() {
         MockRandom random = new MockRandom();
         gpng.setRandom(random);
         output = gpng.generateMaskedRow(null);

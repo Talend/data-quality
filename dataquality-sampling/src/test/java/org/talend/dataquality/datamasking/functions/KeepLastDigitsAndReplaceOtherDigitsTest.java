@@ -46,7 +46,7 @@ public class KeepLastDigitsAndReplaceOtherDigitsTest {
     }
 
     @Test
-    public void allDigitCanBeGenereted() {
+    public void allDigitCanBeGenerated() {
         kfag.parse("10", false, new MockRandom());
         output = kfag.generateMaskedRow("01234567890123456789");
         assertEquals("98765432100123456789", output);

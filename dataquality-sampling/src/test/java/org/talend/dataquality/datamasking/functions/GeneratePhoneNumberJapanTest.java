@@ -52,9 +52,9 @@ public class GeneratePhoneNumberJapanTest {
 
     @Test
     public void testCheck() {
-        boolean res = true;
+        boolean res;
         gpnj.setRandom(new Random());
-        for (int i = 0; i < 10; ++i) {
+        for (int i = 0; i < 10; i++) {
             String tmp = gpnj.generateMaskedRow(null);
             res = (tmp.charAt(0) == '3');
             assertTrue("invalid pĥone number " + tmp, res); //$NON-NLS-1$
@@ -68,7 +68,7 @@ public class GeneratePhoneNumberJapanTest {
     }
 
     @Test
-    public void allDigitCanBeGenereted() {
+    public void allDigitCanBeGenerated() {
         MockRandom random = new MockRandom();
         gpnj.setRandom(random);
         output = gpnj.generateMaskedRow(null);
