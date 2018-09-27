@@ -54,10 +54,10 @@ public class GenerateSsnIndianTest {
     public void testCheckFirstDigit() {
         // First digit should not be a '0' in a Indian SSN
         gni.setRandom(new Random());
-        boolean res = true;
+        boolean res;
         for (int i = 0; i < 10; i++) {
             String tmp = gni.generateMaskedRow(null);
-            res = !(tmp.charAt(0) == '0');
+            res = '0' != tmp.charAt(0);
             assertTrue("wrong number : " + tmp, res); //$NON-NLS-1$
         }
     }

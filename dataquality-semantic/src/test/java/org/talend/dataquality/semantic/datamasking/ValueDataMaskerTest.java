@@ -24,7 +24,6 @@ import java.util.Random;
 
 import org.apache.commons.lang3.SerializationUtils;
 import org.junit.Test;
-import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.talend.dataquality.semantic.AllSemanticTests;
