@@ -47,7 +47,9 @@ public class UpdateComponentDefinition {
 
     private static final String COMPONENTS_FOLDER = "/components";
 
-    private static final String DQ_LIB_VERSION = "6.1.1";
+    private static final String DQ_LIB_VERSION = "6.1.1-SNAPSHOT";
+
+    private static final String DAIKON_VERSION = "0.26.1-SNAPSHOT";
 
     private static final String[] PROVIDERS = new String[] { //
             "/org.talend.designer.components.tdqprovider", //
@@ -61,6 +63,7 @@ public class UpdateComponentDefinition {
         private static final long serialVersionUID = 1L;
 
         {
+            put("daikon", DAIKON_VERSION);
             put("org.talend.dataquality.common", DQ_LIB_VERSION);
             put("org.talend.dataquality.record.linkage", DQ_LIB_VERSION);
             put("org.talend.dataquality.sampling", DQ_LIB_VERSION);
@@ -71,8 +74,6 @@ public class UpdateComponentDefinition {
             put("org.talend.dataquality.statistics", DQ_LIB_VERSION);
         }
     };
-
-    private static final boolean USE_SNAPSHOT_VERSION = true;
 
     private static void handleComponentDefinition(File f) {
         File compoDefFile = new File(f.getAbsolutePath() + "/" + f.getName() + "_java.xml");
@@ -100,14 +101,14 @@ public class UpdateComponentDefinition {
                             if (line.contains(depName)) {
                                 LOGGER.info(depName);
                                 // MODULE field
-                                line = line.replaceAll(depName + "-\\d.\\d.\\d(-SNAPSHOT)?(.jar)?\"", depName + "-"
-                                        + DEP_VERSION_MAP.get(depName) + (USE_SNAPSHOT_VERSION ? "-SNAPSHOT" : "") + "$2\"");
+                                line = line.replaceAll(depName + "-\\d\\d?.\\d\\d?.\\d\\d?(-SNAPSHOT)?(.jar)?\"",
+                                        depName + "-" + DEP_VERSION_MAP.get(depName) + "$2\"");
                                 // MVN field
-                                line = line.replaceAll(depName + "/\\d.\\d.\\d(-SNAPSHOT)?(.jar)?\"", depName + "/"
-                                        + DEP_VERSION_MAP.get(depName) + (USE_SNAPSHOT_VERSION ? "-SNAPSHOT" : "") + "$2\"");
+                                line = line.replaceAll(depName + "/\\d\\d?.\\d\\d?.\\d\\d?(-SNAPSHOT)?(.jar)?\"",
+                                        depName + "/" + DEP_VERSION_MAP.get(depName) + "$2\"");
                                 // UrlPath field
-                                line = line.replaceAll(depName + "_\\d.\\d.\\d(.SNAPSHOT)?.jar\"", depName + "_"
-                                        + DEP_VERSION_MAP.get(depName) + (USE_SNAPSHOT_VERSION ? ".SNAPSHOT" : "") + ".jar\"");
+                                line = line.replaceAll(depName + "_\\d\\d?.\\d\\d?.\\d\\d?(.SNAPSHOT)?.jar\"",
+                                        depName + "_" + DEP_VERSION_MAP.get(depName).replace('-', '.') + ".jar\"");
                             }
                         }
                         IOUtils.write(line + "\n", fos);

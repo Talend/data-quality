@@ -58,25 +58,20 @@ public class ReleaseVersionBumper {
 
     private static final String TARGET_VERSION = "6.1.1-SNAPSHOT";
 
-    private static final String DATAQUALITY_PREFIX = "dataquality.";
+    private static final String TARGET_DAIKON_VERSION = "";
 
-    private static final String SNAPSHOT_VERSION_SUFFIX = "-SNAPSHOT";
+    private static final String DAIKON_VERSION_PROPERTY_NAME = "org.talend.daikon.version";
 
     private static final String BUNDLE_VERSION_STRING = "Bundle-Version: ";
-
-    private static final String MANIFEST_SNAPSHOT_SUFFIX = ".SNAPSHOT";
 
     private XPath xPath = XPathFactory.newInstance().newXPath();
 
     private Transformer xTransformer;
 
-    private String microVersion;
-
     private ReleaseVersionBumper() throws TransformerConfigurationException, TransformerFactoryConfigurationError {
         xTransformer = TransformerFactory.newInstance().newTransformer();
         xTransformer.setOutputProperty(OutputKeys.INDENT, "yes");
         xTransformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-        microVersion = TARGET_VERSION.substring(4);
     }
 
     private void bumpPomVersion()
@@ -101,9 +96,8 @@ public class ReleaseVersionBumper {
             for (int idx = 0; idx < propertyNodes.getLength(); idx++) {
                 Node node = propertyNodes.item(idx);
                 String propertyName = node.getNodeName();
-                String propertyValue = node.getTextContent();
-                if (propertyName.startsWith(DATAQUALITY_PREFIX)) {
-                    node.setTextContent(propertyValue.substring(0, 4) + microVersion);
+                if (DAIKON_VERSION_PROPERTY_NAME.equals(propertyName) && TARGET_DAIKON_VERSION.length() >= 5) {
+                    node.setTextContent(TARGET_DAIKON_VERSION);
                 }
             }
             // re-write pom.xml file
