@@ -81,4 +81,26 @@ public class TypeTester {
         return 5;
     }
 
+    public int getTypeByName(String dataType) {
+        switch (dataType) {
+        case "numeric":
+        case "integer":
+            return 0;
+        case "long":
+            return 1;
+        case "float":
+            return 2;
+        case "double":
+        case "decimal":
+            return 3;
+        case "date":
+            return 5;
+        case "string":
+            return 4;
+        default:
+            return -1;
+
+        }
+    }
+
 }

@@ -93,8 +93,20 @@ public class ValueDataMasker implements Serializable {
     }
 
     /**
+     * ValueDataMasker constructor.
+     *
+     * @param functionName the function name selected by the user
+     * @param dataType the data type information
+     * @param semanticCategory the semantic domain information
+     * @param param extra parameters such as date time pattern list
+     */
+    public ValueDataMasker(String functionName, String dataType, String semanticCategory, String param) {
+        function = SemanticMaskerFunctionFactory.getMaskerFunctionByFunctionName(functionName, dataType, semanticCategory, param);
+    }
+
+    /**
      * mask the input value.
-     * 
+     *
      * @param input
      * @return the masked value
      */
@@ -104,5 +116,14 @@ public class ValueDataMasker implements Serializable {
         }
         // when category is null or input is valid
         return function.generateMaskedRow(input);
+    }
+
+    /**
+     * update the extra param for function
+     * 
+     * @param extraParam
+     */
+    public void resetExtraParameter(String extraParam) {
+        function.parse(extraParam, true, null);
     }
 }
