@@ -38,7 +38,7 @@ public class GenerateFromPattern extends Function<String> {
                     break;
                 }
                 char nextChar = pattern.charAt(i + 1);
-                if (nextChar > '0' && nextChar - '0' <= parameters.length) {
+                if (nextChar > '0' && nextChar - '0' < parameters.length) {
                     result.append(parameters[nextChar - '0'].trim());
                     i++;
                 } else

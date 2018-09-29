@@ -56,10 +56,17 @@ public class GenerateFromPatternTest {
     }
 
     @Test
-    public void patternWithWrongReference() {
+    public void patternWithMissingReference() {
         gfp.parameters = "aaAA99\\, @gmail.com".split(","); //$NON-NLS-1$ //$NON-NLS-2$
         output = gfp.generateMaskedRow(null);
         assertEquals(output, "ñjÖÛ05\\"); //$NON-NLS-1$
+    }
+
+    @Test
+    public void patternWithWrongReference() {
+        gfp.parameters = "aaAA99\\2, @gmail.com".split(","); //$NON-NLS-1$ //$NON-NLS-2$
+        output = gfp.generateMaskedRow(null);
+        assertEquals(output, "ñjÖÛ05\\2"); //$NON-NLS-1$
     }
 
     @Test
