@@ -44,6 +44,8 @@ public class UDCategorySerDeser {
 
     private static UserDefinedClassifier udc;
 
+    private static ObjectMapper mapper = new ObjectMapper();
+
     public static UserDefinedClassifier getRegexClassifier() throws IOException {
         if (udc == null) {
             udc = readJsonFile();
@@ -75,7 +77,7 @@ public class UDCategorySerDeser {
 
     static UserDefinedClassifier readJsonFile(InputStream inputStream) throws IOException {
         try {
-            return new ObjectMapper().readValue(inputStream, UserDefinedClassifier.class);
+            return mapper.readValue(inputStream, UserDefinedClassifier.class);
         } catch (JsonProcessingException e) {
             LOGGER.error(e.getMessage(), e);
             return null;
@@ -84,7 +86,7 @@ public class UDCategorySerDeser {
 
     static UserDefinedClassifier readJsonFile(String content) throws IOException {
         try {
-            return new ObjectMapper().readValue(content, UserDefinedClassifier.class);
+            return mapper.readValue(content, UserDefinedClassifier.class);
         } catch (JsonProcessingException e) {
             LOGGER.error(e.getMessage(), e);
             return null;
@@ -101,7 +103,6 @@ public class UDCategorySerDeser {
         final String content = IOUtils.toString(ins);
         IOUtils.closeQuietly(ins);
         try {
-            ObjectMapper mapper = new ObjectMapper();
             List<UserDefinedCategory> list = mapper.readValue(content, new TypeReference<List<UserDefinedCategory>>() {
             });
             JsonNode arrayNode = mapper.valueToTree(list);
@@ -124,7 +125,6 @@ public class UDCategorySerDeser {
      * @return
      */
     public boolean writeToJsonFile(UserDefinedClassifier userDefinedClassifier, OutputStream outputStream) {
-        ObjectMapper mapper = new ObjectMapper();
         try {
             mapper.writerWithDefaultPrettyPrinter().writeValue(outputStream, userDefinedClassifier);
             outputStream.close();

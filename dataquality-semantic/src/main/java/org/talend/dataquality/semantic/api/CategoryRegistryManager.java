@@ -122,6 +122,8 @@ public class CategoryRegistryManager {
 
     private Directory sharedKeywordDirectory;
 
+    private ObjectMapper mapper = new ObjectMapper();
+
     private CategoryRegistryManager() {
         try {
             if (usingLocalCategoryRegistry) {
@@ -231,7 +233,6 @@ public class CategoryRegistryManager {
             regexRegistryFile.getParentFile().mkdirs();
             FileOutputStream fos = null;
             try {
-                ObjectMapper mapper = new ObjectMapper();
                 JsonNode objNode = mapper.readTree(sb.toString());
                 JsonNode array = objNode.get("classifiers");
                 fos = new FileOutputStream(regexRegistryFile);
