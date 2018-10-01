@@ -36,7 +36,7 @@ import org.talend.dataquality.statistics.type.DataTypeEnum;
  * <b>When cases are important :</b>
  * <p>
  * When cases are taken into account in the detection of patterns, some variations have been introduced to the patterns
- * presented in {@link TypoUnicodePatternRecognizer}.
+ * presented in {@link WordPatternRecognizer}.
  * <br>
  * <li>[Word] : A character string beginning by a capital letter followed only by small letters.</li>
  * <li>[WORD] : A character string only composed with capital letters.</li>
@@ -77,8 +77,7 @@ import org.talend.dataquality.statistics.type.DataTypeEnum;
  * </p>
  * Created by afournier on 06/04/17.
  */
-@Deprecated
-public abstract class TypoUnicodePatternRecognizer extends AbstractPatternRecognizer {
+public abstract class WordPatternRecognizer extends AbstractPatternRecognizer {
 
     private static final Set<Integer> ADDITIONAL_IDEOGRAMS = new HashSet<>();
 
@@ -106,7 +105,7 @@ public abstract class TypoUnicodePatternRecognizer extends AbstractPatternRecogn
      *
      * @return
      */
-    public static TypoUnicodePatternRecognizer withCase() {
+    public static WordPatternRecognizer withCase() {
         return new WithCase();
     }
 
@@ -115,7 +114,7 @@ public abstract class TypoUnicodePatternRecognizer extends AbstractPatternRecogn
      *
      * @return
      */
-    public static TypoUnicodePatternRecognizer noCase() {
+    public static WordPatternRecognizer noCase() {
         return new NoCase();
     }
 
@@ -366,7 +365,7 @@ public abstract class TypoUnicodePatternRecognizer extends AbstractPatternRecogn
         return Character.isDigit(codePoint);
     }
 
-    static class WithCase extends TypoUnicodePatternRecognizer {
+    static class WithCase extends WordPatternRecognizer {
 
         @Override
         public int exploreNextPattern(PatternExplorer pe, char[] ca, int startingPos) {
@@ -374,7 +373,7 @@ public abstract class TypoUnicodePatternRecognizer extends AbstractPatternRecogn
         }
     }
 
-    static class NoCase extends TypoUnicodePatternRecognizer {
+    static class NoCase extends WordPatternRecognizer {
 
         @Override
         public int exploreNextPattern(PatternExplorer pe, char[] ca, int startingPos) {

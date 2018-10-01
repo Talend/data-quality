@@ -66,8 +66,8 @@ public class PatternMatcher {
 
     private static Set<String> getPatterns(boolean caseSensitive, String value) {
         if (caseSensitive)
-            return TypoUnicodePatternRecognizer.withCase().getValuePattern(value);
+            return WordPatternRecognizer.withCase().getValuePattern(value);
         else
-            return TypoUnicodePatternRecognizer.noCase().getValuePattern(value);
+            return WordPatternRecognizer.noCase().getValuePattern(value);
     }
 }

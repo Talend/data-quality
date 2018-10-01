@@ -16,11 +16,11 @@ import org.talend.daikon.pattern.word.WordPatternToRegex;
 /**
  * Created by afournier on 06/04/17.
  */
-public class TypoUnicodePatternRecognizerTest {
+public class WordPatternRecognizerTest {
 
-    private TypoUnicodePatternRecognizer noCaseRecognizer = TypoUnicodePatternRecognizer.noCase();
+    private WordPatternRecognizer noCaseRecognizer = WordPatternRecognizer.noCase();
 
-    private TypoUnicodePatternRecognizer withCaseRecognizer = TypoUnicodePatternRecognizer.withCase();
+    private WordPatternRecognizer withCaseRecognizer = WordPatternRecognizer.withCase();
 
     @Test
     public void checkIsoAllCodepoints() {
@@ -51,7 +51,7 @@ public class TypoUnicodePatternRecognizerTest {
         for (int codePoint = 0; codePoint < Character.MAX_CODE_POINT; codePoint++) {
             String string = String.valueOf(Character.toChars(codePoint));
             boolean matchPattern = pattern.matcher(string).matches();
-            boolean recognizeString = TypoUnicodePatternRecognizer.isUpper(codePoint);
+            boolean recognizeString = WordPatternRecognizer.isUpper(codePoint);
             Assert.assertTrue(matchPattern == recognizeString);
             if (matchPattern != recognizeString)
                 issues.add(codePoint);
@@ -68,7 +68,7 @@ public class TypoUnicodePatternRecognizerTest {
         for (int codePoint = 0; codePoint < Character.MAX_CODE_POINT; codePoint++) {
             String string = String.valueOf(Character.toChars(codePoint));
             boolean matchPattern = pattern.matcher(string).matches();
-            boolean recognizeString = TypoUnicodePatternRecognizer.isIdeographic(codePoint);
+            boolean recognizeString = WordPatternRecognizer.isIdeographic(codePoint);
             Assert.assertTrue(matchPattern == recognizeString);
             if (matchPattern != recognizeString)
                 issues.add(codePoint);
@@ -84,7 +84,7 @@ public class TypoUnicodePatternRecognizerTest {
         for (int codePoint = 0; codePoint < Character.MAX_CODE_POINT; codePoint++) {
             String string = String.valueOf(Character.toChars(codePoint));
             boolean matchPattern = pattern.matcher(string).matches();
-            boolean recognizeString = TypoUnicodePatternRecognizer.isLetter(codePoint);
+            boolean recognizeString = WordPatternRecognizer.isLetter(codePoint);
             Assert.assertTrue(matchPattern == recognizeString);
             if (matchPattern != recognizeString)
                 issues.add(codePoint);
@@ -100,7 +100,7 @@ public class TypoUnicodePatternRecognizerTest {
         for (int codePoint = 0; codePoint < Character.MAX_CODE_POINT; codePoint++) {
             String string = String.valueOf(Character.toChars(codePoint));
             boolean matchPattern = pattern.matcher(string).matches();
-            boolean recognizeString = TypoUnicodePatternRecognizer.isLower(codePoint);
+            boolean recognizeString = WordPatternRecognizer.isLower(codePoint);
             Assert.assertTrue(matchPattern == recognizeString);
             if (matchPattern != recognizeString)
                 issues.add(codePoint);
@@ -116,7 +116,7 @@ public class TypoUnicodePatternRecognizerTest {
         for (int codePoint = 0; codePoint < Character.MAX_CODE_POINT; codePoint++) {
             String string = String.valueOf(Character.toChars(codePoint));
             boolean matchPattern = pattern.matcher(string).matches();
-            boolean recognizeString = TypoUnicodePatternRecognizer.isDigit(codePoint);
+            boolean recognizeString = WordPatternRecognizer.isDigit(codePoint);
             Assert.assertTrue(matchPattern == recognizeString);
             if (matchPattern != recognizeString)
                 issues.add(codePoint);
@@ -276,13 +276,13 @@ public class TypoUnicodePatternRecognizerTest {
         checkPatterns(str2Pattern, withCaseRecognizer);
     }
 
-    private void checkPattern(String searchExpression, String expectedPattern, TypoUnicodePatternRecognizer recognizer) {
+    private void checkPattern(String searchExpression, String expectedPattern, WordPatternRecognizer recognizer) {
         RecognitionResult result = recognizer.recognize(searchExpression);
         Assert.assertEquals(Collections.singleton(expectedPattern), result.getPatternStringSet());
         Assert.assertTrue(result.isComplete());
     }
 
-    private void checkPatterns(Map<String, String> str2Pattern, TypoUnicodePatternRecognizer recognizer) {
+    private void checkPatterns(Map<String, String> str2Pattern, WordPatternRecognizer recognizer) {
         str2Pattern.forEach((str, pattern) -> {
             checkPattern(str, pattern, recognizer);
         });
