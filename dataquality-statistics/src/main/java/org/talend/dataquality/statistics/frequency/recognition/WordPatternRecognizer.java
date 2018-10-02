@@ -12,9 +12,9 @@ import org.talend.dataquality.statistics.type.DataTypeEnum;
 
 /**
  *
- * <b>This class enable the detection of patterns in texts that are encode in Unicode.</b>
+ * <b>This class enables the detection of patterns in texts that are encoded in Unicode.</b>
  * <p>
- * Here are the main patterns recongized and when they are used :
+ * Here are the main patterns recognized and when they are used :
  * <li>[char] : A char is defined as a single alphabetic character (except ideograms) between non alphabetic characters.</li>
  * <li>[word] : A word is defined as a string of alphabetic characters.</li>
  * <li>[Ideogram] : One of the 80 thousands CJK Unified CJK Ideographs, as defined in the Unicode. For more information about
@@ -186,12 +186,12 @@ public abstract class WordPatternRecognizer extends AbstractPatternRecognizer {
         /**
          * Pattern for a single character type
          */
-        private String patternUnit = "";
+        private String patternUnit;
 
         /**
          * Pattern for a sequence of a character type
          */
-        private String patternSequence = "";
+        private String patternSequence;
 
         /**
          * Special pattern for a sequence of combined type of characters, depend on the last pattern

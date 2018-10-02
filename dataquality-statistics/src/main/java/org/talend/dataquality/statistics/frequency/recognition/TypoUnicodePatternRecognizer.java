@@ -11,7 +11,7 @@ import org.talend.daikon.pattern.word.WordPattern;
 import org.talend.dataquality.statistics.type.DataTypeEnum;
 
 /**
- *
+ * @deprecated use {{@link org.talend.dataquality.statistics.frequency.recognition.WordPatternRecognizer}
  * <b>This class enable the detection of patterns in texts that are encode in Unicode.</b>
  * <p>
  * Here are the main patterns recongized and when they are used :
