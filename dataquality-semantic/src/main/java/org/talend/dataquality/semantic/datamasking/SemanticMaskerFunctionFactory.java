@@ -12,6 +12,9 @@
 // ============================================================================
 package org.talend.dataquality.semantic.datamasking;
 
+import java.util.List;
+import java.util.Random;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.dataquality.datamasking.functions.DateVariance;
@@ -25,9 +28,6 @@ import org.talend.dataquality.semantic.classifier.custom.UserDefinedClassifier;
 import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
-
-import java.util.List;
-import java.util.Random;
 
 public class SemanticMaskerFunctionFactory {
 
