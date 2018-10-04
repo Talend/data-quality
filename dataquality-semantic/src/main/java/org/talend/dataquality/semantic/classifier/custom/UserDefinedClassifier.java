@@ -203,10 +203,7 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
         if (categoryId == null) {
             return null;
         }
-        UserDefinedClassifier regexClassifier = CategoryRegistryManager.getInstance().getCustomDictionaryHolder()
-                .getRegexClassifier();
-        Set<ISubCategory> classifiers = regexClassifier.getClassifiers();
-        for (ISubCategory category : classifiers) {
+        for (ISubCategory category : getClassifiers()) {
             if (categoryId.equals(category.getId())) {
                 return ((UserDefinedCategory) category).getValidator().getPatternString();
             }

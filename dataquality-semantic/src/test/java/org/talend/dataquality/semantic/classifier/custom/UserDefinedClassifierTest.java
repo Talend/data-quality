@@ -32,6 +32,7 @@ import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.classifier.ISubCategory;
 
 /**
@@ -510,17 +511,17 @@ public class UserDefinedClassifierTest {
      */
     @Test
     public void testGetPatternStringByCategoryId() {
-        UserDefinedClassifier userDefinedClassifier = new UserDefinedClassifier();
+        final UserDefinedClassifier userDefinedClassifier = CategoryRegistryManager.getInstance().getRegexClassifier();
+        // case 1: CategoryId exists
         String patternString = userDefinedClassifier.getPatternStringByCategoryId("583edc44ec06957a34fa643c"); //$NON-NLS-1$
         assertEquals("The string of pattern is not we want", "^(F-|FRA?(-| ))?(0[1-9]|[1-9][0-9])[0-9]{3}$", //$NON-NLS-1$//$NON-NLS-2$
                 patternString);
-        // CategoryId is not exist case
-        userDefinedClassifier = new UserDefinedClassifier();
+
+        // case 2: CategoryId does not exist
         patternString = userDefinedClassifier.getPatternStringByCategoryId("aaaaaaaaaaaaaaa"); //$NON-NLS-1$
         assertNull("patternString should be null", patternString); //$NON-NLS-1$
 
-        // CategoryId is null case
-        userDefinedClassifier = new UserDefinedClassifier();
+        // case 3: CategoryId is null case
         patternString = userDefinedClassifier.getPatternStringByCategoryId(null);
         assertNull("patternString should be null", patternString); //$NON-NLS-1$
     }
