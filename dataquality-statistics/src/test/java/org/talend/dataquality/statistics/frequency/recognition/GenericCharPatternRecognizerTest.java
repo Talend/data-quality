@@ -59,13 +59,13 @@ public class GenericCharPatternRecognizerTest {
         checkPattern(chars, replChars, true, recognizer);
 
         // Assert incomplete when the chars including a none-ascii character "ィ".
-        checkPattern("abcィd", "aaaka", true, recognizer);
+        checkPattern("abcィd", "aaaKa", true, recognizer);
 
         // Assert incomplete when the chars including a none-ascii character "-".
         checkPattern("abc-d", "aaa-a", true, recognizer);
         checkPattern("Straße", "Aaaaaa", true, recognizer);
-        checkPattern("トンキン", "KKKK", true, recognizer);
-        checkPattern("とうきょう", "HHHhH", true, recognizer);
+        checkPattern("トｩンキン", "KkKKK", true, recognizer);
+        checkPattern("とうきょう", "HHHHH", true, recognizer);
         checkPattern("서울", "GG", true, recognizer);
         checkPattern("北京", "CC", true, recognizer);
 

@@ -67,7 +67,7 @@ public class KatakanaSmallTest {
     public void testHandleRequestCase4() {
         KatakanaSmall katakanaSmall = new KatakanaSmall();
         String handleRequest = katakanaSmall.handleRequest("ァィゥェォッャュョヮヵヶ"); //$NON-NLS-1$
-        Assert.assertEquals("kkkkkkkkkkkk", handleRequest); //$NON-NLS-1$
+        Assert.assertEquals("ァィゥェォッャュョヮヵヶ", handleRequest); //$NON-NLS-1$
     }
 
     /**
@@ -80,7 +80,7 @@ public class KatakanaSmallTest {
     public void testHandleRequestCase5() {
         KatakanaSmall katakanaSmall = new KatakanaSmall();
         String handleRequest = katakanaSmall.handleRequest("ㇰㇱㇲㇳㇴㇵㇶㇷㇸㇹㇺㇻㇼㇽㇾㇿ"); //$NON-NLS-1$
-        Assert.assertEquals("kkkkkkkkkkkkkkkk", handleRequest); //$NON-NLS-1$
+        Assert.assertEquals("ㇰㇱㇲㇳㇴㇵㇶㇷㇸㇹㇺㇻㇼㇽㇾㇿ", handleRequest); //$NON-NLS-1$
     }
 
 }

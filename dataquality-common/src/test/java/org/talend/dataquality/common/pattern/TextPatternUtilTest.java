@@ -24,8 +24,8 @@ public class TextPatternUtilTest {
 
         checkPattern("abc-d", "aaa-a");
         checkPattern("Straße", "Aaaaaa");
-        checkPattern("トンキン", "KKKK");
-        checkPattern("とうきょう", "HHHhH");
+        checkPattern("トンキンｨｩ", "KKKKkk");
+        checkPattern("とうきょう", "HHHHH");
         checkPattern("서울", "GG");
         checkPattern("北京", "CC");
         checkPattern("\uD840\uDC00", "C");
@@ -58,57 +58,30 @@ public class TextPatternUtilTest {
     }
 
     @Test
-    public void replaceCharacterLowerHiragana() {
+    public void replaceCharacterHiragana() {
         Random random = new Random();
-        CharPattern charPattern = CharPattern.LOWER_HIRAGANA;
-        int[] characters = { 0x3041, 0x3043, 0x3045, 0x3047, 0x3049, 0x3063, 0x3083, 0x3085, 0x3087, 0x308E, 0x3095, 0x3096 };
-        for (int position : characters)
-            replaceCharMatch(position, charPattern, random);
+        CharPattern charPattern = CharPattern.HIRAGANA;
+
+        replaceCharMatch(0x3041, 0x3096, charPattern, random);
         assertEquals(String.format("Pattern %s has a size issue", charPattern), globalCount, charPattern.getCodePointSize());
     }
 
     @Test
-    public void replaceCharacterUpperHiragana() {
+    public void replaceCharacterHalfKatakana() {
         Random random = new Random();
-        CharPattern charPattern = CharPattern.UPPER_HIRAGANA;
-        int[] characters = { 0x3042, 0x3044, 0x3046, 0x3048, 0x3084, 0x3086 };
-        for (int position : characters)
-            replaceCharMatch(position, charPattern, random);
+        CharPattern charPattern = CharPattern.HALFWIDTH_KATAKANA;
 
-        replaceCharMatch(0x304A, 0x3062, charPattern, random);
-        replaceCharMatch(0x3064, 0x3082, charPattern, random);
-        replaceCharMatch(0x3088, 0x308D, charPattern, random);
-        replaceCharMatch(0x308F, 0x3094, charPattern, random);
-        assertEquals(String.format("Pattern %s has a size issue", charPattern), globalCount, charPattern.getCodePointSize());
-    }
-
-    @Test
-    public void replaceCharacterLowerKatakana() {
-        Random random = new Random();
-        CharPattern charPattern = CharPattern.LOWER_KATAKANA;
-        int[] characters = { 0x30A1, 0x30A3, 0x30A5, 0x30A7, 0x30A9, 0x30C3, 0x30E3, 0x30E5, 0x30E7, 0x30EE, 0x30F5, 0x30F6 };
-        for (int position : characters)
-            replaceCharMatch(position, charPattern, random);
-
-        replaceCharMatch(0x31F0, 0x31FF, charPattern, random);
-        replaceCharMatch(0xFF67, 0xFF6F, charPattern, random);
-        assertEquals(String.format("Pattern %s has a size issue", charPattern), globalCount, charPattern.getCodePointSize());
-    }
-
-    @Test
-    public void replaceCharacterUpperKatakana() {
-        Random random = new Random();
-        CharPattern charPattern = CharPattern.UPPER_KATAKANA;
-        int[] characters = { 0x30A2, 0x30A4, 0x30A6, 0x30A8, 0x30E4, 0x30E6, 0xFF66 };
-        for (int position : characters)
-            replaceCharMatch(position, charPattern, random);
-
-        replaceCharMatch(0x30AA, 0x30C2, charPattern, random);
-        replaceCharMatch(0x30C4, 0x30E2, charPattern, random);
-        replaceCharMatch(0x30E8, 0x30ED, charPattern, random);
-        replaceCharMatch(0x30EF, 0x30F4, charPattern, random);
-        replaceCharMatch(0x30F7, 0x30FA, charPattern, random);
+        replaceCharMatch(0xFF66, 0xFF6F, charPattern, random);
         replaceCharMatch(0xFF71, 0xFF9D, charPattern, random);
+        assertEquals(String.format("Pattern %s has a size issue", charPattern), globalCount, charPattern.getCodePointSize());
+    }
+
+    @Test
+    public void replaceCharacterFullKatakana() {
+        Random random = new Random();
+        CharPattern charPattern = CharPattern.FULLWIDTH_KATAKANA;
+        replaceCharMatch(0x30A1, 0x30FA, charPattern, random);
+        replaceCharMatch(0x31F0, 0x31FF, charPattern, random);
         assertEquals(String.format("Pattern %s has a size issue", charPattern), globalCount, charPattern.getCodePointSize());
     }
 

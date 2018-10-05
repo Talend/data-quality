@@ -29,7 +29,7 @@ public class KatakanaTest {
     public void testHandleRequestCase1() {
         Katakana katakana = new Katakana();
         String handleRequest = katakana.handleRequest("もしＴｱＬｴＮ Ｄは第二の話、そして誰が最強だ？"); //$NON-NLS-1$
-        Assert.assertEquals("もしＴKＬKＮ Ｄは第二の話、そして誰が最強だ？", handleRequest); //$NON-NLS-1$
+        Assert.assertEquals("もしＴｱＬｴＮ Ｄは第二の話、そして誰が最強だ？", handleRequest); //$NON-NLS-1$
     }
 
     /**

@@ -18,10 +18,10 @@ package org.talend.dataquality.common.regex;
 public class HandlerFactory {
 
     public static ChainResponsibilityHandler createEastAsiaPatternHandler() {
-        ChainResponsibilityHandler handler = new HiraganaSmall();
-        handler.linkSuccessor(new Hiragana()).linkSuccessor(new KatakanaSmall()).linkSuccessor(new Katakana())
-                .linkSuccessor(new FullwidthLatinNumbers()).linkSuccessor(new FullwidthLatinLowercasedLetters())
-                .linkSuccessor(new FullwidthLatinUppercasedLetters()).linkSuccessor(new Hangul()).linkSuccessor(new Kanji());
+        ChainResponsibilityHandler handler = new Hiragana();
+        handler.linkSuccessor(new KatakanaSmall()).linkSuccessor(new Katakana()).linkSuccessor(new FullwidthLatinNumbers())
+                .linkSuccessor(new FullwidthLatinLowercasedLetters()).linkSuccessor(new FullwidthLatinUppercasedLetters())
+                .linkSuccessor(new Hangul()).linkSuccessor(new Kanji());
         return handler;
 
     }

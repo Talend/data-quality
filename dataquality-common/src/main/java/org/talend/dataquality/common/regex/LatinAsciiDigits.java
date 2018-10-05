@@ -43,8 +43,6 @@ public class LatinAsciiDigits extends ChainResponsibilityHandler {
      */
     @Override
     protected Pattern getRegex() {
-        // [A-Z] from http://www.unicode.org/charts/PDF/U0000.pdf
-        // [À-ß] exclude ×
         return pattern;
     }
 

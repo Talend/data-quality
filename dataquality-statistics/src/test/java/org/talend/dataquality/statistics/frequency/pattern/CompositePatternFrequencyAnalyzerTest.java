@@ -38,8 +38,8 @@ public class CompositePatternFrequencyAnalyzerTest {
     public void testAsciiAndAsiaChars() {
         CompositePatternFrequencyAnalyzer analyzer = new CompositePatternFrequencyAnalyzer();
 
-        Map<String, Locale> patternString1 = analyzer.getValuePatternSet("abcd1234ィゥェ中国");
-        Assert.assertEquals(Collections.singleton("aaaa9999kkkCC"), patternString1.keySet());
+        Map<String, Locale> patternString1 = analyzer.getValuePatternSet("abcd1234ｩゥェ中国");
+        Assert.assertEquals(Collections.singleton("aaaa9999kKKCC"), patternString1.keySet());
 
         Map<String, Locale> patternString4 = analyzer.getValuePatternSet("2008-01-01");
         Assert.assertEquals(new HashSet<>(Arrays.asList(new String[] { "yyyy-MM-dd" })), patternString4.keySet());

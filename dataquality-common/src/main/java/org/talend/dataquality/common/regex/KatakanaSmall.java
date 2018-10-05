@@ -21,7 +21,7 @@ import org.talend.daikon.pattern.character.CharPattern;
  */
 public class KatakanaSmall extends ChainResponsibilityHandler {
 
-    private Pattern pattern = Pattern.compile(CharPattern.LOWER_KATAKANA.getPattern().getRegex());
+    private Pattern pattern = Pattern.compile(CharPattern.HALFWIDTH_KATAKANA.getPattern().getRegex());
 
     /*
      * (non-Javadoc)
@@ -40,10 +40,6 @@ public class KatakanaSmall extends ChainResponsibilityHandler {
      */
     @Override
     protected Pattern getRegex() {
-        // 31F0-31FF is Katakana Phonetic Extensions
-        // ㇰㇱㇲㇳㇴㇵㇶㇷㇸㇹㇺㇻㇼㇽㇾㇿ
-        // uFF67-FF6F small ｧ ｨ ｩ ｪ ｫ ｬ ｭ ｮ ｯ
-        // other is ァ ィ ゥ ェ ォッャュョヮヵヶ
         return pattern;
     }
 
