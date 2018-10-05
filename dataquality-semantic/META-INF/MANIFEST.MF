@@ -5,7 +5,6 @@ Bundle-SymbolicName: org.talend.dataquality.semantic;singleton:=true
 Bundle-Version: 6.1.1.SNAPSHOT
 Bundle-Vendor: .Talend SA.
 Export-Package: org.apache.commons.csv,
- org.json,
  org.talend.dataquality.semantic,
  org.talend.dataquality.semantic.api,
  org.talend.dataquality.semantic.api.internal,
