@@ -56,7 +56,6 @@ public class WordPatternRecognizerTest {
             if (matchPattern != recognizeString)
                 issues.add(codePoint);
         }
-
         display(issues);
     }
 
@@ -69,6 +68,54 @@ public class WordPatternRecognizerTest {
             String string = String.valueOf(Character.toChars(codePoint));
             boolean matchPattern = pattern.matcher(string).matches();
             boolean recognizeString = WordPatternRecognizer.isIdeographic(codePoint);
+            Assert.assertTrue(matchPattern == recognizeString);
+            if (matchPattern != recognizeString)
+                issues.add(codePoint);
+        }
+        display(issues);
+    }
+
+    @Test
+    public void checkRangesHiragana() {
+
+        List<Integer> issues = new ArrayList<>();
+        Pattern pattern = Pattern.compile(WordPattern.HIRAGANA.getCaseSensitive());
+        for (int codePoint = 0; codePoint < Character.MAX_CODE_POINT; codePoint++) {
+            String string = String.valueOf(Character.toChars(codePoint));
+            boolean matchPattern = pattern.matcher(string).matches();
+            boolean recognizeString = WordPatternRecognizer.isHiragana(codePoint);
+            Assert.assertTrue(matchPattern == recognizeString);
+            if (matchPattern != recognizeString)
+                issues.add(codePoint);
+        }
+        display(issues);
+    }
+
+    @Test
+    public void checkRangesKatakana() {
+
+        List<Integer> issues = new ArrayList<>();
+        Pattern pattern = Pattern.compile(WordPattern.KATAKANA.getCaseSensitive());
+        for (int codePoint = 0; codePoint < Character.MAX_CODE_POINT; codePoint++) {
+            String string = String.valueOf(Character.toChars(codePoint));
+            boolean matchPattern = pattern.matcher(string).matches();
+            boolean recognizeString = WordPatternRecognizer.isKatakana(codePoint);
+            Assert.assertTrue(matchPattern == recognizeString);
+            if (matchPattern != recognizeString)
+                issues.add(codePoint);
+        }
+        display(issues);
+    }
+
+    @Test
+    public void checkRangesHangul() {
+
+        List<Integer> issues = new ArrayList<>();
+        Pattern pattern = Pattern.compile(WordPattern.HANGUL.getCaseSensitive());
+        for (int codePoint = 0; codePoint < Character.MAX_CODE_POINT; codePoint++) {
+            String string = String.valueOf(Character.toChars(codePoint));
+            boolean matchPattern = pattern.matcher(string).matches();
+            boolean recognizeString = WordPatternRecognizer.isHangul(codePoint);
             Assert.assertTrue(matchPattern == recognizeString);
             if (matchPattern != recognizeString)
                 issues.add(codePoint);
@@ -173,7 +220,7 @@ public class WordPatternRecognizerTest {
         Map<String, String> str2Pattern = new HashMap<>();
         str2Pattern.put("Example123@protonmail.com", "[alnum]@[word].[word]");
         str2Pattern.put("anotherExample8@yopmail.com", "[alnum]@[word].[word]");
-        str2Pattern.put("不45亦_1說乎@gmail.com", "[alnum(CJK)]_[alnum(CJK)]@[word].[word]");
+        str2Pattern.put("不45亦_1說乎@gmail.com", "[Ideogram][number][Ideogram]_[digit][IdeogramSeq]@[word].[word]");
         str2Pattern.put("afff123@gmail.com", "[alnum]@[word].[word]");
         str2Pattern.put("FfF123@gMail.com", "[alnum]@[word].[word]");
         str2Pattern.put("1@gmail123.com", "[digit]@[alnum].[word]");
@@ -193,9 +240,9 @@ public class WordPatternRecognizerTest {
     @Test
     public void testChineseNoCase() {
         Map<String, String> str2Pattern = new HashMap<>();
-        str2Pattern.put("袁 花木蘭88", "[Ideogram] [alnum(CJK)]");
+        str2Pattern.put("袁 花木蘭88", "[Ideogram] [IdeogramSeq][number]");
         str2Pattern.put("愿为市鞍马，从此替爷征。", "[IdeogramSeq]，[IdeogramSeq]。");
-        str2Pattern.put("不亦1說乎？有", "[alnum(CJK)]？[Ideogram]");
+        str2Pattern.put("不亦1說乎？有", "[IdeogramSeq][digit][IdeogramSeq]？[Ideogram]");
         checkPatterns(str2Pattern, noCaseRecognizer);
     }
 
@@ -210,8 +257,8 @@ public class WordPatternRecognizerTest {
      */
     public void testJapaneseNoCase() {
         Map<String, String> str2Pattern = new HashMap<>();
-        str2Pattern.put("こんにちは123 ？你好/Hello!", "こんにちは[number] ？[IdeogramSeq]/[word]!");
-        str2Pattern.put("日本語123 日本語？你好/Hello!", "[alnum(CJK)] [IdeogramSeq]？[IdeogramSeq]/[word]!");
+        str2Pattern.put("こんにちは123 ？你好/Hello!", "[hiraSeq][number] ？[IdeogramSeq]/[word]!");
+        str2Pattern.put("日本語123 日本語？你好/Hello!", "[IdeogramSeq][number] [IdeogramSeq]？[IdeogramSeq]/[word]!");
         checkPatterns(str2Pattern, noCaseRecognizer);
     }
 
@@ -221,9 +268,27 @@ public class WordPatternRecognizerTest {
      */
     public void testJapaneseWithCase() {
         Map<String, String> str2Pattern = new HashMap<>();
-        str2Pattern.put("こんにちは123 ？你好/Hello!", "こんにちは[number] ？[IdeogramSeq]/[Word]!");
+        str2Pattern.put("こんにちは123 ？你好/Hello!", "[hiraSeq][number] ？[IdeogramSeq]/[Word]!");
         str2Pattern.put("日本語123 日本語？你好/Hello!", "[IdeogramSeq][number] [IdeogramSeq]？[IdeogramSeq]/[Word]!");
         checkPatterns(str2Pattern, withCaseRecognizer);
+    }
+
+    @Test
+    public void testKoreanWithCase() {
+        Map<String, String> str2Pattern = new HashMap<>();
+        str2Pattern.put("내 친구 말했는데 거기 정말 아름다운 곳이래.",
+                "[hangul] [hangulSeq] [hangulSeq] [hangulSeq] [hangulSeq] [hangulSeq] [hangulSeq].");
+        str2Pattern.put("그러던데", "[hangulSeq]");
+        checkPatterns(str2Pattern, withCaseRecognizer);
+    }
+
+    @Test
+    public void testKoreanNoCase() {
+        Map<String, String> str2Pattern = new HashMap<>();
+        str2Pattern.put("내 친구 말했는데 거기 정말 아름다운 곳이래.",
+                "[hangul] [hangulSeq] [hangulSeq] [hangulSeq] [hangulSeq] [hangulSeq] [hangulSeq].");
+        str2Pattern.put("그러던데", "[hangulSeq]");
+        checkPatterns(str2Pattern, noCaseRecognizer);
     }
 
     @Test
@@ -232,7 +297,7 @@ public class WordPatternRecognizerTest {
         str2Pattern.put("𠀐", "[Ideogram]");
         str2Pattern.put("𠀐𠀑我𠀒𠀓", "[IdeogramSeq]");
         str2Pattern.put("𠀐𠀑我𠀒𠀓 我Abc", "[IdeogramSeq] [Ideogram][word]");
-        str2Pattern.put("𠀐12//𠀑我?𠀑", "[alnum(CJK)]//[IdeogramSeq]?[Ideogram]");
+        str2Pattern.put("𠀐12//𠀑我?𠀑", "[Ideogram][number]//[IdeogramSeq]?[Ideogram]");
         checkPatterns(str2Pattern, noCaseRecognizer);
     }
 
@@ -260,9 +325,9 @@ public class WordPatternRecognizerTest {
     public void testMixLatinChineseNoCase() {
         Map<String, String> str2Pattern = new HashMap<>();
         str2Pattern.put("子曰：「學而時習之，不1說乎？有朋Aar1AA23自遠方來，不亦樂乎？",
-                "[IdeogramSeq]：「[IdeogramSeq]，[alnum(CJK)]？[IdeogramSeq][alnum][IdeogramSeq]，[IdeogramSeq]？");
+                "[IdeogramSeq]：「[IdeogramSeq]，[Ideogram][digit][IdeogramSeq]？[IdeogramSeq][alnum][IdeogramSeq]，[IdeogramSeq]？");
         str2Pattern.put("Latin2中文", "[alnum][IdeogramSeq]");
-        str2Pattern.put("中文2Latin", "[alnum(CJK)][word]");
+        str2Pattern.put("中文2Latin", "[IdeogramSeq][alnum]");
         checkPatterns(str2Pattern, noCaseRecognizer);
     }
 

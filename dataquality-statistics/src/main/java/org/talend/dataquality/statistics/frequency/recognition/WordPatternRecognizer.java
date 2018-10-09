@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.talend.daikon.pattern.character.CharPattern;
 import org.talend.daikon.pattern.word.WordPattern;
 import org.talend.dataquality.statistics.type.DataTypeEnum;
 
@@ -175,10 +176,10 @@ public abstract class WordPatternRecognizer extends AbstractPatternRecognizer {
                 WordPattern.LOWER_CHAR.getPattern(),
                 WordPattern.LOWER_WORD.getPattern(),
                 WordPattern.ALPHANUMERIC.getPattern()),
-        IDEOGRAPHIC(
-                WordPattern.IDEOGRAM.getPattern(),
-                WordPattern.IDEOGRAM_SEQUENCE.getPattern(),
-                WordPattern.ALPHANUMERIC_CJK.getPattern()),
+        IDEOGRAPHIC(WordPattern.IDEOGRAM.getPattern(), WordPattern.IDEOGRAM_SEQUENCE.getPattern(), null),
+        HIRAGANA(WordPattern.HIRAGANA.getPattern(), WordPattern.HIRAGANA_SEQUENCE.getPattern(), null),
+        KATAKANA(WordPattern.KATAKANA.getPattern(), WordPattern.KATAKANA_SEQUENCE.getPattern(), null),
+        HANGUL(WordPattern.HANGUL.getPattern(), WordPattern.HANGUL_SEQUENCE.getPattern(), null),
         NUMERIC(WordPattern.DIGIT.getPattern(), WordPattern.NUMBER.getPattern(), null),
         UPPER_CASE(WordPattern.UPPER_CHAR.getPattern(), WordPattern.UPPER_WORD.getPattern(), WordPattern.WORD.getPattern()),
         NOT_UPPER_CASE(WordPattern.LOWER_CHAR.getPattern(), WordPattern.LOWER_WORD.getPattern(), null);
@@ -239,6 +240,21 @@ public abstract class WordPatternRecognizer extends AbstractPatternRecognizer {
                     pos += getCodepointSize(ca[pos]);
                 }
                 break;
+            case HANGUL:
+                while (pos < ca.length && isHangul(Character.codePointAt(ca, pos))) {
+                    pos += getCodepointSize(ca[pos]);
+                }
+                break;
+            case HIRAGANA:
+                while (pos < ca.length && isHiragana(Character.codePointAt(ca, pos))) {
+                    pos += getCodepointSize(ca[pos]);
+                }
+                break;
+            case KATAKANA:
+                while (pos < ca.length && isKatakana(Character.codePointAt(ca, pos))) {
+                    pos += getCodepointSize(ca[pos]);
+                }
+                break;
             default:
                 break;
             }
@@ -265,6 +281,21 @@ public abstract class WordPatternRecognizer extends AbstractPatternRecognizer {
                     pos += getCodepointSize(ca[pos]);
                 }
                 break;
+            case HANGUL:
+                while (pos < ca.length && isHangul(Character.codePointAt(ca, pos))) {
+                    pos += getCodepointSize(ca[pos]);
+                }
+                break;
+            case HIRAGANA:
+                while (pos < ca.length && isHiragana(Character.codePointAt(ca, pos))) {
+                    pos += getCodepointSize(ca[pos]);
+                }
+                break;
+            case KATAKANA:
+                while (pos < ca.length && isKatakana(Character.codePointAt(ca, pos))) {
+                    pos += getCodepointSize(ca[pos]);
+                }
+                break;
             default:
                 break;
             }
@@ -284,21 +315,10 @@ public abstract class WordPatternRecognizer extends AbstractPatternRecognizer {
                     pos++;
                 }
                 break;
-            case IDEOGRAPHIC:
-                while (pos < ca.length
-                        && (isIdeographic(Character.codePointAt(ca, pos)) || isDigit(Character.codePointAt(ca, pos)))) {
-                    pos++;
-                }
-                break;
             case NUMERIC:
                 pos += ALPHABETIC.exploreSpecial(ca, start);
                 if (pos > start) {
                     specialPattern = WordPattern.ALPHANUMERIC.getPattern();
-                } else {
-                    pos += IDEOGRAPHIC.exploreSpecial(ca, start);
-                    if (pos > start) {
-                        specialPattern = WordPattern.ALPHANUMERIC_CJK.getPattern();
-                    }
                 }
                 break;
             case UPPER_CASE:
@@ -359,6 +379,18 @@ public abstract class WordPatternRecognizer extends AbstractPatternRecognizer {
     static boolean isIdeographic(int codePoint) {
         return (Character.isIdeographic(codePoint) || ADDITIONAL_IDEOGRAMS.contains(codePoint))
                 && !REMOVED_IDEOGRAMS.contains(codePoint);
+    }
+
+    static boolean isHangul(int codePoint) {
+        return CharPattern.HANGUL.contains(codePoint);
+    }
+
+    static boolean isHiragana(int codePoint) {
+        return CharPattern.HIRAGANA.contains(codePoint);
+    }
+
+    static boolean isKatakana(int codePoint) {
+        return CharPattern.HALFWIDTH_KATAKANA.contains(codePoint) || CharPattern.FULLWIDTH_KATAKANA.contains(codePoint);
     }
 
     static boolean isDigit(int codePoint) {
