@@ -99,10 +99,11 @@ public class ValueDataMasker implements Serializable {
     /**
      * ValueDataMasker constructor.
      *
-     * @param functionName the function name selected by the user
-     * @param dataType the data type information
      * @param semanticCategory the semantic domain information
+     * @param dataType the data type information
      * @param param extra parameters such as date time pattern list
+     * @param dictionarySnapshot the dictionary snapshot
+     * @param functionName the function name selected by the user
      */
     public ValueDataMasker(String semanticCategory, String dataType, String param, DictionarySnapshot dictionarySnapshot,
             String functionName) {
