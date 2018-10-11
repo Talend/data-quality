@@ -24,6 +24,7 @@ import org.talend.dataquality.datamasking.FunctionType;
 import org.talend.dataquality.datamasking.TypeTester;
 import org.talend.dataquality.datamasking.functions.DateVariance;
 import org.talend.dataquality.datamasking.functions.Function;
+import org.talend.dataquality.datamasking.functions.ReplaceAll;
 import org.talend.dataquality.datamasking.semantic.DateFunctionAdapter;
 import org.talend.dataquality.datamasking.semantic.FluctuateNumericString;
 import org.talend.dataquality.datamasking.semantic.GenerateFromRegex;
@@ -112,32 +113,40 @@ public class SemanticMaskerFunctionFactory {
         return function;
     }
 
-    private static Function<String> adaptForDateFunction(List<String> params, Function<Date> functionToAdapt, String extraParam) {
+    private static Function<String> adaptForDateFunction(List<String> datePatterns, Function<Date> functionToAdapt, String extraParam) {
         functionToAdapt.parse(extraParam, true, null);
-        Function<String> function = new DateFunctionAdapter(functionToAdapt, params);
+        Function<String> function = new DateFunctionAdapter(functionToAdapt, datePatterns);
         return function;
     }
 
-    public static Function<String> getMaskerFunctionByFunctionName(String functionName, String dataType, String semanticCategory,
-            String param) {
+    /**
+     * creates a data masking function with the given name and parameters
+     * 
+     * @param functionType
+     * @param dataType
+     * @param extraParam
+     */
+    public static Function<String> getMaskerFunctionByFunctionName(FunctionType functionType, String dataType,
+            String extraParam) {
         FunctionFactory factory = new FunctionFactory();
         TypeTester tester = new TypeTester();
         Function<String> function = null;
         try {
-            if (FunctionType.KEEP_YEAR.name().equals(functionName)) {
+            if (FunctionType.KEEP_YEAR.equals(functionType) || FunctionType.DATE_VARIANCE.equals(functionType)) {
                 function = adaptForDateFunction(null,
-                        (Function<Date>) factory.getFunction(FunctionType.valueOf(functionName), tester.getTypeByName(dataType)),
-                        param);
+                        (Function<Date>) factory.getFunction(functionType, tester.getTypeByName(dataType)), extraParam);
+            } else if (FunctionType.NUMERIC_VARIANCE.equals(functionType)) {
+                function = new FluctuateNumericString();
+            } else if (FunctionType.REPLACE_ALL.equals(functionType)) {
+                function = new ReplaceAll();
             } else {
-                function = (Function<String>) factory.getFunction(FunctionType.valueOf(functionName),
-                        tester.getTypeByName(dataType));
+                function = (Function<String>) factory.getFunction(functionType, tester.getTypeByName(dataType));
             }
-            if (StringUtils.isNotEmpty(param)) {
-                function.parse(param, true, null);
+            if (StringUtils.isNotEmpty(extraParam)) {
+                function.parse(extraParam, true, null);
             }
             function.setKeepFormat(true);
             function.setKeepEmpty(true);
-
         } catch (InstantiationException e) {
             throw new IllegalArgumentException(
                     "No masking function available for the current column!  " + " DataType: " + dataType);

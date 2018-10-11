@@ -42,6 +42,15 @@ public class ValueDataMasker implements Serializable {
 
     /**
      * ValueDataMasker constructor.
+     *
+     * @param function the embedded data masking function
+     */
+    public ValueDataMasker(Function<String> function) {
+        this.function = function;
+    }
+
+    /**
+     * ValueDataMasker constructor.
      * 
      * @param semanticCategory the semantic domain information
      * @param dataType the data type information
@@ -60,7 +69,6 @@ public class ValueDataMasker implements Serializable {
      */
     public ValueDataMasker(String semanticCategory, String dataType, List<String> params) {
         this(semanticCategory, dataType, params, null);
-
     }
 
     /**
@@ -97,22 +105,6 @@ public class ValueDataMasker implements Serializable {
     }
 
     /**
-     * ValueDataMasker constructor.
-     *
-     * @param semanticCategory the semantic domain information
-     * @param dataType the data type information
-     * @param param extra parameters such as date time pattern list
-     * @param dictionarySnapshot the dictionary snapshot
-     * @param functionName the function name selected by the user
-     */
-    public ValueDataMasker(String semanticCategory, String dataType, String param, DictionarySnapshot dictionarySnapshot,
-            String functionName) {
-        function = SemanticMaskerFunctionFactory.getMaskerFunctionByFunctionName(functionName, dataType, semanticCategory, param);
-
-        initCategory(semanticCategory, dictionarySnapshot);
-    }
-
-    /**
      * mask the input value.
      * 
      * @param input
@@ -123,7 +115,11 @@ public class ValueDataMasker implements Serializable {
             return ReplaceCharacterHelper.replaceCharacters(input, function.getRandom());
         }
         // when category is null or input is valid
-        return function.generateMaskedRow(input);
+        try {
+            return function.generateMaskedRow(input);
+        } catch (RuntimeException e) {
+            return ReplaceCharacterHelper.replaceCharacters(input, function.getRandom());
+        }
     }
 
     /**
