@@ -21,7 +21,7 @@ public class HandlerFactory {
         ChainResponsibilityHandler handler = new Hiragana();
         handler.linkSuccessor(new KatakanaSmall()).linkSuccessor(new Katakana()).linkSuccessor(new FullwidthLatinNumbers())
                 .linkSuccessor(new FullwidthLatinLowercasedLetters()).linkSuccessor(new FullwidthLatinUppercasedLetters())
-                .linkSuccessor(new Hangul()).linkSuccessor(new Kanji());
+                .linkSuccessor(new Hangul()).linkSuccessor(new Kanji()).linkSuccessor(new KanjiRare());
         return handler;
 
     }

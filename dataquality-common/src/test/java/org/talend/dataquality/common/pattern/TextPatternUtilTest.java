@@ -90,6 +90,18 @@ public class TextPatternUtilTest {
         Random random = new Random();
         CharPattern charPattern = CharPattern.KANJI;
         replaceCharMatch(0x4E00, 0x9FEF, charPattern, random);
+        replaceCharMatch(0x3005, charPattern, random); // Symbol and punctuation added for TDQ-11343
+        replaceCharMatch(0x3007, charPattern, random); // Symbol and punctuation added for TDQ-11343
+        replaceCharMatch(0x3021, 0x3029, charPattern, random); // Symbol and punctuation added for TDQ-11343
+        replaceCharMatch(0x3038, 0x303B, charPattern, random); // Symbol and punctuation added for TDQ-11343
+
+        assertEquals(String.format("Pattern %s has a size issue", charPattern), globalCount, charPattern.getCodePointSize());
+    }
+
+    @Test
+    public void replaceCharacterKanjiRare() {
+        Random random = new Random();
+        CharPattern charPattern = CharPattern.KANJI_RARE;
         replaceCharMatch(0x3400, 0x4DB5, charPattern, random); // Extension A
         replaceCharMatch(0x20000, 0x2A6D6, charPattern, random); // Extension B
         replaceCharMatch(0x2A700, 0x2B734, charPattern, random); // Extension C
@@ -102,10 +114,6 @@ public class TextPatternUtilTest {
         replaceCharMatch(0x2F00, 0x2FD5, charPattern, random); // KangXi Radicals
         replaceCharMatch(0x2E80, 0x2E99, charPattern, random); // Radical supplement part 1
         replaceCharMatch(0x2E9B, 0x2EF3, charPattern, random); // Radical supplement part 2
-        replaceCharMatch(0x3005, charPattern, random); // Symbol and punctuation added for TDQ-11343
-        replaceCharMatch(0x3007, charPattern, random); // Symbol and punctuation added for TDQ-11343
-        replaceCharMatch(0x3021, 0x3029, charPattern, random); // Symbol and punctuation added for TDQ-11343
-        replaceCharMatch(0x3038, 0x303B, charPattern, random); // Symbol and punctuation added for TDQ-11343
 
         assertEquals(String.format("Pattern %s has a size issue", charPattern), globalCount, charPattern.getCodePointSize());
     }

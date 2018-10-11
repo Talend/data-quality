@@ -52,7 +52,7 @@ public class GenerateFromPatternTest {
     public void patternWithReferences() {
         gfp.parameters = "\\1aA9\\2hHkK\\3C\\4G,latin:,;japanese:,;chinese:,;korean:".split(","); //$NON-NLS-1$ //$NON-NLS-2$
         output = gfp.generateMaskedRow(null);
-        assertEquals(output, "latin:ñT8;japanese:hぅﾀト;chinese:诵;korean:롖"); //$NON-NLS-1$
+        assertEquals(output, "latin:ñT8;japanese:hぅﾀト;chinese:睻;korean:롖"); //$NON-NLS-1$
     }
 
     @Test
