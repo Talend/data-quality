@@ -67,7 +67,7 @@ public class TextTransliterator {
                 return katakanaRStream;
             }
             return KatakanaToHiragana.convert(katakanaRStream);
-            //Katakana reading
+            // Katakana reading
         } else {
             // if output type is KATAKANA_PRONUNCIATION or rōmaji, the text should be converted to Katakana pronunciation
             final Stream<String> katakanaPStream = convert2Katakana(text, true);

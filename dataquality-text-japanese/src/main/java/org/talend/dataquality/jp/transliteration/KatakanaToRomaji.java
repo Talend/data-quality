@@ -24,6 +24,7 @@ public class KatakanaToRomaji {
     private static final Logger LOGGER = LoggerFactory.getLogger(KatakanaToRomaji.class);
 
     protected static final Map<String, String[]> KATAKANA_TO_ROMAJI = new HashMap<>();
+
     // see https://en.wikipedia.org/wiki/Romanization_of_Japanese#Differences_among_romanizations
     static {
         KATAKANA_TO_ROMAJI.put("ア", new String[] { "a" });
@@ -174,7 +175,7 @@ public class KatakanaToRomaji {
     }
 
     protected static Stream<String> convert(Stream<String> katakanaStream, TransliterateType type) {
-        return katakanaStream.map(x -> toRomaji(x, type));
+        return katakanaStream.map(x -> toRomaji(KatakanaUtils.toFullWidth(x), type));
     }
 
     private static String toRomaji(String s, TransliterateType type) {

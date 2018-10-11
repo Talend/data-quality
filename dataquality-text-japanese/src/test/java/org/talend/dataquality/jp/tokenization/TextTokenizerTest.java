@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
-import org.talend.dataquality.jp.common.KuromojiDict;
 
 public class TextTokenizerTest {
 

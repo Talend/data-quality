@@ -30,10 +30,12 @@ public class TextTransliteratorTest {
     private static final List<String> testTextList = new ArrayList<>();
     static {
         testTextList.add("親譲りの無鉄砲で小供の時から損ばかりしている");
-        testTextList.add("東京は夜の七時"); //chōonpu:東京; Multi-pronunciation Kana: は
-        testTextList.add("くノ一 female ninja"); //mixed hiragana, katakana, kanji, english
-        testTextList.add("日本型の顔文字👨‍🎨『笑い』(≧▽≦)富士山／^o^＼"); //emoticon
-        testTextList.add("縮む"); //to shrink
+        testTextList.add("東京は夜の七時"); // chōonpu:東京; Multi-pronunciation Kana: は
+        testTextList.add("くノ一 female ninja"); // mixed hiragana, katakana, kanji, english
+        testTextList.add("日本型の顔文字👨‍🎨『笑い』(≧▽≦)富士山／^o^＼"); // emoticon
+        testTextList.add("縮む"); // to shrink
+        testTextList.add("ﾂｲｯﾀｰ");
+
     }
 
     @Test
@@ -44,6 +46,7 @@ public class TextTransliteratorTest {
         expactedTextList.add("ク ノ イチ   female   ninja");
         expactedTextList.add("ニッポン ガタ ノ カオ モジ 👨 ‍ 🎨 『 ワライ 』(≧▽≦) フジサン ／^ o ^＼");
         expactedTextList.add("チヂム");
+        expactedTextList.add("ﾂｲｯﾀｰ");
 
         for (int i = 0; i < testTextList.size(); i++) {
             final String katakanaReading = transliterator.transliterate(testTextList.get(i), TransliterateType.KATAKANA_READING,
@@ -60,6 +63,7 @@ public class TextTransliteratorTest {
         expactedTextList.add("ク ノ イチ   female   ninja");
         expactedTextList.add("ニッポン ガタ ノ カオ モジ 👨 ‍ 🎨 『 ワライ 』(≧▽≦) フジサン ／^ o ^＼");
         expactedTextList.add("チジム");
+        expactedTextList.add("ﾂｲｯﾀｰ");
 
         for (int i = 0; i < testTextList.size(); i++) {
             final String katakanaPronunciation = transliterator.transliterate(testTextList.get(i),
@@ -76,6 +80,7 @@ public class TextTransliteratorTest {
         expactedTextList.add("く の いち   female   ninja");
         expactedTextList.add("にっぽん がた の かお もじ 👨 ‍ 🎨 『 わらい 』(≧▽≦) ふじさん ／^ o ^＼");
         expactedTextList.add("ちぢむ");
+        expactedTextList.add("ついったあ");
 
         for (int i = 0; i < testTextList.size(); i++) {
             final String hiragana = transliterator.transliterate(testTextList.get(i), TransliterateType.HIRAGANA);
@@ -91,11 +96,13 @@ public class TextTransliteratorTest {
         expactedTextList.add("ku no ichi   female   ninja");
         expactedTextList.add("nippon gata no kao moji 👨 ‍ 🎨 『 warai 』(≧▽≦) fujisan ／^ o ^＼");
         expactedTextList.add("chijimu");
+        expactedTextList.add("tsuittā");
 
         for (int i = 0; i < testTextList.size(); i++) {
             final String hepburn = transliterator.transliterate(testTextList.get(i), TransliterateType.HEPBURN);
             assertEquals(expactedTextList.get(i), hepburn);
         }
+
     }
 
     @Test
@@ -106,6 +113,7 @@ public class TextTransliteratorTest {
         expactedTextList.add("ku no iti   female   ninja");
         expactedTextList.add("nippon gata no kao mozi 👨 ‍ 🎨 『 warai 』(≧▽≦) huzisan ／^ o ^＼");
         expactedTextList.add("tizimu");
+        expactedTextList.add("tuittā");
 
         for (int i = 0; i < testTextList.size(); i++) {
             final String kunrei_shiki = transliterator.transliterate(testTextList.get(i), TransliterateType.KUNREI_SHIKI);
@@ -121,6 +129,7 @@ public class TextTransliteratorTest {
         expactedTextList.add("ku no iti   female   ninja");
         expactedTextList.add("nippon gata no kao mozi 👨 ‍ 🎨 『 warai 』(≧▽≦) huzisan ／^ o ^＼");
         expactedTextList.add("tizimu");
+        expactedTextList.add("tuittā");
 
         for (int i = 0; i < testTextList.size(); i++) {
             final String nihon_shiki = transliterator.transliterate(testTextList.get(i), TransliterateType.NIHON_SHIKI);
