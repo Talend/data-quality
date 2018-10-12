@@ -9,6 +9,7 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.talend.daikon.pattern.character.CharPattern;
 import org.talend.daikon.pattern.word.WordPattern;
+import org.talend.dataquality.common.pattern.TextPatternUtil;
 import org.talend.dataquality.statistics.type.DataTypeEnum;
 
 /**
@@ -246,14 +247,16 @@ public abstract class WordPatternRecognizer extends AbstractPatternRecognizer {
                 }
                 break;
             case HIRAGANA:
-                while (pos < ca.length && isHiragana(Character.codePointAt(ca, pos))) {
-                    pos += getCodepointSize(ca[pos]);
-                }
+                if (pos < ca.length && Character.codePointAt(ca, pos) != TextPatternUtil.PROLONGED_SOUND_MARK)
+                    while (pos < ca.length && isHiragana(Character.codePointAt(ca, pos))) {
+                        pos += getCodepointSize(ca[pos]);
+                    }
                 break;
             case KATAKANA:
-                while (pos < ca.length && isKatakana(Character.codePointAt(ca, pos))) {
-                    pos += getCodepointSize(ca[pos]);
-                }
+                if (pos < ca.length && Character.codePointAt(ca, pos) != TextPatternUtil.PROLONGED_SOUND_MARK)
+                    while (pos < ca.length && isKatakana(Character.codePointAt(ca, pos))) {
+                        pos += getCodepointSize(ca[pos]);
+                    }
                 break;
             default:
                 break;
@@ -287,14 +290,16 @@ public abstract class WordPatternRecognizer extends AbstractPatternRecognizer {
                 }
                 break;
             case HIRAGANA:
-                while (pos < ca.length && isHiragana(Character.codePointAt(ca, pos))) {
-                    pos += getCodepointSize(ca[pos]);
-                }
+                if (pos < ca.length && Character.codePointAt(ca, pos) != TextPatternUtil.PROLONGED_SOUND_MARK)
+                    while (pos < ca.length && isHiragana(Character.codePointAt(ca, pos))) {
+                        pos += getCodepointSize(ca[pos]);
+                    }
                 break;
             case KATAKANA:
-                while (pos < ca.length && isKatakana(Character.codePointAt(ca, pos))) {
-                    pos += getCodepointSize(ca[pos]);
-                }
+                if (pos < ca.length && Character.codePointAt(ca, pos) != TextPatternUtil.PROLONGED_SOUND_MARK)
+                    while (pos < ca.length && isKatakana(Character.codePointAt(ca, pos))) {
+                        pos += getCodepointSize(ca[pos]);
+                    }
                 break;
             default:
                 break;
@@ -386,11 +391,12 @@ public abstract class WordPatternRecognizer extends AbstractPatternRecognizer {
     }
 
     static boolean isHiragana(int codePoint) {
-        return CharPattern.HIRAGANA.contains(codePoint);
+        return CharPattern.HIRAGANA.contains(codePoint) || codePoint == TextPatternUtil.PROLONGED_SOUND_MARK;
     }
 
     static boolean isKatakana(int codePoint) {
-        return CharPattern.HALFWIDTH_KATAKANA.contains(codePoint) || CharPattern.FULLWIDTH_KATAKANA.contains(codePoint);
+        return CharPattern.HALFWIDTH_KATAKANA.contains(codePoint) || CharPattern.FULLWIDTH_KATAKANA.contains(codePoint)
+                || codePoint == TextPatternUtil.PROLONGED_SOUND_MARK;
     }
 
     static boolean isDigit(int codePoint) {

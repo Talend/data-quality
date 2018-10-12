@@ -22,6 +22,11 @@ public class TextPatternUtilTest {
     @Test
     public void testFindPattern() {
 
+        checkPattern("ケーキ", "KKK");
+        checkPattern("ｰヽヾ", "kKK");
+        checkPattern("ゝゞゟ", "HHゟ");
+        checkPattern("ほーむ", "HHH");
+        checkPattern("dー", "aー");
         checkPattern("abc-d", "aaa-a");
         checkPattern("Straße", "Aaaaaa");
         checkPattern("トンキンｨｩ", "KKKKkk");
@@ -30,7 +35,6 @@ public class TextPatternUtilTest {
         checkPattern("北京", "CC");
         checkPattern("\uD840\uDC00", "C");
         checkPattern("\uD840\uDC40\uD840\uDFD3\uD841\uDC01\uD840\uDFD3", "CCCC");
-
     }
 
     private void checkPattern(String input, String expectedOutput) {
@@ -63,6 +67,7 @@ public class TextPatternUtilTest {
         CharPattern charPattern = CharPattern.HIRAGANA;
 
         replaceCharMatch(0x3041, 0x3096, charPattern, random);
+        replaceCharMatch(0x309D, 0x309E, charPattern, random);
         assertEquals(String.format("Pattern %s has a size issue", charPattern), globalCount, charPattern.getCodePointSize());
     }
 
@@ -72,7 +77,7 @@ public class TextPatternUtilTest {
         CharPattern charPattern = CharPattern.HALFWIDTH_KATAKANA;
 
         replaceCharMatch(0xFF66, 0xFF6F, charPattern, random);
-        replaceCharMatch(0xFF71, 0xFF9D, charPattern, random);
+        replaceCharMatch(0xFF70, 0xFF9D, charPattern, random);
         assertEquals(String.format("Pattern %s has a size issue", charPattern), globalCount, charPattern.getCodePointSize());
     }
 
@@ -81,6 +86,7 @@ public class TextPatternUtilTest {
         Random random = new Random();
         CharPattern charPattern = CharPattern.FULLWIDTH_KATAKANA;
         replaceCharMatch(0x30A1, 0x30FA, charPattern, random);
+        replaceCharMatch(0x30FD, 0x30FE, charPattern, random);
         replaceCharMatch(0x31F0, 0x31FF, charPattern, random);
         assertEquals(String.format("Pattern %s has a size issue", charPattern), globalCount, charPattern.getCodePointSize());
     }

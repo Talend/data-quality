@@ -9,6 +9,8 @@ import org.talend.daikon.pattern.character.CharPattern;
  */
 public class TextPatternUtil {
 
+    public static final int PROLONGED_SOUND_MARK = 12540;
+
     /**
      * find text pattern for a given string
      *
@@ -19,11 +21,20 @@ public class TextPatternUtil {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < stringToRecognize.length(); i++) {
             Integer codePoint = stringToRecognize.codePointAt(i);
-            sb.append(Character.toChars(findReplaceCodePoint(codePoint)));
+            if (isValidProlongedSoundMark(codePoint, sb))
+                sb.append(sb.charAt(sb.length() - 1));
+            else
+                sb.append(Character.toChars(findReplaceCodePoint(codePoint)));
             if (Character.isHighSurrogate(stringToRecognize.charAt(i)))
                 i++;
+
         }
         return sb.toString();
+    }
+
+    private static boolean isValidProlongedSoundMark(Integer codePoint, StringBuilder sb) {
+        return codePoint == PROLONGED_SOUND_MARK && sb.length() > 0
+                && (sb.charAt(sb.length() - 1) == 'K' || sb.charAt(sb.length() - 1) == 'H');
     }
 
     private static Integer findReplaceCodePoint(Integer codePoint) {

@@ -274,6 +274,22 @@ public class WordPatternRecognizerTest {
     }
 
     @Test
+    public void japaneseWithSoundMarkー() {
+        Map<String, String> str2Pattern = new HashMap<>();
+        str2Pattern.put("ケーキ", "[kataSeq]");
+        str2Pattern.put("ほーむ", "[hiraSeq]");
+        checkPatterns(str2Pattern, withCaseRecognizer);
+    }
+
+    @Test
+    public void japaneseSpecialCharacters() {
+        Map<String, String> str2Pattern = new HashMap<>();
+        str2Pattern.put("ｰヽヾ", "[kataSeq]");
+        str2Pattern.put("ゝゞゟ", "[hiraSeq]ゟ");
+        checkPatterns(str2Pattern, withCaseRecognizer);
+    }
+
+    @Test
     public void testKoreanWithCase() {
         Map<String, String> str2Pattern = new HashMap<>();
         str2Pattern.put("내 친구 말했는데 거기 정말 아름다운 곳이래.",
