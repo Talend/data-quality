@@ -45,7 +45,7 @@ public class FluctuateNumericString extends NumericVariance<String> {
             } else {
                 try {
                     BigDecimal bigDecimal = BigDecimalParser.toBigDecimal(input);
-                    final int decimalLength = getDecimalPrecision(input);
+                    final int decimalLength = DecimalPrecisionHelper.getDecimalPrecision(input);
                     if (bigDecimal.abs().compareTo(new BigDecimal(Long.MAX_VALUE)) > 0) {
                         final BigDecimal result = bigDecimal.multiply(BigDecimal.valueOf(rateToApply + 100))
                                 .divide(new BigDecimal(100));
@@ -63,22 +63,6 @@ public class FluctuateNumericString extends NumericVariance<String> {
                     return ReplaceCharacterHelper.replaceCharacters(input, rnd);
                 }
             }
-        }
-    }
-
-    private int getDecimalPrecision(final String input) {
-        String inputWithoutScientificPart = input;
-        if (input.contains("e")) {
-            inputWithoutScientificPart = input.substring(0, input.lastIndexOf("e"));
-        } else if (input.contains("E")) {
-            inputWithoutScientificPart = input.substring(0, input.lastIndexOf("E"));
-        }
-        String bigDecimalString = BigDecimalParser.toBigDecimal(inputWithoutScientificPart).toString();
-        int idx = bigDecimalString.lastIndexOf(".");
-        if (idx < 1) {
-            return 0;
-        } else {
-            return inputWithoutScientificPart.length() - bigDecimalString.lastIndexOf(".") - 1;
         }
     }
 }

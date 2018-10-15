@@ -114,6 +114,7 @@ import org.talend.dataquality.datamasking.functions.ReplaceNumericInteger;
 import org.talend.dataquality.datamasking.functions.ReplaceNumericLong;
 import org.talend.dataquality.datamasking.functions.ReplaceNumericString;
 import org.talend.dataquality.datamasking.functions.SetToNull;
+import org.talend.dataquality.datamasking.semantic.GenerateBetweenNumeric;
 import org.talend.dataquality.datamasking.semantic.GenerateFromFileStringProvided;
 import org.talend.dataquality.datamasking.semantic.ReplaceCharactersWithGeneration;
 
@@ -136,6 +137,7 @@ public enum FunctionType {
     GENERATE_BETWEEN_INT(GenerateBetweenInteger.class),
     GENERATE_BETWEEN_LONG(GenerateBetweenLong.class),
     GENERATE_BETWEEN_STRING(GenerateBetweenString.class),
+    GENERATE_BETWEEN_NUMERIC(GenerateBetweenNumeric.class),
     GENERATE_CREDIT_CARD_FORMAT(GenerateCreditCardSimple.class),
     GENERATE_CREDIT_CARD_FORMAT_LONG(GenerateCreditCardFormatLong.class),
     GENERATE_CREDIT_CARD_FORMAT_STRING(GenerateCreditCardFormatString.class),
