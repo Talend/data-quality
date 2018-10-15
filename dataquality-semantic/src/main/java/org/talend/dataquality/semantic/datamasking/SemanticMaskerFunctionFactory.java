@@ -113,7 +113,8 @@ public class SemanticMaskerFunctionFactory {
         return function;
     }
 
-    private static Function<String> adaptForDateFunction(List<String> datePatterns, Function<Date> functionToAdapt, String extraParam) {
+    private static Function<String> adaptForDateFunction(List<String> datePatterns, Function<Date> functionToAdapt,
+            String extraParam) {
         functionToAdapt.parse(extraParam, true, null);
         Function<String> function = new DateFunctionAdapter(functionToAdapt, datePatterns);
         return function;
