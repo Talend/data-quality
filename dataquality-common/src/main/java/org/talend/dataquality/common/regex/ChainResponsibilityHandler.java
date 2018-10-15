@@ -25,6 +25,10 @@ public abstract class ChainResponsibilityHandler {
      */
     protected ChainResponsibilityHandler successor;
 
+    protected boolean includeHiragana = false;
+
+    protected boolean includeKatakana = false;
+
     /**
      * 
      * Handle the request
@@ -37,6 +41,10 @@ public abstract class ChainResponsibilityHandler {
             tempValue = matcher.replaceAll(getReplaceStr());
         }
         if (this.getSuccessor() == null) {
+            if (includeKatakana)
+                tempValue = tempValue.replaceAll("Kー", "KK");
+            if (includeHiragana)
+                tempValue = tempValue.replaceAll("Hー", "HH");
             return tempValue;
         }
         return this.getSuccessor().handleRequest(tempValue);

@@ -19,9 +19,13 @@ public class HandlerFactory {
 
     public static ChainResponsibilityHandler createEastAsiaPatternHandler() {
         ChainResponsibilityHandler handler = new Hiragana();
+        // --- Ugly patch to handle PROLONGED_SOUND_MARK while this code exists
+        ChainResponsibilityHandler lastHandler = new KanjiRare();
+        lastHandler.includeHiragana = true;
+        lastHandler.includeKatakana = true;
         handler.linkSuccessor(new KatakanaSmall()).linkSuccessor(new Katakana()).linkSuccessor(new FullwidthLatinNumbers())
                 .linkSuccessor(new FullwidthLatinLowercasedLetters()).linkSuccessor(new FullwidthLatinUppercasedLetters())
-                .linkSuccessor(new Hangul()).linkSuccessor(new Kanji()).linkSuccessor(new KanjiRare());
+                .linkSuccessor(new Hangul()).linkSuccessor(new Kanji()).linkSuccessor(lastHandler);
         return handler;
 
     }

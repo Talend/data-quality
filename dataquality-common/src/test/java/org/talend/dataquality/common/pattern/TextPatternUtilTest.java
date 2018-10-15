@@ -23,6 +23,7 @@ public class TextPatternUtilTest {
     public void testFindPattern() {
 
         checkPattern("ケーキ", "KKK");
+        checkPattern("bーキ", "aーK");
         checkPattern("ｰヽヾ", "kKK");
         checkPattern("ゝゞゟ", "HHゟ");
         checkPattern("ほーむ", "HHH");
