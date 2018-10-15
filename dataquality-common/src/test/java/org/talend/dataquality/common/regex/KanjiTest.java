@@ -137,7 +137,15 @@ public class KanjiTest {
         String input = "々〆〇】〡〻㐀一豈ab123"; //$NON-NLS-1$
         String handleRequest = kanji.handleRequest(input);
         // Non-letter kanji must not be recognized as 'C'
-        Assert.assertEquals("C〆C】CCCCCab123", handleRequest); //$NON-NLS-1$
+        Assert.assertEquals("C〆C】CC㐀CCab123", handleRequest); //$NON-NLS-1$
     }
 
+    @Test
+    public void rareKanji() {
+        KanjiRare kanji = new KanjiRare();
+        String input = "々〆〇】〡〻㐀一豈ab123"; //$NON-NLS-1$
+        String handleRequest = kanji.handleRequest(input);
+        // Non-letter kanji must not be recognized as 'C'
+        Assert.assertEquals("々〆〇】〡〻C一豈ab123", handleRequest); //$NON-NLS-1$
+    }
 }
