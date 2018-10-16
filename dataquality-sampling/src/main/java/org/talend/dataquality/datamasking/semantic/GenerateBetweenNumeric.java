@@ -49,7 +49,7 @@ public class GenerateBetweenNumeric extends GenerateBetween<String> {
         }
         if (minDouble > maxDouble) {
             double tmp = minDouble;
-            minDouble = max;
+            minDouble = maxDouble;
             maxDouble = tmp;
         }
         min = (int) Math.ceil(minDouble);
@@ -61,14 +61,9 @@ public class GenerateBetweenNumeric extends GenerateBetween<String> {
         if (input == null || EMPTY_STRING.equals(input.trim())) {
             return input;
         } else {
-            if (patternInteger.matcher(input).matches()) {
-                if (max >= min) {
-                    final int result = rnd.nextInt(max - min + 1) + min;
-                    return String.valueOf(result);
-                } else {
-                    final double result = generateRandomDoubleValue();
-                    return getResultStringWithPrecision(result, minimumPrecision);
-                }
+            if (patternInteger.matcher(input).matches() && max >= min) {
+                final int result = rnd.nextInt(max - min + 1) + min;
+                return String.valueOf(result);
             } else {
                 final double result = generateRandomDoubleValue();
                 try {
