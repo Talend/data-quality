@@ -7,7 +7,7 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>dataquality-libraries</artifactId>
-	<version>6.1.1-SNAPSHOT</version>
+	<version>6.1.1</version>
 	<packaging>pom</packaging>
 	<name>dataquality-libraries</name>
 	<description>Parent pom aggregating other library projects, devops tools</description>
@@ -24,7 +24,7 @@
 		<junit.version>4.12</junit.version>
 		<mockito.version>1.10.19</mockito.version>
 
-		<org.talend.daikon.version>0.26.1-SNAPSHOT</org.talend.daikon.version>
+		<org.talend.daikon.version>0.26.1</org.talend.daikon.version>
 
 	</properties>
 
