@@ -25,12 +25,17 @@ public class TextTokenizerTest {
 
     private static final Map<String, List<String>> textsWithExpectedTokens = new HashMap<>();
     static {
+        textsWithExpectedTokens.put("Talend Readlime Bigdata Platformの価格については、営業までお問い合わせください。", Arrays.asList("Talend",
+                "Readlime", "Bigdata", "Platform", "の", "価格", "について", "は", "、", "営業", "まで", "お", "問い合わせ", "ください", "。")); // japanese-english text
         textsWithExpectedTokens.put("お寿司が食べたい。", Arrays.asList("お", "寿司", "が", "食べ", "たい", "。"));
         textsWithExpectedTokens.put("おsushiが食べたい。", Arrays.asList("お", "sushi", "が", "食べ", "たい", "。")); // japanese-english text
+
     }
 
     private static final Map<String, String> textsWithExpectedTokenizedString = new HashMap<>();
     static {
+        textsWithExpectedTokenizedString.put("Talend Readlime Bigdata Platformの価格については、営業までお問い合わせください。",
+                "Talend Readlime Bigdata Platform の 価格 について は 、 営業 まで お 問い合わせ ください 。"); // japanese-english text
         textsWithExpectedTokenizedString.put("お寿司が食べたい。", "お 寿司 が 食べ たい 。");
         textsWithExpectedTokenizedString.put("おsushiが食べたい。", "お sushi が 食べ たい 。"); // japanese-english text
 

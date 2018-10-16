@@ -21,7 +21,7 @@ public abstract class TextTokenizerBase {
     }
 
     private Stream<String> getTokenSurface(String text) {
-        return this.tokenize(text).stream().map(token -> token.getSurface());
+        return this.tokenize(text).stream().map(token -> token.getSurface()).filter(token -> !" ".equals(token));
     }
 
     /**
@@ -40,7 +40,8 @@ public abstract class TextTokenizerBase {
      * @return tokenized string with delimiter
      */
     public String getTokenizedString(String text, String delimiter) {
-        return getTokenSurface(text).collect(Collectors.joining(delimiter));
+        Stream<String> tokens = getTokenSurface(text);
+        return tokens.collect(Collectors.joining(delimiter));
     }
 
     /**
