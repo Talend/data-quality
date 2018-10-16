@@ -65,4 +65,12 @@ public class GenerateBetweenNumericTest {
         String output = func.generateMaskedRow("10.12345");
         assertEquals(output, "0.01782"); //$NON-NLS-1$
     }
+
+    @Test
+    public void testGenerateWithInvalidRange() {
+        // here minimum precision is 3 digits after decimal separator
+        func.parse("0.02, ABC", false, new Random(42)); //$NON-NLS-1$
+        String output = func.generateMaskedRow("10.12345");
+        assertEquals(output, "0.00000"); //$NON-NLS-1$
+    }
 }

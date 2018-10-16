@@ -43,7 +43,8 @@ public class GenerateBetweenNumeric extends GenerateBetween<String> {
                 minimumPrecision = Math.max(DecimalPrecisionHelper.getDecimalPrecision(parameters[0]),
                         DecimalPrecisionHelper.getDecimalPrecision(parameters[1]));
             } catch (NumberFormatException e) {
-                // Do nothing
+                minDouble = 0;
+                maxDouble = 0;
             }
         }
         if (minDouble > maxDouble) {
