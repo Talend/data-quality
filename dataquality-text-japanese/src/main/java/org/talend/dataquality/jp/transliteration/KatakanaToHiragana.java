@@ -15,12 +15,14 @@ package org.talend.dataquality.jp.transliteration;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import static org.talend.dataquality.jp.transliteration.KanaUtils.DIFF_FULLKATAKANA_HIRAGANA;
+
 public class KatakanaToHiragana {
 
     protected static Stream<String> convert(Stream<String> katakanaStream) {
 
         return katakanaStream.map(katakanaToken -> {
-            String fullWidth = KatakanaUtils.toFullWidth(katakanaToken);
+            String fullWidth = KanaUtils.half2FullKatakana(katakanaToken);
             String specialCharacters = handleSpecialCharacters(fullWidth);
             final IntStream intStream = handleChoonpu(specialCharacters).codePoints().map(KatakanaToHiragana::toHiragana);
             return intStream.collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append).toString();
@@ -76,8 +78,8 @@ public class KatakanaToHiragana {
         if (c != 'ー') {
             if (c == '\u30FB') //Middle point need to be skipped
                 return c;
-            if (KatakanaUtils.isFullWidthKatakana(c)) {
-                return (c - 0x60); // code point difference between full-width katakana and hiragana
+            if (KanaUtils.isFullWidthKatakana(c)) {
+                return (c - DIFF_FULLKATAKANA_HIRAGANA); // code point difference between full-width katakana and hiragana
             }
         }
         return cp;

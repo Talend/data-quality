@@ -83,7 +83,7 @@ public class TextTransliterator {
         return tokenize.stream().map(tokenBase -> {
             final String[] features = tokenBase.getAllFeaturesArray();
             final String katakana = toKatakanaPronunciation ? features[PRONUNCIATION_ID] : features[READING_ID];
-            return KUROMOJI_NA_FEATURE.equals(katakana) ? tokenBase.getSurface() : katakana;
+            return KUROMOJI_NA_FEATURE.equals(katakana) ? KanaUtils.hiragana2FullKatakana(tokenBase.getSurface()) : katakana;
         });
     }
 

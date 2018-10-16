@@ -14,8 +14,11 @@ package org.talend.dataquality.jp.transliteration;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.IntStream;
 
-public class KatakanaUtils {
+public class KanaUtils {
+
+    public static final int DIFF_FULLKATAKANA_HIRAGANA = 0x60; // code point difference between full-width katakana and hiragana
 
     private static final Map<Character, Character> MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA = new HashMap<>();
 
@@ -90,7 +93,7 @@ public class KatakanaUtils {
      * @param katakanaToken katakana string
      * @return string of full width katakana.
      */
-    public static String toFullWidth(String katakanaToken) {
+    public static String half2FullKatakana(String katakanaToken) {
 
         StringBuilder sb = new StringBuilder(katakanaToken);
         char katakanaChar;
@@ -117,6 +120,23 @@ public class KatakanaUtils {
         }
 
         return sb.toString();
+    }
+
+    /**
+     * Convert all hiragana chars to full width katakana chars (keep the other chars as input)
+     *
+     * @param text string
+     * @return string of full width katakana.
+     */
+    public static String hiragana2FullKatakana(String text) {
+        final IntStream cpStream = text.codePoints().map(c -> {
+            if ('\u3041' <= c && c <= '\u3096')
+                return (char) (c + DIFF_FULLKATAKANA_HIRAGANA);
+            else
+                return c;
+        });
+
+        return cpStream.collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append).toString();
     }
 
     /**

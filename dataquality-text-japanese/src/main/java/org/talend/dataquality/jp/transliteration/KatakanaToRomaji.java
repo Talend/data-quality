@@ -175,7 +175,7 @@ public class KatakanaToRomaji {
     }
 
     protected static Stream<String> convert(Stream<String> katakanaStream, TransliterateType type) {
-        return katakanaStream.map(x -> toRomaji(KatakanaUtils.toFullWidth(x), type));
+        return katakanaStream.map(x -> toRomaji(KanaUtils.half2FullKatakana(x), type));
     }
 
     private static String toRomaji(String s, TransliterateType type) {
