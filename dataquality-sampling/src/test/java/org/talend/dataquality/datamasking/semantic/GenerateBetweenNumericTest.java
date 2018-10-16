@@ -37,9 +37,9 @@ public class GenerateBetweenNumericTest {
     }
 
     @Test
-    public void testGenerateForIntegerInput_WithNoIntegerInRange() {
+    public void testGenerateForIntegerInputWithNoIntegerInRange() {
         func.parse("1.2, 1.3", false, new Random(42)); //$NON-NLS-1$
-        String output = func.generateMaskedRow("30");
+        String output = func.generateMaskedRow("30.01");
         assertEquals(output, "1.27"); //$NON-NLS-1$
     }
 
@@ -47,6 +47,22 @@ public class GenerateBetweenNumericTest {
     public void testGenerateForStringInput() {
         func.parse("10.0, 20.0", false, new Random(42)); //$NON-NLS-1$
         String output = func.generateMaskedRow("lol");
-        assertEquals(output, "17.28"); //$NON-NLS-1$
+        assertEquals(output, "17.3"); //$NON-NLS-1$
+    }
+
+    @Test
+    public void testGenerateWithPrecision() {
+        // here minimum precision is 3 digits after decimal separator
+        func.parse("0.012, 0.02", false, new Random(42)); //$NON-NLS-1$
+        String output = func.generateMaskedRow("10");
+        assertEquals(output, "0.018"); //$NON-NLS-1$
+    }
+
+    @Test
+    public void testGenerateWithPrecisionForLongInput() {
+        // here minimum precision is 3 digits after decimal separator
+        func.parse("0.012, 0.02", false, new Random(42)); //$NON-NLS-1$
+        String output = func.generateMaskedRow("10.12345");
+        assertEquals(output, "0.01782"); //$NON-NLS-1$
     }
 }

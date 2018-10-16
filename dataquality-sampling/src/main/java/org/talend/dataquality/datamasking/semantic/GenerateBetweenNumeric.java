@@ -29,15 +29,19 @@ public class GenerateBetweenNumeric extends GenerateBetween<String> {
 
     private static final Pattern patternInteger = Pattern.compile("^(\\+|-)?\\d+$");
 
-    protected double minDouble = 0;
+    private double minDouble = 0;
 
-    protected double maxDouble = 0;
+    private double maxDouble = 0;
+
+    private int minimumPrecision = 0;
 
     protected void setBounds() {
         if (parameters != null && parameters.length == 2) {
             try {
                 minDouble = Double.parseDouble(parameters[0]);
                 maxDouble = Double.parseDouble(parameters[1]);
+                minimumPrecision = Math.max(DecimalPrecisionHelper.getDecimalPrecision(parameters[0]),
+                        DecimalPrecisionHelper.getDecimalPrecision(parameters[1]));
             } catch (NumberFormatException e) {
                 // Do nothing
             }
@@ -61,22 +65,22 @@ public class GenerateBetweenNumeric extends GenerateBetween<String> {
                     final int result = rnd.nextInt(max - min + 1) + min;
                     return String.valueOf(result);
                 } else {
-                    final double result = calculateResult();
-                    return getResultStringWithPrecision(result, 2);
+                    final double result = generateRandomDoubleValue();
+                    return getResultStringWithPrecision(result, minimumPrecision);
                 }
             } else {
-                final double result = calculateResult();
+                final double result = generateRandomDoubleValue();
                 try {
                     final int decimalLength = DecimalPrecisionHelper.getDecimalPrecision(input);
-                    return getResultStringWithPrecision(result, decimalLength);
+                    return getResultStringWithPrecision(result, Math.max(decimalLength, minimumPrecision));
                 } catch (NumberFormatException e) {
-                    return getResultStringWithPrecision(result, 2);
+                    return getResultStringWithPrecision(result, minimumPrecision);
                 }
             }
         }
     }
 
-    private double calculateResult() {
+    private double generateRandomDoubleValue() {
         return rnd.nextDouble() * (maxDouble - minDouble) + minDouble;
     }
 
