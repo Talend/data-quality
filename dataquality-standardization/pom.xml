@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>org.talend.dataquality</groupId>
 		<artifactId>dataquality-libraries</artifactId>
-		<version>6.1.2-SNAPSHOT</version>
+		<version>6.1.2</version>
 		<relativePath>../dataquality-libraries</relativePath>
 	</parent>
 	<artifactId>dataquality-standardization</artifactId>
