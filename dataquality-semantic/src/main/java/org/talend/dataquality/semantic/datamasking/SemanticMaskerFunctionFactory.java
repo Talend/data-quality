@@ -16,7 +16,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.dataquality.datamasking.FunctionFactory;
@@ -131,7 +130,7 @@ public class SemanticMaskerFunctionFactory {
             String extraParam) {
         FunctionFactory factory = new FunctionFactory();
         TypeTester tester = new TypeTester();
-        Function<String> function = null;
+        Function<String> function;
         try {
             if (FunctionType.KEEP_YEAR.equals(functionType) || FunctionType.DATE_VARIANCE.equals(functionType)) {
                 function = adaptForDateFunction(null,
@@ -143,9 +142,7 @@ public class SemanticMaskerFunctionFactory {
             } else {
                 function = (Function<String>) factory.getFunction(functionType, tester.getTypeByName(dataType));
             }
-            if (StringUtils.isNotEmpty(extraParam)) {
-                function.parse(extraParam, true, null);
-            }
+            function.parse(extraParam, true, null);
             function.setKeepFormat(true);
             function.setKeepEmpty(true);
         } catch (InstantiationException e) {
