@@ -130,7 +130,7 @@ public class KanaUtils {
      */
     public static String hiragana2FullKatakana(String text) {
         final IntStream cpStream = text.codePoints().map(c -> {
-            if ('\u3041' <= c && c <= '\u3096')
+            if (('\u3041' <= c && c <= '\u3096') || (c >= '\u309D' && c <= '\u309F'))
                 return (char) (c + DIFF_FULLKATAKANA_HIRAGANA);
             else
                 return c;

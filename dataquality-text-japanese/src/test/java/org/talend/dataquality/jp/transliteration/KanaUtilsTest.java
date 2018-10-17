@@ -34,6 +34,6 @@ public class KanaUtilsTest {
         assertEquals("キャキュキョ", KanaUtils.hiragana2FullKatakana("きゃきゅきょ"));
         assertEquals("ギャギュギョ", KanaUtils.hiragana2FullKatakana("ぎゃぎゅぎょ"));
         assertEquals("ピャピュピョ", KanaUtils.hiragana2FullKatakana("ぴゃぴゅぴょ"));
-
+        assertEquals("ヽヾヿ", KanaUtils.hiragana2FullKatakana("ゝゞゟ"));
     }
 }
