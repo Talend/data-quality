@@ -25,8 +25,8 @@ public class KatakanaToRomaji {
 
     protected static final Map<String, String[]> KATAKANA_TO_ROMAJI = new HashMap<>();
 
-    // see https://en.wikipedia.org/wiki/Romanization_of_Japanese#Differences_among_romanizations
     static {
+        // see https://en.wikipedia.org/wiki/Romanization_of_Japanese#Differences_among_romanizations
         KATAKANA_TO_ROMAJI.put("ア", new String[] { "a" });
         KATAKANA_TO_ROMAJI.put("イ", new String[] { "i" });
         KATAKANA_TO_ROMAJI.put("ウ", new String[] { "u" });
@@ -169,9 +169,45 @@ public class KatakanaToRomaji {
         KATAKANA_TO_ROMAJI.put("ピュ", new String[] { "pyu" });
         KATAKANA_TO_ROMAJI.put("ピョ", new String[] { "pyo" });
 
-        KATAKANA_TO_ROMAJI.put("ティ", new String[] { "ti" });
-        KATAKANA_TO_ROMAJI.put("ディ", new String[] { "di" });
-        KATAKANA_TO_ROMAJI.put("ツィ", new String[] { "tsi" });
+        // Extended katakana for foreign names
+        // Provided from Kanagawa prefecture for passport: http://www.pref.kanagawa.jp/osirase/02/2315/hepburn.html
+        // Note: we only find hepburn romanization for those katakana
+        KATAKANA_TO_ROMAJI.put("イェ", new String[] { "ie" });
+        KATAKANA_TO_ROMAJI.put("ウィ", new String[] { "ui" });
+        KATAKANA_TO_ROMAJI.put("ウェ", new String[] { "ue" });
+        KATAKANA_TO_ROMAJI.put("ウォ", new String[] { "uo" });
+        KATAKANA_TO_ROMAJI.put("ヴァ", new String[] { "bua" });
+        KATAKANA_TO_ROMAJI.put("ヴィ", new String[] { "bui" });
+        KATAKANA_TO_ROMAJI.put("ヴ", new String[] { "bu" });
+        KATAKANA_TO_ROMAJI.put("ヴェ", new String[] { "bue" });
+        KATAKANA_TO_ROMAJI.put("ヴォ", new String[] { "buo" });
+
+        KATAKANA_TO_ROMAJI.put("クァ", new String[] { "kua" });
+        KATAKANA_TO_ROMAJI.put("クィ", new String[] { "kui" });
+        KATAKANA_TO_ROMAJI.put("クェ", new String[] { "kue" });
+        KATAKANA_TO_ROMAJI.put("クォ", new String[] { "kuo" });
+        KATAKANA_TO_ROMAJI.put("グァ", new String[] { "gua" });
+        KATAKANA_TO_ROMAJI.put("グィ", new String[] { "gui" });
+        KATAKANA_TO_ROMAJI.put("グェ", new String[] { "gue" });
+        KATAKANA_TO_ROMAJI.put("グォ", new String[] { "guo" });
+        KATAKANA_TO_ROMAJI.put("ジェ", new String[] { "jie" });
+
+        KATAKANA_TO_ROMAJI.put("チェ", new String[] { "chie" });
+        KATAKANA_TO_ROMAJI.put("ツァ", new String[] { "tsua" });
+        KATAKANA_TO_ROMAJI.put("ツィ", new String[] { "tsui" });
+        KATAKANA_TO_ROMAJI.put("ツェ", new String[] { "tsue" });
+        KATAKANA_TO_ROMAJI.put("ツォ", new String[] { "tsuo" });
+        KATAKANA_TO_ROMAJI.put("ティ", new String[] { "tei" });
+        KATAKANA_TO_ROMAJI.put("ディ", new String[] { "dei" });
+        KATAKANA_TO_ROMAJI.put("デュ", new String[] { "deyu" });
+        KATAKANA_TO_ROMAJI.put("ドゥ", new String[] { "dou" });
+
+        KATAKANA_TO_ROMAJI.put("ファ", new String[] { "fua" });
+        KATAKANA_TO_ROMAJI.put("フィ", new String[] { "fui" });
+        KATAKANA_TO_ROMAJI.put("フェ", new String[] { "fue" });
+        KATAKANA_TO_ROMAJI.put("フォ", new String[] { "fuo" });
+        KATAKANA_TO_ROMAJI.put("フョ", new String[] { "fuyo" });
+
     }
 
     protected static Stream<String> convert(Stream<String> katakanaStream, TransliterateType type) {

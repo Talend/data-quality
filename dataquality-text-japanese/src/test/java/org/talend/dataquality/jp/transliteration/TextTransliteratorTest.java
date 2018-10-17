@@ -40,6 +40,8 @@ public class TextTransliteratorTest {
         testTextList.add("きゃきゅきょ");
         testTextList.add("ぎゃぎゅぎょ");
         testTextList.add("ぴゃぴゅぴょ");
+        testTextList.add("シュワルツェネッガー");
+        testTextList.add("フィジカル");
 
     }
 
@@ -57,6 +59,8 @@ public class TextTransliteratorTest {
         expactedTextList.add("キ ャキュキョ");
         expactedTextList.add("ギャギュギョ");
         expactedTextList.add("ピャピュピョ");
+        expactedTextList.add("シュワルツェネッガー");
+        expactedTextList.add("フィジカル");
 
         for (int i = 0; i < testTextList.size(); i++) {
             final String katakanaReading = transliterator.transliterate(testTextList.get(i), TransliterateType.KATAKANA_READING,
@@ -79,6 +83,8 @@ public class TextTransliteratorTest {
         expactedTextList.add("キ ャキュキョ");
         expactedTextList.add("ギャギュギョ");
         expactedTextList.add("ピャピュピョ");
+        expactedTextList.add("シュワルツェネッガー");
+        expactedTextList.add("フィジカル");
 
         for (int i = 0; i < testTextList.size(); i++) {
             final String katakanaPronunciation = transliterator.transliterate(testTextList.get(i),
@@ -101,6 +107,8 @@ public class TextTransliteratorTest {
         expactedTextList.add("き ゃきゅきょ");
         expactedTextList.add("ぎゃぎゅぎょ");
         expactedTextList.add("ぴゃぴゅぴょ");
+        expactedTextList.add("しゅわるつぇねっがあ");
+        expactedTextList.add("ふぃじかる");
 
         for (int i = 0; i < testTextList.size(); i++) {
             final String hiragana = transliterator.transliterate(testTextList.get(i), TransliterateType.HIRAGANA);
@@ -122,6 +130,8 @@ public class TextTransliteratorTest {
         expactedTextList.add("ki yakyukyo");
         expactedTextList.add("gyagyugyo");
         expactedTextList.add("pyapyupyo");
+        expactedTextList.add("shuwarutsueneggā");
+        expactedTextList.add("fuijikaru");
 
         for (int i = 0; i < testTextList.size(); i++) {
             final String hepburn = transliterator.transliterate(testTextList.get(i), TransliterateType.HEPBURN);
@@ -144,6 +154,8 @@ public class TextTransliteratorTest {
         expactedTextList.add("ki yakyukyo");
         expactedTextList.add("gyagyugyo");
         expactedTextList.add("pyapyupyo");
+        expactedTextList.add("syuwarutsueneggā");
+        expactedTextList.add("fuizikaru");
 
         for (int i = 0; i < testTextList.size(); i++) {
             final String kunrei_shiki = transliterator.transliterate(testTextList.get(i), TransliterateType.KUNREI_SHIKI);
@@ -165,6 +177,8 @@ public class TextTransliteratorTest {
         expactedTextList.add("ki yakyukyo");
         expactedTextList.add("gyagyugyo");
         expactedTextList.add("pyapyupyo");
+        expactedTextList.add("syuwarutsueneggā");
+        expactedTextList.add("fuizikaru");
 
         for (int i = 0; i < testTextList.size(); i++) {
             final String nihon_shiki = transliterator.transliterate(testTextList.get(i), TransliterateType.NIHON_SHIKI);
