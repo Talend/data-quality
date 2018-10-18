@@ -24,7 +24,7 @@
 		<junit.version>4.12</junit.version>
 		<mockito.version>1.10.19</mockito.version>
 
-		<org.talend.daikon.version>0.26.1</org.talend.daikon.version>
+		<org.talend.daikon.version>0.27.0</org.talend.daikon.version>
 
 	</properties>
 
