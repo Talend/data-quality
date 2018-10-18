@@ -18,7 +18,7 @@
 		<slf4j.version>1.7.12</slf4j.version>
 		<log4j.version>1.2.17</log4j.version>
 		<log4j2.version>2.4.1</log4j2.version>
-		<jackson.version>2.9.4</jackson.version>
+		<jackson.version>2.9.5</jackson.version>
 		<java.version>1.8</java.version>
 		<assertj.version>3.0.0</assertj.version>
 		<junit.version>4.12</junit.version>
