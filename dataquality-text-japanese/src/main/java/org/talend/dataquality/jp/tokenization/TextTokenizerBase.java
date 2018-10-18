@@ -17,11 +17,11 @@ public abstract class TextTokenizerBase {
      * @return List of TokenBase
      */
     public List<? extends TokenBase> tokenize(String text) {
-        return tokenizer.tokenize(text);
+        return tokenizer.tokenize(text).stream().filter(token -> !" ".equals(token.getSurface())).collect(Collectors.toList());
     }
 
     private Stream<String> getTokenSurface(String text) {
-        return this.tokenize(text).stream().map(token -> token.getSurface()).filter(token -> !" ".equals(token));
+        return this.tokenize(text).stream().map(token -> token.getSurface());
     }
 
     /**

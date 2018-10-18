@@ -43,7 +43,7 @@ public class TextTransliteratorTest {
         List<String> expactedTextList = new ArrayList<>();
         expactedTextList.add("オヤユズリ ノ ムテッポウ デ ショウ キョウ ノ トキ カラ ソン バカリ シ テ イル");
         expactedTextList.add("トウキョウ ハ ヨル ノ ナナ ジ");
-        expactedTextList.add("ク ノ イチ   female   ninja");
+        expactedTextList.add("ク ノ イチ female ninja");
         expactedTextList.add("ニッポン ガタ ノ カオ モジ 👨 ‍ 🎨 『 ワライ 』(≧▽≦) フジサン ／^ o ^＼");
         expactedTextList.add("チヂム");
         expactedTextList.add("ﾂｲｯﾀｰ");
@@ -60,7 +60,7 @@ public class TextTransliteratorTest {
         List<String> expactedTextList = new ArrayList<>();
         expactedTextList.add("オヤユズリ ノ ムテッポー デ ショー キョー ノ トキ カラ ソン バカリ シ テ イル");
         expactedTextList.add("トーキョー ワ ヨル ノ ナナ ジ");
-        expactedTextList.add("ク ノ イチ   female   ninja");
+        expactedTextList.add("ク ノ イチ female ninja");
         expactedTextList.add("ニッポン ガタ ノ カオ モジ 👨 ‍ 🎨 『 ワライ 』(≧▽≦) フジサン ／^ o ^＼");
         expactedTextList.add("チジム");
         expactedTextList.add("ﾂｲｯﾀｰ");
@@ -77,7 +77,7 @@ public class TextTransliteratorTest {
         List<String> expactedTextList = new ArrayList<>();
         expactedTextList.add("おやゆずり の むてっぽう で しょう きょう の とき から そん ばかり し て いる");
         expactedTextList.add("とうきょう は よる の なな じ");
-        expactedTextList.add("く の いち   female   ninja");
+        expactedTextList.add("く の いち female ninja");
         expactedTextList.add("にっぽん がた の かお もじ 👨 ‍ 🎨 『 わらい 』(≧▽≦) ふじさん ／^ o ^＼");
         expactedTextList.add("ちぢむ");
         expactedTextList.add("ついったあ");
@@ -93,7 +93,7 @@ public class TextTransliteratorTest {
         List<String> expactedTextList = new ArrayList<>();
         expactedTextList.add("oyayuzuri no muteppō de shō kyō no toki kara son bakari shi te iru");
         expactedTextList.add("tōkyō wa yoru no nana ji");
-        expactedTextList.add("ku no ichi   female   ninja");
+        expactedTextList.add("ku no ichi female ninja");
         expactedTextList.add("nippon gata no kao moji 👨 ‍ 🎨 『 warai 』(≧▽≦) fujisan ／^ o ^＼");
         expactedTextList.add("chijimu");
         expactedTextList.add("tsuittā");
@@ -110,7 +110,7 @@ public class TextTransliteratorTest {
         List<String> expactedTextList = new ArrayList<>();
         expactedTextList.add("oyayuzuri no muteppō de syō kyō no toki kara son bakari si te iru");
         expactedTextList.add("tōkyō wa yoru no nana zi");
-        expactedTextList.add("ku no iti   female   ninja");
+        expactedTextList.add("ku no iti female ninja");
         expactedTextList.add("nippon gata no kao mozi 👨 ‍ 🎨 『 warai 』(≧▽≦) huzisan ／^ o ^＼");
         expactedTextList.add("tizimu");
         expactedTextList.add("tuittā");
@@ -126,7 +126,7 @@ public class TextTransliteratorTest {
         List<String> expactedTextList = new ArrayList<>();
         expactedTextList.add("oyayuzuri no muteppō de syō kyō no toki kara son bakari si te iru");
         expactedTextList.add("tōkyō wa yoru no nana zi");
-        expactedTextList.add("ku no iti   female   ninja");
+        expactedTextList.add("ku no iti female ninja");
         expactedTextList.add("nippon gata no kao mozi 👨 ‍ 🎨 『 warai 』(≧▽≦) huzisan ／^ o ^＼");
         expactedTextList.add("tizimu");
         expactedTextList.add("tuittā");
@@ -148,7 +148,7 @@ public class TextTransliteratorTest {
         tests.put("ラーメン", "らあめん"); // Rāmen
         tests.put("らーめん", "ら ー めん"); // Rāmen (kuromoji return tokens: ら| ー| めん)
         tests.put("モールス信号 ・・ ・ー ーー ・・・ ーーー ・ー・ ー・ー", // Mōrusu shingō ... (Morse code ...)
-                "もおるす しんごう   ・ ・   ・ー   ーー   ・ ・ ・   ーーー   ・ー・   ー・ー");
+                "もおるす しんごう ・ ・ ・ー ーー ・ ・ ・ ーーー ・ー・ ー・ー");
 
         for (Map.Entry<String, String> t : tests.entrySet()) {
             assertEquals(t.getValue(), transliterator.transliterate(t.getKey(), TransliterateType.HIRAGANA));
