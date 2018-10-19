@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Sampling Library
 Bundle-SymbolicName: org.talend.dataquality.sampling
-Bundle-Version: 6.1.3
+Bundle-Version: 6.1.4.SNAPSHOT
 Bundle-Vendor: .Talend SA.
 Export-Package: org.talend.dataquality.datamasking,
  org.talend.dataquality.datamasking.functions,
