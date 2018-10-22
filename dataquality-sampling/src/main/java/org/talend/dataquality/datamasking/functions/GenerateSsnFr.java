@@ -12,7 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
-import java.math.BigInteger;
+import org.talend.dataquality.datamasking.utils.utilsSsnFr;
 
 /**
  * The first character has a range of (1, 99). The second character has a range of (1, 12). The third character has a
@@ -23,8 +23,6 @@ import java.math.BigInteger;
 public class GenerateSsnFr extends Function<String> {
 
     private static final long serialVersionUID = 8845031997964609626L;
-
-    private static final BigInteger MOD97 = new BigInteger("97"); //$NON-NLS-1$
 
     @Override
     protected String doGenerateMaskedField(String str) {
@@ -40,22 +38,14 @@ public class GenerateSsnFr extends Function<String> {
             result.append("0"); //$NON-NLS-1$
         }
         result.append(mm);
-        int ll = rnd.nextInt(95) + 1;
-        if (ll < 10) {
-            result.append("0"); //$NON-NLS-1$
-        }
-        result.append(ll);
+        int ll = rnd.nextInt(utilsSsnFr.getNumberOfFrenchDepartments());
+        result.append(utilsSsnFr.getFrenchDepartments().get(ll));
         for (int i = 0; i < 6; ++i) {
             result.append(nextRandomDigit());
         }
 
-        BigInteger ssn = new BigInteger(result.toString());
-        int controlKey = 97 - ssn.mod(MOD97).intValue();
-
-        result.append(" "); //$NON-NLS-1$
-        if (controlKey < 10)
-            result.append("0");
-        result.append(controlKey);
+        String controlKey = utilsSsnFr.computeFrenchKey(result.toString());
+        result.append(" ").append(controlKey);
 
         return result.toString();
     }

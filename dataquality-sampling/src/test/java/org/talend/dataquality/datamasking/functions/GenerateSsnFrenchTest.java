@@ -35,15 +35,15 @@ public class GenerateSsnFrenchTest {
     public void testGood() {
         gnf.setRandom(new Random(42));
         output = gnf.generateMaskedRow(null);
-        assertEquals("2490145055893 62", output); //$NON-NLS-1$
+        assertEquals("2490184055893 76", output); //$NON-NLS-1$
     }
 
     @Test
     public void testControlKeyWithOneDigit() {
-        gnf.setRandom(new Random(38));
+        gnf.setRandom(new Random(43));
         output = gnf.generateMaskedRow(null);
         assertEquals('0', output.charAt(14));
-        assertEquals("2781181756480 07", output); //$NON-NLS-1$
+        assertEquals("2180898768616 04", output); //$NON-NLS-1$
     }
 
     @Test
