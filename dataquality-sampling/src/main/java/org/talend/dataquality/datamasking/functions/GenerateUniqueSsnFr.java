@@ -19,7 +19,7 @@ import java.util.List;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldEnum;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
-import org.talend.dataquality.datamasking.utils.utilsSsnFr;
+import org.talend.dataquality.datamasking.utils.UtilsSsnFr;
 
 /**
  * 
@@ -49,7 +49,7 @@ public class GenerateUniqueSsnFr extends AbstractGenerateUniqueSsn {
         }
 
         // add the security key specified for french SSN
-        String key = utilsSsnFr.computeFrenchKey(result.toString());
+        String key = UtilsSsnFr.computeFrenchKey(result.toString());
 
         result.append(key);
 
@@ -68,7 +68,7 @@ public class GenerateUniqueSsnFr extends AbstractGenerateUniqueSsn {
         fields.add(new FieldInterval(BigInteger.ZERO, BigInteger.valueOf(99)));
         fields.add(new FieldInterval(BigInteger.ONE, BigInteger.valueOf(12)));
 
-        fields.add(new FieldEnum(utilsSsnFr.getFrenchDepartments(), 2));
+        fields.add(new FieldEnum(UtilsSsnFr.getFrenchDepartments(), 2));
 
         fields.add(new FieldInterval(BigInteger.ONE, BigInteger.valueOf(990)));
         fields.add(new FieldInterval(BigInteger.ONE, BigInteger.valueOf(999)));

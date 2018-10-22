@@ -12,7 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
-import org.talend.dataquality.datamasking.utils.utilsSsnFr;
+import org.talend.dataquality.datamasking.utils.UtilsSsnFr;
 
 /**
  * The first character has a range of (1, 99). The second character has a range of (1, 12). The third character has a
@@ -38,13 +38,13 @@ public class GenerateSsnFr extends Function<String> {
             result.append("0"); //$NON-NLS-1$
         }
         result.append(mm);
-        int ll = rnd.nextInt(utilsSsnFr.getNumberOfFrenchDepartments());
-        result.append(utilsSsnFr.getFrenchDepartments().get(ll));
+        int ll = rnd.nextInt(UtilsSsnFr.getNumberOfFrenchDepartments());
+        result.append(UtilsSsnFr.getFrenchDepartments().get(ll));
         for (int i = 0; i < 6; ++i) {
             result.append(nextRandomDigit());
         }
 
-        String controlKey = utilsSsnFr.computeFrenchKey(result.toString());
+        String controlKey = UtilsSsnFr.computeFrenchKey(result.toString());
         result.append(" ").append(controlKey);
 
         return result.toString();
