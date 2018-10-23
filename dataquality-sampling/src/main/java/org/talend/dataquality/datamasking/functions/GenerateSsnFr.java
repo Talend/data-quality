@@ -40,9 +40,22 @@ public class GenerateSsnFr extends Function<String> {
         result.append(mm);
         int ll = rnd.nextInt(UtilsSsnFr.getNumberOfFrenchDepartments());
         result.append(UtilsSsnFr.getFrenchDepartments().get(ll));
-        for (int i = 0; i < 6; ++i) {
-            result.append(nextRandomDigit());
+
+        int nnn1 = rnd.nextInt(990) + 1;
+        if (nnn1 < 10) {
+            result.append("00");
+        } else if (nnn1 < 100) {
+            result.append(0);
         }
+        result.append(nnn1);
+
+        int nnn2 = rnd.nextInt(999) + 1;
+        if (nnn2 < 10) {
+            result.append("00");
+        } else if (nnn2 < 100) {
+            result.append(0);
+        }
+        result.append(nnn2);
 
         String controlKey = UtilsSsnFr.computeFrenchKey(result.toString());
         result.append(" ").append(controlKey);
