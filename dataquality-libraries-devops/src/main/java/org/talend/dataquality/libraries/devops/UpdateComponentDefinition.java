@@ -47,9 +47,9 @@ public class UpdateComponentDefinition {
 
     private static final String COMPONENTS_FOLDER = "/components";
 
-    private static final String DQ_LIB_VERSION = "6.1.4-SNAPSHOT";
+    private static final String DQ_LIB_VERSION = "6.1.5-SNAPSHOT";
 
-    private static final String DAIKON_VERSION = "0.27.0";
+    private static final String DAIKON_VERSION = "0.29.0-SNAPSHOT";
 
     private static final String[] PROVIDERS = new String[] { //
             "/org.talend.designer.components.tdqprovider", //
