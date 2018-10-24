@@ -85,7 +85,7 @@ public class GenerateUniquePhoneNumberUsTest {
     }
 
     @Test
-    public void testWrongSsnFieldNumber() {
+    public void testWrongPhoneFieldNumber() {
         gnu.setKeepInvalidPattern(false);
         // with two 1 at the fifth and the sixth position
         output = gnu.generateMaskedRow("465 311 9856");

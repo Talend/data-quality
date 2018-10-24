@@ -18,6 +18,8 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.idealista.fpe.component.functions.prf.PseudoRandomFunction;
+import org.talend.dataquality.datamasking.fpeUtils.HmacPrf;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 
 /**
@@ -33,6 +35,11 @@ public class GenerateUniqueRandomPatterns implements Serializable {
      * The random key to make impossible the decoding
      */
     private Integer key;
+
+    /**
+     * The keyed pseudo random function used to build a Format-Preserving Encrypter
+     */
+    private PseudoRandomFunction pseudoRandomFunction;
 
     /**
      * The list of all possible values for each field
@@ -66,6 +73,7 @@ public class GenerateUniqueRandomPatterns implements Serializable {
         for (int i = getFieldsNumber() - 2; i >= 0; i--) {
             basedWidthsList.add(0, this.fields.get(i + 1).getWidth().multiply(this.basedWidthsList.get(0)));
         }
+        pseudoRandomFunction = new HmacPrf(0);
     }
 
     public List<AbstractField> getFields() {
@@ -82,6 +90,7 @@ public class GenerateUniqueRandomPatterns implements Serializable {
 
     public void setKey(int key) {
         this.key = key;
+        pseudoRandomFunction = new HmacPrf(key);
     }
 
     /**
@@ -95,25 +104,17 @@ public class GenerateUniqueRandomPatterns implements Serializable {
         }
 
         // encode the fields
-        List<BigInteger> listToMask = new ArrayList<BigInteger>();
-        BigInteger encodeNumber;
-        for (int i = 0; i < getFieldsNumber(); i++) {
-            encodeNumber = fields.get(i).encode(strs.get(i));
-            if (encodeNumber.equals(BigInteger.valueOf(-1))) {
-                return null;
-            }
-            listToMask.add(encodeNumber);
+        List<BigInteger> listToMask = getBigIntFieldList(strs);
+
+        if (listToMask == null) {
+            return null;
         }
 
         // generate the unique random number from the old one
         List<BigInteger> uniqueMaskedNumberList = getUniqueRandomNumber(listToMask);
 
-        // decode the fields
-        StringBuilder result = new StringBuilder("");
-        for (int i = 0; i < getFieldsNumber(); i++) {
-            result.append(fields.get(i).decode(uniqueMaskedNumberList.get(i)));
-        }
-        return result;
+        return decodeFields(uniqueMaskedNumberList);
+
     }
 
     /**
@@ -123,10 +124,7 @@ public class GenerateUniqueRandomPatterns implements Serializable {
     private List<BigInteger> getUniqueRandomNumber(List<BigInteger> listToMask) {
 
         // numberToMask is the number to masked created from listToMask
-        BigInteger numberToMask = BigInteger.ZERO;
-        for (int i = 0; i < getFieldsNumber(); i++) {
-            numberToMask = numberToMask.add(listToMask.get(i).multiply(basedWidthsList.get(i)));
-        }
+        BigInteger numberToMask = getSSNRank(listToMask);
 
         if (key == null) {
             setKey((new SecureRandom()).nextInt(Integer.MAX_VALUE - 1000000) + 1000000);
@@ -135,18 +133,7 @@ public class GenerateUniqueRandomPatterns implements Serializable {
         // uniqueMaskedNumber is the number we masked
         BigInteger uniqueMaskedNumber = (numberToMask.multiply(coprimeNumber)).mod(longestWidth);
 
-        // uniqueMaskedNumberList is the unique list created from uniqueMaskedNumber
-        List<BigInteger> uniqueMaskedNumberList = new ArrayList<BigInteger>();
-        for (int i = 0; i < getFieldsNumber(); i++) {
-            // baseRandomNumber is the quotient of the Euclidean division between uniqueMaskedNumber and
-            // basedWidthsList.get(i)
-            BigInteger baseRandomNumber = uniqueMaskedNumber.divide(basedWidthsList.get(i));
-            uniqueMaskedNumberList.add(baseRandomNumber);
-            // we reiterate with the remainder of the Euclidean division
-            uniqueMaskedNumber = uniqueMaskedNumber.mod(basedWidthsList.get(i));
-        }
-
-        return uniqueMaskedNumberList;
+        return getFieldsFromRank(uniqueMaskedNumber);
     }
 
     /**
@@ -172,4 +159,70 @@ public class GenerateUniqueRandomPatterns implements Serializable {
         return length;
     }
 
+    public PseudoRandomFunction getPseudoRandomFunction() {
+        return this.pseudoRandomFunction;
+    }
+
+    public BigInteger getLongestWidth() {
+        return this.longestWidth;
+    }
+
+    /**
+     * @param uniqueMaskedNumberList The field list encoded as Big Integer
+     * @return the decoded field list as a StringBuilder
+     */
+    public StringBuilder decodeFields(List<BigInteger> uniqueMaskedNumberList) {
+        // decode the fields
+        StringBuilder decoded = new StringBuilder("");
+        for (int i = 0; i < getFieldsNumber(); i++) {
+            decoded.append(fields.get(i).decode(uniqueMaskedNumberList.get(i)));
+        }
+        return decoded;
+    }
+
+    /**
+     * @param strs, the string input to encode
+     * @return the new string encoding
+     */
+    public List<BigInteger> getBigIntFieldList(List<String> strs) {
+        // encode the fields
+        List<BigInteger> listToMask = new ArrayList<BigInteger>();
+        BigInteger encodeNumber;
+        for (int i = 0; i < getFieldsNumber(); i++) {
+            encodeNumber = fields.get(i).encode(strs.get(i));
+            if (encodeNumber.equals(BigInteger.valueOf(-1))) {
+                return null;
+            }
+            listToMask.add(encodeNumber);
+        }
+
+        return listToMask;
+    }
+
+    /**
+     * @param listToMask, the numbers list for each field
+     * @return uniqueMaskedNumberList, the masked list
+     */
+    public BigInteger getSSNRank(List<BigInteger> listToMask) {
+        // numberToMask is the number to masked created from listToMask
+        BigInteger numberToMask = BigInteger.ZERO;
+        for (int i = 0; i < getFieldsNumber(); i++)
+            numberToMask = numberToMask.add(listToMask.get(i).multiply(basedWidthsList.get(i)));
+
+        return numberToMask;
+    }
+
+    public List<BigInteger> getFieldsFromRank(BigInteger uniqueMaskedNumber) {
+        // uniqueMaskedNumberList is the unique list created from uniqueMaskedNumber
+        List<BigInteger> uniqueMaskedNumberList = new ArrayList<BigInteger>();
+        for (int i = 0; i < getFieldsNumber(); i++) {
+            // baseRandomNumber is the quotient of the Euclidean division between uniqueMaskedNumber and
+            // basedWidthsList.get(i)
+            BigInteger baseRandomNumber = uniqueMaskedNumber.divide(basedWidthsList.get(i));
+            uniqueMaskedNumberList.add(baseRandomNumber);
+            // we reiterate with the remainder of the Euclidean division
+            uniqueMaskedNumber = uniqueMaskedNumber.mod(basedWidthsList.get(i));
+        }
+        return uniqueMaskedNumberList;
+    }
 }

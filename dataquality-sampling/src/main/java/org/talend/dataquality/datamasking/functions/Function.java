@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * created by jgonzalez on 18 juin 2015. This class is an abstract class that
- * all other functions extends. All the methods and fiels that all functions
+ * all other functions extend. All the methods and fields that all functions
  * share are stored here.
  *
  */

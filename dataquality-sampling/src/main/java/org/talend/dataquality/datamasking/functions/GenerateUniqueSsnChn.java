@@ -79,6 +79,11 @@ public class GenerateUniqueSsnChn extends AbstractGenerateUniqueSsn {
     }
 
     @Override
+    protected boolean isValid(String str) {
+        return true;
+    }
+
+    @Override
     protected List<AbstractField> createFieldsListFromPattern() {
         List<AbstractField> fields = new ArrayList<AbstractField>();
 

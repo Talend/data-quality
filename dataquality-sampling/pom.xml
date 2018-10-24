@@ -125,8 +125,17 @@
             <artifactId>generex</artifactId>
             <version>1.0.2</version>
          </dependency>
-        
-         <!-- https://mvnrepository.com/artifact/dk.brics/automaton -->
+
+		<!-- used for FPE masking.
+		https://github.com/idealista/format-preserving-encryption-java-->
+		<dependency>
+			<groupId>com.idealista</groupId>
+			<artifactId>format-preserving-encryption</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+
+
+		<!-- https://mvnrepository.com/artifact/dk.brics/automaton -->
 		<dependency>
 		    <groupId>dk.brics</groupId>
 		    <artifactId>automaton</artifactId>

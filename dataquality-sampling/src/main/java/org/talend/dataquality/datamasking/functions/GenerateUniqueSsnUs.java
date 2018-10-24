@@ -59,4 +59,9 @@ public class GenerateUniqueSsnUs extends AbstractGenerateUniqueSsn {
         return ssnPattern.generateUniqueString(strs);
     }
 
+    @Override
+    protected boolean isValid(String str) {
+        return true;
+    }
+
 }

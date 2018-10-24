@@ -62,6 +62,11 @@ public class GenerateUniqueSsnIndia extends AbstractGenerateUniqueSsn {
         return result;
     }
 
+    @Override
+    protected boolean isValid(String str) {
+        return true;
+    }
+
     /**
      * 
      * @return the list of each field
