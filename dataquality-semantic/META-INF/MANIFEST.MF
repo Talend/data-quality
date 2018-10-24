@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Semantic Library
 Bundle-SymbolicName: org.talend.dataquality.semantic;singleton:=true
-Bundle-Version: 6.1.4.SNAPSHOT
+Bundle-Version: 6.1.4
 Bundle-Vendor: .Talend SA.
 Export-Package: org.apache.commons.csv,
  org.talend.dataquality.semantic,
