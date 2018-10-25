@@ -80,22 +80,23 @@ class BroadcastUtils {
     static List<BroadcastDocumentObject> readDocumentsFromIndex(Directory indexDir, Set<String> selectedCategoryIds)
             throws IOException {
         List<BroadcastDocumentObject> dictionaryObject = new ArrayList<>();
-
-        BooleanQuery booleanQuery = new BooleanQuery();
-        for (String a : selectedCategoryIds)
-            booleanQuery.add(new TermQuery(new Term(DictionarySearcher.F_CATID, a)), BooleanClause.Occur.SHOULD);
-        DirectoryReader reader = DirectoryReader.open(indexDir);
-        IndexSearcher searcher = new IndexSearcher(reader);
-        TopDocs topDocs = searcher.search(booleanQuery, Integer.MAX_VALUE);
-        for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
-            Document doc = searcher.doc(scoreDoc.doc);
-            Set<String> valueSet = new HashSet<>();
-            // original values must be read from the F_RAW field
-            for (IndexableField syntermField : doc.getFields(DictionarySearcher.F_RAW)) {
-                valueSet.add(syntermField.stringValue());
+        if (indexDir != null) {
+            BooleanQuery booleanQuery = new BooleanQuery();
+            for (String a : selectedCategoryIds)
+                booleanQuery.add(new TermQuery(new Term(DictionarySearcher.F_CATID, a)), BooleanClause.Occur.SHOULD);
+            DirectoryReader reader = DirectoryReader.open(indexDir);
+            IndexSearcher searcher = new IndexSearcher(reader);
+            TopDocs topDocs = searcher.search(booleanQuery, Integer.MAX_VALUE);
+            for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
+                Document doc = searcher.doc(scoreDoc.doc);
+                Set<String> valueSet = new HashSet<>();
+                // original values must be read from the F_RAW field
+                for (IndexableField syntermField : doc.getFields(DictionarySearcher.F_RAW)) {
+                    valueSet.add(syntermField.stringValue());
+                }
+                dictionaryObject
+                        .add(new BroadcastDocumentObject(doc.getField(DictionarySearcher.F_CATID).stringValue(), valueSet));
             }
-            dictionaryObject.add(new BroadcastDocumentObject(doc.getField(DictionarySearcher.F_CATID).stringValue(), valueSet));
-
         }
         return dictionaryObject;
     }

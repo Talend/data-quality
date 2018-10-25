@@ -118,9 +118,6 @@ public class CustomDictionaryHolder {
      * Getter for Lucene Directory of Data Dict
      */
     public Directory getDataDictDirectory() {
-        if (dataDictDirectory == null) {
-            ensureDocumentDictIndexAccess();
-        }
         return dataDictDirectory;
     }
 
@@ -614,7 +611,8 @@ public class CustomDictionaryHolder {
         return new DictionarySnapshot(getMetadata(), //
                 new LuceneIndex(CategoryRegistryManager.getInstance().getSharedDataDictDirectory(),
                         DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY), //
-                new LuceneIndex(getDataDictDirectory(), DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY), //
+                getDataDictDirectory() == null ? null
+                        : new LuceneIndex(getDataDictDirectory(), DictionarySearchMode.MATCH_SEMANTIC_DICTIONARY), //
                 new LuceneIndex(CategoryRegistryManager.getInstance().getSharedKeywordDirectory(),
                         DictionarySearchMode.MATCH_SEMANTIC_KEYWORD), //
                 getRegexClassifier()//
