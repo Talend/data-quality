@@ -13,6 +13,8 @@
 package org.talend.dataquality.jp.numbers;
 
 import java.math.BigDecimal;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 public class JapaneseNumberNormalizer {
 
@@ -68,7 +70,14 @@ public class JapaneseNumberNormalizer {
             if (normalizedNumber == null) {
                 return numberNotTrimmed;
             }
-            return numberBuffer.prefix + normalizedNumber.stripTrailingZeros().toPlainString() + numberBuffer.suffix;
+
+            String formattedNumber = normalizedNumber.stripTrailingZeros().toPlainString();
+            if (numberNotTrimmed.contains("、")) {
+                NumberFormat formatter = NumberFormat.getInstance(new Locale("en_US"));
+                formattedNumber = formatter.format(normalizedNumber.longValue());
+            }
+
+            return numberBuffer.prefix + formattedNumber + numberBuffer.suffix;
         } catch (NumberFormatException | ArithmeticException e) {
             // Return the source number in case of error, i.e. malformed input
             return number;
@@ -389,7 +398,7 @@ public class JapaneseNumberNormalizer {
      */
     private boolean isDecimalPoint(char c) {
         return c == '.' // U+002E FULL STOP 
-                || c == '．' || c == '点' || c == '點'; // U+FF0E FULLWIDTH FULL STOP
+                || c == '．' || c == '点' || c == '點' || c == '・'; // U+FF0E FULLWIDTH FULL STOP
     }
 
     /**
@@ -400,7 +409,8 @@ public class JapaneseNumberNormalizer {
      */
     private boolean isThousandSeparator(char c) {
         return c == ',' // U+002C COMMA
-                || c == '，'; // U+FF0C FULLWIDTH COMMA
+                || c == '，' // U+FF0C FULLWIDTH COMMA
+                || c == '、';
     }
 
     private boolean isKanjiExponent(char c) {

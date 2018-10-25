@@ -50,6 +50,8 @@ public class JapaneseNumberNormalizerTest {
         values.put("負一千一百五十八", "-1158");
         values.put("百二十三円", "123円");
         values.put("¥百二十三", "¥123");
+        values.put("五八五、四〇〇", "585,400");
+        values.put("百五十七・五", "157.5");
     }
 
     @Test
