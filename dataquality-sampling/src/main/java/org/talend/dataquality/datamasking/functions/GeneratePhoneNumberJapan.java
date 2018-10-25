@@ -22,11 +22,11 @@ public class GeneratePhoneNumberJapan extends Function<String> {
 
     @Override
     protected String doGenerateMaskedField(String str) {
-        StringBuilder result = new StringBuilder("3 "); //$NON-NLS-1$
+        StringBuilder result = new StringBuilder("03-"); //$NON-NLS-1$
         for (int i = 0; i < 4; ++i) {
             result.append(nextRandomDigit());
         }
-        result.append(" "); //$NON-NLS-1$
+        result.append("-"); //$NON-NLS-1$
         for (int i = 0; i < 4; ++i) {
             result.append(nextRandomDigit());
         }

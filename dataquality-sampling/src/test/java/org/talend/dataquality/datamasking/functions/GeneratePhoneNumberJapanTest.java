@@ -40,7 +40,7 @@ public class GeneratePhoneNumberJapanTest {
     @Test
     public void testGood() {
         output = gpnj.generateMaskedRow(null);
-        assertEquals("3 0384 0558", output); //$NON-NLS-1$
+        assertEquals("03-0384-0558", output); //$NON-NLS-1$
     }
 
     @Test
@@ -56,7 +56,7 @@ public class GeneratePhoneNumberJapanTest {
         gpnj.setRandom(new Random());
         for (int i = 0; i < 10; i++) {
             String tmp = gpnj.generateMaskedRow(null);
-            res = (tmp.charAt(0) == '3');
+            res = (tmp.charAt(0) == '0') && (tmp.charAt(1) == '3');
             assertTrue("invalid pĥone number " + tmp, res); //$NON-NLS-1$
         }
     }
@@ -72,12 +72,12 @@ public class GeneratePhoneNumberJapanTest {
         MockRandom random = new MockRandom();
         gpnj.setRandom(random);
         output = gpnj.generateMaskedRow(null);
-        assertEquals("3 0123 4567", output);
+        assertEquals("03-0123-4567", output);
         random.setNext(2);
         output = gpnj.generateMaskedRow(null);
-        assertEquals("3 2345 6789", output);
+        assertEquals("03-2345-6789", output);
         random.setNext(6);
         output = gpnj.generateMaskedRow(null);
-        assertEquals("3 6789 0123", output);
+        assertEquals("03-6789-0123", output);
     }
 }
