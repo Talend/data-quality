@@ -2,6 +2,11 @@ package org.talend.dataquality.datamasking.fpeUtils;
 
 import com.idealista.fpe.config.Alphabet;
 
+/**
+ * @author afournier
+ *
+ * Binary Alphabet.
+ */
 public class BinaryAlphabet implements Alphabet {
 
     private static final char[] LOWER_CASE_CHARS = new char[] { '0', '1' };

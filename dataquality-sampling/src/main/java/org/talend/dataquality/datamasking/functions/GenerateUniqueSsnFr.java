@@ -144,6 +144,12 @@ public class GenerateUniqueSsnFr extends AbstractGenerateUniqueSsn {
         return createFieldsListFromPattern();
     }
 
+    /**
+     * Build an instance of {@code FormatPreservingEncryption} used to encrypt the values to mask using FF1 algorithm.
+     * @param prf the underlying keyed pseudo-random function built in
+     *            {@link org.talend.dataquality.datamasking.generic.GenerateUniqueRandomPatterns}
+     * @return an instance of {@code FormatPreservingEncryption}.
+     */
     private FormatPreservingEncryption buildFPEInstance(PseudoRandomFunction prf) {
 
         FrenchSSNTransformer ssnTransformer = new FrenchSSNTransformer(2, ssnPattern);
@@ -155,17 +161,25 @@ public class GenerateUniqueSsnFr extends AbstractGenerateUniqueSsn {
         return fpeBuilder.build();
     }
 
+    /**
+     * Compute a tweak. For now we don't use tweaks for masking.
+     * @return an empty tweak.
+     */
     private byte[] computeTweak(String ssn) {
         return new byte[] {};
     }
 
+    /**
+     * Verifies the validity of an ssn string.
+     * @return true if valid, false otherwise.
+     */
     protected boolean isValid(String ssn) {
-        List<BigInteger> numericFields = ssnPattern.getBigIntFieldList(ssnUtils.splitFields(ssn));
+        List<BigInteger> numericFields = ssnPattern.encodeFields(ssnUtils.splitFields(ssn));
         if (numericFields == null) {
             return false;
         }
 
-        BigInteger rank = ssnPattern.getSSNRank(numericFields);
+        BigInteger rank = ssnPattern.getRank(numericFields);
         return rank.compareTo(ssnPattern.getLongestWidth()) < 0;
     }
 }

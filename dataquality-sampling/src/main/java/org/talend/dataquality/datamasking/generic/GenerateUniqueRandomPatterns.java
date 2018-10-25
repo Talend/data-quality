@@ -73,6 +73,8 @@ public class GenerateUniqueRandomPatterns implements Serializable {
         for (int i = getFieldsNumber() - 2; i >= 0; i--) {
             basedWidthsList.add(0, this.fields.get(i + 1).getWidth().multiply(this.basedWidthsList.get(0)));
         }
+
+        // Initialize the prf with a random key. See HmacPrf constructor implementation.
         pseudoRandomFunction = new HmacPrf(0);
     }
 
@@ -104,7 +106,7 @@ public class GenerateUniqueRandomPatterns implements Serializable {
         }
 
         // encode the fields
-        List<BigInteger> listToMask = getBigIntFieldList(strs);
+        List<BigInteger> listToMask = encodeFields(strs);
 
         if (listToMask == null) {
             return null;
@@ -124,7 +126,7 @@ public class GenerateUniqueRandomPatterns implements Serializable {
     private List<BigInteger> getUniqueRandomNumber(List<BigInteger> listToMask) {
 
         // numberToMask is the number to masked created from listToMask
-        BigInteger numberToMask = getSSNRank(listToMask);
+        BigInteger numberToMask = getRank(listToMask);
 
         if (key == null) {
             setKey((new SecureRandom()).nextInt(Integer.MAX_VALUE - 1000000) + 1000000);
@@ -168,14 +170,14 @@ public class GenerateUniqueRandomPatterns implements Serializable {
     }
 
     /**
-     * @param uniqueMaskedNumberList The field list encoded as Big Integer
+     * @param encodedFieldList The field list encoded as Big Integer
      * @return the decoded field list as a StringBuilder
      */
-    public StringBuilder decodeFields(List<BigInteger> uniqueMaskedNumberList) {
+    public StringBuilder decodeFields(List<BigInteger> encodedFieldList) {
         // decode the fields
         StringBuilder decoded = new StringBuilder("");
         for (int i = 0; i < getFieldsNumber(); i++) {
-            decoded.append(fields.get(i).decode(uniqueMaskedNumberList.get(i)));
+            decoded.append(fields.get(i).decode(encodedFieldList.get(i)));
         }
         return decoded;
     }
@@ -184,7 +186,7 @@ public class GenerateUniqueRandomPatterns implements Serializable {
      * @param strs, the string input to encode
      * @return the new string encoding
      */
-    public List<BigInteger> getBigIntFieldList(List<String> strs) {
+    public List<BigInteger> encodeFields(List<String> strs) {
         // encode the fields
         List<BigInteger> listToMask = new ArrayList<BigInteger>();
         BigInteger encodeNumber;
@@ -203,7 +205,7 @@ public class GenerateUniqueRandomPatterns implements Serializable {
      * @param listToMask, the numbers list for each field
      * @return uniqueMaskedNumberList, the masked list
      */
-    public BigInteger getSSNRank(List<BigInteger> listToMask) {
+    public BigInteger getRank(List<BigInteger> listToMask) {
         // numberToMask is the number to masked created from listToMask
         BigInteger numberToMask = BigInteger.ZERO;
         for (int i = 0; i < getFieldsNumber(); i++)
@@ -212,16 +214,20 @@ public class GenerateUniqueRandomPatterns implements Serializable {
         return numberToMask;
     }
 
-    public List<BigInteger> getFieldsFromRank(BigInteger uniqueMaskedNumber) {
+    /**
+     * @param rank A {@code BigInteger} corresponding to the rank of an element
+     * @return the corresponding numeric values of each field
+     */
+    public List<BigInteger> getFieldsFromRank(BigInteger rank) {
         // uniqueMaskedNumberList is the unique list created from uniqueMaskedNumber
         List<BigInteger> uniqueMaskedNumberList = new ArrayList<BigInteger>();
         for (int i = 0; i < getFieldsNumber(); i++) {
             // baseRandomNumber is the quotient of the Euclidean division between uniqueMaskedNumber and
             // basedWidthsList.get(i)
-            BigInteger baseRandomNumber = uniqueMaskedNumber.divide(basedWidthsList.get(i));
+            BigInteger baseRandomNumber = rank.divide(basedWidthsList.get(i));
             uniqueMaskedNumberList.add(baseRandomNumber);
             // we reiterate with the remainder of the Euclidean division
-            uniqueMaskedNumber = uniqueMaskedNumber.mod(basedWidthsList.get(i));
+            rank = rank.mod(basedWidthsList.get(i));
         }
         return uniqueMaskedNumberList;
     }

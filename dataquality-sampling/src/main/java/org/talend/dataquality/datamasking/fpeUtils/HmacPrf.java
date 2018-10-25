@@ -11,6 +11,12 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
+/**
+ * @author afournier
+ *
+ * This class is a pseduo-random function used in FF1 encryption.
+ * It relies on the HMAC algorithm combined with SHA-2 hashing function.
+ */
 public class HmacPrf implements PseudoRandomFunction {
 
     private static final String MAC_ALGORITHM = "HmacSHA256";
@@ -70,6 +76,11 @@ public class HmacPrf implements PseudoRandomFunction {
         return hmac.doFinal(text);
     }
 
+    /**
+     * @param key a key given as an {@code Integer}
+     * @return a {@code SecretKey} securely generated using
+     *         <a href="https://docs.oracle.com/javase/7/docs/api/javax/crypto/package-summary.html">javax.crypto</a>.
+     */
     private static SecretKey generateKey(int key) {
         try {
             KeyGenerator keyGen = KeyGenerator.getInstance(MAC_ALGORITHM);
