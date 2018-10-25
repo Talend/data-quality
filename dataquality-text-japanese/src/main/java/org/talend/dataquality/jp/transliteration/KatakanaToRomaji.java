@@ -225,7 +225,13 @@ public class KatakanaToRomaji {
                 t.append(getRomajiByType(s.substring(i, i + 1), type));
             } else if (s.charAt(i) == 'ー') { // handle chōonpu: see https://en.wikipedia.org/wiki/Ch%C5%8Donpu
                 if (t.length() >= 1) {
-                    t.replace(t.length() - 1, t.length(), addMacronMark(t.charAt(t.length() - 1)));
+                    String valueToReplace;
+                    if (type == TransliterateType.NIHON_SHIKI || type == TransliterateType.KUNREI_SHIKI)
+                        valueToReplace = addCircumflex(t.charAt(t.length() - 1));
+                    else
+                        valueToReplace = addMacronMark(t.charAt(t.length() - 1));
+
+                    t.replace(t.length() - 1, t.length(), valueToReplace);
                 } else {
                     LOGGER.warn("Token: " + s + " shouldn't start with the chōonpu symbol (¯)");
                 }
@@ -270,6 +276,25 @@ public class KatakanaToRomaji {
             return "ē";
         case 'o':
             return "ō";
+        default: {
+            LOGGER.warn("Unknown chōonpu " + c);
+            return "¯";
+        }
+        }
+    }
+
+    private static String addCircumflex(char c) {
+        switch (c) {
+        case 'a':
+            return "â";
+        case 'i':
+            return "î";
+        case 'u':
+            return "û";
+        case 'e':
+            return "ê";
+        case 'o':
+            return "ô";
         default: {
             LOGGER.warn("Unknown chōonpu " + c);
             return "¯";
