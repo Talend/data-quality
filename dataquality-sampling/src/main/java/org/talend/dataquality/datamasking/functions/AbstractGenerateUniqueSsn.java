@@ -93,6 +93,9 @@ public abstract class AbstractGenerateUniqueSsn extends Function<String> {
     protected abstract boolean isValid(String str);
 
     protected boolean isValidWithFormat(String str) {
+        if (str == null) {
+            return false;
+        }
         String strWithoutSpaces = super.removeFormatInString(str);
         return isValid(strWithoutSpaces);
     }

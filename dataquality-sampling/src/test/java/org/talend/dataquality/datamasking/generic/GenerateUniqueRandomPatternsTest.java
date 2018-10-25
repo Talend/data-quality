@@ -56,6 +56,19 @@ public class GenerateUniqueRandomPatternsTest {
     }
 
     @Test
+    public void testGetMaxRank() {
+        BigInteger rank = pattern.getRank(pattern.encodeFields(Arrays.asList("S", "DU", "500", "20")));
+        assertEquals(rank, pattern.getLongestWidth().add(BigInteger.valueOf(-1)));
+    }
+    
+    @Test
+    public void testGetMinRank() {
+        BigInteger rank = pattern.getRank(pattern.encodeFields(Arrays.asList("O", "SF", "000", "5")));
+        System.out.println("RANK " + rank);
+        assertEquals(rank, BigInteger.ZERO);
+    }
+
+    @Test
     public void testUnique() {
         Set<StringBuilder> uniqueSetTocheck = new HashSet<StringBuilder>();
         for (BigInteger i = BigInteger.ZERO; i.compareTo(pattern.getFields().get(0).getWidth()) < 0; i = i.add(BigInteger.ONE)) {

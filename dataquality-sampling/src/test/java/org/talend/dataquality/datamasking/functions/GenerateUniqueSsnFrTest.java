@@ -111,6 +111,18 @@ public class GenerateUniqueSsnFrTest {
     }
 
     @Test
+    public void testMaxSSN() {
+        output = gnf.generateMaskedRow("2991299990999 87");
+        assertTrue(gnf.isValidWithFormat(output));
+    }
+
+    @Test
+    public void testMinSSN() {
+        output = gnf.generateMaskedRow("1000101001001 05");
+        assertTrue(gnf.isValid(output));
+    }
+
+    @Test
     public void testWrongSsnFieldPattern() {
         gnf.setKeepInvalidPattern(false);
         // with a letter instead of a number
