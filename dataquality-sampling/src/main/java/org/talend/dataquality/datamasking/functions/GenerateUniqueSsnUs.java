@@ -16,6 +16,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.talend.dataquality.datamasking.generic.GenerateUniqueRandomPatterns;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldEnum;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
@@ -56,11 +57,11 @@ public class GenerateUniqueSsnUs extends AbstractGenerateUniqueSsn {
         strs.add(str.substring(3, 5));
         strs.add(str.substring(5, 9));
 
-        return ssnPattern.generateUniqueString(strs);
+        return ssnPattern.generateUniqueString(strs, secretMng);
     }
 
     @Override
-    protected boolean isValid(String str) {
+    protected boolean isValidWithoutFormat(String str) {
         return true;
     }
 

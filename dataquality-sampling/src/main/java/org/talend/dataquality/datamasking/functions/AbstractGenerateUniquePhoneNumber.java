@@ -6,8 +6,10 @@ import java.util.List;
 import java.util.Random;
 
 import org.talend.dataquality.datamasking.generic.GenerateUniqueRandomPatterns;
+import org.talend.dataquality.datamasking.SecretManager;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
+import org.talend.dataquality.datamasking.generic.AbstractGeneratePattern;
 
 /**
  * Created by jteuladedenantes on 21/09/16.
@@ -16,13 +18,13 @@ public abstract class AbstractGenerateUniquePhoneNumber extends Function<String>
 
     private static final long serialVersionUID = -3495285699226639929L;
 
-    protected GenerateUniqueRandomPatterns phoneNumberPattern;
+    protected AbstractGeneratePattern phoneNumberPattern;
 
     private ReplaceNumericString replaceNumeric = new ReplaceNumericString();
 
     public AbstractGenerateUniquePhoneNumber() {
         List<AbstractField> fields = createFieldsListFromPattern();
-
+        secretMng = new SecretManager();
         phoneNumberPattern = new GenerateUniqueRandomPatterns(fields);
     }
 
@@ -30,7 +32,7 @@ public abstract class AbstractGenerateUniquePhoneNumber extends Function<String>
     public void setRandom(Random rand) {
         super.setRandom(rand);
         replaceNumeric.parse(null, false, rand);
-        phoneNumberPattern.setKey(rand.nextInt(Integer.MAX_VALUE - 1000000) + 1000000);
+        secretMng.setKey(rand.nextInt(Integer.MAX_VALUE - 1000000) + 1000000);
     }
 
     @Override
@@ -78,7 +80,7 @@ public abstract class AbstractGenerateUniquePhoneNumber extends Function<String>
 
         strs.add(str.substring(str.length() - getDigitsNumberToMask(), str.length()));
 
-        StringBuilder result = phoneNumberPattern.generateUniqueString(strs);
+        StringBuilder result = phoneNumberPattern.generateUniqueString(strs, secretMng);
         if (result == null) {
             return null;
         }

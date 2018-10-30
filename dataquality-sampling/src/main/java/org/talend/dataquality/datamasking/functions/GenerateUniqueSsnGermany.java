@@ -49,11 +49,11 @@ public class GenerateUniqueSsnGermany extends AbstractGenerateUniqueSsn {
             ssnPattern = new GenerateUniqueRandomPatterns(fields);
         }
 
-        return ssnPattern.generateUniqueString(strs);
+        return ssnPattern.generateUniqueString(strs, secretMng);
     }
 
     @Override
-    protected boolean isValid(String str) {
+    protected boolean isValidWithoutFormat(String str) {
         return true;
     }
 }

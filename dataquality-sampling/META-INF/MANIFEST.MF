@@ -6,6 +6,8 @@ Bundle-Version: 6.2.0.SNAPSHOT
 Bundle-Vendor: .Talend SA.
 Export-Package: org.talend.dataquality.datamasking,
  org.talend.dataquality.datamasking.fpeUtils,
+ org.talend.dataquality.datamasking.fpeUtils.alphabets,
+ org.talend.dataquality.datamasking.fpeUtils.pseudoRandomFunctions,
  org.talend.dataquality.datamasking.functions,
  org.talend.dataquality.datamasking.generic,
  org.talend.dataquality.datamasking.generic.fields,

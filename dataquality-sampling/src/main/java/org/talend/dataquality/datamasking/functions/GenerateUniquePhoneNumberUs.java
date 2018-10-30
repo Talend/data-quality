@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.talend.dataquality.datamasking.generic.GenerateUniqueRandomPatterns;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldEnum;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
@@ -27,7 +28,7 @@ public class GenerateUniquePhoneNumberUs extends AbstractGenerateUniquePhoneNumb
         strs.add(str.substring(str.length() - 6, str.length() - 4));
         strs.add(str.substring(str.length() - 4, str.length()));
 
-        StringBuilder result = phoneNumberPattern.generateUniqueString(strs);
+        StringBuilder result = phoneNumberPattern.generateUniqueString(strs, secretMng);
         if (result == null) {
             return null;
         }

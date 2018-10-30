@@ -15,8 +15,10 @@ package org.talend.dataquality.datamasking.functions;
 import java.util.List;
 import java.util.Random;
 
+import org.talend.dataquality.datamasking.generic.GenerateFormatPreservingPatterns;
 import org.talend.dataquality.datamasking.generic.GenerateUniqueRandomPatterns;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
+import org.talend.dataquality.datamasking.generic.AbstractGeneratePattern;
 
 /**
  * @author jteuladedenantes
@@ -27,7 +29,7 @@ public abstract class AbstractGenerateUniqueSsn extends Function<String> {
 
     private static final long serialVersionUID = -2459692854626505777L;
 
-    protected GenerateUniqueRandomPatterns ssnPattern;
+    protected AbstractGeneratePattern ssnPattern;
 
     /**
      * Used in some countries to check the SSN number. The initialization can be done in createFieldsListFromPattern
@@ -43,7 +45,13 @@ public abstract class AbstractGenerateUniqueSsn extends Function<String> {
     @Override
     public void setRandom(Random rand) {
         super.setRandom(rand);
-        ssnPattern.setKey(rand.nextInt() % 10000 + 1000);
+        secretMng.setKey(rand.nextInt() % 10000 + 1000);
+    }
+
+    @Override
+    public void setUseFPE(boolean useFPE) {
+        this.useFPE = useFPE;
+        ssnPattern = new GenerateFormatPreservingPatterns(2, ssnPattern.getFields());
     }
 
     @Override
@@ -90,14 +98,14 @@ public abstract class AbstractGenerateUniqueSsn extends Function<String> {
 
     protected abstract StringBuilder doValidGenerateMaskedField(String str);
 
-    protected abstract boolean isValid(String str);
+    protected abstract boolean isValidWithoutFormat(String str);
 
-    protected boolean isValidWithFormat(String str) {
+    protected boolean isValid(String str) {
         if (str == null) {
             return false;
         }
         String strWithoutSpaces = super.removeFormatInString(str);
-        return isValid(strWithoutSpaces);
+        return isValidWithoutFormat(strWithoutSpaces);
     }
 
 }

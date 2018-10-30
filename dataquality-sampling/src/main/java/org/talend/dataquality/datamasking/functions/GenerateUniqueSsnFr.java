@@ -16,19 +16,10 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.idealista.fpe.FormatPreservingEncryption;
-import com.idealista.fpe.builder.FormatPreservingEncryptionBuilder;
-import com.idealista.fpe.builder.steps.Builder;
-import com.idealista.fpe.component.functions.prf.PseudoRandomFunction;
-import com.idealista.fpe.config.Domain;
-import com.idealista.fpe.config.GenericDomain;
-import com.idealista.fpe.config.LengthRange;
-import org.talend.dataquality.datamasking.fpeUtils.BinaryAlphabet;
-import org.talend.dataquality.datamasking.fpeUtils.FrenchSSNTransformer;
+import org.talend.dataquality.datamasking.generic.GenerateFormatPreservingPatterns;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldEnum;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
-import org.talend.dataquality.datamasking.ssnUtils;
 
 /**
  * 
@@ -43,53 +34,20 @@ public class GenerateUniqueSsnFr extends AbstractGenerateUniqueSsn {
 
     private static final int MOD97 = 97; // $NON-NLS-1$
 
-    private FormatPreservingEncryption fpeEncrypter = null;
-    /*    @Override
-    protected StringBuilder doValidGenerateMaskedField(String str) {
-        // read the input str
-        List<String> strs = new ArrayList<String>();
-        strs.add(str.substring(0, 1));
-        strs.add(str.substring(1, 3));
-        strs.add(str.substring(3, 5));
-        strs.add(str.substring(5, 7));
-        strs.add(str.substring(7, 10));
-        strs.add(str.substring(10, 13));
-    
-        StringBuilder result = ssnPattern.generateUniqueString(strs);
-        if (result == null) {
-            return null;
-        }
-    
-        // add the security key specified for french SSN
-        String key = computeFrenchKey(result.toString());
-    
-        result.append(key);
-    
-        return result;
-    }*/
-
     @Override
     protected StringBuilder doValidGenerateMaskedField(String str) {
-
-        if (!isValid(str)) {
+        if (!isValidWithoutFormat(str)) {
             return null;
         }
 
-        if (fpeEncrypter == null) {
-            fpeEncrypter = buildFPEInstance(ssnPattern.getPseudoRandomFunction());
-        }
+        List<String> strs = splitFields(str);
 
-        byte[] tweak = computeTweak(str);
-        String result = fpeEncrypter.encrypt(str, tweak);
-
-        while (!isValid(result)) {
-            result = fpeEncrypter.encrypt(result, tweak);
-        }
+        StringBuilder result = ssnPattern.generateUniqueString(strs, secretMng);
 
         // add the security key specified for french SSN
-        String key = computeFrenchKey(result);
+        String key = computeFrenchKey(result.toString());
 
-        return new StringBuilder(result).append(key);
+        return result.append(key);
     }
 
     private String computeFrenchKey(String string) {
@@ -144,42 +102,25 @@ public class GenerateUniqueSsnFr extends AbstractGenerateUniqueSsn {
         return createFieldsListFromPattern();
     }
 
-    /**
-     * Build an instance of {@code FormatPreservingEncryption} used to encrypt the values to mask using FF1 algorithm.
-     * @param prf the underlying keyed pseudo-random function built in
-     *            {@link org.talend.dataquality.datamasking.generic.GenerateUniqueRandomPatterns}
-     * @return an instance of {@code FormatPreservingEncryption}.
-     */
-    private FormatPreservingEncryption buildFPEInstance(PseudoRandomFunction prf) {
+    // TODO : Add this method to true UtilsSsnFr class
+    public List<String> splitFields(String ssn) {
+        // read the input str
+        List<String> strs = new ArrayList<String>();
+        strs.add(ssn.substring(0, 1));
+        strs.add(ssn.substring(1, 3));
+        strs.add(ssn.substring(3, 5));
+        strs.add(ssn.substring(5, 7));
+        strs.add(ssn.substring(7, 10));
+        strs.add(ssn.substring(10, 13));
 
-        FrenchSSNTransformer ssnTransformer = new FrenchSSNTransformer(2, ssnPattern);
-        Domain domain = new GenericDomain(new BinaryAlphabet(), ssnTransformer, ssnTransformer);
-
-        Builder fpeBuilder = FormatPreservingEncryptionBuilder.ff1Implementation().withDomain(domain)
-                .withPseudoRandomFunction(prf).withLengthRange(new LengthRange(7, 4096));
-
-        return fpeBuilder.build();
-    }
-
-    /**
-     * Compute a tweak. For now we don't use tweaks for masking.
-     * @return an empty tweak.
-     */
-    private byte[] computeTweak(String ssn) {
-        return new byte[] {};
+        return strs;
     }
 
     /**
      * Verifies the validity of an ssn string.
      * @return true if valid, false otherwise.
      */
-    protected boolean isValid(String ssn) {
-        List<BigInteger> numericFields = ssnPattern.encodeFields(ssnUtils.splitFields(ssn));
-        if (numericFields == null) {
-            return false;
-        }
-
-        BigInteger rank = ssnPattern.getRank(numericFields);
-        return rank.compareTo(ssnPattern.getLongestWidth()) < 0;
+    protected boolean isValidWithoutFormat(String ssn) {
+        return ssnPattern.encodeFields(splitFields(ssn)) != null;
     }
 }

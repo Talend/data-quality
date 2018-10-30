@@ -23,6 +23,7 @@ import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.talend.dataquality.datamasking.generic.GenerateUniqueRandomPatterns;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldDate;
 import org.talend.dataquality.datamasking.generic.fields.FieldEnum;
@@ -66,7 +67,7 @@ public class GenerateUniqueSsnChn extends AbstractGenerateUniqueSsn {
         strs.add(str.substring(6, 14));
         strs.add(str.substring(14, 17));
 
-        StringBuilder result = ssnPattern.generateUniqueString(strs);
+        StringBuilder result = ssnPattern.generateUniqueString(strs, secretMng);
         if (result == null) {
             return null;
         }
@@ -79,7 +80,7 @@ public class GenerateUniqueSsnChn extends AbstractGenerateUniqueSsn {
     }
 
     @Override
-    protected boolean isValid(String str) {
+    protected boolean isValidWithoutFormat(String str) {
         return true;
     }
 

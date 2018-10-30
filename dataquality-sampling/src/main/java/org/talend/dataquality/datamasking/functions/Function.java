@@ -21,6 +21,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.talend.dataquality.datamasking.SecretManager;
 
 /**
  * created by jgonzalez on 18 juin 2015. This class is an abstract class that
@@ -50,6 +51,8 @@ public abstract class Function<T> implements Serializable {
 
     protected String[] parameters;
 
+    protected SecretManager secretMng = new SecretManager();
+
     protected boolean keepNull = false;
 
     protected boolean keepInvalidPattern = false;
@@ -57,6 +60,8 @@ public abstract class Function<T> implements Serializable {
     protected boolean keepEmpty = false;
 
     protected boolean keepFormat = false;
+
+    protected boolean useFPE = false;
 
     /**
      * getter for random
@@ -102,6 +107,15 @@ public abstract class Function<T> implements Serializable {
 
     public void setKeepInvalidPattern(boolean keepInvalidPattern) {
         this.keepInvalidPattern = keepInvalidPattern;
+    }
+
+    public void setUseFPE(boolean useFPE) {
+        this.useFPE = useFPE;
+    }
+
+    public void setFPEParams(int method, String password) {
+        secretMng.setPrfAlgo(method);
+        secretMng.setPassword(password);
     }
 
     /**

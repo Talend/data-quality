@@ -13,6 +13,7 @@ import java.util.Random;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.talend.dataquality.datamasking.SecretManager;
 import org.talend.dataquality.datamasking.functions.Function;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldDate;
@@ -29,7 +30,9 @@ public class BijectiveSubstitutionFunction extends Function<String> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BijectiveSubstitutionFunction.class);
 
-    private GenerateUniqueRandomPatterns uniqueGenericPattern;
+    private AbstractGeneratePattern uniqueGenericPattern;
+
+    private SecretManager secretMng;
 
     public BijectiveSubstitutionFunction(List<FieldDefinition> fieldDefinitionList) throws IOException {
 
@@ -57,6 +60,7 @@ public class BijectiveSubstitutionFunction extends Function<String> {
         }
 
         uniqueGenericPattern = new GenerateUniqueRandomPatterns(fieldList);
+        secretMng = new SecretManager();
     }
 
     /**
@@ -117,7 +121,7 @@ public class BijectiveSubstitutionFunction extends Function<String> {
     @Override
     public void setRandom(Random rand) {
         super.setRandom(rand);
-        uniqueGenericPattern.setKey(rand.nextInt() % 10000 + 1000);
+        secretMng.setKey(rand.nextInt() % 10000 + 1000);
     }
 
     @Override
@@ -165,7 +169,7 @@ public class BijectiveSubstitutionFunction extends Function<String> {
             currentPos += length;
         }
 
-        StringBuilder result = uniqueGenericPattern.generateUniqueString(strs);
+        StringBuilder result = uniqueGenericPattern.generateUniqueString(strs, secretMng);
         if (result == null) {
             return null;
         }

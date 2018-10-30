@@ -1,4 +1,4 @@
-package org.talend.dataquality.datamasking.fpeUtils;
+package org.talend.dataquality.datamasking.fpeUtils.alphabets;
 
 import com.idealista.fpe.config.Alphabet;
 

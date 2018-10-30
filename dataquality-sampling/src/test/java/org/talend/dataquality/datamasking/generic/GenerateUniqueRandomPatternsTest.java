@@ -2,6 +2,7 @@ package org.talend.dataquality.datamasking.generic;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -13,13 +14,16 @@ import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.talend.dataquality.datamasking.SecretManager;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldEnum;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
 
 public class GenerateUniqueRandomPatternsTest {
 
-    private GenerateUniqueRandomPatterns pattern;
+    private AbstractGeneratePattern pattern;
+
+    private SecretManager secretMng;
 
     @Before
     public void setUp() throws Exception {
@@ -33,39 +37,40 @@ public class GenerateUniqueRandomPatternsTest {
         fields.add(new FieldInterval(BigInteger.valueOf(5), BigInteger.valueOf(20)));
 
         pattern = new GenerateUniqueRandomPatterns(fields);
-        pattern.setKey(new Random(454594).nextInt() % 10000 + 1000);
+        secretMng = new SecretManager();
+        secretMng.setKey(new Random(454594).nextInt() % 10000 + 1000);
     }
 
     @Test
     public void testGenerateUniqueString() {
 
-        StringBuilder result = pattern.generateUniqueString(new ArrayList<String>(Arrays.asList("U", "KI", "453", "12")));
-        assertEquals(result.toString(), "USF40818");
+        StringBuilder result = pattern.generateUniqueString(new ArrayList<String>(Arrays.asList("U", "KI", "453", "12")),
+                secretMng);
+        assertEquals("USF40818", result.toString());
 
         // test with padding 0
-        result = pattern.generateUniqueString(new ArrayList<String>(Arrays.asList("U", "KI", "123", "12")));
-        assertEquals(result.toString(), "UKI40518");
+        result = pattern.generateUniqueString(new ArrayList<String>(Arrays.asList("U", "KI", "123", "12")), secretMng);
+        assertEquals("UKI40518", result.toString());
     }
 
     @Test
     public void testOutLimit() {
 
-        StringBuilder result = pattern.generateUniqueString(new ArrayList<String>(Arrays.asList("U", "KI", "502", "12")));
-        assertEquals(result, null);
-
+        StringBuilder result = pattern.generateUniqueString(new ArrayList<String>(Arrays.asList("U", "KI", "502", "12")),
+                secretMng);
+        assertNull(result);
     }
 
     @Test
     public void testGetMaxRank() {
-        BigInteger rank = pattern.getRank(pattern.encodeFields(Arrays.asList("S", "DU", "500", "20")));
-        assertEquals(rank, pattern.getLongestWidth().add(BigInteger.valueOf(-1)));
+        BigInteger rank = pattern.getNumberToMask(pattern.encodeFields(Arrays.asList("S", "DU", "500", "20")));
+        assertEquals(pattern.getLongestWidth().add(BigInteger.valueOf(-1)), rank);
     }
-    
+
     @Test
     public void testGetMinRank() {
-        BigInteger rank = pattern.getRank(pattern.encodeFields(Arrays.asList("O", "SF", "000", "5")));
-        System.out.println("RANK " + rank);
-        assertEquals(rank, BigInteger.ZERO);
+        BigInteger rank = pattern.getNumberToMask(pattern.encodeFields(Arrays.asList("O", "SF", "000", "5")));
+        assertEquals(BigInteger.ZERO, rank);
     }
 
     @Test
@@ -78,9 +83,11 @@ public class GenerateUniqueRandomPatternsTest {
                         .add(BigInteger.ONE)) {
                     for (BigInteger l = BigInteger.ZERO; l.compareTo(pattern.getFields().get(3).getWidth()) < 0; l = l
                             .add(BigInteger.ONE)) {
-                        StringBuilder uniqueMaskedNumber = pattern.generateUniqueString(new ArrayList<String>(
-                                Arrays.asList(pattern.getFields().get(0).decode(i), pattern.getFields().get(1).decode(j),
-                                        pattern.getFields().get(2).decode(k), pattern.getFields().get(3).decode(l))));
+                        StringBuilder uniqueMaskedNumber = pattern.generateUniqueString(
+                                new ArrayList<String>(
+                                        Arrays.asList(pattern.getFields().get(0).decode(i), pattern.getFields().get(1).decode(j),
+                                                pattern.getFields().get(2).decode(k), pattern.getFields().get(3).decode(l))),
+                                secretMng);
 
                         assertFalse(" we found twice the uniqueMaskedNumberList " + uniqueMaskedNumber,
                                 uniqueSetTocheck.contains(uniqueMaskedNumber));

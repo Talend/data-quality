@@ -32,7 +32,8 @@ public class GenerateUniqueSsnFrTest {
     public void setUp() throws Exception {
         gnf.setRandom(new Random(42));
         // Set key for having consistent results;
-        gnf.ssnPattern.setKey(123456789);
+        gnf.setUseFPE(true);
+        gnf.setFPEParams(2, "data");
         gnf.setKeepFormat(true);
     }
 
@@ -68,6 +69,8 @@ public class GenerateUniqueSsnFrTest {
     @Test
     public void testGood1() {
         output = gnf.generateMaskedRow("1860348282074 19");
+        assertEquals("2330123738105 12", output);
+        // TODO : Replace by isValidWithoutFormat ?
         assertTrue(gnf.isValid(output));
     }
 
@@ -76,14 +79,14 @@ public class GenerateUniqueSsnFrTest {
         gnf.setKeepFormat(false);
         // with spaces
         output = gnf.generateMaskedRow("2 12 12 15 953 006   88");
-        assertTrue(gnf.isValidWithFormat(output));
+        assertTrue(gnf.isValid(output));
     }
 
     @Test
     public void testGood3() {
         // corse department
         output = gnf.generateMaskedRow("10501  2B 532895 34");
-        assertTrue(gnf.isValidWithFormat(output));
+        assertTrue(gnf.isValid(output));
     }
 
     @Test
@@ -113,13 +116,13 @@ public class GenerateUniqueSsnFrTest {
     @Test
     public void testMaxSSN() {
         output = gnf.generateMaskedRow("2991299990999 87");
-        assertTrue(gnf.isValidWithFormat(output));
+        assertTrue(gnf.isValid(output));
     }
 
     @Test
     public void testMinSSN() {
         output = gnf.generateMaskedRow("1000101001001 05");
-        assertTrue(gnf.isValid(output));
+        assertTrue(gnf.isValidWithoutFormat(output));
     }
 
     @Test
