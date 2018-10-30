@@ -12,32 +12,18 @@
 // ============================================================================
 package org.talend.dataquality.statistics.numeric.summary;
 
+import org.junit.Test;
+import org.talend.dataquality.statistics.type.DataTypeEnum;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.talend.dataquality.statistics.type.DataTypeEnum;
-
 public class MinMaxValueAnalyzerTest {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(MinMaxValueAnalyzerTest.class);
 
     // cf jdk.nashorn.internal.objects.Global.Infinity
     private static final double Infinity = 1.0D / 0.0;
 
     private static final double DELTA = 1E-8;
-
-    @Before
-    public void setUp() throws Exception {
-    }
-
-    @After
-    public void tearDown() throws Exception {
-    }
 
     @Test
     public void testAnalyzeDoubleIntegerMixed() {

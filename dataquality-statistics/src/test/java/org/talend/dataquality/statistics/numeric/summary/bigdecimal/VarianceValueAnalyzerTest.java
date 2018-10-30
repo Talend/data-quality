@@ -10,7 +10,10 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.dataquality.statistics.numeric.summary;
+package org.talend.dataquality.statistics.numeric.summary.bigdecimal;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 
 import org.assertj.core.data.Offset;
 import org.junit.Before;
@@ -20,15 +23,13 @@ import org.talend.dataquality.statistics.type.DataTypeEnum;
 
 import java.math.BigDecimal;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 public class VarianceValueAnalyzerTest {
 
-    private SummaryAnalyzer analyzer;
+    private SummaryAnalyzerBigDecimal analyzer;
 
     @Before
     public void setup() {
-        analyzer = new SummaryAnalyzer(new DataTypeEnum[] { DataTypeEnum.DOUBLE });
+        analyzer = new SummaryAnalyzerBigDecimal(new DataTypeEnum[] { DataTypeEnum.DOUBLE });
     }
 
     @Test
@@ -37,7 +38,8 @@ public class VarianceValueAnalyzerTest {
         for (String strValue : values) {
             analyzer.analyze(strValue);
         }
-        assertThat(analyzer.getResult().get(0).getVariance()).isCloseTo(59.2, Offset.offset(0.055));
+        assertThat(analyzer.getResult().get(0).getVariance()).isCloseTo(BigDecimal.valueOf(59.2),
+                Offset.offset(BigDecimal.valueOf(0.055)));
     }
 
     @Test
@@ -46,7 +48,8 @@ public class VarianceValueAnalyzerTest {
         for (String strValue : values) {
             analyzer.analyze(strValue);
         }
-        assertThat(analyzer.getResult().get(0).getVariance()).isCloseTo(0, Offset.offset(0.055));
+        assertThat(analyzer.getResult().get(0).getVariance()).isCloseTo(BigDecimal.valueOf(0),
+                Offset.offset(BigDecimal.valueOf(0.055)));
     }
 
     @Test
@@ -55,7 +58,8 @@ public class VarianceValueAnalyzerTest {
         for (String strValue : values) {
             analyzer.analyze(strValue);
         }
-        assertThat(analyzer.getResult().get(0).getVariance()).isCloseTo(59.2, Offset.offset(0.055));
+        assertThat(analyzer.getResult().get(0).getVariance()).isCloseTo(BigDecimal.valueOf(59.2),
+                Offset.offset(BigDecimal.valueOf(0.055)));
 
     }
 

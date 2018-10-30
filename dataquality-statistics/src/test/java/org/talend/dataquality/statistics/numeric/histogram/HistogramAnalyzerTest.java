@@ -36,7 +36,7 @@ public class HistogramAnalyzerTest {
     }
 
     @Test
-    public void testResizeWithInvalidValues() throws Exception {
+    public void testResizeWithInvalidValues() {
         String[][] data = { { "aaaa" }, { "5" } };
         HistogramParameter histogramParameter = new HistogramParameter();
         histogramParameter.setDefaultParameters(0, 5, 1);
@@ -294,9 +294,9 @@ public class HistogramAnalyzerTest {
         double max = ThreadLocalRandom.current().nextDouble(maxMinValue + 1, maxValue);
         double step = (max - min) / numBins;
         // value list
-        List<Double> values = new ArrayList<Double>();
+        List<Double> values = new ArrayList<>();
         // histograms
-        Map<Range, Long> histograms = new TreeMap<Range, Long>();
+        Map<Range, Long> histograms = new TreeMap<>();
         double current = min;
         for (int i = 1; i <= numBins; i++) {
             // generate values for each bin ( range of 5 to 10)

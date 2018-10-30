@@ -12,28 +12,22 @@
 // ============================================================================
 package org.talend.dataquality.statistics.numeric.quantile;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.After;
+import org.assertj.core.data.Offset;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.statistics.numeric.summary.SummaryAnalyzer;
+import org.talend.dataquality.statistics.numeric.summary.bigdecimal.SummaryAnalyzerBigDecimal;
 import org.talend.dataquality.statistics.quality.ValueQualityAnalyzerTest;
 import org.talend.dataquality.statistics.type.DataTypeEnum;
 
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class QuantileAnalyzerTest {
-
-    @Before
-    public void setUp() throws Exception {
-    }
-
-    @After
-    public void tearDown() throws Exception {
-    }
 
     @Test
     public void testAnalyzeStringArray() {
@@ -145,29 +139,33 @@ public class QuantileAnalyzerTest {
     }
 
     @Test
-    public void testQuantileOfFile() throws IOException {// test for double data, TDQ-10789, TDP-394
+    public void testQuantileOfFile() {// test for double data, TDQ-10789, TDP-394
         final List<String[]> records = ValueQualityAnalyzerTest
                 .getRecords(this.getClass().getResourceAsStream("../../data/t-shirt_100.csv"), ",");
-        QuantileAnalyzer analyzer = new QuantileAnalyzer(new DataTypeEnum[] { DataTypeEnum.DOUBLE });
-        TDigestAnalyzer tanalyzer = new TDigestAnalyzer(new DataTypeEnum[] { DataTypeEnum.DOUBLE });
-        SummaryAnalyzer summaryAnalyzer = new SummaryAnalyzer(new DataTypeEnum[] { DataTypeEnum.DOUBLE });
-        tanalyzer.init();
-        analyzer.init();
-        summaryAnalyzer.init();
-        List<Analyzer<?>> analyzers = new ArrayList<Analyzer<?>>();
-        analyzers.add(summaryAnalyzer);
-        analyzers.add(tanalyzer);
-        analyzers.add(analyzer);
+        final DataTypeEnum[] types = { DataTypeEnum.DOUBLE };
+        QuantileAnalyzer analyzer = new QuantileAnalyzer(types);
+        TDigestAnalyzer tanalyzer = new TDigestAnalyzer(types);
+        SummaryAnalyzerBigDecimal summaryAnalyzerBigDecimal = new SummaryAnalyzerBigDecimal(types);
+        SummaryAnalyzer summaryAnalyzer = new SummaryAnalyzer(types);
+
+        List<Analyzer<?>> analyzers = Arrays.asList(summaryAnalyzer, summaryAnalyzerBigDecimal, tanalyzer, analyzer);
+
         records.forEach(r -> analyze(analyzers, r[7]));
-        tanalyzer.end();
         analyzer.end();
-        summaryAnalyzer.end();
+
         Assert.assertEquals(23.9, tanalyzer.getResult().get(0).getUpperQuartile(), 0);
         Assert.assertEquals(16.7, tanalyzer.getResult().get(0).getLowerQuartile(), 0);
+
         Assert.assertEquals(23.9, analyzer.getResult().get(0).getUpperQuartile(), 0);
         Assert.assertEquals(16.7, analyzer.getResult().get(0).getLowerQuartile(), 0);
+
         Assert.assertEquals(16.7, summaryAnalyzer.getResult().get(0).getMin(), 0);
         Assert.assertEquals(32, summaryAnalyzer.getResult().get(0).getMax(), 0);
+
+        assertThat(summaryAnalyzerBigDecimal.getResult().get(0).getMin()).isCloseTo(BigDecimal.valueOf(16.7),
+                Offset.offset(BigDecimal.ZERO));
+        assertThat(summaryAnalyzerBigDecimal.getResult().get(0).getMax()).isCloseTo(BigDecimal.valueOf(32),
+                Offset.offset(BigDecimal.ZERO));
 
     }
 

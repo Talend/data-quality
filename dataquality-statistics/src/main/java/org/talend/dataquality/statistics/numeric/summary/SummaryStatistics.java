@@ -17,7 +17,7 @@ package org.talend.dataquality.statistics.numeric.summary;
  * Note that variance computation is based on apache common match library. See more at <a href=
  * "http://commons.apache.org/proper/commons-math/apidocs/org/apache/commons/math3/stat/descriptive/SummaryStatistics.html"
  * >SummaryStatistics</a>
- * 
+ *
  * @author mzhao
  *
  */
@@ -27,7 +27,7 @@ public class SummaryStatistics {
 
     /**
      * Add the data to memory so that the variance can be computed given this list.
-     * 
+     *
      * @param value field valued added to the list.<br>
      * See more about add value mehtod
      */

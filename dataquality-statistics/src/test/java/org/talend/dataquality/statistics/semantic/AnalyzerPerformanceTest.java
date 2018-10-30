@@ -33,7 +33,7 @@ import org.talend.dataquality.statistics.cardinality.CardinalityAnalyzer;
 import org.talend.dataquality.statistics.frequency.DataTypeFrequencyAnalyzer;
 import org.talend.dataquality.statistics.frequency.pattern.CompositePatternFrequencyAnalyzer;
 import org.talend.dataquality.statistics.numeric.quantile.QuantileAnalyzer;
-import org.talend.dataquality.statistics.numeric.summary.SummaryAnalyzer;
+import org.talend.dataquality.statistics.numeric.summary.bigdecimal.SummaryAnalyzerBigDecimal;
 import org.talend.dataquality.statistics.quality.DataTypeQualityAnalyzer;
 import org.talend.dataquality.statistics.text.TextLengthAnalyzer;
 import org.talend.dataquality.statistics.type.DataTypeAnalyzer;
@@ -81,7 +81,7 @@ public class AnalyzerPerformanceTest {
         return Analyzers.with(//
                 new TextLengthAnalyzer(), //
                 new QuantileAnalyzer(types_card_exceptions), //
-                new SummaryAnalyzer(types_card_exceptions) //
+                new SummaryAnalyzerBigDecimal(types_card_exceptions) //
         );
     }
 

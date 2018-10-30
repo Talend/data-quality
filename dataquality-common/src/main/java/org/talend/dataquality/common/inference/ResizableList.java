@@ -13,6 +13,7 @@
 package org.talend.dataquality.common.inference;
 
 import java.io.Serializable;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -209,4 +210,23 @@ public class ResizableList<T> implements List<T>, Serializable {
         return innerList.subList(i, i1);
     }
 
+    /**
+     * Copy of {@link AbstractList#toString()}
+     * @return a string representation of this collection
+     */
+    public String toString() {
+        Iterator<T> it = iterator();
+        if (!it.hasNext())
+            return "[]";
+
+        StringBuilder sb = new StringBuilder();
+        sb.append('[');
+        for (;;) {
+            T e = it.next();
+            sb.append(e == this ? "(this Collection)" : e);
+            if (!it.hasNext())
+                return sb.append(']').toString();
+            sb.append(',').append(' ');
+        }
+    }
 }

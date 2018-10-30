@@ -10,24 +10,25 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.dataquality.statistics.numeric.summary;
+package org.talend.dataquality.statistics.numeric.summary.bigdecimal;
 
 import org.assertj.core.data.Offset;
-import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.talend.dataquality.statistics.numeric.summary.bigdecimal.SummaryAnalyzerBigDecimal;
 import org.talend.dataquality.statistics.type.DataTypeEnum;
+
+import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class MeanValueAnalyzerTest {
 
-    private SummaryAnalyzer analyzer;
+    private SummaryAnalyzerBigDecimal analyzer;
 
     @Before
     public void setup() {
-        analyzer = new SummaryAnalyzer(new DataTypeEnum[] { DataTypeEnum.DOUBLE });
+        analyzer = new SummaryAnalyzerBigDecimal(new DataTypeEnum[] { DataTypeEnum.DOUBLE });
     }
 
     @Test
@@ -36,7 +37,8 @@ public class MeanValueAnalyzerTest {
         for (String value : values) {
             analyzer.analyze(value);
         }
-        assertThat(analyzer.getResult().get(0).getMean()).isCloseTo(7.16, Offset.offset(0.001));
+        assertThat(analyzer.getResult().get(0).getMean()).isCloseTo(BigDecimal.valueOf(7.16),
+                Offset.offset(BigDecimal.valueOf(0.001)));
     }
 
     @Test
@@ -45,7 +47,7 @@ public class MeanValueAnalyzerTest {
         for (String value : values) {
             analyzer.analyze(value);
         }
-        assertThat(analyzer.getResult().get(0).getMean()).isCloseTo(10, Offset.offset(0.));
+        assertThat(analyzer.getResult().get(0).getMean()).isCloseTo(BigDecimal.valueOf(10), Offset.offset(BigDecimal.ZERO));
     }
 
     @Test
@@ -54,7 +56,7 @@ public class MeanValueAnalyzerTest {
         for (String value : values) {
             analyzer.analyze(value);
         }
-        assertThat(analyzer.getResult().get(0).getMean()).isCloseTo(8.875, Offset.offset(0.));
+        assertThat(analyzer.getResult().get(0).getMean()).isCloseTo(BigDecimal.valueOf(8.875), Offset.offset(BigDecimal.ZERO));
     }
 
     @Test
@@ -63,7 +65,7 @@ public class MeanValueAnalyzerTest {
         for (String value : values) {
             analyzer.analyze(value);
         }
-        assertThat(analyzer.getResult().get(0).getMean()).isNaN();
+        assertThat(analyzer.getResult().get(0).isValid()).as("Emtpy data analyze is not valid").isFalse();
     }
 
 }

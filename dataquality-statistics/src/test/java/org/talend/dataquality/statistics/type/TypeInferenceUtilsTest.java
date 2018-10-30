@@ -12,22 +12,19 @@
 // ============================================================================
 package org.talend.dataquality.statistics.type;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ArrayUtils;
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * created by talend on 2015-07-28 Detailled comment.
@@ -37,21 +34,13 @@ public class TypeInferenceUtilsTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TypeInferenceUtilsTest.class);
 
-    @Before
-    public void setUp() throws Exception {
-    }
-
-    @After
-    public void tearDown() throws Exception {
-    }
-
     @Test
     public void testIsBoolean() throws Exception {
         List<String> values = loadData("testBoolean.csv");
         int countOfBooleans = 0;
         long timeStart = System.currentTimeMillis();
         // Assert total count.
-        Assert.assertEquals(10000, values.size());
+        assertEquals(10000, values.size());
         for (String value : values) {
             if (TypeInferenceUtils.isBoolean(value)) {
                 countOfBooleans++;
@@ -59,11 +48,11 @@ public class TypeInferenceUtilsTest {
         }
         long timeEnd = System.currentTimeMillis();
         // Assert count of matches.
-        Assert.assertEquals(2000, countOfBooleans);
+        assertEquals(2000, countOfBooleans);
         long difference = timeEnd - timeStart;
 
         LOGGER.debug("The method isBoolean spent " + difference + " ms on 10000 values.");
-        // Assert.assertTrue(difference < 5); //This assert depends on machine performance , so won't assert it.
+        Assert.assertTrue(difference < 5); //This assert depends on machine performance , so won't assert it.
     }
 
     @Test
@@ -72,7 +61,7 @@ public class TypeInferenceUtilsTest {
         int countOfEmpties = 0;
         long timeStart = System.currentTimeMillis();
         // Assert total count.
-        Assert.assertEquals(10000, values.size());
+        assertEquals(10000, values.size());
         for (String value : values) {
             if (TypeInferenceUtils.isEmpty(value)) {
                 countOfEmpties++;
@@ -80,11 +69,11 @@ public class TypeInferenceUtilsTest {
         }
         long timeEnd = System.currentTimeMillis();
         // Assert count of matches.
-        Assert.assertEquals(2000, countOfEmpties);
+        assertEquals(2000, countOfEmpties);
         long difference = timeEnd - timeStart;
 
         LOGGER.debug("The method isEmpty spent " + difference + " ms on 10000 values.");
-        // assertTrue(difference < 6);
+        assertTrue(difference < 6);
     }
 
     @Test
@@ -93,7 +82,7 @@ public class TypeInferenceUtilsTest {
         int countOfIntegers = 0;
         long timeStart = System.currentTimeMillis();
         // Assert total count.
-        Assert.assertEquals(10000, values.size());
+        assertEquals(10000, values.size());
         for (String value : values) {
             if (TypeInferenceUtils.isInteger(value)) {
                 countOfIntegers++;
@@ -101,12 +90,12 @@ public class TypeInferenceUtilsTest {
         }
         long timeEnd = System.currentTimeMillis();
         // Assert count of matches.
-        Assert.assertEquals(3000, countOfIntegers);
+        assertEquals(3000, countOfIntegers);
         // Assert time span.
         long difference = timeEnd - timeStart;
 
         LOGGER.debug("The method isInteger spent " + difference + " ms on 10000 values.");
-        // assertTrue(difference < 80);
+        assertTrue(difference < 80);
     }
 
     @Test
@@ -164,7 +153,7 @@ public class TypeInferenceUtilsTest {
         int countOfDoubles = 0;
         long timeStart = System.currentTimeMillis();
         // Assert total count.
-        Assert.assertEquals(10000, values.size());
+        assertEquals(10000, values.size());
         for (String value : values) {
             if (TypeInferenceUtils.isDouble(value)) {
                 countOfDoubles++;
@@ -172,12 +161,12 @@ public class TypeInferenceUtilsTest {
         }
         long timeEnd = System.currentTimeMillis();
         // Assert count of matches.
-        Assert.assertEquals(5002, countOfDoubles);
+        assertEquals(5002, countOfDoubles);
         // Assert time span.
         long difference = timeEnd - timeStart;
 
         LOGGER.debug("The method isDouble spent " + difference + " ms on 10000 values.");
-        // assertTrue(difference < 180);
+        assertTrue(difference < 180);
 
     }
 
@@ -189,7 +178,7 @@ public class TypeInferenceUtilsTest {
         TypeInferenceUtils.isDate("12/02/99");// init DateTimeFormatters
         long timeStart = System.currentTimeMillis();
         // Assert total count.
-        Assert.assertEquals(10000, values.size());
+        assertEquals(10000, values.size());
         for (String value : values) {
             if (TypeInferenceUtils.isDate(value)) {
                 countOfDates++;
@@ -197,11 +186,11 @@ public class TypeInferenceUtilsTest {
         }
         long timeEnd = System.currentTimeMillis();
         // Assert count of matches.
-        Assert.assertEquals(5001, countOfDates);
+        assertEquals(5001, countOfDates);
         long difference = timeEnd - timeStart;
 
         LOGGER.debug("The method isDate spent " + difference + " ms on 10000 values.");
-        // assertTrue(difference < 430);
+        assertTrue(difference < 430);
     }
 
     @Test
@@ -221,4 +210,8 @@ public class TypeInferenceUtilsTest {
         return values;
     }
 
+    @Test
+    public void doubleLimit() {
+        assertEquals(DataTypeEnum.DOUBLE, TypeInferenceUtils.getNativeDataType("1E21564654"));
+    }
 }

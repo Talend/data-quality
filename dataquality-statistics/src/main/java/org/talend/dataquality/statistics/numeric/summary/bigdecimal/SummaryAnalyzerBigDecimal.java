@@ -10,9 +10,7 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.dataquality.statistics.numeric.summary;
-
-import java.util.List;
+package org.talend.dataquality.statistics.numeric.summary.bigdecimal;
 
 import org.talend.daikon.number.BigDecimalParser;
 import org.talend.dataquality.common.inference.ResizableList;
@@ -20,19 +18,20 @@ import org.talend.dataquality.statistics.numeric.NumericalStatisticsAnalyzer;
 import org.talend.dataquality.statistics.type.DataTypeEnum;
 import org.talend.dataquality.statistics.type.TypeInferenceUtils;
 
+import java.util.List;
+
 /**
- * Analyzer for summary statistics using apache common match library.
- *
- * @author zhao
- *
+ * Analyzer for summary statistics with large numbers.
+ * 
  */
-public class SummaryAnalyzer extends NumericalStatisticsAnalyzer<SummaryStatistics> {
+public class SummaryAnalyzerBigDecimal extends NumericalStatisticsAnalyzer<SummaryStatisticsBigDecimal> {
 
     private static final long serialVersionUID = 8369753525474844077L;
 
-    private final ResizableList<SummaryStatistics> summaryStats = new ResizableList<>(SummaryStatistics.class);
+    private final ResizableList<SummaryStatisticsBigDecimal> summaryStats = new ResizableList<>(
+            SummaryStatisticsBigDecimal.class);
 
-    public SummaryAnalyzer(DataTypeEnum[] types) {
+    public SummaryAnalyzerBigDecimal(DataTypeEnum[] types) {
         super(types);
     }
 
@@ -58,11 +57,11 @@ public class SummaryAnalyzer extends NumericalStatisticsAnalyzer<SummaryStatisti
             if (!TypeInferenceUtils.isValid(types[idx], record[idx])) {
                 continue;
             }
-            final SummaryStatistics stats = summaryStats.get(idx);
+            final SummaryStatisticsBigDecimal stats = summaryStats.get(idx);
             try {
-                stats.addData(BigDecimalParser.toBigDecimal(record[idx]).doubleValue());
+                stats.addData(BigDecimalParser.toBigDecimal(record[idx]));
             } catch (NumberFormatException e) {
-                continue;
+                // The value is ignored
             }
         }
         return true;
@@ -71,11 +70,11 @@ public class SummaryAnalyzer extends NumericalStatisticsAnalyzer<SummaryStatisti
 
     @Override
     public void end() {
-
+        // nothing to do
     }
 
     @Override
-    public List<SummaryStatistics> getResult() {
+    public List<SummaryStatisticsBigDecimal> getResult() {
         return summaryStats;
     }
 
