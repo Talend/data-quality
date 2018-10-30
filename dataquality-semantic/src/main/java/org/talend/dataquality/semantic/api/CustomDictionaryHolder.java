@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.SerializationUtils;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
@@ -228,9 +229,10 @@ public class CustomDictionaryHolder {
             insertOrUpdateRegexCategory(category);
         }
 
-        category.setModified(true);
+        final DQCategory categoryClone = SerializationUtils.clone(category);
+        categoryClone.setModified(true);
         ensureMetadataIndexAccess();
-        customMetadataIndexAccess.insertOrUpdateCategory(category);
+        customMetadataIndexAccess.insertOrUpdateCategory(categoryClone);
         customMetadataIndexAccess.commitChanges();
         metadata = customMetadataIndexAccess.readCategoryMedatada();
     }
@@ -250,7 +252,8 @@ public class CustomDictionaryHolder {
      * @param category
      */
     public void deleteCategory(DQCategory category) {
-        category.setDeleted(true);
+        final DQCategory categoryClone = SerializationUtils.clone(category);
+        categoryClone.setDeleted(true);
         ensureMetadataIndexAccess();
         String categoryId = category.getId();
         if (CategoryType.REGEX.equals(category.getType())) {
@@ -258,14 +261,14 @@ public class CustomDictionaryHolder {
             customRegexClassifierAccess.deleteRegex(categoryId);
         }
         if (TALEND.equals(category.getCreator())) {
-            customMetadataIndexAccess.insertOrUpdateCategory(category);
+            customMetadataIndexAccess.insertOrUpdateCategory(categoryClone);
             if (!CategoryType.REGEX.equals(category.getType()) && Boolean.TRUE.equals(category.getModified())) {
                 ensureDocumentDictIndexAccess();
                 customDocumentIndexAccess.deleteDocumentsByCategoryId(categoryId);
                 customDocumentIndexAccess.commitChanges();
             }
         } else {
-            customMetadataIndexAccess.deleteCategory(category);
+            customMetadataIndexAccess.deleteCategory(categoryClone);
             ensureDocumentDictIndexAccess();
             customDocumentIndexAccess.deleteDocumentsByCategoryId(categoryId);
             customDocumentIndexAccess.commitChanges();
@@ -478,7 +481,7 @@ public class CustomDictionaryHolder {
      */
     public void beforeRepublish() {
         ensureRepublishMetadataIndexAccess();
-        for (DQCategory category : CategoryRegistryManager.getInstance().getSharedCategoryMetadata().values()) {
+        for (DQCategory category : customRepublishMetadataIndexAccess.readCategoryMedatada().values()) {
             category.setDeleted(true);
             customRepublishMetadataIndexAccess.insertOrUpdateCategory(category);
         }

@@ -133,8 +133,7 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
         CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder();
 
         DQCategory firstNameCat = holder.getMetadata().get(SemanticCategoryEnum.FIRST_NAME.getTechnicalId());
-        firstNameCat.setDeleted(true);
-        holder.updateCategory(firstNameCat);
+        holder.deleteCategory(firstNameCat);
 
         final List<String> EXPECTED_CATEGORIES = Arrays.asList(
                 new String[] { "", SemanticCategoryEnum.LAST_NAME.name(), SemanticCategoryEnum.LAST_NAME.name(), "", "", "" });
