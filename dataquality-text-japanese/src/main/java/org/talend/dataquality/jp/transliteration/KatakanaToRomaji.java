@@ -278,7 +278,7 @@ public class KatakanaToRomaji {
             return "ō";
         default: {
             LOGGER.warn("Unknown chōonpu " + c);
-            return "¯";
+            return Character.toString(c);
         }
         }
     }
@@ -297,7 +297,7 @@ public class KatakanaToRomaji {
             return "ô";
         default: {
             LOGGER.warn("Unknown chōonpu " + c);
-            return "¯";
+            return Character.toString(c);
         }
         }
     }
