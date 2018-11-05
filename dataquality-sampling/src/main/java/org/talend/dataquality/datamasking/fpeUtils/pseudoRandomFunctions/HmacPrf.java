@@ -8,6 +8,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
+import javax.security.auth.DestroyFailedException;
 import java.nio.ByteBuffer;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -25,7 +26,7 @@ public class HmacPrf implements PseudoRandomFunction {
 
     private static final String MAC_ALGORITHM = CryptoConstants.HMAC_ALGORITHM;
 
-    private static final String KEY_ALGORITHM_NAME = CryptoConstants.HMAC_KEY_ALGORITHM;
+    private static final String KEY_ALGORITHM_NAME = CryptoConstants.KEY_ALGORITHM;
 
     private Mac hmac;
 

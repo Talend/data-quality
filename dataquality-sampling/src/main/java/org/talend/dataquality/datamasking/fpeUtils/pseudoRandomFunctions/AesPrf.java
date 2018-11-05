@@ -23,20 +23,22 @@ public class AesPrf implements PseudoRandomFunction {
 
     private Cipher cipher;
 
+    private SecretKey key;
+
     private byte[] initializationVector = Arrays.copyOf(new byte[] { 0x00 }, 16);
 
     public AesPrf(byte[] key) {
         try {
             cipher = Cipher.getInstance(AES_ALGORITHM);
-            cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key, KEY_ALGORITHM_NAME),
-                    new IvParameterSpec(initializationVector));
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
+            SecretKeySpec spec = new SecretKeySpec(key, KEY_ALGORITHM_NAME);
+            cipher.init(Cipher.ENCRYPT_MODE, spec, new IvParameterSpec(initializationVector));
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
-        } catch (InvalidAlgorithmParameterException e) {
+        } catch (NoSuchPaddingException e) {
             e.printStackTrace();
         } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        } catch (InvalidAlgorithmParameterException e) {
             e.printStackTrace();
         }
     }
@@ -44,14 +46,15 @@ public class AesPrf implements PseudoRandomFunction {
     public AesPrf(SecretKey secret) {
         try {
             cipher = Cipher.getInstance(AES_ALGORITHM);
-            cipher.init(Cipher.ENCRYPT_MODE, secret, new IvParameterSpec(initializationVector));
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
+            SecretKeySpec spec = new SecretKeySpec(secret.getEncoded(), KEY_ALGORITHM_NAME);
+            cipher.init(Cipher.ENCRYPT_MODE, spec, new IvParameterSpec(initializationVector));
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
-        } catch (InvalidAlgorithmParameterException e) {
+        } catch (NoSuchPaddingException e) {
             e.printStackTrace();
         } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        } catch (InvalidAlgorithmParameterException e) {
             e.printStackTrace();
         }
     }

@@ -5,6 +5,7 @@ import org.talend.dataquality.datamasking.fpeUtils.pseudoRandomFunctions.AesPrf;
 import org.talend.dataquality.datamasking.fpeUtils.pseudoRandomFunctions.CryptoConstants;
 import org.talend.dataquality.datamasking.fpeUtils.pseudoRandomFunctions.HmacPrf;
 
+import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -13,6 +14,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
+import java.util.Random;
 
 public class SecretManager {
 
@@ -28,19 +30,12 @@ public class SecretManager {
     /**
      * {@code Integer} value that corresponds to the type of pseudo-random function used by the secretManager
      */
-    private int prfAlgo;
+    private Integer prfAlgo;
 
     /**
      * The keyed pseudo random function used to build a Format-Preserving Encrypter
      */
     private PseudoRandomFunction pseudoRandomFunction;
-
-    public SecretManager() {
-    }
-
-    public SecretManager(int prfAlgo) {
-        this.prfAlgo = prfAlgo;
-    }
 
     public int getKey() {
         if (key == null)
@@ -54,13 +49,17 @@ public class SecretManager {
     }
 
     public PseudoRandomFunction getPseudoRandomFunction() {
+        // TODO : Should a null PRF return an error ?
         if (pseudoRandomFunction == null) {
-            // TODO : Should a null password return an error ?
+            if (prfAlgo == null) {
+                throw new IllegalStateException("No pseudo random algorithm set for this secret manager.");
+            }
+
             if (prfAlgo == AES_CBC_PRF) {
-                byte[] key = generateKey(16);
+                byte[] key = generateKey(CryptoConstants.KEY_LENGTH);
                 pseudoRandomFunction = new AesPrf(key);
             } else if (prfAlgo == HMAC_SHA2_PRF) {
-                byte[] key = generateKey(16);
+                byte[] key = generateKey(CryptoConstants.KEY_LENGTH);
                 pseudoRandomFunction = new HmacPrf(key);
             }
         }
@@ -69,17 +68,21 @@ public class SecretManager {
     }
 
     public void setPassword(String password) {
-        if (prfAlgo == AES_CBC_PRF) {
-            pseudoRandomFunction = new AesPrf(
-                    generateSecretKey(password, CryptoConstants.AES_ALGORITHM, CryptoConstants.AES_KEY_ALGORITHM));
-        } else if (prfAlgo == HMAC_SHA2_PRF) {
-            pseudoRandomFunction = new HmacPrf(
-                    generateSecretKey(password, CryptoConstants.HMAC_ALGORITHM, CryptoConstants.HMAC_KEY_ALGORITHM));
+        // TODO : Should a null Password return an error ?
+        if (password != null) {
+            SecretKey secret = generateSecretKey(password);
+            if (prfAlgo == AES_CBC_PRF) {
+                pseudoRandomFunction = new AesPrf(secret);
+            } else if (prfAlgo == HMAC_SHA2_PRF) {
+                pseudoRandomFunction = new HmacPrf(secret);
+            }
         }
     }
 
     public void setPrfAlgo(int prfAlgo) {
         this.prfAlgo = prfAlgo;
+        pseudoRandomFunction = null;
+        pseudoRandomFunction = getPseudoRandomFunction();
     }
 
     private byte[] generateKey(int length) {
@@ -94,12 +97,13 @@ public class SecretManager {
      * @return a {@code SecretKey} securely generated using
      *         <a href="https://docs.oracle.com/javase/7/docs/api/javax/crypto/package-summary.html">javax.crypto</a>.
      */
-    private static SecretKey generateSecretKey(String password, String ciphAlgo, String keyAlgo) {
+    private SecretKey generateSecretKey(String password) {
         try {
-            SecretKeyFactory factory = SecretKeyFactory.getInstance(keyAlgo);
-            KeySpec spec = new PBEKeySpec(password.toCharArray());
-            SecretKey tmp = factory.generateSecret(spec);
-            return new SecretKeySpec(tmp.getEncoded(), ciphAlgo);
+            byte[] salt = new byte[CryptoConstants.KEY_LENGTH];
+            new Random(123456789 + password.length()).nextBytes(salt);
+            SecretKeyFactory factory = SecretKeyFactory.getInstance(CryptoConstants.KEY_ALGORITHM);
+            KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, CryptoConstants.KEY_LENGTH << 3);
+            return factory.generateSecret(spec);
         } catch (InvalidKeySpecException e) {
             e.printStackTrace();
         } catch (NoSuchAlgorithmException e) {

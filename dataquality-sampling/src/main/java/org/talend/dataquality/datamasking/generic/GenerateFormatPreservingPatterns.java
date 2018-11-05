@@ -46,8 +46,15 @@ public class GenerateFormatPreservingPatterns extends AbstractGeneratePattern {
 
         int[] data = new int[numSeqLength];
 
+        // Convert the fields from String to BigInteger.
+        List<BigInteger> encodedFields = encodeFields(strs);
+
+        if (encodedFields == null) {
+            return null;
+        }
+
         // Compute the rank of the string to encrypt
-        BigInteger rank = getNumberToMask(encodeFields(strs));
+        BigInteger rank = getNumberToMask(encodedFields);
 
         // Convert the rank into a binary string
         String numString = rank.toString(radix);
@@ -73,6 +80,11 @@ public class GenerateFormatPreservingPatterns extends AbstractGeneratePattern {
     @Override
     public StringBuilder generateUniqueString(List<String> strs, SecretManager secretMng) {
         int[] data = transform(strs);
+
+        if (data == null) {
+            return null;
+        }
+
         byte[] tweak = computeTweak(strs);
         PseudoRandomFunction prf = secretMng.getPseudoRandomFunction();
 
