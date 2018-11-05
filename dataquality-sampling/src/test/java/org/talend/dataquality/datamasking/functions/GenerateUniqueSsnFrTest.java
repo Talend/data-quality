@@ -69,7 +69,7 @@ public class GenerateUniqueSsnFrTest {
     @Test
     public void testGood1() {
         output = gnf.generateMaskedRow("1860348282074 19");
-        assertEquals("2330123738105 12", output);
+        assertEquals("1810835839999 35", output);
         // TODO : Replace by isValidWithoutFormat ?
         assertTrue(gnf.isValid(output));
     }

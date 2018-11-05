@@ -1,13 +1,5 @@
 package org.talend.dataquality.datamasking.generic;
 
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.datamasking.SecretManager;
@@ -15,17 +7,24 @@ import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldEnum;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
 
+import java.math.BigInteger;
+import java.util.*;
+
 import static org.junit.Assert.*;
 
-public class GenerateUniqueRandomPatternsTest {
+public class GenerateFormatPreservingPatternsTest {
 
-    private AbstractGeneratePattern pattern;
+    private GenerateFormatPreservingPatterns pattern;
 
     private SecretManager secretMng;
 
-    protected String minValue;
+    private String minValue;
 
-    protected String maxValue;
+    private String maxValue;
+
+    private List<String> minStringList;
+
+    private List<String> maxStringList;
 
     @Before
     public void setUp() throws Exception {
@@ -38,40 +37,68 @@ public class GenerateUniqueRandomPatternsTest {
         fields.add(new FieldInterval(BigInteger.ZERO, BigInteger.valueOf(500)));
         fields.add(new FieldInterval(BigInteger.valueOf(5), BigInteger.valueOf(20)));
 
-        pattern = new GenerateUniqueRandomPatterns(fields);
+        pattern = new GenerateFormatPreservingPatterns(2, fields);
         minValue = "OSF00005";
         maxValue = "SDU50020";
 
+        minStringList = Arrays.asList("O", "SF", "000", "5");
+        maxStringList = Arrays.asList("S", "DU", "500", "20");
+
         secretMng = new SecretManager();
-        secretMng.setKey(new Random(454594).nextInt() % 10000 + 1000);
+        secretMng.setPrfAlgo(2);
+        secretMng.setPassword("#Datadriven2018");
     }
 
     @Test
-    public void testGenerateUniqueString() {
-        StringBuilder result = pattern.generateUniqueString(new ArrayList<String>(Arrays.asList("U", "KI", "453", "12")),
-                secretMng);
-        assertEquals("USF40818", result.toString());
+    public void transform_value_with_min_rank() {
+        String str = pattern.transform(pattern.transform(minStringList)).toString();
+        assertEquals(minValue, str);
+    }
+
+    @Test
+    public void transform_value_with_max_rank() {
+        String str = pattern.transform(pattern.transform(maxStringList)).toString();
+        assertEquals(maxValue, str);
+    }
+
+    @Test
+    public void transform_value_out_limit() {
+        int[] outLimit = pattern.transform(Arrays.asList("U", "KI", "502", "12"));
+        assertNull(outLimit);
+    }
+
+    @Test
+    public void generate_AES_CBC_encrypted_string() {
+        SecretManager AESSecMng = new SecretManager();
+        AESSecMng.setPrfAlgo(1);
+        AESSecMng.setPassword("#Datadriven2018");
+        StringBuilder result = pattern.generateUniqueString(Arrays.asList("U", "KI", "453", "12"), AESSecMng);
+        assertEquals("GDU45211", result.toString());
+    }
+
+    @Test
+    public void generate_SHA2_HMAC_encrypted_string() {
+        StringBuilder result = pattern.generateUniqueString(Arrays.asList("U", "KI", "453", "12"), secretMng);
+        assertEquals("PKI24614", result.toString());
     }
 
     @Test
     public void mask_value_with_max_rank() {
-        StringBuilder result = pattern.generateUniqueString(new ArrayList<String>(Arrays.asList("S", "DU", "500", "20")),
-                secretMng);
-        assertEquals("SDU01810", result.toString());
+        StringBuilder result = pattern.generateUniqueString(Arrays.asList("S", "DU", "500", "20"), secretMng);
+        assertNotEquals(maxValue, result.toString());
+        assertNotNull(result);
     }
 
     @Test
     public void mask_value_with_min_rank() {
-        StringBuilder result = pattern.generateUniqueString(new ArrayList<String>(Arrays.asList("O", "SF", "000", "5")),
-                secretMng);
-        // To bad this behavior exists : the min value is always masked to itself.
-        assertEquals(minValue, result.toString());
+        StringBuilder result = pattern.generateUniqueString(Arrays.asList("O", "SF", "000", "5"), secretMng);
+        assertNotEquals(minValue, result.toString());
+        assertNotNull(result);
     }
 
     @Test
     public void mask_value_out_limits() {
-        StringBuilder result = pattern.generateUniqueString(new ArrayList<String>(Arrays.asList("U", "KI", "502", "12")),
-                secretMng);
+        StringBuilder result = pattern.generateUniqueString(Arrays.asList("U", "KI", "502", "12"), secretMng);
         assertNull(result);
     }
 
