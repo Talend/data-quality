@@ -95,4 +95,11 @@ public class BetweenIndexesKeepTest {
         output = bik.generateMaskedRow(input);
         assertEquals("", output);
     }
+
+    @Test
+    public void TDP6249() {
+        bik.parse("5,452", false, new Random(42));
+        output = bik.generateMaskedRow(input);
+        assertEquals("e", output);
+    }
 }
