@@ -12,8 +12,10 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
- * created by jgonzalez on 22 juin 2015. This class is used when the requested function is BetweenIndexesKeep. It will
+ * created by jgonzalez on June 22, 2015. This class is used when the requested function is BetweenIndexesKeep. It will
  * return a new String that only contains the input elements that are between the bounds given as parameter.
  *
  */
@@ -30,10 +32,11 @@ public class BetweenIndexesKeep extends BetweenIndexes {
 
     @Override
     protected String doGenerateMaskedField(String str) {
-        if (!isValidParameters || str == null)
+        final int length = str.length();
+        if (!isValidParameters || StringUtils.isEmpty(str) || beginIndex > length)
             return getDefaultOutput();
-        if (endIndex > str.length())
-            return getDefaultOutput();
+        if (endIndex > length)
+            endIndex = length;
         return str.substring(beginIndex, endIndex);
     }
 
