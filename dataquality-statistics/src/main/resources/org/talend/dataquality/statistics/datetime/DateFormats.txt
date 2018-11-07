@@ -156,6 +156,7 @@ en_GB	dd-MMM-yy hh.mm.ss.nnnnnnnnn a
 en_US	EEE MMM dd HH:mm:ss z yyyy
 en_US	dd/MMM/yy h:mm a
 en_US	yyyy/M/d
+en_US	MM/dd/yyyy hh:mm:ss a
 en_US	yyyyMMddZ
 en_US	yyyyMMdd
 en_US	yyyy-MM-dd G
