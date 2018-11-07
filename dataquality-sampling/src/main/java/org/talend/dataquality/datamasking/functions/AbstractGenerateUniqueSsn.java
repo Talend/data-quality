@@ -48,29 +48,39 @@ public abstract class AbstractGenerateUniqueSsn extends Function<String> {
 
     @Override
     protected String doGenerateMaskedField(String str) {
-        if (str == null)
+        if (str == null) {
             return null;
+        }
 
         String strWithoutSpaces = super.removeFormatInString(str);
         // check if the pattern is valid
         if (strWithoutSpaces.isEmpty() || strWithoutSpaces.length() != ssnPattern.getFieldsCharsLength() + checkSumSize) {
-            if (keepInvalidPattern)
-                return str;
-            else
-                return null;
+            return getResult(str);
         }
 
         StringBuilder result = doValidGenerateMaskedField(strWithoutSpaces);
         if (result == null) {
-            if (keepInvalidPattern)
-                return str;
-            else
-                return null;
+            return getResult(str);
         }
-        if (keepFormat)
+        if (keepFormat) {
             return insertFormatInString(str, result);
-        else
+        } else {
             return result.toString();
+        }
+    }
+
+    /**
+     * Get result by input data
+     * 
+     * @param str
+     * @return
+     */
+    private String getResult(String str) {
+        if (keepInvalidPattern) {
+            return str;
+        } else {
+            return null;
+        }
     }
 
     /**

@@ -14,6 +14,7 @@ package org.talend.dataquality.datamasking.functions;
 
 import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * This class generates a ssn number randomly of United Kingdom.<br>
@@ -66,7 +67,7 @@ public class GenerateSsnUk extends Function<String> {
         return result.toString();
     }
 
-    public static HashSet<String> getForbid() {
+    public static Set<String> getForbid() {
         return forbid;
     }
 }

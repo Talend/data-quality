@@ -31,7 +31,7 @@ public abstract class GenerateFromFileHash<T> extends Function<T> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GenerateFromFileHash.class);
 
-    protected List<T> genericTokens = new ArrayList<T>();
+    protected List<T> genericTokens = new ArrayList<>();
 
     @Override
     public void parse(String extraParameter, boolean keepNullValues, Random rand) {

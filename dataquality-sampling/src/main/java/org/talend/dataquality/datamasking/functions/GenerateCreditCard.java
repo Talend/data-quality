@@ -16,7 +16,7 @@ package org.talend.dataquality.datamasking.functions;
  * created by jgonzalez on 24 juin 2015 . This class holds all the function required to generate a credit card number.
  *
  */
-public abstract class GenerateCreditCard<T2> extends Function<T2> {
+public abstract class GenerateCreditCard<T> extends Function<T> {
 
     private static final long serialVersionUID = -5998632284990879388L;
 

@@ -17,6 +17,10 @@ package org.talend.dataquality.common.regex;
  */
 public class HandlerFactory {
 
+    private HandlerFactory() {
+        // no need implement
+    }
+
     public static ChainResponsibilityHandler createEastAsiaPatternHandler() {
         ChainResponsibilityHandler handler = new Hiragana();
         // --- Ugly patch to handle PROLONGED_SOUND_MARK while this code exists

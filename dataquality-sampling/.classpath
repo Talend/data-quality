@@ -7,6 +7,7 @@
 	<classpathentry including="**/*.java" kind="src" output="target/classes" path="src/test/java"/>
 	<classpathentry excluding="**/*.java" kind="src" output="target/classes" path="src/test/resources"/>
 	<classpathentry kind="lib" path="lib/automaton.jar"/>
-	<classpathentry kind="lib" path="lib/generex.jar"/>
+	<classpathentry kind="lib" path="lib/generex.jar" sourcepath="C:/Users/Administrator/.m2/repository/com/github/mifmif/generex/1.0.2/generex-1.0.2-sources.jar"/>
+	<classpathentry kind="lib" path="lib/assertj-core-3.0.0.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

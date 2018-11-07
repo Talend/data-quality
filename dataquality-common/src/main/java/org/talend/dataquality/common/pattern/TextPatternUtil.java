@@ -11,6 +11,10 @@ public class TextPatternUtil {
 
     public static final int PROLONGED_SOUND_MARK = 12540;
 
+    private TextPatternUtil() {
+        // no need any implement
+    }
+
     /**
      * find text pattern for a given string
      *
@@ -19,14 +23,22 @@ public class TextPatternUtil {
      */
     public static String findPattern(String stringToRecognize) {
         StringBuilder sb = new StringBuilder();
+        boolean skipNextOne = false;
         for (int i = 0; i < stringToRecognize.length(); i++) {
+            if (skipNextOne) {
+                skipNextOne = false;
+                continue;
+            }
             Integer codePoint = stringToRecognize.codePointAt(i);
-            if (isValidProlongedSoundMark(codePoint, sb))
+            if (isValidProlongedSoundMark(codePoint, sb)) {
                 sb.append(sb.charAt(sb.length() - 1));
-            else
+            } else {
                 sb.append(Character.toChars(findReplaceCodePoint(codePoint)));
-            if (Character.isHighSurrogate(stringToRecognize.charAt(i)))
-                i++;
+            }
+            if (Character.isHighSurrogate(stringToRecognize.charAt(i))) {
+                // if it is HighSurrogate thene we need to skip next one
+                skipNextOne = true;
+            }
 
         }
         return sb.toString();
@@ -39,8 +51,9 @@ public class TextPatternUtil {
 
     private static Integer findReplaceCodePoint(Integer codePoint) {
         for (CharPattern charPattern : CharPattern.values()) {
-            if (charPattern.contains(codePoint))
+            if (charPattern.contains(codePoint)) {
                 return (int) charPattern.getReplaceChar();
+            }
         }
         return codePoint;
     }
@@ -48,6 +61,7 @@ public class TextPatternUtil {
     /**
      * Replaces a character by a character in the same pattern (according to class CharPattern)
      * If the character is not present in any pattern, then it is kept at it is
+     * 
      * @param codePointToReplace
      * @param random
      * @return
@@ -66,6 +80,7 @@ public class TextPatternUtil {
     /**
      * Replaces a pattern character by a character in this pattern (according to class CharPattern)
      * If the character is not present in any pattern, then it is kept at it is
+     * 
      * @param codePointToReplace
      * @param random
      * @return

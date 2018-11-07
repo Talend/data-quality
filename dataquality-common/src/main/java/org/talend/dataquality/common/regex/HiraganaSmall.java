@@ -16,6 +16,8 @@ import java.util.regex.Pattern;
 
 /**
  * DOC talend class global comment. Detailled comment
+ * 
+ * @deprecated {@link Hiragana has contain it so that remove HiraganaSmall case}
  */
 @Deprecated
 public class HiraganaSmall extends ChainResponsibilityHandler {

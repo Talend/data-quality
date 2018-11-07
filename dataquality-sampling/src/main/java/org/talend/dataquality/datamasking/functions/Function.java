@@ -118,8 +118,9 @@ public abstract class Function<T> implements Serializable {
      */
     public void parse(String extraParameter, boolean keepNullValues, Random rand) {
         if (extraParameter != null) {
-            parameters = getParameters(extraParameter); //$NON-NLS-1$
-            if (parameters.length == 1 && isNeedCheckPath() && (!isBothValidForFileOrNot() || !parameters[0].equals(""))) {
+            parameters = getParameters(extraParameter);
+            if (parameters.length == 1 && isNeedCheckPath()
+                    && (!isBothValidForFileOrNot() || !StringUtils.EMPTY.equals(parameters[0]))) {
                 // check if it's a path to a readable file
                 // For an empty param that is not mandatory, we do not want to return an error
                 try {
@@ -128,7 +129,7 @@ public abstract class Function<T> implements Serializable {
                 } catch (IOException | NullPointerException e2) { // otherwise, we just get the parameter
                     LOGGER.warn(e2.getMessage(), e2);
                     if (!isBothValidForFileOrNot()) {
-                        resetParameterTo(ERROR_MESSAGE); //$NON-NLS-1$
+                        resetParameterTo(ERROR_MESSAGE);
                     }
                 }
             }
@@ -187,8 +188,9 @@ public abstract class Function<T> implements Serializable {
 
     protected int getNumberParameters(String extraParameter) {
         int numberParameters = 0;
-        if (extraParameter != null)
+        if (extraParameter != null) {
             numberParameters = getParameters(extraParameter).length;
+        }
         return numberParameters;
     }
 

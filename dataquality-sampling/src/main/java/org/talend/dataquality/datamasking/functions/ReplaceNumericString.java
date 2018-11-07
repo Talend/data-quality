@@ -34,4 +34,15 @@ public class ReplaceNumericString extends ReplaceNumeric<String> {
     protected boolean isGoodType(Integer codePoint) {
         return Character.isDigit(codePoint);
     }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.talend.dataquality.datamasking.functions.CharactersOperation#isNeedCheck()
+     */
+    @Override
+    protected boolean isNeedCheckSpecialCase() {
+        return true;
+    }
+
 }
