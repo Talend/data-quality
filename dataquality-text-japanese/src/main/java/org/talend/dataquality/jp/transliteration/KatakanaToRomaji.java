@@ -208,6 +208,11 @@ public class KatakanaToRomaji {
         KATAKANA_TO_ROMAJI.put("フォ", new String[] { "fuo" });
         KATAKANA_TO_ROMAJI.put("フョ", new String[] { "fuyo" });
 
+        // katakana used formerly as transliteration: Latin va, vi, ve, vo
+        KATAKANA_TO_ROMAJI.put("ヷ", new String[] { "va" }); // https://en.wiktionary.org/wiki/%E3%83%B7
+        KATAKANA_TO_ROMAJI.put("ヸ", new String[] { "vi" }); // https://en.wiktionary.org/wiki/%E3%83%B8
+        KATAKANA_TO_ROMAJI.put("ヹ", new String[] { "ve" }); // https://en.wiktionary.org/wiki/%E3%83%B9
+        KATAKANA_TO_ROMAJI.put("ヺ", new String[] { "vo" }); // https://en.wiktionary.org/wiki/%E3%83%BA
     }
 
     protected static Stream<String> convert(Stream<String> katakanaStream, TransliterateType type) {
