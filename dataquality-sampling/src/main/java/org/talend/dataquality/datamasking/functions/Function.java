@@ -61,8 +61,6 @@ public abstract class Function<T> implements Serializable {
 
     protected boolean keepFormat = false;
 
-    protected boolean useFPE = false;
-
     /**
      * getter for random
      *
@@ -109,13 +107,8 @@ public abstract class Function<T> implements Serializable {
         this.keepInvalidPattern = keepInvalidPattern;
     }
 
-    public void setUseFPE(boolean useFPE) {
-        this.useFPE = useFPE;
-    }
-
-    public void setFPEParams(int method, String password) {
-        secretMng.setPrfAlgo(method);
-        secretMng.setPassword(password);
+    public void setSecretManager(SecretManager secMng) {
+        this.secretMng = secMng;
     }
 
     /**

@@ -15,6 +15,7 @@ package org.talend.dataquality.datamasking.functions;
 import java.util.List;
 import java.util.Random;
 
+import org.talend.dataquality.datamasking.SecretManager;
 import org.talend.dataquality.datamasking.generic.GenerateFormatPreservingPatterns;
 import org.talend.dataquality.datamasking.generic.GenerateUniqueRandomPatterns;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
@@ -49,9 +50,11 @@ public abstract class AbstractGenerateUniqueSsn extends Function<String> {
     }
 
     @Override
-    public void setUseFPE(boolean useFPE) {
-        this.useFPE = useFPE;
-        ssnPattern = new GenerateFormatPreservingPatterns(2, ssnPattern.getFields());
+    public void setSecretManager(SecretManager secMng) {
+        this.secretMng = secMng;
+        if (secMng.getMethod() != 0) {
+            ssnPattern = new GenerateFormatPreservingPatterns(2, ssnPattern.getFields());
+        }
     }
 
     @Override

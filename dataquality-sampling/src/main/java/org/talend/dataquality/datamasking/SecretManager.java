@@ -1,22 +1,25 @@
 package org.talend.dataquality.datamasking;
 
 import com.idealista.fpe.component.functions.prf.PseudoRandomFunction;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.Hex;
 import org.talend.dataquality.datamasking.fpeUtils.pseudoRandomFunctions.AesPrf;
 import org.talend.dataquality.datamasking.fpeUtils.pseudoRandomFunctions.CryptoConstants;
 import org.talend.dataquality.datamasking.fpeUtils.pseudoRandomFunctions.HmacPrf;
 
-import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
-import javax.crypto.spec.SecretKeySpec;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
+import java.util.Arrays;
 import java.util.Random;
 
 public class SecretManager {
+
+    public static final int TALEND_CUSTOM = 0;
 
     public static final int AES_CBC_PRF = 1;
 
@@ -30,18 +33,33 @@ public class SecretManager {
     /**
      * {@code Integer} value that corresponds to the type of pseudo-random function used by the secretManager
      */
-    private Integer prfAlgo;
+    private Integer method;
 
     /**
      * The keyed pseudo random function used to build a Format-Preserving Encrypter
      */
     private PseudoRandomFunction pseudoRandomFunction;
 
+    public SecretManager() {
+
+    }
+
+    public SecretManager(int method, String password) {
+        setMethod(method);
+        if (method != TALEND_CUSTOM) {
+            setPassword(password);
+        }
+    }
+
     public int getKey() {
         if (key == null)
             key = (new SecureRandom()).nextInt(Integer.MAX_VALUE - 1000000) + 1000000;
 
         return key;
+    }
+
+    public int getMethod() {
+        return method;
     }
 
     public void setKey(int newKey) {
@@ -51,14 +69,14 @@ public class SecretManager {
     public PseudoRandomFunction getPseudoRandomFunction() {
         // TODO : Should a null PRF return an error ?
         if (pseudoRandomFunction == null) {
-            if (prfAlgo == null) {
+            if (method == null) {
                 throw new IllegalStateException("No pseudo random algorithm set for this secret manager.");
             }
 
-            if (prfAlgo == AES_CBC_PRF) {
+            if (method == AES_CBC_PRF) {
                 byte[] key = generateKey(CryptoConstants.KEY_LENGTH);
                 pseudoRandomFunction = new AesPrf(key);
-            } else if (prfAlgo == HMAC_SHA2_PRF) {
+            } else if (method == HMAC_SHA2_PRF) {
                 byte[] key = generateKey(CryptoConstants.KEY_LENGTH);
                 pseudoRandomFunction = new HmacPrf(key);
             }
@@ -71,16 +89,19 @@ public class SecretManager {
         // TODO : Should a null Password return an error ?
         if (password != null) {
             SecretKey secret = generateSecretKey(password);
-            if (prfAlgo == AES_CBC_PRF) {
+            if (secret == null) {
+                throw new IllegalArgumentException("This password can't be used for Format-Preserving Encryption !");
+            }
+            if (method == AES_CBC_PRF) {
                 pseudoRandomFunction = new AesPrf(secret);
-            } else if (prfAlgo == HMAC_SHA2_PRF) {
+            } else if (method == HMAC_SHA2_PRF) {
                 pseudoRandomFunction = new HmacPrf(secret);
             }
         }
     }
 
-    public void setPrfAlgo(int prfAlgo) {
-        this.prfAlgo = prfAlgo;
+    public void setMethod(int method) {
+        this.method = method;
         pseudoRandomFunction = null;
         pseudoRandomFunction = getPseudoRandomFunction();
     }

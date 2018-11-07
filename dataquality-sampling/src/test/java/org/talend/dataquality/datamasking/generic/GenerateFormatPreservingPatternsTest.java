@@ -1,6 +1,7 @@
 package org.talend.dataquality.datamasking.generic;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.talend.dataquality.datamasking.SecretManager;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
@@ -14,20 +15,20 @@ import static org.junit.Assert.*;
 
 public class GenerateFormatPreservingPatternsTest {
 
-    private GenerateFormatPreservingPatterns pattern;
+    static GenerateFormatPreservingPatterns pattern;
 
-    private SecretManager secretMng;
+    static SecretManager secretMng;
 
-    private String minValue;
+    static String minValue;
 
-    private String maxValue;
+    static String maxValue;
 
-    private List<String> minStringList;
+    static List<String> minStringList;
 
-    private List<String> maxStringList;
+    static List<String> maxStringList;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeClass
+    public static void setUp() {
         // pattern we want to test
         List<AbstractField> fields = new ArrayList<AbstractField>();
         List<String> enums = new ArrayList<String>(Arrays.asList("O", "P", "G", "U", "M", "S"));
@@ -44,9 +45,7 @@ public class GenerateFormatPreservingPatternsTest {
         minStringList = Arrays.asList("O", "SF", "000", "5");
         maxStringList = Arrays.asList("S", "DU", "500", "20");
 
-        secretMng = new SecretManager();
-        secretMng.setPrfAlgo(2);
-        secretMng.setPassword("#Datadriven2018");
+        secretMng = new SecretManager(2, "#Datadriven2018");
     }
 
     @Test
@@ -69,8 +68,9 @@ public class GenerateFormatPreservingPatternsTest {
 
     @Test
     public void generate_AES_CBC_encrypted_string() {
+        System.out.println("Start AES");
         SecretManager AESSecMng = new SecretManager();
-        AESSecMng.setPrfAlgo(1);
+        AESSecMng.setMethod(1);
         AESSecMng.setPassword("#Datadriven2018");
         StringBuilder result = pattern.generateUniqueString(Arrays.asList("U", "KI", "453", "12"), AESSecMng);
         assertEquals("GDU45211", result.toString());
@@ -83,16 +83,16 @@ public class GenerateFormatPreservingPatternsTest {
     }
 
     @Test
-    public void mask_value_with_max_rank() {
-        StringBuilder result = pattern.generateUniqueString(Arrays.asList("S", "DU", "500", "20"), secretMng);
-        assertNotEquals(maxValue, result.toString());
+    public void mask_value_with_min_rank() {
+        StringBuilder result = pattern.generateUniqueString(Arrays.asList("O", "SF", "000", "5"), secretMng);
+        assertNotEquals(minValue, result.toString());
         assertNotNull(result);
     }
 
     @Test
-    public void mask_value_with_min_rank() {
-        StringBuilder result = pattern.generateUniqueString(Arrays.asList("O", "SF", "000", "5"), secretMng);
-        assertNotEquals(minValue, result.toString());
+    public void mask_value_with_max_rank() {
+        StringBuilder result = pattern.generateUniqueString(Arrays.asList("S", "DU", "500", "20"), secretMng);
+        assertNotEquals(maxValue, result.toString());
         assertNotNull(result);
     }
 
@@ -102,6 +102,7 @@ public class GenerateFormatPreservingPatternsTest {
         assertNull(result);
     }
 
+    // TODO : Delete this test because of performances ? Or reduce number of possible values for the pattern ?
     @Test
     public void ensure_uniqueness() {
         Set<StringBuilder> uniqueSetTocheck = new HashSet<StringBuilder>();

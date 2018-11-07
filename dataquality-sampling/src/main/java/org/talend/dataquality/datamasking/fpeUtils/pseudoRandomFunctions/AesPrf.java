@@ -23,9 +23,7 @@ public class AesPrf implements PseudoRandomFunction {
 
     private Cipher cipher;
 
-    private SecretKey key;
-
-    private byte[] initializationVector = Arrays.copyOf(new byte[] { 0x00 }, 16);
+    private final byte[] initializationVector = Arrays.copyOf(new byte[] { 0x00 }, 16);
 
     public AesPrf(byte[] key) {
         try {
