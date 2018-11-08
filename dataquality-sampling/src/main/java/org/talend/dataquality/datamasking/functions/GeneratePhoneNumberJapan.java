@@ -23,9 +23,9 @@ public class GeneratePhoneNumberJapan extends Function<String> {
     @Override
     protected String doGenerateMaskedField(String str) {
         StringBuilder result = new StringBuilder("03-"); //$NON-NLS-1$
-        AddFourRandomDigit(result);
+        addFourRandomDigit(result);
         result.append("-"); //$NON-NLS-1$
-        AddFourRandomDigit(result);
+        addFourRandomDigit(result);
         return result.toString();
     }
 
@@ -34,7 +34,7 @@ public class GeneratePhoneNumberJapan extends Function<String> {
      * 
      * @param result
      */
-    private void AddFourRandomDigit(StringBuilder result) {
+    private void addFourRandomDigit(StringBuilder result) {
         for (int i = 0; i < 4; ++i) {
             result.append(nextRandomDigit());
         }

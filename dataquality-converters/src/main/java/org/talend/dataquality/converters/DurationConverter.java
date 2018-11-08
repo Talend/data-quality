@@ -183,11 +183,8 @@ public class DurationConverter {
     }
 
     private boolean noNeedConvert(double value) {
-        if (Double.isNaN(value) || Double.compare(Double.MAX_VALUE, value) == 0 || Double.compare(Double.MIN_VALUE, value) == 0
-                || this.fromUnit.equals(this.toUnit)) {
-            return true;
-        }
-        return false;
+        return Double.isNaN(value) || Double.compare(Double.MAX_VALUE, value) == 0 || Double.compare(Double.MIN_VALUE, value) == 0
+                || this.fromUnit.equals(this.toUnit);
     }
 
     /**

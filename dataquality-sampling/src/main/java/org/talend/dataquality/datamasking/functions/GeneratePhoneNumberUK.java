@@ -23,9 +23,9 @@ public class GeneratePhoneNumberUK extends Function<String> {
     @Override
     protected String doGenerateMaskedField(String str) {
         StringBuilder result = new StringBuilder("020 3"); //$NON-NLS-1$
-        AddRandomDigit(result, 3);
+        addRandomDigit(result, 3);
         result.append(" "); //$NON-NLS-1$
-        AddRandomDigit(result, 4);
+        addRandomDigit(result, 4);
         return result.toString();
     }
 
@@ -34,7 +34,7 @@ public class GeneratePhoneNumberUK extends Function<String> {
      * 
      * @param result
      */
-    private void AddRandomDigit(StringBuilder result, int size) {
+    private void addRandomDigit(StringBuilder result, int size) {
         for (int i = 0; i < size; ++i) {
             result.append(nextRandomDigit());
         }
