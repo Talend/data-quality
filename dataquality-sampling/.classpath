@@ -6,5 +6,7 @@
 	<classpathentry excluding="**/*.java" kind="src" path="src/main/resources"/>
 	<classpathentry including="**/*.java" kind="src" output="target/classes" path="src/test/java"/>
 	<classpathentry excluding="**/*.java" kind="src" output="target/classes" path="src/test/resources"/>
+	<classpathentry kind="lib" path="lib/automaton.jar"/>
+	<classpathentry kind="lib" path="lib/generex.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
