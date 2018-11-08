@@ -19,6 +19,10 @@ import org.apache.commons.math3.distribution.PoissonDistribution;
 
 public class DistributionFactory {
 
+    private DistributionFactory() {
+        // no need to implement
+    }
+
     public static AbstractIntegerDistribution createDistribution(String name, double expectation) {
         AbstractIntegerDistribution distro = null;
         if (expectation < 2) {

@@ -27,7 +27,7 @@ public class GenerateBetweenNumeric extends GenerateBetween<String> {
 
     private static final long serialVersionUID = -8029563336814263376L;
 
-    private static final Pattern patternInteger = Pattern.compile("^(\\+|-)?\\d+$");
+    private static final Pattern patternInteger = Pattern.compile("^(\\+|-)?\\d+$"); //$NON-NLS-1$
 
     private double minDouble = 0;
 
@@ -35,6 +35,7 @@ public class GenerateBetweenNumeric extends GenerateBetween<String> {
 
     private int minimumPrecision = 0;
 
+    @Override
     protected void setBounds() {
         if (parameters != null && parameters.length == 2) {
             try {

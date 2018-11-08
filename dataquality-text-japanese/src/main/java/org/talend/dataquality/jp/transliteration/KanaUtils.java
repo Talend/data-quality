@@ -18,7 +18,12 @@ import java.util.stream.IntStream;
 
 public class KanaUtils {
 
-    public static final int DIFF_FULLKATAKANA_HIRAGANA = 0x60; // code point difference between full-width katakana and hiragana
+    private KanaUtils() {
+        // no need to implement
+    }
+
+    public static final int DIFF_FULLKATAKANA_HIRAGANA = 0x60; // code point difference between full-width katakana and
+                                                               // hiragana
 
     private static final Map<Character, Character> MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA = new HashMap<>();
 
@@ -107,8 +112,9 @@ public class KanaUtils {
                         sb.setCharAt(i - 1, (char) (sb.charAt(i - 1) + 2));// code point distance 2
                     }
                     sb.deleteCharAt(i);
-                    if (i < sb.length())
+                    if (i < sb.length()) {
                         katakanaChar = sb.charAt(i);
+                    }
                 }
                 if (i < sb.length()) {
                     Character fullWidthChar = MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.get(katakanaChar);
@@ -130,10 +136,11 @@ public class KanaUtils {
      */
     public static String hiragana2FullKatakana(String text) {
         final IntStream cpStream = text.codePoints().map(c -> {
-            if (('\u3041' <= c && c <= '\u3096') || (c >= '\u309D' && c <= '\u309F'))
+            if (('\u3041' <= c && c <= '\u3096') || (c >= '\u309D' && c <= '\u309F')) {
                 return (char) (c + DIFF_FULLKATAKANA_HIRAGANA);
-            else
+            } else {
                 return c;
+            }
         });
 
         return cpStream.collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append).toString();
@@ -146,6 +153,6 @@ public class KanaUtils {
      * @return true if input char is Full Width Katakana, otherwise return false.
      */
     protected static boolean isFullWidthKatakana(char c) {
-        return (('\u30a1' <= c) && (c <= '\u30fe'));
+        return ('\u30a1' <= c) && (c <= '\u30fe');
     }
 }

@@ -21,6 +21,10 @@ import org.slf4j.LoggerFactory;
 
 public class KatakanaToRomaji {
 
+    private KatakanaToRomaji() {
+        // no need to implement
+    }
+
     private static final Logger LOGGER = LoggerFactory.getLogger(KatakanaToRomaji.class);
 
     protected static final Map<String, String[]> KATAKANA_TO_ROMAJI = new HashMap<>();
@@ -216,20 +220,27 @@ public class KatakanaToRomaji {
 
     private static String toRomaji(String s, TransliterateType type) {
         StringBuilder t = new StringBuilder();
+        boolean isSkipNextLoop = false;
         for (int i = 0; i < s.length(); i++) {
-            if (i <= s.length() - 2 && KATAKANA_TO_ROMAJI.containsKey(s.substring(i, i + 2))) {// 2 katakanas combination
-                // lookup priority: 2 katakanas combination > single katakana (i.e. ショ > シ)
+            if (isSkipNextLoop) {
+                isSkipNextLoop = false;
+                continue;
+            }
+            if (i <= s.length() - 2 && KATAKANA_TO_ROMAJI.containsKey(s.substring(i, i + 2))) {// 2 katakanas
+                                                                                                   // combination
+                                                                                               // lookup priority: 2 katakanas combination > single katakana (i.e. ショ > シ)
                 t.append(getRomajiByType(s.substring(i, i + 2), type));
-                i++;
+                isSkipNextLoop = true;
             } else if (KATAKANA_TO_ROMAJI.containsKey(s.substring(i, i + 1))) { // single katakana
                 t.append(getRomajiByType(s.substring(i, i + 1), type));
             } else if (s.charAt(i) == 'ー') { // handle chōonpu: see https://en.wikipedia.org/wiki/Ch%C5%8Donpu
                 if (t.length() >= 1) {
                     String valueToReplace;
-                    if (type == TransliterateType.NIHON_SHIKI || type == TransliterateType.KUNREI_SHIKI)
+                    if (type == TransliterateType.NIHON_SHIKI || type == TransliterateType.KUNREI_SHIKI) {
                         valueToReplace = addCircumflex(t.charAt(t.length() - 1));
-                    else
+                    } else {
                         valueToReplace = addMacronMark(t.charAt(t.length() - 1));
+                    }
 
                     t.replace(t.length() - 1, t.length(), valueToReplace);
                 } else {

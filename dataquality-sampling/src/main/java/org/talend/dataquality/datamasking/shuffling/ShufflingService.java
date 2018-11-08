@@ -2,6 +2,7 @@ package org.talend.dataquality.datamasking.shuffling;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -12,14 +13,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This class offers a shuffling service to manipulates the {@link ShuffleColumn} action and the
- * {@link ShufflingHandler} action together.
+ * This class offers a shuffling service to manipulates the {@link ShuffleColumn} action and the {@link ShufflingHandler} action
+ * together.
  */
 public class ShufflingService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ShufflingService.class);
 
-    protected ConcurrentLinkedQueue<Future<List<List<Object>>>> concurrentQueue = new ConcurrentLinkedQueue<Future<List<List<Object>>>>();
+    protected ConcurrentLinkedQueue<Future<List<List<Object>>>> concurrentQueue = new ConcurrentLinkedQueue<>();
 
     protected ShufflingHandler shufflingHandler;
 
@@ -35,7 +36,7 @@ public class ShufflingService {
 
     protected boolean hasSeed;
 
-    private List<List<Object>> rows = new ArrayList<List<Object>>();
+    private List<List<Object>> rows = new ArrayList<>();
 
     private int seperationSize = Integer.MAX_VALUE;
 
@@ -121,21 +122,21 @@ public class ShufflingService {
             executor = Executors.newCachedThreadPool();
         } else {
             if (executor.isShutdown()) {
-                throw new IllegalArgumentException("executor shutdown");
+                throw new IllegalArgumentException("executor shutdown"); //$NON-NLS-1$
             }
         }
     }
 
-    private synchronized List<List<Object>> deepCopyListTo(List<List<Object>> rows) {
-        List<List<Object>> copyRows = new ArrayList<List<Object>>(rows.size());
-        for (List<Object> row : rows) {
-            List<Object> copyRow = new ArrayList<Object>(row.size());
+    private synchronized List<List<Object>> deepCopyListTo(List<List<Object>> parameterRows) {
+        List<List<Object>> copyRows = new ArrayList<>(parameterRows.size());
+        for (List<Object> row : parameterRows) {
+            List<Object> copyRow = new ArrayList<>(row.size());
             for (Object o : row) {
                 copyRow.add(o);
             }
             copyRows.add(copyRow);
         }
-        rows.clear();
+        parameterRows.clear();
         return copyRows;
 
     }
@@ -154,7 +155,7 @@ public class ShufflingService {
         execute(row);
     }
 
-    public ConcurrentLinkedQueue<Future<List<List<Object>>>> getConcurrentQueue() {
+    public Queue<Future<List<List<Object>>>> getConcurrentQueue() {
         return concurrentQueue;
     }
 
@@ -169,10 +170,10 @@ public class ShufflingService {
 
     /**
      * <ul>
-     * <li>First sets the hasSubmitted variable to be true and launches the execute() method with the global variable
-     * hasSubmitted equals true. This allows the resting rows to be submitted to a callable process.
-     * <li>To avoid the handler stopping scanning the result, lets the thread sleep 100 miliseconds. This allows the
-     * last callable job to stand by</li>
+     * <li>First sets the hasSubmitted variable to be true and launches the execute() method with the global variable hasSubmitted
+     * equals true. This allows the resting rows to be submitted to a callable process.
+     * <li>To avoid the handler stopping scanning the result, lets the thread sleep 100 miliseconds. This allows the last callable
+     * job to stand by</li>
      * <li>Sets the hasFinished variable true to announce the handler to finish the scan</li>
      * </ul>
      * 
@@ -180,7 +181,7 @@ public class ShufflingService {
      */
     public void setHasFinished(boolean hasFinished) {
         this.hasSubmitted = hasFinished;
-        execute(new ArrayList<Object>());
+        execute(new ArrayList<>());
         this.hasFinished = hasFinished;
         shufflingHandler.join();
     }

@@ -93,22 +93,21 @@ public class CallbackMailServerCheckerImpl extends AbstractEmailChecker {
     private static int getResponse(BufferedReader in) throws IOException, TalendSMTPRuntimeException {
         String line;
         int res = 0;
+        boolean existException = false;
         do {
             try {
                 line = in.readLine();
             } catch (IOException e) {
                 line = e.getMessage();
                 LOG.warn(line, e);
-                continue;
+                existException = true;
             }
-            if (LOG.isInfoEnabled()) {
+            if (!existException && LOG.isInfoEnabled()) {
                 LOG.info(line);
             }
-            // Make sure the input stream is over and not effect next one read
-            if (line == null) {
-                break;
-            }
-            if (res != 0 && line.charAt(3) != '-') {
+
+            if (line == null || existException || isSkipTheLine(line, res)) {
+                existException = false;
                 continue;
             }
             // if in.ready() is true then line will not be null
@@ -118,12 +117,20 @@ public class CallbackMailServerCheckerImpl extends AbstractEmailChecker {
             } catch (NumberFormatException ex) {
                 res = -1;
             }
-        } while (in.ready());
+        } while (in.ready() && line != null);// Make sure the input stream is over and not effect next one read
         // line.contains("authentication is required") judge whether authentication is required(for example 139.com)
-        if (res != 250 && res != 221 && res != 220 || (line != null && line.contains("authentication is required"))) { //$NON-NLS-1$
+        if (invalidReturnCode(res) || (line != null && line.contains("authentication is required"))) { //$NON-NLS-1$
             throw new TalendSMTPRuntimeException(line);
         }
         return res;
+    }
+
+    private static boolean invalidReturnCode(int res) {
+        return res != 250 && res != 221 && res != 220;
+    }
+
+    private static boolean isSkipTheLine(String line, int res) {
+        return res != 0 && line.charAt(3) != '-';
     }
 
     private List<String> getMX(String hostName) throws NamingException {
@@ -174,7 +181,7 @@ public class CallbackMailServerCheckerImpl extends AbstractEmailChecker {
 
     public void init() {
         // Prepare naming directory context.
-        Hashtable<String, String> env = new Hashtable<String, String>();
+        Hashtable<String, String> env = new Hashtable<>();
         env.put("java.naming.factory.initial", "com.sun.jndi.dns.DnsContextFactory"); //$NON-NLS-1$ //$NON-NLS-2$
 
         // if the user add the paramter for: java.naming.provider.url, if has then add it to env
@@ -197,31 +204,23 @@ public class CallbackMailServerCheckerImpl extends AbstractEmailChecker {
      * 
      * @see org.talend.dataquality.email.IEmailChecker#check(java.lang.String)
      */
+    @SuppressWarnings("null")
     @Override
     public boolean check(String email) throws TalendSMTPRuntimeException {
         if (email == null) {
-            if (LOG.isInfoEnabled()) {
-                LOG.info("mail is empty."); //$NON-NLS-1$
-            }
-            return false;
+            return handleEmptyMailCase();
         }
         // Find the separator for the domain name
         int pos = email.indexOf('@');
         // If the email does not contain an '@', it's not valid
         if (pos == -1) {
-            if (LOG.isInfoEnabled()) {
-                LOG.info("no @ charactor in the mail string.");
-            }
-            return false;
+            return handleNoATExistCase();
         }
 
         // check loose email regex
         final Matcher matcher = emailPattern.matcher(email);
         if (!matcher.find()) {
-            if (LOG.isInfoEnabled()) {
-                LOG.info(HEADER + "Invalid email syntax for " + email); //$NON-NLS-1$
-            }
-            return false;
+            return handleInvalidEmailSyntaxCase(email);
         }
 
         // Isolate the domain/machine name and get a list of mail exchangers
@@ -230,20 +229,13 @@ public class CallbackMailServerCheckerImpl extends AbstractEmailChecker {
         try {
             mxList = getMX(domain);
         } catch (NamingException ex) {
-            if (LOG.isDebugEnabled()) {
-                LOG.info(ex.getMessage(), ex);
-            }
-            // talend email on the outside of office room case
-            throw new TalendSMTPRuntimeException(ex.getMessage());
+            handleNamingExceptionCase(ex);
         }
 
         // Just because we can send mail to the domain, doesn't mean that the
         // email is valid, but if we can't, it's a sure sign that it isn't
         if (mxList.isEmpty()) {
-            if (LOG.isInfoEnabled()) {
-                LOG.info("MX size is 0"); //$NON-NLS-1$
-            }
-            return false;
+            return handleMaxSizeZeroCase();
         }
 
         // Now, do the SMTP validation, try each mail exchanger until we get
@@ -262,32 +254,20 @@ public class CallbackMailServerCheckerImpl extends AbstractEmailChecker {
 
                 res = getResponse(rdr);
                 if (res != 220) { // SMTP Service ready.
-                    skt.close();
-                    if (LOG.isInfoEnabled()) {
-                        LOG.info(HEADER + "Invalid header:" + mxList.get(mx)); //$NON-NLS-1$
-                    }
-                    return false;
+                    return handleSMTPServiceReadyCase(mxList, mx, skt);
                 }
                 write(wtr, "EHLO " + domain); //$NON-NLS-1$
 
                 res = getResponse(rdr);
                 if (res != 250) {
-                    skt.close();
-                    if (LOG.isInfoEnabled()) {
-                        LOG.info(HEADER + "Not ESMTP: " + domain); //$NON-NLS-1$
-                    }
-                    return false;
+                    return handleNotESMTPCase(domain, skt);
                 }
 
                 // validate the sender email
                 write(wtr, "MAIL FROM: <" + email + ">"); //$NON-NLS-1$//$NON-NLS-2$
                 res = getResponse(rdr);
                 if (res != 250) {
-                    skt.close();
-                    if (LOG.isInfoEnabled()) {
-                        LOG.info(HEADER + "Sender rejected: " + email); //$NON-NLS-1$
-                    }
-                    return false;
+                    return handleSenderRejectedCase(email, skt);
                 }
 
                 write(wtr, "RCPT TO: <" + email + ">"); //$NON-NLS-1$//$NON-NLS-2$
@@ -324,6 +304,66 @@ public class CallbackMailServerCheckerImpl extends AbstractEmailChecker {
             }
         }
         throw new TalendSMTPRuntimeException(errorMessage);
+    }
+
+    private boolean handleSenderRejectedCase(String email, Socket skt) throws IOException {
+        skt.close();
+        if (LOG.isInfoEnabled()) {
+            LOG.info(HEADER + "Sender rejected: " + email); //$NON-NLS-1$
+        }
+        return false;
+    }
+
+    private boolean handleNotESMTPCase(String domain, Socket skt) throws IOException {
+        skt.close();
+        if (LOG.isInfoEnabled()) {
+            LOG.info(HEADER + "Not ESMTP: " + domain); //$NON-NLS-1$
+        }
+        return false;
+    }
+
+    private boolean handleSMTPServiceReadyCase(List<String> mxList, int mx, Socket skt) throws IOException {
+        skt.close();
+        if (LOG.isInfoEnabled()) {
+            LOG.info(HEADER + "Invalid header:" + mxList.get(mx)); //$NON-NLS-1$
+        }
+        return false;
+    }
+
+    private boolean handleMaxSizeZeroCase() {
+        if (LOG.isInfoEnabled()) {
+            LOG.info("MX size is 0"); //$NON-NLS-1$
+        }
+        return false;
+    }
+
+    private void handleNamingExceptionCase(NamingException ex) throws TalendSMTPRuntimeException {
+        if (LOG.isDebugEnabled()) {
+            LOG.info(ex.getMessage(), ex);
+        }
+        // talend email on the outside of office room case
+        throw new TalendSMTPRuntimeException(ex.getMessage());
+    }
+
+    private boolean handleInvalidEmailSyntaxCase(String email) {
+        if (LOG.isInfoEnabled()) {
+            LOG.info(HEADER + "Invalid email syntax for " + email); //$NON-NLS-1$
+        }
+        return false;
+    }
+
+    private boolean handleNoATExistCase() {
+        if (LOG.isInfoEnabled()) {
+            LOG.info("no @ charactor in the mail string."); //$NON-NLS-1$
+        }
+        return false;
+    }
+
+    private boolean handleEmptyMailCase() {
+        if (LOG.isInfoEnabled()) {
+            LOG.info("mail is empty."); //$NON-NLS-1$
+        }
+        return false;
     }
 
     /*

@@ -13,7 +13,7 @@
 package org.talend.dataquality.email.api;
 
 /**
- * DOC zshen class global comment. Detailled comment
+ * The parameter of checker
  */
 public class CheckerParams {
 
@@ -22,7 +22,7 @@ public class CheckerParams {
     private String lastName;
 
     public CheckerParams() {
-
+        // no need to implement
     }
 
     public CheckerParams(String firstName, String lastName) {

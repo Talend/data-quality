@@ -35,6 +35,10 @@ public class TextTokenizer extends TextTokenizerBase {
 
     private static class LazyHolder {
 
+        private LazyHolder() {
+            // no need implement
+        }
+
         private static final TextTokenizer INSTANCE = new TextTokenizer();
     }
 

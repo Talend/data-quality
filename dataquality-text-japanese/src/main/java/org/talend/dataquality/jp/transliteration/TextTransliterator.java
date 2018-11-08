@@ -30,7 +30,7 @@ public class TextTransliterator {
 
     private static final int PRONUNCIATION_ID = 8;
 
-    private static final String KUROMOJI_NA_FEATURE = "*";
+    private static final String KUROMOJI_NA_FEATURE = "*"; //$NON-NLS-1$
 
     private static TextTokenizer textTokenizer;
 
@@ -44,6 +44,10 @@ public class TextTransliterator {
 
     private static class LazyHolder {
 
+        private LazyHolder() {
+            // no need to implement
+        }
+
         private static final TextTransliterator INSTANCE = new TextTransliterator();
     }
 
@@ -52,7 +56,7 @@ public class TextTransliterator {
     }
 
     public String transliterate(String text, TransliterateType type) {
-        return transliterate(text, type, " ");
+        return transliterate(text, type, " "); //$NON-NLS-1$
     }
 
     public String transliterate(String text, TransliterateType type, String delimiter) {
@@ -69,7 +73,8 @@ public class TextTransliterator {
             return KatakanaToHiragana.convert(katakanaRStream);
             // Katakana reading
         } else {
-            // if output type is KATAKANA_PRONUNCIATION or rōmaji, the text should be converted to Katakana pronunciation
+            // if output type is KATAKANA_PRONUNCIATION or rōmaji, the text should be converted to Katakana
+            // pronunciation
             final Stream<String> katakanaPStream = convert2Katakana(text, true);
             if (type.equals(TransliterateType.KATAKANA_PRONUNCIATION)) {
                 return katakanaPStream;

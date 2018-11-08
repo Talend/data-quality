@@ -2,6 +2,7 @@ package org.talend.dataquality.datamasking.generic;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -34,39 +35,21 @@ public class BijectiveSubstitutionFunction extends Function<String> {
 
         keepFormat = true;
 
-        List<AbstractField> fieldList = new ArrayList<AbstractField>();
+        List<AbstractField> fieldList = new ArrayList<>();
 
         for (FieldDefinition definition : fieldDefinitionList) {
             switch (definition.getType()) {
             case DATEPATTERN:
-                if (definition.getMin().compareTo(BigInteger.valueOf(1000)) < 0
-                        || definition.getMin().compareTo(BigInteger.valueOf(9999)) > 0)
-                    throw new DQRuntimeException("The minimum value " + definition.getMin() + " must be between 1000 and 9999");
-                if (definition.getMax().compareTo(BigInteger.valueOf(1000)) < 0
-                        || definition.getMax().compareTo(BigInteger.valueOf(9999)) > 0)
-                    throw new DQRuntimeException("The maximum value " + definition.getMax() + " must be between 1000 and 9999");
-                fieldList.add(new FieldDate(definition.getMin().intValue(), definition.getMax().intValue()));
+                handleDatePatternCase(fieldList, definition);
                 break;
             case INTERVAL:
-                if (definition.getMin().signum() < 0)
-                    throw new DQRuntimeException("The minimum value " + definition.getMin() + " must be positive");
-                if (definition.getMin().compareTo(definition.getMax()) > 0)
-                    throw new DQRuntimeException("The minimum value " + definition.getMin()
-                            + " has to be less than the maximum value " + definition.getMax());
-                fieldList.add(new FieldInterval(definition.getMin(), definition.getMax()));
+                handleIntervalCase(fieldList, definition);
                 break;
             case ENUMERATION:
-                fieldList.add(new FieldEnum(Arrays.asList(definition.getValue().split(","))));
+                fieldList.add(new FieldEnum(Arrays.asList(definition.getValue().split(",")))); //$NON-NLS-1$
                 break;
             case ENUMERATION_FROM_FILE:
-                File file = new File(definition.getValue());
-                if (file.exists()) {
-                    FileInputStream fis = new FileInputStream(file);
-                    fieldList.add(new FieldEnum(IOUtils.readLines(fis)));
-                } else {
-                    LOGGER.error("File does not exist");
-                    throw new DQRuntimeException("File " + definition.getValue() + " does not exist");
-                }
+                handleEnumerationFromFileCase(fieldList, definition);
                 break;
             default:
                 break;
@@ -74,6 +57,61 @@ public class BijectiveSubstitutionFunction extends Function<String> {
         }
 
         uniqueGenericPattern = new GenerateUniqueRandomPatterns(fieldList);
+    }
+
+    /**
+     * Deal with enumeration from file case
+     * 
+     * @param fieldList
+     * @param definition
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
+    private void handleEnumerationFromFileCase(List<AbstractField> fieldList, FieldDefinition definition)
+            throws FileNotFoundException, IOException {
+        File file = new File(definition.getValue());
+        if (file.exists()) {
+            FileInputStream fis = new FileInputStream(file);
+            fieldList.add(new FieldEnum(IOUtils.readLines(fis)));
+        } else {
+            LOGGER.error("File does not exist"); //$NON-NLS-1$
+            throw new DQRuntimeException("File " + definition.getValue() + " does not exist"); //$NON-NLS-1$ //$NON-NLS-2$
+        }
+    }
+
+    /**
+     * Deal with interval case
+     * 
+     * @param fieldList
+     * @param definition
+     */
+    private void handleIntervalCase(List<AbstractField> fieldList, FieldDefinition definition) {
+        if (definition.getMin().signum() < 0) {
+            throw new DQRuntimeException("The minimum value " + definition.getMin() + " must be positive"); //$NON-NLS-1$ //$NON-NLS-2$
+        }
+        if (definition.getMin().compareTo(definition.getMax()) > 0) {
+            throw new DQRuntimeException("The minimum value " + definition.getMin() //$NON-NLS-1$
+                    + " has to be less than the maximum value " + definition.getMax()); //$NON-NLS-1$
+        }
+        fieldList.add(new FieldInterval(definition.getMin(), definition.getMax()));
+    }
+
+    /**
+     * Deal with date pattern from file case
+     * 
+     * @param fieldList
+     * @param definition
+     */
+    private void handleDatePatternCase(List<AbstractField> fieldList, FieldDefinition definition) {
+        if (definition.getMin().compareTo(BigInteger.valueOf(1000)) < 0
+                || definition.getMin().compareTo(BigInteger.valueOf(9999)) > 0) {
+            throw new DQRuntimeException("The minimum value " + definition.getMin() + " must be between 1000 and 9999"); //$NON-NLS-1$ //$NON-NLS-2$
+        }
+        if (definition.getMax().compareTo(BigInteger.valueOf(1000)) < 0
+                || definition.getMax().compareTo(BigInteger.valueOf(9999)) > 0) {
+            throw new DQRuntimeException("The maximum value " + definition.getMax() + " must be between 1000 and 9999"); //$NON-NLS-1$ //$NON-NLS-2$
+        }
+        fieldList.add(new FieldDate(definition.getMin().intValue(), definition.getMax().intValue()));
     }
 
     @Override
@@ -84,30 +122,34 @@ public class BijectiveSubstitutionFunction extends Function<String> {
 
     @Override
     protected String doGenerateMaskedField(String str) {
-        if (str == null)
+        if (str == null) {
             return null;
+        }
 
         String strWithoutSpaces = super.removeFormatInString(str);
         // check if the pattern is valid
         if (strWithoutSpaces.isEmpty()
                 || strWithoutSpaces.codePointCount(0, strWithoutSpaces.length()) != uniqueGenericPattern.getFieldsCharsLength()) {
-            if (keepInvalidPattern)
+            if (keepInvalidPattern) {
                 return str;
-            else
+            } else {
                 return null;
+            }
         }
 
         StringBuilder result = doValidGenerateMaskedField(strWithoutSpaces);
         if (result == null) {
-            if (keepInvalidPattern)
+            if (keepInvalidPattern) {
                 return str;
-            else
+            } else {
                 return null;
+            }
         }
-        if (keepFormat)
+        if (keepFormat) {
             return insertFormatInString(str, result);
-        else
+        } else {
             return result.toString();
+        }
     }
 
     protected StringBuilder doValidGenerateMaskedField(String str) {

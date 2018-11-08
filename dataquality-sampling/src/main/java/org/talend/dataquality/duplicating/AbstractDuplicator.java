@@ -20,7 +20,7 @@ import org.apache.commons.math3.distribution.AbstractIntegerDistribution;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class AbstractDuplicator<TIn, TOut> {
+public abstract class AbstractDuplicator<I, O> {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractDuplicator.class);
 
@@ -65,8 +65,8 @@ public abstract class AbstractDuplicator<TIn, TOut> {
         return rnd;
     }
 
-    public List<TOut> process(TIn v) {
-        List<TOut> result = new ArrayList<TOut>();
+    public List<O> process(I v) {
+        List<O> result = new ArrayList<>();
         int grpSize = getRandomGroupSize();
         for (int i = 0; i < grpSize; i++) {
             result.add(generateOutput(v, i == 0));
@@ -74,7 +74,7 @@ public abstract class AbstractDuplicator<TIn, TOut> {
         return result;
     }
 
-    protected abstract TOut generateOutput(TIn v, boolean isOriginal);
+    protected abstract O generateOutput(I v, boolean isOriginal);
 
     private int getRandomGroupSize() {
         if (uniquePercentageOfOriginal > getRandom().nextDouble()) {

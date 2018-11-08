@@ -20,30 +20,37 @@ public class DefaultCallback implements MatchMergeAlgorithm.Callback {
     public static final MatchMergeAlgorithm.Callback INSTANCE = new DefaultCallback();
 
     private DefaultCallback() {
+        // no need to implement
     }
 
     @Override
     public void onBeginRecord(Record record) {
+        // no need to implement
     }
 
     @Override
     public void onMatch(Record record1, Record record2, MatchResult matchResult) {
+        // no need to implement
     }
 
     @Override
     public void onNewMerge(Record record) {
+        // no need to implement
     }
 
     @Override
     public void onRemoveMerge(Record record) {
+        // no need to implement
     }
 
     @Override
     public void onDifferent(Record record1, Record record2, MatchResult matchResult) {
+        // no need to implement
     }
 
     @Override
     public void onEndRecord(Record record) {
+        // no need to implement
     }
 
     @Override
@@ -53,10 +60,12 @@ public class DefaultCallback implements MatchMergeAlgorithm.Callback {
 
     @Override
     public void onBeginProcessing() {
+        // no need to implement
     }
 
     @Override
     public void onEndProcessing() {
+        // no need to implement
     }
 
 }

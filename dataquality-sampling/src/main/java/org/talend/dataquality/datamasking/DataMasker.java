@@ -19,12 +19,12 @@ import java.util.List;
 /**
  * created by jgonzalez on 25 juin 2015 This class is the main class used in the masking process.
  *
- * @param <TIN> The input schema
- * @param <TOUT> The output schema
+ * @param <I> The input schema
+ * @param <O> The output schema
  */
-public abstract class DataMasker<TIN, TOUT> {
+public abstract class DataMasker<I, O> {
 
-    protected abstract TOUT generateOutput(TIN v, boolean isOriginal);
+    protected abstract O generateOutput(I v, boolean isOriginal);
 
     /**
      * DOC jgonzalez Comment method "process". This method is called to generate the masked output.
@@ -34,8 +34,8 @@ public abstract class DataMasker<TIN, TOUT> {
      * not, only the masked row wiil be generated.
      * @return A masekd row from the ouput schema.
      */
-    public List<TOUT> process(TIN v, boolean keepOriginal) {
-        List<TOUT> reslutList = new ArrayList<>();
+    public List<O> process(I v, boolean keepOriginal) {
+        List<O> reslutList = new ArrayList<>();
 
         if (keepOriginal) {
             reslutList.add(generateOutput(v, true));
