@@ -24,8 +24,8 @@ import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
  * 
  * @author jteuladedenantes
  * 
- * French patter: a-bb-cc-dd-eee-fff a: 1 -> 2 bb: 0 -> 99 cc: 1 -> 12 dd: 1 -> 19 ; (2A, 2B) ; 20 -> 99 eee: 1 -> 990
- * fff: 1 -> 999
+ * French pattern: a-bb-cc-dd-eee-fff a: 1 -> 2 bb: 00 -> 99 cc: 1 -> 12 dd: 01 -> 19 ; (2A, 2B) ; 21 -> 99 eee: 001 -> 990
+ * fff: 001 -> 999
  */
 public class GenerateUniqueSsnFr extends AbstractGenerateUniqueSsn {
 
@@ -35,13 +35,12 @@ public class GenerateUniqueSsnFr extends AbstractGenerateUniqueSsn {
 
     @Override
     protected StringBuilder doValidGenerateMaskedField(String str) {
-        if (!isValidWithoutFormat(str)) {
-            return null;
-        }
-
         List<String> strs = splitFields(str);
 
         StringBuilder result = ssnPattern.generateUniqueString(strs, secretMng);
+        if (result == null) {
+            return null;
+        }
 
         // add the security key specified for french SSN
         String key = computeFrenchKey(result.toString());
@@ -57,8 +56,8 @@ public class GenerateUniqueSsnFr extends AbstractGenerateUniqueSsn {
             keyResult.setCharAt(5, '1');
             keyResult.setCharAt(6, (keyResult.charAt(6) == 'A') ? '9' : '8');
         }
-        // TODO : 97 should be replaced by MOD97 or no ?
-        int controlKey = 97 - (int) (Long.valueOf(keyResult.toString()) % MOD97);
+
+        int controlKey = MOD97 - (int) (Long.valueOf(keyResult.toString()) % MOD97);
 
         StringBuilder res = new StringBuilder();
         if (controlKey < 10)
@@ -101,25 +100,16 @@ public class GenerateUniqueSsnFr extends AbstractGenerateUniqueSsn {
         return createFieldsListFromPattern();
     }
 
-    // TODO : Add this method to true UtilsSsnFr class
-    public List<String> splitFields(String ssn) {
+    protected List<String> splitFields(String str) {
         // read the input str
         List<String> strs = new ArrayList<String>();
-        strs.add(ssn.substring(0, 1));
-        strs.add(ssn.substring(1, 3));
-        strs.add(ssn.substring(3, 5));
-        strs.add(ssn.substring(5, 7));
-        strs.add(ssn.substring(7, 10));
-        strs.add(ssn.substring(10, 13));
+        strs.add(str.substring(0, 1));
+        strs.add(str.substring(1, 3));
+        strs.add(str.substring(3, 5));
+        strs.add(str.substring(5, 7));
+        strs.add(str.substring(7, 10));
+        strs.add(str.substring(10, 13));
 
         return strs;
-    }
-
-    /**
-     * Verifies the validity of an ssn string.
-     * @return true if valid, false otherwise.
-     */
-    protected boolean isValidWithoutFormat(String ssn) {
-        return ssnPattern.encodeFields(splitFields(ssn)) != null;
     }
 }

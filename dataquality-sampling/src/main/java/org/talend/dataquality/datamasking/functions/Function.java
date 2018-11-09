@@ -51,6 +51,9 @@ public abstract class Function<T> implements Serializable {
 
     protected String[] parameters;
 
+    /**
+     * The SecretManager handles keys and secret used to generate masked values.
+     */
     protected SecretManager secretMng = new SecretManager();
 
     protected boolean keepNull = false;
@@ -107,6 +110,11 @@ public abstract class Function<T> implements Serializable {
         this.keepInvalidPattern = keepInvalidPattern;
     }
 
+    /**
+     * This method sets the Secret Manager for the Function.
+     *
+     * @param secMng The instance of SecretManager to use.
+     * */
     public void setSecretManager(SecretManager secMng) {
         this.secretMng = secMng;
     }

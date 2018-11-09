@@ -16,7 +16,6 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.talend.dataquality.datamasking.generic.GenerateUniqueRandomPatterns;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
 
@@ -47,9 +46,7 @@ public class GenerateUniqueSsnIndia extends AbstractGenerateUniqueSsn {
     @Override
     protected StringBuilder doValidGenerateMaskedField(String str) {
         // read the input str
-        List<String> strs = new ArrayList<String>();
-        strs.add(str.substring(0, 1));
-        strs.add(str.substring(1, 11));
+        List<String> strs = splitFields(str);
 
         StringBuilder result = ssnPattern.generateUniqueString(strs, secretMng);
         if (result == null) {
@@ -61,11 +58,6 @@ public class GenerateUniqueSsnIndia extends AbstractGenerateUniqueSsn {
         result.append(controlKey);
 
         return result;
-    }
-
-    @Override
-    protected boolean isValidWithoutFormat(String str) {
-        return true;
     }
 
     /**
@@ -81,6 +73,14 @@ public class GenerateUniqueSsnIndia extends AbstractGenerateUniqueSsn {
 
         checkSumSize = 1;
         return fields;
+    }
+
+    @Override
+    protected List<String> splitFields(String str) {
+        List<String> strs = new ArrayList<String>();
+        strs.add(str.substring(0, 1));
+        strs.add(str.substring(1, 11));
+        return strs;
     }
 
     /**

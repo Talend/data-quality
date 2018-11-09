@@ -1,20 +1,37 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package org.talend.dataquality.datamasking.fpeUtils.pseudoRandomFunctions;
 
 import com.idealista.fpe.component.functions.prf.PseudoRandomFunction;
 
 import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.nio.ByteBuffer;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
 import java.util.Arrays;
 
+/**
+ *
+ * This class is a pseudo-random function to use with FF1 encryption.
+ * It relies on the AES-CBC algorithm.
+ *
+ * @author afournier
+ * @see org.talend.dataquality.datamasking.SecretManager
+ * @see HmacPrf
+ * @see CryptoConstants
+ */
 public class AesPrf implements PseudoRandomFunction {
 
     private static final String AES_ALGORITHM = CryptoConstants.AES_ALGORITHM;

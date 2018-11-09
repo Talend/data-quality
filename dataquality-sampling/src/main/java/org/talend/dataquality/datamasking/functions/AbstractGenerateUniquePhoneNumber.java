@@ -5,11 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import org.talend.dataquality.datamasking.generic.GenerateUniqueRandomPatterns;
-import org.talend.dataquality.datamasking.SecretManager;
+import org.talend.dataquality.datamasking.generic.patterns.GenerateUniqueRandomPatterns;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
-import org.talend.dataquality.datamasking.generic.AbstractGeneratePattern;
+import org.talend.dataquality.datamasking.generic.patterns.AbstractGeneratePattern;
 
 /**
  * Created by jteuladedenantes on 21/09/16.
@@ -24,7 +23,6 @@ public abstract class AbstractGenerateUniquePhoneNumber extends Function<String>
 
     public AbstractGenerateUniquePhoneNumber() {
         List<AbstractField> fields = createFieldsListFromPattern();
-        secretMng = new SecretManager();
         phoneNumberPattern = new GenerateUniqueRandomPatterns(fields);
     }
 

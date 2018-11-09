@@ -1,10 +1,24 @@
-package org.talend.dataquality.datamasking.generic;
+// ============================================================================
+//
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
+package org.talend.dataquality.datamasking.generic.patterns;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldEnum;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
+import org.talend.dataquality.datamasking.generic.patterns.AbstractGeneratePattern;
+import org.talend.dataquality.datamasking.generic.patterns.GenerateUniqueRandomPatterns;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -15,15 +29,15 @@ import static org.junit.Assert.assertEquals;
 
 public class AbstractGeneratePatternTest {
 
-    protected AbstractGeneratePattern pattern;
+    private AbstractGeneratePattern pattern;
 
-    protected String minValue;
+    private String minValue;
 
-    protected String maxValue;
+    private String maxValue;
 
-    protected List<BigInteger> minFields;
+    private List<BigInteger> minFields;
 
-    protected List<BigInteger> maxFields;
+    private List<BigInteger> maxFields;
 
     @Before
     public void setUp() throws Exception {
@@ -54,49 +68,49 @@ public class AbstractGeneratePatternTest {
     }
 
     @Test
-    public void encode_fields_with_max_value() {
+    public void encodeMaxValueFields() {
         List<BigInteger> encodedList = pattern.encodeFields(Arrays.asList("S", "DU", "500", "20"));
         assertEquals(maxFields, encodedList);
     }
 
     @Test
-    public void encode_fields_with_min_value() {
+    public void encodeMinValueFields() {
         List<BigInteger> encodedList = pattern.encodeFields(Arrays.asList("O", "SF", "000", "5"));
         assertEquals(minFields, encodedList);
     }
 
     @Test
-    public void decode_fields_with_max_value() {
+    public void decodeMaxValueFields() {
         String decodedList = pattern.decodeFields(maxFields).toString();
         assertEquals(maxValue, decodedList);
     }
 
     @Test
-    public void decode_fields_with_min_value() {
+    public void decodeMinValueFields() {
         String decodedList = pattern.decodeFields(minFields).toString();
         assertEquals(minValue, decodedList);
     }
 
     @Test
-    public void compute_rank_of_max_value() {
+    public void getRankMaxValue() {
         BigInteger rank = pattern.getNumberToMask(maxFields);
         assertEquals(pattern.getLongestWidth().add(BigInteger.valueOf(-1)), rank);
     }
 
     @Test
-    public void compute_rank_of_min_value() {
+    public void getRankMinValue() {
         BigInteger rank = pattern.getNumberToMask(minFields);
         assertEquals(BigInteger.ZERO, rank);
     }
 
     @Test
-    public void get_field_values_from_max_rank() {
+    public void getFieldsMaxRank() {
         List<BigInteger> fieldList = pattern.getFieldsFromNumber(pattern.longestWidth.add(BigInteger.valueOf(-1)));
         assertEquals(maxFields, fieldList);
     }
 
     @Test
-    public void get_field_values_from_min_rank() {
+    public void getFieldsMinRank() {
         List<BigInteger> fieldList = pattern.getFieldsFromNumber(BigInteger.ZERO);
         assertEquals(minFields, fieldList);
     }

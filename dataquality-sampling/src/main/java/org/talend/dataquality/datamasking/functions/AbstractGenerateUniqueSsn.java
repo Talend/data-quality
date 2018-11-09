@@ -16,10 +16,10 @@ import java.util.List;
 import java.util.Random;
 
 import org.talend.dataquality.datamasking.SecretManager;
-import org.talend.dataquality.datamasking.generic.GenerateFormatPreservingPatterns;
-import org.talend.dataquality.datamasking.generic.GenerateUniqueRandomPatterns;
+import org.talend.dataquality.datamasking.generic.patterns.GenerateFormatPreservingPatterns;
+import org.talend.dataquality.datamasking.generic.patterns.GenerateUniqueRandomPatterns;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
-import org.talend.dataquality.datamasking.generic.AbstractGeneratePattern;
+import org.talend.dataquality.datamasking.generic.patterns.AbstractGeneratePattern;
 
 /**
  * @author jteuladedenantes
@@ -46,13 +46,14 @@ public abstract class AbstractGenerateUniqueSsn extends Function<String> {
     @Override
     public void setRandom(Random rand) {
         super.setRandom(rand);
-        secretMng.setKey(rand.nextInt() % 10000 + 1000);
     }
 
     @Override
     public void setSecretManager(SecretManager secMng) {
         this.secretMng = secMng;
-        if (secMng.getMethod() != 0) {
+        if (secMng.getMethod() == SecretManager.BASIC) {
+            secretMng.setKey(super.rnd.nextInt() % 10000 + 1000);
+        } else {
             ssnPattern = new GenerateFormatPreservingPatterns(2, ssnPattern.getFields());
         }
     }
@@ -63,13 +64,13 @@ public abstract class AbstractGenerateUniqueSsn extends Function<String> {
             return null;
         }
 
-        String strWithoutSpaces = super.removeFormatInString(str);
+        String strWithoutFormat = super.removeFormatInString(str);
         // check if the pattern is valid
-        if (strWithoutSpaces.isEmpty() || strWithoutSpaces.length() != ssnPattern.getFieldsCharsLength() + checkSumSize) {
+        if (!isValidWithoutFormat(strWithoutFormat)) {
             return getResult(str);
         }
 
-        StringBuilder result = doValidGenerateMaskedField(strWithoutSpaces);
+        StringBuilder result = doValidGenerateMaskedField(strWithoutFormat);
         if (result == null) {
             return getResult(str);
         }
@@ -99,10 +100,26 @@ public abstract class AbstractGenerateUniqueSsn extends Function<String> {
      */
     protected abstract List<AbstractField> createFieldsListFromPattern();
 
+    /**
+     * Split the string value into the corresponding list of fields.
+     * @param str the string value without format
+     * @return the list of string fields
+     */
+    protected abstract List<String> splitFields(String str);
+
     protected abstract StringBuilder doValidGenerateMaskedField(String str);
 
-    protected abstract boolean isValidWithoutFormat(String str);
+    private boolean isValidWithoutFormat(String str) {
+        if (str.isEmpty() || str.length() != ssnPattern.getFieldsCharsLength() + checkSumSize) {
+            return false;
+        }
+        return ssnPattern.encodeFields(splitFields(str)) != null;
+    }
 
+    /**
+     * Verifies the validity of an ssn string.
+     * @return true if valid, false otherwise.
+     */
     protected boolean isValid(String str) {
         if (str == null) {
             return false;

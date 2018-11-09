@@ -1,26 +1,34 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package org.talend.dataquality.datamasking.fpeUtils.pseudoRandomFunctions;
 
 import com.idealista.fpe.component.functions.prf.PseudoRandomFunction;
 
-import javax.crypto.KeyGenerator;
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
-import javax.security.auth.DestroyFailedException;
-import java.nio.ByteBuffer;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
 
 /**
- * @author afournier
  *
  * This class is a pseduo-random function used in FF1 encryption.
  * It relies on the HMAC algorithm combined with SHA-2 hashing function.
+ *
+ * @author afournier
+ * @see AesPrf
+ * @see CryptoConstants
+ * @see org.talend.dataquality.datamasking.SecretManager
  */
 public class HmacPrf implements PseudoRandomFunction {
 

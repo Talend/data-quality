@@ -1,12 +1,24 @@
-package org.talend.dataquality.datamasking.generic;
+// ============================================================================
+//
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
+package org.talend.dataquality.datamasking.generic.patterns;
 
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.talend.dataquality.datamasking.SecretManager;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldEnum;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
+import org.talend.dataquality.datamasking.generic.patterns.GenerateFormatPreservingPatterns;
 
 import java.math.BigInteger;
 import java.util.*;
@@ -15,17 +27,17 @@ import static org.junit.Assert.*;
 
 public class GenerateFormatPreservingPatternsTest {
 
-    static GenerateFormatPreservingPatterns pattern;
+    private static GenerateFormatPreservingPatterns pattern;
 
-    static SecretManager secretMng;
+    private static SecretManager secretMng;
 
-    static String minValue;
+    private static String minValue;
 
-    static String maxValue;
+    private static String maxValue;
 
-    static List<String> minStringList;
+    private static List<String> minStringList;
 
-    static List<String> maxStringList;
+    private static List<String> maxStringList;
 
     @BeforeClass
     public static void setUp() {
@@ -35,76 +47,72 @@ public class GenerateFormatPreservingPatternsTest {
         fields.add(new FieldEnum(enums, 1));
         enums = new ArrayList<String>(Arrays.asList("SF", "KI", "QG", "DU"));
         fields.add(new FieldEnum(enums, 2));
-        fields.add(new FieldInterval(BigInteger.ZERO, BigInteger.valueOf(500)));
+        fields.add(new FieldInterval(BigInteger.ZERO, BigInteger.valueOf(50)));
         fields.add(new FieldInterval(BigInteger.valueOf(5), BigInteger.valueOf(20)));
 
         pattern = new GenerateFormatPreservingPatterns(2, fields);
-        minValue = "OSF00005";
-        maxValue = "SDU50020";
+        minValue = "OSF0005";
+        maxValue = "SDU5020";
 
-        minStringList = Arrays.asList("O", "SF", "000", "5");
-        maxStringList = Arrays.asList("S", "DU", "500", "20");
+        minStringList = Arrays.asList("O", "SF", "00", "5");
+        maxStringList = Arrays.asList("S", "DU", "50", "20");
 
         secretMng = new SecretManager(2, "#Datadriven2018");
     }
 
     @Test
-    public void transform_value_with_min_rank() {
+    public void transformMinRankValue() {
         String str = pattern.transform(pattern.transform(minStringList)).toString();
         assertEquals(minValue, str);
     }
 
     @Test
-    public void transform_value_with_max_rank() {
+    public void transformMaxRankValue() {
         String str = pattern.transform(pattern.transform(maxStringList)).toString();
         assertEquals(maxValue, str);
     }
 
     @Test
-    public void transform_value_out_limit() {
-        int[] outLimit = pattern.transform(Arrays.asList("U", "KI", "502", "12"));
+    public void transformOutLimitValue() {
+        int[] outLimit = pattern.transform(Arrays.asList("U", "KI", "52", "12"));
         assertNull(outLimit);
     }
 
     @Test
-    public void generate_AES_CBC_encrypted_string() {
-        System.out.println("Start AES");
-        SecretManager AESSecMng = new SecretManager();
-        AESSecMng.setMethod(1);
-        AESSecMng.setPassword("#Datadriven2018");
-        StringBuilder result = pattern.generateUniqueString(Arrays.asList("U", "KI", "453", "12"), AESSecMng);
-        assertEquals("GDU45211", result.toString());
+    public void generateUniqueStringAES() {
+        SecretManager AESSecMng = new SecretManager(1, "#Datadriven2018");
+        StringBuilder result = pattern.generateUniqueString(Arrays.asList("U", "KI", "45", "12"), AESSecMng);
+        assertEquals("SQG1920", result.toString());
     }
 
     @Test
-    public void generate_SHA2_HMAC_encrypted_string() {
-        StringBuilder result = pattern.generateUniqueString(Arrays.asList("U", "KI", "453", "12"), secretMng);
-        assertEquals("PKI24614", result.toString());
+    public void generateUniqueStringHMAC() {
+        StringBuilder result = pattern.generateUniqueString(Arrays.asList("U", "KI", "45", "12"), secretMng);
+        assertEquals("USF3608", result.toString());
     }
 
     @Test
-    public void mask_value_with_min_rank() {
-        StringBuilder result = pattern.generateUniqueString(Arrays.asList("O", "SF", "000", "5"), secretMng);
+    public void maskMinRankValue() {
+        StringBuilder result = pattern.generateUniqueString(Arrays.asList("O", "SF", "00", "5"), secretMng);
         assertNotEquals(minValue, result.toString());
         assertNotNull(result);
     }
 
     @Test
-    public void mask_value_with_max_rank() {
-        StringBuilder result = pattern.generateUniqueString(Arrays.asList("S", "DU", "500", "20"), secretMng);
+    public void maskMaxRankValue() {
+        StringBuilder result = pattern.generateUniqueString(Arrays.asList("S", "DU", "50", "20"), secretMng);
         assertNotEquals(maxValue, result.toString());
         assertNotNull(result);
     }
 
     @Test
-    public void mask_value_out_limits() {
-        StringBuilder result = pattern.generateUniqueString(Arrays.asList("U", "KI", "502", "12"), secretMng);
+    public void maskOutLimitValue() {
+        StringBuilder result = pattern.generateUniqueString(Arrays.asList("U", "KI", "52", "12"), secretMng);
         assertNull(result);
     }
 
-    // TODO : Delete this test because of performances ? Or reduce number of possible values for the pattern ?
     @Test
-    public void ensure_uniqueness() {
+    public void ensureUniqueness() {
         Set<StringBuilder> uniqueSetTocheck = new HashSet<StringBuilder>();
         for (BigInteger i = BigInteger.ZERO; i.compareTo(pattern.getFields().get(0).getWidth()) < 0; i = i.add(BigInteger.ONE)) {
             for (BigInteger j = BigInteger.ZERO; j.compareTo(pattern.getFields().get(1).getWidth()) < 0; j = j

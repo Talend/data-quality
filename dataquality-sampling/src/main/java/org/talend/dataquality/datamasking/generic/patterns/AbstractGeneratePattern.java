@@ -1,4 +1,16 @@
-package org.talend.dataquality.datamasking.generic;
+// ============================================================================
+//
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
+package org.talend.dataquality.datamasking.generic.patterns;
 
 import org.talend.dataquality.datamasking.SecretManager;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
@@ -9,14 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * This is an abstract class containing all the common methods and attributes for the 'GeneratePattern" classes.
+ *
  * @author afournier
- *
- * This abstract class contains the methods required to transform String data into int[] format.
- * these methods are used during the format-preserving encryption using
- * <a href="https://github.com/idealista/format-preserving-encryption-java">idealista's library</a>.
- *
- * The class is composed of the same instance of {@link GenerateUniqueRandomPatterns}
- * as its corresponding {@code GenerateUniqueX} class.
  */
 public abstract class AbstractGeneratePattern implements Serializable {
 
@@ -42,8 +49,6 @@ public abstract class AbstractGeneratePattern implements Serializable {
      */
     protected List<BigInteger> basedWidthsList;
 
-    protected SecretManager secretMng;
-
     public AbstractGeneratePattern(List<AbstractField> fields) {
 
         this.fields = fields;
@@ -60,8 +65,6 @@ public abstract class AbstractGeneratePattern implements Serializable {
         basedWidthsList.add(BigInteger.ONE);
         for (int i = getFieldsNumber() - 2; i >= 0; i--)
             basedWidthsList.add(0, this.fields.get(i + 1).getWidth().multiply(this.basedWidthsList.get(0)));
-
-        secretMng = new SecretManager();
     }
 
     public List<AbstractField> getFields() {

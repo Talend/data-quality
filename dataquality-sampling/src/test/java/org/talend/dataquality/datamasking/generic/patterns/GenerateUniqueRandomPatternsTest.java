@@ -1,4 +1,16 @@
-package org.talend.dataquality.datamasking.generic;
+// ============================================================================
+//
+// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
+package org.talend.dataquality.datamasking.generic.patterns;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -14,6 +26,8 @@ import org.talend.dataquality.datamasking.SecretManager;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldEnum;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
+import org.talend.dataquality.datamasking.generic.patterns.AbstractGeneratePattern;
+import org.talend.dataquality.datamasking.generic.patterns.GenerateUniqueRandomPatterns;
 
 import static org.junit.Assert.*;
 
@@ -54,14 +68,14 @@ public class GenerateUniqueRandomPatternsTest {
     }
 
     @Test
-    public void mask_value_with_max_rank() {
+    public void maskMaxRankValue() {
         StringBuilder result = pattern.generateUniqueString(new ArrayList<String>(Arrays.asList("S", "DU", "500", "20")),
                 secretMng);
         assertEquals("SDU01810", result.toString());
     }
 
     @Test
-    public void mask_value_with_min_rank() {
+    public void maskMinRankValue() {
         StringBuilder result = pattern.generateUniqueString(new ArrayList<String>(Arrays.asList("O", "SF", "000", "5")),
                 secretMng);
         // To bad this behavior exists : the min value is always masked to itself.
@@ -69,14 +83,14 @@ public class GenerateUniqueRandomPatternsTest {
     }
 
     @Test
-    public void mask_value_out_limits() {
+    public void maskOutLimitValue() {
         StringBuilder result = pattern.generateUniqueString(new ArrayList<String>(Arrays.asList("U", "KI", "502", "12")),
                 secretMng);
         assertNull(result);
     }
 
     @Test
-    public void ensure_uniqueness() {
+    public void ensureBijectivity() {
         Set<StringBuilder> uniqueSetTocheck = new HashSet<StringBuilder>();
         for (BigInteger i = BigInteger.ZERO; i.compareTo(pattern.getFields().get(0).getWidth()) < 0; i = i.add(BigInteger.ONE)) {
             for (BigInteger j = BigInteger.ZERO; j.compareTo(pattern.getFields().get(1).getWidth()) < 0; j = j

@@ -13,12 +13,13 @@ import java.util.Random;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.talend.dataquality.datamasking.SecretManager;
 import org.talend.dataquality.datamasking.functions.Function;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldDate;
 import org.talend.dataquality.datamasking.generic.fields.FieldEnum;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
+import org.talend.dataquality.datamasking.generic.patterns.AbstractGeneratePattern;
+import org.talend.dataquality.datamasking.generic.patterns.GenerateUniqueRandomPatterns;
 import org.talend.dataquality.sampling.exception.DQRuntimeException;
 
 /**
@@ -31,8 +32,6 @@ public class BijectiveSubstitutionFunction extends Function<String> {
     private static final Logger LOGGER = LoggerFactory.getLogger(BijectiveSubstitutionFunction.class);
 
     private AbstractGeneratePattern uniqueGenericPattern;
-
-    private SecretManager secretMng;
 
     public BijectiveSubstitutionFunction(List<FieldDefinition> fieldDefinitionList) throws IOException {
 
@@ -60,7 +59,6 @@ public class BijectiveSubstitutionFunction extends Function<String> {
         }
 
         uniqueGenericPattern = new GenerateUniqueRandomPatterns(fieldList);
-        secretMng = new SecretManager();
     }
 
     /**

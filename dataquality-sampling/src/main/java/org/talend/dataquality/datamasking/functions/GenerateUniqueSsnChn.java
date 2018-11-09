@@ -23,7 +23,6 @@ import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.talend.dataquality.datamasking.generic.GenerateUniqueRandomPatterns;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldDate;
 import org.talend.dataquality.datamasking.generic.fields.FieldEnum;
@@ -62,10 +61,7 @@ public class GenerateUniqueSsnChn extends AbstractGenerateUniqueSsn {
     @Override
     protected StringBuilder doValidGenerateMaskedField(String str) {
         // read the input strWithoutSpaces
-        List<String> strs = new ArrayList<String>();
-        strs.add(str.substring(0, 6));
-        strs.add(str.substring(6, 14));
-        strs.add(str.substring(14, 17));
+        List<String> strs = splitFields(str);
 
         StringBuilder result = ssnPattern.generateUniqueString(strs, secretMng);
         if (result == null) {
@@ -77,11 +73,6 @@ public class GenerateUniqueSsnChn extends AbstractGenerateUniqueSsn {
         result.append(controlKey);
 
         return result;
-    }
-
-    @Override
-    protected boolean isValidWithoutFormat(String str) {
-        return true;
     }
 
     @Override
@@ -101,6 +92,16 @@ public class GenerateUniqueSsnChn extends AbstractGenerateUniqueSsn {
         fields.add(new FieldInterval(BigInteger.ZERO, BigInteger.valueOf(999)));
         checkSumSize = 1;
         return fields;
+    }
+
+    protected List<String> splitFields(String str) {
+        // read the input str
+        List<String> strs = new ArrayList<String>();
+        strs.add(str.substring(0, 6));
+        strs.add(str.substring(6, 14));
+        strs.add(str.substring(14, 17));
+
+        return strs;
     }
 
 }
