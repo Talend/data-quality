@@ -28,6 +28,9 @@ public class TypeTester {
      * @return The type of the variable.
      */
     public int getType(Integer x) {
+        if (x == null) {
+            return getTypeByName("integer"); //$NON-NLS-1$
+        }
         return getTypeByName(x.getClass().getSimpleName().toLowerCase());
     }
 
@@ -38,6 +41,9 @@ public class TypeTester {
      * @return The type of the variable.
      */
     public int getType(Long x) {
+        if (x == null) {
+            return getTypeByName("long"); //$NON-NLS-1$
+        }
         return getTypeByName(x.getClass().getSimpleName().toLowerCase());
     }
 
@@ -48,6 +54,9 @@ public class TypeTester {
      * @return The type of the variable.
      */
     public int getType(Float x) {
+        if (x == null) {
+            return getTypeByName("float"); //$NON-NLS-1$
+        }
         return getTypeByName(x.getClass().getSimpleName().toLowerCase());
     }
 
@@ -58,6 +67,9 @@ public class TypeTester {
      * @return The type of the variable.
      */
     public int getType(Double x) {
+        if (x == null) {
+            return getTypeByName("double"); //$NON-NLS-1$
+        }
         return getTypeByName(x.getClass().getSimpleName().toLowerCase());
     }
 
@@ -68,6 +80,9 @@ public class TypeTester {
      * @return The type of the variable.
      */
     public int getType(String x) {
+        if (x == null) {
+            return getTypeByName("string"); //$NON-NLS-1$
+        }
         return getTypeByName(x.getClass().getSimpleName().toLowerCase());
     }
 
@@ -78,10 +93,16 @@ public class TypeTester {
      * @return The type of the variable.
      */
     public int getType(Date x) {
+        if (x == null) {
+            return getTypeByName("date"); //$NON-NLS-1$
+        }
         return getTypeByName(x.getClass().getSimpleName().toLowerCase());
     }
 
     public int getTypeByName(String dataType) {
+        if (dataType == null) {
+            return -1;
+        }
         switch (dataType) {
         case "numeric": //$NON-NLS-1$
         case "integer": //$NON-NLS-1$
@@ -102,5 +123,4 @@ public class TypeTester {
 
         }
     }
-
 }

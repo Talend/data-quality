@@ -52,7 +52,12 @@ public class TypeTesterTest {
      */
     @Test
     public void testGetTypeInteger() {
-        int result = typeTester.getType(10);
+        Integer inputData = 10;
+        int result = typeTester.getType(inputData);
+        Assert.assertEquals("The input data type is Integer so that result should same with 0", 0, result); //$NON-NLS-1$
+
+        inputData = null;
+        result = typeTester.getType(inputData);
         Assert.assertEquals("The input data type is Integer so that result should same with 0", 0, result); //$NON-NLS-1$
     }
 
@@ -61,7 +66,12 @@ public class TypeTesterTest {
      */
     @Test
     public void testGetTypeLong() {
-        int result = typeTester.getType(32768L);
+        Long inputData = 32768L;
+        int result = typeTester.getType(inputData);
+        Assert.assertEquals("The input data type is Long so that result should same with 1", 1, result); //$NON-NLS-1$
+
+        inputData = null;
+        result = typeTester.getType(inputData);
         Assert.assertEquals("The input data type is Long so that result should same with 1", 1, result); //$NON-NLS-1$
     }
 
@@ -70,7 +80,12 @@ public class TypeTesterTest {
      */
     @Test
     public void testGetTypeFloat() {
-        int result = typeTester.getType(0.1f);
+        Float inputData = 0.1f;
+        int result = typeTester.getType(inputData);
+        Assert.assertEquals("The input data type is Float so that result should same with 2", 2, result); //$NON-NLS-1$
+
+        inputData = null;
+        result = typeTester.getType(inputData);
         Assert.assertEquals("The input data type is Float so that result should same with 2", 2, result); //$NON-NLS-1$
     }
 
@@ -79,7 +94,12 @@ public class TypeTesterTest {
      */
     @Test
     public void testGetTypeDouble() {
-        int result = typeTester.getType(0.1d);
+        Double inputData = 0.1d;
+        int result = typeTester.getType(inputData);
+        Assert.assertEquals("The input data type is Double so that result should same with 3", 3, result); //$NON-NLS-1$
+
+        inputData = null;
+        result = typeTester.getType(inputData);
         Assert.assertEquals("The input data type is Double so that result should same with 3", 3, result); //$NON-NLS-1$
     }
 
@@ -88,7 +108,12 @@ public class TypeTesterTest {
      */
     @Test
     public void testGetTypeString() {
-        int result = typeTester.getType("This is a string"); //$NON-NLS-1$
+        String inputData = "This is a string";//$NON-NLS-1$
+        int result = typeTester.getType(inputData);
+        Assert.assertEquals("The input data type is String so that result should same with 4", 4, result); //$NON-NLS-1$
+
+        inputData = null;
+        result = typeTester.getType(inputData);
         Assert.assertEquals("The input data type is String so that result should same with 4", 4, result); //$NON-NLS-1$
     }
 
@@ -97,7 +122,12 @@ public class TypeTesterTest {
      */
     @Test
     public void testGetTypeDate() {
-        int result = typeTester.getType(new Date());
+        Date inputData = new Date();
+        int result = typeTester.getType(inputData);
+        Assert.assertEquals("The input data type is Date so that result should same with 5", 5, result); //$NON-NLS-1$
+
+        inputData = null;
+        result = typeTester.getType(inputData);
         Assert.assertEquals("The input data type is Date so that result should same with 5", 5, result); //$NON-NLS-1$
     }
 
@@ -108,6 +138,10 @@ public class TypeTesterTest {
     public void testGetTypeByName() {
         String typeName = "test"; //$NON-NLS-1$
         int result = typeTester.getTypeByName(typeName);
+        Assert.assertEquals("The typeName is " + typeName + ". It is not exist so that result should same with -1", -1, result); //$NON-NLS-1$ //$NON-NLS-2$
+
+        typeName = null;
+        result = typeTester.getTypeByName(typeName);
         Assert.assertEquals("The typeName is " + typeName + ". It is not exist so that result should same with -1", -1, result); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
