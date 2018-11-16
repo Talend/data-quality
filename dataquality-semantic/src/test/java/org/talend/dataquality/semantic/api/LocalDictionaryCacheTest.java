@@ -267,4 +267,20 @@ public class LocalDictionaryCacheTest extends CategoryRegistryManagerAbstract {
 
         System.out.println("Found " + aux.size() + " values in " + SemanticCategoryEnum.ANSWER.name() + " DQCategory.");
     }
+
+    @Test
+    public void testListDocumentsFromEmptyDict() {
+        CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder();
+
+        DQCategory category = new DQCategory("EmptyCat");
+        category.setLabel("EmptyCat");
+        category.setName("EmptyCat");
+        category.setType(CategoryType.DICT);
+        category.setModified(true);
+        category.setCompleteness(false);
+
+        holder.createCategory(category);
+        List<DQDocument> docs = holder.getDictionaryCache().listDocuments("EmptyCat", 0, 100);
+        assertEquals(0, docs.size());
+    }
 }

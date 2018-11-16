@@ -209,6 +209,8 @@ public class CustomDictionaryHolder {
     public void createCategory(DQCategory category) {
         if (CategoryType.REGEX.equals(category.getType())) {
             insertOrUpdateRegexCategory(category);
+        } else if (CategoryType.DICT.equals(category.getType())) {
+            ensureDocumentDictIndexAccess();
         }
         category.setModified(true);
         ensureMetadataIndexAccess();
