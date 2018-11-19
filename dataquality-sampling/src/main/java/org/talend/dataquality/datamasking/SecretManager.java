@@ -13,15 +13,18 @@
 package org.talend.dataquality.datamasking;
 
 import com.idealista.fpe.component.functions.prf.PseudoRandomFunction;
-import org.talend.dataquality.datamasking.fpeUtils.pseudoRandomFunctions.AesPrf;
-import org.talend.dataquality.datamasking.fpeUtils.pseudoRandomFunctions.CryptoConstants;
-import org.talend.dataquality.datamasking.fpeUtils.pseudoRandomFunctions.HmacPrf;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.talend.dataquality.datamasking.utils.crypto.AesPrf;
+import org.talend.dataquality.datamasking.utils.crypto.CryptoConstants;
+import org.talend.dataquality.datamasking.utils.crypto.HmacPrf;
 import org.talend.dataquality.datamasking.generic.patterns.GenerateFormatPreservingPatterns;
 import org.talend.dataquality.datamasking.generic.patterns.GenerateUniqueRandomPatterns;
 
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
@@ -64,6 +67,8 @@ public class SecretManager {
      * Identifier for using FF1 with SHA-2 as an underlying pseudo-random function.
      */
     public static final int HMAC_SHA2_PRF = 2;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SecretManager.class);
 
     /**
      * The Key to use with Talend internal method.
@@ -122,24 +127,22 @@ public class SecretManager {
      * @return the current pseudo-random function of this {@code SecretManager}.
      */
     public PseudoRandomFunction getPseudoRandomFunction() {
-        // TODO : Should a null PRF return an error ?
         if (pseudoRandomFunction == null) {
 
             if (method == null) {
                 throw new IllegalStateException("No pseudo random algorithm set for this secret manager.");
             }
 
-            // TODO : What to do if method is basic but someone wants the PRF ?
             switch (method) {
             case BASIC:
                 return null;
             case AES_CBC_PRF:
-                byte[] AESkey = generateKey(CryptoConstants.KEY_LENGTH);
-                pseudoRandomFunction = new AesPrf(AESkey);
+                SecretKey aesKey = generateRandomSecretKey(CryptoConstants.KEY_LENGTH);
+                pseudoRandomFunction = new AesPrf(aesKey);
                 break;
             case HMAC_SHA2_PRF:
-                byte[] HMACkey = generateKey(CryptoConstants.KEY_LENGTH);
-                pseudoRandomFunction = new HmacPrf(HMACkey);
+                SecretKey hmacKey = generateRandomSecretKey(CryptoConstants.KEY_LENGTH);
+                pseudoRandomFunction = new HmacPrf(hmacKey);
                 break;
             default:
                 return null;
@@ -161,27 +164,18 @@ public class SecretManager {
         this.method = method;
 
         if (method != BASIC) {
+
+            SecretKey secret;
             if (password == null || "".equals(password)) {
-                byte[] key = generateKey(CryptoConstants.KEY_LENGTH);
-
-                if (method == AES_CBC_PRF) {
-                    pseudoRandomFunction = new AesPrf(key);
-                } else if (method == HMAC_SHA2_PRF) {
-                    pseudoRandomFunction = new HmacPrf(key);
-                }
-
+                secret = generateRandomSecretKey(CryptoConstants.KEY_LENGTH);
             } else {
-                SecretKey secret = generateSecretKey(password);
+                secret = generateSecretKeyFromPassword(password);
+            }
 
-                if (secret == null) {
-                    throw new IllegalArgumentException("This password can't be used for Format-Preserving Encryption.");
-                }
-
-                if (method == AES_CBC_PRF) {
-                    pseudoRandomFunction = new AesPrf(secret);
-                } else if (method == HMAC_SHA2_PRF) {
-                    pseudoRandomFunction = new HmacPrf(secret);
-                }
+            if (method == AES_CBC_PRF) {
+                pseudoRandomFunction = new AesPrf(secret);
+            } else if (method == HMAC_SHA2_PRF) {
+                pseudoRandomFunction = new HmacPrf(secret);
             }
         }
     }
@@ -193,11 +187,11 @@ public class SecretManager {
      * @param length the number of bytes of the key.
      * @return a randomly generated key.
      */
-    private byte[] generateKey(int length) {
-        byte[] key = new byte[length];
+    private SecretKey generateRandomSecretKey(int length) {
+        byte[] randomKey = new byte[length];
         SecureRandom srand = new SecureRandom();
-        srand.nextBytes(key);
-        return key;
+        srand.nextBytes(randomKey);
+        return new SecretKeySpec(randomKey, CryptoConstants.KEY_ALGORITHM);
     }
 
     /**
@@ -209,18 +203,23 @@ public class SecretManager {
      * @param password a password given as a {@code String}.
      * @return a {@code SecretKey} securely generated.
      */
-    private SecretKey generateSecretKey(String password) {
+    private SecretKey generateSecretKeyFromPassword(String password) {
+        SecretKey secret = null;
+
         try {
             byte[] salt = new byte[CryptoConstants.KEY_LENGTH];
             new Random(123456789 + password.length()).nextBytes(salt);
             SecretKeyFactory factory = SecretKeyFactory.getInstance(CryptoConstants.KEY_ALGORITHM);
             KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, CryptoConstants.KEY_LENGTH << 3);
-            return factory.generateSecret(spec);
-        } catch (InvalidKeySpecException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            secret = factory.generateSecret(spec);
+        } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
+            LOGGER.error("Invalid crypto constants have been set, see values of KEY_LENGTH and KEY_ALGORITHM. ", e);
         }
-        return null;
+
+        if (secret == null) {
+            throw new IllegalArgumentException("This password can't be used for Format-Preserving Encryption.");
+        }
+
+        return secret;
     }
 }

@@ -10,9 +10,11 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.dataquality.datamasking.fpeUtils.pseudoRandomFunctions;
+package org.talend.dataquality.datamasking.utils.crypto;
 
 import com.idealista.fpe.component.functions.prf.PseudoRandomFunction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
@@ -38,53 +40,34 @@ public class AesPrf implements PseudoRandomFunction {
 
     private static final String KEY_ALGORITHM_NAME = CryptoConstants.AES_KEY_ALGORITHM;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(AesPrf.class);
+
     private Cipher cipher;
 
     private final byte[] initializationVector = Arrays.copyOf(new byte[] { 0x00 }, 16);
-
-    public AesPrf(byte[] key) {
-        try {
-            cipher = Cipher.getInstance(AES_ALGORITHM);
-            SecretKeySpec spec = new SecretKeySpec(key, KEY_ALGORITHM_NAME);
-            cipher.init(Cipher.ENCRYPT_MODE, spec, new IvParameterSpec(initializationVector));
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (InvalidAlgorithmParameterException e) {
-            e.printStackTrace();
-        }
-    }
 
     public AesPrf(SecretKey secret) {
         try {
             cipher = Cipher.getInstance(AES_ALGORITHM);
             SecretKeySpec spec = new SecretKeySpec(secret.getEncoded(), KEY_ALGORITHM_NAME);
             cipher.init(Cipher.ENCRYPT_MODE, spec, new IvParameterSpec(initializationVector));
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (InvalidAlgorithmParameterException e) {
-            e.printStackTrace();
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException e) {
+            LOGGER.error("Invalid crypto constants have been set for AES, see values of AES_KEY_ALGORITHM and AES_ALGORITHM. ",
+                    e);
         }
     }
 
     @Override
     public byte[] apply(byte[] text) {
+        byte[] result = new byte[] {};
+
         try {
-            byte[] result = cipher.doFinal(text);
-            return Arrays.copyOfRange(result, result.length - initializationVector.length, result.length);
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
+            result = cipher.doFinal(text);
+            result = Arrays.copyOfRange(result, result.length - initializationVector.length, result.length);
+        } catch (IllegalBlockSizeException | BadPaddingException e) {
+            LOGGER.error("Problem with the input block to encrypt, may be due to bad plaintext split.", e);
         }
-        return null;
+        return result;
     }
 
 }

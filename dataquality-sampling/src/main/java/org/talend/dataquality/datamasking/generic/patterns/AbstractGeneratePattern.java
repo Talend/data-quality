@@ -40,6 +40,11 @@ public abstract class AbstractGeneratePattern implements Serializable {
     protected List<AbstractField> fields;
 
     /**
+     * The number of fields of this pattern
+     */
+    protected int fieldsNumber;
+
+    /**
      * The product of width fields, i.e. the combination of all possibles values
      */
     protected BigInteger longestWidth;
@@ -52,10 +57,11 @@ public abstract class AbstractGeneratePattern implements Serializable {
     public AbstractGeneratePattern(List<AbstractField> fields) {
 
         this.fields = fields;
+        fieldsNumber = fields.size();
 
         // longestWidth init
         longestWidth = BigInteger.ONE;
-        for (int i = 0; i < getFieldsNumber(); i++) {
+        for (int i = 0; i < fieldsNumber; i++) {
             BigInteger width = this.fields.get(i).getWidth();
             longestWidth = longestWidth.multiply(width);
         }
@@ -63,8 +69,9 @@ public abstract class AbstractGeneratePattern implements Serializable {
         // basedWidthsList init
         basedWidthsList = new ArrayList<BigInteger>();
         basedWidthsList.add(BigInteger.ONE);
-        for (int i = getFieldsNumber() - 2; i >= 0; i--)
+        for (int i = fieldsNumber - 2; i >= 0; i--) {
             basedWidthsList.add(0, this.fields.get(i + 1).getWidth().multiply(this.basedWidthsList.get(0)));
+        }
     }
 
     public List<AbstractField> getFields() {
@@ -73,10 +80,6 @@ public abstract class AbstractGeneratePattern implements Serializable {
 
     public void setFields(List<AbstractField> fields) {
         this.fields = fields;
-    }
-
-    public int getFieldsNumber() {
-        return fields.size();
     }
 
     /**
@@ -99,9 +102,14 @@ public abstract class AbstractGeneratePattern implements Serializable {
      * @return the decoded field list as a StringBuilder
      */
     public StringBuilder decodeFields(List<BigInteger> encodedFieldList) {
+        // check inputs
+        if (encodedFieldList.size() != fieldsNumber) {
+            return null;
+        }
+
         // decode the fields
         StringBuilder decoded = new StringBuilder("");
-        for (int i = 0; i < getFieldsNumber(); i++) {
+        for (int i = 0; i < fieldsNumber; i++) {
             decoded.append(fields.get(i).decode(encodedFieldList.get(i)));
         }
         return decoded;
@@ -115,7 +123,7 @@ public abstract class AbstractGeneratePattern implements Serializable {
         // encode the fields
         List<BigInteger> listToMask = new ArrayList<BigInteger>();
         BigInteger encodeNumber;
-        for (int i = 0; i < getFieldsNumber(); i++) {
+        for (int i = 0; i < fieldsNumber; i++) {
             encodeNumber = fields.get(i).encode(strs.get(i));
             if (encodeNumber.equals(BigInteger.valueOf(-1))) {
                 return null;
@@ -133,7 +141,7 @@ public abstract class AbstractGeneratePattern implements Serializable {
     public BigInteger getNumberToMask(List<BigInteger> listToMask) {
         // numberToMask is the number to masked created from listToMask
         BigInteger numberToMask = BigInteger.ZERO;
-        for (int i = 0; i < getFieldsNumber(); i++)
+        for (int i = 0; i < fieldsNumber; i++)
             numberToMask = numberToMask.add(listToMask.get(i).multiply(basedWidthsList.get(i)));
 
         return numberToMask;
@@ -146,7 +154,7 @@ public abstract class AbstractGeneratePattern implements Serializable {
     public List<BigInteger> getFieldsFromNumber(BigInteger number) {
         // uniqueMaskedNumberList is the unique list created from uniqueMaskedNumber
         List<BigInteger> uniqueMaskedNumberList = new ArrayList<BigInteger>();
-        for (int i = 0; i < getFieldsNumber(); i++) {
+        for (int i = 0; i < fieldsNumber; i++) {
             // baseRandomNumber is the quotient of the Euclidean division between uniqueMaskedNumber and
             // basedWidthsList.get(i)
             BigInteger baseRandomNumber = number.divide(basedWidthsList.get(i));
@@ -159,7 +167,23 @@ public abstract class AbstractGeneratePattern implements Serializable {
 
     /**
      * @param strs, the string input to encode
-     * @return the new string encoding
+     * @param secretMng, the SecretManager instance providing the secrets to generate a unique string
+     * @return the new encoded string
      */
-    public abstract StringBuilder generateUniqueString(List<String> strs, SecretManager secretMng);
+    public StringBuilder generateUniqueString(List<String> strs, SecretManager secretMng) {
+        // check inputs
+        if (strs.size() != fieldsNumber) {
+            return null;
+        }
+
+        return generateUniquePattern(strs, secretMng);
+    }
+
+    /**
+     *
+     * @param strs the string fields to encode
+     * @param secretMng, the SecretManager instance providing the secrets to generate a unique string
+     * @return the new encoded string
+     */
+    public abstract StringBuilder generateUniquePattern(List<String> strs, SecretManager secretMng);
 }

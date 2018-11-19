@@ -20,6 +20,7 @@ import org.talend.dataquality.datamasking.generic.patterns.GenerateFormatPreserv
 import org.talend.dataquality.datamasking.generic.patterns.GenerateUniqueRandomPatterns;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.patterns.AbstractGeneratePattern;
+import org.talend.dataquality.datamasking.utils.crypto.CryptoConstants;
 
 /**
  * @author jteuladedenantes
@@ -52,7 +53,7 @@ public abstract class AbstractGenerateUniqueSsn extends Function<String> {
     public void setSecretManager(SecretManager secMng) {
         this.secretMng = secMng;
         if (secMng.getMethod() == SecretManager.BASIC) {
-            secretMng.setKey(super.rnd.nextInt() % 10000 + 1000);
+            secretMng.setKey(super.rnd.nextInt() % CryptoConstants.BASIC_KEY_BOUND + CryptoConstants.BASIC_KEY_OFFSET);
         } else {
             ssnPattern = new GenerateFormatPreservingPatterns(2, ssnPattern.getFields());
         }
@@ -110,10 +111,15 @@ public abstract class AbstractGenerateUniqueSsn extends Function<String> {
     protected abstract StringBuilder doValidGenerateMaskedField(String str);
 
     private boolean isValidWithoutFormat(String str) {
+        boolean isValid;
+
         if (str.isEmpty() || str.length() != ssnPattern.getFieldsCharsLength() + checkSumSize) {
-            return false;
+            isValid = false;
+        } else {
+            isValid = ssnPattern.encodeFields(splitFields(str)) != null;
         }
-        return ssnPattern.encodeFields(splitFields(str)) != null;
+
+        return isValid;
     }
 
     /**
@@ -121,11 +127,16 @@ public abstract class AbstractGenerateUniqueSsn extends Function<String> {
      * @return true if valid, false otherwise.
      */
     protected boolean isValid(String str) {
+        boolean isValid;
+
         if (str == null) {
             return false;
+        } else {
+            String strWithoutSpaces = super.removeFormatInString(str);
+            isValid = isValidWithoutFormat(strWithoutSpaces);
         }
-        String strWithoutSpaces = super.removeFormatInString(str);
-        return isValidWithoutFormat(strWithoutSpaces);
+
+        return isValid;
     }
 
 }

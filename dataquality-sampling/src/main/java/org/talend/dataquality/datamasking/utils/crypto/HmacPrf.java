@@ -10,13 +10,14 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.dataquality.datamasking.fpeUtils.pseudoRandomFunctions;
+package org.talend.dataquality.datamasking.utils.crypto;
 
 import com.idealista.fpe.component.functions.prf.PseudoRandomFunction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
@@ -34,29 +35,16 @@ public class HmacPrf implements PseudoRandomFunction {
 
     private static final String MAC_ALGORITHM = CryptoConstants.HMAC_ALGORITHM;
 
-    private static final String KEY_ALGORITHM_NAME = CryptoConstants.KEY_ALGORITHM;
+    private static final Logger LOGGER = LoggerFactory.getLogger(HmacPrf.class);
 
     private Mac hmac;
-
-    public HmacPrf(byte[] key) {
-        try {
-            hmac = Mac.getInstance(MAC_ALGORITHM);
-            hmac.init(new SecretKeySpec(key, KEY_ALGORITHM_NAME));
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-    }
 
     public HmacPrf(SecretKey secret) {
         try {
             hmac = Mac.getInstance(MAC_ALGORITHM);
             hmac.init(secret);
-        } catch (NoSuchAlgorithmException e1) {
-            e1.printStackTrace();
-        } catch (InvalidKeyException e1) {
-            e1.printStackTrace();
+        } catch (NoSuchAlgorithmException | InvalidKeyException e) {
+            LOGGER.error("Invalid crypto constant have been set for HMAC, see value of HMAC_ALGORITHM. ", e);
         }
     }
 

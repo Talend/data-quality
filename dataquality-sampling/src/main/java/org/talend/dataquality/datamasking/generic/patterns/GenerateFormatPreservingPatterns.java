@@ -66,6 +66,27 @@ public class GenerateFormatPreservingPatterns extends AbstractGeneratePattern {
         }
     }
 
+    @Override
+    public StringBuilder generateUniquePattern(List<String> strs, SecretManager secretMng) {
+        int[] data = transform(strs);
+
+        if (data == null) {
+            return null;
+        }
+
+        byte[] tweak = new byte[] {};
+        PseudoRandomFunction prf = secretMng.getPseudoRandomFunction();
+
+        int[] result = cipher.encrypt(data, radix, tweak, prf);
+
+        // If the result is out of bounds, re-encrypt the result. This method is called cycle-walking.
+        while (!isValid(result)) {
+            result = cipher.encrypt(result, radix, tweak, prf);
+        }
+
+        return transform(result);
+    }
+
     /**
      * Transform the encrypted array of {@code int}s into the corresponding {@code String} representation.
      */
@@ -118,27 +139,6 @@ public class GenerateFormatPreservingPatterns extends AbstractGeneratePattern {
         }
 
         return data;
-    }
-
-    @Override
-    public StringBuilder generateUniqueString(List<String> strs, SecretManager secretMng) {
-        int[] data = transform(strs);
-
-        if (data == null) {
-            return null;
-        }
-
-        byte[] tweak = new byte[] {};
-        PseudoRandomFunction prf = secretMng.getPseudoRandomFunction();
-
-        int[] result = cipher.encrypt(data, radix, tweak, prf);
-
-        // If the result is out of bounds, re-encrypt the result. This method is called cycle-walking.
-        while (!isValid(result)) {
-            result = cipher.encrypt(result, radix, tweak, prf);
-        }
-
-        return transform(result);
     }
 
     /**

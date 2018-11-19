@@ -20,6 +20,7 @@ import org.talend.dataquality.datamasking.generic.fields.FieldEnum;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
 import org.talend.dataquality.datamasking.generic.patterns.AbstractGeneratePattern;
 import org.talend.dataquality.datamasking.generic.patterns.GenerateUniqueRandomPatterns;
+import org.talend.dataquality.datamasking.utils.crypto.CryptoConstants;
 import org.talend.dataquality.sampling.exception.DQRuntimeException;
 
 /**
@@ -119,7 +120,7 @@ public class BijectiveSubstitutionFunction extends Function<String> {
     @Override
     public void setRandom(Random rand) {
         super.setRandom(rand);
-        secretMng.setKey(rand.nextInt() % 10000 + 1000);
+        secretMng.setKey(rand.nextInt() % CryptoConstants.BASIC_KEY_BOUND + CryptoConstants.BASIC_KEY_OFFSET);
     }
 
     @Override

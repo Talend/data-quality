@@ -10,7 +10,7 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.dataquality.datamasking.fpeUtils.pseudoRandomFunctions;
+package org.talend.dataquality.datamasking.utils.crypto;
 
 /**
  *
@@ -52,4 +52,7 @@ public class CryptoConstants {
      */
     public static final int KEY_LENGTH = 32;
 
+    public static final int BASIC_KEY_BOUND = 10000;
+
+    public static final int BASIC_KEY_OFFSET = 1000;
 }

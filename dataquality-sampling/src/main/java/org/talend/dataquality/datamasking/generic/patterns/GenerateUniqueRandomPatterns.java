@@ -29,16 +29,8 @@ public class GenerateUniqueRandomPatterns extends AbstractGeneratePattern {
         super(fields);
     }
 
-    /**
-     * @param strs, the string input to encode
-     * @return the new string encoding
-     */
-    public StringBuilder generateUniqueString(List<String> strs, SecretManager secretMng) {
-        // check inputs
-        if (strs.size() != getFieldsNumber()) {
-            return null;
-        }
-
+    @Override
+    public StringBuilder generateUniquePattern(List<String> strs, SecretManager secretMng) {
         // encode the fields
         List<BigInteger> listToMask = encodeFields(strs);
 
