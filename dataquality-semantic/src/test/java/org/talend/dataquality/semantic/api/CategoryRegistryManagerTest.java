@@ -27,11 +27,11 @@ public class CategoryRegistryManagerTest extends CategoryRegistryManagerAbstract
         CategoryRegistryManager crm = CategoryRegistryManager.getInstance();
         final UserDefinedClassifier udc = crm.getRegexClassifier();
         final Set<ISubCategory> classifiers = udc.getClassifiers();
-        assertEquals("Unexpected size of classifiers", 47, classifiers.size());
+        assertEquals("Unexpected size of classifiers", 42, classifiers.size());
 
         // getRegexClassifier before deletion
         UserDefinedClassifier userDefinedClassifier = crm.getCustomDictionaryHolder().getRegexClassifier();
-        assertEquals("Unexpected size of classifiers", 47, userDefinedClassifier.getClassifiers().size());
+        assertEquals("Unexpected size of classifiers", 42, userDefinedClassifier.getClassifiers().size());
 
         DQCategory regexCategory = crm.getCategoryMetadataById(SemanticCategoryEnum.EMAIL.getTechnicalId());
         regexCategory.setCreator(CustomDictionaryHolder.TALEND);
@@ -40,7 +40,7 @@ public class CategoryRegistryManagerTest extends CategoryRegistryManagerAbstract
         crm.reloadCategoriesFromRegistry();
         userDefinedClassifier = crm.getCustomDictionaryHolder().getRegexClassifier();
         // getRegexClassifier after deletion
-        assertEquals("Unexpected size of classifiers", 46, userDefinedClassifier.getClassifiers().size());
+        assertEquals("Unexpected size of classifiers", 41, userDefinedClassifier.getClassifiers().size());
 
     }
 

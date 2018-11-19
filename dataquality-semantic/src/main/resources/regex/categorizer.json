@@ -88,18 +88,6 @@
       }
     },
     {
-      "id": "583edc44ec06957a34fa643a",
-      "description": "Weekday or their abbreviation",
-      "mainCategory": "Alpha",
-      "name": "EN_WEEKDAY",
-      "label": "EN Weekday",
-      "filter": null,
-      "validator": {
-        "patternString": "^((Sun|Mon|(T(ues|hurs))|Fri)(day|\\.)?|Wed(\\.|nesday)?|Sat(\\.|urday)?|T((ue?)|(hu?r?))\\.?)$",
-        "subValidatorClassName": null
-      }
-    },
-    {
       "id": "583edc44ec06957a34fa643c",
       "description": "French postal code",
       "mainCategory": "AlphaNumeric",
@@ -256,18 +244,6 @@
       }
     },
     {
-      "id": "583edc44ec06957a34fa6456",
-      "description": "Month in English",
-      "mainCategory": "Alpha",
-      "name": "EN_MONTH",
-      "label": "EN Month",
-      "filter": null,
-      "validator": {
-        "patternString": "^(?:J(anuary|u(ne|ly))|February|Ma(rch|y)|A(pril|ugust)|(((Sept|Nov|Dec)em)|Octo)ber)$",
-        "subValidatorClassName": null
-      }
-    },
-    {
       "id": "583edc44ec06957a34fa6458",
       "description": "IPv6 address",
       "mainCategory": "AlphaNumeric",
@@ -376,18 +352,6 @@
       }
     },
     {
-      "id": "583edc44ec06957a34fa646a",
-      "description": "Month English abbreviation",
-      "mainCategory": "Alpha",
-      "name": "EN_MONTH_ABBREV",
-      "label": "EN Month Abbrev",
-      "filter": null,
-      "validator": {
-        "patternString": "^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)$",
-        "subValidatorClassName": null
-      }
-    },
-    {
       "id": "583edc44ec06957a34fa646c",
       "description": "French phone number",
       "mainCategory": "Numeric",
@@ -412,18 +376,6 @@
       }
     },
     {
-      "id": "583edc44ec06957a34fa6470",
-      "description": "US states",
-      "mainCategory": "Alpha",
-      "name": "US_STATE",
-      "label": "US State",
-      "filter": null,
-      "validator": {
-        "patternString": "^(A(la(bama|ska)|rizona|rkansas)|C(alifornia|o(lorado|nnecticut))|Delaware|Florida|Georgia|Hawaii|I(daho|llinois|ndiana|owa)|K(ansas|entucky)|Louisiana|M(a(ine|ryland|ssachusetts)|i(chigan|nnesota|ss(issippi|ouri))|ontana)|N(ebraska|evada|ew\\s(Hampshire|Jersey|Mexico|York)|orth\\s(Carolina|Dakota))|O(hio|klahoma|regon)|Pennsylvania|Rhode\\sIsland|South\\s(Carolina|Dakota)|Te(nnessee|xas)|Utah|V(ermont|irginia)|W(ashington|est\\sVirginia|isconsin|yoming))$",
-        "subValidatorClassName": null
-      }
-    },
-    {
       "id": "583edc44ec06957a34fa6472",
       "description": "FILE URL",
       "mainCategory": "AlphaNumeric",
@@ -432,18 +384,6 @@
       "filter": null,
       "validator": {
         "patternString": "^(?:file)\\:(?:\\/){2,3}((?:[a-zA-Z0-9\\-\\._]+(?:[a-zA-Z0-9\\-\\.\\:\\|_]+)+)|localhost)\\/([a-zA-Z0-9\\-\\.\\/\\+\\&\\%\\$_\\|\\:]*)?$",
-        "subValidatorClassName": null
-      }
-    },
-    {
-      "id": "583edc44ec06957a34fa6474",
-      "description": "US state code",
-      "mainCategory": "Alpha",
-      "name": "US_STATE_CODE",
-      "label": "US State Code",
-      "filter": null,
-      "validator": {
-        "patternString": "^(A[KLRZ]|C[AOT]|DE|FL|GA|HI|I[ADLN]|K[SY]|LA|M[ADEINOST]|N[CDEHJMVY]|O[HKR]|PA|RI|S[CD]|T[NX]|UT|V[AT]|W[AIVY])$",
         "subValidatorClassName": null
       }
     },
