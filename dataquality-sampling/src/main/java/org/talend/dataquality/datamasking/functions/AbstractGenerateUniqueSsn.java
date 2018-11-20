@@ -130,7 +130,7 @@ public abstract class AbstractGenerateUniqueSsn extends Function<String> {
         boolean isValid;
 
         if (str == null) {
-            return false;
+            isValid = false;
         } else {
             String strWithoutSpaces = super.removeFormatInString(str);
             isValid = isValidWithoutFormat(strWithoutSpaces);
