@@ -154,13 +154,14 @@ public abstract class AbstractGeneratePattern implements Serializable {
     public List<BigInteger> getFieldsFromNumber(BigInteger number) {
         // uniqueMaskedNumberList is the unique list created from uniqueMaskedNumber
         List<BigInteger> uniqueMaskedNumberList = new ArrayList<BigInteger>();
+        BigInteger base = number;
         for (int i = 0; i < fieldsNumber; i++) {
             // baseRandomNumber is the quotient of the Euclidean division between uniqueMaskedNumber and
             // basedWidthsList.get(i)
-            BigInteger baseRandomNumber = number.divide(basedWidthsList.get(i));
+            BigInteger baseRandomNumber = base.divide(basedWidthsList.get(i));
             uniqueMaskedNumberList.add(baseRandomNumber);
             // we reiterate with the remainder of the Euclidean division
-            number = number.mod(basedWidthsList.get(i));
+            base = base.mod(basedWidthsList.get(i));
         }
         return uniqueMaskedNumberList;
     }
