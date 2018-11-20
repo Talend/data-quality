@@ -73,7 +73,7 @@ public class TdqCategoriesFactoryTest extends CategoryRegistryManagerAbstract {
         assertEquals("Unexpected document size in shared data dict!", 45829, cats.getDictionary().getDocumentList().size());
         assertEquals("Unexpected document size in custom data dict!", 0, cats.getCustomDictionary().getDocumentList().size());
         assertEquals("Unexpected document size in shared keyword!", 0, cats.getKeyword().getDocumentList().size());
-        assertEquals("Unexpected regex classifier size!", 47, cats.getRegex().getRegexClassifier().getClassifiers().size());
+        assertEquals("Unexpected regex classifier size!", 42, cats.getRegex().getRegexClassifier().getClassifiers().size());
     }
 
     @Test
