@@ -227,6 +227,7 @@ public class DictionaryUtils {
 
         if (dqValidator != null) {
             UserDefinedRegexValidator validator = new UserDefinedRegexValidator();
+            validator.setRe2jCompliant(dqValidator.getRe2jCompliant());
             validator.setPatternString(dqValidator.getPatternString());
             validator.setSubValidatorClassName(dqValidator.getSubValidatorClassName());
             regEx.setValidator(validator);
