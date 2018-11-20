@@ -19,6 +19,7 @@ import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldEnum;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
 import org.talend.dataquality.datamasking.generic.patterns.GenerateFormatPreservingPatterns;
+import org.talend.dataquality.datamasking.utils.crypto.CryptoConstants;
 
 import java.math.BigInteger;
 import java.util.*;
@@ -82,13 +83,27 @@ public class GenerateFormatPreservingPatternsTest {
     public void generateUniqueStringAES() {
         SecretManager AESSecMng = new SecretManager(1, "#Datadriven2018");
         StringBuilder result = pattern.generateUniqueString(Arrays.asList("U", "KI", "45", "12"), AESSecMng);
-        assertEquals("SQG1920", result.toString());
+
+        String expected;
+        if (CryptoConstants.getKeyLength() == 32) {
+            expected = "SQG1920";
+        } else {
+            expected = "SSF0112";
+        }
+        assertEquals(expected, result.toString());
     }
 
     @Test
     public void generateUniqueStringHMAC() {
         StringBuilder result = pattern.generateUniqueString(Arrays.asList("U", "KI", "45", "12"), secretMng);
-        assertEquals("USF3608", result.toString());
+
+        String expected;
+        if (CryptoConstants.getKeyLength() == 32) {
+            expected = "USF3608";
+        } else {
+            expected = "OSF4017";
+        }
+        assertEquals(expected, result.toString());
     }
 
     @Test

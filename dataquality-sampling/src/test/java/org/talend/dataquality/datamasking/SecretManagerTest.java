@@ -14,6 +14,7 @@ package org.talend.dataquality.datamasking;
 
 import org.apache.commons.codec.binary.Hex;
 import org.junit.Test;
+import org.talend.dataquality.datamasking.utils.crypto.CryptoConstants;
 
 import java.util.Random;
 
@@ -26,14 +27,28 @@ public class SecretManagerTest {
     public void latinPasswordWithNumbers() {
         SecretManager secMng = new SecretManager(2, "ARandomPassword921");
         byte[] res = secMng.getPseudoRandomFunction().apply("abcde".getBytes());
-        assertEquals("c5cd0a933b2f329874e885c3614524042338648757a44a4bd71b3a15084bebd3", Hex.encodeHexString(res));
+
+        String expected;
+        if (CryptoConstants.getKeyLength() == 32) {
+            expected = "c5cd0a933b2f329874e885c3614524042338648757a44a4bd71b3a15084bebd3";
+        } else {
+            expected = "7afdf81ff65d04dfa071e76ba6abdf21e7f5e04d69d614ed24e77a4fee326ebd";
+        }
+        assertEquals(expected, Hex.encodeHexString(res));
     }
 
     @Test
     public void passwordWithSpecialChars() {
         SecretManager secMng = new SecretManager(2, "Pa$$_With%Spe{ial_Ch@rs");
         byte[] res = secMng.getPseudoRandomFunction().apply("abcde".getBytes());
-        assertEquals("51e22ba9968590ed4ef65837176b8e45a01a61a289c034a9041dc4f38f731b62", Hex.encodeHexString(res));
+
+        String expected;
+        if (CryptoConstants.getKeyLength() == 32) {
+            expected = "51e22ba9968590ed4ef65837176b8e45a01a61a289c034a9041dc4f38f731b62";
+        } else {
+            expected = "4a1d0087927696b419a94418478465ca5f70a3c2c588028ad7c599adc0707e48";
+        }
+        assertEquals(expected, Hex.encodeHexString(res));
     }
 
     @Test
