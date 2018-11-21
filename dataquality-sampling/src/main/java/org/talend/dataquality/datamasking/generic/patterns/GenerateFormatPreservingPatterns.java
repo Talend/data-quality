@@ -70,7 +70,8 @@ public class GenerateFormatPreservingPatterns extends AbstractGeneratePattern {
     public StringBuilder generateUniquePattern(List<String> strs, SecretManager secretMng) {
         int[] data = transform(strs);
 
-        if (data == null) {
+        if (data.length == 0) {
+            System.out.println("LEngth == 0");
             return null;
         }
 
@@ -114,7 +115,7 @@ public class GenerateFormatPreservingPatterns extends AbstractGeneratePattern {
         List<BigInteger> encodedFields = encodeFields(strs);
 
         if (encodedFields == null) {
-            return null;
+            return new int[] {};
         }
 
         // Compute the rank of the string to encrypt

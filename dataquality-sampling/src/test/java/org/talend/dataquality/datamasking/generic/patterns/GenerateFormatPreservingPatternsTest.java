@@ -76,7 +76,7 @@ public class GenerateFormatPreservingPatternsTest {
     @Test
     public void transformOutLimitValue() {
         int[] outLimit = pattern.transform(Arrays.asList("U", "KI", "52", "12"));
-        assertNull(outLimit);
+        assertEquals(0, outLimit.length);
     }
 
     @Test
@@ -85,7 +85,7 @@ public class GenerateFormatPreservingPatternsTest {
         StringBuilder result = pattern.generateUniqueString(Arrays.asList("U", "KI", "45", "12"), AESSecMng);
 
         String expected;
-        if (CryptoConstants.getKeyLength() == 32) {
+        if (CryptoConstants.KEY_LENGTH == 32) {
             expected = "SQG1920";
         } else {
             expected = "SSF0112";
@@ -98,7 +98,7 @@ public class GenerateFormatPreservingPatternsTest {
         StringBuilder result = pattern.generateUniqueString(Arrays.asList("U", "KI", "45", "12"), secretMng);
 
         String expected;
-        if (CryptoConstants.getKeyLength() == 32) {
+        if (CryptoConstants.KEY_LENGTH == 32) {
             expected = "USF3608";
         } else {
             expected = "OSF4017";

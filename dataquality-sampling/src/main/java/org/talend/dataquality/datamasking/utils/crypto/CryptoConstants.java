@@ -68,7 +68,7 @@ public class CryptoConstants {
      *
      * @return the key length to use depending on java version
      */
-    public static int getKeyLength() {
+    private static int getKeyLength() {
         String major1, major2, update;
         String[] javaVersionElements = System.getProperty("java.runtime.version").split("\\.|_|-b");
         major1 = javaVersionElements[0];
@@ -81,9 +81,7 @@ public class CryptoConstants {
         LOGGER.info("Java Runtime version : " + System.getProperty("java.runtime.version"));
 
         int supportedLength;
-        if (specVersion > 1.8) {
-            supportedLength = 32;
-        } else if (specVersion == 1.8 && implVersion >= 161) {
+        if (specVersion > 1.8 || (specVersion == 1.8 && implVersion >= 161)) {
             supportedLength = 32;
         } else {
             supportedLength = 16;

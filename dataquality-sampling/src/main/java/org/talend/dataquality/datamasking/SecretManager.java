@@ -135,7 +135,7 @@ public class SecretManager {
 
             switch (method) {
             case BASIC:
-                return null;
+                break;
             case AES_CBC_PRF:
                 SecretKey aesKey = generateRandomSecretKey(CryptoConstants.KEY_LENGTH);
                 pseudoRandomFunction = new AesPrf(aesKey);
@@ -145,7 +145,7 @@ public class SecretManager {
                 pseudoRandomFunction = new HmacPrf(hmacKey);
                 break;
             default:
-                return null;
+                break;
             }
         }
         return this.pseudoRandomFunction;
