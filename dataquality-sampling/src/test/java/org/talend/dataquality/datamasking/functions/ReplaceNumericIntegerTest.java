@@ -19,6 +19,7 @@ import static org.junit.Assert.fail;
 import java.util.Random;
 
 import org.junit.Test;
+import org.talend.dataquality.duplicating.RandomWrapper;
 
 /**
  * created by jgonzalez on 25 juin 2015 Detailled comment
@@ -44,6 +45,20 @@ public class ReplaceNumericIntegerTest {
         rni.parse(null, false, new Random(42));
         output = rni.generateMaskedRow(input);
         assertEquals(38, output);
+    }
+
+    @Test
+    public void consistent() {
+        rni.parse(" ", false, new RandomWrapper(42));
+        output = rni.generateMaskedRow(input, true);
+        assertEquals(output, (int) rni.generateMaskedRow(input, true)); //$NON-NLS-1$
+    }
+
+    @Test
+    public void consistentNoSeed() {
+        rni.parse(" ", false, new RandomWrapper());
+        output = rni.generateMaskedRow(input, true);
+        assertEquals(output, (int) rni.generateMaskedRow(input, true)); //$NON-NLS-1$
     }
 
     @Test

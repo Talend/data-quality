@@ -18,9 +18,11 @@ import java.util.List;
 import java.util.Random;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.talend.dataquality.duplicating.RandomWrapper;
 
 /**
  * created by jgonzalez on 18 juin 2015. This class is an abstract class that
@@ -195,6 +197,10 @@ public abstract class Function<T> implements Serializable {
     }
 
     public T generateMaskedRow(T t) {
+        return generateMaskedRow(t, false);
+    }
+
+    public T generateMaskedRow(T t, boolean isConsistent) {
         if (t == null && keepNull) {
             return null;
         }
@@ -203,7 +209,7 @@ public abstract class Function<T> implements Serializable {
             return t;
         }
 
-        return doGenerateMaskedField(t);
+        return isConsistent ? doGenerateMaskedFieldConsistent(t) : doGenerateMaskedField(t);
     }
 
     /**
@@ -244,7 +250,18 @@ public abstract class Function<T> implements Serializable {
      */
     protected abstract T doGenerateMaskedField(T t);
 
+    protected T doGenerateMaskedFieldConsistent(T t) {
+        throw new NotImplementedException();
+    }
+
     protected int nextRandomDigit() {
         return rnd.nextInt(10);
+    }
+
+    protected Random getRandomForString(String toBeReplaced) {
+        RandomWrapper randomWrapper = (RandomWrapper) rnd;
+        Random random = new Random();
+        random.setSeed(toBeReplaced.hashCode() * randomWrapper.getSeed());
+        return random;
     }
 }

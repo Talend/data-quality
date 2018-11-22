@@ -27,7 +27,7 @@ public class FunctionFactory<T> {
 
     private Function<T> getFunction3(FunctionType type, int javaType) throws InstantiationException, IllegalAccessException {
         Function<T> res;
-        if (type == FunctionType.REPLACE_LAST_CHARS) {
+        if (type == FunctionType.REPLACE_LAST_CHARS || type == FunctionType.REPLACE_LAST_CHARS_CONSISTENT) {
             res = handleReplaceLastCharsFunction(javaType);
         } else if (type == FunctionType.REPLACE_NUMERIC) {
             res = handleReplaceNumbericFunction(javaType);
@@ -111,7 +111,7 @@ public class FunctionFactory<T> {
             res = handleRemoveFirstCharsFunction(javaType);
         } else if (type == FunctionType.REMOVE_LAST_CHARS) {
             res = handleRemoveLastCharsFunction(javaType);
-        } else if (type == FunctionType.REPLACE_FIRST_CHARS) {
+        } else if (type == FunctionType.REPLACE_FIRST_CHARS || type == FunctionType.REPLACE_FIRST_CHARS_CONSISTENT) {
             res = handleReplaceFirstCharsFunction(javaType);
         } else {
             res = getFunction3(type, javaType);
@@ -329,9 +329,9 @@ public class FunctionFactory<T> {
      */
     public Function<T> getFunction(FunctionType type, int javaType) throws InstantiationException, IllegalAccessException {
         Function<T> res;
-        if (type == FunctionType.KEEP_FIRST_AND_GENERATE) {
+        if (type == FunctionType.KEEP_FIRST_AND_GENERATE || type == FunctionType.KEEP_FIRST_AND_GENERATE_CONSISTENT) {
             res = handleKeepFirstAndGenerateFunction(javaType);
-        } else if (type == FunctionType.KEEP_LAST_AND_GENERATE) {
+        } else if (type == FunctionType.KEEP_LAST_AND_GENERATE || type == FunctionType.KEEP_LAST_AND_GENERATE_CONSISTENT) {
             res = handleKeepLastAndGenerateFunction(javaType);
         } else if (type == FunctionType.GENERATE_BETWEEN) {
             res = handleGenerateBetweenFunction(javaType);

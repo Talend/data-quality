@@ -19,6 +19,7 @@ import static org.junit.Assert.fail;
 import java.util.Random;
 
 import org.junit.Test;
+import org.talend.dataquality.duplicating.RandomWrapper;
 
 /**
  * created by jgonzalez on 29 juin 2015 Detailled comment
@@ -37,6 +38,20 @@ public class ReplaceFirstCharsStringTest {
         rfcs.parse("3,y", false, new Random(42));
         output = rfcs.generateMaskedRow(input);
         assertEquals("yyy456", output);
+    }
+
+    @Test
+    public void consistent() {
+        rfcs.parse("3", false, new RandomWrapper(42));
+        output = rfcs.generateMaskedRow(input, true);
+        assertEquals(output, rfcs.generateMaskedRow(input, true));
+    }
+
+    @Test
+    public void consistentNoSeed() {
+        rfcs.parse("3", false, new RandomWrapper());
+        output = rfcs.generateMaskedRow(input, true);
+        assertEquals(output, rfcs.generateMaskedRow(input, true));
     }
 
     @Test

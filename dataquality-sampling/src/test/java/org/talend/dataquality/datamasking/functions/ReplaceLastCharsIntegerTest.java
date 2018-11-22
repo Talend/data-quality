@@ -17,6 +17,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.Random;
 
 import org.junit.Test;
+import org.talend.dataquality.duplicating.RandomWrapper;
 
 /**
  * created by jgonzalez on 1 juil. 2015 Detailled comment
@@ -42,5 +43,19 @@ public class ReplaceLastCharsIntegerTest {
         rlci.parse("7", false, new Random(42));
         output = rlci.generateMaskedRow(input).toString();
         assertEquals(output, "38405"); //$NON-NLS-1$
+    }
+
+    @Test
+    public void consistent() {
+        rlci.parse("3", false, new RandomWrapper(42));
+        output = rlci.generateMaskedRow(input, true).toString();
+        assertEquals(output, rlci.generateMaskedRow(input, true).toString());
+    }
+
+    @Test
+    public void consistentNoSeed() {
+        rlci.parse("3", false, new RandomWrapper());
+        output = rlci.generateMaskedRow(input, true).toString();
+        assertEquals(output, rlci.generateMaskedRow(input, true).toString());
     }
 }

@@ -12,7 +12,108 @@
 // ============================================================================
 package org.talend.dataquality.datamasking;
 
-import org.talend.dataquality.datamasking.functions.*;
+import org.talend.dataquality.datamasking.functions.BetweenIndexes;
+import org.talend.dataquality.datamasking.functions.BetweenIndexesKeep;
+import org.talend.dataquality.datamasking.functions.BetweenIndexesRemove;
+import org.talend.dataquality.datamasking.functions.BetweenIndexesReplace;
+import org.talend.dataquality.datamasking.functions.DateVariance;
+import org.talend.dataquality.datamasking.functions.GenerateAccountNumberFormat;
+import org.talend.dataquality.datamasking.functions.GenerateAccountNumberSimple;
+import org.talend.dataquality.datamasking.functions.GenerateBetween;
+import org.talend.dataquality.datamasking.functions.GenerateBetweenDate;
+import org.talend.dataquality.datamasking.functions.GenerateBetweenDouble;
+import org.talend.dataquality.datamasking.functions.GenerateBetweenFloat;
+import org.talend.dataquality.datamasking.functions.GenerateBetweenInteger;
+import org.talend.dataquality.datamasking.functions.GenerateBetweenLong;
+import org.talend.dataquality.datamasking.functions.GenerateBetweenString;
+import org.talend.dataquality.datamasking.functions.GenerateCreditCardFormatLong;
+import org.talend.dataquality.datamasking.functions.GenerateCreditCardFormatString;
+import org.talend.dataquality.datamasking.functions.GenerateCreditCardLong;
+import org.talend.dataquality.datamasking.functions.GenerateCreditCardSimple;
+import org.talend.dataquality.datamasking.functions.GenerateCreditCardString;
+import org.talend.dataquality.datamasking.functions.GenerateFromFile;
+import org.talend.dataquality.datamasking.functions.GenerateFromFileHash;
+import org.talend.dataquality.datamasking.functions.GenerateFromFileHashInteger;
+import org.talend.dataquality.datamasking.functions.GenerateFromFileHashLong;
+import org.talend.dataquality.datamasking.functions.GenerateFromFileHashString;
+import org.talend.dataquality.datamasking.functions.GenerateFromFileInteger;
+import org.talend.dataquality.datamasking.functions.GenerateFromFileLong;
+import org.talend.dataquality.datamasking.functions.GenerateFromFileString;
+import org.talend.dataquality.datamasking.functions.GenerateFromPattern;
+import org.talend.dataquality.datamasking.functions.GeneratePhoneNumberFrench;
+import org.talend.dataquality.datamasking.functions.GeneratePhoneNumberGermany;
+import org.talend.dataquality.datamasking.functions.GeneratePhoneNumberJapan;
+import org.talend.dataquality.datamasking.functions.GeneratePhoneNumberUK;
+import org.talend.dataquality.datamasking.functions.GeneratePhoneNumberUS;
+import org.talend.dataquality.datamasking.functions.GenerateSequenceDouble;
+import org.talend.dataquality.datamasking.functions.GenerateSequenceFloat;
+import org.talend.dataquality.datamasking.functions.GenerateSequenceInteger;
+import org.talend.dataquality.datamasking.functions.GenerateSequenceLong;
+import org.talend.dataquality.datamasking.functions.GenerateSequenceString;
+import org.talend.dataquality.datamasking.functions.GenerateSsnFr;
+import org.talend.dataquality.datamasking.functions.GenerateSsnGermany;
+import org.talend.dataquality.datamasking.functions.GenerateSsnJapan;
+import org.talend.dataquality.datamasking.functions.GenerateSsnUk;
+import org.talend.dataquality.datamasking.functions.GenerateSsnUs;
+import org.talend.dataquality.datamasking.functions.GenerateUniquePhoneNumberFr;
+import org.talend.dataquality.datamasking.functions.GenerateUniquePhoneNumberGermany;
+import org.talend.dataquality.datamasking.functions.GenerateUniquePhoneNumberJapan;
+import org.talend.dataquality.datamasking.functions.GenerateUniquePhoneNumberUk;
+import org.talend.dataquality.datamasking.functions.GenerateUniquePhoneNumberUs;
+import org.talend.dataquality.datamasking.functions.GenerateUniqueSsnChn;
+import org.talend.dataquality.datamasking.functions.GenerateUniqueSsnFr;
+import org.talend.dataquality.datamasking.functions.GenerateUniqueSsnGermany;
+import org.talend.dataquality.datamasking.functions.GenerateUniqueSsnIndia;
+import org.talend.dataquality.datamasking.functions.GenerateUniqueSsnJapan;
+import org.talend.dataquality.datamasking.functions.GenerateUniqueSsnUk;
+import org.talend.dataquality.datamasking.functions.GenerateUniqueSsnUs;
+import org.talend.dataquality.datamasking.functions.GenerateUuid;
+import org.talend.dataquality.datamasking.functions.KeepFirstChars;
+import org.talend.dataquality.datamasking.functions.KeepFirstCharsInteger;
+import org.talend.dataquality.datamasking.functions.KeepFirstCharsLong;
+import org.talend.dataquality.datamasking.functions.KeepFirstDigitsAndReplaceOtherDigits;
+import org.talend.dataquality.datamasking.functions.KeepLastChars;
+import org.talend.dataquality.datamasking.functions.KeepLastCharsInteger;
+import org.talend.dataquality.datamasking.functions.KeepLastCharsLong;
+import org.talend.dataquality.datamasking.functions.KeepLastDigitsAndReplaceOtherDigits;
+import org.talend.dataquality.datamasking.functions.KeepYear;
+import org.talend.dataquality.datamasking.functions.MaskAddress;
+import org.talend.dataquality.datamasking.functions.MaskEmailLocalPartByX;
+import org.talend.dataquality.datamasking.functions.MaskEmailLocalPartRandomly;
+import org.talend.dataquality.datamasking.functions.MaskFullEmailDomainByX;
+import org.talend.dataquality.datamasking.functions.MaskFullEmailDomainRandomly;
+import org.talend.dataquality.datamasking.functions.MaskTopEmailDomainByX;
+import org.talend.dataquality.datamasking.functions.MaskTopEmailDomainRandomly;
+import org.talend.dataquality.datamasking.functions.NumericVariance;
+import org.talend.dataquality.datamasking.functions.NumericVarianceDouble;
+import org.talend.dataquality.datamasking.functions.NumericVarianceFloat;
+import org.talend.dataquality.datamasking.functions.NumericVarianceInteger;
+import org.talend.dataquality.datamasking.functions.NumericVarianceLong;
+import org.talend.dataquality.datamasking.functions.RemoveFirstChars;
+import org.talend.dataquality.datamasking.functions.RemoveFirstCharsInteger;
+import org.talend.dataquality.datamasking.functions.RemoveFirstCharsLong;
+import org.talend.dataquality.datamasking.functions.RemoveFirstCharsString;
+import org.talend.dataquality.datamasking.functions.RemoveLastChars;
+import org.talend.dataquality.datamasking.functions.RemoveLastCharsInteger;
+import org.talend.dataquality.datamasking.functions.RemoveLastCharsLong;
+import org.talend.dataquality.datamasking.functions.RemoveLastCharsString;
+import org.talend.dataquality.datamasking.functions.ReplaceAll;
+import org.talend.dataquality.datamasking.functions.ReplaceCharacters;
+import org.talend.dataquality.datamasking.functions.ReplaceFirstChars;
+import org.talend.dataquality.datamasking.functions.ReplaceFirstCharsInteger;
+import org.talend.dataquality.datamasking.functions.ReplaceFirstCharsLong;
+import org.talend.dataquality.datamasking.functions.ReplaceFirstCharsString;
+import org.talend.dataquality.datamasking.functions.ReplaceLastChars;
+import org.talend.dataquality.datamasking.functions.ReplaceLastCharsInteger;
+import org.talend.dataquality.datamasking.functions.ReplaceLastCharsLong;
+import org.talend.dataquality.datamasking.functions.ReplaceLastCharsString;
+import org.talend.dataquality.datamasking.functions.ReplaceNumeric;
+import org.talend.dataquality.datamasking.functions.ReplaceNumericDouble;
+import org.talend.dataquality.datamasking.functions.ReplaceNumericFloat;
+import org.talend.dataquality.datamasking.functions.ReplaceNumericInteger;
+import org.talend.dataquality.datamasking.functions.ReplaceNumericLong;
+import org.talend.dataquality.datamasking.functions.ReplaceNumericString;
+import org.talend.dataquality.datamasking.functions.SetToNull;
 import org.talend.dataquality.datamasking.semantic.GenerateBetweenNumeric;
 import org.talend.dataquality.datamasking.semantic.GenerateFromFileStringProvided;
 import org.talend.dataquality.datamasking.semantic.ReplaceCharactersWithGeneration;
@@ -24,6 +125,7 @@ import org.talend.dataquality.datamasking.semantic.ReplaceCharactersWithGenerati
 public enum FunctionType {
     BETWEEN_INDEXES(BetweenIndexes.class),
     BETWEEN_INDEXES_REPLACE(BetweenIndexesReplace.class),
+    BETWEEN_INDEXES_REPLACE_CONSISTENT(BetweenIndexesReplace.class),
     BETWEEN_INDEXES_KEEP(BetweenIndexesKeep.class),
     BETWEEN_INDEXES_REMOVE(BetweenIndexesRemove.class),
     DATE_VARIANCE(DateVariance.class),
@@ -93,10 +195,12 @@ public enum FunctionType {
     GENERATE_UNIQUE_SSN_INDIA(GenerateUniqueSsnIndia.class),
     GENERATE_UUID(GenerateUuid.class),
     KEEP_FIRST_AND_GENERATE(KeepFirstChars.class),
+    KEEP_FIRST_AND_GENERATE_CONSISTENT(KeepFirstChars.class),
     KEEP_FIRST_AND_GENERATE_INT(KeepFirstCharsInteger.class),
     KEEP_FIRST_AND_GENERATE_LONG(KeepFirstCharsLong.class),
     KEEP_FIRST_AND_GENERATE_STRING(KeepFirstDigitsAndReplaceOtherDigits.class),
     KEEP_LAST_AND_GENERATE(KeepLastChars.class),
+    KEEP_LAST_AND_GENERATE_CONSISTENT(KeepLastChars.class),
     KEEP_LAST_AND_GENERATE_INT(KeepLastCharsInteger.class),
     KEEP_LAST_AND_GENERATE_LONG(KeepLastCharsLong.class),
     KEEP_LAST_AND_GENERATE_STRING(KeepLastDigitsAndReplaceOtherDigits.class),
@@ -123,17 +227,22 @@ public enum FunctionType {
     REMOVE_LAST_CHARS_LONG(RemoveLastCharsLong.class),
     REMOVE_LAST_CHARS_STRING(RemoveLastCharsString.class),
     REPLACE_ALL(ReplaceAll.class),
+    REPLACE_ALL_CONSISTENT(ReplaceAll.class),
     REPLACE_CHARACTERS(ReplaceCharacters.class),
+    REPLACE_CHARACTERS_CONSISTENT(ReplaceCharacters.class),
     REPLACE_CHARACTERS_WITH_GENERATION(ReplaceCharactersWithGeneration.class),
     REPLACE_FIRST_CHARS(ReplaceFirstChars.class),
+    REPLACE_FIRST_CHARS_CONSISTENT(ReplaceFirstChars.class),
     REPLACE_FIRST_CHARS_INT(ReplaceFirstCharsInteger.class),
     REPLACE_FIRST_CHARS_LONG(ReplaceFirstCharsLong.class),
     REPLACE_FIRST_CHARS_STRING(ReplaceFirstCharsString.class),
     REPLACE_LAST_CHARS(ReplaceLastChars.class),
+    REPLACE_LAST_CHARS_CONSISTENT(ReplaceLastChars.class),
     REPLACE_LAST_CHARS_INT(ReplaceLastCharsInteger.class),
     REPLACE_LAST_CHARS_LONG(ReplaceLastCharsLong.class),
     REPLACE_LAST_CHARS_STRING(ReplaceLastCharsString.class),
     REPLACE_NUMERIC(ReplaceNumeric.class),
+    REPLACE_NUMERIC_CONSISTENT(ReplaceNumeric.class),
     REPLACE_NUMERIC_DOUBLE(ReplaceNumericDouble.class),
     REPLACE_NUMERIC_FLOAT(ReplaceNumericFloat.class),
     REPLACE_NUMERIC_INT(ReplaceNumericInteger.class),

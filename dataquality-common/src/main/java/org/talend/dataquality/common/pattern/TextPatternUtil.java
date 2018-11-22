@@ -1,5 +1,7 @@
 package org.talend.dataquality.common.pattern;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import org.talend.daikon.pattern.character.CharPattern;
@@ -75,6 +77,17 @@ public class TextPatternUtil {
             }
         }
         return codePointToReplace;
+    }
+
+    public static List<Integer> replaceStringCodePoints(String stringToReplace, Random random) {
+        List<Integer> codePoints = new ArrayList<>();
+        long numberCodePoints = stringToReplace.codePoints().count();
+        StringBuilder stringBuilder = new StringBuilder("");
+        for (int i = 0; i < numberCodePoints; i++) {
+            Integer codePoint = stringToReplace.codePointAt(i);
+            codePoints.add(replaceCharacter(codePoint, random));
+        }
+        return codePoints;
     }
 
     /**

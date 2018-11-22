@@ -19,6 +19,7 @@ import static org.junit.Assert.fail;
 import java.util.Random;
 
 import org.junit.Test;
+import org.talend.dataquality.duplicating.RandomWrapper;
 
 /**
  * created by jgonzalez on 1 juil. 2015 Detailled comment
@@ -62,6 +63,20 @@ public class ReplaceLastCharsLongTest {
             assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$
         }
         assertEquals(0L, output); // $NON-NLS-1$
+    }
+
+    @Test
+    public void consistent() {
+        rlcl.parse("3", false, new RandomWrapper(42));
+        output = rlcl.generateMaskedRow(input, true);
+        assertEquals(output, (long) rlcl.generateMaskedRow(input, true));
+    }
+
+    @Test
+    public void consistentNoSeed() {
+        rlcl.parse("3", false, new RandomWrapper());
+        output = rlcl.generateMaskedRow(input, true);
+        assertEquals(output, (long) rlcl.generateMaskedRow(input, true));
     }
 
 }

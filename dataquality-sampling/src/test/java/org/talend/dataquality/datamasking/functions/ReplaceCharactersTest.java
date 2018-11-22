@@ -19,6 +19,7 @@ import static org.junit.Assert.fail;
 import java.util.Random;
 
 import org.junit.Test;
+import org.talend.dataquality.duplicating.RandomWrapper;
 
 /**
  * created by jgonzalez on 25 juin 2015 Detailled comment
@@ -58,6 +59,20 @@ public class ReplaceCharactersTest {
         rc.parse(" ", false, new Random(42));
         output = rc.generateMaskedRow(input);
         assertEquals("ñjë456ñï xàiäz", output); //$NON-NLS-1$
+    }
+
+    @Test
+    public void consistent() {
+        rc.parse(" ", false, new RandomWrapper(42));
+        output = rc.generateMaskedRow(input, true);
+        assertEquals(output, rc.generateMaskedRow(input, true)); //$NON-NLS-1$
+    }
+
+    @Test
+    public void consistentNoSeed() {
+        rc.parse(" ", false, new RandomWrapper());
+        output = rc.generateMaskedRow(input, true);
+        assertEquals(output, rc.generateMaskedRow(input, true)); //$NON-NLS-1$
     }
 
     @Test

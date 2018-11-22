@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.Random;
 
 import org.junit.Test;
+import org.talend.dataquality.duplicating.RandomWrapper;
 import org.talend.dataquality.utils.MockRandom;
 
 public class KeepFirstDigitsAndReplaceOtherDigitsTest {
@@ -20,6 +21,20 @@ public class KeepFirstDigitsAndReplaceOtherDigitsTest {
         kfag.parse("3", false, new Random(42));
         output = kfag.generateMaskedRow(input);
         assertEquals("a1b2c3d038", output); //$NON-NLS-1$
+    }
+
+    @Test
+    public void consistent() {
+        kfag.parse("3", false, new RandomWrapper(42));
+        output = kfag.generateMaskedRow(input, true);
+        assertEquals(output, kfag.generateMaskedRow(input, true)); //$NON-NLS-1$
+    }
+
+    @Test
+    public void consistentNoSeed() {
+        kfag.parse("3", false, new RandomWrapper());
+        output = kfag.generateMaskedRow(input, true);
+        assertEquals(output, kfag.generateMaskedRow(input, true)); //$NON-NLS-1$
     }
 
     @Test

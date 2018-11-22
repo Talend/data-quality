@@ -19,6 +19,7 @@ import static org.junit.Assert.fail;
 import java.util.Random;
 
 import org.junit.Test;
+import org.talend.dataquality.duplicating.RandomWrapper;
 
 /**
  * created by jgonzalez on 30 juin 2015 Detailled comment
@@ -63,6 +64,20 @@ public class ReplaceFirstCharsIntegerTest {
         }
         output = rfci.generateMaskedRow(input);
         assertEquals(0, output); // $NON-NLS-1$
+    }
+
+    @Test
+    public void consistent() {
+        rfci.parse("3", false, new RandomWrapper(42));
+        output = rfci.generateMaskedRow(input, true);
+        assertEquals(output, (int) rfci.generateMaskedRow(input, true));
+    }
+
+    @Test
+    public void consistentNoSeed() {
+        rfci.parse("3", false, new RandomWrapper());
+        output = rfci.generateMaskedRow(input, true);
+        assertEquals(output, (int) rfci.generateMaskedRow(input, true));
     }
 
 }

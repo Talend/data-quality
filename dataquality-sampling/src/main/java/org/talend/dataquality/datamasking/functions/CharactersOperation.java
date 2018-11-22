@@ -12,6 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
+import java.util.List;
 import java.util.Random;
 
 import org.talend.dataquality.common.pattern.TextPatternUtil;
@@ -57,6 +58,8 @@ public abstract class CharactersOperation<T> extends Function<T> {
 
     protected boolean isValidParameters = false;
 
+    private int counter;
+
     @Override
     public void parse(String extraParameter, boolean keepNullValues, Random rand) {
         super.parse(extraParameter, keepNullValues, rand);
@@ -95,14 +98,74 @@ public abstract class CharactersOperation<T> extends Function<T> {
         return getOutput(sb.toString());
     }
 
+    @Override
+    protected T doGenerateMaskedFieldConsistent(T t) {
+        if (!isValidParameters || t == null) {
+            return getDefaultOutput();
+        }
+        String str = t.toString();
+        StringBuilder sb = new StringBuilder();
+
+        int strCPCount = str.codePointCount(0, str.length());
+        int beginAux = Math.min(Math.max(beginIndex, strCPCount - endNumberToReplace), strCPCount);
+        int endAux = Math.max(Math.min(endIndex, strCPCount - endNumberToKeep), 0);
+        sb.append(str, 0, str.offsetByCodePoints(0, beginAux));
+        if (!toRemove) {
+            String toBeReplaced = findStringToReplace(str, beginAux, endAux);
+            Random random = getRandomForString(toBeReplaced);
+            List<Integer> replacedCodePoints = TextPatternUtil.replaceStringCodePoints(toBeReplaced, random);
+            String substring = str.substring(str.offsetByCodePoints(0, beginAux), str.offsetByCodePoints(0, endAux));
+            sb.append(replaceConsistent(substring, replacedCodePoints));
+        }
+        sb.append(str.substring(str.offsetByCodePoints(0, endAux)));
+        if (sb.length() == 0) {
+            return getDefaultOutput();
+        }
+        return getOutput(sb.toString());
+    }
+
+    private String replaceConsistent(String substringToReplace, List<Integer> replacedString) {
+        StringBuilder stringBuilder = new StringBuilder("");
+        long codePointCounts = substringToReplace.codePoints().count();
+        counter = 0;
+        for (int i = 0; i < codePointCounts; i++) {
+            Integer codePoint = substringToReplace.codePointAt(substringToReplace.offsetByCodePoints(0, i));
+            Integer nextReplaceCodePoint = counter < replacedString.size() ? replacedString.get(counter) : null;
+            Integer codePointToReplace = replaceChar(codePoint, nextReplaceCodePoint);
+            stringBuilder.append(Character.toChars(codePointToReplace));
+        }
+        return stringBuilder.toString();
+    }
+
+    private String findStringToReplace(String str, int beginAux, int endAux) {
+        StringBuilder stringBuilder = new StringBuilder("");
+        for (int i = beginAux; i < endAux; i++) {
+            Integer codePoint = str.codePointAt(str.offsetByCodePoints(0, i));
+            if ((!isNeedCheckSpecialCase() || isGoodType(codePoint)) && charToReplace == null)
+                stringBuilder.append(Character.toChars(codePoint));
+        }
+        return stringBuilder.toString();
+    }
+
     private Integer replaceChar(Integer codePoint) {
+        return replaceChar(codePoint, null);
+    }
+
+    private Integer replaceChar(Integer codePoint, Integer replaceCodePoint) {
         if (isNeedCheckSpecialCase() && !isGoodType(codePoint)) {
             return codePoint;
         }
         if (charToReplace != null) {
             return (int) charToReplace;
         }
-        return TextPatternUtil.replaceCharacter(codePoint, rnd);
+        Integer replace;
+        if (replaceCodePoint == null) {
+            replace = TextPatternUtil.replaceCharacter(codePoint, rnd);
+        } else {
+            replace = replaceCodePoint;
+            counter++;
+        }
+        return replace;
     }
 
     /**

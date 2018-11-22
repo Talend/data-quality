@@ -20,6 +20,7 @@ import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.talend.dataquality.duplicating.RandomWrapper;
 
 /**
  * created by jgonzalez on 25 juin 2015 Detailled comment
@@ -46,10 +47,24 @@ public class BetweenIndexesReplaceTest {
     }
 
     @Test
+    public void consistent() {
+        bir.parse("2, 4", false, new RandomWrapper(42));
+        output = bir.generateMaskedRow(input, true);
+        assertEquals(output, bir.generateMaskedRow(input, true)); //$NON-NLS-1$
+    }
+
+    @Test
+    public void consistentNoSeed() {
+        bir.parse("2, 4", false, new RandomWrapper());
+        output = bir.generateMaskedRow(input, true);
+        assertEquals(output, bir.generateMaskedRow(input, true)); //$NON-NLS-1$
+    }
+
+    @Test
     public void testEmpty() {
         bir.parse("2, 4, X", false, new Random(42));
-        output = bir.generateMaskedRow(input);
-        assertEquals("SXXXe", output); //$NON-NLS-1$
+        output = bir.generateMaskedRow("");
+        assertEquals("", output); //$NON-NLS-1$
     }
 
     @Test

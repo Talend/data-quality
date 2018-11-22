@@ -1,6 +1,9 @@
 package org.talend.dataquality.datamasking.functions;
 
+import java.util.List;
 import java.util.Random;
+
+import org.talend.dataquality.common.pattern.TextPatternUtil;
 
 public class KeepLastDigitsAndReplaceOtherDigits extends Function<String> {
 
@@ -34,6 +37,47 @@ public class KeepLastDigitsAndReplaceOtherDigits extends Function<String> {
             }
         }
         return sb.toString();
+    }
+
+    @Override
+    protected String doGenerateMaskedFieldConsistent(String str) {
+        if (integerParam < 0)
+            return EMPTY_STRING;
+
+        if (str == null || integerParam >= str.trim().length())
+            return str;
+
+        int totalDigit = 0;
+        StringBuilder sb = new StringBuilder(str.trim());
+        String toBeReplaced = findDigits(sb);
+        Random random = getRandomForString(toBeReplaced);
+        List<Integer> replacedCodePoints = TextPatternUtil.replaceStringCodePoints(toBeReplaced, random);
+        int counter = 0;
+        for (int i = sb.length() - 1; i >= 0; i--) {
+            if (Character.isDigit(sb.charAt(i))) {
+                if (integerParam > totalDigit)
+                    totalDigit++;
+                else {
+                    sb.setCharAt(i, Character.toChars(replacedCodePoints.get(counter))[0]);
+                    counter++;
+                }
+            }
+        }
+        return sb.toString();
+    }
+
+    private String findDigits(StringBuilder sb) {
+        StringBuilder stringBuilder = new StringBuilder("");
+        int totalDigit = 0;
+        for (int i = sb.length() - 1; i >= 0; i--) {
+            if (Character.isDigit(sb.charAt(i))) {
+                if (integerParam > totalDigit)
+                    totalDigit++;
+                else
+                    stringBuilder.append(sb.charAt(i));
+            }
+        }
+        return stringBuilder.toString();
     }
 
 }
