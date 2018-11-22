@@ -12,7 +12,6 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.utils.crypto;
 
-import com.idealista.fpe.component.functions.prf.PseudoRandomFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,24 +31,26 @@ import java.util.Arrays;
  * @author afournier
  * @see org.talend.dataquality.datamasking.SecretManager
  * @see HmacPrf
- * @see CryptoConstants
+ * @see AbstractCryptoSpec
  */
-public class AesPrf implements PseudoRandomFunction {
-
-    private static final String AES_ALGORITHM = CryptoConstants.AES_ALGORITHM;
-
-    private static final String KEY_ALGORITHM_NAME = CryptoConstants.AES_KEY_ALGORITHM;
+public class AesPrf extends AbstractPrf {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AesPrf.class);
 
     private Cipher cipher;
 
-    private final byte[] initializationVector = Arrays.copyOf(new byte[] { 0x00 }, 16);
+    private byte[] initializationVector = Arrays.copyOf(new byte[] { 0x00 }, 16);
 
-    public AesPrf(SecretKey secret) {
+    public AesPrf(AbstractCryptoSpec cryptoSpec, SecretKey secret) {
+        super(cryptoSpec);
+        init(secret);
+    }
+
+    @Override
+    protected void init(SecretKey secret) {
         try {
-            cipher = Cipher.getInstance(AES_ALGORITHM);
-            SecretKeySpec spec = new SecretKeySpec(secret.getEncoded(), KEY_ALGORITHM_NAME);
+            cipher = Cipher.getInstance(cryptoSpec.getCipherAlgorithm());
+            SecretKeySpec spec = new SecretKeySpec(secret.getEncoded(), cryptoSpec.getKeyAlgorithm());
             cipher.init(Cipher.ENCRYPT_MODE, spec, new IvParameterSpec(initializationVector));
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException e) {
             LOGGER.error("Invalid crypto constants have been set for AES, see values of AES_KEY_ALGORITHM and AES_ALGORITHM. ",
@@ -69,5 +70,4 @@ public class AesPrf implements PseudoRandomFunction {
         }
         return result;
     }
-
 }

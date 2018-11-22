@@ -15,9 +15,7 @@ package org.talend.dataquality.datamasking;
 import com.idealista.fpe.component.functions.prf.PseudoRandomFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.talend.dataquality.datamasking.utils.crypto.AesPrf;
-import org.talend.dataquality.datamasking.utils.crypto.CryptoConstants;
-import org.talend.dataquality.datamasking.utils.crypto.HmacPrf;
+import org.talend.dataquality.datamasking.utils.crypto.*;
 import org.talend.dataquality.datamasking.generic.patterns.GenerateFormatPreservingPatterns;
 import org.talend.dataquality.datamasking.generic.patterns.GenerateUniqueRandomPatterns;
 
@@ -39,15 +37,10 @@ import java.util.Random;
  * When the password is changed, a new pseudo-random function is created according to the method and
  * its key will be derivated form the password.
  *
- * <br>
- * TODO : When {@link SecretManager#getPseudoRandomFunction()} is called :
- * TODO : - What to do when the method is set to Basic ?
- * TODO : - What to do when the method the prf attribute is null ?
- *
  * @author afournier
  * @see AesPrf
  * @see HmacPrf
- * @see CryptoConstants
+ * @see AbstractCryptoSpec
  * @see GenerateFormatPreservingPatterns
  * @see GenerateUniqueRandomPatterns
  */
@@ -65,6 +58,8 @@ public class SecretManager {
      */
     private FormatPreservingMethod method;
 
+    private AbstractCryptoSpec cryptoSpec;
+
     /**
      * The keyed pseudo-random function used to build a Format-Preserving Encrypter
      */
@@ -75,7 +70,20 @@ public class SecretManager {
     }
 
     public SecretManager(FormatPreservingMethod method, String password) {
-        setPseudoRandomFunction(method, password);
+        this.method = method;
+        switch (method) {
+        case BASIC:
+            break;
+        case AES_CBC_PRF:
+            cryptoSpec = new AesCbcCryptoSpec();
+            break;
+        case SHA2_HMAC_PRF:
+            cryptoSpec = new HmacSha2CryptoSpec();
+            break;
+        default:
+            break;
+        }
+        setPseudoRandomFunction(password);
     }
 
     /**
@@ -89,10 +97,17 @@ public class SecretManager {
     }
 
     /**
-     * getter for the method used
+     * getter for the method used.
      */
     public FormatPreservingMethod getMethod() {
         return method;
+    }
+
+    /**
+     * getter for the crypto specifications of this secret manager.
+     */
+    public AbstractCryptoSpec getCryptoSpec() {
+        return cryptoSpec;
     }
 
     /**
@@ -122,18 +137,18 @@ public class SecretManager {
             case BASIC:
                 break;
             case AES_CBC_PRF:
-                SecretKey aesKey = generateRandomSecretKey(CryptoConstants.KEY_LENGTH);
-                pseudoRandomFunction = new AesPrf(aesKey);
+                SecretKey aesKey = generateRandomSecretKey(cryptoSpec.getKeyLength());
+                pseudoRandomFunction = new AesPrf(cryptoSpec, aesKey);
                 break;
             case SHA2_HMAC_PRF:
-                SecretKey hmacKey = generateRandomSecretKey(CryptoConstants.KEY_LENGTH);
-                pseudoRandomFunction = new HmacPrf(hmacKey);
+                SecretKey hmacKey = generateRandomSecretKey(cryptoSpec.getKeyLength());
+                pseudoRandomFunction = new HmacPrf(cryptoSpec, hmacKey);
                 break;
             default:
                 break;
             }
         }
-        return this.pseudoRandomFunction;
+        return pseudoRandomFunction;
     }
 
     /**
@@ -142,25 +157,22 @@ public class SecretManager {
      * the PRF instance corresponding to the method value.
      * If the method is set to {@link FormatPreservingMethod#BASIC}, then no PRF is instantiated.
      *
-     * @param method the masking method to use.
      * @param password the password
      */
-    public void setPseudoRandomFunction(FormatPreservingMethod method, String password) {
-        this.method = method;
-
+    public void setPseudoRandomFunction(String password) {
         if (method != FormatPreservingMethod.BASIC) {
 
             SecretKey secret;
             if (password == null || "".equals(password)) {
-                secret = generateRandomSecretKey(CryptoConstants.KEY_LENGTH);
+                secret = generateRandomSecretKey(cryptoSpec.getKeyLength());
             } else {
                 secret = generateSecretKeyFromPassword(password);
             }
 
             if (method == FormatPreservingMethod.AES_CBC_PRF) {
-                pseudoRandomFunction = new AesPrf(secret);
+                pseudoRandomFunction = new AesPrf(cryptoSpec, secret);
             } else if (method == FormatPreservingMethod.SHA2_HMAC_PRF) {
-                pseudoRandomFunction = new HmacPrf(secret);
+                pseudoRandomFunction = new HmacPrf(cryptoSpec, secret);
             }
         }
     }
@@ -176,7 +188,7 @@ public class SecretManager {
         byte[] randomKey = new byte[length];
         SecureRandom srand = new SecureRandom();
         srand.nextBytes(randomKey);
-        return new SecretKeySpec(randomKey, CryptoConstants.KEY_ALGORITHM);
+        return new SecretKeySpec(randomKey, cryptoSpec.getKeyAlgorithm());
     }
 
     /**
@@ -192,13 +204,13 @@ public class SecretManager {
         SecretKey secret = null;
 
         try {
-            byte[] salt = new byte[CryptoConstants.KEY_LENGTH];
+            byte[] salt = new byte[cryptoSpec.getKeyLength()];
             new Random(123456789 + password.length()).nextBytes(salt);
-            SecretKeyFactory factory = SecretKeyFactory.getInstance(CryptoConstants.KEY_ALGORITHM);
-            KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, CryptoConstants.KEY_LENGTH << 3);
+            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+            KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, cryptoSpec.getKeyLength() << 3);
             secret = factory.generateSecret(spec);
         } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
-            LOGGER.error("Invalid crypto constants have been set, see values of KEY_LENGTH and KEY_ALGORITHM. ", e);
+            LOGGER.error("Invalid cipher or key algorithm set in " + cryptoSpec.getClass(), e);
         }
 
         if (secret == null) {

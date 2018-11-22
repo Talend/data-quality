@@ -19,8 +19,6 @@ import org.talend.dataquality.datamasking.SecretManager;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldEnum;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
-import org.talend.dataquality.datamasking.generic.patterns.GenerateFormatPreservingPatterns;
-import org.talend.dataquality.datamasking.utils.crypto.CryptoConstants;
 
 import java.math.BigInteger;
 import java.util.*;
@@ -86,7 +84,7 @@ public class GenerateFormatPreservingPatternsTest {
         StringBuilder result = pattern.generateUniqueString(Arrays.asList("U", "KI", "45", "12"), AESSecMng);
 
         String expected;
-        if (CryptoConstants.KEY_LENGTH == 32) {
+        if (AESSecMng.getCryptoSpec().getKeyLength() == 32) {
             expected = "SQG1920";
         } else {
             expected = "SSF0112";
@@ -99,7 +97,7 @@ public class GenerateFormatPreservingPatternsTest {
         StringBuilder result = pattern.generateUniqueString(Arrays.asList("U", "KI", "45", "12"), secretMng);
 
         String expected;
-        if (CryptoConstants.KEY_LENGTH == 32) {
+        if (secretMng.getCryptoSpec().getKeyLength() == 32) {
             expected = "USF3608";
         } else {
             expected = "OSF4017";
