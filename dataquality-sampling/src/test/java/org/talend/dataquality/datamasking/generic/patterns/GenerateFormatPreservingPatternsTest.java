@@ -14,6 +14,7 @@ package org.talend.dataquality.datamasking.generic.patterns;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.talend.dataquality.datamasking.FormatPreservingMethod;
 import org.talend.dataquality.datamasking.SecretManager;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldEnum;
@@ -58,7 +59,7 @@ public class GenerateFormatPreservingPatternsTest {
         minStringList = Arrays.asList("O", "SF", "00", "5");
         maxStringList = Arrays.asList("S", "DU", "50", "20");
 
-        secretMng = new SecretManager(2, "#Datadriven2018");
+        secretMng = new SecretManager(FormatPreservingMethod.SHA2_HMAC_PRF, "#Datadriven2018");
     }
 
     @Test
@@ -81,7 +82,7 @@ public class GenerateFormatPreservingPatternsTest {
 
     @Test
     public void generateUniqueStringAES() {
-        SecretManager AESSecMng = new SecretManager(1, "#Datadriven2018");
+        SecretManager AESSecMng = new SecretManager(FormatPreservingMethod.AES_CBC_PRF, "#Datadriven2018");
         StringBuilder result = pattern.generateUniqueString(Arrays.asList("U", "KI", "45", "12"), AESSecMng);
 
         String expected;

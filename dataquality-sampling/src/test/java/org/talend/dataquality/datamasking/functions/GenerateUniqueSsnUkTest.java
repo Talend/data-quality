@@ -20,6 +20,7 @@ import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.talend.dataquality.datamasking.FormatPreservingMethod;
 import org.talend.dataquality.datamasking.SecretManager;
 
 /**
@@ -36,7 +37,7 @@ public class GenerateUniqueSsnUkTest {
     public void setUp() throws Exception {
         gnu.setRandom(new Random(42));
         gnu.setKeepFormat(true);
-        gnu.setSecretManager(new SecretManager(0, null));
+        gnu.setSecretManager(new SecretManager(FormatPreservingMethod.BASIC, null));
 
     }
 

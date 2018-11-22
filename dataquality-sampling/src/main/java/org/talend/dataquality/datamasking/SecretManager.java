@@ -53,21 +53,6 @@ import java.util.Random;
  */
 public class SecretManager {
 
-    /**
-     * Identifier for Talend internal method.
-     */
-    public static final int BASIC = 0;
-
-    /**
-     * Identifier for using FF1 with AES as an underlying pseudo-random function.
-     */
-    public static final int AES_CBC_PRF = 1;
-
-    /**
-     * Identifier for using FF1 with SHA-2 as an underlying pseudo-random function.
-     */
-    public static final int HMAC_SHA2_PRF = 2;
-
     private static final Logger LOGGER = LoggerFactory.getLogger(SecretManager.class);
 
     /**
@@ -76,9 +61,9 @@ public class SecretManager {
     private Integer key;
 
     /**
-     * {@code Integer} value that corresponds to the type of pseudo-random function used by the secretManager
+     * Enumeration that corresponds to the type of pseudo-random function used by the secretManager
      */
-    private Integer method;
+    private FormatPreservingMethod method;
 
     /**
      * The keyed pseudo-random function used to build a Format-Preserving Encrypter
@@ -89,12 +74,12 @@ public class SecretManager {
 
     }
 
-    public SecretManager(int method, String password) {
+    public SecretManager(FormatPreservingMethod method, String password) {
         setPseudoRandomFunction(method, password);
     }
 
     /**
-     * getter for the {@link #BASIC} method key.
+     * getter for the {@link FormatPreservingMethod#BASIC} method key.
      */
     public int getKey() {
         if (key == null)
@@ -106,12 +91,12 @@ public class SecretManager {
     /**
      * getter for the method used
      */
-    public int getMethod() {
+    public FormatPreservingMethod getMethod() {
         return method;
     }
 
     /**
-     * setter for the {@link #BASIC} method key.
+     * setter for the {@link FormatPreservingMethod#BASIC} method key.
      */
     public void setKey(int newKey) {
         this.key = newKey;
@@ -140,7 +125,7 @@ public class SecretManager {
                 SecretKey aesKey = generateRandomSecretKey(CryptoConstants.KEY_LENGTH);
                 pseudoRandomFunction = new AesPrf(aesKey);
                 break;
-            case HMAC_SHA2_PRF:
+            case SHA2_HMAC_PRF:
                 SecretKey hmacKey = generateRandomSecretKey(CryptoConstants.KEY_LENGTH);
                 pseudoRandomFunction = new HmacPrf(hmacKey);
                 break;
@@ -155,15 +140,15 @@ public class SecretManager {
      * This method sets the pseudo-random function of the current instance of {@code SecretManager}.
      * If the password is null / not set, it will generate a completely random key and create
      * the PRF instance corresponding to the method value.
-     * If the method is set to {@link #BASIC}, then no PRF is instantiated.
+     * If the method is set to {@link FormatPreservingMethod#BASIC}, then no PRF is instantiated.
      *
      * @param method the masking method to use.
      * @param password the password
      */
-    public void setPseudoRandomFunction(int method, String password) {
+    public void setPseudoRandomFunction(FormatPreservingMethod method, String password) {
         this.method = method;
 
-        if (method != BASIC) {
+        if (method != FormatPreservingMethod.BASIC) {
 
             SecretKey secret;
             if (password == null || "".equals(password)) {
@@ -172,9 +157,9 @@ public class SecretManager {
                 secret = generateSecretKeyFromPassword(password);
             }
 
-            if (method == AES_CBC_PRF) {
+            if (method == FormatPreservingMethod.AES_CBC_PRF) {
                 pseudoRandomFunction = new AesPrf(secret);
-            } else if (method == HMAC_SHA2_PRF) {
+            } else if (method == FormatPreservingMethod.SHA2_HMAC_PRF) {
                 pseudoRandomFunction = new HmacPrf(secret);
             }
         }

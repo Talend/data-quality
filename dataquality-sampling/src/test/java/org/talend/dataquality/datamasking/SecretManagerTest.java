@@ -25,7 +25,7 @@ public class SecretManagerTest {
 
     @Test
     public void latinPasswordWithNumbers() {
-        SecretManager secMng = new SecretManager(2, "ARandomPassword921");
+        SecretManager secMng = new SecretManager(FormatPreservingMethod.SHA2_HMAC_PRF, "ARandomPassword921");
         byte[] res = secMng.getPseudoRandomFunction().apply("abcde".getBytes());
 
         String expected;
@@ -39,7 +39,7 @@ public class SecretManagerTest {
 
     @Test
     public void passwordWithSpecialChars() {
-        SecretManager secMng = new SecretManager(2, "Pa$$_With%Spe{ial_Ch@rs");
+        SecretManager secMng = new SecretManager(FormatPreservingMethod.SHA2_HMAC_PRF, "Pa$$_With%Spe{ial_Ch@rs");
         byte[] res = secMng.getPseudoRandomFunction().apply("abcde".getBytes());
 
         String expected;
@@ -53,14 +53,14 @@ public class SecretManagerTest {
 
     @Test
     public void getPrfNoPasswordHMAC() {
-        SecretManager secMng = new SecretManager(2, null);
+        SecretManager secMng = new SecretManager(FormatPreservingMethod.SHA2_HMAC_PRF, null);
         byte[] res = secMng.getPseudoRandomFunction().apply("something".getBytes());
         assertNotNull(res);
     }
 
     @Test
     public void getPrfNoPasswordAES() {
-        SecretManager secMng = new SecretManager(1, null);
+        SecretManager secMng = new SecretManager(FormatPreservingMethod.AES_CBC_PRF, null);
         // AES supports only multiples of 16-byte inputs
         byte[] input = new byte[16];
         new Random(123456).nextBytes(input);

@@ -15,6 +15,7 @@ package org.talend.dataquality.datamasking.functions;
 import java.util.List;
 import java.util.Random;
 
+import org.talend.dataquality.datamasking.FormatPreservingMethod;
 import org.talend.dataquality.datamasking.SecretManager;
 import org.talend.dataquality.datamasking.generic.patterns.GenerateFormatPreservingPatterns;
 import org.talend.dataquality.datamasking.generic.patterns.GenerateUniqueRandomPatterns;
@@ -52,7 +53,7 @@ public abstract class AbstractGenerateUniqueSsn extends Function<String> {
     @Override
     public void setSecretManager(SecretManager secMng) {
         this.secretMng = secMng;
-        if (secMng.getMethod() == SecretManager.BASIC) {
+        if (secMng.getMethod() == FormatPreservingMethod.BASIC) {
             secretMng.setKey(super.rnd.nextInt() % CryptoConstants.BASIC_KEY_BOUND + CryptoConstants.BASIC_KEY_OFFSET);
         } else {
             ssnPattern = new GenerateFormatPreservingPatterns(2, ssnPattern.getFields());
