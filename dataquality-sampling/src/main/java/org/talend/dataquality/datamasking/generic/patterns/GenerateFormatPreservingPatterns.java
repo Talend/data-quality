@@ -71,7 +71,6 @@ public class GenerateFormatPreservingPatterns extends AbstractGeneratePattern {
         int[] data = transform(strs);
 
         if (data.length == 0) {
-            System.out.println("LEngth == 0");
             return null;
         }
 
@@ -119,7 +118,7 @@ public class GenerateFormatPreservingPatterns extends AbstractGeneratePattern {
         }
 
         // Compute the rank of the string to encrypt
-        BigInteger rank = getNumberToMask(encodedFields);
+        BigInteger rank = getRank(encodedFields);
 
         // Convert the rank into a binary string
         String numString = rank.toString(radix);

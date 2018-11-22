@@ -46,20 +46,20 @@ public class GenerateUniqueRandomPatterns extends AbstractGeneratePattern {
     }
 
     /**
-     * @param listToMask, the numbers list for each field
-     * @return uniqueMaskedNumberList, the masked list
+     * @param listToMask, the list of fields expressed as numbers
+     * @return the list of masked fields expressed as numbers
      */
     private List<BigInteger> getUniqueRandomNumber(List<BigInteger> listToMask, SecretManager secretMng) {
 
-        // numberToMask is the number to masked created from listToMask
-        BigInteger numberToMask = getNumberToMask(listToMask);
+        // rank is the unique ordinal number corresponding to the listToMask
+        BigInteger rank = getRank(listToMask);
 
         BigInteger coprimeNumber = BigInteger.valueOf(findLargestCoprime(Math.abs(secretMng.getKey())));
 
-        // uniqueMaskedNumber is the number we masked
-        BigInteger uniqueMaskedNumber = (numberToMask.multiply(coprimeNumber)).mod(getLongestWidth());
+        // newRank is the permuted rank and identifies the masked list of fields
+        BigInteger newRank = (rank.multiply(coprimeNumber)).mod(getLongestWidth());
 
-        return getFieldsFromNumber(uniqueMaskedNumber);
+        return getFieldsFromNumber(newRank);
     }
 
     /**

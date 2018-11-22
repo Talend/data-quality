@@ -17,8 +17,6 @@ import org.junit.Test;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldEnum;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
-import org.talend.dataquality.datamasking.generic.patterns.AbstractGeneratePattern;
-import org.talend.dataquality.datamasking.generic.patterns.GenerateUniqueRandomPatterns;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -93,13 +91,13 @@ public class AbstractGeneratePatternTest {
 
     @Test
     public void getRankMaxValue() {
-        BigInteger rank = pattern.getNumberToMask(maxFields);
+        BigInteger rank = pattern.getRank(maxFields);
         assertEquals(pattern.getLongestWidth().add(BigInteger.valueOf(-1)), rank);
     }
 
     @Test
     public void getRankMinValue() {
-        BigInteger rank = pattern.getNumberToMask(minFields);
+        BigInteger rank = pattern.getRank(minFields);
         assertEquals(BigInteger.ZERO, rank);
     }
 

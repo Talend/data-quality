@@ -135,35 +135,34 @@ public abstract class AbstractGeneratePattern implements Serializable {
     }
 
     /**
-     * @param listToMask, the numbers list for each field
-     * @return numberToMask, the unique number representing the field list
+     * @param fieldList, the list of fields expressed as numbers
+     * @return the unique number representing the field list
      */
-    public BigInteger getNumberToMask(List<BigInteger> listToMask) {
-        // numberToMask is the number to masked created from listToMask
-        BigInteger numberToMask = BigInteger.ZERO;
+    public BigInteger getRank(List<BigInteger> fieldList) {
+        // rank is the unique number identifying the list of fields.
+        BigInteger rank = BigInteger.ZERO;
         for (int i = 0; i < fieldsNumber; i++)
-            numberToMask = numberToMask.add(listToMask.get(i).multiply(basedWidthsList.get(i)));
-
-        return numberToMask;
+            rank = rank.add(fieldList.get(i).multiply(basedWidthsList.get(i)));
+        return rank;
     }
 
     /**
-     * @param number A {@code BigInteger} corresponding to the unique number representing an element
+     * @param number A {@code BigInteger} corresponding to the unique number representing a value from the pattern
      * @return the corresponding numeric values of each field
      */
     public List<BigInteger> getFieldsFromNumber(BigInteger number) {
-        // uniqueMaskedNumberList is the unique list created from uniqueMaskedNumber
-        List<BigInteger> uniqueMaskedNumberList = new ArrayList<BigInteger>();
+        // fieldList is the unique list created from uniqueMaskedNumber
+        List<BigInteger> fieldList = new ArrayList<BigInteger>();
         BigInteger base = number;
         for (int i = 0; i < fieldsNumber; i++) {
             // baseRandomNumber is the quotient of the Euclidean division between uniqueMaskedNumber and
             // basedWidthsList.get(i)
             BigInteger baseRandomNumber = base.divide(basedWidthsList.get(i));
-            uniqueMaskedNumberList.add(baseRandomNumber);
+            fieldList.add(baseRandomNumber);
             // we reiterate with the remainder of the Euclidean division
             base = base.mod(basedWidthsList.get(i));
         }
-        return uniqueMaskedNumberList;
+        return fieldList;
     }
 
     /**
