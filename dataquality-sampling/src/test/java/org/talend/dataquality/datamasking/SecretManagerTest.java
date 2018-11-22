@@ -12,16 +12,42 @@
 // ============================================================================
 package org.talend.dataquality.datamasking;
 
+import com.idealista.fpe.component.functions.prf.PseudoRandomFunction;
 import org.apache.commons.codec.binary.Hex;
 import org.junit.Test;
+import org.talend.dataquality.datamasking.utils.crypto.AesPrf;
 import org.talend.dataquality.datamasking.utils.crypto.CryptoConstants;
+import org.talend.dataquality.datamasking.utils.crypto.HmacPrf;
 
 import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class SecretManagerTest {
+
+    @Test(expected = IllegalStateException.class)
+    public void getPRFWhenMethodIsNull() {
+        SecretManager secMng = new SecretManager();
+        secMng.getPseudoRandomFunction();
+    }
+
+    @Test
+    public void getPRFWithEachMethod() {
+        SecretManager secMng = new SecretManager(FormatPreservingMethod.BASIC, "Password");
+        PseudoRandomFunction prf = secMng.getPseudoRandomFunction();
+        assertNull("The method is basic but the PRF returned is not null ! ", prf);
+
+        secMng = new SecretManager(FormatPreservingMethod.AES_CBC_PRF, "Password");
+        prf = secMng.getPseudoRandomFunction();
+        assertTrue("The PRF is not of the correct type (AesPrf) !", prf instanceof AesPrf);
+
+        secMng = new SecretManager(FormatPreservingMethod.SHA2_HMAC_PRF, "Password");
+        prf = secMng.getPseudoRandomFunction();
+        assertTrue("The PRF is not of the correct type (HmacPrf) !", prf instanceof HmacPrf);
+    }
 
     @Test
     public void latinPasswordWithNumbers() {
