@@ -22,7 +22,6 @@ import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 public class SecretManagerTest {
@@ -33,14 +32,16 @@ public class SecretManagerTest {
         secMng.getPseudoRandomFunction();
     }
 
+    @Test(expected = IllegalStateException.class)
+    public void getPRFWhenMethodIsBasic() {
+        SecretManager secMng = new SecretManager(FormatPreservingMethod.BASIC, "Password");
+        secMng.getPseudoRandomFunction();
+    }
+
     @Test
     public void getPRFWithEachMethod() {
-        SecretManager secMng = new SecretManager(FormatPreservingMethod.BASIC, "Password");
+        SecretManager secMng = new SecretManager(FormatPreservingMethod.AES_CBC_PRF, "Password");
         PseudoRandomFunction prf = secMng.getPseudoRandomFunction();
-        assertNull("The method is basic but the PRF returned is not null ! ", prf);
-
-        secMng = new SecretManager(FormatPreservingMethod.AES_CBC_PRF, "Password");
-        prf = secMng.getPseudoRandomFunction();
         assertTrue("The PRF is not of the correct type (AesPrf) !", prf instanceof AesPrf);
 
         secMng = new SecretManager(FormatPreservingMethod.SHA2_HMAC_PRF, "Password");

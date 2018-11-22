@@ -1,19 +1,25 @@
 package org.talend.dataquality.datamasking.utils.crypto;
 
+/**
+ * This class contains the specifications for {@link HmacPrf} pseudo-random function.
+ *
+ * @author afournier
+ * @see HmacPrf
+ */
 public class HmacSha2CryptoSpec extends AbstractCryptoSpec {
 
     @Override
-    protected String cipherAlgo() {
+    public String getCipherAlgorithm() {
         return "HmacSHA256";
     }
 
     @Override
-    protected String keyAlgo() {
+    public String getKeyAlgorithm() {
         return "PBKDF2WithHmacSHA256";
     }
 
     @Override
-    protected int keyLength() {
+    public int getKeyLength() {
         return 32;
     }
 }

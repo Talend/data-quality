@@ -41,6 +41,7 @@ import java.util.Random;
  * @see AesPrf
  * @see HmacPrf
  * @see AbstractCryptoSpec
+ * @see CryptoFactory
  * @see GenerateFormatPreservingPatterns
  * @see GenerateUniqueRandomPatterns
  */
@@ -58,10 +59,19 @@ public class SecretManager {
      */
     private FormatPreservingMethod method;
 
+    /**
+     * This attribute contains all the specifications relative to the pseudo-random function.
+     */
     private AbstractCryptoSpec cryptoSpec;
 
     /**
-     * The keyed pseudo-random function used to build a Format-Preserving Encrypter
+     * Factory for constructing the {@link #pseudoRandomFunction} and {@link #cryptoSpec}
+     * according to the context given by the {@link #method}.
+     */
+    private CryptoFactory cryptoFactory;
+
+    /**
+     * The keyed pseudo-random function used to build a Format-Preserving Cipher
      */
     private PseudoRandomFunction pseudoRandomFunction;
 
@@ -71,18 +81,8 @@ public class SecretManager {
 
     public SecretManager(FormatPreservingMethod method, String password) {
         this.method = method;
-        switch (method) {
-        case BASIC:
-            break;
-        case AES_CBC_PRF:
-            cryptoSpec = new AesCbcCryptoSpec();
-            break;
-        case SHA2_HMAC_PRF:
-            cryptoSpec = new HmacSha2CryptoSpec();
-            break;
-        default:
-            break;
-        }
+        cryptoFactory = new CryptoFactory();
+        cryptoSpec = cryptoFactory.getPrfSpec(method);
         setPseudoRandomFunction(password);
     }
 
@@ -129,24 +129,12 @@ public class SecretManager {
     public PseudoRandomFunction getPseudoRandomFunction() {
         if (pseudoRandomFunction == null) {
 
-            if (method == null) {
-                throw new IllegalStateException("No pseudo random algorithm set for this secret manager.");
+            if (method == null || method == FormatPreservingMethod.BASIC) {
+                throw new IllegalStateException("This secret manager is not set to handle a pseudo-random function");
             }
 
-            switch (method) {
-            case BASIC:
-                break;
-            case AES_CBC_PRF:
-                SecretKey aesKey = generateRandomSecretKey(cryptoSpec.getKeyLength());
-                pseudoRandomFunction = new AesPrf(cryptoSpec, aesKey);
-                break;
-            case SHA2_HMAC_PRF:
-                SecretKey hmacKey = generateRandomSecretKey(cryptoSpec.getKeyLength());
-                pseudoRandomFunction = new HmacPrf(cryptoSpec, hmacKey);
-                break;
-            default:
-                break;
-            }
+            SecretKey secret = generateRandomSecretKey(cryptoSpec.getKeyLength());
+            pseudoRandomFunction = cryptoFactory.getPrf(cryptoSpec, secret);
         }
         return pseudoRandomFunction;
     }
@@ -169,11 +157,7 @@ public class SecretManager {
                 secret = generateSecretKeyFromPassword(password);
             }
 
-            if (method == FormatPreservingMethod.AES_CBC_PRF) {
-                pseudoRandomFunction = new AesPrf(cryptoSpec, secret);
-            } else if (method == FormatPreservingMethod.SHA2_HMAC_PRF) {
-                pseudoRandomFunction = new HmacPrf(cryptoSpec, secret);
-            }
+            pseudoRandomFunction = cryptoFactory.getPrf(cryptoSpec, secret);
         }
     }
 

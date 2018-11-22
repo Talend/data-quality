@@ -27,7 +27,7 @@ import java.security.NoSuchAlgorithmException;
  *
  * @author afournier
  * @see AesPrf
- * @see AbstractCryptoSpec
+ * @see HmacSha2CryptoSpec
  * @see org.talend.dataquality.datamasking.SecretManager
  */
 public class HmacPrf extends AbstractPrf {

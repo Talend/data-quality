@@ -1,19 +1,25 @@
 package org.talend.dataquality.datamasking.utils.crypto;
 
+/**
+ * This class contains the specifications for {@link AesPrf} pseudo-random function
+ *
+ * @author afournier
+ * @see AesPrf
+ */
 public class AesCbcCryptoSpec extends AbstractCryptoSpec {
 
     @Override
-    protected String cipherAlgo() {
+    public String getCipherAlgorithm() {
         return "AES/CBC/NoPadding";
     }
 
     @Override
-    protected String keyAlgo() {
+    public String getKeyAlgorithm() {
         return "AES";
     }
 
     @Override
-    protected int keyLength() {
+    public int getKeyLength() {
         String major1, major2, update;
         String[] javaVersionElements = System.getProperty("java.runtime.version").split("\\.|_|-b");
         major1 = javaVersionElements[0];
