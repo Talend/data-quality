@@ -25,6 +25,7 @@ import org.junit.Test;
 import org.talend.dataquality.semantic.classifier.ISubCategory;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.exception.DQSemanticRuntimeException;
+import org.talend.dataquality.semantic.validator.AbstractRegexSemanticValidator;
 import org.talend.dataquality.semantic.validator.ISemanticValidator;
 
 public class UserDefinedRegexValidatorTest {
@@ -40,7 +41,6 @@ public class UserDefinedRegexValidatorTest {
     @Test
     public void testIsValidSEDOL() {
         UserDefinedRegexValidator validator = new UserDefinedRegexValidator();
-        validator.setRe2jCompliant(false);
         validator.setPatternString("^(?<Sedol>[B-Db-dF-Hf-hJ-Nj-nP-Tp-tV-Xv-xYyZz\\d]{6}\\d)$");
         assertTrueDigits(validator);
         assertFalseDigits(validator);
@@ -105,12 +105,11 @@ public class UserDefinedRegexValidatorTest {
 
     @Test
     public void isInvalidRe2J() {
-        UserDefinedRegexValidator validator = new UserDefinedRegexValidator();
+        AbstractRegexSemanticValidator validator = new UserDefinedRE2JRegexValidator();
         validator.setPatternString("^(?!01000|99999)(0[1-9]\\d{3}|[1-9]\\d{4})$"); // regex of DE_POSTAL_CODE
         Assert.assertFalse(validator.isValid("12345"));
 
-        UserDefinedRegexValidator validatorJava = new UserDefinedRegexValidator();
-        validatorJava.setRe2jCompliant(false);
+        AbstractRegexSemanticValidator validatorJava = new UserDefinedRegexValidator();
         validatorJava.setPatternString("^(?!01000|99999)(0[1-9]\\d{3}|[1-9]\\d{4})$"); // regex of DE_POSTAL_CODE
         Assert.assertTrue(validatorJava.isValid("12345"));
     }
@@ -118,7 +117,6 @@ public class UserDefinedRegexValidatorTest {
     @Test
     public void testCaseInsensitive() {
         UserDefinedRegexValidator validator = new UserDefinedRegexValidator();
-        validator.setRe2jCompliant(false);
         validator.setPatternString("^(?<Sedol>[B-Db-dF-Hf-hJ-Nj-nP-Tp-tV-Xv-xYyZz\\d]{6}\\d)$");
         Assert.assertTrue(validator.isValid("B0YBKL9"));
         Assert.assertTrue(validator.isValid("b0yBKL9"));

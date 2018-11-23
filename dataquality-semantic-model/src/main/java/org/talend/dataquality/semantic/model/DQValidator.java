@@ -24,7 +24,7 @@ public class DQValidator implements Serializable {
 
     private Boolean caseInsensitive = true;
 
-    private Boolean re2jCompliant = true;
+    private boolean re2jCompliant = true;
 
     public String getPatternString() {
         return patternString;
@@ -50,11 +50,11 @@ public class DQValidator implements Serializable {
         this.caseInsensitive = caseInsensitive;
     }
 
-    public Boolean getRe2jCompliant() {
+    public boolean isRe2jCompliant() {
         return re2jCompliant;
     }
 
-    public void setRe2jCompliant(Boolean re2jCompliant) {
+    public void setRe2jCompliant(boolean re2jCompliant) {
         this.re2jCompliant = re2jCompliant;
     }
 

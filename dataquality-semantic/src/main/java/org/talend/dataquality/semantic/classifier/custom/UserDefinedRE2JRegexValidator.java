@@ -18,6 +18,9 @@ import org.slf4j.LoggerFactory;
 import org.talend.dataquality.semantic.exception.DQSemanticRuntimeException;
 import org.talend.dataquality.semantic.validator.AbstractRegexSemanticValidator;
 
+import com.google.re2j.Pattern;
+import com.google.re2j.PatternSyntaxException;
+
 /**
  * The regex validator can have a sub-validator defined in json file. Like : <br/>
  * <code>
@@ -28,15 +31,15 @@ import org.talend.dataquality.semantic.validator.AbstractRegexSemanticValidator;
  * Or set with setter {{@link #setSubValidatorClassName(String)}<br>
  * When the regex matches, then do another check with sub-validator if provided.
  */
-public class UserDefinedRegexValidator extends AbstractRegexSemanticValidator {
+public class UserDefinedRE2JRegexValidator extends AbstractRegexSemanticValidator {
 
     private static final long serialVersionUID = -7832927422566889796L;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserDefinedRegexValidator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserDefinedRE2JRegexValidator.class);
 
-    private java.util.regex.Pattern caseSensitivePattern;
+    private com.google.re2j.Pattern caseSensitiveRe2JPattern;
 
-    private java.util.regex.Pattern caseInsensitivePattern;
+    private com.google.re2j.Pattern caseInsensitiveRe2JPattern;
 
     @Override
     public void setPatternString(String patternString) {
@@ -45,11 +48,10 @@ public class UserDefinedRegexValidator extends AbstractRegexSemanticValidator {
         }
         this.patternString = patternString;
         try {
-            caseInsensitivePattern = caseInsensitive
-                    ? java.util.regex.Pattern.compile(patternString, java.util.regex.Pattern.CASE_INSENSITIVE)
-                    : java.util.regex.Pattern.compile(patternString);
-            caseSensitivePattern = java.util.regex.Pattern.compile(patternString);
-        } catch (IllegalArgumentException e) {
+            caseInsensitiveRe2JPattern = caseInsensitive ? Pattern.compile(patternString, Pattern.CASE_INSENSITIVE)
+                    : Pattern.compile(patternString);
+            caseSensitiveRe2JPattern = Pattern.compile(patternString);
+        } catch (IllegalArgumentException | PatternSyntaxException e) {
             LOGGER.error("Invalid regular expression: " + this.patternString, e);
         }
     }
@@ -67,11 +69,12 @@ public class UserDefinedRegexValidator extends AbstractRegexSemanticValidator {
         return true;
     }
 
-    public boolean checkValid(String str, boolean caseSensitive) {
-        if (str == null || caseSensitivePattern == null || caseInsensitivePattern == null)
+    private boolean checkValid(String str, boolean caseSensitive) {
+        if (str == null || caseSensitiveRe2JPattern == null || caseInsensitiveRe2JPattern == null)
             return false;
 
-        return (caseSensitive ? caseSensitivePattern.matcher(str.trim()).find()
-                : caseInsensitivePattern.matcher(str.trim()).find());
+        return (caseSensitive ? caseSensitiveRe2JPattern.matcher(str.trim()).find()
+                : caseInsensitiveRe2JPattern.matcher(str.trim()).find());
     }
+
 }
