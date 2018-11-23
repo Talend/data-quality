@@ -1,12 +1,23 @@
 package org.talend.dataquality.datamasking.utils.crypto;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * This class contains the specifications for {@link AesPrf} pseudo-random function
  *
  * @author afournier
  * @see AesPrf
  */
-public class AesCbcCryptoSpec extends AbstractCryptoSpec {
+public class AesCbcCryptoSpec implements AbstractCryptoSpec {
+
+    protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractCryptoSpec.class);
+
+    private int runtimeKeyLength;
+
+    public AesCbcCryptoSpec() {
+        runtimeKeyLength = computeKeyLength();
+    }
 
     @Override
     public String getCipherAlgorithm() {
@@ -20,6 +31,10 @@ public class AesCbcCryptoSpec extends AbstractCryptoSpec {
 
     @Override
     public int getKeyLength() {
+        return runtimeKeyLength;
+    }
+
+    private int computeKeyLength() {
         String major1, major2, update;
         String[] javaVersionElements = System.getProperty("java.runtime.version").split("\\.|_|-b");
         major1 = javaVersionElements[0];
@@ -37,8 +52,7 @@ public class AesCbcCryptoSpec extends AbstractCryptoSpec {
         } else {
             supportedLength = 16;
         }
-
-        LOGGER.info("FPE supported key length for current java version is " + supportedLength + " bytes");
+        LOGGER.info("FPE supported key length for current java version is " + runtimeKeyLength + " bytes");
 
         return supportedLength;
     }

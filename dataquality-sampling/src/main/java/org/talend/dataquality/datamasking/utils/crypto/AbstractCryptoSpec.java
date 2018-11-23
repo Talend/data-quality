@@ -1,8 +1,5 @@
 package org.talend.dataquality.datamasking.utils.crypto;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * Abstract class that contains the specifications of a {@link AbstractPrf}.
  * This specifications include :
@@ -17,28 +14,11 @@ import org.slf4j.LoggerFactory;
  * @see CryptoFactory
  * @see AbstractPrf
  */
-public abstract class AbstractCryptoSpec {
+public interface AbstractCryptoSpec {
 
-    protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractCryptoSpec.class);
+    String getCipherAlgorithm();
 
-    /**
-     * Algorithm used to encrypt data.
-     */
-    private final String cipherAlgorithm = getCipherAlgorithm();
+    String getKeyAlgorithm();
 
-    /**
-     * Algorithm used to generate the Key.
-     */
-    private final String keyAlgorithm = getKeyAlgorithm();
-
-    /**
-     * Length in bytes of the key used for FPE.
-     */
-    private final int keyLength = getKeyLength();
-
-    public abstract String getCipherAlgorithm();
-
-    public abstract String getKeyAlgorithm();
-
-    public abstract int getKeyLength();
+    int getKeyLength();
 }

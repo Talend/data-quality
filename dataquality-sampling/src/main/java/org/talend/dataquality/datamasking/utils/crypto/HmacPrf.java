@@ -17,8 +17,10 @@ import org.slf4j.LoggerFactory;
 
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
+import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 
 /**
  *
@@ -46,8 +48,17 @@ public class HmacPrf extends AbstractPrf {
         try {
             hmac = Mac.getInstance(cryptoSpec.getCipherAlgorithm());
             hmac.init(secret);
-        } catch (NoSuchAlgorithmException | InvalidKeyException e) {
-            LOGGER.error("Invalid crypto constant have been set for HMAC, see value of HMAC_ALGORITHM. ", e);
+        } catch (NoSuchAlgorithmException e) {
+            LOGGER.error("Invalid algorithm name defined in the specifications : " + cryptoSpec.getCipherAlgorithm(), e);
+        } catch (InvalidKeyException e) {
+            try {
+                LOGGER.error("Invalid specifications for the cipher ! " + "Wrong key : "
+                        + new String(secret.getEncoded(), secret.getFormat()) + " or wrong key algorithm :"
+                        + cryptoSpec.getKeyAlgorithm(), e);
+            } catch (UnsupportedEncodingException e1) {
+                // If secret.getFormat() outputs a wrong format, I can't do nothing more for the guys at javax.crypto.
+                e1.printStackTrace();
+            }
         }
     }
 

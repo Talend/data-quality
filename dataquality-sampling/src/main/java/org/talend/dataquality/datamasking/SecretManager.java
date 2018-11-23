@@ -189,6 +189,7 @@ public class SecretManager {
 
         try {
             byte[] salt = new byte[cryptoSpec.getKeyLength()];
+            // The salt is not secret, the use of Random is not critical.
             new Random(123456789 + password.length()).nextBytes(salt);
             SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
             KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, cryptoSpec.getKeyLength() << 3);

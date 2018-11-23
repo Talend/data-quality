@@ -6,7 +6,7 @@ package org.talend.dataquality.datamasking.utils.crypto;
  * @author afournier
  * @see HmacPrf
  */
-public class HmacSha2CryptoSpec extends AbstractCryptoSpec {
+public class HmacSha2CryptoSpec implements AbstractCryptoSpec {
 
     @Override
     public String getCipherAlgorithm() {

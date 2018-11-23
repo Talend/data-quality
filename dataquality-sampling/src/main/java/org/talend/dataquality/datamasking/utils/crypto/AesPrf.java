@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -50,11 +51,19 @@ public class AesPrf extends AbstractPrf {
     protected void init(SecretKey secret) {
         try {
             cipher = Cipher.getInstance(cryptoSpec.getCipherAlgorithm());
-            SecretKeySpec spec = new SecretKeySpec(secret.getEncoded(), cryptoSpec.getKeyAlgorithm());
+            SecretKeySpec spec = new SecretKeySpec(secret.getEncoded(), cryptoSpec.getKeyAlgorithm());//cryptoSpec.getKeyAlgorithm());
             cipher.init(Cipher.ENCRYPT_MODE, spec, new IvParameterSpec(initializationVector));
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException e) {
-            LOGGER.error("Invalid crypto constants have been set for AES, see values of AES_KEY_ALGORITHM and AES_ALGORITHM. ",
-                    e);
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
+            LOGGER.error("Invalid algorithm name defined in the specifications : " + cryptoSpec.getCipherAlgorithm(), e);
+        } catch (InvalidKeyException | InvalidAlgorithmParameterException e) {
+            try {
+                LOGGER.error("Invalid specifications for the cipher ! " + "Wrong key : "
+                        + new String(secret.getEncoded(), secret.getFormat()) + " or wrong key algorithm :"
+                        + cryptoSpec.getKeyAlgorithm() + " or wrong Initial Vector" + Arrays.toString(initializationVector), e);
+            } catch (UnsupportedEncodingException e1) {
+                // If secret.getFormat() outputs a wrong format, I can't do nothing more for the guys at javax.crypto.
+                e1.printStackTrace();
+            }
         }
     }
 
