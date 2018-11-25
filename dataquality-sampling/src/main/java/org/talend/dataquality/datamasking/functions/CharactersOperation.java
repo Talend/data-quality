@@ -125,7 +125,7 @@ public abstract class CharactersOperation<T> extends Function<T> {
     }
 
     private String replaceConsistent(String substringToReplace, List<Integer> replacedString) {
-        StringBuilder stringBuilder = new StringBuilder("");
+        StringBuilder stringBuilder = new StringBuilder();
         long codePointCounts = substringToReplace.codePoints().count();
         counter = 0;
         for (int i = 0; i < codePointCounts; i++) {

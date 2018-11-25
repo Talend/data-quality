@@ -67,7 +67,7 @@ public class KeepLastDigitsAndReplaceOtherDigits extends Function<String> {
     }
 
     private String findDigits(StringBuilder sb) {
-        StringBuilder stringBuilder = new StringBuilder("");
+        StringBuilder stringBuilder = new StringBuilder();
         int totalDigit = 0;
         for (int i = sb.length() - 1; i >= 0; i--) {
             if (Character.isDigit(sb.charAt(i))) {
