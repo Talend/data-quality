@@ -117,9 +117,6 @@ public class GenerateFormatPreservingPatterns extends AbstractGeneratePattern {
      * Transform the {@code String} element into an array of {@code int}s for FF1 encryption.
      */
     public int[] transform(List<String> strs) {
-
-        int[] data = new int[numeralMaxRank.length];
-
         // Convert the fields from String to BigInteger.
         List<BigInteger> encodedFields = encodeFields(strs);
 
@@ -132,6 +129,8 @@ public class GenerateFormatPreservingPatterns extends AbstractGeneratePattern {
 
         // Convert the rank into a binary string
         String numString = rank.toString(radix);
+
+        int[] data = new int[numeralMaxRank.length];
 
         // Pad with 0s if necessary.
         int paddingLength = numeralMaxRank.length - numString.length();

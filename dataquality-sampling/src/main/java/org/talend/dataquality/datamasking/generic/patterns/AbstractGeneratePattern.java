@@ -108,7 +108,7 @@ public abstract class AbstractGeneratePattern implements Serializable {
         }
 
         // decode the fields
-        StringBuilder decoded = new StringBuilder("");
+        StringBuilder decoded = new StringBuilder();
         for (int i = 0; i < fieldsNumber; i++) {
             decoded.append(fields.get(i).decode(encodedFieldList.get(i)));
         }
