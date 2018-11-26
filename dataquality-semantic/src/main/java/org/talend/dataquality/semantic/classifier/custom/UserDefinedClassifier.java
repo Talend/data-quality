@@ -17,14 +17,13 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.classifier.ISubCategory;
 import org.talend.dataquality.semantic.classifier.ISubCategoryClassifier;
 import org.talend.dataquality.semantic.classifier.impl.AbstractSubCategoryClassifier;
 import org.talend.dataquality.semantic.filter.ISemanticFilter;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.model.MainCategory;
-import org.talend.dataquality.semantic.validator.ISemanticValidator;
+import org.talend.dataquality.semantic.validator.AbstractRegexSemanticValidator;
 
 /**
  * created by talend on 2015-07-28 Detailled comment.
@@ -188,7 +187,7 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
         return filter != null && !filter.isQualified(str);
     }
 
-    private boolean validValidator(String str, ISemanticValidator validator, boolean caseSensitive) {
+    private boolean validValidator(String str, AbstractRegexSemanticValidator validator, boolean caseSensitive) {
         return validator != null && validator.isValid(str, caseSensitive);
     }
 

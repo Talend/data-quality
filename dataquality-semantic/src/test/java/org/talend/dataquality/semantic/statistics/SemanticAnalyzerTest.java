@@ -164,7 +164,7 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
     }
 
     @Test
-    public void testTagadaWithCustomRegex() {
+    public void testTagadaWithCustomRegexRe2J() {
         CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder();
         DQValidator dqValidator = new DQValidator();
         dqValidator.setPatternString("^(true|false)$");
@@ -185,7 +185,31 @@ public class SemanticAnalyzerTest extends CategoryRegistryManagerAbstract {
                 SemanticCategoryEnum.FIRST_NAME.name(), "", "", "the_name" });
 
         testSemanticAnalyzer(TEST_RECORDS_TAGADA, null, EXPECTED_CATEGORIES);
+    }
 
+    @Test
+    public void testTagadaWithCustomRegexJava() {
+        CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder();
+        DQValidator dqValidator = new DQValidator();
+        dqValidator.setRe2jCompliant(false);
+        dqValidator.setPatternString("^(true|false)$");
+        DQRegEx dqRegEx = new DQRegEx();
+        dqRegEx.setMainCategory(MainCategory.Alpha);
+        dqRegEx.setValidator(dqValidator);
+        DQCategory dqCat = new DQCategory("the_id");
+        dqCat.setName("the_name");
+        dqCat.setLabel("the_label");
+        dqCat.setDescription("the_description");
+        dqCat.setRegEx(dqRegEx);
+        dqCat.setType(CategoryType.REGEX);
+        dqCat.setCompleteness(Boolean.TRUE);
+        dqCat.setModified(Boolean.TRUE);
+        holder.updateCategory(dqCat);
+
+        final List<String> EXPECTED_CATEGORIES = Arrays.asList(new String[] { "", SemanticCategoryEnum.LAST_NAME.name(),
+                SemanticCategoryEnum.FIRST_NAME.name(), "", "", "the_name" });
+
+        testSemanticAnalyzer(TEST_RECORDS_TAGADA, null, EXPECTED_CATEGORIES);
     }
 
     @Test
