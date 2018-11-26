@@ -56,7 +56,7 @@ public class SecretManagerTest {
 
         String expected;
         if (secMng.getCryptoSpec().getKeyLength() == 32) {
-            expected = "c5cd0a933b2f329874e885c3614524042338648757a44a4bd71b3a15084bebd3";
+            expected = "6a4fb8b769575e2f30658e56d1c632e076c8e7e325d9c7939eabdc9d455ddb43";
         } else {
             expected = "7afdf81ff65d04dfa071e76ba6abdf21e7f5e04d69d614ed24e77a4fee326ebd";
         }
@@ -70,7 +70,7 @@ public class SecretManagerTest {
 
         String expected;
         if (secMng.getCryptoSpec().getKeyLength() == 32) {
-            expected = "51e22ba9968590ed4ef65837176b8e45a01a61a289c034a9041dc4f38f731b62";
+            expected = "8b40b26aac1b24d20927872342f5d75002b942817779f2b2b7de5ffa8813d15f";
         } else {
             expected = "4a1d0087927696b419a94418478465ca5f70a3c2c588028ad7c599adc0707e48";
         }
@@ -93,5 +93,4 @@ public class SecretManagerTest {
         byte[] res = secMng.getPseudoRandomFunction().apply(input);
         assertNotNull(res);
     }
-
 }

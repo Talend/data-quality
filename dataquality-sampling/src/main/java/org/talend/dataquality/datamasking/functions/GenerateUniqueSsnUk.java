@@ -59,14 +59,6 @@ public class GenerateUniqueSsnUk extends AbstractGenerateUniqueSsn {
     }
 
     @Override
-    protected StringBuilder doValidGenerateMaskedField(String str) {
-        // read the input strWithoutSpaces
-        List<String> strs = splitFields(str);
-
-        return ssnPattern.generateUniqueString(strs, secretMng);
-    }
-
-    @Override
     protected List<String> splitFields(String str) {
         List<String> strs = new ArrayList<String>();
         strs.add(str.substring(0, 2));

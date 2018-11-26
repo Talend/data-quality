@@ -34,23 +34,8 @@ public class GenerateUniqueSsnFr extends AbstractGenerateUniqueSsn {
     private static final int MOD97 = 97; // $NON-NLS-1$
 
     @Override
-    protected StringBuilder doValidGenerateMaskedField(String str) {
-        List<String> strs = splitFields(str);
-
-        StringBuilder result = ssnPattern.generateUniqueString(strs, secretMng);
-        if (result == null) {
-            return null;
-        }
-
-        // add the security key specified for french SSN
-        String key = computeFrenchKey(result.toString());
-
-        return result.append(key);
-    }
-
-    private String computeFrenchKey(String string) {
-
-        StringBuilder keyResult = new StringBuilder(string);
+    protected String computeKey(StringBuilder str) {
+        StringBuilder keyResult = new StringBuilder(str);
 
         if (keyResult.charAt(5) == '2') {
             keyResult.setCharAt(5, '1');

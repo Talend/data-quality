@@ -83,11 +83,20 @@ public abstract class AbstractGenerateUniqueSsn extends Function<String> {
         }
     }
 
+    protected StringBuilder doValidGenerateMaskedField(String str) {
+        // read the input str
+        List<String> strs = splitFields(str);
+
+        StringBuilder result = ssnPattern.generateUniqueString(strs, secretMng);
+        if (result == null) {
+            return null;
+        }
+
+        return result.append(computeKey(result));
+    }
+
     /**
      * Get result by input data
-     * 
-     * @param str
-     * @return
      */
     private String getResult(String str) {
         if (keepInvalidPattern) {
@@ -109,7 +118,13 @@ public abstract class AbstractGenerateUniqueSsn extends Function<String> {
      */
     protected abstract List<String> splitFields(String str);
 
-    protected abstract StringBuilder doValidGenerateMaskedField(String str);
+    /**
+     * A control key is not necessarily put at the end of SSNs like in the US, the UK, Japan or Germany.
+     * This method must be overridden if a SSN has a control key like for France, China and India.
+     */
+    protected String computeKey(StringBuilder str) {
+        return "";
+    }
 
     private boolean isValidWithoutFormat(String str) {
         boolean isValid;
@@ -124,13 +139,12 @@ public abstract class AbstractGenerateUniqueSsn extends Function<String> {
     }
 
     /**
-     * Verifies the validity of an ssn string.
-     * @return true if valid, false otherwise.
+     * Verifies the validity of a ssn string.
      */
     protected boolean isValid(String str) {
         boolean isValid;
 
-        if (str == null) {
+        if (str == null || str.isEmpty()) {
             isValid = false;
         } else {
             String strWithoutSpaces = super.removeFormatInString(str);

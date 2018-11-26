@@ -50,6 +50,12 @@ public class SecretManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(SecretManager.class);
 
     /**
+     * Factory for constructing the {@link #pseudoRandomFunction} and {@link #cryptoSpec}
+     * according to the context given by the {@link #method}.
+     */
+    private static final CryptoFactory cryptoFactory = new CryptoFactory();
+
+    /**
      * The Key to use with Talend internal method.
      */
     private Integer key;
@@ -65,12 +71,6 @@ public class SecretManager {
     private AbstractCryptoSpec cryptoSpec;
 
     /**
-     * Factory for constructing the {@link #pseudoRandomFunction} and {@link #cryptoSpec}
-     * according to the context given by the {@link #method}.
-     */
-    private CryptoFactory cryptoFactory;
-
-    /**
      * The keyed pseudo-random function used to build a Format-Preserving Cipher
      */
     private PseudoRandomFunction pseudoRandomFunction;
@@ -81,9 +81,37 @@ public class SecretManager {
 
     public SecretManager(FormatPreservingMethod method, String password) {
         this.method = method;
-        cryptoFactory = new CryptoFactory();
         cryptoSpec = cryptoFactory.getPrfSpec(method);
         setPseudoRandomFunction(password);
+    }
+
+    /**
+     * This method sets the pseudo-random function of the current instance of {@link SecretManager}.
+     * If the password is null / not set, it will generate a cryptographically secure random key and create
+     * the PRF instance corresponding to the method value.
+     * If the method is set to {@link FormatPreservingMethod#BASIC}, then no PRF is instantiated.
+     *
+     * @param password the password used to generate the pseudo-random function's key
+     */
+    public void setPseudoRandomFunction(String password) {
+        if (method != FormatPreservingMethod.BASIC) {
+
+            SecretKey secret;
+            if (password == null || "".equals(password)) {
+                secret = generateRandomSecretKey(cryptoSpec.getKeyLength());
+            } else {
+                secret = generateSecretKeyFromPassword(password);
+            }
+
+            pseudoRandomFunction = cryptoFactory.getPrf(cryptoSpec, secret);
+        }
+    }
+
+    /**
+     * setter for the {@link FormatPreservingMethod#BASIC} method key.
+     */
+    public void setKey(int newKey) {
+        this.key = newKey;
     }
 
     /**
@@ -111,20 +139,13 @@ public class SecretManager {
     }
 
     /**
-     * setter for the {@link FormatPreservingMethod#BASIC} method key.
-     */
-    public void setKey(int newKey) {
-        this.key = newKey;
-    }
-
-    /**
      * This method returns the pseudo-random function of the current instance of {@code SecretManager}.
-     * If the pseudo-random function is null, create a new one with a random key.
+     * If the pseudo-random function is null, create a new one with a cryptographically secure random key.
      * <br>
      * If the method has not been set, it should return an {@code IllegalStateException}
      * because this is not a behavior we want.
      *
-     * @return the current pseudo-random function of this {@code SecretManager}.
+     * @return the current pseudo-random function of this {@link SecretManager}.
      */
     public PseudoRandomFunction getPseudoRandomFunction() {
         if (pseudoRandomFunction == null) {
@@ -140,30 +161,8 @@ public class SecretManager {
     }
 
     /**
-     * This method sets the pseudo-random function of the current instance of {@code SecretManager}.
-     * If the password is null / not set, it will generate a completely random key and create
-     * the PRF instance corresponding to the method value.
-     * If the method is set to {@link FormatPreservingMethod#BASIC}, then no PRF is instantiated.
-     *
-     * @param password the password
-     */
-    public void setPseudoRandomFunction(String password) {
-        if (method != FormatPreservingMethod.BASIC) {
-
-            SecretKey secret;
-            if (password == null || "".equals(password)) {
-                secret = generateRandomSecretKey(cryptoSpec.getKeyLength());
-            } else {
-                secret = generateSecretKeyFromPassword(password);
-            }
-
-            pseudoRandomFunction = cryptoFactory.getPrf(cryptoSpec, secret);
-        }
-    }
-
-    /**
      * This method generates a key in an array of bytes of length {@code length}.
-     * The array of bytes is randomly filled using a {@code SecureRandom} object.
+     * The array of bytes is randomly filled using a {@code SecureRandom} object to ensure cryptographic security.
      *
      * @param length the number of bytes of the key.
      * @return a randomly generated key.
@@ -180,7 +179,14 @@ public class SecretManager {
      * <a href="https://docs.oracle.com/javase/7/docs/api/javax/crypto/package-summary.html">javax.crypto</a>.
      * It is basically a hashing algorithm slow by design, in order to increase the time
      * required for an attacker to try a lot of passwords in a bruteforce attack.
-     *
+     * <br>
+     *     About the salt :
+     *     <ul>
+     *         <li>The salt is not secret, the use of Random is not critical.</li>
+     *         <li>The salt is important to avoid rainbow table attacks.</li>
+     *         <li>The salt should be generated with SecureRandom() in case the passwords are stored.</li>
+     *         <li>In that case the salt should be stored in plaintext next to the password and a unique user identifier.</li>
+     *     </ul>
      * @param password a password given as a {@code String}.
      * @return a {@code SecretKey} securely generated.
      */
@@ -189,8 +195,7 @@ public class SecretManager {
 
         try {
             byte[] salt = new byte[cryptoSpec.getKeyLength()];
-            // The salt is not secret, the use of Random is not critical.
-            new Random(123456789 + password.length()).nextBytes(salt);
+            new Random(password.hashCode()).nextBytes(salt);
             SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
             KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, cryptoSpec.getKeyLength() << 3);
             secret = factory.generateSecret(spec);

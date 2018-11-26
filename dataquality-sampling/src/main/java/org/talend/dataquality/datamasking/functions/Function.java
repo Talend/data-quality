@@ -167,20 +167,14 @@ public abstract class Function<T> implements Serializable {
     }
 
     /**
-     * 
      * Judge whether current function need to check parameter as a path
-     * 
-     * @return
      */
     protected boolean isNeedCheckPath() {
         return false;
     }
 
     /**
-     * 
      * Judge whether the parameter can be both file and value
-     * 
-     * @return
      */
     protected boolean isBothValidForFileOrNot() {
         return false;

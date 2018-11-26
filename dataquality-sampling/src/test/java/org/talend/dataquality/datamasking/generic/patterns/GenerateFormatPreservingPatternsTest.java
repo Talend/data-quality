@@ -85,9 +85,9 @@ public class GenerateFormatPreservingPatternsTest {
 
         String expected;
         if (AESSecMng.getCryptoSpec().getKeyLength() == 32) {
-            expected = "SQG1920";
+            expected = "OKI0208";
         } else {
-            expected = "SSF0112";
+            expected = "SKI1816";
         }
         assertEquals(expected, result.toString());
     }
@@ -98,7 +98,7 @@ public class GenerateFormatPreservingPatternsTest {
 
         String expected;
         if (secretMng.getCryptoSpec().getKeyLength() == 32) {
-            expected = "USF3608";
+            expected = "OKI1514";
         } else {
             expected = "OSF4017";
         }

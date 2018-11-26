@@ -49,30 +49,14 @@ public class GenerateUniqueSsnChn extends AbstractGenerateUniqueSsn {
     private static final List<String> keyString = Collections
             .unmodifiableList(Arrays.asList("1", "0", "X", "9", "8", "7", "6", "5", "4", "3", "2"));
 
-    private String computeChineseKey(String ssnNumber) {
+    @Override
+    protected String computeKey(StringBuilder str) {
         int key = 0;
         for (int i = 0; i < 17; i++) {
-            key += Character.getNumericValue(ssnNumber.charAt(i)) * keyWeight.get(i);
+            key += Character.getNumericValue(str.charAt(i)) * keyWeight.get(i);
         }
         key = key % KEYMOD;
         return keyString.get(key);
-    }
-
-    @Override
-    protected StringBuilder doValidGenerateMaskedField(String str) {
-        // read the input strWithoutSpaces
-        List<String> strs = splitFields(str);
-
-        StringBuilder result = ssnPattern.generateUniqueString(strs, secretMng);
-        if (result == null) {
-            return null;
-        }
-
-        // Add the security key specified for Chinese SSN
-        String controlKey = computeChineseKey(result.toString());
-        result.append(controlKey);
-
-        return result;
     }
 
     @Override

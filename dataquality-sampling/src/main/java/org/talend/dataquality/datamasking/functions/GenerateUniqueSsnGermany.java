@@ -39,21 +39,6 @@ public class GenerateUniqueSsnGermany extends AbstractGenerateUniqueSsn {
     }
 
     @Override
-    protected StringBuilder doValidGenerateMaskedField(String str) {
-        // read the input str
-        List<String> strs = splitFields(str);
-
-        // TODO : Is this check really useful ? It is not done on all GenerateUniqueSsnXX classes
-        if (ssnPattern == null) {
-            List<AbstractField> fields = createFieldsListFromPattern();
-            ssnPattern = new GenerateUniqueRandomPatterns(fields);
-            setSecretManager(secretMng);
-        }
-
-        return ssnPattern.generateUniqueString(strs, secretMng);
-    }
-
-    @Override
     protected List<String> splitFields(String str) {
         List<String> strs = new ArrayList<String>();
         strs.add(str.substring(0, 11));
