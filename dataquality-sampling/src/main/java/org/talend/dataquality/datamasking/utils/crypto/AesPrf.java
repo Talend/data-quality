@@ -51,7 +51,7 @@ public class AesPrf extends AbstractPrf {
     protected void init(SecretKey secret) {
         try {
             cipher = Cipher.getInstance(cryptoSpec.getCipherAlgorithm());
-            SecretKeySpec spec = new SecretKeySpec(secret.getEncoded(), cryptoSpec.getKeyAlgorithm());//cryptoSpec.getKeyAlgorithm());
+            SecretKeySpec spec = new SecretKeySpec(secret.getEncoded(), cryptoSpec.getKeyAlgorithm());
             cipher.init(Cipher.ENCRYPT_MODE, spec, new IvParameterSpec(initializationVector));
         } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
             LOGGER.error("Invalid algorithm name defined in the specifications : " + cryptoSpec.getCipherAlgorithm(), e);
@@ -61,8 +61,7 @@ public class AesPrf extends AbstractPrf {
                         + new String(secret.getEncoded(), secret.getFormat()) + " or wrong key algorithm :"
                         + cryptoSpec.getKeyAlgorithm() + " or wrong Initial Vector" + Arrays.toString(initializationVector), e);
             } catch (UnsupportedEncodingException e1) {
-                // If secret.getFormat() outputs a wrong format, I can't do nothing more for the guys at javax.crypto.
-                e1.printStackTrace();
+                LOGGER.error("The secret has a format unsupported by java.String : " + secret.getFormat(), e1);
             }
         }
     }

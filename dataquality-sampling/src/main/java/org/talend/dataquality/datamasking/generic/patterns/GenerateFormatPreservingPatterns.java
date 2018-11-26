@@ -32,7 +32,7 @@ public class GenerateFormatPreservingPatterns extends AbstractGeneratePattern {
     /**
      * The cipher used to encrypt data.
      * It is taken from <a href="https://github.com/idealista/format-preserving-encryption-java">
-     * idealista's library</a>
+     * idealista library</a>
      * and corresponds to the <a href="https://nvlpubs.nist.gov/nistpubs/specialpublications/nist.sp.800-38g.pdf">
      * NIST-validated FF1 algorithm.</a>.
      *
@@ -42,7 +42,7 @@ public class GenerateFormatPreservingPatterns extends AbstractGeneratePattern {
     private static Cipher cipher = new com.idealista.fpe.algorithm.ff1.Cipher();
 
     /**
-     * The radix of the numeral representations of the patterns to encrypt
+     * The radix of the numeral representations of patterns to encrypt
      */
     private int radix;
 
@@ -66,6 +66,17 @@ public class GenerateFormatPreservingPatterns extends AbstractGeneratePattern {
         }
     }
 
+    /**
+     * This method generates a unique pattern using FF1 encryption.
+     * <br>
+     * If the encrypted result is not a valid pattern, it is re-encrypted until the output is a valid pattern.
+     * This method is called cycle-walking and ensures that the output is valid and unique for the original input.
+     * <br>
+     * However this method can be slow if there are a lot of invalid values in the domain used ({@code [0, radix^numeralRank.length]}).
+     *
+     * @param strs the string fields to encode
+     * @param secretMng, the SecretManager instance providing the secrets to generate a unique string
+     */
     @Override
     public StringBuilder generateUniquePattern(List<String> strs, SecretManager secretMng) {
         int[] data = transform(strs);
@@ -79,7 +90,6 @@ public class GenerateFormatPreservingPatterns extends AbstractGeneratePattern {
 
         int[] result = cipher.encrypt(data, radix, tweak, prf);
 
-        // If the result is out of bounds, re-encrypt the result. This method is called cycle-walking.
         while (!isValid(result)) {
             result = cipher.encrypt(result, radix, tweak, prf);
         }

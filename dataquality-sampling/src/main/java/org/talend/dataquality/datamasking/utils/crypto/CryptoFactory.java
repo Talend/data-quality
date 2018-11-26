@@ -19,8 +19,6 @@ public class CryptoFactory {
     /**
      * Returns the correct instance of {@link AbstractCryptoSpec}
      * according to the context given by the {@link FormatPreservingMethod}.
-     * @param method
-     * @return
      */
     public AbstractCryptoSpec getPrfSpec(FormatPreservingMethod method) {
         AbstractCryptoSpec cryptoSpec = null;

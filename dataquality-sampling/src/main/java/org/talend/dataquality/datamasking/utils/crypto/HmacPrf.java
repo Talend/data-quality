@@ -24,7 +24,7 @@ import java.util.Arrays;
 
 /**
  *
- * This class is a pseduo-random function used in FF1 encryption.
+ * This class is a pseudo-random function used in FF1 encryption.
  * It relies on the HMAC algorithm combined with SHA-2 hashing function.
  *
  * @author afournier
@@ -56,8 +56,7 @@ public class HmacPrf extends AbstractPrf {
                         + new String(secret.getEncoded(), secret.getFormat()) + " or wrong key algorithm :"
                         + cryptoSpec.getKeyAlgorithm(), e);
             } catch (UnsupportedEncodingException e1) {
-                // If secret.getFormat() outputs a wrong format, I can't do nothing more for the guys at javax.crypto.
-                e1.printStackTrace();
+                LOGGER.error("The secret has a format unsupported by java.String : " + secret.getFormat(), e1);
             }
         }
     }

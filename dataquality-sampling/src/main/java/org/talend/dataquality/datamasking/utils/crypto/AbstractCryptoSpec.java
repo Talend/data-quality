@@ -1,7 +1,7 @@
 package org.talend.dataquality.datamasking.utils.crypto;
 
 /**
- * Abstract class that contains the specifications of a {@link AbstractPrf}.
+ * Abstract class that contains the specifications of an {@link AbstractPrf} instance.
  * This specifications include :
  * <br>
  *     <ul><
