@@ -42,7 +42,7 @@ public abstract class AbstractRegexSemanticValidator implements ISemanticValidat
      */
     private String subValidatorClassName = "";
 
-    protected ISemanticSubValidator subValidator;
+    private ISemanticSubValidator subValidator;
 
     protected boolean isSetSubValidator = false;
 

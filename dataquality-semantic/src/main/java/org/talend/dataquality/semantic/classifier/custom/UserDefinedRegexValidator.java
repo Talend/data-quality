@@ -12,6 +12,8 @@
 // ============================================================================
 package org.talend.dataquality.semantic.classifier.custom;
 
+import java.util.regex.Pattern;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,9 +36,9 @@ public class UserDefinedRegexValidator extends AbstractRegexSemanticValidator {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserDefinedRegexValidator.class);
 
-    private java.util.regex.Pattern caseSensitivePattern;
+    private Pattern caseSensitivePattern;
 
-    private java.util.regex.Pattern caseInsensitivePattern;
+    private Pattern caseInsensitivePattern;
 
     @Override
     public void setPatternString(String patternString) {
@@ -45,10 +47,9 @@ public class UserDefinedRegexValidator extends AbstractRegexSemanticValidator {
         }
         this.patternString = patternString;
         try {
-            caseInsensitivePattern = caseInsensitive
-                    ? java.util.regex.Pattern.compile(patternString, java.util.regex.Pattern.CASE_INSENSITIVE)
-                    : java.util.regex.Pattern.compile(patternString);
-            caseSensitivePattern = java.util.regex.Pattern.compile(patternString);
+            caseInsensitivePattern = caseInsensitive ? Pattern.compile(patternString, Pattern.CASE_INSENSITIVE)
+                    : Pattern.compile(patternString);
+            caseSensitivePattern = Pattern.compile(patternString);
         } catch (IllegalArgumentException e) {
             LOGGER.error("Invalid regular expression: " + this.patternString, e);
         }

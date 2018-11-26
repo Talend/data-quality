@@ -37,9 +37,9 @@ public class UserDefinedRE2JRegexValidator extends AbstractRegexSemanticValidato
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserDefinedRE2JRegexValidator.class);
 
-    private com.google.re2j.Pattern caseSensitiveRe2JPattern;
+    private Pattern caseSensitiveRe2JPattern;
 
-    private com.google.re2j.Pattern caseInsensitiveRe2JPattern;
+    private Pattern caseInsensitiveRe2JPattern;
 
     @Override
     public void setPatternString(String patternString) {
