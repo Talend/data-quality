@@ -285,7 +285,7 @@
       "filter": null,
       "validator": {
         "re2jCompliant" : true,
-        "patternString": "^(?:mailto)\\:([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}(,)?)*((?:\\?)((subject|to|body|cc)=(([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4})|([\\d\\w\\.\\/\\%\\+\\-\\=\\&\\?\\:\\\"\\'\\,\\|\\~\\;#\\\\])*)+(\\&)?)*)*$",
+        "patternString": "^(?:mailto)\\:((\\p{L}|\\p{N}|[\\._%\\-'])+@(\\p{L}|\\p{N}|[.%-])+(,)?)*((?:\\?)((subject|to|body|cc|blat)=(((\\p{L}|\\p{N}|[\\._%\\-'])+@(\\p{L}|\\p{N}|[.%-])+)|([\\d\\w\\.\\/\\%\\+\\-\\=\\&\\?\\:\\\"\\'\\,\\|\\~\\;#\\\\]|[\\p{L}])*)+(\\&)?)*)*$",
         "subValidatorClassName": null
       }
     },
@@ -415,7 +415,7 @@
       "filter": null,
       "validator": {
         "re2jCompliant" : true,
-        "patternString": "^(?:file)\\:(?:\\/){2,3}((?:[a-zA-Z0-9\\-\\._]+(?:[a-zA-Z0-9\\-\\.\\:\\|_]+)+)|localhost)\\/([a-zA-Z0-9\\-\\.\\/\\+\\&\\%\\$_\\|\\:]*)?$",
+        "patternString": "^(?:file)\\:(?:\\/){0,5}((?:([\\p{L}|\\p{N}]|[\\-\\._])+(?:([\\p{L}|\\p{N}]|[\\-\\.\\:\\|_])+)+)|localhost)\\/(([\\p{L}|\\p{N}]|[\\-\\.\\/\\+\\&\\%\\$_\\|\\:])*)?$",
         "subValidatorClassName": null
       }
     },
@@ -454,7 +454,7 @@
       "filter": null,
       "validator": {
         "re2jCompliant" : true,
-        "patternString": "^(?:hdfs)\\:\\/\\/((?:[a-zA-Z0-9\\-\\._]+(?:\\.[a-zA-Z0-9\\-\\._]+)+)|localhost)\\/([a-zA-Z0-9\\-\\.\\/\\+\\&\\%\\$_\\\\]*)?([\\d\\w\\.\\/\\%\\+\\-\\=\\&\\#\\~]*)$",
+        "patternString": "^(?:hdfs)\\:(?:\\/){2}((?:([\\p{L}|\\p{N}]|[\\-\\._\\:])+)?)(([\\p{L}|\\p{N}]|[\\:\\-\\.\\/\\+\\&\\%\\$_\\\\])*)?$",
         "subValidatorClassName": null
       }
     },

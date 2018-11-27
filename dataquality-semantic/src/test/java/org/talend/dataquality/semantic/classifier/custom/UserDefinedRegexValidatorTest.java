@@ -269,4 +269,200 @@ public class UserDefinedRegexValidatorTest {
         }
     }
 
+    @Test
+    public void testIsValidMailtoURL() throws IOException {
+        // this testcase is to test SemanticCategoryEnum.MAILTO_URL's Validator can
+        // TDQ-15407: Support Asian characters in URL semantic types
+        // follow http://www.ietf.org/rfc/rfc2368.txt
+
+        String[] validMailtoURLs = { "mailto:chris@example.com", "mailto:infobot@example.com?subject=current-issue",
+                "mailto:infobot@example.com?body=send%20current-issue",
+                "mailto:infobot@example.com?body=send%20current-" + "\\n" + "issue%0D%0Asend%20index",
+                "mailto:majordomo@example.com?body=subscribe%20bamboo-l", "mailto:joe@example.com?cc=bob@example.com&body=hello",
+                "mailto:?to=joe@example.com&cc=bob@example.com&body=hello",
+                "mailto:?to=joe@xyz.com&amp;cc=bob@xyz.com&amp;body=hello",
+
+                // comes from https://wiki.suikawiki.org/n/mailto
+                // Within mailto URLs, the characters "?", "=", "&" are reserved.
+                "mailto:gorby%25kremvax@example.com", "mailto:unlikely%3Faddress@example.com",
+                "mailto:unlikely%3Faddress@example.com?blat=foop", "mailto:Mike%26family@example.org",
+                "mailto:%22not%40me%22@example.org", "mailto:%22oh%5C%5Cno%22@example.org",
+                "mailto:%22%5C%5C%5C%22it's%5C%20ugly%5C%5C%5C%22%22@example.org",
+
+                // not ASCII
+                "mailto:user@example.org?subject=caf%C3%A9", "mailto:user@example.org?subject=caf%C3%A9&body=caf%C3%A9", // caf=C3=A9
+                "mailto:user@example.org?subject=%3D%3Futf-8%3FQ%3Fcaf%3DC3%3DA9%3F%3D", // utf-8 encoded
+                "mailto:user@example.org?subject=%3D%3Fiso-8859-1%3FQ%3Fcaf%3DE9%3F%3D", // ISO-8859-1 encoded
+                "mailto:user@%E7%B4%8D%E8%B1%86.example.org?subject=Test&body=NATTO", // user@xn--99zt52a.example.org
+
+                // not ASCII
+                "mailto:haorooms@Σελ.Σελδα", "mailto:Σελίδα@126.com", "mailto:haorooms@126.com?subject=α_Σελίδα",
+                "mailto:Σελίδα@126.com?subject=α_Σελίδα", "mailto:user@例子.卷筒纸", "mailto:user@引き割り.引き割り", "mailto:user@하하하하.하하하하",
+                "mailto:user@例子.中華人民共和國", "mailto:haorooms@126.com?subject=春节",
+
+                "mailto:user@talend.com.cn", "mailto:user_cn@talend.com", "mailto:user-cn@talend.com",
+                "mailto:user-cn@talend-cn.com", "mailto:user@example.com?subject=MessageTitle&body=MessageContent",
+                "mailto:haorooms@126.com?subject=The%20subject%20of%20the%20mail",
+                "mailto:haorooms@126.com?cc=name2@rapidtables.com&bcc=name3@rapidtables.com&subject=The%20subject%20of%20the%20email&body=The%20body%20of%20the%20email" };
+
+        String[] invalidMailtoURLs = {
+                // special charactors
+                "mailto:unlikely?address@example.com?blat=foop", "mailto:Mike&family@example.org", "mailto:oh\\no@example.org",
+                "mailto:\\\"it's ugly\\\"@example.org", "mailto:user@talend_cn.com", "mailto:user_cn@talend_cn.com",
+                "mailto:user@example.com?subject=Message Title&body=Message Content",
+
+                "user@192.168.1.1", "mailto:user@____.___", "", "-", "mailto:user", "user", "www.talend.com",
+                "user@www.talend.com", "例子.卷筒纸", "user@例子.卷筒纸", "用户:pass@例子.卷筒纸", "例子@引き割り.引き割り", "하하@하하하하.하하하하" };
+
+        ISemanticValidator validator = null;
+        UserDefinedClassifier userDefinedClassifier = new UDCategorySerDeser().readJsonFile();
+        Set<ISubCategory> classifiers = userDefinedClassifier.getClassifiers();
+        for (ISubCategory iSubCategory : classifiers) {
+            String name = iSubCategory.getLabel();
+            if (SemanticCategoryEnum.MAILTO_URL.getDisplayName().equals(name)) {
+                validator = iSubCategory.getValidator();
+                break;
+            }
+        }
+        if (validator != null) {
+            for (String validMailtoURL : validMailtoURLs) {
+                Assert.assertTrue("Invalid MailTo URL expected to be valid: " + validMailtoURL,
+                        validator.isValid(validMailtoURL));
+            }
+            for (String invalidMailtoURL : invalidMailtoURLs) {
+                Assert.assertFalse("Valid MailTo URL expected to be invalid: " + invalidMailtoURL,
+                        validator.isValid(invalidMailtoURL));
+            }
+        }
+    }
+
+    @Test
+    public void testIsValidFileURL() throws IOException {
+        // this testcase is to test SemanticCategoryEnum.FILE_URL's Validator can
+        // TDQ-15407: Support Asian characters in URL semantic types
+        // follow https://tools.ietf.org/html/rfc8089
+
+        String[] validFileURLs = {
+                // Unix
+                "file://localhost/etc/fstab", "file:///etc/fstab",
+
+                // Windows
+                "file://localhost/c$/WINDOWS/clock.avi", "file:///c:/WINDOWS/clock.avi", "file://hostname/path/to/the%20file.txt",
+                "file:///c:/path/to/the%20file.txt",
+
+                "file:///c:/WINDOWS/",
+
+                // A traditional file URI for a local file with an empty authority
+                "file:///c:/bar.txt", "file:///C:/MyDocuments/",
+                // The minimal representation of a local file with no authority field
+                // and an absolute path that begins with a slash "/"
+                "file:/path/to/file", "file:c:/path/to/file",
+
+                // old URI
+                "file:///c|/path/to/file", "file:/c|/path/to/file", "file:c|/path/to/file",
+
+                // For a network location
+                "file://hostname/path/to/the%20file.txt",
+
+                // the UNC String
+                "file://host.example.com/Share/path/to/file.txt",
+
+                // Non-local files with an explicit authority
+                "file://host.example.com/path/to/file",
+                // Non-local files with an empty authority and a complete (transformed) UNC string in the path
+                "file:////host.example.com/path/to/file",
+                // Non-local files with an extra slash between the empty authority and the transformed UNC
+                // string
+                "file://///host.example.com/path/to/file",
+
+                // a network location
+                "file://例子.卷筒纸/path/to/file", "file://引き割り.引き割り/path/引き/引き", "file://하하하하.하하하하/path/to/file",
+                "file://例子.中華人民共和國/path/to/file", "file://例子.卷筒纸/path/納豆/file", "file://引き割り.引き割り/path/to/见佳琪",
+
+                // local non-english
+                "file:///引き割り/中華人民共和國/", "file:///C:/引き割り.引き割り/", "file:///C:/Σελδα.引き割り/", "file:///例子.卷筒纸/",
+                "file:///Users/talend/例子", "file:///C:/Users/talend/例子/a_b/测试.txt", "file:///C:/Users/talend/例子/c-d/测试.txt" };
+
+        String[] invalidFileURLs = { "", " ", "\\", "file://foo.txt", "file://./sharename/path/to/the%20file.txt",
+                "C:/My Documents/", "file:///C:/My Documents/", "/My Documents/", "file:///C:/My Documents/ALetter.html",
+
+                // a file name can't contain any of the following characters:\/:*?"<>| at least on windows.
+                "file:///C:/a?b.txt", "file:///C:/ab/e<f.txt", "file:///C:/ab/e>f.txt", "file:///C:/a*b/ef.txt",
+                "file:///C:/a\"b.txt" };
+
+        ISemanticValidator validator = null;
+        UserDefinedClassifier userDefinedClassifier = new UDCategorySerDeser().readJsonFile();
+        Set<ISubCategory> classifiers = userDefinedClassifier.getClassifiers();
+        for (ISubCategory iSubCategory : classifiers) {
+            String name = iSubCategory.getLabel();
+            if (SemanticCategoryEnum.FILE_URL.getDisplayName().equals(name)) {
+                validator = iSubCategory.getValidator();
+                break;
+            }
+        }
+        if (validator != null) {
+            for (String validFileURL : validFileURLs) {
+                Assert.assertTrue("Invalid File URL expected to be valid: " + validFileURL, validator.isValid(validFileURL));
+            }
+            for (String invalidFileURL : invalidFileURLs) {
+                Assert.assertFalse("Valid File URL expected to be invalid: " + invalidFileURL, validator.isValid(invalidFileURL));
+            }
+        }
+    }
+
+    @Test
+    public void testIsValidHdfsURL() throws IOException {
+        // this testcase is to test SemanticCategoryEnum.HDFS_URL's Validator can
+        // TDQ-15407: Support Asian characters in URL semantic types
+
+        String[] validHdfsURLs = { "hdfs:///", "hdfs://hadoop1:9000", "hdfs://hadoopNS/data/file.csv", "hdfs://192.168.1.2:9000",
+                "hdfs://192.168.1.2:9000/", "hdfs://localhost:9000/user",
+
+                "hdfs://localhost:9000", "hdfs://localhost:9000/user/hadoop/test.txt",
+
+                // special characters
+                "hdfs://localhost:9000/user/app-logs/test.txt", "hdfs://localhost/user/spark_logs/spark_logs.txt",
+                "hdfs://localhost:9000/user/hadoop/the%20file.txt",
+
+                "hdfs://localhost:54310/user/hadoop/test.txt", "hdfs://tal-qa173.talend.lan:8020/user/automation/test/test.csv",
+                "hdfs://tal-qa173.talend.lan/user/automation/test/test.csv", "hdfs:///user/automation/test/test.csv",
+
+                // non-english
+                "hdfs://192.168.1.2:9000/user/msjian/王府井.txt", "hdfs://192.168.1.2:9000/user/hadoop/Σελδα.txt",
+
+                "hdfs://例子.卷筒纸:9000/user/msjian/王府井.txt", "hdfs://例子.卷筒纸/王府井/msjian/王府井.txt", "hdfs://引き割り.引き割り/引き/引き",
+                "hdfs://하하하하.하하하하:9000/하하하하/하하하하.txt", "hdfs://例子.中華人民共和國/path/to/file",
+
+                // local non-english
+                "hdfs:///msjian/王府井.txt", "hdfs:///王府井/王府井", "hdfs:///引き/引き", "hdfs:///하하하하/하하하하.txt",
+
+                "hdfs:///引き割り/中華人民共和國/", "hdfs:///C:/引き割り.引き割り/", "hdfs:///C:/Σελδα.引き割り/", "hdfs:///例子.卷筒纸/",
+                "hdfs:///Users/talend/例子", "hdfs:///C:/Users/talend/例子/a_b/测试.txt", "hdfs:///C:/Users/talend/例子/c-d/测试.txt" };
+
+        String[] invalidHdfsURLs = { "", " ", "\\", "//hadoop1:9000", "//localhost/test.csv", "hds://localhost:9000/user",
+                "hdfs://localhost:9000/user/hadoop/the file.txt", "hdfs://192.168.1.2:9000/user/hadoop/Σελδα - Copy.txt",
+                "C:/My Documents/", "hdfs:///C:/My Documents/", "/MyDocuments/", "hdfs:///C:/My Documents/ALetter.html",
+
+                // a file name can't contain any of the following characters:\/:*?"<>| at least on windows.
+                "hdfs:///C:/a?b.txt", "hdfs:///ab/e<f.txt", "hdfs:///ab/e>f.txt", "hdfs:///a*b/ef.txt", "hdfs:///a\"b.txt" };
+
+        ISemanticValidator validator = null;
+        UserDefinedClassifier userDefinedClassifier = new UDCategorySerDeser().readJsonFile();
+        Set<ISubCategory> classifiers = userDefinedClassifier.getClassifiers();
+        for (ISubCategory iSubCategory : classifiers) {
+            String name = iSubCategory.getLabel();
+            if (SemanticCategoryEnum.HDFS_URL.getDisplayName().equals(name)) {
+                validator = iSubCategory.getValidator();
+                break;
+            }
+        }
+        if (validator != null) {
+            for (String validHdfsURL : validHdfsURLs) {
+                Assert.assertTrue("Invalid HDFS URL expected to be valid: " + validHdfsURL, validator.isValid(validHdfsURL));
+            }
+            for (String invalidHdfsURL : invalidHdfsURLs) {
+                Assert.assertFalse("Valid HDFS URL expected to be invalid: " + invalidHdfsURL, validator.isValid(invalidHdfsURL));
+            }
+        }
+    }
 }
