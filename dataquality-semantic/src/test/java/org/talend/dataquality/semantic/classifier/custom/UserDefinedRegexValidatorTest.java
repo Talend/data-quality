@@ -342,7 +342,8 @@ public class UserDefinedRegexValidatorTest {
         // TDQ-15407: Support Asian characters in URL semantic types
         // follow https://tools.ietf.org/html/rfc8089
 
-        String[] validFileURLs = {
+        String[] validFileURLs = { "file:///u/lai", "file:///u/lai/tik/tik76002/public_html/lermanfiles/chaps",
+                "file:///u/lai/tik/tik76002/public_html/lerman.files/chaps",
                 // Unix
                 "file://localhost/etc/fstab", "file:///etc/fstab",
 
@@ -383,8 +384,8 @@ public class UserDefinedRegexValidatorTest {
                 "file:///引き割り/中華人民共和國/", "file:///C:/引き割り.引き割り/", "file:///C:/Σελδα.引き割り/", "file:///例子.卷筒纸/",
                 "file:///Users/talend/例子", "file:///C:/Users/talend/例子/a_b/测试.txt", "file:///C:/Users/talend/例子/c-d/测试.txt" };
 
-        String[] invalidFileURLs = { "", " ", "\\", "file://foo.txt", "file://./sharename/path/to/the%20file.txt",
-                "C:/My Documents/", "file:///C:/My Documents/", "/My Documents/", "file:///C:/My Documents/ALetter.html",
+        String[] invalidFileURLs = { "", " ", "\\", "C:/My Documents/", "file:///C:/My Documents/", "/MyDocuments/",
+                "file:///C:/My Documents/ALetter.html",
 
                 // a file name can't contain any of the following characters:\/:*?"<>| at least on windows.
                 "file:///C:/a?b.txt", "file:///C:/ab/e<f.txt", "file:///C:/ab/e>f.txt", "file:///C:/a*b/ef.txt",
