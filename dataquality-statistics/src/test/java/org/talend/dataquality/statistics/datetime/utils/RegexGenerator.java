@@ -41,13 +41,13 @@ public class RegexGenerator {
             put("DDD", "[0-9]{1,3}");
 
             put("HH", "(?:0[0-9]|1[0-9]|2[0-3])");
-            put("H", "(?:0?[0-9]|1[0-9]|2[0-3])");
+            put("H", "(?:[0-9]|1[0-9]|2[0-3])");
             put("hh", "(?:0[1-9]|1[0-2])"); // in 12-hour format time, 00 o'clock is written as 12h AM.
-            put("h", "(?:0?[1-9]|1[0-2])");
+            put("h", "(?:[1-9]|1[0-2])"); // same here, 0 o'clock is written as 12h AM.
             put("mm", "(?:[0-5][0-9])");
-            put("m", "(?:[0-5]?[0-9])");
+            put("m", "(?:[0-9]|[1-5][0-9])");
             put("ss", "(?:[0-5][0-9])");
-            put("s", "(?:[0-5]?[0-9])");
+            put("s", "(?:[0-9]|[1-5][0-9])");
             put("SSS", "(?:[0-9]{3})");
             put("S", "[0-9]");
             put("nnnnnnnnn", "[0-9]{9}");
@@ -60,7 +60,8 @@ public class RegexGenerator {
             put("yy", "[0-9]{2}");
             put("y", "[0-9]{2,4}"); // TO CHECK
             put("MMMM", "((?:\\p{L}{3,10})|(?:(?:[1-9]|1[0-2]|\\p{Lo})\\p{Lo}))");
-            put("MMM", "((?:\\p{L}{3,4}\\.?)|(?:(?:[1-9]|1[0-2]|\\p{Lo})\\p{Lo}))"); // this line must be after the replacement of 'a'
+            put("MMM", "((?:\\p{L}{3,4}\\.?)|(?:(?:[1-9]|1[0-2]|\\p{Lo})\\p{Lo}))"); // this line must be after the replacement of
+                                                                                     // 'a'
             put("MM", "(?:0[1-9]|1[0-2])");
             put("M", "(?:[1-9]|1[0-2])");
             put("dd", "(?:0[1-9]|[1-2][0-9]|3[0-1])");

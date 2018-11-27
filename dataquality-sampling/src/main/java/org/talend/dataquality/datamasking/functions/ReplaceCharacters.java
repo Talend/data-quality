@@ -25,4 +25,14 @@ public class ReplaceCharacters extends ReplaceAll {
         return Character.isLetter(codePoint);
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.talend.dataquality.datamasking.functions.CharactersOperation#isNeedCheck()
+     */
+    @Override
+    protected boolean isNeedCheckSpecialCase() {
+        return true;
+    }
+
 }

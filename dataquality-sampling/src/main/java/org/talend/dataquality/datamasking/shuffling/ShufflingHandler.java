@@ -42,7 +42,7 @@ public class ShufflingHandler {
         @Override
         public void run() {
             try {
-                ConcurrentLinkedQueue<Future<List<List<Object>>>> queue = shufflingService.getConcurrentQueue();
+                Queue<Future<List<List<Object>>>> queue = shufflingService.getConcurrentQueue();
                 while (!shufflingService.hasFinished() || !queue.isEmpty()) {
                     if (queue.isEmpty()) {
                         Thread.sleep(100);

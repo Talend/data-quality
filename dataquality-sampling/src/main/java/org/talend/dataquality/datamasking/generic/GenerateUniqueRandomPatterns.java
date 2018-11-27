@@ -23,17 +23,11 @@ import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 /**
  * @author jteuladedenantes
  * <p>
- * This class allows to generate unique random pattern from a list of fields. Each field define a set of possible
- * values.
+ * This class allows to generate unique random pattern from a list of fields. Each field define a set of possible values.
  */
 public class GenerateUniqueRandomPatterns implements Serializable {
 
     private static final long serialVersionUID = -5509905086789639724L;
-
-    /**
-     * The maximum width value we can handle (around Long.MaxValue / 11000)
-     */
-    private static final long WIDTH_THRESHOLD = 838000000000000L;
 
     /**
      * The random key to make impossible the decoding
@@ -69,8 +63,9 @@ public class GenerateUniqueRandomPatterns implements Serializable {
         // basedWidthsList init
         basedWidthsList = new ArrayList<BigInteger>();
         basedWidthsList.add(BigInteger.ONE);
-        for (int i = getFieldsNumber() - 2; i >= 0; i--)
+        for (int i = getFieldsNumber() - 2; i >= 0; i--) {
             basedWidthsList.add(0, this.fields.get(i + 1).getWidth().multiply(this.basedWidthsList.get(0)));
+        }
     }
 
     public List<AbstractField> getFields() {
@@ -95,8 +90,9 @@ public class GenerateUniqueRandomPatterns implements Serializable {
      */
     public StringBuilder generateUniqueString(List<String> strs) {
         // check inputs
-        if (strs.size() != getFieldsNumber())
+        if (strs.size() != getFieldsNumber()) {
             return null;
+        }
 
         // encode the fields
         List<BigInteger> listToMask = new ArrayList<BigInteger>();
@@ -128,11 +124,13 @@ public class GenerateUniqueRandomPatterns implements Serializable {
 
         // numberToMask is the number to masked created from listToMask
         BigInteger numberToMask = BigInteger.ZERO;
-        for (int i = 0; i < getFieldsNumber(); i++)
+        for (int i = 0; i < getFieldsNumber(); i++) {
             numberToMask = numberToMask.add(listToMask.get(i).multiply(basedWidthsList.get(i)));
+        }
 
-        if (key == null)
+        if (key == null) {
             setKey((new SecureRandom()).nextInt(Integer.MAX_VALUE - 1000000) + 1000000);
+        }
         BigInteger coprimeNumber = BigInteger.valueOf(findLargestCoprime(Math.abs(key)));
         // uniqueMaskedNumber is the number we masked
         BigInteger uniqueMaskedNumber = (numberToMask.multiply(coprimeNumber)).mod(longestWidth);

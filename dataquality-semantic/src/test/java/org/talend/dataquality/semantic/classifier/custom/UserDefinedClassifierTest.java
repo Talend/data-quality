@@ -12,7 +12,11 @@
 // ============================================================================
 package org.talend.dataquality.semantic.classifier.custom;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -30,7 +34,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.classifier.ISubCategory;
@@ -46,77 +49,12 @@ public class UserDefinedClassifierTest {
      * created by talend on 2015-07-28 Detailled comment.
      *
      */
-    private static enum STATE {
-        Alabama,
-        Alaska,
-        Arizona,
-        Arkansas,
-        California,
-        Colorado,
-        Connecticut,
-        Delaware,
-        Florida,
-        Georgia,
-        Hawaii,
-        Idaho,
-        Illinois,
-        Indiana,
-        Iowa,
-        Kansas,
-        Kentucky,
-        Louisiana,
-        Maine,
-        Maryland,
-        Massachusetts,
-        Michigan,
-        Minnesota,
-        Mississippi,
-        Missouri,
-        Montana,
-        Nebraska,
-        Nevada,
-        New_Hampshire,
-        New_Jersey,
-        New_Mexico,
-        New_York,
-        North_Carolina,
-        North_Dakota,
-        Ohio,
-        Oklahoma,
-        Oregon,
-        Pennsylvania,
-        Rhode_Island,
-        South_Carolina,
-        South_Dakota,
-        Tennessee,
-        Texas,
-        Utah,
-        Vermont,
-        Virginia,
-        Washington,
-        West_Virginia,
-        Wisconsin,
-        Wyoming;
-
-        /*
-         * (non-Javadoc)
-         * 
-         * @see java.lang.Enum#toString()
-         */
-        @Override
-        public String toString() {
-            return super.toString().replace("_", " "); //$NON-NLS-1$ //$NON-NLS-2$
-        }
-    }
-
     private final String TLD_NAME_URL = "http://data.iana.org/TLD/tlds-alpha-by-domain.txt"; //$NON-NLS-1$
 
     private final int MAX_TLD_LENGTH = 24;
 
     /**
      * Map from technical ID to category name
-     * 583edc44ec06957a34fa6456 -> EN_MONTH
-     * 583edc44ec06957a34fa646a -> EN_MONTH_ABBREV
      * 583edc44ec06957a34fa644c -> UK_SSN
      * 583edc44ec06957a34fa6448 -> SE_SSN
      * 583edc44ec06957a34fa6444 -> FR_SSN
@@ -126,8 +64,6 @@ public class UserDefinedClassifierTest {
      * 583edc44ec06957a34fa643c -> FR_POSTAL_CODE
      * 583edc44ec06957a34fa647c -> DE_POSTAL_CODE
      * 583edc44ec06957a34fa6488 -> US_POSTAL_CODE
-     * 583edc44ec06957a34fa6474 -> US_STATE_CODE
-     * 583edc44ec06957a34fa6470 -> US_STATE
      * 583edc44ec06957a34fa6434 -> URL
      * 583edc44ec06957a34fa642c -> WEB_DOMAIN
      * 583edc44ec06957a34fa6446 -> ISBN_10
@@ -144,7 +80,6 @@ public class UserDefinedClassifierTest {
      * 583edc44ec06957a34fa646e -> GEO_COORDINATES
      * 583edc44ec06957a34fa6436 -> GEO_COORDINATE
      * 583edc44ec06957a34fa6462 -> GEO_COORDINATES_DEG
-     * 583edc44ec06957a34fa643a -> EN_WEEKDAY
      * 583edc44ec06957a34fa6484 -> SEDOL
      * 583edc44ec06957a34fa647a -> HDFS_URL
      * 583edc44ec06957a34fa6472 -> FILE_URL
@@ -168,14 +103,6 @@ public class UserDefinedClassifierTest {
             put("cat", new String[] {});//$NON-NLS-1$
             put("2012-02-03 7:08PM", new String[] {});//$NON-NLS-1$
             put("1/2/2012", new String[] {});//$NON-NLS-1$
-            put("january", new String[] { "583edc44ec06957a34fa6456" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("jan", new String[] { "583edc44ec06957a34fa646a" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("february", new String[] { "583edc44ec06957a34fa6456" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("march", new String[] { "583edc44ec06957a34fa6456" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("auG", new String[] { "583edc44ec06957a34fa646a" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("MAY", new String[] { "583edc44ec06957a34fa6456", "583edc44ec06957a34fa646a" });//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-            put("januar", new String[] {});//$NON-NLS-1$
-            put("janvier", new String[] {});//$NON-NLS-1$
 
             put("AB123456C", new String[] { "583edc44ec06957a34fa644c" });//$NON-NLS-1$ //$NON-NLS-2$
             put("AB 12 34 56 C", new String[] { "583edc44ec06957a34fa644c" });//$NON-NLS-1$ //$NON-NLS-2$
@@ -197,14 +124,7 @@ public class UserDefinedClassifierTest {
             put("Talend", new String[] {}); //$NON-NLS-1$
             put("9 rue pages, 92150 suresnes", new String[] {}); //$NON-NLS-1$
             put("avenue des champs elysees", new String[] {}); //$NON-NLS-1$
-            put("MA", new String[] { "583edc44ec06957a34fa6474" }); //$NON-NLS-1$ //$NON-NLS-2$
-            put("FL", new String[] { "583edc44ec06957a34fa6474" }); //$NON-NLS-1$ //$NON-NLS-2$
-            put("FLorIda", new String[] { "583edc44ec06957a34fa6470" }); //$NON-NLS-1$ //$NON-NLS-2$
-            put("FLORIDA", new String[] { "583edc44ec06957a34fa6470" }); //$NON-NLS-1$ //$NON-NLS-2$
-            put("New Hampshire", new String[] { "583edc44ec06957a34fa6470" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("Arizona", new String[] { "583edc44ec06957a34fa6470" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("Alabama", new String[] { "583edc44ec06957a34fa6470" });//$NON-NLS-1$ //$NON-NLS-2$
-            put("F", new String[] {});//$NON-NLS-1$ 
+            put("F", new String[] {});//$NON-NLS-1$
             put("M", new String[] {});//$NON-NLS-1$ 
             put("Male", new String[] {});//$NON-NLS-1$ 
             put("female", new String[] {});//$NON-NLS-1$ 
@@ -281,15 +201,6 @@ public class UserDefinedClassifierTest {
             put("15:53", new String[] {}); //$NON-NLS-1$ 
             put("23:59", new String[] {}); //$NON-NLS-1$ 
 
-            put("Monday", new String[] { "583edc44ec06957a34fa643a" }); //$NON-NLS-1$ //$NON-NLS-2$
-            put("MonDay", new String[] { "583edc44ec06957a34fa643a" }); //$NON-NLS-1$ //$NON-NLS-2$
-            put("MOnDay", new String[] { "583edc44ec06957a34fa643a" }); //$NON-NLS-1$ //$NON-NLS-2$
-            put("MOn", new String[] { "583edc44ec06957a34fa643a" }); //$NON-NLS-1$ //$NON-NLS-2$
-            put("Tue", new String[] { "583edc44ec06957a34fa643a" }); //$NON-NLS-1$ //$NON-NLS-2$
-            put("Wed", new String[] { "583edc44ec06957a34fa643a" }); //$NON-NLS-1$ //$NON-NLS-2$
-            put("Wednesday", new String[] { "583edc44ec06957a34fa643a" }); //$NON-NLS-1$ //$NON-NLS-2$
-            put("Thurs", new String[] { "583edc44ec06957a34fa643a" }); //$NON-NLS-1$ //$NON-NLS-2$
-
             put("25:59", new String[] {}); // does not match TIME (as expected) //$NON-NLS-1$
 
             put("0067340", new String[] { "583edc44ec06957a34fa6484" }); //$NON-NLS-1$ //$NON-NLS-2$
@@ -324,13 +235,6 @@ public class UserDefinedClassifierTest {
             put("FR7630001007941234567890185", new String[] { "583edc44ec06957a34fa6460" }); //$NON-NLS-1$ //$NON-NLS-2$
         }
     };
-
-    @Before
-    public void prepare() {
-        for (STATE state : STATE.values()) {
-            TEST_DATA.put(state.toString(), new String[] { "583edc44ec06957a34fa6470" }); //$NON-NLS-1$
-        }
-    }
 
     @Test
     public void testClassify() throws IOException {

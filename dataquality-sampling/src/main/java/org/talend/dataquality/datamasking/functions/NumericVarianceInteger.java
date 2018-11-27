@@ -44,30 +44,62 @@ public class NumericVarianceInteger extends NumericVariance<Integer> {
             return 0;
         }
         if (value1 > 0 && value2 > 0) {
-
-            if (value1 < Integer.MAX_VALUE / value2) {
-                return value1 * value2;
-            } else {
-                return Integer.MAX_VALUE - Integer.MAX_VALUE % (value1 > value2 ? value1 : value2);
-            }
+            return handleBothMoreThanZeroCase(value1, value2);
         } else if (value1 < 0 && value2 < 0) {
-            if (value1 != Integer.MIN_VALUE && Math.abs(value1) < Integer.MAX_VALUE / Math.abs(value2)) {
-                return value1 * value2;
-            } else {
-                if (Integer.MIN_VALUE == value1 || Integer.MIN_VALUE == value2) {
-                    return Integer.MAX_VALUE;
-                }
-                return Integer.MAX_VALUE - Integer.MAX_VALUE % (value1 < value2 ? value1 : value2);
-            }
+            return handleBothLessThanZeroCase(value1, value2);
         } else {
-            if (value1 != Integer.MIN_VALUE && Math.abs(value1) < Integer.MAX_VALUE / Math.abs(value2)) {
-                return value1 * value2;
-            } else {
-                if (Integer.MIN_VALUE == value1 || Integer.MIN_VALUE == value2) {
-                    return Integer.MIN_VALUE;
-                }
-                return Integer.MIN_VALUE - Integer.MIN_VALUE % (Math.abs(value1) > Math.abs(value2) ? value1 : value2);
+            return handleOthersCase(value1, value2);
+        }
+    }
+
+    /**
+     * Deal with other case.
+     * 
+     * @param value1
+     * @param value2
+     * @return
+     */
+    private Integer handleOthersCase(int value1, int value2) {
+        if (value1 != Integer.MIN_VALUE && Math.abs(value1) < Integer.MAX_VALUE / Math.abs(value2)) {
+            return value1 * value2;
+        } else {
+            if (Integer.MIN_VALUE == value1 || Integer.MIN_VALUE == value2) {
+                return Integer.MIN_VALUE;
             }
+            return Integer.MIN_VALUE - Integer.MIN_VALUE % (Math.abs(value1) > Math.abs(value2) ? value1 : value2);
+        }
+    }
+
+    /**
+     * Deal with both less than 0 case.
+     * 
+     * @param value1
+     * @param value2
+     * @return
+     */
+    private Integer handleBothLessThanZeroCase(int value1, int value2) {
+        if (value1 != Integer.MIN_VALUE && Math.abs(value1) < Integer.MAX_VALUE / Math.abs(value2)) {
+            return value1 * value2;
+        } else {
+            if (Integer.MIN_VALUE == value1 || Integer.MIN_VALUE == value2) {
+                return Integer.MAX_VALUE;
+            }
+            return Integer.MAX_VALUE - Integer.MAX_VALUE % (value1 < value2 ? value1 : value2);
+        }
+    }
+
+    /**
+     * Deal with both more than 0 case.
+     * 
+     * @param value1
+     * @param value2
+     * @return
+     */
+    private Integer handleBothMoreThanZeroCase(int value1, int value2) {
+        if (value1 < Integer.MAX_VALUE / value2) {
+            return value1 * value2;
+        } else {
+            return Integer.MAX_VALUE - Integer.MAX_VALUE % (value1 > value2 ? value1 : value2);
         }
     }
 

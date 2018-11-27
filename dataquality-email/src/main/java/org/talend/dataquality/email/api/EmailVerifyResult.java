@@ -47,19 +47,4 @@ public enum EmailVerifyResult {
         this.setResultValue(resultValue);
     }
 
-    // /**
-    // * get type by component value".
-    // *
-    // * @param value
-    // * @return the type corresponding to the component value
-    // */
-    // public static EmailVerifyResult getResult(String value) {
-    // for (EmailVerifyResult type : values()) {
-    // if (type.resultValue.equals(value)) {
-    // return type;
-    // }
-    // }
-    // return null;
-    // }
-
 }

@@ -29,7 +29,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.SerializationUtils;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.slf4j.Logger;
@@ -331,10 +330,7 @@ public class CategoryRegistryManager {
      * Get the full map between category ID and category metadata.
      */
     public Map<String, DQCategory> getSharedCategoryMetadata() {
-        HashMap<String, DQCategory> sharedMetadataCopy = new HashMap<>();
-        sharedMetadata.entrySet()
-                .forEach(entry -> sharedMetadataCopy.put(entry.getKey(), SerializationUtils.clone(entry.getValue())));
-        return sharedMetadataCopy;
+        return sharedMetadata;
     }
 
     /**

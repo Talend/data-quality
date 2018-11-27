@@ -19,7 +19,7 @@ import java.util.Random;
  * parse and set the parameters.
  *
  */
-public abstract class GenerateBetween<T2> extends Function<T2> {
+public abstract class GenerateBetween<T> extends Function<T> {
 
     private static final long serialVersionUID = 1L;
 
@@ -50,5 +50,5 @@ public abstract class GenerateBetween<T2> extends Function<T2> {
     }
 
     @Override
-    protected abstract T2 doGenerateMaskedField(T2 t);
+    protected abstract T doGenerateMaskedField(T t);
 }

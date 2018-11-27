@@ -110,8 +110,8 @@ public class ResizableList<T> implements List<T>, Serializable {
     }
 
     @Override
-    public <T1> T1[] toArray(T1[] t1s) {
-        return innerList.toArray(t1s);
+    public <Q> Q[] toArray(Q[] qs) {
+        return innerList.toArray(qs);
     }
 
     @Override

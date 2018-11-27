@@ -17,10 +17,10 @@ package org.talend.dataquality.datamasking.functions;
  * if it's from a known type. It can be used on String and Long values.
  *
  */
-public abstract class GenerateCreditCardFormat<T2> extends GenerateCreditCard<T2> {
+public abstract class GenerateCreditCardFormat<T> extends GenerateCreditCard<T> {
 
     private static final long serialVersionUID = -6097968704420111379L;
 
     @Override
-    protected abstract T2 doGenerateMaskedField(T2 t);
+    protected abstract T doGenerateMaskedField(T t);
 }

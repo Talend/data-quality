@@ -12,6 +12,13 @@
 	<description>API for semantic category analysis</description>
 
 	<dependencies>
+
+		<dependency>
+			<groupId>com.google.re2j</groupId>
+			<artifactId>re2j</artifactId>
+			<version>${re2j.version}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.talend.daikon</groupId>
 			<artifactId>multitenant-core</artifactId>

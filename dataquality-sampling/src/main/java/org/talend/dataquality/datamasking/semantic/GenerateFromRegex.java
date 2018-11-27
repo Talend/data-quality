@@ -29,13 +29,13 @@ public class GenerateFromRegex extends Function<String> {
 
     private static final long serialVersionUID = 2315410175790920472L;
 
-    protected Generex generex = null;
+    protected transient Generex generex = null;
 
     private static final String[] invalidKw = { "(?:", "(?!", "(?=", "[[:space:]]", "[[:digit:]]", "\\u" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 
-    private Pattern startPattern = Pattern.compile("[\\^]*+", Pattern.CASE_INSENSITIVE);
+    private Pattern startPattern = Pattern.compile("[\\^]*+", Pattern.CASE_INSENSITIVE); //$NON-NLS-1$
 
-    private Pattern endPattern = Pattern.compile("[\\$]*$", Pattern.CASE_INSENSITIVE);
+    private Pattern endPattern = Pattern.compile("[\\$]*$", Pattern.CASE_INSENSITIVE); //$NON-NLS-1$
 
     /*
      * (non-Javadoc)

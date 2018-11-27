@@ -18,7 +18,7 @@ import java.util.Random;
  * created by jgonzalez on 8 sept. 2015 Detailled comment
  *
  */
-public abstract class GenerateSequence<T2> extends Function<T2> {
+public abstract class GenerateSequence<T> extends Function<T> {
 
     private static final long serialVersionUID = 3643893998777572476L;
 
@@ -41,6 +41,6 @@ public abstract class GenerateSequence<T2> extends Function<T2> {
     }
 
     @Override
-    protected abstract T2 doGenerateMaskedField(T2 t);
+    protected abstract T doGenerateMaskedField(T t);
 
 }

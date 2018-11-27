@@ -30,7 +30,7 @@ public abstract class GenerateFromFile<T> extends Function<T> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GenerateFromFile.class);
 
-    protected List<T> genericTokens = new ArrayList<T>();
+    protected List<T> genericTokens = new ArrayList<>();
 
     @Override
     public void parse(String extraParameter, boolean keepNullValues, Random rand) {

@@ -16,8 +16,9 @@ public abstract class TextTokenizerBase {
      * @param text
      * @return List of TokenBase
      */
-    public List<? extends TokenBase> tokenize(String text) {
-        return tokenizer.tokenize(text).stream().filter(token -> !" ".equals(token.getSurface())).collect(Collectors.toList());
+    public List<TokenBase> tokenize(String text) {
+        return tokenizer.tokenize(text).stream().filter(token -> !" ".equals(token.getSurface())) //$NON-NLS-1$
+                .collect(Collectors.toList());
     }
 
     private Stream<String> getTokenSurface(String text) {
@@ -50,6 +51,6 @@ public abstract class TextTokenizerBase {
      * @return tokenized string with space as delimiter
      */
     public String getTokenizedString(String text) {
-        return getTokenizedString(text, " ");
+        return getTokenizedString(text, " "); //$NON-NLS-1$
     }
 }

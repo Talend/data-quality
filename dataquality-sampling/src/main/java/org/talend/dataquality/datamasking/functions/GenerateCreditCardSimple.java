@@ -17,7 +17,7 @@ package org.talend.dataquality.datamasking.functions;
  * String and Long values.
  *
  */
-public abstract class GenerateCreditCardSimple<T2> extends GenerateCreditCard<T2> {
+public abstract class GenerateCreditCardSimple<T> extends GenerateCreditCard<T> {
 
     private static final long serialVersionUID = 1364972443525284765L;
 
@@ -30,5 +30,5 @@ public abstract class GenerateCreditCardSimple<T2> extends GenerateCreditCard<T2
     }
 
     @Override
-    protected abstract T2 doGenerateMaskedField(T2 t);
+    protected abstract T doGenerateMaskedField(T t);
 }

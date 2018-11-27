@@ -65,14 +65,16 @@ public abstract class CharactersOperation<T> extends Function<T> {
             this.initAttributes();
             isValidParameters = beginIndex >= 0 && beginIndex <= endIndex;
         }
-        if (!isValidParameters)
+        if (!isValidParameters) {
             throw new IllegalArgumentException("The parameters are not valid");
+        }
     }
 
     @Override
     protected T doGenerateMaskedField(T t) {
-        if (!isValidParameters || t == null)
+        if (!isValidParameters || t == null) {
             return getDefaultOutput();
+        }
         String str = t.toString();
         StringBuilder sb = new StringBuilder();
 
@@ -87,17 +89,29 @@ public abstract class CharactersOperation<T> extends Function<T> {
             }
         }
         sb.append(str.substring(str.offsetByCodePoints(0, endAux)));
-        if (sb.length() == 0)
+        if (sb.length() == 0) {
             return getDefaultOutput();
+        }
         return getOutput(sb.toString());
     }
 
     private Integer replaceChar(Integer codePoint) {
-        if (!isGoodType(codePoint))
+        if (isNeedCheckSpecialCase() && !isGoodType(codePoint)) {
             return codePoint;
-        if (charToReplace != null)
+        }
+        if (charToReplace != null) {
             return (int) charToReplace;
+        }
         return TextPatternUtil.replaceCharacter(codePoint, rnd);
+    }
+
+    /**
+     * Judge whether need to check first.
+     * 
+     * @return
+     */
+    protected boolean isNeedCheckSpecialCase() {
+        return false;
     }
 
     /**
@@ -107,7 +121,7 @@ public abstract class CharactersOperation<T> extends Function<T> {
      * @return true if c type is ok
      */
     protected boolean isGoodType(Integer codePoint) {
-        return true;
+        return codePoint != null;
     }
 
     /**

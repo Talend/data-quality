@@ -59,7 +59,6 @@ public class JapaneseNumberNormalizerTest {
 
         JapaneseNumberNormalizer japaneseNumberFilter = new JapaneseNumberNormalizer();
         for (String number : values.keySet()) {
-            System.out.println("Trying to normalize value: " + number);
             Assert.assertEquals(values.get(number), japaneseNumberFilter.normalizeNumber(number));
         }
     }

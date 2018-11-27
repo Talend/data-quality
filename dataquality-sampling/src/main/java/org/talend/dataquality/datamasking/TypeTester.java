@@ -28,7 +28,10 @@ public class TypeTester {
      * @return The type of the variable.
      */
     public int getType(Integer x) {
-        return 0;
+        if (x == null) {
+            return getTypeByName("integer"); //$NON-NLS-1$
+        }
+        return getTypeByName(x.getClass().getSimpleName().toLowerCase());
     }
 
     /**
@@ -38,7 +41,10 @@ public class TypeTester {
      * @return The type of the variable.
      */
     public int getType(Long x) {
-        return 1;
+        if (x == null) {
+            return getTypeByName("long"); //$NON-NLS-1$
+        }
+        return getTypeByName(x.getClass().getSimpleName().toLowerCase());
     }
 
     /**
@@ -48,7 +54,10 @@ public class TypeTester {
      * @return The type of the variable.
      */
     public int getType(Float x) {
-        return 2;
+        if (x == null) {
+            return getTypeByName("float"); //$NON-NLS-1$
+        }
+        return getTypeByName(x.getClass().getSimpleName().toLowerCase());
     }
 
     /**
@@ -58,7 +67,10 @@ public class TypeTester {
      * @return The type of the variable.
      */
     public int getType(Double x) {
-        return 3;
+        if (x == null) {
+            return getTypeByName("double"); //$NON-NLS-1$
+        }
+        return getTypeByName(x.getClass().getSimpleName().toLowerCase());
     }
 
     /**
@@ -68,7 +80,10 @@ public class TypeTester {
      * @return The type of the variable.
      */
     public int getType(String x) {
-        return 4;
+        if (x == null) {
+            return getTypeByName("string"); //$NON-NLS-1$
+        }
+        return getTypeByName(x.getClass().getSimpleName().toLowerCase());
     }
 
     /**
@@ -78,29 +93,34 @@ public class TypeTester {
      * @return The type of the variable.
      */
     public int getType(Date x) {
-        return 5;
+        if (x == null) {
+            return getTypeByName("date"); //$NON-NLS-1$
+        }
+        return getTypeByName(x.getClass().getSimpleName().toLowerCase());
     }
 
     public int getTypeByName(String dataType) {
+        if (dataType == null) {
+            return -1;
+        }
         switch (dataType) {
-        case "numeric":
-        case "integer":
+        case "numeric": //$NON-NLS-1$
+        case "integer": //$NON-NLS-1$
             return 0;
-        case "long":
+        case "long": //$NON-NLS-1$
             return 1;
-        case "float":
+        case "float": //$NON-NLS-1$
             return 2;
-        case "double":
-        case "decimal":
+        case "double": //$NON-NLS-1$
+        case "decimal": //$NON-NLS-1$
             return 3;
-        case "date":
-            return 5;
-        case "string":
+        case "string": //$NON-NLS-1$
             return 4;
+        case "date": //$NON-NLS-1$
+            return 5;
         default:
             return -1;
 
         }
     }
-
 }

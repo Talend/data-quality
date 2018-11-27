@@ -26,6 +26,7 @@ import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.Metadata;
 import org.talend.dataquality.common.inference.ResizableList;
 import org.talend.dataquality.semantic.exception.DQSemanticRuntimeException;
+import org.talend.dataquality.semantic.index.Index;
 import org.talend.dataquality.semantic.recognizer.CategoryFrequency;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizer;
 import org.talend.dataquality.semantic.recognizer.DefaultCategoryRecognizer;
@@ -94,7 +95,10 @@ public class SemanticAnalyzer implements Analyzer<SemanticType> {
         columnIdxToCategoryRecognizer.clear();
         results.clear();
         if (dictionarySnapshot != null) {
-            dictionarySnapshot.getCustomDataDict().initIndex();
+            final Index customDict = dictionarySnapshot.getCustomDataDict();
+            if (customDict != null) {
+                customDict.initIndex();
+            }
         }
     }
 

@@ -33,42 +33,42 @@ public class DurationConverter {
     /**
      * 1 day = 24 hours.
      */
-    private static final double num_24 = 24;
+    private static final double NUM_24 = 24;
 
     /**
      * 1 minite = 60 seconds
      */
-    private static final double num_60 = 60;
+    private static final double NUM_60 = 60;
 
     /**
      * 1 second = 1000 milliseconds.
      */
-    private static final double num_1000 = 1000;
+    private static final double NUM_1000 = 1000;
 
     /**
      * 1 year = 365 days.
      */
-    private static final double num_365 = 365;
+    private static final double NUM_365 = 365;
 
     /**
      * 1 month = 30 days.
      */
-    private static final double num_30 = 30;
+    private static final double NUM_30 = 30;
 
     /**
      * 1 week = 7 days.
      */
-    private static final double num_7 = 7;
+    private static final double NUM_7 = 7;
 
     /**
      * 1 year = 52 weeks.
      */
-    private static final double num_52 = 52;
+    private static final double NUM_52 = 52;
 
     /**
      * 1 year = 12 months.
      */
-    private static final double num_12 = 12;
+    private static final double NUM_12 = 12;
 
     public static final ChronoUnit DEFAULT_FROM_UNIT = ChronoUnit.DAYS;
 
@@ -104,69 +104,87 @@ public class DurationConverter {
      * @return long
      */
     public double convert(double value) {
-        if (Double.isNaN(value)) {
+
+        if (noNeedConvert(value)) {
             return value;
         }
 
-        if (Double.compare(Double.MAX_VALUE, value) == 0 || Double.compare(Double.MIN_VALUE, value) == 0) {
-            return value;
-        }
-        if (this.fromUnit.equals(this.toUnit)) {
-            return value;
-        }
+        double days = handleDays(value);
+        double result = handleFinalResult(value, days);
 
+        return result;
+    }
+
+    private double handleFinalResult(double value, double days) {
+        double result = value;
+        switch (this.toUnit) {
+        case MILLIS:
+            result = getExactDays(value, days) * NUM_24 * NUM_60 * NUM_60 * NUM_1000;
+            break;
+        case SECONDS:
+            result = getExactDays(value, days) * NUM_24 * NUM_60 * NUM_60;
+            break;
+        case MINUTES:
+            result = getExactDays(value, days) * NUM_24 * NUM_60;
+            break;
+        case HOURS:
+            result = getExactDays(value, days) * NUM_24;
+            break;
+        case DAYS:
+            result = getExactDays(value, days);
+            break;
+        case YEARS:
+            result = days / NUM_365;
+            break;
+        case MONTHS:
+            result = days / NUM_30;
+            break;
+        case WEEKS:
+            result = days / NUM_7;
+            break;
+        default:
+            break;
+        }
+        return result;
+    }
+
+    private double handleDays(double value) {
         // get the days first, then use it as base to convert to the target value.
         double days = 0;
         switch (this.fromUnit) {
         case MILLIS:
-            days = value / num_24 / num_60 / num_60 / num_1000;
+            days = value / NUM_24 / NUM_60 / NUM_60 / NUM_1000;
             break;
         case SECONDS:
-            days = value / num_24 / num_60 / num_60;
+            days = value / NUM_24 / NUM_60 / NUM_60;
             break;
         case MINUTES:
-            days = value / num_24 / num_60;
+            days = value / NUM_24 / NUM_60;
             break;
         case HOURS:
-            days = value / num_24;
+            days = value / NUM_24;
             break;
         case DAYS:
             days = value;
             break;
         case YEARS:
-            days = value * num_365;
+            days = value * NUM_365;
             break;
         case MONTHS:
-            days = value * num_30;
+            days = value * NUM_30;
             break;
         case WEEKS:
-            days = value * num_7;
+            days = value * NUM_7;
             break;
         default:
             break;
         }
+        return days;
+    }
 
-        switch (this.toUnit) {
-        case MILLIS:
-            return getExactDays(value, days) * num_24 * num_60 * num_60 * num_1000;
-        case SECONDS:
-            return getExactDays(value, days) * num_24 * num_60 * num_60;
-        case MINUTES:
-            return getExactDays(value, days) * num_24 * num_60;
-        case HOURS:
-            return getExactDays(value, days) * num_24;
-        case DAYS:
-            return getExactDays(value, days);
-        case YEARS:
-            return days / num_365;
-        case MONTHS:
-            return days / num_30;
-        case WEEKS:
-            return days / num_7;
-        default:
-            break;
-        }
-        return value;
+    private boolean noNeedConvert(double value) {
+        return Double.isNaN(value) || Double.compare(Double.MAX_VALUE, value) == 0 || Double.compare(Double.MIN_VALUE, value) == 0
+                || this.fromUnit.equals(this.toUnit);
     }
 
     /**
@@ -185,13 +203,13 @@ public class DurationConverter {
      */
     protected double getExactDays(double value, double days) {
         if (this.fromUnit == ChronoUnit.MONTHS) {
-            int year = (int) (value / num_12);
-            int month = (int) (value % num_12);
-            return year * num_365 + month * num_30;
+            int year = (int) (value / NUM_12);
+            int month = (int) (value % NUM_12);
+            return year * NUM_365 + month * NUM_30;
         } else if (this.fromUnit == ChronoUnit.WEEKS) {
-            int year = (int) (value / num_52);
-            int week = (int) (value % num_52);
-            return year * num_365 + week * num_7;
+            int year = (int) (value / NUM_52);
+            int week = (int) (value % NUM_52);
+            return year * NUM_365 + week * NUM_7;
         }
         return days;
     }

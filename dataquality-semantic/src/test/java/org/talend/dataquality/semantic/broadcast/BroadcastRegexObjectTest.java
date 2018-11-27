@@ -32,7 +32,7 @@ public class BroadcastRegexObjectTest extends CategoryRegistryManagerAbstract {
 
         // then
         assertNotNull(regex);
-        assertEquals("Unexpected classifier size!", 47, regex.getClassifiers().size());
+        assertEquals("Unexpected classifier size!", 42, regex.getClassifiers().size());
 
     }
 

@@ -64,11 +64,11 @@ public class FieldModifier {
 
     private Map<Character, List<Character>> getInverseSoundexMap() {
         if (inverseSoundexMap == null) {
-            inverseSoundexMap = new HashMap<Character, List<Character>>();
+            inverseSoundexMap = new HashMap<>();
             for (int i = 0; i < soundexMap.length; i++) {
                 List<Character> charSet = inverseSoundexMap.get(soundexMap[i]);
                 if (charSet == null) {
-                    charSet = new ArrayList<Character>();
+                    charSet = new ArrayList<>();
                     inverseSoundexMap.put(soundexMap[i], charSet);
                 }
                 charSet.add((char) ('A' + i));
@@ -110,101 +110,181 @@ public class FieldModifier {
         StringBuilder sb = new StringBuilder(str);
         switch (function) {
         case REPLACE_LETTER:
-            if (sb.length() > 0) {
-                for (int i = 0; i < modifCount; i++) {
-                    int pos = random.nextInt(sb.length());
-                    int idx = random.nextInt(LETTER.length());
-                    sb.setCharAt(pos, LETTER.charAt(idx));
-                }
-            }
+            handleReplaceLetterCase(modifCount, sb);
             break;
         case ADD_LETTER:
-            for (int i = 0; i < modifCount; i++) {
-                int pos = sb.length() == 0 ? 0 : random.nextInt(sb.length());
-                int idx = random.nextInt(LETTER.length());
-                sb.insert(pos, LETTER.charAt(idx));
-            }
+            handleAddLetterCase(modifCount, sb);
             break;
         case REPLACE_DIGIT:
-            if (sb.length() > 0) {
-                for (int i = 0; i < modifCount; i++) {
-                    int pos = random.nextInt(sb.length());
-                    int idx = random.nextInt(DIGIT.length());
-                    sb.setCharAt(pos, DIGIT.charAt(idx));
-                }
-            }
+            handleReplaceDigitCase(modifCount, sb);
             break;
         case ADD_DIGIT:
-            for (int i = 0; i < modifCount; i++) {
-                int pos = sb.length() == 0 ? 0 : random.nextInt(sb.length());
-                int idx = random.nextInt(DIGIT.length());
-                if (pos == 0) {
-                    idx = random.nextInt(DIGIT.length() - 1) + 1;
-                }
-                sb.insert(pos, DIGIT.charAt(idx));
-            }
+            handleAddDigitCase(modifCount, sb);
             break;
         case REMOVE_LETTER:
-            for (int i = 0; i < modifCount; i++) {
-                if (sb.length() > 0) {
-                    int pos = random.nextInt(sb.length());
-                    sb.deleteCharAt(pos);
-                }
-            }
+            handleRemoveLetterCase(modifCount, sb);
             break;
         case REMOVE_DIGIT:
-            for (int i = 0; i < modifCount; i++) {
-                if (sb.length() > 1) {
-                    int pos = random.nextInt(sb.length());
-                    sb.deleteCharAt(pos);
-                }
-            }
+            handleRemoveDigitCase(modifCount, sb);
             break;
         case EXCHANGE_CHAR:
-            if (sb.length() > 1) {
-                for (int i = 0; i < modifCount; i++) {
-                    int pos1 = random.nextInt(sb.length());
-                    int pos2 = random.nextInt(sb.length());
-                    if (pos1 != pos2) {
-                        char ch1 = sb.charAt(pos1);
-                        char ch2 = sb.charAt(pos2);
-                        sb.setCharAt(pos1, ch2);
-                        sb.setCharAt(pos2, ch1);
-                    }
-                }
-            }
+            handleExchangeCharCase(modifCount, sb);
             break;
         case SOUNDEX_REPLACE:
-            if (sb.length() > 0) {
-                List<Character> charSet = new ArrayList<Character>();
-                for (int i = 0; i < modifCount; i++) {
-                    int pos = random.nextInt(sb.length());
-                    char charToReplace = sb.charAt(pos);
-                    int idx = Character.toUpperCase(charToReplace) - 'A';
-                    if (idx >= 0 && idx < 26) {
-                        List<Character> soundexSet = getInverseSoundexMap().get(soundexMap[idx]);
-                        if (soundexSet != null) {
-                            charSet.clear();
-                            charSet.addAll(soundexSet);
-                            charSet.remove(charSet.indexOf(Character.toUpperCase(charToReplace)));
-                            if (!charSet.isEmpty()) {
-                                Character[] charArray = charSet.toArray(new Character[charSet.size()]);
-                                Character newChar = charArray[random.nextInt(charArray.length)];
-                                if (Character.isLowerCase(charToReplace)) {
-                                    newChar = Character.toLowerCase(newChar);
-                                }
-                                sb.setCharAt(pos, newChar);
-                            }
-                        }
-                    }
-                }
-            }
+            handleSoundexReplaceCase(modifCount, sb);
             break;
         default:
             return str;
         }
 
         return sb.toString();
+    }
+
+    /**
+     * Deal with soundex replace case
+     * 
+     * @param modifCount
+     * @param sb
+     */
+    private void handleSoundexReplaceCase(int modifCount, StringBuilder sb) {
+        if (sb.length() > 0) {
+            List<Character> charSet = new ArrayList<>();
+            for (int i = 0; i < modifCount; i++) {
+                int pos = random.nextInt(sb.length());
+                char charToReplace = sb.charAt(pos);
+                int idx = Character.toUpperCase(charToReplace) - 'A';
+                if (idx >= 0 && idx < 26) {
+                    List<Character> soundexSet = getInverseSoundexMap().get(soundexMap[idx]);
+                    if (soundexSet != null) {
+                        charSet.clear();
+                        charSet.addAll(soundexSet);
+                        charSet.remove(charSet.indexOf(Character.toUpperCase(charToReplace)));
+                        if (!charSet.isEmpty()) {
+                            Character[] charArray = charSet.toArray(new Character[charSet.size()]);
+                            Character newChar = charArray[random.nextInt(charArray.length)];
+                            if (Character.isLowerCase(charToReplace)) {
+                                newChar = Character.toLowerCase(newChar);
+                            }
+                            sb.setCharAt(pos, newChar);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Deal with exchange char case
+     * 
+     * @param modifCount
+     * @param sb
+     */
+    private void handleExchangeCharCase(int modifCount, StringBuilder sb) {
+        if (sb.length() > 1) {
+            for (int i = 0; i < modifCount; i++) {
+                int pos1 = random.nextInt(sb.length());
+                int pos2 = random.nextInt(sb.length());
+                if (pos1 != pos2) {
+                    char ch1 = sb.charAt(pos1);
+                    char ch2 = sb.charAt(pos2);
+                    sb.setCharAt(pos1, ch2);
+                    sb.setCharAt(pos2, ch1);
+                }
+            }
+        }
+    }
+
+    /**
+     * Deal with remove digit case
+     * 
+     * @param modifCount
+     * @param sb
+     */
+    private void handleRemoveDigitCase(int modifCount, StringBuilder sb) {
+        for (int i = 0; i < modifCount; i++) {
+            if (sb.length() > 1) {
+                int pos = random.nextInt(sb.length());
+                sb.deleteCharAt(pos);
+            }
+        }
+    }
+
+    /**
+     * Deal with remove letter case
+     * 
+     * @param modifCount
+     * @param sb
+     */
+    private void handleRemoveLetterCase(int modifCount, StringBuilder sb) {
+        for (int i = 0; i < modifCount; i++) {
+            if (sb.length() > 0) {
+                int pos = random.nextInt(sb.length());
+                sb.deleteCharAt(pos);
+            }
+        }
+    }
+
+    /**
+     * Deal with add digit case
+     * 
+     * @param modifCount
+     * @param sb
+     */
+    private void handleAddDigitCase(int modifCount, StringBuilder sb) {
+        for (int i = 0; i < modifCount; i++) {
+            int pos = sb.length() == 0 ? 0 : random.nextInt(sb.length());
+            int idx = random.nextInt(DIGIT.length());
+            if (pos == 0) {
+                idx = random.nextInt(DIGIT.length() - 1) + 1;
+            }
+            sb.insert(pos, DIGIT.charAt(idx));
+        }
+    }
+
+    /**
+     * Deal with replace digit case
+     * 
+     * @param modifCount
+     * @param sb
+     */
+    private void handleReplaceDigitCase(int modifCount, StringBuilder sb) {
+        if (sb.length() > 0) {
+            for (int i = 0; i < modifCount; i++) {
+                int pos = random.nextInt(sb.length());
+                int idx = random.nextInt(DIGIT.length());
+                sb.setCharAt(pos, DIGIT.charAt(idx));
+            }
+        }
+    }
+
+    /**
+     * Deal with add letter case
+     * 
+     * @param modifCount
+     * @param sb
+     */
+    private void handleAddLetterCase(int modifCount, StringBuilder sb) {
+        for (int i = 0; i < modifCount; i++) {
+            int pos = sb.length() == 0 ? 0 : random.nextInt(sb.length());
+            int idx = random.nextInt(LETTER.length());
+            sb.insert(pos, LETTER.charAt(idx));
+        }
+    }
+
+    /**
+     * Deal with replace letter case
+     * 
+     * @param modifCount
+     * @param sb
+     */
+    private void handleReplaceLetterCase(int modifCount, StringBuilder sb) {
+        if (sb.length() > 0) {
+            for (int i = 0; i < modifCount; i++) {
+                int pos = random.nextInt(sb.length());
+                int idx = random.nextInt(LETTER.length());
+                sb.setCharAt(pos, LETTER.charAt(idx));
+            }
+        }
     }
 
     /**

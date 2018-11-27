@@ -102,8 +102,9 @@ public class JapaneseNumberNormalizer {
         computePrefix(buffer);
         computeSuffix(buffer);
         // check that remaining string is numeric
-        if (!isNumeric(buffer))
+        if (!isNumeric(buffer)) {
             return null;
+        }
 
         BigDecimal result = parseLargePair(buffer);
 
@@ -116,15 +117,17 @@ public class JapaneseNumberNormalizer {
             result = parseLargePair(buffer);
         }
 
-        if (isNegative)
+        if (isNegative) {
             sum = sum.negate();
+        }
         return sum;
     }
 
     private boolean isNumeric(NumberBuffer buffer) {
         while (buffer.position < buffer.string.length()) {
-            if (!isNumeric(buffer.charAt(buffer.position)))
+            if (!isNumeric(buffer.charAt(buffer.position))) {
                 return false;
+            }
             buffer.advance();
         }
         buffer.position = 0;
@@ -133,8 +136,9 @@ public class JapaneseNumberNormalizer {
 
     private void computePrefix(NumberBuffer buffer) {
         int start = buffer.position;
-        while (buffer.position < buffer.string.length() && !isNumeric(buffer.charAt(buffer.position)))
+        while (buffer.position < buffer.string.length() && !isNumeric(buffer.charAt(buffer.position))) {
             buffer.advance();
+        }
 
         buffer.setPrefix(start, buffer.position);
     }
@@ -397,8 +401,12 @@ public class JapaneseNumberNormalizer {
      * @return true if and only if c is a decimal point
      */
     private boolean isDecimalPoint(char c) {
-        return c == '.' // U+002E FULL STOP 
-                || c == '．' || c == '点' || c == '點' || c == '・'; // U+FF0E FULLWIDTH FULL STOP
+        return handleNormalDotCase(c) || c == '点' || c == '點'; // U+FF0E FULLWIDTH FULL STOP
+    }
+
+    private boolean handleNormalDotCase(char c) {
+        return c == '.' // U+002E FULL STOP
+                || c == '．' || c == '・';
     }
 
     /**

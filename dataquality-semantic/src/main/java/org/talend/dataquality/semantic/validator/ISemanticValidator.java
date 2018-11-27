@@ -22,4 +22,5 @@ public interface ISemanticValidator extends Serializable {
     public boolean isValid(String str);
 
     public boolean isValid(String str, boolean caseSensitive);
+
 }

@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
  * the parameter and its opposite.
  *
  */
-public abstract class NumericVariance<T2> extends Function<T2> {
+public abstract class NumericVariance<T> extends Function<T> {
 
     private static final long serialVersionUID = -9042942041517353551L;
 
@@ -53,5 +53,5 @@ public abstract class NumericVariance<T2> extends Function<T2> {
     }
 
     @Override
-    protected abstract T2 doGenerateMaskedField(T2 t);
+    protected abstract T doGenerateMaskedField(T t);
 }

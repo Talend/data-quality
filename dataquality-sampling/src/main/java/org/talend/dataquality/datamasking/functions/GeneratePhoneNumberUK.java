@@ -23,14 +23,21 @@ public class GeneratePhoneNumberUK extends Function<String> {
     @Override
     protected String doGenerateMaskedField(String str) {
         StringBuilder result = new StringBuilder("020 3"); //$NON-NLS-1$
-        for (int i = 0; i < 3; ++i) {
-            result.append(nextRandomDigit());
-        }
+        addRandomDigit(result, 3);
         result.append(" "); //$NON-NLS-1$
-        for (int i = 0; i < 4; ++i) {
+        addRandomDigit(result, 4);
+        return result.toString();
+    }
+
+    /**
+     * Add random digit by special size
+     * 
+     * @param result
+     */
+    private void addRandomDigit(StringBuilder result, int size) {
+        for (int i = 0; i < size; ++i) {
             result.append(nextRandomDigit());
         }
-        return result.toString();
     }
 
 }
