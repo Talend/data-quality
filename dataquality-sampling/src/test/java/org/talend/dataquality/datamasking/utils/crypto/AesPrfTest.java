@@ -5,8 +5,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -15,12 +13,8 @@ import java.security.SecureRandom;
 @RunWith(MockitoJUnitRunner.class)
 public class AesPrfTest {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AesPrfTest.class);
-
     @Mock
-    AesCbcCryptoSpec spec;
-
-    private AesPrf aesPrf;
+    private AesCbcCryptoSpec spec;
 
     @Test
     public void displayIncorrectAlgorithmWhenNoSuchAlgorithmException() {
@@ -29,7 +23,7 @@ public class AesPrfTest {
         SecretKey secret = generateRandomSecretKey();
 
         // Will call init() method
-        aesPrf = new AesPrf(spec, secret);
+        new AesPrf(spec, secret);
 
         // This method should be called to display the incorrect algorithm name after the catch of 'NoSuchAlgorithmException'.
         Mockito.verify(spec, Mockito.atLeast(2)).getCipherAlgorithm();
@@ -42,7 +36,7 @@ public class AesPrfTest {
         SecretKey secret = generateRandomSecretKey();
 
         // Will call init() method
-        aesPrf = new AesPrf(spec, secret);
+        new AesPrf(spec, secret);
 
         // This method should be called to display the incorrect algorithm name after the catch of 'NoSuchPaddingException'.
         Mockito.verify(spec, Mockito.atLeast(2)).getCipherAlgorithm();
@@ -55,7 +49,7 @@ public class AesPrfTest {
         SecretKey secret = generateRandomSecretKey();
 
         // Will call init() method
-        aesPrf = new AesPrf(spec, secret);
+        new AesPrf(spec, secret);
 
         // This method should be called to display the incorrect key algorithm name after the catch of 'InvalidKeyException'.
         Mockito.verify(spec, Mockito.atLeast(1)).getKeyAlgorithm();
