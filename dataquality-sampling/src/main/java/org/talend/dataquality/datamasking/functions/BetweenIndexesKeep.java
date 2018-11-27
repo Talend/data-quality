@@ -12,7 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * created by jgonzalez on June 22, 2015. This class is used when the requested function is BetweenIndexesKeep. It will
