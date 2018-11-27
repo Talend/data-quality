@@ -109,4 +109,13 @@ public class BetweenIndexesKeepTest {
         output = bik.generateMaskedRow(null);
         assertEquals("", output);
     }
+
+    @Test
+    public void testWithMultipleInputs() {
+        bik.parse("5,452", false, new Random(42));
+        output = bik.generateMaskedRow(input);
+        String output2 = bik.generateMaskedRow("SteveDo");
+        assertEquals("e", output);
+        assertEquals("eDo", output2);
+    }
 }
