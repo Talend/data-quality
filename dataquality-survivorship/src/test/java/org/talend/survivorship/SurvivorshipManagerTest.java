@@ -12,10 +12,7 @@
 // ============================================================================
 package org.talend.survivorship;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -1124,9 +1121,10 @@ public class SurvivorshipManagerTest {
         assertTrue(conflictList.size() == 6);
         assertTrue(conflictList.get(0).isEmpty());
         assertTrue(conflictList.get(1).isEmpty());
-        String expectConflictName = "[firstName]";
-        assertEquals(expectConflictName, conflictList.get(2).toString());
-        assertEquals(expectConflictName, conflictList.get(3).toString());
+        // because of 2 and 3 is same with result of survivorship then no more conlict again
+        assertTrue(conflictList.get(2).isEmpty());
+        assertTrue(conflictList.get(3).isEmpty());
+        String expectConflictName = "[firstName]"; //$NON-NLS-1$
         assertEquals(expectConflictName, conflictList.get(4).toString());
         assertEquals(expectConflictName, conflictList.get(5).toString());
     }

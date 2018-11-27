@@ -14,6 +14,7 @@ package org.talend.survivorship.action.handler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -44,12 +45,25 @@ public class CRCRHandlerTest {
         columns.add(col1);
         columns.add(col2);
         DataSet dataset = new DataSet(columns);
+        // first record
         Record record1 = new Record();
         record1.setId(1);
         Attribute att1 = new Attribute(record1, col1, "value1");
         Attribute att2 = new Attribute(record1, col2, "value2");
         record1.putAttribute("city1", att1);
         record1.putAttribute("city2", att2);
+        col1.putAttribute(record1, att1);
+        col2.putAttribute(record1, att2);
+        dataset.getRecordList().add(record1);
+        // second record
+        record1 = new Record();
+        record1.setId(2);
+        att1 = new Attribute(record1, col1, "value3");
+        att2 = new Attribute(record1, col2, "value4");
+        record1.putAttribute("city1", att1);
+        record1.putAttribute("city2", att2);
+        col1.putAttribute(record1, att1);
+        col2.putAttribute(record1, att2);
         dataset.getRecordList().add(record1);
         List<Integer> conflictRowNum = new ArrayList<>();
         conflictRowNum.add(0);
@@ -65,6 +79,16 @@ public class CRCRHandlerTest {
         Map<String, Integer> columnIndexMap = new HashMap<>();
         columnIndexMap.put("city1", 0);
         columnIndexMap.put("city2", 1);
+        List<HashSet<String>> conflictList = dataset.getConflictList();
+        HashSet hashSet = new HashSet();
+        hashSet.add("city1");
+        hashSet.add("city2");
+        conflictList.add(hashSet);
+
+        hashSet = new HashSet();
+        hashSet.add("city1");
+        hashSet.add("city2");
+        conflictList.add(hashSet);
         FunctionParameter functionParameter = new FunctionParameter(action, expression, isIgnoreBlank, isDealDup);
         HandlerParameter handlerParameter = new HandlerParameter(dataset, refColumn, tarColumn, ruleName, columnIndexMap,
                 fillColumn, functionParameter);
@@ -82,6 +106,115 @@ public class CRCRHandlerTest {
                         subDataset, crcrHandler.getHandlerParameter().getDataset());
             }
         }
+    }
+
+    /**
+     * Test method for {@link org.talend.survivorship.action.handler.CRCRHandler#handleRequest(java.lang.Object, int)}.
+     */
+    @Test
+    public void testHandleRequestRemoveConflictList() {
+        Column col1 = new Column("city1", "String");
+        Column col2 = new Column("city2", "String");
+        List<Column> columns = new ArrayList<>();
+        columns.add(col1);
+        columns.add(col2);
+        DataSet dataset = new DataSet(columns);
+        // first record
+        Record record1 = new Record();
+        record1.setId(1);
+        Attribute att1 = new Attribute(record1, col1, "value1");
+        Attribute att2 = new Attribute(record1, col2, "value2");
+        record1.putAttribute("city1", att1);
+        record1.putAttribute("city2", att2);
+        col1.putAttribute(record1, att1);
+        col2.putAttribute(record1, att2);
+        dataset.getRecordList().add(record1);
+        // second record
+        record1 = new Record();
+        record1.setId(2);
+        att1 = new Attribute(record1, col1, "value3");
+        att2 = new Attribute(record1, col2, "value4");
+        record1.putAttribute("city1", att1);
+        record1.putAttribute("city2", att2);
+        col1.putAttribute(record1, att1);
+        col2.putAttribute(record1, att2);
+        dataset.getRecordList().add(record1);
+        // third record
+        record1 = new Record();
+        record1.setId(3);
+        att1 = new Attribute(record1, col1, "value5");
+        att2 = new Attribute(record1, col2, "value6");
+        record1.putAttribute("city1", att1);
+        record1.putAttribute("city2", att2);
+        col1.putAttribute(record1, att1);
+        col2.putAttribute(record1, att2);
+        dataset.getRecordList().add(record1);
+        List<Integer> conflictRowNum = new ArrayList<>();
+        conflictRowNum.add(0);
+        dataset.getConflictDataMap().get().put("city2", conflictRowNum);
+        List<HashSet<String>> conflictList = dataset.getConflictList();
+        // conflict row1
+        HashSet hashSet = new HashSet();
+        hashSet.add("city1");
+        hashSet.add("city2");
+        conflictList.add(hashSet);
+        // conflict row2
+        hashSet = new HashSet();
+        hashSet.add("city1");
+        hashSet.add("city2");
+        conflictList.add(hashSet);
+        // conflict row3
+        hashSet = new HashSet();
+        hashSet.add("city1");
+        hashSet.add("city2");
+        conflictList.add(hashSet);
+        ISurvivorshipAction action1 = RuleDefinition.Function.MostCommon.getAction();
+        ISurvivorshipAction action2 = RuleDefinition.Function.MostCommon.getAction();
+        Column refColumn = col1;
+        Column tarColumn = col2;
+        String ruleName = "rule1";
+        String expression = null;
+        boolean isIgnoreBlank = false;
+        String fillColumn = "city2";
+        boolean isDealDup = false;
+        Map<String, Integer> columnIndexMap = new HashMap<>();
+        columnIndexMap.put("city1", 0);
+        columnIndexMap.put("city2", 1);
+        FunctionParameter functionParameter1 = new FunctionParameter(action1, expression, isIgnoreBlank, isDealDup);
+        HandlerParameter handlerParameter1 = new HandlerParameter(dataset, refColumn, tarColumn, ruleName, columnIndexMap,
+                fillColumn, functionParameter1);
+        handlerParameter1.getConflictDataIndexList().add(1);
+        handlerParameter1.getConflictDataIndexList().add(2);
+        CRCRHandler crcrHandler1 = new CRCRHandler(handlerParameter1);
+        FunctionParameter functionParameter2 = new FunctionParameter(action2, expression, isIgnoreBlank, isDealDup);
+        HandlerParameter handlerParameter2 = new HandlerParameter(dataset, refColumn, tarColumn, ruleName, columnIndexMap,
+                fillColumn, functionParameter2);
+        CRCRHandler crcrHandler2 = new CRCRHandler(handlerParameter2);
+        crcrHandler1.linkSuccessor(crcrHandler2);
+        crcrHandler1.linkUISuccessor(crcrHandler2);
+        DataSet subDataset = null;
+        // no matter how many times it is execute there alaways is a same result
+        for (int index = 0; index < 5; index++) {
+            crcrHandler1.handleRequest(null, index);
+
+            if (index == 0) {
+                subDataset = crcrHandler1.getHandlerParameter().getDataset();
+                Assert.assertNotEquals("subDataset should be create so that dataset should different with subDataset", dataset,
+                        subDataset);
+            } else {
+                Assert.assertEquals("crcrHandler only should be execute one time so that dataset will not change agian",
+                        subDataset, crcrHandler1.getHandlerParameter().getDataset());
+            }
+        }
+        Assert.assertEquals("The size of conflict list should be 1", 1, conflictList.get(0).size());
+        String conflictColumnForFirstRecored = conflictList.get(0).iterator().next();
+        Assert.assertEquals("The conflict column in first record should be city1", "city1", conflictColumnForFirstRecored);
+        Assert.assertEquals("The size of conflict list should be 1", 1, conflictList.get(1).size());
+        conflictColumnForFirstRecored = conflictList.get(1).iterator().next();
+        Assert.assertEquals("The conflict column in first record should be city1", "city1", conflictColumnForFirstRecored);
+        Assert.assertEquals("The size of conflict list should be 1", 1, conflictList.get(2).size());
+        conflictColumnForFirstRecored = conflictList.get(2).iterator().next();
+        Assert.assertEquals("The conflict column in first record should be city1", "city1", conflictColumnForFirstRecored);
     }
 
     /**
@@ -375,7 +508,8 @@ public class CRCRHandlerTest {
     }
 
     /**
-     * Test method for {@link org.talend.survivorship.action.handler.CRCRHandler#getNonDuplicatedResult(java.lang.Object)}.
+     * Test method for
+     * {@link org.talend.survivorship.action.handler.CRCRHandler#getNonDuplicatedResult(java.lang.Object)}.
      */
     @Test
     public void testGetNonDupResult() {
