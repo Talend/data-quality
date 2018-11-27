@@ -32,9 +32,8 @@ public class BetweenIndexesKeep extends BetweenIndexes {
     protected String doGenerateMaskedField(String str) {
         if (!isValidParameters || str == null)
             return getDefaultOutput();
-        if (endIndex > str.length())
-            return getDefaultOutput();
-        return str.substring(beginIndex, endIndex);
+        int index = endIndex > str.length() ? str.length() : endIndex;
+        return str.substring(beginIndex, index);
     }
 
     @Override
