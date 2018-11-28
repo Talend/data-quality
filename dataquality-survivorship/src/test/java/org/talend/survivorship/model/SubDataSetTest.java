@@ -20,8 +20,6 @@ import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.talend.survivorship.action.ISurvivorshipAction;
-import org.talend.survivorship.action.handler.FunctionParameter;
 
 public class SubDataSetTest {
 
@@ -59,25 +57,16 @@ public class SubDataSetTest {
         List<Integer> conflictRowNum = new ArrayList<>();
         conflictRowNum.add(0);
         dataset.getConflictDataMap().get().put("city2", conflictRowNum); //$NON-NLS-1$
-        ISurvivorshipAction action = RuleDefinition.Function.MostCommon.getAction();
-        Column refColumn = col1;
-        Column tarColumn = col2;
-        String ruleName = "rule1"; //$NON-NLS-1$
-        String expression = null;
-        boolean isIgnoreBlank = false;
-        String fillColumn = "city2"; //$NON-NLS-1$
-        boolean isDealDup = false;
         Map<String, Integer> columnIndexMap = new HashMap<>();
         columnIndexMap.put("city1", 0); //$NON-NLS-1$
         columnIndexMap.put("city2", 1); //$NON-NLS-1$
-        FunctionParameter functionParameter = new FunctionParameter(action, expression, isIgnoreBlank, isDealDup);
         List<HashSet<String>> conflictList = dataset.getConflictList();
-        HashSet hashSet = new HashSet();
+        HashSet<String> hashSet = new HashSet<>();
         hashSet.add("city1"); //$NON-NLS-1$
         hashSet.add("city2"); //$NON-NLS-1$
         conflictList.add(hashSet);
 
-        hashSet = new HashSet();
+        hashSet = new HashSet<>();
         hashSet.add("city1"); //$NON-NLS-1$
         hashSet.add("city2"); //$NON-NLS-1$
         conflictList.add(hashSet);
