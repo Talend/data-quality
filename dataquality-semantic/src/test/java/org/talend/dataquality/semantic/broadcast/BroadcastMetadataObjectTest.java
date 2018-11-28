@@ -12,7 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.semantic.broadcast;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -64,8 +64,9 @@ public class BroadcastMetadataObjectTest {
         // THEN
         // the json payload must conform
         assertEquals(//
-                IOUtils.toString(this.getClass().getResourceAsStream("broadcastMetadataObject.json")), //
-                bmoStringToSend);
+                IOUtils.toString(this.getClass().getResourceAsStream("broadcastMetadataObject.json")).replaceAll("\\s*|\t|\r|\n",
+                        ""), //
+                bmoStringToSend.replaceAll("\\s*|\t|\r|\n", ""));
 
         // and be able reconstruct object from payload without exception
         mapper.readValue(bmoStringToSend, BroadcastMetadataObject.class);
