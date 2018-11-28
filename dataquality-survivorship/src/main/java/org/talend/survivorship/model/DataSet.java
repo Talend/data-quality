@@ -533,10 +533,7 @@ public class DataSet {
     }
 
     protected boolean isInputVialid(int rowNum) {
-        if (rowNum + 1 < 0 || rowNum + 1 > this.getRecordList().size() - 1) {
-            return false;
-        }
-        return true;
+        return !(rowNum + 1 < 0 || rowNum + 1 > this.getRecordList().size() - 1);
     }
 
     /**
