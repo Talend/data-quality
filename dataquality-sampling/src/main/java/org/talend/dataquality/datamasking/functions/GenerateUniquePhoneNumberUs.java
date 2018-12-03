@@ -27,7 +27,7 @@ public class GenerateUniquePhoneNumberUs extends AbstractGenerateUniquePhoneNumb
         strs.add(str.substring(str.length() - 6, str.length() - 4));
         strs.add(str.substring(str.length() - 4, str.length()));
 
-        StringBuilder result = phoneNumberPattern.generateUniqueString(strs, secretMng);
+        StringBuilder result = phoneNumberPattern.generateUniqueString(strs);
         if (result == null) {
             return null;
         }

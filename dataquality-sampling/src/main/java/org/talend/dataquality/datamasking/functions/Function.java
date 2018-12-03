@@ -21,11 +21,10 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.talend.dataquality.datamasking.SecretManager;
 
 /**
  * created by jgonzalez on 18 juin 2015. This class is an abstract class that
- * all other functions extend. All the methods and fields that all functions
+ * all other functions extends. All the methods and fiels that all functions
  * share are stored here.
  *
  */
@@ -50,11 +49,6 @@ public abstract class Function<T> implements Serializable {
     protected Random rnd = new Random();
 
     protected String[] parameters;
-
-    /**
-     * The SecretManager handles keys and secret used to generate masked values.
-     */
-    protected SecretManager secretMng = new SecretManager();
 
     protected boolean keepNull = false;
 
@@ -111,15 +105,6 @@ public abstract class Function<T> implements Serializable {
     }
 
     /**
-     * This method sets the Secret Manager for the Function.
-     *
-     * @param secMng The instance of SecretManager to use.
-     * */
-    public void setSecretManager(SecretManager secMng) {
-        this.secretMng = secMng;
-    }
-
-    /**
      * DOC jgonzalez Comment method "parse". This function is called at the
      * beginning of the job and parses the parameter. Moreover, it will call
      * methods setKeepNull and setRandomWrapper
@@ -167,14 +152,20 @@ public abstract class Function<T> implements Serializable {
     }
 
     /**
+     * 
      * Judge whether current function need to check parameter as a path
+     * 
+     * @return
      */
     protected boolean isNeedCheckPath() {
         return false;
     }
 
     /**
+     * 
      * Judge whether the parameter can be both file and value
+     * 
+     * @return
      */
     protected boolean isBothValidForFileOrNot() {
         return false;

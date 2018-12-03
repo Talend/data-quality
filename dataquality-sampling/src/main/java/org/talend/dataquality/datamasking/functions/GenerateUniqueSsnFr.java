@@ -24,8 +24,8 @@ import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
  * 
  * @author jteuladedenantes
  * 
- * French pattern: a-bb-cc-dd-eee-fff a: 1 -> 2 bb: 00 -> 99 cc: 1 -> 12 dd: 01 -> 19 ; (2A, 2B) ; 21 -> 99 eee: 001 -> 990
- * fff: 001 -> 999
+ * French patter: a-bb-cc-dd-eee-fff a: 1 -> 2 bb: 0 -> 99 cc: 1 -> 12 dd: 1 -> 19 ; (2A, 2B) ; 20 -> 99 eee: 1 -> 990
+ * fff: 1 -> 999
  */
 public class GenerateUniqueSsnFr extends AbstractGenerateUniqueSsn {
 
@@ -34,15 +34,38 @@ public class GenerateUniqueSsnFr extends AbstractGenerateUniqueSsn {
     private static final int MOD97 = 97; // $NON-NLS-1$
 
     @Override
-    protected String computeKey(StringBuilder str) {
-        StringBuilder keyResult = new StringBuilder(str);
+    protected StringBuilder doValidGenerateMaskedField(String str) {
+        // read the input str
+        List<String> strs = new ArrayList<String>();
+        strs.add(str.substring(0, 1));
+        strs.add(str.substring(1, 3));
+        strs.add(str.substring(3, 5));
+        strs.add(str.substring(5, 7));
+        strs.add(str.substring(7, 10));
+        strs.add(str.substring(10, 13));
+
+        StringBuilder result = ssnPattern.generateUniqueString(strs);
+        if (result == null) {
+            return null;
+        }
+
+        // add the security key specified for french SSN
+        String key = computeFrenchKey(result.toString());
+
+        result.append(key);
+
+        return result;
+    }
+
+    private String computeFrenchKey(String string) {
+
+        StringBuilder keyResult = new StringBuilder(string);
 
         if (keyResult.charAt(5) == '2') {
             keyResult.setCharAt(5, '1');
             keyResult.setCharAt(6, (keyResult.charAt(6) == 'A') ? '9' : '8');
         }
-
-        int controlKey = MOD97 - (int) (Long.valueOf(keyResult.toString()) % MOD97);
+        int controlKey = 97 - (int) (Long.valueOf(keyResult.toString()) % MOD97);
 
         StringBuilder res = new StringBuilder();
         if (controlKey < 10)
@@ -81,20 +104,4 @@ public class GenerateUniqueSsnFr extends AbstractGenerateUniqueSsn {
         return fields;
     }
 
-    public List<AbstractField> getFields() {
-        return createFieldsListFromPattern();
-    }
-
-    protected List<String> splitFields(String str) {
-        // read the input str
-        List<String> strs = new ArrayList<String>();
-        strs.add(str.substring(0, 1));
-        strs.add(str.substring(1, 3));
-        strs.add(str.substring(3, 5));
-        strs.add(str.substring(5, 7));
-        strs.add(str.substring(7, 10));
-        strs.add(str.substring(10, 13));
-
-        return strs;
-    }
 }

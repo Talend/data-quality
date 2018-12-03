@@ -13,15 +13,11 @@
 package org.talend.dataquality.datamasking.functions;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.talend.dataquality.datamasking.FormatPreservingMethod;
-import org.talend.dataquality.datamasking.SecretManager;
 
 /**
  * @author jteuladedenantes
@@ -36,7 +32,6 @@ public class GenerateUniqueSsnJapanTest {
     public void setUp() throws Exception {
         gnj.setRandom(new Random(42));
         gnj.setKeepFormat(true);
-        gnj.setSecretManager(new SecretManager(FormatPreservingMethod.BASIC, null));
     }
 
     @Test
@@ -49,14 +44,12 @@ public class GenerateUniqueSsnJapanTest {
     @Test
     public void testGood1() {
         output = gnj.generateMaskedRow("830807527228");
-        assertTrue(gnj.isValid(output));
         assertEquals("477564837070", output);
     }
 
     @Test
     public void testGood2() {
         output = gnj.generateMaskedRow("486953617449");
-        assertTrue(gnj.isValid(output));
         assertEquals("370892787197", output);
     }
 
@@ -65,7 +58,7 @@ public class GenerateUniqueSsnJapanTest {
         gnj.setKeepInvalidPattern(false);
         // without a number
         output = gnj.generateMaskedRow("83080727228");
-        assertNull(output);
+        assertEquals(null, output);
     }
 
     @Test
@@ -73,6 +66,6 @@ public class GenerateUniqueSsnJapanTest {
         gnj.setKeepInvalidPattern(false);
         // with a letter instead of a number
         output = gnj.generateMaskedRow("83080752722P");
-        assertNull(output);
+        assertEquals(null, output);
     }
 }

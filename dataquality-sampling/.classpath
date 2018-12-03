@@ -8,6 +8,5 @@
 	<classpathentry excluding="**/*.java" kind="src" output="target/classes" path="src/test/resources"/>
 	<classpathentry kind="lib" path="lib/automaton.jar"/>
 	<classpathentry kind="lib" path="lib/generex.jar"/>
-	<classpathentry kind="lib" path="lib/format-preserving-encryption.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
