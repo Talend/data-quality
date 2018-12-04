@@ -37,6 +37,7 @@ Require-Bundle: org.slf4j.api,
  org.talend.dataquality.semantic.model,
  org.talend.dataquality.record.linkage,
  org.talend.dataquality.sampling,
+ org.talend.libraries.google.re2j,
  org.apache.commons.beanutils
 Bundle-ClassPath: .,
  lib/commons-csv-1.3.jar
