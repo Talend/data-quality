@@ -16,7 +16,6 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.talend.dataquality.datamasking.generic.GenerateUniqueRandomPatterns;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
 
@@ -38,16 +37,9 @@ public class GenerateUniqueSsnJapan extends AbstractGenerateUniqueSsn {
     }
 
     @Override
-    protected StringBuilder doValidGenerateMaskedField(String str) {
-        // read the input str
+    protected List<String> splitFields(String str) {
         List<String> strs = new ArrayList<String>();
         strs.add(str.substring(0, 12));
-
-        if (ssnPattern == null) {
-            List<AbstractField> fields = createFieldsListFromPattern();
-            ssnPattern = new GenerateUniqueRandomPatterns(fields);
-        }
-
-        return ssnPattern.generateUniqueString(strs);
+        return strs;
     }
 }

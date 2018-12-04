@@ -37,6 +37,11 @@
                                     <artifactId>automaton</artifactId>
                                     <version>1.12-1</version>
                                 </artifactItem>
+                                <artifactItem>
+                                    <groupId>com.idealista</groupId>
+                                    <artifactId>format-preserving-encryption</artifactId>
+                                    <version>1.0.0</version>
+                                </artifactItem>
                             </artifactItems>
                         </configuration>
                     </execution>
@@ -48,7 +53,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
-                        <Include-Resource>{maven-resources},lib/automaton.jar=lib/automaton.jar,lib/generex.jar=lib/generex.jar,licenses=licenses</Include-Resource>
+                        <Include-Resource>{maven-resources},lib/automaton.jar=lib/automaton.jar,lib/generex.jar=lib/generex.jar,lib/format-preserving-encryption.jar=lib/format-preserving-encryption.jar,licenses=licenses</Include-Resource>
                     </instructions>
                 </configuration>
             </plugin>
@@ -102,32 +107,39 @@
 			<artifactId>assertj-core</artifactId>
 			<scope>test</scope>
 		</dependency>
+
 		<!-- logging stuff -->
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 		</dependency>
+
 		<dependency>
 			<groupId>com.googlecode.libphonenumber</groupId>
 			<artifactId>libphonenumber</artifactId>
 			<version>8.9.6</version>
 			<scope>test</scope>
 		</dependency>
+
 		 <!--used by GenerateFromRegex-->
         <dependency>
             <groupId>com.github.mifmif</groupId>
             <artifactId>generex</artifactId>
             <version>1.0.2</version>
          </dependency>
-        
-         <!-- https://mvnrepository.com/artifact/dk.brics/automaton -->
 		<dependency>
 		    <groupId>dk.brics</groupId>
 		    <artifactId>automaton</artifactId>
 		    <version>1.12-1</version>
 		</dependency>
 
-         <!--used by GenerateFromRegex-->
+		<!-- used for FPE masking.
+		https://github.com/idealista/format-preserving-encryption-java-->
+		<dependency>
+			<groupId>com.idealista</groupId>
+			<artifactId>format-preserving-encryption</artifactId>
+			<version>1.0.0</version>
+		</dependency>
 	</dependencies>
 
 </project>

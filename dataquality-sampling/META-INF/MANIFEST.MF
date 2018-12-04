@@ -5,9 +5,12 @@ Bundle-SymbolicName: org.talend.dataquality.sampling
 Bundle-Version: 6.2.0.SNAPSHOT
 Bundle-Vendor: .Talend SA.
 Export-Package: org.talend.dataquality.datamasking,
+ org.talend.dataquality.datamasking.utils,
+ org.talend.dataquality.datamasking.utils.crypto,
  org.talend.dataquality.datamasking.functions,
  org.talend.dataquality.datamasking.generic,
  org.talend.dataquality.datamasking.generic.fields,
+ org.talend.dataquality.datamasking.generic.patterns,
  org.talend.dataquality.datamasking.semantic,
  org.talend.dataquality.datamasking.shuffling,
  org.talend.dataquality.duplicating,
@@ -16,7 +19,8 @@ Export-Package: org.talend.dataquality.datamasking,
  org.talend.dataquality.sampling.parallel
 Bundle-ClassPath: .,
  lib/automaton.jar,
- lib/generex.jar
+ lib/generex.jar,
+ lib/format-preserving-encryption.jar
 Import-Package: com.google.i18n.phonenumbers,
  org.apache.commons.codec.language,
  org.apache.commons.io;version="[2.2.0,3.0.0)",

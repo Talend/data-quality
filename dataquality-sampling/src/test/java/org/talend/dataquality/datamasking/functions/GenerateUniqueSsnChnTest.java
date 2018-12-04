@@ -13,11 +13,15 @@
 package org.talend.dataquality.datamasking.functions;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.talend.dataquality.datamasking.FormatPreservingMethod;
+import org.talend.dataquality.datamasking.SecretManager;
 
 /**
  * @author dprot
@@ -32,6 +36,7 @@ public class GenerateUniqueSsnChnTest {
     public void setUp() throws Exception {
         gnf.setRandom(new Random(42));
         gnf.setKeepFormat(true);
+        gnf.setSecretManager(new SecretManager(FormatPreservingMethod.BASIC, null));
     }
 
     @Test
@@ -45,7 +50,7 @@ public class GenerateUniqueSsnChnTest {
     public void testKeepInvalidPatternTrue() {
         gnf.setKeepInvalidPattern(true);
         output = gnf.generateMaskedRow(null);
-        assertEquals(null, output);
+        assertNull(output);
         output = gnf.generateMaskedRow("");
         assertEquals("", output);
         output = gnf.generateMaskedRow("AHDBNSKD");
@@ -56,16 +61,17 @@ public class GenerateUniqueSsnChnTest {
     public void testKeepInvalidPatternFalse() {
         gnf.setKeepInvalidPattern(false);
         output = gnf.generateMaskedRow(null);
-        assertEquals(null, output);
+        assertNull(output);
         output = gnf.generateMaskedRow("");
-        assertEquals(null, output);
+        assertNull(output);
         output = gnf.generateMaskedRow("AHDBNSKD");
-        assertEquals(null, output);
+        assertNull(output);
     }
 
     @Test
     public void testGood() {
         output = gnf.generateMaskedRow("64010119520414123X");
+        assertTrue(gnf.isValid(output));
         assertEquals("15092320521223813X", output);
     }
 
@@ -73,6 +79,7 @@ public class GenerateUniqueSsnChnTest {
     public void testGoodSpace() {
         // with spaces
         output = gnf.generateMaskedRow("231202 19510411 456   4");
+        assertTrue(gnf.isValid(output));
         assertEquals("410422 19840319 136   X", output);
     }
 
@@ -80,6 +87,7 @@ public class GenerateUniqueSsnChnTest {
     public void testGoodLeapYear() {
         // leap year for date of birth
         output = gnf.generateMaskedRow("232723 19960229 459 4");
+        assertTrue(gnf.isValid(output));
         assertEquals("445322 19370707 229 X", output);
     }
 
@@ -88,7 +96,7 @@ public class GenerateUniqueSsnChnTest {
         gnf.setKeepInvalidPattern(false);
         // without a number
         output = gnf.generateMaskedRow("6401011920414123X");
-        assertEquals(null, output);
+        assertNull(output);
     }
 
     @Test
@@ -96,7 +104,7 @@ public class GenerateUniqueSsnChnTest {
         gnf.setKeepInvalidPattern(false);
         // with a wrong letter
         output = gnf.generateMaskedRow("640101195204141C3X");
-        assertEquals(null, output);
+        assertNull(output);
     }
 
     @Test
@@ -104,7 +112,7 @@ public class GenerateUniqueSsnChnTest {
         gnf.setKeepInvalidPattern(false);
         // With an invalid region code
         output = gnf.generateMaskedRow("11000119520414123X");
-        assertEquals(null, output);
+        assertNull(output);
     }
 
     @Test
@@ -112,7 +120,7 @@ public class GenerateUniqueSsnChnTest {
         gnf.setKeepInvalidPattern(false);
         // With an invalid date of birth (wrong year)
         output = gnf.generateMaskedRow("64010118520414123X");
-        assertEquals(null, output);
+        assertNull(output);
     }
 
     @Test
@@ -120,7 +128,7 @@ public class GenerateUniqueSsnChnTest {
         gnf.setKeepInvalidPattern(false);
         // With an invalid date of birth (day not existing)
         output = gnf.generateMaskedRow("64010119520434123X");
-        assertEquals(null, output);
+        assertNull(output);
     }
 
     @Test
@@ -128,7 +136,7 @@ public class GenerateUniqueSsnChnTest {
         gnf.setKeepInvalidPattern(false);
         // With an invalid date of birth (29th February in a non-leap year)
         output = gnf.generateMaskedRow("64010119530229123X");
-        assertEquals(null, output);
+        assertNull(output);
     }
 
 }

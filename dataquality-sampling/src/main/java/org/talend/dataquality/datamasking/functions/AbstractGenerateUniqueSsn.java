@@ -15,8 +15,13 @@ package org.talend.dataquality.datamasking.functions;
 import java.util.List;
 import java.util.Random;
 
-import org.talend.dataquality.datamasking.generic.GenerateUniqueRandomPatterns;
+import org.talend.dataquality.datamasking.FormatPreservingMethod;
+import org.talend.dataquality.datamasking.SecretManager;
+import org.talend.dataquality.datamasking.generic.patterns.GenerateFormatPreservingPatterns;
+import org.talend.dataquality.datamasking.generic.patterns.GenerateUniqueRandomPatterns;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
+import org.talend.dataquality.datamasking.generic.patterns.AbstractGeneratePattern;
+import org.talend.dataquality.datamasking.utils.crypto.BasicSpec;
 
 /**
  * @author jteuladedenantes
@@ -27,7 +32,7 @@ public abstract class AbstractGenerateUniqueSsn extends Function<String> {
 
     private static final long serialVersionUID = -2459692854626505777L;
 
-    protected GenerateUniqueRandomPatterns ssnPattern;
+    protected AbstractGeneratePattern ssnPattern;
 
     /**
      * Used in some countries to check the SSN number. The initialization can be done in createFieldsListFromPattern
@@ -43,7 +48,16 @@ public abstract class AbstractGenerateUniqueSsn extends Function<String> {
     @Override
     public void setRandom(Random rand) {
         super.setRandom(rand);
-        ssnPattern.setKey(rand.nextInt() % 10000 + 1000);
+    }
+
+    @Override
+    public void setSecretManager(SecretManager secMng) {
+        this.secretMng = secMng;
+        if (secMng.getMethod() == FormatPreservingMethod.BASIC) {
+            secretMng.setKey(super.rnd.nextInt() % BasicSpec.BASIC_KEY_BOUND + BasicSpec.BASIC_KEY_OFFSET);
+        } else {
+            ssnPattern = new GenerateFormatPreservingPatterns(2, ssnPattern.getFields());
+        }
     }
 
     @Override
@@ -52,13 +66,13 @@ public abstract class AbstractGenerateUniqueSsn extends Function<String> {
             return null;
         }
 
-        String strWithoutSpaces = super.removeFormatInString(str);
+        String strWithoutFormat = super.removeFormatInString(str);
         // check if the pattern is valid
-        if (strWithoutSpaces.isEmpty() || strWithoutSpaces.length() != ssnPattern.getFieldsCharsLength() + checkSumSize) {
+        if (!isValidWithoutFormat(strWithoutFormat)) {
             return getResult(str);
         }
 
-        StringBuilder result = doValidGenerateMaskedField(strWithoutSpaces);
+        StringBuilder result = doValidGenerateMaskedField(strWithoutFormat);
         if (result == null) {
             return getResult(str);
         }
@@ -69,11 +83,20 @@ public abstract class AbstractGenerateUniqueSsn extends Function<String> {
         }
     }
 
+    protected StringBuilder doValidGenerateMaskedField(String str) {
+        // read the input str
+        List<String> strs = splitFields(str);
+
+        StringBuilder result = ssnPattern.generateUniqueString(strs, secretMng);
+        if (result == null) {
+            return null;
+        }
+
+        return result.append(computeKey(result));
+    }
+
     /**
      * Get result by input data
-     * 
-     * @param str
-     * @return
      */
     private String getResult(String str) {
         if (keepInvalidPattern) {
@@ -88,6 +111,47 @@ public abstract class AbstractGenerateUniqueSsn extends Function<String> {
      */
     protected abstract List<AbstractField> createFieldsListFromPattern();
 
-    protected abstract StringBuilder doValidGenerateMaskedField(String str);
+    /**
+     * Split the string value into the corresponding list of fields.
+     * @param str the string value without format
+     * @return the list of string fields
+     */
+    protected abstract List<String> splitFields(String str);
+
+    /**
+     * A control key is not necessarily put at the end of SSNs like in the US, the UK, Japan or Germany.
+     * This method must be overridden if a SSN has a control key like for France, China and India.
+     */
+    protected String computeKey(StringBuilder str) {
+        return "";
+    }
+
+    private boolean isValidWithoutFormat(String str) {
+        boolean isValid;
+
+        if (str.isEmpty() || str.length() != ssnPattern.getFieldsCharsLength() + checkSumSize) {
+            isValid = false;
+        } else {
+            isValid = ssnPattern.encodeFields(splitFields(str)) != null;
+        }
+
+        return isValid;
+    }
+
+    /**
+     * Verifies the validity of a ssn string.
+     */
+    protected boolean isValid(String str) {
+        boolean isValid;
+
+        if (str == null || str.isEmpty()) {
+            isValid = false;
+        } else {
+            String strWithoutSpaces = super.removeFormatInString(str);
+            isValid = isValidWithoutFormat(strWithoutSpaces);
+        }
+
+        return isValid;
+    }
 
 }

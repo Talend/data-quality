@@ -44,22 +44,14 @@ public class GenerateUniqueSsnIndia extends AbstractGenerateUniqueSsn {
     private static final int[] INV = { 0, 4, 3, 2, 1, 5, 6, 7, 8, 9 };
 
     @Override
-    protected StringBuilder doValidGenerateMaskedField(String str) {
-        // read the input str
-        List<String> strs = new ArrayList<String>();
-        strs.add(str.substring(0, 1));
-        strs.add(str.substring(1, 11));
+    protected String computeKey(StringBuilder str) {
+        int c = 0;
+        int[] myArray = stringToReversedIntArray(str.toString());
 
-        StringBuilder result = ssnPattern.generateUniqueString(strs);
-        if (result == null) {
-            return null;
+        for (int i = 0; i < myArray.length; i++) {
+            c = D[c][P[(i + 1) % 8][myArray[i]]];
         }
-
-        // add the security key specified for Indian SSN
-        String controlKey = computeIndianKey(result.toString());
-        result.append(controlKey);
-
-        return result;
+        return Integer.toString(INV[c]);
     }
 
     /**
@@ -77,23 +69,12 @@ public class GenerateUniqueSsnIndia extends AbstractGenerateUniqueSsn {
         return fields;
     }
 
-    /**
-     * 
-     * Compute the key for an Indian SSN
-     * 
-     * @param string
-     * @return
-     */
-    private String computeIndianKey(String string) {
-
-        int c = 0;
-        int[] myArray = stringToReversedIntArray(string);
-
-        for (int i = 0; i < myArray.length; i++) {
-            c = D[c][P[(i + 1) % 8][myArray[i]]];
-        }
-
-        return Integer.toString(INV[c]);
+    @Override
+    protected List<String> splitFields(String str) {
+        List<String> strs = new ArrayList<String>();
+        strs.add(str.substring(0, 1));
+        strs.add(str.substring(1, 11));
+        return strs;
     }
 
     /*

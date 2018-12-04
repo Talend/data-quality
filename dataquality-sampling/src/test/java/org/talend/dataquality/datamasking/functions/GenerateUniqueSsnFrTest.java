@@ -12,12 +12,14 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.talend.dataquality.datamasking.FormatPreservingMethod;
+import org.talend.dataquality.datamasking.SecretManager;
+
+import static org.junit.Assert.*;
 
 /**
  * @author jteuladedenantes
@@ -31,6 +33,8 @@ public class GenerateUniqueSsnFrTest {
     @Before
     public void setUp() throws Exception {
         gnf.setRandom(new Random(42));
+        // Set key for having consistent results;
+        gnf.setSecretManager(new SecretManager(FormatPreservingMethod.BASIC, null));
         gnf.setKeepFormat(true);
     }
 
@@ -45,7 +49,7 @@ public class GenerateUniqueSsnFrTest {
     public void testKeepInvalidPatternTrue() {
         gnf.setKeepInvalidPattern(true);
         output = gnf.generateMaskedRow(null);
-        assertEquals(null, output);
+        assertNull(output);
         output = gnf.generateMaskedRow("");
         assertEquals("", output);
         output = gnf.generateMaskedRow("AHDBNSKD");
@@ -56,16 +60,17 @@ public class GenerateUniqueSsnFrTest {
     public void testKeepInvalidPatternFalse() {
         gnf.setKeepInvalidPattern(false);
         output = gnf.generateMaskedRow(null);
-        assertEquals(null, output);
+        assertNull(output);
         output = gnf.generateMaskedRow("");
-        assertEquals(null, output);
+        assertNull(output);
         output = gnf.generateMaskedRow("AHDBNSKD");
-        assertEquals(null, output);
+        assertNull(output);
     }
 
     @Test
     public void testGood1() {
         output = gnf.generateMaskedRow("1860348282074 19");
+        assertTrue(gnf.isValid(output));
         assertEquals("2000132446558 52", output);
     }
 
@@ -74,6 +79,7 @@ public class GenerateUniqueSsnFrTest {
         gnf.setKeepFormat(false);
         // with spaces
         output = gnf.generateMaskedRow("2 12 12 15 953 006   88");
+        assertTrue(gnf.isValid(output));
         assertEquals("117051129317622", output);
     }
 
@@ -81,6 +87,7 @@ public class GenerateUniqueSsnFrTest {
     public void testGood3() {
         // corse department
         output = gnf.generateMaskedRow("10501  2B 532895 34");
+        assertTrue(gnf.isValid(output));
         assertEquals("12312  85 719322 48", output);
     }
 
@@ -89,6 +96,7 @@ public class GenerateUniqueSsnFrTest {
         gnf.setKeepFormat(false);
         // with a control key less than 10
         output = gnf.generateMaskedRow("1960159794247 60");
+        assertTrue(gnf.isValid(output));
         assertEquals("276115886661903", output);
     }
 
@@ -97,7 +105,7 @@ public class GenerateUniqueSsnFrTest {
         gnf.setKeepInvalidPattern(false);
         // without a number
         output = gnf.generateMaskedRow("186034828207 19");
-        assertEquals(null, output);
+        assertNull(output);
     }
 
     @Test
@@ -105,7 +113,7 @@ public class GenerateUniqueSsnFrTest {
         gnf.setKeepInvalidPattern(false);
         // with a wrong letter
         output = gnf.generateMaskedRow("186034Y282079 19");
-        assertEquals(null, output);
+        assertNull(output);
     }
 
     @Test
@@ -113,7 +121,7 @@ public class GenerateUniqueSsnFrTest {
         gnf.setKeepInvalidPattern(false);
         // with a letter instead of a number
         output = gnf.generateMaskedRow("1860I48282079 19");
-        assertEquals(null, output);
+        assertNull(output);
     }
 
 }

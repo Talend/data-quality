@@ -49,33 +49,14 @@ public class GenerateUniqueSsnChn extends AbstractGenerateUniqueSsn {
     private static final List<String> keyString = Collections
             .unmodifiableList(Arrays.asList("1", "0", "X", "9", "8", "7", "6", "5", "4", "3", "2"));
 
-    private String computeChineseKey(String ssnNumber) {
+    @Override
+    protected String computeKey(StringBuilder str) {
         int key = 0;
         for (int i = 0; i < 17; i++) {
-            key += Character.getNumericValue(ssnNumber.charAt(i)) * keyWeight.get(i);
+            key += Character.getNumericValue(str.charAt(i)) * keyWeight.get(i);
         }
         key = key % KEYMOD;
         return keyString.get(key);
-    }
-
-    @Override
-    protected StringBuilder doValidGenerateMaskedField(String str) {
-        // read the input strWithoutSpaces
-        List<String> strs = new ArrayList<String>();
-        strs.add(str.substring(0, 6));
-        strs.add(str.substring(6, 14));
-        strs.add(str.substring(14, 17));
-
-        StringBuilder result = ssnPattern.generateUniqueString(strs);
-        if (result == null) {
-            return null;
-        }
-
-        // Add the security key specified for Chinese SSN
-        String controlKey = computeChineseKey(result.toString());
-        result.append(controlKey);
-
-        return result;
     }
 
     @Override
@@ -95,6 +76,16 @@ public class GenerateUniqueSsnChn extends AbstractGenerateUniqueSsn {
         fields.add(new FieldInterval(BigInteger.ZERO, BigInteger.valueOf(999)));
         checkSumSize = 1;
         return fields;
+    }
+
+    protected List<String> splitFields(String str) {
+        // read the input str
+        List<String> strs = new ArrayList<String>();
+        strs.add(str.substring(0, 6));
+        strs.add(str.substring(6, 14));
+        strs.add(str.substring(14, 17));
+
+        return strs;
     }
 
 }
