@@ -33,8 +33,6 @@ public class GenerateUniqueSsnFrTest {
     @Before
     public void setUp() throws Exception {
         gnf.setRandom(new Random(42));
-        // Set key for having consistent results;
-        gnf.setSecretManager(new SecretManager(FormatPreservingMethod.BASIC, null));
         gnf.setKeepFormat(true);
     }
 

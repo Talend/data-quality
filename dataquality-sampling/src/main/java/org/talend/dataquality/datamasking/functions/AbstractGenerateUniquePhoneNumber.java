@@ -5,15 +5,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.talend.dataquality.datamasking.SecretManager;
 import org.talend.dataquality.datamasking.generic.patterns.GenerateUniqueRandomPatterns;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
 import org.talend.dataquality.datamasking.generic.patterns.AbstractGeneratePattern;
+import org.talend.dataquality.datamasking.utils.crypto.BasicSpec;
 
 /**
  * Created by jteuladedenantes on 21/09/16.
  */
-public abstract class AbstractGenerateUniquePhoneNumber extends Function<String> {
+public abstract class AbstractGenerateUniquePhoneNumber extends AbstractGenerateWithSecret {
 
     private static final long serialVersionUID = -3495285699226639929L;
 
@@ -30,7 +32,10 @@ public abstract class AbstractGenerateUniquePhoneNumber extends Function<String>
     public void setRandom(Random rand) {
         super.setRandom(rand);
         replaceNumeric.parse(null, false, rand);
-        secretMng.setKey(rand.nextInt(Integer.MAX_VALUE - 1000000) + 1000000);
+        if (secretMng == null) {
+            secretMng = new SecretManager();
+        }
+        secretMng.setKey(super.rnd.nextInt(Integer.MAX_VALUE - 1000000) + 1000000);
     }
 
     @Override

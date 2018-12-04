@@ -29,6 +29,8 @@ import java.util.List;
  */
 public class GenerateFormatPreservingPatterns extends AbstractGeneratePattern {
 
+    private static final long serialVersionUID = -2998638592803380290L;
+
     /**
      * The cipher used to encrypt data.
      * It is taken from <a href="https://github.com/idealista/format-preserving-encryption-java">

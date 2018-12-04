@@ -36,7 +36,6 @@ public class GenerateUniqueSsnJapanTest {
     public void setUp() throws Exception {
         gnj.setRandom(new Random(42));
         gnj.setKeepFormat(true);
-        gnj.setSecretManager(new SecretManager(FormatPreservingMethod.BASIC, null));
     }
 
     @Test

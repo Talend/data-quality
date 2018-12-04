@@ -23,7 +23,6 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.dataquality.duplicating.RandomWrapper;
-import org.talend.dataquality.datamasking.SecretManager;
 
 /**
  * created by jgonzalez on 18 juin 2015. This class is an abstract class that
@@ -52,11 +51,6 @@ public abstract class Function<T> implements Serializable {
     protected Random rnd = new Random();
 
     protected String[] parameters;
-
-    /**
-     * The SecretManager handles keys and secret used to generate masked values.
-     */
-    protected SecretManager secretMng = new SecretManager();
 
     protected boolean keepNull = false;
 
@@ -110,15 +104,6 @@ public abstract class Function<T> implements Serializable {
 
     public void setKeepInvalidPattern(boolean keepInvalidPattern) {
         this.keepInvalidPattern = keepInvalidPattern;
-    }
-
-    /**
-     * This method sets the Secret Manager for the Function.
-     *
-     * @param secMng The instance of SecretManager to use.
-     * */
-    public void setSecretManager(SecretManager secMng) {
-        this.secretMng = secMng;
     }
 
     /**
@@ -261,6 +246,12 @@ public abstract class Function<T> implements Serializable {
 
     protected T doGenerateMaskedFieldConsistent(T t) {
         throw new NotImplementedException();
+    }
+
+    public void setSecret(String method, String secret) {
+        if (!(this instanceof AbstractGenerateWithSecret)) {
+            throw new UnsupportedOperationException("The class " + this.getClass() + " should not use a secret.");
+        }
     }
 
     protected int nextRandomDigit() {

@@ -54,4 +54,10 @@ public class FunctionTest {
         Assert.assertEquals("genericTokens should not be empty", "Configuration issue (check your parameters)", //$NON-NLS-1$ //$NON-NLS-2$
                 generateFromFileString.genericTokens.get(0));
     }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void setSecretWithWrongFunctionType() {
+        Function fn = new GenerateCreditCardFormatLong();
+        fn.setSecret("BASIC", "Password");
+    }
 }

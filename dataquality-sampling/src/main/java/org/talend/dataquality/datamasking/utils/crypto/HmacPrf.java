@@ -33,6 +33,8 @@ import java.security.NoSuchAlgorithmException;
  */
 public class HmacPrf extends AbstractPrf {
 
+    private static final long serialVersionUID = 5826316461622875148L;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(HmacPrf.class);
 
     private Mac hmac;

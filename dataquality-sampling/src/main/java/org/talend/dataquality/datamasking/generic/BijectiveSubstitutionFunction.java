@@ -13,7 +13,8 @@ import java.util.Random;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.talend.dataquality.datamasking.functions.Function;
+import org.talend.dataquality.datamasking.SecretManager;
+import org.talend.dataquality.datamasking.functions.AbstractGenerateWithSecret;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldDate;
 import org.talend.dataquality.datamasking.generic.fields.FieldEnum;
@@ -26,7 +27,7 @@ import org.talend.dataquality.sampling.exception.DQRuntimeException;
 /**
  *
  */
-public class BijectiveSubstitutionFunction extends Function<String> {
+public class BijectiveSubstitutionFunction extends AbstractGenerateWithSecret {
 
     private static final long serialVersionUID = 8900059408697610292L;
 
@@ -120,6 +121,9 @@ public class BijectiveSubstitutionFunction extends Function<String> {
     @Override
     public void setRandom(Random rand) {
         super.setRandom(rand);
+        if (secretMng == null) {
+            secretMng = new SecretManager();
+        }
         secretMng.setKey(rand.nextInt() % BasicSpec.BASIC_KEY_BOUND + BasicSpec.BASIC_KEY_OFFSET);
     }
 

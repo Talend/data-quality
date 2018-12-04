@@ -8,6 +8,8 @@ package org.talend.dataquality.datamasking.utils.crypto;
  */
 public class HmacSha2CryptoSpec implements AbstractCryptoSpec {
 
+    private static final long serialVersionUID = 255044036901853895L;
+
     @Override
     public String getCipherAlgorithm() {
         return "HmacSHA256";

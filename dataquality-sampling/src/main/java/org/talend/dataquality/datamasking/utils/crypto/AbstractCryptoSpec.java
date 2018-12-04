@@ -1,5 +1,7 @@
 package org.talend.dataquality.datamasking.utils.crypto;
 
+import java.io.Serializable;
+
 /**
  * Abstract class that contains the specifications of an {@link AbstractPrf} instance.
  * This specifications include :
@@ -14,7 +16,7 @@ package org.talend.dataquality.datamasking.utils.crypto;
  * @see CryptoFactory
  * @see AbstractPrf
  */
-public interface AbstractCryptoSpec {
+public interface AbstractCryptoSpec extends Serializable {
 
     String getCipherAlgorithm();
 

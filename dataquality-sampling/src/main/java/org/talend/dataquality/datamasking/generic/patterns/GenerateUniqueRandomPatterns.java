@@ -25,6 +25,8 @@ import org.talend.dataquality.datamasking.generic.fields.AbstractField;
  */
 public class GenerateUniqueRandomPatterns extends AbstractGeneratePattern {
 
+    private static final long serialVersionUID = -6142792466994187170L;
+
     public GenerateUniqueRandomPatterns(List<AbstractField> fields) {
         super(fields);
     }

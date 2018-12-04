@@ -3,6 +3,7 @@ package org.talend.dataquality.datamasking.utils.crypto;
 import com.idealista.fpe.component.functions.prf.PseudoRandomFunction;
 
 import javax.crypto.SecretKey;
+import java.io.Serializable;
 
 /**
  * Abstract class of the keyed pseudo-random functions used by {@link org.talend.dataquality.datamasking.SecretManager}
@@ -14,7 +15,9 @@ import javax.crypto.SecretKey;
  * @see AbstractCryptoSpec
  * @see CryptoFactory
  */
-public abstract class AbstractPrf implements PseudoRandomFunction {
+public abstract class AbstractPrf implements PseudoRandomFunction, Serializable {
+
+    private static final long serialVersionUID = -1056892850423616130L;
 
     protected AbstractCryptoSpec cryptoSpec;
 

@@ -28,7 +28,7 @@ import org.talend.dataquality.datamasking.utils.crypto.BasicSpec;
  * 
  * This abstract class contains all attributes and methods similar among the SNN numbers.
  */
-public abstract class AbstractGenerateUniqueSsn extends Function<String> {
+public abstract class AbstractGenerateUniqueSsn extends AbstractGenerateWithSecret {
 
     private static final long serialVersionUID = -2459692854626505777L;
 
@@ -48,12 +48,17 @@ public abstract class AbstractGenerateUniqueSsn extends Function<String> {
     @Override
     public void setRandom(Random rand) {
         super.setRandom(rand);
+        if (secretMng == null) {
+            secretMng = new SecretManager();
+        }
+        secretMng.setKey(super.rnd.nextInt() % BasicSpec.BASIC_KEY_BOUND + BasicSpec.BASIC_KEY_OFFSET);
     }
 
     @Override
-    public void setSecretManager(SecretManager secMng) {
-        this.secretMng = secMng;
-        if (secMng.getMethod() == FormatPreservingMethod.BASIC) {
+    public void setSecret(String method, String password) {
+        secretMng = new SecretManager(method, password);
+
+        if (FormatPreservingMethod.BASIC == secretMng.getMethod()) {
             secretMng.setKey(super.rnd.nextInt() % BasicSpec.BASIC_KEY_BOUND + BasicSpec.BASIC_KEY_OFFSET);
         } else {
             ssnPattern = new GenerateFormatPreservingPatterns(2, ssnPattern.getFields());

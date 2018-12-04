@@ -36,7 +36,6 @@ public class GenerateUniqueSsnChnTest {
     public void setUp() throws Exception {
         gnf.setRandom(new Random(42));
         gnf.setKeepFormat(true);
-        gnf.setSecretManager(new SecretManager(FormatPreservingMethod.BASIC, null));
     }
 
     @Test

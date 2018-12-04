@@ -37,8 +37,6 @@ public class GenerateUniqueSsnUkTest {
     public void setUp() throws Exception {
         gnu.setRandom(new Random(42));
         gnu.setKeepFormat(true);
-        gnu.setSecretManager(new SecretManager(FormatPreservingMethod.BASIC, null));
-
     }
 
     @Test

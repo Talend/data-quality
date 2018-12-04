@@ -13,6 +13,7 @@
 package org.talend.dataquality.datamasking;
 
 import com.idealista.fpe.component.functions.prf.PseudoRandomFunction;
+import com.sun.org.apache.xpath.internal.compiler.PsuedoNames;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.dataquality.datamasking.utils.crypto.*;
@@ -23,10 +24,12 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -45,7 +48,9 @@ import java.util.Random;
  * @see GenerateFormatPreservingPatterns
  * @see GenerateUniqueRandomPatterns
  */
-public class SecretManager {
+public class SecretManager implements Serializable {
+
+    private static final long serialVersionUID = -1884126359185258203L;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SecretManager.class);
 
@@ -76,7 +81,11 @@ public class SecretManager {
     private PseudoRandomFunction pseudoRandomFunction;
 
     public SecretManager() {
+        this.method = FormatPreservingMethod.BASIC;
+    }
 
+    public SecretManager(String method, String password) {
+        this(FormatPreservingMethod.valueOf(method), password);
     }
 
     public SecretManager(FormatPreservingMethod method, String password) {
@@ -105,6 +114,14 @@ public class SecretManager {
 
             pseudoRandomFunction = cryptoFactory.getPrf(cryptoSpec, secret);
         }
+    }
+
+    /**
+     * setter for the method.
+     */
+    public void setMethod(String method) {
+        this.method = FormatPreservingMethod.valueOf(method);
+        cryptoSpec = cryptoFactory.getPrfSpec(this.method);
     }
 
     /**
