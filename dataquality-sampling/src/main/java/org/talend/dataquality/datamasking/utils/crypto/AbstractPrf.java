@@ -2,6 +2,7 @@ package org.talend.dataquality.datamasking.utils.crypto;
 
 import com.idealista.fpe.component.functions.prf.PseudoRandomFunction;
 
+import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import java.io.Serializable;
 
@@ -21,9 +22,10 @@ public abstract class AbstractPrf implements PseudoRandomFunction, Serializable 
 
     protected AbstractCryptoSpec cryptoSpec;
 
-    protected AbstractPrf(AbstractCryptoSpec cryptoSpec) {
-        this.cryptoSpec = cryptoSpec;
-    }
+    protected SecretKey secret;
 
-    protected abstract void init(SecretKey secret);
+    protected AbstractPrf(AbstractCryptoSpec cryptoSpec, SecretKey secret) {
+        this.cryptoSpec = cryptoSpec;
+        this.secret = secret;
+    }
 }

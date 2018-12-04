@@ -16,14 +16,16 @@ public class HmacPrfTest {
     @Mock
     private HmacSha2CryptoSpec spec;
 
+    private byte[] input = "testInput".getBytes();
+
     @Test
     public void displayIncorrectAlgorithmWhenNoSuchAlgorithmException() {
         Mockito.when(spec.getCipherAlgorithm()).thenReturn("WrongAlgorithm");
 
         SecretKey secret = generateRandomSecretKey();
 
-        // Will call init() method
-        new HmacPrf(spec, secret);
+        HmacPrf prf = new HmacPrf(spec, secret);
+        prf.apply(input);
 
         // This method should be called to display the incorrect algorithm name after the catch of 'NoSuchAlgorithmException'.
         Mockito.verify(spec, Mockito.atLeast(2)).getCipherAlgorithm();

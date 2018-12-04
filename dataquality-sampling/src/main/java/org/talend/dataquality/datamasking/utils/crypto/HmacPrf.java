@@ -37,18 +37,16 @@ public class HmacPrf extends AbstractPrf {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HmacPrf.class);
 
-    private Mac hmac;
-
     public HmacPrf(AbstractCryptoSpec cryptoSpec, SecretKey secret) {
-        super(cryptoSpec);
-        init(secret);
+        super(cryptoSpec, secret);
     }
 
     @Override
-    protected void init(SecretKey secret) {
+    public byte[] apply(byte[] text) {
         try {
-            hmac = Mac.getInstance(cryptoSpec.getCipherAlgorithm());
+            Mac hmac = Mac.getInstance(cryptoSpec.getCipherAlgorithm());
             hmac.init(secret);
+            return hmac.doFinal(text);
         } catch (NoSuchAlgorithmException e) {
             LOGGER.error("Invalid algorithm name defined in the specifications : " + cryptoSpec.getCipherAlgorithm(), e);
         } catch (InvalidKeyException e) {
@@ -60,11 +58,7 @@ public class HmacPrf extends AbstractPrf {
                 LOGGER.error("The secret has a format unsupported by java.String : " + secret.getFormat(), e1);
             }
         }
-    }
-
-    @Override
-    public byte[] apply(byte[] text) {
-        return hmac.doFinal(text);
+        return null;
     }
 
 }
