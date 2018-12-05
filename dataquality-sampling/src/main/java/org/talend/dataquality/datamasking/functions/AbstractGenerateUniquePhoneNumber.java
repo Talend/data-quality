@@ -10,7 +10,6 @@ import org.talend.dataquality.datamasking.generic.patterns.GenerateUniqueRandomP
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
 import org.talend.dataquality.datamasking.generic.patterns.AbstractGeneratePattern;
-import org.talend.dataquality.datamasking.utils.crypto.BasicSpec;
 
 /**
  * Created by jteuladedenantes on 21/09/16.

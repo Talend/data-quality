@@ -13,7 +13,6 @@
 package org.talend.dataquality.datamasking;
 
 import com.idealista.fpe.component.functions.prf.PseudoRandomFunction;
-import com.sun.org.apache.xpath.internal.compiler.PsuedoNames;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.dataquality.datamasking.utils.crypto.*;
@@ -29,7 +28,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
-import java.util.Arrays;
 import java.util.Random;
 
 /**

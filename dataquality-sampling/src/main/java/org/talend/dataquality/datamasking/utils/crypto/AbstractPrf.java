@@ -2,7 +2,6 @@ package org.talend.dataquality.datamasking.utils.crypto;
 
 import com.idealista.fpe.component.functions.prf.PseudoRandomFunction;
 
-import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import java.io.Serializable;
 
