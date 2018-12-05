@@ -52,9 +52,8 @@ public class AesCbcCryptoSpec implements AbstractCryptoSpec {
         double implVersion = Double.parseDouble(update);
 
         LOGGER.info("Java Runtime version : " + javaVersion);
-
         int supportedLength;
-        if (specVersion > 1.8 || (specVersion == 1.8 && implVersion >= 161)) {
+        if (specVersion > 1.8 || (Double.valueOf(1.8).equals(specVersion) && implVersion >= 161)) {
             supportedLength = 32;
         } else {
             supportedLength = 16;
