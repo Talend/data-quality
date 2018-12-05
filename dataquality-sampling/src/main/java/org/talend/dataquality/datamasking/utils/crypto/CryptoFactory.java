@@ -1,6 +1,5 @@
 package org.talend.dataquality.datamasking.utils.crypto;
 
-import com.idealista.fpe.component.functions.prf.PseudoRandomFunction;
 import org.talend.dataquality.datamasking.FormatPreservingMethod;
 
 import javax.crypto.SecretKey;
@@ -41,8 +40,8 @@ public class CryptoFactory {
      * Returns the correct keyed instance of {@link AbstractPrf)
      * according to the instance of {@link AbstractCryptoSpec}
      */
-    public PseudoRandomFunction getPrf(AbstractCryptoSpec spec, SecretKey secret) {
-        PseudoRandomFunction prf = null;
+    public AbstractPrf getPrf(AbstractCryptoSpec spec, SecretKey secret) {
+        AbstractPrf prf = null;
 
         if (spec instanceof AesCbcCryptoSpec) {
             prf = new AesPrf(spec, secret);

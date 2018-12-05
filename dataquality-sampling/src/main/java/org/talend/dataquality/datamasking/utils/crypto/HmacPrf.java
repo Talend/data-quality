@@ -58,7 +58,7 @@ public class HmacPrf extends AbstractPrf {
                 LOGGER.error("The secret has a format unsupported by java.String : " + secret.getFormat(), e1);
             }
         }
-        return null;
+        return new byte[] {};
     }
 
 }

@@ -37,12 +37,12 @@ public abstract class AbstractGeneratePattern implements Serializable {
     /**
      * The list of all possible values for each field
      */
-    protected List<AbstractField> fields;
+    private List<AbstractField> fields;
 
     /**
      * The number of fields of this pattern
      */
-    protected int fieldsNumber;
+    private int fieldsNumber;
 
     /**
      * The product of width fields, i.e. the combination of all possibles values
@@ -52,7 +52,7 @@ public abstract class AbstractGeneratePattern implements Serializable {
     /**
      * BasedWidthsList is used to go from a base to an other
      */
-    protected List<BigInteger> basedWidthsList;
+    private List<BigInteger> basedWidthsList;
 
     public AbstractGeneratePattern(List<AbstractField> fields) {
 

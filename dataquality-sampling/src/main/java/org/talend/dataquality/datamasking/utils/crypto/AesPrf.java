@@ -22,7 +22,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.BadPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -62,16 +62,15 @@ public class AesPrf extends AbstractPrf {
         } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
             LOGGER.error("Invalid algorithm name defined in the specifications : " + cryptoSpec.getCipherAlgorithm(), e);
         } catch (InvalidKeyException | InvalidAlgorithmParameterException e) {
-            try {
-                LOGGER.error("Invalid specifications for the cipher ! " + "Wrong key : "
-                        + new String(secret.getEncoded(), secret.getFormat()) + " or wrong key algorithm :"
-                        + cryptoSpec.getKeyAlgorithm() + " or wrong Initial Vector" + Arrays.toString(initializationVector), e);
-            } catch (UnsupportedEncodingException e1) {
-                LOGGER.error("The secret has a format unsupported by java.String : " + secret.getFormat(), e1);
-            }
+            LOGGER.error(
+                    "Invalid specifications for the cipher ! " + "Wrong key : "
+                            + new String(secret.getEncoded(), StandardCharsets.UTF_8) + " or wrong key algorithm : "
+                            + cryptoSpec.getKeyAlgorithm() + " or wrong Initial Vector" + Arrays.toString(initializationVector),
+                    e);
         } catch (IllegalBlockSizeException | BadPaddingException e) {
-            LOGGER.error("Problem with the input block to encrypt, may be due to bad plaintext split.", e);
+            LOGGER.error("Problem with the input block to encrypt, may be due to bad plaintext split. Input = "
+                    + new String(text, StandardCharsets.UTF_8), e);
         }
-        return null;
+        return new byte[] {};
     }
 }

@@ -5,7 +5,7 @@ package org.talend.dataquality.datamasking.utils.crypto;
  *
  * @author afournier
  */
-public class BasicSpec {
+public abstract class BasicSpec {
 
     public static final int BASIC_KEY_OFFSET = 1000;
 

@@ -13,7 +13,7 @@ public class AesCbcCryptoSpec implements AbstractCryptoSpec {
 
     private static final long serialVersionUID = -4824912287609169178L;
 
-    protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractCryptoSpec.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractCryptoSpec.class);
 
     private int runtimeKeyLength;
 

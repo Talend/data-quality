@@ -12,7 +12,6 @@
 // ============================================================================
 package org.talend.dataquality.datamasking;
 
-import com.idealista.fpe.component.functions.prf.PseudoRandomFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.dataquality.datamasking.utils.crypto.*;
@@ -76,7 +75,7 @@ public class SecretManager implements Serializable {
     /**
      * The keyed pseudo-random function used to build a Format-Preserving Cipher
      */
-    private PseudoRandomFunction pseudoRandomFunction;
+    private AbstractPrf pseudoRandomFunction;
 
     public SecretManager() {
         this.method = FormatPreservingMethod.BASIC;
@@ -112,14 +111,6 @@ public class SecretManager implements Serializable {
 
             pseudoRandomFunction = cryptoFactory.getPrf(cryptoSpec, secret);
         }
-    }
-
-    /**
-     * setter for the method.
-     */
-    public void setMethod(String method) {
-        this.method = FormatPreservingMethod.valueOf(method);
-        cryptoSpec = cryptoFactory.getPrfSpec(this.method);
     }
 
     /**
@@ -162,7 +153,7 @@ public class SecretManager implements Serializable {
      *
      * @return the current pseudo-random function of this {@link SecretManager}.
      */
-    public PseudoRandomFunction getPseudoRandomFunction() {
+    public AbstractPrf getPseudoRandomFunction() {
         if (pseudoRandomFunction == null) {
 
             if (method == null || method == FormatPreservingMethod.BASIC) {
