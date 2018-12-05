@@ -14,13 +14,17 @@ package org.talend.dataquality.datamasking.generic;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.datamasking.generic.FieldDefinition.FieldDefinitionType;
+import org.talend.dataquality.sampling.exception.DQRuntimeException;
 
 public class BijectiveSubstitutionFunctionTest {
 
@@ -129,6 +133,36 @@ public class BijectiveSubstitutionFunctionTest {
         // with a letter instead of a number
         output = fn.generateMaskedRow("1860I48282079");
         assertEquals(null, output);
+    }
+
+    @Test
+    public void variableLengthLastField() throws Exception {
+
+        List<FieldDefinition> fieldDefinitionList = new ArrayList<>();
+        fieldDefinitionList.add(new FieldDefinition(FieldDefinitionType.INTERVAL.getComponentValue(), null, "0,9"));
+
+        fieldDefinitionList.add(new FieldDefinition(FieldDefinitionType.ENUMERATION.getComponentValue(), "a,b,cd", null));
+
+        List<String> input = Arrays.asList("1a", "1b", "2b", "3cd", "4e", "1b", "z", "", "1abcd");
+        List<String> expectedOutput = Arrays.asList("3a", "0cd", "3cd", "4b", null, "0cd", null, null, null);
+
+        BijectiveSubstitutionFunction bijectiveSubstitutionFunction = new BijectiveSubstitutionFunction(fieldDefinitionList);
+        bijectiveSubstitutionFunction.setRandom(new Random(124));
+        bijectiveSubstitutionFunction.setKeepFormat(true);
+        List<String> output = input.stream().map(string -> bijectiveSubstitutionFunction.generateMaskedRow(string))
+                .collect(Collectors.toList());
+
+        assertEquals(expectedOutput, output);
+    }
+
+    @Test(expected = DQRuntimeException.class)
+    public void invalidPattern() throws IOException {
+        List<FieldDefinition> fieldDefinitionList = new ArrayList<>();
+
+        fieldDefinitionList
+                .add(new FieldDefinition(FieldDefinitionType.ENUMERATION.getComponentValue(), "Montreal,Paris,Nantes", null));
+        fieldDefinitionList.add(new FieldDefinition(FieldDefinitionType.INTERVAL.getComponentValue(), null, "1,2"));
+        new BijectiveSubstitutionFunction(fieldDefinitionList);
     }
 
 }

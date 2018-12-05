@@ -36,8 +36,9 @@ public class BijectiveSubstitutionFunction extends Function<String> {
         keepFormat = true;
 
         List<AbstractField> fieldList = new ArrayList<>();
-
-        for (FieldDefinition definition : fieldDefinitionList) {
+        int nbFields = fieldDefinitionList.size();
+        for (int i = 0; i < nbFields; i++) {
+            FieldDefinition definition = fieldDefinitionList.get(i);
             switch (definition.getType()) {
             case DATEPATTERN:
                 handleDatePatternCase(fieldList, definition);
@@ -46,7 +47,7 @@ public class BijectiveSubstitutionFunction extends Function<String> {
                 handleIntervalCase(fieldList, definition);
                 break;
             case ENUMERATION:
-                fieldList.add(new FieldEnum(Arrays.asList(definition.getValue().split(",")))); //$NON-NLS-1$
+                fieldList.add(new FieldEnum(Arrays.asList(definition.getValue().split(",")), i == nbFields - 1)); //$NON-NLS-1$
                 break;
             case ENUMERATION_FROM_FILE:
                 handleEnumerationFromFileCase(fieldList, definition);
@@ -128,8 +129,7 @@ public class BijectiveSubstitutionFunction extends Function<String> {
 
         String strWithoutSpaces = super.removeFormatInString(str);
         // check if the pattern is valid
-        if (strWithoutSpaces.isEmpty()
-                || strWithoutSpaces.codePointCount(0, strWithoutSpaces.length()) != uniqueGenericPattern.getFieldsCharsLength()) {
+        if (strWithoutSpaces.isEmpty() || strWithoutSpaces.codePoints().count() < uniqueGenericPattern.getFieldsCharsLength()) {
             if (keepInvalidPattern) {
                 return str;
             } else {
@@ -152,18 +152,22 @@ public class BijectiveSubstitutionFunction extends Function<String> {
         }
     }
 
-    protected StringBuilder doValidGenerateMaskedField(String str) {
+    private StringBuilder doValidGenerateMaskedField(String str) {
         // read the input str
         List<String> strs = new ArrayList<String>();
 
         int currentPos = 0;
-        for (AbstractField f : uniqueGenericPattern.getFields()) {
-            int length = f.getLength();
+        int nbFields = uniqueGenericPattern.getFields().size();
+        for (int i = 0; i < nbFields - 1; i++) {
+            AbstractField field = uniqueGenericPattern.getFields().get(i);
+            int length = field.getLength();
             int beginCPOffset = str.offsetByCodePoints(0, currentPos);
             int endCPOffset = str.offsetByCodePoints(0, currentPos + length);
             strs.add(str.substring(beginCPOffset, endCPOffset));
             currentPos += length;
         }
+        // Last field: take the remaining chain
+        strs.add(str.substring(currentPos));
 
         StringBuilder result = uniqueGenericPattern.generateUniqueString(strs);
         if (result == null) {

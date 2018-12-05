@@ -35,15 +35,39 @@ public class FieldEnum extends AbstractField {
      */
     private List<String> enumValues;
 
-    public FieldEnum(List<String> enumValues) {
-        int maxLen = 0;
+    public FieldEnum(List<String> enumValues, boolean isLastField) {
+        if (isLastField) {
+            this.enumValues = enumValues;
+            this.length = getMinLength(enumValues);
+        } else {
+            initialize(enumValues, getMaxLength(enumValues));
+        }
+    }
+
+    private int getMaxLength(List<String> enumValues) {
+        int maxLength = 0;
         for (String value : enumValues) {
             int valueCPCount = value.codePointCount(0, value.length());
-            if (valueCPCount > maxLen) {
-                maxLen = valueCPCount;
+            if (valueCPCount > maxLength) {
+                maxLength = valueCPCount;
             }
         }
-        initialize(enumValues, maxLen);
+        return maxLength;
+    }
+
+    private int getMinLength(List<String> enumValues) {
+        int minLength = enumValues.size() == 0 ? 0 : (int) enumValues.get(0).codePoints().count();
+        for (String value : enumValues) {
+            int valueCPCount = value.codePointCount(0, value.length());
+            if (valueCPCount < minLength) {
+                minLength = valueCPCount;
+            }
+        }
+        return minLength;
+    }
+
+    public FieldEnum(List<String> enumValues) {
+        this(enumValues, false);
     }
 
     public FieldEnum(List<String> enumValues, int length) {
