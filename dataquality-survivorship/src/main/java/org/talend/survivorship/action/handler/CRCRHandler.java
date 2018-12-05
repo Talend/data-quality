@@ -120,6 +120,11 @@ public class CRCRHandler extends AbstractChainOfResponsibilityHandler {
                     removedIndexList.add(index);
                 }
             }
+            // for survivorAs function we need to make sure the conflict has be resoultion.
+            // If no conflict exist at here then no index need to be removed
+            if (this.conflictingRowNumbers.size() == 0) {
+                removedIndexList.clear();
+            }
             // 4.next handleRequest
             if (this.getSuccessor() != null) {
                 List<Integer> newConflictDataIndexList = this.getHandlerParameter().getConflictDataIndexList();
