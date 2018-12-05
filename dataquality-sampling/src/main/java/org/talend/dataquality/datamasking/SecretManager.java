@@ -12,11 +12,16 @@
 // ============================================================================
 package org.talend.dataquality.datamasking;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.talend.dataquality.datamasking.utils.crypto.*;
 import org.talend.dataquality.datamasking.generic.patterns.GenerateFormatPreservingPatterns;
 import org.talend.dataquality.datamasking.generic.patterns.GenerateUniqueRandomPatterns;
+import org.talend.dataquality.datamasking.utils.crypto.AbstractCryptoSpec;
+import org.talend.dataquality.datamasking.utils.crypto.AbstractPrf;
+import org.talend.dataquality.datamasking.utils.crypto.AesPrf;
+import org.talend.dataquality.datamasking.utils.crypto.CryptoFactory;
+import org.talend.dataquality.datamasking.utils.crypto.HmacPrf;
 
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
@@ -50,6 +55,8 @@ public class SecretManager implements Serializable {
     private static final long serialVersionUID = -1884126359185258203L;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SecretManager.class);
+
+    private static final String KEY_GEN_ALGO = "PBKDF2WithHmacSHA256";
 
     /**
      * Factory for constructing the {@link #pseudoRandomFunction} and {@link #cryptoSpec}
@@ -103,7 +110,7 @@ public class SecretManager implements Serializable {
         if (method != FormatPreservingMethod.BASIC) {
 
             SecretKey secret;
-            if (password == null || "".equals(password)) {
+            if (StringUtils.isEmpty(password)) {
                 secret = generateRandomSecretKey(cryptoSpec.getKeyLength());
             } else {
                 secret = generateSecretKeyFromPassword(password);
@@ -202,7 +209,7 @@ public class SecretManager implements Serializable {
         try {
             byte[] salt = new byte[cryptoSpec.getKeyLength()];
             new Random(password.hashCode()).nextBytes(salt);
-            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+            SecretKeyFactory factory = SecretKeyFactory.getInstance(KEY_GEN_ALGO);
             KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, cryptoSpec.getKeyLength() << 3);
             secret = factory.generateSecret(spec);
         } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {

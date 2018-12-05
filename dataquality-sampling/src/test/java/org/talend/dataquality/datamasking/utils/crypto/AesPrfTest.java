@@ -1,19 +1,14 @@
 package org.talend.dataquality.datamasking.utils.crypto;
 
-import org.apache.log4j.Appender;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.SecureRandom;
-import java.util.Random;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AesPrfTest {

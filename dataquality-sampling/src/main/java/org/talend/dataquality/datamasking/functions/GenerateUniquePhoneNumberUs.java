@@ -3,6 +3,7 @@ package org.talend.dataquality.datamasking.functions;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldEnum;
@@ -25,14 +26,13 @@ public class GenerateUniquePhoneNumberUs extends AbstractGenerateUniquePhoneNumb
         // read the input str
         List<String> strs = new ArrayList<String>();
         strs.add(str.substring(str.length() - 6, str.length() - 4));
-        strs.add(str.substring(str.length() - 4, str.length()));
+        strs.add(str.substring(str.length() - 4));
 
-        StringBuilder result = phoneNumberPattern.generateUniqueString(strs, secretMng);
-        if (result == null) {
-            return null;
-        }
-        result.insert(0, str.substring(0, str.length() - 6));
-        return result;
+        Optional<StringBuilder> result = phoneNumberPattern.generateUniqueString(strs, secretMng);
+
+        result.ifPresent(result1 -> result1.insert(0, str.substring(0, str.length() - 6)));
+
+        return result.orElse(null);
     }
 
     @Override

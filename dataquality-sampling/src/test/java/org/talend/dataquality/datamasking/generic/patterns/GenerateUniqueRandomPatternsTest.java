@@ -26,8 +26,6 @@ import org.talend.dataquality.datamasking.SecretManager;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldEnum;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
-import org.talend.dataquality.datamasking.generic.patterns.AbstractGeneratePattern;
-import org.talend.dataquality.datamasking.generic.patterns.GenerateUniqueRandomPatterns;
 
 import static org.junit.Assert.*;
 
@@ -62,30 +60,33 @@ public class GenerateUniqueRandomPatternsTest {
 
     @Test
     public void testGenerateUniqueString() {
-        StringBuilder result = pattern.generateUniqueString(new ArrayList<String>(Arrays.asList("U", "KI", "453", "12")),
-                secretMng);
+        StringBuilder result = pattern
+                .generateUniqueString(new ArrayList<String>(Arrays.asList("U", "KI", "453", "12")), secretMng).orElse(null);
+        assertNotNull(result);
         assertEquals("USF40818", result.toString());
     }
 
     @Test
     public void maskMaxRankValue() {
-        StringBuilder result = pattern.generateUniqueString(new ArrayList<String>(Arrays.asList("S", "DU", "500", "20")),
-                secretMng);
+        StringBuilder result = pattern
+                .generateUniqueString(new ArrayList<String>(Arrays.asList("S", "DU", "500", "20")), secretMng).orElse(null);
+        assertNotNull(result);
         assertEquals("SDU01810", result.toString());
     }
 
     @Test
     public void maskMinRankValue() {
-        StringBuilder result = pattern.generateUniqueString(new ArrayList<String>(Arrays.asList("O", "SF", "000", "5")),
-                secretMng);
-        // To bad this behavior exists : the min value is always masked to itself.
+        StringBuilder result = pattern
+                .generateUniqueString(new ArrayList<String>(Arrays.asList("O", "SF", "000", "5")), secretMng).orElse(null);
+        assertNotNull(result);
+        // Too bad this behavior exists : the min value is always masked to itself.
         assertEquals(minValue, result.toString());
     }
 
     @Test
     public void maskOutLimitValue() {
-        StringBuilder result = pattern.generateUniqueString(new ArrayList<String>(Arrays.asList("U", "KI", "502", "12")),
-                secretMng);
+        StringBuilder result = pattern
+                .generateUniqueString(new ArrayList<String>(Arrays.asList("U", "KI", "502", "12")), secretMng).orElse(null);
         assertNull(result);
     }
 
@@ -103,7 +104,7 @@ public class GenerateUniqueRandomPatternsTest {
                                 new ArrayList<String>(
                                         Arrays.asList(pattern.getFields().get(0).decode(i), pattern.getFields().get(1).decode(j),
                                                 pattern.getFields().get(2).decode(k), pattern.getFields().get(3).decode(l))),
-                                secretMng);
+                                secretMng).orElse(null);
 
                         assertFalse(" we found twice the uniqueMaskedNumberList " + uniqueMaskedNumber,
                                 uniqueSetTocheck.contains(uniqueMaskedNumber));

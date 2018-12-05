@@ -5,15 +5,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.talend.dataquality.datamasking.SecretManager;
 import org.talend.dataquality.datamasking.functions.AbstractGenerateWithSecret;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldDate;
@@ -122,7 +118,7 @@ public class BijectiveSubstitutionFunction extends AbstractGenerateWithSecret {
     public void setRandom(Random rand) {
         super.setRandom(rand);
         if (secretMng == null) {
-            secretMng = new SecretManager();
+            setSecret("BASIC", "");
         }
         secretMng.setKey(rand.nextInt() % BasicSpec.BASIC_KEY_BOUND + BasicSpec.BASIC_KEY_OFFSET);
     }
@@ -172,10 +168,8 @@ public class BijectiveSubstitutionFunction extends AbstractGenerateWithSecret {
             currentPos += length;
         }
 
-        StringBuilder result = uniqueGenericPattern.generateUniqueString(strs, secretMng);
-        if (result == null) {
-            return null;
-        }
-        return result;
+        Optional<StringBuilder> result = uniqueGenericPattern.generateUniqueString(strs, secretMng);
+
+        return result.orElse(null);
     }
 }

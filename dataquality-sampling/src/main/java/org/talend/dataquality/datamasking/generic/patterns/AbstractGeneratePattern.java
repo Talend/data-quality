@@ -19,6 +19,7 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This is an abstract class containing all the common methods and attributes for the 'GeneratePattern" classes.
@@ -170,13 +171,13 @@ public abstract class AbstractGeneratePattern implements Serializable {
      * @param secretMng, the SecretManager instance providing the secrets to generate a unique string
      * @return the new encoded string
      */
-    public StringBuilder generateUniqueString(List<String> strs, SecretManager secretMng) {
+    public Optional<StringBuilder> generateUniqueString(List<String> strs, SecretManager secretMng) {
         // check inputs
         if (strs.size() != fieldsNumber) {
             return null;
         }
 
-        return generateUniquePattern(strs, secretMng);
+        return Optional.ofNullable(generateUniquePattern(strs, secretMng));
     }
 
     /**

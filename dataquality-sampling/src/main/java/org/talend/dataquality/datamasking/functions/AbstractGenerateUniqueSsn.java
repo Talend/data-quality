@@ -13,8 +13,10 @@
 package org.talend.dataquality.datamasking.functions;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
+import org.apache.commons.lang.StringUtils;
 import org.talend.dataquality.datamasking.FormatPreservingMethod;
 import org.talend.dataquality.datamasking.SecretManager;
 import org.talend.dataquality.datamasking.generic.patterns.GenerateFormatPreservingPatterns;
@@ -92,12 +94,9 @@ public abstract class AbstractGenerateUniqueSsn extends AbstractGenerateWithSecr
         // read the input str
         List<String> strs = splitFields(str);
 
-        StringBuilder result = ssnPattern.generateUniqueString(strs, secretMng);
-        if (result == null) {
-            return null;
-        }
+        Optional<StringBuilder> result = ssnPattern.generateUniqueString(strs, secretMng);
 
-        return result.append(computeKey(result));
+        return result.isPresent() ? result.get().append(computeKey(result.get())) : null;
     }
 
     /**
@@ -149,7 +148,7 @@ public abstract class AbstractGenerateUniqueSsn extends AbstractGenerateWithSecr
     protected boolean isValid(String str) {
         boolean isValid;
 
-        if (str == null || str.isEmpty()) {
+        if (StringUtils.isEmpty(str)) {
             isValid = false;
         } else {
             String strWithoutSpaces = super.removeFormatInString(str);

@@ -15,6 +15,10 @@ public class AesCbcCryptoSpec implements AbstractCryptoSpec {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractCryptoSpec.class);
 
+    private static final String AES_CIPHER_ALGORITHM = "AES/CBC/NoPadding";
+
+    private static final String AES_CIPHER_KEY_ALGORITHM = "AES";
+
     private int runtimeKeyLength;
 
     public AesCbcCryptoSpec() {
@@ -23,12 +27,12 @@ public class AesCbcCryptoSpec implements AbstractCryptoSpec {
 
     @Override
     public String getCipherAlgorithm() {
-        return "AES/CBC/NoPadding";
+        return AES_CIPHER_ALGORITHM;
     }
 
     @Override
     public String getKeyAlgorithm() {
-        return "AES";
+        return AES_CIPHER_KEY_ALGORITHM;
     }
 
     @Override

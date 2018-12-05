@@ -10,18 +10,24 @@ public class HmacSha2CryptoSpec implements AbstractCryptoSpec {
 
     private static final long serialVersionUID = 255044036901853895L;
 
+    private static final String SHA2_HMAC_ALGORITHM = "HmacSHA256";
+
+    private static final String SHA2_HMAC_KEY_ALGORITHM = "PBKDF2WithHmacSHA256";
+
+    private static final int SHA2_HMAC_KEY_LENGTH = 32;
+
     @Override
     public String getCipherAlgorithm() {
-        return "HmacSHA256";
+        return SHA2_HMAC_ALGORITHM;
     }
 
     @Override
     public String getKeyAlgorithm() {
-        return "PBKDF2WithHmacSHA256";
+        return SHA2_HMAC_KEY_ALGORITHM;
     }
 
     @Override
     public int getKeyLength() {
-        return 32;
+        return SHA2_HMAC_KEY_LENGTH;
     }
 }

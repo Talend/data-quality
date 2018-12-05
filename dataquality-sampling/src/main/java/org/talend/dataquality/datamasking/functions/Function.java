@@ -249,9 +249,7 @@ public abstract class Function<T> implements Serializable {
     }
 
     public void setSecret(String method, String secret) {
-        if (!(this instanceof AbstractGenerateWithSecret)) {
-            throw new UnsupportedOperationException("The class " + this.getClass() + " should not use a secret.");
-        }
+        throw new UnsupportedOperationException("The class " + this.getClass() + " should not use a secret.");
     }
 
     protected int nextRandomDigit() {

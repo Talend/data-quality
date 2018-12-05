@@ -81,7 +81,7 @@ public class GenerateFormatPreservingPatternsTest {
     @Test
     public void generateUniqueStringAES() {
         SecretManager AESSecMng = new SecretManager(FormatPreservingMethod.AES_CBC_PRF, "#Datadriven2018");
-        StringBuilder result = pattern.generateUniqueString(Arrays.asList("U", "KI", "45", "12"), AESSecMng);
+        StringBuilder result = pattern.generateUniqueString(Arrays.asList("U", "KI", "45", "12"), AESSecMng).orElse(null);
 
         String expected;
         if (AESSecMng.getCryptoSpec().getKeyLength() == 32) {
@@ -89,12 +89,13 @@ public class GenerateFormatPreservingPatternsTest {
         } else {
             expected = "SKI1816";
         }
+        assertNotNull(result);
         assertEquals(expected, result.toString());
     }
 
     @Test
     public void generateUniqueStringHMAC() {
-        StringBuilder result = pattern.generateUniqueString(Arrays.asList("U", "KI", "45", "12"), secretMng);
+        StringBuilder result = pattern.generateUniqueString(Arrays.asList("U", "KI", "45", "12"), secretMng).orElse(null);
 
         String expected;
         if (secretMng.getCryptoSpec().getKeyLength() == 32) {
@@ -102,26 +103,27 @@ public class GenerateFormatPreservingPatternsTest {
         } else {
             expected = "OSF4017";
         }
+        assertNotNull(result);
         assertEquals(expected, result.toString());
     }
 
     @Test
     public void maskMinRankValue() {
-        StringBuilder result = pattern.generateUniqueString(Arrays.asList("O", "SF", "00", "5"), secretMng);
-        assertNotEquals(minValue, result.toString());
+        StringBuilder result = pattern.generateUniqueString(Arrays.asList("O", "SF", "00", "5"), secretMng).orElse(null);
         assertNotNull(result);
+        assertNotEquals(minValue, result.toString());
     }
 
     @Test
     public void maskMaxRankValue() {
-        StringBuilder result = pattern.generateUniqueString(Arrays.asList("S", "DU", "50", "20"), secretMng);
-        assertNotEquals(maxValue, result.toString());
+        StringBuilder result = pattern.generateUniqueString(Arrays.asList("S", "DU", "50", "20"), secretMng).orElse(null);
         assertNotNull(result);
+        assertNotEquals(maxValue, result.toString());
     }
 
     @Test
     public void maskOutLimitValue() {
-        StringBuilder result = pattern.generateUniqueString(Arrays.asList("U", "KI", "52", "12"), secretMng);
+        StringBuilder result = pattern.generateUniqueString(Arrays.asList("U", "KI", "52", "12"), secretMng).orElse(null);
         assertNull(result);
     }
 
@@ -139,7 +141,7 @@ public class GenerateFormatPreservingPatternsTest {
                                 new ArrayList<String>(
                                         Arrays.asList(pattern.getFields().get(0).decode(i), pattern.getFields().get(1).decode(j),
                                                 pattern.getFields().get(2).decode(k), pattern.getFields().get(3).decode(l))),
-                                secretMng);
+                                secretMng).orElse(null);
 
                         assertFalse(" we found twice the uniqueMaskedNumberList " + uniqueMaskedNumber,
                                 uniqueSetTocheck.contains(uniqueMaskedNumber));
