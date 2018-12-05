@@ -16,6 +16,7 @@ import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.talend.dataquality.datamasking.FormatPreservingMethod;
 
 import static org.junit.Assert.*;
 
@@ -31,6 +32,7 @@ public class GenerateUniqueSsnFrTest {
     @Before
     public void setUp() throws Exception {
         gnf.setRandom(new Random(42));
+        gnf.setSecret(FormatPreservingMethod.BASIC.name(), "");
         gnf.setKeepFormat(true);
     }
 

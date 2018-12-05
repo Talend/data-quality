@@ -30,7 +30,7 @@ public class GenerateUniquePhoneNumberUs extends AbstractGenerateUniquePhoneNumb
 
         Optional<StringBuilder> result = phoneNumberPattern.generateUniqueString(strs, secretMng);
 
-        result.ifPresent(result1 -> result1.insert(0, str.substring(0, str.length() - 6)));
+        result.ifPresent(number -> number.insert(0, str.substring(0, str.length() - 6)));
 
         return result.orElse(null);
     }

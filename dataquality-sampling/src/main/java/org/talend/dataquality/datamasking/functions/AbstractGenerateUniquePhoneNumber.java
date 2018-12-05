@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-import java.util.function.Consumer;
 
 import org.talend.dataquality.datamasking.generic.patterns.GenerateUniqueRandomPatterns;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
@@ -32,9 +31,6 @@ public abstract class AbstractGenerateUniquePhoneNumber extends AbstractGenerate
     public void setRandom(Random rand) {
         super.setRandom(rand);
         replaceNumeric.parse(null, false, rand);
-        if (secretMng == null) {
-            setSecret("BASIC", "");
-        }
         secretMng.setKey(super.rnd.nextInt(Integer.MAX_VALUE - 1000000) + 1000000);
     }
 
@@ -85,7 +81,7 @@ public abstract class AbstractGenerateUniquePhoneNumber extends AbstractGenerate
 
         Optional<StringBuilder> result = phoneNumberPattern.generateUniqueString(strs, secretMng);
 
-        result.ifPresent(result1 -> result1.insert(0, str.substring(0, str.length() - getDigitsNumberToMask())));
+        result.ifPresent(number -> number.insert(0, str.substring(0, str.length() - getDigitsNumberToMask())));
 
         return result.orElse(null);
     }

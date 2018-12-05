@@ -20,6 +20,7 @@ import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.talend.dataquality.datamasking.FormatPreservingMethod;
 
 /**
  * @author dprot
@@ -33,6 +34,7 @@ public class GenerateUniqueSsnChnTest {
     @Before
     public void setUp() throws Exception {
         gnf.setRandom(new Random(42));
+        gnf.setSecret(FormatPreservingMethod.BASIC.name(), "");
         gnf.setKeepFormat(true);
     }
 

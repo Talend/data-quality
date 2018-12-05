@@ -14,7 +14,6 @@ package org.talend.dataquality.datamasking.functions;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 import org.apache.commons.lang.StringUtils;
 import org.talend.dataquality.datamasking.FormatPreservingMethod;
@@ -45,15 +44,6 @@ public abstract class AbstractGenerateUniqueSsn extends AbstractGenerateWithSecr
     public AbstractGenerateUniqueSsn() {
         List<AbstractField> fields = createFieldsListFromPattern();
         ssnPattern = new GenerateUniqueRandomPatterns(fields);
-    }
-
-    @Override
-    public void setRandom(Random rand) {
-        super.setRandom(rand);
-        if (secretMng == null) {
-            secretMng = new SecretManager();
-        }
-        secretMng.setKey(super.rnd.nextInt() % BasicSpec.BASIC_KEY_BOUND + BasicSpec.BASIC_KEY_OFFSET);
     }
 
     @Override

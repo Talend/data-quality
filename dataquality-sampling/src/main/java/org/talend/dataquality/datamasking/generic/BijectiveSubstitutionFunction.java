@@ -5,7 +5,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -117,9 +121,6 @@ public class BijectiveSubstitutionFunction extends AbstractGenerateWithSecret {
     @Override
     public void setRandom(Random rand) {
         super.setRandom(rand);
-        if (secretMng == null) {
-            setSecret("BASIC", "");
-        }
         secretMng.setKey(rand.nextInt() % BasicSpec.BASIC_KEY_BOUND + BasicSpec.BASIC_KEY_OFFSET);
     }
 
