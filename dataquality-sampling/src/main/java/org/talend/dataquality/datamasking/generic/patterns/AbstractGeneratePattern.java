@@ -31,11 +31,6 @@ public abstract class AbstractGeneratePattern implements Serializable {
     private static final long serialVersionUID = -5509905086789639724L;
 
     /**
-     * The maximum width value we can handle (around Long.MaxValue / 11000)
-     */
-    private static final long WIDTH_THRESHOLD = 838000000000000L;
-
-    /**
      * The list of all possible values for each field
      */
     private List<AbstractField> fields;
