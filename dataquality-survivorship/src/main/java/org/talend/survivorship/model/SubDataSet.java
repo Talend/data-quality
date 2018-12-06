@@ -76,7 +76,10 @@ public class SubDataSet extends DataSet {
      */
     @Override
     public Object getValueAfterFiled(int rowNum, String colName) {
-        Record record = this.getRecordList().get(rowNum);
+        if (!isInputVialid(rowNum)) {
+            return null;
+        }
+        Record record = this.getRecordList().get(rowNum + 1);
         Attribute originalAttribute = record.getAttribute(colName);
         if (this.fillAttributeMap != null) {
             FilledAttribute filledAttribute = this.fillAttributeMap.get(originalAttribute);
@@ -106,7 +109,6 @@ public class SubDataSet extends DataSet {
     }
 
     public void addFillAttributeMap(FilledAttribute filledAttribute) {
-
         getFillAttributeMap().put(filledAttribute.getOrignalAttribute(), filledAttribute);
     }
 

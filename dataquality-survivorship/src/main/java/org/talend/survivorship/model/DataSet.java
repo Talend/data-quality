@@ -317,12 +317,17 @@ public class DataSet {
      * @param survivoredRowNum
      */
     public void arrangeConflictCol(String conflictCol, SurvivedResult survivoredRowNum) {
-        if (survivoredRowNum.isResolved()) {
-            List<Integer> orignalList = conflictDataMap.get().get(conflictCol);
-            if (orignalList == null) {
-                return;
-            }
-            for (int index : orignalList) {
+        List<Integer> orignalList = conflictDataMap.get().get(conflictCol);
+        Object survivShipResult = this.survivorMap.get(conflictCol);
+        if (orignalList == null) {
+            return;
+        }
+        for (int index : orignalList) {
+            if (survivoredRowNum.isResolved()) {
+                // if conflict has been resolved then remove all
+                conflictList.get(index).remove(conflictCol);
+            } else if (survivShipResult.equals(this.getValueAfterFiled(index - 1, conflictCol))) {
+                // if conflict has not been resolved then remove the index which value same with surviv result
                 conflictList.get(index).remove(conflictCol);
             }
         }
@@ -520,8 +525,15 @@ public class DataSet {
      * @return The value which special rowNum and colName
      */
     public Object getValueAfterFiled(int rowNum, String colName) {
-        Record record = this.getRecordList().get(rowNum);
+        if (!isInputVialid(rowNum)) {
+            return null;
+        }
+        Record record = this.getRecordList().get(rowNum + 1);
         return record.getAttribute(colName).getValue();
+    }
+
+    protected boolean isInputVialid(int rowNum) {
+        return !(rowNum + 1 < 0 || rowNum + 1 > this.getRecordList().size() - 1);
     }
 
     /**

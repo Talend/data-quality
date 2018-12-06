@@ -19,9 +19,10 @@ import org.talend.survivorship.action.ISurvivorshipAction;
 import org.talend.survivorship.model.Column;
 import org.talend.survivorship.model.DataSet;
 import org.talend.survivorship.model.RuleDefinition.Function;
+import org.talend.survivorship.model.SubDataSet;
 
 /**
- * create by zshen parameter of handler node
+ * parameter of handler node
  */
 public class HandlerParameter {
 
@@ -267,6 +268,20 @@ public class HandlerParameter {
      */
     public Function getFunction() {
         return this.functionParam.getFunction();
+    }
+
+    /**
+     * Remove the column which unconflict new from the list of conflict columns
+     */
+    public void removeFromConflictList(Integer index, String realColName) {
+        if (dataset == null) {
+            return;
+        }
+        DataSet originalSet = dataset;
+        if (originalSet instanceof SubDataSet) {
+            originalSet = ((SubDataSet) originalSet).getOrignialDataSet();
+        }
+        originalSet.getConflictList().get(index).remove(realColName);
     }
 
 }

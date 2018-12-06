@@ -107,25 +107,31 @@ public class CRCRHandler extends AbstractChainOfResponsibilityHandler {
                 ((SubDataSet) this.getHandlerParameter().getDataset()).getFillAttributeMap()
                         .putAll(((SubDataSet) this.getPreSuccessor().getHandlerParameter().getDataset()).getFillAttributeMap());
             }
+
+            List<Integer> removedIndexList = new ArrayList<>();
             for (Integer index : conflictDataIndexList) {
                 InputConvertResult inputData = getInputData(index);
                 if (this.canHandle(inputData.getInputData(), getHandlerParameter().getExpression(), index)) {
                     doHandle(index, getRealColName(index));
-                    if (this.getSuccessor() != null) {
-                        // 3.generate new conflict data for next node
-                        // init ConflictDataIndexList for next one
-                        this.getHandlerParameter().addConfDataIndex(index);
-                    }
+                    // 3.generate new conflict data for next node
+                    // init ConflictDataIndexList for next one
+                    this.getHandlerParameter().addConfDataIndex(index);
+                } else {
+                    removedIndexList.add(index);
                 }
+            }
+            // for survivorAs function we need to make sure the conflict has be resoultion.
+            // If no conflict exist at here then no index need to be removed
+            if (this.conflictingRowNumbers.size() == 0) {
+                removedIndexList.clear();
             }
             // 4.next handleRequest
             if (this.getSuccessor() != null) {
                 List<Integer> newConflictDataIndexList = this.getHandlerParameter().getConflictDataIndexList();
-                // Current handler find nothing so that keep result and start neex one.
+                // Current handler find nothing so that keep result and start next one.
                 if (newConflictDataIndexList != null && newConflictDataIndexList.size() <= 0) {
                     this.getHandlerParameter().getConflictDataIndexList().addAll(conflictDataIndexList);
                     saveCurrentStatus(conflictDataIndexList);
-
                     // Current handler find a valid result
                 } else if (this.isValidResult()) {
                     markMissionCompleted();
@@ -135,15 +141,27 @@ public class CRCRHandler extends AbstractChainOfResponsibilityHandler {
                     // Current handler find many valid result so that start next one
                 } else {
                     saveCurrentStatus(newConflictDataIndexList);
+                    removeFromConflictList(removedIndexList);
+                    // if newConflictDataIndexList less than before we should remove conflitList with same time from
+                    // here to fixed job_b
                 }
             } else {
                 // If Current node is last one of current column then we need to update result
+                // here to fixed job_a this time update need to modify resolved state with same time
                 updateResult();
+                removeFromConflictList(removedIndexList);
             }
         }
         if (this.getUiNextSuccessor() != null) {
             this.getUiNextSuccessor().handleRequest();
         }
+    }
+
+    private void removeFromConflictList(List<Integer> removedIndexList) {
+        for (Integer index : removedIndexList) {
+            this.getHandlerParameter().removeFromConflictList(index, getRealColName(index));
+        }
+
     }
 
     /**
@@ -175,7 +193,8 @@ public class CRCRHandler extends AbstractChainOfResponsibilityHandler {
             if (survivoredRowNum.isResolved()) {
                 originalSet.getConflictsOfSurvivor().remove(conflictCol);
             }
-            Object survivedVlaue = originalSet.getValueAfterFiled(survivoredRowNum.getRowNum(), survivoredRowNum.getColumnName());
+            Object survivedVlaue = originalSet.getValueAfterFiled(survivoredRowNum.getRowNum() - 1,
+                    survivoredRowNum.getColumnName());
             originalSet.getSurvivorMap().put(conflictCol, survivedVlaue);
             originalSet.getSurvivorIndexMap().put(conflictCol, survivoredRowNum.getRowNum());
             originalSet.arrangeConflictCol(conflictCol, survivoredRowNum);
@@ -222,7 +241,7 @@ public class CRCRHandler extends AbstractChainOfResponsibilityHandler {
         Object[] dataArray = new Object[columnIndexMap.size()];
         for (Entry<String, Integer> entry : columnIndexMap.entrySet()) {
             String colName = entry.getKey();
-            Object value = handlerParameter.getDataset().getValueAfterFiled(rowNum, colName);
+            Object value = handlerParameter.getDataset().getValueAfterFiled(rowNum - 1, colName);
             dataArray[entry.getValue()] = value;
         }
         inputResult.setInputData(dataArray);
@@ -419,7 +438,7 @@ public class CRCRHandler extends AbstractChainOfResponsibilityHandler {
         while (iterator.hasNext()) {
             Integer index = iterator.next();
             setContainer.add(
-                    this.getHandlerParameter().getDataset().getValueAfterFiled(index, this.conflictingRowNumbers.get(index)));
+                    this.getHandlerParameter().getDataset().getValueAfterFiled(index - 1, this.conflictingRowNumbers.get(index)));
         }
         return setContainer.size() == 1;
     }
