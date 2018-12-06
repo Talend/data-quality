@@ -50,7 +50,7 @@ public class BijectiveSubstitutionFunction extends Function<String> {
                 fieldList.add(new FieldEnum(Arrays.asList(definition.getValue().split(",")), i == nbFields - 1)); //$NON-NLS-1$
                 break;
             case ENUMERATION_FROM_FILE:
-                handleEnumerationFromFileCase(fieldList, definition);
+                handleEnumerationFromFileCase(fieldList, definition, i == nbFields - 1);
                 break;
             default:
                 break;
@@ -68,12 +68,12 @@ public class BijectiveSubstitutionFunction extends Function<String> {
      * @throws FileNotFoundException
      * @throws IOException
      */
-    private void handleEnumerationFromFileCase(List<AbstractField> fieldList, FieldDefinition definition)
+    private void handleEnumerationFromFileCase(List<AbstractField> fieldList, FieldDefinition definition, boolean isLastField)
             throws FileNotFoundException, IOException {
         File file = new File(definition.getValue());
         if (file.exists()) {
             FileInputStream fis = new FileInputStream(file);
-            fieldList.add(new FieldEnum(IOUtils.readLines(fis)));
+            fieldList.add(new FieldEnum(IOUtils.readLines(fis), isLastField));
         } else {
             LOGGER.error("File does not exist"); //$NON-NLS-1$
             throw new DQRuntimeException("File " + definition.getValue() + " does not exist"); //$NON-NLS-1$ //$NON-NLS-2$

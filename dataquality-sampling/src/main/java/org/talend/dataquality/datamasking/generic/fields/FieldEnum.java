@@ -44,6 +44,10 @@ public class FieldEnum extends AbstractField {
         }
     }
 
+    public FieldEnum(List<String> enumValues, int length) {
+        initialize(enumValues, length);
+    }
+
     private int getMaxLength(List<String> enumValues) {
         int maxLength = 0;
         for (String value : enumValues) {
@@ -56,7 +60,7 @@ public class FieldEnum extends AbstractField {
     }
 
     private int getMinLength(List<String> enumValues) {
-        int minLength = enumValues.size() == 0 ? 0 : (int) enumValues.get(0).codePoints().count();
+        int minLength = enumValues.isEmpty() ? 0 : Integer.MAX_VALUE;
         for (String value : enumValues) {
             int valueCPCount = value.codePointCount(0, value.length());
             if (valueCPCount < minLength) {
@@ -64,14 +68,6 @@ public class FieldEnum extends AbstractField {
             }
         }
         return minLength;
-    }
-
-    public FieldEnum(List<String> enumValues) {
-        this(enumValues, false);
-    }
-
-    public FieldEnum(List<String> enumValues, int length) {
-        initialize(enumValues, length);
     }
 
     private void initialize(List<String> enumValues, int length) {

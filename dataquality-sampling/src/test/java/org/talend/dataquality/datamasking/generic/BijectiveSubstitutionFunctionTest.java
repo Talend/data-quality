@@ -149,8 +149,27 @@ public class BijectiveSubstitutionFunctionTest {
         BijectiveSubstitutionFunction bijectiveSubstitutionFunction = new BijectiveSubstitutionFunction(fieldDefinitionList);
         bijectiveSubstitutionFunction.setRandom(new Random(124));
         bijectiveSubstitutionFunction.setKeepFormat(true);
-        List<String> output = input.stream().map(string -> bijectiveSubstitutionFunction.generateMaskedRow(string))
-                .collect(Collectors.toList());
+        List<String> output = input.stream().map(bijectiveSubstitutionFunction::generateMaskedRow).collect(Collectors.toList());
+
+        assertEquals(expectedOutput, output);
+    }
+
+    @Test
+    public void variableLengthLastFieldFromFile() throws Exception {
+
+        List<FieldDefinition> fieldDefinitionList = new ArrayList<>();
+        fieldDefinitionList.add(new FieldDefinition(FieldDefinitionType.INTERVAL.getComponentValue(), null, "0,9"));
+
+        fieldDefinitionList.add(new FieldDefinition(FieldDefinitionType.ENUMERATION_FROM_FILE.getComponentValue(),
+                BijectiveSubstitutionFunctionTest.class.getResource("enumFile.txt").getPath(), null));
+
+        List<String> input = Arrays.asList("1a", "1b", "2b", "3cd", "4e", "1b", "z", "", "1abcd");
+        List<String> expectedOutput = Arrays.asList("3a", "0cd", "3cd", "4b", null, "0cd", null, null, null);
+
+        BijectiveSubstitutionFunction bijectiveSubstitutionFunction = new BijectiveSubstitutionFunction(fieldDefinitionList);
+        bijectiveSubstitutionFunction.setRandom(new Random(124));
+        bijectiveSubstitutionFunction.setKeepFormat(true);
+        List<String> output = input.stream().map(bijectiveSubstitutionFunction::generateMaskedRow).collect(Collectors.toList());
 
         assertEquals(expectedOutput, output);
     }
