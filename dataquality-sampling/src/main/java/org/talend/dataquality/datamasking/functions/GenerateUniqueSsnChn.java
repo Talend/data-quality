@@ -12,21 +12,15 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldDate;
 import org.talend.dataquality.datamasking.generic.fields.FieldEnum;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
+import org.talend.dataquality.datamasking.utils.ssn.UtilsSsnChn;
 
 /**
  * 
@@ -39,39 +33,17 @@ public class GenerateUniqueSsnChn extends AbstractGenerateUniqueSsn {
 
     private static final long serialVersionUID = 4514471121590047091L;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GenerateUniqueSsnChn.class);
-
-    private static final List<Integer> keyWeight = Collections
-            .unmodifiableList(Arrays.asList(7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2));
-
-    private static final int KEYMOD = 11; // $NON-NLS-1$
-
-    private static final List<String> keyString = Collections
-            .unmodifiableList(Arrays.asList("1", "0", "X", "9", "8", "7", "6", "5", "4", "3", "2"));
-
     @Override
     protected String computeKey(StringBuilder str) {
-        int key = 0;
-        for (int i = 0; i < 17; i++) {
-            key += Character.getNumericValue(str.charAt(i)) * keyWeight.get(i);
-        }
-        key = key % KEYMOD;
-        return keyString.get(key);
+        return UtilsSsnChn.computeChineseKey(str);
     }
 
     @Override
     protected List<AbstractField> createFieldsListFromPattern() {
         List<AbstractField> fields = new ArrayList<AbstractField>();
 
-        InputStream is = GenerateUniqueSsnChn.class.getResourceAsStream("RegionListChina.txt");
-        try {
-            List<String> places = IOUtils.readLines(is, "UTF-8");
+        fields.add(new FieldEnum(UtilsSsnChn.readChinaRegionFile(), 6));
 
-            fields.add(new FieldEnum(places, 6));
-
-        } catch (IOException e) {
-            LOGGER.error("The file of chinese regions is not correctly loaded " + e.getMessage(), e);
-        }
         fields.add(new FieldDate());
         fields.add(new FieldInterval(BigInteger.ZERO, BigInteger.valueOf(999)));
         checkSumSize = 1;

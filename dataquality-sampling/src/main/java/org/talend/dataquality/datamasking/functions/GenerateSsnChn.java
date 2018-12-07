@@ -12,15 +12,10 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.talend.dataquality.datamasking.generic.fields.FieldDate;
+import org.talend.dataquality.datamasking.utils.ssn.UtilsSsnChn;
 
 /**
  * 
@@ -33,41 +28,11 @@ public class GenerateSsnChn extends Function<String> {
 
     private static final long serialVersionUID = 8845031997964609626L;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GenerateSsnChn.class);
-
-    public static final List<Integer> monthSize = Collections
-            .unmodifiableList(Arrays.asList(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31));
-
-    private static final List<Integer> keyWeight = Collections
-            .unmodifiableList(Arrays.asList(7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2));
-
-    private static final int KEY_MOD = 11; // $NON-NLS-1$
-
-    private static final List<String> keyString = Collections
-            .unmodifiableList(Arrays.asList("1", "0", "X", "9", "8", "7", "6", "5", "4", "3", "2"));
-
-    private String computeChineseKey(String ssnNumber) {
-        int key = 0;
-        for (int i = 0; i < 17; i++) {
-            key += Character.getNumericValue(ssnNumber.charAt(i)) * keyWeight.get(i);
-        }
-        key = key % KEY_MOD;
-        return keyString.get(key);
-    }
-
     @Override
     protected String doGenerateMaskedField(String str) {
         StringBuilder result = new StringBuilder(EMPTY_STRING);
 
-        // Region code
-        InputStream is = GenerateUniqueSsnChn.class.getResourceAsStream("RegionListChina.txt");
-        List<String> places = null;
-        try {
-            places = IOUtils.readLines(is, "UTF-8");
-
-        } catch (IOException e) {
-            LOGGER.error("The file of chinese regions is not correctly loaded " + e.getMessage(), e);
-        }
+        List<String> places = UtilsSsnChn.readChinaRegionFile();
 
         if (places != null) {
             result.append(places.get(rnd.nextInt(places.size())));
@@ -83,7 +48,7 @@ public class GenerateSsnChn extends Function<String> {
         }
         result.append(mm);
         // Day
-        int dd = 1 + rnd.nextInt(monthSize.get(mm - 1));
+        int dd = 1 + rnd.nextInt(FieldDate.monthSize.get(mm - 1));
         if (dd < 10) {
             result.append("0"); //$NON-NLS-1$
         }
@@ -95,7 +60,7 @@ public class GenerateSsnChn extends Function<String> {
 
         // Checksum
 
-        String controlKey = computeChineseKey(result.toString());
+        String controlKey = UtilsSsnChn.computeChineseKey(result);
         result.append(controlKey);
 
         return result.toString();
