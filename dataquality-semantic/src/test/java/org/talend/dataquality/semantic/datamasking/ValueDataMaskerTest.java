@@ -106,7 +106,7 @@ public class ValueDataMaskerTest extends CategoryRegistryManagerAbstract {
 
             // 11 SSN
             put(new String[] { "728931789", MaskableCategoryEnum.US_SSN.name(), "string" }, "325151655");
-            put(new String[] { "17612 38293 28232", MaskableCategoryEnum.FR_SSN.name(), "string" }, "2210622516550 94");
+            put(new String[] { "17612 38293 28232", MaskableCategoryEnum.FR_SSN.name(), "string" }, "2210671796720 95");
             put(new String[] { "634217823", MaskableCategoryEnum.UK_SSN.name(), "string" }, "325151655");
 
             // Company

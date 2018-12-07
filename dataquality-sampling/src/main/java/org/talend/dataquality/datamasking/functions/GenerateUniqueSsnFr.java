@@ -19,6 +19,7 @@ import java.util.List;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldEnum;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
+import org.talend.dataquality.datamasking.utils.ssn.UtilsSsnFr;
 
 /**
  * 
@@ -31,23 +32,9 @@ public class GenerateUniqueSsnFr extends AbstractGenerateUniqueSsn {
 
     private static final long serialVersionUID = 4514471121590047091L;
 
-    private static final int MOD97 = 97; // $NON-NLS-1$
-
     @Override
     protected String computeKey(StringBuilder str) {
-        StringBuilder keyResult = new StringBuilder(str);
-
-        if (keyResult.charAt(5) == '2') {
-            keyResult.setCharAt(5, '1');
-            keyResult.setCharAt(6, (keyResult.charAt(6) == 'A') ? '9' : '8');
-        }
-
-        int controlKey = MOD97 - (int) (Long.valueOf(keyResult.toString()) % MOD97);
-
-        StringBuilder res = new StringBuilder();
-        if (controlKey < 10)
-            res.append("0");
-        return res.append(controlKey).toString();
+        return UtilsSsnFr.computeFrenchKey(str);
     }
 
     /**
@@ -62,17 +49,7 @@ public class GenerateUniqueSsnFr extends AbstractGenerateUniqueSsn {
         fields.add(new FieldInterval(BigInteger.ZERO, BigInteger.valueOf(99)));
         fields.add(new FieldInterval(BigInteger.ONE, BigInteger.valueOf(12)));
 
-        List<String> departments = new ArrayList<String>();
-        for (int department = 1; department <= 99; department++) {
-            if (department < 10)
-                departments.add("0" + department);
-            else if (department == 20) {
-                departments.add("2A");
-                departments.add("2B");
-            } else
-                departments.add(String.valueOf(department));
-        }
-        fields.add(new FieldEnum(departments, 2));
+        fields.add(new FieldEnum(UtilsSsnFr.getFrenchDepartments(), 2));
 
         fields.add(new FieldInterval(BigInteger.ONE, BigInteger.valueOf(990)));
         fields.add(new FieldInterval(BigInteger.ONE, BigInteger.valueOf(999)));

@@ -12,7 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
-import java.math.BigInteger;
+import org.talend.dataquality.datamasking.utils.ssn.UtilsSsnFr;
 
 /**
  * The first character has a range of (1, 99). The second character has a range of (1, 12). The third character has a
@@ -23,8 +23,6 @@ import java.math.BigInteger;
 public class GenerateSsnFr extends Function<String> {
 
     private static final long serialVersionUID = 8845031997964609626L;
-
-    private static final BigInteger MOD97 = new BigInteger("97"); //$NON-NLS-1$
 
     @Override
     protected String doGenerateMaskedField(String str) {
@@ -40,22 +38,27 @@ public class GenerateSsnFr extends Function<String> {
             result.append("0"); //$NON-NLS-1$
         }
         result.append(mm);
-        int ll = rnd.nextInt(95) + 1;
-        if (ll < 10) {
-            result.append("0"); //$NON-NLS-1$
-        }
-        result.append(ll);
-        for (int i = 0; i < 6; ++i) {
-            result.append(nextRandomDigit());
-        }
+        int ll = rnd.nextInt(UtilsSsnFr.getNumberOfFrenchDepartments());
+        result.append(UtilsSsnFr.getFrenchDepartments().get(ll));
 
-        BigInteger ssn = new BigInteger(result.toString());
-        int controlKey = 97 - ssn.mod(MOD97).intValue();
+        int nnn1 = rnd.nextInt(990) + 1;
+        if (nnn1 < 10) {
+            result.append("00");
+        } else if (nnn1 < 100) {
+            result.append(0);
+        }
+        result.append(nnn1);
 
-        result.append(" "); //$NON-NLS-1$
-        if (controlKey < 10)
-            result.append("0");
-        result.append(controlKey);
+        int nnn2 = rnd.nextInt(999) + 1;
+        if (nnn2 < 10) {
+            result.append("00");
+        } else if (nnn2 < 100) {
+            result.append(0);
+        }
+        result.append(nnn2);
+
+        String controlKey = UtilsSsnFr.computeFrenchKey(result);
+        result.append(" ").append(controlKey);
 
         return result.toString();
     }

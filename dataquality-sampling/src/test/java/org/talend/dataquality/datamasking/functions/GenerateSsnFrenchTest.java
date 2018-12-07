@@ -35,15 +35,7 @@ public class GenerateSsnFrenchTest {
     public void testGood() {
         gnf.setRandom(new Random(42));
         output = gnf.generateMaskedRow(null);
-        assertEquals("2490145055893 62", output); //$NON-NLS-1$
-    }
-
-    @Test
-    public void testControlKeyWithOneDigit() {
-        gnf.setRandom(new Random(38));
-        output = gnf.generateMaskedRow(null);
-        assertEquals('0', output.charAt(14));
-        assertEquals("2781181756480 07", output); //$NON-NLS-1$
+        assertEquals("2490184631638 26", output); //$NON-NLS-1$
     }
 
     @Test
@@ -76,6 +68,6 @@ public class GenerateSsnFrenchTest {
         MockRandom random = new MockRandom();
         gnf.setRandom(random);
         output = gnf.generateMaskedRow(null);
-        assertEquals("1020304456789 67", output);
+        assertEquals("1020304005006 24", output);
     }
 }
