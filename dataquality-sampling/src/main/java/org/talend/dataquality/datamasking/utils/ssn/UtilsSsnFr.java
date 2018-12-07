@@ -30,7 +30,7 @@ public class UtilsSsnFr {
             keyResult.setCharAt(5, '1');
             keyResult.setCharAt(6, (keyResult.charAt(6) == 'A') ? '9' : '8');
         }
-        int controlKey = 97 - (int) (Long.valueOf(keyResult.toString()) % MOD97);
+        int controlKey = MOD97 - (int) (Long.valueOf(keyResult.toString()) % MOD97);
 
         StringBuilder res = new StringBuilder();
         if (controlKey < 10)

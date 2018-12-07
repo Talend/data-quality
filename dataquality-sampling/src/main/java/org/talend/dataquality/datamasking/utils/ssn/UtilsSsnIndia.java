@@ -20,42 +20,18 @@ public class UtilsSsnIndia {
      * Compute the key for an Indian SSN
      */
     public static final String computeIndianKey(StringBuilder str) {
-        int c = 0;
-        int[] myArray = stringToReversedIntArray(str.toString());
+        String reversed = new StringBuilder(str).reverse().toString();
+        int length = reversed.length();
+        int[] ssnNumbers = new int[length];
 
-        for (int i = 0; i < myArray.length; i++) {
-            c = D[c][P[(i + 1) % 8][myArray[i]]];
+        for (int i = 0; i < length; i++) {
+            ssnNumbers[i] = Character.getNumericValue(reversed.charAt(i));
         }
 
+        int c = 0;
+        for (int i = 0; i < ssnNumbers.length; i++) {
+            c = D[c][P[(i + 1) % 8][ssnNumbers[i]]];
+        }
         return Integer.toString(INV[c]);
     }
-
-    /*
-     * Converts a string to a reversed integer array.
-     */
-    private static int[] stringToReversedIntArray(String num) {
-
-        int[] myArray = new int[num.length()];
-
-        for (int i = 0; i < num.length(); i++) {
-            myArray[i] = Integer.parseInt(num.substring(i, i + 1));
-        }
-
-        myArray = reverse(myArray);
-        return myArray;
-    }
-
-    /*
-     * Reverses an int array
-     */
-    private static int[] reverse(int[] myArray) {
-        int[] reversed = new int[myArray.length];
-
-        for (int i = 0; i < myArray.length; i++) {
-            reversed[i] = myArray[myArray.length - (i + 1)];
-        }
-
-        return reversed;
-    }
-
 }
