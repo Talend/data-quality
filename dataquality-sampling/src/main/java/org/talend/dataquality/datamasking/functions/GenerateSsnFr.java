@@ -28,38 +28,44 @@ public class GenerateSsnFr extends Function<String> {
     protected String doGenerateMaskedField(String str) {
         StringBuilder result = new StringBuilder(EMPTY_STRING);
         result.append(rnd.nextInt(2) + 1);
-        int yy = rnd.nextInt(99) + 1;
-        if (yy < 10) {
+
+        int year = rnd.nextInt(99) + 1;
+        if (year < 10) {
             result.append("0"); //$NON-NLS-1$
         }
-        result.append(yy);
-        int mm = rnd.nextInt(12) + 1;
-        if (mm < 10) {
+        result.append(year);
+
+        int month = rnd.nextInt(12) + 1;
+        if (month < 10) {
             result.append("0"); //$NON-NLS-1$
         }
-        result.append(mm);
-        int ll = rnd.nextInt(UtilsSsnFr.getNumberOfFrenchDepartments());
-        result.append(UtilsSsnFr.getFrenchDepartments().get(ll));
+        result.append(month);
 
-        int nnn1 = rnd.nextInt(990) + 1;
-        if (nnn1 < 10) {
-            result.append("00");
-        } else if (nnn1 < 100) {
-            result.append(0);
-        }
-        result.append(nnn1);
+        int dept = rnd.nextInt(UtilsSsnFr.getNumberOfFrenchDepartments());
+        result.append(UtilsSsnFr.getFrenchDepartments().get(dept));
 
-        int nnn2 = rnd.nextInt(999) + 1;
-        if (nnn2 < 10) {
-            result.append("00");
-        } else if (nnn2 < 100) {
-            result.append(0);
-        }
-        result.append(nnn2);
+        // Commune
+        result.append(generateTripleN(990));
 
+        // Rank of birth
+        result.append(generateTripleN(999));
+
+        // Add the security key specified for french SSN
         String controlKey = UtilsSsnFr.computeFrenchKey(result);
         result.append(" ").append(controlKey);
 
         return result.toString();
+    }
+
+    private StringBuilder generateTripleN(int bound) {
+        StringBuilder sb = new StringBuilder();
+        int number = rnd.nextInt(bound) + 1;
+        if (number < 10) {
+            sb.append("00");
+        } else if (number < 100) {
+            sb.append(0);
+        }
+        sb.append(number);
+        return sb;
     }
 }

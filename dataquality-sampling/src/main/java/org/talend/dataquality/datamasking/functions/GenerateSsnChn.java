@@ -58,10 +58,8 @@ public class GenerateSsnChn extends Function<String> {
             result.append(nextRandomDigit());
         }
 
-        // Checksum
-
-        String controlKey = UtilsSsnChn.computeChineseKey(result);
-        result.append(controlKey);
+        // Add the security key specified for Chinese SSN
+        result.append(UtilsSsnChn.computeChineseKey(result));
 
         return result.toString();
     }

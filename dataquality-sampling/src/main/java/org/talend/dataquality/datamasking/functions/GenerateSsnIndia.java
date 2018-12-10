@@ -36,9 +36,8 @@ public class GenerateSsnIndia extends Function<String> {
             result.append(nextRandomDigit());
         }
 
-        // add the security key specified for Indian SSN
-        String controlKey = UtilsSsnIndia.computeIndianKey(result);
-        result.append(controlKey);
+        // Add the security key specified for Indian SSN
+        result.append(UtilsSsnIndia.computeIndianKey(result));
 
         return result.toString();
     }
