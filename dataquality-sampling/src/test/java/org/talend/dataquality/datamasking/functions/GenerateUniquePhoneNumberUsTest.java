@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
+import org.talend.dataquality.datamasking.FormatPreservingMethod;
 
 /**
  * Created by jdenantes on 21/09/16.
@@ -29,6 +30,7 @@ public class GenerateUniquePhoneNumberUsTest {
     @Before
     public void setUp() throws Exception {
         gnu.setRandom(new Random(42));
+        gnu.setSecret(FormatPreservingMethod.BASIC.name(), "");
         gnu.setKeepFormat(true);
     }
 

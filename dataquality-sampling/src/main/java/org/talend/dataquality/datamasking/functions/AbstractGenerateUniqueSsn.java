@@ -15,13 +15,11 @@ package org.talend.dataquality.datamasking.functions;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.commons.lang.StringUtils;
 import org.talend.dataquality.datamasking.FormatPreservingMethod;
 import org.talend.dataquality.datamasking.SecretManager;
 import org.talend.dataquality.datamasking.generic.patterns.GenerateFormatPreservingPatterns;
 import org.talend.dataquality.datamasking.generic.patterns.GenerateUniqueRandomPatterns;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
-import org.talend.dataquality.datamasking.generic.patterns.AbstractGeneratePattern;
 import org.talend.dataquality.datamasking.utils.crypto.BasicSpec;
 
 /**
@@ -33,8 +31,6 @@ public abstract class AbstractGenerateUniqueSsn extends AbstractGenerateWithSecr
 
     private static final long serialVersionUID = -2459692854626505777L;
 
-    protected AbstractGeneratePattern ssnPattern;
-
     /**
      * Used in some countries to check the SSN number. The initialization can be done in createFieldsListFromPattern
      * method if necessary.
@@ -43,7 +39,7 @@ public abstract class AbstractGenerateUniqueSsn extends AbstractGenerateWithSecr
 
     public AbstractGenerateUniqueSsn() {
         List<AbstractField> fields = createFieldsListFromPattern();
-        ssnPattern = new GenerateUniqueRandomPatterns(fields);
+        pattern = new GenerateUniqueRandomPatterns(fields);
     }
 
     @Override
@@ -53,51 +49,18 @@ public abstract class AbstractGenerateUniqueSsn extends AbstractGenerateWithSecr
         if (FormatPreservingMethod.BASIC == secretMng.getMethod()) {
             secretMng.setKey(super.rnd.nextInt() % BasicSpec.BASIC_KEY_BOUND + BasicSpec.BASIC_KEY_OFFSET);
         } else {
-            ssnPattern = new GenerateFormatPreservingPatterns(2, ssnPattern.getFields());
+            pattern = new GenerateFormatPreservingPatterns(2, pattern.getFields());
         }
     }
 
     @Override
-    protected String doGenerateMaskedField(String str) {
-        if (str == null) {
-            return null;
-        }
-
-        String strWithoutFormat = super.removeFormatInString(str);
-        // check if the pattern is valid
-        if (!isValidWithoutFormat(strWithoutFormat)) {
-            return getResult(str);
-        }
-
-        StringBuilder result = doValidGenerateMaskedField(strWithoutFormat);
-        if (result == null) {
-            return getResult(str);
-        }
-        if (keepFormat) {
-            return insertFormatInString(str, result);
-        } else {
-            return result.toString();
-        }
-    }
-
     protected StringBuilder doValidGenerateMaskedField(String str) {
         // read the input str
         List<String> strs = splitFields(str);
 
-        Optional<StringBuilder> result = ssnPattern.generateUniqueString(strs, secretMng);
+        Optional<StringBuilder> result = pattern.generateUniqueString(strs, secretMng);
 
         return result.isPresent() ? result.get().append(computeKey(result.get())) : null;
-    }
-
-    /**
-     * Get result by input data
-     */
-    private String getResult(String str) {
-        if (keepInvalidPattern) {
-            return str;
-        } else {
-            return null;
-        }
     }
 
     /**
@@ -120,29 +83,14 @@ public abstract class AbstractGenerateUniqueSsn extends AbstractGenerateWithSecr
         return "";
     }
 
-    private boolean isValidWithoutFormat(String str) {
+    @Override
+    protected boolean isValidWithoutFormat(String str) {
         boolean isValid;
 
-        if (str.isEmpty() || str.length() != ssnPattern.getFieldsCharsLength() + checkSumSize) {
+        if (str.isEmpty() || str.length() != pattern.getFieldsCharsLength() + checkSumSize) {
             isValid = false;
         } else {
-            isValid = ssnPattern.encodeFields(splitFields(str)) != null;
-        }
-
-        return isValid;
-    }
-
-    /**
-     * Verifies the validity of a ssn string.
-     */
-    protected boolean isValid(String str) {
-        boolean isValid;
-
-        if (StringUtils.isEmpty(str)) {
-            isValid = false;
-        } else {
-            String strWithoutSpaces = super.removeFormatInString(str);
-            isValid = isValidWithoutFormat(strWithoutSpaces);
+            isValid = pattern.encodeFields(splitFields(str)) != null;
         }
 
         return isValid;

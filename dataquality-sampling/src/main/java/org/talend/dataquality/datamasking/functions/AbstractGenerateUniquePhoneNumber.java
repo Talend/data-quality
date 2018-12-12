@@ -6,10 +6,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
+import org.talend.dataquality.datamasking.FormatPreservingMethod;
+import org.talend.dataquality.datamasking.SecretManager;
+import org.talend.dataquality.datamasking.generic.patterns.GenerateFormatPreservingPatterns;
 import org.talend.dataquality.datamasking.generic.patterns.GenerateUniqueRandomPatterns;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
-import org.talend.dataquality.datamasking.generic.patterns.AbstractGeneratePattern;
 
 /**
  * Created by jteuladedenantes on 21/09/16.
@@ -18,51 +20,36 @@ public abstract class AbstractGenerateUniquePhoneNumber extends AbstractGenerate
 
     private static final long serialVersionUID = -3495285699226639929L;
 
-    protected AbstractGeneratePattern phoneNumberPattern;
-
     private ReplaceNumericString replaceNumeric = new ReplaceNumericString();
 
     public AbstractGenerateUniquePhoneNumber() {
         List<AbstractField> fields = createFieldsListFromPattern();
-        phoneNumberPattern = new GenerateUniqueRandomPatterns(fields);
+        pattern = new GenerateUniqueRandomPatterns(fields);
     }
 
     @Override
     public void setRandom(Random rand) {
         super.setRandom(rand);
         replaceNumeric.parse(null, false, rand);
-        secretMng.setKey(super.rnd.nextInt(Integer.MAX_VALUE - 1000000) + 1000000);
     }
 
     @Override
-    protected String doGenerateMaskedField(String str) {
+    public void setSecret(String method, String password) {
+        secretMng = new SecretManager(method, password);
 
-        if (str == null) {
-            return null;
-        }
-
-        String strWithoutSpaces = removeFormatInString(str);
-        // check if the pattern is valid
-        if (strWithoutSpaces.isEmpty() || strWithoutSpaces.length() < phoneNumberPattern.getFieldsCharsLength()) {
-            if (keepInvalidPattern) {
-                return str;
-            } else {
-                return replaceNumeric.doGenerateMaskedField(str);
-            }
-        }
-
-        StringBuilder result = doValidGenerateMaskedField(strWithoutSpaces);
-        if (result == null) {
-            if (keepInvalidPattern) {
-                return str;
-            } else {
-                return replaceNumeric.doGenerateMaskedField(str);
-            }
-        }
-        if (keepFormat) {
-            return insertFormatInString(str, result);
+        if (FormatPreservingMethod.BASIC == secretMng.getMethod()) {
+            secretMng.setKey(super.rnd.nextInt(Integer.MAX_VALUE - 1000000) + 1000000);
         } else {
-            return result.toString();
+            pattern = new GenerateFormatPreservingPatterns(10, pattern.getFields());
+        }
+    }
+
+    @Override
+    protected String getResult(String str) {
+        if (keepInvalidPattern) {
+            return str;
+        } else {
+            return replaceNumeric.doGenerateMaskedField(str);
         }
     }
 
@@ -73,13 +60,14 @@ public abstract class AbstractGenerateUniquePhoneNumber extends AbstractGenerate
         return fields;
     }
 
+    @Override
     protected StringBuilder doValidGenerateMaskedField(String str) {
         // read the input str
         List<String> strs = new ArrayList<String>();
 
         strs.add(str.substring(str.length() - getDigitsNumberToMask()));
 
-        Optional<StringBuilder> result = phoneNumberPattern.generateUniqueString(strs, secretMng);
+        Optional<StringBuilder> result = pattern.generateUniqueString(strs, secretMng);
 
         result.ifPresent(number -> number.insert(0, str.substring(0, str.length() - getDigitsNumberToMask())));
 
