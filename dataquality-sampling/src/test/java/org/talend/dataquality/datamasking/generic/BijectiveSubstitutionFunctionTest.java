@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.talend.dataquality.datamasking.FormatPreservingMethod;
 import org.talend.dataquality.datamasking.generic.FieldDefinition.FieldDefinitionType;
 import org.talend.dataquality.sampling.exception.DQRuntimeException;
 
@@ -51,6 +52,7 @@ public class BijectiveSubstitutionFunctionTest {
 
         fn = new BijectiveSubstitutionFunction(fieldDefinitionList);
         fn.setRandom(new Random(42));
+        fn.setSecret(FormatPreservingMethod.BASIC.name(), "");
         fn.setKeepFormat(true);
     }
 

@@ -9,11 +9,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.talend.dataquality.datamasking.FormatPreservingMethod;
+import org.talend.dataquality.datamasking.SecretManager;
 import org.talend.dataquality.datamasking.functions.AbstractGenerateWithSecret;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldDate;
@@ -119,44 +120,25 @@ public class BijectiveSubstitutionFunction extends AbstractGenerateWithSecret {
         fieldList.add(new FieldDate(definition.getMin().intValue(), definition.getMax().intValue()));
     }
 
+    /**
+     * For now BijectiveSubstitutionFunction does not support FF1 so it always uses the BASIC {@link FormatPreservingMethod}.
+     *
+     * @param method a String referring to a {@link FormatPreservingMethod}.
+     * @param password the password entered by the user
+     */
     @Override
-    public void setRandom(Random rand) {
-        super.setRandom(rand);
-        secretMng.setKey(rand.nextInt() % BasicSpec.BASIC_KEY_BOUND + BasicSpec.BASIC_KEY_OFFSET);
+    public void setSecret(String method, String password) {
+        secretMng = new SecretManager(FormatPreservingMethod.BASIC, "");
+        secretMng.setKey(rnd.nextInt() % BasicSpec.BASIC_KEY_BOUND + BasicSpec.BASIC_KEY_OFFSET);
     }
 
     @Override
-    protected String doGenerateMaskedField(String str) {
-        if (str == null) {
-            return null;
-        }
-
-        String strWithoutSpaces = super.removeFormatInString(str);
-        // check if the pattern is valid
-        if (strWithoutSpaces.isEmpty() || strWithoutSpaces.codePoints().count() < uniqueGenericPattern.getFieldsCharsLength()) {
-            if (keepInvalidPattern) {
-                return str;
-            } else {
-                return null;
-            }
-        }
-
-        StringBuilder result = doValidGenerateMaskedField(strWithoutSpaces);
-        if (result == null) {
-            if (keepInvalidPattern) {
-                return str;
-            } else {
-                return null;
-            }
-        }
-        if (keepFormat) {
-            return insertFormatInString(str, result);
-        } else {
-            return result.toString();
-        }
+    protected boolean isValidWithoutFormat(String str) {
+        return !str.isEmpty() && str.codePointCount(0, str.length()) >= uniqueGenericPattern.getFieldsCharsLength();
     }
 
-    private StringBuilder doValidGenerateMaskedField(String str) {
+    @Override
+    protected StringBuilder doValidGenerateMaskedField(String str) {
         // read the input str
         List<String> strs = new ArrayList<String>();
 

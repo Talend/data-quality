@@ -72,12 +72,13 @@ public abstract class AbstractGenerateWithSecret extends Function<String> {
 
     protected abstract StringBuilder doValidGenerateMaskedField(String str);
 
-    protected boolean isValidWithoutFormat(String str) {
-        return !str.isEmpty() && str.length() >= pattern.getFieldsCharsLength();
-    }
+    /**
+     * Verifies the validity of a string with pattern without its format.
+     */
+    protected abstract boolean isValidWithoutFormat(String str);
 
     /**
-     * Verifies the validity of a ssn string.
+     * Verifies the validity of a string with a certain pattern.
      */
     protected boolean isValid(String str) {
         boolean isValid;
@@ -85,7 +86,7 @@ public abstract class AbstractGenerateWithSecret extends Function<String> {
         if (StringUtils.isEmpty(str)) {
             isValid = false;
         } else {
-            String strWithoutSpaces = super.removeFormatInString(str);
+            String strWithoutSpaces = removeFormatInString(str);
             isValid = isValidWithoutFormat(strWithoutSpaces);
         }
 

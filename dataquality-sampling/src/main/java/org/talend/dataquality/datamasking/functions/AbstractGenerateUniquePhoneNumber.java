@@ -74,11 +74,13 @@ public abstract class AbstractGenerateUniquePhoneNumber extends AbstractGenerate
         return result.orElse(null);
     }
 
+    @Override
+    protected boolean isValidWithoutFormat(String str) {
+        return !str.isEmpty() && str.length() >= pattern.getFieldsCharsLength();
+    }
+
     /**
-     * Remove all the spaces in the input string
-     *
-     * @param input
-     * @return
+     * Remove all the non-digit characters in the input string
      */
     @Override
     protected String removeFormatInString(String input) {
