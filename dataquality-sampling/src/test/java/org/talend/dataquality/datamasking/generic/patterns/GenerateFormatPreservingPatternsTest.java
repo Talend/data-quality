@@ -108,6 +108,15 @@ public class GenerateFormatPreservingPatternsTest {
     }
 
     @Test
+    public void severalRadix() {
+        for (int i = Character.MIN_RADIX; i <= Character.MAX_RADIX; i++) {
+            pattern = new GenerateFormatPreservingPatterns(i, pattern.getFields());
+            StringBuilder output = pattern.generateUniquePattern(Arrays.asList("U", "KI", "45", "12"), secretMng);
+            assertNotNull("Masking did not work with radix value of : " + i, output);
+        }
+    }
+
+    @Test
     public void maskMinRankValue() {
         StringBuilder result = pattern.generateUniqueString(Arrays.asList("O", "SF", "00", "5"), secretMng).orElse(null);
         assertNotNull(result);

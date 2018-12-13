@@ -11,5 +11,4 @@ public class GenerateUniquePhoneNumberFr extends AbstractGenerateUniquePhoneNumb
     protected int getDigitsNumberToMask() {
         return 6;
     }
-
 }

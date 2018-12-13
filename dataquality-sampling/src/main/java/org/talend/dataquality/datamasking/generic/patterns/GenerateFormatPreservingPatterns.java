@@ -180,7 +180,7 @@ public class GenerateFormatPreservingPatterns extends AbstractGeneratePattern {
 
         if (data.length > 0) {
             for (int n : data) {
-                sb.append(n);
+                sb.append(Integer.toString(n, radix));
             }
         }
         return sb.toString();
