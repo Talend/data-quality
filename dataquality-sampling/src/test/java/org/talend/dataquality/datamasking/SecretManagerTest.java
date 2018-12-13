@@ -12,17 +12,18 @@
 // ============================================================================
 package org.talend.dataquality.datamasking;
 
-import com.idealista.fpe.component.functions.prf.PseudoRandomFunction;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Random;
+
 import org.apache.commons.codec.binary.Hex;
 import org.junit.Test;
 import org.talend.dataquality.datamasking.utils.crypto.AesPrf;
 import org.talend.dataquality.datamasking.utils.crypto.HmacPrf;
 
-import java.util.Random;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import com.idealista.fpe.component.functions.prf.PseudoRandomFunction;
 
 public class SecretManagerTest {
 

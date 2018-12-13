@@ -24,6 +24,7 @@ Bundle-ClassPath: .,
  lib/generex.jar,
  lib/format-preserving-encryption.jar
 Import-Package: com.google.i18n.phonenumbers,
+ org.apache.commons.codec.binary,
  org.apache.commons.codec.language,
  org.apache.commons.io;version="[2.2.0,3.0.0)",
  org.apache.commons.lang,
