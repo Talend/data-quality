@@ -222,4 +222,19 @@ public class GenerateFromRegexTest {
         Assert.assertTrue("All of action don't should spent more than 2 second. But in fact it is "
                 + ((endTime - startTime) / 1000.0) + "s", endTime - startTime < 2000);
     }
+
+    @Test
+    public void smallRegex() {
+        String pattern = "(.{1,6})( *, *(.{1,6})){0,2}";
+        Assert.assertTrue(GenerateFromRegex.isValidPattern(pattern));
+
+    }
+
+    @Test
+    public void largeRegex() {
+        String pattern = "(.{1,6})( *, *(.{1,6})){0,25}";
+        Assert.assertFalse(GenerateFromRegex.isValidPattern(pattern));
+
+    }
+
 }

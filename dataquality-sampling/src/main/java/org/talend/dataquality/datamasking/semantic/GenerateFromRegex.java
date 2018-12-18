@@ -14,6 +14,12 @@ package org.talend.dataquality.datamasking.semantic;
 
 import java.security.SecureRandom;
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -156,7 +162,24 @@ public class GenerateFromRegex extends Function<String> {
                 return false;
             }
         }
-        return Generex.isValidPattern(patternString);
+        return Generex.isValidPattern(patternString) && isComputable(patternString);
+    }
+
+    private static boolean isComputable(String patternString) {
+
+        ExecutorService executor = Executors.newFixedThreadPool(1);
+
+        Future future = executor.submit(() -> {
+            new Generex(patternString);
+        });
+
+        try {
+            future.get(1, TimeUnit.SECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            return false;
+        }
+
+        return true;
     }
 
 }
