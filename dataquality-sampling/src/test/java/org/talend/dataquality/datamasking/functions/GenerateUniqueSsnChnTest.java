@@ -46,22 +46,21 @@ public class GenerateUniqueSsnChnTest {
     @Test
     public void testKeepInvalidPatternTrue() {
         gnc.setKeepInvalidPattern(true);
-        output = gnc.generateMaskedRow(null);
-        assertNull(output);
-        output = gnc.generateMaskedRow("");
-        assertEquals("", output);
         output = gnc.generateMaskedRow("AHDBNSKD");
         assertEquals("AHDBNSKD", output);
     }
 
     @Test
-    public void testKeepInvalidPatternFalse() {
+    public void outputsNullWhenInputNull() {
         gnc.setKeepInvalidPattern(false);
         output = gnc.generateMaskedRow(null);
         assertNull(output);
+    }
+
+    @Test
+    public void outputsNullWhenInputEmpty() {
+        gnc.setKeepInvalidPattern(false);
         output = gnc.generateMaskedRow("");
-        assertNull(output);
-        output = gnc.generateMaskedRow("AHDBNSKD");
         assertNull(output);
     }
 

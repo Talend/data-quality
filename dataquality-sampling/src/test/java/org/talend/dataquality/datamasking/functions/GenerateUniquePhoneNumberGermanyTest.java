@@ -36,21 +36,27 @@ public class GenerateUniquePhoneNumberGermanyTest {
     @Test
     public void testKeepInvalidPatternTrue() {
         gng.setKeepInvalidPattern(true);
-        output = gng.generateMaskedRow(null);
-        assertNull(output);
-        output = gng.generateMaskedRow("");
-        assertEquals("", output);
         output = gng.generateMaskedRow("AHDBNSKD");
         assertEquals("AHDBNSKD", output);
     }
 
     @Test
-    public void testKeepInvalidPatternFalse() {
+    public void outputsNullWhenInputNull() {
         gng.setKeepInvalidPattern(false);
         output = gng.generateMaskedRow(null);
         assertNull(output);
+    }
+
+    @Test
+    public void outputsNullWhenInputEmpty() {
+        gng.setKeepInvalidPattern(false);
         output = gng.generateMaskedRow("");
         assertNull(output);
+    }
+
+    @Test
+    public void outputsNullWhenInputInvalid() {
+        gng.setKeepInvalidPattern(false);
         output = gng.generateMaskedRow("AHDBNSKD");
         assertNull(output);
     }

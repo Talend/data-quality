@@ -36,27 +36,26 @@ public class GenerateUniquePhoneNumberUsTest {
     @Test
     public void testKeepInvalidPatternTrue() {
         gnu.setKeepInvalidPattern(true);
-        output = gnu.generateMaskedRow(null);
-        assertNull(output);
-        output = gnu.generateMaskedRow("");
-        assertEquals("", output);
         output = gnu.generateMaskedRow("AHDBNSKD");
         assertEquals("AHDBNSKD", output);
     }
 
     @Test
-    public void testKeepInvalidPatternFalse() {
+    public void outputsNullWhenInputNull() {
         gnu.setKeepInvalidPattern(false);
         output = gnu.generateMaskedRow(null);
-        assertNull(output);
-        output = gnu.generateMaskedRow("");
-        assertNull(output);
-        output = gnu.generateMaskedRow("AHDBNSKD");
         assertNull(output);
     }
 
     @Test
-    public void testWrongPhoneFieldNumber() {
+    public void outputsNullWhenInputEmpty() {
+        gnu.setKeepInvalidPattern(false);
+        output = gnu.generateMaskedRow("");
+        assertNull(output);
+    }
+
+    @Test
+    public void outputsNullWhenInputInvalid() {
         gnu.setKeepInvalidPattern(false);
         // with two 1 at the fifth and the sixth position
         output = gnu.generateMaskedRow("465 311 9856");

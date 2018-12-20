@@ -39,36 +39,22 @@ public class GenerateUniqueSsnIndiaTest {
     @Test
     public void testKeepInvalidPatternTrue() {
         gni.setKeepInvalidPattern(true);
-        output = gni.generateMaskedRow(null);
-        assertNull(output);
-        output = gni.generateMaskedRow("");
-        assertEquals("", output);
         output = gni.generateMaskedRow("AHDBNSKD");
         assertEquals("AHDBNSKD", output);
     }
 
     @Test
-    public void testKeepInvalidPatternFalse() {
+    public void outputsNullWhenInputNull() {
         gni.setKeepInvalidPattern(false);
         output = gni.generateMaskedRow(null);
-        assertNull(output);
-        output = gni.generateMaskedRow("");
-        assertNull(output);
-        output = gni.generateMaskedRow("AHDBNSKD");
         assertNull(output);
     }
 
     @Test
-    public void unreproducibleWhenNoPasswordSet() {
-        String input = "186034828209";
-        gni.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF.name(), "");
-        String result1 = gni.generateMaskedRow(input);
-
-        gni.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF.name(), "");
-        String result2 = gni.generateMaskedRow(input);
-
-        assertNotEquals(String.format("The result should not be reproducible when no password is set. Input value is %s.", input),
-                result1, result2);
+    public void outputsNullWhenInputEmpty() {
+        gni.setKeepInvalidPattern(false);
+        output = gni.generateMaskedRow("");
+        assertNull(output);
     }
 
     @Test
@@ -110,4 +96,16 @@ public class GenerateUniqueSsnIndiaTest {
         assertNull(output);
     }
 
+    @Test
+    public void unreproducibleWhenNoPasswordSet() {
+        String input = "186034828209";
+        gni.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF.name(), "");
+        String result1 = gni.generateMaskedRow(input);
+
+        gni.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF.name(), "");
+        String result2 = gni.generateMaskedRow(input);
+
+        assertNotEquals(String.format("The result should not be reproducible when no password is set. Input value is %s.", input),
+                result1, result2);
+    }
 }

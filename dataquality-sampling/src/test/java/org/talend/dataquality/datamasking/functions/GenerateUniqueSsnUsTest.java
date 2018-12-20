@@ -44,16 +44,24 @@ public class GenerateUniqueSsnUsTest {
     }
 
     @Test
-    public void unreproducibleWhenNoPasswordSet() {
-        String input = "153 65 4862";
-        gnu.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF.name(), "");
-        String result1 = gnu.generateMaskedRow(input);
+    public void testKeepInvalidPatternTrue() {
+        gnu.setKeepInvalidPattern(true);
+        output = gnu.generateMaskedRow("AHDBNSKD");
+        assertEquals("AHDBNSKD", output);
+    }
 
-        gnu.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF.name(), "");
-        String result2 = gnu.generateMaskedRow(input);
+    @Test
+    public void outputsNullWhenInputNull() {
+        gnu.setKeepInvalidPattern(false);
+        output = gnu.generateMaskedRow(null);
+        assertNull(output);
+    }
 
-        assertNotEquals(String.format("The result should not be reproducible when no password is set. Input value is %s.", input),
-                result1, result2);
+    @Test
+    public void outputsNullWhenInputEmpty() {
+        gnu.setKeepInvalidPattern(false);
+        output = gnu.generateMaskedRow("");
+        assertNull(output);
     }
 
     @Test
@@ -92,5 +100,18 @@ public class GenerateUniqueSsnUsTest {
         // with the forbidden number 00
         output = gnu.generateMaskedRow("153 00 4862");
         assertNull(output);
+    }
+
+    @Test
+    public void unreproducibleWhenNoPasswordSet() {
+        String input = "153 65 4862";
+        gnu.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF.name(), "");
+        String result1 = gnu.generateMaskedRow(input);
+
+        gnu.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF.name(), "");
+        String result2 = gnu.generateMaskedRow(input);
+
+        assertNotEquals(String.format("The result should not be reproducible when no password is set. Input value is %s.", input),
+                result1, result2);
     }
 }

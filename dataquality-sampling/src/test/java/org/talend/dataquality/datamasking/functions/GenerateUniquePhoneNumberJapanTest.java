@@ -36,21 +36,27 @@ public class GenerateUniquePhoneNumberJapanTest {
     @Test
     public void testKeepInvalidPatternTrue() {
         gnj.setKeepInvalidPattern(true);
-        output = gnj.generateMaskedRow(null);
-        assertNull(output);
-        output = gnj.generateMaskedRow("");
-        assertEquals("", output);
         output = gnj.generateMaskedRow("AHDBNSKD");
         assertEquals("AHDBNSKD", output);
     }
 
     @Test
-    public void testKeepInvalidPatternFalse() {
+    public void outputsNullWhenInputNull() {
         gnj.setKeepInvalidPattern(false);
         output = gnj.generateMaskedRow(null);
         assertNull(output);
+    }
+
+    @Test
+    public void outputsNullWhenInputEmpty() {
+        gnj.setKeepInvalidPattern(false);
         output = gnj.generateMaskedRow("");
         assertNull(output);
+    }
+
+    @Test
+    public void outputsNullWhenInputInvalid() {
+        gnj.setKeepInvalidPattern(false);
         output = gnj.generateMaskedRow("AHDBNSKD");
         assertNull(output);
     }

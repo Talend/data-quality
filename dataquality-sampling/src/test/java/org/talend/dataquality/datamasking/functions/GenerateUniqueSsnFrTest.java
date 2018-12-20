@@ -46,36 +46,22 @@ public class GenerateUniqueSsnFrTest {
     @Test
     public void testKeepInvalidPatternTrue() {
         gnf.setKeepInvalidPattern(true);
-        output = gnf.generateMaskedRow(null);
-        assertNull(output);
-        output = gnf.generateMaskedRow("");
-        assertEquals("", output);
         output = gnf.generateMaskedRow("AHDBNSKD");
         assertEquals("AHDBNSKD", output);
     }
 
     @Test
-    public void testKeepInvalidPatternFalse() {
+    public void outputsNullWhenInputNull() {
         gnf.setKeepInvalidPattern(false);
         output = gnf.generateMaskedRow(null);
-        assertNull(output);
-        output = gnf.generateMaskedRow("");
-        assertNull(output);
-        output = gnf.generateMaskedRow("AHDBNSKD");
         assertNull(output);
     }
 
     @Test
-    public void unreproducibleWhenNoPasswordSet() {
-        String input = "1860348282074 19";
-        gnf.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF.name(), "");
-        String result1 = gnf.generateMaskedRow(input);
-
-        gnf.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF.name(), "");
-        String result2 = gnf.generateMaskedRow(input);
-
-        assertNotEquals(String.format("The result should not be reproducible when no password is set. Input value is %s.", input),
-                result1, result2);
+    public void outputsNullWhenInputEmpty() {
+        gnf.setKeepInvalidPattern(false);
+        output = gnf.generateMaskedRow("");
+        assertNull(output);
     }
 
     @Test
@@ -135,4 +121,16 @@ public class GenerateUniqueSsnFrTest {
         assertNull(output);
     }
 
+    @Test
+    public void unreproducibleWhenNoPasswordSet() {
+        String input = "1860348282074 19";
+        gnf.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF.name(), "");
+        String result1 = gnf.generateMaskedRow(input);
+
+        gnf.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF.name(), "");
+        String result2 = gnf.generateMaskedRow(input);
+
+        assertNotEquals(String.format("The result should not be reproducible when no password is set. Input value is %s.", input),
+                result1, result2);
+    }
 }

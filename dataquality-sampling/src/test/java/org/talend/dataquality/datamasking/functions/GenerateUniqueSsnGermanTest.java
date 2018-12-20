@@ -44,16 +44,24 @@ public class GenerateUniqueSsnGermanTest {
     }
 
     @Test
-    public void unreproducibleWhenNoPasswordSet() {
-        String input = "83807527228";
-        gng.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF.name(), "");
-        String result1 = gng.generateMaskedRow(input);
+    public void testKeepInvalidPatternTrue() {
+        gng.setKeepInvalidPattern(true);
+        output = gng.generateMaskedRow("AHDBNSKD");
+        assertEquals("AHDBNSKD", output);
+    }
 
-        gng.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF.name(), "");
-        String result2 = gng.generateMaskedRow(input);
+    @Test
+    public void outputsNullWhenInputNull() {
+        gng.setKeepInvalidPattern(false);
+        output = gng.generateMaskedRow(null);
+        assertNull(output);
+    }
 
-        assertNotEquals(String.format("The result should not be reproducible when no password is set. Input value is %s.", input),
-                result1, result2);
+    @Test
+    public void outputsNullWhenInputEmpty() {
+        gng.setKeepInvalidPattern(false);
+        output = gng.generateMaskedRow("");
+        assertNull(output);
     }
 
     @Test
@@ -84,5 +92,18 @@ public class GenerateUniqueSsnGermanTest {
         // with a letter instead of a number
         output = gng.generateMaskedRow("8308752722P");
         assertNull(output);
+    }
+
+    @Test
+    public void unreproducibleWhenNoPasswordSet() {
+        String input = "83807527228";
+        gng.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF.name(), "");
+        String result1 = gng.generateMaskedRow(input);
+
+        gng.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF.name(), "");
+        String result2 = gng.generateMaskedRow(input);
+
+        assertNotEquals(String.format("The result should not be reproducible when no password is set. Input value is %s.", input),
+                result1, result2);
     }
 }
