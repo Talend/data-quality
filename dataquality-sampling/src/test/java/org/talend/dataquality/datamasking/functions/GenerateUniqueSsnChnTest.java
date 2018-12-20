@@ -12,15 +12,13 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
 import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.datamasking.FormatPreservingMethod;
+
+import static org.junit.Assert.*;
 
 /**
  * @author dprot
@@ -29,112 +27,125 @@ public class GenerateUniqueSsnChnTest {
 
     private String output;
 
-    private AbstractGenerateUniqueSsn gnf = new GenerateUniqueSsnChn();
+    private AbstractGenerateUniqueSsn gnc = new GenerateUniqueSsnChn();
 
     @Before
     public void setUp() throws Exception {
-        gnf.setRandom(new Random(42));
-        gnf.setSecret(FormatPreservingMethod.BASIC.name(), "");
-        gnf.setKeepFormat(true);
+        gnc.setRandom(new Random(42));
+        gnc.setSecret(FormatPreservingMethod.BASIC.name(), "");
+        gnc.setKeepFormat(true);
     }
 
     @Test
     public void testEmpty() {
-        gnf.setKeepEmpty(true);
-        output = gnf.generateMaskedRow("");
+        gnc.setKeepEmpty(true);
+        output = gnc.generateMaskedRow("");
         assertEquals("", output); //$NON-NLS-1$
     }
 
     @Test
     public void testKeepInvalidPatternTrue() {
-        gnf.setKeepInvalidPattern(true);
-        output = gnf.generateMaskedRow(null);
+        gnc.setKeepInvalidPattern(true);
+        output = gnc.generateMaskedRow(null);
         assertNull(output);
-        output = gnf.generateMaskedRow("");
+        output = gnc.generateMaskedRow("");
         assertEquals("", output);
-        output = gnf.generateMaskedRow("AHDBNSKD");
+        output = gnc.generateMaskedRow("AHDBNSKD");
         assertEquals("AHDBNSKD", output);
     }
 
     @Test
     public void testKeepInvalidPatternFalse() {
-        gnf.setKeepInvalidPattern(false);
-        output = gnf.generateMaskedRow(null);
+        gnc.setKeepInvalidPattern(false);
+        output = gnc.generateMaskedRow(null);
         assertNull(output);
-        output = gnf.generateMaskedRow("");
+        output = gnc.generateMaskedRow("");
         assertNull(output);
-        output = gnf.generateMaskedRow("AHDBNSKD");
+        output = gnc.generateMaskedRow("AHDBNSKD");
         assertNull(output);
     }
 
     @Test
+    public void unreproducibleWhenNoPasswordSet() {
+        String input = "64010119520414123X";
+        gnc.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF.name(), "");
+        String result1 = gnc.generateMaskedRow(input);
+
+        gnc.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF.name(), "");
+        String result2 = gnc.generateMaskedRow(input);
+
+        assertNotEquals(String.format("The result should not be reproducible when no password is set. Input value is %s.", input),
+                result1, result2);
+    }
+
+    @Test
     public void testGood() {
-        output = gnf.generateMaskedRow("64010119520414123X");
-        assertTrue(gnf.isValid(output));
+        output = gnc.generateMaskedRow("64010119520414123X");
+        assertTrue(gnc.isValid(output));
         assertEquals("15092320521223813X", output);
     }
 
     @Test
     public void testGoodSpace() {
         // with spaces
-        output = gnf.generateMaskedRow("231202 19510411 456   4");
-        assertTrue(gnf.isValid(output));
+        output = gnc.generateMaskedRow("231202 19510411 456   4");
+        assertTrue(gnc.isValid(output));
         assertEquals("410422 19840319 136   X", output);
     }
 
     @Test
     public void testGoodLeapYear() {
         // leap year for date of birth
-        output = gnf.generateMaskedRow("232723 19960229 459 4");
-        assertTrue(gnf.isValid(output));
+        output = gnc.generateMaskedRow("232723 19960229 459 4");
+        assertTrue(gnc.isValid(output));
         assertEquals("445322 19370707 229 X", output);
     }
 
     @Test
     public void testWrongSsnFieldNumber() {
-        gnf.setKeepInvalidPattern(false);
+        gnc.setKeepInvalidPattern(false);
         // without a number
-        output = gnf.generateMaskedRow("6401011920414123X");
+        output = gnc.generateMaskedRow("6401011920414123X");
         assertNull(output);
     }
 
     @Test
     public void testWrongSsnFieldLetter() {
-        gnf.setKeepInvalidPattern(false);
+        gnc.setKeepInvalidPattern(false);
         // with a wrong letter
-        output = gnf.generateMaskedRow("640101195204141C3X");
+        output = gnc.generateMaskedRow("640101195204141C3X");
         assertNull(output);
     }
 
     @Test
     public void testWrongSsnFieldRegion() {
-        gnf.setKeepInvalidPattern(false);
+        gnc.setKeepInvalidPattern(false);
         // With an invalid region code
-        output = gnf.generateMaskedRow("11000119520414123X");
+        output = gnc.generateMaskedRow("11000119520414123X");
         assertNull(output);
     }
 
     @Test
     public void testWrongSsnFieldBirth() {
-        gnf.setKeepInvalidPattern(false);
+        gnc.setKeepInvalidPattern(false);
         // With an invalid date of birth (wrong year)
-        output = gnf.generateMaskedRow("64010118520414123X");
+        output = gnc.generateMaskedRow("64010118520414123X");
         assertNull(output);
     }
 
     @Test
     public void testWrongSsnFieldBirth2() {
-        gnf.setKeepInvalidPattern(false);
+        gnc.setKeepInvalidPattern(false);
         // With an invalid date of birth (day not existing)
-        output = gnf.generateMaskedRow("64010119520434123X");
+        output = gnc.generateMaskedRow("64010119520434123X");
         assertNull(output);
     }
 
     @Test
     public void testWrongSsnFieldBirth3() {
-        gnf.setKeepInvalidPattern(false);
+        gnc.setKeepInvalidPattern(false);
         // With an invalid date of birth (29th February in a non-leap year)
-        output = gnf.generateMaskedRow("64010119530229123X");
+        output = gnc.generateMaskedRow("64010119530229123X");
         assertNull(output);
     }
 

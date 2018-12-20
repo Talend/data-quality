@@ -1,7 +1,5 @@
 package org.talend.dataquality.datamasking.functions;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.Locale;
 import java.util.Random;
 
@@ -12,6 +10,8 @@ import org.junit.Test;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 import org.talend.dataquality.datamasking.FormatPreservingMethod;
+
+import static org.junit.Assert.*;
 
 /**
  * Created by jteuladedenantes on 22/09/16.
@@ -34,6 +34,28 @@ public class GenerateUniquePhoneNumberGermanyTest {
     }
 
     @Test
+    public void testKeepInvalidPatternTrue() {
+        gng.setKeepInvalidPattern(true);
+        output = gng.generateMaskedRow(null);
+        assertNull(output);
+        output = gng.generateMaskedRow("");
+        assertEquals("", output);
+        output = gng.generateMaskedRow("AHDBNSKD");
+        assertEquals("AHDBNSKD", output);
+    }
+
+    @Test
+    public void testKeepInvalidPatternFalse() {
+        gng.setKeepInvalidPattern(false);
+        output = gng.generateMaskedRow(null);
+        assertNull(output);
+        output = gng.generateMaskedRow("");
+        assertNull(output);
+        output = gng.generateMaskedRow("AHDBNSKD");
+        assertNull(output);
+    }
+
+    @Test
     public void testValidWithFormat() {
         output = gng.generateMaskedRow("(089) / 636-48018");
         assertEquals("(089) / 829-42714", output);
@@ -47,14 +69,16 @@ public class GenerateUniquePhoneNumberGermanyTest {
     }
 
     @Test
-    public void testInvalid() {
-        // without a number
-        output = gng.generateMaskedRow("35686");
-        assertEquals("34647", output);
-        gng.setKeepInvalidPattern(true);
-        // with a letter
-        output = gng.generateMaskedRow("35686");
-        assertEquals("35686", output);
+    public void unreproducibleWhenNoPasswordSet() {
+        String input = "(089) / 636-48018";
+        gng.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF.name(), "");
+        String result1 = gng.generateMaskedRow(input);
+
+        gng.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF.name(), "");
+        String result2 = gng.generateMaskedRow(input);
+
+        assertNotEquals(String.format("The result should not be reproducible when no password is set. Input value is %s.", input),
+                result1, result2);
     }
 
     @Test

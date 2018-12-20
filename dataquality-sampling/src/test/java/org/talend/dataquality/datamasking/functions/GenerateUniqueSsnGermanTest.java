@@ -12,15 +12,13 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
 import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.datamasking.FormatPreservingMethod;
+
+import static org.junit.Assert.*;
 
 /**
  * @author dprot
@@ -29,49 +27,62 @@ public class GenerateUniqueSsnGermanTest {
 
     private String output;
 
-    private AbstractGenerateUniqueSsn gnj = new GenerateUniqueSsnGermany();
+    private AbstractGenerateUniqueSsn gng = new GenerateUniqueSsnGermany();
 
     @Before
     public void setUp() throws Exception {
-        gnj.setRandom(new Random(42));
-        gnj.setSecret(FormatPreservingMethod.BASIC.name(), "");
-        gnj.setKeepFormat(true);
+        gng.setRandom(new Random(42));
+        gng.setSecret(FormatPreservingMethod.BASIC.name(), "");
+        gng.setKeepFormat(true);
     }
 
     @Test
     public void testEmpty() {
-        gnj.setKeepEmpty(true);
-        output = gnj.generateMaskedRow("");
+        gng.setKeepEmpty(true);
+        output = gng.generateMaskedRow("");
         assertEquals("", output); //$NON-NLS-1$
     }
 
     @Test
+    public void unreproducibleWhenNoPasswordSet() {
+        String input = "83807527228";
+        gng.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF.name(), "");
+        String result1 = gng.generateMaskedRow(input);
+
+        gng.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF.name(), "");
+        String result2 = gng.generateMaskedRow(input);
+
+        assertNotEquals(String.format("The result should not be reproducible when no password is set. Input value is %s.", input),
+                result1, result2);
+    }
+
+    @Test
     public void testGood1() {
-        output = gnj.generateMaskedRow("83807527228");
-        assertTrue(gnj.isValid(output));
+        output = gng.generateMaskedRow("83807527228");
+        assertTrue(gng.isValid(output));
         assertEquals("79564837099", output);
     }
 
     @Test
     public void testGood2() {
-        output = gnj.generateMaskedRow("48695361449");
-        assertTrue(gnj.isValid(output));
+        output = gng.generateMaskedRow("48695361449");
+        assertTrue(gng.isValid(output));
         assertEquals("37088083197", output);
     }
 
     @Test
     public void testWrongSsnFieldNumber() {
-        gnj.setKeepInvalidPattern(false);
+        gng.setKeepInvalidPattern(false);
         // without a number
-        output = gnj.generateMaskedRow("8308072728");
+        output = gng.generateMaskedRow("8308072728");
         assertNull(output);
     }
 
     @Test
     public void testWrongSsnFieldLetter() {
-        gnj.setKeepInvalidPattern(false);
+        gng.setKeepInvalidPattern(false);
         // with a letter instead of a number
-        output = gnj.generateMaskedRow("8308752722P");
+        output = gng.generateMaskedRow("8308752722P");
         assertNull(output);
     }
 }

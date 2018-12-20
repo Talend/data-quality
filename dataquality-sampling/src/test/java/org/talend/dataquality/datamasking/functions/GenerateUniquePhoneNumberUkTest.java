@@ -1,7 +1,5 @@
 package org.talend.dataquality.datamasking.functions;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.Locale;
 import java.util.Random;
 
@@ -12,6 +10,8 @@ import org.junit.Test;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 import org.talend.dataquality.datamasking.FormatPreservingMethod;
+
+import static org.junit.Assert.*;
 
 /**
  * Created by jteuladedenantes on 22/09/16.
@@ -34,6 +34,28 @@ public class GenerateUniquePhoneNumberUkTest {
     }
 
     @Test
+    public void testKeepInvalidPatternTrue() {
+        gnu.setKeepInvalidPattern(true);
+        output = gnu.generateMaskedRow(null);
+        assertNull(output);
+        output = gnu.generateMaskedRow("");
+        assertEquals("", output);
+        output = gnu.generateMaskedRow("AHDBNSKD");
+        assertEquals("AHDBNSKD", output);
+    }
+
+    @Test
+    public void testKeepInvalidPatternFalse() {
+        gnu.setKeepInvalidPattern(false);
+        output = gnu.generateMaskedRow(null);
+        assertNull(output);
+        output = gnu.generateMaskedRow("");
+        assertNull(output);
+        output = gnu.generateMaskedRow("AHDBNSKD");
+        assertNull(output);
+    }
+
+    @Test
     public void testValidWithFormat() {
         output = gnu.generateMaskedRow("07700 900343");
         assertEquals("07706 359939", output);
@@ -47,14 +69,16 @@ public class GenerateUniquePhoneNumberUkTest {
     }
 
     @Test
-    public void testInvalid() {
-        // without a number
-        output = gnu.generateMaskedRow("35686");
-        assertEquals("34647", output);
-        gnu.setKeepInvalidPattern(true);
-        // with a letter
-        output = gnu.generateMaskedRow("35686");
-        assertEquals("35686", output);
+    public void unreproducibleWhenNoPasswordSet() {
+        String input = "07700 900343";
+        gnu.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF.name(), "");
+        String result1 = gnu.generateMaskedRow(input);
+
+        gnu.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF.name(), "");
+        String result2 = gnu.generateMaskedRow(input);
+
+        assertNotEquals(String.format("The result should not be reproducible when no password is set. Input value is %s.", input),
+                result1, result2);
     }
 
     @Test

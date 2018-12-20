@@ -44,15 +44,6 @@ public abstract class AbstractGenerateUniquePhoneNumber extends AbstractGenerate
         }
     }
 
-    @Override
-    protected String getResult(String str) {
-        if (keepInvalidPattern) {
-            return str;
-        } else {
-            return replaceNumeric.doGenerateMaskedField(str);
-        }
-    }
-
     protected List<AbstractField> createFieldsListFromPattern() {
         List<AbstractField> fields = new ArrayList<AbstractField>();
         long max = (long) Math.pow(10, getDigitsNumberToMask()) - 1;

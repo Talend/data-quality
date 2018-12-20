@@ -66,6 +66,19 @@ public class GenerateUniqueSsnFrTest {
     }
 
     @Test
+    public void unreproducibleWhenNoPasswordSet() {
+        String input = "1860348282074 19";
+        gnf.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF.name(), "");
+        String result1 = gnf.generateMaskedRow(input);
+
+        gnf.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF.name(), "");
+        String result2 = gnf.generateMaskedRow(input);
+
+        assertNotEquals(String.format("The result should not be reproducible when no password is set. Input value is %s.", input),
+                result1, result2);
+    }
+
+    @Test
     public void testGood1() {
         output = gnf.generateMaskedRow("1860348282074 19");
         assertTrue(gnf.isValid(output));

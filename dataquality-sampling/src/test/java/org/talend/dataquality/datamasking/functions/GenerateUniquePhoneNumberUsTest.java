@@ -1,8 +1,5 @@
 package org.talend.dataquality.datamasking.functions;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-
 import java.util.Locale;
 import java.util.Random;
 
@@ -13,6 +10,8 @@ import org.junit.Test;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 import org.talend.dataquality.datamasking.FormatPreservingMethod;
+
+import static org.junit.Assert.*;
 
 /**
  * Created by jdenantes on 21/09/16.
@@ -38,7 +37,7 @@ public class GenerateUniquePhoneNumberUsTest {
     public void testKeepInvalidPatternTrue() {
         gnu.setKeepInvalidPattern(true);
         output = gnu.generateMaskedRow(null);
-        assertEquals(null, output);
+        assertNull(output);
         output = gnu.generateMaskedRow("");
         assertEquals("", output);
         output = gnu.generateMaskedRow("AHDBNSKD");
@@ -49,41 +48,11 @@ public class GenerateUniquePhoneNumberUsTest {
     public void testKeepInvalidPatternFalse() {
         gnu.setKeepInvalidPattern(false);
         output = gnu.generateMaskedRow(null);
-        assertEquals(null, output);
+        assertNull(output);
         output = gnu.generateMaskedRow("");
-        assertEquals("", output);
+        assertNull(output);
         output = gnu.generateMaskedRow("AHDBNSKD");
-        assertEquals("AHDBNSKD", output);
-    }
-
-    @Test
-    public void testKeepInvalidResult() {
-        AbstractGenerateUniquePhoneNumber newGnu = new GenerateUniquePhoneNumberUs();
-        newGnu.setKeepInvalidPattern(false);
-        newGnu.parse("invalid", false, new Random(42));
-        output = newGnu.generateMaskedRow("626");
-        assertFalse("After mask 626 should not get empty result", output.isEmpty());
-        output = newGnu.generateMaskedRow("(845)");
-        assertFalse("After mask (845) should not get empty result", output.isEmpty());
-        newGnu.setKeepInvalidPattern(true);
-        output = newGnu.generateMaskedRow("626");
-        assertEquals("The result should be 626", "626", output);
-        output = newGnu.generateMaskedRow("(845)");
-        assertEquals("The result should be (845)", "(845)", output);
-    }
-
-    @Test
-    public void testGood1() {
-        output = gnu.generateMaskedRow("35-6/42-5/9 865");
-        assertEquals("35-6/45-0/7 585", output);
-    }
-
-    @Test
-    public void testGood2() {
-        gnu.setKeepFormat(false);
-        // with spaces
-        output = gnu.generateMaskedRow("356-425-9865");
-        assertEquals("3564507585", output);
+        assertNull(output);
     }
 
     @Test
@@ -91,7 +60,33 @@ public class GenerateUniquePhoneNumberUsTest {
         gnu.setKeepInvalidPattern(false);
         // with two 1 at the fifth and the sixth position
         output = gnu.generateMaskedRow("465 311 9856");
-        assertEquals("384 055 8932", output);
+        assertNull(output);
+    }
+
+    @Test
+    public void testValidWithFormat() {
+        output = gnu.generateMaskedRow("35-6/42-5/9 865");
+        assertEquals("35-6/45-0/7 585", output);
+    }
+
+    @Test
+    public void testValidWithoutFormat() {
+        gnu.setKeepFormat(false);
+        output = gnu.generateMaskedRow("356-425-9865");
+        assertEquals("3564507585", output);
+    }
+
+    @Test
+    public void unreproducibleWhenNoPasswordSet() {
+        String input = "35-6/42-5/9 865";
+        gnu.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF.name(), "");
+        String result1 = gnu.generateMaskedRow(input);
+
+        gnu.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF.name(), "");
+        String result2 = gnu.generateMaskedRow(input);
+
+        assertNotEquals(String.format("The result should not be reproducible when no password is set. Input value is %s.", input),
+                result1, result2);
     }
 
     @Test

@@ -12,15 +12,13 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
 import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.datamasking.FormatPreservingMethod;
+
+import static org.junit.Assert.*;
 
 /**
  * @author dprot
@@ -29,73 +27,86 @@ public class GenerateUniqueSsnIndiaTest {
 
     private String output;
 
-    private AbstractGenerateUniqueSsn gnf = new GenerateUniqueSsnIndia();
+    private AbstractGenerateUniqueSsn gni = new GenerateUniqueSsnIndia();
 
     @Before
     public void setUp() throws Exception {
-        gnf.setRandom(new Random(42));
-        gnf.setSecret(FormatPreservingMethod.BASIC.name(), "");
-        gnf.setKeepFormat(true);
+        gni.setRandom(new Random(42));
+        gni.setSecret(FormatPreservingMethod.BASIC.name(), "");
+        gni.setKeepFormat(true);
     }
 
     @Test
     public void testKeepInvalidPatternTrue() {
-        gnf.setKeepInvalidPattern(true);
-        output = gnf.generateMaskedRow(null);
+        gni.setKeepInvalidPattern(true);
+        output = gni.generateMaskedRow(null);
         assertNull(output);
-        output = gnf.generateMaskedRow("");
+        output = gni.generateMaskedRow("");
         assertEquals("", output);
-        output = gnf.generateMaskedRow("AHDBNSKD");
+        output = gni.generateMaskedRow("AHDBNSKD");
         assertEquals("AHDBNSKD", output);
     }
 
     @Test
     public void testKeepInvalidPatternFalse() {
-        gnf.setKeepInvalidPattern(false);
-        output = gnf.generateMaskedRow(null);
+        gni.setKeepInvalidPattern(false);
+        output = gni.generateMaskedRow(null);
         assertNull(output);
-        output = gnf.generateMaskedRow("");
+        output = gni.generateMaskedRow("");
         assertNull(output);
-        output = gnf.generateMaskedRow("AHDBNSKD");
+        output = gni.generateMaskedRow("AHDBNSKD");
         assertNull(output);
     }
 
     @Test
+    public void unreproducibleWhenNoPasswordSet() {
+        String input = "186034828209";
+        gni.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF.name(), "");
+        String result1 = gni.generateMaskedRow(input);
+
+        gni.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF.name(), "");
+        String result2 = gni.generateMaskedRow(input);
+
+        assertNotEquals(String.format("The result should not be reproducible when no password is set. Input value is %s.", input),
+                result1, result2);
+    }
+
+    @Test
     public void testGood1() {
-        output = gnf.generateMaskedRow("186034828209");
-        assertTrue(gnf.isValid(output));
+        output = gni.generateMaskedRow("186034828209");
+        assertTrue(gni.isValid(output));
         assertEquals("578462130603", output);
     }
 
     @Test
     public void testGood2() {
         // with spaces
-        output = gnf.generateMaskedRow("21212159530   8");
-        assertTrue(gnf.isValid(output));
+        output = gni.generateMaskedRow("21212159530   8");
+        assertTrue(gni.isValid(output));
         assertEquals("48639384490   5", output);
     }
 
     @Test
     public void testWrongSsnFieldNumber() {
-        gnf.setKeepInvalidPattern(false);
+        gni.setKeepInvalidPattern(false);
         // without a number
-        output = gnf.generateMaskedRow("21860348282");
+        output = gni.generateMaskedRow("21860348282");
         assertNull(output);
     }
 
     @Test
     public void testWrongSsnField1() {
-        gnf.setKeepInvalidPattern(false);
+        gni.setKeepInvalidPattern(false);
         // Wrong first field
-        output = gnf.generateMaskedRow("086034828209");
+        output = gni.generateMaskedRow("086034828209");
         assertNull(output);
     }
 
     @Test
     public void testWrongSsnFieldLetter() {
-        gnf.setKeepInvalidPattern(false);
+        gni.setKeepInvalidPattern(false);
         // with a letter instead of a number
-        output = gnf.generateMaskedRow("186034Y20795");
+        output = gni.generateMaskedRow("186034Y20795");
         assertNull(output);
     }
 
