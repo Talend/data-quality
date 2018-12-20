@@ -26,6 +26,8 @@ import org.apache.commons.lang3.SerializationUtils;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
 import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.talend.dataquality.datamasking.FormatPreservingMethod;
+import org.talend.dataquality.datamasking.functions.AbstractGenerateWithSecret;
 import org.talend.dataquality.semantic.AllSemanticTests;
 import org.talend.dataquality.semantic.CategoryRegistryManagerAbstract;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
@@ -369,8 +371,11 @@ public class ValueDataMaskerTest extends CategoryRegistryManagerAbstract {
                 masker.getFunction().setRandom(new Random(Long.parseLong(input[3])));
             }
             masker.getFunction().setKeepEmpty(true);
+            if (masker.getFunction() instanceof AbstractGenerateWithSecret) {
+                masker.getFunction().setSecret(FormatPreservingMethod.BASIC.name(), "");
+            }
             String maskedValue = masker.maskValue(inputValue);
-            assertEquals("Test faild on [" + inputValue + "]", EXPECTED_MASKED_VALUES.get(input), maskedValue);
+            assertEquals("Test failed on [" + inputValue + "]", EXPECTED_MASKED_VALUES.get(input), maskedValue);
         }
     }
 
