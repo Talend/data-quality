@@ -18,10 +18,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberToCarrierMapper;
 import com.google.i18n.phonenumbers.PhoneNumberToTimeZonesMapper;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
@@ -58,7 +59,7 @@ public class PhoneNumberHandlerBase {
         try {
             final CharSequence cs = data.toString();
             phonenumber = GOOGLE_PHONE_UTIL.parse(cs, regionCode);
-        } catch (Exception e) {
+        } catch (NumberParseException e) {
             LOG.info("Phone number parsing exception with " + data, e); //$NON-NLS-1$
             return null;
         }
@@ -74,11 +75,14 @@ public class PhoneNumberHandlerBase {
      * @return a boolean that indicates whether the number is of a valid pattern
      */
     public static boolean isValidPhoneNumber(Object data, String regionCode) {
+        if (data == null) {
+            return false;
+        }
         PhoneNumber phonenumber = null;
         try {
             final CharSequence cs = data.toString();
             phonenumber = GOOGLE_PHONE_UTIL.parse(cs, regionCode);
-        } catch (Exception e) {
+        } catch (NumberParseException e) {
             LOG.error(e.getMessage(), e);
             return false;
         }

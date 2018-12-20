@@ -19,6 +19,5 @@ Export-Package: org.talend.dataquality.standardization,
  org.talend.dataquality.standardization.exception,
  org.talend.dataquality.standardization.i18n,
  org.talend.dataquality.standardization.index,
- org.talend.dataquality.standardization.phone,
  org.talend.dataquality.standardization.query,
  org.talend.dataquality.standardization.record

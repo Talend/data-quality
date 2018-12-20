@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Phone number validation and formatting Library
+Bundle-SymbolicName: org.talend.dataquality.phone
+Bundle-Version: 6.2.0.SNAPSHOT
+Bundle-Vendor: .Talend SA.
+Bundle-ClassPath: .
+Require-Bundle: org.talend.libraries.google.libphonumber,
+ org.apache.commons.lang3,
+ org.slf4j.api,
+ org.junit;resolution:=optional,
+ org.eclipse.m2e.maven.runtime.slf4j.simple;resolution:=optional
+Export-Package: org.talend.dataquality.standardization.phone

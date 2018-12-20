@@ -33,6 +33,7 @@
 		<module>../dataquality-libraries-devops</module>
 		<module>../dataquality-common</module>
 		<module>../dataquality-record-linkage</module>
+		<module>../dataquality-phone</module>
 		<module>../dataquality-sampling</module>
 		<module>../dataquality-standardization</module>
 		<module>../dataquality-semantic-model</module>

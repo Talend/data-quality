@@ -46,7 +46,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.talend.dataquality</groupId>
-			<artifactId>dataquality-standardization</artifactId>
+			<artifactId>dataquality-phone</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
