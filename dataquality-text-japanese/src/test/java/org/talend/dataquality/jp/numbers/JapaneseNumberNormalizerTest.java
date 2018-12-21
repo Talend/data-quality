@@ -52,6 +52,13 @@ public class JapaneseNumberNormalizerTest {
         values.put("¥百二十三", "¥123");
         values.put("五八五、四〇〇", "585,400");
         values.put("百五十七・五", "157.5");
+        values.put("二分の一", "1/2");
+        values.put("三分の二", "2/3");
+        values.put("百分の百七十", "170/100");
+        values.put("二分の", "二分の");
+        values.put("九百八十三万 六千七百三 分の 一千一百五十八", "1158/9836703");
+        values.put("分の二", "分の二");
+        values.put("二分七", "二分七");
     }
 
     @Test

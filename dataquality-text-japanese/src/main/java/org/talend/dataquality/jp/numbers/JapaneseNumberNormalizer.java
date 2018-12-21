@@ -24,6 +24,10 @@ public class JapaneseNumberNormalizer {
 
     private static char[] exponents;
 
+    private static String cutOffLineJP = "分の";
+
+    private static String cutOffLine = "/";
+
     static {
         numerals = new char[0x10000];
         for (int i = 0; i < numerals.length; i++) {
@@ -65,6 +69,12 @@ public class JapaneseNumberNormalizer {
         // Small adaptation of the lib, because whitespaces were not handled
         String number = numberNotTrimmed.replaceAll("\\s+", "");
         try {
+            // TDQ-15959 handle "分の" firstly.
+            String fraction = getFraction(numberNotTrimmed);
+            if (fraction != null) {
+                return fraction;
+            }
+
             NumberBuffer numberBuffer = new NumberBuffer(number);
             BigDecimal normalizedNumber = parseNumber(numberBuffer);
             if (normalizedNumber == null) {
@@ -432,6 +442,33 @@ public class JapaneseNumberNormalizer {
     private boolean isNumeric(char c) {
         return isArabicNumeral(c) || isDecimalPoint(c) || isKanjiNumeral(c) || isKanjiExponent(c) || isNegativeSign(c)
                 || isThousandSeparator(c);
+    }
+
+    /**
+     * 二分の一: return: 1/2
+     * 
+     * @param numberNotTrimmed: if it contains "分の" like 二分の一
+     * @return 1/2
+     */
+    private String getFraction(String numberNotTrimmed) {
+        String numberStr = numberNotTrimmed.replaceAll("\\s+", "");
+        // find the cutoff line first
+        int positionOfLine = numberStr.indexOf(cutOffLineJP);
+        if (positionOfLine > -1) {
+            // format the numerator
+            NumberBuffer numeratorBuffer = new NumberBuffer(numberStr.substring(positionOfLine + 2, numberStr.length()));
+            BigDecimal numeratorNumber = this.parseNumber(numeratorBuffer);
+            // format the denominator
+            NumberBuffer denominatorBuffer = new NumberBuffer(numberStr.substring(0, positionOfLine));
+            BigDecimal denominatorNumber = this.parseNumber(denominatorBuffer);
+            if (numeratorNumber == null || denominatorNumber == null) {
+                return numberNotTrimmed;
+            }
+            // combine as : numerator/denominator
+            return numeratorNumber.stripTrailingZeros().toPlainString() + cutOffLine
+                    + denominatorNumber.stripTrailingZeros().toPlainString();
+        }
+        return null;
     }
 
     /**
