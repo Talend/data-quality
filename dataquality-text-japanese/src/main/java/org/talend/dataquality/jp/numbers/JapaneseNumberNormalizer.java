@@ -459,11 +459,17 @@ public class JapaneseNumberNormalizer {
             NumberBuffer numeratorBuffer = new NumberBuffer(numberStr.substring(positionOfLine + 2, numberStr.length()));
             BigDecimal numeratorNumber = this.parseNumber(numeratorBuffer);
             // format the denominator
-            NumberBuffer denominatorBuffer = new NumberBuffer(numberStr.substring(0, positionOfLine));
+            int start = 0;
+            if (isNegativeSign(numberStr.charAt(0))) {
+                start = 1;
+                numeratorNumber = numeratorNumber.negate();
+            }
+            NumberBuffer denominatorBuffer = new NumberBuffer(numberStr.substring(start, positionOfLine));
             BigDecimal denominatorNumber = this.parseNumber(denominatorBuffer);
             if (numeratorNumber == null || denominatorNumber == null) {
                 return numberNotTrimmed;
             }
+
             // combine as : numerator/denominator
             return numeratorNumber.stripTrailingZeros().toPlainString() + cutOffLine
                     + denominatorNumber.stripTrailingZeros().toPlainString();

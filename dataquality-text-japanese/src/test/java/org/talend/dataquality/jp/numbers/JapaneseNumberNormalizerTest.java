@@ -59,6 +59,9 @@ public class JapaneseNumberNormalizerTest {
         values.put("九百八十三万 六千七百三 分の 一千一百五十八", "1158/9836703");
         values.put("分の二", "分の二");
         values.put("二分七", "二分七");
+        values.put("負二分の一", "-1/2");
+        values.put("負分の一", "負分の一");
+        values.put("-３．２千分の一", "-1/3200");
     }
 
     @Test
