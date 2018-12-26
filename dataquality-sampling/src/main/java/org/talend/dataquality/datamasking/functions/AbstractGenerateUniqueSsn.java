@@ -15,12 +15,8 @@ package org.talend.dataquality.datamasking.functions;
 import java.util.List;
 import java.util.Optional;
 
-import org.talend.dataquality.datamasking.FormatPreservingMethod;
-import org.talend.dataquality.datamasking.SecretManager;
-import org.talend.dataquality.datamasking.generic.patterns.GenerateFormatPreservingPatterns;
 import org.talend.dataquality.datamasking.generic.patterns.GenerateUniqueRandomPatterns;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
-import org.talend.dataquality.datamasking.utils.crypto.BasicSpec;
 
 /**
  * @author jteuladedenantes
@@ -40,17 +36,6 @@ public abstract class AbstractGenerateUniqueSsn extends AbstractGenerateWithSecr
     public AbstractGenerateUniqueSsn() {
         List<AbstractField> fields = createFieldsListFromPattern();
         pattern = new GenerateUniqueRandomPatterns(fields);
-    }
-
-    @Override
-    public void setSecret(String method, String password) {
-        secretMng = new SecretManager(method, password);
-
-        if (FormatPreservingMethod.BASIC == secretMng.getMethod()) {
-            secretMng.setKey(super.rnd.nextInt() % BasicSpec.BASIC_KEY_BOUND + BasicSpec.BASIC_KEY_OFFSET);
-        } else {
-            pattern = new GenerateFormatPreservingPatterns(2, pattern.getFields());
-        }
     }
 
     @Override

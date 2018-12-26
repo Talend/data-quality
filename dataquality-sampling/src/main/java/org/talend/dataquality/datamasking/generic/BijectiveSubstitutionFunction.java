@@ -13,16 +13,12 @@ import java.util.Optional;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.talend.dataquality.datamasking.FormatPreservingMethod;
-import org.talend.dataquality.datamasking.SecretManager;
 import org.talend.dataquality.datamasking.functions.AbstractGenerateWithSecret;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldDate;
 import org.talend.dataquality.datamasking.generic.fields.FieldEnum;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
-import org.talend.dataquality.datamasking.generic.patterns.AbstractGeneratePattern;
 import org.talend.dataquality.datamasking.generic.patterns.GenerateUniqueRandomPatterns;
-import org.talend.dataquality.datamasking.utils.crypto.BasicSpec;
 import org.talend.dataquality.sampling.exception.DQRuntimeException;
 
 /**
@@ -33,8 +29,6 @@ public class BijectiveSubstitutionFunction extends AbstractGenerateWithSecret {
     private static final long serialVersionUID = 8900059408697610292L;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BijectiveSubstitutionFunction.class);
-
-    private AbstractGeneratePattern uniqueGenericPattern;
 
     public BijectiveSubstitutionFunction(List<FieldDefinition> fieldDefinitionList) throws IOException {
 
@@ -62,7 +56,7 @@ public class BijectiveSubstitutionFunction extends AbstractGenerateWithSecret {
             }
         }
 
-        uniqueGenericPattern = new GenerateUniqueRandomPatterns(fieldList);
+        pattern = new GenerateUniqueRandomPatterns(fieldList);
     }
 
     /**
@@ -120,21 +114,9 @@ public class BijectiveSubstitutionFunction extends AbstractGenerateWithSecret {
         fieldList.add(new FieldDate(definition.getMin().intValue(), definition.getMax().intValue()));
     }
 
-    /**
-     * For now BijectiveSubstitutionFunction does not support FF1 so it always uses the BASIC {@link FormatPreservingMethod}.
-     *
-     * @param method a String referring to a {@link FormatPreservingMethod}.
-     * @param password the password entered by the user
-     */
-    @Override
-    public void setSecret(String method, String password) {
-        secretMng = new SecretManager(FormatPreservingMethod.BASIC, "");
-        secretMng.setKey(rnd.nextInt() % BasicSpec.BASIC_KEY_BOUND + BasicSpec.BASIC_KEY_OFFSET);
-    }
-
     @Override
     protected boolean isValidWithoutFormat(String str) {
-        return !str.isEmpty() && str.codePointCount(0, str.length()) >= uniqueGenericPattern.getFieldsCharsLength();
+        return !str.isEmpty() && str.codePointCount(0, str.length()) >= pattern.getFieldsCharsLength();
     }
 
     @Override
@@ -143,9 +125,9 @@ public class BijectiveSubstitutionFunction extends AbstractGenerateWithSecret {
         List<String> strs = new ArrayList<String>();
 
         int currentPos = 0;
-        int nbFields = uniqueGenericPattern.getFields().size();
+        int nbFields = pattern.getFields().size();
         for (int i = 0; i < nbFields - 1; i++) {
-            AbstractField field = uniqueGenericPattern.getFields().get(i);
+            AbstractField field = pattern.getFields().get(i);
             int length = field.getLength();
             int beginCPOffset = str.offsetByCodePoints(0, currentPos);
             int endCPOffset = str.offsetByCodePoints(0, currentPos + length);
@@ -155,7 +137,7 @@ public class BijectiveSubstitutionFunction extends AbstractGenerateWithSecret {
         // Last field: take the remaining chain
         strs.add(str.substring(currentPos));
 
-        Optional<StringBuilder> result = uniqueGenericPattern.generateUniqueString(strs, secretMng);
+        Optional<StringBuilder> result = pattern.generateUniqueString(strs, secretMng);
 
         return result.orElse(null);
     }

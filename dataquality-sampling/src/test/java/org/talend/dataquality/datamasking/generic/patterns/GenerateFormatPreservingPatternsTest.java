@@ -65,6 +65,96 @@ public class GenerateFormatPreservingPatternsTest {
     }
 
     @Test
+    public void findTrivialOptimalRadix() {
+        List<AbstractField> fields = new ArrayList<>();
+        fields.add(new FieldInterval(BigInteger.ZERO, BigInteger.valueOf(9)));
+
+        GenerateFormatPreservingPatterns arabicDigits = new GenerateFormatPreservingPatterns(fields);
+        assertEquals(10, arabicDigits.getRadix());
+    }
+
+    @Test
+    public void findBinaryOptimalRadix() {
+        List<AbstractField> fields = new ArrayList<>();
+        fields.add(new FieldInterval(BigInteger.ZERO, BigInteger.valueOf(255)));
+
+        GenerateFormatPreservingPatterns octet = new GenerateFormatPreservingPatterns(fields);
+        assertEquals(2, octet.getRadix());
+    }
+
+    @Test
+    public void findBigIntOptimalRadix() {
+        List<AbstractField> fields = new ArrayList<>();
+
+        // The Big Integer is equal to 2^10000 and this cardinality perfectly fits in 10k-bit strings
+        BigInteger card = new BigInteger("1" + new String(new char[10000]).replace("\0", "0"), 2);
+        fields.add(new FieldInterval(BigInteger.ONE, card));
+
+        GenerateFormatPreservingPatterns bigPattern = new GenerateFormatPreservingPatterns(fields);
+        assertEquals(2, bigPattern.getRadix());
+    }
+
+    @Test
+    public void almostFullDenseBinaryPattern() {
+        List<AbstractField> fields = new ArrayList<>();
+
+        // Here the cardinality is one away to be full dense on 10k bits.
+        BigInteger card = new BigInteger("1" + new String(new char[10000]).replace("\0", "0"), 2).add(BigInteger.valueOf(-1L));
+        fields.add(new FieldInterval(BigInteger.ONE, card));
+
+        GenerateFormatPreservingPatterns bigPattern = new GenerateFormatPreservingPatterns(fields);
+        assertEquals(2, bigPattern.getRadix());
+    }
+
+    @Test
+    public void sparseBinaryPattern() {
+        List<AbstractField> fields = new ArrayList<>();
+
+        // Here the cardinality is one above to be full dense on 10k bits, so it is very sparse on 10001 bits.
+        BigInteger card = new BigInteger("1" + new String(new char[10000]).replace("\0", "0"), 2).add(BigInteger.ONE);
+        fields.add(new FieldInterval(BigInteger.ONE, card));
+
+        GenerateFormatPreservingPatterns bigPattern = new GenerateFormatPreservingPatterns(fields);
+        assertNotEquals(2, bigPattern.getRadix());
+    }
+
+    @Test
+    public void almostFullDenseBase35Pattern() {
+        List<AbstractField> fields = new ArrayList<>();
+
+        // Here the cardinality is one away to be full dense on base-35
+        // strings of 1000 characters.
+        BigInteger card = new BigInteger("1" + new String(new char[1000]).replace("\0", "0"), 35).add(BigInteger.valueOf(-1L));
+
+        fields.add(new FieldInterval(BigInteger.ONE, card));
+
+        GenerateFormatPreservingPatterns bigPattern = new GenerateFormatPreservingPatterns(fields);
+        assertEquals(35, bigPattern.getRadix());
+    }
+
+    @Test
+    public void sparseBase35Pattern() {
+        List<AbstractField> fields = new ArrayList<>();
+
+        // Here the cardinality is one above to be full dense on base-35
+        // strings of 1000 characters. so it is very sparse on 65 bits.
+        BigInteger card = new BigInteger("1" + new String(new char[1000]).replace("\0", "0"), 35).add(BigInteger.ONE);
+        fields.add(new FieldInterval(BigInteger.ONE, card));
+
+        GenerateFormatPreservingPatterns bigPattern = new GenerateFormatPreservingPatterns(fields);
+        assertNotEquals(35, bigPattern.getRadix());
+    }
+
+    @Test
+    public void worksForAllRadix() {
+        for (int i = Character.MIN_RADIX; i <= Character.MAX_RADIX; i++) {
+            GenerateFormatPreservingPatterns pat = new GenerateFormatPreservingPatterns(i, pattern.getFields());
+            StringBuilder output = pat.generateUniquePattern(Arrays.asList("U", "KI", "45", "12"), secretMng);
+            assertNotNull("Masking did not work with radix value of : " + i, output);
+        }
+    }
+
+    @Test
     public void transformMinRankValue() {
         String str = pattern.transform(pattern.transform(minStringList)).toString();
         assertEquals(minValue, str);
@@ -109,15 +199,6 @@ public class GenerateFormatPreservingPatternsTest {
         }
         assertNotNull(result);
         assertEquals(expected, result.toString());
-    }
-
-    @Test
-    public void severalRadix() {
-        for (int i = Character.MIN_RADIX; i <= Character.MAX_RADIX; i++) {
-            pattern = new GenerateFormatPreservingPatterns(i, pattern.getFields());
-            StringBuilder output = pattern.generateUniquePattern(Arrays.asList("U", "KI", "45", "12"), secretMng);
-            assertNotNull("Masking did not work with radix value of : " + i, output);
-        }
     }
 
     @Test

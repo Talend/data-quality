@@ -4,6 +4,8 @@ import org.apache.commons.lang.StringUtils;
 import org.talend.dataquality.datamasking.FormatPreservingMethod;
 import org.talend.dataquality.datamasking.SecretManager;
 import org.talend.dataquality.datamasking.generic.patterns.AbstractGeneratePattern;
+import org.talend.dataquality.datamasking.generic.patterns.GenerateFormatPreservingPatterns;
+import org.talend.dataquality.datamasking.utils.crypto.BasicSpec;
 
 /**
  * This class is for Functions using a secret that needs to be handled by a {@link SecretManager}, such as a password
@@ -34,6 +36,12 @@ public abstract class AbstractGenerateWithSecret extends Function<String> {
     @Override
     public void setSecret(String method, String password) {
         secretMng = new SecretManager(method, password);
+
+        if (FormatPreservingMethod.BASIC == secretMng.getMethod()) {
+            secretMng.setKey(super.rnd.nextInt() % BasicSpec.BASIC_KEY_BOUND + BasicSpec.BASIC_KEY_OFFSET);
+        } else {
+            pattern = new GenerateFormatPreservingPatterns(pattern.getFields());
+        }
     }
 
     @Override
