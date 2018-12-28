@@ -35,6 +35,21 @@ public class GenerateFormatPreservingPatterns extends AbstractGeneratePattern {
     private static final long serialVersionUID = -2998638592803380290L;
 
     /**
+     * Specifies the precision and rounding mode for operations with BigDecimal numbers.
+     */
+    private static final MathContext MC = new MathContext(34, RoundingMode.UP);
+
+    /**
+     * Log2 at a precision of 34.
+     */
+    private static final double LOG2 = 0.6931471805599453D;
+
+    /**
+     * 1 / Log2 at a precision of 34.
+     */
+    private static final double INV_LOG2 = 1.4426950408889634D;
+
+    /**
      * The cipher used to encrypt data.
      * It is taken from <a href="https://github.com/idealista/format-preserving-encryption-java">
      * idealista library</a>
@@ -44,7 +59,7 @@ public class GenerateFormatPreservingPatterns extends AbstractGeneratePattern {
      * The current implementation requires the input data to be encoded in an array of integers in a certain base
      * {@link GenerateFormatPreservingPatterns#radix}.
      */
-    private static Cipher cipher = new com.idealista.fpe.algorithm.ff1.Cipher();
+    private Cipher cipher = new com.idealista.fpe.algorithm.ff1.Cipher();
 
     /**
      * The radix of the numeral representations of patterns to encrypt
@@ -60,20 +75,19 @@ public class GenerateFormatPreservingPatterns extends AbstractGeneratePattern {
      */
     private int[] numeralMaxRank;
 
-    public GenerateFormatPreservingPatterns(List<AbstractField> fields) {
-        super(fields);
-        this.radix = computeOptimalRadix(this.longestWidth);
-        char[] maxRankStr = this.longestWidth.toString(radix).toCharArray();
-
-        numeralMaxRank = new int[maxRankStr.length];
-        for (int i = 0; i < numeralMaxRank.length; i++) {
-            numeralMaxRank[i] = Character.digit(maxRankStr[i], radix);
-        }
-    }
-
     public GenerateFormatPreservingPatterns(int radix, List<AbstractField> fields) {
         super(fields);
         this.radix = radix;
+        computeMaxRank();
+    }
+
+    public GenerateFormatPreservingPatterns(List<AbstractField> fields) {
+        super(fields);
+        this.radix = computeOptimalRadix(this.longestWidth);
+        computeMaxRank();
+    }
+
+    private void computeMaxRank() {
         char[] maxRankStr = this.longestWidth.toString(radix).toCharArray();
 
         numeralMaxRank = new int[maxRankStr.length];
@@ -127,7 +141,7 @@ public class GenerateFormatPreservingPatterns extends AbstractGeneratePattern {
     /**
      * Transform the encrypted array of {@code int}s into the corresponding {@code String} representation.
      */
-    public StringBuilder transform(int[] data) {
+    private StringBuilder transform(int[] data) {
         BigInteger rank = new BigInteger(numeralToString(data), radix);
 
         if (rank.compareTo(longestWidth) >= 0) {
@@ -143,7 +157,7 @@ public class GenerateFormatPreservingPatterns extends AbstractGeneratePattern {
     /**
      * Transform the {@code String} element into an array of {@code int}s for FF1 encryption.
      */
-    public int[] transform(List<String> strs) {
+    private int[] transform(List<String> strs) {
         // Convert the fields from String to BigInteger.
         List<BigInteger> encodedFields = encodeFields(strs);
 
@@ -183,7 +197,7 @@ public class GenerateFormatPreservingPatterns extends AbstractGeneratePattern {
      * @param encryptedData result of format-preserving encryption.
      * @return whether the encrypted data is lower to the max rank.
      */
-    public boolean isValid(int[] encryptedData) {
+    private boolean isValid(int[] encryptedData) {
         int i = 0;
         while (i < numeralMaxRank.length && numeralMaxRank[i] == encryptedData[i]) {
             i++;
@@ -210,21 +224,6 @@ public class GenerateFormatPreservingPatterns extends AbstractGeneratePattern {
         }
         return sb.toString();
     }
-
-    /**
-     * Specifies the precision and rounding mode for operations with BigDecimal numbers.
-     */
-    private static final MathContext MC = new MathContext(34, RoundingMode.UP);
-
-    /**
-     * Log2 at a precision of 34.
-     */
-    private static final double LOG2 = 0.6931471805599453D;
-
-    /**
-     * 1 / Log2 at a precision of 34.
-     */
-    private static final double INV_LOG2 = 1.4426950408889634D;
 
     /**
      * Computes the optimal radix to use for FF1 encryption
@@ -293,7 +292,7 @@ public class GenerateFormatPreservingPatterns extends AbstractGeneratePattern {
                     optimalRadix = radix;
                     maxDensity = density;
                 }
-            } // else the pattern is too space on the current radix.
+            } // else the pattern is too sparse on the current radix.
         }
 
         if (Double.compare(maxDensity, 0.5D) < 0) {
