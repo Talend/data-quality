@@ -166,7 +166,7 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see org.talend.dataquality.record.linkage.grouping.IRecordGrouping#setIsDisplayAttLabels(java.lang.Boolean)
      */
     @Override
@@ -233,7 +233,7 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
             vsrMatch(inputRow, matchingRule, lookupDataArray);
             break;
         case T_SwooshAlgorithm:// used for "chart" in analysis
-            swooshGrouping.addToList(inputRow, multiMatchRules);
+            swooshGrouping.addToList(inputRow, multiMatchRules, this.getSurvivorShipAlgorithmParams());
             break;
         }
     }
@@ -472,7 +472,7 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see
      * org.talend.dataquality.record.linkage.grouping.IRecordGrouping#setSurvivorShipAlgorithmParams(org.talend.dataquality
      * .record.linkage.grouping.swoosh.SurvivorShipAlgorithmParams)
@@ -508,7 +508,7 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see org.talend.dataquality.hadoop.group.IRecordGrouping#initialize()
      */
     @Override

@@ -36,24 +36,35 @@ public class Attribute implements Serializable {
      */
     private final int columnIndex;
 
+    /**
+     * The index of the reference column in a record.
+     */
+    private final int referenceColumnIndex;
+
+    private String referenceValue;
+
     private String value;
 
     private final AttributeValues<String> values = new AttributeValues<String>();
 
     public Attribute(String label) {
-        this.label = label;
-        columnIndex = 0;
+        this(label, 0, null, 0);
     }
 
     public Attribute(String label, int colIdx) {
-        this.label = label;
-        this.columnIndex = colIdx;
+        this(label, colIdx, null, colIdx);
+
     }
 
     public Attribute(String label, int colIdx, String value) {
+        this(label, colIdx, value, colIdx);
+    }
+
+    public Attribute(String label, int colIdx, String value, int referenceIdx) {
         this.label = label;
         this.columnIndex = colIdx;
         this.value = value;
+        this.referenceColumnIndex = referenceIdx;
     }
 
     /**
@@ -71,6 +82,18 @@ public class Attribute implements Serializable {
     }
 
     /**
+     * Get the value which used to be compare with others
+     * 
+     * @return value if reference column is not valid else return referenceValue
+     */
+    public String getCompareValue() {
+        if (columnIndex == referenceColumnIndex) {
+            return value;
+        }
+        return referenceValue;
+    }
+
+    /**
      * Set the merged column value.
      * 
      * @param value A string value for the column. For custom types, provide a consistent representation of the data
@@ -78,6 +101,33 @@ public class Attribute implements Serializable {
      */
     public void setValue(String value) {
         this.value = value;
+    }
+
+    /**
+     * Getter for referencevalue.
+     * 
+     * @return the referencevalue
+     */
+    public String getReferenceValue() {
+        return this.referenceValue;
+    }
+
+    /**
+     * Sets the referencevalue.
+     * 
+     * @param referencevalue the referencevalue to set
+     */
+    public void setReferenceValue(String referencevalue) {
+        this.referenceValue = referencevalue;
+    }
+
+    /**
+     * Getter for referenceColumnIndex.
+     * 
+     * @return the referenceColumnIndex
+     */
+    public int getReferenceColumnIndex() {
+        return this.referenceColumnIndex;
     }
 
     /**

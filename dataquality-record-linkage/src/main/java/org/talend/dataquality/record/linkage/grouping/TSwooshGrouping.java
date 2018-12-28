@@ -132,6 +132,150 @@ public class TSwooshGrouping<TYPE> {
                         }
                         return null;
                     }
+
+                    @Override
+                    public int getReferenceColumnIndex() {
+                        String refColumnIndex = recordMap.get(IRecordGrouping.REFERENCE_COLUMN_IDX);
+                        if (refColumnIndex == null) {
+                            return getColumnIndex();
+                        } else {
+                            return Integer.valueOf(refColumnIndex);
+                        }
+                    }
+
+                    @Override
+                    public String getReferenceValue() {
+                        String refColumnIndex = recordMap.get(IRecordGrouping.REFERENCE_COLUMN_IDX);
+                        if (refColumnIndex == null) {
+                            return newValue();
+                        }
+                        Integer columnIndex = Integer.valueOf(refColumnIndex);
+                        TYPE value = inputRow[columnIndex];
+                        if (value != null && value instanceof Date) {
+                            return getFormatDate((Date) value, columnIndex);
+                        } else {
+                            return value == null ? null : value.toString();
+                        }
+                    }
+
+                });
+            }
+        }
+        RecordGenerator rcdGen = new RecordGenerator();
+        rcdGen.setMatchKeyMap(rcdMap);
+        List<DQAttribute<?>> rowList = new ArrayList<>();
+        int colIdx = 0;
+
+        for (TYPE attribute : inputRow) {
+            DQAttribute<TYPE> attri;
+            // Added TDQ-12057, when pass original & multipass, no need to pass it into OriginalRow.
+            if (attribute instanceof List) {
+                attri = new DQAttribute<>(SwooshConstants.ORIGINAL_RECORD, colIdx, null);
+                hasPassedOriginal = true;
+            } else {// ~
+                attri = new DQAttribute<>(StringUtils.EMPTY, colIdx, attribute);
+            }
+            rowList.add(attri);
+            colIdx++;
+        }
+        rcdGen.setOriginalRow(rowList);
+        rcdsGenerators.add(rcdGen);
+    }
+
+    /**
+     * Recording matching with t-swoosh algorithm. Used for tmatchgroup only
+     * 
+     * @param inputRow
+     * @param matchingRule
+     */
+    public void addToList(final TYPE[] inputRow, List<List<Map<java.lang.String, java.lang.String>>> multiMatchRules,
+            SurvivorShipAlgorithmParams parameter) {
+        totalCount++;
+        String attributeName;
+        Map<java.lang.String, ValueGenerator> rcdMap = new LinkedHashMap<>();
+        final Map<Integer, SurvivorshipFunction> defaultSurviorshipRules = parameter.getDefaultSurviorshipRules();
+        for (List<Map<java.lang.String, java.lang.String>> matchRule : multiMatchRules) {
+            for (final Map<java.lang.String, java.lang.String> recordMap : matchRule) {
+                attributeName = recordMap.get(IRecordGrouping.ATTRIBUTE_NAME);
+                if (attributeName == null) {
+                    // Dummy matcher
+                    continue;
+                }
+                rcdMap.put(attributeName, new ValueGenerator() {
+
+                    @Override
+                    public int getColumnIndex() {
+                        return Integer.valueOf(recordMap.get(IRecordGrouping.COLUMN_IDX));
+                    }
+
+                    @Override
+                    public java.lang.String newValue() {
+                        Integer columnIndex = Integer.valueOf(recordMap.get(IRecordGrouping.COLUMN_IDX));
+                        TYPE value = inputRow[columnIndex];
+                        if (value != null && value instanceof Date) {
+                            return getFormatDate((Date) value, columnIndex);
+                        } else {
+                            return value == null ? null : value.toString();
+                        }
+                    }
+
+                    // Added TDQ-12057 : return the current column's values from the last original
+                    // values.(multipass+swoosh+passOriginal)
+                    // the original is the last one.
+                    @Override
+                    public Object getAttribute() {
+                        TYPE type = inputRow[inputRow.length - 1];
+                        if (type instanceof List) {
+                            List<Attribute> attris = (List<Attribute>) inputRow[inputRow.length - 1];
+                            Integer colIndex = Integer.valueOf(recordMap.get(IRecordGrouping.COLUMN_IDX));
+                            for (Attribute att : attris) {
+                                if (att.getColumnIndex() == colIndex) {
+
+                                    return att.getValues();
+                                }
+                            }
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    public int getReferenceColumnIndex() {
+                        Integer referenceColumnIndex = getColumnIndex();
+                        String referenceColumnIndexStr = recordMap.get(IRecordGrouping.REFERENCE_COLUMN_IDX);
+
+                        if (referenceColumnIndexStr != null) {
+                            referenceColumnIndex = Integer.valueOf(referenceColumnIndexStr);
+                            String matchType = recordMap.get("MATCHING_TYPE"); //$NON-NLS-1$
+                            if (matchType != null && "dummy".equalsIgnoreCase(matchType)) { //$NON-NLS-1$
+                                Integer inputColumnIndex = Integer.valueOf(recordMap.get(IRecordGrouping.COLUMN_IDX));
+                                SurvivorshipFunction survivorshipFunction = defaultSurviorshipRules.get(inputColumnIndex);
+                                if (survivorshipFunction != null && survivorshipFunction.getReferenceColumnIndex() != null) {
+                                    referenceColumnIndex = survivorshipFunction.getReferenceColumnIndex();
+                                }
+                            }
+                        }
+                        return referenceColumnIndex;
+                    }
+
+                    @Override
+                    public String getReferenceValue() {
+                        String matchType = recordMap.get("MATCHING_TYPE"); //$NON-NLS-1$
+                        Integer referenceColumnIndex = getReferenceColumnIndex();
+                        if (matchType != null && "dummy".equalsIgnoreCase(matchType)) { //$NON-NLS-1$
+                            Integer inputColumnIndex = Integer.valueOf(recordMap.get(IRecordGrouping.COLUMN_IDX));
+                            SurvivorshipFunction survivorshipFunction = defaultSurviorshipRules.get(inputColumnIndex);
+                            if (survivorshipFunction != null && survivorshipFunction.getReferenceColumnIndex() != null) {
+                                referenceColumnIndex = survivorshipFunction.getReferenceColumnIndex();
+                            }
+                        }
+                        TYPE value = inputRow[referenceColumnIndex];
+                        if (value != null && value instanceof Date) {
+                            return getFormatDate((Date) value, referenceColumnIndex);
+                        } else {
+                            return value == null ? null : value.toString();
+                        }
+                    }
+
                 });
             }
         }

@@ -54,6 +54,12 @@ public interface IRecordGrouping<T> {
     // zero based
     public static final String COLUMN_IDX = "COLUMN_IDX"; //$NON-NLS-1$
 
+    public static final String INPUT_COLUMN = "INPUT_COLUMN"; //$NON-NLS-1$
+
+    public static final String REFERENCE_COLUMN = "REFERENCE_COLUMN"; //$NON-NLS-1$
+
+    public static final String REFERENCE_COLUMN_IDX = "REFERENCE_COLUMN_IDX"; //$NON-NLS-1$
+
     public static final String HANDLE_NULL = "HANDLE_NULL"; //$NON-NLS-1$
 
     public static final String JAR_PATH = "JAR_PATH"; //$NON-NLS-1$

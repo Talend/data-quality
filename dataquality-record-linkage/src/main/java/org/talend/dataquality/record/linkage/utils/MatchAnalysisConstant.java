@@ -110,6 +110,8 @@ public class MatchAnalysisConstant {
 
     public static final String FUNCTION = "MatchAnalysisConstant.Function"; //$NON-NLS-1$
 
+    public static final String REFERENCE_COLUMN = "MatchAnalysisConstant.ReferenceColumn"; //$NON-NLS-1$
+
     public static final String PARAMETER = "MatchAnalysisConstant.Parameter"; //$NON-NLS-1$
 
     public static final String ALLOW_MANUAL_RESOLUTION = "MatchAnalysisConstant.AllowManualResolution"; //$NON-NLS-1$

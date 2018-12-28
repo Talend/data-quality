@@ -55,7 +55,8 @@ public class MFBRecordMerger implements IRecordMerger {
                 : record2.getTimestamp();
         Record mergedRecord = createNewRecord(record1, record2, mergedRecordTimestamp);
         for (int k = 0; k < r1.size(); k++) {
-            Attribute a = new Attribute(r1.get(k).getLabel(), r1.get(k).getColumnIndex());
+            Attribute a = new Attribute(r1.get(k).getLabel(), r1.get(k).getColumnIndex(), r1.get(k).getValue(),
+                    r1.get(k).getReferenceColumnIndex());
             mergedRecord.getAttributes().add(k, a);
         }
         for (int i = 0; i < r1.size(); i++) {
@@ -82,11 +83,17 @@ public class MFBRecordMerger implements IRecordMerger {
                 mergedAttribute.setValue(null);
             } else {
                 String mergedValue = null;
+                String mergedCompareValue = null;
                 switch (typeMergeTable[i]) {
                 case MOST_RECENT:
                 case MOST_ANCIENT:
-                    mergedValue = compareAsDate(leftValue, rightValue, typeMergeTable[i], String.valueOf(i),
-                            record1.getTimestamp(), record2.getTimestamp());
+                    String leftCompareValue = leftAttribute.getCompareValue();
+                    String rightCompareValue = rightAttribute.getCompareValue();
+                    int referenceColumnIndex = leftAttribute.getReferenceColumnIndex();
+                    mergedCompareValue = compareAsDate(leftCompareValue, rightCompareValue, typeMergeTable[i],
+                            String.valueOf(referenceColumnIndex), record1.getTimestamp(), record2.getTimestamp());
+
+                    mergedValue = leftCompareValue.equals(mergedCompareValue) ? leftValue : rightValue;
                     break;
                 default:
                     mergedValue = createMergeValue(record1.getSource(), record2.getSource(), parameters[i],
@@ -96,6 +103,7 @@ public class MFBRecordMerger implements IRecordMerger {
                 }
                 if (mergedValue != null) {
                     mergedAttribute.setValue(mergedValue);
+                    mergedAttribute.setReferenceValue(mergedCompareValue);
                 }
             }
         }

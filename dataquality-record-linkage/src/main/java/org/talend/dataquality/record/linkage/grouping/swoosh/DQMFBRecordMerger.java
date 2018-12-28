@@ -97,7 +97,7 @@ public class DQMFBRecordMerger extends MFBRecordMerger {
                     break;
                 }
             }
-
+            // added merge function for all columns which don't contain survivorship function
             if (!isMatchKeyIndex) {
                 Map<Integer, SurvivorshipFunction> defaultSurvivorshipFuncs = matchMergeParam.getDefaultSurviorshipRules();
                 SurvivorshipFunction survivorshipFunc = defaultSurvivorshipFuncs.get(colIdx);
@@ -129,13 +129,31 @@ public class DQMFBRecordMerger extends MFBRecordMerger {
                     mergedRows[colIdx].setValue(null);
                 } else {
                     SurvivorShipAlgorithmEnum survAlgo = survivorshipFunc.getSurvivorShipAlgoEnum();
+                    Integer referenceColumnIndex = survivorshipFunc.getReferenceColumnIndex();
                     String parameter = survivorshipFunc.getParameter();
                     String mergedValue = null;
+                    String mergedCompareValue = null;
                     switch (survAlgo) {
                     case MOST_RECENT:
                     case MOST_ANCIENT:
-                        mergedValue = compareAsDate(leftValue, rightValue, survAlgo, String.valueOf(colIdx),
-                                record1.getTimestamp(), record2.getTimestamp());
+                        String leftCompareValue = leftValue;
+                        String rightCompareValue = rightValue;
+
+                        if (referenceColumnIndex != null && referenceColumnIndex.equals(colIdx)) {
+                            leftCompareValue = richRecord1.getOriginRow().get(referenceColumnIndex).getValue();
+                            rightCompareValue = richRecord2.getOriginRow().get(referenceColumnIndex).getValue();
+                        } else {
+                            referenceColumnIndex = colIdx;
+                        }
+                        mergedCompareValue = compareAsDate(leftCompareValue, rightCompareValue, survAlgo,
+                                String.valueOf(referenceColumnIndex), record1.getTimestamp(), record2.getTimestamp());
+                        if (mergedCompareValue != null) {
+                            if (mergedCompareValue.equals(leftCompareValue)) {
+                                mergedValue = leftValue;
+                            } else {
+                                mergedValue = rightValue;
+                            }
+                        }
                         break;
                     default:
                         mergedValue = createMergeValue(record1.getSource(), record2.getSource(), parameter,
@@ -145,6 +163,7 @@ public class DQMFBRecordMerger extends MFBRecordMerger {
                     }
                     if (mergedValue != null) {
                         mergedRows[colIdx].setValue(mergedValue);
+                        mergedRows[colIdx].setReferenceValue(mergedCompareValue);
                     }
                 }
 

@@ -64,6 +64,18 @@ public class MFBTest extends TestCase {
                 // TODO Auto-generated method stub
                 return null;
             }
+
+            @Override
+            public int getReferenceColumnIndex() {
+                // TODO Auto-generated method stub
+                return 0;
+            }
+
+            @Override
+            public String getReferenceValue() {
+                // TODO Auto-generated method stub
+                return null;
+            }
         });
         RecordGenerator recordGenerator = new RecordGenerator();
         recordGenerator.setMatchKeyMap(generators);
@@ -98,6 +110,18 @@ public class MFBTest extends TestCase {
 
             @Override
             public Object getAttribute() {
+                // TODO Auto-generated method stub
+                return null;
+            }
+
+            @Override
+            public int getReferenceColumnIndex() {
+                // TODO Auto-generated method stub
+                return 0;
+            }
+
+            @Override
+            public String getReferenceValue() {
                 // TODO Auto-generated method stub
                 return null;
             }
@@ -147,6 +171,18 @@ public class MFBTest extends TestCase {
                 // TODO Auto-generated method stub
                 return null;
             }
+
+            @Override
+            public int getReferenceColumnIndex() {
+                // TODO Auto-generated method stub
+                return 0;
+            }
+
+            @Override
+            public String getReferenceValue() {
+                // TODO Auto-generated method stub
+                return null;
+            }
         });
         RecordGenerator recordGenerator = new RecordGenerator();
         recordGenerator.setMatchKeyMap(generators);
@@ -184,6 +220,18 @@ public class MFBTest extends TestCase {
                 // TODO Auto-generated method stub
                 return null;
             }
+
+            @Override
+            public int getReferenceColumnIndex() {
+                // TODO Auto-generated method stub
+                return 0;
+            }
+
+            @Override
+            public String getReferenceValue() {
+                // TODO Auto-generated method stub
+                return null;
+            }
         });
         // Runs a first match with a weight 1
         RecordGenerator recordGenerator = new RecordGenerator();
@@ -204,7 +252,8 @@ public class MFBTest extends TestCase {
         // Runs a second match with a weight 4
         iterator = new RecordIterator(totalCount, recordGenerator);
         algorithm = MFB.build(new AttributeMatcherType[] { matchAlgorithm }, new String[] { "" }, new float[] { 1 }, 0,
-                new SurvivorShipAlgorithmEnum[] { SurvivorShipAlgorithmEnum.LONGEST }, new String[] { "" }, new double[] { 4 }, // Mark rule with a weight of 4 -> should not affect overall score since score is
+                new SurvivorShipAlgorithmEnum[] { SurvivorShipAlgorithmEnum.LONGEST }, new String[] { "" }, new double[] { 4 }, // Mark rule with a weight of 4 -> should not affect overall score since
+                // score is
                 // normalized.
                 new IAttributeMatcher.NullOption[] { IAttributeMatcher.NullOption.nullMatchAll },
                 new SubString[] { SubString.NO_SUBSTRING }, "MFB");

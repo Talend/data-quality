@@ -115,10 +115,18 @@ public class ComponentMatchParameterAdapter extends MatchParameterAdapter {
             String dataTypeName = entry.getValue();
 
             for (Map<String, String> pdefaultSurvivdef : particularDefaultSurvivorshipDefinitions) {
-                if (pdefaultSurvivdef.get("INPUT_COLUMN").equals(columnName)) { //$NON-NLS-1$
-                    putNewSurvFunc(defaultSurvRules, Integer.parseInt(columnWithIndex.get(columnName)), columnName,
-                            pdefaultSurvivdef.get(SurvivorshipUtils.PARAMETER),
-                            pdefaultSurvivdef.get(SurvivorshipUtils.SURVIVORSHIP_FUNCTION));
+                if (pdefaultSurvivdef.get(IRecordGrouping.INPUT_COLUMN).equals(columnName)) {
+                    // try to get reference column index and setting into new function
+                    String referenceColumnName = pdefaultSurvivdef.get(IRecordGrouping.REFERENCE_COLUMN);
+                    String refColumnIndex = columnWithIndex.get(referenceColumnName);
+                    int colIndex = Integer.parseInt(columnWithIndex.get(columnName));
+                    int referenceColumnIndex = colIndex;
+                    if (refColumnIndex != null) {
+                        referenceColumnIndex = Integer.parseInt(refColumnIndex);
+                    }
+                    putNewSurvFunc(defaultSurvRules, colIndex, columnName, pdefaultSurvivdef.get(SurvivorshipUtils.PARAMETER),
+                            pdefaultSurvivdef.get(SurvivorshipUtils.SURVIVORSHIP_FUNCTION), referenceColumnName,
+                            referenceColumnIndex);
                     break;
                 }
             }
@@ -131,8 +139,16 @@ public class ComponentMatchParameterAdapter extends MatchParameterAdapter {
                 // type before judging if they are equal
 
                 if (SurvivorshipUtils.isMappingDataType(dataTypeName, defSurvDef.get(SurvivorshipUtils.DATA_TYPE))) {
-                    putNewSurvFunc(defaultSurvRules, Integer.parseInt(columnWithIndex.get(columnName)), columnName,
-                            defSurvDef.get(SurvivorshipUtils.PARAMETER), defSurvDef.get(SurvivorshipUtils.SURVIVORSHIP_FUNCTION));
+                    // try to get reference column index and setting into new function
+                    String referenceColumnName = defSurvDef.get(IRecordGrouping.REFERENCE_COLUMN);
+                    String refColumnIndex = columnWithIndex.get(referenceColumnName);
+                    int colIndex = Integer.parseInt(columnWithIndex.get(columnName));
+                    int referenceColumnIndex = colIndex;
+                    if (refColumnIndex != null) {
+                        referenceColumnIndex = Integer.parseInt(refColumnIndex);
+                    }
+                    putNewSurvFunc(defaultSurvRules, colIndex, columnName, defSurvDef.get(SurvivorshipUtils.PARAMETER),
+                            defSurvDef.get(SurvivorshipUtils.SURVIVORSHIP_FUNCTION), referenceColumnName, referenceColumnIndex);
                     break;
                 }
             } // End for: if no func defined, then the value will be taken from one of the records in a group (1st
@@ -142,11 +158,13 @@ public class ComponentMatchParameterAdapter extends MatchParameterAdapter {
     }
 
     private void putNewSurvFunc(Map<Integer, SurvivorshipFunction> defaultSurvRules, int columnIndex, String columnName,
-            String parameter, String algorithmType) {
+            String parameter, String algorithmType, String refColName, int refColIndex) {
         SurvivorshipFunction survFunc = new SurvivorShipAlgorithmParams().new SurvivorshipFunction();
         survFunc.setSurvivorShipKey(columnName);
         survFunc.setParameter(parameter);
         survFunc.setSurvivorShipAlgoEnum(SurvivorShipAlgorithmEnum.getTypeBySavedValue(algorithmType));
+        survFunc.setReferenceColumnName(refColName);
+        survFunc.setReferenceColumnIndex(refColIndex);
         defaultSurvRules.put(columnIndex, survFunc);
     }
 

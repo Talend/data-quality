@@ -54,9 +54,14 @@ public class RecordIterator implements Iterator<Record> {
 
         int getColumnIndex();
 
+        int getReferenceColumnIndex();
+
+        String getReferenceValue();
+
         String newValue();
 
         Object getAttribute();
+
     }
 
     @Override
@@ -82,10 +87,11 @@ public class RecordIterator implements Iterator<Record> {
         Map<String, ValueGenerator> matchKeyMap = rcdGenerators.get(rcdIdx).getMatchKeyMap();
         // Attributes
         for (Map.Entry<String, ValueGenerator> generator : matchKeyMap.entrySet()) {
-            Attribute attribute = new Attribute(generator.getKey(), generator.getValue().getColumnIndex());
-            attribute.setValue(generator.getValue().newValue());
+            Attribute attribute = new Attribute(generator.getKey(), generator.getValue().getColumnIndex(),
+                    generator.getValue().newValue(), generator.getValue().getReferenceColumnIndex());
+            attribute.setReferenceValue(generator.getValue().getReferenceValue());
             record.add(attribute);
-            //Added TDQ-12057 20160918,yyin--if the related attribute has its original values, add them.
+            // Added TDQ-12057 20160918,yyin--if the related attribute has its original values, add them.
             Object attriValues = generator.getValue().getAttribute();
             if (attriValues != null) {
                 attribute.getValues().merge((AttributeValues<String>) attriValues);
