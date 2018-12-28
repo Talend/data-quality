@@ -111,16 +111,16 @@ public class SurvivorShipAlgorithmParams {
 
     public class SurvivorshipFunction {
 
-        String survivorShipKey;
+        private String survivorShipKey;
 
-        SurvivorShipAlgorithmEnum survivorShipAlgorithmEnum;
+        private SurvivorShipAlgorithmEnum survivorShipAlgorithmEnum;
 
-        String referenceColumnName;
+        private String referenceColumnName;
 
-        Integer referenceColumnIndex;
+        private Integer referenceColumnIndex;
 
         // Will be usefull when the function is SurvivorShipAlgorithmEnum.MOST_TRUSTED_SOURCE.
-        String parameter;
+        private String parameter;
 
         /**
          * Getter for survivorShipFunction.

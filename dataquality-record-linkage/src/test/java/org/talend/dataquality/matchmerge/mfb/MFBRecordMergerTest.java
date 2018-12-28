@@ -19,33 +19,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.talend.dataquality.matchmerge.Attribute;
 import org.talend.dataquality.matchmerge.Record;
 import org.talend.dataquality.record.linkage.utils.SurvivorShipAlgorithmEnum;
 
 public class MFBRecordMergerTest {
-
-    @BeforeClass
-    public static void setUpBeforeClass() throws Exception {
-    }
-
-    @AfterClass
-    public static void tearDownAfterClass() throws Exception {
-    }
-
-    @Before
-    public void setUp() throws Exception {
-    }
-
-    @After
-    public void tearDown() throws Exception {
-    }
 
     /**
      * Test method for
