@@ -12,8 +12,14 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.generic.patterns;
 
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Matchers;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.internal.util.reflection.FieldSetter;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.talend.dataquality.datamasking.FormatPreservingMethod;
 import org.talend.dataquality.datamasking.SecretManager;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
@@ -23,28 +29,29 @@ import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.*;
 
+@RunWith(MockitoJUnitRunner.class)
 public class GenerateFormatPreservingPatternsTest {
 
-    private static GenerateFormatPreservingPatterns pattern;
+    private GenerateFormatPreservingPatterns pattern;
 
-    private static SecretManager secretMng;
+    @Mock
+    private com.idealista.fpe.algorithm.ff1.Cipher mockCipher;
 
-    private static String minValue;
+    private SecretManager secretMng;
 
-    private static String maxValue;
+    private String minValue;
 
-    private static List<String> minStringList;
+    private String maxValue;
 
-    private static List<String> maxStringList;
-
-    @BeforeClass
-    public static void setUp() {
+    @Before
+    public void setUp() {
         // pattern we want to test
         List<AbstractField> fields = new ArrayList<AbstractField>();
         List<String> enums = new ArrayList<String>(Arrays.asList("O", "P", "G", "U", "M", "S"));
@@ -57,9 +64,6 @@ public class GenerateFormatPreservingPatternsTest {
         pattern = new GenerateFormatPreservingPatterns(2, fields);
         minValue = "OSF0005";
         maxValue = "SDU5020";
-
-        minStringList = Arrays.asList("O", "SF", "00", "5");
-        maxStringList = Arrays.asList("S", "DU", "50", "20");
 
         secretMng = new SecretManager(FormatPreservingMethod.SHA2_HMAC_PRF, "#Datadriven2018");
     }
@@ -137,7 +141,7 @@ public class GenerateFormatPreservingPatternsTest {
         List<AbstractField> fields = new ArrayList<>();
 
         // Here the cardinality is one above to be full dense on base-35
-        // strings of 1000 characters. so it is very sparse on 65 bits.
+        // strings of 1000 characters, so it is very sparse in the ensemble of base-35 strings of 10001 characters.
         BigInteger card = new BigInteger("1" + new String(new char[1000]).replace("\0", "0"), 35).add(BigInteger.ONE);
         fields.add(new FieldInterval(BigInteger.ONE, card));
 
@@ -155,21 +159,37 @@ public class GenerateFormatPreservingPatternsTest {
     }
 
     @Test
-    public void transformMinRankValue() {
-        String str = pattern.transform(pattern.transform(minStringList)).toString();
-        assertEquals(minValue, str);
+    public void transformMinRankValue() throws NoSuchFieldException {
+
+        GenerateFormatPreservingPatterns mockPattern = new GenerateFormatPreservingPatterns(10,
+                Collections.singletonList(new FieldInterval(BigInteger.ZERO, BigInteger.TEN)));
+
+        Mockito.when(mockCipher.encrypt(Matchers.any(), Matchers.any(), Matchers.any(), Matchers.any()))
+                .thenReturn(new int[] { 0, 0 });
+
+        new FieldSetter(mockPattern, GenerateFormatPreservingPatterns.class.getDeclaredField("cipher")).set(mockCipher);
+
+        List<String> input = new ArrayList<>();
+        input.add("00");
+
+        assertEquals("00", mockPattern.generateUniquePattern(input, secretMng).toString());
     }
 
     @Test
-    public void transformMaxRankValue() {
-        String str = pattern.transform(pattern.transform(maxStringList)).toString();
-        assertEquals(maxValue, str);
-    }
+    public void transformMaxRankValue() throws NoSuchFieldException {
 
-    @Test
-    public void transformOutLimitValue() {
-        int[] outLimit = pattern.transform(Arrays.asList("U", "KI", "52", "12"));
-        assertEquals(0, outLimit.length);
+        GenerateFormatPreservingPatterns mockPattern = new GenerateFormatPreservingPatterns(10,
+                Collections.singletonList(new FieldInterval(BigInteger.ZERO, BigInteger.TEN)));
+
+        Mockito.when(mockCipher.encrypt(Matchers.any(), Matchers.any(), Matchers.any(), Matchers.any()))
+                .thenReturn(new int[] { 1, 0 });
+
+        new FieldSetter(mockPattern, GenerateFormatPreservingPatterns.class.getDeclaredField("cipher")).set(mockCipher);
+
+        List<String> input = new ArrayList<>();
+        input.add("10");
+
+        assertEquals("10", mockPattern.generateUniquePattern(input, secretMng).toString());
     }
 
     @Test
