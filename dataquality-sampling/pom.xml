@@ -57,6 +57,37 @@
                     </instructions>
                 </configuration>
             </plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>aspectj-maven-plugin</artifactId>
+					<version>1.11</version>
+					<configuration>
+						<complianceLevel>${java.version}</complianceLevel>
+						<source>${java.version}</source>
+						<target>${java.version}</target>
+						<weaveDependencies>
+							<weaveDependency>
+								<groupId>com.github.mifmif</groupId>
+								<artifactId>generex</artifactId>
+							</weaveDependency>
+							<weaveDependency>
+								<groupId>dk.brics</groupId>
+								<artifactId>automaton</artifactId>
+							</weaveDependency>
+						</weaveDependencies>
+					</configuration>
+					<executions>
+						<execution>
+							<goals>
+								<!-- use this goal to weave all your main classes -->
+								<goal>compile</goal>
+								<!-- use this goal to weave all your test classes -->
+								<goal>test-compile</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+
         </plugins>
     </build>
 	<dependencies>
@@ -90,6 +121,19 @@
 		<dependency>
 			<groupId>org.talend.daikon</groupId>
 			<artifactId>daikon</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+			<scope>compile</scope>
+			<version>${aspectj.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<scope>compile</scope>
+			<version>${aspectj.version}</version>
 		</dependency>
 
 		<dependency>

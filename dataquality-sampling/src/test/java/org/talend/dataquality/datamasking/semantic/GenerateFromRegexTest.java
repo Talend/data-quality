@@ -231,10 +231,15 @@ public class GenerateFromRegexTest {
     }
 
     @Test
-    public void largeRegex() {
+    public void largeRegex() throws InterruptedException {
+
+        //        Thread.sleep(10000);
         String pattern = "(.{1,6})( *, *(.{1,6})){0,25}";
+
+        //      for (int i = 0; i < 50; i++)
         Assert.assertFalse(GenerateFromRegex.isValidPattern(pattern));
 
+        //    Thread.sleep(300000);
     }
 
 }
