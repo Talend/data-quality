@@ -13,6 +13,7 @@
 package org.talend.survivorship.utils;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.talend.survivorship.action.handler.AbstractChainOfResponsibilityHandler;
@@ -68,7 +69,11 @@ public class ChainNodeMap extends HashMap<String, AbstractChainOfResponsibilityH
      * @return
      */
     public AbstractChainOfResponsibilityHandler getFirstNode() {
-        return orderMap.get(0);
+        if (orderMap.isEmpty()) {
+            return null;
+        }
+        Iterator<Integer> iterator = orderMap.keySet().iterator();
+        return orderMap.get(iterator.next());
     }
 
 }
