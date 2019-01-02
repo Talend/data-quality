@@ -105,9 +105,6 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
         String left = leftAttribute.getValue();
         String right = rightAttribute.getValue();
         double score = matcher.getMatchingWeight(left, right);
-        if (score >= matcher.getThreshold()) {
-            return score;
-        }
         // 2- Compare using values that build attribute value (if any)
         Iterator<String> leftValues = new IteratorChain(Collections.singleton(left).iterator(),
                 leftAttribute.getValues().iterator());
