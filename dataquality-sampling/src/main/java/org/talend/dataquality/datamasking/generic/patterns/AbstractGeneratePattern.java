@@ -169,7 +169,7 @@ public abstract class AbstractGeneratePattern implements Serializable {
     public Optional<StringBuilder> generateUniqueString(List<String> strs, SecretManager secretMng) {
         // check inputs
         if (strs.size() != fieldsNumber) {
-            return null;
+            return Optional.empty();
         }
 
         return Optional.ofNullable(generateUniquePattern(strs, secretMng));

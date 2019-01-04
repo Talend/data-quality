@@ -12,6 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -42,7 +43,7 @@ public abstract class CharactersOperation<T> extends Function<T> {
     protected int endNumberToReplace = Integer.MAX_VALUE;
 
     /**
-     * the last number we want to keep. By default, it's Integer.MAX_VALUE and we won't use it
+     * the number we want to keep. By default, it's 0 and we won't use it
      */
     protected int endNumberToKeep = 0;
 
@@ -124,6 +125,23 @@ public abstract class CharactersOperation<T> extends Function<T> {
         return getOutput(sb.toString());
     }
 
+    protected T doGenerateMaskedFieldBijective(T t) {
+        if (!isValidParameters || t == null) {
+            return getDefaultOutput();
+        }
+        String str = t.toString();
+        StringBuilder sb = new StringBuilder();
+
+        int strCPCount = str.codePointCount(0, str.length());
+        int beginAux = Math.min(Math.max(beginIndex, strCPCount - endNumberToReplace), strCPCount);
+        int endAux = Math.max(Math.min(endIndex, strCPCount - endNumberToKeep), 0);
+        sb.append(str, 0, str.offsetByCodePoints(0, beginAux));
+        if (!toRemove) {
+        }
+        sb.append(str.substring(str.offsetByCodePoints(0, endAux)));
+        return getResult(sb);
+    }
+
     private String replaceConsistent(String substringToReplace, List<Integer> replacedString) {
         StringBuilder stringBuilder = new StringBuilder();
         long codePointCounts = substringToReplace.codePoints().count();
@@ -147,6 +165,16 @@ public abstract class CharactersOperation<T> extends Function<T> {
         return stringBuilder.toString();
     }
 
+    private List<String> findCharactersToReplace(String str, int beginAux, int endAux) {
+        List<String> characters = new ArrayList<>();
+        for (int i = beginAux; i < endAux; i++) {
+            Integer codePoint = str.codePointAt(str.offsetByCodePoints(0, i));
+            if ((!isNeedCheckSpecialCase() || isGoodType(codePoint)) && charToReplace == null)
+                characters.add(String.valueOf(Character.toChars(codePoint)));
+        }
+        return characters;
+    }
+
     private Integer replaceChar(Integer codePoint) {
         return replaceChar(codePoint, null);
     }
@@ -168,6 +196,13 @@ public abstract class CharactersOperation<T> extends Function<T> {
         return replace;
     }
 
+    private T getResult(StringBuilder sb) {
+        if (sb.length() == 0) {
+            return getDefaultOutput();
+        }
+        return getOutput(sb.toString());
+    }
+
     /**
      * Judge whether need to check first.
      * 
@@ -180,7 +215,7 @@ public abstract class CharactersOperation<T> extends Function<T> {
     /**
      * This method allows to replace only some specific types
      * 
-     * @param the character c to ckeck
+     * @param codePoint the character c to ckeck
      * @return true if c type is ok
      */
     protected boolean isGoodType(Integer codePoint) {
