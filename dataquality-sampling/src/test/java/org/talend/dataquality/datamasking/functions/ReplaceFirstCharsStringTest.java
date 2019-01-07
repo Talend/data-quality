@@ -19,6 +19,7 @@ import static org.junit.Assert.fail;
 import java.util.Random;
 
 import org.junit.Test;
+import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.duplicating.RandomWrapper;
 
 /**
@@ -43,15 +44,15 @@ public class ReplaceFirstCharsStringTest {
     @Test
     public void consistent() {
         rfcs.parse("3", false, new RandomWrapper(42));
-        output = rfcs.generateMaskedRow(input, true);
-        assertEquals(output, rfcs.generateMaskedRow(input, true));
+        output = rfcs.generateMaskedRow(input, FunctionMode.CONSISTENT);
+        assertEquals(output, rfcs.generateMaskedRow(input, FunctionMode.CONSISTENT));
     }
 
     @Test
     public void consistentNoSeed() {
         rfcs.parse("3", false, new RandomWrapper());
-        output = rfcs.generateMaskedRow(input, true);
-        assertEquals(output, rfcs.generateMaskedRow(input, true));
+        output = rfcs.generateMaskedRow(input, FunctionMode.CONSISTENT);
+        assertEquals(output, rfcs.generateMaskedRow(input, FunctionMode.CONSISTENT));
     }
 
     @Test

@@ -1,15 +1,20 @@
 package org.talend.dataquality.datamasking.generic;
 
 import com.idealista.fpe.algorithm.Cipher;
-import com.idealista.fpe.component.functions.prf.PseudoRandomFunction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.datamasking.SecretManager;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
-public class GenerateFromAlphabet {
+public class GenerateFromAlphabet implements Serializable {
 
     private static final long serialVersionUID = 4131439329223094305L;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(GenerateFromAlphabet.class);
 
     /**
      * The cipher used to encrypt data.
@@ -20,59 +25,102 @@ public class GenerateFromAlphabet {
      *
      * The current implementation requires the input data to be encoded in an array of integers in a certain base.
      */
-    private static Cipher cipher = new com.idealista.fpe.algorithm.ff1.Cipher();
+    private transient Cipher cipher = new com.idealista.fpe.algorithm.ff1.Cipher();
 
+    /**
+     * Alphabet used during FF1 encryption for bijective methods.
+     */
     private Alphabet alphabet;
 
+    /**
+     * The minimal length for a string to be valid to replace with FF1.
+     */
     private int minLength;
 
-    public GenerateFromAlphabet(Alphabet alphabet) {
+    /**
+     * The SecretManager handles keys and secret used to generate masked values with FF1
+     */
+    private SecretManager secretMng;
+
+    public GenerateFromAlphabet(Alphabet alphabet, String method, String password) {
         this.alphabet = alphabet;
+        this.secretMng = new SecretManager(method, password);
         minLength = (int) Math.ceil(Math.log(100) / Math.log(alphabet.getRadix()));
+        LOGGER.info("Any string to mask must have a length of at least {}", minLength);
     }
 
     /**
-     * @param strs, the string input to encode
-     * @param secretMng, the SecretManager instance providing the secrets to generate a unique string
+     * @param codePoints, the string input to encode
      * @return the new encoded string
      */
-    public Optional<StringBuilder> generateUniqueString(List<String> strs, SecretManager secretMng) {
-        int[] data = transform(strs);
+    public List<Integer> generateUniqueCodePoints(List<Integer> codePoints) {
+        int[] data = transform(codePoints);
 
         if (data.length < minLength) {
-            return Optional.empty();
+            return Collections.emptyList();
+        }
+
+        int[] result = encryptData(data);
+
+        return transform(result, codePoints);
+    }
+
+    /**
+     * @param digits, the string input to encode
+     * @return the new encoded string
+     */
+    public List<Integer> generateUniqueDigits(List<Integer> digits) {
+        int[] data = new int[digits.size()];
+
+        for (int i = 0; i < digits.size(); i++) {
+            data[i] = digits.get(i);
+        }
+
+        int[] result = encryptData(data);
+
+        List<Integer> newDigits = new ArrayList<>();
+        for (int digit : result) {
+            newDigits.add(digit);
+        }
+
+        return newDigits;
+    }
+
+    private int[] encryptData(int[] data) {
+        if (data.length < minLength) {
+            return new int[] {};
         }
 
         byte[] tweak = new byte[] {};
-        PseudoRandomFunction prf = secretMng.getPseudoRandomFunction();
 
-        int[] result = cipher.encrypt(data, alphabet.getRadix(), tweak, prf);
-
-        return Optional.ofNullable(transform(result));
+        return cipher.encrypt(data, alphabet.getRadix(), tweak, secretMng.getPseudoRandomFunction());
     }
 
     /**
      * Transform the encrypted array of {@code int}s into the corresponding {@code String} representation.
      */
-    public StringBuilder transform(int[] data) {
+    private List<Integer> transform(int[] data, List<Integer> originalCodePoints) {
 
-        StringBuilder sb = new StringBuilder();
+        List<Integer> codePoints = new ArrayList<>();
 
-        for (int numeral : data) {
-            sb.append(alphabet.getCharactersMap().get(numeral));
+        int counter = 0;
+        for (int codePoint : originalCodePoints) {
+            if (alphabet.getRanksMap().containsKey(codePoint)) {
+                codePoints.add(alphabet.getCharactersMap().get(data[counter++]));
+            } else {
+                codePoints.add(codePoint);
+            }
         }
 
-        return sb;
+        return codePoints;
     }
 
     /**
      * Transform the {@code String} element into an array of {@code int}s for FF1 encryption.
      */
-    public int[] transform(List<String> strs) {
-        int[] data = new int[strs.size()];
-        for (int i = 0; i < strs.size(); i++) {
-            data[i] = alphabet.getRanksMap().get(strs.get(i));
-        }
-        return data;
+    private int[] transform(List<Integer> codePoints) {
+        List<Integer> filteredCodePoints = new ArrayList<>(codePoints);
+        return filteredCodePoints.stream().filter(i -> alphabet.getRanksMap().containsKey(i))
+                .mapToInt(i -> alphabet.getRanksMap().get(i)).toArray();
     }
 }

@@ -19,6 +19,7 @@ import static org.junit.Assert.fail;
 import java.util.Random;
 
 import org.junit.Test;
+import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.duplicating.RandomWrapper;
 
 /**
@@ -57,15 +58,15 @@ public class ReplaceNumericStringTest {
     @Test
     public void consistent() {
         rns.parse(" ", false, new RandomWrapper(42));
-        output = rns.generateMaskedRow(input, true);
-        assertEquals(output, rns.generateMaskedRow(input, true)); //$NON-NLS-1$
+        output = rns.generateMaskedRow(input, FunctionMode.CONSISTENT);
+        assertEquals(output, rns.generateMaskedRow(input, FunctionMode.CONSISTENT)); //$NON-NLS-1$
     }
 
     @Test
     public void consistentNoSeed() {
         rns.parse(" ", false, new RandomWrapper());
-        output = rns.generateMaskedRow(input, true);
-        assertEquals(output, rns.generateMaskedRow(input, true)); //$NON-NLS-1$
+        output = rns.generateMaskedRow(input, FunctionMode.CONSISTENT);
+        assertEquals(output, rns.generateMaskedRow(input, FunctionMode.CONSISTENT)); //$NON-NLS-1$
     }
 
     @Test

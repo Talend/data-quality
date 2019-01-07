@@ -22,6 +22,7 @@ import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.duplicating.RandomWrapper;
 
 /**
@@ -191,10 +192,10 @@ public abstract class Function<T> implements Serializable {
     }
 
     public T generateMaskedRow(T t) {
-        return generateMaskedRow(t, false);
+        return generateMaskedRow(t, FunctionMode.RANDOM);
     }
 
-    public T generateMaskedRow(T t, boolean isConsistent) {
+    public T generateMaskedRow(T t, FunctionMode mode) {
         if (t == null && keepNull) {
             return null;
         }
@@ -203,7 +204,22 @@ public abstract class Function<T> implements Serializable {
             return t;
         }
 
-        return isConsistent ? doGenerateMaskedFieldConsistent(t) : doGenerateMaskedField(t);
+        try {
+            return doGenerateMaskedField(t, mode);
+        } catch (NotImplementedException e) {
+            return doGenerateMaskedField(t);
+        }
+
+        /*
+        switch(mode) {
+            case CONSISTENT:
+                return doGenerateMaskedFieldConsistent(t);
+            case BIJECTIVE:
+                return doGenerateMaskedFieldBijective(t);
+            default:
+                return doGenerateMaskedField(t);
+        }
+        */
     }
 
     /**
@@ -244,7 +260,15 @@ public abstract class Function<T> implements Serializable {
      */
     protected abstract T doGenerateMaskedField(T t);
 
+    protected T doGenerateMaskedField(T t, FunctionMode mode) {
+        throw new NotImplementedException();
+    }
+
     protected T doGenerateMaskedFieldConsistent(T t) {
+        throw new NotImplementedException();
+    }
+
+    protected T doGenerateMaskedFieldBijective(T t) {
         throw new NotImplementedException();
     }
 

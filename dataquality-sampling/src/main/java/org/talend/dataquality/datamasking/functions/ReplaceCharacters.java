@@ -12,6 +12,8 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
+import org.talend.dataquality.datamasking.generic.Alphabet;
+
 /**
  * created by jgonzalez on 22 juin 2015. This function will replace every letter by the parameter.
  *
@@ -19,6 +21,11 @@ package org.talend.dataquality.datamasking.functions;
 public class ReplaceCharacters extends ReplaceAll {
 
     private static final long serialVersionUID = 368348491822287354L;
+
+    @Override
+    public void setFF1Cipher(String alphabetName, String method, String password) {
+        super.setFF1Cipher(Alphabet.LATIN_LETTERS.name(), method, password);
+    }
 
     @Override
     protected boolean isGoodType(Integer codePoint) {

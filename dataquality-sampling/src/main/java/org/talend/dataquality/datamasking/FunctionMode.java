@@ -1,4 +1,4 @@
-package org.talend.dataquality;
+package org.talend.dataquality.datamasking;
 
 public enum FunctionMode {
     RANDOM,

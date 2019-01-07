@@ -19,6 +19,7 @@ import static org.junit.Assert.fail;
 import java.util.Random;
 
 import org.junit.Test;
+import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.duplicating.RandomWrapper;
 
 /**
@@ -50,8 +51,8 @@ public class ReplaceAllTest {
     @Test
     public void testSurrogateConsistent() {
         ra.parse("", false, new RandomWrapper(42));
-        output = ra.generateMaskedRow("\uD840\uDC40\uD840\uDFD3\uD841\uDC01\uD840\uDFD3", true);
-        assertEquals(output, ra.generateMaskedRow("\uD840\uDC40\uD840\uDFD3\uD841\uDC01\uD840\uDFD3", true));
+        output = ra.generateMaskedRow("\uD840\uDC40\uD840\uDFD3\uD841\uDC01\uD840\uDFD3", FunctionMode.CONSISTENT);
+        assertEquals(output, ra.generateMaskedRow("\uD840\uDC40\uD840\uDFD3\uD841\uDC01\uD840\uDFD3", FunctionMode.CONSISTENT));
     }
 
     @Test
@@ -90,14 +91,14 @@ public class ReplaceAllTest {
     @Test
     public void testNoParameterConsistent() {
         ra.parse(" ", false, new RandomWrapper(42));
-        output = ra.generateMaskedRow(input, true);
-        assertEquals(output, ra.generateMaskedRow(input, true)); //$NON-NLS-1$
+        output = ra.generateMaskedRow(input, FunctionMode.CONSISTENT);
+        assertEquals(output, ra.generateMaskedRow(input, FunctionMode.CONSISTENT)); //$NON-NLS-1$
     }
 
     @Test
     public void testNoSeedConsistent() {
         ra.parse(" ", false, new RandomWrapper());
-        output = ra.generateMaskedRow(input, true);
-        assertEquals(output, ra.generateMaskedRow(input, true)); //$NON-NLS-1$
+        output = ra.generateMaskedRow(input, FunctionMode.CONSISTENT);
+        assertEquals(output, ra.generateMaskedRow(input, FunctionMode.CONSISTENT)); //$NON-NLS-1$
     }
 }

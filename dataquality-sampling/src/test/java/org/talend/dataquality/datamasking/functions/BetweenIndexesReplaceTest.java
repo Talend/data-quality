@@ -20,6 +20,7 @@ import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.duplicating.RandomWrapper;
 
 /**
@@ -49,15 +50,15 @@ public class BetweenIndexesReplaceTest {
     @Test
     public void consistent() {
         bir.parse("2, 4", false, new RandomWrapper(42));
-        output = bir.generateMaskedRow(input, true);
-        assertEquals(output, bir.generateMaskedRow(input, true)); //$NON-NLS-1$
+        output = bir.generateMaskedRow(input, FunctionMode.CONSISTENT);
+        assertEquals(output, bir.generateMaskedRow(input, FunctionMode.CONSISTENT)); //$NON-NLS-1$
     }
 
     @Test
     public void consistentNoSeed() {
         bir.parse("2, 4", false, new RandomWrapper());
-        output = bir.generateMaskedRow(input, true);
-        assertEquals(output, bir.generateMaskedRow(input, true)); //$NON-NLS-1$
+        output = bir.generateMaskedRow(input, FunctionMode.CONSISTENT);
+        assertEquals(output, bir.generateMaskedRow(input, FunctionMode.CONSISTENT)); //$NON-NLS-1$
     }
 
     @Test

@@ -12,7 +12,9 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.StringUtils;
+import org.talend.dataquality.datamasking.FunctionMode;
 
 /**
  * created by jgonzalez on June 22, 2015. This class is used when the requested function is BetweenIndexesKeep. It will
@@ -36,6 +38,11 @@ public class BetweenIndexesKeep extends BetweenIndexes {
             return getDefaultOutput();
         int index = endIndex > str.length() ? str.length() : endIndex;
         return str.substring(beginIndex, index);
+    }
+
+    @Override
+    protected String doGenerateMaskedField(String str, FunctionMode mode) {
+        throw new NotImplementedException();
     }
 
     @Override

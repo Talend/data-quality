@@ -1,63 +1,68 @@
 package org.talend.dataquality.datamasking.generic;
 
-import com.mifmif.common.regex.Generex;
 import org.talend.daikon.pattern.character.CharPattern;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public enum Alphabet {
 
-    DIGITS("[0-9]"),
+    DEFAULT_LATIN(
+            Arrays.asList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K",
+                    "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g",
+                    "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z")),
 
-    DEFAULT_LATIN("[a-zA-Z0-9]"),
+    LATIN_LETTERS(
+            Arrays.asList("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U",
+                    "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q",
+                    "r", "s", "t", "u", "v", "w", "x", "y", "z")),
 
-    COMPLETE_LATIN(Arrays.asList(CharPattern.DIGIT, CharPattern.LOWER_LATIN, CharPattern.UPPER_LATIN)),
+    DIGITS(CharPattern.DIGIT),
 
-    HIRAGANA(Collections.singletonList(CharPattern.HIRAGANA)),
+    COMPLETE_LATIN(new CharPattern[] { CharPattern.DIGIT, CharPattern.LOWER_LATIN, CharPattern.UPPER_LATIN }),
 
-    KATAKANA(Arrays.asList(CharPattern.HALFWIDTH_KATAKANA, CharPattern.FULLWIDTH_KATAKANA)),
+    HIRAGANA(CharPattern.HIRAGANA),
 
-    KANJI(Collections.singletonList(CharPattern.KANJI)),
+    KATAKANA(new CharPattern[] { CharPattern.HALFWIDTH_KATAKANA, CharPattern.FULLWIDTH_KATAKANA }),
 
-    HANGUL(Collections.singletonList(CharPattern.HANGUL));
+    KANJI(CharPattern.KANJI),
 
-    private Map<Integer, String> charactersMap;
+    HANGUL(CharPattern.HANGUL);
 
-    private Map<String, Integer> ranksMap;
+    private Map<Integer, Integer> charactersMap;
+
+    private Map<Integer, Integer> ranksMap;
 
     private int radix;
 
-    Alphabet(List<CharPattern> charPatterns) {
+    Alphabet(CharPattern[] charPatterns) {
         charactersMap = new HashMap<>();
         ranksMap = new HashMap<>();
         int rank = 0;
         for (CharPattern pattern : charPatterns) {
-            for (int pos = 0; pos < pattern.getCodePointSize(); pos++) {
-                Integer codePoint = pattern.getCodePointAt(pos);
-                String character = String.valueOf(Character.toChars(codePoint));
-                charactersMap.put(rank, character);
-                ranksMap.put(character, rank++);
-            }
+            addPatternCodePoints(pattern, rank);
+            rank += pattern.getCodePointSize();
         }
         radix = charactersMap.size();
     }
 
-    Alphabet(String regex) {
+    Alphabet(CharPattern pattern) {
         charactersMap = new HashMap<>();
         ranksMap = new HashMap<>();
-        if (Generex.isValidPattern(regex)) {
-            Generex generex = new Generex(regex);
-            com.mifmif.common.regex.util.Iterator iterator = generex.iterator();
-            int rank = 0;
-            while (iterator.hasNext()) {
-                String character = iterator.next();
-                charactersMap.put(rank, character);
-                ranksMap.put(character, rank++);
-            }
+        addPatternCodePoints(pattern, 0);
+        radix = charactersMap.size();
+    }
+
+    Alphabet(List<String> characters) {
+        charactersMap = new HashMap<>();
+        ranksMap = new HashMap<>();
+        int rank = 0;
+        for (String ch : characters) {
+            int codePoint = Character.codePointAt(ch, 0);
+            charactersMap.put(rank, codePoint);
+            ranksMap.put(codePoint, rank++);
         }
         radix = charactersMap.size();
     }
@@ -66,11 +71,19 @@ public enum Alphabet {
         return this.radix;
     }
 
-    public Map<Integer, String> getCharactersMap() {
+    public Map<Integer, Integer> getCharactersMap() {
         return charactersMap;
     }
 
-    public Map<String, Integer> getRanksMap() {
+    public Map<Integer, Integer> getRanksMap() {
         return ranksMap;
+    }
+
+    private void addPatternCodePoints(CharPattern pattern, int offsetRank) {
+        for (int pos = 0; pos < pattern.getCodePointSize(); pos++) {
+            Integer codePoint = pattern.getCodePointAt(pos);
+            charactersMap.put(offsetRank, codePoint);
+            ranksMap.put(codePoint, offsetRank++);
+        }
     }
 }

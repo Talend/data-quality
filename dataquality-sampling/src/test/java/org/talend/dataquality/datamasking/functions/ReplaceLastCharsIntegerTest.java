@@ -17,6 +17,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.Random;
 
 import org.junit.Test;
+import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.duplicating.RandomWrapper;
 
 /**
@@ -48,14 +49,14 @@ public class ReplaceLastCharsIntegerTest {
     @Test
     public void consistent() {
         rlci.parse("3", false, new RandomWrapper(42));
-        output = rlci.generateMaskedRow(input, true).toString();
-        assertEquals(output, rlci.generateMaskedRow(input, true).toString());
+        output = rlci.generateMaskedRow(input, FunctionMode.CONSISTENT).toString();
+        assertEquals(output, rlci.generateMaskedRow(input, FunctionMode.CONSISTENT).toString());
     }
 
     @Test
     public void consistentNoSeed() {
         rlci.parse("3", false, new RandomWrapper());
-        output = rlci.generateMaskedRow(input, true).toString();
-        assertEquals(output, rlci.generateMaskedRow(input, true).toString());
+        output = rlci.generateMaskedRow(input, FunctionMode.CONSISTENT).toString();
+        assertEquals(output, rlci.generateMaskedRow(input, FunctionMode.CONSISTENT).toString());
     }
 }

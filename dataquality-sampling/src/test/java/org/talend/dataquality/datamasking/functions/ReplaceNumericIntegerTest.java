@@ -19,6 +19,7 @@ import static org.junit.Assert.fail;
 import java.util.Random;
 
 import org.junit.Test;
+import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.duplicating.RandomWrapper;
 
 /**
@@ -50,15 +51,15 @@ public class ReplaceNumericIntegerTest {
     @Test
     public void consistent() {
         rni.parse(" ", false, new RandomWrapper(42));
-        output = rni.generateMaskedRow(input, true);
-        assertEquals(output, (int) rni.generateMaskedRow(input, true)); //$NON-NLS-1$
+        output = rni.generateMaskedRow(input, FunctionMode.CONSISTENT);
+        assertEquals(output, (int) rni.generateMaskedRow(input, FunctionMode.CONSISTENT)); //$NON-NLS-1$
     }
 
     @Test
     public void consistentNoSeed() {
         rni.parse(" ", false, new RandomWrapper());
-        output = rni.generateMaskedRow(input, true);
-        assertEquals(output, (int) rni.generateMaskedRow(input, true)); //$NON-NLS-1$
+        output = rni.generateMaskedRow(input, FunctionMode.CONSISTENT);
+        assertEquals(output, (int) rni.generateMaskedRow(input, FunctionMode.CONSISTENT)); //$NON-NLS-1$
     }
 
     @Test

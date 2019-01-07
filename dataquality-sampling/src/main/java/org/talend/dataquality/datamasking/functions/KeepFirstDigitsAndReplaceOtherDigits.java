@@ -1,13 +1,26 @@
 package org.talend.dataquality.datamasking.functions;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
 import org.talend.dataquality.common.pattern.TextPatternUtil;
+import org.talend.dataquality.datamasking.FunctionMode;
+import org.talend.dataquality.datamasking.generic.Alphabet;
+import org.talend.dataquality.datamasking.generic.GenerateFromAlphabet;
 
 public class KeepFirstDigitsAndReplaceOtherDigits extends Function<String> {
 
+    private static final long serialVersionUID = -83982230699832305L;
+
     private int integerParam = 0;
+
+    private GenerateFromAlphabet ff1Cipher;
+
+    public void setFF1Cipher(String method, String password) {
+        ff1Cipher = new GenerateFromAlphabet(Alphabet.DIGITS, method, password);
+    }
 
     @Override
     public void parse(String extraParameter, boolean keepNullValues, Random rand) {
@@ -16,19 +29,39 @@ public class KeepFirstDigitsAndReplaceOtherDigits extends Function<String> {
             integerParam = Integer.parseInt(parameters[0]);
         else
             throw new IllegalArgumentException("The parameter is not a positive integer");
-
     }
 
     @Override
     protected String doGenerateMaskedField(String str) {
+        return doGenerateMaskedField(str, FunctionMode.RANDOM);
+    }
+
+    @Override
+    protected String doGenerateMaskedField(String str, FunctionMode mode) {
         if (integerParam < 0)
             return EMPTY_STRING;
 
         if (str == null || integerParam >= str.trim().length())
             return str;
 
-        int totalDigit = 0;
         StringBuilder sb = new StringBuilder(str.trim());
+
+        switch (mode) {
+        case CONSISTENT:
+            generateConsistentDigits(sb);
+            break;
+        case BIJECTIVE:
+            generateBijectiveDigits(sb);
+            break;
+        default:
+            generateRandomDigits(sb);
+        }
+
+        return sb.toString();
+    }
+
+    private void generateRandomDigits(StringBuilder sb) {
+        int totalDigit = 0;
         for (int i = 0; i < sb.length(); i++) {
             if (Character.isDigit(sb.charAt(i))) {
                 if (integerParam > totalDigit)
@@ -37,24 +70,14 @@ public class KeepFirstDigitsAndReplaceOtherDigits extends Function<String> {
                     sb.setCharAt(i, Character.forDigit(nextRandomDigit(), 10));
             }
         }
-
-        return sb.toString();
     }
 
-    @Override
-    protected String doGenerateMaskedFieldConsistent(String str) {
-        if (integerParam < 0)
-            return EMPTY_STRING;
-
-        if (str == null || integerParam >= str.trim().length())
-            return str;
-
-        int totalDigit = 0;
-        StringBuilder sb = new StringBuilder(str.trim());
+    private void generateConsistentDigits(StringBuilder sb) {
         String toBeReplaced = findDigits(sb);
         Random random = getRandomForString(toBeReplaced);
         List<Integer> replacedCodePoints = TextPatternUtil.replaceStringCodePoints(toBeReplaced, random);
         int counter = 0;
+        int totalDigit = 0;
         for (int i = 0; i < sb.length(); i++) {
             if (Character.isDigit(sb.charAt(i))) {
                 if (integerParam > totalDigit)
@@ -65,7 +88,28 @@ public class KeepFirstDigitsAndReplaceOtherDigits extends Function<String> {
                 }
             }
         }
-        return sb.toString();
+    }
+
+    private void generateBijectiveDigits(StringBuilder sb) {
+        int totalDigit = 0;
+        List<Integer> digitsToReplace = new ArrayList<>();
+        List<Integer> indexesToReplace = new ArrayList<>();
+        for (int i = 0; i < sb.length(); i++) {
+            if (Character.isDigit(sb.charAt(i))) {
+                if (integerParam > totalDigit)
+                    totalDigit++;
+                else {
+                    indexesToReplace.add(i);
+                    digitsToReplace.add(Character.digit(sb.charAt(i), 10));
+                }
+            }
+        }
+        List<Integer> replacedDigits = ff1Cipher.generateUniqueDigits(digitsToReplace);
+
+        Iterator<Integer> it = replacedDigits.iterator();
+        for (int index : indexesToReplace) {
+            sb.replace(index, index + 1, it.next().toString());
+        }
     }
 
     private String findDigits(StringBuilder sb) {
