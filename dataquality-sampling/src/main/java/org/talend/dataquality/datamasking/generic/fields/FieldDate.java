@@ -72,7 +72,7 @@ public class FieldDate extends AbstractField {
      */
     private void computeDaysPerYear() {
 
-        Integer count = 0;
+        int count = 0;
         for (int year = firstYear; year <= lastYear; year++) {
             numberDaysPerYear.add(count);
             if (isLeapYear(year))
@@ -147,7 +147,7 @@ public class FieldDate extends AbstractField {
             return "";
 
         int year = findNearest(number, numberDaysPerYear);
-        long remainingDays = Integer.valueOf(number - numberDaysPerYear.get(year)).longValue();
+        long remainingDays = number - numberDaysPerYear.get(year);
         int month;
         int days;
         if (isLeapYear(year + firstYear)) {

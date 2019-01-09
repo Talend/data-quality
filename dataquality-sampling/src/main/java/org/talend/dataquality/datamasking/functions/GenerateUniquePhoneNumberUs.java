@@ -24,7 +24,7 @@ public class GenerateUniquePhoneNumberUs extends AbstractGenerateUniquePhoneNumb
     @Override
     protected StringBuilder doValidGenerateMaskedField(String str) {
         // read the input str
-        List<String> strs = new ArrayList<String>();
+        List<String> strs = new ArrayList<>();
         strs.add(str.substring(str.length() - 6, str.length() - 4));
         strs.add(str.substring(str.length() - 4));
 
@@ -37,9 +37,9 @@ public class GenerateUniquePhoneNumberUs extends AbstractGenerateUniquePhoneNumb
 
     @Override
     protected List<AbstractField> createFieldsListFromPattern() {
-        List<AbstractField> fields = new ArrayList<AbstractField>();
+        List<AbstractField> fields = new ArrayList<>();
 
-        List<String> secondAndThirdDigits = new ArrayList<String>();
+        List<String> secondAndThirdDigits = new ArrayList<>();
         String tmp;
         for (int i = 0; i <= 9; i++) {
             tmp = String.valueOf(i);

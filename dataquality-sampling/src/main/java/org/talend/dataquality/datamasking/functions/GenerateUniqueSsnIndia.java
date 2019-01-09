@@ -41,7 +41,7 @@ public class GenerateUniqueSsnIndia extends AbstractGenerateUniqueSsn {
      */
     @Override
     protected List<AbstractField> createFieldsListFromPattern() {
-        List<AbstractField> fields = new ArrayList<AbstractField>();
+        List<AbstractField> fields = new ArrayList<>();
 
         fields.add(new FieldInterval(BigInteger.ONE, BigInteger.valueOf(9)));
         fields.add(new FieldInterval(BigInteger.ZERO, BigInteger.valueOf(9999999999L)));
@@ -52,7 +52,7 @@ public class GenerateUniqueSsnIndia extends AbstractGenerateUniqueSsn {
 
     @Override
     protected List<String> splitFields(String str) {
-        List<String> strs = new ArrayList<String>();
+        List<String> strs = new ArrayList<>();
         strs.add(str.substring(0, 1));
         strs.add(str.substring(1, 11));
         return strs;

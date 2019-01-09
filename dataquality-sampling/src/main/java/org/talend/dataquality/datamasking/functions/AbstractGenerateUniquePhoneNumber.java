@@ -45,7 +45,7 @@ public abstract class AbstractGenerateUniquePhoneNumber extends AbstractGenerate
     }
 
     protected List<AbstractField> createFieldsListFromPattern() {
-        List<AbstractField> fields = new ArrayList<AbstractField>();
+        List<AbstractField> fields = new ArrayList<>();
         long max = (long) Math.pow(10, getDigitsNumberToMask()) - 1;
         fields.add(new FieldInterval(BigInteger.ZERO, BigInteger.valueOf(max)));
         return fields;
@@ -54,7 +54,7 @@ public abstract class AbstractGenerateUniquePhoneNumber extends AbstractGenerate
     @Override
     protected StringBuilder doValidGenerateMaskedField(String str) {
         // read the input str
-        List<String> strs = new ArrayList<String>();
+        List<String> strs = new ArrayList<>();
 
         strs.add(str.substring(str.length() - getDigitsNumberToMask()));
 

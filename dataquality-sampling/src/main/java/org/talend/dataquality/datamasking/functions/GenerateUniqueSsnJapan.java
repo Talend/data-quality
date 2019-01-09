@@ -31,14 +31,14 @@ public class GenerateUniqueSsnJapan extends AbstractGenerateUniqueSsn {
 
     @Override
     protected List<AbstractField> createFieldsListFromPattern() {
-        List<AbstractField> fields = new ArrayList<AbstractField>();
+        List<AbstractField> fields = new ArrayList<>();
         fields.add(new FieldInterval(BigInteger.ONE, BigInteger.valueOf(999999999999L)));
         return fields;
     }
 
     @Override
     protected List<String> splitFields(String str) {
-        List<String> strs = new ArrayList<String>();
+        List<String> strs = new ArrayList<>();
         strs.add(str.substring(0, 12));
         return strs;
     }

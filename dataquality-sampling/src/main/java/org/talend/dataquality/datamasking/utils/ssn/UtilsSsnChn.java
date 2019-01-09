@@ -13,6 +13,10 @@ import java.util.List;
 
 public class UtilsSsnChn {
 
+    private UtilsSsnChn() {
+
+    }
+
     private static final Logger LOGGER = LoggerFactory.getLogger(UtilsSsnChn.class);
 
     private static final List<Integer> keyWeight = Collections

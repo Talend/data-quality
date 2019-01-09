@@ -209,17 +209,6 @@ public abstract class Function<T> implements Serializable {
         } catch (NotImplementedException e) {
             return doGenerateMaskedField(t);
         }
-
-        /*
-        switch(mode) {
-            case CONSISTENT:
-                return doGenerateMaskedFieldConsistent(t);
-            case BIJECTIVE:
-                return doGenerateMaskedFieldBijective(t);
-            default:
-                return doGenerateMaskedField(t);
-        }
-        */
     }
 
     /**

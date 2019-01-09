@@ -51,14 +51,14 @@ public class AesCbcCryptoSpec implements AbstractCryptoSpec {
         double specVersion = Double.parseDouble(major1 + "." + major2);
         double implVersion = Double.parseDouble(update);
 
-        LOGGER.info("Java Runtime version : " + javaVersion);
+        LOGGER.info("Java Runtime version : {}", javaVersion);
         int supportedLength;
         if (specVersion > 1.8 || (Double.valueOf(1.8).equals(specVersion) && implVersion >= 161)) {
             supportedLength = 32;
         } else {
             supportedLength = 16;
         }
-        LOGGER.info("FPE supported key length for current java version is " + runtimeKeyLength + " bytes");
+        LOGGER.info("FPE supported key length for current java version is {} bytes", runtimeKeyLength);
 
         return supportedLength;
     }

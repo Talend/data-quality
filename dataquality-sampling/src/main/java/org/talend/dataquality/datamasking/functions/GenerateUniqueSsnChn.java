@@ -40,7 +40,7 @@ public class GenerateUniqueSsnChn extends AbstractGenerateUniqueSsn {
 
     @Override
     protected List<AbstractField> createFieldsListFromPattern() {
-        List<AbstractField> fields = new ArrayList<AbstractField>();
+        List<AbstractField> fields = new ArrayList<>();
 
         fields.add(new FieldEnum(UtilsSsnChn.readChinaRegionFile(), 6));
 
@@ -52,7 +52,7 @@ public class GenerateUniqueSsnChn extends AbstractGenerateUniqueSsn {
 
     protected List<String> splitFields(String str) {
         // read the input str
-        List<String> strs = new ArrayList<String>();
+        List<String> strs = new ArrayList<>();
         strs.add(str.substring(0, 6));
         strs.add(str.substring(6, 14));
         strs.add(str.substring(14, 17));

@@ -122,7 +122,7 @@ public class BijectiveSubstitutionFunction extends AbstractGenerateWithSecret {
     @Override
     protected StringBuilder doValidGenerateMaskedField(String str) {
         // read the input str
-        List<String> strs = new ArrayList<String>();
+        List<String> strs = new ArrayList<>();
 
         int currentPos = 0;
         int nbFields = pattern.getFields().size();

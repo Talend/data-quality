@@ -57,6 +57,6 @@ public class ReplaceLastCharsIntegerTest {
     public void consistentNoSeed() {
         rlci.parse("3", false, new RandomWrapper());
         output = rlci.generateMaskedRow(input, FunctionMode.CONSISTENT);
-        assertEquals(output,rlci.generateMaskedRow(input, FunctionMode.CONSISTENT).intValue());
+        assertEquals(output, rlci.generateMaskedRow(input, FunctionMode.CONSISTENT).intValue());
     }
 }
