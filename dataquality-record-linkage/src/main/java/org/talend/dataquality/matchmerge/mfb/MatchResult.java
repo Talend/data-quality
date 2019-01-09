@@ -25,6 +25,10 @@ public class MatchResult {
 
     private double normalizedConfidence;
 
+    private double finalWorstConfidenceValue;
+
+    private boolean isSucess = false;
+
     public MatchResult(int size) {
         scores = new ArrayList<Score>(size + 1);
         thresholds = new ArrayList<Float>(size + 1);
@@ -79,12 +83,44 @@ public class MatchResult {
     }
 
     public boolean isMatch() {
-        int i = 0;
-        for (Score score : scores) {
-            if (score.score < getThresholds().get(i++)) {
-                return false;
-            }
-        }
-        return true;
+
+        return isSucess();
     }
+
+    /**
+     * Getter for isSucess.
+     * 
+     * @return the isSucess
+     */
+    public boolean isSucess() {
+        return this.isSucess;
+    }
+
+    /**
+     * Sets the isSucess.
+     * 
+     * @param isSucess the isSucess to set
+     */
+    public void setSucess(boolean isSucess) {
+        this.isSucess = isSucess;
+    }
+
+    /**
+     * Getter for finalWorstConfidenceValue.
+     * 
+     * @return the finalWorstConfidenceValue
+     */
+    protected double getFinalWorstConfidenceValue() {
+        return this.finalWorstConfidenceValue;
+    }
+
+    /**
+     * Sets the finalWorstConfidenceValue.
+     * 
+     * @param finalWorstConfidenceValue the finalWorstConfidenceValue to set
+     */
+    protected void setFinalWorstConfidenceValue(double finalWorstConfidenceValue) {
+        this.finalWorstConfidenceValue = finalWorstConfidenceValue;
+    }
+
 }

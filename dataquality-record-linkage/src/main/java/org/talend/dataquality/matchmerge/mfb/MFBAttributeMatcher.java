@@ -51,9 +51,9 @@ public class MFBAttributeMatcher implements IAttributeMatcher, ITokenization {
             newStr2 = newStr2.substring(newStr2.offsetByCodePoints(0, beginIndex), newStr2.offsetByCodePoints(0, endIndex));
         }
         double matchingWeight = delegate.getMatchingWeight(newStr1, newStr2);
-        if (matchingWeight < threshold) {
-            return 0;
-        }
+        // if (matchingWeight < threshold) {
+        // return 0;
+        // }
         return matchingWeight;
     }
 
