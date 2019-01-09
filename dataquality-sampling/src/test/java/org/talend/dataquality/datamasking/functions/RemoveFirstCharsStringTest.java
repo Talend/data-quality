@@ -41,20 +41,20 @@ public class RemoveFirstCharsStringTest {
     public void test() {
         rfcs.parse("2", false, new Random(42));
         output = rfcs.generateMaskedRow(input);
-        assertEquals(output, "eve"); //$NON-NLS-1$
+        assertEquals("eve", output); //$NON-NLS-1$
     }
 
     @Test
     public void testDummyGood() {
         rfcs.parse("10", false, new Random(42));
         output = rfcs.generateMaskedRow(input);
-        assertEquals(output, Function.EMPTY_STRING); // $NON-NLS-1$
+        assertEquals(Function.EMPTY_STRING, output); // $NON-NLS-1$
     }
 
     @Test
     public void testParameterToLong() {
         rfcs.parse("10000", false, new Random(42));
         output = rfcs.generateMaskedRow(input);
-        assertEquals(output, Function.EMPTY_STRING);
+        assertEquals(Function.EMPTY_STRING, output);
     }
 }

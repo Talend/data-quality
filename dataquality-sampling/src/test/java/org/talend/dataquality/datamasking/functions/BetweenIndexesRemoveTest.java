@@ -16,9 +16,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.Arrays;
 import java.util.Random;
 
 import org.junit.Test;
+import org.talend.dataquality.datamasking.FunctionMode;
 
 public class BetweenIndexesRemoveTest {
 
@@ -29,24 +31,24 @@ public class BetweenIndexesRemoveTest {
     private String output;
 
     @Test
-    public void testGood() {
+    public void random() {
         bir.parse("2, 4", false, new Random(42));
-        output = bir.generateMaskedRow(input);
+        output = bir.generateMaskedRow(input, FunctionMode.RANDOM);
         assertEquals("Se", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testEmpty() {
+    public void emptyReturnsEmpty() {
         bir.parse("2, 4", false, new Random(42));
         output = bir.generateMaskedRow("");
         assertEquals("", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testNegativeParameter() {
+    public void negativeParameter() {
         try {
             bir.parse("-2, 8", false, new Random(42));
-            fail("should get exception with input " + bir.parameters); //$NON-NLS-1$
+            fail("should get exception with input " + Arrays.toString(bir.parameters)); //$NON-NLS-1$
         } catch (Exception e) {
             assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$
         }
@@ -55,10 +57,10 @@ public class BetweenIndexesRemoveTest {
     }
 
     @Test
-    public void testSwitchParameter() {
+    public void swappedParameters() {
         try {
             bir.parse("4, 2", false, new Random(42));
-            fail("should get exception with input " + bir.parameters); //$NON-NLS-1$
+            fail("should get exception with input " + Arrays.toString(bir.parameters)); //$NON-NLS-1$
         } catch (Exception e) {
             assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$
         }
@@ -67,10 +69,10 @@ public class BetweenIndexesRemoveTest {
     }
 
     @Test
-    public void testBad() {
+    public void tooFewParameters() {
         try {
             bir.parse("1", false, new Random(42));
-            fail("should get exception with input " + bir.parameters); //$NON-NLS-1$
+            fail("should get exception with input " + Arrays.toString(bir.parameters)); //$NON-NLS-1$
         } catch (Exception e) {
             assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$
         }
@@ -79,10 +81,9 @@ public class BetweenIndexesRemoveTest {
     }
 
     @Test
-    public void testDummyParameters() {
+    public void dummyHighParameters() {
         bir.parse("423,452", false, new Random(42));
         output = bir.generateMaskedRow(input);
         assertEquals(input, output);
     }
-
 }

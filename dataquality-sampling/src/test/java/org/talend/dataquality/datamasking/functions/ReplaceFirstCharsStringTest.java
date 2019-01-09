@@ -16,6 +16,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.Arrays;
 import java.util.Random;
 
 import org.junit.Test;
@@ -35,7 +36,7 @@ public class ReplaceFirstCharsStringTest {
     private ReplaceFirstCharsString rfcs = new ReplaceFirstCharsString();
 
     @Test
-    public void testGood() {
+    public void random() {
         rfcs.parse("3,y", false, new Random(42));
         output = rfcs.generateMaskedRow(input);
         assertEquals("yyy456", output);
@@ -56,24 +57,24 @@ public class ReplaceFirstCharsStringTest {
     }
 
     @Test
-    public void testEmpty() {
+    public void emptyReturnsEmpty() {
         rfcs.setKeepEmpty(true);
         output = rfcs.generateMaskedRow("");
         assertEquals("", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testDummyGood() {
+    public void dummyHighParameter() {
         rfcs.parse("7", false, new Random(42));
         output = rfcs.generateMaskedRow(input);
         assertEquals("038405", output);
     }
 
     @Test
-    public void testWrongParameters() {
+    public void letterInParameters() {
         try {
             rfcs.parse("0,xs", false, new Random(42));
-            fail("should get exception with input " + rfcs.parameters); //$NON-NLS-1$
+            fail("should get exception with input " + Arrays.toString(rfcs.parameters)); //$NON-NLS-1$
         } catch (Exception e) {
             assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$
         }

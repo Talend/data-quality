@@ -35,14 +35,14 @@ public class RemoveFirstCharsIntegerTest {
         rfci.parse("2", false, new Random(42));
         ;
         output = rfci.generateMaskedRow(input);
-        assertEquals(output, 6);
+        assertEquals(6, output);
     }
 
     @Test
     public void testDummyGood() {
         rfci.parse("10", false, new Random(42));
         output = rfci.generateMaskedRow(input);
-        assertEquals(output, 0);
+        assertEquals(0, output);
     }
 
 }

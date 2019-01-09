@@ -12,7 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
@@ -27,9 +27,9 @@ public class SetToNullTest {
     private SetToNull<?> stn = new SetToNull<>();
 
     @Test
-    public void test() {
+    public void returnsNull() {
         output = stn.generateMaskedRow(null);
-        assertEquals(output, null);
+        assertNull(output);
     }
 
 }

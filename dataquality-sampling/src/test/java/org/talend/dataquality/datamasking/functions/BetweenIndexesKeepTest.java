@@ -16,9 +16,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.Arrays;
 import java.util.Random;
 
 import org.junit.Test;
+import org.talend.dataquality.datamasking.FunctionMode;
 
 /**
  * created by jgonzalez on 25 juin 2015 Detailled comment
@@ -33,31 +35,38 @@ public class BetweenIndexesKeepTest {
     private String output;
 
     @Test
-    public void testGood() {
+    public void random() {
         bik.parse("2, 4", false, new Random(42));
-        output = bik.generateMaskedRow(input);
+        output = bik.generateMaskedRow(input, FunctionMode.RANDOM);
         assertEquals("tev", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testGood2() {
+    public void random2() {
         bik.parse("1, 2", false, new Random(42));
         output = bik.generateMaskedRow(input);
         assertEquals("St", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testEmpty() {
+    public void emptyReturnsEmpty() {
         bik.parse("2, 4", false, new Random(42));
         output = bik.generateMaskedRow("");
         assertEquals("", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testWrongParameter() {
+    public void nullReturnsEmpty() {
+        bik.parse("5,452", false, new Random(42));
+        output = bik.generateMaskedRow(null);
+        assertEquals("", output);
+    }
+
+    @Test
+    public void zeroParameter() {
         try {
             bik.parse("0, 8", false, new Random(42));
-            fail("should get exception with input " + bik.parameters); //$NON-NLS-1$
+            fail("should get exception with input " + Arrays.toString(bik.parameters)); //$NON-NLS-1$
         } catch (Exception e) {
             assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$
         }
@@ -66,10 +75,10 @@ public class BetweenIndexesKeepTest {
     }
 
     @Test
-    public void testBad() {
+    public void tooFewParameters() {
         try {
             bik.parse("1", false, new Random(42));
-            fail("should get exception with input " + bik.parameters); //$NON-NLS-1$
+            fail("should get exception with input " + Arrays.toString(bik.parameters)); //$NON-NLS-1$
         } catch (Exception e) {
             assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$
         }
@@ -78,7 +87,7 @@ public class BetweenIndexesKeepTest {
     }
 
     @Test
-    public void testBad2() {
+    public void letterInParameters() {
         try {
             bik.parse("lk, df", false, new Random(42));
             fail("should get exception with input " + bik.parameters); //$NON-NLS-1$
@@ -90,7 +99,7 @@ public class BetweenIndexesKeepTest {
     }
 
     @Test
-    public void testDummyParameters() {
+    public void worksWithDummyHighParameters() {
         bik.parse("423,452", false, new Random(42));
         output = bik.generateMaskedRow(input);
         assertEquals("", output);
@@ -101,21 +110,5 @@ public class BetweenIndexesKeepTest {
         bik.parse("5,452", false, new Random(42));
         output = bik.generateMaskedRow(input);
         assertEquals("e", output);
-    }
-
-    @Test
-    public void testWithNullInput() {
-        bik.parse("5,452", false, new Random(42));
-        output = bik.generateMaskedRow(null);
-        assertEquals("", output);
-    }
-
-    @Test
-    public void testWithMultipleInputs() {
-        bik.parse("5,452", false, new Random(42));
-        output = bik.generateMaskedRow(input);
-        String output2 = bik.generateMaskedRow("SteveDo");
-        assertEquals("e", output);
-        assertEquals("eDo", output2);
     }
 }

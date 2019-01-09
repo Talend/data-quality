@@ -33,24 +33,24 @@ public class ReplaceLastCharsStringTest {
     private ReplaceLastCharsString rlcs = new ReplaceLastCharsString();
 
     @Test
-    public void testGood() {
+    public void random() {
         rlcs.parse("3", false, new Random(42));
-        output = rlcs.generateMaskedRow(input);
-        assertEquals(output, "123038");
+        output = rlcs.generateMaskedRow(input, FunctionMode.RANDOM);
+        assertEquals("123038", output);
     }
 
     @Test
-    public void testEmpty() {
+    public void emptyREturnsEmpty() {
         rlcs.setKeepEmpty(true);
         output = rlcs.generateMaskedRow("");
-        assertEquals("", output); //$NON-NLS-1$
+        assertEquals(output, ""); //$NON-NLS-1$
     }
 
     @Test
-    public void testDummyGood() {
+    public void dummyHighParameter() {
         rlcs.parse("7", false, new Random(42));
         output = rlcs.generateMaskedRow(input);
-        assertEquals(output, "038405");
+        assertEquals("038405", output);
     }
 
     @Test

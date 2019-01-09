@@ -34,14 +34,14 @@ public class RemoveLastCharsIntegerTest {
     public void test() {
         rlci.parse("2", false, new Random(42));
         output = rlci.generateMaskedRow(input);
-        assertEquals(output, 6);
+        assertEquals(6, output);
     }
 
     @Test
     public void testDummyGood() {
         rlci.parse("10", false, new Random(42));
         output = rlci.generateMaskedRow(input);
-        assertEquals(output, 0);
+        assertEquals(0, output);
     }
 
 }

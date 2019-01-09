@@ -37,7 +37,7 @@ public class KeepLastCharsStringTest {
     }
 
     @Test
-    public void testEmpty() {
+    public void emptyReturnsEmpty() {
         klads.setKeepEmpty(true);
         output = klads.generateMaskedRow("");
         assertEquals("", output); //$NON-NLS-1$
@@ -50,25 +50,25 @@ public class KeepLastCharsStringTest {
         assertEquals("038456", output); //$NON-NLS-1$
 
         // add msjian test for bug TDQ-11339: fix a "String index out of range: -1" exception
-        String inputa[] = new String[] { "test1234", "pp456", "wei@sina.com" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-        String outputa[] = new String[] { "ñjëñ0534", "ài956", "zßw@sñuu.uom" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        String[] input2 = new String[] { "test1234", "pp456", "wei@sina.com" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        String[] output2 = new String[] { "ñjëñ0534", "ài956", "zßw@sñuu.uom" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         klads.parse("2", false, new Random(42));
-        for (int i = 0; i < inputa.length; i++) {
-            output = klads.generateMaskedRow(inputa[i]);
-            assertEquals(outputa[i], output);
+        for (int i = 0; i < input2.length; i++) {
+            output = klads.generateMaskedRow(input2[i]);
+            assertEquals(output2[i], output);
         }
         // TDQ-11339~
     }
 
     @Test
-    public void testDummyGood() {
+    public void dummyHighParameter() {
         klads.parse("7", false, new Random(42));
         output = klads.generateMaskedRow(input);
         assertEquals(input, output);
     }
 
     @Test
-    public void testParameter() {
+    public void twoParameters() {
         klads.parse("3,i", false, new Random(42));
         output = klads.generateMaskedRow(input);
         assertEquals("iii456", output);

@@ -16,6 +16,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.Arrays;
 import java.util.Random;
 
 import org.junit.Test;
@@ -35,14 +36,14 @@ public class ReplaceNumericIntegerTest {
     private ReplaceNumericInteger rni = new ReplaceNumericInteger();
 
     @Test
-    public void testGood() {
+    public void random() {
         rni.parse("6", false, new Random(42));
-        output = rni.generateMaskedRow(input);
+        output = rni.generateMaskedRow(input, FunctionMode.RANDOM);
         assertEquals(666, output);
     }
 
     @Test
-    public void testNullParameter() {
+    public void noParameter() {
         rni.parse(null, false, new Random(42));
         output = rni.generateMaskedRow(input);
         assertEquals(38, output);
@@ -63,10 +64,10 @@ public class ReplaceNumericIntegerTest {
     }
 
     @Test
-    public void testWrongParameter() {
+    public void letterInParameter() {
         try {
             rni.parse("r", false, new Random(42));
-            fail("should get exception with input " + rni.parameters); //$NON-NLS-1$
+            fail("should get exception with input " + Arrays.toString(rni.parameters)); //$NON-NLS-1$
         } catch (Exception e) {
             assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$
         }
@@ -75,10 +76,10 @@ public class ReplaceNumericIntegerTest {
     }
 
     @Test
-    public void testBad() {
+    public void twoDigitsInParameter() {
         try {
             rni.parse("10", false, new Random(42));
-            fail("should get exception with input " + rni.parameters); //$NON-NLS-1$
+            fail("should get exception with input " + Arrays.toString(rni.parameters)); //$NON-NLS-1$
         } catch (Exception e) {
             assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$
         }

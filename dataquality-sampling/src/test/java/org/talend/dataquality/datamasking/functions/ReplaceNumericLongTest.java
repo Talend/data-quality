@@ -16,6 +16,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.Arrays;
 import java.util.Random;
 
 import org.junit.Test;
@@ -35,17 +36,17 @@ public class ReplaceNumericLongTest {
     private ReplaceNumericLong rnl = new ReplaceNumericLong();
 
     @Test
-    public void testGood() {
+    public void random() {
         rnl.parse("6", false, new Random(42));
-        output = rnl.generateMaskedRow(input);
-        assertEquals(output, 666);
+        output = rnl.generateMaskedRow(input, FunctionMode.RANDOM);
+        assertEquals(666, output);
     }
 
     @Test
-    public void testEmptyParameter() {
+    public void emptyParameter() {
         rnl.parse(" ", false, new Random(42));
         output = rnl.generateMaskedRow(input);
-        assertEquals(output, 38);
+        assertEquals(38, output);
     }
 
     @Test
@@ -63,10 +64,10 @@ public class ReplaceNumericLongTest {
     }
 
     @Test
-    public void testBad() {
+    public void twoDigitsInParameters() {
         try {
             rnl.parse("10", false, new Random(42));
-            fail("should get exception with input " + rnl.parameters); //$NON-NLS-1$
+            fail("should get exception with input " + Arrays.toString(rnl.parameters)); //$NON-NLS-1$
         } catch (Exception e) {
             assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$
         }

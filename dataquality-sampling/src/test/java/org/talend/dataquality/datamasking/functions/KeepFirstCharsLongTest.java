@@ -17,6 +17,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.Random;
 
 import org.junit.Test;
+import org.talend.dataquality.datamasking.FunctionMode;
 
 /**
  * created by jgonzalez on 30 juin 2015 Detailled comment
@@ -24,30 +25,30 @@ import org.junit.Test;
  */
 public class KeepFirstCharsLongTest {
 
-    private String output;
+    private long output;
 
-    private Long input = 123456L;
+    private long input = 123456L;
 
     private KeepFirstCharsLong kfag = new KeepFirstCharsLong();
 
     @Test
-    public void testGood() {
+    public void random() {
         kfag.parse("3", false, new Random(42));
-        output = kfag.generateMaskedRow(input).toString();
-        assertEquals(output, "123038"); //$NON-NLS-1$
+        output = kfag.generateMaskedRow(input, FunctionMode.RANDOM);
+        assertEquals(123038L, output); //$NON-NLS-1$
     }
 
     @Test
-    public void testDummyGood() {
+    public void dummyHighParameter() {
         kfag.parse("7", false, new Random(42));
-        output = kfag.generateMaskedRow(input).toString();
-        assertEquals(output, input.toString());
+        output = kfag.generateMaskedRow(input);
+        assertEquals(output, input);
     }
 
     @Test
-    public void testParameters() {
+    public void twoParameters() {
         kfag.parse("2,6", false, new Random(42));
-        output = kfag.generateMaskedRow(input).toString();
-        assertEquals(output, "126666");
+        output = kfag.generateMaskedRow(input);
+        assertEquals(126666L, output);
     }
 }

@@ -16,6 +16,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.Arrays;
 import java.util.Random;
 
 import org.junit.Test;
@@ -42,24 +43,24 @@ public class ReplaceLastCharsLongTest {
     }
 
     @Test
-    public void testDummyGood() {
+    public void dummyHighParameter() {
         rlcl.parse("7", false, new Random(42));
         output = rlcl.generateMaskedRow(input);
         assertEquals(38405, output); // $NON-NLS-1$
     }
 
     @Test
-    public void testParameters() {
+    public void twoParameters() {
         rlcl.parse("4,9", false, new Random(42));
         output = rlcl.generateMaskedRow(input);
         assertEquals(129999, output); // $NON-NLS-1$
     }
 
     @Test
-    public void testWrongParameters() {
+    public void letterInParameters() {
         try {
             rlcl.parse("0,x", false, new Random(42));
-            fail("should get exception with input " + rlcl.parameters); //$NON-NLS-1$
+            fail("should get exception with input " + Arrays.toString(rlcl.parameters)); //$NON-NLS-1$
         } catch (Exception e) {
             assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$
         }
