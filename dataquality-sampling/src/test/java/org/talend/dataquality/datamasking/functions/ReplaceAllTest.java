@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.datamasking.FormatPreservingMethod;
 import org.talend.dataquality.datamasking.FunctionMode;
@@ -39,6 +40,13 @@ public class ReplaceAllTest {
 
     private ReplaceAll ra = new ReplaceAll();
 
+    private Alphabet alphabet = Alphabet.DEFAULT_LATIN;
+
+    @Before
+    public void setUp() {
+        ra.parse("", false, new RandomWrapper(42));
+    }
+
     @Test
     public void replaceByParameter() {
         ra.parse("X", false, new Random(42));
@@ -47,44 +55,59 @@ public class ReplaceAllTest {
     }
 
     @Test
+    public void noParameter() {
+        output = ra.generateMaskedRow(input);
+        assertEquals("ñ38ñï xài 9", output); //$NON-NLS-1$
+    }
+
+    @Test
     public void randomWithSurrogate() {
-        ra.parse("", false, new Random(42));
-        output = ra.generateMaskedRow("\uD840\uDC40\uD840\uDFD3\uD841\uDC01\uD840\uDFD3");
+        output = ra.generateMaskedRow("\uD840\uDC40\uD840\uDFD3\uD841\uDC01\uD840\uDFD3", FunctionMode.RANDOM);
         assertEquals(4, output.codePoints().count()); //$NON-NLS-1$
     }
 
     @Test
+    public void consistent() {
+        output = ra.generateMaskedRow(input, FunctionMode.CONSISTENT);
+        assertEquals(output, ra.generateMaskedRow(input, FunctionMode.CONSISTENT)); //$NON-NLS-1$
+    }
+
+    @Test
+    public void noSeedConsistent() {
+        ra.parse(" ", false, new RandomWrapper());
+        output = ra.generateMaskedRow(input, FunctionMode.CONSISTENT);
+        assertEquals(output, ra.generateMaskedRow(input, FunctionMode.CONSISTENT)); //$NON-NLS-1$
+    }
+
+    @Test
     public void consistentWithSurrogate() {
-        ra.parse("", false, new RandomWrapper(42));
-        output = ra.generateMaskedRow("\uD840\uDC40\uD840\uDFD3\uD841\uDC01\uD840\uDFD3", FunctionMode.CONSISTENT.name());
-        assertEquals(output,
-                ra.generateMaskedRow("\uD840\uDC40\uD840\uDFD3\uD841\uDC01\uD840\uDFD3", FunctionMode.CONSISTENT.name()));
+        output = ra.generateMaskedRow("\uD840\uDC40\uD840\uDFD3\uD841\uDC01\uD840\uDFD3", FunctionMode.CONSISTENT);
+        assertEquals(output, ra.generateMaskedRow("\uD840\uDC40\uD840\uDFD3\uD841\uDC01\uD840\uDFD3", FunctionMode.CONSISTENT));
     }
 
     @Test
     public void bijectiveWithSurrogate() {
-        ra.parse("", false, new RandomWrapper(42));
-        ra.setFF1Cipher(Alphabet.DEFAULT_LATIN.name(), FormatPreservingMethod.SHA2_HMAC_PRF.name(), "data");
+        ra.setAlphabet(alphabet);
+        ra.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF, "data");
         String input = "abc\uD840\uDC40\uD840\uDFD3\uD841\uDC01\uD840\uDFD3efgh";
-        String output = ra.generateMaskedRow(input, FunctionMode.BIJECTIVE.name());
+        String output = ra.generateMaskedRow(input, FunctionMode.BIJECTIVE);
         assertEquals(input.length(), output.length());
         assertEquals(input.substring(3, 11), output.substring(3, 11));
     }
 
     @Test
     public void bijectiveTooShortValue() {
-        ra.parse("", false, new RandomWrapper(42));
-        ra.setFF1Cipher(Alphabet.DEFAULT_LATIN.name(), FormatPreservingMethod.SHA2_HMAC_PRF.name(), "data");
+        ra.setAlphabet(alphabet);
+        ra.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF, "data");
         String input = "a";
-        String output = ra.generateMaskedRow(input, FunctionMode.BIJECTIVE.name());
+        String output = ra.generateMaskedRow(input, FunctionMode.BIJECTIVE);
         assertEquals(ra.getDefaultOutput(), output);
     }
 
     @Test
     public void bijectivity() {
-        Alphabet alphabet = Alphabet.DEFAULT_LATIN;
-        ra.parse("", false, new RandomWrapper(42));
-        ra.setFF1Cipher(alphabet.name(), FormatPreservingMethod.AES_CBC_PRF.name(), "data");
+        ra.setAlphabet(alphabet);
+        ra.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF, "data");
         Set<String> outputSet = new HashSet<>();
         String prefix = "a@";
         String suffix = "z98";
@@ -93,7 +116,7 @@ public class ReplaceAllTest {
                 String input = new StringBuilder().append(prefix).append(Character.toChars(alphabet.getCharactersMap().get(i)))
                         .append(Character.toChars(alphabet.getCharactersMap().get(j))).append(suffix).toString();
 
-                outputSet.add(ra.generateMaskedRow(input, FunctionMode.BIJECTIVE.name()));
+                outputSet.add(ra.generateMaskedRow(input, FunctionMode.BIJECTIVE));
             }
         }
         assertEquals((int) Math.pow(alphabet.getRadix(), 2), outputSet.size()); //$NON-NLS-1$
@@ -116,26 +139,5 @@ public class ReplaceAllTest {
         }
         output = ra.generateMaskedRow(input);
         assertEquals("", output); // $NON-NLS-1$
-    }
-
-    @Test
-    public void noParameter() {
-        ra.parse(" ", false, new Random(42));
-        output = ra.generateMaskedRow(input);
-        assertEquals("ñ38ñï xài 9", output); //$NON-NLS-1$
-    }
-
-    @Test
-    public void noParameterConsistent() {
-        ra.parse(" ", false, new RandomWrapper(42));
-        output = ra.generateMaskedRow(input, FunctionMode.CONSISTENT.name());
-        assertEquals(output, ra.generateMaskedRow(input, FunctionMode.CONSISTENT.name())); //$NON-NLS-1$
-    }
-
-    @Test
-    public void noSeedConsistent() {
-        ra.parse(" ", false, new RandomWrapper());
-        output = ra.generateMaskedRow(input, FunctionMode.CONSISTENT.name());
-        assertEquals(output, ra.generateMaskedRow(input, FunctionMode.CONSISTENT.name())); //$NON-NLS-1$
     }
 }

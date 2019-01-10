@@ -29,7 +29,7 @@ public class GenerateUniquePhoneNumberGermanyTest {
     @Before
     public void setUp() throws Exception {
         gng.setRandom(new Random(56));
-        gng.setSecret(FormatPreservingMethod.BASIC.name(), "");
+        gng.setSecret(FormatPreservingMethod.BASIC, "");
         gng.setKeepFormat(true);
     }
 
@@ -77,10 +77,10 @@ public class GenerateUniquePhoneNumberGermanyTest {
     @Test
     public void unreproducibleWhenNoPasswordSet() {
         String input = "(089) / 636-48018";
-        gng.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF.name(), "");
+        gng.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF, "");
         String result1 = gng.generateMaskedRow(input);
 
-        gng.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF.name(), "");
+        gng.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF, "");
         String result2 = gng.generateMaskedRow(input);
 
         assertNotEquals(String.format("The result should not be reproducible when no password is set. Input value is %s.", input),
@@ -115,8 +115,8 @@ public class GenerateUniquePhoneNumberGermanyTest {
      * @param data the data that we want to validate
      * @return a boolean that indicates whether the number is of a valid pattern
      */
-    public static boolean isValidPhoneNumber(Object data) {
-        Phonenumber.PhoneNumber phonenumber = null;
+    private static boolean isValidPhoneNumber(Object data) {
+        Phonenumber.PhoneNumber phonenumber;
         try {
             phonenumber = GOOGLE_PHONE_UTIL.parse(data.toString(), Locale.GERMANY.getCountry());
         } catch (Exception e) {

@@ -16,6 +16,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.Arrays;
 import java.util.Random;
 
 import org.junit.Test;
@@ -43,7 +44,7 @@ public class RemoveLastCharsLongTest {
     public void testNullParameter() {
         try {
             rlci.parse(null, false, new Random(42));
-            fail("should get exception with input " + rlci.parameters); //$NON-NLS-1$
+            fail("should get exception with input " + Arrays.toString(rlci.parameters)); //$NON-NLS-1$
         } catch (Exception e) {
             assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$
         }
@@ -67,7 +68,7 @@ public class RemoveLastCharsLongTest {
     public void testWrongParameterCase() {
         try {
             rlci.parse("a", false, new Random(42));
-            fail("should get exception with input " + rlci.parameters); //$NON-NLS-1$
+            fail("should get exception with input " + Arrays.toString(rlci.parameters)); //$NON-NLS-1$
         } catch (Exception e) {
             assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$
         }

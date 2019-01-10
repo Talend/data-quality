@@ -38,7 +38,7 @@ public class ReplaceFirstCharsLongTest {
     @Test
     public void random() {
         rfcl.parse("3", false, new Random(42));
-        output = rfcl.generateMaskedRow(input, FunctionMode.RANDOM.name());
+        output = rfcl.generateMaskedRow(input, FunctionMode.RANDOM);
         assertEquals(38456, output); // $NON-NLS-1$
     }
 
@@ -71,15 +71,15 @@ public class ReplaceFirstCharsLongTest {
     @Test
     public void consistent() {
         rfcl.parse("3", false, new RandomWrapper(42));
-        output = rfcl.generateMaskedRow(input, FunctionMode.CONSISTENT.name());
-        assertEquals(output, (long) rfcl.generateMaskedRow(input, FunctionMode.CONSISTENT.name()));
+        output = rfcl.generateMaskedRow(input, FunctionMode.CONSISTENT);
+        assertEquals(output, (long) rfcl.generateMaskedRow(input, FunctionMode.CONSISTENT));
     }
 
     @Test
     public void consistentNoSeed() {
         rfcl.parse("3", false, new RandomWrapper());
-        output = rfcl.generateMaskedRow(input, FunctionMode.CONSISTENT.name());
-        assertEquals(output, (long) rfcl.generateMaskedRow(input, FunctionMode.CONSISTENT.name()));
+        output = rfcl.generateMaskedRow(input, FunctionMode.CONSISTENT);
+        assertEquals(output, (long) rfcl.generateMaskedRow(input, FunctionMode.CONSISTENT));
     }
 
 }

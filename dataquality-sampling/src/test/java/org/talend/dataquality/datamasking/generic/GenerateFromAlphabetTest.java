@@ -12,7 +12,7 @@ import static org.junit.Assert.*;
 
 public class GenerateFromAlphabetTest {
 
-    private String method = FormatPreservingMethod.AES_CBC_PRF.name();
+    private FormatPreservingMethod method = FormatPreservingMethod.AES_CBC_PRF;
 
     private String password = "data";
 
@@ -30,7 +30,7 @@ public class GenerateFromAlphabetTest {
 
             GenerateFromAlphabet gfa = new GenerateFromAlphabet(alphabet, method, password);
             List<Integer> output = gfa.generateUniqueCodePoints(input);
-            assertFalse("Alphabet " + alphabet.name() + " is not masked properly.", output.isEmpty());
+            assertFalse("Alphabet " + alphabet + " is not masked properly.", output.isEmpty());
         }
     }
 
@@ -71,7 +71,7 @@ public class GenerateFromAlphabetTest {
     @Test
     public void generateDigitsBijectiveWithHmac() {
         Alphabet digits = Alphabet.DIGITS;
-        GenerateFromAlphabet gfa = new GenerateFromAlphabet(digits, FormatPreservingMethod.SHA2_HMAC_PRF.name(), password);
+        GenerateFromAlphabet gfa = new GenerateFromAlphabet(digits, FormatPreservingMethod.SHA2_HMAC_PRF, password);
         Set<List<Integer>> generatedDigits = new HashSet<>();
         for (int i = 0; i < digits.getRadix(); i++) {
             for (int j = 0; j < digits.getRadix(); j++) {
@@ -104,8 +104,7 @@ public class GenerateFromAlphabetTest {
 
     @Test
     public void generateCodePointsBijectiveWithHmac() {
-        GenerateFromAlphabet gfa = new GenerateFromAlphabet(defaultAlphabet, FormatPreservingMethod.SHA2_HMAC_PRF.name(),
-                password);
+        GenerateFromAlphabet gfa = new GenerateFromAlphabet(defaultAlphabet, FormatPreservingMethod.SHA2_HMAC_PRF, password);
         Set<List<Integer>> generatedCodePoints = new HashSet<>();
         for (int i = 0; i < defaultAlphabet.getCharactersMap().size(); i++) {
             for (int j = 0; j < defaultAlphabet.getCharactersMap().size(); j++) {

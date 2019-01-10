@@ -82,7 +82,7 @@ public class BetweenIndexesKeepTest {
     public void letterInParameters() {
         try {
             bik.parse("lk, df", false, new Random(42));
-            fail("should get exception with input " + bik.parameters); //$NON-NLS-1$
+            fail("should get exception with input " + Arrays.toString(bik.parameters)); //$NON-NLS-1$
         } catch (Exception e) {
             assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$
         }

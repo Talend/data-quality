@@ -53,7 +53,7 @@ public class BijectiveSubstitutionFunctionTest {
 
         fn = new BijectiveSubstitutionFunction(fieldDefinitionList);
         fn.setRandom(new Random(42));
-        fn.setSecret(FormatPreservingMethod.BASIC.name(), "");
+        fn.setSecret(FormatPreservingMethod.BASIC, "");
         fn.setKeepFormat(true);
     }
 
@@ -151,7 +151,7 @@ public class BijectiveSubstitutionFunctionTest {
 
         BijectiveSubstitutionFunction bijectiveSubstitutionFunction = new BijectiveSubstitutionFunction(fieldDefinitionList);
         bijectiveSubstitutionFunction.setRandom(new Random(124));
-        bijectiveSubstitutionFunction.setSecret(FormatPreservingMethod.BASIC.name(), "");
+        bijectiveSubstitutionFunction.setSecret(FormatPreservingMethod.BASIC, "");
         bijectiveSubstitutionFunction.setKeepFormat(true);
         List<String> output = input.stream().map(bijectiveSubstitutionFunction::generateMaskedRow).collect(Collectors.toList());
 
@@ -172,7 +172,7 @@ public class BijectiveSubstitutionFunctionTest {
 
         BijectiveSubstitutionFunction bijectiveSubstitutionFunction = new BijectiveSubstitutionFunction(fieldDefinitionList);
         bijectiveSubstitutionFunction.setRandom(new Random(124));
-        bijectiveSubstitutionFunction.setSecret(FormatPreservingMethod.BASIC.name(), "");
+        bijectiveSubstitutionFunction.setSecret(FormatPreservingMethod.BASIC, "");
         bijectiveSubstitutionFunction.setKeepFormat(true);
         List<String> output = input.stream().map(bijectiveSubstitutionFunction::generateMaskedRow).collect(Collectors.toList());
 

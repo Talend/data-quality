@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Random;
 
 import org.talend.dataquality.common.pattern.TextPatternUtil;
+import org.talend.dataquality.datamasking.FormatPreservingMethod;
 import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.datamasking.generic.Alphabet;
 import org.talend.dataquality.datamasking.generic.GenerateFromAlphabet;
@@ -66,13 +67,21 @@ public abstract class CharactersOperation<T> extends Function<T> {
 
     private GenerateFromAlphabet ff1Cipher;
 
-    public void setFF1Cipher(String alphabetName, String method, String password) {
-        for (Alphabet alphabet : Alphabet.values()) {
-            if (alphabet.name().equals(alphabetName)) {
-                ff1Cipher = new GenerateFromAlphabet(alphabet, method, password);
-                break;
-            }
+    private Alphabet alphabet;
+
+    @Override
+    public void setAlphabet(Alphabet alphabet) {
+        this.alphabet = alphabet;
+    }
+
+    @Override
+    public void setSecret(FormatPreservingMethod method, String password) {
+        if (alphabet == null) {
+            throw new IllegalArgumentException(
+                    "The method setAlphabet should be called before the method setSecret for the function "
+                            + this.getClass().getName());
         }
+        ff1Cipher = new GenerateFromAlphabet(alphabet, method, password);
     }
 
     @Override

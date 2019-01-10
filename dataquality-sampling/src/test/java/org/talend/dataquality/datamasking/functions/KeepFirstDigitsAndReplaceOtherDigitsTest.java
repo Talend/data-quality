@@ -23,22 +23,22 @@ public class KeepFirstDigitsAndReplaceOtherDigitsTest {
     @Test
     public void random() {
         kfag.parse("3", false, new Random(42));
-        output = kfag.generateMaskedRow(input, FunctionMode.RANDOM.name());
+        output = kfag.generateMaskedRow(input, FunctionMode.RANDOM);
         assertEquals("a1b2c3d038", output); //$NON-NLS-1$
     }
 
     @Test
     public void consistent() {
         kfag.parse("3", false, new RandomWrapper(42));
-        output = kfag.generateMaskedRow(input, FunctionMode.CONSISTENT.name());
-        assertEquals(output, kfag.generateMaskedRow(input, FunctionMode.CONSISTENT.name())); //$NON-NLS-1$
+        output = kfag.generateMaskedRow(input, FunctionMode.CONSISTENT);
+        assertEquals(output, kfag.generateMaskedRow(input, FunctionMode.CONSISTENT)); //$NON-NLS-1$
     }
 
     @Test
     public void bijectiveReplaceOnlyDigits() {
         kfag.parse("2", false, new RandomWrapper(42));
-        kfag.setFF1Cipher(FormatPreservingMethod.SHA2_HMAC_PRF.name(), "data");
-        String output = kfag.generateMaskedRow(input, FunctionMode.BIJECTIVE.name());
+        kfag.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF, "data");
+        String output = kfag.generateMaskedRow(input, FunctionMode.BIJECTIVE);
         assertEquals(input.length(), output.length());
         assertEquals('d', output.charAt(6));
     }
@@ -46,7 +46,7 @@ public class KeepFirstDigitsAndReplaceOtherDigitsTest {
     @Test
     public void bijective() {
         kfag.parse("3", false, new RandomWrapper(42));
-        kfag.setFF1Cipher(FormatPreservingMethod.SHA2_HMAC_PRF.name(), "data");
+        kfag.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF, "data");
         Set<String> outputSet = new HashSet<>();
         for (int i = 0; i < 1000; i++) {
             StringBuilder sb = new StringBuilder();
@@ -56,7 +56,7 @@ public class KeepFirstDigitsAndReplaceOtherDigitsTest {
                 sb.append(0);
             }
             String input = sb.append(i).toString();
-            outputSet.add(kfag.generateMaskedRow(input, FunctionMode.BIJECTIVE.name()));
+            outputSet.add(kfag.generateMaskedRow(input, FunctionMode.BIJECTIVE));
         }
         assertEquals(1000, outputSet.size()); //$NON-NLS-1$
     }
@@ -64,8 +64,8 @@ public class KeepFirstDigitsAndReplaceOtherDigitsTest {
     @Test
     public void consistentNoSeed() {
         kfag.parse("3", false, new RandomWrapper());
-        output = kfag.generateMaskedRow(input, FunctionMode.CONSISTENT.name());
-        assertEquals(output, kfag.generateMaskedRow(input, FunctionMode.CONSISTENT.name())); //$NON-NLS-1$
+        output = kfag.generateMaskedRow(input, FunctionMode.CONSISTENT);
+        assertEquals(output, kfag.generateMaskedRow(input, FunctionMode.CONSISTENT)); //$NON-NLS-1$
     }
 
     @Test

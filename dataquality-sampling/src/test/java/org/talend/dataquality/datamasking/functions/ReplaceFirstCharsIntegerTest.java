@@ -38,22 +38,22 @@ public class ReplaceFirstCharsIntegerTest {
     @Test
     public void random() {
         rfci.parse("3", false, new Random(42));
-        output = rfci.generateMaskedRow(input, FunctionMode.RANDOM.name());
+        output = rfci.generateMaskedRow(input, FunctionMode.RANDOM);
         assertEquals(38456, output); // $NON-NLS-1$
     }
 
     @Test
     public void consistent() {
         rfci.parse("3", false, new RandomWrapper(42));
-        output = rfci.generateMaskedRow(input, FunctionMode.CONSISTENT.name());
-        assertEquals(output, (int) rfci.generateMaskedRow(input, FunctionMode.CONSISTENT.name()));
+        output = rfci.generateMaskedRow(input, FunctionMode.CONSISTENT);
+        assertEquals(output, (int) rfci.generateMaskedRow(input, FunctionMode.CONSISTENT));
     }
 
     @Test
     public void consistentNoSeed() {
         rfci.parse("3", false, new RandomWrapper());
-        output = rfci.generateMaskedRow(input, FunctionMode.CONSISTENT.name());
-        assertEquals(output, (int) rfci.generateMaskedRow(input, FunctionMode.CONSISTENT.name()));
+        output = rfci.generateMaskedRow(input, FunctionMode.CONSISTENT);
+        assertEquals(output, (int) rfci.generateMaskedRow(input, FunctionMode.CONSISTENT));
     }
 
     @Test

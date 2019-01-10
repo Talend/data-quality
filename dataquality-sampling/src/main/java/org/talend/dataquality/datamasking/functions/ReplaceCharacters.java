@@ -22,9 +22,8 @@ public class ReplaceCharacters extends ReplaceAll {
 
     private static final long serialVersionUID = 368348491822287354L;
 
-    @Override
-    public void setFF1Cipher(String alphabetName, String method, String password) {
-        super.setFF1Cipher(Alphabet.LATIN_LETTERS.name(), method, password);
+    public ReplaceCharacters() {
+        super.setAlphabet(Alphabet.LATIN_LETTERS);
     }
 
     @Override

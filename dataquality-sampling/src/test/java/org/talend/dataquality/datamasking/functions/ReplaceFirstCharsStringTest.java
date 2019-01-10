@@ -38,22 +38,22 @@ public class ReplaceFirstCharsStringTest {
     @Test
     public void random() {
         rfcs.parse("3,y", false, new Random(42));
-        output = rfcs.generateMaskedRow(input, FunctionMode.RANDOM.name());
+        output = rfcs.generateMaskedRow(input, FunctionMode.RANDOM);
         assertEquals("yyy456", output);
     }
 
     @Test
     public void consistent() {
         rfcs.parse("3", false, new RandomWrapper(42));
-        output = rfcs.generateMaskedRow(input, FunctionMode.CONSISTENT.name());
-        assertEquals(output, rfcs.generateMaskedRow(input, FunctionMode.CONSISTENT.name()));
+        output = rfcs.generateMaskedRow(input, FunctionMode.CONSISTENT);
+        assertEquals(output, rfcs.generateMaskedRow(input, FunctionMode.CONSISTENT));
     }
 
     @Test
     public void consistentNoSeed() {
         rfcs.parse("3", false, new RandomWrapper());
-        output = rfcs.generateMaskedRow(input, FunctionMode.CONSISTENT.name());
-        assertEquals(output, rfcs.generateMaskedRow(input, FunctionMode.CONSISTENT.name()));
+        output = rfcs.generateMaskedRow(input, FunctionMode.CONSISTENT);
+        assertEquals(output, rfcs.generateMaskedRow(input, FunctionMode.CONSISTENT));
     }
 
     @Test

@@ -32,7 +32,7 @@ public class GenerateUniqueSsnFrTest {
     @Before
     public void setUp() throws Exception {
         gnf.setRandom(new Random(42));
-        gnf.setSecret(FormatPreservingMethod.BASIC.name(), "");
+        gnf.setSecret(FormatPreservingMethod.BASIC, "");
         gnf.setKeepFormat(true);
     }
 
@@ -124,10 +124,10 @@ public class GenerateUniqueSsnFrTest {
     @Test
     public void unreproducibleWhenNoPasswordSet() {
         String input = "1860348282074 19";
-        gnf.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF.name(), "");
+        gnf.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF, "");
         String result1 = gnf.generateMaskedRow(input);
 
-        gnf.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF.name(), "");
+        gnf.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF, "");
         String result2 = gnf.generateMaskedRow(input);
 
         assertNotEquals(String.format("The result should not be reproducible when no password is set. Input value is %s.", input),

@@ -3,6 +3,7 @@ package org.talend.dataquality.datamasking.generic;
 import com.idealista.fpe.algorithm.Cipher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.talend.dataquality.datamasking.FormatPreservingMethod;
 import org.talend.dataquality.datamasking.SecretManager;
 
 import java.io.Serializable;
@@ -42,7 +43,7 @@ public class GenerateFromAlphabet implements Serializable {
      */
     private SecretManager secretMng;
 
-    public GenerateFromAlphabet(Alphabet alphabet, String method, String password) {
+    public GenerateFromAlphabet(Alphabet alphabet, FormatPreservingMethod method, String password) {
         this.alphabet = alphabet;
         this.secretMng = new SecretManager(method, password);
         minLength = (int) Math.ceil(Math.log(100) / Math.log(alphabet.getRadix()));

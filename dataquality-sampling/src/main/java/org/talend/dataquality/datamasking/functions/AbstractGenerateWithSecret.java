@@ -26,15 +26,14 @@ public abstract class AbstractGenerateWithSecret extends Function<String> {
     protected AbstractGeneratePattern pattern;
 
     /**
-     * This method overrides {@link Function#setSecret(String, String)} method which throws an exception by default.
+     * This method overrides {@link Function#setSecret(FormatPreservingMethod, String)} method which throws an exception by default.
      *
      * A new instance of {@link SecretManager} is created with the desired method and password for the format-preserving masking operation.
-     *
-     * @param method a String referring to a {@link FormatPreservingMethod}.
+     *  @param method a String referring to a {@link FormatPreservingMethod}.
      * @param password the password entered by the user
      */
     @Override
-    public void setSecret(String method, String password) {
+    public void setSecret(FormatPreservingMethod method, String password) {
         secretMng = new SecretManager(method, password);
 
         if (FormatPreservingMethod.BASIC == secretMng.getMethod()) {

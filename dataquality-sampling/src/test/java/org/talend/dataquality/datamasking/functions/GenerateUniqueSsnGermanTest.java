@@ -32,7 +32,7 @@ public class GenerateUniqueSsnGermanTest {
     @Before
     public void setUp() throws Exception {
         gng.setRandom(new Random(42));
-        gng.setSecret(FormatPreservingMethod.BASIC.name(), "");
+        gng.setSecret(FormatPreservingMethod.BASIC, "");
         gng.setKeepFormat(true);
     }
 
@@ -97,10 +97,10 @@ public class GenerateUniqueSsnGermanTest {
     @Test
     public void unreproducibleWhenNoPasswordSet() {
         String input = "83807527228";
-        gng.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF.name(), "");
+        gng.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF, "");
         String result1 = gng.generateMaskedRow(input);
 
-        gng.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF.name(), "");
+        gng.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF, "");
         String result2 = gng.generateMaskedRow(input);
 
         assertNotEquals(String.format("The result should not be reproducible when no password is set. Input value is %s.", input),

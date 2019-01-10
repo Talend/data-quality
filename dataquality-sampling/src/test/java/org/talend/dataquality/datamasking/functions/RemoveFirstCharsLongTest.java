@@ -16,6 +16,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.Arrays;
 import java.util.Random;
 
 import org.junit.Test;
@@ -50,7 +51,7 @@ public class RemoveFirstCharsLongTest {
     public void testNegativeParameter() {
         try {
             rfci.parse("-10", false, new Random(42));
-            fail("should get exception with input " + rfci.parameters); //$NON-NLS-1$
+            fail("should get exception with input " + Arrays.toString(rfci.parameters)); //$NON-NLS-1$
         } catch (Exception e) {
             assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$
         }

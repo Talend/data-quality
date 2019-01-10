@@ -35,7 +35,7 @@ public class ReplaceLastCharsIntegerTest {
     @Test
     public void random() {
         rlci.parse("3", false, new Random(42));
-        output = rlci.generateMaskedRow(input, FunctionMode.RANDOM.name());
+        output = rlci.generateMaskedRow(input, FunctionMode.RANDOM);
         assertEquals(123038, output); //$NON-NLS-1$
     }
 
@@ -49,14 +49,14 @@ public class ReplaceLastCharsIntegerTest {
     @Test
     public void consistent() {
         rlci.parse("3", false, new RandomWrapper(42));
-        output = rlci.generateMaskedRow(input, FunctionMode.CONSISTENT.name());
-        assertEquals(output, rlci.generateMaskedRow(input, FunctionMode.CONSISTENT.name()).intValue());
+        output = rlci.generateMaskedRow(input, FunctionMode.CONSISTENT);
+        assertEquals(output, rlci.generateMaskedRow(input, FunctionMode.CONSISTENT).intValue());
     }
 
     @Test
     public void consistentNoSeed() {
         rlci.parse("3", false, new RandomWrapper());
-        output = rlci.generateMaskedRow(input, FunctionMode.CONSISTENT.name());
-        assertEquals(output, rlci.generateMaskedRow(input, FunctionMode.CONSISTENT.name()).intValue());
+        output = rlci.generateMaskedRow(input, FunctionMode.CONSISTENT);
+        assertEquals(output, rlci.generateMaskedRow(input, FunctionMode.CONSISTENT).intValue());
     }
 }

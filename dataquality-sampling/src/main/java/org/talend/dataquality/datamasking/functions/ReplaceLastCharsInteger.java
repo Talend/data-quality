@@ -22,9 +22,8 @@ public class ReplaceLastCharsInteger extends ReplaceLastChars<Integer> {
 
     private static final long serialVersionUID = -57357829426399512L;
 
-    @Override
-    public void setFF1Cipher(String alphabetName, String method, String password) {
-        super.setFF1Cipher(Alphabet.DIGITS.name(), method, password);
+    public ReplaceLastCharsInteger() {
+        super.setAlphabet(Alphabet.DIGITS);
     }
 
     @Override

@@ -14,6 +14,7 @@ package org.talend.dataquality.datamasking.functions;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.talend.dataquality.datamasking.FormatPreservingMethod;
 
 /**
  * Test for function class
@@ -30,8 +31,8 @@ public class FunctionTest {
         GenerateFromFileString generateFromFileString = new GenerateFromFileString();
         generateFromFileString.parse("abc1", false, null);// invalid path //$NON-NLS-1$
         Assert.assertEquals("Parameters length should be 1", 1, generateFromFileString.parameters.length); //$NON-NLS-1$
-        Assert.assertEquals("Parameters should not be empty", true, generateFromFileString.parameters[0].length() > 0); //$NON-NLS-1$
-        Assert.assertEquals("genericTokens should not be empty", true, generateFromFileString.genericTokens.get(0).length() > 0); //$NON-NLS-1$
+        Assert.assertTrue("Parameters should not be empty", generateFromFileString.parameters[0].length() > 0); //$NON-NLS-1$
+        Assert.assertTrue("genericTokens should not be empty", generateFromFileString.genericTokens.get(0).length() > 0); //$NON-NLS-1$
 
     }
 
@@ -40,7 +41,7 @@ public class FunctionTest {
         ReplaceNumericString replaceNumericString = new ReplaceNumericString();
         replaceNumericString.parse("2", false, null); //$NON-NLS-1$
         Assert.assertEquals("Parameters length should be 1", 1, replaceNumericString.parameters.length); //$NON-NLS-1$
-        Assert.assertEquals("Parameters should be valid", true, replaceNumericString.isValidParameters); //$NON-NLS-1$
+        Assert.assertTrue("Parameters should be valid", replaceNumericString.isValidParameters); //$NON-NLS-1$
     }
 
     @Test
@@ -58,6 +59,6 @@ public class FunctionTest {
     @Test(expected = UnsupportedOperationException.class)
     public void setSecretWithWrongFunctionType() {
         Function fn = new GenerateCreditCardFormatLong();
-        fn.setSecret("BASIC", "Password");
+        fn.setSecret(FormatPreservingMethod.BASIC, "Password");
     }
 }

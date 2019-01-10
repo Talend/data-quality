@@ -33,7 +33,7 @@ public class GenerateUniqueSsnUkTest {
     @Before
     public void setUp() throws Exception {
         gnu.setRandom(new Random(42));
-        gnu.setSecret(FormatPreservingMethod.BASIC.name(), "");
+        gnu.setSecret(FormatPreservingMethod.BASIC, "");
         gnu.setKeepFormat(true);
     }
 
@@ -106,10 +106,10 @@ public class GenerateUniqueSsnUkTest {
     @Test
     public void unreproducibleWhenNoPasswordSet() {
         String input = "AL 486934 D";
-        gnu.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF.name(), "");
+        gnu.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF, "");
         String result1 = gnu.generateMaskedRow(input);
 
-        gnu.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF.name(), "");
+        gnu.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF, "");
         String result2 = gnu.generateMaskedRow(input);
 
         assertNotEquals(String.format("The result should not be reproducible when no password is set. Input value is %s.", input),

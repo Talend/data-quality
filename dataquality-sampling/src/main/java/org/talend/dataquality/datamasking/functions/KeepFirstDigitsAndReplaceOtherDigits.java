@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 import org.talend.dataquality.common.pattern.TextPatternUtil;
+import org.talend.dataquality.datamasking.FormatPreservingMethod;
 import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.datamasking.generic.Alphabet;
 import org.talend.dataquality.datamasking.generic.GenerateFromAlphabet;
@@ -18,8 +19,11 @@ public class KeepFirstDigitsAndReplaceOtherDigits extends Function<String> {
 
     private GenerateFromAlphabet ff1Cipher;
 
-    public void setFF1Cipher(String method, String password) {
-        ff1Cipher = new GenerateFromAlphabet(Alphabet.DIGITS, method, password);
+    private Alphabet alphabet = Alphabet.DIGITS;
+
+    @Override
+    public void setSecret(FormatPreservingMethod method, String password) {
+        ff1Cipher = new GenerateFromAlphabet(alphabet, method, password);
     }
 
     @Override

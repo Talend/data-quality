@@ -34,7 +34,7 @@ public abstract class AbstractGenerateUniquePhoneNumber extends AbstractGenerate
     }
 
     @Override
-    public void setSecret(String method, String password) {
+    public void setSecret(FormatPreservingMethod method, String password) {
         secretMng = new SecretManager(method, password);
 
         if (FormatPreservingMethod.BASIC == secretMng.getMethod()) {

@@ -23,9 +23,8 @@ public abstract class ReplaceNumeric<T> extends CharactersOperation<T> {
 
     private static final long serialVersionUID = -6892473143126922554L;
 
-    @Override
-    public void setFF1Cipher(String alphabetName, String method, String password) {
-        super.setFF1Cipher(Alphabet.DIGITS.name(), method, password);
+    public ReplaceNumeric() {
+        super.setAlphabet(Alphabet.DIGITS);
     }
 
     @Override

@@ -22,9 +22,8 @@ public class ReplaceFirstCharsLong extends ReplaceFirstChars<Long> {
 
     private static final long serialVersionUID = 4462142503829372818L;
 
-    @Override
-    public void setFF1Cipher(String alphabetName, String method, String password) {
-        super.setFF1Cipher(Alphabet.DIGITS.name(), method, password);
+    public ReplaceFirstCharsLong() {
+        super.setAlphabet(Alphabet.DIGITS);
     }
 
     @Override
