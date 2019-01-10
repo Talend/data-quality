@@ -59,7 +59,7 @@ public class GenerateFormatPreservingPatterns extends AbstractGeneratePattern {
      * The current implementation requires the input data to be encoded in an array of integers in a certain base
      * {@link GenerateFormatPreservingPatterns#radix}.
      */
-    private transient Cipher cipher = new com.idealista.fpe.algorithm.ff1.Cipher();
+    private Cipher cipher = new com.idealista.fpe.algorithm.ff1.Cipher();
 
     /**
      * The radix of the numeral representations of patterns to encrypt

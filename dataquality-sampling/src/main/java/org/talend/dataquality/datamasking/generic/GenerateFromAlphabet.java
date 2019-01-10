@@ -26,7 +26,7 @@ public class GenerateFromAlphabet implements Serializable {
      *
      * The current implementation requires the input data to be encoded in an array of integers in a certain base.
      */
-    private transient Cipher cipher = new com.idealista.fpe.algorithm.ff1.Cipher();
+    private Cipher cipher = new com.idealista.fpe.algorithm.ff1.Cipher();
 
     /**
      * Alphabet used during FF1 encryption for bijective methods.

@@ -125,6 +125,7 @@ public abstract class CharactersOperation<T> extends Function<T> {
                 break;
             default:
                 replacedString = generateRandomString(str, beginAux, endAux);
+                break;
             }
             if (replacedString == null) {
                 return getDefaultOutput();

@@ -13,8 +13,6 @@
 package org.talend.dataquality.semantic.datamasking;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.talend.dataquality.semantic.TestUtils.mockWithTenant;
 
 import java.util.Arrays;
@@ -374,7 +372,7 @@ public class ValueDataMaskerTest extends CategoryRegistryManagerAbstract {
             }
             masker.getFunction().setKeepEmpty(true);
             if (masker.getFunction() instanceof AbstractGenerateWithSecret) {
-                masker.getFunction().setSecret(FormatPreservingMethod.BASIC.name(), "");
+                masker.getFunction().setSecret(FormatPreservingMethod.BASIC, "");
             }
             String maskedValue = masker.maskValue(inputValue);
             assertEquals("Test failed on [" + inputValue + "]", EXPECTED_MASKED_VALUES.get(input), maskedValue);

@@ -27,9 +27,11 @@ public class FunctionFactory<T> {
 
     private Function<T> getFunction3(FunctionType type, int javaType) throws InstantiationException, IllegalAccessException {
         Function<T> res;
-        if (type == FunctionType.REPLACE_LAST_CHARS || type == FunctionType.REPLACE_LAST_CHARS_CONSISTENT) {
+        if (type == FunctionType.REPLACE_LAST_CHARS || type == FunctionType.REPLACE_LAST_CHARS_CONSISTENT
+                || type == FunctionType.REPLACE_LAST_CHARS_BIJECTIVE) {
             res = handleReplaceLastCharsFunction(javaType);
-        } else if (type == FunctionType.REPLACE_NUMERIC || type == FunctionType.REPLACE_NUMERIC_CONSISTENT) {
+        } else if (type == FunctionType.REPLACE_NUMERIC || type == FunctionType.REPLACE_NUMERIC_CONSISTENT
+                || type == FunctionType.REPLACE_NUMERIC_BIJECTIVE) {
             res = handleReplaceNumericFunction(javaType);
         } else {
             res = getFunction(type.getClazz());
@@ -111,7 +113,8 @@ public class FunctionFactory<T> {
             res = handleRemoveFirstCharsFunction(javaType);
         } else if (type == FunctionType.REMOVE_LAST_CHARS) {
             res = handleRemoveLastCharsFunction(javaType);
-        } else if (type == FunctionType.REPLACE_FIRST_CHARS || type == FunctionType.REPLACE_FIRST_CHARS_CONSISTENT) {
+        } else if (type == FunctionType.REPLACE_FIRST_CHARS || type == FunctionType.REPLACE_FIRST_CHARS_CONSISTENT
+                || type == FunctionType.REPLACE_FIRST_CHARS_BIJECTIVE) {
             res = handleReplaceFirstCharsFunction(javaType);
         } else {
             res = getFunction3(type, javaType);
@@ -329,9 +332,11 @@ public class FunctionFactory<T> {
      */
     public Function<T> getFunction(FunctionType type, int javaType) throws InstantiationException, IllegalAccessException {
         Function<T> res;
-        if (type == FunctionType.KEEP_FIRST_AND_GENERATE || type == FunctionType.KEEP_FIRST_AND_GENERATE_CONSISTENT) {
+        if (type == FunctionType.KEEP_FIRST_AND_GENERATE || type == FunctionType.KEEP_FIRST_AND_GENERATE_CONSISTENT
+                || type == FunctionType.KEEP_FIRST_AND_GENERATE_BIJECTIVE) {
             res = handleKeepFirstAndGenerateFunction(javaType);
-        } else if (type == FunctionType.KEEP_LAST_AND_GENERATE || type == FunctionType.KEEP_LAST_AND_GENERATE_CONSISTENT) {
+        } else if (type == FunctionType.KEEP_LAST_AND_GENERATE || type == FunctionType.KEEP_LAST_AND_GENERATE_CONSISTENT
+                || type == FunctionType.KEEP_LAST_AND_GENERATE_BIJECTIVE) {
             res = handleKeepLastAndGenerateFunction(javaType);
         } else if (type == FunctionType.GENERATE_BETWEEN) {
             res = handleGenerateBetweenFunction(javaType);

@@ -59,6 +59,7 @@ public class KeepFirstDigitsAndReplaceOtherDigits extends Function<String> {
             break;
         default:
             generateRandomDigits(sb);
+            break;
         }
 
         return sb.toString();

@@ -80,10 +80,11 @@ public enum Alphabet {
     }
 
     private void addPatternCodePoints(CharPattern pattern, int offsetRank) {
+        int rank = offsetRank;
         for (int pos = 0; pos < pattern.getCodePointSize(); pos++) {
             Integer codePoint = pattern.getCodePointAt(pos);
-            charactersMap.put(offsetRank, codePoint);
-            ranksMap.put(codePoint, offsetRank++);
+            charactersMap.put(rank, codePoint);
+            ranksMap.put(codePoint, rank++);
         }
     }
 }
