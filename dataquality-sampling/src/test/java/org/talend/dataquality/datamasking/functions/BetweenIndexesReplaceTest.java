@@ -46,22 +46,22 @@ public class BetweenIndexesReplaceTest {
     @Test
     public void random() {
         bir.parse("2, 4, X", false, new Random(42));
-        output = bir.generateMaskedRow(input, FunctionMode.RANDOM);
+        output = bir.generateMaskedRow(input, FunctionMode.RANDOM.name());
         assertEquals("SXXXe", output); //$NON-NLS-1$
     }
 
     @Test
     public void consistent() {
         bir.parse("2, 4", false, new RandomWrapper(42));
-        output = bir.generateMaskedRow(input, FunctionMode.CONSISTENT);
-        assertEquals(output, bir.generateMaskedRow(input, FunctionMode.CONSISTENT)); //$NON-NLS-1$
+        output = bir.generateMaskedRow(input, FunctionMode.CONSISTENT.name());
+        assertEquals(output, bir.generateMaskedRow(input, FunctionMode.CONSISTENT.name())); //$NON-NLS-1$
     }
 
     @Test
     public void bijectiveReplaceOnlyValidCharacters() {
         bir.parse("2, 4", false, new RandomWrapper(42));
         bir.setFF1Cipher(Alphabet.DEFAULT_LATIN.name(), FormatPreservingMethod.SHA2_HMAC_PRF.name(), "data");
-        String output = bir.generateMaskedRow("St€ve", FunctionMode.BIJECTIVE);
+        String output = bir.generateMaskedRow("St€ve", FunctionMode.BIJECTIVE.name());
         assertEquals(input.length(), output.length());
         assertEquals('€', output.charAt(2));
     }
@@ -78,7 +78,7 @@ public class BetweenIndexesReplaceTest {
             for (int j = 0; j < alphabet.getRadix(); j++) {
                 String input = new StringBuilder().append(prefix).append(Character.toChars(alphabet.getCharactersMap().get(i)))
                         .append(Character.toChars(alphabet.getCharactersMap().get(j))).append(suffix).toString();
-                String output = bir.generateMaskedRow(input, FunctionMode.BIJECTIVE);
+                String output = bir.generateMaskedRow(input, FunctionMode.BIJECTIVE.name());
                 assertTrue("This output is already present : " + output + "\nInput : " + input + "\nIndex : " + (i + j),
                         outputSet.add(output));
             }
@@ -88,8 +88,8 @@ public class BetweenIndexesReplaceTest {
     @Test
     public void consistentNoSeed() {
         bir.parse("2, 4", false, new RandomWrapper());
-        output = bir.generateMaskedRow(input, FunctionMode.CONSISTENT);
-        assertEquals(output, bir.generateMaskedRow(input, FunctionMode.CONSISTENT)); //$NON-NLS-1$
+        output = bir.generateMaskedRow(input, FunctionMode.CONSISTENT.name());
+        assertEquals(output, bir.generateMaskedRow(input, FunctionMode.CONSISTENT.name())); //$NON-NLS-1$
     }
 
     @Test

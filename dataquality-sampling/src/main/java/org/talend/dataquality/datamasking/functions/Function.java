@@ -192,10 +192,10 @@ public abstract class Function<T> implements Serializable {
     }
 
     public T generateMaskedRow(T t) {
-        return generateMaskedRow(t, FunctionMode.RANDOM);
+        return generateMaskedRow(t, "RANDOM");
     }
 
-    public T generateMaskedRow(T t, FunctionMode mode) {
+    public T generateMaskedRow(T t, String mode) {
         if (t == null && keepNull) {
             return null;
         }
@@ -205,7 +205,7 @@ public abstract class Function<T> implements Serializable {
         }
 
         try {
-            return doGenerateMaskedField(t, mode);
+            return doGenerateMaskedField(t, FunctionMode.valueOf(mode));
         } catch (NotImplementedException e) {
             return doGenerateMaskedField(t);
         }
@@ -250,14 +250,6 @@ public abstract class Function<T> implements Serializable {
     protected abstract T doGenerateMaskedField(T t);
 
     protected T doGenerateMaskedField(T t, FunctionMode mode) {
-        throw new NotImplementedException();
-    }
-
-    protected T doGenerateMaskedFieldConsistent(T t) {
-        throw new NotImplementedException();
-    }
-
-    protected T doGenerateMaskedFieldBijective(T t) {
         throw new NotImplementedException();
     }
 

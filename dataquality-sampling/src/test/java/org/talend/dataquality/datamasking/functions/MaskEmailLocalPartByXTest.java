@@ -40,7 +40,7 @@ public class MaskEmailLocalPartByXTest {
 
     @Test
     public void testSpecialEmail() {
-        maskEmailLocalPartByX.parse("", true, new Random(Long.valueOf(12345678)));
+        maskEmailLocalPartByX.parse("", true, new Random(12345678L));
         output = maskEmailLocalPartByX.generateMaskedRow(spemail);
         Assert.assertEquals("XXXX@telecom-bretagne.eu", output);
 

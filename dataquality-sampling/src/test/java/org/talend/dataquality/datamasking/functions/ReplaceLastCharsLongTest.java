@@ -19,6 +19,7 @@ import static org.junit.Assert.fail;
 import java.util.Arrays;
 import java.util.Random;
 
+import jdk.nashorn.internal.ir.FunctionNode;
 import org.junit.Test;
 import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.duplicating.RandomWrapper;
@@ -36,9 +37,9 @@ public class ReplaceLastCharsLongTest {
     private ReplaceLastCharsLong rlcl = new ReplaceLastCharsLong();
 
     @Test
-    public void testGood() {
+    public void random() {
         rlcl.parse("3", false, new Random(42));
-        output = rlcl.generateMaskedRow(input);
+        output = rlcl.generateMaskedRow(input, FunctionMode.RANDOM.name());
         assertEquals(123038, output); // $NON-NLS-1$
     }
 
@@ -70,15 +71,15 @@ public class ReplaceLastCharsLongTest {
     @Test
     public void consistent() {
         rlcl.parse("3", false, new RandomWrapper(42));
-        output = rlcl.generateMaskedRow(input, FunctionMode.CONSISTENT);
-        assertEquals(output, (long) rlcl.generateMaskedRow(input, FunctionMode.CONSISTENT));
+        output = rlcl.generateMaskedRow(input, FunctionMode.CONSISTENT.name());
+        assertEquals(output, (long) rlcl.generateMaskedRow(input, FunctionMode.CONSISTENT.name()));
     }
 
     @Test
     public void consistentNoSeed() {
         rlcl.parse("3", false, new RandomWrapper());
-        output = rlcl.generateMaskedRow(input, FunctionMode.CONSISTENT);
-        assertEquals(output, (long) rlcl.generateMaskedRow(input, FunctionMode.CONSISTENT));
+        output = rlcl.generateMaskedRow(input, FunctionMode.CONSISTENT.name());
+        assertEquals(output, (long) rlcl.generateMaskedRow(input, FunctionMode.CONSISTENT.name()));
     }
 
 }

@@ -75,22 +75,22 @@ public class ReplaceCharactersTest {
     @Test
     public void consistent() {
         rc.parse(" ", false, new RandomWrapper(42));
-        output = rc.generateMaskedRow(input, FunctionMode.CONSISTENT);
-        assertEquals(output, rc.generateMaskedRow(input, FunctionMode.CONSISTENT)); //$NON-NLS-1$
+        output = rc.generateMaskedRow(input, FunctionMode.CONSISTENT.name());
+        assertEquals(output, rc.generateMaskedRow(input, FunctionMode.CONSISTENT.name())); //$NON-NLS-1$
     }
 
     @Test
     public void consistentNoSeed() {
         rc.parse(" ", false, new RandomWrapper());
-        output = rc.generateMaskedRow(input, FunctionMode.CONSISTENT);
-        assertEquals(output, rc.generateMaskedRow(input, FunctionMode.CONSISTENT)); //$NON-NLS-1$
+        output = rc.generateMaskedRow(input, FunctionMode.CONSISTENT.name());
+        assertEquals(output, rc.generateMaskedRow(input, FunctionMode.CONSISTENT.name())); //$NON-NLS-1$
     }
 
     @Test
     public void bijectiveReplaceOnlyCharactersFromAlphabet() {
         rc.parse("", false, new RandomWrapper(42));
         rc.setFF1Cipher(Alphabet.LATIN_LETTERS.name(), FormatPreservingMethod.SHA2_HMAC_PRF.name(), "data");
-        String output = rc.generateMaskedRow(input, FunctionMode.BIJECTIVE);
+        String output = rc.generateMaskedRow(input, FunctionMode.BIJECTIVE.name());
         assertEquals("inpput : " + input + "\noutput : " + output, input.length(), output.length());
         assertEquals(input.substring(3, 6), output.substring(3, 6));
     }
@@ -108,7 +108,7 @@ public class ReplaceCharactersTest {
                 String input = new StringBuilder().append(prefix).append(Character.toChars(alphabet.getCharactersMap().get(i)))
                         .append(Character.toChars(alphabet.getCharactersMap().get(j))).append(suffix).toString();
 
-                outputSet.add(rc.generateMaskedRow(input, FunctionMode.BIJECTIVE));
+                outputSet.add(rc.generateMaskedRow(input, FunctionMode.BIJECTIVE.name()));
             }
         }
         assertEquals((int) Math.pow(alphabet.getRadix(), 2), outputSet.size()); //$NON-NLS-1$

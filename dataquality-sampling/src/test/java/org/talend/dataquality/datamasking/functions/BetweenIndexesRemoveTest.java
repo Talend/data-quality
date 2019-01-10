@@ -20,7 +20,6 @@ import java.util.Arrays;
 import java.util.Random;
 
 import org.junit.Test;
-import org.talend.dataquality.datamasking.FunctionMode;
 
 public class BetweenIndexesRemoveTest {
 
@@ -31,9 +30,9 @@ public class BetweenIndexesRemoveTest {
     private String output;
 
     @Test
-    public void random() {
+    public void normalBehavior() {
         bir.parse("2, 4", false, new Random(42));
-        output = bir.generateMaskedRow(input, FunctionMode.RANDOM);
+        output = bir.generateMaskedRow(input);
         assertEquals("Se", output); //$NON-NLS-1$
     }
 

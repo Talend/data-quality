@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.Random;
 
 import org.junit.Test;
+import org.talend.dataquality.datamasking.FunctionMode;
 
 /**
  * created by jgonzalez on 30 juin 2015 Detailled comment
@@ -36,7 +37,7 @@ public class KeepLastCharsIntegerTest {
     @Test
     public void random() {
         klag.parse("3", false, new Random(42));
-        output = klag.generateMaskedRow(input);
+        output = klag.generateMaskedRow(input, FunctionMode.RANDOM.name());
         assertEquals(38456, output); // $NON-NLS-1$
     }
 

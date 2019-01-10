@@ -56,8 +56,9 @@ public class ReplaceAllTest {
     @Test
     public void consistentWithSurrogate() {
         ra.parse("", false, new RandomWrapper(42));
-        output = ra.generateMaskedRow("\uD840\uDC40\uD840\uDFD3\uD841\uDC01\uD840\uDFD3", FunctionMode.CONSISTENT);
-        assertEquals(output, ra.generateMaskedRow("\uD840\uDC40\uD840\uDFD3\uD841\uDC01\uD840\uDFD3", FunctionMode.CONSISTENT));
+        output = ra.generateMaskedRow("\uD840\uDC40\uD840\uDFD3\uD841\uDC01\uD840\uDFD3", FunctionMode.CONSISTENT.name());
+        assertEquals(output,
+                ra.generateMaskedRow("\uD840\uDC40\uD840\uDFD3\uD841\uDC01\uD840\uDFD3", FunctionMode.CONSISTENT.name()));
     }
 
     @Test
@@ -65,7 +66,7 @@ public class ReplaceAllTest {
         ra.parse("", false, new RandomWrapper(42));
         ra.setFF1Cipher(Alphabet.DEFAULT_LATIN.name(), FormatPreservingMethod.SHA2_HMAC_PRF.name(), "data");
         String input = "abc\uD840\uDC40\uD840\uDFD3\uD841\uDC01\uD840\uDFD3efgh";
-        String output = ra.generateMaskedRow(input, FunctionMode.BIJECTIVE);
+        String output = ra.generateMaskedRow(input, FunctionMode.BIJECTIVE.name());
         assertEquals(input.length(), output.length());
         assertEquals(input.substring(3, 11), output.substring(3, 11));
     }
@@ -75,7 +76,7 @@ public class ReplaceAllTest {
         ra.parse("", false, new RandomWrapper(42));
         ra.setFF1Cipher(Alphabet.DEFAULT_LATIN.name(), FormatPreservingMethod.SHA2_HMAC_PRF.name(), "data");
         String input = "a";
-        String output = ra.generateMaskedRow(input, FunctionMode.BIJECTIVE);
+        String output = ra.generateMaskedRow(input, FunctionMode.BIJECTIVE.name());
         assertEquals(ra.getDefaultOutput(), output);
     }
 
@@ -92,7 +93,7 @@ public class ReplaceAllTest {
                 String input = new StringBuilder().append(prefix).append(Character.toChars(alphabet.getCharactersMap().get(i)))
                         .append(Character.toChars(alphabet.getCharactersMap().get(j))).append(suffix).toString();
 
-                outputSet.add(ra.generateMaskedRow(input, FunctionMode.BIJECTIVE));
+                outputSet.add(ra.generateMaskedRow(input, FunctionMode.BIJECTIVE.name()));
             }
         }
         assertEquals((int) Math.pow(alphabet.getRadix(), 2), outputSet.size()); //$NON-NLS-1$
@@ -127,14 +128,14 @@ public class ReplaceAllTest {
     @Test
     public void noParameterConsistent() {
         ra.parse(" ", false, new RandomWrapper(42));
-        output = ra.generateMaskedRow(input, FunctionMode.CONSISTENT);
-        assertEquals(output, ra.generateMaskedRow(input, FunctionMode.CONSISTENT)); //$NON-NLS-1$
+        output = ra.generateMaskedRow(input, FunctionMode.CONSISTENT.name());
+        assertEquals(output, ra.generateMaskedRow(input, FunctionMode.CONSISTENT.name())); //$NON-NLS-1$
     }
 
     @Test
     public void noSeedConsistent() {
         ra.parse(" ", false, new RandomWrapper());
-        output = ra.generateMaskedRow(input, FunctionMode.CONSISTENT);
-        assertEquals(output, ra.generateMaskedRow(input, FunctionMode.CONSISTENT)); //$NON-NLS-1$
+        output = ra.generateMaskedRow(input, FunctionMode.CONSISTENT.name());
+        assertEquals(output, ra.generateMaskedRow(input, FunctionMode.CONSISTENT.name())); //$NON-NLS-1$
     }
 }

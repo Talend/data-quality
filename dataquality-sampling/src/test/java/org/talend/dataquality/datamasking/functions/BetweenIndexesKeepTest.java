@@ -20,7 +20,6 @@ import java.util.Arrays;
 import java.util.Random;
 
 import org.junit.Test;
-import org.talend.dataquality.datamasking.FunctionMode;
 
 /**
  * created by jgonzalez on 25 juin 2015 Detailled comment
@@ -35,17 +34,10 @@ public class BetweenIndexesKeepTest {
     private String output;
 
     @Test
-    public void random() {
+    public void normalBehavior() {
         bik.parse("2, 4", false, new Random(42));
-        output = bik.generateMaskedRow(input, FunctionMode.RANDOM);
-        assertEquals("tev", output); //$NON-NLS-1$
-    }
-
-    @Test
-    public void random2() {
-        bik.parse("1, 2", false, new Random(42));
         output = bik.generateMaskedRow(input);
-        assertEquals("St", output); //$NON-NLS-1$
+        assertEquals("tev", output); //$NON-NLS-1$
     }
 
     @Test

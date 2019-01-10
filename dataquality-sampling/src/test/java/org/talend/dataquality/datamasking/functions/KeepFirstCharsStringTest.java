@@ -41,7 +41,7 @@ public class KeepFirstCharsStringTest {
     @Test
     public void random() {
         kfag.parse("3", false, new Random(42));
-        output = kfag.generateMaskedRow(input, FunctionMode.RANDOM);
+        output = kfag.generateMaskedRow(input, FunctionMode.RANDOM.name());
         assertEquals("a1b0j8ñ055", output); //$NON-NLS-1$
     }
 

@@ -37,7 +37,7 @@ public class KeepLastCharsLongTest {
     @Test
     public void random() {
         klag.parse("3", false, new Random(42));
-        output = klag.generateMaskedRow(input, FunctionMode.RANDOM);
+        output = klag.generateMaskedRow(input, FunctionMode.RANDOM.name());
         assertEquals(38456, output); // $NON-NLS-1$
     }
 

@@ -38,7 +38,7 @@ public class ReplaceNumericLongTest {
     @Test
     public void random() {
         rnl.parse("6", false, new Random(42));
-        output = rnl.generateMaskedRow(input, FunctionMode.RANDOM);
+        output = rnl.generateMaskedRow(input, FunctionMode.RANDOM.name());
         assertEquals(666, output);
     }
 
@@ -52,15 +52,15 @@ public class ReplaceNumericLongTest {
     @Test
     public void consistent() {
         rnl.parse(" ", false, new RandomWrapper(42));
-        output = rnl.generateMaskedRow(input, FunctionMode.CONSISTENT);
-        assertEquals(output, (long) rnl.generateMaskedRow(input, FunctionMode.CONSISTENT)); //$NON-NLS-1$
+        output = rnl.generateMaskedRow(input, FunctionMode.CONSISTENT.name());
+        assertEquals(output, (long) rnl.generateMaskedRow(input, FunctionMode.CONSISTENT.name())); //$NON-NLS-1$
     }
 
     @Test
     public void consistentNoSeed() {
         rnl.parse(" ", false, new RandomWrapper());
-        output = rnl.generateMaskedRow(input, FunctionMode.CONSISTENT);
-        assertEquals(output, (long) rnl.generateMaskedRow(input, FunctionMode.CONSISTENT)); //$NON-NLS-1$
+        output = rnl.generateMaskedRow(input, FunctionMode.CONSISTENT.name());
+        assertEquals(output, (long) rnl.generateMaskedRow(input, FunctionMode.CONSISTENT.name())); //$NON-NLS-1$
     }
 
     @Test

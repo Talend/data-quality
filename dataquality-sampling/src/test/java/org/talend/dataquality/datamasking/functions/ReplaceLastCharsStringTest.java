@@ -35,7 +35,7 @@ public class ReplaceLastCharsStringTest {
     @Test
     public void random() {
         rlcs.parse("3", false, new Random(42));
-        output = rlcs.generateMaskedRow(input, FunctionMode.RANDOM);
+        output = rlcs.generateMaskedRow(input, FunctionMode.RANDOM.name());
         assertEquals("123038", output);
     }
 
@@ -56,14 +56,14 @@ public class ReplaceLastCharsStringTest {
     @Test
     public void consistent() {
         rlcs.parse("3", false, new RandomWrapper(42));
-        output = rlcs.generateMaskedRow(input, FunctionMode.CONSISTENT);
-        assertEquals(output, rlcs.generateMaskedRow(input, FunctionMode.CONSISTENT));
+        output = rlcs.generateMaskedRow(input, FunctionMode.CONSISTENT.name());
+        assertEquals(output, rlcs.generateMaskedRow(input, FunctionMode.CONSISTENT.name()));
     }
 
     @Test
     public void consistentNoSeed() {
         rlcs.parse("3", false, new RandomWrapper());
-        output = rlcs.generateMaskedRow(input, FunctionMode.CONSISTENT);
-        assertEquals(output, rlcs.generateMaskedRow(input, FunctionMode.CONSISTENT));
+        output = rlcs.generateMaskedRow(input, FunctionMode.CONSISTENT.name());
+        assertEquals(output, rlcs.generateMaskedRow(input, FunctionMode.CONSISTENT.name()));
     }
 }

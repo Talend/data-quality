@@ -38,7 +38,7 @@ public class ReplaceNumericIntegerTest {
     @Test
     public void random() {
         rni.parse("6", false, new Random(42));
-        output = rni.generateMaskedRow(input, FunctionMode.RANDOM);
+        output = rni.generateMaskedRow(input, FunctionMode.RANDOM.name());
         assertEquals(666, output);
     }
 
@@ -52,15 +52,15 @@ public class ReplaceNumericIntegerTest {
     @Test
     public void consistent() {
         rni.parse(" ", false, new RandomWrapper(42));
-        output = rni.generateMaskedRow(input, FunctionMode.CONSISTENT);
-        assertEquals(output, (int) rni.generateMaskedRow(input, FunctionMode.CONSISTENT)); //$NON-NLS-1$
+        output = rni.generateMaskedRow(input, FunctionMode.CONSISTENT.name());
+        assertEquals(output, (int) rni.generateMaskedRow(input, FunctionMode.CONSISTENT.name())); //$NON-NLS-1$
     }
 
     @Test
     public void consistentNoSeed() {
         rni.parse(" ", false, new RandomWrapper());
-        output = rni.generateMaskedRow(input, FunctionMode.CONSISTENT);
-        assertEquals(output, (int) rni.generateMaskedRow(input, FunctionMode.CONSISTENT)); //$NON-NLS-1$
+        output = rni.generateMaskedRow(input, FunctionMode.CONSISTENT.name());
+        assertEquals(output, (int) rni.generateMaskedRow(input, FunctionMode.CONSISTENT.name())); //$NON-NLS-1$
     }
 
     @Test
