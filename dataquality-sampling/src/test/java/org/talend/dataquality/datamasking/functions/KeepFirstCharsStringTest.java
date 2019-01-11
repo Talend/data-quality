@@ -17,7 +17,6 @@ import static org.junit.Assert.assertEquals;
 import java.util.Random;
 
 import org.junit.Test;
-import org.talend.dataquality.datamasking.FunctionMode;
 
 /**
  * created by jgonzalez on 29 juin 2015 Detailled comment
@@ -39,9 +38,9 @@ public class KeepFirstCharsStringTest {
     }
 
     @Test
-    public void random() {
+    public void defaultBehavior() {
         kfag.parse("3", false, new Random(42));
-        output = kfag.generateMaskedRow(input, FunctionMode.RANDOM);
+        output = kfag.generateMaskedRow(input);
         assertEquals("a1b0j8ñ055", output); //$NON-NLS-1$
     }
 

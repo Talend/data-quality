@@ -36,6 +36,13 @@ public class ReplaceNumericStringTest {
     private ReplaceNumericString rns = new ReplaceNumericString();
 
     @Test
+    public void defaultBehavior() {
+        rns.parse("0", false, new Random(42));
+        output = rns.generateMaskedRow(input);
+        assertEquals("abc000def", output); //$NON-NLS-1$
+    }
+
+    @Test
     public void random() {
         rns.parse("0", false, new Random(42));
         output = rns.generateMaskedRow(input, FunctionMode.RANDOM);

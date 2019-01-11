@@ -12,8 +12,6 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
-import org.talend.dataquality.datamasking.generic.Alphabet;
-
 /**
  * created by jgonzalez on 22 juin 2015. See ReplaceLastChars.
  *
@@ -21,10 +19,6 @@ import org.talend.dataquality.datamasking.generic.Alphabet;
 public class ReplaceLastCharsLong extends ReplaceLastChars<Long> {
 
     private static final long serialVersionUID = -9172743551534233769L;
-
-    public ReplaceLastCharsLong() {
-        super.setAlphabet(Alphabet.DIGITS);
-    }
 
     @Override
     protected Long getDefaultOutput() {

@@ -36,6 +36,13 @@ public class ReplaceFirstCharsStringTest {
     private ReplaceFirstCharsString rfcs = new ReplaceFirstCharsString();
 
     @Test
+    public void defaultBehavior() {
+        rfcs.parse("3,y", false, new Random(42));
+        output = rfcs.generateMaskedRow(input);
+        assertEquals("yyy456", output);
+    }
+
+    @Test
     public void random() {
         rfcs.parse("3,y", false, new Random(42));
         output = rfcs.generateMaskedRow(input, FunctionMode.RANDOM);

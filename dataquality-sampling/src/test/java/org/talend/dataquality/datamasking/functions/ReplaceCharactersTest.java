@@ -47,8 +47,8 @@ public class ReplaceCharactersTest {
     }
 
     @Test
-    public void emptyParameter() {
-        rc.parse(" ", false, new Random(42));
+    public void defaultBehavior() {
+        rc.parse("", false, new Random(42));
         output = rc.generateMaskedRow(input);
         assertEquals("ñjë456ñï xàiäz", output); //$NON-NLS-1$
     }
@@ -89,6 +89,7 @@ public class ReplaceCharactersTest {
     @Test
     public void bijectiveReplaceOnlyCharactersFromAlphabet() {
         rc.parse("", false, new RandomWrapper(42));
+        rc.setAlphabet(Alphabet.LATIN_LETTERS);
         rc.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF, "data");
         String output = rc.generateMaskedRow(input, FunctionMode.BIJECTIVE);
         assertEquals("inpput : " + input + "\noutput : " + output, input.length(), output.length());
@@ -99,6 +100,7 @@ public class ReplaceCharactersTest {
     public void bijective() {
         Alphabet alphabet = Alphabet.LATIN_LETTERS;
         rc.parse("", false, new RandomWrapper(42));
+        rc.setAlphabet(alphabet);
         rc.setSecret(FormatPreservingMethod.AES_CBC_PRF, "data");
         Set<String> outputSet = new HashSet<>();
         String prefix = "a@";

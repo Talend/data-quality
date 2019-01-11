@@ -21,6 +21,13 @@ public class KeepLastDigitsAndReplaceOtherDigitsTest {
     private KeepLastDigitsAndReplaceOtherDigits kfag = new KeepLastDigitsAndReplaceOtherDigits();
 
     @Test
+    public void defaultBehavior() {
+        kfag.parse("3", false, new Random(42));
+        output = kfag.generateMaskedRow(input);
+        assertEquals("a8b3c0d456", output); //$NON-NLS-1$
+    }
+
+    @Test
     public void random() {
         kfag.parse("3", false, new Random(42));
         output = kfag.generateMaskedRow(input, FunctionMode.RANDOM);

@@ -30,7 +30,7 @@ public class BetweenIndexesRemoveTest {
     private String output;
 
     @Test
-    public void normalBehavior() {
+    public void defaultBehavior() {
         bir.parse("2, 4", false, new Random(42));
         output = bir.generateMaskedRow(input);
         assertEquals("Se", output); //$NON-NLS-1$

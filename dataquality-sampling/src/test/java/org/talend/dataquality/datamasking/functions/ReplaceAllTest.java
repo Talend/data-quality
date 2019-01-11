@@ -55,7 +55,7 @@ public class ReplaceAllTest {
     }
 
     @Test
-    public void noParameter() {
+    public void defaultBehavior() {
         output = ra.generateMaskedRow(input);
         assertEquals("ñ38ñï xài 9", output); //$NON-NLS-1$
     }

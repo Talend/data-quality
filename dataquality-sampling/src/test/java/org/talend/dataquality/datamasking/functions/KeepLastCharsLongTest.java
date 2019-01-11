@@ -20,7 +20,6 @@ import java.util.Arrays;
 import java.util.Random;
 
 import org.junit.Test;
-import org.talend.dataquality.datamasking.FunctionMode;
 
 /**
  * created by jgonzalez on 30 juin 2015 Detailled comment
@@ -35,9 +34,9 @@ public class KeepLastCharsLongTest {
     private KeepLastCharsLong klag = new KeepLastCharsLong();
 
     @Test
-    public void random() {
+    public void defaultBehavior() {
         klag.parse("3", false, new Random(42));
-        output = klag.generateMaskedRow(input, FunctionMode.RANDOM);
+        output = klag.generateMaskedRow(input);
         assertEquals(38456, output); // $NON-NLS-1$
     }
 

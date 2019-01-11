@@ -31,21 +31,21 @@ public class RemoveLastCharsStringTest {
     private RemoveLastCharsString rlcs = new RemoveLastCharsString();
 
     @Test
-    public void test() {
+    public void defaultBehavior() {
         rlcs.parse("2", false, new Random(42));
         output = rlcs.generateMaskedRow(input);
         assertEquals("Ste", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testEmpty() {
+    public void emptyReturnsEmpty() {
         rlcs.setKeepEmpty(true);
         output = rlcs.generateMaskedRow("");
         assertEquals("", output); //$NON-NLS-1$
     }
 
     @Test
-    public void testDummyGood() {
+    public void dummyParameter() {
         rlcs.parse("10", false, new Random(42));
         output = rlcs.generateMaskedRow(input);
         assertEquals("", output); //$NON-NLS-1$

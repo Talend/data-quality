@@ -31,7 +31,7 @@ public class RemoveFirstCharsIntegerTest {
     private RemoveFirstCharsInteger rfci = new RemoveFirstCharsInteger();
 
     @Test
-    public void test() {
+    public void defaultBehavior() {
         rfci.parse("2", false, new Random(42));
         ;
         output = rfci.generateMaskedRow(input);
@@ -39,7 +39,7 @@ public class RemoveFirstCharsIntegerTest {
     }
 
     @Test
-    public void testDummyGood() {
+    public void dummyParameter() {
         rfci.parse("10", false, new Random(42));
         output = rfci.generateMaskedRow(input);
         assertEquals(0, output);

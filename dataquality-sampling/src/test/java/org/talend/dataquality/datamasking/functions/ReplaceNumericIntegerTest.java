@@ -36,6 +36,13 @@ public class ReplaceNumericIntegerTest {
     private ReplaceNumericInteger rni = new ReplaceNumericInteger();
 
     @Test
+    public void defaultBehavior() {
+        rni.parse("6", false, new Random(42));
+        output = rni.generateMaskedRow(input);
+        assertEquals(666, output);
+    }
+
+    @Test
     public void random() {
         rni.parse("6", false, new Random(42));
         output = rni.generateMaskedRow(input, FunctionMode.RANDOM);
@@ -43,7 +50,7 @@ public class ReplaceNumericIntegerTest {
     }
 
     @Test
-    public void noParameter() {
+    public void nullParameter() {
         rni.parse(null, false, new Random(42));
         output = rni.generateMaskedRow(input);
         assertEquals(38, output);

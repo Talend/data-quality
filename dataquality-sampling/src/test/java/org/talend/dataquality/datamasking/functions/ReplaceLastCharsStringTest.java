@@ -33,6 +33,13 @@ public class ReplaceLastCharsStringTest {
     private ReplaceLastCharsString rlcs = new ReplaceLastCharsString();
 
     @Test
+    public void defaultBehavior() {
+        rlcs.parse("3", false, new Random(42));
+        output = rlcs.generateMaskedRow(input);
+        assertEquals("123038", output);
+    }
+
+    @Test
     public void random() {
         rlcs.parse("3", false, new Random(42));
         output = rlcs.generateMaskedRow(input, FunctionMode.RANDOM);

@@ -36,6 +36,13 @@ public class ReplaceLastCharsLongTest {
     private ReplaceLastCharsLong rlcl = new ReplaceLastCharsLong();
 
     @Test
+    public void defaultBehavior() {
+        rlcl.parse("3", false, new Random(42));
+        output = rlcl.generateMaskedRow(input);
+        assertEquals(123038, output); // $NON-NLS-1$
+    }
+
+    @Test
     public void random() {
         rlcl.parse("3", false, new Random(42));
         output = rlcl.generateMaskedRow(input, FunctionMode.RANDOM);

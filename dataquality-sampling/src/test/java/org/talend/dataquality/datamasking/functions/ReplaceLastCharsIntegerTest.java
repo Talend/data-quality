@@ -33,6 +33,13 @@ public class ReplaceLastCharsIntegerTest {
     private ReplaceLastCharsInteger rlci = new ReplaceLastCharsInteger();
 
     @Test
+    public void defaultBehavior() {
+        rlci.parse("3", false, new Random(42));
+        output = rlci.generateMaskedRow(input);
+        assertEquals(123038, output); //$NON-NLS-1$
+    }
+
+    @Test
     public void random() {
         rlci.parse("3", false, new Random(42));
         output = rlci.generateMaskedRow(input, FunctionMode.RANDOM);

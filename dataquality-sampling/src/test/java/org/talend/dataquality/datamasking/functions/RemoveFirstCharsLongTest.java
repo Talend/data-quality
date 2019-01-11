@@ -34,21 +34,21 @@ public class RemoveFirstCharsLongTest {
     private RemoveFirstCharsLong rfci = new RemoveFirstCharsLong();
 
     @Test
-    public void test() {
+    public void defaultBehavior() {
         rfci.parse("2", false, new Random(42));
         output = rfci.generateMaskedRow(input);
         assertEquals(6, output);
     }
 
     @Test
-    public void testDummyGood() {
+    public void dummyParameter() {
         rfci.parse("10", false, new Random(42));
         output = rfci.generateMaskedRow(input);
         assertEquals(0, output);
     }
 
     @Test
-    public void testNegativeParameter() {
+    public void negativeParameter() {
         try {
             rfci.parse("-10", false, new Random(42));
             fail("should get exception with input " + Arrays.toString(rfci.parameters)); //$NON-NLS-1$

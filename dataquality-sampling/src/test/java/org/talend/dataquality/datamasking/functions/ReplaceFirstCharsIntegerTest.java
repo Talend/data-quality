@@ -36,6 +36,13 @@ public class ReplaceFirstCharsIntegerTest {
     private ReplaceFirstCharsInteger rfci = new ReplaceFirstCharsInteger();
 
     @Test
+    public void defaultBehavior() {
+        rfci.parse("3", false, new Random(42));
+        output = rfci.generateMaskedRow(input);
+        assertEquals(38456, output); // $NON-NLS-1$
+    }
+
+    @Test
     public void random() {
         rfci.parse("3", false, new Random(42));
         output = rfci.generateMaskedRow(input, FunctionMode.RANDOM);

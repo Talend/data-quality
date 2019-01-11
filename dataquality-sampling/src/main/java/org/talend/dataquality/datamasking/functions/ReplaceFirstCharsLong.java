@@ -12,8 +12,6 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
-import org.talend.dataquality.datamasking.generic.Alphabet;
-
 /**
  * created by jgonzalez on 22 juin 2015. See ReplaceFirstChars.
  *
@@ -21,10 +19,6 @@ import org.talend.dataquality.datamasking.generic.Alphabet;
 public class ReplaceFirstCharsLong extends ReplaceFirstChars<Long> {
 
     private static final long serialVersionUID = 4462142503829372818L;
-
-    public ReplaceFirstCharsLong() {
-        super.setAlphabet(Alphabet.DIGITS);
-    }
 
     @Override
     protected Long getDefaultOutput() {

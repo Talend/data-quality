@@ -32,6 +32,13 @@ public class KeepFirstCharsIntegerTest {
     private KeepFirstCharsInteger kfag = new KeepFirstCharsInteger();
 
     @Test
+    public void defaultBehavior() {
+        kfag.parse("3", false, new Random(42));
+        output = kfag.generateMaskedRow(input);
+        assertEquals(123038, output); // $NON-NLS-1$
+    }
+
+    @Test
     public void random() {
         kfag.parse("3", false, new Random(42));
         output = kfag.generateMaskedRow(input, FunctionMode.RANDOM);

@@ -13,7 +13,6 @@
 package org.talend.dataquality.datamasking.functions;
 
 import org.apache.commons.lang.StringUtils;
-import org.talend.dataquality.datamasking.generic.Alphabet;
 
 /**
  * created by jgonzalez on 22 juin 2015. This function will replace every digit by the parameter.
@@ -22,10 +21,6 @@ import org.talend.dataquality.datamasking.generic.Alphabet;
 public abstract class ReplaceNumeric<T> extends CharactersOperation<T> {
 
     private static final long serialVersionUID = -6892473143126922554L;
-
-    public ReplaceNumeric() {
-        super.setAlphabet(Alphabet.DIGITS);
-    }
 
     @Override
     protected void initAttributes() {

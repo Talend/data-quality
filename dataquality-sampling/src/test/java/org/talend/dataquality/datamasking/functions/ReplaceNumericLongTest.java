@@ -36,6 +36,13 @@ public class ReplaceNumericLongTest {
     private ReplaceNumericLong rnl = new ReplaceNumericLong();
 
     @Test
+    public void defaultBehavior() {
+        rnl.parse("6", false, new Random(42));
+        output = rnl.generateMaskedRow(input);
+        assertEquals(666, output);
+    }
+
+    @Test
     public void random() {
         rnl.parse("6", false, new Random(42));
         output = rnl.generateMaskedRow(input, FunctionMode.RANDOM);

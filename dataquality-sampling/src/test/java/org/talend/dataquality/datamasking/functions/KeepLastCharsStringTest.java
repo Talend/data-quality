@@ -44,7 +44,7 @@ public class KeepLastCharsStringTest {
     }
 
     @Test
-    public void testGood() {
+    public void defaultBehavior() {
         klads.parse("3", false, new Random(42));
         output = klads.generateMaskedRow(input);
         assertEquals("038456", output); //$NON-NLS-1$

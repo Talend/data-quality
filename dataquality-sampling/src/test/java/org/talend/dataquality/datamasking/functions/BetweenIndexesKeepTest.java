@@ -34,7 +34,7 @@ public class BetweenIndexesKeepTest {
     private String output;
 
     @Test
-    public void normalBehavior() {
+    public void defaultBehavior() {
         bik.parse("2, 4", false, new Random(42));
         output = bik.generateMaskedRow(input);
         assertEquals("tev", output); //$NON-NLS-1$

@@ -36,6 +36,13 @@ public class ReplaceFirstCharsLongTest {
     private ReplaceFirstCharsLong rfcl = new ReplaceFirstCharsLong();
 
     @Test
+    public void defaultBehavior() {
+        rfcl.parse("3", false, new Random(42));
+        output = rfcl.generateMaskedRow(input);
+        assertEquals(38456, output); // $NON-NLS-1$
+    }
+
+    @Test
     public void random() {
         rfcl.parse("3", false, new Random(42));
         output = rfcl.generateMaskedRow(input, FunctionMode.RANDOM);
