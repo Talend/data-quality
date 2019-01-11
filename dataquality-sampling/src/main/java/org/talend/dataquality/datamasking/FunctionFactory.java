@@ -29,8 +29,8 @@ public class FunctionFactory<T> {
         Function<T> res;
         if (type == FunctionType.REPLACE_LAST_CHARS || type == FunctionType.REPLACE_LAST_CHARS_CONSISTENT) {
             res = handleReplaceLastCharsFunction(javaType);
-        } else if (type == FunctionType.REPLACE_NUMERIC) {
-            res = handleReplaceNumbericFunction(javaType);
+        } else if (type == FunctionType.REPLACE_NUMERIC || type == FunctionType.REPLACE_NUMERIC_CONSISTENT) {
+            res = handleReplaceNumericFunction(javaType);
         } else {
             res = getFunction(type.getClazz());
         }
@@ -45,7 +45,7 @@ public class FunctionFactory<T> {
      * @throws InstantiationException
      * @throws IllegalAccessException
      */
-    private Function<T> handleReplaceNumbericFunction(int javaType) throws InstantiationException, IllegalAccessException {
+    private Function<T> handleReplaceNumericFunction(int javaType) throws InstantiationException, IllegalAccessException {
         Function<T> res;
         switch (javaType) {
         case 0:

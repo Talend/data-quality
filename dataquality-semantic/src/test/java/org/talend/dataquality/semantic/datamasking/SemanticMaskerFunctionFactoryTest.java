@@ -121,6 +121,10 @@ public class SemanticMaskerFunctionFactoryTest extends CategoryRegistryManagerAb
         function = SemanticMaskerFunctionFactory.getMaskerFunctionByFunctionName(FunctionType.REPLACE_NUMERIC, "integer", "5");
         Assert.assertEquals(FunctionType.REPLACE_NUMERIC_INT.getClazz(), function.getClass());
 
+        function = SemanticMaskerFunctionFactory.getMaskerFunctionByFunctionName(FunctionType.REPLACE_NUMERIC_CONSISTENT,
+                "integer", "5");
+        Assert.assertEquals(FunctionType.REPLACE_NUMERIC_INT.getClazz(), function.getClass());
+
         function = SemanticMaskerFunctionFactory.getMaskerFunctionByFunctionName(FunctionType.KEEP_FIRST_AND_GENERATE, "string",
                 "2");
         Assert.assertEquals(FunctionType.KEEP_FIRST_AND_GENERATE_STRING.getClazz(), function.getClass());
