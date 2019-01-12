@@ -111,10 +111,12 @@ public class SemanticMaskerFunctionFactoryTest extends CategoryRegistryManagerAb
         function = SemanticMaskerFunctionFactory.getMaskerFunctionByFunctionName(FunctionType.REPLACE_ALL, "String", "X");
         Assert.assertEquals(FunctionType.REPLACE_ALL.getClazz(), function.getClass());
 
-        function = SemanticMaskerFunctionFactory.getMaskerFunctionByFunctionName(FunctionType.REPLACE_ALL_BIJECTIVE, "String", "X");
+        function = SemanticMaskerFunctionFactory.getMaskerFunctionByFunctionName(FunctionType.REPLACE_ALL_BIJECTIVE, "String",
+                "X");
         Assert.assertEquals(FunctionType.REPLACE_ALL.getClazz(), function.getClass());
 
-        function = SemanticMaskerFunctionFactory.getMaskerFunctionByFunctionName(FunctionType.REPLACE_CHARACTERS_BIJECTIVE, "String", "X");
+        function = SemanticMaskerFunctionFactory.getMaskerFunctionByFunctionName(FunctionType.REPLACE_CHARACTERS_BIJECTIVE,
+                "String", "X");
         Assert.assertEquals(FunctionType.REPLACE_CHARACTERS.getClazz(), function.getClass());
 
         function = SemanticMaskerFunctionFactory.getMaskerFunctionByFunctionName(FunctionType.REPLACE_FIRST_CHARS, "string",
@@ -124,11 +126,12 @@ public class SemanticMaskerFunctionFactoryTest extends CategoryRegistryManagerAb
         function = SemanticMaskerFunctionFactory.getMaskerFunctionByFunctionName(FunctionType.REPLACE_LAST_CHARS, "string", "5");
         Assert.assertEquals(FunctionType.REPLACE_LAST_CHARS_STRING.getClazz(), function.getClass());
 
-        function = SemanticMaskerFunctionFactory.getMaskerFunctionByFunctionName(FunctionType.REPLACE_FIRST_CHARS_BIJECTIVE, "string",
-                "10");
+        function = SemanticMaskerFunctionFactory.getMaskerFunctionByFunctionName(FunctionType.REPLACE_FIRST_CHARS_BIJECTIVE,
+                "string", "10");
         Assert.assertEquals(FunctionType.REPLACE_FIRST_CHARS_STRING.getClazz(), function.getClass());
 
-        function = SemanticMaskerFunctionFactory.getMaskerFunctionByFunctionName(FunctionType.REPLACE_LAST_CHARS_BIJECTIVE, "string", "5");
+        function = SemanticMaskerFunctionFactory.getMaskerFunctionByFunctionName(FunctionType.REPLACE_LAST_CHARS_BIJECTIVE,
+                "string", "5");
         Assert.assertEquals(FunctionType.REPLACE_LAST_CHARS_STRING.getClazz(), function.getClass());
 
         function = SemanticMaskerFunctionFactory.getMaskerFunctionByFunctionName(FunctionType.REPLACE_NUMERIC, "integer", "5");
@@ -150,13 +153,13 @@ public class SemanticMaskerFunctionFactoryTest extends CategoryRegistryManagerAb
                 "2");
         Assert.assertEquals(FunctionType.KEEP_LAST_AND_GENERATE_STRING.getClazz(), function.getClass());
 
-        function = SemanticMaskerFunctionFactory.getMaskerFunctionByFunctionName(FunctionType.KEEP_LAST_AND_GENERATE_BIJECTIVE, "string",
-                "2");
-        Assert.assertEquals(FunctionType.KEEP_LAST_AND_GENERATE.getClazz(), function.getClass());
+        function = SemanticMaskerFunctionFactory.getMaskerFunctionByFunctionName(FunctionType.KEEP_LAST_AND_GENERATE_BIJECTIVE,
+                "string", "2");
+        Assert.assertEquals(FunctionType.KEEP_LAST_AND_GENERATE_STRING.getClazz(), function.getClass());
 
-        function = SemanticMaskerFunctionFactory.getMaskerFunctionByFunctionName(FunctionType.KEEP_FIRST_AND_GENERATE_BIJECTIVE, "string",
-                "2");
-        Assert.assertEquals(FunctionType.KEEP_FIRST_AND_GENERATE.getClazz(), function.getClass());
+        function = SemanticMaskerFunctionFactory.getMaskerFunctionByFunctionName(FunctionType.KEEP_FIRST_AND_GENERATE_BIJECTIVE,
+                "string", "2");
+        Assert.assertEquals(FunctionType.KEEP_FIRST_AND_GENERATE_STRING.getClazz(), function.getClass());
     }
 
 }
