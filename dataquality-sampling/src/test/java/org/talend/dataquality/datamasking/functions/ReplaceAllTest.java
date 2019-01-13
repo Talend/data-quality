@@ -97,11 +97,11 @@ public class ReplaceAllTest {
 
     @Test
     public void bijectiveTooShortValue() {
+        String input = "a";
         ra.setAlphabet(alphabet);
         ra.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF, "data");
-        String input = "a";
         String output = ra.generateMaskedRow(input, FunctionMode.BIJECTIVE);
-        assertEquals(ra.getDefaultOutput(), output);
+        assertEquals(1, output.length());
     }
 
     @Test

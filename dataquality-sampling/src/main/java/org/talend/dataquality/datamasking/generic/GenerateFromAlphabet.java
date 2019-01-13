@@ -46,8 +46,8 @@ public class GenerateFromAlphabet implements Serializable {
     public GenerateFromAlphabet(Alphabet alphabet, FormatPreservingMethod method, String password) {
         this.alphabet = alphabet;
         this.secretMng = new SecretManager(method, password);
-        minLength = (int) Math.ceil(Math.log(100) / Math.log(alphabet.getRadix()));
-        LOGGER.info("Any string to mask must have a length of at least {}", minLength);
+        minLength = Math.max(2, (int) Math.ceil(Math.log(100) / Math.log(alphabet.getRadix())));
+        LOGGER.warn("Any string to mask must have a length of at least {}", minLength);
     }
 
     /**
@@ -57,11 +57,11 @@ public class GenerateFromAlphabet implements Serializable {
     public List<Integer> generateUniqueCodePoints(List<Integer> codePoints) {
         int[] data = transform(codePoints);
 
-        if (data.length < minLength) {
+        int[] result = encryptData(data);
+
+        if (result.length == 0) {
             return Collections.emptyList();
         }
-
-        int[] result = encryptData(data);
 
         return transform(result, codePoints);
     }

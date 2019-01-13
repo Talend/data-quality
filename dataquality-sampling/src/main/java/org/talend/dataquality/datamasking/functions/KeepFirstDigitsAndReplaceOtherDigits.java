@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.common.pattern.TextPatternUtil;
 import org.talend.dataquality.datamasking.FormatPreservingMethod;
 import org.talend.dataquality.datamasking.FunctionMode;
@@ -14,6 +16,8 @@ import org.talend.dataquality.datamasking.generic.GenerateFromAlphabet;
 public class KeepFirstDigitsAndReplaceOtherDigits extends Function<String> {
 
     private static final long serialVersionUID = -83982230699832305L;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(KeepFirstDigitsAndReplaceOtherDigits.class);
 
     private int integerParam = 0;
 
@@ -110,6 +114,11 @@ public class KeepFirstDigitsAndReplaceOtherDigits extends Function<String> {
             }
         }
         List<Integer> replacedDigits = ff1Cipher.generateUniqueDigits(digitsToReplace);
+
+        if (replacedDigits.isEmpty()) {
+            LOGGER.warn("The element {} has too few digits to be masked bijectively. It will be masked consistently.", sb);
+            generateConsistentDigits(sb);
+        }
 
         Iterator<Integer> it = replacedDigits.iterator();
         for (int index : indexesToReplace) {

@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.common.pattern.TextPatternUtil;
 import org.talend.dataquality.datamasking.FormatPreservingMethod;
 import org.talend.dataquality.datamasking.FunctionMode;
@@ -30,6 +32,8 @@ import org.talend.dataquality.datamasking.generic.GenerateFromAlphabet;
 public abstract class CharactersOperation<T> extends Function<T> {
 
     private static final long serialVersionUID = -1326050500008572996L;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CharactersOperation.class);
 
     /**
      * the index from which we replace
@@ -154,7 +158,8 @@ public abstract class CharactersOperation<T> extends Function<T> {
 
         List<Integer> replacedCodePoints = ff1Cipher.generateUniqueCodePoints(codePoints);
         if (replacedCodePoints.isEmpty()) {
-            return null;
+            LOGGER.warn("The element {} has too few characters to be masked bijectively. It will be masked consistently.", str);
+            return generateConsistentString(str, beginAux, endAux);
         }
 
         StringBuilder sb = new StringBuilder();
