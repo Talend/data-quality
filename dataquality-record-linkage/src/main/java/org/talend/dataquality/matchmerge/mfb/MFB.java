@@ -176,6 +176,7 @@ public class MFB implements MatchMergeAlgorithm {
                 callback.onMatch(mergedRecord, record, matchResult);
                 Record newMergedRecord = merger.merge(record, mergedRecord);
                 newMergedRecord.setConfidence(matchResult.getFinalWorstConfidenceValue());
+                newMergedRecord.setWorstConfidenceValueScoreList(matchResult.getWorstConfidenceValueScoreList());
                 queue.offer(newMergedRecord);
                 callback.onNewMerge(newMergedRecord);
                 mergedRecords.remove(mergedRecord);

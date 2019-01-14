@@ -125,7 +125,7 @@ public class MFBOrderTest extends TestCase {
     }
 
     public void testABCDEFGHIJ_Longest() {
-        System.out.println("\n--------------- Longest (minConfidence = 0.4) -----------------------");
+        System.out.println("\n--------------- Longest (minConfidence = 0.85) -----------------------");
         MatchMergeAlgorithm algorithm = buildMFB(0.8F, 0.85, SurvivorShipAlgorithmEnum.LONGEST);
         System.out.println("Order 4: ");
         printResult(algorithm.execute(listOrder4.iterator(), callback));

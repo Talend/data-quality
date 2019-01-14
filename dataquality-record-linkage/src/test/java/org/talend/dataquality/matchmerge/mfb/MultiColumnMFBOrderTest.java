@@ -175,14 +175,14 @@ public class MultiColumnMFBOrderTest extends TestCase {
     }
 
     public void testABCDE_Longest() {
-        System.out.println("\n--------------- Longest (minConfidence = 0.4) -----------------------");
+        System.out.println("\n--------------- Longest (minConfidence = 0.55) -----------------------");
         MatchMergeAlgorithm algorithm = buildMFB(0.5F, 0.55, SurvivorShipAlgorithmEnum.LONGEST);
         System.out.println("Order 1: ");
-        printResult(algorithm.execute(listOrder1.iterator(), callback));
+        printResult(algorithm.execute(listOrder1a.iterator(), callback));
         System.out.println("\nOrder 2:  ");
-        printResult(algorithm.execute(listOrder2.iterator(), callback));
+        printResult(algorithm.execute(listOrder2a.iterator(), callback));
         System.out.println("\nOrder 3: ");
-        printResult(algorithm.execute(listOrder3.iterator(), callback));
+        printResult(algorithm.execute(listOrder3a.iterator(), callback));
     }
 
     public void testNameAndCity_Longest() {

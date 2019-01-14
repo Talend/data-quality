@@ -47,6 +47,8 @@ public class Record {
 
     private Set<String> relatedIds = new HashSet<String>();
 
+    private List<Double> worstConfidenceValueScoreList = new ArrayList<Double>();
+
     private double confidence = MAX_CONFIDENCE;
 
     /**
@@ -176,7 +178,8 @@ public class Record {
      */
     public void setConfidence(double confidence) {
         if (confidence > MAX_CONFIDENCE) {
-            throw new IllegalArgumentException("Confidence value '" + confidence + "' is incorrect (>" + MAX_CONFIDENCE + ".");
+            throw new IllegalArgumentException("Confidence value '" + confidence + "' is incorrect (>" + MAX_CONFIDENCE
+                    + ".");
         }
         // TMDM-7833: A record can never gain confidence (especially in case of multiple merges, it's not because this
         // record perfectly match another that it becomes a sure match).
@@ -196,4 +199,23 @@ public class Record {
     public String getSource() {
         return source;
     }
+
+    /**
+     * Sets the worstConfidenceValueScoreList.
+     * 
+     * @param worstConfidenceValueScoreList the worstConfidenceValueScoreList to set
+     */
+    public void setWorstConfidenceValueScoreList(List<Double> worstConfidenceValueScoreList) {
+        this.worstConfidenceValueScoreList = worstConfidenceValueScoreList;
+    }
+
+    /**
+     * Getter for worstConfidenceValueScoreList.
+     * 
+     * @return the worstConfidenceValueScoreList
+     */
+    public List<Double> getWorstConfidenceValueScoreList() {
+        return this.worstConfidenceValueScoreList;
+    }
+
 }

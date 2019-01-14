@@ -14,6 +14,7 @@ package org.talend.dataquality.matchmerge.mfb;
 
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.commons.collections.iterators.IteratorChain;
 import org.apache.commons.lang.StringUtils;
@@ -58,6 +59,9 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
     public MatchResult getMatchingWeight(Record record1, Record record2) {
         Iterator<Attribute> mergedRecordAttributes = record1.getAttributes().iterator();
         Iterator<Attribute> currentRecordAttributes = record2.getAttributes().iterator();
+        List<Double> leftWorstConfidenceValueScoreList = record1.getWorstConfidenceValueScoreList();
+        List<Double> rightWorstConfidenceValueScoreList = record2.getWorstConfidenceValueScoreList();
+        record2.getWorstConfidenceValueScoreList();
         double confidence = 0;
         int matchIndex = 0;
         MatchResult result = new MatchResult(record1.getAttributes().size());
@@ -67,12 +71,16 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
             Attribute left = mergedRecordAttributes.next();
             Attribute right = currentRecordAttributes.next();
             IAttributeMatcher matcher = attributeMatchers[matchIndex];
+            Double leftWorstScore = getWorstScore(leftWorstConfidenceValueScoreList, matchIndex);
+            Double rightWorstScore = getWorstScore(rightWorstConfidenceValueScoreList, matchIndex);
             // Find the first score to exceed threshold (if any).
-            double score = matchScore(left, right, matcher);
+            // use record1.getWorstConfidenceValueScoreList() to instead of some while in matchScore method
+            double score = matchScore(left, right, matcher, leftWorstScore, rightWorstScore);
             attributeMatchingWeights[matchIndex] = score;
             result.setScore(matchIndex, matcher.getMatchType(), score, record1.getId(), left.getValue(),
                     record2.getId(), right.getValue());
             result.setThreshold(matchIndex, matcher.getThreshold());
+            result.storeWorstScore(matchIndex, worstConfidenceValue);
             confidence += score * matcher.getWeight();
             finalWorstConfidenceValue += worstConfidenceValue * matcher.getWeight();
             maxWeight += matcher.getWeight();
@@ -98,6 +106,13 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
         return result;
     }
 
+    private Double getWorstScore(List<Double> leftWorstConfidenceValueScoreList, int index) {
+        if (leftWorstConfidenceValueScoreList.size() > index) {
+            return leftWorstConfidenceValueScoreList.get(index);
+        }
+        return 1.0d;
+    }
+
     /**
      * DOC zshen Comment method "synRecord2ConFidence".
      * 
@@ -108,7 +123,8 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
         record2.setConfidence(normalizedConfidence);
     }
 
-    private static double matchScore(Attribute leftAttribute, Attribute rightAttribute, IAttributeMatcher matcher) {
+    private static double matchScore(Attribute leftAttribute, Attribute rightAttribute, IAttributeMatcher matcher,
+            Double leftWorstScore, Double rightWorstScore) {
         // Find the best score in values
         // 1- Try first values
         String left = leftAttribute.getValue();
@@ -120,9 +136,15 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
         // 2- Compare using values that build attribute value (if any)
         Iterator<String> leftValues =
                 new IteratorChain(Collections.singleton(left).iterator(), leftAttribute.getValues().iterator());
+
         double maxScore = 0;
         double score = 0;
-        worstConfidenceValue = 1.0d;
+        if (leftWorstScore > rightWorstScore) {
+            worstConfidenceValue = rightWorstScore;
+        } else {
+            worstConfidenceValue = leftWorstScore;
+        }
+
         while (leftValues.hasNext()) {
             String leftValue = leftValues.next();
             Iterator<String> rightValues =
@@ -136,12 +158,36 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
                 if (score > maxScore) {
                     maxScore = score;
                 }
-                if (Double.compare(maxScore, MAX_SCORE) == 0) {
-                    // Can't go higher, no need to perform other checks.
-                    return maxScore;
-                }
+                // if (Double.compare(maxScore, MAX_SCORE) == 0) {
+                // // Can't go higher, no need to perform other checks.
+                // // return maxScore;
+                // break;
+                // }
             }
         }
+        // Iterator<String> selfEvalValuesLeft =
+        // new IteratorChain(new IteratorChain(Collections.singleton(left).iterator(), leftAttribute
+        // .getValues()
+        // .iterator()), new IteratorChain(Collections.singleton(right).iterator(), rightAttribute
+        // .getValues()
+        // .iterator()));
+        //
+        // while (selfEvalValuesLeft.hasNext()) {
+        // String selfEvalValueLeft = selfEvalValuesLeft.next();
+        // Iterator<String> selfEvalValuesRight =
+        // new IteratorChain(new IteratorChain(Collections.singleton(left).iterator(), leftAttribute
+        // .getValues()
+        // .iterator()), new IteratorChain(Collections.singleton(right).iterator(), rightAttribute
+        // .getValues()
+        // .iterator()));
+        // while (selfEvalValuesRight.hasNext()) {
+        // String selfEvalValueRight = selfEvalValuesRight.next();
+        // score = matcher.getMatchingWeight(selfEvalValueLeft, selfEvalValueRight);
+        // if (worstConfidenceValue > score) {
+        // worstConfidenceValue = score;
+        // }
+        // }
+        // }
         return maxScore;
     }
 
