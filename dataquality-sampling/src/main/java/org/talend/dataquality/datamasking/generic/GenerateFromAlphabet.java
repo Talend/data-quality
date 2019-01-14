@@ -47,7 +47,7 @@ public class GenerateFromAlphabet implements Serializable {
         this.alphabet = alphabet;
         this.secretMng = new SecretManager(method, password);
         minLength = Math.max(2, (int) Math.ceil(Math.log(100) / Math.log(alphabet.getRadix())));
-        LOGGER.warn("Any string to mask must have a length of at least {}", minLength);
+        LOGGER.info("Any string to mask must have a length of at least {}", minLength);
     }
 
     /**
