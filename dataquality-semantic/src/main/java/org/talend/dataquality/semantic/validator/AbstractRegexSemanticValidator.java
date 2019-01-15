@@ -56,6 +56,8 @@ public abstract class AbstractRegexSemanticValidator implements ISemanticValidat
 
     protected Boolean caseInsensitive = true;
 
+    private Boolean generexCompliant = false;
+
     /**
      * Getter for caseInsensitive.
      *
@@ -132,5 +134,13 @@ public abstract class AbstractRegexSemanticValidator implements ISemanticValidat
      */
     protected boolean validateWithSubValidator(String str) {
         return this.subValidator.isValid(str);
+    }
+
+    public Boolean getGenerexCompliant() {
+        return generexCompliant;
+    }
+
+    public void setGenerexCompliant(Boolean generexCompliant) {
+        this.generexCompliant = generexCompliant;
     }
 }

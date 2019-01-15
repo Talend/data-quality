@@ -167,6 +167,9 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
 
     private boolean isValid(String str, MainCategory mainCategory, UserDefinedCategory classifier, boolean caseSensitive) {
         MainCategory classifierCategory = classifier.getMainCategory();
+        if (classifierCategory == null)
+            return false;
+
         // if the MainCategory is different, ignor it and continue;AlphaNumeric rule should contain pure Alpha and
         // Numeric.
         if (mainCategory == MainCategory.Alpha || mainCategory == MainCategory.Numeric) {
@@ -210,4 +213,19 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
         return null;
     }
 
+    public boolean isGenerexCompliant(String categoryId) {
+        if (categoryId == null) {
+            return false;
+        }
+        for (ISubCategory category : getClassifiers()) {
+            if (categoryId.equals(category.getId())) {
+                if (category.getValidator() instanceof UserDefinedRE2JRegexValidator
+                        || category.getValidator() instanceof UserDefinedRegexValidator) {
+                    AbstractRegexSemanticValidator validator = (AbstractRegexSemanticValidator) category.getValidator();
+                    return validator.getGenerexCompliant();
+                }
+            }
+        }
+        return false;
+    }
 }
