@@ -18,6 +18,10 @@ import java.util.Locale;
 
 public class JapaneseNumberNormalizer {
 
+    private static final String negativeString = "マイナス";
+
+    private static final String negativeChar = "-";
+
     private static char NO_NUMERAL = Character.MAX_VALUE;
 
     private static char[] numerals;
@@ -103,9 +107,12 @@ public class JapaneseNumberNormalizer {
     private BigDecimal parseNumber(NumberBuffer buffer) {
         BigDecimal sum = BigDecimal.ZERO;
         boolean isNegative = false;
-        if (buffer.string.length() > 0 && isNegativeSign(buffer.charAt(0))) {
+        if (buffer.string.length() > 0 && isNegativeSign(buffer.string)) {
             isNegative = true;
-            buffer.advance();
+            int position = this.getNegativeStartIndex(buffer.string);
+            while (position-- > 0) {
+                buffer.advance();
+            }
         }
 
         // Remove prefix and suffix that are not numeric values
@@ -135,7 +142,7 @@ public class JapaneseNumberNormalizer {
 
     private boolean isNumeric(NumberBuffer buffer) {
         while (buffer.position < buffer.string.length()) {
-            if (!isNumeric(buffer.charAt(buffer.position))) {
+            if (!isNumeric(buffer, buffer.position)) {
                 return false;
             }
             buffer.advance();
@@ -146,16 +153,15 @@ public class JapaneseNumberNormalizer {
 
     private void computePrefix(NumberBuffer buffer) {
         int start = buffer.position;
-        while (buffer.position < buffer.string.length() && !isNumeric(buffer.charAt(buffer.position))) {
+        while (buffer.position < buffer.string.length() && !isNumeric(buffer, buffer.position)) {
             buffer.advance();
         }
-
         buffer.setPrefix(start, buffer.position);
     }
 
     private void computeSuffix(NumberBuffer buffer) {
         buffer.position = buffer.string.length();
-        while (buffer.position > 0 && !isNumeric(buffer.charAt(buffer.position - 1))) {
+        while (buffer.position > 0 && !isNumeric(buffer, buffer.position - 1)) {
             buffer.back();
         }
         buffer.setSuffix(buffer.position);
@@ -182,9 +188,10 @@ public class JapaneseNumberNormalizer {
         }
 
         if (first == null) {
-            // If there's no first factor, just return the second one,
-            // which is the same as multiplying by 1, i.e. with 万
-            return second;
+            // If there's no first factor, just return null,
+            // because the format is wrong. i.e. "万" TDQ-16372:
+            // "万 or bigger numbers needs 一 before it.  If they doesn't have 一 before it. they shouldn't be transferred."
+            return null;
         }
 
         return first.multiply(second);
@@ -420,6 +427,23 @@ public class JapaneseNumberNormalizer {
     }
 
     /**
+     * check if the numBuffer contain any char as decimal point
+     * 
+     * @param numBuffer
+     * @return true if buffer contains any char as decimal point
+     */
+    private boolean containDecimalPoint(NumberBuffer numBuffer) {
+        int i = numBuffer.position();
+        while (i < numBuffer.length()) {
+            char c = numBuffer.charAt(i);
+            if (isDecimalPoint(c)) {
+                return true;
+            }
+            i++;
+        }
+        return false;
+    }
+    /**
      * Thousand separator predicate
      *
      * @param c character to test
@@ -435,13 +459,29 @@ public class JapaneseNumberNormalizer {
         return exponents[c] != 0;
     }
 
-    private boolean isNegativeSign(char c) {
-        return c == '-' || c == '負';
+    private boolean isNegativeSign(String numberStr) {
+        if (numberStr.startsWith(negativeChar) && numberStr.lastIndexOf(negativeChar) == 0) {
+            return true;
+        } else if (numberStr.startsWith(negativeString) && numberStr.length() > negativeString.length()
+                && numberStr.lastIndexOf(negativeString) == 0) {
+            return true;
+        }
+        return false;
     }
 
-    private boolean isNumeric(char c) {
-        return isArabicNumeral(c) || isDecimalPoint(c) || isKanjiNumeral(c) || isKanjiExponent(c) || isNegativeSign(c)
-                || isThousandSeparator(c);
+    private int getNegativeStartIndex(String numberStr) {
+        if (numberStr.charAt(0) == '-') {
+            return 1;
+        } else if (numberStr.startsWith(negativeString)) {
+            return 4;
+        }
+        return -1;
+    }
+
+    private boolean isNumeric(NumberBuffer buffer, int position) {
+        char c = buffer.charAt(position);
+        return isArabicNumeral(c) || isDecimalPoint(c) || isKanjiNumeral(c) || isKanjiExponent(c)
+                || isNegativeSign(buffer.string) || isThousandSeparator(c);
     }
 
     /**
@@ -457,14 +497,23 @@ public class JapaneseNumberNormalizer {
         if (positionOfLine > -1) {
             // format the numerator
             NumberBuffer numeratorBuffer = new NumberBuffer(numberStr.substring(positionOfLine + 2, numberStr.length()));
+            if (containDecimalPoint(numeratorBuffer)) {// TDQ-16372 Decimal and fraction never used together
+                return numberNotTrimmed;
+            }
             BigDecimal numeratorNumber = this.parseNumber(numeratorBuffer);
+
             // format the denominator
             int start = 0;
-            if (isNegativeSign(numberStr.charAt(0))) {
-                start = 1;
-                numeratorNumber = numeratorNumber.negate();
+            if (isNegativeSign(numberStr)) {
+                start = getNegativeStartIndex(numberStr);
+                if (numeratorNumber != null) {
+                    numeratorNumber = numeratorNumber.negate();
+                }
             }
             NumberBuffer denominatorBuffer = new NumberBuffer(numberStr.substring(start, positionOfLine));
+            if (containDecimalPoint(denominatorBuffer)) {// TDQ-16372 Decimal and fraction never used together
+                return numberNotTrimmed;
+            }
             BigDecimal denominatorNumber = this.parseNumber(denominatorBuffer);
             if (numeratorNumber == null || denominatorNumber == null) {
                 return numberNotTrimmed;
