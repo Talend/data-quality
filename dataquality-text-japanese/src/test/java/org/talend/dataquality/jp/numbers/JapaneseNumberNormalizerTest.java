@@ -29,6 +29,8 @@ public class JapaneseNumberNormalizerTest {
 
     static {
         values.put("", "");
+        values.put(" ", " ");
+        values.put("null", "null");
         values.put("abc", "abc");
         values.put("a-b123", "a-b123");
         values.put("〇〇七", "7");
@@ -38,17 +40,29 @@ public class JapaneseNumberNormalizerTest {
         values.put("１．２万３４５．６三", "12345.63");
         values.put("4,647.100", "4647.1");
         values.put("15,7", "157");
+        values.put("十", "10");
+        values.put("百", "100");
+        values.put("千", "1000");
         values.put("万", "万");
         values.put("一万", "10000");
         values.put("六万", "60000");
         values.put("億", "億");
         values.put("一億", "100000000");
+        values.put("十億", "1000000000");
+        values.put("百億", "10000000000");
+        values.put("五百億", "50000000000");
+        values.put("千億", "100000000000");
+        values.put("三千億", "300000000000");
+        values.put("万億", "万億");
         values.put("兆", "兆");
         values.put("一兆", "1000000000000");
+        values.put("万兆", "万兆");
         values.put("京", "京");
         values.put("一京", "10000000000000000");
+        values.put("万京", "万京");
         values.put("垓", "垓");
         values.put("一垓", "100000000000000000000");
+        values.put("万垓", "万垓");
         values.put("九百八十三万 六千七百三", "9836703");
         values.put("二十億 三千六百五十二万 千八百一", "2036521801");
         values.put("abc二十億 三千六百五十二万 千八百一", "abc2036521801");
@@ -65,6 +79,10 @@ public class JapaneseNumberNormalizerTest {
 
         minusValues.put("-３．２千", "-3200");
         minusValues.put("負一千一百五十八", "負1158");
+        minusValues.put("負1千一百五十八", "負1158");
+        minusValues.put("負一千1百五十八", "負1158");
+        minusValues.put("負一千一百5十八", "負1158");
+        minusValues.put("負一千一百五十8", "負1158");
         minusValues.put("マイナス一千一百五十八", "-1158");
         minusValues.put("マイナス二分の一", "-1/2");
         minusValues.put("マイナス百五十八", "-158");
@@ -107,6 +125,7 @@ public class JapaneseNumberNormalizerTest {
         fractionalValues.put("一億分の億", "一億分の億");
         fractionalValues.put("一億分の一", "1/100000000");
         fractionalValues.put("兆分の一", "兆分の一");
+        fractionalValues.put("万兆分の一", "万兆分の一");
         fractionalValues.put("一兆分の一", "1/1000000000000");
         fractionalValues.put("百分の二百七十五点五", "百分の二百七十五点五");
         fractionalValues.put("百分の二百七十五点〇", "百分の二百七十五点〇");
