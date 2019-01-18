@@ -443,6 +443,7 @@ public class JapaneseNumberNormalizer {
         }
         return false;
     }
+
     /**
      * Thousand separator predicate
      *
@@ -480,8 +481,8 @@ public class JapaneseNumberNormalizer {
 
     private boolean isNumeric(NumberBuffer buffer, int position) {
         char c = buffer.charAt(position);
-        return isArabicNumeral(c) || isDecimalPoint(c) || isKanjiNumeral(c) || isKanjiExponent(c)
-                || isNegativeSign(buffer.string) || isThousandSeparator(c);
+        return isArabicNumeral(c) || isDecimalPoint(c) || isKanjiNumeral(c) || isKanjiExponent(c) || isNegativeSign(buffer.string)
+                || isThousandSeparator(c);
     }
 
     /**
