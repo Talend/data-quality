@@ -25,60 +25,69 @@ public class MultiColumnMFBOrderTest extends TestCase {
     private final List<Record> listOrder1 = new ArrayList<Record>() {
 
         {
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A1", 0, "AAAAAAAAAA"),
-                    new Attribute("B1", 1, "OOOOOOOOOO") }), "R1", 999L, "MFB"));
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A2", 0, "AAAAAAABBB"),
-                    new Attribute("B2", 1, "OOOOOIIIIZ") }), "R2", 999L, "MFB"));
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A3", 0, "AAAAAACCBB"),
-                    new Attribute("B3", 1, "OOOOOOOZZZ") }), "R3", 999L, "MFB"));
+            add(new Record(
+                    Arrays.asList(new Attribute[] { new Attribute("A1", 0, "AAAAAAAAAA"), new Attribute("B1", 1, "OOOOOOOOOO") }),
+                    "R1", 999L, "MFB"));
+            add(new Record(
+                    Arrays.asList(new Attribute[] { new Attribute("A2", 0, "AAAAAAABBB"), new Attribute("B2", 1, "OOOOOIIIIZ") }),
+                    "R2", 999L, "MFB"));
+            add(new Record(
+                    Arrays.asList(new Attribute[] { new Attribute("A3", 0, "AAAAAACCBB"), new Attribute("B3", 1, "OOOOOOOZZZ") }),
+                    "R3", 999L, "MFB"));
         }
     };
 
     private final List<Record> listOrder2 = new ArrayList<Record>() {
 
         {
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A2", 0, "AAAAAAABBB"),
-                    new Attribute("B2", 1, "OOOOOIIIIZ") }), "R2", 999L, "MFB"));
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A3", 0, "AAAAAACCBB"),
-                    new Attribute("B3", 1, "OOOOOOOZZZ") }), "R3", 999L, "MFB"));
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A1", 0, "AAAAAAAAAA"),
-                    new Attribute("B1", 1, "OOOOOOOOOO") }), "R1", 999L, "MFB"));
+            add(new Record(
+                    Arrays.asList(new Attribute[] { new Attribute("A2", 0, "AAAAAAABBB"), new Attribute("B2", 1, "OOOOOIIIIZ") }),
+                    "R2", 999L, "MFB"));
+            add(new Record(
+                    Arrays.asList(new Attribute[] { new Attribute("A3", 0, "AAAAAACCBB"), new Attribute("B3", 1, "OOOOOOOZZZ") }),
+                    "R3", 999L, "MFB"));
+            add(new Record(
+                    Arrays.asList(new Attribute[] { new Attribute("A1", 0, "AAAAAAAAAA"), new Attribute("B1", 1, "OOOOOOOOOO") }),
+                    "R1", 999L, "MFB"));
         }
     };
 
     private final List<Record> listOrder3 = new ArrayList<Record>() {
 
         {
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A3", 0, "AAAAAACCBB"),
-                    new Attribute("B3", 1, "OOOOOOOZZZ") }), "R3", 999L, "MFB"));
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A1", 0, "AAAAAAAAAA"),
-                    new Attribute("B1", 1, "OOOOOOOOOO") }), "R1", 999L, "MFB"));
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A2", 0, "AAAAAAABBB"),
-                    new Attribute("B2", 1, "OOOOOIIIIZ") }), "R2", 999L, "MFB"));
+            add(new Record(
+                    Arrays.asList(new Attribute[] { new Attribute("A3", 0, "AAAAAACCBB"), new Attribute("B3", 1, "OOOOOOOZZZ") }),
+                    "R3", 999L, "MFB"));
+            add(new Record(
+                    Arrays.asList(new Attribute[] { new Attribute("A1", 0, "AAAAAAAAAA"), new Attribute("B1", 1, "OOOOOOOOOO") }),
+                    "R1", 999L, "MFB"));
+            add(new Record(
+                    Arrays.asList(new Attribute[] { new Attribute("A2", 0, "AAAAAAABBB"), new Attribute("B2", 1, "OOOOOIIIIZ") }),
+                    "R2", 999L, "MFB"));
         }
     };
 
     private final List<Record> listOrder1a = new ArrayList<Record>() {
 
         {
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A1", 0, "ABCDE"),
-                    new Attribute("B1", 1, "ALLMM") }), "R1", 999L, "MFB"));
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A2", 0, "ABCDF"),
-                    new Attribute("B2", 1, "BLLLL") }), "R2", 999L, "MFB"));
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A3", 0, "ABCFF"),
-                    new Attribute("B3", 1, "CLLLM") }), "R3", 999L, "MFB"));
+            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A1", 0, "ABCDE"), new Attribute("B1", 1, "ALLMM") }),
+                    "R1", 999L, "MFB"));
+            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A2", 0, "ABCDF"), new Attribute("B2", 1, "BLLLL") }),
+                    "R2", 999L, "MFB"));
+            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A3", 0, "ABCFF"), new Attribute("B3", 1, "CLLLM") }),
+                    "R3", 999L, "MFB"));
         }
     };
 
     private final List<Record> listOrder2a = new ArrayList<Record>() {
 
         {
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A2", 0, "ABCDF"),
-                    new Attribute("B2", 1, "BLLLL") }), "R2", 999L, "MFB"));
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A3", 0, "ABCFF"),
-                    new Attribute("B3", 1, "CLLLM") }), "R3", 999L, "MFB"));
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A1", 0, "ABCDE"),
-                    new Attribute("B1", 1, "ALLMM") }), "R1", 999L, "MFB"));
+            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A2", 0, "ABCDF"), new Attribute("B2", 1, "BLLLL") }),
+                    "R2", 999L, "MFB"));
+            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A3", 0, "ABCFF"), new Attribute("B3", 1, "CLLLM") }),
+                    "R3", 999L, "MFB"));
+            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A1", 0, "ABCDE"), new Attribute("B1", 1, "ALLMM") }),
+                    "R1", 999L, "MFB"));
         }
     };
 
@@ -92,73 +101,116 @@ public class MultiColumnMFBOrderTest extends TestCase {
         // A3--0.6--0.8---1------------B3---0.6-----0.6--------1
 
         {
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A3", 0, "ABCFF"),
-                    new Attribute("B3", 1, "CLLLM") }), "R3", 999L, "MFB"));
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A1", 0, "ABCDE"),
-                    new Attribute("B1", 1, "ALLMM") }), "R1", 999L, "MFB"));
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A2", 0, "ABCDF"),
-                    new Attribute("B2", 1, "BLLLL") }), "R2", 999L, "MFB"));
+            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A3", 0, "ABCFF"), new Attribute("B3", 1, "CLLLM") }),
+                    "R3", 999L, "MFB"));
+            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A1", 0, "ABCDE"), new Attribute("B1", 1, "ALLMM") }),
+                    "R1", 999L, "MFB"));
+            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A2", 0, "ABCDF"), new Attribute("B2", 1, "BLLLL") }),
+                    "R2", 999L, "MFB"));
         }
     };
 
     private final List<Record> listOrder4 = new ArrayList<Record>() {
 
         {
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("name1", 0, "Maximilian"),
-                    new Attribute("city1", 1, "Concepcion") }), "R1", 999L, "MFB"));
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("name2", 0, "MaximiliaX"),
-                    new Attribute("city2", 1, "ConcepcioX") }), "R2", 999L, "MFB"));
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("name3", 0, "MaximiliXX"),
-                    new Attribute("city3", 1, "ConcepciXX") }), "R3", 999L, "MFB"));
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("name4", 0, "MaximilXXX"),
-                    new Attribute("city4", 1, "ConcepcXXX") }), "R4", 999L, "MFB"));
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("name5", 0, "MaximiXXXX"),
-                    new Attribute("city5", 1, "ConcepXXXX") }), "R5", 999L, "MFB"));
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("name6", 0, "MaximXXXXX"),
-                    new Attribute("city6", 1, "ConceXXXXX") }), "R6", 999L, "MFB"));
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("name7", 0, "MaxiXXXXXX"),
-                    new Attribute("city7", 1, "ConcXXXXXX") }), "R7", 999L, "MFB"));
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("name8", 0, "MaxXXXXXXX"),
-                    new Attribute("city8", 1, "ConXXXXXXX") }), "R8", 999L, "MFB"));
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("name9", 0, "MaXXXXXXXX"),
-                    new Attribute("city9", 1, "CoXXXXXXXX") }), "R9", 999L, "MFB"));
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("name10", 0, "MXXXXXXXX"),
-                    new Attribute("city10", 1, "CXXXXXXXX") }), "R10", 999L, "MFB"));
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("name10", 0, "XXXXXXXXX"),
-                    new Attribute("city11", 1, "XXXXXXXXX") }), "R11", 999L, "MFB"));
+            add(new Record(
+                    Arrays.asList(
+                            new Attribute[] { new Attribute("name1", 0, "Maximilian"), new Attribute("city1", 1, "Concepcion") }),
+                    "R1", 999L, "MFB"));
+            add(new Record(
+                    Arrays.asList(
+                            new Attribute[] { new Attribute("name2", 0, "MaximiliaX"), new Attribute("city2", 1, "ConcepcioX") }),
+                    "R2", 999L, "MFB"));
+            add(new Record(
+                    Arrays.asList(
+                            new Attribute[] { new Attribute("name3", 0, "MaximiliXX"), new Attribute("city3", 1, "ConcepciXX") }),
+                    "R3", 999L, "MFB"));
+            add(new Record(
+                    Arrays.asList(
+                            new Attribute[] { new Attribute("name4", 0, "MaximilXXX"), new Attribute("city4", 1, "ConcepcXXX") }),
+                    "R4", 999L, "MFB"));
+            add(new Record(
+                    Arrays.asList(
+                            new Attribute[] { new Attribute("name5", 0, "MaximiXXXX"), new Attribute("city5", 1, "ConcepXXXX") }),
+                    "R5", 999L, "MFB"));
+            add(new Record(
+                    Arrays.asList(
+                            new Attribute[] { new Attribute("name6", 0, "MaximXXXXX"), new Attribute("city6", 1, "ConceXXXXX") }),
+                    "R6", 999L, "MFB"));
+            add(new Record(
+                    Arrays.asList(
+                            new Attribute[] { new Attribute("name7", 0, "MaxiXXXXXX"), new Attribute("city7", 1, "ConcXXXXXX") }),
+                    "R7", 999L, "MFB"));
+            add(new Record(
+                    Arrays.asList(
+                            new Attribute[] { new Attribute("name8", 0, "MaxXXXXXXX"), new Attribute("city8", 1, "ConXXXXXXX") }),
+                    "R8", 999L, "MFB"));
+            add(new Record(
+                    Arrays.asList(
+                            new Attribute[] { new Attribute("name9", 0, "MaXXXXXXXX"), new Attribute("city9", 1, "CoXXXXXXXX") }),
+                    "R9", 999L, "MFB"));
+            add(new Record(
+                    Arrays.asList(
+                            new Attribute[] { new Attribute("name10", 0, "MXXXXXXXX"), new Attribute("city10", 1, "CXXXXXXXX") }),
+                    "R10", 999L, "MFB"));
+            add(new Record(
+                    Arrays.asList(
+                            new Attribute[] { new Attribute("name10", 0, "XXXXXXXXX"), new Attribute("city11", 1, "XXXXXXXXX") }),
+                    "R11", 999L, "MFB"));
         }
     };
 
     private final List<Record> listOrder5 = new ArrayList<Record>() {
 
         {
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("name10", 0, "XXXXXXXXX"),
-                    new Attribute("city11", 1, "XXXXXXXXX") }), "R11", 999L, "MFB"));
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("name7", 0, "MaxiXXXXXX"),
-                    new Attribute("city7", 1, "ConcXXXXXX") }), "R7", 999L, "MFB"));
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("name4", 0, "MaximilXXX"),
-                    new Attribute("city4", 1, "ConcepcXXX") }), "R4", 999L, "MFB"));
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("name1", 0, "Maximilian"),
-                    new Attribute("city1", 1, "Concepcion") }), "R1", 999L, "MFB"));
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("name3", 0, "MaximiliXX"),
-                    new Attribute("city3", 1, "ConcepciXX") }), "R3", 999L, "MFB"));
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("name9", 0, "MaXXXXXXXX"),
-                    new Attribute("city9", 1, "CoXXXXXXXX") }), "R9", 999L, "MFB"));
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("name5", 0, "MaximiXXXX"),
-                    new Attribute("city5", 1, "ConcepXXXX") }), "R5", 999L, "MFB"));
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("name6", 0, "MaximXXXXX"),
-                    new Attribute("city6", 1, "ConceXXXXX") }), "R6", 999L, "MFB"));
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("name8", 0, "MaxXXXXXXX"),
-                    new Attribute("city8", 1, "ConXXXXXXX") }), "R8", 999L, "MFB"));
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("name10", 0, "MXXXXXXXX"),
-                    new Attribute("city10", 1, "CXXXXXXXX") }), "R10", 999L, "MFB"));
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("name2", 0, "MaximiliaX"),
-                    new Attribute("city2", 1, "ConcepcioX") }), "R2", 999L, "MFB"));
+            add(new Record(
+                    Arrays.asList(
+                            new Attribute[] { new Attribute("name10", 0, "XXXXXXXXX"), new Attribute("city11", 1, "XXXXXXXXX") }),
+                    "R11", 999L, "MFB"));
+            add(new Record(
+                    Arrays.asList(
+                            new Attribute[] { new Attribute("name7", 0, "MaxiXXXXXX"), new Attribute("city7", 1, "ConcXXXXXX") }),
+                    "R7", 999L, "MFB"));
+            add(new Record(
+                    Arrays.asList(
+                            new Attribute[] { new Attribute("name4", 0, "MaximilXXX"), new Attribute("city4", 1, "ConcepcXXX") }),
+                    "R4", 999L, "MFB"));
+            add(new Record(
+                    Arrays.asList(
+                            new Attribute[] { new Attribute("name1", 0, "Maximilian"), new Attribute("city1", 1, "Concepcion") }),
+                    "R1", 999L, "MFB"));
+            add(new Record(
+                    Arrays.asList(
+                            new Attribute[] { new Attribute("name3", 0, "MaximiliXX"), new Attribute("city3", 1, "ConcepciXX") }),
+                    "R3", 999L, "MFB"));
+            add(new Record(
+                    Arrays.asList(
+                            new Attribute[] { new Attribute("name9", 0, "MaXXXXXXXX"), new Attribute("city9", 1, "CoXXXXXXXX") }),
+                    "R9", 999L, "MFB"));
+            add(new Record(
+                    Arrays.asList(
+                            new Attribute[] { new Attribute("name5", 0, "MaximiXXXX"), new Attribute("city5", 1, "ConcepXXXX") }),
+                    "R5", 999L, "MFB"));
+            add(new Record(
+                    Arrays.asList(
+                            new Attribute[] { new Attribute("name6", 0, "MaximXXXXX"), new Attribute("city6", 1, "ConceXXXXX") }),
+                    "R6", 999L, "MFB"));
+            add(new Record(
+                    Arrays.asList(
+                            new Attribute[] { new Attribute("name8", 0, "MaxXXXXXXX"), new Attribute("city8", 1, "ConXXXXXXX") }),
+                    "R8", 999L, "MFB"));
+            add(new Record(
+                    Arrays.asList(
+                            new Attribute[] { new Attribute("name10", 0, "MXXXXXXXX"), new Attribute("city10", 1, "CXXXXXXXX") }),
+                    "R10", 999L, "MFB"));
+            add(new Record(
+                    Arrays.asList(
+                            new Attribute[] { new Attribute("name2", 0, "MaximiliaX"), new Attribute("city2", 1, "ConcepcioX") }),
+                    "R2", 999L, "MFB"));
         }
     };
 
-    private MatchMergeAlgorithm
-            buildMFB(float attrThreshold, double minConfidence, SurvivorShipAlgorithmEnum mergeAlgo) {
+    private MatchMergeAlgorithm buildMFB(float attrThreshold, double minConfidence, SurvivorShipAlgorithmEnum mergeAlgo) {
         return MFB.build( //
                 new AttributeMatcherType[] { AttributeMatcherType.LEVENSHTEIN, AttributeMatcherType.LEVENSHTEIN }, // algorithms
                 new String[] { "", "" }, // algo params
@@ -218,8 +270,7 @@ public class MultiColumnMFBOrderTest extends TestCase {
 
     private void printResult(List<Record> mergedRecords) {
         for (Record rec : mergedRecords) {
-            List<String> attrList =
-                    rec.getAttributes().stream().map(attr -> attr.getValue()).collect(Collectors.toList());
+            List<String> attrList = rec.getAttributes().stream().map(attr -> attr.getValue()).collect(Collectors.toList());
             System.out.println("  " + rec + " " + attrList + "   Confidence: " + rec.getConfidence());
         }
     }

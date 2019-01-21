@@ -125,4 +125,12 @@ public class LoggerCallback implements MatchMergeAlgorithm.Callback {
         }
     }
 
+    @Override
+    public void onSynResult(Record newRecord, Record originalRecord, MatchResult matchResult) {
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("Synchronize result between new merge record and original one");
+        }
+
+    }
+
 }

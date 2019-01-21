@@ -113,7 +113,7 @@ public class MatchResult {
      * 
      * @return the finalWorstConfidenceValue
      */
-    protected double getFinalWorstConfidenceValue() {
+    public double getFinalWorstConfidenceValue() {
         return this.finalWorstConfidenceValue;
     }
 
@@ -138,7 +138,7 @@ public class MatchResult {
      * 
      * @return the worstConfidenceValueScoreList
      */
-    protected List<Double> getWorstConfidenceValueScoreList() {
+    public List<Double> getWorstConfidenceValueScoreList() {
         return this.worstConfidenceValueScoreList;
     }
 

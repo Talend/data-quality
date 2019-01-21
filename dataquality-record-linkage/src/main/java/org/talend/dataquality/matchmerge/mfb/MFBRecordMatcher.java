@@ -77,8 +77,8 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
             // use record1.getWorstConfidenceValueScoreList() to instead of some while in matchScore method
             double score = matchScore(left, right, matcher, leftWorstScore, rightWorstScore);
             attributeMatchingWeights[matchIndex] = score;
-            result.setScore(matchIndex, matcher.getMatchType(), score, record1.getId(), left.getValue(),
-                    record2.getId(), right.getValue());
+            result.setScore(matchIndex, matcher.getMatchType(), score, record1.getId(), left.getValue(), record2.getId(),
+                    right.getValue());
             result.setThreshold(matchIndex, matcher.getThreshold());
             result.storeWorstScore(matchIndex, worstConfidenceValue);
             confidence += score * matcher.getWeight();
@@ -88,9 +88,8 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
         }
         double normalizedConfidence = confidence > 0 && maxWeight != 0 ? confidence / maxWeight : confidence; // Normalize
                                                                                                               // to 0..1
-        finalWorstConfidenceValue =
-                finalWorstConfidenceValue > 0 && maxWeight != 0 ? finalWorstConfidenceValue / maxWeight
-                        : finalWorstConfidenceValue; // Normalize
+        finalWorstConfidenceValue = finalWorstConfidenceValue > 0 && maxWeight != 0 ? finalWorstConfidenceValue / maxWeight
+                : finalWorstConfidenceValue; // Normalize
         // to 0..1
         result.setSucess(true); // value
         result.setConfidence(normalizedConfidence);
@@ -98,8 +97,8 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
 
         if (normalizedConfidence < minConfidenceValue) {
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Cannot match record: merged record has a too low confidence value ("
-                        + normalizedConfidence + " < " + minConfidenceValue + ")");
+                LOGGER.debug("Cannot match record: merged record has a too low confidence value (" + normalizedConfidence + " < "
+                        + minConfidenceValue + ")");
             }
             return MFB.NonMatchResult.wrap(result);
         }
@@ -134,8 +133,8 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
         // return score;
         // }
         // 2- Compare using values that build attribute value (if any)
-        Iterator<String> leftValues =
-                new IteratorChain(Collections.singleton(left).iterator(), leftAttribute.getValues().iterator());
+        Iterator<String> leftValues = new IteratorChain(Collections.singleton(left).iterator(),
+                leftAttribute.getValues().iterator());
 
         double maxScore = 0;
         double score = 0;
@@ -147,8 +146,8 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
 
         while (leftValues.hasNext()) {
             String leftValue = leftValues.next();
-            Iterator<String> rightValues =
-                    new IteratorChain(Collections.singleton(right).iterator(), rightAttribute.getValues().iterator());
+            Iterator<String> rightValues = new IteratorChain(Collections.singleton(right).iterator(),
+                    rightAttribute.getValues().iterator());
             while (rightValues.hasNext()) {
                 String rightValue = rightValues.next();
                 score = matcher.getMatchingWeight(leftValue, rightValue);

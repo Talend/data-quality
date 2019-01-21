@@ -68,4 +68,10 @@ public class DefaultCallback implements MatchMergeAlgorithm.Callback {
         // no need to implement
     }
 
+    @Override
+    public void onSynResult(Record newRecord, Record originalRecord, MatchResult matchResult) {
+        // TODO Auto-generated method stub
+
+    }
+
 }

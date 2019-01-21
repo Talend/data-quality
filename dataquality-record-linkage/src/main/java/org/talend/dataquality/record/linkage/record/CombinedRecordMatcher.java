@@ -170,8 +170,8 @@ public class CombinedRecordMatcher extends AbstractRecordMatcher {
             }
         }
         if (lastPositiveMatchResult.isMatch() && record1 instanceof RichRecord) { // record 2 will then be instance of
-                                                                                  // RichRecord class naturally.
-            // Set matching score and labeled attribute scores
+                                                                                      // RichRecord class naturally.
+                                                                                  // Set matching score and labeled attribute scores
             RichRecord richRecord1 = (RichRecord) record1;
             RichRecord richRecord2 = (RichRecord) record2;
             richRecord1.setScore(matchingWeight);

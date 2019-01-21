@@ -101,7 +101,8 @@ public class GroupingCallBack<T> implements MatchMergeAlgorithm.Callback {
         if (record.getGroupId() != null) {
             richRecord.setMerged(true);
             richRecord.setGrpSize(richRecord.getRelatedIds().size());
-            if (Double.compare(richRecord.getGroupQuality(), 0.0d) == 0) {
+            if (Double.compare(richRecord.getGroupQuality(), 0.0d) == 0
+                    || Double.compare(richRecord.getGroupQuality(), richRecord.getConfidence()) > 0) {
                 // group quality will be the confidence (score) .
                 richRecord.setGroupQuality(record.getConfidence());
             }
@@ -150,6 +151,12 @@ public class GroupingCallBack<T> implements MatchMergeAlgorithm.Callback {
 
     protected void output(RichRecord record) {
         recordGrouping.outputRichRecord(record);
+    }
+
+    @Override
+    public void onSynResult(Record newRecord, Record originalRecord, MatchResult matchResult) {
+        newRecord.setConfidence(matchResult.getFinalWorstConfidenceValue());
+        newRecord.setWorstConfidenceValueScoreList(matchResult.getWorstConfidenceValueScoreList());
     }
 
 }

@@ -178,8 +178,7 @@ public class Record {
      */
     public void setConfidence(double confidence) {
         if (confidence > MAX_CONFIDENCE) {
-            throw new IllegalArgumentException("Confidence value '" + confidence + "' is incorrect (>" + MAX_CONFIDENCE
-                    + ".");
+            throw new IllegalArgumentException("Confidence value '" + confidence + "' is incorrect (>" + MAX_CONFIDENCE + ".");
         }
         // TMDM-7833: A record can never gain confidence (especially in case of multiple merges, it's not because this
         // record perfectly match another that it becomes a sure match).
