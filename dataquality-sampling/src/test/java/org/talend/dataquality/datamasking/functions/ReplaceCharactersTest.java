@@ -50,7 +50,7 @@ public class ReplaceCharactersTest {
     public void defaultBehavior() {
         rc.parse("", false, new Random(42));
         output = rc.generateMaskedRow(input);
-        assertEquals("ñjë456ñï xàiäz", output); //$NON-NLS-1$
+        assertEquals("ahw456ma rnqdp", output); //$NON-NLS-1$
     }
 
     @Test

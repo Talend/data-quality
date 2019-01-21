@@ -47,6 +47,13 @@ public class TextPatternUtilTest {
         Random random = new Random();
         CharPattern charPattern = CharPattern.LOWER_LATIN;
         replaceCharMatch((int) 'a', (int) 'z', charPattern, random);
+        assertEquals(String.format("Pattern %s has a size issue", charPattern), globalCount, charPattern.getCodePointSize());
+    }
+
+    @Test
+    public void replaceCharacterLowerLatinRare() {
+        Random random = new Random();
+        CharPattern charPattern = CharPattern.LOWER_LATIN_RARE;
         replaceCharMatch((int) 'ß', (int) 'ö', charPattern, random);
         replaceCharMatch((int) 'ø', (int) 'ÿ', charPattern, random);
         assertEquals(String.format("Pattern %s has a size issue", charPattern), globalCount, charPattern.getCodePointSize());
@@ -57,6 +64,13 @@ public class TextPatternUtilTest {
         Random random = new Random();
         CharPattern charPattern = CharPattern.UPPER_LATIN;
         replaceCharMatch((int) 'A', (int) 'Z', charPattern, random);
+        assertEquals(String.format("Pattern %s has a size issue", charPattern), globalCount, charPattern.getCodePointSize());
+    }
+
+    @Test
+    public void replaceCharacterUpperLatinRare() {
+        Random random = new Random();
+        CharPattern charPattern = CharPattern.UPPER_LATIN_RARE;
         replaceCharMatch((int) 'À', (int) 'Ö', charPattern, random);
         replaceCharMatch((int) 'Ø', (int) 'Þ', charPattern, random);
         assertEquals(String.format("Pattern %s has a size issue", charPattern), globalCount, charPattern.getCodePointSize());

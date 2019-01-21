@@ -24,8 +24,7 @@
 		<junit.version>4.12</junit.version>
 		<mockito.version>1.10.19</mockito.version>
 		<re2j.version>1.2</re2j.version>
-
-		<org.talend.daikon.version>0.29.0-SNAPSHOT</org.talend.daikon.version>
+		<org.talend.daikon.version>0.31.1-SNAPSHOT</org.talend.daikon.version>
 	</properties>
 
 	<distributionManagement>

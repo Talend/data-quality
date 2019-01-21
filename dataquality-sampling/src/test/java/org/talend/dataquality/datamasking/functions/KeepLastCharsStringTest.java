@@ -51,7 +51,7 @@ public class KeepLastCharsStringTest {
 
         // add msjian test for bug TDQ-11339: fix a "String index out of range: -1" exception
         String[] input2 = new String[] { "test1234", "pp456", "wei@sina.com" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-        String[] output2 = new String[] { "ñjëñ0534", "ài956", "zßw@sñuu.uom" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        String[] output2 = new String[] { "ahwm0534", "nq956", "paa@igue.wom" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         klads.parse("2", false, new Random(42));
         for (int i = 0; i < input2.length; i++) {
             output = klads.generateMaskedRow(input2[i]);

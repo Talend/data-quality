@@ -38,48 +38,48 @@ public class GenerateFromPatternTest {
     public void standardPattern() {
         gfp.parameters = "aaAA99".split(","); //$NON-NLS-1$ //$NON-NLS-2$
         output = gfp.generateMaskedRow(null);
-        assertEquals(output, "ñjÖÛ05"); //$NON-NLS-1$
+        assertEquals("ahWM05", output); //$NON-NLS-1$
     }
 
     @Test
     public void patternWithReference() {
         gfp.parameters = "aaAA99\\1, @gmail.com".split(","); //$NON-NLS-1$ //$NON-NLS-2$
         output = gfp.generateMaskedRow(null);
-        assertEquals(output, "ñjÖÛ05@gmail.com"); //$NON-NLS-1$
+        assertEquals("ahWM05@gmail.com", output); //$NON-NLS-1$
     }
 
     @Test
     public void patternWithReferences() {
         gfp.parameters = "\\1aA9\\2hHkK\\3C\\4G,latin:,;japanese:,;chinese:,;korean:".split(","); //$NON-NLS-1$ //$NON-NLS-2$
         output = gfp.generateMaskedRow(null);
-        assertEquals(output, "latin:ñT8;japanese:hぽﾀㇵ;chinese:睻;korean:롖"); //$NON-NLS-1$
+        assertEquals("latin:aH8;japanese:hぽﾀㇵ;chinese:睻;korean:롖", output); //$NON-NLS-1$
     }
 
     @Test
     public void patternWithMissingReference() {
         gfp.parameters = "aaAA99\\, @gmail.com".split(","); //$NON-NLS-1$ //$NON-NLS-2$
         output = gfp.generateMaskedRow(null);
-        assertEquals(output, "ñjÖÛ05\\"); //$NON-NLS-1$
+        assertEquals("ahWM05\\", output); //$NON-NLS-1$
     }
 
     @Test
     public void patternWithWrongReference() {
         gfp.parameters = "aaAA99\\2, @gmail.com".split(","); //$NON-NLS-1$ //$NON-NLS-2$
         output = gfp.generateMaskedRow(null);
-        assertEquals(output, "ñjÖÛ05\\2"); //$NON-NLS-1$
+        assertEquals("ahWM05\\2", output); //$NON-NLS-1$
     }
 
     @Test
     public void wrongPattern() {
         gfp.parameters = Function.EMPTY_STRING.split(","); //$NON-NLS-1$
         output = gfp.generateMaskedRow(null);
-        assertEquals(output, Function.EMPTY_STRING);
+        assertEquals(Function.EMPTY_STRING, output);
     }
 
     @Test
     public void nullPattern() {
         gfp.keepNull = true;
         output = gfp.generateMaskedRow(null);
-        assertEquals(output, null);
+        assertEquals(null, output);
     }
 }

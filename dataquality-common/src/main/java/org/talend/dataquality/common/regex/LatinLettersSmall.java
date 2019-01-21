@@ -24,7 +24,8 @@ import org.talend.daikon.pattern.character.CharPattern;
  */
 public class LatinLettersSmall extends ChainResponsibilityHandler {
 
-    private Pattern pattern = Pattern.compile(CharPattern.LOWER_LATIN.getPattern().getRegex());
+    private Pattern pattern = Pattern.compile(
+            CharPattern.LOWER_LATIN.getPattern().getRegex() + "|" + CharPattern.LOWER_LATIN_RARE.getPattern().getRegex());
 
     /*
      * (non-Javadoc)
