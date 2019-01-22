@@ -17,7 +17,6 @@ import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.filter.ISemanticFilter;
 import org.talend.dataquality.semantic.filter.impl.CharSequenceFilter;
 import org.talend.dataquality.semantic.model.MainCategory;
-import org.talend.dataquality.semantic.validator.AbstractRegexSemanticValidator;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -42,7 +41,7 @@ public class UserDefinedCategory implements ISubCategory {
 
     private ISemanticFilter filter;
 
-    private AbstractRegexSemanticValidator validator;
+    private UserDefinedRegexValidator validator;
 
     @JsonCreator
     public UserDefinedCategory(@JsonProperty("name") String name, @JsonProperty("label") String label) {
@@ -120,11 +119,11 @@ public class UserDefinedCategory implements ISubCategory {
     }
 
     @Override
-    public AbstractRegexSemanticValidator getValidator() {
+    public UserDefinedRegexValidator getValidator() {
         return validator;
     }
 
-    public void setValidator(AbstractRegexSemanticValidator validator) {
+    public void setValidator(UserDefinedRegexValidator validator) {
         this.validator = validator;
     }
 
