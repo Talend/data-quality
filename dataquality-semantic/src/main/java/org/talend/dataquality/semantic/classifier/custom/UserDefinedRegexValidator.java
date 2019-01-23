@@ -37,9 +37,9 @@ public class UserDefinedRegexValidator extends AbstractRegexSemanticValidator {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserDefinedRegexValidator.class);
 
-    private String patternString;
+    protected String patternString;
 
-    private Boolean caseInsensitive = true;
+    protected Boolean caseInsensitive = true;
 
     /**
      * an optional secondary validator.
@@ -48,7 +48,7 @@ public class UserDefinedRegexValidator extends AbstractRegexSemanticValidator {
 
     private ISemanticSubValidator subValidator;
 
-    private boolean isSetSubValidator = false;
+    protected boolean isSetSubValidator = false;
 
     /**
      * Getter for subValidatorClassName.
@@ -159,7 +159,7 @@ public class UserDefinedRegexValidator extends AbstractRegexSemanticValidator {
      * @param str the string to check
      * @return true when the subValidator class validates the given string, false otherwise.
      */
-    private boolean validateWithSubValidator(String str) {
+    protected boolean validateWithSubValidator(String str) {
         return this.subValidator.isValid(str);
     }
 }

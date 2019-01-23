@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.classifier.ISubCategory;
 import org.talend.dataquality.semantic.classifier.ISubCategoryClassifier;
 import org.talend.dataquality.semantic.classifier.impl.AbstractSubCategoryClassifier;
