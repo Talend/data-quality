@@ -61,7 +61,6 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
         Iterator<Attribute> currentRecordAttributes = record2.getAttributes().iterator();
         List<Double> leftWorstConfidenceValueScoreList = record1.getWorstConfidenceValueScoreList();
         List<Double> rightWorstConfidenceValueScoreList = record2.getWorstConfidenceValueScoreList();
-        record2.getWorstConfidenceValueScoreList();
         double confidence = 0;
         int matchIndex = 0;
         MatchResult result = new MatchResult(record1.getAttributes().size());
@@ -91,7 +90,6 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
         finalWorstConfidenceValue = finalWorstConfidenceValue > 0 && maxWeight != 0 ? finalWorstConfidenceValue / maxWeight
                 : finalWorstConfidenceValue; // Normalize
         // to 0..1
-        result.setSucess(true); // value
         result.setConfidence(normalizedConfidence);
         result.setFinalWorstConfidenceValue(finalWorstConfidenceValue);
 

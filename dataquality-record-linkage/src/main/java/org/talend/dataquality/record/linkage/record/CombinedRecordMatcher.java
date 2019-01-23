@@ -163,9 +163,8 @@ public class CombinedRecordMatcher extends AbstractRecordMatcher {
             matchingWeight = currentWeight;
             lastPositiveMatchResult = matchResult;
 
-            if (matchingWeight >= matcher.getRecordMatchThreshold()) {
+            if (lastPositiveMatchResult.isMatch() && matchingWeight >= matcher.getRecordMatchThreshold()) {
                 // when there is a match with one matcher, no need to loop on all matchers
-                matchResult.setSucess(true);
                 break;
             }
         }
