@@ -17,11 +17,15 @@ import java.io.Serializable;
 import java.net.URI;
 import java.util.Set;
 
+import org.apache.commons.lang3.SerializationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.dataquality.semantic.classifier.ISubCategory;
 import org.talend.dataquality.semantic.classifier.custom.UDCategorySerDeser;
+import org.talend.dataquality.semantic.classifier.custom.UserDefinedCategory;
 import org.talend.dataquality.semantic.classifier.custom.UserDefinedClassifier;
+import org.talend.dataquality.semantic.classifier.custom.UserDefinedRE2JRegexValidator;
+import org.talend.dataquality.semantic.classifier.custom.UserDefinedRegexValidator;
 
 /**
  * A serializable object to hold REGEX classifiers.
@@ -47,7 +51,18 @@ public class BroadcastRegexObject implements Serializable {
         this.regexClassifier = new UserDefinedClassifier();
         for (ISubCategory c : udc.getClassifiers()) {
             if (categories.contains(c.getId())) {
-                this.regexClassifier.addSubCategory(c);
+                UserDefinedRegexValidator validator = (UserDefinedRegexValidator) c.getValidator();
+                if (validator instanceof UserDefinedRE2JRegexValidator) {
+                    UserDefinedCategory newCat = (UserDefinedCategory) SerializationUtils.clone(c);
+                    UserDefinedRegexValidator newValidator = new UserDefinedRegexValidator();
+                    newValidator.setCaseInsensitive(validator.getCaseInsensitive());
+                    newValidator.setPatternString(validator.getPatternString());
+                    newValidator.setSubValidatorClassName(validator.getSubValidatorClassName());
+                    newCat.setValidator(newValidator);
+                    this.regexClassifier.addSubCategory(newCat);
+                } else {
+                    this.regexClassifier.addSubCategory(c);
+                }
             }
         }
     }

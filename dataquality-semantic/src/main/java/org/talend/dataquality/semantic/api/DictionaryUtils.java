@@ -35,6 +35,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 import org.talend.dataquality.semantic.classifier.custom.UserDefinedCategory;
+import org.talend.dataquality.semantic.classifier.custom.UserDefinedRE2JRegexValidator;
 import org.talend.dataquality.semantic.classifier.custom.UserDefinedRegexValidator;
 import org.talend.dataquality.semantic.filter.impl.CharSequenceFilter;
 import org.talend.dataquality.semantic.filter.impl.CharSequenceFilter.CharSequenceFilterType;
@@ -226,7 +227,12 @@ public class DictionaryUtils {
         }
 
         if (dqValidator != null) {
-            UserDefinedRegexValidator validator = new UserDefinedRegexValidator();
+            UserDefinedRegexValidator validator;
+            if (dqValidator.isRe2jCompliant())
+                validator = new UserDefinedRE2JRegexValidator();
+            else
+                validator = new UserDefinedRegexValidator();
+
             validator.setPatternString(dqValidator.getPatternString());
             validator.setSubValidatorClassName(dqValidator.getSubValidatorClassName());
             regEx.setValidator(validator);

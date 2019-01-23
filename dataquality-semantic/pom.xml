@@ -66,6 +66,11 @@
 			<artifactId>commons-validator</artifactId>
 			<version>1.5.1</version>
 		</dependency>
+		<dependency>
+			<groupId>com.google.re2j</groupId>
+			<artifactId>re2j</artifactId>
+			<version>${re2j.version}</version>
+		</dependency>
 
 		<!--used by GenerateFromRegex-->
 		<dependency>
