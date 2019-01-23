@@ -17,8 +17,6 @@ import static org.junit.Assert.fail;
 import java.io.IOException;
 import java.util.Set;
 
-import jdk.nashorn.internal.ir.annotations.Ignore;
-
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -27,6 +25,8 @@ import org.talend.dataquality.semantic.classifier.ISubCategory;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.exception.DQSemanticRuntimeException;
 import org.talend.dataquality.semantic.validator.ISemanticValidator;
+
+import jdk.nashorn.internal.ir.annotations.Ignore;
 
 public class UserDefinedRegexValidatorTest {
 
@@ -101,6 +101,17 @@ public class UserDefinedRegexValidatorTest {
         Assert.assertFalse(validator.isValid(""));
         Assert.assertFalse(validator.isValid(" "));
         Assert.assertFalse(validator.isValid(null));
+    }
+
+    @Test
+    public void isInvalidRe2J() {
+        UserDefinedRegexValidator validator = new UserDefinedRE2JRegexValidator();
+        validator.setPatternString("^(?!01000|99999)(0[1-9]\\d{3}|[1-9]\\d{4})$"); // regex of DE_POSTAL_CODE
+        Assert.assertFalse(validator.isValid("12345"));
+
+        UserDefinedRegexValidator validatorJava = new UserDefinedRegexValidator();
+        validatorJava.setPatternString("^(?!01000|99999)(0[1-9]\\d{3}|[1-9]\\d{4})$"); // regex of DE_POSTAL_CODE
+        Assert.assertTrue(validatorJava.isValid("12345"));
     }
 
     @Test
