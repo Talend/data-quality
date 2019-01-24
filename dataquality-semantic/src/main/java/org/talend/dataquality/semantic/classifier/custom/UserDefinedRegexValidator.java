@@ -73,7 +73,7 @@ public class UserDefinedRegexValidator extends AbstractRegexSemanticValidator {
         isSetSubValidator = this.subValidator != null;
     }
 
-    boolean isSetSubValidator() {
+    protected boolean isSetSubValidator() {
         return isSetSubValidator;
     }
 
