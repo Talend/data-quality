@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.dataquality.semantic.exception.DQSemanticRuntimeException;
 import org.talend.dataquality.semantic.validator.AbstractRegexSemanticValidator;
+import org.talend.dataquality.semantic.validator.ISemanticSubValidator;
 
 /**
  * The regex validator can have a sub-validator defined in json file. Like : <br/>
@@ -36,11 +37,68 @@ public class UserDefinedRegexValidator extends AbstractRegexSemanticValidator {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserDefinedRegexValidator.class);
 
-    private Pattern caseSensitivePattern;
+    private String patternString;
 
-    private Pattern caseInsensitivePattern;
+    private Boolean caseInsensitive = true;
 
-    @Override
+    /**
+     * an optional secondary validator.
+     */
+    private String subValidatorClassName = "";
+
+    private ISemanticSubValidator subValidator;
+
+    private boolean isSetSubValidator = false;
+
+    /**
+     * Getter for subValidatorClassName.
+     * 
+     * @return the subValidatorClassName
+     */
+    public String getSubValidatorClassName() {
+        return this.subValidatorClassName;
+    }
+
+    /**
+     * Sets the subValidatorClassName. <br>
+     * The subValidatorClassName should be a full qualified class name like
+     * <code>org.talend.dataquality.semantic.validator.impl.SedolValidator</code> <br>
+     * A runtime exception will be thrown if given class name is incorrect or not loaded properly.
+     * 
+     * @param subValidatorClassName the subValidatorClassName to set
+     */
+    public void setSubValidatorClassName(String subValidatorClassName) {
+        this.subValidatorClassName = subValidatorClassName;
+        this.subValidator = createSubValidator(subValidatorClassName);
+        isSetSubValidator = this.subValidator != null;
+    }
+
+    boolean isSetSubValidator() {
+        return isSetSubValidator;
+    }
+
+    /**
+     * Getter for caseInsensitive.
+     * 
+     * @return the caseInsensitive
+     */
+    public Boolean getCaseInsensitive() {
+        return this.caseInsensitive;
+    }
+
+    /**
+     * Sets the caseInsensitive.
+     * 
+     * @param caseInsensitive the caseInsensitive to set
+     */
+    public void setCaseInsensitive(Boolean caseInsensitive) {
+        this.caseInsensitive = caseInsensitive;
+    }
+
+    public String getPatternString() {
+        return patternString;
+    }
+
     public void setPatternString(String patternString) {
         if (StringUtils.isEmpty(patternString)) {
             throw new DQSemanticRuntimeException("null argument of patternString is not allowed.");
@@ -55,9 +113,19 @@ public class UserDefinedRegexValidator extends AbstractRegexSemanticValidator {
         }
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.talend.dataquality.semantic.validator.AbstractRegexSemanticValidator#isValid(java.lang.String)
+     */
+    @Override
+    public boolean isValid(String str) {
+        return isValid(str, false);
+    }
+
     @Override
     public boolean isValid(String str, boolean caseSensitive) {
-        if (!checkValid(str, caseSensitive)) {
+        if (!super.isValid(str, caseSensitive)) {
             return false;
         }
         // else
@@ -68,11 +136,30 @@ public class UserDefinedRegexValidator extends AbstractRegexSemanticValidator {
         return true;
     }
 
-    public boolean checkValid(String str, boolean caseSensitive) {
-        if (str == null || caseSensitivePattern == null || caseInsensitivePattern == null)
-            return false;
+    private ISemanticSubValidator createSubValidator(String validatorName) {
+        if (validatorName != null && !validatorName.isEmpty()) {
+            try {
+                Class<?> subSemanticValidator = Class.forName(validatorName);
+                return (ISemanticSubValidator) subSemanticValidator.newInstance();
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+                LOGGER.error(e.getMessage(), e);
+            }
+            // exception caught => default subValidator
+            // remove any existing subvalidator
+            this.isSetSubValidator = false;
+            this.subValidator = null;
+            throw new IllegalArgumentException("Invalid validator class name: " + validatorName); //$NON-NLS-1$
+        }
+        return null;
+    }
 
-        return (caseSensitive ? caseSensitivePattern.matcher(str.trim()).find()
-                : caseInsensitivePattern.matcher(str.trim()).find());
+    /**
+     * Method "validateWithSubValidator".
+     * 
+     * @param str the string to check
+     * @return true when the subValidator class validates the given string, false otherwise.
+     */
+    private boolean validateWithSubValidator(String str) {
+        return this.subValidator.isValid(str);
     }
 }

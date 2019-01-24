@@ -8,7 +8,6 @@
       "label": "Web Domain",
       "filter": null,
       "validator": {
-        "re2jCompliant" : true,
         "patternString": "^([a-zA-Z0-9]([a-zA-Z0-9\\-]{0,61}[a-zA-Z0-9])?\\.)+[a-zA-Z]{2,24}$",
         "subValidatorClassName": null
       }
@@ -21,7 +20,6 @@
       "label": "US Social Security Number",
       "filter": null,
       "validator": {
-        "re2jCompliant" : false,
         "patternString": "^\\d{3}-\\d{2}-\\d{4}$",
         "subValidatorClassName": null
       }
@@ -37,8 +35,7 @@
         "filterType": "MUST_CONTAIN"
       },
       "validator": {
-        "re2jCompliant" : true,
-        "patternString": "^(([^\\s\\x00-\\x1F\\x7F\\(\\)<>@,;:'\\\\\\\"\\.\\[\\]]|')+|(\\\"[^\\\"]*\\\"))(\\.(([^\\s\\x00-\\x1F\\x7F\\(\\)<>@,;:'\\\\\\\"\\.\\[\\]]|')+|(\\\"[^\\\"]*\\\")))*@([\\p{L}\\p{M}0-9]([\\p{L}\\p{M}0-9\\-]{0,61}[\\p{L}\\p{M}0-9])?\\.)+[\\p{L}\\p{M}]{2,6}$",
+        "patternString": "^(([^\\s\\p{Cntrl}\\(\\)<>@,;:'\\\\\\\"\\.\\[\\]]|')+|(\\\"[^\\\"]*\\\"))(\\.(([^\\s\\p{Cntrl}\\(\\)<>@,;:'\\\\\\\"\\.\\[\\]]|')+|(\\\"[^\\\"]*\\\")))*@([\\p{L}\\p{M}0-9]([\\p{L}\\p{M}0-9\\-]{0,61}[\\p{L}\\p{M}0-9])?\\.)+[\\p{L}\\p{M}]{2,6}$",
         "subValidatorClassName": null
       }
     },
@@ -50,7 +47,6 @@
       "label": "BG VAT Number",
       "filter": null,
       "validator": {
-        "re2jCompliant" : false,
         "patternString": "^BG[0-9]{9,10}$",
         "subValidatorClassName": null
       }
@@ -63,7 +59,6 @@
       "label": "URL",
       "filter": null,
       "validator": {
-        "re2jCompliant" : true,
         "patternString": "^(((?:ht|s?f)tps?)\\:\\/\\/)(((\\p{L}|\\p{N}|[\\-\\._])+(:(\\p{L}|\\p{N}|[\\-\\._])+)?@)?((?:(\\p{L}|\\p{N})+(?:\\.(\\p{L}|\\p{N})+)+)|localhost)(\\/?)((\\p{L}|\\p{N})*)(([\\d\\w\\.\\/\\%\\+\\-\\=\\&\\?\\:\\\"\\'\\,\\|\\~\\;#\\\\]*(\\p{L}|\\p{N})*)|(\\p{L}|\\p{N})*)?)$",
         "subValidatorClassName": null
       }
@@ -76,7 +71,6 @@
       "label": "Geographic coordinate",
       "filter": null,
       "validator": {
-        "re2jCompliant" : false,
         "patternString": "^-?([1]?[1-7][1-9]|[1]?[1-8][0]|[1-9]?[0-9])\\.{1}[0-9]{5,6}$",
         "subValidatorClassName": null
       }
@@ -89,7 +83,6 @@
       "label": "MAC Address",
       "filter": null,
       "validator": {
-        "re2jCompliant" : false,
         "patternString": "^([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])$",
         "subValidatorClassName": null
       }
@@ -102,7 +95,6 @@
       "label": "FR Postal Code",
       "filter": null,
       "validator": {
-        "re2jCompliant" : false,
         "patternString": "^(F-|FRA?(-| ))?(0[1-9]|[1-9][0-9])[0-9]{3}$",
         "subValidatorClassName": null
       }
@@ -115,7 +107,6 @@
       "label": "DE Phone",
       "filter": null,
       "validator": {
-        "re2jCompliant" : false,
         "patternString": "^(tel:)?(0049|\\+49|0)[2-9]([-. ]?[0-9]{2}){4}([0-9]{1,2})?$",
         "subValidatorClassName": "org.talend.dataquality.semantic.validator.impl.DEPhoneNumberValidator"
       }
@@ -128,7 +119,6 @@
       "label": "Visa Card",
       "filter": null,
       "validator": {
-        "re2jCompliant" : false,
         "patternString": "^4[0-9]{15}$",
         "subValidatorClassName": null
       }
@@ -141,7 +131,6 @@
       "label": "MasterCard",
       "filter": null,
       "validator": {
-        "re2jCompliant" : false,
         "patternString": "^5[1-5][0-9]{14}$",
         "subValidatorClassName": null
       }
@@ -154,7 +143,6 @@
       "label": "FR Social Security Number",
       "filter": null,
       "validator": {
-        "re2jCompliant" : false,
         "patternString": "^[12] ?[0-9]{2} ?(0[1-9]|1[0-2]) ?(2[AB]|[0-9]{2}) ?[0-9]{3} ?[0-9]{3}( ?[0-9]{2})?$",
         "subValidatorClassName": null
       }
@@ -167,7 +155,6 @@
       "label": "ISBN-10",
       "filter": null,
       "validator": {
-        "re2jCompliant" : false,
         "patternString": "^ISBN(?:-10)?:?\\ *((?=\\d{1,5}([ -]?)\\d{1,7}\\2?\\d{1,6}\\2?\\d)(?:\\d\\2*){9}[\\dX])$",
         "subValidatorClassName": null
       }
@@ -180,7 +167,6 @@
       "label": "SE Social Security Number",
       "filter": null,
       "validator": {
-        "re2jCompliant" : false,
         "patternString": "^[1-2][0|9][0-9]{2}[0-1][0-9][0-3][0-9][-][0-9]{4}$",
         "subValidatorClassName": null
       }
@@ -193,7 +179,6 @@
       "label": "ISBN-13",
       "filter": null,
       "validator": {
-        "re2jCompliant" : false,
         "patternString": "^ISBN(?:-13)?:?\\ *(97(?:8|9)([ -]?)(?=\\d{1,5}\\2?\\d{1,7}\\2?\\d{1,6}\\2?\\d)(?:\\d\\2*){9}\\d)$",
         "subValidatorClassName": null
       }
@@ -206,7 +191,6 @@
       "label": "UK Social Security Number",
       "filter": null,
       "validator": {
-        "re2jCompliant" : false,
         "patternString": "^[A-CEGHJ-PR-TW-Z]{1}[A-CEGHJ-NPR-TW-Z]{1}([0-9]{6}|( [0-9]{2}){3} )[A-DFM]{0,1}$",
         "subValidatorClassName": null
       }
@@ -219,7 +203,6 @@
       "label": "Money Amount (EN)",
       "filter": null,
       "validator": {
-        "re2jCompliant" : false,
         "patternString": "^((US|CA)?\\$|\\u00A3|\\u20AC|\\u00A5)(([1-9]\\d{0,2}(\\,\\d{3})*)|([1-9]\\d*)|(0))(\\.\\d{2}|k|M|G|T)?$",
         "subValidatorClassName": null
       }
@@ -232,7 +215,6 @@
       "label": "Bank Routing Transit Number",
       "filter": null,
       "validator": {
-        "re2jCompliant" : false,
         "patternString": "^((0[0-9])|(1[0-2])|(2[1-9])|(3[0-2])|(6[1-9])|(7[0-2])|80)([0-9]{7})$",
         "subValidatorClassName": null
       }
@@ -245,7 +227,6 @@
       "label": "Amex Card",
       "filter": null,
       "validator": {
-        "re2jCompliant" : false,
         "patternString": "^3[47][0-9]{13}$",
         "subValidatorClassName": null
       }
@@ -258,7 +239,6 @@
       "label": "UK Postal Code",
       "filter": null,
       "validator": {
-        "re2jCompliant" : false,
         "patternString": "^(([gG][iI][rR] {0,}0[aA]{2})|((([a-pr-uwyzA-PR-UWYZ][a-hk-yA-HK-Y]?[0-9][0-9]?)|(([a-pr-uwyzA-PR-UWYZ][0-9][a-hjkstuwA-HJKSTUW])|([a-pr-uwyzA-PR-UWYZ][a-hk-yA-HK-Y][0-9][abehmnprv-yABEHMNPRV-Y]))) {0,}[0-9][abd-hjlnp-uw-zABD-HJLNP-UW-Z]{2}))$",
         "subValidatorClassName": null
       }
@@ -271,7 +251,6 @@
       "label": "IPv6 Address",
       "filter": null,
       "validator": {
-        "re2jCompliant" : true,
         "patternString": "^((([0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}:[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){5}:([0-9A-Fa-f]{1,4}:)?[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){4}:([0-9A-Fa-f]{1,4}:){0,2}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){3}:([0-9A-Fa-f]{1,4}:){0,3}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){2}:([0-9A-Fa-f]{1,4}:){0,4}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}((\\b((25[0-5])|(1\\d{2})|(2[0-4]\\d)|(\\d{1,2}))\\b)\\.){3}(\\b((25[0-5])|(1\\d{2})|(2[0-4]\\d)|(\\d{1,2}))\\b))|(([0-9A-Fa-f]{1,4}:){0,5}:((\\b((25[0-5])|(1\\d{2})|(2[0-4]\\d)|(\\d{1,2}))\\b)\\.){3}(\\b((25[0-5])|(1\\d{2})|(2[0-4]\\d)|(\\d{1,2}))\\b))|(::([0-9A-Fa-f]{1,4}:){0,5}((\\b((25[0-5])|(1\\d{2})|(2[0-4]\\d)|(\\d{1,2}))\\b)\\.){3}(\\b((25[0-5])|(1\\d{2})|(2[0-4]\\d)|(\\d{1,2}))\\b))|([0-9A-Fa-f]{1,4}::([0-9A-Fa-f]{1,4}:){0,5}[0-9A-Fa-f]{1,4})|(::([0-9A-Fa-f]{1,4}:){0,6}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){1,7}:))$",
         "subValidatorClassName": null
       }
@@ -284,7 +263,6 @@
       "label": "MailTo URL",
       "filter": null,
       "validator": {
-        "re2jCompliant" : true,
         "patternString": "^(?:mailto)\\:((\\p{L}|\\p{N}|[\\._%\\-'])+@(\\p{L}|\\p{N}|[.%-])+(,)?)*((?:\\?)((subject|to|body|cc|blat)=(((\\p{L}|\\p{N}|[\\._%\\-'])+@(\\p{L}|\\p{N}|[.%-])+)|([\\d\\w\\.\\/\\%\\+\\-\\=\\&\\?\\:\\\"\\'\\,\\|\\~\\;#\\\\]|[\\p{L}])*)+(\\&)?)*)*$",
         "subValidatorClassName": null
       }
@@ -297,7 +275,6 @@
       "label": "US Phone",
       "filter": null,
       "validator": {
-        "re2jCompliant" : false,
         "patternString": "^(tel:)?(?:(?:(?:\\+|00)?1\\s*(?:[.-]\\s*)?)?(?:\\(\\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\\s*\\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\\s*(?:[.-]\\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\\s*(?:[.-]\\s*)?([0-9]{4})(?:\\s*(?:#|x\\.?|ext\\.?|extension)\\s*(\\d+))?$",
         "subValidatorClassName": "org.talend.dataquality.semantic.validator.impl.USPhoneNumberValidator"
       }
@@ -310,7 +287,6 @@
       "label": "FR Insee Code",
       "filter": null,
       "validator": {
-        "re2jCompliant" : false,
         "patternString": "^(F-|FRA?(-| ))?((2[A|B])|[0-9]{2})[0-9]{3}$",
         "subValidatorClassName": null
       }
@@ -323,7 +299,6 @@
       "label": "IBAN",
       "filter": null,
       "validator": {
-        "re2jCompliant" : false,
         "patternString": "^[a-zA-Z]{2}[0-9]{2}\\ ?([a-zA-Z0-9]{4}\\ ?){2,6}([a-zA-Z0-9]{4}\\ ?|[a-zA-Z0-9])?[a-zA-Z0-9]{0,2}$",
         "subValidatorClassName": "org.talend.dataquality.semantic.validator.impl.IBANValidator"
       }
@@ -336,7 +311,6 @@
       "label": "Geographic Coordinates (degree)",
       "filter": null,
       "validator": {
-        "re2jCompliant" : false,
         "patternString": "^[NS] \\d{1,}(\\:[0-5]\\d){2}.{0,1}\\d{0,},[EW] \\d{1,}(\\:[0-5]\\d){2}.{0,1}\\d{0,}$",
         "subValidatorClassName": null
       }
@@ -349,7 +323,6 @@
       "label": "Data URL",
       "filter": null,
       "validator": {
-        "re2jCompliant" : true,
         "patternString": "^(?:data)\\:([a-z]+\\/[a-z]+)?(;charset=([\\w-])*)?(;base64)?,([\\w\\!\\$\\&\\'\\,\\(\\)\\*\\+\\,\\;\\=\\-\\.\\_\\~\\:\\@\\/\\?\\%\\s]+)$",
         "subValidatorClassName": null
       }
@@ -362,7 +335,6 @@
       "label": "IPv4 Address",
       "filter": null,
       "validator": {
-        "re2jCompliant" : false,
         "patternString": "^([01]?[\\d][\\d]?|2[0-4][\\d]|25[0-5])\\.([01]?[\\d][\\d]?|2[0-4][\\d]|25[0-5])\\.([01]?[\\d][\\d]?|2[0-4][\\d]|25[0-5])\\.([01]?[\\d][\\d]?|2[0-4][\\d]|25[0-5])$",
         "subValidatorClassName": null
       }
@@ -375,7 +347,6 @@
       "label": "Money Amount (FR)",
       "filter": null,
       "validator": {
-        "re2jCompliant" : false,
         "patternString": "^(([1-9]\\d{0,2}( \\d{3})*)|([1-9]\\d*)|0)((,\\d{2} | (k|M|G|T))?| )(\\$( (US|CA))?|\\u00A3|\\u20AC|\\u00A5)$",
         "subValidatorClassName": null
       }
@@ -388,7 +359,6 @@
       "label": "FR Phone",
       "filter": null,
       "validator": {
-        "re2jCompliant" : false,
         "patternString": "^(tel:)?(0033 ?|\\+33 ?|0)[1-9]([-. ]?[0-9]{2}){4}$",
         "subValidatorClassName": "org.talend.dataquality.semantic.validator.impl.FRPhoneNumberValidator"
       }
@@ -401,7 +371,6 @@
       "label": "Geographic Coordinates",
       "filter": null,
       "validator": {
-        "re2jCompliant" : false,
         "patternString": "^(\\d{1,3}[\\.]\\d*)[, ]+-?(\\d{1,3}[\\.]\\d*)$",
         "subValidatorClassName": null
       }
@@ -414,7 +383,6 @@
       "label": "File URL",
       "filter": null,
       "validator": {
-        "re2jCompliant" : true,
         "patternString": "^(?:file)\\:(?:\\/){0,5}(([\\p{L}|\\p{N}]|[\\-\\.\\:\\|_])*)(([\\p{L}|\\p{N}]|[\\:\\-\\.\\/\\+\\&\\%\\$_\\|])*)?$",
         "subValidatorClassName": null
       }
@@ -427,7 +395,6 @@
       "label": "Color Hex Code",
       "filter": null,
       "validator": {
-        "re2jCompliant" : false,
         "patternString": "^\\#[A-Fa-f0-9]{3}([A-Fa-f0-9]{3})?$",
         "subValidatorClassName": null
       }
@@ -440,7 +407,6 @@
       "label": "FR VAT Number",
       "filter": null,
       "validator": {
-        "re2jCompliant" : false,
         "patternString": "^(FR){0,1}[0-9A-Z]{2}\\ [0-9]{9}$",
         "subValidatorClassName": null
       }
@@ -453,7 +419,6 @@
       "label": "HDFS URL",
       "filter": null,
       "validator": {
-        "re2jCompliant" : true,
         "patternString": "^(?:hdfs)\\:(?:\\/){2}((?:([\\p{L}|\\p{N}]|[\\-\\._\\:])+)?)(([\\p{L}|\\p{N}]|[\\:\\-\\.\\/\\+\\&\\%\\$_\\\\])*)?$",
         "subValidatorClassName": null
       }
@@ -466,7 +431,6 @@
       "label": "DE Postal Code",
       "filter": null,
       "validator": {
-        "re2jCompliant" : false,
         "patternString": "^(?!01000|99999)(0[1-9]\\d{3}|[1-9]\\d{4})$",
         "subValidatorClassName": null
       }
@@ -479,7 +443,6 @@
       "label": "UK Phone",
       "filter": null,
       "validator": {
-        "re2jCompliant" : false,
         "patternString": "^(tel:)?(((\\+44\\s?\\d{4}|\\(?0\\d{4}\\)?)\\s?\\d{3}\\s?\\d{3})|((\\+44\\s?\\d{3}|\\(?0\\d{3}\\)?)\\s?\\d{3}\\s?\\d{4})|((\\+44\\s?\\d{2}|\\(?0\\d{2}\\)?)\\s?\\d{4}\\s?\\d{4}))(\\s?\\#(\\d{4}|\\d{3}))?$",
         "subValidatorClassName": "org.talend.dataquality.semantic.validator.impl.UKPhoneNumberValidator"
       }
@@ -492,7 +455,6 @@
       "label": "BE Postal Code",
       "filter": null,
       "validator": {
-        "re2jCompliant" : false,
         "patternString": "^(F-[0-9]{4,5}|B-[0-9]{4})$",
         "subValidatorClassName": null
       }
@@ -505,7 +467,6 @@
       "label": "AT VAT Number",
       "filter": null,
       "validator": {
-        "re2jCompliant" : false,
         "patternString": "^AT[0-9]{8}$",
         "subValidatorClassName": null
       }
@@ -518,7 +479,6 @@
       "label": "SEDOL",
       "filter": null,
       "validator": {
-        "re2jCompliant" : false,
         "patternString": "^(?<Sedol>[B-Db-dF-Hf-hJ-Nj-nP-Tp-tV-Xv-xYyZz\\d]{6}\\d)$",
         "subValidatorClassName": "org.talend.dataquality.semantic.validator.impl.SedolValidator"
       }
@@ -531,7 +491,6 @@
       "label": "Passport",
       "filter": null,
       "validator": {
-        "re2jCompliant" : false,
         "patternString": "^[A-Z0-9<]{9}[0-9]{1}[A-Z]{3}[0-9]{7}[A-Z]{1}[0-9]{7}[A-Z0-9<]{14}[0-9]{2}$",
         "subValidatorClassName": null
       }
@@ -544,7 +503,6 @@
       "label": "US Postal Code",
       "filter": null,
       "validator": {
-        "re2jCompliant" : false,
         "patternString": "^[0-9]{5}(-[0-9]{4})?$",
         "subValidatorClassName": null
       }
