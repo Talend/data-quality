@@ -21,7 +21,7 @@ public class MFBOrderTest extends TestCase {
 
     private final Callback callback = DefaultCallback.INSTANCE;
 
-    private final List<Record> listOrder1 = new ArrayList<Record>() {
+    private static final List<Record> listOrder1 = new ArrayList<Record>() {
 
         {
             // add(new Record(Arrays.asList(new Attribute[] { new Attribute("A0", 0, "OOOOO") }), "R0", 999L, "MFB"));
@@ -124,8 +124,8 @@ public class MFBOrderTest extends TestCase {
         System.out.println("\nOrder 3: "); //$NON-NLS-1$
         List<Record> mergeRecordList3 = algorithm.execute(listOrder3.iterator(), callback);
         printResult(mergeRecordList3);
-        AssertResult(mergeRecordList1, mergeRecordList2);
-        AssertResult(mergeRecordList1, mergeRecordList3);
+        Assert.assertTrue(assertResult(mergeRecordList1, mergeRecordList2));
+        Assert.assertTrue(assertResult(mergeRecordList1, mergeRecordList3));
     }
 
     public void testABCDEFGHIJLongest() {
@@ -137,7 +137,7 @@ public class MFBOrderTest extends TestCase {
         System.out.println("Order 5: "); //$NON-NLS-1$
         List<Record> mergeRecordList5 = algorithm.execute(listOrder5.iterator(), callback);
         printResult(mergeRecordList5);
-        AssertResult(mergeRecordList4, mergeRecordList5);
+        Assert.assertTrue(assertResult(mergeRecordList4, mergeRecordList5));
 
     }
 
@@ -153,8 +153,8 @@ public class MFBOrderTest extends TestCase {
         System.out.println("\nOrder 3: "); //$NON-NLS-1$
         List<Record> mergeRecordList3 = algorithm.execute(listOrder3.iterator(), callback);
         printResult(mergeRecordList3);
-        AssertResult(mergeRecordList1, mergeRecordList2);
-        AssertResult(mergeRecordList1, mergeRecordList3);
+        Assert.assertTrue(assertResult(mergeRecordList1, mergeRecordList2));
+        Assert.assertTrue(assertResult(mergeRecordList1, mergeRecordList3));
     }
 
     public void testABCDEConcat() {
@@ -169,15 +169,15 @@ public class MFBOrderTest extends TestCase {
         System.out.println("\nOrder 3:  "); //$NON-NLS-1$
         List<Record> mergeRecordList3 = algorithm.execute(listOrder3.iterator(), callback);
         printResult(mergeRecordList3);
-        AssertResult(mergeRecordList1, mergeRecordList2);
-        AssertResult(mergeRecordList1, mergeRecordList3, true, new Integer[] { 1 });
+        Assert.assertTrue(assertResult(mergeRecordList1, mergeRecordList2));
+        Assert.assertTrue(assertResult(mergeRecordList1, mergeRecordList3, true, new Integer[] { 1 }));
     }
 
-    private void AssertResult(List<Record> expectMergeRecordList, List<Record> actualMergeRecordList) {
-        AssertResult(expectMergeRecordList, actualMergeRecordList, false, null);
+    private boolean assertResult(List<Record> expectMergeRecordList, List<Record> actualMergeRecordList) {
+        return assertResult(expectMergeRecordList, actualMergeRecordList, false, null);
     }
 
-    private void AssertResult(List<Record> expectMergeRecordList, List<Record> actualMergeRecordList,
+    private boolean assertResult(List<Record> expectMergeRecordList, List<Record> actualMergeRecordList,
             boolean hasDifferentConfidence, Integer[] differentIndexs) {
         Assert.assertNotNull("expectMergeRecordList should not be null", expectMergeRecordList); //$NON-NLS-1$
         Assert.assertNotNull("actualMergeRecordList should not be null", actualMergeRecordList); //$NON-NLS-1$
@@ -196,6 +196,7 @@ public class MFBOrderTest extends TestCase {
                         actualRecord.getConfidence() == expectRecord.getConfidence());
             }
         }
+        return true;
     }
 
     private void printResult(List<Record> mergedRecords) {

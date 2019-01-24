@@ -47,6 +47,12 @@ public class MultiColumnMFBOrderTest extends TestCase {
 
     private static final List<Record> listOrder3 = new ArrayList<Record>() {
 
+        // ----A1----A2----A3----------------B1-----B2--------B3
+        // A1---1---0.8---0.6----------B1----1-----0.4--------0.6
+        // -----------------------------------------------------
+        // A2--0.8---1----0.8----------B2---0.4-----1---------0.6
+        // -------------------------------------------------------
+        // A3--0.6--0.8---1------------B3---0.6-----0.6--------1
         {
             add(new Record(Arrays.asList(new Attribute[] { new Attribute("A3", 0, "AAAAAACCBB"), //$NON-NLS-1$ //$NON-NLS-2$
                     new Attribute("B3", 1, "OOOOOOOZZZ") }), "R3", 999L, "MFB")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
@@ -54,49 +60,6 @@ public class MultiColumnMFBOrderTest extends TestCase {
                     new Attribute("B1", 1, "OOOOOOOOOO") }), "R1", 999L, "MFB")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
             add(new Record(Arrays.asList(new Attribute[] { new Attribute("A2", 0, "AAAAAAABBB"), //$NON-NLS-1$ //$NON-NLS-2$
                     new Attribute("B2", 1, "OOOOOIIIIZ") }), "R2", 999L, "MFB")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-        }
-    };
-
-    private static final List<Record> listOrder1a = new ArrayList<Record>() {
-
-        {
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A1", 0, "ABCDE"), //$NON-NLS-1$ //$NON-NLS-2$
-                    new Attribute("B1", 1, "ALLMM") }), "R1", 999L, "MFB")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A2", 0, "ABCDF"), //$NON-NLS-1$ //$NON-NLS-2$
-                    new Attribute("B2", 1, "BLLLL") }), "R2", 999L, "MFB")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A3", 0, "ABCFF"), //$NON-NLS-1$ //$NON-NLS-2$
-                    new Attribute("B3", 1, "CLLLM") }), "R3", 999L, "MFB")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-        }
-    };
-
-    private static final List<Record> listOrder2a = new ArrayList<Record>() {
-
-        {
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A2", 0, "ABCDF"), //$NON-NLS-1$ //$NON-NLS-2$
-                    new Attribute("B2", 1, "BLLLL") }), "R2", 999L, "MFB")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A3", 0, "ABCFF"), //$NON-NLS-1$ //$NON-NLS-2$
-                    new Attribute("B3", 1, "CLLLM") }), "R3", 999L, "MFB")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A1", 0, "ABCDE"), //$NON-NLS-1$ //$NON-NLS-2$
-                    new Attribute("B1", 1, "ALLMM") }), "R1", 999L, "MFB")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-        }
-    };
-
-    private static final List<Record> listOrder3a = new ArrayList<Record>() {
-
-        // ----A1----A2----A3----------------B1-----B2--------B3
-        // A1---1---0.8---0.6----------B1----1-----0.4--------0.6
-        // -----------------------------------------------------
-        // A2--0.8---1----0.8----------B2---0.4-----1---------0.6
-        // -------------------------------------------------------
-        // A3--0.6--0.8---1------------B3---0.6-----0.6--------1
-
-        {
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A3", 0, "ABCFF"), //$NON-NLS-1$ //$NON-NLS-2$
-                    new Attribute("B3", 1, "CLLLM") }), "R3", 999L, "MFB")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A1", 0, "ABCDE"), //$NON-NLS-1$ //$NON-NLS-2$
-                    new Attribute("B1", 1, "ALLMM") }), "R1", 999L, "MFB")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A2", 0, "ABCDF"), //$NON-NLS-1$ //$NON-NLS-2$
-                    new Attribute("B2", 1, "BLLLL") }), "R2", 999L, "MFB")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
         }
     };
 
@@ -184,8 +147,8 @@ public class MultiColumnMFBOrderTest extends TestCase {
         System.out.println("\nOrder 3: "); //$NON-NLS-1$
         List<Record> mergeRecordList3 = algorithm.execute(listOrder3.iterator(), callback);
         printResult(mergeRecordList3);
-        AssertResult(mergeRecordList1, mergeRecordList2);
-        AssertResult(mergeRecordList1, mergeRecordList3);
+        Assert.assertTrue(assertResult(mergeRecordList1, mergeRecordList2));
+        Assert.assertTrue(assertResult(mergeRecordList1, mergeRecordList3));
     }
 
     public void testNameAndCityLongest() {
@@ -197,7 +160,7 @@ public class MultiColumnMFBOrderTest extends TestCase {
         System.out.println("\nOrder 5:  "); //$NON-NLS-1$
         List<Record> mergeRecordList5 = algorithm.execute(listOrder5.iterator(), callback);
         printResult(mergeRecordList5);
-        AssertResult(mergeRecordList4, mergeRecordList5);
+        Assert.assertTrue(assertResult(mergeRecordList4, mergeRecordList5));
     }
 
     public void testABCDELongestLowMinConfidence() {
@@ -212,8 +175,8 @@ public class MultiColumnMFBOrderTest extends TestCase {
         System.out.println("\nOrder 3: "); //$NON-NLS-1$
         List<Record> mergeRecordList3 = algorithm.execute(listOrder3.iterator(), callback);
         printResult(mergeRecordList3);
-        AssertResult(mergeRecordList1, mergeRecordList2);
-        AssertResult(mergeRecordList1, mergeRecordList3);
+        Assert.assertTrue(assertResult(mergeRecordList1, mergeRecordList2));
+        Assert.assertTrue(assertResult(mergeRecordList1, mergeRecordList3));
     }
 
     public void testABCDEConcat() {
@@ -228,16 +191,16 @@ public class MultiColumnMFBOrderTest extends TestCase {
         System.out.println("\nOrder 3:  "); //$NON-NLS-1$
         List<Record> mergeRecordList3 = algorithm.execute(listOrder3.iterator(), callback);
         printResult(mergeRecordList3);
-        AssertResult(mergeRecordList1, mergeRecordList2, true, new Integer[] { 0 });
-        AssertResult(mergeRecordList1, mergeRecordList3, true, new Integer[] { 0 });
-        AssertResult(mergeRecordList2, mergeRecordList3);
+        Assert.assertTrue(assertResult(mergeRecordList1, mergeRecordList2, true, new Integer[] { 0 }));
+        Assert.assertTrue(assertResult(mergeRecordList1, mergeRecordList3, true, new Integer[] { 0 }));
+        Assert.assertTrue(assertResult(mergeRecordList2, mergeRecordList3));
     }
 
-    private void AssertResult(List<Record> expectMergeRecordList, List<Record> actualMergeRecordList) {
-        AssertResult(expectMergeRecordList, actualMergeRecordList, false, null);
+    private boolean assertResult(List<Record> expectMergeRecordList, List<Record> actualMergeRecordList) {
+        return assertResult(expectMergeRecordList, actualMergeRecordList, false, null);
     }
 
-    private void AssertResult(List<Record> expectMergeRecordList, List<Record> actualMergeRecordList,
+    private boolean assertResult(List<Record> expectMergeRecordList, List<Record> actualMergeRecordList,
             boolean hasDifferentConfidence, Integer[] differentIndexs) {
         Assert.assertNotNull("expectMergeRecordList should not be null", expectMergeRecordList); //$NON-NLS-1$
         Assert.assertNotNull("actualMergeRecordList should not be null", actualMergeRecordList); //$NON-NLS-1$
@@ -256,6 +219,7 @@ public class MultiColumnMFBOrderTest extends TestCase {
                         actualRecord.getConfidence() == expectRecord.getConfidence());
             }
         }
+        return true;
     }
 
     private void printResult(List<Record> mergedRecords) {
