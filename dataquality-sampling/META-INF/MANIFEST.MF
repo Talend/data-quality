@@ -27,6 +27,7 @@ Import-Package: com.google.i18n.phonenumbers,
  org.apache.commons.lang3.tuple,
  org.apache.commons.math3.distribution,
  org.slf4j;version="[1.7.0,2.0.0)",
- org.talend.daikon.number;version="[0.26.0,1.0.0)"
+ org.talend.daikon.number;version="[0.26.0,1.0.0)",
+ org.talend.daikon.pattern.character;version="[0.26.0,1.0.0]"
 Require-Bundle: org.talend.dataquality.common,
  org.talend.testutils;resolution:=optional
