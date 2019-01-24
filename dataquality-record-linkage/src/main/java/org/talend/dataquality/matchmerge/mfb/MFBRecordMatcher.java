@@ -126,10 +126,6 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
         // 1- Try first values
         String left = leftAttribute.getValue();
         String right = rightAttribute.getValue();
-        // double score = matcher.getMatchingWeight(left, right);
-        // if (score >= matcher.getThreshold()) {
-        // return score;
-        // }
         // 2- Compare using values that build attribute value (if any)
         Iterator<String> leftValues = new IteratorChain(Collections.singleton(left).iterator(),
                 leftAttribute.getValues().iterator());
@@ -155,36 +151,8 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
                 if (score > maxScore) {
                     maxScore = score;
                 }
-                // if (Double.compare(maxScore, MAX_SCORE) == 0) {
-                // // Can't go higher, no need to perform other checks.
-                // // return maxScore;
-                // break;
-                // }
             }
         }
-        // Iterator<String> selfEvalValuesLeft =
-        // new IteratorChain(new IteratorChain(Collections.singleton(left).iterator(), leftAttribute
-        // .getValues()
-        // .iterator()), new IteratorChain(Collections.singleton(right).iterator(), rightAttribute
-        // .getValues()
-        // .iterator()));
-        //
-        // while (selfEvalValuesLeft.hasNext()) {
-        // String selfEvalValueLeft = selfEvalValuesLeft.next();
-        // Iterator<String> selfEvalValuesRight =
-        // new IteratorChain(new IteratorChain(Collections.singleton(left).iterator(), leftAttribute
-        // .getValues()
-        // .iterator()), new IteratorChain(Collections.singleton(right).iterator(), rightAttribute
-        // .getValues()
-        // .iterator()));
-        // while (selfEvalValuesRight.hasNext()) {
-        // String selfEvalValueRight = selfEvalValuesRight.next();
-        // score = matcher.getMatchingWeight(selfEvalValueLeft, selfEvalValueRight);
-        // if (worstConfidenceValue > score) {
-        // worstConfidenceValue = score;
-        // }
-        // }
-        // }
         return maxScore;
     }
 

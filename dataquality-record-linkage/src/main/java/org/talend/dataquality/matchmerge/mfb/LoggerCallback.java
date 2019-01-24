@@ -34,7 +34,7 @@ public class LoggerCallback implements MatchMergeAlgorithm.Callback {
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("\t(+) Positive match: #" + record1.getId() + " <---> #" + record2.getId());
         }
-        if (LOGGER.isInfoEnabled()) {
+        if (LOGGER.isDebugEnabled()) {
             StringBuilder messagesBuilder = new StringBuilder();
             int i = 0;
             for (MatchResult.Score score : matchResult.getScores()) {
@@ -45,7 +45,7 @@ public class LoggerCallback implements MatchMergeAlgorithm.Callback {
             }
             messagesBuilder.append('\n');
             messagesBuilder.append("\t\tconfidence: ").append(matchResult.getNormalizedConfidence()).append(")");
-            LOGGER.info(messagesBuilder.toString());
+            LOGGER.debug(messagesBuilder.toString());
         }
     }
 
@@ -58,12 +58,12 @@ public class LoggerCallback implements MatchMergeAlgorithm.Callback {
                 LOGGER.info("\t(+) New merge: #" + record.getId() + " (unique record).");
             }
         }
-        if (LOGGER.isInfoEnabled()) {
+        if (LOGGER.isDebugEnabled()) {
             StringBuilder messageBuilder = new StringBuilder();
             for (Attribute attribute : record.getAttributes()) {
                 messageBuilder.append("\t\t").append(attribute.getLabel()).append(": '").append(attribute.getValue()).append("'");
             }
-            LOGGER.info(messageBuilder.toString());
+            LOGGER.debug(messageBuilder.toString());
         }
     }
 
@@ -76,8 +76,8 @@ public class LoggerCallback implements MatchMergeAlgorithm.Callback {
 
     @Override
     public void onDifferent(Record record1, Record record2, MatchResult matchResult) {
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("\t(-) Negative match: #" + record1.getId() + " <-/-> #" + record2.getId());
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("\t(-) Negative match: #" + record1.getId() + " <-/-> #" + record2.getId());
             StringBuilder messagesBuilder = new StringBuilder();
             int i = 0;
             for (MatchResult.Score score : matchResult.getScores()) {
@@ -95,7 +95,7 @@ public class LoggerCallback implements MatchMergeAlgorithm.Callback {
             }
             messagesBuilder.append('\n');
             messagesBuilder.append("\t\tconfidence: ").append(matchResult.getNormalizedConfidence()).append(")");
-            LOGGER.info(messagesBuilder.toString());
+            LOGGER.debug(messagesBuilder.toString());
         }
     }
 

@@ -70,7 +70,7 @@ public class DefaultCallback implements MatchMergeAlgorithm.Callback {
 
     @Override
     public void onSynResult(Record newRecord, Record originalRecord, MatchResult matchResult) {
-        // TODO Auto-generated method stub
+        // no need to implement
 
     }
 
