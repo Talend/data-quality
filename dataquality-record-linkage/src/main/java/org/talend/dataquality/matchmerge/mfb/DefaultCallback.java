@@ -70,8 +70,8 @@ public class DefaultCallback implements MatchMergeAlgorithm.Callback {
 
     @Override
     public void onSynResult(Record newRecord, Record originalRecord, MatchResult matchResult) {
-        // no need to implement
-
+        newRecord.setConfidence(matchResult.getFinalWorstConfidenceValue());
+        newRecord.setWorstConfidenceValueScoreList(matchResult.getWorstConfidenceValueScoreList());
     }
 
 }
