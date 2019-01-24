@@ -97,8 +97,7 @@ public class MFBOrderTest extends TestCase {
         }
     };
 
-    private MatchMergeAlgorithm
-            buildMFB(float attrThreshold, double minConfidence, SurvivorShipAlgorithmEnum mergeAlgo) {
+    private MatchMergeAlgorithm buildMFB(float attrThreshold, double minConfidence, SurvivorShipAlgorithmEnum mergeAlgo) {
         return MFB.build( //
                 new AttributeMatcherType[] { AttributeMatcherType.LEVENSHTEIN }, // algorithms
                 new String[] { "" }, // algo params //$NON-NLS-1$
@@ -201,8 +200,7 @@ public class MFBOrderTest extends TestCase {
 
     private void printResult(List<Record> mergedRecords) {
         for (Record rec : mergedRecords) {
-            List<String> attrList =
-                    rec.getAttributes().stream().map(attr -> attr.getValue()).collect(Collectors.toList());
+            List<String> attrList = rec.getAttributes().stream().map(attr -> attr.getValue()).collect(Collectors.toList());
             System.out.println("  " + rec + " " + attrList + "   Confidence: " + rec.getConfidence()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         }
     }
