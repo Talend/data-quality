@@ -15,7 +15,6 @@ package org.talend.dataquality.record.linkage.grouping.callback;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
 import org.talend.dataquality.matchmerge.Record;
 import org.talend.dataquality.matchmerge.mfb.MatchResult;
 import org.talend.dataquality.record.linkage.grouping.AbstractRecordGrouping;
@@ -25,7 +24,8 @@ import org.talend.dataquality.record.linkage.grouping.swoosh.SwooshConstants;
 import org.talend.dataquality.record.linkage.utils.BidiMultiMap;
 
 /**
- * Create by zshen This class is used to finish all kinds of action(match merge remove and so on) in Multi pass match processing.
+ * Create by zshen This class is used to finish all kinds of action(match merge remove and so on) in Multi pass match
+ * processing.
  */
 public class MultiPassGroupingCallBack<T> extends GroupingCallBack<T> {
 
@@ -183,7 +183,7 @@ public class MultiPassGroupingCallBack<T> extends GroupingCallBack<T> {
     private void setOldGrpQuality(RichRecord richRecord, Double value) {
         if (richRecord.getGRP_QUALITY() == null) {
             richRecord.setGRP_QUALITY(
-                    new DQAttribute<>(SwooshConstants.GROUP_QUALITY, richRecord.getRecordSize(), StringUtils.EMPTY));
+                    new DQAttribute<>(SwooshConstants.GROUP_QUALITY, richRecord.getRecordSize(), String.valueOf(value)));
         } else {
             richRecord.getGRP_QUALITY().setValue(String.valueOf(value));
         }
@@ -216,7 +216,9 @@ public class MultiPassGroupingCallBack<T> extends GroupingCallBack<T> {
         if (record.getGroupId() != null) {
             richRecord.setMerged(true);
             richRecord.setGrpSize(richRecord.getRelatedIds().size());
-            if (Double.compare(richRecord.getGroupQuality(), 0.0d) == 0) {
+            if (Double.compare(richRecord.getGroupQuality(), richRecord.getConfidence()) > 0) {
+                richRecord.setGroupQuality(record.getConfidence());
+            } else if (Double.compare(richRecord.getGroupQuality(), 0.0d) == 0) {
                 // group quality will be the confidence (score) or old group quality decide that by who is minimum.
                 Double oldGrpQuality = getOldGrpQuality(richRecord);
                 richRecord.setGroupQuality(getMergeGQ(oldGrpQuality, record.getConfidence()));
@@ -232,7 +234,12 @@ public class MultiPassGroupingCallBack<T> extends GroupingCallBack<T> {
      */
     private Double getOldGrpQuality(RichRecord richRecord) {
         String value = richRecord.getGRP_QUALITY() == null ? null : richRecord.getGRP_QUALITY().getValue();
-        return Double.valueOf(value == null ? "1.0" : value);
+        if (value == null) {
+            value = "1.0"; //$NON-NLS-1$
+        } else if (value.isEmpty()) {
+            return richRecord.getGroupQuality();
+        }
+        return Double.valueOf(value);
     }
 
     /**
@@ -270,6 +277,12 @@ public class MultiPassGroupingCallBack<T> extends GroupingCallBack<T> {
             // remove the oldgid's list in: groupRows
             groupRows.remove(oldGID);
         }
+    }
+
+    @Override
+    public void onSynResult(Record newRecord, Record originalRecord, MatchResult matchResult) {
+        super.onSynResult(newRecord, originalRecord, matchResult);
+        this.uniqueOldGroupQuality(originalRecord, newRecord);
     }
 
 }

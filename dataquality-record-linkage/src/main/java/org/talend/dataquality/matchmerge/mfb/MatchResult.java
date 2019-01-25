@@ -25,9 +25,14 @@ public class MatchResult {
 
     private double normalizedConfidence;
 
+    private double finalWorstConfidenceValue;
+
+    private final List<Double> worstConfidenceValueScoreList;
+
     public MatchResult(int size) {
         scores = new ArrayList<Score>(size + 1);
         thresholds = new ArrayList<Float>(size + 1);
+        worstConfidenceValueScoreList = new ArrayList<Double>(size + 1);
     }
 
     public static class Score {
@@ -87,4 +92,39 @@ public class MatchResult {
         }
         return true;
     }
+
+    /**
+     * Getter for finalWorstConfidenceValue.
+     * 
+     * @return the finalWorstConfidenceValue
+     */
+    public double getFinalWorstConfidenceValue() {
+        return this.finalWorstConfidenceValue;
+    }
+
+    /**
+     * Sets the finalWorstConfidenceValue.
+     * 
+     * @param finalWorstConfidenceValue the finalWorstConfidenceValue to set
+     */
+    protected void setFinalWorstConfidenceValue(double finalWorstConfidenceValue) {
+        this.finalWorstConfidenceValue = finalWorstConfidenceValue;
+    }
+
+    /**
+     * Store worst score for every attribute
+     * */
+    protected void storeWorstScore(int index, double score) {
+        this.worstConfidenceValueScoreList.add(index, score);
+    }
+
+    /**
+     * Getter for worstConfidenceValueScoreList.
+     * 
+     * @return the worstConfidenceValueScoreList
+     */
+    public List<Double> getWorstConfidenceValueScoreList() {
+        return this.worstConfidenceValueScoreList;
+    }
+
 }

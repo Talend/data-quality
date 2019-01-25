@@ -14,6 +14,7 @@ package org.talend.dataquality.matchmerge.mfb;
 
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.commons.collections.iterators.IteratorChain;
 import org.apache.commons.lang.StringUtils;
@@ -31,6 +32,8 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
     private static final double MAX_SCORE = 1;
 
     private final double minConfidenceValue;
+
+    private static double worstConfidenceValue;
 
     public MFBRecordMatcher(double minConfidenceValue) {
         this.minConfidenceValue = minConfidenceValue;
@@ -56,28 +59,40 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
     public MatchResult getMatchingWeight(Record record1, Record record2) {
         Iterator<Attribute> mergedRecordAttributes = record1.getAttributes().iterator();
         Iterator<Attribute> currentRecordAttributes = record2.getAttributes().iterator();
+        List<Double> leftWorstConfidenceValueScoreList = record1.getWorstConfidenceValueScoreList();
+        List<Double> rightWorstConfidenceValueScoreList = record2.getWorstConfidenceValueScoreList();
         double confidence = 0;
         int matchIndex = 0;
         MatchResult result = new MatchResult(record1.getAttributes().size());
         int maxWeight = 0;
+        double finalWorstConfidenceValue = 0.0d;
         while (mergedRecordAttributes.hasNext()) {
             Attribute left = mergedRecordAttributes.next();
             Attribute right = currentRecordAttributes.next();
             IAttributeMatcher matcher = attributeMatchers[matchIndex];
+            Double leftWorstScore = getWorstScore(leftWorstConfidenceValueScoreList, matchIndex);
+            Double rightWorstScore = getWorstScore(rightWorstConfidenceValueScoreList, matchIndex);
             // Find the first score to exceed threshold (if any).
-            double score = matchScore(left, right, matcher);
+            // use record1.getWorstConfidenceValueScoreList() to instead of some while in matchScore method
+            double score = matchScore(left, right, matcher, leftWorstScore, rightWorstScore);
             attributeMatchingWeights[matchIndex] = score;
             result.setScore(matchIndex, matcher.getMatchType(), score, record1.getId(), left.getValue(), record2.getId(),
                     right.getValue());
             result.setThreshold(matchIndex, matcher.getThreshold());
+            result.storeWorstScore(matchIndex, worstConfidenceValue);
             confidence += score * matcher.getWeight();
+            finalWorstConfidenceValue += worstConfidenceValue * matcher.getWeight();
             maxWeight += matcher.getWeight();
             matchIndex++;
         }
         double normalizedConfidence = confidence > 0 && maxWeight != 0 ? confidence / maxWeight : confidence; // Normalize
                                                                                                               // to 0..1
-                                                                                                              // value
+        finalWorstConfidenceValue = finalWorstConfidenceValue > 0 && maxWeight != 0 ? finalWorstConfidenceValue / maxWeight
+                : finalWorstConfidenceValue; // Normalize
+        // to 0..1
         result.setConfidence(normalizedConfidence);
+        result.setFinalWorstConfidenceValue(finalWorstConfidenceValue);
+
         if (normalizedConfidence < minConfidenceValue) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Cannot match record: merged record has a too low confidence value (" + normalizedConfidence + " < "
@@ -85,8 +100,14 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
             }
             return MFB.NonMatchResult.wrap(result);
         }
-        synRecord2ConFidence(record2, normalizedConfidence);
         return result;
+    }
+
+    private Double getWorstScore(List<Double> leftWorstConfidenceValueScoreList, int index) {
+        if (leftWorstConfidenceValueScoreList.size() > index) {
+            return leftWorstConfidenceValueScoreList.get(index);
+        }
+        return 1.0d;
     }
 
     /**
@@ -99,16 +120,24 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
         record2.setConfidence(normalizedConfidence);
     }
 
-    private static double matchScore(Attribute leftAttribute, Attribute rightAttribute, IAttributeMatcher matcher) {
+    private static double matchScore(Attribute leftAttribute, Attribute rightAttribute, IAttributeMatcher matcher,
+            Double leftWorstScore, Double rightWorstScore) {
         // Find the best score in values
         // 1- Try first values
         String left = leftAttribute.getValue();
         String right = rightAttribute.getValue();
-        double score = matcher.getMatchingWeight(left, right);
         // 2- Compare using values that build attribute value (if any)
         Iterator<String> leftValues = new IteratorChain(Collections.singleton(left).iterator(),
                 leftAttribute.getValues().iterator());
+
         double maxScore = 0;
+        double score = 0;
+        if (leftWorstScore > rightWorstScore) {
+            worstConfidenceValue = rightWorstScore;
+        } else {
+            worstConfidenceValue = leftWorstScore;
+        }
+
         while (leftValues.hasNext()) {
             String leftValue = leftValues.next();
             Iterator<String> rightValues = new IteratorChain(Collections.singleton(right).iterator(),
@@ -116,16 +145,24 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
             while (rightValues.hasNext()) {
                 String rightValue = rightValues.next();
                 score = matcher.getMatchingWeight(leftValue, rightValue);
+                if (worstConfidenceValue > score) {
+                    worstConfidenceValue = score;
+                }
                 if (score > maxScore) {
                     maxScore = score;
-                }
-                if (Double.compare(maxScore, MAX_SCORE) == 0) {
-                    // Can't go higher, no need to perform other checks.
-                    return maxScore;
                 }
             }
         }
         return maxScore;
+    }
+
+    /**
+     * Getter for worstConfidenceValue.
+     * 
+     * @return the worstConfidenceValue
+     */
+    protected double getWorstConfidenceValue() {
+        return this.worstConfidenceValue;
     }
 
 }
