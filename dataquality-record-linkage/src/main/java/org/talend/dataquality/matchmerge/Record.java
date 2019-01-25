@@ -47,6 +47,8 @@ public class Record {
 
     private Set<String> relatedIds = new HashSet<String>();
 
+    private List<Double> worstConfidenceValueScoreList = new ArrayList<Double>();
+
     private double confidence = MAX_CONFIDENCE;
 
     /**
@@ -196,4 +198,23 @@ public class Record {
     public String getSource() {
         return source;
     }
+
+    /**
+     * Sets the worstConfidenceValueScoreList.
+     * 
+     * @param worstConfidenceValueScoreList the worstConfidenceValueScoreList to set
+     */
+    public void setWorstConfidenceValueScoreList(List<Double> worstConfidenceValueScoreList) {
+        this.worstConfidenceValueScoreList = worstConfidenceValueScoreList;
+    }
+
+    /**
+     * Getter for worstConfidenceValueScoreList.
+     * 
+     * @return the worstConfidenceValueScoreList
+     */
+    public List<Double> getWorstConfidenceValueScoreList() {
+        return this.worstConfidenceValueScoreList;
+    }
+
 }

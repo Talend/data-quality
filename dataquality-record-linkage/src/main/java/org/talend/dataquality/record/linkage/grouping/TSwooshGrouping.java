@@ -349,7 +349,8 @@ public class TSwooshGrouping<TYPE> {
      */
     private void restoreMasterData(RichRecord master) {
         DQAttribute<?> isMasterAttribute = master.getMASTER();
-        if (Double.compare(master.getGroupQuality(), 0.0d) == 0 && "false".equals(isMasterAttribute.getValue())) { //$NON-NLS-1$
+        if (master.getMASTER() != null && Double.compare(master.getGroupQuality(), 0.0d) == 0
+                && "false".equals(isMasterAttribute.getValue())) { //$NON-NLS-1$
             isMasterAttribute.setValue("true"); //$NON-NLS-1$
             Double valueDQ = Double.valueOf(master.getGRP_QUALITY().getValue());
             master.setGroupQuality(valueDQ);

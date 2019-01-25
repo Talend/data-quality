@@ -683,4 +683,13 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
         return null;
     }
 
+    /**
+     * Getter for swooshGrouping.
+     * 
+     * @return the swooshGrouping
+     */
+    public TSwooshGrouping<TYPE> getSwooshGrouping() {
+        return this.swooshGrouping;
+    }
+
 }

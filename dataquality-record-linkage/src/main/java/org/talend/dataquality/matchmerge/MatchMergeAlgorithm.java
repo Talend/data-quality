@@ -128,6 +128,15 @@ public interface MatchMergeAlgorithm {
          */
         void onEndProcessing();
 
+        /**
+         * Synchronize result between new merge record and original record
+         * 
+         * @param newRecord The new master record
+         * @param originalRecord One of the record which will merge
+         * @param matchResult The result of merging
+         */
+        void onSynResult(Record newRecord, Record originalRecord, MatchResult matchResult);
+
     }
 
 }

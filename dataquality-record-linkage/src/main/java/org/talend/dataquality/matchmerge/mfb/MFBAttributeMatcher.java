@@ -49,9 +49,6 @@ public class MFBAttributeMatcher implements IAttributeMatcher, ITokenization {
             newStr2 = newStr2.substring(subString.getBeginIndex(), subString.getEndIndex());
         }
         double matchingWeight = delegate.getMatchingWeight(newStr1, newStr2);
-        if (matchingWeight < threshold) {
-            return 0;
-        }
         return matchingWeight;
     }
 
@@ -97,8 +94,9 @@ public class MFBAttributeMatcher implements IAttributeMatcher, ITokenization {
 
     @Override
     public void setTokenMethod(TokenizedResolutionMethod tokenMethod) {
-        if (!AttributeMatcherType.CUSTOM.equals(delegate.getMatchType()))
+        if (!AttributeMatcherType.CUSTOM.equals(delegate.getMatchType())) {
             ((AbstractAttributeMatcher) delegate).setTokenMethod(tokenMethod);
+        }
     }
 
 }

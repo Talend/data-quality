@@ -506,4 +506,57 @@ public class AbstractRecordGroupingTest {
 
         }
     }
+
+    /**
+     * Test method for {@link org.talend.dataquality.record.linkage.grouping.AbstractRecordGrouping#getSwooshGrouping()}
+     * .
+     */
+    @Test
+    public void testGetSwooshGrouping() {
+        recordGroup = new AbstractRecordGrouping<String>() {
+
+            /*
+             * (non-Javadoc)
+             * 
+             * @see org.talend.dataquality.record.linkage.grouping.AbstractRecordGrouping#outputRow(java.lang.String)
+             */
+            @Override
+            protected void outputRow(String[] row) {
+                groupingRecords.add(row);
+            }
+
+            @Override
+            protected String incrementGroupSize(String oldGroupSize) {
+                String newGroupSize = String.valueOf(Integer.parseInt(String.valueOf(oldGroupSize)) + 1);
+                return newGroupSize;
+            }
+
+            @Override
+            protected String castAsType(Object objectValue) {
+                String column = String.valueOf(objectValue);
+                return column;
+            }
+
+            @Override
+            protected boolean isMaster(String col) {
+                return "true".equals(col); //$NON-NLS-1$
+            }
+
+            @Override
+            protected String[] createTYPEArray(int size) {
+                String[] arrays = new String[size];
+                return arrays;
+            }
+
+            @Override
+            protected void outputRow(RichRecord row) {
+                // no need to implements
+            }
+
+        };
+        Assert.assertNotNull("The attribute swooshGrouping should not be null", //$NON-NLS-1$
+                ((AbstractRecordGrouping<String>) recordGroup).getSwooshGrouping());
+
+    }
+
 }

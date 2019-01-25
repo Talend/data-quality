@@ -163,22 +163,21 @@ public class CombinedRecordMatcher extends AbstractRecordMatcher {
             matchingWeight = currentWeight;
             lastPositiveMatchResult = matchResult;
 
-            if (matchResult.isMatch() && matchingWeight >= matcher.getRecordMatchThreshold()) {
+            if (lastPositiveMatchResult.isMatch() && matchingWeight >= matcher.getRecordMatchThreshold()) {
                 // when there is a match with one matcher, no need to loop on all matchers
                 break;
             }
         }
-        if (record1 instanceof RichRecord) { // record 2 will then be instance of RichRecord class naturally.
-            // Set matching score and labeled attribute scores
+        if (lastPositiveMatchResult.isMatch() && record1 instanceof RichRecord) { // record 2 will then be instance of
+                                                                                      // RichRecord class naturally.
+                                                                                  // Set matching score and labeled attribute scores
             RichRecord richRecord1 = (RichRecord) record1;
             RichRecord richRecord2 = (RichRecord) record2;
             richRecord1.setScore(matchingWeight);
             richRecord2.setScore(matchingWeight);
-            if (lastPositiveMatchResult.isMatch()) {
-                String labeledAttributeMatchWeights = getLabeledAttributeMatchWeights();
-                richRecord1.setLabeledAttributeScores(labeledAttributeMatchWeights);
-                richRecord2.setLabeledAttributeScores(labeledAttributeMatchWeights);
-            }
+            String labeledAttributeMatchWeights = getLabeledAttributeMatchWeights();
+            richRecord1.setLabeledAttributeScores(labeledAttributeMatchWeights);
+            richRecord2.setLabeledAttributeScores(labeledAttributeMatchWeights);
 
         }
         return lastPositiveMatchResult;
