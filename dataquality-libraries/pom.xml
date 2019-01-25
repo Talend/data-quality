@@ -26,8 +26,26 @@
 		<re2j.version>1.2</re2j.version>
 
 		<org.talend.daikon.version>0.29.0-SNAPSHOT</org.talend.daikon.version>
-
+		<version.jgit>5.1.2.201810061102-r</version.jgit>
 	</properties>
+
+	<distributionManagement>
+		<snapshotRepository>
+			<id>talend_nexus_deployment</id>
+			<url>https://artifacts-zl.talend.com/nexus/content/repositories/snapshots/</url>
+		</snapshotRepository>
+		<repository>
+			<id>talend_nexus_deployment</id>
+			<url>https://artifacts-zl.talend.com/nexus/content/repositories/releases/</url>
+		</repository>
+	</distributionManagement>
+
+	<scm>
+		<connection>scm:git:https://github.com/Talend/data-quality.git</connection>
+		<developerConnection>scm:git:https://github.com/Talend/data-quality.git</developerConnection>
+		<url>https://github.com/Talend/data-quality</url>
+		<tag>HEAD</tag>
+	</scm>
 
 	<modules>
 		<module>../dataquality-libraries-devops</module>
@@ -150,6 +168,32 @@
 	<build>
 		<pluginManagement>
 			<plugins>
+				<plugin>
+					<groupId>com.itemis.maven.plugins</groupId>
+					<artifactId>unleash-maven-plugin</artifactId>
+					<version>2.9.3</version>
+					<configuration>
+						<workflowDescriptor>release_workflow</workflowDescriptor>
+					</configuration>
+					<dependencies>
+						<dependency>
+							<groupId>com.itemis.maven.plugins</groupId>
+							<artifactId>unleash-scm-provider-git</artifactId>
+							<version>2.2.0</version>
+						</dependency>
+						<dependency>
+							<groupId>org.eclipse.jgit</groupId>
+							<artifactId>org.eclipse.jgit</artifactId>
+							<version>${version.jgit}</version>
+						</dependency>
+						<dependency>
+
+							<groupId>org.talend.dataquality</groupId>
+							<artifactId>dataquality-libraries-hooks</artifactId>
+							<version>1.0.0</version>
+						</dependency>
+					</dependencies>
+				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-clean-plugin</artifactId>
@@ -372,6 +416,10 @@
 			<id>talend-opensource-release</id>
 			<name>talend-opensource-release</name>
 			<url>https://artifacts-oss.talend.com/nexus/content/repositories/TalendOpenSourceRelease/</url>
+		</pluginRepository>
+		<pluginRepository>
+			<id>public-maven</id>
+			<url>https://artifacts-zl.talend.com/nexus/content/groups/public/</url>
 		</pluginRepository>
 	</pluginRepositories>
 </project>
