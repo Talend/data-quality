@@ -1,9 +1,13 @@
 package org.talend.dataquality.datamasking.utils.crypto;
 
-import com.idealista.fpe.component.functions.prf.PseudoRandomFunction;
+import java.io.Serializable;
+import java.nio.ByteBuffer;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import javax.crypto.SecretKey;
-import java.io.Serializable;
+
+import com.idealista.fpe.component.functions.prf.PseudoRandomFunction;
 
 /**
  * Abstract class of the keyed pseudo-random functions used by {@link org.talend.dataquality.datamasking.SecretManager}
@@ -26,5 +30,18 @@ public abstract class AbstractPrf implements PseudoRandomFunction, Serializable 
     protected AbstractPrf(AbstractCryptoSpec cryptoSpec, SecretKey secret) {
         this.cryptoSpec = cryptoSpec;
         this.secret = secret;
+    }
+
+    @Override
+    public int hashCode() {
+        MessageDigest digest = null;
+        try {
+            digest = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        byte[] hash = digest.digest(secret.getEncoded());
+
+        return ByteBuffer.wrap(hash).getInt();
     }
 }

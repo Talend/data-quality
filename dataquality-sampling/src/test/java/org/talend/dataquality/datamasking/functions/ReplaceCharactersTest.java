@@ -18,10 +18,13 @@ import static org.junit.Assert.fail;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
 import org.junit.Test;
+import org.talend.daikon.pattern.character.CharPattern;
 import org.talend.dataquality.datamasking.FormatPreservingMethod;
 import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.datamasking.generic.Alphabet;
@@ -92,8 +95,67 @@ public class ReplaceCharactersTest {
         rc.setAlphabet(Alphabet.LATIN_LETTERS);
         rc.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF, "data");
         String output = rc.generateMaskedRow(input, FunctionMode.BIJECTIVE);
-        assertEquals("inpput : " + input + "\noutput : " + output, input.length(), output.length());
+        assertEquals("input : " + input + "\noutput : " + output, input.length(), output.length());
         assertEquals(input.substring(3, 6), output.substring(3, 6));
+    }
+
+    @Test
+    public void bijectiveBestGuess() {
+
+        rc.parse("", false, new RandomWrapper());
+        rc.setAlphabet(Alphabet.BEST_GUESS);
+        rc.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF, "data");
+        Map<String, String> inputOutput = new LinkedHashMap<String, String>() {
+
+            {
+                put("abc123", "gvlc95"); // lower_latin + digit
+                put("123abc", "xohb4e"); // lower_latin + digit
+                put("abcd", "pwij"); // lower_latin
+                put("ぁｦアぁｦア", "こごヹｱﾑゔ"); // kanas
+                put("éaièE", "épàüV"); // lower_latin + lower_latin_rare + upper_latin
+                put("éaièE０ａＡ", "ñklÿV６ｕＣ"); // More than 5 patterns, plug pattern
+                put("一一", "顠枔"); // Kanji, plug pattern
+                put("一약", "璊얚"); // Kanji + hangul, plug pattern
+                put("\u3400\u3401", "㢴\uD84F\uDF90"); // kanji_rare, plug pattern
+                put("0aéBÈ０ａＡぁｦア一\u3400약", "5oþIÑ５ｕＡひｮア揹\uD876\uDEF8룵"); // all char patterns, plug pattern
+                put("\u3400", "\uD864\uDFC0"); // switch to consistent for the moment
+                put("\u4E00", "碽"); // Switch to consistent for the moment
+            }
+        };
+
+        for (String input : inputOutput.keySet()) {
+            String output = rc.generateMaskedRow(input, FunctionMode.BIJECTIVE);
+            assertEquals(inputOutput.get(input), output);
+            assertTrue("The same charPatterns are present", checkPatterns(input, output));
+        }
+    }
+
+    private boolean checkPatterns(String input, String output) {
+        Set<CharPattern> charPatternSetInput = getPatterns(input);
+        Set<CharPattern> charPatternSetOutput = getPatterns(output);
+        if (charPatternSetInput.size() != charPatternSetOutput.size())
+            return false;
+
+        for (CharPattern charPattern : charPatternSetInput) {
+            if (!charPatternSetOutput.contains(charPattern))
+                return false;
+        }
+        return true;
+    }
+
+    private Set<CharPattern> getPatterns(String input) {
+        Set<CharPattern> charPatternSet = new HashSet<>();
+        long numberCodePoints = input.codePoints().count();
+        for (int i = 0; i < numberCodePoints; i++) {
+            Integer codePoint = input.codePointAt(input.offsetByCodePoints(0, i));
+            for (CharPattern charPattern : CharPattern.values()) {
+                if (charPattern.contains(codePoint)) {
+                    charPatternSet.add(charPattern);
+                    break;
+                }
+            }
+        }
+        return charPatternSet;
     }
 
     @Test
