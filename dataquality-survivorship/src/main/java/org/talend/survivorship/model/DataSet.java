@@ -352,17 +352,17 @@ public class DataSet {
      */
     private void conflictRecord(Column col, Attribute a) {
         // default case get first one
-        if (survivorMap.get(col.getName()) == null) {
-            survivorMap.put(col.getName(), a.getValue());
-            survivorIndexMap.put(col.getName(), a.getRecordID());
-        } else {
-            survivorIndexMap.remove(col.getName());
-            Object survivor = survivorMap.get(col.getName());
-            if (a.getValue() != null && !a.getValue().equals(survivor)) {
-                HashSet<String> desc = conflictList.get(a.getRecordID());
-                desc.add(col.getName());
-                conflictsOfSurvivor.add(col.getName());
-            }
+        String colName = col.getName();
+        Object attributeValue = a.getValue();
+        Object survivor = survivorMap.get(colName);
+        if (survivor == null) {
+            survivorMap.put(colName, attributeValue);
+            survivorIndexMap.put(colName, a.getRecordID());
+        } else if (!survivor.equals(attributeValue)) {
+            survivorIndexMap.remove(colName);
+            HashSet<String> desc = conflictList.get(a.getRecordID());
+            desc.add(colName);
+            conflictsOfSurvivor.add(colName);
         }
     }
 
