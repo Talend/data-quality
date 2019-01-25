@@ -12,6 +12,12 @@
 // ============================================================================
 package org.talend.dataquality.semantic.datamasking;
 
+import static org.talend.dataquality.semantic.datamasking.FunctionBuilder.functionInitializer;
+
+import java.security.SecureRandom;
+import java.util.Date;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.dataquality.datamasking.FunctionFactory;
@@ -30,12 +36,6 @@ import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
 import org.talend.dataquality.semantic.snapshot.StandardDictionarySnapshotProvider;
 import org.talend.dataquality.semantic.validator.GenerateValidator;
-
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
-
-import static org.talend.dataquality.semantic.datamasking.FunctionBuilder.functionInitializer;
 
 public class SemanticMaskerFunctionFactory {
 
@@ -132,7 +132,7 @@ public class SemanticMaskerFunctionFactory {
         }
         // setRandom must be call because of there is some special class declaration init operation in the method(e.g
         // AbstractGenerateUniquePhoneNumber)
-        function.setRandom(new Random());
+        function.setRandom(new SecureRandom());
         return function;
     }
 
