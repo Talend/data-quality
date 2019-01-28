@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
 import org.talend.dataquality.semantic.classifier.custom.UserDefinedRE2JRegexValidator;
 import org.talend.dataquality.semantic.classifier.custom.UserDefinedRegexValidator;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
@@ -27,6 +28,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "re2jCompliant", defaultImpl = UserDefinedRegexValidator.class)
 @JsonSubTypes({ @JsonSubTypes.Type(value = UserDefinedRE2JRegexValidator.class, name = "true"),
         @JsonSubTypes.Type(value = UserDefinedRegexValidator.class, name = "false") })
+@JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class AbstractRegexSemanticValidator implements ISemanticValidator {
 
     private static final long serialVersionUID = -8373360239860394354L;
