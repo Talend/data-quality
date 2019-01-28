@@ -1,0 +1,21 @@
+{
+  "classifiers": [
+    {
+      "id": "583edc44ec06957a34fa6430",
+      "description": "Email address",
+      "mainCategory": "AlphaNumeric",
+      "name": "EMAIL",
+      "label": "Email",
+      "filter": {
+        "filterParam": "@",
+        "filterType": "MUST_CONTAIN"
+      },
+      "validator": {
+        "re2jCompliant": true,
+        "patternString": "^(([^\\s\\x00-\\x1F\\x7F\\(\\)<>@,;:'\\\\\\\"\\.\\[\\]]|')+|(\\\"[^\\\"]*\\\"))(\\.(([^\\s\\x00-\\x1F\\x7F\\(\\)<>@,;:'\\\\\\\"\\.\\[\\]]|')+|(\\\"[^\\\"]*\\\")))*@([\\p{L}\\p{M}0-9]([\\p{L}\\p{M}0-9\\-]{0,61}[\\p{L}\\p{M}0-9])?\\.)+[\\p{L}\\p{M}]{2,6}$",
+        "subValidatorClassName": null,
+        "unknownField": "who knows me"
+      }
+    }
+  ]
+}

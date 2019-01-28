@@ -21,6 +21,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -63,9 +64,21 @@ public class UDCategorySerDeserTest {
         assertTrue("Expected to read at least 10 category but only get " + nbCat, nbCat > 9); //$NON-NLS-1$
     }
 
+    @Test
+    public void testReadJsonFileWithUnknownField() throws IOException {
+        // WHEN
+        InputStream inputStream = UDCategorySerDeserTest.class.getResourceAsStream("category_with_unknown_field.json");
+        UserDefinedClassifier userDefinedClassifier = UDCategorySerDeser.readJsonFile(inputStream);
+
+        // THEN
+        // unknown fields should be ignored without exception
+        assertNotNull(userDefinedClassifier);
+        assertEquals("Unexpected category size!", 1, userDefinedClassifier.getClassifiers().size()); //$NON-NLS-1$
+    }
+
     /**
      * Test method for
-     * {@link org.talend.dataquality.semantic.classifier.custom.UserDefinedHelper#writeToJsonFile(org.talend.dataquality.semantic.classifier.custom.UserDefinedClassifier)}
+     * {@link org.talend.dataquality.semantic.classifier.custom.UDCategorySerDeser#writeToJsonFile(UserDefinedClassifier, OutputStream)}
      * .
      * 
      * @throws IOException
@@ -73,7 +86,7 @@ public class UDCategorySerDeserTest {
      * @throws JsonParseException
      */
     @Test
-    public void testWriteToJsonFile() throws JsonParseException, JsonMappingException, IOException {
+    public void testWriteToJsonFile() throws IOException {
 
         UDCategorySerDeser helper = new UDCategorySerDeser();
 
@@ -116,7 +129,7 @@ public class UDCategorySerDeserTest {
      * UserDefinedClassifier implementation.
      */
     @Test
-    public void testDeserializeObjectFromFile() throws IOException {
+    public void testDeserializeObjectFromFile() {
         InputStream inputStream = UDCategorySerDeserTest.class.getResourceAsStream("udc.ser");
         UserDefinedClassifier udc = (UserDefinedClassifier) SerializationUtils.deserialize(inputStream);
 
