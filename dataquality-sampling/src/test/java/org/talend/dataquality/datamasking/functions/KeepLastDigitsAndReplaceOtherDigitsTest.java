@@ -1,6 +1,7 @@
 package org.talend.dataquality.datamasking.functions;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.util.HashSet;
 import java.util.Random;
@@ -73,6 +74,14 @@ public class KeepLastDigitsAndReplaceOtherDigitsTest {
             outputSet.add(kfag.generateMaskedRow(input, FunctionMode.BIJECTIVE));
         }
         assertEquals(1000, outputSet.size()); //$NON-NLS-1$
+    }
+
+    @Test
+    public void bijectiveReturnsNullIfOneDigit() {
+        kfag.parse("1", false, new RandomWrapper(42));
+        kfag.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF, "data");
+        String output = kfag.generateMaskedRow("1abcdef", FunctionMode.BIJECTIVE);
+        assertNull(output);
     }
 
     @Test

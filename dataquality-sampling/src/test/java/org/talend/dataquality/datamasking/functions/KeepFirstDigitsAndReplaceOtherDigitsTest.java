@@ -69,6 +69,14 @@ public class KeepFirstDigitsAndReplaceOtherDigitsTest {
     }
 
     @Test
+    public void bijectiveReturnsNullIfOneDigit() {
+        kfag.parse("1", false, new RandomWrapper(42));
+        kfag.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF, "data");
+        String output = kfag.generateMaskedRow("1abcdef", FunctionMode.BIJECTIVE);
+        assertNull(output);
+    }
+
+    @Test
     public void consistentNoSeed() {
         kfag.parse("3", false, new RandomWrapper());
         output = kfag.generateMaskedRow(input, FunctionMode.CONSISTENT);

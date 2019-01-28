@@ -12,10 +12,6 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Random;
@@ -27,6 +23,8 @@ import org.talend.dataquality.datamasking.FormatPreservingMethod;
 import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.datamasking.generic.Alphabet;
 import org.talend.dataquality.duplicating.RandomWrapper;
+
+import static org.junit.Assert.*;
 
 /**
  * created by jgonzalez on 25 juin 2015 Detailled comment
@@ -101,7 +99,7 @@ public class ReplaceAllTest {
         ra.setAlphabet(alphabet);
         ra.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF, "data");
         String output = ra.generateMaskedRow(input, FunctionMode.BIJECTIVE);
-        assertEquals(1, output.length());
+        assertNull(output);
     }
 
     @Test

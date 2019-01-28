@@ -65,6 +65,9 @@ public class KeepLastDigitsAndReplaceOtherDigits extends Function<String> {
             generateRandomDigits(sb);
             break;
         }
+        if (sb.length() == 0) {
+            return null;
+        }
 
         return sb.toString();
     }
@@ -116,8 +119,7 @@ public class KeepLastDigitsAndReplaceOtherDigits extends Function<String> {
         List<Integer> replacedDigits = ff1Cipher.generateUniqueDigits(digitsToReplace);
 
         if (replacedDigits.isEmpty()) {
-            LOGGER.warn("The element {} has too few digits to be masked bijectively. It will be masked consistently.", sb);
-            generateConsistentDigits(sb);
+            sb.delete(0, sb.length());
         }
 
         Iterator<Integer> it = replacedDigits.iterator();

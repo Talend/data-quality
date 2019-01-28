@@ -132,7 +132,7 @@ public abstract class CharactersOperation<T> extends Function<T> {
                 break;
             }
             if (replacedString == null) {
-                return getDefaultOutput();
+                return null;
             }
 
             sb.append(replacedString);
@@ -158,8 +158,7 @@ public abstract class CharactersOperation<T> extends Function<T> {
 
         List<Integer> replacedCodePoints = ff1Cipher.generateUniqueCodePoints(codePoints);
         if (replacedCodePoints.isEmpty()) {
-            LOGGER.warn("The element {} has too few characters to be masked bijectively. It will be masked consistently.", str);
-            return generateConsistentString(str, beginAux, endAux);
+            return null;
         }
 
         StringBuilder sb = new StringBuilder();
