@@ -93,7 +93,11 @@ public class MFBRecordMerger implements IRecordMerger {
                     mergedCompareValue = compareAsDate(leftCompareValue, rightCompareValue, typeMergeTable[i],
                             String.valueOf(referenceColumnIndex), record1.getTimestamp(), record2.getTimestamp());
 
-                    mergedValue = leftCompareValue.equals(mergedCompareValue) ? leftValue : rightValue;
+                    if (leftCompareValue == null) {
+                        mergedValue = rightValue;
+                    } else {
+                        mergedValue = leftCompareValue.equals(mergedCompareValue) ? leftValue : rightValue;
+                    }
                     break;
                 default:
                     mergedValue = createMergeValue(record1.getSource(), record2.getSource(), parameters[i],

@@ -29,8 +29,8 @@ public enum SurvivorShipAlgorithmEnum {
     PREFER_TRUE(1, "Prefer True (for booleans)", "PreferTrue", DefaultSurvivorShipDataTypeEnum.BOOLEAN), //$NON-NLS-1$ //$NON-NLS-2$
     PREFER_FALSE(2, "Prefer False (for booleans)", "PreferFalse", DefaultSurvivorShipDataTypeEnum.BOOLEAN), //$NON-NLS-1$ //$NON-NLS-2$
     MOST_COMMON(3, "Most common", "MostCommon"), //$NON-NLS-1$ //$NON-NLS-2$
-    MOST_RECENT(4, "Most recent", "MostRecent", DefaultSurvivorShipDataTypeEnum.DATE), //$NON-NLS-1$ //$NON-NLS-2$
-    MOST_ANCIENT(5, "Most ancient", "MostAncient", DefaultSurvivorShipDataTypeEnum.DATE), //$NON-NLS-1$ //$NON-NLS-2$
+    MOST_RECENT(4, "Most recent", "MostRecent"), //$NON-NLS-1$ //$NON-NLS-2$
+    MOST_ANCIENT(5, "Most ancient", "MostAncient"), //$NON-NLS-1$ //$NON-NLS-2$
     LONGEST(6, "Longest (for strings)", "Longest", DefaultSurvivorShipDataTypeEnum.STRING), //$NON-NLS-1$ //$NON-NLS-2$
     SHORTEST(7, "Shortest (for strings)", "Shortest", DefaultSurvivorShipDataTypeEnum.STRING), //$NON-NLS-1$ //$NON-NLS-2$
     LARGEST(8, "Largest (for numbers)", "Largest", DefaultSurvivorShipDataTypeEnum.NUMBER), //$NON-NLS-1$ //$NON-NLS-2$
