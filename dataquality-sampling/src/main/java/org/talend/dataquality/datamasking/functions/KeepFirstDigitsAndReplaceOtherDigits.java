@@ -49,8 +49,9 @@ public class KeepFirstDigitsAndReplaceOtherDigits extends Function<String> {
         if (integerParam < 0)
             return EMPTY_STRING;
 
-        if (str == null || integerParam >= str.trim().length())
-            return str;
+        if (str == null || integerParam >= str.trim().length()) {
+            return mode == FunctionMode.BIJECTIVE ? null : str;
+        }
 
         StringBuilder sb = new StringBuilder(str.trim());
 
@@ -120,11 +121,11 @@ public class KeepFirstDigitsAndReplaceOtherDigits extends Function<String> {
 
         if (replacedDigits.isEmpty()) {
             sb.delete(0, sb.length());
-        }
-
-        Iterator<Integer> it = replacedDigits.iterator();
-        for (int index : indexesToReplace) {
-            sb.replace(index, index + 1, it.next().toString());
+        } else {
+            Iterator<Integer> it = replacedDigits.iterator();
+            for (int i = 0; i < indexesToReplace.size() && it.hasNext(); i++) {
+                sb.replace(indexesToReplace.get(i), indexesToReplace.get(i) + 1, it.next().toString());
+            }
         }
     }
 
