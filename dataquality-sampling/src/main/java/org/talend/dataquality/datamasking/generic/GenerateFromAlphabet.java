@@ -111,10 +111,8 @@ public class GenerateFromAlphabet implements Serializable {
     }
 
     private boolean needPatternMasking(Set<CharPattern> charPatternSet) {
-        if (charPatternSet.size() > MAX_ALPHABET_NUMBER || charPatternSet.contains(CharPattern.HANGUL)
-                || charPatternSet.contains(CharPattern.KANJI) || charPatternSet.contains(CharPattern.KANJI_RARE))
-            return true;
-        return false;
+        return charPatternSet.size() > MAX_ALPHABET_NUMBER || charPatternSet.contains(CharPattern.HANGUL)
+                || charPatternSet.contains(CharPattern.KANJI) || charPatternSet.contains(CharPattern.KANJI_RARE);
     }
 
     private List<Integer> maskByCharPattern(List<Integer> originalCodePoints, List<Integer> filteredCodepoints) {
