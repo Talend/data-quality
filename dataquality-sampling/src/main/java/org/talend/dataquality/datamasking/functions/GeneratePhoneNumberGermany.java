@@ -28,6 +28,10 @@ public class GeneratePhoneNumberGermany extends FunctionString {
 
     @Override
     protected String doGenerateMaskedFieldWithRandom(String str, Random r) {
+        return doGenerateMaskedField(str, rnd);
+    }
+
+    private String doGenerateMaskedField(String str, Random r) {
         StringBuilder result = new StringBuilder(EMPTY_STRING);
         int choice = r.nextInt(4);
         switch (choice) {

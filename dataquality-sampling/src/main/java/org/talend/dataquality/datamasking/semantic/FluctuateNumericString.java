@@ -41,6 +41,7 @@ public class FluctuateNumericString extends NumericVariance<String> {
     }
 
     private String doGenerateMaskedField(String input, Random r) {
+
         if (input == null || EMPTY_STRING.equals(input.trim())) {
             return input;
         } else {
