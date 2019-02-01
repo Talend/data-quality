@@ -1,9 +1,6 @@
 package org.talend.dataquality.datamasking.utils.crypto;
 
 import java.io.Serializable;
-import java.nio.ByteBuffer;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 import javax.crypto.SecretKey;
 
@@ -30,18 +27,5 @@ public abstract class AbstractPrf implements PseudoRandomFunction, Serializable 
     protected AbstractPrf(AbstractCryptoSpec cryptoSpec, SecretKey secret) {
         this.cryptoSpec = cryptoSpec;
         this.secret = secret;
-    }
-
-    @Override
-    public int hashCode() {
-        MessageDigest digest = null;
-        try {
-            digest = MessageDigest.getInstance("SHA-256");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        byte[] hash = digest.digest(secret.getEncoded());
-
-        return ByteBuffer.wrap(hash).getInt();
     }
 }
