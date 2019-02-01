@@ -12,6 +12,8 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
+import org.talend.dataquality.datamasking.FunctionMode;
+
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -44,26 +46,39 @@ public class GenerateSsnUk extends Function<String> {
     }
 
     @Override
+    protected String doGenerateMaskedField(String str, FunctionMode mode) {
+        Random r = rnd;
+        if (FunctionMode.CONSISTENT == mode)
+            r = getRandomForString(str);
+
+        return doGenerateMaskedField(str, r);
+    }
+
+    @Override
     protected String doGenerateMaskedField(String str) {
+        return doGenerateMaskedField(str, rnd);
+    }
+
+    private String doGenerateMaskedField(String str, Random r) {
         StringBuilder result = new StringBuilder();
         StringBuilder prefix;
         char tmp;
         do {
             prefix = new StringBuilder();
-            tmp = first.charAt(rnd.nextInt(20));
+            tmp = first.charAt(r.nextInt(20));
             prefix.append(tmp);
-            tmp = second.charAt(rnd.nextInt(19));
+            tmp = second.charAt(r.nextInt(19));
             prefix.append(tmp);
         } while (getForbid().contains(prefix.toString()));
         result.append(prefix);
         result.append(" "); //$NON-NLS-1$
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 2; ++j) {
-                result.append(nextRandomDigit());
+                result.append(nextRandomDigit(r));
             }
             result.append(" "); //$NON-NLS-1$
         }
-        result.append(UPPER.charAt(rnd.nextInt(4)));
+        result.append(UPPER.charAt(r.nextInt(4)));
         return result.toString();
     }
 

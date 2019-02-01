@@ -12,6 +12,10 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
+import org.talend.dataquality.datamasking.FunctionMode;
+
+import java.util.Random;
+
 /**
  * The Japanese ssn has 12 numbers. As we generate every number from 0 to 8 randomly, it can generate 282 429 536 481 (9
  * power 12) ssn numbers.<br>
@@ -22,10 +26,23 @@ public class GenerateSsnJapan extends Function<String> {
     private static final long serialVersionUID = -8621894245597689328L;
 
     @Override
+    protected String doGenerateMaskedField(String str, FunctionMode mode) {
+        Random r = rnd;
+        if (FunctionMode.CONSISTENT == mode) {
+            r = getRandomForString(str);
+        }
+        return doGenerateMaskedField(str, r);
+    }
+
+    @Override
     protected String doGenerateMaskedField(String str) {
+        return doGenerateMaskedField(str, rnd);
+    }
+
+    private String doGenerateMaskedField(String str, Random r) {
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < 12; ++i) {
-            result.append(nextRandomDigit());
+            result.append(nextRandomDigit(r));
         }
         return result.toString();
     }

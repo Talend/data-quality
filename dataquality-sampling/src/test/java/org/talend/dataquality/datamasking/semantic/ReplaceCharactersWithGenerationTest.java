@@ -16,18 +16,32 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Random;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.duplicating.AllDataqualitySamplingTests;
 
 public class ReplaceCharactersWithGenerationTest {
 
+    private ReplaceCharactersWithGeneration rcwg;
+
+    @Before
+    public void setUp() {
+        rcwg = new ReplaceCharactersWithGeneration();
+    }
+
     @Test
     public void testInit() {
-        ReplaceCharactersWithGeneration rcwg = new ReplaceCharactersWithGeneration();
-
         rcwg.parse(null, true, new Random(AllDataqualitySamplingTests.RANDOM_SEED));
         assertEquals("Vkfz-Zps-550", rcwg.generateMaskedRow("Abcd-Efg-135"));
         assertEquals("  \t", rcwg.generateMaskedRow("  \t")); // SPACE_SPACE_TAB
+    }
+
+    @Test
+    public void consistentMasking() {
+        rcwg.setSeed("aSeed");
+        String result = rcwg.doGenerateMaskedField("Abcd-Efg-135", FunctionMode.CONSISTENT);
+        assertEquals("Émäå-Beô-131", result);
     }
 
 }

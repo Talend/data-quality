@@ -52,6 +52,12 @@ public abstract class NumericVariance<T> extends Function<T> {
         } while (rate == 0);
     }
 
+    protected void init(Random r) {
+        do {
+            rate = r.nextInt(2 * integerParam) - integerParam;
+        } while (rate == 0);
+    }
+
     @Override
     protected abstract T doGenerateMaskedField(T t);
 }

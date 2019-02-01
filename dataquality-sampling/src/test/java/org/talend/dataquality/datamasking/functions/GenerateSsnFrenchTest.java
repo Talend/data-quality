@@ -19,6 +19,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.Random;
 
 import org.junit.Test;
+import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.utils.MockRandom;
 
 /**
@@ -69,5 +70,12 @@ public class GenerateSsnFrenchTest {
         gnf.setRandom(random);
         output = gnf.generateMaskedRow(null);
         assertEquals("1020304005006 24", output);
+    }
+
+    @Test
+    public void consistentMasking() {
+        gnf.setSeed("aSeed");
+        String result = gnf.doGenerateMaskedField("1020304005006 24", FunctionMode.CONSISTENT);
+        assertEquals("2600723855180 50", result);
     }
 }

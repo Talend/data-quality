@@ -15,6 +15,7 @@ package org.talend.dataquality.semantic.datamasking;
 import java.io.Serializable;
 import java.util.List;
 
+import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.datamasking.functions.Function;
 import org.talend.dataquality.datamasking.semantic.ReplaceCharacterHelper;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
@@ -83,6 +84,25 @@ public class ValueDataMasker implements Serializable {
     public ValueDataMasker(String semanticCategory, String dataType, List<String> params, DictionarySnapshot dictionarySnapshot) {
         this.function = SemanticMaskerFunctionFactory.createMaskerFunctionForSemanticCategory(semanticCategory, dataType, params,
                 dictionarySnapshot);
+
+        initCategory(semanticCategory, dictionarySnapshot);
+    }
+
+    /**
+     *
+     * ValueDataMasker constructor.
+     *
+     * @param semanticCategory the semantic domain information
+     * @param dataType the data type information
+     * @param params extra parameters such as date time pattern list
+     * @param dictionarySnapshot the dictionary snapshot
+     * @param seed seed used for masking
+     */
+    public ValueDataMasker(String semanticCategory, String dataType, List<String> params, DictionarySnapshot dictionarySnapshot,
+            String seed, FunctionMode mode) {
+
+        this.function = SemanticMaskerFunctionFactory.createMaskerFunctionForSemanticCategory(semanticCategory, dataType, params,
+                dictionarySnapshot, seed, mode);
 
         initCategory(semanticCategory, dictionarySnapshot);
     }

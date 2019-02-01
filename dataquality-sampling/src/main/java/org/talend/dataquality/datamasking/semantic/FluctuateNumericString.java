@@ -14,9 +14,11 @@ package org.talend.dataquality.datamasking.semantic;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Random;
 import java.util.regex.Pattern;
 
 import org.talend.daikon.number.BigDecimalParser;
+import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.datamasking.functions.NumericVariance;
 
 public class FluctuateNumericString extends NumericVariance<String> {
@@ -26,12 +28,24 @@ public class FluctuateNumericString extends NumericVariance<String> {
     private static final Pattern patternInteger = Pattern.compile("^(\\+|-)?\\d+$");
 
     @Override
+    protected String doGenerateMaskedField(String str, FunctionMode mode) {
+        Random r = rnd;
+        if (FunctionMode.CONSISTENT == mode)
+            r = getRandomForString(str);
+        return doGeneratedMaskedField(str, r);
+    }
+
+    @Override
     protected String doGenerateMaskedField(String input) {
+        return doGeneratedMaskedField(input, rnd);
+    }
+
+    private String doGeneratedMaskedField(String input, Random r) {
         if (input == null || EMPTY_STRING.equals(input.trim())) {
             return input;
         } else {
-            init();
-            double rateToApply = rnd.nextDouble() * rate;
+            init(r);
+            double rateToApply = r.nextDouble() * rate;
             if (patternInteger.matcher(input).matches()) {
                 BigDecimal bigDecimal = new BigDecimal(input);
                 if (bigDecimal.abs().compareTo(new BigDecimal(Long.MAX_VALUE)) > 0) {
@@ -60,7 +74,7 @@ public class FluctuateNumericString extends NumericVariance<String> {
                         return String.valueOf(result.setScale(decimalLength, RoundingMode.HALF_UP).doubleValue());
                     }
                 } catch (NumberFormatException e) {
-                    return ReplaceCharacterHelper.replaceCharacters(input, rnd);
+                    return ReplaceCharacterHelper.replaceCharacters(input, r);
                 }
             }
         }

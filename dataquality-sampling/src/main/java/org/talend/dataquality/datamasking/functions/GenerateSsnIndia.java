@@ -12,13 +12,16 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
+import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.datamasking.utils.ssn.UtilsSsnIndia;
+
+import java.util.Random;
 
 /**
  * /**
- * 
+ *
  * @author dprot
- * 
+ * <p>
  * Indian pattern: abbbbbbbbbbc
  * a: 1 -> 9
  * b: 0 -> 9
@@ -29,11 +32,24 @@ public class GenerateSsnIndia extends Function<String> {
     private static final long serialVersionUID = -8621894245597689328L;
 
     @Override
+    protected String doGenerateMaskedField(String str, FunctionMode mode) {
+        Random r = rnd;
+        if (FunctionMode.CONSISTENT == mode)
+            r = getRandomForString(str);
+
+        return doGenerateMaskedField(str, r);
+    }
+
+    @Override
     protected String doGenerateMaskedField(String str) {
+        return doGenerateMaskedField(str, rnd);
+    }
+
+    private String doGenerateMaskedField(String str, Random r) {
         StringBuilder result = new StringBuilder(EMPTY_STRING);
-        result.append(1 + rnd.nextInt(9));
+        result.append(1 + r.nextInt(9));
         for (int i = 0; i < 10; i++) {
-            result.append(nextRandomDigit());
+            result.append(nextRandomDigit(r));
         }
 
         // Add the security key specified for Indian SSN

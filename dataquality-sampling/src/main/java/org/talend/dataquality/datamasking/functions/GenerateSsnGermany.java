@@ -12,6 +12,10 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
+import org.talend.dataquality.datamasking.FunctionMode;
+
+import java.util.Random;
+
 /**
  * The Germany ssn has 11 numbers. As we generate every number from 0 to 8 randomly, it can generate 31 381 059 609 (9
  * power 11) ssn numbers.<br>
@@ -22,10 +26,24 @@ public class GenerateSsnGermany extends Function<String> {
     private static final long serialVersionUID = -3060510098713442546L;
 
     @Override
+    protected String doGenerateMaskedField(String str, FunctionMode mode) {
+        Random r = rnd;
+        if (FunctionMode.CONSISTENT == mode) {
+            r = getRandomForString(str);
+        }
+
+        return doGenerateMaskedField(str, r);
+    }
+
+    @Override
     protected String doGenerateMaskedField(String str) {
+        return doGenerateMaskedField(str, rnd);
+    }
+
+    private String doGenerateMaskedField(String str, Random r) {
         StringBuilder result = new StringBuilder(EMPTY_STRING);
         for (int i = 0; i < 11; ++i) {
-            result.append(nextRandomDigit());
+            result.append(nextRandomDigit(r));
         }
         return result.toString();
     }

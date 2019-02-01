@@ -19,6 +19,7 @@ import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.utils.MockRandom;
 
 /**
@@ -62,5 +63,12 @@ public class GenerateSsnJapanTest {
         gnj.setRandom(random);
         output = gnj.generateMaskedRow(null);
         assertEquals("012345678901", output);
+    }
+
+    @Test
+    public void consistentMasking() {
+        gnj.setSeed("aSeed");
+        String result = gnj.doGenerateMaskedField("038405589322", FunctionMode.CONSISTENT);
+        assertEquals("483061215197", result);
     }
 }

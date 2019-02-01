@@ -14,17 +14,33 @@ package org.talend.dataquality.datamasking.functions;
 
 import org.apache.commons.lang.StringUtils;
 import org.talend.dataquality.common.pattern.TextPatternUtil;
+import org.talend.dataquality.datamasking.FunctionMode;
+
+import java.util.Random;
 
 /**
  * created by jgonzalez on 17 juil. 2015 Detailled comment
- *
  */
 public class GenerateFromPattern extends Function<String> {
 
     private static final long serialVersionUID = 7920843158759995757L;
 
     @Override
+    protected String doGenerateMaskedField(String str, FunctionMode mode) {
+
+        Random r = rnd;
+        if (FunctionMode.CONSISTENT == mode)
+            r = getRandomForString(str);
+
+        return doGeneratedMaskedField(str, r);
+    }
+
+    @Override
     protected String doGenerateMaskedField(String str) {
+        return doGeneratedMaskedField(str, rnd);
+    }
+
+    private String doGeneratedMaskedField(String str, Random r) {
         StringBuilder result = new StringBuilder(EMPTY_STRING);
         if (parameters == null) {
             return StringUtils.EMPTY;
@@ -43,7 +59,7 @@ public class GenerateFromPattern extends Function<String> {
                 skipNextLoop = handleBackslashCase(result, pattern, i);
                 break;
             default:
-                result.append(TextPatternUtil.replacePatternCharacter(codePoint, rnd));
+                result.append(TextPatternUtil.replacePatternCharacter(codePoint, r));
                 break;
             }
             if (Character.isHighSurrogate(pattern.charAt(i))) {
@@ -55,9 +71,10 @@ public class GenerateFromPattern extends Function<String> {
 
     /**
      * Deal backslash case.
-     * 
+     *
      * @param result
-     * @param skipNextLoop
+     * @param pattern
+     * @param i
      */
     private boolean handleBackslashCase(StringBuilder result, String pattern, int i) {
         if (i == pattern.length() - 1) {

@@ -13,7 +13,9 @@
 package org.talend.dataquality.datamasking.functions;
 
 import java.util.List;
+import java.util.Random;
 
+import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.datamasking.generic.fields.FieldDate;
 import org.talend.dataquality.datamasking.utils.ssn.UtilsSsnChn;
 
@@ -29,26 +31,39 @@ public class GenerateSsnChn extends Function<String> {
     private static final long serialVersionUID = 8845031997964609626L;
 
     @Override
+    protected String doGenerateMaskedField(String str, FunctionMode mode) {
+        Random r = rnd;
+        if (FunctionMode.CONSISTENT == mode)
+            r = getRandomForString(str);
+
+        return doGenerateMaskedField(str, r);
+    }
+
+    @Override
     protected String doGenerateMaskedField(String str) {
+        return doGenerateMaskedField(str, rnd);
+    }
+
+    private String doGenerateMaskedField(String str, Random r) {
         StringBuilder result = new StringBuilder(EMPTY_STRING);
 
         List<String> places = UtilsSsnChn.readChinaRegionFile();
 
         if (places != null) {
-            result.append(places.get(rnd.nextInt(places.size())));
+            result.append(places.get(r.nextInt(places.size())));
         }
 
         // Year
-        int yyyy = rnd.nextInt(200) + 1900;
+        int yyyy = r.nextInt(200) + 1900;
         result.append(yyyy);
         // Month
-        int mm = rnd.nextInt(12) + 1;
+        int mm = r.nextInt(12) + 1;
         if (mm < 10) {
             result.append("0"); //$NON-NLS-1$
         }
         result.append(mm);
         // Day
-        int dd = 1 + rnd.nextInt(FieldDate.monthSize.get(mm - 1));
+        int dd = 1 + r.nextInt(FieldDate.monthSize.get(mm - 1));
         if (dd < 10) {
             result.append("0"); //$NON-NLS-1$
         }

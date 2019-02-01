@@ -12,21 +12,37 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
+import org.talend.dataquality.datamasking.FunctionMode;
+
+import java.util.Random;
+
 /**
  * created by jgonzalez on 19 juin 2015. This function will generate a correct French phone number.
- *
  */
 public class GeneratePhoneNumberFrench extends Function<String> {
 
     private static final long serialVersionUID = -1118298923509759266L;
 
     @Override
+    protected String doGenerateMaskedField(String str, FunctionMode mode) {
+        Random r = rnd;
+        if (FunctionMode.CONSISTENT == mode)
+            r = getRandomForString(str);
+        return doGenerateMaskedField(str, r);
+    }
+
+    @Override
     protected String doGenerateMaskedField(String str) {
+        return doGenerateMaskedField(str, rnd);
+    }
+
+    private String doGenerateMaskedField(String str, Random r) {
         StringBuilder result = new StringBuilder("+33 "); //$NON-NLS-1$
-        result.append(rnd.nextInt(9) + 1);
+        result.append(r.nextInt(9) + 1);
         for (int i = 0; i < 8; i++) {
-            result.append(nextRandomDigit());
+            result.append(nextRandomDigit(r));
         }
         return result.toString();
     }
+
 }

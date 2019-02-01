@@ -12,15 +12,26 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.semantic;
 
+import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.datamasking.functions.Function;
+
+import java.util.Random;
 
 /**
  * created by jgonzalez on 22 juin 2015. This function will replace every letter by the parameter.
- *
  */
 public class ReplaceCharactersWithGeneration extends Function<String> {
 
     private static final long serialVersionUID = 368348491822287354L;
+
+    @Override
+    protected String doGenerateMaskedField(String input, FunctionMode mode) {
+        Random r = rnd;
+        if (FunctionMode.CONSISTENT == mode)
+            r = getRandomForString(input);
+
+        return ReplaceCharacterHelper.replaceCharacters(input, r);
+    }
 
     @Override
     protected String doGenerateMaskedField(String input) {

@@ -12,6 +12,10 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
+import org.talend.dataquality.datamasking.FunctionMode;
+
+import java.util.Random;
+
 /**
  * created by jgonzalez on 16 juil. 2015 Detailled comment
  *
@@ -21,11 +25,24 @@ public class GeneratePhoneNumberUK extends Function<String> {
     private static final long serialVersionUID = -4131614123980116791L;
 
     @Override
+    protected String doGenerateMaskedField(String str, FunctionMode mode) {
+        Random r = rnd;
+        if (FunctionMode.CONSISTENT == mode)
+            r = getRandomForString(str);
+
+        return doGenerateMaskedField(str, r);
+    }
+
+    @Override
     protected String doGenerateMaskedField(String str) {
+        return doGenerateMaskedField(str, rnd);
+    }
+
+    private String doGenerateMaskedField(String str, Random r) {
         StringBuilder result = new StringBuilder("020 3"); //$NON-NLS-1$
-        addRandomDigit(result, 3);
+        addRandomDigit(result, 3, r);
         result.append(" "); //$NON-NLS-1$
-        addRandomDigit(result, 4);
+        addRandomDigit(result, 4, r);
         return result.toString();
     }
 
@@ -34,9 +51,9 @@ public class GeneratePhoneNumberUK extends Function<String> {
      * 
      * @param result
      */
-    private void addRandomDigit(StringBuilder result, int size) {
+    private void addRandomDigit(StringBuilder result, int size, Random r) {
         for (int i = 0; i < size; ++i) {
-            result.append(nextRandomDigit());
+            result.append(nextRandomDigit(r));
         }
     }
 
