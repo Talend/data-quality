@@ -41,7 +41,7 @@ public class ReplaceCharactersWithGenerationTest {
     public void consistentMasking() {
         rcwg.setSeed("aSeed");
         String result = rcwg.doGenerateMaskedField("Abcd-Efg-135", FunctionMode.CONSISTENT);
-        assertEquals("Émäå-Beô-131", result);
+        assertEquals("Bkjo-Zsh-131", result);
     }
 
 }

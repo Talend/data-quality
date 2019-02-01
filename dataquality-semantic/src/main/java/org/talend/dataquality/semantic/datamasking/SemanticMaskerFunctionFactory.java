@@ -49,7 +49,7 @@ public class SemanticMaskerFunctionFactory {
     }
 
     public static Function<String> createMaskerFunctionForSemanticCategory(String semanticCategory, String dataType,
-                                                                           List<String> params, DictionarySnapshot dictionarySnapshot, String seed, FunctionMode mode) {
+            List<String> params, DictionarySnapshot dictionarySnapshot, String seed, FunctionMode mode) {
 
         Function<String> function = null;
         final MaskableCategoryEnum cat = MaskableCategoryEnum.getCategoryById(semanticCategory);
@@ -71,34 +71,34 @@ public class SemanticMaskerFunctionFactory {
                 String extraParameter = category.getId();
 
                 switch (categoryType) {
-                    case DICT:
-                        function = new GenerateFromDictionaries();
-                        DictionarySnapshot snapshot = dictionarySnapshot != null ? dictionarySnapshot
-                                : new StandardDictionarySnapshotProvider().get();
-                        ((GenerateFromDictionaries) function).setDictionarySnapshot(snapshot);
-                        break;
-                    case REGEX:
-                        final UserDefinedClassifier udc = dictionarySnapshot != null ? dictionarySnapshot.getRegexClassifier()
-                                : CategoryRegistryManager.getInstance().getRegexClassifier();
-                        final String patternString = udc.getPatternStringByCategoryId(category.getId());
-                        if (GenerateFromRegex.isValidPattern(patternString)) {
-                            function = new GenerateFromRegex();
-                            extraParameter = patternString;
-                        }
-                        break;
-                    case COMPOUND:
+                case DICT:
+                    function = new GenerateFromDictionaries();
+                    DictionarySnapshot snapshot = dictionarySnapshot != null ? dictionarySnapshot
+                            : new StandardDictionarySnapshotProvider().get();
+                    ((GenerateFromDictionaries) function).setDictionarySnapshot(snapshot);
+                    break;
+                case REGEX:
+                    final UserDefinedClassifier udc = dictionarySnapshot != null ? dictionarySnapshot.getRegexClassifier()
+                            : CategoryRegistryManager.getInstance().getRegexClassifier();
+                    final String patternString = udc.getPatternStringByCategoryId(category.getId());
+                    if (GenerateFromRegex.isValidPattern(patternString)) {
+                        function = new GenerateFromRegex();
+                        extraParameter = patternString;
+                    }
+                    break;
+                case COMPOUND:
 
-                        DictionarySnapshot snapshotCompound = dictionarySnapshot != null ? dictionarySnapshot
-                                : new StandardDictionarySnapshotProvider().get();
+                    DictionarySnapshot snapshotCompound = dictionarySnapshot != null ? dictionarySnapshot
+                            : new StandardDictionarySnapshotProvider().get();
 
-                        List types = GenerateValidator.initSemanticTypes(snapshotCompound, category, null);
-                        if (types.size() > 0) {
-                            function = new GenerateFromCompound();
-                            ((GenerateFromCompound) function).setDictionarySnapshot(snapshotCompound);
-                            ((GenerateFromCompound) function).setCategoryValues(types);
-                        }
+                    List types = GenerateValidator.initSemanticTypes(snapshotCompound, category, null);
+                    if (types.size() > 0) {
+                        function = new GenerateFromCompound();
+                        ((GenerateFromCompound) function).setDictionarySnapshot(snapshotCompound);
+                        ((GenerateFromCompound) function).setCategoryValues(types);
+                    }
 
-                        break;
+                    break;
                 }
                 if (function != null)
                     function.parse(extraParameter, true, null);
@@ -107,25 +107,25 @@ public class SemanticMaskerFunctionFactory {
 
         if (function == null) {
             switch (dataType) {
-                case "numeric":
-                case "integer":
-                case "float":
-                case "double":
-                case "decimal":
-                    function = new FluctuateNumericString();
-                    function.parse("10", true, null);
-                    break;
-                case "date":
-                    DateVariance df = new DateVariance();
-                    df.parse("61", true, null);
-                    function = new DateFunctionAdapter(df, params);
-                    break;
-                case "string":
-                    function = new ReplaceCharactersWithGeneration();
-                    function.parse("X", true, null);
-                    break;
-                default:
-                    break;
+            case "numeric":
+            case "integer":
+            case "float":
+            case "double":
+            case "decimal":
+                function = new FluctuateNumericString();
+                function.parse("10", true, null);
+                break;
+            case "date":
+                DateVariance df = new DateVariance();
+                df.parse("61", true, null);
+                function = new DateFunctionAdapter(df, params);
+                break;
+            case "string":
+                function = new ReplaceCharactersWithGeneration();
+                function.parse("X", true, null);
+                break;
+            default:
+                break;
 
             }
         }
@@ -148,13 +148,13 @@ public class SemanticMaskerFunctionFactory {
 
     @SuppressWarnings("unchecked")
     public static Function<String> createMaskerFunctionForSemanticCategory(String semanticCategory, String dataType,
-                                                                           List<String> params, DictionarySnapshot dictionarySnapshot) {
+            List<String> params, DictionarySnapshot dictionarySnapshot) {
         return createMaskerFunctionForSemanticCategory(semanticCategory, dataType, params, dictionarySnapshot, null,
                 FunctionMode.RANDOM);
     }
 
     private static Function<String> adaptForDateFunction(List<String> datePatterns, Function<Date> functionToAdapt,
-                                                         String extraParam) {
+            String extraParam) {
         functionToAdapt.parse(extraParam, true, null);
         Function<String> function = new DateFunctionAdapter(functionToAdapt, datePatterns);
         return function;
@@ -168,7 +168,7 @@ public class SemanticMaskerFunctionFactory {
      * @param extraParam
      */
     public static Function<String> getMaskerFunctionByFunctionName(FunctionType functionType, String dataType,
-                                                                   String extraParam) {
+            String extraParam) {
         FunctionFactory factory = new FunctionFactory();
         TypeTester tester = new TypeTester();
         Function<String> function;
@@ -205,7 +205,7 @@ public class SemanticMaskerFunctionFactory {
      * @param extraParam
      */
     public static Function<String> getMaskerFunctionByFunctionName(FunctionType functionType, String dataType, String extraParam,
-                                                                   String seed, FunctionMode mode) {
+            String seed, FunctionMode mode) {
 
         Function<String> function = getMaskerFunctionByFunctionName(functionType, dataType, extraParam);
         function.setSeed(seed);

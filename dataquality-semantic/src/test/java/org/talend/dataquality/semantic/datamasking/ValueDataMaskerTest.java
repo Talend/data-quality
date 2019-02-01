@@ -73,12 +73,12 @@ public class ValueDataMaskerTest extends CategoryRegistryManagerAbstract {
             put(new String[] { "3333116789", MaskableCategoryEnum.US_PHONE.name(), "string" }, "3251516550");
             put(new String[] { "321938", MaskableCategoryEnum.FR_PHONE.name(), "string" }, "325151");// regex invalid
             put(new String[] { "0212345678", MaskableCategoryEnum.FR_PHONE.name(), "string" }, "+33 625151655");
-            put(new String[] { "++044dso44aa", MaskableCategoryEnum.DE_PHONE.name(), "string" }, "++325hxj65âë");
+            put(new String[] { "++044dso44aa", MaskableCategoryEnum.DE_PHONE.name(), "string" }, "++325zzp65bq");
             put(new String[] { "666666666", MaskableCategoryEnum.UK_PHONE.name(), "string" }, "325151655");
-            put(new String[] { "777777777abc", MaskableCategoryEnum.UK_PHONE.name(), "string" }, "325151655ëïm");
+            put(new String[] { "777777777abc", MaskableCategoryEnum.UK_PHONE.name(), "string" }, "325151655qga");
             put(new String[] { "(301) 231-9473 x 2364", MaskableCategoryEnum.US_PHONE.name(), "string" }, "725-951-6550");
             put(new String[] { "(563) 557-7600 Ext. 2890", MaskableCategoryEnum.US_PHONE.name(), "string" },
-                    "(325) 151-6550 Wmí. 4703");
+                    "(325) 151-6550 Gaq. 4703");
 
             // 5. JOB_TITLE
             put(new String[] { "CEO", SemanticCategoryEnum.JOB_TITLE.name(), "string" }, "Aviation Inspector");
