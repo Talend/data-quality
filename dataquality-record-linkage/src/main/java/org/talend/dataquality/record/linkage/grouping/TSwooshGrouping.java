@@ -183,7 +183,7 @@ public class TSwooshGrouping<TYPE> {
     }
 
     /**
-     * Recording matching with t-swoosh algorithm. Used for tmatchgroup only
+     * Recording matching with t-swoosh algorithm. Used for matchAnalysis only
      * 
      * @param inputRow
      * @param matchingRule
