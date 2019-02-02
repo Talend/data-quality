@@ -139,7 +139,8 @@ public class DQMFBRecordMerger extends MFBRecordMerger {
                         String leftCompareValue = leftValue;
                         String rightCompareValue = rightValue;
 
-                        if (referenceColumnIndex != null && !referenceColumnIndex.equals(colIdx)) {
+                        if (referenceColumnIndex != null && !referenceColumnIndex.equals(colIdx)
+                                && datePatternMap.get(referenceColumnIndex) != null) {
                             leftCompareValue = richRecord1.getOriginRow().get(referenceColumnIndex).getValue();
                             rightCompareValue = richRecord2.getOriginRow().get(referenceColumnIndex).getValue();
                         } else {
