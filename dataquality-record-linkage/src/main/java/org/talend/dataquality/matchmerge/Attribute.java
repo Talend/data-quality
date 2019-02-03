@@ -39,7 +39,7 @@ public class Attribute implements Serializable {
     /**
      * The index of the reference column in a record.
      */
-    private final int referenceColumnIndex;
+    private int referenceColumnIndex;
 
     private String referenceValue;
 
@@ -148,6 +148,15 @@ public class Attribute implements Serializable {
 
     public Iterator<String> allValues() {
         return new IteratorChain(new Iterator[] { Collections.singleton(value).iterator(), values.iterator() });
+    }
+
+    /**
+     * Sets the referenceColumnIndex.
+     * 
+     * @param referenceColumnIndex the referenceColumnIndex to set
+     */
+    protected void setReferenceColumnIndex(int referenceColumnIndex) {
+        this.referenceColumnIndex = referenceColumnIndex;
     }
 
 }

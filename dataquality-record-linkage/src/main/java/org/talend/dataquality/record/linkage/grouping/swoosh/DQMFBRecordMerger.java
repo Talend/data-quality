@@ -106,12 +106,17 @@ public class DQMFBRecordMerger extends MFBRecordMerger {
                     continue;
                 }
 
-                // Get the merged value and update the merged row.
-                mergedRows[colIdx] = new DQAttribute(StringUtils.EMPTY, colIdx);// No label for the
                 // attributes which are not matching keys
                 // Keep values from original records (if any)
                 String leftValue = richRecord1.getOriginRow().get(colIdx).getValue();
                 String rightValue = richRecord2.getOriginRow().get(colIdx).getValue();
+                Integer referenceColumnIndex = survivorshipFunc.getReferenceColumnIndex();
+                // Get the merged value and update the merged row.
+                mergedRows[colIdx] = new DQAttribute<>(StringUtils.EMPTY, colIdx, leftValue,
+                        referenceColumnIndex == null ? colIdx : referenceColumnIndex.intValue());// No
+                // label
+                // for
+                // the
                 AttributeValues<String> leftValues = richRecord1.getOriginRow().get(colIdx).getValues();
                 if (leftValues.size() > 0) {
                     mergedRows[colIdx].getValues().merge(leftValues);
@@ -129,7 +134,6 @@ public class DQMFBRecordMerger extends MFBRecordMerger {
                     mergedRows[colIdx].setValue(null);
                 } else {
                     SurvivorShipAlgorithmEnum survAlgo = survivorshipFunc.getSurvivorShipAlgoEnum();
-                    Integer referenceColumnIndex = survivorshipFunc.getReferenceColumnIndex();
                     String parameter = survivorshipFunc.getParameter();
                     String mergedValue = null;
                     String mergedCompareValue = null;
@@ -140,9 +144,13 @@ public class DQMFBRecordMerger extends MFBRecordMerger {
                         String rightCompareValue = rightValue;
 
                         if (referenceColumnIndex != null && !referenceColumnIndex.equals(colIdx)
-                                && datePatternMap.get(referenceColumnIndex) != null) {
-                            leftCompareValue = richRecord1.getOriginRow().get(referenceColumnIndex).getValue();
-                            rightCompareValue = richRecord2.getOriginRow().get(referenceColumnIndex).getValue();
+                                && (datePatternMap == null || datePatternMap.get(referenceColumnIndex.toString()) != null)) {
+                            leftCompareValue = richRecord1.getOriginRow().get(colIdx).getReferenceValue();
+                            rightCompareValue = richRecord2.getOriginRow().get(colIdx).getReferenceValue();
+                            leftCompareValue = leftCompareValue == null
+                                    ? richRecord1.getOriginRow().get(referenceColumnIndex).getValue() : leftCompareValue;
+                            rightCompareValue = rightCompareValue == null
+                                    ? richRecord2.getOriginRow().get(referenceColumnIndex).getValue() : rightCompareValue;
                         } else {
                             referenceColumnIndex = colIdx;
                         }

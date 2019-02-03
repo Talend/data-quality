@@ -91,7 +91,8 @@ public class MFBRecordMerger implements IRecordMerger {
                     String rightCompareValue = rightValue;
                     int referenceColumnIndex = leftAttribute.getReferenceColumnIndex();
 
-                    if ((referenceColumnIndex != i) && datePatternMap.get(String.valueOf(referenceColumnIndex)) != null) {
+                    if ((referenceColumnIndex != i)
+                            && (datePatternMap == null || datePatternMap.get(String.valueOf(referenceColumnIndex)) != null)) {
                         leftCompareValue = leftAttribute.getCompareValue();
                         rightCompareValue = rightAttribute.getCompareValue();
                     } else {

@@ -47,6 +47,14 @@ public class DQAttribute<TYPE extends Object> extends Attribute {
     }
 
     /**
+     * The constructor of DQAttribute class.
+     */
+    public DQAttribute(String label, int colIdx, TYPE value, int referenceIndex) {
+        this(label, colIdx, value);
+        setReferenceColumnIndex(referenceIndex);
+    }
+
+    /**
      * Getter for originalValue.
      * 
      * @return the originalValue
