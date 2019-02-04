@@ -12,8 +12,6 @@
 // ============================================================================
 package org.talend.dataquality.semantic.datamasking;
 
-import static org.talend.dataquality.semantic.utils.RegexUtils.removeInvalidCharacter;
-
 import java.security.SecureRandom;
 import java.util.Random;
 
@@ -21,6 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.talend.dataquality.datamasking.functions.Function;
 
 import com.mifmif.common.regex.Generex;
+import org.talend.dataquality.semantic.utils.RegexUtils;
 
 /**
  * Generate masking data from regex str
@@ -46,10 +45,7 @@ public class GenerateFromRegex extends Function<String> {
         if (StringUtils.isEmpty(inputValue)) {
             return EMPTY_STRING;
         }
-        String result = generex.random();
-        // just remove "$"(last) from the result
-
-        return result.substring(0, result.length() - 1);
+        return generex.random();
     }
 
     /*
@@ -60,7 +56,7 @@ public class GenerateFromRegex extends Function<String> {
     @Override
     public void parse(String extraParameter, boolean keepNullValues, Random rand) {
         if (extraParameter != null) {
-            String patterStr = removeInvalidCharacter(extraParameter);
+            String patterStr = RegexUtils.removeStartingAndEndingAnchors(extraParameter);
             generex = new Generex(patterStr);
             setKeepNull(keepNullValues);
             setRandom(rand);

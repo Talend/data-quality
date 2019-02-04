@@ -1,6 +1,11 @@
 package org.talend.dataquality.semantic.validator;
 
-import com.mifmif.common.regex.Generex;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
+
 import org.apache.lucene.document.Document;
 import org.talend.dataquality.semantic.datamasking.GenerateFromRegex;
 import org.talend.dataquality.semantic.datamasking.model.CategoryValues;
@@ -10,14 +15,6 @@ import org.talend.dataquality.semantic.index.LuceneIndex;
 import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
-
-import static org.talend.dataquality.semantic.utils.RegexUtils.removeInvalidCharacter;
 
 public class GenerateValidator {
 
@@ -49,7 +46,6 @@ public class GenerateValidator {
                 break;
             case REGEX:
                 String pattern = dictionarySnapshot.getRegexClassifier().getPatternStringByCategoryId(child.getId());
-                pattern = removeInvalidCharacter(pattern);
                 if (GenerateFromRegex.isValidPattern(pattern)) {
                     CategoryValues catValue = new CategoryValues();
                     catValue.setCategoryId(child.getId());

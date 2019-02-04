@@ -90,7 +90,7 @@ public class ValueDataMaskerTest extends CategoryRegistryManagerAbstract {
             // 7 POSTAL_CODE
             // use regex function
             put(new String[] { "37218-1324", SemanticCategoryEnum.US_POSTAL_CODE.name(), "string" }, "82660");
-            put(new String[] { "37218-1324", SemanticCategoryEnum.US_POSTAL_CODE.name(), "string", "1111" }, "74201-1254");
+            put(new String[] { "37218-1324", SemanticCategoryEnum.US_POSTAL_CODE.name(), "string", "1111" }, "74201-5198");
             // use regex function
             put(new String[] { "92150", SemanticCategoryEnum.FR_POSTAL_CODE.name(), "string" }, "82660");
             put(new String[] { "63274", SemanticCategoryEnum.DE_POSTAL_CODE.name(), "string" }, "32515");
@@ -153,22 +153,22 @@ public class ValueDataMaskerTest extends CategoryRegistryManagerAbstract {
             put(new String[] { "201234567", SemanticCategoryEnum.BANK_ROUTING_TRANSIT_NUMBER.name(), "string" }, "515165500");// invalid
 
             // exist issue need to use GenerateFromRegex function
-            put(new String[] { "F-1234", SemanticCategoryEnum.BE_POSTAL_CODE.name(), "string" }, "F-66014");// valid
-            put(new String[] { "F-12345", SemanticCategoryEnum.BE_POSTAL_CODE.name(), "string" }, "F-66014");// valid
-            put(new String[] { "B-1234", SemanticCategoryEnum.BE_POSTAL_CODE.name(), "string" }, "F-66014");// valid
+            put(new String[] { "F-1234", SemanticCategoryEnum.BE_POSTAL_CODE.name(), "string" }, "F-66010");// valid
+            put(new String[] { "F-12345", SemanticCategoryEnum.BE_POSTAL_CODE.name(), "string" }, "F-66010");// valid
+            put(new String[] { "B-1234", SemanticCategoryEnum.BE_POSTAL_CODE.name(), "string" }, "F-66010");// valid
             /**
              * invalid input mask to valid reulst
              */
             put(new String[] { "B-12345", SemanticCategoryEnum.BE_POSTAL_CODE.name(), "string" }, "F-15165");// invalid
 
             // work well
-            put(new String[] { "BG0123456789", SemanticCategoryEnum.BG_VAT_NUMBER.name(), "string" }, "BG6601457612");// valid
-            put(new String[] { "BG123456789", SemanticCategoryEnum.BG_VAT_NUMBER.name(), "string" }, "BG6601457612");// valid
+            put(new String[] { "BG0123456789", SemanticCategoryEnum.BG_VAT_NUMBER.name(), "string" }, "BG6601457619");// valid
+            put(new String[] { "BG123456789", SemanticCategoryEnum.BG_VAT_NUMBER.name(), "string" }, "BG6601457619");// valid
             put(new String[] { "BB123456789", SemanticCategoryEnum.BG_VAT_NUMBER.name(), "string" }, "FZ516550002");// invalid
 
             // work well
-            put(new String[] { "#A1A", SemanticCategoryEnum.COLOR_HEX_CODE.name(), "string" }, "#eae0f4");// valid
-            put(new String[] { "#A1A1A1", SemanticCategoryEnum.COLOR_HEX_CODE.name(), "string" }, "#eae0f4");// valid
+            put(new String[] { "#A1A", SemanticCategoryEnum.COLOR_HEX_CODE.name(), "string" }, "#eae");// valid
+            put(new String[] { "#A1A1A1", SemanticCategoryEnum.COLOR_HEX_CODE.name(), "string" }, "#eae");// valid
             put(new String[] { "#A1G", SemanticCategoryEnum.COLOR_HEX_CODE.name(), "string" }, "#F1Z");// invalid
 
             /**
@@ -290,10 +290,10 @@ public class ValueDataMaskerTest extends CategoryRegistryManagerAbstract {
             put(new String[] { "httpss://www.baidu.com", SemanticCategoryEnum.URL.name(), "string" }, "vkfzzp://sbb.qgaqa.vov");// invalid
 
             put(new String[] { "baidu.com", SemanticCategoryEnum.WEB_DOMAIN.name(), "string" },
-                    "C---0.4---1ge--S0-dKs1d1-4394ow.6--LfD7v0-6.415M4n-1-8Y.b---B-7.w0E.e-5--p.4N.j5ioJ9-v.g.e.M-Y---3YZ8w5-c-icw.LpHjHBVAIq");//
+                    "C---0.4---1ge--S0-dKs1d1-4394ow.6--LfD7v0-6.415M4n-1-8Y.b---B-7.w0E.e-5--p.4N.j5ioJ9-v.g.e.M-Y---3YZ8w5-c-icw.Lp.Y.O4.t--L.P.2-lwuZ-2zKnck93-3Cnl.t-i-0-q.GA.q.2-k9.gmii.Mx");//
             // valid
             put(new String[] { "baidu.cn", SemanticCategoryEnum.WEB_DOMAIN.name(), "string" },
-                    "C---0.4---1ge--S0-dKs1d1-4394ow.6--LfD7v0-6.415M4n-1-8Y.b---B-7.w0E.e-5--p.4N.j5ioJ9-v.g.e.M-Y---3YZ8w5-c-icw.LpHjHBVAIq");//
+                    "C---0.4---1ge--S0-dKs1d1-4394ow.6--LfD7v0-6.415M4n-1-8Y.b---B-7.w0E.e-5--p.4N.j5ioJ9-v.g.e.M-Y---3YZ8w5-c-icw.Lp.Y.O4.t--L.P.2-lwuZ-2zKnck93-3Cnl.t-i-0-q.GA.q.2-k9.gmii.Mx");//
             // valid
             put(new String[] { "baidu.c", SemanticCategoryEnum.WEB_DOMAIN.name(), "string" }, "fzzps.b");// invalid
 
@@ -325,7 +325,7 @@ public class ValueDataMaskerTest extends CategoryRegistryManagerAbstract {
             put(new String[] { "data:data/test;charset=UTF-8", SemanticCategoryEnum.DATA_URL.name(), "string" },
                     "vkfz:zpsb/bqga;qavovbr=SKQ-8");// invalid
 
-            put(new String[] { "DE07 5011 0200 9000 0104 01", SemanticCategoryEnum.IBAN.name(), "string" }, "cu660n4R 6xG0 ");// valid
+            put(new String[] { "DE07 5011 0200 9000 0104 01", SemanticCategoryEnum.IBAN.name(), "string" }, "cu660n4R 6xG0wS0d9");// valid
             put(new String[] { "DE07 5011 0200 9000 0104 0111", SemanticCategoryEnum.IBAN.name(), "string" },
                     "FZ51 6550 0024 7033 1688 8260");// valid
             put(new String[] { "DE07 5011 0200 9000 01041 01", SemanticCategoryEnum.IBAN.name(), "string" },

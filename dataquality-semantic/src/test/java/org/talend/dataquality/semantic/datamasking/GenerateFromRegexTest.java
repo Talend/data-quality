@@ -105,7 +105,7 @@ public class GenerateFromRegexTest {
         patternJudgeResult("(0033 ?|\\+33 ?|0)[1-9]([-. ]?[0-9]{2}){4}", "*", new Random(), true); //$NON-NLS-1$ //$NON-NLS-2$
         patternJudgeResult("(0033 ?|\\+33 ?|0)[1-9]([-. ]?[0-9]{2}){4}", "*", new SecureRandom(), true); //$NON-NLS-1$ //$NON-NLS-2$
         patternJudgeResult("(0033 ?|\\+33 ?|0)[1-9]([-. ]?[0-9]{2}){4}", "*", null, true); //$NON-NLS-1$ //$NON-NLS-2$
-        patternJudgeResult("^\\d*[02468]$", "355018403192633499074", new Random(12345), true); //$NON-NLS-1$ //$NON-NLS-2$
+        patternJudgeResult("^\\d*[02468]$", "355084", new Random(12345), true); //$NON-NLS-1$ //$NON-NLS-2$
         // added for codacy check
         Assert.assertTrue(true);
     }
@@ -157,9 +157,9 @@ public class GenerateFromRegexTest {
         patternJudgeResult("^(0033 ?|\\+33 ?|0)[1-9]([-. ]?[0-9]{2}){4}$", "08 38 9302 63", new Random(12345), true); //$NON-NLS-1$ //$NON-NLS-2$
         // more than one ^ and $
         patternJudgeResult("^^^^^^(0033 ?|\\+33 ?|0)[1-9]([-. ]?[0-9]{2}){4}$$$$$$$", "08 38 9302 63", new Random(12345), true); //$NON-NLS-1$ //$NON-NLS-2$
-        patternJudgeResult("^^^^\\^^(0033 ?|\\+33 ?|0)[1-9]([-. ]?[0-9]{2}){4}$$$$$\\$$", "^^+3339302 63 00$$$$$", //$NON-NLS-1$//$NON-NLS-2$
+        patternJudgeResult("^^^^\\^^(0033 ?|\\+33 ?|0)[1-9]([-. ]?[0-9]{2}){4}$$$$$\\$$", "^^+3339302 63 00$$$$$$", //$NON-NLS-1$//$NON-NLS-2$
                 new Random(12345), false);
-        patternJudgeResult("\\^^^^^^(0033 ?|\\+33 ?|0)[1-9]([-. ]?[0-9]{2}){4}$$$$$$\\$", "^^^^^^+33 4.31 02 3475$$$$$$", //$NON-NLS-1$//$NON-NLS-2$
+        patternJudgeResult("\\^^^^^^(0033 ?|\\+33 ?|0)[1-9]([-. ]?[0-9]{2}){4}$$$$$$\\$", "^^^^^^+33 4.31 02 3475$$$$$$$", //$NON-NLS-1$//$NON-NLS-2$
                 new Random(12345), false);
         // added for codacy check
         Assert.assertTrue(true);
@@ -207,6 +207,14 @@ public class GenerateFromRegexTest {
         Assert.assertTrue("empty should be support by this API by now", isValidPattern);
         isValidPattern = GenerateFromRegex.isValidPattern("^\\d*[02468]$");
         Assert.assertTrue("^\\d*[02468]$ should be support by this API by now", isValidPattern);
+    }
+
+    @Test
+    public void testParseCaseTDQ16375() {
+        GenerateFromRegex regexFunction = new GenerateFromRegex();
+        regexFunction.parse("^alcool|bière|tequila|pastis|champagne$", true, new Random(12345));
+        String maskResult = regexFunction.doGenerateMaskedField("ABC");
+        assertEquals("unexpected mask result! ", "pastis", maskResult);
     }
 
 }
