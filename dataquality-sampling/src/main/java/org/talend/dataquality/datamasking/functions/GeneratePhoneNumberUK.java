@@ -12,33 +12,22 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
-import org.talend.dataquality.datamasking.FunctionMode;
-
 import java.util.Random;
 
 /**
  * created by jgonzalez on 16 juil. 2015 Detailled comment
- *
  */
-public class GeneratePhoneNumberUK extends Function<String> {
+public class GeneratePhoneNumberUK extends FunctionString {
 
     private static final long serialVersionUID = -4131614123980116791L;
 
     @Override
-    protected String doGenerateMaskedField(String str, FunctionMode mode) {
-        Random r = rnd;
-        if (FunctionMode.CONSISTENT == mode)
-            r = getRandomForString(str);
-
-        return doGenerateMaskedField(str, r);
+    protected String doGenerateMaskedField(String str) {
+        return doGenerateMaskedFieldWithRandom(rnd);
     }
 
     @Override
-    protected String doGenerateMaskedField(String str) {
-        return doGenerateMaskedField(str, rnd);
-    }
-
-    private String doGenerateMaskedField(String str, Random r) {
+    protected String doGenerateMaskedFieldWithRandom(Random r) {
         StringBuilder result = new StringBuilder("020 3"); //$NON-NLS-1$
         addRandomDigit(result, 3, r);
         result.append(" "); //$NON-NLS-1$
@@ -48,7 +37,7 @@ public class GeneratePhoneNumberUK extends Function<String> {
 
     /**
      * Add random digit by special size
-     * 
+     *
      * @param result
      */
     private void addRandomDigit(StringBuilder result, int size, Random r) {

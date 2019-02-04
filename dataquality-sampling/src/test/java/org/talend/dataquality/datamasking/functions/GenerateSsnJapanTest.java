@@ -68,7 +68,8 @@ public class GenerateSsnJapanTest {
     @Test
     public void consistentMasking() {
         gnj.setSeed("aSeed");
-        String result = gnj.doGenerateMaskedField("038405589322", FunctionMode.CONSISTENT);
-        assertEquals("483061215197", result);
+        String result1 = gnj.doGenerateMaskedField("038405589322", FunctionMode.CONSISTENT);
+        String result2 = gnj.doGenerateMaskedField("038405589322", FunctionMode.CONSISTENT);
+        assertEquals(result2, result1);
     }
 }

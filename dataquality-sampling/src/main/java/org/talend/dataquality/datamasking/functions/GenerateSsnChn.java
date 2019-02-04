@@ -12,39 +12,29 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
-import java.util.List;
-import java.util.Random;
-
-import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.datamasking.generic.fields.FieldDate;
 import org.talend.dataquality.datamasking.utils.ssn.UtilsSsnChn;
 
+import java.util.List;
+import java.util.Random;
+
 /**
- * 
  * @author dprot
  * This class proposes a pure-random Chinese SSN number
  * The Chinese SSN has 4 fields : the first one, on 6 digits, stands for the birth place; the second one, with format
  * YYYYMMDD for the date of birth; the third one, with 3 digits; the last one, on one digit, is a checksum key
  */
-public class GenerateSsnChn extends Function<String> {
+public class GenerateSsnChn extends FunctionString {
 
     private static final long serialVersionUID = 8845031997964609626L;
 
     @Override
-    protected String doGenerateMaskedField(String str, FunctionMode mode) {
-        Random r = rnd;
-        if (FunctionMode.CONSISTENT == mode)
-            r = getRandomForString(str);
-
-        return doGenerateMaskedField(str, r);
+    protected String doGenerateMaskedField(String str) {
+        return doGenerateMaskedFieldWithRandom(rnd);
     }
 
     @Override
-    protected String doGenerateMaskedField(String str) {
-        return doGenerateMaskedField(str, rnd);
-    }
-
-    private String doGenerateMaskedField(String str, Random r) {
+    protected String doGenerateMaskedFieldWithRandom(Random r) {
         StringBuilder result = new StringBuilder(EMPTY_STRING);
 
         List<String> places = UtilsSsnChn.readChinaRegionFile();
@@ -70,7 +60,7 @@ public class GenerateSsnChn extends Function<String> {
         // Birth rank
         result.append(dd);
         for (int i = 0; i < 3; ++i) {
-            result.append(nextRandomDigit());
+            result.append(nextRandomDigit(r));
         }
 
         // Add the security key specified for Chinese SSN

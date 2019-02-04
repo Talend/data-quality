@@ -36,7 +36,6 @@ import org.talend.dataquality.semantic.validator.GenerateValidator;
 import java.security.SecureRandom;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 import static org.talend.dataquality.semantic.datamasking.FunctionBuilder.functionInitializer;
 
@@ -140,7 +139,7 @@ public class SemanticMaskerFunctionFactory {
         if (StringUtils.isNotEmpty(seed))
             function.setSeed(seed);
         else
-            function.setRandom(new Random());
+            function.setRandom(new SecureRandom());
 
         return function;
 

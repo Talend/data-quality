@@ -84,7 +84,8 @@ public class GeneratePhoneNumberFrenchTest {
     @Test
     public void consistentMasking() {
         gpn.setSeed("aSeed");
-        String result = gpn.doGenerateMaskedField("+33 112345678", FunctionMode.CONSISTENT);
-        assertEquals("+33 407146361", result);
+        String result1 = gpn.doGenerateMaskedField("+33 112345678", FunctionMode.CONSISTENT);
+        String result2 = gpn.doGenerateMaskedField("+33 112345678", FunctionMode.CONSISTENT);
+        assertEquals(result2, result1);
     }
 }

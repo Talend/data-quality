@@ -32,15 +32,15 @@ public class FluctuateNumericString extends NumericVariance<String> {
         Random r = rnd;
         if (FunctionMode.CONSISTENT == mode)
             r = getRandomForString(str);
-        return doGeneratedMaskedField(str, r);
+        return doGenerateMaskedField(str, r);
     }
 
     @Override
     protected String doGenerateMaskedField(String input) {
-        return doGeneratedMaskedField(input, rnd);
+        return doGenerateMaskedField(input, rnd);
     }
 
-    private String doGeneratedMaskedField(String input, Random r) {
+    private String doGenerateMaskedField(String input, Random r) {
         if (input == null || EMPTY_STRING.equals(input.trim())) {
             return input;
         } else {

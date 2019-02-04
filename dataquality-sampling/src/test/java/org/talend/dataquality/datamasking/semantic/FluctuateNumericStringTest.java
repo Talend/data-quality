@@ -18,7 +18,8 @@ public class FluctuateNumericStringTest {
     @Test
     public void consistentMasking() {
         fns.setSeed("aSeed");
-        String result = fns.doGenerateMaskedField("123412341234", FunctionMode.CONSISTENT);
-        assertEquals("123030159208", result);
+        String result1 = fns.doGenerateMaskedField("123412341234", FunctionMode.CONSISTENT);
+        String result2 = fns.doGenerateMaskedField("123412341234", FunctionMode.CONSISTENT);
+        assertEquals(result2, result1);
     }
 }

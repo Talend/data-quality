@@ -85,7 +85,8 @@ public class GeneratePhoneNumberJapanTest {
     @Test
     public void consistentMasking() {
         gpnj.setSeed("aSeed");
-        String result = gpnj.doGenerateMaskedField("03-6789-0123", FunctionMode.CONSISTENT);
-        assertEquals("03-7387-0047", result);
+        String result1 = gpnj.doGenerateMaskedField("03-6789-0123", FunctionMode.CONSISTENT);
+        String result2 = gpnj.doGenerateMaskedField("03-6789-0123", FunctionMode.CONSISTENT);
+        assertEquals(result2, result1);
     }
 }

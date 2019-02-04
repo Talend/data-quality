@@ -62,9 +62,9 @@ public abstract class Function<T> implements Serializable {
 
     protected boolean keepFormat = false;
 
-    protected String seed = RandomStringUtils.random(6);
+    protected String seed = RandomStringUtils.randomAlphanumeric(4);
 
-    protected FunctionMode maskingMode;
+    protected FunctionMode maskingMode = FunctionMode.RANDOM;
 
     /**
      * getter for random
@@ -193,11 +193,7 @@ public abstract class Function<T> implements Serializable {
     }
 
     public T generateMaskedRow(T t) {
-        FunctionMode mode = FunctionMode.RANDOM;
-        if (FunctionMode.CONSISTENT == maskingMode)
-            mode = FunctionMode.CONSISTENT;
-
-        return generateMaskedRow(t, mode);
+        return generateMaskedRow(t, maskingMode);
     }
 
     public T generateMaskedRow(T t, FunctionMode mode) {
@@ -274,26 +270,12 @@ public abstract class Function<T> implements Serializable {
 
     protected Random getRandomForString(String toBeReplaced) {
         Random random = new Random();
-
-        int multiplier = 1;
-        if (seed != null)
-            multiplier = seed.hashCode();
-
-        random.setSeed(toBeReplaced.hashCode() * multiplier);
+        random.setSeed(toBeReplaced.hashCode() * seed.hashCode());
         return random;
-    }
-
-    public String getSeed() {
-        return seed;
     }
 
     public void setSeed(String seed) {
         this.seed = seed;
-
-    }
-
-    public FunctionMode getMaskingMode() {
-        return maskingMode;
     }
 
     public void setMaskingMode(FunctionMode maskingMode) {

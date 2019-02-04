@@ -12,7 +12,6 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
-import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.datamasking.utils.ssn.UtilsSsnFr;
 
 import java.util.Random;
@@ -23,25 +22,17 @@ import java.util.Random;
  * has a range of (0, 97).<br>
  * So this class proposes a ssn randomly from the range 5,877886263×10¹²<br>
  */
-public class GenerateSsnFr extends Function<String> {
+public class GenerateSsnFr extends FunctionString {
 
     private static final long serialVersionUID = 8845031997964609626L;
 
     @Override
-    protected String doGenerateMaskedField(String str, FunctionMode mode) {
-        Random r = rnd;
-        if (FunctionMode.CONSISTENT == mode)
-            r = getRandomForString(str);
-
-        return doGenerateMaskedField(str, r);
+    protected String doGenerateMaskedField(String str) {
+        return doGenerateMaskedFieldWithRandom(rnd);
     }
 
     @Override
-    protected String doGenerateMaskedField(String str) {
-        return doGenerateMaskedField(str, rnd);
-    }
-
-    private String doGenerateMaskedField(String str, Random r) {
+    protected String doGenerateMaskedFieldWithRandom(Random r) {
         StringBuilder result = new StringBuilder(EMPTY_STRING);
         result.append(r.nextInt(2) + 1);
 

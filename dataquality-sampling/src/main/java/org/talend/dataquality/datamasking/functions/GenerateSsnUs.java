@@ -12,8 +12,6 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
-import org.talend.dataquality.datamasking.FunctionMode;
-
 import java.util.Random;
 
 /**
@@ -23,24 +21,17 @@ import java.util.Random;
  * following character has 9 combinations too. The end four characters, it can generate at least 5832 combinations. <br>
  * In totoal, it has 374 134 464 results.<br>
  */
-public class GenerateSsnUs extends Function<String> {
+public class GenerateSsnUs extends FunctionString {
 
     private static final long serialVersionUID = -7651076296534530622L;
 
     @Override
-    protected String doGenerateMaskedField(String str, FunctionMode mode) {
-        Random r = rnd;
-        if (FunctionMode.CONSISTENT == mode)
-            r = getRandomForString(str);
-        return doGenerateMaskedField(str, r);
+    protected String doGenerateMaskedField(String str) {
+        return this.doGenerateMaskedFieldWithRandom(rnd);
     }
 
     @Override
-    protected String doGenerateMaskedField(String str) {
-        return doGenerateMaskedField(str, rnd);
-    }
-
-    private String doGenerateMaskedField(String str, Random r) {
+    protected String doGenerateMaskedFieldWithRandom(Random r) {
         StringBuilder result = new StringBuilder();
         result.append(generateFirstGroup(r));
         result.append("-"); //$NON-NLS-1$

@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 
 public class GenerateFromDictionariesTest {
@@ -46,7 +45,7 @@ public class GenerateFromDictionariesTest {
         mockIndex = Mockito.mock(LuceneIndex.class);
         mockUserClassifier = Mockito.mock(UserDefinedClassifier.class);
         when(mockIndex.getSearcher()).thenReturn(mockSearcher);
-        when(mockSearcher.listDocumentsByCategoryId("CAT1", 0, Integer.MAX_VALUE)).thenReturn(getDocuments("1", 9999));
+        when(mockSearcher.listDocumentsByCategoryId("CAT1", 0, Integer.MAX_VALUE)).thenReturn(getDocuments(9999));
 
         metadata = createMetadata();
         dictionarySnapshot = Mockito.mock(DictionarySnapshot.class);
@@ -64,11 +63,14 @@ public class GenerateFromDictionariesTest {
     public void consistentMasking() {
         gfd.setSeed("aSeed");
         gfd.parse("CAT1", true, new Random(1234));
-        String result = gfd.doGenerateMaskedField("value1", FunctionMode.CONSISTENT);
-        assertEquals("value3769", result);
+        gfd.setMaskingMode(FunctionMode.CONSISTENT);
+        String result1 = gfd.generateMaskedRow("value1");
+        String result2 = gfd.generateMaskedRow("value1");
+        assertEquals("value3769", result1);
+        assertEquals(result2, result1);
     }
 
-    private List<Document> getDocuments(String id, int number) {
+    private List<Document> getDocuments(int number) {
         List<Document> documents = new ArrayList<>();
 
         Document doc = new Document();

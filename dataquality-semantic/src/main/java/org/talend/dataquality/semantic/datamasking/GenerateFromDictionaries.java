@@ -13,8 +13,7 @@
 package org.talend.dataquality.semantic.datamasking;
 
 import org.apache.lucene.document.Document;
-import org.talend.dataquality.datamasking.FunctionMode;
-import org.talend.dataquality.datamasking.functions.Function;
+import org.talend.dataquality.datamasking.functions.FunctionString;
 import org.talend.dataquality.semantic.index.DictionarySearcher;
 import org.talend.dataquality.semantic.index.Index;
 import org.talend.dataquality.semantic.index.LuceneIndex;
@@ -31,7 +30,7 @@ import java.util.stream.Collectors;
  * created by msjian on 2017.10.11.
  * TDQ-14147: data masking of a column with the content of its semantic type (dictionaries)
  */
-public class GenerateFromDictionaries extends Function<String> {
+public class GenerateFromDictionaries extends FunctionString {
 
     private static final long serialVersionUID = 1476820256067746995L;
 
@@ -42,20 +41,12 @@ public class GenerateFromDictionaries extends Function<String> {
     private String semanticCategoryId;
 
     @Override
-    protected String doGenerateMaskedField(String str, FunctionMode mode) {
-        Random r = rnd;
-        if (FunctionMode.CONSISTENT == mode)
-            r = getRandomForString(str);
-
-        return doGenerateMaskedField(str, r);
+    protected String doGenerateMaskedField(String t) {
+        return this.doGenerateMaskedFieldWithRandom(rnd);
     }
 
     @Override
-    protected String doGenerateMaskedField(String t) {
-        return doGenerateMaskedField(t, rnd);
-    }
-
-    private String doGenerateMaskedField(String t, Random r) {
+    protected String doGenerateMaskedFieldWithRandom(Random r) {
         if (!valuesInDictionaries.isEmpty()) {
             return valuesInDictionaries.get(r.nextInt(valuesInDictionaries.size()));
         } else {

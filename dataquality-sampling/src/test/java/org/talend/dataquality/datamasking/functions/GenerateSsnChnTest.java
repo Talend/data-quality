@@ -84,7 +84,8 @@ public class GenerateSsnChnTest {
     @Test
     public void consistentMasking() {
         gnf.setSeed("aSeed");
-        String result = gnf.doGenerateMaskedField("610201206301240556", FunctionMode.CONSISTENT);
-        assertEquals("542132198404020383", result);
+        String result1 = gnf.doGenerateMaskedField("610201206301240556", FunctionMode.CONSISTENT);
+        String result2 = gnf.doGenerateMaskedField("610201206301240556", FunctionMode.CONSISTENT);
+        assertEquals(result2, result1);
     }
 }

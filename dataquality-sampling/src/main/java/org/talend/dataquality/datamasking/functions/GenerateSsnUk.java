@@ -12,8 +12,6 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
-import org.talend.dataquality.datamasking.FunctionMode;
-
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -23,7 +21,7 @@ import java.util.Set;
  * There are 373 combinations for the first two characters. Then the the number part, it generates 531441 (9 power 6)
  * combinations. It has 4 characters to choose from in the last position. In total, it has 792 909 972 results.<br>
  */
-public class GenerateSsnUk extends Function<String> {
+public class GenerateSsnUk extends FunctionString {
 
     private static final long serialVersionUID = 4664211523958436354L;
 
@@ -46,20 +44,12 @@ public class GenerateSsnUk extends Function<String> {
     }
 
     @Override
-    protected String doGenerateMaskedField(String str, FunctionMode mode) {
-        Random r = rnd;
-        if (FunctionMode.CONSISTENT == mode)
-            r = getRandomForString(str);
-
-        return doGenerateMaskedField(str, r);
+    protected String doGenerateMaskedField(String str) {
+        return doGenerateMaskedFieldWithRandom(rnd);
     }
 
     @Override
-    protected String doGenerateMaskedField(String str) {
-        return doGenerateMaskedField(str, rnd);
-    }
-
-    private String doGenerateMaskedField(String str, Random r) {
+    protected String doGenerateMaskedFieldWithRandom(Random r) {
         StringBuilder result = new StringBuilder();
         StringBuilder prefix;
         char tmp;

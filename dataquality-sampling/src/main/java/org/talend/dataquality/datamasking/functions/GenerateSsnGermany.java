@@ -12,8 +12,6 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
-import org.talend.dataquality.datamasking.FunctionMode;
-
 import java.util.Random;
 
 /**
@@ -21,26 +19,17 @@ import java.util.Random;
  * power 11) ssn numbers.<br>
  * However, every generation is independent, this class cannot guarantee the difference among all the execution.<br>
  */
-public class GenerateSsnGermany extends Function<String> {
+public class GenerateSsnGermany extends FunctionString {
 
     private static final long serialVersionUID = -3060510098713442546L;
 
     @Override
-    protected String doGenerateMaskedField(String str, FunctionMode mode) {
-        Random r = rnd;
-        if (FunctionMode.CONSISTENT == mode) {
-            r = getRandomForString(str);
-        }
-
-        return doGenerateMaskedField(str, r);
+    protected String doGenerateMaskedField(String str) {
+        return doGenerateMaskedFieldWithRandom(rnd);
     }
 
     @Override
-    protected String doGenerateMaskedField(String str) {
-        return doGenerateMaskedField(str, rnd);
-    }
-
-    private String doGenerateMaskedField(String str, Random r) {
+    protected String doGenerateMaskedFieldWithRandom(Random r) {
         StringBuilder result = new StringBuilder(EMPTY_STRING);
         for (int i = 0; i < 11; ++i) {
             result.append(nextRandomDigit(r));

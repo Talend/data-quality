@@ -47,9 +47,7 @@ public abstract class NumericVariance<T> extends Function<T> {
     }
 
     protected void init() {
-        do {
-            rate = rnd.nextInt(2 * integerParam) - integerParam;
-        } while (rate == 0);
+        init(rnd);
     }
 
     protected void init(Random r) {

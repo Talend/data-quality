@@ -85,7 +85,8 @@ public class GeneratePhoneNumberGermanyTest {
     @Test
     public void consistentMasking() {
         gpng.setSeed("aSeed");
-        String result = gpng.doGenerateMaskedField("030 12345678", FunctionMode.CONSISTENT);
-        assertEquals("089 04160876", result);
+        String result1 = gpng.doGenerateMaskedField("030 12345678", FunctionMode.CONSISTENT);
+        String result2 = gpng.doGenerateMaskedField("030 12345678", FunctionMode.CONSISTENT);
+        assertEquals(result2, result1);
     }
 }

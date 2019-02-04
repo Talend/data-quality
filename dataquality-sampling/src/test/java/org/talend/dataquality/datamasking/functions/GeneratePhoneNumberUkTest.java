@@ -84,7 +84,8 @@ public class GeneratePhoneNumberUkTest {
     @Test
     public void consistentMasking() {
         gpnuk.setSeed("aSeed");
-        String result = gpnuk.doGenerateMaskedField("020 3456 7890", FunctionMode.CONSISTENT);
-        assertEquals("020 3286 2187", result);
+        String result1 = gpnuk.doGenerateMaskedField("020 3456 7890", FunctionMode.CONSISTENT);
+        String result2 = gpnuk.doGenerateMaskedField("020 3456 7890", FunctionMode.CONSISTENT);
+        assertEquals(result2, result1);
     }
 }

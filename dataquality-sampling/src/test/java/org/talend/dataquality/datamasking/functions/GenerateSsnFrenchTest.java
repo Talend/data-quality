@@ -75,7 +75,8 @@ public class GenerateSsnFrenchTest {
     @Test
     public void consistentMasking() {
         gnf.setSeed("aSeed");
-        String result = gnf.doGenerateMaskedField("1020304005006 24", FunctionMode.CONSISTENT);
-        assertEquals("2600723855180 50", result);
+        String result1 = gnf.doGenerateMaskedField("1020304005006 24", FunctionMode.CONSISTENT);
+        String result2 = gnf.doGenerateMaskedField("1020304005006 24", FunctionMode.CONSISTENT);
+        assertEquals(result2, result1);
     }
 }

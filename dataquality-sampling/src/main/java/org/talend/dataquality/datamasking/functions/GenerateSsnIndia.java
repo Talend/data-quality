@@ -12,7 +12,6 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
-import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.datamasking.utils.ssn.UtilsSsnIndia;
 
 import java.util.Random;
@@ -27,25 +26,17 @@ import java.util.Random;
  * b: 0 -> 9
  * c: checksum with Verhoeff' algorithm
  */
-public class GenerateSsnIndia extends Function<String> {
+public class GenerateSsnIndia extends FunctionString {
 
     private static final long serialVersionUID = -8621894245597689328L;
 
     @Override
-    protected String doGenerateMaskedField(String str, FunctionMode mode) {
-        Random r = rnd;
-        if (FunctionMode.CONSISTENT == mode)
-            r = getRandomForString(str);
-
-        return doGenerateMaskedField(str, r);
+    protected String doGenerateMaskedField(String str) {
+        return doGenerateMaskedFieldWithRandom(rnd);
     }
 
     @Override
-    protected String doGenerateMaskedField(String str) {
-        return doGenerateMaskedField(str, rnd);
-    }
-
-    private String doGenerateMaskedField(String str, Random r) {
+    protected String doGenerateMaskedFieldWithRandom(Random r) {
         StringBuilder result = new StringBuilder(EMPTY_STRING);
         result.append(1 + r.nextInt(9));
         for (int i = 0; i < 10; i++) {

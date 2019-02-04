@@ -81,8 +81,9 @@ public class GenerateSsnIndianTest {
     @Test
     public void consistentMasking() {
         gni.setSeed("aSeed");
-        String result = gni.doGenerateMaskedField("112345678907", FunctionMode.CONSISTENT);
-        assertEquals("136508344409", result);
+        String result1 = gni.doGenerateMaskedField("112345678907", FunctionMode.CONSISTENT);
+        String result2 = gni.doGenerateMaskedField("112345678907", FunctionMode.CONSISTENT);
+        assertEquals(result2, result1);
     }
 
 }

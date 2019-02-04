@@ -84,8 +84,9 @@ public class GeneratePhoneNumberUsTest {
     @Test
     public void consistentMasking() {
         gpnus.setSeed("aSeed");
-        String result = gpnus.doGenerateMaskedField("612-945-6789", FunctionMode.CONSISTENT);
-        assertEquals("698-842-0847", result);
+        String result1 = gpnus.doGenerateMaskedField("612-945-6789", FunctionMode.CONSISTENT);
+        String result2 = gpnus.doGenerateMaskedField("612-945-6789", FunctionMode.CONSISTENT);
+        assertEquals(result2, result1);
     }
 
 }

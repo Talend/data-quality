@@ -14,33 +14,23 @@ package org.talend.dataquality.datamasking.functions;
 
 import org.apache.commons.lang.StringUtils;
 import org.talend.dataquality.common.pattern.TextPatternUtil;
-import org.talend.dataquality.datamasking.FunctionMode;
 
 import java.util.Random;
 
 /**
  * created by jgonzalez on 17 juil. 2015 Detailled comment
  */
-public class GenerateFromPattern extends Function<String> {
+public class GenerateFromPattern extends FunctionString {
 
     private static final long serialVersionUID = 7920843158759995757L;
 
     @Override
-    protected String doGenerateMaskedField(String str, FunctionMode mode) {
-
-        Random r = rnd;
-        if (FunctionMode.CONSISTENT == mode)
-            r = getRandomForString(str);
-
-        return doGeneratedMaskedField(str, r);
+    protected String doGenerateMaskedField(String str) {
+        return doGenerateMaskedFieldWithRandom(rnd);
     }
 
     @Override
-    protected String doGenerateMaskedField(String str) {
-        return doGeneratedMaskedField(str, rnd);
-    }
-
-    private String doGeneratedMaskedField(String str, Random r) {
+    protected String doGenerateMaskedFieldWithRandom(Random r) {
         StringBuilder result = new StringBuilder(EMPTY_STRING);
         if (parameters == null) {
             return StringUtils.EMPTY;

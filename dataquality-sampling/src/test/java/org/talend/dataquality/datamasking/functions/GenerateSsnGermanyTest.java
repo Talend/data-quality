@@ -68,7 +68,8 @@ public class GenerateSsnGermanyTest {
     @Test
     public void consistentMasking() {
         gng.setSeed("aSeed");
-        String result = gng.doGenerateMaskedField("01234567890", FunctionMode.CONSISTENT);
-        assertEquals("94574020599", result);
+        String result1 = gng.doGenerateMaskedField("01234567890", FunctionMode.CONSISTENT);
+        String result2 = gng.doGenerateMaskedField("01234567890", FunctionMode.CONSISTENT);
+        assertEquals(result2, result1);
     }
 }

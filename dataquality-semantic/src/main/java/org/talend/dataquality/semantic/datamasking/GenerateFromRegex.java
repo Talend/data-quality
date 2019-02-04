@@ -35,7 +35,7 @@ public class GenerateFromRegex extends Function<String> {
     /*
      * (non-Javadoc)
      * 
-     * @see org.talend.dataquality.datamasking.functions.Function#doGenerateMaskedField(java.lang.Object)
+     * @see org.talend.dataquality.datamasking.functions.Function#doGenerateMaskedFieldWithRandom(java.lang.Object)
      */
     @Override
     protected String doGenerateMaskedField(String inputValue) {

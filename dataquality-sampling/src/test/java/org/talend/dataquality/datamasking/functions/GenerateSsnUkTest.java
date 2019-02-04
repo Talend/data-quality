@@ -84,7 +84,8 @@ public class GenerateSsnUkTest {
     @Test
     public void consistentMasking() {
         gsuk.setSeed("aSeed");
-        String result = gsuk.doGenerateMaskedField("HH 84 05 58 C", FunctionMode.CONSISTENT);
-        assertEquals("BB 83 61 17 A", result);
+        String result1 = gsuk.doGenerateMaskedField("HH 84 05 58 C", FunctionMode.CONSISTENT);
+        String result2 = gsuk.doGenerateMaskedField("HH 84 05 58 C", FunctionMode.CONSISTENT);
+        assertEquals(result2, result1);
     }
 }
