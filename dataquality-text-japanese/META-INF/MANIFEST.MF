@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Japanese text analysis Library
 Bundle-SymbolicName: org.talend.dataquality.text.japanese;singleton:=true
-Bundle-Version: 6.1.6.SNAPSHOT
+Bundle-Version: 6.1.6
 Bundle-Vendor: .Talend SA.
 Export-Package: org.talend.dataquality.jp.common,
  org.talend.dataquality.jp.tokenization,
