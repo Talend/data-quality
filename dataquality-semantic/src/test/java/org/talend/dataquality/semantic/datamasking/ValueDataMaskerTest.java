@@ -333,13 +333,18 @@ public class ValueDataMaskerTest extends CategoryRegistryManagerAbstract {
         }
     };
 
-    private static final Map<String[], String> EXPECTED_MASKED_VALUES_EXIST=new LinkedHashMap<String[],String>(){
+    private static final Map<String[], String> EXPECTED_MASKED_VALUES_EXIST = new LinkedHashMap<String[], String>() {
 
-    private static final long serialVersionUID=2L;
+        private static final long serialVersionUID = 2L;
 
-    {
-    // custom dictionary
-    put(new String[]{"true","NEW_CAT_NAME","string"},"false");put(new String[]{"false","NEW_CAT_NAME","string"},"false");put(new String[]{"TRUE","NEW_CAT_NAME","string"},"VKFZ");put(new String[]{"FALSE","NEW_CAT_NAME","string"},"VKFZZ");}};
+        {
+            // custom dictionary
+            put(new String[] { "true", "NEW_CAT_NAME", "string" }, "false");
+            put(new String[] { "false", "NEW_CAT_NAME", "string" }, "false");
+            put(new String[] { "TRUE", "NEW_CAT_NAME", "string" }, "VKFZ");
+            put(new String[] { "FALSE", "NEW_CAT_NAME", "string" }, "VKFZZ");
+        }
+    };
 
     /**
      * Test method for {@link org.talend.dataquality.datamasking.DataMasker#process(java.lang.Object, boolean)}.

@@ -14,7 +14,6 @@ package org.talend.dataquality.semantic.datamasking;
 
 import org.apache.lucene.document.Document;
 import org.talend.dataquality.datamasking.functions.FunctionString;
-import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.semantic.index.DictionarySearcher;
 import org.talend.dataquality.semantic.index.Index;
 import org.talend.dataquality.semantic.index.LuceneIndex;
@@ -40,15 +39,6 @@ public class GenerateFromDictionaries extends FunctionString {
     private DictionarySnapshot dictionarySnapshot;
 
     private String semanticCategoryId;
-
-    @Override
-    protected String doGenerateMaskedField(String str, FunctionMode mode) {
-        Random r = rnd;
-        if (FunctionMode.CONSISTENT == mode)
-            r = getRandomForString(str);
-
-        return doGenerateMaskedField(str, r);
-    }
 
     @Override
     protected String doGenerateMaskedField(String t) {

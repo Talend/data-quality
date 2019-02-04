@@ -21,8 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import static org.junit.Assert.assertEquals;<<<<<<<HEAD=======
-import static org.mockito.Matchers.anyString;>>>>>>>feat(TDQ-16456):consistent masking in TDP
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 public class GenerateFromDictionariesTest {
@@ -46,11 +45,7 @@ public class GenerateFromDictionariesTest {
         mockIndex = Mockito.mock(LuceneIndex.class);
         mockUserClassifier = Mockito.mock(UserDefinedClassifier.class);
         when(mockIndex.getSearcher()).thenReturn(mockSearcher);
-<<<<<<< HEAD
         when(mockSearcher.listDocumentsByCategoryId("CAT1", 0, Integer.MAX_VALUE)).thenReturn(getDocuments(9999));
-=======
-        when(mockSearcher.listDocumentsByCategoryId("CAT1", 0, Integer.MAX_VALUE)).thenReturn(getDocuments("1", 9999));
->>>>>>> feat(TDQ-16456) : consistent masking in TDP
 
         metadata = createMetadata();
         dictionarySnapshot = Mockito.mock(DictionarySnapshot.class);
@@ -68,7 +63,6 @@ public class GenerateFromDictionariesTest {
     public void consistentMasking() {
         gfd.setSeed("aSeed");
         gfd.parse("CAT1", true, new Random(1234));
-<<<<<<< HEAD
         gfd.setMaskingMode(FunctionMode.CONSISTENT);
         String result1 = gfd.generateMaskedRow("value1");
         String result2 = gfd.generateMaskedRow("value1");
@@ -77,13 +71,6 @@ public class GenerateFromDictionariesTest {
     }
 
     private List<Document> getDocuments(int number) {
-=======
-        String result = gfd.doGenerateMaskedField("value1", FunctionMode.CONSISTENT);
-        assertEquals("value3769", result);
-    }
-
-    private List<Document> getDocuments(String id, int number) {
->>>>>>> feat(TDQ-16456) : consistent masking in TDP
         List<Document> documents = new ArrayList<>();
 
         Document doc = new Document();

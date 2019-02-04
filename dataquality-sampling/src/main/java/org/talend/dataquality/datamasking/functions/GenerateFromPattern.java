@@ -14,9 +14,6 @@ package org.talend.dataquality.datamasking.functions;
 
 import org.apache.commons.lang.StringUtils;
 import org.talend.dataquality.common.pattern.TextPatternUtil;
-import org.talend.dataquality.datamasking.FunctionMode;
-
-import java.util.Random;
 
 import java.util.Random;
 
