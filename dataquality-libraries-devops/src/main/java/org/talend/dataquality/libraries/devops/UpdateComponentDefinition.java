@@ -47,7 +47,7 @@ public class UpdateComponentDefinition {
 
     private static final String COMPONENTS_FOLDER = "/components";
 
-    private static final String DQ_LIB_VERSION = "6.1.6-SNAPSHOT";
+    private static final String DQ_LIB_VERSION = "6.1.7-SNAPSHOT";
 
     private static final String DAIKON_VERSION = "0.28.0";
 
