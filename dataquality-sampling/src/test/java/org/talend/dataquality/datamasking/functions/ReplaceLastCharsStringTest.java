@@ -16,9 +16,9 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Random;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.datamasking.FunctionMode;
-import org.talend.dataquality.duplicating.RandomWrapper;
 
 /**
  * created by jgonzalez on 29 juin 2015 Detailled comment
@@ -32,16 +32,21 @@ public class ReplaceLastCharsStringTest {
 
     private ReplaceLastCharsString rlcs = new ReplaceLastCharsString();
 
+    @Before
+    public void setUp() throws Exception {
+        rlcs.setRandom(new Random(42));
+    }
+
     @Test
     public void defaultBehavior() {
-        rlcs.parse("3", false, new Random(42));
+        rlcs.parse("3", false);
         output = rlcs.generateMaskedRow(input);
         assertEquals("123038", output);
     }
 
     @Test
     public void random() {
-        rlcs.parse("3", false, new Random(42));
+        rlcs.parse("3", false);
         output = rlcs.generateMaskedRow(input, FunctionMode.RANDOM);
         assertEquals("123038", output);
     }
@@ -55,21 +60,22 @@ public class ReplaceLastCharsStringTest {
 
     @Test
     public void dummyHighParameter() {
-        rlcs.parse("7", false, new Random(42));
+        rlcs.parse("7", false);
         output = rlcs.generateMaskedRow(input);
         assertEquals("038405", output);
     }
 
     @Test
     public void consistent() {
-        rlcs.parse("3", false, new RandomWrapper(42));
+        rlcs.parse("3", false);
         output = rlcs.generateMaskedRow(input, FunctionMode.CONSISTENT);
         assertEquals(output, rlcs.generateMaskedRow(input, FunctionMode.CONSISTENT));
     }
 
     @Test
     public void consistentNoSeed() {
-        rlcs.parse("3", false, new RandomWrapper());
+        rlcs.setRandom(null);
+        rlcs.parse("3", false);
         output = rlcs.generateMaskedRow(input, FunctionMode.CONSISTENT);
         assertEquals(output, rlcs.generateMaskedRow(input, FunctionMode.CONSISTENT));
     }

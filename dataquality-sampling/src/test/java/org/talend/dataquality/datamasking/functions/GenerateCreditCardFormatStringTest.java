@@ -14,12 +14,14 @@ package org.talend.dataquality.datamasking.functions;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.datamasking.FunctionMode;
+
 
 /**
  * created by jgonzalez on 30 juin 2015 Detailled comment
@@ -33,14 +35,14 @@ public class GenerateCreditCardFormatStringTest {
 
     @Before
     public void setUp() throws Exception {
-        gccfs.setRandom(new Random(42));
+        gccfs.setRandom(new Random(42L));
 
     }
 
     @Test
     public void testGood() {
         String input = "4120356987563"; //$NON-NLS-1$
-        output = gccfs.generateMaskedRow(input).toString();
+        output = gccfs.generateMaskedRow(input);
         assertEquals(output, String.valueOf(4038405589322L));
     }
 
@@ -48,7 +50,7 @@ public class GenerateCreditCardFormatStringTest {
     public void testEmpty() {
         String input = ""; //$NON-NLS-1$
         gccfs.setKeepEmpty(true);
-        output = gccfs.generateMaskedRow(input).toString();
+        output = gccfs.generateMaskedRow(input);
         assertEquals("", output);
     }
 
@@ -56,31 +58,31 @@ public class GenerateCreditCardFormatStringTest {
     public void testSpaces() {
         gccfs.setKeepFormat(true);
         String input = "41 2 0356  9875 63"; //$NON-NLS-1$
-        output = gccfs.generateMaskedRow(input).toString();
+        output = gccfs.generateMaskedRow(input);
         assertEquals(output, "40 3 8405  5893 22");
     }
 
     @Test
     public void testSpaces2() {
         String input = "41 2 0356  9875 63"; //$NON-NLS-1$
-        output = gccfs.generateMaskedRow(input).toString();
+        output = gccfs.generateMaskedRow(input);
         assertEquals(output, "4038405589322");
     }
 
     @Test
     public void testCheck() {
-        gccfs.setRandom(new Random());
-        boolean res = true;
+        gccfs.setRandom(null);
+        boolean res;
         for (int i = 0; i < 10; i++) {
             String tmp = gccfs.generateMaskedRow("4120356987563"); //$NON-NLS-1$
             res = GenerateCreditCard.luhnTest(new StringBuilder(tmp));
-            assertEquals("Wrong number : " + tmp, res, true); //$NON-NLS-1$
+            assertTrue("Wrong number : " + tmp, res); //$NON-NLS-1$
         }
     }
 
     @Test
     public void testBad() {
-        output = gccfs.generateMaskedRow(null).toString();
+        output = gccfs.generateMaskedRow(null);
         assertEquals(output, "4384055893226268"); //$NON-NLS-1$
     }
 

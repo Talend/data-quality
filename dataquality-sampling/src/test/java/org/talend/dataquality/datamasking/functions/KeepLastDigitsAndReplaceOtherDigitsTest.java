@@ -7,10 +7,10 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.datamasking.FormatPreservingMethod;
 import org.talend.dataquality.datamasking.FunctionMode;
-import org.talend.dataquality.duplicating.RandomWrapper;
 import org.talend.dataquality.utils.MockRandom;
 
 public class KeepLastDigitsAndReplaceOtherDigitsTest {
@@ -21,37 +21,42 @@ public class KeepLastDigitsAndReplaceOtherDigitsTest {
 
     private KeepLastDigitsAndReplaceOtherDigits kfag = new KeepLastDigitsAndReplaceOtherDigits();
 
+    @Before
+    public void setUp() {
+        kfag.setRandom(new Random(42));
+    }
+
     @Test
     public void defaultBehavior() {
-        kfag.parse("3", false, new Random(42));
+        kfag.parse("3", false);
         output = kfag.generateMaskedRow(input);
         assertEquals("a8b3c0d456", output); //$NON-NLS-1$
     }
 
     @Test
     public void random() {
-        kfag.parse("3", false, new Random(42));
+        kfag.parse("3", false);
         output = kfag.generateMaskedRow(input, FunctionMode.RANDOM);
         assertEquals("a8b3c0d456", output); //$NON-NLS-1$
     }
 
     @Test
     public void consistent() {
-        kfag.parse("3", false, new RandomWrapper(42));
+        kfag.parse("3", false);
         output = kfag.generateMaskedRow(input, FunctionMode.CONSISTENT);
         assertEquals(output, kfag.generateMaskedRow(input, FunctionMode.CONSISTENT)); //$NON-NLS-1$
     }
 
     @Test
     public void consistentNoSeed() {
-        kfag.parse("3", false, new RandomWrapper());
+        kfag.parse("3", false);
         output = kfag.generateMaskedRow(input, FunctionMode.CONSISTENT);
         assertEquals(output, kfag.generateMaskedRow(input, FunctionMode.CONSISTENT)); //$NON-NLS-1$
     }
 
     @Test
     public void bijectiveReplaceOnlyDigits() {
-        kfag.parse("2", false, new RandomWrapper(42));
+        kfag.parse("2", false);
         kfag.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF, "data");
         String output = kfag.generateMaskedRow(input, FunctionMode.BIJECTIVE);
         assertEquals(input.length(), output.length());
@@ -60,7 +65,7 @@ public class KeepLastDigitsAndReplaceOtherDigitsTest {
 
     @Test
     public void bijective() {
-        kfag.parse("1", false, new RandomWrapper(42));
+        kfag.parse("1", false);
         kfag.setSecret(FormatPreservingMethod.AES_CBC_PRF, "data");
         Set<String> outputSet = new HashSet<>();
         for (int i = 0; i < 1000; i++) {
@@ -78,7 +83,7 @@ public class KeepLastDigitsAndReplaceOtherDigitsTest {
 
     @Test
     public void bijectiveReturnsNullIfOneDigitToReplace() {
-        kfag.parse("2", false, new RandomWrapper(42));
+        kfag.parse("2", false);
         kfag.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF, "data");
         String output = kfag.generateMaskedRow("abc123", FunctionMode.BIJECTIVE);
         assertNull(output);
@@ -86,7 +91,7 @@ public class KeepLastDigitsAndReplaceOtherDigitsTest {
 
     @Test
     public void bijectiveReturnsNullIfSmallerThanParam() {
-        kfag.parse("2", false, new RandomWrapper(42));
+        kfag.parse("2", false);
         kfag.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF, "data");
         String output = kfag.generateMaskedRow("a", FunctionMode.BIJECTIVE);
         assertNull(output);
@@ -94,7 +99,7 @@ public class KeepLastDigitsAndReplaceOtherDigitsTest {
 
     @Test
     public void randomReturnsInputIfSmallerThanParam() {
-        kfag.parse("2", false, new RandomWrapper(42));
+        kfag.parse("2", false);
         kfag.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF, "data");
         String output = kfag.generateMaskedRow("a", FunctionMode.RANDOM);
         assertEquals("a", output);
@@ -102,21 +107,22 @@ public class KeepLastDigitsAndReplaceOtherDigitsTest {
 
     @Test
     public void dummyHighParameter() {
-        kfag.parse("15", false, new Random(542));
+        kfag.parse("15", false);
         output = kfag.generateMaskedRow(input);
         assertEquals(input, output);
     }
 
     @Test
     public void dummyExactSizeParameter() {
-        kfag.parse("10", false, new Random(542));
+        kfag.parse("10", false);
         output = kfag.generateMaskedRow(input);
         assertEquals(input, output);
     }
 
     @Test
     public void allDigitCanBeGenerated() {
-        kfag.parse("10", false, new MockRandom());
+        kfag.setRandom(new MockRandom());
+        kfag.parse("10", false);
         output = kfag.generateMaskedRow("01234567890123456789");
         assertEquals("98765432100123456789", output);
     }

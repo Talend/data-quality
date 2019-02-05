@@ -54,7 +54,7 @@ public class GenerateSsnUkTest {
     @Test
     public void testCheck() {
         gsuk.setRandom(new Random());
-        boolean res = true;
+        boolean res;
         for (int i = 0; i < 10; i++) {
             String tmp = gsuk.generateMaskedRow(null);
             res = Function.UPPER.substring(0, 4).indexOf(tmp.charAt(tmp.length() - 1)) != -1

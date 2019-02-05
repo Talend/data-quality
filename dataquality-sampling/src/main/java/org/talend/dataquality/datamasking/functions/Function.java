@@ -27,6 +27,8 @@ import org.talend.dataquality.datamasking.FormatPreservingMethod;
 import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.datamasking.generic.Alphabet;
 
+import java.security.SecureRandom;
+
 /**
  * created by jgonzalez on 18 juin 2015. This class is an abstract class that
  * all other functions extend. All the methods and fields that all functions
@@ -50,7 +52,7 @@ public abstract class Function<T> implements Serializable {
 
     protected static final String ERROR_MESSAGE = "Configuration issue (check your parameters)";
 
-    protected Random rnd = new Random();
+    protected Random rnd = new SecureRandom();
 
     protected String[] parameters;
 
@@ -78,14 +80,10 @@ public abstract class Function<T> implements Serializable {
     /**
      * setter for random
      *
-     * @param rand The java.util.Random instance.
+     * @param rnd The pseudo-random number generator
      */
-    public void setRandom(Random rand) {
-        if (rand == null) {
-            rnd = new Random();
-        } else {
-            rnd = rand;
-        }
+    public void setRandom(Random rnd) {
+        this.rnd = rnd == null ? new SecureRandom() : rnd;
     }
 
     /**
@@ -117,9 +115,8 @@ public abstract class Function<T> implements Serializable {
      *
      * @param extraParameter The parameter we try to parse.
      * @param keepNullValues The parameter used for setKeepNull.
-     * @param rand The parameter used for setRandomMWrapper.
      */
-    public void parse(String extraParameter, boolean keepNullValues, Random rand) {
+    public void parse(String extraParameter, boolean keepNullValues) {
         if (extraParameter != null) {
             parameters = getParameters(extraParameter);
             if (parameters.length == 1 && isNeedCheckPath()
@@ -142,10 +139,6 @@ public abstract class Function<T> implements Serializable {
         }
 
         setKeepNull(keepNullValues);
-
-        if (rand != null) {
-            setRandom(rand);
-        }
     }
 
     /**

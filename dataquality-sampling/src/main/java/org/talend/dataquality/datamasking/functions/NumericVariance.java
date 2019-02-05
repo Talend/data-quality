@@ -33,8 +33,8 @@ public abstract class NumericVariance<T> extends Function<T> {
     private int integerParam = 10;
 
     @Override
-    public void parse(String extraParameter, boolean keepNullValues, Random rand) {
-        super.parse(extraParameter, keepNullValues, rand);
+    public void parse(String extraParameter, boolean keepNullValues) {
+        super.parse(extraParameter, keepNullValues);
         if (CharactersOperationUtils.validParameters1Number(parameters))
             integerParam = Integer.parseInt(parameters[0]);
         else

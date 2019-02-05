@@ -52,8 +52,8 @@ public class GenerateSsnChnTest {
     @Test
     public void testCheckFirstDigit() {
         // First digit should not be a '9' in a Chinese SSN
-        gnf.setRandom(new Random());
-        boolean res = true;
+        gnf.setRandom(null);
+        boolean res;
         for (int i = 0; i < 10; i++) {
             String tmp = gnf.generateMaskedRow(null);
             res = !(tmp.charAt(0) == '9');

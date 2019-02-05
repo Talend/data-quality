@@ -35,7 +35,7 @@ public class GeneratePhoneNumberFrenchTest {
 
     @Before
     public void setUp() throws Exception {
-        gpn.setRandom(new Random(42));
+        gpn.setRandom(new Random(42L));
     }
 
     @Test
@@ -54,7 +54,7 @@ public class GeneratePhoneNumberFrenchTest {
     @Test
     public void testCheck() {
         boolean res;
-        gpn.setRandom(new Random());
+        gpn.setRandom(null);
         for (int i = 0; i < 10; i++) {
             String tmp = gpn.generateMaskedRow(null);
             int digit = Integer.valueOf(tmp.charAt(4) + "");

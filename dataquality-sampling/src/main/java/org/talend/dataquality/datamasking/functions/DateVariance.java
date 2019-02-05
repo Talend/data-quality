@@ -15,7 +15,6 @@ package org.talend.dataquality.datamasking.functions;
 import static org.talend.dataquality.datamasking.FunctionMode.CONSISTENT;
 
 import java.util.Date;
-import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,8 +37,8 @@ public class DateVariance extends AbstractDateFunction {
     private int integerParam = 31;
 
     @Override
-    public void parse(String extraParameter, boolean keepNullValues, Random rand) {
-        super.parse(extraParameter, keepNullValues, rand);
+    public void parse(String extraParameter, boolean keepNullValues) {
+        super.parse(extraParameter, keepNullValues);
         if (CharactersOperationUtils.validParameters1Number(parameters))
             integerParam = Integer.parseInt(parameters[0]);
         else

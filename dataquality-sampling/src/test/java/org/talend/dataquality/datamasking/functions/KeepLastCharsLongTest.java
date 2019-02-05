@@ -19,6 +19,7 @@ import static org.junit.Assert.fail;
 import java.util.Arrays;
 import java.util.Random;
 
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -33,23 +34,28 @@ public class KeepLastCharsLongTest {
 
     private KeepLastCharsLong klag = new KeepLastCharsLong();
 
+    @Before
+    public void setUp() {
+        klag.setRandom(new Random(42));
+    }
+
     @Test
     public void defaultBehavior() {
-        klag.parse("3", false, new Random(42));
+        klag.parse("3", false);
         output = klag.generateMaskedRow(input);
         assertEquals(38456, output); // $NON-NLS-1$
     }
 
     @Test
     public void dummyHighParameter() {
-        klag.parse("7", false, new Random(42));
+        klag.parse("7", false);
         output = klag.generateMaskedRow(input);
         assertEquals(input, output);
     }
 
     @Test
     public void twoParameters() {
-        klag.parse("3,8", false, new Random(42));
+        klag.parse("3,8", false);
         output = klag.generateMaskedRow(input);
         assertEquals(888456L, output);
     }
@@ -57,7 +63,7 @@ public class KeepLastCharsLongTest {
     @Test
     public void letterInParameters() {
         try {
-            klag.parse("3,r", false, new Random(42));
+            klag.parse("3,r", false);
             fail("should get exception with input " + Arrays.toString(klag.parameters)); //$NON-NLS-1$
         } catch (Exception e) {
             assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$

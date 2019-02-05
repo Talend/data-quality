@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Random;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 public class MaskEmailLocalPartRandomlyTest {
@@ -18,6 +19,11 @@ public class MaskEmailLocalPartRandomlyTest {
 
     private String mail = "jugonzalez@talend.com";
 
+    @Before
+    public void setUp() throws Exception {
+        maskEmailLocalPart.setRandom(new Random(42));
+    }
+
     @Test
     public void testEmpty() {
         maskEmailLocalPart.setKeepEmpty(true);
@@ -27,21 +33,21 @@ public class MaskEmailLocalPartRandomlyTest {
 
     @Test
     public void testOneGoodInput() {
-        maskEmailLocalPart.parse("test.com", false, new Random(42));
+        maskEmailLocalPart.parse("test.com", false);
         output = maskEmailLocalPart.generateMaskedRow(mail);
         Assert.assertEquals(output, "test.com@talend.com");
     }
 
     @Test
     public void test1OneGoodInputWithSpace() {
-        maskEmailLocalPart.parse("", false, new Random(42));
+        maskEmailLocalPart.parse("", false);
         output = maskEmailLocalPart.generateMaskedRow(mail);
         Assert.assertEquals(output, "@talend.com");
     }
 
     @Test
     public void testServeralGoodInputs() {
-        maskEmailLocalPart.parse("aol.com, att.net, comcast.net, facebook.com, gmail.com, gmx.com", false, new Random(42));
+        maskEmailLocalPart.parse("aol.com, att.net, comcast.net, facebook.com, gmail.com, gmx.com", false);
         for (int i = 0; i < 20; i++) {
             output = maskEmailLocalPart.generateMaskedRow(mail);
             Assert.assertTrue(!output.equals(mail));
@@ -50,7 +56,7 @@ public class MaskEmailLocalPartRandomlyTest {
 
     @Test
     public void testServeralGoodInputsWithSpace() {
-        maskEmailLocalPart.parse("nelson  ,  quentin, ", false, new Random(42));
+        maskEmailLocalPart.parse("nelson  ,  quentin, ", false);
         List<String> results = Arrays.asList("nelson@talend.com", "quentin@talend.com");
         for (int i = 0; i < 20; i++) {
             output = maskEmailLocalPart.generateMaskedRow(mail);
@@ -61,7 +67,7 @@ public class MaskEmailLocalPartRandomlyTest {
     @Test
     public void test1GoodLocalFile() throws URISyntaxException {
         String path = this.getClass().getResource("data/domain.txt").toURI().getPath();
-        maskEmailLocalPart.parse(path, false, new Random(42));
+        maskEmailLocalPart.parse(path, false);
         for (int i = 0; i < 20; i++) {
             output = maskEmailLocalPart.generateMaskedRow(mail);
             Assert.assertTrue(!output.equals(mail));
@@ -70,14 +76,14 @@ public class MaskEmailLocalPartRandomlyTest {
 
     @Test
     public void testNullEmail() {
-        maskEmailLocalPart.parse("hehe", false, new Random(42));
+        maskEmailLocalPart.parse("hehe", false);
         output = maskEmailLocalPart.generateMaskedRow(null);
         Assert.assertTrue(output.isEmpty());
     }
 
     @Test
     public void testNotKeepNullEmail() {
-        maskEmailLocalPart.parse("hehe", true, new Random(42));
+        maskEmailLocalPart.parse("hehe", true);
         output = maskEmailLocalPart.generateMaskedRow(null);
         Assert.assertTrue(output == null);
     }
@@ -90,7 +96,7 @@ public class MaskEmailLocalPartRandomlyTest {
 
     @Test
     public void testWrongFormat() {
-        maskEmailLocalPart.parse("replace", true, new Random(42));
+        maskEmailLocalPart.parse("replace", true);
         output = maskEmailLocalPart.generateMaskedRow("hehe");
         Assert.assertEquals("replace", output);
     }

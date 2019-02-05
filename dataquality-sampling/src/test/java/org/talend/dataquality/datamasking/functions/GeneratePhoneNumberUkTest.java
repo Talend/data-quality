@@ -53,8 +53,8 @@ public class GeneratePhoneNumberUkTest {
 
     @Test
     public void testCheck() {
-        boolean res = true;
-        gpnuk.setRandom(new Random());
+        boolean res;
+        gpnuk.setRandom(null);
         for (int i = 0; i < 10; i++) {
             String tmp = gpnuk.generateMaskedRow(null);
             res = (tmp.substring(0, 5).equals("020 3")); //$NON-NLS-1$

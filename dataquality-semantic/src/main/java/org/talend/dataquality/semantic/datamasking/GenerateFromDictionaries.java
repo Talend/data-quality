@@ -62,11 +62,10 @@ public class GenerateFromDictionaries extends FunctionString {
     }
 
     @Override
-    public void parse(String semanticCategoryId, boolean keepNullValues, Random rand) {
+    public void parse(String semanticCategoryId, boolean keepNullValues) {
         this.semanticCategoryId = semanticCategoryId;
 
         setKeepNull(keepNullValues);
-        setRandom(rand);
 
         if (valuesInDictionaries == null && dictionarySnapshot != null) {
             DQCategory cat = dictionarySnapshot.getMetadata().get(semanticCategoryId);

@@ -16,9 +16,9 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Random;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.datamasking.FunctionMode;
-import org.talend.dataquality.duplicating.RandomWrapper;
 
 /**
  * created by jgonzalez on 1 juil. 2015 Detailled comment
@@ -32,37 +32,43 @@ public class ReplaceLastCharsIntegerTest {
 
     private ReplaceLastCharsInteger rlci = new ReplaceLastCharsInteger();
 
+    @Before
+    public void setUp() throws Exception {
+        rlci.setRandom(new Random(42));
+    }
+
     @Test
     public void defaultBehavior() {
-        rlci.parse("3", false, new Random(42));
+        rlci.parse("3", false);
         output = rlci.generateMaskedRow(input);
         assertEquals(123038, output); //$NON-NLS-1$
     }
 
     @Test
     public void random() {
-        rlci.parse("3", false, new Random(42));
+        rlci.parse("3", false);
         output = rlci.generateMaskedRow(input, FunctionMode.RANDOM);
         assertEquals(123038, output); //$NON-NLS-1$
     }
 
     @Test
     public void dummyHighParameter() {
-        rlci.parse("7", false, new Random(42));
+        rlci.parse("7", false);
         output = rlci.generateMaskedRow(input);
         assertEquals(38405, output); //$NON-NLS-1$
     }
 
     @Test
     public void consistent() {
-        rlci.parse("3", false, new RandomWrapper(42));
+        rlci.parse("3", false);
         output = rlci.generateMaskedRow(input, FunctionMode.CONSISTENT);
         assertEquals(output, rlci.generateMaskedRow(input, FunctionMode.CONSISTENT).intValue());
     }
 
     @Test
     public void consistentNoSeed() {
-        rlci.parse("3", false, new RandomWrapper());
+        rlci.setRandom(null);
+        rlci.parse("3", false);
         output = rlci.generateMaskedRow(input, FunctionMode.CONSISTENT);
         assertEquals(output, rlci.generateMaskedRow(input, FunctionMode.CONSISTENT).intValue());
     }

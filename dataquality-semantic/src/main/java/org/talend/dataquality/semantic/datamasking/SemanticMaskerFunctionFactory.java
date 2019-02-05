@@ -101,7 +101,7 @@ public class SemanticMaskerFunctionFactory {
                     break;
                 }
                 if (function != null)
-                    function.parse(extraParameter, true, null);
+                    function.parse(extraParameter, true);
             }
         }
 
@@ -113,16 +113,16 @@ public class SemanticMaskerFunctionFactory {
             case "double":
             case "decimal":
                 function = new FluctuateNumericString();
-                function.parse("10", true, null);
+                function.parse("10", true);
                 break;
             case "date":
                 DateVariance df = new DateVariance();
-                df.parse("61", true, null);
+                df.parse("61", true);
                 function = new DateFunctionAdapter(df, params);
                 break;
             case "string":
                 function = new ReplaceCharactersWithGeneration();
-                function.parse("X", true, null);
+                function.parse("X", true);
                 break;
             default:
                 break;
@@ -155,7 +155,7 @@ public class SemanticMaskerFunctionFactory {
 
     private static Function<String> adaptForDateFunction(List<String> datePatterns, AbstractDateFunction functionToAdapt,
             String extraParam) {
-        functionToAdapt.parse(extraParam, true, null);
+        functionToAdapt.parse(extraParam, true);
         return new DateFunctionAdapter(functionToAdapt, datePatterns);
     }
 
@@ -182,7 +182,7 @@ public class SemanticMaskerFunctionFactory {
             } else {
                 function = (Function<String>) factory.getFunction(functionType, tester.getTypeByName(dataType));
             }
-            function.parse(extraParam, true, null);
+            function.parse(extraParam, true);
             function.setKeepFormat(true);
             function.setKeepEmpty(true);
         } catch (InstantiationException e) {

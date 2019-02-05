@@ -33,17 +33,16 @@ public class DateVarianceTest {
 
     private Date input = null;
 
-    private Random rand = new Random(42);
-
     @Before
     public void setUp() throws Exception {
         input = sdf.parse("29-02-1992"); //$NON-NLS-1$
         dv = new DateVariance();
+        dv.setRandom(new Random(42L));
     }
 
     @Test
     public void testGoodCase1() throws ParseException {
-        dv.parse("31", false, rand); //$NON-NLS-1$
+        dv.parse("31", false); //$NON-NLS-1$
         for (int index = 0; index < 20; index++) {
             String output = sdf.format(dv.generateMaskedRow(input));
             boolean result = checkResult(output, "29-01-1992", "31-03-1992"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -53,7 +52,7 @@ public class DateVarianceTest {
 
     @Test
     public void testGoodCase2() throws ParseException {
-        dv.parse("-31", false, rand); //$NON-NLS-1$
+        dv.parse("-31", false); //$NON-NLS-1$
         for (int index = 0; index < 20; index++) {
             String output = sdf.format(dv.generateMaskedRow(input));
             boolean result = checkResult(output, "29-01-1992", "31-03-1992"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -63,7 +62,7 @@ public class DateVarianceTest {
 
     @Test
     public void testGoodCase3() throws ParseException {
-        dv.parse("1", false, rand); //$NON-NLS-1$
+        dv.parse("1", false); //$NON-NLS-1$
         for (int index = 0; index < 20; index++) {
             String output = sdf.format(dv.generateMaskedRow(input));
             boolean result = checkResult(output, "28-01-1992", "01-03-1992"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -73,7 +72,7 @@ public class DateVarianceTest {
 
     @Test
     public void testGoodCase4() throws ParseException {
-        dv.parse("1,3", false, rand); //$NON-NLS-1$
+        dv.parse("1,3", false); //$NON-NLS-1$
         for (int index = 0; index < 20; index++) {
             String output = sdf.format(dv.generateMaskedRow(input));
             boolean result = checkResult(output, "29-01-1992", "31-03-1992"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -83,7 +82,7 @@ public class DateVarianceTest {
 
     @Test
     public void testDummyGood() throws ParseException {
-        dv.parse("0", false, rand); //$NON-NLS-1$
+        dv.parse("0", false); //$NON-NLS-1$
         for (int index = 0; index < 20; index++) {
             String output = sdf.format(dv.generateMaskedRow(input));
             boolean result = checkResult(output, "29-01-1992", "31-03-1992"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -93,7 +92,7 @@ public class DateVarianceTest {
 
     @Test
     public void testNullParameter() throws ParseException {
-        dv.parse(null, false, rand); // $NON-NLS-1$
+        dv.parse(null, false); // $NON-NLS-1$
         for (int index = 0; index < 20; index++) {
             String output = sdf.format(dv.generateMaskedRow(input));
             boolean result = checkResult(output, "29-01-1992", "31-03-1992"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -103,7 +102,7 @@ public class DateVarianceTest {
 
     @Test
     public void testBad() throws ParseException {
-        dv.parse("j", false, rand); //$NON-NLS-1$
+        dv.parse("j", false); //$NON-NLS-1$
         for (int index = 0; index < 20; index++) {
             String output = sdf.format(dv.generateMaskedRow(input));
             boolean result = checkResult(output, "29-01-1992", "31-03-1992"); //$NON-NLS-1$ //$NON-NLS-2$

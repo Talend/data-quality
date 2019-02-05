@@ -19,6 +19,7 @@ import static org.junit.Assert.fail;
 import java.util.Arrays;
 import java.util.Random;
 
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -33,9 +34,14 @@ public class RemoveLastCharsLongTest {
 
     private RemoveLastCharsLong rlci = new RemoveLastCharsLong();
 
+    @Before
+    public void setUp() throws Exception {
+        rlci.setRandom(new Random(42));
+    }
+
     @Test
     public void defaultBehavior() {
-        rlci.parse("2", false, new Random(42));
+        rlci.parse("2", false);
         output = rlci.generateMaskedRow(input);
         assertEquals(6, output);
     }
@@ -43,7 +49,7 @@ public class RemoveLastCharsLongTest {
     @Test
     public void nullParameter() {
         try {
-            rlci.parse(null, false, new Random(42));
+            rlci.parse(null, false);
             fail("should get exception with input " + Arrays.toString(rlci.parameters)); //$NON-NLS-1$
         } catch (Exception e) {
             assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$
@@ -52,14 +58,14 @@ public class RemoveLastCharsLongTest {
 
     @Test
     public void dummyParameter() {
-        rlci.parse("10", false, new Random(42));
+        rlci.parse("10", false);
         output = rlci.generateMaskedRow(input);
         assertEquals(0, output);
     }
 
     @Test
     public void zeroParameter() {
-        rlci.parse("0", false, new Random(42));
+        rlci.parse("0", false);
         output = rlci.generateMaskedRow(input);
         assertEquals(666, output);
     }
@@ -67,7 +73,7 @@ public class RemoveLastCharsLongTest {
     @Test
     public void letterInParameter() {
         try {
-            rlci.parse("a", false, new Random(42));
+            rlci.parse("a", false);
             fail("should get exception with input " + Arrays.toString(rlci.parameters)); //$NON-NLS-1$
         } catch (Exception e) {
             assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$

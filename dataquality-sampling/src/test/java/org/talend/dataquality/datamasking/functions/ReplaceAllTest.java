@@ -25,7 +25,6 @@ import org.talend.daikon.pattern.character.CharPattern;
 import org.talend.dataquality.datamasking.FormatPreservingMethod;
 import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.datamasking.generic.Alphabet;
-import org.talend.dataquality.duplicating.RandomWrapper;
 
 import static org.junit.Assert.*;
 
@@ -45,12 +44,13 @@ public class ReplaceAllTest {
 
     @Before
     public void setUp() {
-        ra.parse("", false, new RandomWrapper(42));
+        ra.setRandom(new Random(42));
+        ra.parse("", false);
     }
 
     @Test
     public void replaceByParameter() {
-        ra.parse("X", false, new Random(42));
+        ra.parse("X", false);
         output = ra.generateMaskedRow(input);
         assertEquals("XXXXXXXXXXX", output); //$NON-NLS-1$
     }
@@ -75,7 +75,8 @@ public class ReplaceAllTest {
 
     @Test
     public void noSeedConsistent() {
-        ra.parse(" ", false, new RandomWrapper());
+        ra.setRandom(null);
+        ra.parse(" ", false);
         output = ra.generateMaskedRow(input, FunctionMode.CONSISTENT);
         assertEquals(output, ra.generateMaskedRow(input, FunctionMode.CONSISTENT)); //$NON-NLS-1$
     }
@@ -107,6 +108,7 @@ public class ReplaceAllTest {
 
     @Test
     public void bijectivity() {
+        ra.setRandom(null);
         ra.setAlphabet(alphabet);
         ra.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF, "data");
         Set<String> outputSet = new HashSet<>();
@@ -114,8 +116,8 @@ public class ReplaceAllTest {
         String suffix = "z98";
         for (int i = 0; i < alphabet.getRadix(); i++) {
             for (int j = 0; j < alphabet.getRadix(); j++) {
-                String input = new StringBuilder().append(prefix).append(Character.toChars(alphabet.getCharactersMap().get(i)))
-                        .append(Character.toChars(alphabet.getCharactersMap().get(j))).append(suffix).toString();
+                String input = prefix + String.valueOf(Character.toChars(alphabet.getCharactersMap().get(i)))
+                        + String.valueOf(Character.toChars(alphabet.getCharactersMap().get(j))) + suffix;
 
                 outputSet.add(ra.generateMaskedRow(input, FunctionMode.BIJECTIVE));
             }
@@ -133,7 +135,7 @@ public class ReplaceAllTest {
     @Test
     public void lettersInParameter() {
         try {
-            ra.parse("zi", false, new Random(42));
+            ra.parse("zi", false);
             fail("should get exception with input " + Arrays.toString(ra.parameters)); //$NON-NLS-1$
         } catch (Exception e) {
             assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$
@@ -145,7 +147,7 @@ public class ReplaceAllTest {
     @Test
     public void bijectiveBestGuess() {
 
-        ra.parse("", false, new RandomWrapper());
+        ra.parse("", false);
         ra.setAlphabet(Alphabet.BEST_GUESS);
         ra.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF, "data");
         Map<String, String> inputOutput = new LinkedHashMap<String, String>() {

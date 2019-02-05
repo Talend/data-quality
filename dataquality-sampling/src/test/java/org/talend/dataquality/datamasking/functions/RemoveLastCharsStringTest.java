@@ -16,6 +16,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Random;
 
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -30,9 +31,14 @@ public class RemoveLastCharsStringTest {
 
     private RemoveLastCharsString rlcs = new RemoveLastCharsString();
 
+    @Before
+    public void setUp() throws Exception {
+        rlcs.setRandom(new Random(42));
+    }
+
     @Test
     public void defaultBehavior() {
-        rlcs.parse("2", false, new Random(42));
+        rlcs.parse("2", false);
         output = rlcs.generateMaskedRow(input);
         assertEquals("Ste", output); //$NON-NLS-1$
     }
@@ -46,7 +52,7 @@ public class RemoveLastCharsStringTest {
 
     @Test
     public void dummyParameter() {
-        rlcs.parse("10", false, new Random(42));
+        rlcs.parse("10", false);
         output = rlcs.generateMaskedRow(input);
         assertEquals("", output); //$NON-NLS-1$
     }

@@ -19,6 +19,7 @@ import static org.junit.Assert.fail;
 import java.util.Arrays;
 import java.util.Random;
 
+import org.junit.Before;
 import org.junit.Test;
 
 public class BetweenIndexesRemoveTest {
@@ -29,16 +30,21 @@ public class BetweenIndexesRemoveTest {
 
     private String output;
 
+    @Before
+    public void setup() {
+        bir.setRandom(new Random(42L));
+    }
+
     @Test
     public void defaultBehavior() {
-        bir.parse("2, 4", false, new Random(42));
+        bir.parse("2, 4", false);
         output = bir.generateMaskedRow(input);
         assertEquals("Se", output); //$NON-NLS-1$
     }
 
     @Test
     public void emptyReturnsEmpty() {
-        bir.parse("2, 4", false, new Random(42));
+        bir.parse("2, 4", false);
         output = bir.generateMaskedRow("");
         assertEquals("", output); //$NON-NLS-1$
     }
@@ -46,7 +52,7 @@ public class BetweenIndexesRemoveTest {
     @Test
     public void negativeParameter() {
         try {
-            bir.parse("-2, 8", false, new Random(42));
+            bir.parse("-2, 8", false);
             fail("should get exception with input " + Arrays.toString(bir.parameters)); //$NON-NLS-1$
         } catch (Exception e) {
             assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$
@@ -58,7 +64,7 @@ public class BetweenIndexesRemoveTest {
     @Test
     public void swappedParameters() {
         try {
-            bir.parse("4, 2", false, new Random(42));
+            bir.parse("4, 2", false);
             fail("should get exception with input " + Arrays.toString(bir.parameters)); //$NON-NLS-1$
         } catch (Exception e) {
             assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$
@@ -70,7 +76,7 @@ public class BetweenIndexesRemoveTest {
     @Test
     public void tooFewParameters() {
         try {
-            bir.parse("1", false, new Random(42));
+            bir.parse("1", false);
             fail("should get exception with input " + Arrays.toString(bir.parameters)); //$NON-NLS-1$
         } catch (Exception e) {
             assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$
@@ -81,7 +87,7 @@ public class BetweenIndexesRemoveTest {
 
     @Test
     public void dummyHighParameters() {
-        bir.parse("423,452", false, new Random(42));
+        bir.parse("423,452", false);
         output = bir.generateMaskedRow(input);
         assertEquals(input, output);
     }

@@ -99,9 +99,8 @@ public class GenerateFromCompound extends FunctionString {
     }
 
     @Override
-    public void parse(String semanticCategoryId, boolean keepNullValues, Random rand) {
+    public void parse(String semanticCategoryId, boolean keepNullValues) {
         setKeepNull(keepNullValues);
-        setRandom(rand);
     }
 
     private Distribution processDistribution(List<CategoryValues> categories, Random r) {

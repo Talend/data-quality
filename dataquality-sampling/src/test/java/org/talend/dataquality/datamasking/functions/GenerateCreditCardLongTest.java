@@ -13,11 +13,12 @@
 package org.talend.dataquality.datamasking.functions;
 
 import static org.junit.Assert.assertEquals;
-
-import java.util.Random;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Random;
 
 /**
  * created by jgonzalez on 29 juin 2015 Detailled comment
@@ -31,7 +32,7 @@ public class GenerateCreditCardLongTest {
 
     @Before
     public void setUp() throws Exception {
-        gccl.setRandom(new Random(42));
+        gccl.setRandom(new Random(42L));
     }
 
     @Test
@@ -42,12 +43,12 @@ public class GenerateCreditCardLongTest {
 
     @Test
     public void testCheck() {
-        gccl.setRandom(new Random());
-        boolean res = true;
+        gccl.setRandom(null);
+        boolean res;
         for (int i = 0; i < 10; i++) {
             Long tmp = gccl.generateMaskedRow(null);
             res = GenerateCreditCard.luhnTest(new StringBuilder(tmp.toString()));
-            assertEquals("Wrong number : " + tmp, res, true); //$NON-NLS-1$
+            assertTrue("Wrong number : " + tmp, res); //$NON-NLS-1$
         }
     }
 

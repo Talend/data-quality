@@ -153,6 +153,6 @@ public class ValueDataMasker implements Serializable {
      * @param extraParam
      */
     public void resetExtraParameter(String extraParam) {
-        function.parse(extraParam, true, null);
+        function.parse(extraParam, true);
     }
 }

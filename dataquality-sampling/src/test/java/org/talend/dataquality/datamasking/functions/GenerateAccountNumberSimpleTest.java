@@ -13,11 +13,12 @@
 package org.talend.dataquality.datamasking.functions;
 
 import static org.junit.Assert.assertEquals;
-
-import java.util.Random;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Random;
 
 /**
  * created by jgonzalez on 29 juin 2015 Detailled comment
@@ -31,7 +32,7 @@ public class GenerateAccountNumberSimpleTest {
 
     @Before
     public void setUp() throws Exception {
-        gans.setRandom(new Random(42));
+        gans.setRandom(new Random(42L));
     }
 
     @Test
@@ -52,7 +53,7 @@ public class GenerateAccountNumberSimpleTest {
     public void testNull() {
         gans.keepNull = true;
         output = gans.generateMaskedRow(null);
-        assertEquals(null, output);
+        assertNull(output);
     }
 
 }

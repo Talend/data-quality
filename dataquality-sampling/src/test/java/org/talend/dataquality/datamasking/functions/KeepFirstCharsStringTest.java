@@ -16,6 +16,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Random;
 
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -30,6 +31,11 @@ public class KeepFirstCharsStringTest {
 
     private KeepFirstCharsString kfag = new KeepFirstCharsString();
 
+    @Before
+    public void setUp() {
+        kfag.setRandom(new Random(42));
+    }
+
     @Test
     public void emptyReturnsEmpty() {
         kfag.setKeepEmpty(true);
@@ -39,21 +45,21 @@ public class KeepFirstCharsStringTest {
 
     @Test
     public void defaultBehavior() {
-        kfag.parse("3", false, new Random(42));
+        kfag.parse("3", false);
         output = kfag.generateMaskedRow(input);
         assertEquals("a1b0h8m055", output); //$NON-NLS-1$
     }
 
     @Test
     public void dummyHighParameter() {
-        kfag.parse("15", false, new Random(542));
+        kfag.parse("15", false);
         output = kfag.generateMaskedRow(input);
         assertEquals(input, output);
     }
 
     @Test
     public void twoParameters() {
-        kfag.parse("5,8", false, new Random(542));
+        kfag.parse("5,8", false);
         output = kfag.generateMaskedRow(input);
         assertEquals("a1b2c88888", output);
     }

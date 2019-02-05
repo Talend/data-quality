@@ -4,7 +4,6 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 import org.talend.dataquality.datamasking.FormatPreservingMethod;
 import org.talend.dataquality.datamasking.SecretManager;
@@ -25,12 +24,6 @@ public abstract class AbstractGenerateUniquePhoneNumber extends AbstractGenerate
     public AbstractGenerateUniquePhoneNumber() {
         List<AbstractField> fields = createFieldsListFromPattern();
         pattern = new GenerateUniqueRandomPatterns(fields);
-    }
-
-    @Override
-    public void setRandom(Random rand) {
-        super.setRandom(rand);
-        replaceNumeric.parse(null, false, rand);
     }
 
     @Override

@@ -35,7 +35,7 @@ public class GenerateBetweenDateTest {
 
     @Before
     public void setUp() throws Exception {
-        gbd.setRandom(new Random(42));
+        gbd.setRandom(new Random(42L));
     }
 
     @Test

@@ -48,8 +48,8 @@ public class GenerateSsnFrenchTest {
 
     @Test
     public void testCheck() {
-        gnf.setRandom(new Random());
-        boolean res = true;
+        gnf.setRandom(null);
+        boolean res;
         for (int i = 0; i < 10; i++) {
             String tmp = gnf.generateMaskedRow(null);
             res = (tmp.charAt(0) == '1' || tmp.charAt(0) == '2');

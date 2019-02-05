@@ -13,6 +13,7 @@
 package org.talend.dataquality.datamasking.semantic;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,12 +29,12 @@ public class DateFunctionAdapterTest {
     @Test
     public void testGenerateMaskedRow() {
         final DateVariance dv = new DateVariance();
-        dv.parse("61", true, new Random(AllDataqualitySamplingTests.RANDOM_SEED));
-        final List<String> patternList = Arrays
-                .asList(new String[] { "yyyy/MM/dd", "yyyy-MM-dd", "yyyy/MM/dd H:mm:ss", "AA9999" });
+        dv.setRandom(new Random(AllDataqualitySamplingTests.RANDOM_SEED));
+        dv.parse("61", true);
+        final List<String> patternList = Arrays.asList("yyyy/MM/dd", "yyyy-MM-dd", "yyyy/MM/dd H:mm:ss", "AA9999");
         final DateFunctionAdapter function = new DateFunctionAdapter(dv, patternList);
 
-        assertEquals(null, function.generateMaskedRow(null)); // return null when input is null
+        assertNull(function.generateMaskedRow(null)); // return null when input is null
         assertEquals("", function.generateMaskedRow("")); // return empty when input is empty
         assertEquals("  \t", function.generateMaskedRow("  \t")); // return original value when input contains only whitespaces
 

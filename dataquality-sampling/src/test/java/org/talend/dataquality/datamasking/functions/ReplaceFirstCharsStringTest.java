@@ -19,9 +19,9 @@ import static org.junit.Assert.fail;
 import java.util.Arrays;
 import java.util.Random;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.datamasking.FunctionMode;
-import org.talend.dataquality.duplicating.RandomWrapper;
 
 /**
  * created by jgonzalez on 29 juin 2015 Detailled comment
@@ -35,30 +35,36 @@ public class ReplaceFirstCharsStringTest {
 
     private ReplaceFirstCharsString rfcs = new ReplaceFirstCharsString();
 
+    @Before
+    public void setUp() throws Exception {
+        rfcs.setRandom(new Random(42));
+    }
+
     @Test
     public void defaultBehavior() {
-        rfcs.parse("3,y", false, new Random(42));
+        rfcs.parse("3,y", false);
         output = rfcs.generateMaskedRow(input);
         assertEquals("yyy456", output);
     }
 
     @Test
     public void random() {
-        rfcs.parse("3,y", false, new Random(42));
+        rfcs.parse("3,y", false);
         output = rfcs.generateMaskedRow(input, FunctionMode.RANDOM);
         assertEquals("yyy456", output);
     }
 
     @Test
     public void consistent() {
-        rfcs.parse("3", false, new RandomWrapper(42));
+        rfcs.parse("3", false);
         output = rfcs.generateMaskedRow(input, FunctionMode.CONSISTENT);
         assertEquals(output, rfcs.generateMaskedRow(input, FunctionMode.CONSISTENT));
     }
 
     @Test
     public void consistentNoSeed() {
-        rfcs.parse("3", false, new RandomWrapper());
+        rfcs.setRandom(null);
+        rfcs.parse("3", false);
         output = rfcs.generateMaskedRow(input, FunctionMode.CONSISTENT);
         assertEquals(output, rfcs.generateMaskedRow(input, FunctionMode.CONSISTENT));
     }
@@ -72,7 +78,7 @@ public class ReplaceFirstCharsStringTest {
 
     @Test
     public void dummyHighParameter() {
-        rfcs.parse("7", false, new Random(42));
+        rfcs.parse("7", false);
         output = rfcs.generateMaskedRow(input);
         assertEquals("038405", output);
     }
@@ -80,7 +86,7 @@ public class ReplaceFirstCharsStringTest {
     @Test
     public void letterInParameters() {
         try {
-            rfcs.parse("0,xs", false, new Random(42));
+            rfcs.parse("0,xs", false);
             fail("should get exception with input " + Arrays.toString(rfcs.parameters)); //$NON-NLS-1$
         } catch (Exception e) {
             assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$

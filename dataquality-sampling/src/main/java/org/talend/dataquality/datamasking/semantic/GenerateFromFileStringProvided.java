@@ -13,7 +13,6 @@
 package org.talend.dataquality.datamasking.semantic;
 
 import java.io.IOException;
-import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,8 +31,8 @@ public class GenerateFromFileStringProvided extends GenerateFromFileString {
      */
     // TODO We need to remove this method after known we can
     @Override
-    public void parse(String extraParameter, boolean keepNullValues, Random rand) {
-        super.parse(extraParameter, keepNullValues, rand);
+    public void parse(String extraParameter, boolean keepNullValues) {
+        super.parse(extraParameter, keepNullValues);
         try {
             genericTokens = KeysLoader.loadKeys(getClass().getResourceAsStream(parameters[0]));
         } catch (IOException | NullPointerException e) {

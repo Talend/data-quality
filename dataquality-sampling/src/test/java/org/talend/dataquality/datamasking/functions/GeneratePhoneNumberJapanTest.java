@@ -54,7 +54,7 @@ public class GeneratePhoneNumberJapanTest {
     @Test
     public void testCheck() {
         boolean res;
-        gpnj.setRandom(new Random());
+        gpnj.setRandom(null);
         for (int i = 0; i < 10; i++) {
             String tmp = gpnj.generateMaskedRow(null);
             res = (tmp.charAt(0) == '0') && (tmp.charAt(1) == '3');

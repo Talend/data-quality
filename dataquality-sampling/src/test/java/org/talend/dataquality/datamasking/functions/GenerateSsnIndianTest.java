@@ -54,7 +54,7 @@ public class GenerateSsnIndianTest {
     @Test
     public void testCheckFirstDigit() {
         // First digit should not be a '0' in a Indian SSN
-        gni.setRandom(new Random());
+        gni.setRandom(null);
         boolean res;
         for (int i = 0; i < 10; i++) {
             String tmp = gni.generateMaskedRow(null);

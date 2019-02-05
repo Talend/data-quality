@@ -63,6 +63,7 @@ public class GenerateFromCompoundTest {
 
         generate = new GenerateFromCompound();
         generate.setDictionarySnapshot(dictionarySnapshot);
+        generate.setRandom(new Random(1234));
     }
 
     private Map<String, DQCategory> createMetadata() {
@@ -88,7 +89,7 @@ public class GenerateFromCompoundTest {
         when(mockIndex.validCategories(eq("value1"), eq(metadata.get("CAT1")), eq(null))).thenReturn(true);
 
         generate.setCategoryValues(createCategoryValuesWithDict());
-        generate.parse("1", true, new Random(1234));
+        generate.parse("1", true);
         String result = generate.doGenerateMaskedField("value1");
         assertEquals("value3", result);
     }
@@ -99,7 +100,7 @@ public class GenerateFromCompoundTest {
         when(mockUserClassifier.validCategories(eq("a"), eq(metadata.get("REGEX2")), eq(null))).thenReturn(true);
 
         generate.setCategoryValues(createCategoryValuesWithRegex());
-        generate.parse("2", true, new Random(1234));
+        generate.parse("2", true);
         String result = generate.doGenerateMaskedField("a");
         assertEquals("y", result);
     }
@@ -112,7 +113,7 @@ public class GenerateFromCompoundTest {
         when(mockUserClassifier.validCategories(eq("a"), eq(metadata.get("REGEX2")), eq(null))).thenReturn(true);
 
         generate.setCategoryValues(createCategoryValuesWithCompound());
-        generate.parse("1", true, new Random(1234));
+        generate.parse("1", true);
         String result = generate.doGenerateMaskedField("a");
         assertEquals("y", result);
     }

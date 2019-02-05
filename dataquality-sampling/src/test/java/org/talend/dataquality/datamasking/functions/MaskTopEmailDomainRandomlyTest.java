@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Random;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
@@ -38,6 +39,11 @@ public class MaskTopEmailDomainRandomlyTest {
 
     private MaskTopEmailDomainRandomly maskTopEmailDomainRandomly = new MaskTopEmailDomainRandomly();
 
+    @Before
+    public void setUp() throws Exception {
+        maskTopEmailDomainRandomly.setRandom(new Random(42));
+    }
+
     @Test
     public void testEmpty() {
         maskTopEmailDomainRandomly.setKeepEmpty(true);
@@ -47,21 +53,21 @@ public class MaskTopEmailDomainRandomlyTest {
 
     @Test
     public void testOneGoodStandard() {
-        maskTopEmailDomainRandomly.parse("gmail,test", false, new Random(24));
+        maskTopEmailDomainRandomly.parse("gmail,test", false);
         output = maskTopEmailDomainRandomly.generateMaskedRow(mailStandard);
         Assert.assertEquals("hehe@test.com", output);
     }
 
     @Test
     public void testOneGoodStandardWithSpace() {
-        maskTopEmailDomainRandomly.parse("", false, new Random(24));
+        maskTopEmailDomainRandomly.parse("", false);
         output = maskTopEmailDomainRandomly.generateMaskedRow(mailStandard);
         Assert.assertEquals("hehe@.com", output);
     }
 
     @Test
     public void testSeveralGoodStandard() {
-        maskTopEmailDomainRandomly.parse("test1, test2, test3", false, new Random(24));
+        maskTopEmailDomainRandomly.parse("test1, test2, test3", false);
         List<String> results = Arrays.asList("hehe@test1.com", "hehe@test2.com", "hehe@test3.com");
 
         for (int i = 0; i < 20; i++) {
@@ -72,7 +78,7 @@ public class MaskTopEmailDomainRandomlyTest {
 
     @Test
     public void test1SeveralGoodStandardWithSpace() {
-        maskTopEmailDomainRandomly.parse("test1, test2, ", false, new Random(24));
+        maskTopEmailDomainRandomly.parse("test1, test2, ", false);
         List<String> results = Arrays.asList("hehe@test1.com", "hehe@test2.com");
 
         for (int i = 0; i < 20; i++) {
@@ -83,7 +89,7 @@ public class MaskTopEmailDomainRandomlyTest {
 
     @Test
     public void testSeveralGoodMultipalDomaim() {
-        maskTopEmailDomainRandomly.parse("test1, test2, test3", false, new Random(24));
+        maskTopEmailDomainRandomly.parse("test1, test2, test3", false);
         List<String> results = Arrays.asList("hehe.haha@test1.cn", "hehe.haha@test2.cn", "hehe.haha@test3.cn");
 
         for (int i = 0; i < 20; i++) {
@@ -95,7 +101,7 @@ public class MaskTopEmailDomainRandomlyTest {
     @Test
     public void testOneGoodFromFile() throws URISyntaxException {
         String filePath = this.getClass().getResource("data/top-domain.txt").toURI().getPath();
-        maskTopEmailDomainRandomly.parse(filePath, false, new Random(24));
+        maskTopEmailDomainRandomly.parse(filePath, false);
 
         for (int i = 0; i < 20; i++) {
             output = maskTopEmailDomainRandomly.generateMaskedRow(mailStandard);
@@ -106,7 +112,7 @@ public class MaskTopEmailDomainRandomlyTest {
     @Test
     public void testServeralGoodFromFile() throws URISyntaxException {
         String filePath = this.getClass().getResource("data/top-domain.txt").toURI().getPath();
-        maskTopEmailDomainRandomly.parse(filePath, false, new Random(24));
+        maskTopEmailDomainRandomly.parse(filePath, false);
 
         for (int i = 0; i < 20; i++) {
             output = maskTopEmailDomainRandomly.generateMaskedRow(mailMultipalDomaim);
@@ -116,28 +122,28 @@ public class MaskTopEmailDomainRandomlyTest {
 
     @Test
     public void testNullEmail() {
-        maskTopEmailDomainRandomly.parse("", false, new Random());
+        maskTopEmailDomainRandomly.parse("", false);
         output = maskTopEmailDomainRandomly.generateMaskedRow(null);
         Assert.assertTrue(output.isEmpty());
     }
 
     @Test
     public void testKeepNullEmail() {
-        maskTopEmailDomainRandomly.parse("", true, new Random());
+        maskTopEmailDomainRandomly.parse("", true);
         output = maskTopEmailDomainRandomly.generateMaskedRow(null);
-        Assert.assertTrue(output == null);
+        Assert.assertNull(output);
     }
 
     @Test
     public void testEmptyEmail() {
-        maskTopEmailDomainRandomly.parse("", false, new Random());
+        maskTopEmailDomainRandomly.parse("", false);
         output = maskTopEmailDomainRandomly.generateMaskedRow("");
         Assert.assertTrue(output.isEmpty());
     }
 
     @Test
     public void testWrongFormat() {
-        maskTopEmailDomainRandomly.parse("replace", false, new Random());
+        maskTopEmailDomainRandomly.parse("replace", false);
         output = maskTopEmailDomainRandomly.generateMaskedRow("hehe");
         Assert.assertEquals("replace", output);
     }

@@ -33,8 +33,6 @@ public abstract class CharactersOperation<T> extends Function<T> {
 
     private static final long serialVersionUID = -1326050500008572996L;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CharactersOperation.class);
-
     /**
      * the index from which we replace
      */
@@ -89,8 +87,8 @@ public abstract class CharactersOperation<T> extends Function<T> {
     }
 
     @Override
-    public void parse(String extraParameter, boolean keepNullValues, Random rand) {
-        super.parse(extraParameter, keepNullValues, rand);
+    public void parse(String extraParameter, boolean keepNullValues) {
+        super.parse(extraParameter, keepNullValues);
         isValidParameters = validParameters();
         if (isValidParameters) {
             this.initAttributes();

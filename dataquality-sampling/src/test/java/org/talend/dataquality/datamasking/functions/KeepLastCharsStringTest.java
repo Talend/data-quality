@@ -45,14 +45,17 @@ public class KeepLastCharsStringTest {
 
     @Test
     public void defaultBehavior() {
-        klads.parse("3", false, new Random(42));
+        klads.parse("3", false);
         output = klads.generateMaskedRow(input);
         assertEquals("038456", output); //$NON-NLS-1$
+    }
 
+    @Test
+    public void tdq11339() {
+        klads.parse("2", false);
         // add msjian test for bug TDQ-11339: fix a "String index out of range: -1" exception
         String[] input2 = new String[] { "test1234", "pp456", "wei@sina.com" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         String[] output2 = new String[] { "ahwm0534", "nq956", "paa@igue.wom" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-        klads.parse("2", false, new Random(42));
         for (int i = 0; i < input2.length; i++) {
             output = klads.generateMaskedRow(input2[i]);
             assertEquals(output2[i], output);
@@ -62,14 +65,14 @@ public class KeepLastCharsStringTest {
 
     @Test
     public void dummyHighParameter() {
-        klads.parse("7", false, new Random(42));
+        klads.parse("7", false);
         output = klads.generateMaskedRow(input);
         assertEquals(input, output);
     }
 
     @Test
     public void twoParameters() {
-        klads.parse("3,i", false, new Random(42));
+        klads.parse("3,i", false);
         output = klads.generateMaskedRow(input);
         assertEquals("iii456", output);
     }

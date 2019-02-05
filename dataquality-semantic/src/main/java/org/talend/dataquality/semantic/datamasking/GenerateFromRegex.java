@@ -17,7 +17,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.talend.dataquality.datamasking.functions.FunctionString;
 import org.talend.dataquality.semantic.utils.RegexUtils;
 
-import java.security.SecureRandom;
 import java.util.Random;
 
 import static org.talend.dataquality.datamasking.FunctionMode.CONSISTENT;
@@ -68,12 +67,11 @@ public class GenerateFromRegex extends FunctionString {
      * @see org.talend.dataquality.datamasking.functions.Function#parse(java.lang.String, boolean, java.util.Random)
      */
     @Override
-    public void parse(String extraParameter, boolean keepNullValues, Random rand) {
+    public void parse(String extraParameter, boolean keepNullValues) {
         if (extraParameter != null) {
             patternStr = RegexUtils.removeStartingAndEndingAnchors(extraParameter);
             generex = new Generex(patternStr);
             setKeepNull(keepNullValues);
-            setRandom(rand);
         }
     }
 
@@ -84,8 +82,7 @@ public class GenerateFromRegex extends FunctionString {
      */
     @Override
     public void setRandom(Random rand) {
-        SecureRandom secureRandom = new SecureRandom();
-        super.setRandom(rand == null ? secureRandom : rand);
+        super.setRandom(rand);
         if (generex != null) {
             generex.setSeed(rnd.nextLong());
         }

@@ -14,8 +14,6 @@ package org.talend.dataquality.datamasking.functions;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.Random;
-
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -46,14 +44,14 @@ public class MaskFullEmailDomainByXTest {
 
     @Test
     public void test1Good() {
-        maskEmailDomainByX.parse("", false, new Random());
+        maskEmailDomainByX.parse("", false);
         output = maskEmailDomainByX.generateMaskedRow(mail);
         Assert.assertEquals("hehe.hehe@XXXXX.XXX.XX", output);
     }
 
     @Test
     public void testReal() {
-        maskEmailDomainByX.parse("", true, new Random(Long.valueOf(12345678)));
+        maskEmailDomainByX.parse("", true);
         output = maskEmailDomainByX.generateMaskedRow("dewitt.julio@hotmail.com");
         Assert.assertEquals("dewitt.julio@XXXXXXX.XXX", output);
 
@@ -61,7 +59,7 @@ public class MaskFullEmailDomainByXTest {
 
     @Test
     public void testSpecialEmail() {
-        maskEmailDomainByX.parse("", true, new Random(Long.valueOf(12345678)));
+        maskEmailDomainByX.parse("", true);
         output = maskEmailDomainByX.generateMaskedRow(spemail);
         Assert.assertEquals("hehe@XXXXXXXXXXXXXXXX.XX", output);
 
@@ -69,7 +67,7 @@ public class MaskFullEmailDomainByXTest {
 
     @Test
     public void testSpecialEmails() {
-        maskEmailDomainByX.parse("", true, new Random(Long.valueOf(12345678)));
+        maskEmailDomainByX.parse("", true);
         output = maskEmailDomainByX.generateMaskedRow(spemails);
         Assert.assertEquals("hehe@XXXXXXXXXXXXXXXXX.XXXXXXX.XX", output);
 
@@ -77,49 +75,49 @@ public class MaskFullEmailDomainByXTest {
 
     @Test
     public void test2WithInput() {
-        maskEmailDomainByX.parse("hehe", false, new Random());
+        maskEmailDomainByX.parse("hehe", false);
         output = maskEmailDomainByX.generateMaskedRow(mail);
         Assert.assertEquals("hehe.hehe@XXXXX.XXX.XX", output);
     }
 
     @Test
     public void test2WithOneCharacter() {
-        maskEmailDomainByX.parse("A", false, new Random());
+        maskEmailDomainByX.parse("A", false);
         output = maskEmailDomainByX.generateMaskedRow(mail);
         Assert.assertEquals("hehe.hehe@AAAAA.AAA.AA", output);
     }
 
     @Test
     public void test2WithOneDigit() {
-        maskEmailDomainByX.parse("1", false, new Random());
+        maskEmailDomainByX.parse("1", false);
         output = maskEmailDomainByX.generateMaskedRow(mail);
         Assert.assertEquals("hehe.hehe@XXXXX.XXX.XX", output);
     }
 
     @Test
     public void test3NullEmail() {
-        maskEmailDomainByX.parse("", false, new Random());
+        maskEmailDomainByX.parse("", false);
         output = maskEmailDomainByX.generateMaskedRow(null);
         Assert.assertTrue(output.isEmpty());
     }
 
     @Test
     public void test3KeepNullEmail() {
-        maskEmailDomainByX.parse("", true, new Random());
+        maskEmailDomainByX.parse("", true);
         output = maskEmailDomainByX.generateMaskedRow(null);
         Assert.assertTrue(output == null);
     }
 
     @Test
     public void test4EmptyEmail() {
-        maskEmailDomainByX.parse("", false, new Random());
+        maskEmailDomainByX.parse("", false);
         output = maskEmailDomainByX.generateMaskedRow("");
         Assert.assertTrue(output.isEmpty());
     }
 
     @Test
     public void test5WrongFormat() {
-        maskEmailDomainByX.parse("", false, new Random());
+        maskEmailDomainByX.parse("", false);
         output = maskEmailDomainByX.generateMaskedRow("hehe");
         Assert.assertEquals("XXXX", output);
     }

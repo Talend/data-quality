@@ -62,7 +62,8 @@ public class GenerateFromDictionariesTest {
     @Test
     public void consistentMasking() {
         gfd.setSeed("aSeed");
-        gfd.parse("CAT1", true, new Random(1234));
+        gfd.setRandom(new Random(1234));
+        gfd.parse("CAT1", true);
         gfd.setMaskingMode(FunctionMode.CONSISTENT);
         String result1 = gfd.generateMaskedRow("value1");
         String result2 = gfd.generateMaskedRow("value1");

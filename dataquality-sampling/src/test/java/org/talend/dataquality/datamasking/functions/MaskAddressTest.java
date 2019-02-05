@@ -68,7 +68,7 @@ public class MaskAddressTest {
     @Test
     public void testWithFile() throws URISyntaxException {
         String path = this.getClass().getResource("data/top-domain.txt").toURI().getPath(); //$NON-NLS-1$
-        ma.parse(path, false, new Random(42));
+        ma.parse(path, false);
         String input = "5 rue de l'oise et facebook"; //$NON-NLS-1$
         output = ma.generateMaskedRow(input);
         assertEquals("9 rue XX XXXXXX XX facebook", output); //$NON-NLS-1$
@@ -76,7 +76,7 @@ public class MaskAddressTest {
 
     @Test
     public void testParseWillNotImpactResult() {
-        ma.parse("5 rue de l'oise", false, new Random(42)); //$NON-NLS-1$
+        ma.parse("5 rue de l'oise", false); //$NON-NLS-1$
         output = ma.generateMaskedRow("5 rue de l'oise"); //$NON-NLS-1$
         assertEquals("9 rue XX XXXXXX", output); //$NON-NLS-1$
         assertEquals("5 rue de l'oise", ma.parameters[0]); //$NON-NLS-1$

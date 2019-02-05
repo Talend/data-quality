@@ -16,6 +16,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Random;
 
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -30,9 +31,14 @@ public class RemoveFirstCharsIntegerTest {
 
     private RemoveFirstCharsInteger rfci = new RemoveFirstCharsInteger();
 
+    @Before
+    public void setUp() throws Exception {
+        rfci.setRandom(new Random(42));
+    }
+
     @Test
     public void defaultBehavior() {
-        rfci.parse("2", false, new Random(42));
+        rfci.parse("2", false);
         ;
         output = rfci.generateMaskedRow(input);
         assertEquals(6, output);
@@ -40,7 +46,7 @@ public class RemoveFirstCharsIntegerTest {
 
     @Test
     public void dummyParameter() {
-        rfci.parse("10", false, new Random(42));
+        rfci.parse("10", false);
         output = rfci.generateMaskedRow(input);
         assertEquals(0, output);
     }

@@ -13,11 +13,12 @@
 package org.talend.dataquality.datamasking.functions;
 
 import static org.junit.Assert.assertEquals;
-
-import java.util.Random;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Random;
 
 /**
  * created by jgonzalez on 29 juin 2015 Detailled comment
@@ -31,25 +32,25 @@ public class GenerateBetweenIntegerTest {
 
     @Before
     public void setUp() throws Exception {
-        gbi.setRandom(new Random(42));
+        gbi.setRandom(new Random(42L));
     }
 
     @Test
     public void testGood() {
-        gbi.parse("10,20", false, new Random(42)); //$NON-NLS-1$
+        gbi.parse("10,20", false); //$NON-NLS-1$
         output = gbi.generateMaskedRow(null).toString();
         assertEquals(output, "17"); //$NON-NLS-1$
     }
 
     @Test
     public void testCheck() {
-        gbi.setRandom(new Random());
+        gbi.setRandom(null);
         gbi.parameters = "0,100".split(","); //$NON-NLS-1$ //$NON-NLS-2$
-        boolean res = true;
+        boolean res;
         for (int i = 0; i < 10; i++) {
             int tmp = gbi.generateMaskedRow(null);
             res = (tmp <= 100 && tmp >= 0);
-            assertEquals("Wrong number : " + tmp, res, true); //$NON-NLS-1$
+            assertTrue("Wrong number : " + tmp, res); //$NON-NLS-1$
         }
     }
 
@@ -62,7 +63,7 @@ public class GenerateBetweenIntegerTest {
 
     @Test
     public void testWrongParameter() {
-        gbi.parse(null, false, new Random(42)); // $NON-NLS-1$
+        gbi.parse(null, false); // $NON-NLS-1$
         output = gbi.generateMaskedRow(null).toString();
         assertEquals(output, "0"); //$NON-NLS-1$
     }

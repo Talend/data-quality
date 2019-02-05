@@ -19,6 +19,7 @@ import static org.junit.Assert.fail;
 import java.util.Arrays;
 import java.util.Random;
 
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -33,16 +34,21 @@ public class RemoveFirstCharsLongTest {
 
     private RemoveFirstCharsLong rfci = new RemoveFirstCharsLong();
 
+    @Before
+    public void setUp() throws Exception {
+        rfci.setRandom(new Random(42));
+    }
+
     @Test
     public void defaultBehavior() {
-        rfci.parse("2", false, new Random(42));
+        rfci.parse("2", false);
         output = rfci.generateMaskedRow(input);
         assertEquals(6, output);
     }
 
     @Test
     public void dummyParameter() {
-        rfci.parse("10", false, new Random(42));
+        rfci.parse("10", false);
         output = rfci.generateMaskedRow(input);
         assertEquals(0, output);
     }
@@ -50,7 +56,7 @@ public class RemoveFirstCharsLongTest {
     @Test
     public void negativeParameter() {
         try {
-            rfci.parse("-10", false, new Random(42));
+            rfci.parse("-10", false);
             fail("should get exception with input " + Arrays.toString(rfci.parameters)); //$NON-NLS-1$
         } catch (Exception e) {
             assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$

@@ -1,5 +1,6 @@
 package org.talend.dataquality.datamasking.shuffling;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -27,7 +28,7 @@ public class ShuffleColumn {
 
     private List<String> allInputColumns = new ArrayList<String>();
 
-    private Random random = new Random();
+    private Random random = new SecureRandom();
 
     /**
      * Constructor without the partition choice
@@ -246,7 +247,7 @@ public class ShuffleColumn {
      * @param seed a long number
      */
     public void setRandomSeed(long seed) {
-        this.random.setSeed(seed);
+        this.random = new Random(seed);
     }
 
     /**
@@ -320,16 +321,12 @@ public class ShuffleColumn {
         public Row(int rIndex, List<Object> rItems, List<Object> rGroup) {
             super();
             this.rIndex = rIndex;
-            for (Object o : rItems) {
-                this.rItems.add(o);
-            }
+            this.rItems.addAll(rItems);
 
             if (rGroup == null) {
                 this.rPartition = null;
             } else {
-                for (Object o : rGroup) {
-                    this.rPartition.add(o);
-                }
+                this.rPartition.addAll(rGroup);
             }
 
         }

@@ -32,7 +32,8 @@ public class ReplaceCharactersWithGenerationTest {
 
     @Test
     public void testInit() {
-        rcwg.parse(null, true, new Random(AllDataqualitySamplingTests.RANDOM_SEED));
+        rcwg.setRandom(new Random(AllDataqualitySamplingTests.RANDOM_SEED));
+        rcwg.parse(null, true);
         assertEquals("Vkfz-Zps-550", rcwg.generateMaskedRow("Abcd-Efg-135"));
         assertEquals("  \t", rcwg.generateMaskedRow("  \t")); // SPACE_SPACE_TAB
     }

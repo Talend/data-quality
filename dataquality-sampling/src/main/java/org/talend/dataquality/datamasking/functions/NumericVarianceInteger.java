@@ -26,8 +26,7 @@ public class NumericVarianceInteger extends NumericVariance<Integer> {
             return 0;
         } else {
             super.init();
-            int value = getNonOverAddResult(i, getNonOverMultiResult(i, rate).intValue() / 100);
-            return value;
+            return getNonOverAddResult(i, getNonOverMultiResult(i, rate) / 100);
         }
     }
 

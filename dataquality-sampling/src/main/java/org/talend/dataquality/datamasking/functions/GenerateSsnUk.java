@@ -32,8 +32,8 @@ public class GenerateSsnUk extends FunctionString {
     private static HashSet<String> forbid = new HashSet<>();
 
     @Override
-    public void parse(String extraParameter, boolean keepNullValues, Random rand) {
-        super.parse(extraParameter, keepNullValues, rand);
+    public void parse(String extraParameter, boolean keepNullValues) {
+        super.parse(extraParameter, keepNullValues);
         forbid.add("BG"); //$NON-NLS-1$
         forbid.add("GB"); //$NON-NLS-1$
         forbid.add("NK"); //$NON-NLS-1$

@@ -16,6 +16,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Random;
 
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -30,16 +31,21 @@ public class NumericVarianceLongTest {
 
     private NumericVarianceLong nvl = new NumericVarianceLong();
 
+    @Before
+    public void setUp() throws Exception {
+        nvl.setRandom(new Random(42));
+    }
+
     @Test
     public void testGood() {
-        nvl.parse("10", false, new Random(42));
+        nvl.parse("10", false);
         output = nvl.generateMaskedRow(input).toString();
         assertEquals(output, String.valueOf(114));
     }
 
     @Test
     public void testDummy() {
-        nvl.parse("-10", false, new Random(42));
+        nvl.parse("-10", false);
         output = nvl.generateMaskedRow(input).toString();
         assertEquals(output, String.valueOf(114));
     }

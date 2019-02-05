@@ -54,7 +54,7 @@ public class GeneratePhoneNumberGermanyTest {
     @Test
     public void testCheck() {
         boolean res;
-        gpng.setRandom(new Random());
+        gpng.setRandom(null);
         for (int i = 0; i < 10; i++) {
             String tmp = gpng.generateMaskedRow(null);
             String prefix = tmp.substring(0, 3);

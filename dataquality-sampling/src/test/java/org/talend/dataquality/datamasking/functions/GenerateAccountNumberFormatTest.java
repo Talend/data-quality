@@ -14,10 +14,10 @@ package org.talend.dataquality.datamasking.functions;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.Random;
-
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Random;
 
 /**
  * created by jgonzalez on 29 juin 2015 Detailled comment
@@ -31,7 +31,7 @@ public class GenerateAccountNumberFormatTest {
 
     @Before
     public void setUp() throws Exception {
-        ganf.setRandom(new Random(4245));
+        ganf.setRandom(new Random(4245L));
     }
 
     @Test

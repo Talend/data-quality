@@ -16,6 +16,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Random;
 
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -30,6 +31,11 @@ public class RemoveFirstCharsStringTest {
 
     private RemoveFirstCharsString rfcs = new RemoveFirstCharsString();
 
+    @Before
+    public void setUp() throws Exception {
+        rfcs.setRandom(new Random(42));
+    }
+
     @Test
     public void emptyReturnsEmpty() {
         rfcs.setKeepEmpty(true);
@@ -39,21 +45,21 @@ public class RemoveFirstCharsStringTest {
 
     @Test
     public void defaultBehavior() {
-        rfcs.parse("2", false, new Random(42));
+        rfcs.parse("2", false);
         output = rfcs.generateMaskedRow(input);
         assertEquals("eve", output); //$NON-NLS-1$
     }
 
     @Test
     public void dummyParameter() {
-        rfcs.parse("10", false, new Random(42));
+        rfcs.parse("10", false);
         output = rfcs.generateMaskedRow(input);
         assertEquals(Function.EMPTY_STRING, output); // $NON-NLS-1$
     }
 
     @Test
     public void parameterToLong() {
-        rfcs.parse("10000", false, new Random(42));
+        rfcs.parse("10000", false);
         output = rfcs.generateMaskedRow(input);
         assertEquals(Function.EMPTY_STRING, output);
     }

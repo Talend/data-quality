@@ -1,14 +1,12 @@
 package org.talend.dataquality.datamasking.functions;
 
-import java.util.Random;
-
 public abstract class MaskEmailRandomly extends MaskEmail {
 
     private static final long serialVersionUID = 8651785081691625301L;
 
     @Override
-    public void parse(String extraParameter, boolean keepNullValues, Random rand) {
-        super.parse(extraParameter, keepNullValues, rand);
+    public void parse(String extraParameter, boolean keepNullValues) {
+        super.parse(extraParameter, keepNullValues);
         if (parameters == null || parameters.length == 0)
             parameters = new String[] { EMPTY_STRING };
     }

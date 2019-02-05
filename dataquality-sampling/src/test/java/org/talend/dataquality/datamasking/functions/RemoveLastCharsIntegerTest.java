@@ -16,6 +16,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Random;
 
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -30,16 +31,21 @@ public class RemoveLastCharsIntegerTest {
 
     private RemoveLastCharsInteger rlci = new RemoveLastCharsInteger();
 
+    @Before
+    public void setUp() throws Exception {
+        rlci.setRandom(new Random(42));
+    }
+
     @Test
     public void defaultBehavior() {
-        rlci.parse("2", false, new Random(42));
+        rlci.parse("2", false);
         output = rlci.generateMaskedRow(input);
         assertEquals(6, output);
     }
 
     @Test
     public void dummyParameter() {
-        rlci.parse("10", false, new Random(42));
+        rlci.parse("10", false);
         output = rlci.generateMaskedRow(input);
         assertEquals(0, output);
     }

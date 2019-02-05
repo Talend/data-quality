@@ -13,6 +13,7 @@
 package org.talend.dataquality.datamasking.functions;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.net.URISyntaxException;
 import java.util.Random;
@@ -33,7 +34,8 @@ public class GenerateFromFileStringTest {
     @Before
     public void setUp() throws URISyntaxException {
         final String path = this.getClass().getResource("data/name.txt").toURI().getPath(); //$NON-NLS-1$
-        gffs.parse(path, false, new Random(42));
+        gffs.setRandom(new Random(42L));
+        gffs.parse(path, false);
     }
 
     @Test
@@ -53,7 +55,7 @@ public class GenerateFromFileStringTest {
     public void testNull() {
         gffs.keepNull = true;
         output = gffs.generateMaskedRow(null);
-        assertEquals(null, output);
+        assertNull(output);
     }
 
 }

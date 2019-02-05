@@ -14,8 +14,6 @@ package org.talend.dataquality.datamasking.functions;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.Random;
-
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -43,70 +41,70 @@ public class MaskTopEmailDomainByXTest {
 
     @Test
     public void testGoodStandard() {
-        maskTopEmailDomainByX.parse("", false, new Random());
+        maskTopEmailDomainByX.parse("", false);
         output = maskTopEmailDomainByX.generateMaskedRow(mailStandard);
         Assert.assertEquals("hehe@XXXXX.com", output);
     }
 
     @Test
     public void testGoodWithPointsInLocal() {
-        maskTopEmailDomainByX.parse("", false, new Random());
+        maskTopEmailDomainByX.parse("", false);
         output = maskTopEmailDomainByX.generateMaskedRow(mailWithPointsInLocal);
         Assert.assertEquals("hehe.haha@XXXXX.com", output);
     }
 
     @Test
     public void testMultipalDomaim() {
-        maskTopEmailDomainByX.parse("", false, new Random());
+        maskTopEmailDomainByX.parse("", false);
         output = maskTopEmailDomainByX.generateMaskedRow(mailMultipalDomaim);
         Assert.assertEquals("hehe.haha@XXXXX.XX.XXX.cn", output);
     }
 
     @Test
     public void testOneCharacter() {
-        maskTopEmailDomainByX.parse("Z", false, new Random());
+        maskTopEmailDomainByX.parse("Z", false);
         output = maskTopEmailDomainByX.generateMaskedRow(mailMultipalDomaim);
         Assert.assertEquals("hehe.haha@ZZZZZ.ZZ.ZZZ.cn", output);
     }
 
     @Test
     public void testString() {
-        maskTopEmailDomainByX.parse("Zed", false, new Random());
+        maskTopEmailDomainByX.parse("Zed", false);
         output = maskTopEmailDomainByX.generateMaskedRow(mailMultipalDomaim);
         Assert.assertEquals("hehe.haha@XXXXX.XX.XXX.cn", output);
     }
 
     @Test
     public void testOneDigit() {
-        maskTopEmailDomainByX.parse("Zed", false, new Random());
+        maskTopEmailDomainByX.parse("Zed", false);
         output = maskTopEmailDomainByX.generateMaskedRow(mailMultipalDomaim);
         Assert.assertEquals("hehe.haha@XXXXX.XX.XXX.cn", output);
     }
 
     @Test
     public void testNullEmail() {
-        maskTopEmailDomainByX.parse("", false, new Random());
+        maskTopEmailDomainByX.parse("", false);
         output = maskTopEmailDomainByX.generateMaskedRow(null);
         Assert.assertEquals("", output);
     }
 
     @Test
     public void testKeepNullEmail() {
-        maskTopEmailDomainByX.parse("", true, new Random());
+        maskTopEmailDomainByX.parse("", true);
         output = maskTopEmailDomainByX.generateMaskedRow(null);
         Assert.assertEquals(output, output);
     }
 
     @Test
     public void testEmptyEmail() {
-        maskTopEmailDomainByX.parse("", false, new Random());
+        maskTopEmailDomainByX.parse("", false);
         output = maskTopEmailDomainByX.generateMaskedRow("");
         Assert.assertTrue(output.isEmpty());
     }
 
     @Test
     public void testWrongFormat() {
-        maskTopEmailDomainByX.parse("", false, new Random());
+        maskTopEmailDomainByX.parse("", false);
         output = maskTopEmailDomainByX.generateMaskedRow("hehe");
         Assert.assertEquals("XXXX", output);
     }

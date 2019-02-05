@@ -12,15 +12,13 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import java.net.URISyntaxException;
 import java.util.Random;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
  * created by jgonzalez on 29 juin 2015 Detailled comment
@@ -30,14 +28,11 @@ public class GenerateFromFileHashStringTest {
 
     private String output;
 
-    @Before
-    public void setUp() throws Exception {
-    }
-
     public void testGood() throws URISyntaxException {
         GenerateFromFileHashString gffhs = new GenerateFromFileHashString();
         final String path = this.getClass().getResource("data/name.txt").toURI().getPath(); //$NON-NLS-1$
-        gffhs.parse(path, false, new Random(42));
+        gffhs.setRandom(new Random(42L));
+        gffhs.parse(path, false);
         output = gffhs.generateMaskedRow(null);
         assertEquals("Brad X", output); //$NON-NLS-1$
     }
@@ -46,14 +41,15 @@ public class GenerateFromFileHashStringTest {
     public void testEmpty() {
         GenerateFromFileHashString gffhs = new GenerateFromFileHashString();
         gffhs.setKeepEmpty(true);
-        output = gffhs.generateMaskedRow("").toString();
+        output = gffhs.generateMaskedRow("");
         assertEquals("", output); //$NON-NLS-1$
     }
 
+    @Test
     public void testSeparatorWin() throws URISyntaxException {
         GenerateFromFileHashString gffhs = new GenerateFromFileHashString();
         final String pathWin = this.getClass().getResource("data/name_win.txt").toURI().getPath(); //$NON-NLS-1$
-        gffhs.parse(pathWin, false, new Random(42));
+        gffhs.parse(pathWin, false);
         int runTimes = 10000;
         String[] keysArray = new String[] { "Brad X", "Marouane", "Matthieu", "Xavier", "Aymen" };
         while (runTimes > 0) {
@@ -67,7 +63,8 @@ public class GenerateFromFileHashStringTest {
     public void testSeparatorLinux() throws URISyntaxException {
         GenerateFromFileHashString gffhs = new GenerateFromFileHashString();
         final String linuxFilePath = this.getClass().getResource("data/last_names.csv").toURI().getPath(); //$NON-NLS-1$
-        gffhs.parse(linuxFilePath, false, new Random(42));
+        gffhs.parse(linuxFilePath, false);
+        gffhs.setRandom(new Random(42));
         int runTimes = 5;
         String[] keysArray = new String[] { "Mendez", "Slaven", "Posner", "Rosemont", "Wyllie" };
         while (runTimes > 0) {
@@ -80,9 +77,9 @@ public class GenerateFromFileHashStringTest {
     public void testNull() throws URISyntaxException {
         GenerateFromFileHashString gffhs = new GenerateFromFileHashString();
         final String path = this.getClass().getResource("data/name.txt").toURI().getPath(); //$NON-NLS-1$
-        gffhs.parse(path, false, new Random(42));
+        gffhs.parse(path, false);
         gffhs.keepNull = true;
         output = gffhs.generateMaskedRow(null);
-        assertEquals(null, output);
+        assertNull(output);
     }
 }
