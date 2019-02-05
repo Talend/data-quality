@@ -23,11 +23,11 @@ public class GeneratePhoneNumberFrench extends FunctionString {
 
     @Override
     protected String doGenerateMaskedField(String str) {
-        return doGenerateMaskedFieldWithRandom(rnd);
+        return doGenerateMaskedFieldWithRandom(str, rnd);
     }
 
     @Override
-    protected String doGenerateMaskedFieldWithRandom(Random r) {
+    protected String doGenerateMaskedFieldWithRandom(String str, Random r) {
         StringBuilder result = new StringBuilder("+33 "); //$NON-NLS-1$
         result.append(r.nextInt(9) + 1);
         for (int i = 0; i < 8; i++) {

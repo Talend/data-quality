@@ -32,11 +32,11 @@ public class GenerateSsnIndia extends FunctionString {
 
     @Override
     protected String doGenerateMaskedField(String str) {
-        return doGenerateMaskedFieldWithRandom(rnd);
+        return doGenerateMaskedFieldWithRandom(str, rnd);
     }
 
     @Override
-    protected String doGenerateMaskedFieldWithRandom(Random r) {
+    protected String doGenerateMaskedFieldWithRandom(String str, Random r) {
         StringBuilder result = new StringBuilder(EMPTY_STRING);
         result.append(1 + r.nextInt(9));
         for (int i = 0; i < 10; i++) {

@@ -25,11 +25,11 @@ public class GenerateSsnGermany extends FunctionString {
 
     @Override
     protected String doGenerateMaskedField(String str) {
-        return doGenerateMaskedFieldWithRandom(rnd);
+        return doGenerateMaskedFieldWithRandom(str, rnd);
     }
 
     @Override
-    protected String doGenerateMaskedFieldWithRandom(Random r) {
+    protected String doGenerateMaskedFieldWithRandom(String str, Random r) {
         StringBuilder result = new StringBuilder(EMPTY_STRING);
         for (int i = 0; i < 11; ++i) {
             result.append(nextRandomDigit(r));

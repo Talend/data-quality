@@ -27,11 +27,11 @@ public class GenerateSsnUs extends FunctionString {
 
     @Override
     protected String doGenerateMaskedField(String str) {
-        return this.doGenerateMaskedFieldWithRandom(rnd);
+        return this.doGenerateMaskedFieldWithRandom(str, rnd);
     }
 
     @Override
-    protected String doGenerateMaskedFieldWithRandom(Random r) {
+    protected String doGenerateMaskedFieldWithRandom(String str, Random r) {
         StringBuilder result = new StringBuilder();
         result.append(generateFirstGroup(r));
         result.append("-"); //$NON-NLS-1$

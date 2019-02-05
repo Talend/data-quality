@@ -45,11 +45,11 @@ public class GenerateSsnUk extends FunctionString {
 
     @Override
     protected String doGenerateMaskedField(String str) {
-        return doGenerateMaskedFieldWithRandom(rnd);
+        return doGenerateMaskedFieldWithRandom(str, rnd);
     }
 
     @Override
-    protected String doGenerateMaskedFieldWithRandom(Random r) {
+    protected String doGenerateMaskedFieldWithRandom(String str, Random r) {
         StringBuilder result = new StringBuilder();
         StringBuilder prefix;
         char tmp;

@@ -42,11 +42,11 @@ public class GenerateFromDictionaries extends FunctionString {
 
     @Override
     protected String doGenerateMaskedField(String t) {
-        return this.doGenerateMaskedFieldWithRandom(rnd);
+        return this.doGenerateMaskedFieldWithRandom(t, rnd);
     }
 
     @Override
-    protected String doGenerateMaskedFieldWithRandom(Random r) {
+    protected String doGenerateMaskedFieldWithRandom(String str, Random r) {
         if (!valuesInDictionaries.isEmpty()) {
             return valuesInDictionaries.get(r.nextInt(valuesInDictionaries.size()));
         } else {

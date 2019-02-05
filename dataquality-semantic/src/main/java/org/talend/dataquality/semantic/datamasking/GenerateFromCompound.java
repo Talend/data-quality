@@ -16,7 +16,9 @@ import com.mifmif.common.regex.Generex;
 import org.apache.commons.math3.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.datamasking.functions.Function;
+import org.talend.dataquality.datamasking.functions.FunctionString;
 import org.talend.dataquality.semantic.Distribution;
 import org.talend.dataquality.semantic.datamasking.model.CategoryValues;
 import org.talend.dataquality.semantic.model.CategoryType;
@@ -36,7 +38,7 @@ import static org.talend.dataquality.semantic.model.CategoryType.REGEX;
 /**
  * data masking of a column with the content of compound semantic type
  */
-public class GenerateFromCompound extends Function<String> {
+public class GenerateFromCompound extends FunctionString {
 
     private Logger LOGGER = LoggerFactory.getLogger(GenerateFromCompound.class);
 
@@ -48,21 +50,25 @@ public class GenerateFromCompound extends Function<String> {
 
     @Override
     protected String doGenerateMaskedField(String value) {
+        return doGenerateMaskedFieldWithRandom(value, rnd);
+    }
+
+    @Override
+    protected String doGenerateMaskedFieldWithRandom(String str, Random r) {
         String result = EMPTY_STRING;
         analyzer = new SemanticQualityAnalyzer(dictionarySnapshot,
                 new String[] { String.valueOf(categoryValues.stream().map(CategoryValues::getName).toArray()) });
-        Optional<List<CategoryValues>> categoryValues = findMatchTypes(value);
+        Optional<List<CategoryValues>> categoryValues = findMatchTypes(str);
         if (categoryValues.isPresent()) {
             Distribution distribution = processDistribution(categoryValues.get());
             try {
-                result = getMaskedValue(value, distribution);
+                result = getMaskedValue(str, distribution, r);
             } catch (IllegalAccessException | InstantiationException e) {
                 LOGGER.info(e.getMessage(), e);
             }
         } //if category is not present, it's not a valid value and it won't be processed here
 
         return result;
-
     }
 
     private Optional<List<CategoryValues>> findMatchTypes(String value) {
@@ -120,7 +126,8 @@ public class GenerateFromCompound extends Function<String> {
         return new Distribution(probabilities, rnd);
     }
 
-    private String getMaskedValue(String value, Distribution distribution) throws IllegalAccessException, InstantiationException {
+    private String getMaskedValue(String value, Distribution distribution, Random r)
+            throws IllegalAccessException, InstantiationException {
         String result = EMPTY_STRING;
 
         String key = (String) distribution.sample();
@@ -129,14 +136,15 @@ public class GenerateFromCompound extends Function<String> {
         final MaskableCategoryEnum cat = MaskableCategoryEnum.getCategoryById(cats.getName());
         if (cat != null) { //specific masking
             Function<String> function = functionInitializer(cat);
-            result = function.generateMaskedRow(value);
+            function.setSeed(seed);
+            result = function.generateMaskedRow(value, maskingMode);
         } else {
             CategoryType type = cats.getType();
             if (DICT.equals(type)) {
                 List values = (List) cats.getValue();
-                result = (String) values.get(rnd.nextInt(values.size()));
+                result = (String) values.get(r.nextInt(values.size()));
             } else if (REGEX.equals(type)) {
-                Generex generex = new Generex((String) cats.getValue(), getRandom());
+                Generex generex = new Generex((String) cats.getValue(), r);
                 result = generex.random();
                 result = result.substring(0, result.length() - 1);
             }
