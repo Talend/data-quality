@@ -27,17 +27,6 @@
 		<org.talend.daikon.version>0.31.1-SNAPSHOT</org.talend.daikon.version>
 	</properties>
 
-	<distributionManagement>
-		<snapshotRepository>
-			<id>talend_nexus_deployment</id>
-			<url>https://artifacts-zl.talend.com/nexus/content/repositories/snapshots/</url>
-		</snapshotRepository>
-		<repository>
-			<id>talend_nexus_deployment</id>
-			<url>https://artifacts-zl.talend.com/nexus/content/repositories/releases/</url>
-		</repository>
-	</distributionManagement>
-
 	<scm>
 		<connection>scm:git:https://github.com/Talend/data-quality.git</connection>
 		<developerConnection>scm:git:https://github.com/Talend/data-quality.git</developerConnection>
