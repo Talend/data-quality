@@ -141,6 +141,12 @@ public abstract class Function<T> implements Serializable {
         setKeepNull(keepNullValues);
     }
 
+    @Deprecated
+    public void parse(String extraParameter, boolean keepNullValues, Random rand) {
+        parse(extraParameter, keepNullValues);
+        setRandom(rand);
+    }
+
     /**
      * Reset the parameter
      */
