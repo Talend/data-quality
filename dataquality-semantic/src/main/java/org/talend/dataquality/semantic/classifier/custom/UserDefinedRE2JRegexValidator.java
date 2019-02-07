@@ -29,7 +29,7 @@ public class UserDefinedRE2JRegexValidator extends UserDefinedRegexValidator {
                     : Pattern.compile(patternString);
             caseSensitiveRe2JPattern = Pattern.compile(patternString);
         } catch (IllegalArgumentException | PatternSyntaxException e) {
-            LOGGER.error("Invalid regular expression: " + this.patternString, e);
+            LOGGER.info("Invalid regular expression: {}", this.patternString);
         }
     }
 
