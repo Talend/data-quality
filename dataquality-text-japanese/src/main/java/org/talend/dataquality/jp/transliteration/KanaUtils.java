@@ -12,9 +12,13 @@
 // ============================================================================
 package org.talend.dataquality.jp.transliteration;
 
-import java.util.HashMap;
-import java.util.Map;
+import static org.talend.dataquality.converters.character.KanaConstants.HALFWIDTH_ASPIRATED_MARK;
+import static org.talend.dataquality.converters.character.KanaConstants.HALFWIDTH_VOICED_MARK;
+import static org.talend.dataquality.converters.character.KanaConstants.MAPPING_HALF_TO_FULL_KATAKANA;
+
 import java.util.stream.IntStream;
+
+import org.talend.dataquality.converters.character.KanaConstants;
 
 public class KanaUtils {
 
@@ -25,73 +29,6 @@ public class KanaUtils {
     public static final int DIFF_FULLKATAKANA_HIRAGANA = 0x60; // code point difference between full-width katakana and
                                                                // hiragana
 
-    private static final Map<Character, Character> MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA = new HashMap<>();
-
-    static {
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('｡', '。');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('｢', '「');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('｣', '」');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('､', '、');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('･', '・');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ｧ', 'ァ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ｨ', 'ィ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ｩ', 'ゥ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ｪ', 'ェ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ｫ', 'ォ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ｬ', 'ャ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ｭ', 'ュ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ｮ', 'ョ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ｯ', 'ッ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ｰ', 'ー');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ｱ', 'ア');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ｲ', 'イ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ｳ', 'ウ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ｴ', 'エ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ｵ', 'オ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ｶ', 'カ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ｷ', 'キ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ｸ', 'ク');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ｹ', 'ケ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ｺ', 'コ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ｻ', 'サ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ｼ', 'シ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ｽ', 'ス');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ｾ', 'セ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ｿ', 'ソ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ﾀ', 'タ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ﾁ', 'チ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ﾂ', 'ツ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ﾃ', 'テ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ﾄ', 'ト');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ﾅ', 'ナ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ﾆ', 'ニ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ﾇ', 'ヌ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ﾈ', 'ネ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ﾉ', 'ノ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ﾊ', 'ハ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ﾋ', 'ヒ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ﾌ', 'フ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ﾍ', 'ヘ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ﾎ', 'ホ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ﾏ', 'マ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ﾐ', 'ミ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ﾑ', 'ム');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ﾒ', 'メ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ﾓ', 'モ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ﾔ', 'ヤ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ﾕ', 'ユ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ﾖ', 'ヨ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ﾗ', 'ラ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ﾘ', 'リ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ﾙ', 'ル');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ﾚ', 'レ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ﾛ', 'ロ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ﾜ', 'ワ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ｴ', 'ヱ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ｦ', 'ヲ');
-        MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.put('ﾝ', 'ン');
-    }
-
     /**
      * Convert half width katakana to full width katakana.
      * 
@@ -100,26 +37,21 @@ public class KanaUtils {
      */
     public static String half2FullKatakana(String katakanaToken) {
 
-        StringBuilder sb = new StringBuilder(katakanaToken);
-        char katakanaChar;
+        final StringBuilder sb = new StringBuilder(katakanaToken);
         for (int i = 0; i < sb.length(); i++) {
-            katakanaChar = sb.charAt(i);
-            if (!isFullWidthKatakana(katakanaChar)) {
-                if (i > 0 && (katakanaChar == 'ﾞ' || katakanaChar == 'ﾟ')) {
-                    if (katakanaChar == 'ﾞ') {
-                        sb.setCharAt(i - 1, (char) (sb.charAt(i - 1) + 1));// code point distance 1
-                    } else { // katakanaChar == 'ﾟ'
-                        sb.setCharAt(i - 1, (char) (sb.charAt(i - 1) + 2));// code point distance 2
-                    }
+            final char ch = sb.charAt(i);
+            if (KanaConstants.isHalfwidthKatakana(ch)) {
+                final Character fullwidthChar = MAPPING_HALF_TO_FULL_KATAKANA.get(ch);
+                if (fullwidthChar != null) {
+                    sb.setCharAt(i, fullwidthChar);
+                } else if (i > 0 && (ch == HALFWIDTH_VOICED_MARK || ch == HALFWIDTH_ASPIRATED_MARK)
+                        && KanaConstants.isHalfwidthKatakana(sb.charAt(i - 1))) {
                     sb.deleteCharAt(i);
-                    if (i < sb.length()) {
-                        katakanaChar = sb.charAt(i);
-                    }
-                }
-                if (i < sb.length()) {
-                    Character fullWidthChar = MAPPING_HALFWIDTH_TO_FULLWIDTH_KATAKANA.get(katakanaChar);
-                    if (fullWidthChar != null) {
-                        sb.setCharAt(i, fullWidthChar);
+                    i--;
+                    if (ch == HALFWIDTH_VOICED_MARK) {
+                        sb.setCharAt(i, (char) (sb.charAt(i) + 1));// code point distance 1
+                    } else if (ch == HALFWIDTH_ASPIRATED_MARK) {
+                        sb.setCharAt(i, (char) (sb.charAt(i) + 2));// code point distance 2
                     }
                 }
             }

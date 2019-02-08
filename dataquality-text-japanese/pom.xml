@@ -16,6 +16,12 @@
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>org.talend.dataquality</groupId>
+			<artifactId>dataquality-converters</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+
 		<!-- Japanese morphological analyzer -->
 		<dependency>
 			<groupId>com.atilika.kuromoji</groupId>
@@ -68,6 +74,7 @@
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -76,6 +83,7 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

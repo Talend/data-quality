@@ -11,4 +11,5 @@ Require-Bundle: org.slf4j.api,
  org.apache.commons.lang
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Export-Package: org.talend.dataquality.converters
+Export-Package: org.talend.dataquality.converters,
+ org.talend.dataquality.converters.character
