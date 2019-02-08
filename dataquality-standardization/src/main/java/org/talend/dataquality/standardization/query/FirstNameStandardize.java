@@ -35,8 +35,6 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.TopDocsCollector;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.talend.dataquality.standardization.constant.PluginConstant;
 import org.talend.dataquality.standardization.exception.DQException;
 
