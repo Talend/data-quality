@@ -14,6 +14,7 @@ package org.talend.dataquality.semantic.datamasking;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Random;
 
 import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.datamasking.functions.Function;
@@ -129,7 +130,12 @@ public class ValueDataMasker implements Serializable {
      */
     public String maskValue(String input) {
         if (semanticQualityAnalyzer != null && !semanticQualityAnalyzer.isValid(category, input)) {
-            return ReplaceCharacterHelper.replaceCharacters(input, function.getRandom());
+            Random r = function.getRandom();
+
+            if (FunctionMode.CONSISTENT == function.getMaskingMode())
+                r = new Random(function.getSeed().hashCode());
+
+            return ReplaceCharacterHelper.replaceCharacters(input, r);
         }
         // when category is null or input is valid
         try {

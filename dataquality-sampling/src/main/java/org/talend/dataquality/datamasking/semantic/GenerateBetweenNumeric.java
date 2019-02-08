@@ -14,8 +14,11 @@ package org.talend.dataquality.datamasking.semantic;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Random;
 import java.util.regex.Pattern;
 
+import org.talend.dataquality.datamasking.FunctionMode;
+import org.talend.dataquality.datamasking.functions.FunctionString;
 import org.talend.dataquality.datamasking.functions.GenerateBetween;
 
 /**
@@ -58,17 +61,31 @@ public class GenerateBetweenNumeric extends GenerateBetween<String> {
     }
 
     @Override
+    protected String doGenerateMaskedField(String input, FunctionMode mode) {
+        Random r = rnd;
+        if (FunctionMode.CONSISTENT == mode)
+            r = getRandomForString(input);
+
+        return doGenerateMaskedFieldWithRandom(input, r);
+
+    }
+
+    @Override
     protected String doGenerateMaskedField(String input) {
-        if (input == null || EMPTY_STRING.equals(input.trim())) {
-            return input;
+        return doGenerateMaskedFieldWithRandom(input, rnd);
+    }
+
+    protected String doGenerateMaskedFieldWithRandom(String str, Random r) {
+        if (str == null || EMPTY_STRING.equals(str.trim())) {
+            return str;
         } else {
-            if (patternInteger.matcher(input).matches() && max >= min) {
-                final int result = rnd.nextInt(max - min + 1) + min;
+            if (patternInteger.matcher(str).matches() && max >= min) {
+                final int result = r.nextInt(max - min + 1) + min;
                 return String.valueOf(result);
             } else {
-                final double result = generateRandomDoubleValue();
+                final double result = generateRandomDoubleValue(r);
                 try {
-                    final int decimalLength = DecimalPrecisionHelper.getDecimalPrecision(input);
+                    final int decimalLength = DecimalPrecisionHelper.getDecimalPrecision(str);
                     return getResultStringWithPrecision(result, Math.max(decimalLength, minimumPrecision));
                 } catch (NumberFormatException e) {
                     return getResultStringWithPrecision(result, minimumPrecision);
@@ -77,8 +94,8 @@ public class GenerateBetweenNumeric extends GenerateBetween<String> {
         }
     }
 
-    private double generateRandomDoubleValue() {
-        return rnd.nextDouble() * (maxDouble - minDouble) + minDouble;
+    private double generateRandomDoubleValue(Random r) {
+        return r.nextDouble() * (maxDouble - minDouble) + minDouble;
     }
 
     private String getResultStringWithPrecision(double result, int decimalLength) {

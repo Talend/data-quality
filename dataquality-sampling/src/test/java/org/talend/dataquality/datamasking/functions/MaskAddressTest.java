@@ -19,6 +19,7 @@ import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.utils.MockRandom;
 
 /**
@@ -94,5 +95,13 @@ public class MaskAddressTest {
         ma.setRandom(new MockRandom());
         output = ma.generateMaskedRow(input);
         assertEquals("1234567891 XXXXXX XXXXX Freeway", output);
+    }
+
+    @Test
+    public void consistentMasking() {
+        ma.setSeed("aSeed");
+        String result1 = ma.doGenerateMaskedField("9876543210 Golden State Freeway", FunctionMode.CONSISTENT);
+        String result2 = ma.doGenerateMaskedField("9876543210 Golden State Freeway", FunctionMode.CONSISTENT);
+        assertEquals(result2, result1);
     }
 }

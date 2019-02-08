@@ -22,7 +22,7 @@ import java.util.Set;
  * Moreover, there is a list of keywords that won’t be transformed.
  *
  */
-public class MaskAddress extends Function<String> {
+public class MaskAddress extends FunctionString {
 
     private static final long serialVersionUID = -4661073390672757141L;
 
@@ -40,6 +40,11 @@ public class MaskAddress extends Function<String> {
 
     @Override
     protected String doGenerateMaskedField(String str) {
+        return doGenerateMaskedFieldWithRandom(str, rnd);
+    }
+
+    @Override
+    protected String doGenerateMaskedFieldWithRandom(String str, Random r) {
         StringBuilder sb = new StringBuilder(EMPTY_STRING);
         if (str != null && !EMPTY_STRING.equals(str) && !(" ").equals(str)) { //$NON-NLS-1$
             String[] address = str.split(",| "); //$NON-NLS-1$
@@ -54,7 +59,7 @@ public class MaskAddress extends Function<String> {
                     for (int i = 0; i < word.length(); i += Character.charCount(cp)) {
                         cp = word.codePointAt(i);
                         if (Character.isDigit(cp)) {
-                            sb.append(rnd.nextInt(9) + 1);
+                            sb.append(r.nextInt(9) + 1);
                         } else {
                             sb.append("X"); //$NON-NLS-1$
                         }

@@ -13,10 +13,13 @@
 package org.talend.dataquality.datamasking.semantic;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import java.util.Random;
 
 import org.junit.Test;
+import org.talend.dataquality.datamasking.FunctionMode;
+import org.talend.dataquality.datamasking.functions.Function;
 
 public class GenerateBetweenNumericTest {
 
@@ -72,5 +75,26 @@ public class GenerateBetweenNumericTest {
         func.parse("0.02, ABC", false, new Random(42)); //$NON-NLS-1$
         String output = func.generateMaskedRow("10.12345");
         assertEquals(output, "0.00000"); //$NON-NLS-1$
+    }
+
+    @Test
+    public void consistentMasking() {
+        func.setSeed("aSeed");
+        func.parse("10.0, 20.0", false, new Random(42)); //$NON-NLS-1$
+        func.setMaskingMode(FunctionMode.CONSISTENT);
+        String result1 = func.generateMaskedRow("30.012");
+        String result2 = func.generateMaskedRow("30.012");
+        assertEquals("10.268", result1);
+        assertEquals(result2, result1);
+    }
+
+    @Test
+    public void randomMasking() {
+        func.setSeed("aSeed");
+        func.parse("10.0, 20.0", false, new Random(42)); //$NON-NLS-1$
+        func.setMaskingMode(FunctionMode.RANDOM);
+        String result1 = func.generateMaskedRow("30.012");
+        String result2 = func.generateMaskedRow("30.012");
+        assertNotEquals(result2, result1);
     }
 }

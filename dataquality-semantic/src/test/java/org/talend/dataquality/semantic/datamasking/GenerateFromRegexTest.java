@@ -13,6 +13,7 @@
 package org.talend.dataquality.semantic.datamasking;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -25,6 +26,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
+import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.datamasking.functions.KeysLoader;
 
 /**
@@ -92,6 +94,23 @@ public class GenerateFromRegexTest {
         regexFunction.parse("(0033 ?|\\+33 ?|0)[1-9]([-. ]?[0-9]{2}){4}", true, null); //$NON-NLS-1$
         String maskResult = regexFunction.doGenerateMaskedField(StringUtils.EMPTY);
         assertEquals("maskResult should be EMPTY", StringUtils.EMPTY, maskResult); //$NON-NLS-1$
+    }
+
+    /**
+     * Test method for
+     * {@link org.talend.dataquality.semantic.datamasking.GenerateFromRegex#doGenerateMaskedField(java.lang.String)}.
+     * case 2 keepNull is true and inputValue is empty
+     */
+    @Test
+    public void testDoGenerateMaskedFieldStringCaseConsistent() {
+        GenerateFromRegex regexFunction = new GenerateFromRegex();
+        regexFunction.setSeed("12345");
+        regexFunction.setMaskingMode(FunctionMode.CONSISTENT);
+        regexFunction.parse("(0033 ?|\\+33 ?|0)[1-9]([-. ]?[0-9]{2}){4}", true, null); //$NON-NLS-1$
+        String maskResult = regexFunction.generateMaskedRow("+33145263761", FunctionMode.CONSISTENT);
+        String maskResult2 = regexFunction.generateMaskedRow("+33145263761", FunctionMode.CONSISTENT);
+        assertEquals("+337.0930 0862", maskResult);
+        assertEquals(maskResult2, maskResult);
     }
 
     /**

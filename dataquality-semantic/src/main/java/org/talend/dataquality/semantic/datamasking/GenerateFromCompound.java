@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.datamasking.functions.Function;
 import org.talend.dataquality.datamasking.functions.FunctionString;
+import org.talend.dataquality.datamasking.semantic.ReplaceCharactersWithGeneration;
 import org.talend.dataquality.semantic.Distribution;
 import org.talend.dataquality.semantic.datamasking.model.CategoryValues;
 import org.talend.dataquality.semantic.model.CategoryType;
@@ -66,7 +67,12 @@ public class GenerateFromCompound extends FunctionString {
             } catch (IllegalAccessException | InstantiationException e) {
                 LOGGER.info(e.getMessage(), e);
             }
-        } //if category is not present, it's not a valid value and it won't be processed here
+        } else {
+            ReplaceCharactersWithGeneration function = new ReplaceCharactersWithGeneration();
+            function.parse("X", true, null);
+            function.setSeed(this.seed);
+            result = function.generateMaskedRow(str, this.maskingMode);
+        }
 
         return result;
     }

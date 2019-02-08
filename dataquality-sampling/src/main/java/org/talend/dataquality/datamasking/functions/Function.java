@@ -278,7 +278,15 @@ public abstract class Function<T> implements Serializable {
         this.seed = seed;
     }
 
+    public String getSeed() {
+        return seed;
+    }
+
     public void setMaskingMode(FunctionMode maskingMode) {
         this.maskingMode = maskingMode;
+    }
+
+    public FunctionMode getMaskingMode() {
+        return maskingMode;
     }
 }

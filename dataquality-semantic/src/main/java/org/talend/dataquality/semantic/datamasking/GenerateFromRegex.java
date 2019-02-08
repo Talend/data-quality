@@ -20,6 +20,8 @@ import org.talend.dataquality.semantic.utils.RegexUtils;
 import java.security.SecureRandom;
 import java.util.Random;
 
+import static org.talend.dataquality.datamasking.FunctionMode.CONSISTENT;
+
 /**
  * Generate masking data from regex str
  */
@@ -49,7 +51,14 @@ public class GenerateFromRegex extends FunctionString {
         if (StringUtils.isEmpty(str)) {
             return EMPTY_STRING;
         }
-        return generex.random();
+
+        if (CONSISTENT == this.maskingMode)
+            generex.setSeed(this.seed.hashCode());
+
+        String result = generex.random();
+        // just remove "$"(last) from the result
+
+        return result.substring(0, result.length() - 1);
     }
 
     /*
