@@ -16,7 +16,6 @@ import com.mifmif.common.regex.Generex;
 import org.apache.commons.math3.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.datamasking.functions.Function;
 import org.talend.dataquality.datamasking.functions.FunctionString;
 import org.talend.dataquality.datamasking.semantic.ReplaceCharactersWithGeneration;

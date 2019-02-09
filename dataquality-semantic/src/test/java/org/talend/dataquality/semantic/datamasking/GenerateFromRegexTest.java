@@ -12,8 +12,11 @@
 // ============================================================================
 package org.talend.dataquality.semantic.datamasking;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import org.apache.commons.lang3.StringUtils;
+import org.junit.Assert;
+import org.junit.Test;
+import org.talend.dataquality.datamasking.FunctionMode;
+import org.talend.dataquality.datamasking.functions.KeysLoader;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -23,11 +26,7 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang3.StringUtils;
-import org.junit.Assert;
-import org.junit.Test;
-import org.talend.dataquality.datamasking.FunctionMode;
-import org.talend.dataquality.datamasking.functions.KeysLoader;
+import static org.junit.Assert.assertEquals;
 
 /**
  * The Function which used to generate data by regex

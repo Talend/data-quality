@@ -12,14 +12,13 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.semantic;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import org.junit.Test;
+import org.talend.dataquality.datamasking.FunctionMode;
 
 import java.util.Random;
 
-import org.junit.Test;
-import org.talend.dataquality.datamasking.FunctionMode;
-import org.talend.dataquality.datamasking.functions.Function;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 public class GenerateBetweenNumericTest {
 
