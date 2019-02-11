@@ -1,65 +1,60 @@
 package org.talend.dataquality.semantic.extraction;
 
-import javafx.util.Pair;
-import org.talend.dataquality.semantic.model.DQCategory;
-
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class FieldExtractionFunction {
 
-    private final Pattern separatorPattern = Pattern.compile("[\\p{Punct}\\s]+");
-
     private List<ExtractFromSemanticType> functions;
-    
-    public FieldExtractionFunction() {
 
+    public FieldExtractionFunction(List<ExtractFromSemanticType> functions) {
+        this.functions = functions;
     }
 
     public Map<String, List<String>> extractFieldParts(String field) {
-        Map<String, List<String>> matchedTokens = new HashMap<>();
+        TokenizedString tokenizedField = new TokenizedString(field);
+        List<MatchedPart> matches = new ArrayList<>();
+        Map<String, List<String>> matchesByCategory = new HashMap<>();
 
-        Pair<List<String>, List<String>> tokensAndSeparators = tokenize(field);
+        for (int i = 0; i<functions.size(); i++) {
+            ExtractFromSemanticType function = functions.get(i);
+            List<MatchedPart> functionMatches = function.getMatches(tokenizedField);
+            List<String> matchString = new ArrayList<>(matches.size());
 
-        return matchedTokens;
+            for(MatchedPart match : functionMatches) {
+                match.setPriority(i);
+                matchString.add(match.toString());
+            }
+            matchesByCategory.put(function.getCategoryName(), matchString);
+            matches.addAll(functionMatches);
+        }
+
+        Collections.sort(matches);
+        filter(matches, matchesByCategory);
+
+        return matchesByCategory;
     }
 
-    /**
-     * Tokenize the input and return the list of tokens and the list of separators.
-     *
-     * @param field to tokenize
-     * @return a pair containing the list of token (Left) and the list of separators (Right)
-     */
-    protected Pair<List<String>, List<String>> tokenize(String field) {
-        List<String> tokens = new ArrayList<>(Arrays.asList(separatorPattern.split(field)));
-
-        if (tokens.get(0).isEmpty()) {
-            tokens.remove(0);
-        }
-
-        List<String> separators = new ArrayList<>(tokens.size() - 1);
-        Matcher matcher = separatorPattern.matcher(field);
-
-        while (matcher.find()) {
-            if (matcher.start() != 0 && matcher.end() < field.length() - 1) {
-                separators.add(matcher.group());
+    protected void filter(List<MatchedPart> matches, Map<String, List<String>> matchesByCategory) {
+        Set<Integer> matchedTokens = new HashSet<>();
+        for(MatchedPart match : matches) {
+            boolean toAdd = true;
+            for(Integer token : match.getTokenPositions()) {
+                if(matchedTokens.contains(token)) {
+                    ExtractFromSemanticType function = functions.get(match.getPriority());
+                    matchesByCategory.get(function.getCategoryName()).remove(match.toString());
+                    toAdd = false;
+                    break;
+                }
+            }
+            if(toAdd) {
+                matchedTokens.addAll(match.getTokenPositions());
             }
         }
-
-        return new Pair<>(tokens, separators);
-    }
-
-    protected List<String> concatTokens(List<List<Integer>> matchedTokens, List<String> tokens, List<String> separators) {
-        List<String> joinTokenList = new ArrayList<>();
-
-        for(List<Integer> tokenList : matchedTokens) {
-            StringBuilder sb = new StringBuilder(tokens.get(tokenList.get(0)));
-            for(int i = 1; i<tokenList.size(); i++) {
-                sb.append(separators.get(tokenList.get(i-1))).append(tokens.get(tokenList.get(i)));
-            }
-            joinTokenList.add(sb.toString());
-        }
-        return joinTokenList;
     }
 }
