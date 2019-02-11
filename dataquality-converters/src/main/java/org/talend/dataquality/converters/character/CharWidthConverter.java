@@ -8,6 +8,9 @@ import static org.talend.dataquality.converters.character.KanaConstants.MAPPING_
 
 import java.text.Normalizer;
 
+/**
+ * API for character width conversion
+ */
 public class CharWidthConverter {
 
     private static final int HALF_FULL_ASCII_DIFF = 65248;
@@ -18,6 +21,11 @@ public class CharWidthConverter {
         this.config = config;
     }
 
+    /**
+     * convert the character width of a string.
+     * @param input
+     * @return
+     */
     public String convert(String input) {
         String result = null;
         switch (config.getMode()) {

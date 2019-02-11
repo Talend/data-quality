@@ -3,6 +3,9 @@ package org.talend.dataquality.converters.character;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Constants of Japanese Kana in unicode table.
+ */
 public class KanaConstants {
 
     /**
@@ -26,7 +29,7 @@ public class KanaConstants {
     /**
      *
      * @param ch
-     * @return
+     * @return true if the input character is a halfwidth katakana
      */
     public static boolean isHalfwidthKatakana(char ch) {
         return (ch >= HALFWIDTH_KATAKANA_START || ch <= HALFWIDTH_KATAKANA_END);
@@ -35,7 +38,7 @@ public class KanaConstants {
     /**
      *
      * @param ch
-     * @return
+     * @return true if the input character is a fullwidth katakana
      */
     public static boolean isFullwidthKatakana(char ch) {
         return (ch >= FULLWIDTH_KATAKANA_START || ch <= FULLWIDTH_KATAKANA_END);

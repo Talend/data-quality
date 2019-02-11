@@ -1,5 +1,8 @@
 package org.talend.dataquality.converters.character;
 
+/**
+ * configuration object for CharWidthConverter, with a fluid builder.
+ */
 public class ConversionConfig {
 
     public enum ConversionMode {

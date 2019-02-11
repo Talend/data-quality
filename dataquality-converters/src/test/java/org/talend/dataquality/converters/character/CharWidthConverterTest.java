@@ -33,21 +33,20 @@ public class CharWidthConverterTest {
 
     private static final String FULL_MIXED = "テスティーング１－２－３　ａｂｃ　ＡＢＣ";
 
-    private static final Map<String, String> EXPECTED_NFKC = new HashMap<String, String>() {
+    private static final Map<String, String> EXPECTED_NFKC = new HashMap<>();
 
-        {
-            put("ﾂｲｯﾀｰ", "ツイッター");
-            put("ｼｭﾜﾙﾂｪﾈｯｶﾞｰ", "シュワルツェネッガー");
-            put("ﾊﾟﾊﾟ", "パパ");
-            put("ﾋﾟｬﾆｯﾁ", "ピャニッチ");
-            put("ﾌｨｼﾞｶﾙ", "フィジカル");
-            put("かな変換ﾃｽﾃｨｰﾝｸﾞ｡ １－２－３ ａｂｃ ＡＢＣ", "かな変換テスティーング。 1-2-3 abc ABC");
-            put("ｼﾞ", "ジ");
-            put("i⁹", "i9");
-            put("i₉", "i9");
-            put("schön", "schön");
-        }
-    };
+    static {
+        EXPECTED_NFKC.put("ﾂｲｯﾀｰ", "ツイッター");
+        EXPECTED_NFKC.put("ｼｭﾜﾙﾂｪﾈｯｶﾞｰ", "シュワルツェネッガー");
+        EXPECTED_NFKC.put("ﾊﾟﾊﾟ", "パパ");
+        EXPECTED_NFKC.put("ﾋﾟｬﾆｯﾁ", "ピャニッチ");
+        EXPECTED_NFKC.put("ﾌｨｼﾞｶﾙ", "フィジカル");
+        EXPECTED_NFKC.put("かな変換ﾃｽﾃｨｰﾝｸﾞ｡ １－２－３ ａｂｃ ＡＢＣ", "かな変換テスティーング。 1-2-3 abc ABC");
+        EXPECTED_NFKC.put("ｼﾞ", "ジ");
+        EXPECTED_NFKC.put("i⁹", "i9");
+        EXPECTED_NFKC.put("i₉", "i9");
+        EXPECTED_NFKC.put("schön", "schön");
+    }
 
     @Test
     public void testConvertNFKC() {
