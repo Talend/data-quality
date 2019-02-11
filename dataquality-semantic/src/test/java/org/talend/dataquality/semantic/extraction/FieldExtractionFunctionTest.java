@@ -26,8 +26,12 @@ public class FieldExtractionFunctionTest {
 
     @Test
     public void concatTokens() {
-        String expected = "This, .is. a test   with/punctuation";
-        // TODO
+        List<String> expected = Arrays.asList("This, .is", "test\twith/punctuation");
+        List<String> tokens = Arrays.asList("This", "is", "a", "test", "with", "punctuation");
+        List<String> separators = Arrays.asList(", .", ". ", " ", "\t", "/");
+        List<List<Integer>> matchedTokens = Arrays.asList(Arrays.asList(0, 1), Arrays.asList(3, 4, 5));
+
+        assertEquals(expected, function.concatTokens(matchedTokens, tokens, separators));
     }
 
 }

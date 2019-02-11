@@ -12,13 +12,13 @@ public class FieldExtractionFunction {
     private final Pattern separatorPattern = Pattern.compile("[\\p{Punct}\\s]+");
 
     private List<ExtractFromSemanticType> functions;
-
+    
     public FieldExtractionFunction() {
 
     }
 
-    public Map<DQCategory, List<String>> extractFieldParts(String field) {
-        Map<DQCategory, List<String>> matchedTokens = new HashMap<>();
+    public Map<String, List<String>> extractFieldParts(String field) {
+        Map<String, List<String>> matchedTokens = new HashMap<>();
 
         Pair<List<String>, List<String>> tokensAndSeparators = tokenize(field);
 
@@ -53,6 +53,13 @@ public class FieldExtractionFunction {
     protected List<String> concatTokens(List<List<Integer>> matchedTokens, List<String> tokens, List<String> separators) {
         List<String> joinTokenList = new ArrayList<>();
 
+        for(List<Integer> tokenList : matchedTokens) {
+            StringBuilder sb = new StringBuilder(tokens.get(tokenList.get(0)));
+            for(int i = 1; i<tokenList.size(); i++) {
+                sb.append(separators.get(tokenList.get(i-1))).append(tokens.get(tokenList.get(i)));
+            }
+            joinTokenList.add(sb.toString());
+        }
         return joinTokenList;
     }
 }
