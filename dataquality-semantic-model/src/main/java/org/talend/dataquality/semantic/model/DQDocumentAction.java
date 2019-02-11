@@ -16,19 +16,9 @@ import java.util.List;
 
 public class DQDocumentAction extends DQAction {
 
-    private String id;
-
     private List<DQDocument> documents;
 
     private String context;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public List<DQDocument> getDocuments() {
         return documents;

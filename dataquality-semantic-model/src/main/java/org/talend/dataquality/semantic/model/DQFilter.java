@@ -22,6 +22,10 @@ public class DQFilter implements Serializable {
 
     private String filterType;
 
+    public static DQFilterBuilder newBuilder() {
+        return new DQFilterBuilder();
+    }
+
     public String getFilterParam() {
         return filterParam;
     }
@@ -36,5 +40,32 @@ public class DQFilter implements Serializable {
 
     public void setFilterType(String filterType) {
         this.filterType = filterType;
+    }
+
+    public static final class DQFilterBuilder {
+
+        private String filterParam;
+
+        private String filterType;
+
+        private DQFilterBuilder() {
+        }
+
+        public DQFilterBuilder filterParam(String filterParam) {
+            this.filterParam = filterParam;
+            return this;
+        }
+
+        public DQFilterBuilder filterType(String filterType) {
+            this.filterType = filterType;
+            return this;
+        }
+
+        public DQFilter build() {
+            DQFilter dQFilter = new DQFilter();
+            dQFilter.setFilterParam(filterParam);
+            dQFilter.setFilterType(filterType);
+            return dQFilter;
+        }
     }
 }

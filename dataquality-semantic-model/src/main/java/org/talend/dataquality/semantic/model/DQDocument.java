@@ -36,6 +36,10 @@ public class DQDocument implements Serializable {
 
     private CategoryState state;
 
+    public static DQDocumentBuilder newBuilder() {
+        return new DQDocumentBuilder();
+    }
+
     public String getId() {
         return id;
     }
@@ -103,5 +107,85 @@ public class DQDocument implements Serializable {
     @Override
     public String toString() {
         return String.format("DQDocument [ID=%s]", id);
+    }
+
+    public static final class DQDocumentBuilder {
+
+        private String id;
+
+        private Set<String> values;
+
+        private DQCategory category;
+
+        private String creator;
+
+        private Date createdAt;
+
+        private Date modifiedAt;
+
+        private String lastModifier;
+
+        private CategoryState state;
+
+        private DQDocumentBuilder() {
+        }
+
+        public DQDocumentBuilder id(String id) {
+            this.id = id;
+            return this;
+        }
+
+        public DQDocumentBuilder values(Set<String> values) {
+            this.values = values;
+            return this;
+        }
+
+        public DQDocumentBuilder category(DQCategory category) {
+            this.category = category;
+            return this;
+        }
+
+        public DQDocumentBuilder categoryId(String categoryId) {
+            this.category = new DQCategory(categoryId);
+            return this;
+        }
+
+        public DQDocumentBuilder creator(String creator) {
+            this.creator = creator;
+            return this;
+        }
+
+        public DQDocumentBuilder createdAt(Date createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
+        public DQDocumentBuilder modifiedAt(Date modifiedAt) {
+            this.modifiedAt = modifiedAt;
+            return this;
+        }
+
+        public DQDocumentBuilder lastModifier(String lastModifier) {
+            this.lastModifier = lastModifier;
+            return this;
+        }
+
+        public DQDocumentBuilder state(CategoryState state) {
+            this.state = state;
+            return this;
+        }
+
+        public DQDocument build() {
+            DQDocument dQDocument = new DQDocument();
+            dQDocument.setId(id);
+            dQDocument.setValues(values);
+            dQDocument.setCategory(category);
+            dQDocument.setCreator(creator);
+            dQDocument.setCreatedAt(createdAt);
+            dQDocument.setModifiedAt(modifiedAt);
+            dQDocument.setLastModifier(lastModifier);
+            dQDocument.setState(state);
+            return dQDocument;
+        }
     }
 }

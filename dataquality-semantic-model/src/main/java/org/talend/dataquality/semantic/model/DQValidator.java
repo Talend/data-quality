@@ -28,6 +28,10 @@ public class DQValidator implements Serializable {
 
     private boolean generexCompliant = true;
 
+    public static DQValidatorBuilder newBuilder() {
+        return new DQValidatorBuilder();
+    }
+
     public String getPatternString() {
         return patternString;
     }
@@ -60,11 +64,54 @@ public class DQValidator implements Serializable {
         this.re2jCompliant = re2jCompliant;
     }
 
-    public boolean isGenerexCompliant() {
-        return generexCompliant;
-    }
+    public static final class DQValidatorBuilder {
 
-    public void setGenerexCompliant(boolean generexCompliant) {
-        this.generexCompliant = generexCompliant;
+        private String patternString;
+
+        private String subValidatorClassName;
+
+        private Boolean caseInsensitive = true;
+
+        private boolean re2jCompliant = true;
+
+        private boolean generexCompliant = true;
+
+        private DQValidatorBuilder() {
+        }
+
+        public DQValidatorBuilder patternString(String patternString) {
+            this.patternString = patternString;
+            return this;
+        }
+
+        public DQValidatorBuilder subValidatorClassName(String subValidatorClassName) {
+            this.subValidatorClassName = subValidatorClassName;
+            return this;
+        }
+
+        public DQValidatorBuilder caseInsensitive(Boolean caseInsensitive) {
+            this.caseInsensitive = caseInsensitive;
+            return this;
+        }
+
+        public DQValidatorBuilder re2jCompliant(boolean re2jCompliant) {
+            this.re2jCompliant = re2jCompliant;
+            return this;
+        }
+
+        public DQValidatorBuilder generexCompliant(boolean generexCompliant) {
+            this.generexCompliant = generexCompliant;
+            return this;
+        }
+
+        public DQValidator build() {
+            DQValidator dQValidator = new DQValidator();
+            dQValidator.setPatternString(patternString);
+            dQValidator.setSubValidatorClassName(subValidatorClassName);
+            dQValidator.setCaseInsensitive(caseInsensitive);
+            dQValidator.setRe2jCompliant(re2jCompliant);
+            dQValidator.generexCompliant = this.generexCompliant;
+            return dQValidator;
+        }
     }
 }

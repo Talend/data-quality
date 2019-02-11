@@ -24,6 +24,10 @@ public class DQRegEx implements Serializable {
 
     private DQValidator validator;
 
+    public static DQRegExBuilder newBuilder() {
+        return new DQRegExBuilder();
+    }
+
     public MainCategory getMainCategory() {
         return mainCategory;
     }
@@ -46,5 +50,40 @@ public class DQRegEx implements Serializable {
 
     public void setValidator(DQValidator validator) {
         this.validator = validator;
+    }
+
+    public static final class DQRegExBuilder {
+
+        private MainCategory mainCategory;
+
+        private DQFilter filter;
+
+        private DQValidator validator;
+
+        private DQRegExBuilder() {
+        }
+
+        public DQRegExBuilder mainCategory(MainCategory mainCategory) {
+            this.mainCategory = mainCategory;
+            return this;
+        }
+
+        public DQRegExBuilder filter(DQFilter filter) {
+            this.filter = filter;
+            return this;
+        }
+
+        public DQRegExBuilder validator(DQValidator validator) {
+            this.validator = validator;
+            return this;
+        }
+
+        public DQRegEx build() {
+            DQRegEx dQRegEx = new DQRegEx();
+            dQRegEx.setMainCategory(mainCategory);
+            dQRegEx.setFilter(filter);
+            dQRegEx.setValidator(validator);
+            return dQRegEx;
+        }
     }
 }

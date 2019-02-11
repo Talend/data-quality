@@ -80,6 +80,10 @@ public class DQCategory implements Serializable {
 
     }
 
+    public static DQCategoryBuilder newBuilder() {
+        return new DQCategoryBuilder();
+    }
+
     public String getId() {
         return id;
     }
@@ -279,4 +283,206 @@ public class DQCategory implements Serializable {
                 id, type, name, label, completeness, modified, creator, lastModifier, state, publishedAt);
     }
 
+    public static final class DQCategoryBuilder {
+
+        private String id;
+
+        private String name;
+
+        private String label;
+
+        private String description;
+
+        private CategoryType type; // A type: RE, DD, KW (needed? How to manage OR clause: RE or in DD?)
+
+        private CategoryPrivacyLevel privacyLevel;
+
+        private String version;
+
+        private String creator;
+
+        private String creatorName;
+
+        private Date createdAt;
+
+        private DQRegEx regEx;
+
+        private Date modifiedAt;
+
+        private String lastModifier;
+
+        private String lastModifierName;
+
+        private Boolean completeness;
+
+        private Date publishedAt;
+
+        private String lastPublisher;
+
+        private String lastPublisherName;
+
+        private ValidationMode validationMode;
+
+        private CategoryState state;
+
+        private List<DQCategory> children;
+
+        private List<DQCategory> parents;
+
+        private Boolean modified = Boolean.FALSE;
+
+        private Boolean deleted = Boolean.FALSE;
+
+        private DQCategoryBuilder() {
+        }
+
+        public DQCategoryBuilder id(String id) {
+            this.id = id;
+            return this;
+        }
+
+        public DQCategoryBuilder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public DQCategoryBuilder label(String label) {
+            this.label = label;
+            return this;
+        }
+
+        public DQCategoryBuilder description(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public DQCategoryBuilder type(CategoryType type) {
+            this.type = type;
+            return this;
+        }
+
+        public DQCategoryBuilder privacyLevel(CategoryPrivacyLevel privacyLevel) {
+            this.privacyLevel = privacyLevel;
+            return this;
+        }
+
+        public DQCategoryBuilder version(String version) {
+            this.version = version;
+            return this;
+        }
+
+        public DQCategoryBuilder creator(String creator) {
+            this.creator = creator;
+            return this;
+        }
+
+        public DQCategoryBuilder creatorName(String creatorName) {
+            this.creatorName = creatorName;
+            return this;
+        }
+
+        public DQCategoryBuilder createdAt(Date createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
+        public DQCategoryBuilder regEx(DQRegEx regEx) {
+            this.regEx = regEx;
+            return this;
+        }
+
+        public DQCategoryBuilder modifiedAt(Date modifiedAt) {
+            this.modifiedAt = modifiedAt;
+            return this;
+        }
+
+        public DQCategoryBuilder lastModifier(String lastModifier) {
+            this.lastModifier = lastModifier;
+            return this;
+        }
+
+        public DQCategoryBuilder lastModifierName(String lastModifierName) {
+            this.lastModifierName = lastModifierName;
+            return this;
+        }
+
+        public DQCategoryBuilder completeness(Boolean completeness) {
+            this.completeness = completeness;
+            return this;
+        }
+
+        public DQCategoryBuilder publishedAt(Date publishedAt) {
+            this.publishedAt = publishedAt;
+            return this;
+        }
+
+        public DQCategoryBuilder lastPublisher(String lastPublisher) {
+            this.lastPublisher = lastPublisher;
+            return this;
+        }
+
+        public DQCategoryBuilder lastPublisherName(String lastPublisherName) {
+            this.lastPublisherName = lastPublisherName;
+            return this;
+        }
+
+        public DQCategoryBuilder validationMode(ValidationMode validationMode) {
+            this.validationMode = validationMode;
+            return this;
+        }
+
+        public DQCategoryBuilder state(CategoryState state) {
+            this.state = state;
+            return this;
+        }
+
+        public DQCategoryBuilder children(List<DQCategory> children) {
+            this.children = children;
+            return this;
+        }
+
+        public DQCategoryBuilder parents(List<DQCategory> parents) {
+            this.parents = parents;
+            return this;
+        }
+
+        public DQCategoryBuilder modified(Boolean modified) {
+            this.modified = modified;
+            return this;
+        }
+
+        public DQCategoryBuilder deleted(Boolean deleted) {
+            this.deleted = deleted;
+            return this;
+        }
+
+        public DQCategory build() {
+            DQCategory dQCategory = new DQCategory();
+            dQCategory.setId(id);
+            dQCategory.setName(name);
+            dQCategory.setLabel(label);
+            dQCategory.setDescription(description);
+            dQCategory.setType(type);
+            dQCategory.setPrivacyLevel(privacyLevel);
+            dQCategory.setVersion(version);
+            dQCategory.setCreator(creator);
+            dQCategory.setCreatorName(creatorName);
+            dQCategory.setCreatedAt(createdAt);
+            dQCategory.setRegEx(regEx);
+            dQCategory.setModifiedAt(modifiedAt);
+            dQCategory.setLastModifier(lastModifier);
+            dQCategory.setLastModifierName(lastModifierName);
+            dQCategory.setCompleteness(completeness);
+            dQCategory.setPublishedAt(publishedAt);
+            dQCategory.setLastPublisher(lastPublisher);
+            dQCategory.setLastPublisherName(lastPublisherName);
+            dQCategory.setValidationMode(validationMode);
+            dQCategory.setState(state);
+            dQCategory.setChildren(children);
+            dQCategory.setParents(parents);
+            dQCategory.setModified(modified);
+            dQCategory.setDeleted(deleted);
+            return dQCategory;
+        }
+    }
 }
