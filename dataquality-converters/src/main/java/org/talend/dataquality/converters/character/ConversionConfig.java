@@ -13,13 +13,13 @@ public class ConversionConfig {
 
     private ConversionMode mode;
 
-    private boolean convertDigit;
+    private boolean convertDigit = true;
 
-    private boolean convertKatakana;
+    private boolean convertKatakana = true;
 
-    private boolean convertLetter;
+    private boolean convertLetter = true;
 
-    private boolean convertOtherChars;
+    private boolean convertOtherChars = true;
 
     public static class Builder {
 
@@ -39,7 +39,7 @@ public class ConversionConfig {
             return this;
         }
 
-        public Builder fullTofhalf() {
+        public Builder fullToHalf() {
             config.setMode(ConversionMode.FULL_TO_HALF);
             return this;
         }

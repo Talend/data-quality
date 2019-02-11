@@ -58,42 +58,47 @@ public class CharWidthConverterTest {
     }
 
     @Test
-    public void testConvertDigitHalfToFull() {
-        ConversionConfig config = new ConversionConfig.Builder().halfToFull().withDigit(true).build();
+    public void testConvertHalfToFullDigit() {
+        ConversionConfig config = new ConversionConfig.Builder().halfToFull() //
+                .withDigit(true).withLetter(false).withKatanana(false).withOtherChars(false).build();
         CharWidthConverter converter = new CharWidthConverter(config);
         assertEquals(FULL_DIGIT, converter.convert(HALF_DIGIT));
     }
 
     @Test
-    public void testConvertLetterHalfToFull() {
-        ConversionConfig config = new ConversionConfig.Builder().halfToFull().withLetter(true).build();
+    public void testConvertHalfToFullLetter() {
+        ConversionConfig config = new ConversionConfig.Builder().halfToFull() //
+                .withDigit(false).withLetter(true).withKatanana(false).withOtherChars(false).build();
         CharWidthConverter converter = new CharWidthConverter(config);
         assertEquals(FULL_LETTER, converter.convert(HALF_LETTER));
     }
 
     @Test
-    public void testConvertKatakanaHalfToFull() {
-        ConversionConfig config = new ConversionConfig.Builder().halfToFull().withKatanana(true).build();
+    public void testConvertHalfToFullKatakana() {
+        ConversionConfig config = new ConversionConfig.Builder().halfToFull() //
+                .withDigit(false).withLetter(false).withKatanana(true).withOtherChars(false).build();
         CharWidthConverter converter = new CharWidthConverter(config);
         assertEquals(FULL_KATAKANA, converter.convert(HALF_KATAKANA));
     }
 
     @Test
-    public void testConvertKatakanaWithMarkHalfToFull() {
-        ConversionConfig config = new ConversionConfig.Builder().halfToFull().withKatanana(true).build();
+    public void testConvertHalfToFullKatakanaWithSoundMark() {
+        ConversionConfig config = new ConversionConfig.Builder().halfToFull() //
+                .withDigit(false).withLetter(false).withKatanana(true).withOtherChars(false).build();
         CharWidthConverter converter = new CharWidthConverter(config);
         assertEquals(FULL_KATAKANA_WITH_SOUND_MARK, converter.convert(HALF_KATAKANA_WITH_SOUND_MARK));
     }
 
     @Test
-    public void testConvertSymbolHalfToFull() {
-        ConversionConfig config = new ConversionConfig.Builder().halfToFull().withOtherChars(true).build();
+    public void testConvertHalfToFullSymbol() {
+        ConversionConfig config = new ConversionConfig.Builder().halfToFull() //
+                .withDigit(false).withLetter(false).withKatanana(false).withOtherChars(true).build();
         CharWidthConverter converter = new CharWidthConverter(config);
-        assertEquals(FULL_SYMBOL, converter.convert(HALF_SYMBOL));
+        assertEquals(HALF_DIGIT + HALF_LETTER + FULL_SYMBOL, converter.convert(HALF_DIGIT + HALF_LETTER + HALF_SYMBOL));
     }
 
     @Test
-    public void testConvertMixedHalfToFull() {
+    public void testConvertHalfToFullAllMixed() {
         ConversionConfig config = new ConversionConfig.Builder().halfToFull() //
                 .withDigit(true).withLetter(true).withKatanana(true).withOtherChars(true).build();
         CharWidthConverter converter = new CharWidthConverter(config);
@@ -101,43 +106,49 @@ public class CharWidthConverterTest {
     }
 
     @Test
-    public void testConvertDigitFullToHalf() {
-        ConversionConfig config = new ConversionConfig.Builder().fullTofhalf().withDigit(true).build();
+    public void testConvertFullToHalfDigit() {
+        ConversionConfig config = new ConversionConfig.Builder().fullToHalf() //
+                .withDigit(true).withLetter(false).withKatanana(false).withOtherChars(false).build();
         CharWidthConverter converter = new CharWidthConverter(config);
         assertEquals(HALF_DIGIT, converter.convert(FULL_DIGIT));
     }
 
     @Test
-    public void testConvertLetterFullToHalf() {
-        ConversionConfig config = new ConversionConfig.Builder().fullTofhalf().withLetter(true).build();
+    public void testConvertFullToHalfLetter() {
+        ConversionConfig config = new ConversionConfig.Builder().fullToHalf() //
+                .withDigit(false).withLetter(true).withKatanana(false).withOtherChars(false).build();
         CharWidthConverter converter = new CharWidthConverter(config);
         assertEquals(HALF_LETTER, converter.convert(FULL_LETTER));
     }
 
     @Test
-    public void testConvertKatakanaFullToHalf() {
-        ConversionConfig config = new ConversionConfig.Builder().fullTofhalf().withKatanana(true).build();
+    public void testConvertFullToHalfKatakana() {
+        ConversionConfig config = new ConversionConfig.Builder().fullToHalf() //
+                .withDigit(false).withLetter(false).withKatanana(true).withOtherChars(false).build();
         CharWidthConverter converter = new CharWidthConverter(config);
         assertEquals(HALF_KATAKANA, converter.convert(FULL_KATAKANA));
     }
 
     @Test
-    public void testConvertKatakanaWithMarkFullToHalf() {
-        ConversionConfig config = new ConversionConfig.Builder().fullTofhalf().withKatanana(true).build();
+    public void testConvertFullToHalfKatakanaWithSoundMark() {
+        ConversionConfig config = new ConversionConfig.Builder().fullToHalf() //
+                .withDigit(false).withLetter(false).withKatanana(true).withOtherChars(false).build();
         CharWidthConverter converter = new CharWidthConverter(config);
         assertEquals(HALF_KATAKANA_WITH_SOUND_MARK, converter.convert(FULL_KATAKANA_WITH_SOUND_MARK));
     }
 
     @Test
-    public void testConvertSymbolFullToHalf() {
-        ConversionConfig config = new ConversionConfig.Builder().fullTofhalf().withOtherChars(true).build();
+    public void testConvertFullToHalfSymbol() {
+        ConversionConfig config = new ConversionConfig.Builder().fullToHalf() //
+                .withDigit(false).withLetter(false).withKatanana(false).withOtherChars(true).build();
         CharWidthConverter converter = new CharWidthConverter(config);
-        assertEquals(HALF_SYMBOL, converter.convert(FULL_SYMBOL));
+        assertEquals(FULL_DIGIT + " " + FULL_LETTER + " " + HALF_SYMBOL,
+                converter.convert(FULL_DIGIT + " " + FULL_LETTER + " " + FULL_SYMBOL));
     }
 
     @Test
-    public void testConvertMixedFullToHalf() {
-        ConversionConfig config = new ConversionConfig.Builder().fullTofhalf()//
+    public void testConvertFullToHalfAllMixed() {
+        ConversionConfig config = new ConversionConfig.Builder().fullToHalf() //
                 .withDigit(true).withLetter(true).withKatanana(true).withOtherChars(true).build();
         CharWidthConverter converter = new CharWidthConverter(config);
         assertEquals(HALF_MIXED, converter.convert(FULL_MIXED));

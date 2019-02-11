@@ -23,6 +23,7 @@ public class CharWidthConverter {
 
     /**
      * convert the character width of a string.
+     * 
      * @param input
      * @return
      */
@@ -48,14 +49,22 @@ public class CharWidthConverter {
         final StringBuilder sb = new StringBuilder(input);
         for (int i = 0; i < sb.length(); i++) {
             final char ch = sb.charAt(i);
-            if (config.isConvertDigit() && (ch >= '0' && ch <= '9')) {
-                sb.setCharAt(i, (char) (ch + HALF_FULL_ASCII_DIFF));
-            } else if (config.isConvertLetter() && (ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z')) {
-                sb.setCharAt(i, (char) (ch + HALF_FULL_ASCII_DIFF));
-            } else if (config.isConvertOtherChars() && ch == ' ') {
-                sb.setCharAt(i, '　');
-            } else if (config.isConvertOtherChars() && (ch >= '!' && ch <= '~')) {
-                sb.setCharAt(i, (char) (ch + HALF_FULL_ASCII_DIFF));
+            if (ch >= '!' && ch <= '~') {
+                if ((ch >= '0' && ch <= '9')) {
+                    if (config.isConvertDigit()) {
+                        sb.setCharAt(i, (char) (ch + HALF_FULL_ASCII_DIFF));
+                    }
+                } else if ((ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z')) {
+                    if (config.isConvertLetter()) {
+                        sb.setCharAt(i, (char) (ch + HALF_FULL_ASCII_DIFF));
+                    }
+                } else if (config.isConvertOtherChars()) {
+                    sb.setCharAt(i, (char) (ch + HALF_FULL_ASCII_DIFF));
+                }
+            } else if (ch == ' ') {
+                if (config.isConvertOtherChars()) {
+                    sb.setCharAt(i, '　');
+                }
             } else if (config.isConvertKatakana() && KanaConstants.isHalfwidthKatakana(ch)) {
                 final Character fullwidthChar = MAPPING_HALF_TO_FULL_KATAKANA.get(ch);
                 if (fullwidthChar != null) {
@@ -79,14 +88,22 @@ public class CharWidthConverter {
         final StringBuilder sb = new StringBuilder(input);
         for (int i = 0; i < sb.length(); i++) {
             char ch = sb.charAt(i);
-            if (config.isConvertDigit() && (ch >= '０' && ch <= '９')) {
-                sb.setCharAt(i, (char) (ch - HALF_FULL_ASCII_DIFF));
-            } else if (config.isConvertLetter() && (ch >= 'ａ' && ch <= 'ｚ' || ch >= 'Ａ' && ch <= 'Ｚ')) {
-                sb.setCharAt(i, (char) (ch - HALF_FULL_ASCII_DIFF));
-            } else if (config.isConvertOtherChars() && ch == '　') {
-                sb.setCharAt(i, ' ');
-            } else if (config.isConvertOtherChars() && (ch >= '！' && ch <= '～')) {
-                sb.setCharAt(i, (char) (ch - HALF_FULL_ASCII_DIFF));
+            if ((ch >= '！' && ch <= '～')) {
+                if ((ch >= '０' && ch <= '９')) {
+                    if (config.isConvertDigit()) {
+                        sb.setCharAt(i, (char) (ch - HALF_FULL_ASCII_DIFF));
+                    }
+                } else if (ch >= 'ａ' && ch <= 'ｚ' || ch >= 'Ａ' && ch <= 'Ｚ') {
+                    if (config.isConvertLetter()) {
+                        sb.setCharAt(i, (char) (ch - HALF_FULL_ASCII_DIFF));
+                    }
+                } else if (config.isConvertOtherChars()) {
+                    sb.setCharAt(i, (char) (ch - HALF_FULL_ASCII_DIFF));
+                }
+            } else if (ch == '　') {
+                if (config.isConvertOtherChars()) {
+                    sb.setCharAt(i, ' ');
+                }
             } else if (config.isConvertKatakana() && KanaConstants.isFullwidthKatakana(ch)) {
                 Character halfwidthChar = MAPPING_FULL_TO_HALF_KATAKANA.get(ch);
                 if (halfwidthChar != null) {
