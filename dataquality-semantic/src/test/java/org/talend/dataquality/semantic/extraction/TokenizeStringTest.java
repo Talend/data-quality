@@ -32,9 +32,8 @@ public class TokenizeStringTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void tooMuchSeparators() {
-        String expected = "This, .is. a test\twith/punctuation";
         List<String> tokens = Arrays.asList("This", "is", "a", "test", "with", "punctuation");
         List<String> separators = Arrays.asList(";", ", .", ". ", " ", "\t", "/", ".");
-        TokenizedString str = new TokenizedString(tokens, separators);
+        new TokenizedString(tokens, separators);
     }
 }

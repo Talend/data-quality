@@ -4,9 +4,9 @@ import java.util.List;
 
 public class MatchedPart implements Comparable<MatchedPart> {
 
-    private TokenizedString originalField;
+    private final TokenizedString originalField;
 
-    private List<Integer> tokenPositions;
+    private final List<Integer> tokenPositions;
 
     private int priority;
 
@@ -43,6 +43,21 @@ public class MatchedPart implements Comparable<MatchedPart> {
         this.priority = priority;
     }
 
+    /**
+     * Implement {@link Comparable} interface to make possible the sorting of a list of matches.
+     * We want the matches to be sorted in ascending order of priority.
+     * The rules are the following :
+     * <ul>
+     *     <li>A match with a greater number of tokens matched is more important.</li>
+     *     <li>If the number of token is equal, then the priority level is compared.</li>
+     * </ul>
+     *
+     * The priority level is set via the method {@link #setPriority(int)} used in {@link FieldExtractionFunction#extractFieldParts(String)}.
+     *
+     * @apiNote x.compareTo(y) == 0 does not imply x.equals(y).
+     * @param o the object to compare the current object with.
+     * @return -1 if the current object is more important than the argument, 1 if it is less important, 0 if there are of same priority.
+     */
     @Override
     public int compareTo(MatchedPart o) {
         int compared = Integer.compare(o.getNumberOfTokens(), this.getNumberOfTokens());

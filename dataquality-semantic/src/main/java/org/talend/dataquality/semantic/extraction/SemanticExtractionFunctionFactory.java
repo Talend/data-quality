@@ -26,14 +26,14 @@ public class SemanticExtractionFunctionFactory {
             CategoryType categoryType = category.getType();
 
             switch (categoryType) {
-                case DICT:
-                    ExtractFromSemanticType fun = new ExtractFromDictionary(category);
-                    extractFunctions.add(fun);
-                    break;
-                case REGEX:
-                    break;
-                case COMPOUND:
-                    break;
+            case DICT:
+                ExtractFromSemanticType fun = new ExtractFromDictionary(category);
+                extractFunctions.add(fun);
+                break;
+            case REGEX:
+                break;
+            case COMPOUND:
+                break;
             }
         }
         return new FieldExtractionFunction(extractFunctions);

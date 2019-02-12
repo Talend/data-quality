@@ -1,8 +1,6 @@
 package org.talend.dataquality.semantic.extraction;
 
 import javafx.util.Pair;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,9 +8,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class TokenizedString implements Comparable<TokenizedString> {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(TokenizedString.class);
+public class TokenizedString {
 
     private final Pattern separatorPattern = Pattern.compile("[\\p{Punct}\\s]+");
 
@@ -44,10 +40,6 @@ public class TokenizedString implements Comparable<TokenizedString> {
         return separators;
     }
 
-    public int getNumberOfTokens() {
-        return tokens.size();
-    }
-
     /**
      * Tokenize the input and return the list of tokens and the list of separators.
      *
@@ -76,24 +68,21 @@ public class TokenizedString implements Comparable<TokenizedString> {
     protected String concatTokens() {
         StringBuilder sb = new StringBuilder(tokens.get(0));
         for (int i = 1; i < tokens.size(); i++) {
-            sb.append(separators.get(i-1)).append(tokens.get(i));
+            sb.append(separators.get(i - 1)).append(tokens.get(i));
         }
         return sb.toString();
     }
 
     private void checkTokens() {
-        if(tokens.size() -1 != separators.size()) {
-            throw new IllegalArgumentException("Invalid tokens and/or separators ! There must be one less separator than tokens.\nNumber of tokens : " + tokens.size() + "\nNumber of separators : " + separators.size());
+        if (tokens.size() - 1 != separators.size()) {
+            throw new IllegalArgumentException(
+                    "Invalid tokens and/or separators ! There must be one less separator than tokens.\nNumber of tokens : "
+                            + tokens.size() + "\nNumber of separators : " + separators.size());
         }
     }
 
     @Override
     public String toString() {
         return value;
-    }
-
-    @Override
-    public int compareTo(TokenizedString o) {
-        return Integer.compare(o.getNumberOfTokens(), this.getNumberOfTokens());
     }
 }

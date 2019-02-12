@@ -21,12 +21,12 @@ public class FieldExtractionFunction {
         List<MatchedPart> matches = new ArrayList<>();
         Map<String, List<String>> matchesByCategory = new HashMap<>();
 
-        for (int i = 0; i<functions.size(); i++) {
+        for (int i = 0; i < functions.size(); i++) {
             ExtractFromSemanticType function = functions.get(i);
             List<MatchedPart> functionMatches = function.getMatches(tokenizedField);
             List<String> matchString = new ArrayList<>(matches.size());
 
-            for(MatchedPart match : functionMatches) {
+            for (MatchedPart match : functionMatches) {
                 match.setPriority(i);
                 matchString.add(match.toString());
             }
@@ -42,17 +42,17 @@ public class FieldExtractionFunction {
 
     protected void filter(List<MatchedPart> matches, Map<String, List<String>> matchesByCategory) {
         Set<Integer> matchedTokens = new HashSet<>();
-        for(MatchedPart match : matches) {
+        for (MatchedPart match : matches) {
             boolean toAdd = true;
-            for(Integer token : match.getTokenPositions()) {
-                if(matchedTokens.contains(token)) {
+            for (Integer token : match.getTokenPositions()) {
+                if (matchedTokens.contains(token)) {
                     ExtractFromSemanticType function = functions.get(match.getPriority());
                     matchesByCategory.get(function.getCategoryName()).remove(match.toString());
                     toAdd = false;
                     break;
                 }
             }
-            if(toAdd) {
+            if (toAdd) {
                 matchedTokens.addAll(match.getTokenPositions());
             }
         }
