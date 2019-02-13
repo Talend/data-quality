@@ -4,6 +4,7 @@ import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
+import org.talend.dataquality.semantic.snapshot.StandardDictionarySnapshotProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,9 @@ public class SemanticExtractionFunctionFactory {
 
             switch (categoryType) {
             case DICT:
-                ExtractFromSemanticType fun = new ExtractFromDictionary(category);
+                DictionarySnapshot snapshotDict = dictionarySnapshot != null ? dictionarySnapshot
+                        : new StandardDictionarySnapshotProvider().get();
+                ExtractFromSemanticType fun = new ExtractFromDictionary(snapshotDict, category);
                 extractFunctions.add(fun);
                 break;
             case REGEX:

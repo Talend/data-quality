@@ -1,15 +1,19 @@
 package org.talend.dataquality.semantic.extraction;
 
 import org.talend.dataquality.semantic.model.DQCategory;
+import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
 
 import java.util.List;
 
 public abstract class ExtractFromSemanticType {
 
-    private DQCategory semancticCategory;
+    protected DQCategory semancticCategory;
 
-    public ExtractFromSemanticType(DQCategory category) {
+    protected DictionarySnapshot dicoSnapshot;
+
+    public ExtractFromSemanticType(DictionarySnapshot snapshot, DQCategory category) {
         semancticCategory = category;
+        dicoSnapshot = snapshot;
     }
 
     public String getCategoryName() {

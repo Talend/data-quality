@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -36,6 +37,7 @@ import org.apache.lucene.search.FieldCacheTermsFilter;
 import org.apache.lucene.search.Filter;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.RegexpQuery;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.SearcherManager;
 import org.apache.lucene.search.TermQuery;
@@ -364,7 +366,7 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
                 Query q = new TermQuery(new Term(DictionarySearcher.F_CATID, catId));
                 topDocs = searcher.searchAfter(docs.scoreDocs[Math.min(docs.totalHits, offset) - 1], q, n);
             }
-            List<Document> listDocs = new ArrayList<>();
+            List<Document> listDocs = new ArrayList<>(topDocs.totalHits);
             for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
                 Document luceneDoc = reader.document(scoreDoc.doc);
                 listDocs.add(luceneDoc);
@@ -375,5 +377,36 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
             LOGGER.error(e.getMessage(), e);
         }
         return Collections.emptyList();
+    }
+
+    public List<String> searchPhraseInSemanticCategory(String catId, List<String> phrase) {
+
+        //System.out.println("Phrase" + Arrays.toString(phrase.toArray()));
+        BooleanQuery combinedQuery = new BooleanQuery();
+        Term catTerm = new Term(DictionarySearcher.F_CATID, catId);
+        Query catQuery = new TermQuery(catTerm);
+        combinedQuery.add(catQuery, BooleanClause.Occur.MUST);
+
+        combinedQuery.add(new RegexpQuery(new Term(F_SYNTERM, StringUtils.join(phrase, ' ').toLowerCase() + ".*")),
+                BooleanClause.Occur.MUST);
+
+        try {
+            final IndexSearcher searcher = mgr.acquire();
+            final IndexReader reader = searcher.getIndexReader();
+            TopDocs topDocs = searcher.search(combinedQuery, Integer.MAX_VALUE);
+
+            List<String> listDocs = new ArrayList<>();
+            for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
+                Document luceneDoc = reader.document(scoreDoc.doc);
+                //System.out.println("\nDocument Raw : " + Arrays.toString(luceneDoc.getValues(F_RAW)) + "\nDocument Score : " + scoreDoc.score);
+                listDocs.addAll(Arrays.asList(luceneDoc.getValues(F_RAW)));
+            }
+            mgr.release(searcher);
+            return listDocs;
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+        return Collections.emptyList();
+
     }
 }

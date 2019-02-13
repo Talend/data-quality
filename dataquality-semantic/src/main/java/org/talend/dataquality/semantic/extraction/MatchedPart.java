@@ -63,4 +63,15 @@ public class MatchedPart implements Comparable<MatchedPart> {
         int compared = Integer.compare(o.getNumberOfTokens(), this.getNumberOfTokens());
         return compared == 0 ? Integer.compare(this.priority, o.priority) : compared;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof MatchedPart)) {
+            return false;
+        }
+
+        MatchedPart otherMatchedPart = (MatchedPart) o;
+        return otherMatchedPart.originalField.toString().equals(this.originalField.toString())
+                && tokenPositions.equals(otherMatchedPart.tokenPositions);
+    }
 }

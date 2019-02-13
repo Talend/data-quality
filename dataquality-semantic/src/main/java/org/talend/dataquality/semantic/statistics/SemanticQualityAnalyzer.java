@@ -150,7 +150,7 @@ public class SemanticQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
 
     /**
      * 
-     * Judege input value is valid or not
+     * Judge whether or not input value is valid
      * 
      * @param category category of input value
      * @param value input value
