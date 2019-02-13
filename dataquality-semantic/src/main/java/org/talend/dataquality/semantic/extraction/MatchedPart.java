@@ -1,18 +1,42 @@
 package org.talend.dataquality.semantic.extraction;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MatchedPart implements Comparable<MatchedPart> {
 
     private final TokenizedString originalField;
 
+    private final int start;
+
+    private final int end;
+
     private final List<Integer> tokenPositions;
 
     private int priority;
 
+    public MatchedPart(TokenizedString originalField, int start, int end) {
+        this.originalField = originalField;
+        this.start = start;
+        this.end = end;
+        checkBounds();
+        tokenPositions = new ArrayList<>(end - start + 1);
+        for (int i = start; i <= end; i++) {
+            tokenPositions.add(i);
+        }
+    }
+
+    private void checkBounds() {
+        if (start < 0 || end < 0 || end < start) {
+            throw new IllegalArgumentException("Bounds for match are incorrect : start = {}, end = {}" + start + end);
+        }
+    }
+
     public MatchedPart(TokenizedString originalField, List<Integer> tokenPositions) {
         this.originalField = originalField;
         this.tokenPositions = tokenPositions;
+        start = tokenPositions.get(0);
+        end = tokenPositions.get(tokenPositions.size() - 1);
     }
 
     @Override
@@ -20,9 +44,9 @@ public class MatchedPart implements Comparable<MatchedPart> {
         List<String> tokens = originalField.getTokens();
         List<String> separators = originalField.getSeparators();
 
-        StringBuilder sb = new StringBuilder(tokens.get(tokenPositions.get(0)));
-        for (int i = 1; i < tokenPositions.size(); i++) {
-            sb.append(separators.get(tokenPositions.get(i - 1))).append(tokens.get(tokenPositions.get(i)));
+        StringBuilder sb = new StringBuilder(tokens.get(start));
+        for (int i = start; i < end; i++) {
+            sb.append(separators.get(i)).append(tokens.get(i + 1));
         }
         return sb.toString();
     }
