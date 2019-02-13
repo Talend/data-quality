@@ -29,9 +29,11 @@ public class CharWidthConverterTest {
 
     private static final String FULL_SYMBOL = "　！（－＿＾）～";
 
-    private static final String HALF_MIXED = "ﾃｽﾃｨｰﾝｸﾞ1-2-3 abc ABC";
+    private static final String HALF_MIXED = "ﾃｽﾃｨｰﾝｸﾞ 1-2-3 abc ABC";
 
-    private static final String FULL_MIXED = "テスティーング１－２－３　ａｂｃ　ＡＢＣ";
+    private static final String FULL_MIXED = "テスティーング　１－２－３　ａｂｃ　ＡＢＣ";
+
+    private static final String HALF_MIXED_WITH_NBSP = "ﾃｽﾃｨｰﾝｸﾞ\u00a01-2-3\u202fabc\u2007ABC";
 
     private static final Map<String, String> EXPECTED_NFKC = new HashMap<>();
 
@@ -103,6 +105,14 @@ public class CharWidthConverterTest {
                 .withDigit(true).withLetter(true).withKatanana(true).withOtherChars(true).build();
         CharWidthConverter converter = new CharWidthConverter(config);
         assertEquals(FULL_MIXED, converter.convert(HALF_MIXED));
+    }
+
+    @Test
+    public void testConvertHalfToHalfAllMixedWithNBSP() {
+        ConversionConfig config = new ConversionConfig.Builder().halfToFull() //
+                .withDigit(true).withLetter(true).withKatanana(true).withOtherChars(true).build();
+        CharWidthConverter converter = new CharWidthConverter(config);
+        assertEquals(FULL_MIXED, converter.convert(HALF_MIXED_WITH_NBSP));
     }
 
     @Test

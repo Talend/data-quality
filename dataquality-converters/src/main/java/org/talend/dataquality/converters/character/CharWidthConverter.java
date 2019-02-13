@@ -15,6 +15,17 @@ public class CharWidthConverter {
 
     private static final int HALF_FULL_ASCII_DIFF = 65248;
 
+    /**
+     * see https://en.wikipedia.org/wiki/Non-breaking_space
+     */
+    private static final char NBSP = '\u00a0'; // Standard non-breaking space
+
+    private static final char NBSP_VAR_1 = '\u202f'; // U+202F NARROW NO-BREAK SPACE
+
+    private static final char NBSP_VAR_2 = '\u2007'; // U+2007 FIGURE SPACE
+
+    private static final char FULLWIDTH_SPACE = '\u3000';
+
     private ConversionConfig config;
 
     public CharWidthConverter(ConversionConfig config) {
@@ -61,9 +72,9 @@ public class CharWidthConverter {
                 } else if (config.isConvertOtherChars()) {
                     sb.setCharAt(i, (char) (ch + HALF_FULL_ASCII_DIFF));
                 }
-            } else if (ch == ' ') {
+            } else if (ch == ' ' || ch == NBSP || ch == NBSP_VAR_1 || ch == NBSP_VAR_2) {
                 if (config.isConvertOtherChars()) {
-                    sb.setCharAt(i, '　');
+                    sb.setCharAt(i, FULLWIDTH_SPACE);
                 }
             } else if (config.isConvertKatakana() && KanaConstants.isHalfwidthKatakana(ch)) {
                 final Character fullwidthChar = MAPPING_HALF_TO_FULL_KATAKANA.get(ch);
@@ -100,7 +111,7 @@ public class CharWidthConverter {
                 } else if (config.isConvertOtherChars()) {
                     sb.setCharAt(i, (char) (ch - HALF_FULL_ASCII_DIFF));
                 }
-            } else if (ch == '　') {
+            } else if (ch == FULLWIDTH_SPACE) {
                 if (config.isConvertOtherChars()) {
                     sb.setCharAt(i, ' ');
                 }
