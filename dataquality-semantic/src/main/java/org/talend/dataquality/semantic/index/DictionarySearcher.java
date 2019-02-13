@@ -379,16 +379,15 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
         return Collections.emptyList();
     }
 
-    public List<String> searchPhraseInSemanticCategory(String catId, List<String> phrase) {
+    public List<String> searchPhraseInSemanticCategory(String catId, String phrase) {
+        Query catQuery = getTermQuery(F_CATID, catId, false);
 
-        //System.out.println("Phrase" + Arrays.toString(phrase.toArray()));
+        String filteredString = StringUtils.join(getTokensFromAnalyzer(phrase), ' ');
+        RegexpQuery regexQuery = new RegexpQuery(new Term(F_SYNTERM, filteredString + ".*"));
+
         BooleanQuery combinedQuery = new BooleanQuery();
-        Term catTerm = new Term(DictionarySearcher.F_CATID, catId);
-        Query catQuery = new TermQuery(catTerm);
         combinedQuery.add(catQuery, BooleanClause.Occur.MUST);
-
-        combinedQuery.add(new RegexpQuery(new Term(F_SYNTERM, StringUtils.join(phrase, ' ').toLowerCase() + ".*")),
-                BooleanClause.Occur.MUST);
+        combinedQuery.add(regexQuery, BooleanClause.Occur.MUST);
 
         try {
             final IndexSearcher searcher = mgr.acquire();
@@ -398,7 +397,6 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
             List<String> listDocs = new ArrayList<>();
             for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
                 Document luceneDoc = reader.document(scoreDoc.doc);
-                //System.out.println("\nDocument Raw : " + Arrays.toString(luceneDoc.getValues(F_RAW)) + "\nDocument Score : " + scoreDoc.score);
                 listDocs.addAll(Arrays.asList(luceneDoc.getValues(F_RAW)));
             }
             mgr.release(searcher);
@@ -407,6 +405,5 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
             LOGGER.error(e.getMessage(), e);
         }
         return Collections.emptyList();
-
     }
 }

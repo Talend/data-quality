@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
 public class TokenizeStringTest {
 
     @Test
-    public void tokenize() {
+    public void correctTokensAndSeparators() {
         TokenizedString str = new TokenizedString(";This, .is. a test\twith/punctuation.");
 
         List<String> expectedTokens = Arrays.asList("This", "is", "a", "test", "with", "punctuation");

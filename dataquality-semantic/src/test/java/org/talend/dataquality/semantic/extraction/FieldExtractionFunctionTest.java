@@ -7,6 +7,10 @@ import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.talend.dataquality.semantic.api.CategoryRegistryManager;
+import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
+import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
+import org.talend.dataquality.semantic.snapshot.StandardDictionarySnapshotProvider;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -121,7 +125,7 @@ public class FieldExtractionFunctionTest {
         FieldExtractionFunction function = new FieldExtractionFunction(Arrays.asList(dict, dict1, dict3));
 
         Map<String, List<String>> expectedMatches = new HashMap<>();
-        expectedMatches.put("NoMatch", new ArrayList<>());
+        expectedMatches.put("NoMatch", Collections.emptyList());
         expectedMatches.put("Football Club", Collections.singletonList("Manchester United"));
         expectedMatches.put("City", Collections.singletonList("Paris"));
 
@@ -138,9 +142,34 @@ public class FieldExtractionFunctionTest {
 
         Map<String, List<String>> expectedMatches = new HashMap<>();
         expectedMatches.put("Football Club", Arrays.asList("Manchester United", "Paris-Saint Germain"));
-        expectedMatches.put("Country", new ArrayList<>());
-        expectedMatches.put("City", new ArrayList<>());
+        expectedMatches.put("Country", Collections.emptyList());
+        expectedMatches.put("City", Collections.emptyList());
 
         assertEquals(expectedMatches, function.extractFieldParts(input));
+    }
+
+    @Test
+    public void notMocked() {
+        DictionarySnapshot snapshot = new StandardDictionarySnapshotProvider().get();
+
+        CategoryRegistryManager crm = CategoryRegistryManager.getInstance();
+
+        ExtractFromDictionary efd_country = new ExtractFromDictionary(snapshot,
+                crm.getCategoryMetadataByName(SemanticCategoryEnum.COUNTRY.getId()));
+        ExtractFromDictionary efd_commune = new ExtractFromDictionary(snapshot,
+                crm.getCategoryMetadataByName(SemanticCategoryEnum.FR_COMMUNE.getId()));
+        ExtractFromDictionary efd_animal = new ExtractFromDictionary(snapshot,
+                crm.getCategoryMetadataByName(SemanticCategoryEnum.ANIMAL.getId()));
+
+        FieldExtractionFunction function = new FieldExtractionFunction(Arrays.asList(efd_country, efd_commune, efd_animal));
+
+        String field = "Bear, Polar bear, Teddy Bear, Canada, the United States, clermont ferrand.";
+
+        Map<String, List<String>> expectedMatches = new HashMap<>();
+        expectedMatches.put("COUNTRY", Arrays.asList("Canada", "United States"));
+        expectedMatches.put("FR_COMMUNE", Collections.singletonList("clermont ferrand"));
+        expectedMatches.put("ANIMAL", Arrays.asList("Bear", "bear", "Bear"));
+
+        assertEquals(expectedMatches, function.extractFieldParts(field));
     }
 }

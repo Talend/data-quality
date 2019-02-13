@@ -3,6 +3,23 @@ package org.talend.dataquality.semantic.extraction;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class that contains one matched part of a given {@link #originalField}.
+ *
+ * A match consists of a list of tokens from the {@link #originalField}.
+ * Their positions are stored in {@link #tokenPositions}.
+ *
+ * A match can be built using either a list of token positions or with a {@link #start} position and an {@link #end}.
+ * The latter is possible because a match always consists of a list of contiguous tokens.
+ *
+ * This class implements {@link Comparable} so that
+ * the list of matched parts can be sorted by length and priority.
+ *
+ * The priority is given by the position of the semantic category
+ * in the list of all the semantic categories used to extract parts of the field.
+ *
+ * @author afournier
+ */
 public class MatchedPart implements Comparable<MatchedPart> {
 
     private final TokenizedString originalField;
@@ -15,7 +32,14 @@ public class MatchedPart implements Comparable<MatchedPart> {
 
     private int priority;
 
-    public MatchedPart(TokenizedString originalField, int start, int end) {
+    MatchedPart(TokenizedString originalField, List<Integer> tokenPositions) {
+        this.originalField = originalField;
+        this.tokenPositions = tokenPositions;
+        start = tokenPositions.get(0);
+        end = tokenPositions.get(tokenPositions.size() - 1);
+    }
+
+    MatchedPart(TokenizedString originalField, int start, int end) {
         this.originalField = originalField;
         this.start = start;
         this.end = end;
@@ -32,13 +56,6 @@ public class MatchedPart implements Comparable<MatchedPart> {
         }
     }
 
-    public MatchedPart(TokenizedString originalField, List<Integer> tokenPositions) {
-        this.originalField = originalField;
-        this.tokenPositions = tokenPositions;
-        start = tokenPositions.get(0);
-        end = tokenPositions.get(tokenPositions.size() - 1);
-    }
-
     @Override
     public String toString() {
         List<String> tokens = originalField.getTokens();
@@ -51,11 +68,11 @@ public class MatchedPart implements Comparable<MatchedPart> {
         return sb.toString();
     }
 
-    public int getNumberOfTokens() {
+    private int getNumberOfTokens() {
         return tokenPositions.size();
     }
 
-    public List<Integer> getTokenPositions() {
+    List<Integer> getTokenPositions() {
         return tokenPositions;
     }
 
@@ -76,11 +93,14 @@ public class MatchedPart implements Comparable<MatchedPart> {
      *     <li>If the number of token is equal, then the priority level is compared.</li>
      * </ul>
      *
-     * The priority level is set via the method {@link #setPriority(int)} used in {@link FieldExtractionFunction#extractFieldParts(String)}.
+     * The priority level is set via the method {@link #setPriority(int)}
+     * used in {@link FieldExtractionFunction#extractFieldParts(String)}.
      *
      * @apiNote x.compareTo(y) == 0 does not imply x.equals(y).
      * @param o the object to compare the current object with.
-     * @return -1 if the current object is more important than the argument, 1 if it is less important, 0 if there are of same priority.
+     * @return -1 if the current object is more important than the argument,
+     *          1 if it is less important,
+     *          0 if there are of same priority.
      */
     @Override
     public int compareTo(MatchedPart o) {

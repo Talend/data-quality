@@ -1,51 +1,85 @@
 package org.talend.dataquality.semantic.extraction;
 
+import org.apache.commons.lang3.StringUtils;
 import org.talend.dataquality.semantic.index.LuceneIndex;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
+/**
+ * This function extracts parts of fields that matches exactly with elements in a semantic dictionary.
+ *
+ * @author afournier
+ */
 public class ExtractFromDictionary extends ExtractFromSemanticType {
 
-    public ExtractFromDictionary(DictionarySnapshot snapshot, DQCategory category) {
+    private LuceneIndex index;
+
+    protected ExtractFromDictionary(DictionarySnapshot snapshot, DQCategory category) {
         super(snapshot, category);
+        index = (LuceneIndex) dicoSnapshot.getSharedDataDict();
     }
 
     @Override
     public List<MatchedPart> getMatches(TokenizedString tokenizedField) {
-        List<MatchedPart> matches = new ArrayList<>();
+        List<MatchedPart> matchedParts = new ArrayList<>();
         List<String> tokens = tokenizedField.getTokens();
 
         for (int i = 0; i < tokens.size(); i++) {
+            int matchStart = -1;
+            int matchEnd = -1;
+            boolean exactMatch = false;
             List<String> phrase = new ArrayList<>();
-            Set<String> matchedDocumentRaws = new HashSet<>();
-            List<Integer> matchedPositions = new ArrayList<>();
-            int j;
-            for (j = i; j < tokens.size(); j++) {
+            int j = i;
+            while (j < tokens.size()) {
                 phrase.add(tokens.get(j));
-                if (!findMatches(phrase).isEmpty()) {
-                    matchedPositions.add(j);
-                } else {
+                List<String> matches = findMatches(phrase);
+                if (matches.isEmpty()) {
                     break;
                 }
+                if (containsExactMatch(phrase, matches)) {
+                    exactMatch = true;
+                    matchStart = i;
+                    matchEnd = j;
+                }
+                j++;
             }
-            i = j;
-            if (!matchedPositions.isEmpty()) {
-                matches.add(new MatchedPart(tokenizedField, matchedPositions));
-
+            if (exactMatch) {
+                matchedParts.add(new MatchedPart(tokenizedField, matchStart, matchEnd));
+                i = matchEnd;
             }
         }
 
-        return matches;
+        return matchedParts;
     }
 
     private List<String> findMatches(List<String> phrase) {
-        return ((LuceneIndex) dicoSnapshot.getSharedDataDict()).getSearcher()
-                .searchPhraseInSemanticCategory(semancticCategory.getId(), phrase);
+        return index.getSearcher().searchPhraseInSemanticCategory(semancticCategory.getId(), StringUtils.join(phrase, ' '));
     }
 
+    private boolean containsExactMatch(List<String> phrase, List<String> matches) {
+        for (String match : matches) {
+            if (listsMatch(TokenizedString.tokenize(match), phrase)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Check lists equality with case insensitivity for the String objects.
+     */
+    private boolean listsMatch(List<String> tokens, List<String> phrase) {
+        Iterator<String> tokensIt = tokens.iterator();
+        Iterator<String> phraseIt = phrase.iterator();
+        while (tokensIt.hasNext() && phraseIt.hasNext()) {
+            if (!tokensIt.next().toLowerCase().equals(phraseIt.next().toLowerCase())) {
+                return false;
+            }
+        }
+        return !(tokensIt.hasNext() || phraseIt.hasNext());
+    }
 }

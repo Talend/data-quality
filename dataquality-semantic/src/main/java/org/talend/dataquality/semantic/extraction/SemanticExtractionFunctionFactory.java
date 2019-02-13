@@ -9,7 +9,17 @@ import org.talend.dataquality.semantic.snapshot.StandardDictionarySnapshotProvid
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Factory for instantiation of {@link FieldExtractionFunction}
+ * according to the specified semantic categories and dictionary snapshot.
+ *
+ * @author afournier
+ */
 public class SemanticExtractionFunctionFactory {
+
+    public static FieldExtractionFunction createFieldExtractionFunction(List<String> categoryList) {
+        return createFieldExtractionFunction(categoryList, null);
+    }
 
     public static FieldExtractionFunction createFieldExtractionFunction(List<String> categoryList,
             DictionarySnapshot dictionarySnapshot) {
