@@ -84,6 +84,14 @@ public class TokenizedString {
         }
     }
 
+    public Pattern getSeparatorPattern() {
+        return separatorPattern;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
     @Override
     public String toString() {
         return value;
