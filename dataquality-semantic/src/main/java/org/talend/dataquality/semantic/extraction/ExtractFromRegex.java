@@ -58,7 +58,7 @@ public class ExtractFromRegex extends ExtractFromSemanticType {
     }
 
     private String getCleanedRegex() {
-        String cleaned = semancticCategory.getRegEx().getValidator().getPatternString();
+        String cleaned = dicoSnapshot.getRegexClassifier().getPatternStringByCategoryId(semancticCategory.getId());
         if (cleaned.startsWith("^"))
             cleaned = cleaned.substring(1);
 
