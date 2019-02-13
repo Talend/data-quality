@@ -17,6 +17,9 @@ import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.talend.dataquality.datamasking.FunctionMode;
+
+import static org.talend.dataquality.datamasking.FunctionMode.CONSISTENT;
 
 /**
  * created by jgonzalez on 18 juin 2015. This function will modify the input date by adding or retieving a number of
@@ -44,7 +47,20 @@ public class DateVariance extends Function<Date> {
     }
 
     @Override
+    protected Date doGenerateMaskedField(Date date, FunctionMode mode) {
+        Random r = rnd;
+        if (CONSISTENT == mode) {
+            r = new Random(seed.hashCode());
+        }
+        return doGenerateMaskedField(date, r);
+    }
+
+    @Override
     protected Date doGenerateMaskedField(Date date) {
+        return doGenerateMaskedField(date, rnd);
+    }
+
+    private Date doGenerateMaskedField(Date date, Random r) {
         if (date != null) {
             long variation;
             if (integerParam < 0) {
@@ -53,7 +69,7 @@ public class DateVariance extends Function<Date> {
                 integerParam = 31;
             }
             do {
-                variation = Math.round((rnd.nextDouble() * 2 - 1) * integerParam * NB_MS_PER_DAY);
+                variation = Math.round((r.nextDouble() * 2 - 1) * integerParam * NB_MS_PER_DAY);
             } while (variation == 0);
             Long originalDate = date.getTime();
             Date newDate = new Date(originalDate + variation);

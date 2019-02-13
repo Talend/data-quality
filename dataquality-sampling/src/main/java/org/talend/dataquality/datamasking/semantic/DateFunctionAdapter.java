@@ -21,7 +21,10 @@ import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.datamasking.functions.Function;
+
+import static org.talend.dataquality.datamasking.FunctionMode.CONSISTENT;
 
 public class DateFunctionAdapter extends Function<String> {
 
@@ -54,7 +57,23 @@ public class DateFunctionAdapter extends Function<String> {
     }
 
     @Override
+    protected String doGenerateMaskedField(String input, FunctionMode mode) {
+        Random r = rnd;
+        if (CONSISTENT == mode) {
+            function.setSeed(seed);
+            function.setMaskingMode(mode);
+            r = new Random(seed.hashCode());
+        }
+
+        return doGenerateMaskedField(input, r);
+    }
+
+    @Override
     protected String doGenerateMaskedField(String input) {
+        return doGenerateMaskedField(input, rnd);
+    }
+
+    private String doGenerateMaskedField(String input, Random r) {
         if (input == null || EMPTY_STRING.equals(input.trim())) {
             return input;
         }
@@ -82,7 +101,6 @@ public class DateFunctionAdapter extends Function<String> {
                 LOG.warn(e.getMessage());
             }
         }
-        return ReplaceCharacterHelper.replaceCharacters(input, rnd);
+        return ReplaceCharacterHelper.replaceCharacters(input, r);
     }
-
 }
