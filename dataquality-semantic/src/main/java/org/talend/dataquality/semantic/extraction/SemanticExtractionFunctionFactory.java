@@ -8,7 +8,6 @@ import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
 import org.talend.dataquality.semantic.snapshot.StandardDictionarySnapshotProvider;
 
-
 /**
  * Factory for instantiation of {@link FieldExtractionFunction}
  * according to the specified semantic categories and dictionary snapshot.

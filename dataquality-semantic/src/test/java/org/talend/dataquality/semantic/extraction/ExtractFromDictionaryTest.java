@@ -1,6 +1,5 @@
 package org.talend.dataquality.semantic.extraction;
 
-
 import static junit.framework.TestCase.assertEquals;
 
 import java.util.ArrayList;
