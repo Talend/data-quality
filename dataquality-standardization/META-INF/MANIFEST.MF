@@ -7,7 +7,6 @@ Bundle-Vendor: .Talend SA.
 Require-Bundle: org.slf4j.api,
  org.eclipse.m2e.maven.runtime.slf4j.simple,
  org.talend.libraries.apache.lucene4,
- org.talend.libraries.google.libphonumber,
  org.apache.commons.io,
  org.apache.commons.lang,
  org.junit;resolution:=optional,
