@@ -8,6 +8,8 @@ import static org.talend.dataquality.converters.character.KanaConstants.MAPPING_
 
 import java.text.Normalizer;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * API for character width conversion
  */
@@ -39,6 +41,9 @@ public class CharWidthConverter {
      * @return
      */
     public String convert(String input) {
+        if (StringUtils.isEmpty(input)) {
+            return StringUtils.EMPTY;
+        }
         String result = null;
         switch (config.getMode()) {
         case NFKC:
