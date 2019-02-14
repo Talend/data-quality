@@ -41,7 +41,7 @@ public class ExtractFromRegex extends ExtractFromSemanticType {
         boolean isOkEnd = false;
         if (start == 0 || tokenizedField.getSeparatorPattern().matcher(input.substring(start - 1, start)).matches())
             isOkStart = true;
-        if (end == input.length() - 1 || tokenizedField.getSeparatorPattern().matcher(input.substring(end, end + 1)).matches())
+        if (end == input.length() || tokenizedField.getSeparatorPattern().matcher(input.substring(end, end + 1)).matches())
             isOkEnd = true;
 
         if (isOkStart && isOkEnd) {

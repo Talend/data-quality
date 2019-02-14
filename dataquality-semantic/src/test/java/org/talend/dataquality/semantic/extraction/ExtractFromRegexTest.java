@@ -37,6 +37,17 @@ public class ExtractFromRegexTest extends CategoryRegistryManagerAbstract {
     }
 
     @Test
+    public void ibanMatchAlone() {
+        DQCategory category = CategoryRegistryManager.getInstance().getCategoryMetadataByName(SemanticCategoryEnum.IBAN.getId());
+        ExtractFromRegex efd = new ExtractFromRegex(dictionarySnapshot, category);
+        TokenizedString input = new TokenizedString("DE89 3704 0044 0532 0130 00");
+        MatchedPart expectedMatch = new MatchedPart(input, Arrays.asList(0, 1, 2, 3, 4, 5));
+        List<MatchedPart> list = efd.getMatches(input);
+        assertTrue(list.contains(expectedMatch));
+        assertTrue(list.size() == 1);
+    }
+
+    @Test
     public void frPhone() {
         DQCategory category = CategoryRegistryManager.getInstance()
                 .getCategoryMetadataByName(SemanticCategoryEnum.FR_PHONE.getId());
