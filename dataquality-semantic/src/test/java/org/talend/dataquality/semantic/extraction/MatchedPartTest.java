@@ -5,10 +5,25 @@ import org.junit.Test;
 import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 public class MatchedPartTest {
 
     private TokenizedString field = new TokenizedString("Manchester United States Of America");
+
+    @Test(expected = IllegalArgumentException.class)
+    public void outOfBounds() {
+        new MatchedPart(field, -1, 120);
+    }
+
+    @Test
+    public void equals() {
+        MatchedPart x = new MatchedPart(field, Arrays.asList(0, 1));
+        MatchedPart y = new MatchedPart(field, Arrays.asList(0, 1));
+
+        assertEquals(x, y);
+        assertNotEquals(x, field);
+    }
 
     @Test
     public void smallerIsLessImportant() {

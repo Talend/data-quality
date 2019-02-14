@@ -25,13 +25,13 @@ import static org.junit.Assert.assertEquals;
 public class FieldExtractionFunctionTest {
 
     @Mock
-    ExtractFromSemanticType dict1;
+    private ExtractFromSemanticType dict1;
 
     @Mock
-    ExtractFromSemanticType dict2;
+    private ExtractFromSemanticType dict2;
 
     @Mock
-    ExtractFromSemanticType dict3;
+    private ExtractFromSemanticType dict3;
 
     private String input;
 

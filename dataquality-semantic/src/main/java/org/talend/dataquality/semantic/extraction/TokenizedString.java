@@ -26,28 +26,29 @@ public class TokenizedString {
 
     private final List<String> separators;
 
-    TokenizedString(String str) {
+    public TokenizedString(String str) {
         value = str;
         tokens = tokenize(value);
-        separators = extractSeparators();
+        separators = new ArrayList<>(tokens.size());
+        extractSeparators();
     }
 
-    TokenizedString(List<String> tokens, List<String> separators) {
+    public TokenizedString(List<String> tokens, List<String> separators) {
         this.tokens = tokens;
         this.separators = separators;
         checkTokens();
         value = concatTokens();
     }
 
-    List<String> getTokens() {
+    public List<String> getTokens() {
         return tokens;
     }
 
-    List<String> getSeparators() {
+    public List<String> getSeparators() {
         return separators;
     }
 
-    static List<String> tokenize(String field) {
+    public static List<String> tokenize(String field) {
         List<String> tokens = new ArrayList<>(Arrays.asList(separatorPattern.split(field)));
 
         if (tokens.get(0).isEmpty()) {
@@ -57,11 +58,7 @@ public class TokenizedString {
         return tokens;
     }
 
-    /**
-     *
-     */
-    private List<String> extractSeparators() {
-        List<String> separators = new ArrayList<>(tokens.size() - 1);
+    private void extractSeparators() {
         Matcher matcher = separatorPattern.matcher(value);
 
         while (matcher.find()) {
@@ -69,8 +66,6 @@ public class TokenizedString {
                 separators.add(matcher.group());
             }
         }
-
-        return separators;
     }
 
     private String concatTokens() {

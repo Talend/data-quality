@@ -8,6 +8,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class DictionarySearcherTest {
@@ -19,7 +20,7 @@ public class DictionarySearcherTest {
         String input = "United States of America";
         List<String> listDocs = dataDictIndex.getSearcher()
                 .searchPhraseInSemanticCategory(SemanticCategoryEnum.COUNTRY.getTechnicalId(), input);
-        assertTrue(!listDocs.contains("United States"));
+        assertFalse(listDocs.contains("United States"));
     }
 
     @Test

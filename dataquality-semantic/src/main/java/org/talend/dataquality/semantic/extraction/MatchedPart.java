@@ -2,6 +2,7 @@ package org.talend.dataquality.semantic.extraction;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Class that contains one matched part of a given {@link #originalField}.
@@ -32,14 +33,14 @@ public class MatchedPart implements Comparable<MatchedPart> {
 
     private int priority;
 
-    MatchedPart(TokenizedString originalField, List<Integer> tokenPositions) {
+    public MatchedPart(TokenizedString originalField, List<Integer> tokenPositions) {
         this.originalField = originalField;
         this.tokenPositions = tokenPositions;
         start = tokenPositions.get(0);
         end = tokenPositions.get(tokenPositions.size() - 1);
     }
 
-    MatchedPart(TokenizedString originalField, int start, int end) {
+    public MatchedPart(TokenizedString originalField, int start, int end) {
         this.originalField = originalField;
         this.start = start;
         this.end = end;
@@ -72,7 +73,7 @@ public class MatchedPart implements Comparable<MatchedPart> {
         return tokenPositions.size();
     }
 
-    List<Integer> getTokenPositions() {
+    public List<Integer> getTokenPositions() {
         return tokenPositions;
     }
 
@@ -117,5 +118,10 @@ public class MatchedPart implements Comparable<MatchedPart> {
         MatchedPart otherMatchedPart = (MatchedPart) o;
         return otherMatchedPart.originalField.toString().equals(this.originalField.toString())
                 && tokenPositions.equals(otherMatchedPart.tokenPositions);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(originalField, tokenPositions, priority);
     }
 }

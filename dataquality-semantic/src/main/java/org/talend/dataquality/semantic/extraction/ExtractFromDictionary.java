@@ -28,7 +28,8 @@ public class ExtractFromDictionary extends ExtractFromSemanticType {
         List<MatchedPart> matchedParts = new ArrayList<>();
         List<String> tokens = tokenizedField.getTokens();
 
-        for (int i = 0; i < tokens.size(); i++) {
+        int i = 0;
+        while (i < tokens.size()) {
             int matchStart = -1;
             int matchEnd = -1;
             boolean exactMatch = false;
@@ -51,6 +52,7 @@ public class ExtractFromDictionary extends ExtractFromSemanticType {
                 matchedParts.add(new MatchedPart(tokenizedField, matchStart, matchEnd));
                 i = matchEnd;
             }
+            i++;
         }
 
         return matchedParts;
@@ -62,7 +64,7 @@ public class ExtractFromDictionary extends ExtractFromSemanticType {
 
     private boolean containsExactMatch(List<String> phrase, List<String> matches) {
         for (String match : matches) {
-            if (listsMatch(TokenizedString.tokenize(match), phrase)) {
+            if (equalsIgnoreCase(TokenizedString.tokenize(match), phrase)) {
                 return true;
             }
         }
@@ -72,11 +74,11 @@ public class ExtractFromDictionary extends ExtractFromSemanticType {
     /**
      * Check lists equality with case insensitivity for the String objects.
      */
-    private boolean listsMatch(List<String> tokens, List<String> phrase) {
+    private boolean equalsIgnoreCase(List<String> tokens, List<String> phrase) {
         Iterator<String> tokensIt = tokens.iterator();
         Iterator<String> phraseIt = phrase.iterator();
         while (tokensIt.hasNext() && phraseIt.hasNext()) {
-            if (!tokensIt.next().toLowerCase().equals(phraseIt.next().toLowerCase())) {
+            if (!tokensIt.next().equalsIgnoreCase(phraseIt.next())) {
                 return false;
             }
         }

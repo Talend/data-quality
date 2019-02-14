@@ -17,6 +17,10 @@ import java.util.List;
  */
 public class SemanticExtractionFunctionFactory {
 
+    private SemanticExtractionFunctionFactory() {
+
+    }
+
     public static FieldExtractionFunction createFieldExtractionFunction(List<String> categoryList) {
         return createFieldExtractionFunction(categoryList, null);
     }
@@ -46,6 +50,8 @@ public class SemanticExtractionFunctionFactory {
             case REGEX:
                 break;
             case COMPOUND:
+                break;
+            default:
                 break;
             }
         }
