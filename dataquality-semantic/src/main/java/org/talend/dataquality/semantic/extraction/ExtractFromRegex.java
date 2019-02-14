@@ -4,15 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
 
 public class ExtractFromRegex extends ExtractFromSemanticType {
 
+    private Pattern pattern;
+
     public ExtractFromRegex(DictionarySnapshot snapshot, DQCategory category) {
         super(snapshot, category);
+        pattern = Pattern.compile(getCleanedRegex());
     }
 
     @Override
@@ -20,9 +22,7 @@ public class ExtractFromRegex extends ExtractFromSemanticType {
 
         List<MatchedPart> matchedParts = new ArrayList<>();
         String inputValue = tokenizedField.getValue();
-        String cleanedRegex = getCleanedRegex();
 
-        Pattern pattern = Pattern.compile(cleanedRegex);
         Matcher matcher = pattern.matcher(inputValue);
         while (matcher.find()) {
             int start = matcher.start();
@@ -68,13 +68,10 @@ public class ExtractFromRegex extends ExtractFromSemanticType {
     }
 
     private boolean isLitteral(String regex) {
-        // If removing the last $ makes the regex invalid, then it was a litteral $
-        regex = regex.substring(0, regex.length() - 1);
-        try {
-            Pattern.compile(regex);
-        } catch (PatternSyntaxException p) {
-            return true;
+        int position = regex.length() - 2;
+        while (position >= 0 && regex.charAt(position) == '\\') {
+            position--;
         }
-        return false;
+        return (regex.length() - position) % 2 == 1;
     }
 }

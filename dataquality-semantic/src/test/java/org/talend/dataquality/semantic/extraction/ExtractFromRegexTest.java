@@ -71,6 +71,28 @@ public class ExtractFromRegexTest extends CategoryRegistryManagerAbstract {
     }
 
     @Test
+    public void withBackslashAndLitteralDollar() {
+        DQCategory category = prepCategory("abc\\\\\\$");
+        ExtractFromRegex efd = new ExtractFromRegex(dictionarySnapshot, category);
+        TokenizedString input = new TokenizedString("My phone is abc\\$.");
+        MatchedPart expectedMatch = new MatchedPart(input, Arrays.asList(3));
+        List<MatchedPart> list = efd.getMatches(input);
+        assertTrue(list.contains(expectedMatch));
+        assertTrue(list.size() == 1);
+    }
+
+    @Test
+    public void withBackslashAndDollar() {
+        DQCategory category = prepCategory("abc\\\\$");
+        ExtractFromRegex efd = new ExtractFromRegex(dictionarySnapshot, category);
+        TokenizedString input = new TokenizedString("My phone is abc\\.");
+        MatchedPart expectedMatch = new MatchedPart(input, Arrays.asList(3));
+        List<MatchedPart> list = efd.getMatches(input);
+        assertTrue(list.contains(expectedMatch));
+        assertTrue(list.size() == 1);
+    }
+
+    @Test
     public void frPhoneWithSpaces() {
         DQCategory category = CategoryRegistryManager.getInstance()
                 .getCategoryMetadataByName(SemanticCategoryEnum.FR_PHONE.getId());
