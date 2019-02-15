@@ -66,7 +66,7 @@ public class GenerateFromDictionariesTest {
         gfd.setMaskingMode(FunctionMode.CONSISTENT);
         String result1 = gfd.generateMaskedRow("value1");
         String result2 = gfd.generateMaskedRow("value1");
-        assertEquals("value3769", result1);
+        assertEquals("value7703", result1);
         assertEquals(result2, result1);
     }
 

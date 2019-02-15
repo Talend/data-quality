@@ -270,7 +270,7 @@ public abstract class Function<T> implements Serializable {
 
     protected Random getRandomForObject(Object toBeReplaced) {
         Random random = new Random();
-        random.setSeed(toBeReplaced.hashCode() * seed.hashCode());
+        random.setSeed(toBeReplaced.hashCode() ^ seed.hashCode());
         return random;
     }
 

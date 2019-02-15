@@ -132,8 +132,10 @@ public class ValueDataMasker implements Serializable {
         if (semanticQualityAnalyzer != null && !semanticQualityAnalyzer.isValid(category, input)) {
             Random r = function.getRandom();
 
-            if (FunctionMode.CONSISTENT == function.getMaskingMode())
-                r = new Random(function.getSeed().hashCode());
+            if (FunctionMode.CONSISTENT == function.getMaskingMode()) {
+                r = new Random();
+                r.setSeed(input.hashCode() ^ function.getSeed().hashCode());
+            }
 
             return ReplaceCharacterHelper.replaceCharacters(input, r);
         }

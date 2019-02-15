@@ -58,7 +58,6 @@ public class GenerateFromRegex extends FunctionString {
             Generex gen = new Generex(this.patternStr, r);
             return gen.random();
         } else {
-            generex.setSeed(this.seed.hashCode());
             return generex.random();
         }
     }

@@ -83,7 +83,7 @@ public class GenerateBetweenNumericTest {
         func.setMaskingMode(FunctionMode.CONSISTENT);
         String result1 = func.generateMaskedRow("30.012");
         String result2 = func.generateMaskedRow("30.012");
-        assertEquals("10.268", result1);
+        assertEquals("19.343", result1);
         assertEquals(result2, result1);
     }
 
