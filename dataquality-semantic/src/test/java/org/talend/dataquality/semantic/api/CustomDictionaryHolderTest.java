@@ -2,8 +2,11 @@ package org.talend.dataquality.semantic.api;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -20,6 +23,7 @@ import static org.talend.dataquality.semantic.api.CategoryRegistryManager.PRODUC
 import static org.talend.dataquality.semantic.api.CategoryRegistryManager.REGEX_CATEGORIZER_FILE_NAME;
 import static org.talend.dataquality.semantic.api.CategoryRegistryManager.REGEX_SUBFOLDER_NAME;
 import static org.talend.dataquality.semantic.api.CategoryRegistryManager.REPUBLISH_FOLDER_NAME;
+import static org.talend.dataquality.semantic.api.CustomDictionaryHolder.SYSTEM;
 import static org.talend.dataquality.semantic.api.CustomDictionaryHolder.TALEND;
 
 import java.io.File;
@@ -48,6 +52,8 @@ import org.talend.dataquality.semantic.api.internal.CustomDocumentIndexAccess;
 import org.talend.dataquality.semantic.api.internal.CustomMetadataIndexAccess;
 import org.talend.dataquality.semantic.api.internal.CustomRegexClassifierAccess;
 import org.talend.dataquality.semantic.classifier.ISubCategory;
+import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
+import org.talend.dataquality.semantic.classifier.custom.UserDefinedClassifier;
 import org.talend.dataquality.semantic.filter.impl.CharSequenceFilter;
 import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
@@ -72,6 +78,7 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
 
     @Before
     public void setUp() throws Exception {
+        super.setUp();
         MockitoAnnotations.initMocks(this);
 
         initializeCDH(this.getClass().getSimpleName() + "_" + testName.getMethodName());
@@ -85,7 +92,7 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
 
     @Test
     public void createRegexCategory() {
-        holder.createCategory(createDQRegexCategory("1"));
+        holder.createCategory(defaultDQRegexCategory("1"));
         Set<ISubCategory> filteredSet = holder.getRegexClassifier().getClassifiers().stream()
                 .filter(classifier -> classifier.getName().equals("RegExCategoryName")).collect(Collectors.toSet());
         assertEquals(1, filteredSet.size());
@@ -94,7 +101,7 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
     @Test
     public void republishRegex() throws Exception {
         initRepublishMocks();
-        holder.republishCategories(Arrays.asList(createDQRegexCategory("newCat")));
+        holder.republishCategories(Arrays.asList(defaultDQRegexCategory("newCat")));
         verify(customMetadataIndexAccess, times(0)).insertOrUpdateCategory(any(DQCategory.class));
         verify(customMetadataIndexAccess, times(1)).createCategory(any(DQCategory.class));
         verify(customRegexClassifierAccess, times(1)).insertOrUpdateRegex(any(ISubCategory.class));
@@ -104,7 +111,7 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
     @Test
     public void republishCompound() throws Exception {
         initRepublishMocks();
-        holder.republishCategories(Arrays.asList(createCompoundCategory("1", false)));
+        holder.republishCategories(Arrays.asList(defaultCompoundCategory("1", false)));
         verify(customMetadataIndexAccess, times(0)).insertOrUpdateCategory(any(DQCategory.class));
         verify(customMetadataIndexAccess, times(1)).createCategory(any(DQCategory.class));
         verify(customRegexClassifierAccess, times(0)).insertOrUpdateRegex(any(ISubCategory.class));
@@ -114,8 +121,9 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
     @Test
     public void republishExistingCompound() throws Exception {
         initRepublishMocks();
-        DQCategory category = createCompoundCategory("compoundCategory", true);
-        holder.republishCategories(Arrays.asList(category));
+        DQCategory category = defaultCompoundCategory("compoundCategory", true);
+        category.setLastModifier(holder.getTenantID());
+        holder.republishCategories(Collections.singletonList(category));
         verify(customMetadataIndexAccess, times(1)).insertOrUpdateCategory(any(DQCategory.class));
         verify(customMetadataIndexAccess, times(0)).createCategory(any(DQCategory.class));
         verify(customRegexClassifierAccess, times(0)).insertOrUpdateRegex(any(ISubCategory.class));
@@ -126,8 +134,9 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
     @Test
     public void republishExistingUnmodifiedCompound() throws Exception {
         initRepublishMocks();
-        DQCategory category = createCompoundCategory("compoundCategory", false);
-        holder.republishCategories(Arrays.asList(category));
+        DQCategory category = defaultCompoundCategory("compoundCategory", false);
+        category.setLastModifier(holder.getTenantID());
+        holder.republishCategories(Collections.singletonList(category));
         verify(customMetadataIndexAccess, times(1)).insertOrUpdateCategory(any(DQCategory.class));
         verify(customMetadataIndexAccess, times(0)).createCategory(any(DQCategory.class));
         verify(customRegexClassifierAccess, times(0)).insertOrUpdateRegex(any(ISubCategory.class));
@@ -137,9 +146,20 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
 
     @Test
     public void republishTalendDict() throws Exception {
+        DQCategory category = defaultDictCategory("dictCategory");
+        category.setLastModifier(TALEND);
+        republishSystemDict(category);
+    }
+
+    @Test
+    public void republishSystemdDict() throws Exception {
+        DQCategory category = defaultDictCategory("dictCategory");
+        republishSystemDict(category);
+    }
+
+    private void republishSystemDict(DQCategory category) throws Exception {
         initRepublishMocks();
-        DQCategory category = createTalendDictCategory("dictCategory");
-        holder.republishCategories(Arrays.asList(category));
+        holder.republishCategories(Collections.singletonList(category));
         verify(customMetadataIndexAccess, times(1)).insertOrUpdateCategory(any(DQCategory.class));
         verify(customMetadataIndexAccess, times(0)).createCategory(any(DQCategory.class));
         verify(customRegexClassifierAccess, times(0)).insertOrUpdateRegex(any(ISubCategory.class));
@@ -150,9 +170,9 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
     @Test
     public void republishDataDictDocuments() throws Exception {
         initRepublishMocks();
-        DQDocument document = createDQDocument("dictCategory");
-        holder.republishDataDictDocuments(Arrays.asList(document));
-        verify(customDocumentIndexAccess, times(1)).createDocument(any(List.class));
+        DQDocument document = defaultDQDocument("dictCategory");
+        holder.republishDataDictDocuments(Collections.singletonList(document));
+        verify(customDocumentIndexAccess, times(1)).createDocument(anyListOf(DQDocument.class));
         assertTrue(
                 new File("target/test_crm/CustomDictionaryHolderTest_republishDataDictDocuments/republish/dictionary").exists());
     }
@@ -291,11 +311,23 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
     }
 
     @Test
-    public void closeRepublishDictionaryAccess() throws Exception {
+    public void closeRepublishDictionaryTalendAccess() throws Exception {
+        DQCategory dict = defaultDictCategory("CAT_ID");
+        dict.setLastModifier("TALEND");
+        closeRepublishDictionaryAccess(dict);
+    }
+
+    @Test
+    public void closeRepublishDictionarySystemAccess() throws Exception {
+        DQCategory dict = defaultDictCategory("CAT_ID");
+        closeRepublishDictionaryAccess(dict);
+    }
+
+    private void closeRepublishDictionaryAccess(DQCategory dict) throws Exception {
         initRepublishMocks();
-        holder.republishCategories(Arrays.asList(createTalendDictCategory("CAT_ID")));
-        holder.republishCategories(Arrays.asList(createDQRegexCategory("CAT_ID")));
-        holder.republishDataDictDocuments(Arrays.asList(createDQDocument("CAT_ID")));
+        holder.republishCategories(Collections.singletonList(dict));
+        holder.republishCategories(Collections.singletonList(defaultDQRegexCategory("CAT_ID")));
+        holder.republishDataDictDocuments(Collections.singletonList(defaultDQDocument("CAT_ID")));
         holder.closeRepublishDictionaryAccess();
 
         verify(customMetadataIndexAccess, times(1)).close();
@@ -342,66 +374,10 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
 
     private Map<String, DQCategory> mockMap() {
         Map<String, DQCategory> map = new HashMap<>();
-        map.put("dictCategory", createTalendDictCategory("dictCategory"));
-        map.put("regexCategory", createDQRegexCategory("regexCategory"));
-        map.put("compoundCategory", createCompoundCategory("compoundCategory", false));
+        map.put("dictCategory", defaultDictCategory("dictCategory"));
+        map.put("regexCategory", defaultDQRegexCategory("regexCategory"));
+        map.put("compoundCategory", defaultCompoundCategory("compoundCategory", false));
         return map;
-    }
-
-    private DQCategory createTalendDictCategory(String categoryId) {
-        DQCategory category = new DQCategory(categoryId);
-        category.setLabel("dictCategoryLabel");
-        category.setName("dictCategoryName");
-        category.setType(CategoryType.DICT);
-        category.setCompleteness(false);
-        category.setModified(false);
-        category.setLastModifier(TALEND);
-        return category;
-    }
-
-    private DQCategory createCompoundCategory(String categoryId, boolean isModified) {
-        DQCategory category = new DQCategory(categoryId);
-        category.setLabel("compoundCategoryLabel");
-        category.setName("compoundCategoryName");
-        category.setType(CategoryType.COMPOUND);
-        category.setCompleteness(true);
-        category.setLastModifier(holder.getTenantID());
-        category.setModified(isModified);
-        DQCategory child1 = new DQCategory("child1");
-        DQCategory child2 = new DQCategory("child2");
-        List<DQCategory> children = new ArrayList<>();
-        children.add(child1);
-        children.add(child2);
-        category.setChildren(children);
-        return category;
-    }
-
-    private DQCategory createDQRegexCategory(String categoryId) {
-        DQCategory category = new DQCategory(categoryId);
-        category.setLabel("RegExCategoryLabel");
-        category.setName("RegExCategoryName");
-        category.setType(CategoryType.REGEX);
-        category.setCompleteness(true);
-
-        DQRegEx regEx = new DQRegEx();
-
-        DQFilter filter = new DQFilter();
-        filter.setFilterParam("filterParam");
-        filter.setFilterType(CharSequenceFilter.CharSequenceFilterType.MUST_CONTAIN.toString());
-        regEx.setFilter(filter);
-
-        category.setRegEx(regEx);
-
-        return category;
-    }
-
-    private DQDocument createDQDocument(String categoryId) {
-        DQDocument document = new DQDocument();
-        document.setCategory(createTalendDictCategory(categoryId));
-        document.setId("ID");
-        document.setValues(Collections.singleton("value1"));
-
-        return document;
     }
 
     @Test
@@ -429,5 +405,104 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
         holder.delete();
 
         assertFalse(new File(rootFolderPath).exists());
+    }
+
+    @Test
+    public void deleteSystemCategoryMarkAsDeleted() {
+        CategoryRegistryManager crm = CategoryRegistryManager.getInstance();
+
+        DQCategory regexCategory = crm.getCategoryMetadataById(SemanticCategoryEnum.EMAIL.getTechnicalId());
+        regexCategory.setCreator(SYSTEM);
+
+        // WHEN
+        crm.getCustomDictionaryHolder().deleteCategory(regexCategory);
+
+        DQCategory deleted = crm.getCategoryMetadataById(SemanticCategoryEnum.EMAIL.getTechnicalId());
+        assertNotNull(deleted);
+        assertTrue(deleted.getDeleted());
+    }
+
+    @Test
+    public void deleteTalendCategoryMarkAsDeleted() {
+        CategoryRegistryManager crm = CategoryRegistryManager.getInstance();
+
+        DQCategory regexCategory = crm.getCategoryMetadataById(SemanticCategoryEnum.EMAIL.getTechnicalId());
+        regexCategory.setCreator(TALEND);
+
+        // WHEN
+        crm.getCustomDictionaryHolder().deleteCategory(regexCategory);
+
+        DQCategory deleted = crm.getCategoryMetadataById(SemanticCategoryEnum.EMAIL.getTechnicalId());
+        assertNotNull(deleted);
+        assertTrue(deleted.getDeleted());
+    }
+
+    @Test
+    public void deleteUserCategoryDeleted() {
+        CategoryRegistryManager crm = CategoryRegistryManager.getInstance();
+
+        DQCategory regexCategory = crm.getCategoryMetadataById(SemanticCategoryEnum.EMAIL.getTechnicalId());
+        regexCategory.setCreator("pony");
+        // WHEN
+        crm.getCustomDictionaryHolder().deleteCategory(regexCategory);
+
+        DQCategory deleted = crm.getCategoryMetadataById(SemanticCategoryEnum.EMAIL.getTechnicalId());
+        assertNull(deleted);
+    }
+
+    private DQCategory defaultDictCategory(String categoryId) {
+        DQCategory category = new DQCategory(categoryId);
+        category.setLabel("dictCategoryLabel");
+        category.setName("dictCategoryName");
+        category.setType(CategoryType.DICT);
+        category.setCompleteness(false);
+        category.setModified(false);
+        category.setLastModifier(SYSTEM);
+        return category;
+    }
+
+    private DQCategory defaultCompoundCategory(String categoryId, boolean isModified) {
+        DQCategory category = new DQCategory(categoryId);
+        category.setLabel("compoundCategoryLabel");
+        category.setName("compoundCategoryName");
+        category.setType(CategoryType.COMPOUND);
+        category.setCompleteness(true);
+        category.setLastModifier(SYSTEM);
+        category.setModified(isModified);
+        DQCategory child1 = new DQCategory("child1");
+        DQCategory child2 = new DQCategory("child2");
+        List<DQCategory> children = new ArrayList<>();
+        children.add(child1);
+        children.add(child2);
+        category.setChildren(children);
+        return category;
+    }
+
+    private DQCategory defaultDQRegexCategory(String categoryId) {
+        DQCategory category = new DQCategory(categoryId);
+        category.setLabel("RegExCategoryLabel");
+        category.setName("RegExCategoryName");
+        category.setType(CategoryType.REGEX);
+        category.setCompleteness(true);
+
+        DQRegEx regEx = new DQRegEx();
+
+        DQFilter filter = new DQFilter();
+        filter.setFilterParam("filterParam");
+        filter.setFilterType(CharSequenceFilter.CharSequenceFilterType.MUST_CONTAIN.toString());
+        regEx.setFilter(filter);
+
+        category.setRegEx(regEx);
+
+        return category;
+    }
+
+    private DQDocument defaultDQDocument(String categoryId) {
+        DQDocument document = new DQDocument();
+        document.setCategory(defaultDictCategory(categoryId));
+        document.setId("ID");
+        document.setValues(Collections.singleton("value1"));
+
+        return document;
     }
 }

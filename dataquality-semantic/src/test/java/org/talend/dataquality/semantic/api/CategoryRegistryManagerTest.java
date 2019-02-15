@@ -23,25 +23,42 @@ import org.talend.dataquality.semantic.model.DQDocument;
 public class CategoryRegistryManagerTest extends CategoryRegistryManagerAbstract {
 
     @Test
-    public void testGetRegexClassifier() throws IOException, URISyntaxException {
+    public void testRegexClassifierCount() {
+
         CategoryRegistryManager crm = CategoryRegistryManager.getInstance();
-        final UserDefinedClassifier udc = crm.getRegexClassifier();
-        final Set<ISubCategory> classifiers = udc.getClassifiers();
-        assertEquals("Unexpected size of classifiers", 42, classifiers.size());
+        UserDefinedClassifier userDefinedClassifier = crm.getCustomDictionaryHolder().getRegexClassifier();
 
         // getRegexClassifier before deletion
-        UserDefinedClassifier userDefinedClassifier = crm.getCustomDictionaryHolder().getRegexClassifier();
         assertEquals("Unexpected size of classifiers", 42, userDefinedClassifier.getClassifiers().size());
+    }
+
+    @Test
+    public void testGetRegexClassifierMultiAccessWay() {
+        CategoryRegistryManager crm = CategoryRegistryManager.getInstance();
+        Set<ISubCategory> direct = crm.getRegexClassifier().getClassifiers();
+        Set<ISubCategory> byCustomDictionaryHolder = crm.getCustomDictionaryHolder().getRegexClassifier().getClassifiers();
+
+        assertEquals(direct, byCustomDictionaryHolder);
+    }
+
+    @Test
+    public void testGetRegexClassifierTalend() {
+        // GIVEN
+        CategoryRegistryManager crm = CategoryRegistryManager.getInstance();
+        UserDefinedClassifier userDefinedClassifier = crm.getCustomDictionaryHolder().getRegexClassifier();
 
         DQCategory regexCategory = crm.getCategoryMetadataById(SemanticCategoryEnum.EMAIL.getTechnicalId());
-        regexCategory.setCreator(CustomDictionaryHolder.TALEND);
+
+        int beforeSize = userDefinedClassifier.getClassifiers().size();
+
+        // WHEN
         crm.getCustomDictionaryHolder().deleteCategory(regexCategory);
-
         crm.reloadCategoriesFromRegistry();
-        userDefinedClassifier = crm.getCustomDictionaryHolder().getRegexClassifier();
-        // getRegexClassifier after deletion
-        assertEquals("Unexpected size of classifiers", 41, userDefinedClassifier.getClassifiers().size());
 
+        userDefinedClassifier = crm.getCustomDictionaryHolder().getRegexClassifier();
+
+        // THEN
+        assertEquals(beforeSize - 1, userDefinedClassifier.getClassifiers().size());
     }
 
     @Test

@@ -15,10 +15,8 @@ package org.talend.dataquality.semantic;
 import static org.talend.dataquality.semantic.TestUtils.mockWithTenant;
 
 import java.io.File;
-import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -43,10 +41,6 @@ public abstract class CategoryRegistryManagerAbstract {
         CategoryRegistryManager.setLocalRegistryPath(TARGET_TEST_CRM_PATH);
     }
 
-    @AfterClass
-    public static void after() throws IOException {
-    }
-
     @Before
     public void setUp() throws Exception {
         File tenantFolder = new File(
@@ -56,5 +50,4 @@ public abstract class CategoryRegistryManagerAbstract {
         }
         mockWithTenant(this.getClass().getSimpleName() + "_" + testName.getMethodName());
     }
-
 }

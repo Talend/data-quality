@@ -40,13 +40,15 @@ import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
  */
 public class CustomDictionaryHolder {
 
-    public static final String TALEND = "Talend";
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(CustomDictionaryHolder.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     private static final String INITIALIZE_ACCESS = "Initialize %s %s access for [%s]";
 
     private static final String CUSTOM = "custom";
+
+    static final String TALEND = "Talend";
+
+    static final String SYSTEM = "System";
 
     private Map<String, DQCategory> metadata;
 
@@ -262,7 +264,7 @@ public class CustomDictionaryHolder {
             ensureRegexClassifierAccess();
             customRegexClassifierAccess.deleteRegex(categoryId);
         }
-        if (TALEND.equals(category.getCreator())) {
+        if (isSystemCategory(category)) {
             customMetadataIndexAccess.insertOrUpdateCategory(categoryClone);
             if (!CategoryType.REGEX.equals(category.getType()) && Boolean.TRUE.equals(category.getModified())) {
                 ensureDocumentDictIndexAccess();
@@ -277,6 +279,10 @@ public class CustomDictionaryHolder {
         }
         customMetadataIndexAccess.commitChanges();
         metadata = customMetadataIndexAccess.readCategoryMedatada();
+    }
+
+    private boolean isSystemCategory(DQCategory category) {
+        return TALEND.equals(category.getCreator()) || SYSTEM.equals(category.getCreator());
     }
 
     /**
@@ -518,11 +524,8 @@ public class CustomDictionaryHolder {
     public void republishCategories(List<DQCategory> categories) {
         ensureRepublishMetadataIndexAccess();
         for (DQCategory category : categories) {
-            category.setModified(true);
+            category.setModified(isModifiedByUser(category));
             if (CategoryRegistryManager.getInstance().getSharedCategoryMetadata().containsKey(category.getId())) {
-                if (category.getLastModifier() == null || TALEND.equals(category.getLastModifier())) {
-                    category.setModified(false);
-                }
                 customRepublishMetadataIndexAccess.insertOrUpdateCategory(category);
             } else
                 customRepublishMetadataIndexAccess.createCategory(category);
@@ -532,6 +535,12 @@ public class CustomDictionaryHolder {
             }
         }
         customRepublishMetadataIndexAccess.commitChanges();
+    }
+
+    private boolean isModifiedByUser(DQCategory category) {
+        boolean isSystem = category.getLastModifier() == null || TALEND.equals(category.getLastModifier())
+                || SYSTEM.equals(category.getLastModifier());
+        return !isSystem;
     }
 
     /**
