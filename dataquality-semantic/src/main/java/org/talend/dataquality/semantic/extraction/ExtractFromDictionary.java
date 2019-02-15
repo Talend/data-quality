@@ -1,6 +1,7 @@
 package org.talend.dataquality.semantic.extraction;
 
 import org.apache.commons.lang3.StringUtils;
+import org.talend.dataquality.semantic.index.Index;
 import org.talend.dataquality.semantic.index.LuceneIndex;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
@@ -16,11 +17,23 @@ import java.util.List;
  */
 public class ExtractFromDictionary extends ExtractFromSemanticType {
 
-    private LuceneIndex index;
+    private final LuceneIndex index;
 
     protected ExtractFromDictionary(DictionarySnapshot snapshot, DQCategory category) {
         super(snapshot, category);
-        index = (LuceneIndex) dicoSnapshot.getSharedDataDict();
+        index = (LuceneIndex) initIndex();
+    }
+
+    private Index initIndex() {
+        DQCategory cat = dicoSnapshot.getMetadata().get(semancticCategory.getId());
+        if (cat != null) {
+            if (!cat.getModified()) {
+                return dicoSnapshot.getSharedDataDict();
+            } else {
+                return dicoSnapshot.getCustomDataDict();
+            }
+        }
+        throw new IllegalArgumentException("The semantic category has not been found : " + semancticCategory);
     }
 
     @Override
