@@ -28,11 +28,11 @@ import org.talend.dataquality.statistics.datetime.SystemDateTimePatternManager;
  */
 public class TypeInferenceUtils {
 
-    private static final Pattern patternInteger = Pattern.compile("^(\\+|-)?[0-9０-９]+$");
+    private static final Pattern patternInteger = Pattern.compile("^([-－+＋])?[0-9０-９]+$");
 
     private static final Pattern patternDouble = Pattern.compile("^[-+－＋]?"// Positive/Negative sign
             + "("// BEGIN Decimal part
-            + "[0-9０-９]+([,\\.．][0-9０-９]+)?|"// Alternative I (w/o grouped integer part)
+            + "[0-9０-９]+([,.．][0-9０-９]+)?|"// Alternative I (w/o grouped integer part)
             + "(" // BEGIN Alternative II (with grouped integer part)
             + "[0-9]{1,3}" // starting digits
             + "(" // BEGIN grouped part

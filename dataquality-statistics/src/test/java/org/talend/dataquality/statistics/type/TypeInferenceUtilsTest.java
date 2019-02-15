@@ -36,14 +36,6 @@ public class TypeInferenceUtilsTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TypeInferenceUtilsTest.class);
 
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
-    }
-
     @Test
     public void testIsBoolean() throws Exception {
         List<String> values = loadData("testBoolean.csv");
@@ -110,11 +102,13 @@ public class TypeInferenceUtilsTest {
 
     @Test
     public void testFullwidthNumbers() {
-        String fullWidthInteger = "９９９９９９";
+        String[] fullWidthIntegerValues = { "９９９９９９", "＋９９９９９９", "－９９９９９９" };
         String[] fullWidthDoubleValues = { "３．１４", "１００", "－２．０", "＋２．０", "１．０ｅ－０４", "１．０ｅ＋４", "１Ｅ－４", "１．０　ｅ－４", "１　Ｅ＋１２", "２５％",
                 "５８９．９４　％", "１．６５Ｅ－５％" };
-        Assert.assertTrue(fullWidthInteger + " is expected to be a valid Integer(full width) but actually not.",
-                TypeInferenceUtils.isInteger(fullWidthInteger));
+        for (String value : Arrays.asList(fullWidthIntegerValues)) {
+            Assert.assertTrue(value + " is expected to be a valid Integer(full width) but actually not.",
+                    TypeInferenceUtils.isInteger(value));
+        }
         for (String value : Arrays.asList(fullWidthDoubleValues)) {
             Assert.assertTrue(value + " is expected to be a valid decimal value(full width) but actually not.",
                     TypeInferenceUtils.isDouble(value));
