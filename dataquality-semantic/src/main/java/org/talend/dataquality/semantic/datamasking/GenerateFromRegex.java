@@ -55,10 +55,7 @@ public class GenerateFromRegex extends FunctionString {
         if (CONSISTENT == this.maskingMode)
             generex.setSeed(this.seed.hashCode());
 
-        String result = generex.random();
-        // just remove "$"(last) from the result
-
-        return result.substring(0, result.length() - 1);
+        return generex.random();
     }
 
     /*
