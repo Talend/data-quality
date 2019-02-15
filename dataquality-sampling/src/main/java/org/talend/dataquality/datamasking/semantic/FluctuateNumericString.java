@@ -31,7 +31,7 @@ public class FluctuateNumericString extends NumericVariance<String> {
     protected String doGenerateMaskedField(String str, FunctionMode mode) {
         Random r = rnd;
         if (FunctionMode.CONSISTENT == mode)
-            r = getRandomForString(str);
+            r = getRandomForObject(str);
         return doGenerateMaskedField(str, r);
     }
 

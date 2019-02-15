@@ -17,7 +17,7 @@ public abstract class FunctionString extends Function<String> {
 
         Random r = rnd;
         if (FunctionMode.CONSISTENT == mode)
-            r = getRandomForString(str);
+            r = getRandomForObject(str);
 
         return doGenerateMaskedFieldWithRandom(str, r);
     }

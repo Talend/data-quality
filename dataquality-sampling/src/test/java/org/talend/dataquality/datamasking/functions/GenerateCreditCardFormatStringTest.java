@@ -13,6 +13,7 @@
 package org.talend.dataquality.datamasking.functions;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import java.util.Random;
 
@@ -89,5 +90,15 @@ public class GenerateCreditCardFormatStringTest {
         String result1 = gccfs.doGenerateMaskedField("4384055893226268", FunctionMode.CONSISTENT);
         String result2 = gccfs.doGenerateMaskedField("4384055893226268", FunctionMode.CONSISTENT);
         assertEquals(result2, result1);
+    }
+
+    @Test
+    public void consistentMaskingWithDifferentValues() {
+        gccfs.setSeed("azer1!");
+        String input = "5380189322275031"; //$NON-NLS-1$
+        String input2 = "5391569788142648";
+        String result1 = gccfs.doGenerateMaskedField(input, FunctionMode.CONSISTENT);
+        String result2 = gccfs.doGenerateMaskedField(input2, FunctionMode.CONSISTENT);
+        assertNotEquals(result2, result1);
     }
 }

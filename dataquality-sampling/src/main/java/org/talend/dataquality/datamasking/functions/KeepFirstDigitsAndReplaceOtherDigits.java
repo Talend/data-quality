@@ -87,7 +87,7 @@ public class KeepFirstDigitsAndReplaceOtherDigits extends Function<String> {
 
     private void generateConsistentDigits(StringBuilder sb) {
         String toBeReplaced = findDigits(sb);
-        Random random = getRandomForString(toBeReplaced);
+        Random random = getRandomForObject(toBeReplaced);
         List<Integer> replacedCodePoints = TextPatternUtil.replaceStringCodePoints(toBeReplaced, random);
         int counter = 0;
         int totalDigit = 0;

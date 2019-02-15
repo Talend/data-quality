@@ -62,7 +62,7 @@ public class DateFunctionAdapter extends Function<String> {
         if (CONSISTENT == mode) {
             function.setSeed(seed);
             function.setMaskingMode(mode);
-            r = new Random(seed.hashCode());
+            r = getRandomForObject(input);
         }
 
         return doGenerateMaskedField(input, r);

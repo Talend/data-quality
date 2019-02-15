@@ -31,7 +31,7 @@ public class GenerateCreditCardFormatString extends GenerateCreditCardFormat<Str
     protected String doGenerateMaskedField(String str, FunctionMode mode) {
         Random r = rnd;
         if (CONSISTENT == mode)
-            r = new Random(seed.hashCode());
+            r = getRandomForObject(str);
 
         return doGenerateMaskedField(str, r);
     }

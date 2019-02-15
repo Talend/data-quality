@@ -143,7 +143,7 @@ public abstract class CharactersOperation<T> extends Function<T> {
 
     private String generateConsistentString(String str, int beginAux, int endAux) {
         String toBeReplaced = findStringToReplace(str, beginAux, endAux);
-        Random random = getRandomForString(toBeReplaced);
+        Random random = getRandomForObject(toBeReplaced);
         List<Integer> replacedCodePoints = TextPatternUtil.replaceStringCodePoints(toBeReplaced, random);
         String substring = str.substring(str.offsetByCodePoints(0, beginAux), str.offsetByCodePoints(0, endAux));
 

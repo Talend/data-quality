@@ -30,7 +30,7 @@ public class GenerateCreditCardLong extends GenerateCreditCardSimple<Long> {
     protected Long doGenerateMaskedField(Long l, FunctionMode mode) {
         Random r = rnd;
         if (CONSISTENT == mode)
-            r = new Random(seed.hashCode());
+            r = getRandomForObject(l);
         generateCreditCard(r);
         return number;
     }

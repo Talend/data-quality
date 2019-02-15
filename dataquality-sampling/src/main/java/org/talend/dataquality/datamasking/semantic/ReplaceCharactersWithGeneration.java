@@ -28,7 +28,7 @@ public class ReplaceCharactersWithGeneration extends Function<String> {
     protected String doGenerateMaskedField(String input, FunctionMode mode) {
         Random r = rnd;
         if (FunctionMode.CONSISTENT == mode)
-            r = getRandomForString(input);
+            r = getRandomForObject(input);
 
         return ReplaceCharacterHelper.replaceCharacters(input, r);
     }

@@ -50,7 +50,7 @@ public class DateVariance extends Function<Date> {
     protected Date doGenerateMaskedField(Date date, FunctionMode mode) {
         Random r = rnd;
         if (CONSISTENT == mode) {
-            r = new Random(seed.hashCode());
+            r = getRandomForObject(date);
         }
         return doGenerateMaskedField(date, r);
     }

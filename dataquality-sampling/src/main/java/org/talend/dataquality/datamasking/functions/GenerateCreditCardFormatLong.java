@@ -30,7 +30,7 @@ public class GenerateCreditCardFormatLong extends GenerateCreditCardFormat<Long>
     protected Long doGenerateMaskedField(Long l, FunctionMode mode) {
         Random r = rnd;
         if (CONSISTENT == mode)
-            r = new Random(seed.hashCode());
+            r = getRandomForObject(l);
         return doGenerateMaskedField(l, r);
     }
 

@@ -30,7 +30,8 @@ public class GenerateCreditCardString extends GenerateCreditCardSimple<String> {
     protected String doGenerateMaskedField(String str, FunctionMode mode) {
         Random r = rnd;
         if (CONSISTENT == mode)
-            r = new Random(seed.hashCode());
+            r = getRandomForObject(str);
+
         generateCreditCard(r);
         return String.valueOf(number);
     }
