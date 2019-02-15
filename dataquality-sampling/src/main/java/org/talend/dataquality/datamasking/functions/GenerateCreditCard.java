@@ -12,6 +12,8 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
+import java.util.Random;
+
 /**
  * created by jgonzalez on 24 juin 2015 . This class holds all the function required to generate a credit card number.
  *
@@ -55,14 +57,7 @@ public abstract class GenerateCreditCard<T> extends Function<T> {
         return (s1 + s2) % 10 == 0;
     }
 
-    /**
-     * This function creates a new Credit Card Number.
-     * 
-     * @param cct represents the credit card type to generate.
-     * @param valueIn represents the credit card number sent in input.
-     * @return a new number with the same length and prefix as @param valueIn.
-     */
-    public Long generateCreditCardFormat(CreditCardType cct, Long valueIn) {
+    public Long generateCreditCardFormat(CreditCardType cct, Long valueIn, Random r) {
         StringBuilder res = new StringBuilder(""); //$NON-NLS-1$
         int len = valueIn.toString().length();
         String prefix;
@@ -73,7 +68,7 @@ public abstract class GenerateCreditCard<T> extends Function<T> {
         }
         res.append(prefix);
         for (int i = prefix.length(); i < len; ++i) {
-            int tmp = rnd.nextInt(10);
+            int tmp = r.nextInt(10);
             res.append(tmp);
         }
 
@@ -87,7 +82,7 @@ public abstract class GenerateCreditCard<T> extends Function<T> {
         return result;
     }
 
-    public StringBuilder generateCreditCardFormat(CreditCardType cct, String str) {
+    public StringBuilder generateCreditCardFormat(CreditCardType cct, String str, Random r) {
         StringBuilder res = new StringBuilder(""); //$NON-NLS-1$
         String prefix;
         if (cct == CreditCardType.VISA) {
@@ -97,7 +92,7 @@ public abstract class GenerateCreditCard<T> extends Function<T> {
         }
         res.append(prefix);
         for (int i = prefix.length(); i < str.length(); ++i) {
-            int tmp = rnd.nextInt(10);
+            int tmp = r.nextInt(10);
             res.append(tmp);
         }
 
@@ -116,7 +111,7 @@ public abstract class GenerateCreditCard<T> extends Function<T> {
      * @param cct represents the credit card type to generate.
      * @return a new credit card number.
      */
-    public Long generateCreditCard(CreditCardType cct) {
+    public Long generateCreditCard(CreditCardType cct, Random r) {
         int len;
         String init;
         StringBuilder res = new StringBuilder(""); //$NON-NLS-1$
@@ -139,7 +134,7 @@ public abstract class GenerateCreditCard<T> extends Function<T> {
         }
         res.append(init);
         for (int i = 0; i < len; ++i) {
-            int tmp = rnd.nextInt(10);
+            int tmp = r.nextInt(10);
             res.append(tmp);
         }
 

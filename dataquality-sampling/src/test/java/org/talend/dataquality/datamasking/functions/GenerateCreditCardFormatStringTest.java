@@ -18,6 +18,7 @@ import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.talend.dataquality.datamasking.FunctionMode;
 
 /**
  * created by jgonzalez on 30 juin 2015 Detailled comment
@@ -82,4 +83,11 @@ public class GenerateCreditCardFormatStringTest {
         assertEquals(output, "4384055893226268"); //$NON-NLS-1$
     }
 
+    @Test
+    public void consistentMasking() {
+        gccfs.setSeed("aSeed");
+        String result1 = gccfs.doGenerateMaskedField("4384055893226268", FunctionMode.CONSISTENT);
+        String result2 = gccfs.doGenerateMaskedField("4384055893226268", FunctionMode.CONSISTENT);
+        assertEquals(result2, result1);
+    }
 }

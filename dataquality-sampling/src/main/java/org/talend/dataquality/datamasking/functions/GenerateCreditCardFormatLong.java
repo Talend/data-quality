@@ -12,6 +12,12 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
+import org.talend.dataquality.datamasking.FunctionMode;
+
+import java.util.Random;
+
+import static org.talend.dataquality.datamasking.FunctionMode.CONSISTENT;
+
 /**
  * created by jgonzalez on 19 juin 2015. See GenerateCreditCardFormat.
  *
@@ -21,19 +27,31 @@ public class GenerateCreditCardFormatLong extends GenerateCreditCardFormat<Long>
     private static final long serialVersionUID = 4432818921989956298L;
 
     @Override
+    protected Long doGenerateMaskedField(Long l, FunctionMode mode) {
+        Random r = rnd;
+        if (CONSISTENT == mode)
+            r = new Random(seed.hashCode());
+        return doGenerateMaskedField(l, r);
+    }
+
+    @Override
     protected Long doGenerateMaskedField(Long l) {
+        return doGenerateMaskedField(l, rnd);
+    }
+
+    private Long doGenerateMaskedField(Long l, Random r) {
         CreditCardType cctFormat;
         Long res;
         if (l == null) {
             cctFormat = chooseCreditCardType();
-            res = generateCreditCard(cctFormat);
+            res = generateCreditCard(cctFormat, r);
         } else {
             cctFormat = getCreditCardType(l);
             if (cctFormat != null) {
-                res = generateCreditCardFormat(cctFormat, l);
+                res = generateCreditCardFormat(cctFormat, l, r);
             } else {
                 cctFormat = chooseCreditCardType();
-                res = generateCreditCard(cctFormat);
+                res = generateCreditCard(cctFormat, r);
             }
         }
         return res;

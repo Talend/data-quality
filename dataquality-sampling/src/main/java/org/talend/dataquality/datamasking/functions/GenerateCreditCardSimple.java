@@ -12,6 +12,8 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
+import java.util.Random;
+
 /**
  * created by jgonzalez on 19 juin 2015. This function will generate a valid credit card number. It can be used on
  * String and Long values.
@@ -23,9 +25,9 @@ public abstract class GenerateCreditCardSimple<T> extends GenerateCreditCard<T> 
 
     protected Long number = null;
 
-    protected void generateCreditCard() {
+    protected void generateCreditCard(Random r) {
         CreditCardType cct = chooseCreditCardType();
-        Long card = generateCreditCard(cct);
+        Long card = generateCreditCard(cct, r);
         number = card;
     }
 
