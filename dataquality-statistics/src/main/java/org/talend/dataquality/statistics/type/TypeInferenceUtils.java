@@ -28,11 +28,11 @@ import org.talend.dataquality.statistics.datetime.SystemDateTimePatternManager;
  */
 public class TypeInferenceUtils {
 
-    private static final Pattern patternInteger = Pattern.compile("^(\\+|-)?\\d+$");
+    private static final Pattern patternInteger = Pattern.compile("^(\\+|-)?[0-9０-９]+$");
 
-    private static final Pattern patternDouble = Pattern.compile("^[-+]?"// Positive/Negative sign
+    private static final Pattern patternDouble = Pattern.compile("^[-+－＋]?"// Positive/Negative sign
             + "("// BEGIN Decimal part
-            + "[0-9]+([,\\.][0-9]+)?|"// Alternative I (w/o grouped integer part)
+            + "[0-9０-９]+([,\\.．][0-9０-９]+)?|"// Alternative I (w/o grouped integer part)
             + "(" // BEGIN Alternative II (with grouped integer part)
             + "[0-9]{1,3}" // starting digits
             + "(" // BEGIN grouped part
@@ -44,8 +44,8 @@ public class TypeInferenceUtils {
             + ")"// END grouped part
             + ")" // END Alternative II
             + ")" // END Decimal part
-            + "([ ]?[eE][-+]?[0-9]+)?" // scientific part
-            + "([ ]?%)?$"); // percentage part
+            + "([ \u3000]?[eEｅＥ][-+－＋]?[0-9０-９]+)?" // scientific part
+            + "([ \u3000]?[%％])?$"); // percentage part
 
     /**
      * Detect if the given value is a double type.
