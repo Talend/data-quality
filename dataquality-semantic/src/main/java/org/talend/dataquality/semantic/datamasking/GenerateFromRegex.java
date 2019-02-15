@@ -31,6 +31,8 @@ public class GenerateFromRegex extends FunctionString {
 
     protected transient Generex generex = null;
 
+    private transient String patternStr;
+
     private static final String[] invalidKw = { "(?:", "(?!", "(?=", "[[:space:]]", "[[:digit:]]", "\\u" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 
     /*
@@ -52,10 +54,13 @@ public class GenerateFromRegex extends FunctionString {
             return EMPTY_STRING;
         }
 
-        if (CONSISTENT == this.maskingMode)
+        if (CONSISTENT == this.maskingMode) {
+            Generex gen = new Generex(this.patternStr, r);
+            return gen.random();
+        } else {
             generex.setSeed(this.seed.hashCode());
-
-        return generex.random();
+            return generex.random();
+        }
     }
 
     /*
@@ -66,8 +71,8 @@ public class GenerateFromRegex extends FunctionString {
     @Override
     public void parse(String extraParameter, boolean keepNullValues, Random rand) {
         if (extraParameter != null) {
-            String patterStr = RegexUtils.removeStartingAndEndingAnchors(extraParameter);
-            generex = new Generex(patterStr);
+            patternStr = RegexUtils.removeStartingAndEndingAnchors(extraParameter);
+            generex = new Generex(patternStr);
             setKeepNull(keepNullValues);
             setRandom(rand);
         }
