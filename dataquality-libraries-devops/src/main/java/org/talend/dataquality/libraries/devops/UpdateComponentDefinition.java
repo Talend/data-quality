@@ -53,7 +53,7 @@ public class UpdateComponentDefinition {
 
     private static final String DQ_LIB_VERSION = "6.2.0-SNAPSHOT"; //$NON-NLS-1$
 
-    private static final String DAIKON_VERSION = "0.29.0-SNAPSHOT"; //$NON-NLS-1$
+    private static final String DAIKON_VERSION = "0.31.1"; //$NON-NLS-1$
 
     private static final String[] PROVIDERS = new String[] { //
             "/org.talend.designer.components.tdqprovider", // //$NON-NLS-1$
