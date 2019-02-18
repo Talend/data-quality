@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.talend.dataquality</groupId>
     <artifactId>dataquality-parent</artifactId>
-    <version>3</version>
+    <version>6.2.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>dataquality-parent</name>
 
@@ -68,7 +68,59 @@
         </repository>
     </repositories>
 
+    <pluginRepositories>
+        <pluginRepository>
+            <id>TalendOpenSourceRelease</id>
+            <url>https://artifacts-oss.talend.com/nexus/content/repositories/TalendOpenSourceRelease</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
     <modules>
         <module>dataquality-libraries</module>
     </modules>
+
+    <scm>
+        <connection>scm:git:https://github.com/Talend/data-quality.git</connection>
+        <developerConnection>scm:git:https://github.com/Talend/data-quality.git</developerConnection>
+        <url>https://github.com/Talend/data-quality</url>
+        <tag>HEAD</tag>
+    </scm>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.itemis.maven.plugins</groupId>
+                    <artifactId>unleash-maven-plugin</artifactId>
+                    <version>2.9.3</version>
+                    <configuration>
+                        <workflowDescriptor>release_workflow</workflowDescriptor>
+                    </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>com.itemis.maven.plugins</groupId>
+                            <artifactId>unleash-scm-provider-git</artifactId>
+                            <version>2.2.0</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.eclipse.jgit</groupId>
+                            <artifactId>org.eclipse.jgit</artifactId>
+                            <version>5.1.2.201810061102-r</version>
+                        </dependency>
+                        <dependency>
+
+                            <groupId>org.talend.dataquality</groupId>
+                            <artifactId>dataquality-libraries-hooks</artifactId>
+                            <version>1.0.0</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>
