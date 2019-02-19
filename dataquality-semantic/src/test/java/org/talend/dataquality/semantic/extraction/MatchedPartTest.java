@@ -26,6 +26,11 @@ public class MatchedPartTest {
     }
 
     @Test
+    public void equalsNull() {
+        assertNotEquals(field, null);
+    }
+
+    @Test
     public void smallerIsLessImportant() {
         MatchedPart x = new MatchedPart(field, Arrays.asList(0, 1));
         MatchedPart y = new MatchedPart(field, Arrays.asList(1, 2, 3, 4));

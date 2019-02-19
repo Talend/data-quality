@@ -34,9 +34,9 @@ public class TokenizedString {
     }
 
     public TokenizedString(List<String> tokens, List<String> separators) {
+        check(tokens, separators);
         this.tokens = tokens;
         this.separators = separators;
-        checkTokens();
         value = concatTokens();
     }
 
@@ -76,7 +76,7 @@ public class TokenizedString {
         return sb.toString();
     }
 
-    private void checkTokens() {
+    private void check(List<String> tokens, List<String> separators) {
         if (tokens.size() - 1 != separators.size()) {
             throw new IllegalArgumentException(
                     "Invalid tokens and/or separators ! There must be one less separator than tokens.\nNumber of tokens : "

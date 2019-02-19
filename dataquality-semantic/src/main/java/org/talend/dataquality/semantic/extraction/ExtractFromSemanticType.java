@@ -1,5 +1,6 @@
 package org.talend.dataquality.semantic.extraction;
 
+import org.talend.dataquality.semantic.index.Index;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
 
@@ -27,4 +28,15 @@ public abstract class ExtractFromSemanticType {
 
     public abstract List<MatchedPart> getMatches(TokenizedString tokenizedField);
 
+    protected Index initIndex() {
+        DQCategory cat = dicoSnapshot.getMetadata().get(semancticCategory.getId());
+        if (cat != null) {
+            if (!cat.getModified()) {
+                return dicoSnapshot.getSharedDataDict();
+            } else {
+                return dicoSnapshot.getCustomDataDict();
+            }
+        }
+        throw new IllegalArgumentException("The semantic category has not been found : " + semancticCategory);
+    }
 }

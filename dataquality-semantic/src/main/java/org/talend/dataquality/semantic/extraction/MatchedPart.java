@@ -41,17 +41,17 @@ public class MatchedPart implements Comparable<MatchedPart> {
     }
 
     public MatchedPart(TokenizedString originalField, int start, int end) {
+        checkBounds(start, end);
         this.originalField = originalField;
         this.start = start;
         this.end = end;
-        checkBounds();
         tokenPositions = new ArrayList<>(end - start + 1);
         for (int i = start; i <= end; i++) {
             tokenPositions.add(i);
         }
     }
 
-    private void checkBounds() {
+    private void checkBounds(int start, int end) {
         if (start < 0 || end < 0 || end < start) {
             throw new IllegalArgumentException("Bounds for match are incorrect : start = {}, end = {}" + start + end);
         }
@@ -111,12 +111,16 @@ public class MatchedPart implements Comparable<MatchedPart> {
 
     @Override
     public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
         if (!(o instanceof MatchedPart)) {
             return false;
         }
 
         MatchedPart otherMatchedPart = (MatchedPart) o;
-        return otherMatchedPart.originalField.toString().equals(this.originalField.toString())
+        return originalField.toString().equals(otherMatchedPart.originalField.toString())
                 && tokenPositions.equals(otherMatchedPart.tokenPositions);
     }
 

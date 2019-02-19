@@ -37,11 +37,15 @@ public class FieldExtractionFunction {
 
     private List<ExtractFromSemanticType> functions;
 
-    FieldExtractionFunction(List<ExtractFromSemanticType> functions) {
+    protected FieldExtractionFunction(List<ExtractFromSemanticType> functions) {
         this.functions = functions;
     }
 
     public Map<String, List<String>> extractFieldParts(String field) {
+        if (field == null) {
+            return new HashMap<>();
+        }
+
         TokenizedString tokenizedField = new TokenizedString(field);
         List<MatchedPart> matches = new ArrayList<>();
         Map<String, List<String>> matchesByCategory = new HashMap<>();

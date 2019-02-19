@@ -1,13 +1,11 @@
 package org.talend.dataquality.semantic.extraction;
 
 import org.apache.commons.lang3.StringUtils;
-import org.talend.dataquality.semantic.index.Index;
 import org.talend.dataquality.semantic.index.LuceneIndex;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -24,31 +22,20 @@ public class ExtractFromDictionary extends ExtractFromSemanticType {
         index = (LuceneIndex) initIndex();
     }
 
-    private Index initIndex() {
-        DQCategory cat = dicoSnapshot.getMetadata().get(semancticCategory.getId());
-        if (cat != null) {
-            if (!cat.getModified()) {
-                return dicoSnapshot.getSharedDataDict();
-            } else {
-                return dicoSnapshot.getCustomDataDict();
-            }
-        }
-        throw new IllegalArgumentException("The semantic category has not been found : " + semancticCategory);
-    }
-
     @Override
     public List<MatchedPart> getMatches(TokenizedString tokenizedField) {
         List<MatchedPart> matchedParts = new ArrayList<>();
         List<String> tokens = tokenizedField.getTokens();
 
+        int nbOfTokens = tokens.size();
         int i = 0;
-        while (i < tokens.size()) {
+        while (i < nbOfTokens) {
             int matchStart = -1;
             int matchEnd = -1;
             boolean exactMatch = false;
             List<String> phrase = new ArrayList<>();
             int j = i;
-            while (j < tokens.size()) {
+            while (j < nbOfTokens) {
                 phrase.add(tokens.get(j));
                 List<String> matches = findMatches(phrase);
                 if (matches.isEmpty()) {
@@ -88,13 +75,20 @@ public class ExtractFromDictionary extends ExtractFromSemanticType {
      * Check lists equality with case insensitivity for the String objects.
      */
     private boolean equalsIgnoreCase(List<String> tokens, List<String> phrase) {
-        Iterator<String> tokensIt = tokens.iterator();
-        Iterator<String> phraseIt = phrase.iterator();
-        while (tokensIt.hasNext() && phraseIt.hasNext()) {
-            if (!tokensIt.next().equalsIgnoreCase(phraseIt.next())) {
+        if (tokens == null || phrase == null) {
+            return false;
+        }
+
+        if (tokens.size() != phrase.size()) {
+            return false;
+        }
+
+        for (int i = 0; i < tokens.size(); i++) {
+            if (!tokens.get(i).equalsIgnoreCase(phrase.get(i))) {
                 return false;
             }
         }
-        return !(tokensIt.hasNext() || phraseIt.hasNext());
+
+        return true;
     }
 }
