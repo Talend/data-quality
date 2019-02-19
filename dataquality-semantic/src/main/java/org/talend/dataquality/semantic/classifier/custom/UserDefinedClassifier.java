@@ -220,8 +220,7 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
         }
         for (ISubCategory category : getClassifiers()) {
             if (categoryId.equals(category.getId())) {
-                if (category.getValidator() instanceof UserDefinedRE2JRegexValidator
-                        || category.getValidator() instanceof UserDefinedRegexValidator) {
+                if (category.getValidator() instanceof UserDefinedRegexValidator) {
                     AbstractRegexSemanticValidator validator = (AbstractRegexSemanticValidator) category.getValidator();
                     return validator.getGenerexCompliant();
                 }
