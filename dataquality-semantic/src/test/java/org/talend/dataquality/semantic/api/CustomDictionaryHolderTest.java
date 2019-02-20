@@ -23,8 +23,6 @@ import static org.talend.dataquality.semantic.api.CategoryRegistryManager.PRODUC
 import static org.talend.dataquality.semantic.api.CategoryRegistryManager.REGEX_CATEGORIZER_FILE_NAME;
 import static org.talend.dataquality.semantic.api.CategoryRegistryManager.REGEX_SUBFOLDER_NAME;
 import static org.talend.dataquality.semantic.api.CategoryRegistryManager.REPUBLISH_FOLDER_NAME;
-import static org.talend.dataquality.semantic.api.CustomDictionaryHolder.SYSTEM;
-import static org.talend.dataquality.semantic.api.CustomDictionaryHolder.TALEND;
 
 import java.io.File;
 import java.io.IOException;
@@ -53,7 +51,6 @@ import org.talend.dataquality.semantic.api.internal.CustomMetadataIndexAccess;
 import org.talend.dataquality.semantic.api.internal.CustomRegexClassifierAccess;
 import org.talend.dataquality.semantic.classifier.ISubCategory;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
-import org.talend.dataquality.semantic.classifier.custom.UserDefinedClassifier;
 import org.talend.dataquality.semantic.filter.impl.CharSequenceFilter;
 import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
@@ -64,6 +61,10 @@ import org.talend.dataquality.semantic.model.DQRegEx;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ CustomDictionaryHolder.class, CategoryRegistryManager.class })
 public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract {
+
+    private static final String TALEND = "Talend";
+
+    private static final String SYSTEM = "System";
 
     private CustomDictionaryHolder holder;
 

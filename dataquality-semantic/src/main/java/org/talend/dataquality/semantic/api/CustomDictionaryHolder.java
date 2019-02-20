@@ -46,9 +46,9 @@ public class CustomDictionaryHolder {
 
     private static final String CUSTOM = "custom";
 
-    static final String TALEND = "Talend";
+    private static final String TALEND = "Talend";
 
-    static final String SYSTEM = "System";
+    private static final String SYSTEM = "System";
 
     private Map<String, DQCategory> metadata;
 
