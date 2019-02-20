@@ -3,7 +3,6 @@ package org.talend.dataquality.semantic.api;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.talend.dataquality.semantic.api.CustomDictionaryHolder.TALEND;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -227,7 +226,7 @@ public class LocalDictionaryCacheTest extends CategoryRegistryManagerAbstract {
         CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder();
         int totalSize = holder.listCategories().size();
         DQCategory airportCode = holder.getMetadata().get(SemanticCategoryEnum.AIRPORT_CODE.getTechnicalId());
-        airportCode.setCreator(TALEND);
+        airportCode.setCreator("Talend");
         holder.deleteCategory(airportCode);
         assertEquals(totalSize - 1, holder.listCategories().size());
     }
