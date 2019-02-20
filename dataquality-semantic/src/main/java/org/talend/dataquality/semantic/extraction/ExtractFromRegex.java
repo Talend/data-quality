@@ -21,40 +21,23 @@ public class ExtractFromRegex extends ExtractFromSemanticType {
     public List<MatchedPart> getMatches(TokenizedString tokenizedField) {
 
         List<MatchedPart> matchedParts = new ArrayList<>();
-        String inputValue = tokenizedField.getValue();
+        String inputValue = tokenizedField.toString();
 
         Matcher matcher = pattern.matcher(inputValue);
         while (matcher.find()) {
             int start = matcher.start();
             int end = matcher.end();
-            MatchedPart matchedPart = getMatch(tokenizedField, start, end);
-            if (matchedPart != null)
-                matchedParts.add(matchedPart);
+            if (validBounds(tokenizedField, start, end))
+                matchedParts.add(new RegexMatch(tokenizedField, start, end));
         }
         return matchedParts;
     }
 
-    private MatchedPart getMatch(TokenizedString tokenizedField, int start, int end) {
-        MatchedPart matchedPart = null;
-        String input = tokenizedField.getValue();
-        boolean isOkStart = false;
-        boolean isOkEnd = false;
-        if (start == 0 || tokenizedField.getSeparatorPattern().matcher(input.substring(start - 1, start)).matches())
-            isOkStart = true;
-        if (end == input.length() || tokenizedField.getSeparatorPattern().matcher(input.substring(end, end + 1)).matches())
-            isOkEnd = true;
-
-        if (isOkStart && isOkEnd) {
-            int startToken = getTokenNumber(input.substring(0, start));
-            int endToken = getTokenNumber(input.substring(0, end)) - 1;
-            matchedPart = new MatchedPart(tokenizedField, startToken, endToken);
-        }
-        return matchedPart;
-    }
-
-    private int getTokenNumber(String string) {
-        TokenizedString tokenizedString = new TokenizedString(string);
-        return tokenizedString.getTokens().size();
+    private boolean validBounds(TokenizedString tokenizedField, int start, int end) {
+        String input = tokenizedField.toString();
+        return (start == 0 || tokenizedField.getSeparatorPattern().matcher(input.substring(start - 1, start)).matches())
+                && (end == input.length()
+                        || tokenizedField.getSeparatorPattern().matcher(input.substring(end, end + 1)).matches());
     }
 
     private String getCleanedRegex() {

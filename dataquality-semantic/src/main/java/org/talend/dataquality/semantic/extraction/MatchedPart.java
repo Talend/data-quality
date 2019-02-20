@@ -23,15 +23,19 @@ import java.util.Objects;
  */
 public class MatchedPart implements Comparable<MatchedPart> {
 
-    private final TokenizedString originalField;
+    protected TokenizedString originalField;
 
-    private final int start;
+    protected int start;
 
-    private final int end;
+    protected int end;
 
-    private final List<Integer> tokenPositions;
+    private List<Integer> tokenPositions;
 
     private int priority;
+
+    protected MatchedPart() {
+
+    }
 
     public MatchedPart(TokenizedString originalField, List<Integer> tokenPositions) {
         this.originalField = originalField;
@@ -45,15 +49,19 @@ public class MatchedPart implements Comparable<MatchedPart> {
         this.originalField = originalField;
         this.start = start;
         this.end = end;
-        tokenPositions = new ArrayList<>(end - start + 1);
-        for (int i = start; i <= end; i++) {
-            tokenPositions.add(i);
+        initTokenPositions();
+    }
+
+    protected void checkBounds(int start, int end) {
+        if (start < 0 || end < 0 || end < start) {
+            throw new IllegalArgumentException("Bounds for match are incorrect : start = {}, end = {}" + start + end);
         }
     }
 
-    private void checkBounds(int start, int end) {
-        if (start < 0 || end < 0 || end < start) {
-            throw new IllegalArgumentException("Bounds for match are incorrect : start = {}, end = {}" + start + end);
+    protected void initTokenPositions() {
+        tokenPositions = new ArrayList<>(end - start + 1);
+        for (int i = start; i <= end; i++) {
+            tokenPositions.add(i);
         }
     }
 

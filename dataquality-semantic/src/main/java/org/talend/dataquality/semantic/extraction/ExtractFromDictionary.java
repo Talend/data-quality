@@ -28,7 +28,7 @@ public class ExtractFromDictionary extends ExtractFromSemanticType {
         List<String> tokens = tokenizedField.getTokens();
 
         int nbOfTokens = tokens.size();
-        int i = 0;
+        int i = nextNonEmptyToken(tokens, 0);
         while (i < nbOfTokens) {
             int matchStart = -1;
             int matchEnd = -1;
@@ -36,7 +36,7 @@ public class ExtractFromDictionary extends ExtractFromSemanticType {
             List<String> phrase = new ArrayList<>();
             int j = i;
             while (j < nbOfTokens) {
-                phrase.add(tokens.get(j));
+                phrase.add(tokens.get(nextNonEmptyToken(tokens, j)));
                 List<String> matches = findMatches(phrase);
                 if (matches.isEmpty()) {
                     break;
@@ -52,7 +52,7 @@ public class ExtractFromDictionary extends ExtractFromSemanticType {
                 matchedParts.add(new MatchedPart(tokenizedField, matchStart, matchEnd));
                 i = matchEnd;
             }
-            i++;
+            i = nextNonEmptyToken(tokens, i + 1);
         }
 
         return matchedParts;
@@ -69,6 +69,18 @@ public class ExtractFromDictionary extends ExtractFromSemanticType {
             }
         }
         return false;
+    }
+
+    private int nextNonEmptyToken(List<String> tokens, int i) {
+        if (i > tokens.size() - 1) {
+            return i;
+        }
+
+        String token = tokens.get(i);
+        while (token.isEmpty() && i < tokens.size() - 1) {
+            token = tokens.get(++i);
+        }
+        return i;
     }
 
     /**

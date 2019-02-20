@@ -88,10 +88,6 @@ public class TokenizedString {
         return separatorPattern;
     }
 
-    public String getValue() {
-        return value;
-    }
-
     @Override
     public String toString() {
         return value;
