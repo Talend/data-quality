@@ -1,5 +1,14 @@
 package org.talend.dataquality.semantic.extraction;
 
+import static org.junit.Assert.assertEquals;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,15 +20,6 @@ import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
 import org.talend.dataquality.semantic.snapshot.StandardDictionarySnapshotProvider;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static org.junit.Assert.assertEquals;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FieldExtractionFunctionTest {
@@ -47,11 +47,11 @@ public class FieldExtractionFunctionTest {
         TokenizedString tokenizedInput = new TokenizedString(input);
 
         match1 = new MatchedPart(tokenizedInput, Arrays.asList(0, 1));
-        match1bis = new MatchedPart(tokenizedInput, Arrays.asList(5, 6, 7));
+        match1bis = new MatchedPart(tokenizedInput, Arrays.asList(6, 7, 8));
         match2 = new MatchedPart(tokenizedInput, Arrays.asList(1, 2, 3, 4));
         match2bis = new MatchedPart(tokenizedInput, Arrays.asList(1, 2));
         match3 = new MatchedPart(tokenizedInput, Collections.singletonList(0));
-        match3bis = new MatchedPart(tokenizedInput, Collections.singletonList(5));
+        match3bis = new MatchedPart(tokenizedInput, Collections.singletonList(6));
     }
 
     @Test

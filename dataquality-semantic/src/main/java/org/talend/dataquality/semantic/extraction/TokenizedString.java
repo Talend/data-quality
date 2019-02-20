@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  */
 public class TokenizedString {
 
-    private static final Pattern separatorPattern = Pattern.compile("[\\p{Punct}\\s]+");
+    private static final Pattern separatorPattern = Pattern.compile("[\\p{Punct}\\s]");
 
     private final String value;
 

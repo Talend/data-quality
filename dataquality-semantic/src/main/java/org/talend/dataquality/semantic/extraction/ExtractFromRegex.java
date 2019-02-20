@@ -45,8 +45,8 @@ public class ExtractFromRegex extends ExtractFromSemanticType {
             isOkEnd = true;
 
         if (isOkStart && isOkEnd) {
-            int startToken = getTokenNumber(input.substring(0, start + 1));
-            int endToken = getTokenNumber(input.substring(0, end));
+            int startToken = getTokenNumber(input.substring(0, start));
+            int endToken = getTokenNumber(input.substring(0, end)) - 1;
             matchedPart = new MatchedPart(tokenizedField, startToken, endToken);
         }
         return matchedPart;
@@ -54,7 +54,7 @@ public class ExtractFromRegex extends ExtractFromSemanticType {
 
     private int getTokenNumber(String string) {
         TokenizedString tokenizedString = new TokenizedString(string);
-        return tokenizedString.getTokens().size() - 1;
+        return tokenizedString.getTokens().size();
     }
 
     private String getCleanedRegex() {

@@ -1,11 +1,11 @@
 package org.talend.dataquality.semantic.extraction;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 public class TokenizeStringTest {
 
@@ -13,8 +13,8 @@ public class TokenizeStringTest {
     public void correctTokensAndSeparators() {
         TokenizedString str = new TokenizedString(";This, .is. a test\twith/punctuation.");
 
-        List<String> expectedTokens = Arrays.asList("This", "is", "a", "test", "with", "punctuation");
-        List<String> expectedSeparators = Arrays.asList(", .", ". ", " ", "\t", "/");
+        List<String> expectedTokens = Arrays.asList("This", "", "", "is", "", "a", "test", "with", "punctuation");
+        List<String> expectedSeparators = Arrays.asList(",", " ", ".", ".", " ", " ", "\t", "/");
 
         assertEquals(expectedTokens, str.getTokens());
         assertEquals(expectedSeparators, str.getSeparators());
