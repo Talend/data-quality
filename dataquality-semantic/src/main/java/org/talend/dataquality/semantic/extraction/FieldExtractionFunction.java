@@ -42,10 +42,9 @@ public class FieldExtractionFunction {
     }
 
     public Map<String, List<String>> extractFieldParts(String field) {
-        if (field == null) {
+        if (isEmpty(field)) {
             return new HashMap<>();
         }
-
         TokenizedString tokenizedField = new TokenizedString(field);
         List<MatchedPart> matches = new ArrayList<>();
         Map<String, List<String>> matchesByCategory = new HashMap<>();
@@ -66,6 +65,10 @@ public class FieldExtractionFunction {
         filter(matches, matchesByCategory);
 
         return matchesByCategory;
+    }
+
+    private boolean isEmpty(String field) {
+        return field == null || new TokenizedString(field).getTokens().isEmpty();
     }
 
     private void filter(List<MatchedPart> matches, Map<String, List<String>> matchesByCategory) {

@@ -13,8 +13,8 @@ public class TokenizeStringTest {
     public void correctTokensAndSeparators() {
         TokenizedString str = new TokenizedString(";This, .is. a test\twith/punctuation.");
 
-        List<String> expectedTokens = Arrays.asList("This", "", "", "is", "", "a", "test", "with", "punctuation");
-        List<String> expectedSeparators = Arrays.asList(",", " ", ".", ".", " ", " ", "\t", "/");
+        List<String> expectedTokens = Arrays.asList("This", "is", "a", "test", "with", "punctuation");
+        List<String> expectedSeparators = Arrays.asList(", .", ". ", " ", "\t", "/");
 
         assertEquals(expectedTokens, str.getTokens());
         assertEquals(expectedSeparators, str.getSeparators());

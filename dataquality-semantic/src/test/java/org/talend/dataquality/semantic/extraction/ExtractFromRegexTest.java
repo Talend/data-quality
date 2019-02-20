@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.semantic.CategoryRegistryManagerAbstract;
@@ -77,7 +78,7 @@ public class ExtractFromRegexTest extends CategoryRegistryManagerAbstract {
         DQCategory category = prepCategory("abc\\$");
         ExtractFromRegex efd = new ExtractFromRegex(dictionarySnapshot, category);
         TokenizedString input = new TokenizedString("My phone is abc$.");
-        MatchedPart expectedMatch = new MatchedPart(input, Arrays.asList(3));
+        MatchedPart expectedMatch = new MatchedPart(input, Collections.singletonList(3));
         List<MatchedPart> list = efd.getMatches(input);
         assertTrue(list.contains(expectedMatch));
         assertEquals(1, list.size());
@@ -88,7 +89,7 @@ public class ExtractFromRegexTest extends CategoryRegistryManagerAbstract {
         DQCategory category = prepCategory("abc\\\\\\$");
         ExtractFromRegex efd = new ExtractFromRegex(dictionarySnapshot, category);
         TokenizedString input = new TokenizedString("My phone is abc\\$.");
-        MatchedPart expectedMatch = new MatchedPart(input, Arrays.asList(3));
+        MatchedPart expectedMatch = new MatchedPart(input, Collections.singletonList(3));
         List<MatchedPart> list = efd.getMatches(input);
         assertTrue(list.contains(expectedMatch));
         assertEquals(1, list.size());
@@ -99,7 +100,7 @@ public class ExtractFromRegexTest extends CategoryRegistryManagerAbstract {
         DQCategory category = prepCategory("abc\\\\$");
         ExtractFromRegex efd = new ExtractFromRegex(dictionarySnapshot, category);
         TokenizedString input = new TokenizedString("My phone is abc\\.");
-        MatchedPart expectedMatch = new MatchedPart(input, Arrays.asList(3));
+        MatchedPart expectedMatch = new MatchedPart(input, Collections.singletonList(3));
         List<MatchedPart> list = efd.getMatches(input);
         assertTrue(list.contains(expectedMatch));
         assertEquals(1, list.size());
@@ -136,7 +137,7 @@ public class ExtractFromRegexTest extends CategoryRegistryManagerAbstract {
         ExtractFromRegex efd = new ExtractFromRegex(dictionarySnapshot, category);
         TokenizedString input = new TokenizedString(
                 "file://localhost/etc/fstab F-9748 0033739-55.67 67 OK 18 57 04 C fabien.bouquignaud@solypse.com");
-        MatchedPart expectedMatch = new MatchedPart(input, 12, 16);
+        MatchedPart expectedMatch = new MatchedPart(input, 10, 14);
         List<MatchedPart> list = efd.getMatches(input);
         assertTrue(list.contains(expectedMatch));
         assertEquals(1, list.size());
@@ -150,26 +151,24 @@ public class ExtractFromRegexTest extends CategoryRegistryManagerAbstract {
         TokenizedString input = new TokenizedString(
                 "My phone is 0102030405. Your phone is 0203040506, isn't it? My SSN is 123010112312374.");
         MatchedPart expectedMatch1 = new MatchedPart(input, Collections.singletonList(3));
-        MatchedPart expectedMatch2 = new MatchedPart(input, Collections.singletonList(8));
+        MatchedPart expectedMatch2 = new MatchedPart(input, Collections.singletonList(7));
         List<MatchedPart> list = efd.getMatches(input);
         assertTrue(list.contains(expectedMatch1));
         assertTrue(list.contains(expectedMatch2));
         assertEquals(2, list.size());
     }
 
-    private DQCategory prepCategory(String regex) {
-
-        String id = "this is the Id"; //$NON-NLS-1$
-        UserDefinedCategory cat = new UserDefinedCategory(id);
-        cat.setId(id);
-        UserDefinedRegexValidator userDefinedRegexValidator = new UserDefinedRegexValidator();
-        userDefinedRegexValidator.setPatternString(regex);
-        cat.setValidator(userDefinedRegexValidator);
-        dictionarySnapshot.getRegexClassifier().addSubCategory(cat);
-
-        DQCategory dqCategory = new DQCategory();
-        dqCategory.setId(id);
-        return dqCategory;
+    @Test
+    public void frPostalCode() {
+        DQCategory category = CategoryRegistryManager.getInstance()
+                .getCategoryMetadataByName(SemanticCategoryEnum.FR_POSTAL_CODE.getId());
+        ExtractFromRegex efd = new ExtractFromRegex(dictionarySnapshot, category);
+        TokenizedString input = new TokenizedString(
+                "SW 24 48 37 A F-54444 file:///home/User/2ndFile.html 0033880533496 munjuluris@aetna.com");
+        MatchedPart expectedMatch = new MatchedPart(input, 5, 6);
+        List<MatchedPart> list = efd.getMatches(input);
+        assertTrue(list.contains(expectedMatch));
+        assertEquals(1, list.size());
     }
 
     @Test
@@ -197,15 +196,30 @@ public class ExtractFromRegexTest extends CategoryRegistryManagerAbstract {
     }
 
     @Test
-    public void frPostalCode() {
+    public void fieldStartingWithSeparator() {
         DQCategory category = CategoryRegistryManager.getInstance()
-                .getCategoryMetadataByName(SemanticCategoryEnum.FR_POSTAL_CODE.getId());
+                .getCategoryMetadataByName(SemanticCategoryEnum.FR_PHONE.getId());
         ExtractFromRegex efd = new ExtractFromRegex(dictionarySnapshot, category);
-        TokenizedString input = new TokenizedString(
-                "SW 24 48 37 A F-54444 file:///home/User/2ndFile.html 0033880533496 munjuluris@aetna.com");
-        MatchedPart expectedMatch = new MatchedPart(input, 5, 6);
+        TokenizedString input = new TokenizedString(" My phone is 0102030405.");
+        MatchedPart expectedMatch = new MatchedPart(input, Collections.singletonList(3));
         List<MatchedPart> list = efd.getMatches(input);
-        assertTrue(list.contains(expectedMatch));
+        Assert.assertTrue(list.contains(expectedMatch));
         assertEquals(1, list.size());
     }
+
+    private DQCategory prepCategory(String regex) {
+
+        String id = "this is the Id"; //$NON-NLS-1$
+        UserDefinedCategory cat = new UserDefinedCategory(id);
+        cat.setId(id);
+        UserDefinedRegexValidator userDefinedRegexValidator = new UserDefinedRegexValidator();
+        userDefinedRegexValidator.setPatternString(regex);
+        cat.setValidator(userDefinedRegexValidator);
+        dictionarySnapshot.getRegexClassifier().addSubCategory(cat);
+
+        DQCategory dqCategory = new DQCategory();
+        dqCategory.setId(id);
+        return dqCategory;
+    }
+
 }

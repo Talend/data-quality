@@ -15,13 +15,12 @@ public class RegexMatch extends MatchedPart {
     private String exactMatch;
 
     public RegexMatch(TokenizedString tokenizedField, int start, int end) {
-        super();
         checkBounds(start, end);
         originalField = tokenizedField;
         String field = tokenizedField.toString();
         exactMatch = field.substring(start, end);
-        super.start = getTokenNumber(field.substring(0, start));
-        super.end = getTokenNumber(field.substring(0, end)) - 1;
+        this.start = getTokenNumber(field.substring(0, start));
+        this.end = getTokenNumber(field.substring(0, end)) - 1;
         initTokenPositions();
     }
 

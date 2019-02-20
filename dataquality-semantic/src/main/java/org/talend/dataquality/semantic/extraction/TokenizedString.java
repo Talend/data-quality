@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  */
 public class TokenizedString {
 
-    private static final Pattern separatorPattern = Pattern.compile("[\\p{Punct}\\s]");
+    private static final Pattern separatorPattern = Pattern.compile("[\\p{Punct}\\s]+");
 
     private final String value;
 
@@ -51,7 +51,7 @@ public class TokenizedString {
     public static List<String> tokenize(String field) {
         List<String> tokens = new ArrayList<>(Arrays.asList(separatorPattern.split(field)));
 
-        if (tokens.get(0).isEmpty()) {
+        if (!tokens.isEmpty() && tokens.get(0).isEmpty()) {
             tokens.remove(0);
         }
 
