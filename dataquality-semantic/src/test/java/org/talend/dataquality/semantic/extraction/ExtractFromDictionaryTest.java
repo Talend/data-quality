@@ -25,7 +25,7 @@ public class ExtractFromDictionaryTest {
     public void basicMatch() {
         ExtractFromDictionary efd = new ExtractFromDictionary(snapshot, category);
         TokenizedString input = new TokenizedString("Manchester United States");
-        List<MatchedPart> expected = Collections.singletonList(new MatchedPart(input, 1, 2));
+        List<MatchedPart> expected = Collections.singletonList(new MatchedPartDict(input, 1, 2));
         assertEquals(expected, efd.getMatches(input));
     }
 
@@ -41,7 +41,7 @@ public class ExtractFromDictionaryTest {
     public void matchAfterMultiTokenMatch() {
         ExtractFromDictionary efd = new ExtractFromDictionary(snapshot, category);
         TokenizedString input = new TokenizedString("The United States, Somalia, AFR");
-        List<MatchedPart> expected = Arrays.asList(new MatchedPart(input, 1, 2), new MatchedPart(input, 3, 3));
+        List<MatchedPart> expected = Arrays.asList(new MatchedPartDict(input, 1, 2), new MatchedPartDict(input, 3, 3));
         assertEquals(expected, efd.getMatches(input));
     }
 
@@ -49,7 +49,7 @@ public class ExtractFromDictionaryTest {
     public void matchAfterNoExactMatch() {
         ExtractFromDictionary efd = new ExtractFromDictionary(snapshot, category);
         TokenizedString input = new TokenizedString("Emirates United Arabia, Somalia, SO, Africa, AFR");
-        List<MatchedPart> expected = Collections.singletonList(new MatchedPart(input, 3, 3));
+        List<MatchedPart> expected = Collections.singletonList(new MatchedPartDict(input, 3, 3));
         assertEquals(expected, efd.getMatches(input));
     }
 }

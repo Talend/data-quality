@@ -21,7 +21,7 @@ import java.util.Objects;
  *
  * @author afournier
  */
-public class MatchedPart implements Comparable<MatchedPart> {
+public abstract class MatchedPart implements Comparable<MatchedPart> {
 
     protected TokenizedString originalField;
 
@@ -29,27 +29,12 @@ public class MatchedPart implements Comparable<MatchedPart> {
 
     protected int end;
 
-    private List<Integer> tokenPositions;
+    protected List<Integer> tokenPositions;
 
     private int priority;
 
     protected MatchedPart() {
 
-    }
-
-    public MatchedPart(TokenizedString originalField, List<Integer> tokenPositions) {
-        this.originalField = originalField;
-        this.tokenPositions = tokenPositions;
-        start = tokenPositions.get(0);
-        end = tokenPositions.get(tokenPositions.size() - 1);
-    }
-
-    public MatchedPart(TokenizedString originalField, int start, int end) {
-        checkBounds(start, end);
-        this.originalField = originalField;
-        this.start = start;
-        this.end = end;
-        initTokenPositions();
     }
 
     protected void checkBounds(int start, int end) {
@@ -65,17 +50,7 @@ public class MatchedPart implements Comparable<MatchedPart> {
         }
     }
 
-    @Override
-    public String toString() {
-        List<String> tokens = originalField.getTokens();
-        List<String> separators = originalField.getSeparators();
-
-        StringBuilder sb = new StringBuilder(tokens.get(start));
-        for (int i = start; i < end; i++) {
-            sb.append(separators.get(i)).append(tokens.get(i + 1));
-        }
-        return sb.toString();
-    }
+    public abstract String getExactMatch();
 
     private int getNumberOfTokens() {
         return tokenPositions.size();
@@ -118,6 +93,17 @@ public class MatchedPart implements Comparable<MatchedPart> {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(originalField, tokenPositions, priority);
+    }
+
+    @Override
+    public String toString() {
+        return "Original Field:" + originalField.getValue() + ", Exact Match:" + getExactMatch() + ", Start Token:" + start
+                + ", End Token:" + end + ", Priority:" + priority;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -129,11 +115,7 @@ public class MatchedPart implements Comparable<MatchedPart> {
 
         MatchedPart otherMatchedPart = (MatchedPart) o;
         return originalField.toString().equals(otherMatchedPart.originalField.toString())
-                && tokenPositions.equals(otherMatchedPart.tokenPositions);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(originalField, tokenPositions, priority);
+                && tokenPositions.equals(otherMatchedPart.tokenPositions)
+                && getExactMatch().equals(otherMatchedPart.getExactMatch());
     }
 }

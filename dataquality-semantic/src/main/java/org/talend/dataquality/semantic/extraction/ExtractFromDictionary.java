@@ -49,7 +49,7 @@ public class ExtractFromDictionary extends ExtractFromSemanticType {
                 j++;
             }
             if (exactMatch) {
-                matchedParts.add(new MatchedPart(tokenizedField, matchStart, matchEnd));
+                matchedParts.add(new MatchedPartDict(tokenizedField, matchStart, matchEnd));
                 i = matchEnd;
             }
             i++;

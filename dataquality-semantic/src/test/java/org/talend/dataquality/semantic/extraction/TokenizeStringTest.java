@@ -27,7 +27,7 @@ public class TokenizeStringTest {
         List<String> separators = Arrays.asList(", .", ". ", " ", "\t", "/");
         TokenizedString str = new TokenizedString(tokens, separators);
 
-        assertEquals(expected, str.toString());
+        assertEquals(expected, str.getValue());
     }
 
     @Test(expected = IllegalArgumentException.class)

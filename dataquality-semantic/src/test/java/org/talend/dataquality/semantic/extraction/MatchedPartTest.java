@@ -2,8 +2,6 @@ package org.talend.dataquality.semantic.extraction;
 
 import org.junit.Test;
 
-import java.util.Arrays;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
@@ -13,13 +11,13 @@ public class MatchedPartTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void outOfBounds() {
-        new MatchedPart(field, -1, 120);
+        new MatchedPartDict(field, -1, 120);
     }
 
     @Test
     public void equals() {
-        MatchedPart x = new MatchedPart(field, Arrays.asList(0, 1));
-        MatchedPart y = new MatchedPart(field, Arrays.asList(0, 1));
+        MatchedPart x = new MatchedPartDict(field, 0, 1);
+        MatchedPart y = new MatchedPartDict(field, 0, 1);
 
         assertEquals(x, y);
         assertNotEquals(x, field);
@@ -32,22 +30,22 @@ public class MatchedPartTest {
 
     @Test
     public void smallerIsLessImportant() {
-        MatchedPart x = new MatchedPart(field, Arrays.asList(0, 1));
-        MatchedPart y = new MatchedPart(field, Arrays.asList(1, 2, 3, 4));
+        MatchedPart x = new MatchedPartDict(field, 0, 1);
+        MatchedPart y = new MatchedPartDict(field, 1, 4);
         assertEquals(1, x.compareTo(y));
     }
 
     @Test
     public void longerIsMoreImportant() {
-        MatchedPart x = new MatchedPart(field, Arrays.asList(0, 1, 2));
-        MatchedPart y = new MatchedPart(field, Arrays.asList(1, 2));
+        MatchedPart x = new MatchedPartDict(field, 0, 2);
+        MatchedPart y = new MatchedPartDict(field, 1, 2);
         assertEquals(-1, x.compareTo(y));
     }
 
     @Test
     public void priorityBreaksEquality() {
-        MatchedPart x = new MatchedPart(field, Arrays.asList(0, 1));
-        MatchedPart y = new MatchedPart(field, Arrays.asList(1, 2));
+        MatchedPart x = new MatchedPartDict(field, 0, 1);
+        MatchedPart y = new MatchedPartDict(field, 1, 2);
         x.setPriority(0);
         y.setPriority(1);
         assertEquals(-1, x.compareTo(y));
@@ -58,16 +56,16 @@ public class MatchedPartTest {
 
     @Test
     public void comparisonSymmetry() {
-        MatchedPart x = new MatchedPart(field, Arrays.asList(0, 1));
-        MatchedPart y = new MatchedPart(field, Arrays.asList(1, 2, 3, 4));
+        MatchedPart x = new MatchedPartDict(field, 0, 1);
+        MatchedPart y = new MatchedPartDict(field, 1, 4);
         assertEquals(x.compareTo(y), -y.compareTo(x));
     }
 
     @Test
     public void comparisonTransitivity() {
-        MatchedPart x = new MatchedPart(field, Arrays.asList(0, 1));
-        MatchedPart y = new MatchedPart(field, Arrays.asList(1, 2));
-        MatchedPart z = new MatchedPart(field, Arrays.asList(3, 4));
+        MatchedPart x = new MatchedPartDict(field, 0, 1);
+        MatchedPart y = new MatchedPartDict(field, 1, 2);
+        MatchedPart z = new MatchedPartDict(field, 3, 4);
         x.setPriority(0);
         y.setPriority(0);
         z.setPriority(0);
@@ -78,9 +76,9 @@ public class MatchedPartTest {
 
     @Test
     public void doubleEquality() {
-        MatchedPart x = new MatchedPart(field, Arrays.asList(0, 1));
-        MatchedPart y = new MatchedPart(field, Arrays.asList(0, 1));
-        MatchedPart z = new MatchedPart(field, Arrays.asList(3, 4));
+        MatchedPart x = new MatchedPartDict(field, 0, 1);
+        MatchedPart y = new MatchedPartDict(field, 0, 1);
+        MatchedPart z = new MatchedPartDict(field, 3, 4);
         x.setPriority(0);
         y.setPriority(0);
         z.setPriority(0);

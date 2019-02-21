@@ -46,12 +46,12 @@ public class FieldExtractionFunctionTest {
         input = "Manchester United States Of America, Paris-Saint Germain";
         TokenizedString tokenizedInput = new TokenizedString(input);
 
-        match1 = new MatchedPart(tokenizedInput, Arrays.asList(0, 1));
-        match1bis = new MatchedPart(tokenizedInput, Arrays.asList(5, 6, 7));
-        match2 = new MatchedPart(tokenizedInput, Arrays.asList(1, 2, 3, 4));
-        match2bis = new MatchedPart(tokenizedInput, Arrays.asList(1, 2));
-        match3 = new MatchedPart(tokenizedInput, Collections.singletonList(0));
-        match3bis = new MatchedPart(tokenizedInput, Collections.singletonList(5));
+        match1 = new MatchedPartDict(tokenizedInput, 0, 1);
+        match1bis = new MatchedPartDict(tokenizedInput, 5, 7);
+        match2 = new MatchedPartDict(tokenizedInput, 1, 4);
+        match2bis = new MatchedPartDict(tokenizedInput, 1, 2);
+        match3 = new MatchedPartDict(tokenizedInput, 0, 0);
+        match3bis = new MatchedPartDict(tokenizedInput, 5, 5);
     }
 
     @Test

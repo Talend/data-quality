@@ -21,20 +21,20 @@ public class ExtractFromRegex extends ExtractFromSemanticType {
     public List<MatchedPart> getMatches(TokenizedString tokenizedField) {
 
         List<MatchedPart> matchedParts = new ArrayList<>();
-        String inputValue = tokenizedField.toString();
+        String inputValue = tokenizedField.getValue();
 
         Matcher matcher = pattern.matcher(inputValue);
         while (matcher.find()) {
             int start = matcher.start();
             int end = matcher.end();
             if (validBounds(tokenizedField, start, end))
-                matchedParts.add(new RegexMatchedPart(tokenizedField, start, end));
+                matchedParts.add(new MatchedPartRegex(tokenizedField, start, end));
         }
         return matchedParts;
     }
 
     private boolean validBounds(TokenizedString tokenizedField, int start, int end) {
-        String input = tokenizedField.toString();
+        String input = tokenizedField.getValue();
         return (start == 0 || tokenizedField.getSeparatorPattern().matcher(input.substring(start - 1, start)).matches())
                 && (end == input.length()
                         || tokenizedField.getSeparatorPattern().matcher(input.substring(end, end + 1)).matches());
