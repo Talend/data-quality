@@ -10,11 +10,11 @@ package org.talend.dataquality.semantic.extraction;
  *
  * @author afournier
  */
-public class RegexMatch extends MatchedPart {
+public class RegexMatchedPart extends MatchedPart {
 
     private String exactMatch;
 
-    public RegexMatch(TokenizedString tokenizedField, int start, int end) {
+    public RegexMatchedPart(TokenizedString tokenizedField, int start, int end) {
         checkBounds(start, end);
         originalField = tokenizedField;
         String field = tokenizedField.toString();

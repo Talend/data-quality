@@ -28,7 +28,7 @@ public class ExtractFromRegex extends ExtractFromSemanticType {
             int start = matcher.start();
             int end = matcher.end();
             if (validBounds(tokenizedField, start, end))
-                matchedParts.add(new RegexMatch(tokenizedField, start, end));
+                matchedParts.add(new RegexMatchedPart(tokenizedField, start, end));
         }
         return matchedParts;
     }

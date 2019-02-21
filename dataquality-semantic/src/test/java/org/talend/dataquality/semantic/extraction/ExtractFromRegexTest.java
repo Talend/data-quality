@@ -177,7 +177,7 @@ public class ExtractFromRegexTest extends CategoryRegistryManagerAbstract {
 
         ExtractFromRegex efd = new ExtractFromRegex(dictionarySnapshot, category);
         TokenizedString input = new TokenizedString("+33 7.65.1434.22 123+");
-        MatchedPart expectedMatch = new RegexMatch(input, 16, 21);
+        MatchedPart expectedMatch = new RegexMatchedPart(input, 16, 21);
         List<MatchedPart> list = efd.getMatches(input);
         assertTrue(list.contains(expectedMatch));
         assertEquals(1, list.size());
@@ -189,7 +189,7 @@ public class ExtractFromRegexTest extends CategoryRegistryManagerAbstract {
                 .getCategoryMetadataByName(SemanticCategoryEnum.FR_PHONE.getId());
         ExtractFromRegex efd = new ExtractFromRegex(dictionarySnapshot, category);
         TokenizedString input = new TokenizedString("+33 7.65.1434.22 ZL228849 file:///c:/WINDOWS/clock.avi swann@redkeet.com");
-        MatchedPart expectedMatch = new RegexMatch(input, 0, 16);
+        MatchedPart expectedMatch = new RegexMatchedPart(input, 0, 16);
         List<MatchedPart> list = efd.getMatches(input);
         assertTrue(list.contains(expectedMatch));
         assertEquals(1, list.size());
