@@ -54,6 +54,17 @@ public class DictionarySnapshot {
         return dqCategory;
     }
 
+    public DQCategory getDQCategoryById(String categoryId) {
+        DQCategory dqCategory = null;
+        for (DQCategory dqCat : getMetadata().values()) {
+            if (dqCat.getId().equals(categoryId)) {
+                dqCategory = dqCat;
+                break;
+            }
+        }
+        return dqCategory;
+    }
+
     public Index getSharedDataDict() {
         return sharedDataDict;
     }

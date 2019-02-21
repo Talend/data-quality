@@ -27,8 +27,7 @@ public class SemanticExtractionFunctionFactory {
     public static FieldExtractionFunction createFieldExtractionFunction(List<String> categoryList,
             DictionarySnapshot dictionarySnapshot) {
 
-        DictionarySnapshot snapshotDict = dictionarySnapshot != null ? dictionarySnapshot
-                : new StandardDictionarySnapshotProvider().get();
+        dictionarySnapshot = dictionarySnapshot != null ? dictionarySnapshot : new StandardDictionarySnapshotProvider().get();
 
         List<ExtractFromSemanticType> extractFunctions = new ArrayList<>();
         for (String semanticCategory : categoryList) {
@@ -40,21 +39,30 @@ public class SemanticExtractionFunctionFactory {
                 throw new IllegalArgumentException("Invalid Semantic Category Name : " + semanticCategory);
             }
 
-            switch (category.getType()) {
-            case DICT:
-                ExtractFromSemanticType fun = new ExtractFromDictionary(snapshotDict, category);
-                extractFunctions.add(fun);
-                break;
-            case REGEX:
-                ExtractFromRegex extractFromRegex = new ExtractFromRegex(snapshotDict, category);
-                extractFunctions.add(extractFromRegex);
-                break;
-            case COMPOUND:
-                break;
-            default:
-                break;
+            ExtractFromSemanticType function = getFunction(category, dictionarySnapshot);
+
+            if (function != null) {
+                extractFunctions.add(function);
             }
         }
         return new FieldExtractionFunction(extractFunctions);
+    }
+
+    protected static ExtractFromSemanticType getFunction(DQCategory category, DictionarySnapshot dicoSnapshot) {
+        ExtractFromSemanticType function = null;
+        switch (category.getType()) {
+        case DICT:
+            function = new ExtractFromDictionary(dicoSnapshot, category);
+            break;
+        case REGEX:
+            function = new ExtractFromRegex(dicoSnapshot, category);
+            break;
+        case COMPOUND:
+            function = new ExtractFromCompound(dicoSnapshot, category);
+            break;
+        default:
+            break;
+        }
+        return function;
     }
 }
