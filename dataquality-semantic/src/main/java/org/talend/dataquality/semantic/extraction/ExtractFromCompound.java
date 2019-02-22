@@ -10,21 +10,25 @@ import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
 
 public class ExtractFromCompound extends ExtractFromSemanticType {
 
+    private List<ExtractFromSemanticType> children;
+
     protected ExtractFromCompound(DictionarySnapshot snapshot, DQCategory category) {
         super(snapshot, category);
+        this.children = new ArrayList<>();
+        this.semancticCategory.getChildren().forEach(child -> {
+            child = dicoSnapshot.getDQCategoryById(child.getId());
+            children.add(getFunction(child, this.dicoSnapshot));
+        });
     }
 
     @Override
     public List<MatchedPart> getMatches(TokenizedString tokenizedField) {
         List<MatchedPart> matchedParts = new ArrayList<>();
-        this.semancticCategory.getChildren().forEach(category -> {
-            category = dicoSnapshot.getDQCategoryById(category.getId());
-            ExtractFromSemanticType function = getFunction(category, this.dicoSnapshot);
-
-            if (function != null) {
-                matchedParts.addAll(function.getMatches(tokenizedField));
-            }
-        });
+        if (!children.isEmpty())
+            this.children.forEach(child -> {
+                List<MatchedPart> parts = child.getMatches(tokenizedField);
+                matchedParts.addAll(parts);
+            });
         return matchedParts;
     }
 }
