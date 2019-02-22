@@ -1,5 +1,7 @@
 package org.talend.dataquality.semantic.extraction;
 
+import java.util.Objects;
+
 /**
  * Child class of {@link MatchedPart} for handling matches from regexes.
  *
@@ -47,5 +49,11 @@ public class MatchedPartRegex extends MatchedPart {
         MatchedPartRegex otherMatchedPart = (MatchedPartRegex) o;
         return originalField.toString().equals(otherMatchedPart.originalField.toString())
                 && exactMatch.equals(otherMatchedPart.exactMatch);
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = super.hashCode();
+        return hash + Objects.hash(exactMatch);
     }
 }
