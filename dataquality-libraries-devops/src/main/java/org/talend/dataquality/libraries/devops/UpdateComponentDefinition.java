@@ -69,6 +69,7 @@ public class UpdateComponentDefinition {
     static {
         DEP_VERSION_MAP.put("daikon", DAIKON_VERSION); //$NON-NLS-1$
         DEP_VERSION_MAP.put("org.talend.dataquality.common", DQ_LIB_VERSION); //$NON-NLS-1$
+        DEP_VERSION_MAP.put("org.talend.dataquality.converters", DQ_LIB_VERSION); //$NON-NLS-1$
         DEP_VERSION_MAP.put("org.talend.dataquality.record.linkage", DQ_LIB_VERSION); //$NON-NLS-1$
         DEP_VERSION_MAP.put("org.talend.dataquality.sampling", DQ_LIB_VERSION); //$NON-NLS-1$
         DEP_VERSION_MAP.put("org.talend.dataquality.standardization", DQ_LIB_VERSION); //$NON-NLS-1$
