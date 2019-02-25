@@ -15,20 +15,21 @@ public class ExtractFromCompound extends ExtractFromSemanticType {
     protected ExtractFromCompound(DictionarySnapshot snapshot, DQCategory category) {
         super(snapshot, category);
         this.children = new ArrayList<>();
-        this.semancticCategory.getChildren().forEach(child -> {
-            child = dicoSnapshot.getDQCategoryById(child.getId());
-            children.add(getFunction(child, this.dicoSnapshot));
-        });
+        if (semancticCategory.getChildren() != null) {
+            this.semancticCategory.getChildren().forEach(child -> {
+                child = dicoSnapshot.getDQCategoryById(child.getId());
+                children.add(getFunction(child, this.dicoSnapshot));
+            });
+        }
     }
 
     @Override
     public List<MatchedPart> getMatches(TokenizedString tokenizedField) {
         List<MatchedPart> matchedParts = new ArrayList<>();
-        if (!children.isEmpty())
-            this.children.forEach(child -> {
-                List<MatchedPart> parts = child.getMatches(tokenizedField);
-                matchedParts.addAll(parts);
-            });
+        this.children.forEach(child -> {
+            List<MatchedPart> parts = child.getMatches(tokenizedField);
+            matchedParts.addAll(parts);
+        });
         return matchedParts;
     }
 }
