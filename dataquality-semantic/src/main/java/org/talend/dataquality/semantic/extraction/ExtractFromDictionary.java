@@ -1,12 +1,12 @@
 package org.talend.dataquality.semantic.extraction;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.talend.dataquality.semantic.index.LuceneIndex;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This function extracts parts of fields that matches exactly with elements in a semantic dictionary.
@@ -36,7 +36,7 @@ public class ExtractFromDictionary extends ExtractFromSemanticType {
             List<String> phrase = new ArrayList<>();
             int j = i;
             while (j < nbOfTokens) {
-                phrase.add(tokens.get(j));
+                phrase.add(StringUtils.stripAccents(tokens.get(j)));
                 List<String> matches = findMatches(phrase);
                 if (matches.isEmpty()) {
                     break;
@@ -64,7 +64,7 @@ public class ExtractFromDictionary extends ExtractFromSemanticType {
 
     private boolean containsExactMatch(List<String> phrase, List<String> matches) {
         for (String match : matches) {
-            if (equalsIgnoreCase(TokenizedString.tokenize(match), phrase)) {
+            if (equalsIgnoreCase(TokenizedString.tokenize(StringUtils.stripAccents(match)), phrase)) {
                 return true;
             }
         }

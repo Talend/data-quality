@@ -23,7 +23,6 @@ public class TokenizedStringTest {
     @Test
     public void noBreakSpaces() {
         TokenizedString str = new TokenizedString("A\u00A0B\u2007C\u202FD\u3000E");
-        System.out.println(str.getValue());
 
         List<String> expectedTokens = Arrays.asList("A", "B", "C", "D", "E");
         List<String> expectedSeparators = Arrays.asList("\u00A0", "\u2007", "\u202F", "\u3000");

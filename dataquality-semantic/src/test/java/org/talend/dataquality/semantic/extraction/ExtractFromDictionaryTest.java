@@ -52,4 +52,26 @@ public class ExtractFromDictionaryTest {
         List<MatchedPart> expected = Collections.singletonList(new MatchedPartDict(input, 3, 3));
         assertEquals(expected, efd.getMatches(input));
     }
+
+    @Test
+    public void matchWithAccentInDictionary() {
+        ExtractFromDictionary efd = new ExtractFromDictionary(snapshot, category);
+        // input does not contain accent, but should match "Brésil" with accent
+        TokenizedString input = new TokenizedString("Neymar vient de BRESIL. Messi vient d'une autre planète.");
+        List<MatchedPart> expected = Collections.singletonList(new MatchedPartDict(input, 3, 3));
+        List<MatchedPart> actual = efd.getMatches(input);
+        assertEquals(expected, actual);
+        assertEquals("BRESIL", actual.get(0).getExactMatch());
+    }
+
+    @Test
+    public void matchWithAccentFromInput() {
+        ExtractFromDictionary efd = new ExtractFromDictionary(snapshot, category);
+        // input contains à with accent, the spelling is incorrect, but it should still match "Brazil" without accent in dico
+        TokenizedString input = new TokenizedString("Neymar is from Bràzil. Messi is from another planet.");
+        List<MatchedPart> expected = Collections.singletonList(new MatchedPartDict(input, 3, 3));
+        List<MatchedPart> actual = efd.getMatches(input);
+        assertEquals(expected, actual);
+        assertEquals("Bràzil", actual.get(0).getExactMatch());
+    }
 }
