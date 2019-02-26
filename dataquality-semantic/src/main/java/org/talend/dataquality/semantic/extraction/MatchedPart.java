@@ -29,6 +29,8 @@ public abstract class MatchedPart implements Comparable<MatchedPart> {
 
     protected int end;
 
+    protected String exactMatch;
+
     protected List<Integer> tokenPositions;
 
     private int priority;
@@ -37,11 +39,7 @@ public abstract class MatchedPart implements Comparable<MatchedPart> {
 
     }
 
-    protected void checkBounds(int start, int end) {
-        if (start < 0 || end < 0 || end < start) {
-            throw new IllegalArgumentException("Bounds for match are incorrect : start = {}, end = {}" + start + end);
-        }
-    }
+    protected abstract void checkBounds(int start, int end);
 
     protected void initTokenPositions() {
         tokenPositions = new ArrayList<>(end - start + 1);
@@ -50,7 +48,9 @@ public abstract class MatchedPart implements Comparable<MatchedPart> {
         }
     }
 
-    public abstract String getExactMatch();
+    public String getExactMatch() {
+        return exactMatch;
+    }
 
     private int getNumberOfTokens() {
         return tokenPositions.size();
@@ -94,7 +94,7 @@ public abstract class MatchedPart implements Comparable<MatchedPart> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(originalField, tokenPositions, priority);
+        return Objects.hash(originalField, exactMatch, tokenPositions, priority);
     }
 
     @Override
@@ -115,7 +115,6 @@ public abstract class MatchedPart implements Comparable<MatchedPart> {
 
         MatchedPart otherMatchedPart = (MatchedPart) o;
         return originalField.toString().equals(otherMatchedPart.originalField.toString())
-                && tokenPositions.equals(otherMatchedPart.tokenPositions)
-                && getExactMatch().equals(otherMatchedPart.getExactMatch());
+                && tokenPositions.equals(otherMatchedPart.tokenPositions) && exactMatch.equals(otherMatchedPart.exactMatch);
     }
 }

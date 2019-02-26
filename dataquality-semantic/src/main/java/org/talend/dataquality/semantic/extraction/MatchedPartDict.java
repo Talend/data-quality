@@ -12,16 +12,64 @@ import java.util.List;
  */
 public class MatchedPartDict extends MatchedPart {
 
-    public MatchedPartDict(TokenizedString originalField, int start, int end) {
-        checkBounds(start, end);
+    public MatchedPartDict(TokenizedString originalField, int startToken, int endToken, String luceneMatch) {
         this.originalField = originalField;
-        this.start = start;
-        this.end = end;
+        checkBounds(startToken, endToken);
+        this.start = startToken;
+        this.end = endToken;
         initTokenPositions();
+        computeExactMatch(luceneMatch);
     }
 
     @Override
-    public String getExactMatch() {
+    protected void checkBounds(int start, int end) {
+        if (start < 0 || end < 0 || end < start || end >= originalField.getTokens().size()) {
+            throw new IllegalArgumentException("Bounds for match are incorrect : start = {}, end = {}" + start + end);
+        }
+    }
+
+    public void computeExactMatch(String luceneMatch) {
+        StringBuilder match = joinMatchedTokens();
+        TokenizedString tokenizedMatch = new TokenizedString(luceneMatch);
+
+        if (tokenizedMatch.isStartingWithSeparator() && this.hasPrecedingSeparator()) {
+            String precedingSeparator = originalField.getSeparators()
+                    .get(originalField.isStartingWithSeparator() ? start : start - 1);
+            String matchFirstSeparator = tokenizedMatch.getSeparators().get(0);
+
+            int curs1 = precedingSeparator.length() - 1;
+            int curs2 = matchFirstSeparator.length() - 1;
+            while (curs1 >= 0 && curs2 >= 0 && precedingSeparator.charAt(curs1) == matchFirstSeparator.charAt(curs2)) {
+                match.insert(0, precedingSeparator.charAt(curs1--));
+                curs2--;
+            }
+        }
+
+        if (tokenizedMatch.isEndingWithSeparator() && this.hasFollowingSeparator()) {
+            String followingSeparator = originalField.getSeparators()
+                    .get(originalField.isStartingWithSeparator() ? end + 1 : end);
+            String matchLastSeparator = tokenizedMatch.getSeparators().get(0);
+
+            int curs1 = 0;
+            int curs2 = 0;
+            while (curs1 < followingSeparator.length() && curs2 < matchLastSeparator.length()
+                    && followingSeparator.charAt(curs1) == matchLastSeparator.charAt(curs2)) {
+                match.append(followingSeparator.charAt(curs1++));
+                curs2++;
+            }
+        }
+        exactMatch = match.toString();
+    }
+
+    private boolean hasPrecedingSeparator() {
+        return start > 0 || originalField.isStartingWithSeparator();
+    }
+
+    private boolean hasFollowingSeparator() {
+        return end < originalField.getTokens().size() - 1 || originalField.isEndingWithSeparator();
+    }
+
+    private StringBuilder joinMatchedTokens() {
         List<String> tokens = originalField.getTokens();
         List<String> separators = originalField.getSeparators();
 
@@ -29,6 +77,7 @@ public class MatchedPartDict extends MatchedPart {
         for (int i = start; i < end; i++) {
             sb.append(separators.get(i)).append(tokens.get(i + 1));
         }
-        return sb.toString();
+        return sb;
     }
+
 }

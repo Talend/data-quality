@@ -1,4 +1,5 @@
 .DS_Store
+.attach_*
 target/
 bin/
 class/
