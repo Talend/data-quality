@@ -167,4 +167,16 @@ public class ExtractFromDictionaryTest {
         assertEquals(expected, actual);
         assertEquals("Bràzil", actual.get(0).getExactMatch());
     }
+
+    @Test
+    public void matchEndsWithSeparator() {
+        DQCategory category = CategoryRegistryManager.getInstance()
+                .getCategoryMetadataByName(SemanticCategoryEnum.MUSEUM.getId());
+        ExtractFromDictionary efd = new ExtractFromDictionary(snapshot, category);
+        TokenizedString input = new TokenizedString("Musical Instrument Museum (Phoenix) and the las");
+        List<MatchedPart> expected = Collections
+                .singletonList(new MatchedPartDict(input, 0, 3, "Musical Instrument Museum (Phoenix)"));
+        List<MatchedPart> matches = efd.getMatches(input);
+        assertEquals(expected, matches);
+    }
 }
