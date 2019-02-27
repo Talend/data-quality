@@ -64,6 +64,14 @@ public class DQValidator implements Serializable {
         this.re2jCompliant = re2jCompliant;
     }
 
+    public boolean isGenerexCompliant() {
+        return generexCompliant;
+    }
+
+    public void setGenerexCompliant(boolean generexCompliant) {
+        this.generexCompliant = generexCompliant;
+    }
+
     public static final class DQValidatorBuilder {
 
         private String patternString;
