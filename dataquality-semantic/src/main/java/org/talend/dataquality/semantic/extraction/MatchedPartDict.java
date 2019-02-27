@@ -48,7 +48,7 @@ public class MatchedPartDict extends MatchedPart {
         if (tokenizedMatch.isEndingWithSeparator() && this.hasFollowingSeparator()) {
             String followingSeparator = originalField.getSeparators()
                     .get(originalField.isStartingWithSeparator() ? end + 1 : end);
-            String matchLastSeparator = tokenizedMatch.getSeparators().get(0);
+            String matchLastSeparator = tokenizedMatch.getSeparators().get(tokenizedMatch.getSeparators().size() - 1);
 
             int curs1 = 0;
             int curs2 = 0;
@@ -79,5 +79,4 @@ public class MatchedPartDict extends MatchedPart {
         }
         return sb;
     }
-
 }

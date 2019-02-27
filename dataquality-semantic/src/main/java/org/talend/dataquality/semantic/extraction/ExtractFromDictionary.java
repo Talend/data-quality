@@ -44,7 +44,7 @@ public class ExtractFromDictionary extends ExtractFromSemanticType {
                     break;
                 }
 
-                int match = containsExactMatch(phrase, matches);
+                int match = exactMatchIndex(phrase, matches);
                 if (match > -1) {
                     luceneMatch = matches.get(match);
                     matchStart = i;
@@ -66,7 +66,7 @@ public class ExtractFromDictionary extends ExtractFromSemanticType {
         return index.getSearcher().searchPhraseInSemanticCategory(semancticCategory.getId(), StringUtils.join(phrase, ' '));
     }
 
-    private int containsExactMatch(List<String> phrase, List<String> matches) {
+    private int exactMatchIndex(List<String> phrase, List<String> matches) {
         for (int i = 0; i < matches.size(); i++) {
             List<String> matchTokens = TokenizedString.tokenize(StringUtils.stripAccents(matches.get(i)));
             if (equalsIgnoreCase(matchTokens, phrase)) {
