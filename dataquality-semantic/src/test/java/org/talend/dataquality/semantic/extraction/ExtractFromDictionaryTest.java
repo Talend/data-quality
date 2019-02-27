@@ -85,7 +85,7 @@ public class ExtractFromDictionaryTest {
 
     @Test
     public void matchEndsWithSeparator() {
-        TokenizedString input = new TokenizedString("The Music International Museum (Phoenix) is the best.");
+        TokenizedString input = new TokenizedString("The Music International Museum (Phoenix))) is the best.");
         ExtractFromDictionary dict = new ExtractFromDictionary(mockSnapshot, category);
         when(mockSearcher.searchPhraseInSemanticCategory(Matchers.anyString(), Matchers.anyString()))
                 .thenReturn(Collections.singletonList("Music International Museum (Phoenix)"));
