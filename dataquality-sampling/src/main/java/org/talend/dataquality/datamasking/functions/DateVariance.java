@@ -15,6 +15,7 @@ package org.talend.dataquality.datamasking.functions;
 import static org.talend.dataquality.datamasking.FunctionMode.CONSISTENT;
 
 import java.util.Date;
+import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

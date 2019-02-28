@@ -232,8 +232,8 @@ public class GenerateFromRegexTest {
     @Test
     public void testParseCaseTDQ16375() {
         GenerateFromRegex regexFunction = new GenerateFromRegex();
-        regexFunction.setRandom(new Random(12345));
         regexFunction.parse("^alcool|bière|tequila|pastis|champagne$", true);
+        regexFunction.setRandom(new Random(12345));
         String maskResult = regexFunction.doGenerateMaskedField("ABC");
         assertEquals("unexpected mask result! ", "pastis", maskResult);
     }
