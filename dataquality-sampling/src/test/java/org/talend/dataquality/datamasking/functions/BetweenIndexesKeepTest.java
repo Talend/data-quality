@@ -35,7 +35,7 @@ public class BetweenIndexesKeepTest {
     private String output;
 
     @Before
-    public void setup() {
+    public void setUp() {
         bik.setRandom(new Random(42L));
     }
 

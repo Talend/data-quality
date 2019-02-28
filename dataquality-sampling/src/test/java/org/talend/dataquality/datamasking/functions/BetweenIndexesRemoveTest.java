@@ -31,7 +31,7 @@ public class BetweenIndexesRemoveTest {
     private String output;
 
     @Before
-    public void setup() {
+    public void setUp() {
         bir.setRandom(new Random(42L));
     }
 
