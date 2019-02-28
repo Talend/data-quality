@@ -24,11 +24,17 @@ public class ExtractFromRegex extends ExtractFromSemanticType {
         String inputValue = tokenizedField.getValue();
 
         Matcher matcher = pattern.matcher(inputValue);
-        while (matcher.find()) {
+        int curs = 0;
+        while (matcher.find(curs)) {
             int start = matcher.start();
             int end = matcher.end();
-            if (validBounds(tokenizedField, start, end))
+            if (validBounds(tokenizedField, start, end)) {
                 matchedParts.add(new MatchedPartRegex(tokenizedField, start, end));
+                curs = end;
+            } else {
+                curs++;
+            }
+
         }
         return matchedParts;
     }

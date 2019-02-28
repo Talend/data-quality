@@ -142,6 +142,21 @@ public class ExtractFromRegexTest extends CategoryRegistryManagerAbstract {
     }
 
     @Test
+    public void validMatchAfterInvalidMatch() {
+        DQCategory category = CategoryRegistryManager.getInstance()
+                .getCategoryMetadataByName(SemanticCategoryEnum.FR_PHONE.getId());
+        ExtractFromRegex efd = new ExtractFromRegex(dictionarySnapshot, category);
+        TokenizedString input = new TokenizedString(
+                "My phone is 0102030405. Your phone is 9906 0203040506, isn't it? My SSN is 123010112312374.");
+        MatchedPart expectedMatch1 = new MatchedPartRegex(input, 12, 22);
+        MatchedPart expectedMatch2 = new MatchedPartRegex(input, 43, 53);
+        List<MatchedPart> list = efd.getMatches(input);
+        assertTrue("Expected : " + expectedMatch1.getExactMatch() + " in " + list, list.contains(expectedMatch1));
+        assertTrue("Expected : " + expectedMatch2.getExactMatch() + " in " + list, list.contains(expectedMatch2));
+        assertEquals(list.toString(), 2, list.size());
+    }
+
+    @Test
     public void multipleFrPhone() {
         DQCategory category = CategoryRegistryManager.getInstance()
                 .getCategoryMetadataByName(SemanticCategoryEnum.FR_PHONE.getId());
