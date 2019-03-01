@@ -60,7 +60,7 @@ public class GenerateFromCompound extends FunctionString {
                 new String[] { String.valueOf(categoryValues.stream().map(CategoryValues::getName).toArray()) });
         Optional<List<CategoryValues>> categoryValues = findMatchTypes(str);
         if (categoryValues.isPresent()) {
-            Distribution distribution = processDistribution(categoryValues.get());
+            Distribution distribution = processDistribution(categoryValues.get(), r);
             try {
                 result = getMaskedValue(str, distribution, r);
             } catch (IllegalAccessException | InstantiationException e) {
@@ -97,7 +97,7 @@ public class GenerateFromCompound extends FunctionString {
         setRandom(rand);
     }
 
-    private Distribution processDistribution(List<CategoryValues> categories) {
+    private Distribution processDistribution(List<CategoryValues> categories, Random r) {
         int largestDict;
         int nbElem;
 
@@ -128,7 +128,7 @@ public class GenerateFromCompound extends FunctionString {
                 probabilities.add(new Pair(categoryValues.getCategoryId(), (double) largestDict / nbElem));
         });
 
-        return new Distribution(probabilities, rnd);
+        return new Distribution(probabilities, r);
     }
 
     private String getMaskedValue(String value, Distribution distribution, Random r)
