@@ -1,7 +1,5 @@
 package org.talend.dataquality.semantic.extraction;
 
-import java.util.Objects;
-
 /**
  * Child class of {@link MatchedPart} for handling matches from regexes.
  *
@@ -14,46 +12,25 @@ import java.util.Objects;
  */
 public class MatchedPartRegex extends MatchedPart {
 
-    private String exactMatch;
-
-    public MatchedPartRegex(TokenizedString tokenizedField, int start, int end) {
-        checkBounds(start, end);
+    public MatchedPartRegex(TokenizedString tokenizedField, int startChar, int endChar) {
         originalField = tokenizedField;
+        checkBounds(startChar, endChar);
         String field = tokenizedField.getValue();
-        exactMatch = field.substring(start, end);
-        this.start = getTokenNumber(field.substring(0, start));
-        this.end = getTokenNumber(field.substring(0, end)) - 1;
+        exactMatch = field.substring(startChar, endChar);
+        this.start = getTokenNumber(field.substring(0, startChar));
+        this.end = getTokenNumber(field.substring(0, endChar)) - 1;
         initTokenPositions();
+    }
+
+    @Override
+    protected void checkBounds(int start, int end) {
+        if (start < 0 || end < 0 || end < start || end > originalField.getValue().length()) {
+            throw new IllegalArgumentException("Bounds for match are incorrect : start = {}, end = {}" + start + end);
+        }
     }
 
     private int getTokenNumber(String string) {
         TokenizedString tokenizedString = new TokenizedString(string);
         return tokenizedString.getTokens().size();
-    }
-
-    @Override
-    public String getExactMatch() {
-        return exactMatch;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-
-        if (!(o instanceof MatchedPartRegex)) {
-            return false;
-        }
-
-        MatchedPartRegex otherMatchedPart = (MatchedPartRegex) o;
-        return originalField.toString().equals(otherMatchedPart.originalField.toString())
-                && exactMatch.equals(otherMatchedPart.exactMatch);
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = super.hashCode();
-        return hash + Objects.hash(exactMatch);
     }
 }

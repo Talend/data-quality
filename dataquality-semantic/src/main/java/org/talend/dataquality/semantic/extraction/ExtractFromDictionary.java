@@ -32,29 +32,33 @@ public class ExtractFromDictionary extends ExtractFromSemanticType {
         while (i < nbOfTokens) {
             int matchStart = -1;
             int matchEnd = -1;
-            boolean exactMatch = false;
+            String luceneMatch = null;
             List<String> phrase = new ArrayList<>();
+
             int j = i;
             while (j < nbOfTokens) {
                 phrase.add(StringUtils.stripAccents(tokens.get(j)));
                 List<String> matches = findMatches(phrase);
+
                 if (matches.isEmpty()) {
                     break;
                 }
-                if (containsExactMatch(phrase, matches)) {
-                    exactMatch = true;
+
+                int match = exactMatchIndex(phrase, matches);
+                if (match > -1) {
+                    luceneMatch = matches.get(match);
                     matchStart = i;
                     matchEnd = j;
                 }
                 j++;
             }
-            if (exactMatch) {
-                matchedParts.add(new MatchedPartDict(tokenizedField, matchStart, matchEnd));
+
+            if (luceneMatch != null) {
+                matchedParts.add(new MatchedPartDict(tokenizedField, matchStart, matchEnd, luceneMatch));
                 i = matchEnd;
             }
             i++;
         }
-
         return matchedParts;
     }
 
@@ -62,13 +66,14 @@ public class ExtractFromDictionary extends ExtractFromSemanticType {
         return index.getSearcher().searchPhraseInSemanticCategory(semancticCategory.getId(), StringUtils.join(phrase, ' '));
     }
 
-    private boolean containsExactMatch(List<String> phrase, List<String> matches) {
-        for (String match : matches) {
-            if (equalsIgnoreCase(TokenizedString.tokenize(StringUtils.stripAccents(match)), phrase)) {
-                return true;
+    private int exactMatchIndex(List<String> phrase, List<String> matches) {
+        for (int i = 0; i < matches.size(); i++) {
+            List<String> matchTokens = TokenizedString.tokenize(StringUtils.stripAccents(matches.get(i)));
+            if (equalsIgnoreCase(matchTokens, phrase)) {
+                return i;
             }
         }
-        return false;
+        return -1;
     }
 
     /**
@@ -88,7 +93,6 @@ public class ExtractFromDictionary extends ExtractFromSemanticType {
                 return false;
             }
         }
-
         return true;
     }
 }

@@ -26,6 +26,10 @@ public class TokenizedString {
 
     private final List<String> separators;
 
+    private boolean startingWithSeparator;
+
+    private boolean endingWithSeparator;
+
     public TokenizedString(String str) {
         value = str;
         tokens = tokenize(value);
@@ -33,11 +37,12 @@ public class TokenizedString {
         extractSeparators();
     }
 
-    public TokenizedString(List<String> tokens, List<String> separators) {
-        check(tokens, separators);
-        this.tokens = tokens;
-        this.separators = separators;
-        value = concatTokens();
+    public boolean isStartingWithSeparator() {
+        return startingWithSeparator;
+    }
+
+    public boolean isEndingWithSeparator() {
+        return endingWithSeparator;
     }
 
     public List<String> getTokens() {
@@ -61,26 +66,15 @@ public class TokenizedString {
     private void extractSeparators() {
         Matcher matcher = separatorPattern.matcher(value);
 
+        startingWithSeparator = false;
+        endingWithSeparator = false;
         while (matcher.find()) {
-            if (matcher.start() != 0 && matcher.end() < value.length()) {
-                separators.add(matcher.group());
+            if (matcher.start() == 0) {
+                startingWithSeparator = true;
+            } else if (matcher.end() == value.length()) {
+                endingWithSeparator = true;
             }
-        }
-    }
-
-    private String concatTokens() {
-        StringBuilder sb = new StringBuilder(tokens.get(0));
-        for (int i = 1; i < tokens.size(); i++) {
-            sb.append(separators.get(i - 1)).append(tokens.get(i));
-        }
-        return sb.toString();
-    }
-
-    private void check(List<String> tokens, List<String> separators) {
-        if (tokens.size() - 1 != separators.size()) {
-            throw new IllegalArgumentException(
-                    "Invalid tokens and/or separators ! There must be one less separator than tokens.\nNumber of tokens : "
-                            + tokens.size() + "\nNumber of separators : " + separators.size());
+            separators.add(matcher.group());
         }
     }
 

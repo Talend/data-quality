@@ -10,14 +10,19 @@ public class MatchedPartTest {
     private TokenizedString field = new TokenizedString("Manchester United States Of America");
 
     @Test(expected = IllegalArgumentException.class)
-    public void outOfBounds() {
-        new MatchedPartDict(field, -1, 120);
+    public void startOutOfBounds() {
+        new MatchedPartDict(field, -1, 120, "fgdfgdf");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void endOutOfBounds() {
+        new MatchedPartDict(field, -1, 120, "fgdfgdf");
     }
 
     @Test
     public void equals() {
-        MatchedPart x = new MatchedPartDict(field, 0, 1);
-        MatchedPart y = new MatchedPartDict(field, 0, 1);
+        MatchedPart x = new MatchedPartDict(field, 0, 1, "Manchester United");
+        MatchedPart y = new MatchedPartDict(field, 0, 1, "Manchester United");
 
         assertEquals(x, y);
         assertNotEquals(x, field);
@@ -30,22 +35,22 @@ public class MatchedPartTest {
 
     @Test
     public void smallerIsLessImportant() {
-        MatchedPart x = new MatchedPartDict(field, 0, 1);
-        MatchedPart y = new MatchedPartDict(field, 1, 4);
+        MatchedPart x = new MatchedPartDict(field, 0, 1, "Manchester United");
+        MatchedPart y = new MatchedPartDict(field, 1, 4, "United States Of America");
         assertEquals(1, x.compareTo(y));
     }
 
     @Test
     public void longerIsMoreImportant() {
-        MatchedPart x = new MatchedPartDict(field, 0, 2);
-        MatchedPart y = new MatchedPartDict(field, 1, 2);
+        MatchedPart x = new MatchedPartDict(field, 0, 2, "Manchester United States");
+        MatchedPart y = new MatchedPartDict(field, 1, 2, "United States");
         assertEquals(-1, x.compareTo(y));
     }
 
     @Test
     public void priorityBreaksEquality() {
-        MatchedPart x = new MatchedPartDict(field, 0, 1);
-        MatchedPart y = new MatchedPartDict(field, 1, 2);
+        MatchedPart x = new MatchedPartDict(field, 0, 1, "Manchester United");
+        MatchedPart y = new MatchedPartDict(field, 1, 2, "United States");
         x.setPriority(0);
         y.setPriority(1);
         assertEquals(-1, x.compareTo(y));
@@ -56,16 +61,16 @@ public class MatchedPartTest {
 
     @Test
     public void comparisonSymmetry() {
-        MatchedPart x = new MatchedPartDict(field, 0, 1);
-        MatchedPart y = new MatchedPartDict(field, 1, 4);
+        MatchedPart x = new MatchedPartDict(field, 0, 1, "Manchester United");
+        MatchedPart y = new MatchedPartDict(field, 1, 4, "United States Of America");
         assertEquals(x.compareTo(y), -y.compareTo(x));
     }
 
     @Test
     public void comparisonTransitivity() {
-        MatchedPart x = new MatchedPartDict(field, 0, 1);
-        MatchedPart y = new MatchedPartDict(field, 1, 2);
-        MatchedPart z = new MatchedPartDict(field, 3, 4);
+        MatchedPart x = new MatchedPartDict(field, 0, 1, "Manchester United");
+        MatchedPart y = new MatchedPartDict(field, 1, 2, "United States");
+        MatchedPart z = new MatchedPartDict(field, 3, 4, "Of America");
         x.setPriority(0);
         y.setPriority(0);
         z.setPriority(0);
@@ -76,9 +81,9 @@ public class MatchedPartTest {
 
     @Test
     public void doubleEquality() {
-        MatchedPart x = new MatchedPartDict(field, 0, 1);
-        MatchedPart y = new MatchedPartDict(field, 0, 1);
-        MatchedPart z = new MatchedPartDict(field, 3, 4);
+        MatchedPart x = new MatchedPartDict(field, 0, 1, "Manchester United");
+        MatchedPart y = new MatchedPartDict(field, 0, 1, "Manchester United");
+        MatchedPart z = new MatchedPartDict(field, 3, 4, "Of America");
         x.setPriority(0);
         y.setPriority(0);
         z.setPriority(0);

@@ -46,12 +46,12 @@ public class FieldExtractionFunctionTest {
         input = "Manchester United States Of America, Paris-Saint Germain";
         TokenizedString tokenizedInput = new TokenizedString(input);
 
-        match1 = new MatchedPartDict(tokenizedInput, 0, 1);
-        match1bis = new MatchedPartDict(tokenizedInput, 5, 7);
-        match2 = new MatchedPartDict(tokenizedInput, 1, 4);
-        match2bis = new MatchedPartDict(tokenizedInput, 1, 2);
-        match3 = new MatchedPartDict(tokenizedInput, 0, 0);
-        match3bis = new MatchedPartDict(tokenizedInput, 5, 5);
+        match1 = new MatchedPartDict(tokenizedInput, 0, 1, "Manchester");
+        match1bis = new MatchedPartDict(tokenizedInput, 5, 7, "Paris-Saint Germain");
+        match2 = new MatchedPartDict(tokenizedInput, 1, 4, "United States Of America");
+        match2bis = new MatchedPartDict(tokenizedInput, 1, 2, "United States");
+        match3 = new MatchedPartDict(tokenizedInput, 0, 0, "Manchester");
+        match3bis = new MatchedPartDict(tokenizedInput, 5, 5, "Paris");
     }
 
     @Test
