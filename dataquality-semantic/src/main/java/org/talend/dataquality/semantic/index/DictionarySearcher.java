@@ -36,8 +36,8 @@ import org.apache.lucene.search.CachingWrapperFilter;
 import org.apache.lucene.search.FieldCacheTermsFilter;
 import org.apache.lucene.search.Filter;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.PrefixQuery;
 import org.apache.lucene.search.Query;
-import org.apache.lucene.search.RegexpQuery;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.SearcherManager;
 import org.apache.lucene.search.TermQuery;
@@ -383,16 +383,16 @@ public class DictionarySearcher extends AbstractDictionarySearcher {
         Query catQuery = getTermQuery(F_CATID, catId, false);
 
         String filteredString = StringUtils.join(getTokensFromAnalyzer(phrase), ' ');
-        RegexpQuery regexQuery = new RegexpQuery(new Term(F_SYNTERM, filteredString + ".*"));
+        PrefixQuery syntermQuery = new PrefixQuery(new Term(F_SYNTERM, filteredString));
 
         BooleanQuery combinedQuery = new BooleanQuery();
         combinedQuery.add(catQuery, BooleanClause.Occur.MUST);
-        combinedQuery.add(regexQuery, BooleanClause.Occur.MUST);
+        combinedQuery.add(syntermQuery, BooleanClause.Occur.MUST);
 
         try {
             final IndexSearcher searcher = mgr.acquire();
             final IndexReader reader = searcher.getIndexReader();
-            TopDocs topDocs = searcher.search(combinedQuery, Integer.MAX_VALUE);
+            TopDocs topDocs = searcher.search(combinedQuery, 1000);
 
             List<String> listDocs = new ArrayList<>();
             for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
