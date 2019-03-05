@@ -80,5 +80,4 @@ public class MatchedPartDict extends MatchedPart {
         }
         return S1.substring(Start, (Start + Max));
     }
-
 }
