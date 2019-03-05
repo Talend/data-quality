@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Phone number validation and formatting Library
 Bundle-SymbolicName: org.talend.dataquality.phone
-Bundle-Version: 6.3.0.SNAPSHOT
+Bundle-Version: 6.3.1.SNAPSHOT
 Bundle-Vendor: .Talend SA.
 Bundle-ClassPath: .
 Require-Bundle: org.talend.libraries.google.libphonumber,
