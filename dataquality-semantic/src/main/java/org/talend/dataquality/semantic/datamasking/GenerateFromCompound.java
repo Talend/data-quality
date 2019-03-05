@@ -16,6 +16,7 @@ import com.mifmif.common.regex.Generex;
 import org.apache.commons.math3.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.datamasking.functions.Function;
 import org.talend.dataquality.datamasking.functions.FunctionString;
 import org.talend.dataquality.datamasking.semantic.ReplaceCharactersWithGeneration;
@@ -49,6 +50,11 @@ public class GenerateFromCompound extends FunctionString {
     private SemanticQualityAnalyzer analyzer = null;
 
     @Override
+    protected String doGenerateMaskedField(String str, FunctionMode mode) {
+        return super.doGenerateMaskedField(str, mode);
+    }
+
+    @Override
     protected String doGenerateMaskedField(String value) {
         return doGenerateMaskedFieldWithRandom(value, rnd);
     }
@@ -60,7 +66,7 @@ public class GenerateFromCompound extends FunctionString {
                 new String[] { String.valueOf(categoryValues.stream().map(CategoryValues::getName).toArray()) });
         Optional<List<CategoryValues>> categoryValues = findMatchTypes(str);
         if (categoryValues.isPresent()) {
-            Distribution distribution = processDistribution(categoryValues.get());
+            Distribution distribution = processDistribution(categoryValues.get(), r);
             try {
                 result = getMaskedValue(str, distribution, r);
             } catch (IllegalAccessException | InstantiationException e) {
@@ -97,7 +103,7 @@ public class GenerateFromCompound extends FunctionString {
         setRandom(rand);
     }
 
-    private Distribution processDistribution(List<CategoryValues> categories) {
+    private Distribution processDistribution(List<CategoryValues> categories, Random r) {
         int largestDict;
         int nbElem;
 
@@ -128,7 +134,7 @@ public class GenerateFromCompound extends FunctionString {
                 probabilities.add(new Pair(categoryValues.getCategoryId(), (double) largestDict / nbElem));
         });
 
-        return new Distribution(probabilities, rnd);
+        return new Distribution(probabilities, r);
     }
 
     private String getMaskedValue(String value, Distribution distribution, Random r)
