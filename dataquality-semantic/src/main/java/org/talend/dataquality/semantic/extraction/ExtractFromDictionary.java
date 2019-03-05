@@ -22,8 +22,7 @@ public class ExtractFromDictionary extends ExtractFromSemanticType {
 
     private final LuceneIndex index;
 
-    private static final Pattern separatorPatternWithApostrophe =
-            Pattern.compile("[\\p{Punct}\\s\\u00A0\\u2007\\u202F\\u3000]+");
+    private static final Pattern separatorPatternWithApostrophe = Pattern.compile("[\\p{Punct}\\s\\u00A0\\u2007\\u202F\\u3000]+");
 
     protected ExtractFromDictionary(DictionarySnapshot snapshot, DQCategory category) {
         super(snapshot, category);
@@ -84,8 +83,8 @@ public class ExtractFromDictionary extends ExtractFromSemanticType {
 
     private List<String> getTokensWithApostrophe(TokenizedString tokenizedString) {
         List<String> tokens = tokenizedString.getTokens();
-        List<String> tokensWithoutApostrophe =
-                new ArrayList<>(Arrays.asList(separatorPatternWithApostrophe.split(tokenizedString.getValue())));
+        List<String> tokensWithoutApostrophe = new ArrayList<>(
+                Arrays.asList(separatorPatternWithApostrophe.split(tokenizedString.getValue())));
 
         if (!tokensWithoutApostrophe.isEmpty() && tokensWithoutApostrophe.get(0).isEmpty()) {
             tokens.remove(0);
@@ -103,9 +102,7 @@ public class ExtractFromDictionary extends ExtractFromSemanticType {
     }
 
     private List<String> findMatches(List<String> phrase) {
-        return index
-                .getSearcher()
-                .searchPhraseInSemanticCategory(semancticCategory.getId(), StringUtils.join(phrase, ' '));
+        return index.getSearcher().searchPhraseInSemanticCategory(semancticCategory.getId(), StringUtils.join(phrase, ' '));
     }
 
     private int exactMatchIndex(List<String> phrase, List<String> matches) {

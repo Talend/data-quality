@@ -30,8 +30,8 @@ public class ExtractFromDictionaryTest {
 
     private DictionarySnapshot snapshot = new StandardDictionarySnapshotProvider().get();
 
-    private DQCategory category =
-            CategoryRegistryManager.getInstance().getCategoryMetadataByName(SemanticCategoryEnum.COUNTRY.getId());
+    private DQCategory category = CategoryRegistryManager.getInstance()
+            .getCategoryMetadataByName(SemanticCategoryEnum.COUNTRY.getId());
 
     @Mock
     private DictionarySearcher mockSearcher;
@@ -133,8 +133,8 @@ public class ExtractFromDictionaryTest {
     public void matchAfterMultiTokenMatch() {
         ExtractFromDictionary efd = new ExtractFromDictionary(snapshot, category);
         TokenizedString input = new TokenizedString("The United States, Somalia, AFR");
-        List<MatchedPart> expected = Arrays
-                .asList(new MatchedPartDict(input, 1, 2, "United States"), new MatchedPartDict(input, 3, 3, "Somalia"));
+        List<MatchedPart> expected = Arrays.asList(new MatchedPartDict(input, 1, 2, "United States"),
+                new MatchedPartDict(input, 3, 3, "Somalia"));
         assertEquals(expected, efd.getMatches(input));
     }
 
@@ -171,8 +171,7 @@ public class ExtractFromDictionaryTest {
 
     @Test
     public void matchWithApostrophe() {
-        DQCategory firstname = CategoryRegistryManager
-                .getInstance()
+        DQCategory firstname = CategoryRegistryManager.getInstance()
                 .getCategoryMetadataByName(SemanticCategoryEnum.FIRST_NAME.getId());
 
         ExtractFromDictionary efd = new ExtractFromDictionary(snapshot, firstname);

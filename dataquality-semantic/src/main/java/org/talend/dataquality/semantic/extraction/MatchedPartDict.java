@@ -56,8 +56,7 @@ public class MatchedPartDict extends MatchedPart {
         String commonSubString = longestCommonSubstring(originalWithModif, match.toLowerCase());
         if (!commonSubString.isEmpty()) { //we have found the longest common substring between value and lucene
             int indexOf = originalWithModif.indexOf(commonSubString);
-            exactMatch = originalValue
-                    .substring(indexStart + indexOf, indexStart + indexOf + commonSubString.length()); //sub spart with good case and separator
+            exactMatch = originalValue.substring(indexStart + indexOf, indexStart + indexOf + commonSubString.length()); //sub spart with good case and separator
         }
     }
 
