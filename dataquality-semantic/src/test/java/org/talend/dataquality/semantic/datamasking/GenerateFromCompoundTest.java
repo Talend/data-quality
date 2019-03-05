@@ -6,6 +6,8 @@ import org.apache.lucene.document.StringField;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.talend.dataquality.datamasking.FunctionMode;
+import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.classifier.custom.UserDefinedClassifier;
 import org.talend.dataquality.semantic.datamasking.model.CategoryValues;
 import org.talend.dataquality.semantic.index.DictionarySearcher;
@@ -14,6 +16,8 @@ import org.talend.dataquality.semantic.index.LuceneIndex;
 import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
+import org.talend.dataquality.semantic.snapshot.StandardDictionarySnapshotProvider;
+import org.talend.dataquality.semantic.validator.GenerateValidator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -111,6 +115,28 @@ public class GenerateFromCompoundTest {
         generate.parse("1", true, new Random(1234));
         String result = generate.doGenerateMaskedField("a");
         assertEquals("y", result);
+    }
+
+    @Test
+    public void repeatableMaskCompoundMultiMatchedRegex() { //TDQ-16673: Consistent repeatable SemanticType masking on Phone number
+        DictionarySnapshot snapshotCompound = new StandardDictionarySnapshotProvider().get();
+        final DQCategory dqCategory = snapshotCompound.getDQCategoryByName(SemanticCategoryEnum.PHONE.name());
+        List types = GenerateValidator.initSemanticTypes(snapshotCompound, dqCategory, null);
+
+        GenerateFromCompound generateFromCompound = new GenerateFromCompound();
+        if (types.size() > 0) {
+            generateFromCompound.setDictionarySnapshot(snapshotCompound);
+            generateFromCompound.setCategoryValues(types);
+        }
+        generateFromCompound.setSeed("azer1!");
+        generateFromCompound.setMaskingMode(FunctionMode.CONSISTENT);
+
+        final String originalMaskedPhone = "0714-1438-85";
+        final String expectedMaskedPhone = "089 61994681";
+        String result1 = generateFromCompound.doGenerateMaskedField(originalMaskedPhone, FunctionMode.CONSISTENT);
+        String result2 = generateFromCompound.doGenerateMaskedField(originalMaskedPhone, FunctionMode.CONSISTENT);
+        assertEquals(expectedMaskedPhone, result1);
+        assertEquals(expectedMaskedPhone, result2);
     }
 
     private List<CategoryValues> createCategoryValuesWithCompound() {
