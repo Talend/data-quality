@@ -31,6 +31,41 @@ public enum SemanticCategoryEnum {
     AIRPORT("5836fb7042b02a69874f3b0b", "Airport", "Airport name", CategoryType.DICT, false),
     AIRPORT_CODE("5836fb7642b02a69874f77e3", "Airport Code", "Airport code", CategoryType.DICT, true),
     CIVILITY("5836fbb042b02a698752e66b", "Civility", "Civility (multilingual)", CategoryType.DICT, true),
+    ACADEMIC_PROFESSIONAL_TITLE(
+            "4e50887000c04b09d5bb8107",
+            "Academic and professional title",
+            "Academic and professional title (in EN and FR)",
+            CategoryType.DICT,
+            true),
+    CHRISTIAN_RELIGIOUS_TITLE(
+            "4e508870c04b091057ad70a7",
+            "Christian religious title",
+            "Christian religious title (in EN and FR)",
+            CategoryType.DICT,
+            true),
+    ISLAMIC_RELIGIOUS_TITLE(
+            "4e508870c04b091057ad70a8",
+            "Islamic religious title",
+            "Islamic religious title (in EN and FR)",
+            CategoryType.DICT,
+            true),
+    JUDAIC_RELIGIOUS_TITLE(
+            "4e508870c04b091057ad70a9",
+            "Judaic religious title",
+            "Judaic religious title (in EN and FR)",
+            CategoryType.DICT,
+            true),
+    FORMAL_TITLE("4e508870c04b091057ad70a6", "Formal title", "Formal title (in EN and FR)", CategoryType.DICT, true),
+
+    ACADEMIC_PROFESSIONAL_SUFFIX(
+            "4e508870c04b091057ad70ad",
+            "Academic and professional suffix",
+            "Academic and professional suffix (in EN and FR)",
+            CategoryType.DICT,
+            true),
+    MILITARY_SUFFIX("4e508870c04b091057ad70ae", "Military suffix", "Military suffix (in EN and FR)", CategoryType.DICT, true),
+    INHERITED_SUFFIX("4e508870c04b091057ad70ac", "Inherited suffix", "Inherited suffix (in EN and FR)", CategoryType.DICT, true),
+
     CONTINENT("5836fbb042b02a698752e679", "Continent", "Continent name (multilingual)", CategoryType.DICT, true),
     CONTINENT_CODE("5836fbb042b02a698752e68f", "Continent Code", "Continent code", CategoryType.DICT, true),
     COUNTRY("5836fbb042b02a698752e6a1", "Country", "Country Name (EN+FR)", CategoryType.DICT, true),
@@ -226,6 +261,11 @@ public enum SemanticCategoryEnum {
             "North American state code groups together US and Canadian state codes",
             CategoryType.COMPOUND,
             true),
+
+    GENERIC_URL("4e50887000c04b094367d3a5", "Generic URL", "Generic URL", CategoryType.COMPOUND, true),
+    RELIGIOUS_TITLE("4e508870c04b091057ad70aa", "Religious title", "Religious title (in EN and FR)", CategoryType.COMPOUND, true),
+    TITLE("4e508870c04b091057ad70ab", "Title", "Title (in EN and FR)", CategoryType.COMPOUND, true),
+    NAME_SUFFIX("4e508870c04b091057ad70af", "Name suffix", "Name suffix (in EN and FR)", CategoryType.COMPOUND, true),
 
     /**
      * the categories with specific implementations

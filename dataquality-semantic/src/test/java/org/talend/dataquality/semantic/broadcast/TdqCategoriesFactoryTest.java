@@ -60,7 +60,7 @@ public class TdqCategoriesFactoryTest extends CategoryRegistryManagerAbstract {
         TdqCategories cats = TdqCategoriesFactory.createFullTdqCategories();
 
         Map<String, DQCategory> meta = cats.getCategoryMetadata().getDQCategoryMap();
-        assertEquals("Unexpected metadata size!", 75, meta.values().size());
+        assertEquals("Unexpected metadata size!", 87, meta.values().size());
         Set<String> categoryNames = new HashSet<>();
         meta.values().forEach(value -> categoryNames.add(value.getName()));
         for (DQCategory value : expectedCategories) {
@@ -78,8 +78,8 @@ public class TdqCategoriesFactoryTest extends CategoryRegistryManagerAbstract {
     @Test
     public void testCreateDefaultTdqCategories() throws IOException {
         TdqCategories cats = TdqCategoriesFactory.createSharedTdqCategories();
-        assertEquals("Unexpected metadata size!", 75, cats.getCategoryMetadata().getMetadata().size());
-        assertEquals("Unexpected document size in shared data dict!", 45829, cats.getDictionary().getDocumentList().size());
+        assertEquals("Unexpected metadata size!", 87, cats.getCategoryMetadata().getMetadata().size());
+        assertEquals("Unexpected document size in shared data dict!", 46000, cats.getDictionary().getDocumentList().size());
         assertEquals("Unexpected document size in custom data dict!", 0, cats.getCustomDictionary().getDocumentList().size());
         assertEquals("Unexpected document size in shared keyword!", 0, cats.getKeyword().getDocumentList().size());
         assertEquals("Unexpected regex classifier size!", 42, cats.getRegex().getRegexClassifier().getClassifiers().size());

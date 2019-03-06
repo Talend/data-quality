@@ -234,7 +234,7 @@ public class LocalDictionaryCacheTest extends CategoryRegistryManagerAbstract {
     @Test
     public void testListCategoriesByType() {
         CustomDictionaryHolder holder = CategoryRegistryManager.getInstance().getCustomDictionaryHolder();
-        assertEquals(45, holder.listCategories(CategoryType.DICT).size());
+        assertEquals(53, holder.listCategories(CategoryType.DICT).size());
     }
 
     @Test

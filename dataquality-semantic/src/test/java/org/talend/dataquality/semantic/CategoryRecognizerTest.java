@@ -76,6 +76,7 @@ public class CategoryRecognizerTest extends CategoryRegistryManagerAbstract {
             put("ISBN_10", 2.77F);
             put("URL", 2.77F);
             put("IBAN", 2.77F);
+            put("GENERIC_URL", 2.77F);
         }
 
     };
@@ -125,7 +126,8 @@ public class CategoryRecognizerTest extends CategoryRegistryManagerAbstract {
             put("9 rue pages, 92150 suresnes", new String[] { SemanticCategoryEnum.ADDRESS_LINE.getId() });
             put("avenue des champs elysees", new String[] { SemanticCategoryEnum.ADDRESS_LINE.getId() });
             put("F", new String[] { SemanticCategoryEnum.GENDER.getId() });
-            put("http://www.talend.com", new String[] { SemanticCategoryEnum.URL.getId() });
+            put("http://www.talend.com",
+                    new String[] { SemanticCategoryEnum.GENERIC_URL.getId(), SemanticCategoryEnum.URL.getId() });
             put("1 81 04 95 201 569 62", new String[] { SemanticCategoryEnum.FR_SSN.getId() });
             put("1810495201569", new String[] { SemanticCategoryEnum.FR_SSN.getId() });
             put("123-45-6789", new String[] { SemanticCategoryEnum.US_SSN.getId() });
@@ -184,7 +186,8 @@ public class CategoryRecognizerTest extends CategoryRegistryManagerAbstract {
             put("9 rue pages, 92150 suresnes", new String[] { SemanticCategoryEnum.ADDRESS_LINE.getDisplayName() });
             put("avenue des champs elysees", new String[] { SemanticCategoryEnum.ADDRESS_LINE.getDisplayName() });
             put("F", new String[] { SemanticCategoryEnum.GENDER.getDisplayName() });
-            put("http://www.talend.com", new String[] { SemanticCategoryEnum.URL.getDisplayName() });
+            put("http://www.talend.com",
+                    new String[] { SemanticCategoryEnum.URL.getDisplayName(), SemanticCategoryEnum.URL.getDisplayName() });
             put("1 81 04 95 201 569 62", new String[] { SemanticCategoryEnum.FR_SSN.getDisplayName() });
             put("1810495201569", new String[] { SemanticCategoryEnum.FR_SSN.getDisplayName() });
             put("123-45-6789", new String[] { SemanticCategoryEnum.US_SSN.getDisplayName() });
@@ -225,10 +228,10 @@ public class CategoryRecognizerTest extends CategoryRegistryManagerAbstract {
                     new String[] { SemanticCategoryEnum.COUNTRY_CODE_ISO3.getId(), SemanticCategoryEnum.AIRPORT_CODE.getId() });
             put("AVI", new String[] { SemanticCategoryEnum.FIRST_NAME.getId(), SemanticCategoryEnum.AIRPORT_CODE.getId() });
 
-            put("Mr", new String[] { SemanticCategoryEnum.COUNTRY_CODE_ISO2.getId(), //
+            put("Mr", new String[] { SemanticCategoryEnum.TITLE.getId(), SemanticCategoryEnum.COUNTRY_CODE_ISO2.getId(), //
                     SemanticCategoryEnum.LANGUAGE_CODE_ISO2.getId(), SemanticCategoryEnum.CIVILITY.getId() });
 
-            put("Mr.", new String[] { SemanticCategoryEnum.COUNTRY_CODE_ISO2.getId(), //
+            put("Mr.", new String[] { SemanticCategoryEnum.TITLE.getId(), SemanticCategoryEnum.COUNTRY_CODE_ISO2.getId(), //
                     SemanticCategoryEnum.LANGUAGE_CODE_ISO2.getId(), SemanticCategoryEnum.CIVILITY.getId() });
 
             put("Hartsfield–Jackson Atlanta International Airport", new String[] { SemanticCategoryEnum.AIRPORT.getId() });
@@ -282,7 +285,7 @@ public class CategoryRecognizerTest extends CategoryRegistryManagerAbstract {
             String[] catNames = catRecognizer.process(data);
             assertEquals("Invalid assumption for data <" + data + ">, actual categories: " + Arrays.asList(catNames), //$NON-NLS-1$
                     EXPECTED_CAT_ID_FOR_SINGLE_VALUES.get(data).length, catNames.length);
-            // System.out.println("\n" + data + " => expected: " + Arrays.asList(EXPECTED_CAT_ID_FOR_SINGLE_VALUES.get(data)));
+            System.out.println("\n" + data + " => expected: " + Arrays.asList(EXPECTED_CAT_ID_FOR_SINGLE_VALUES.get(data)));
 
             for (String catName : catNames) {
                 assertTrue(
@@ -308,7 +311,7 @@ public class CategoryRecognizerTest extends CategoryRegistryManagerAbstract {
             System.out.println(cf);
         }
 
-        assertEquals(7, result.size());
+        assertEquals(11, result.size());
         CategoryFrequency categoryFrequency = result.iterator().next();
 
         assertEquals("US_STATE_CODE", categoryFrequency.getCategoryId());
