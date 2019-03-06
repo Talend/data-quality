@@ -1,5 +1,8 @@
 package org.talend.dataquality.semantic.extraction;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -37,6 +40,8 @@ public class FieldExtractionFunction {
 
     private List<ExtractFromSemanticType> functions;
 
+    private final Logger LOGGER = LoggerFactory.getLogger(FieldExtractionFunction.class);
+
     protected FieldExtractionFunction(List<ExtractFromSemanticType> functions) {
         this.functions = functions;
     }
@@ -51,15 +56,19 @@ public class FieldExtractionFunction {
 
         for (int i = 0; i < functions.size(); i++) {
             ExtractFromSemanticType function = functions.get(i);
-            List<MatchedPart> functionMatches = function.getMatches(tokenizedField);
-            List<String> matchString = new ArrayList<>();
+            try {
+                List<MatchedPart> functionMatches = function.getMatches(tokenizedField);
+                List<String> matchString = new ArrayList<>();
 
-            for (MatchedPart match : functionMatches) {
-                match.setPriority(i);
-                matchString.add(match.getExactMatch());
+                for (MatchedPart match : functionMatches) {
+                    match.setPriority(i);
+                    matchString.add(match.getExactMatch());
+                }
+                matchesByCategory.put(function.getCategoryName(), matchString);
+                matches.addAll(functionMatches);
+            } catch (IllegalArgumentException exception) {
+                LOGGER.info(exception.getMessage(), exception);
             }
-            matchesByCategory.put(function.getCategoryName(), matchString);
-            matches.addAll(functionMatches);
         }
         Collections.sort(matches);
         filter(matches, matchesByCategory);
