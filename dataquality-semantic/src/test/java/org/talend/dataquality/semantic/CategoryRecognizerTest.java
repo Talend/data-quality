@@ -228,15 +228,11 @@ public class CategoryRecognizerTest extends CategoryRegistryManagerAbstract {
                     new String[] { SemanticCategoryEnum.COUNTRY_CODE_ISO3.getId(), SemanticCategoryEnum.AIRPORT_CODE.getId() });
             put("AVI", new String[] { SemanticCategoryEnum.FIRST_NAME.getId(), SemanticCategoryEnum.AIRPORT_CODE.getId() });
 
-            put("Mr",
-                    new String[] { SemanticCategoryEnum.TITLE.getId(), SemanticCategoryEnum.COUNTRY_CODE_ISO2.getId(), //
-                            SemanticCategoryEnum.LANGUAGE_CODE_ISO2.getId(), SemanticCategoryEnum.CIVILITY.getId(),
-                            SemanticCategoryEnum.COMMON_TITLE.getId() });
+            put("Mr", new String[] { SemanticCategoryEnum.TITLE.getId(), SemanticCategoryEnum.COUNTRY_CODE_ISO2.getId(), //
+                    SemanticCategoryEnum.LANGUAGE_CODE_ISO2.getId(), SemanticCategoryEnum.CIVILITY.getId() });
 
-            put("Mr.",
-                    new String[] { SemanticCategoryEnum.TITLE.getId(), SemanticCategoryEnum.COUNTRY_CODE_ISO2.getId(), //
-                            SemanticCategoryEnum.LANGUAGE_CODE_ISO2.getId(), SemanticCategoryEnum.CIVILITY.getId(),
-                            SemanticCategoryEnum.COMMON_TITLE.getId() });
+            put("Mr.", new String[] { SemanticCategoryEnum.TITLE.getId(), SemanticCategoryEnum.COUNTRY_CODE_ISO2.getId(), //
+                    SemanticCategoryEnum.LANGUAGE_CODE_ISO2.getId(), SemanticCategoryEnum.CIVILITY.getId() });
 
             put("Hartsfield–Jackson Atlanta International Airport", new String[] { SemanticCategoryEnum.AIRPORT.getId() });
 

@@ -55,7 +55,6 @@ public enum SemanticCategoryEnum {
             "Judaic religious title (in EN and FR)",
             CategoryType.DICT,
             true),
-    COMMON_TITLE("4e508870c04b091057ad70a5", "Common title", "Common title (in EN and FR)", CategoryType.DICT, true),
     FORMAL_TITLE("4e508870c04b091057ad70a6", "Formal title", "Formal title (in EN and FR)", CategoryType.DICT, true),
 
     ACADEMIC_PROFESSIONAL_SUFFIX(
