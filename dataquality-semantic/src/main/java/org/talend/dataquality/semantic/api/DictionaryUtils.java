@@ -233,6 +233,7 @@ public class DictionaryUtils {
             else
                 validator = new UserDefinedRegexValidator();
 
+            validator.setGenerexCompliant(dqValidator.isGenerexCompliant());
             validator.setPatternString(dqValidator.getPatternString());
             validator.setSubValidatorClassName(dqValidator.getSubValidatorClassName());
             regEx.setValidator(validator);
