@@ -1,7 +1,12 @@
 package org.talend.dataquality.semantic.extraction;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.talend.dataquality.semantic.index.LuceneIndex;
@@ -17,6 +22,8 @@ public class ExtractFromDictionary extends ExtractFromSemanticType {
 
     private final LuceneIndex index;
 
+    private static final Pattern separatorPatternWithApostrophe = Pattern.compile("[\\p{Punct}\\s\\u00A0\\u2007\\u202F\\u3000]+");
+
     protected ExtractFromDictionary(DictionarySnapshot snapshot, DQCategory category) {
         super(snapshot, category);
         index = (LuceneIndex) initIndex();
@@ -24,8 +31,19 @@ public class ExtractFromDictionary extends ExtractFromSemanticType {
 
     @Override
     public List<MatchedPart> getMatches(TokenizedString tokenizedField) {
+        Set<MatchedPart> uniqueMatchedParts = new TreeSet<>();
+
+        uniqueMatchedParts.addAll(getMatchPart(tokenizedField, tokenizedField.getTokens()));
+
+        if (tokenizedField.getValue().contains("'")) {
+            List<String> tokensWithoutApostrophe = getTokensWithApostrophe(tokenizedField);
+            uniqueMatchedParts.addAll(getMatchPart(tokenizedField, tokensWithoutApostrophe));
+        }
+        return new ArrayList(uniqueMatchedParts);
+    }
+
+    private List<MatchedPart> getMatchPart(TokenizedString tokenizedField, List<String> tokens) {
         List<MatchedPart> matchedParts = new ArrayList<>();
-        List<String> tokens = tokenizedField.getTokens();
 
         int nbOfTokens = tokens.size();
         int i = 0;
@@ -59,7 +77,28 @@ public class ExtractFromDictionary extends ExtractFromSemanticType {
             }
             i++;
         }
+
         return matchedParts;
+    }
+
+    private List<String> getTokensWithApostrophe(TokenizedString tokenizedString) {
+        List<String> tokens = tokenizedString.getTokens();
+        List<String> tokensWithoutApostrophe = new ArrayList<>(
+                Arrays.asList(separatorPatternWithApostrophe.split(tokenizedString.getValue())));
+
+        if (!tokensWithoutApostrophe.isEmpty() && tokensWithoutApostrophe.get(0).isEmpty()) {
+            tokens.remove(0);
+        }
+
+        Iterator tokenIterator = tokensWithoutApostrophe.iterator();
+        while (tokenIterator.hasNext()) {
+            if (tokenIterator.next().toString().length() < 2) {
+                tokenIterator.remove();
+            }
+        }
+
+        return tokensWithoutApostrophe;
+
     }
 
     private List<String> findMatches(List<String> phrase) {

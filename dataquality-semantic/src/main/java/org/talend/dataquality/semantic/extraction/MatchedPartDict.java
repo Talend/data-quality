@@ -1,5 +1,7 @@
 package org.talend.dataquality.semantic.extraction;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.List;
 
 /**
@@ -11,6 +13,10 @@ import java.util.List;
  * @author afournier
  */
 public class MatchedPartDict extends MatchedPart {
+
+    private static String DASH = "-";
+
+    private static String SPACE = " ";
 
     public MatchedPartDict(TokenizedString originalField, int startToken, int endToken, String luceneMatch) {
         this.originalField = originalField;
@@ -29,61 +35,48 @@ public class MatchedPartDict extends MatchedPart {
     }
 
     private void computeExactMatch(String luceneMatch) {
-        StringBuilder match = joinMatchedTokens();
-        TokenizedString tokenizedMatch = new TokenizedString(luceneMatch);
 
-        if (tokenizedMatch.isStartingWithSeparator() && this.hasPrecedingSeparator()) {
-            addPrecedingSeparators(match, tokenizedMatch.getSeparators());
-        }
+        String originalValue = originalField.getValue();
 
-        if (tokenizedMatch.isEndingWithSeparator() && this.hasFollowingSeparator()) {
-            addFollowingSeparators(match, tokenizedMatch.getSeparators());
-        }
-        exactMatch = match.toString();
-    }
-
-    private StringBuilder joinMatchedTokens() {
+        //searching for the character start index
+        int indexStart = 0;
         List<String> tokens = originalField.getTokens();
-        List<String> separators = originalField.getSeparators();
-
-        StringBuilder sb = new StringBuilder(tokens.get(start));
-        for (int i = start; i < end; i++) {
-            sb.append(separators.get(i)).append(tokens.get(i + 1));
+        for (int i = 0; i < start; i++) {
+            indexStart += tokens.get(i).length() + 1; // +1 is for space
         }
-        return sb;
-    }
 
-    private boolean hasPrecedingSeparator() {
-        return start > 0 || originalField.isStartingWithSeparator();
-    }
+        //remove all accents,  dash on original value
+        String originalWithModif = StringUtils.stripAccents(originalValue);
+        originalWithModif = originalWithModif.substring(indexStart).toLowerCase().replaceAll(DASH, SPACE);
 
-    private boolean hasFollowingSeparator() {
-        return end < originalField.getTokens().size() - 1 || originalField.isEndingWithSeparator();
-    }
+        //remove all accents,  dash on lucene match
+        String match = StringUtils.stripAccents(luceneMatch);
+        match = match.toLowerCase().replaceAll(DASH, SPACE);
 
-    private void addPrecedingSeparators(StringBuilder match, List<String> separators) {
-        String precedingSeparator = originalField.getSeparators()
-                .get(originalField.isStartingWithSeparator() ? start : start - 1);
-        String matchFirstSeparator = separators.get(0);
-
-        int curs1 = precedingSeparator.length() - 1;
-        int curs2 = matchFirstSeparator.length() - 1;
-        while (curs1 >= 0 && curs2 >= 0 && precedingSeparator.charAt(curs1) == matchFirstSeparator.charAt(curs2)) {
-            match.insert(0, precedingSeparator.charAt(curs1--));
-            curs2--;
+        String commonSubString = longestCommonSubstring(originalWithModif, match.toLowerCase());
+        if (!commonSubString.isEmpty()) { //we have found the longest common substring between value and lucene
+            int indexOf = originalWithModif.indexOf(commonSubString);
+            exactMatch = originalValue.substring(indexStart + indexOf, indexStart + indexOf + commonSubString.length()); //sub spart with good case and separator
         }
     }
 
-    private void addFollowingSeparators(StringBuilder match, List<String> separators) {
-        String followingSeparator = originalField.getSeparators().get(originalField.isStartingWithSeparator() ? end + 1 : end);
-        String matchLastSeparator = separators.get(separators.size() - 1);
-
-        int curs1 = 0;
-        int curs2 = 0;
-        while (curs1 < followingSeparator.length() && curs2 < matchLastSeparator.length()
-                && followingSeparator.charAt(curs1) == matchLastSeparator.charAt(curs2)) {
-            match.append(followingSeparator.charAt(curs1++));
-            curs2++;
+    private static String longestCommonSubstring(String S1, String S2) {
+        int Start = 0;
+        int Max = 0;
+        for (int i = 0; i < S1.length(); i++) {
+            for (int j = 0; j < S2.length(); j++) {
+                int x = 0;
+                while (S1.charAt(i + x) == S2.charAt(j + x)) {
+                    x++;
+                    if (((i + x) >= S1.length()) || ((j + x) >= S2.length()))
+                        break;
+                }
+                if (x > Max) {
+                    Max = x;
+                    Start = i;
+                }
+            }
         }
+        return S1.substring(Start, (Start + Max));
     }
 }

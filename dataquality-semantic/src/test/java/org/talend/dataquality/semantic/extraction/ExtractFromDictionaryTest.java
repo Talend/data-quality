@@ -160,11 +160,51 @@ public class ExtractFromDictionaryTest {
     @Test
     public void matchWithAccentFromInput() {
         ExtractFromDictionary efd = new ExtractFromDictionary(snapshot, category);
-        // input contains à with accent, the spelling is incorrect, but it should still match "Brazil" without accent in dico
+        // input contains à with accent, the spelling is incorrect, but it should still match "Brazil" without accent in
+        // dico
         TokenizedString input = new TokenizedString("Neymar is from Bràzil. Messi is from another planet.");
         List<MatchedPart> expected = Collections.singletonList(new MatchedPartDict(input, 3, 3, "Brazil"));
         List<MatchedPart> actual = efd.getMatches(input);
         assertEquals(expected, actual);
         assertEquals("Bràzil", actual.get(0).getExactMatch());
+    }
+
+    @Test
+    public void matchWithApostrophe() {
+        DQCategory firstname = CategoryRegistryManager.getInstance()
+                .getCategoryMetadataByName(SemanticCategoryEnum.FIRST_NAME.getId());
+
+        ExtractFromDictionary efd = new ExtractFromDictionary(snapshot, firstname);
+        // input contains à with accent, the spelling is incorrect, but it should still match "Brazil" without accent in
+        // dico
+        TokenizedString input = new TokenizedString("Susan's");
+        List<MatchedPart> expected = Collections.singletonList(new MatchedPartDict(input, 0, 0, "Susan"));
+        List<MatchedPart> actual = efd.getMatches(input);
+        assertEquals(expected, actual);
+        assertEquals("Susan", actual.get(0).getExactMatch());
+    }
+
+    @Test
+    public void matchWithApostropheInTheMiddle() {
+        ExtractFromDictionary efd = new ExtractFromDictionary(snapshot, category);
+        // input contains à with accent, the spelling is incorrect, but it should still match "Brazil" without accent in
+        // dico
+        TokenizedString input = new TokenizedString("lac d'Angola");
+        List<MatchedPart> expected = Collections.singletonList(new MatchedPartDict(input, 1, 1, "Angola"));
+        List<MatchedPart> actual = efd.getMatches(input);
+        assertEquals(expected, actual);
+        assertEquals("Angola", actual.get(0).getExactMatch());
+    }
+
+    @Test
+    public void matchWithApostropheAtTheEnd() {
+        ExtractFromDictionary efd = new ExtractFromDictionary(snapshot, category);
+        // input contains à with accent, the spelling is incorrect, but it should still match "Brazil" without accent in
+        // dico
+        TokenizedString input = new TokenizedString("Angola'");
+        List<MatchedPart> expected = Collections.singletonList(new MatchedPartDict(input, 0, 0, "Angola"));
+        List<MatchedPart> actual = efd.getMatches(input);
+        assertEquals(expected, actual);
+        assertEquals("Angola", actual.get(0).getExactMatch());
     }
 }

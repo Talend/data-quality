@@ -46,7 +46,7 @@ public class FieldExtractionFunctionTest {
         input = "Manchester United States Of America, Paris-Saint Germain";
         TokenizedString tokenizedInput = new TokenizedString(input);
 
-        match1 = new MatchedPartDict(tokenizedInput, 0, 1, "Manchester");
+        match1 = new MatchedPartDict(tokenizedInput, 0, 1, "Manchester United");
         match1bis = new MatchedPartDict(tokenizedInput, 5, 7, "Paris-Saint Germain");
         match2 = new MatchedPartDict(tokenizedInput, 1, 4, "United States Of America");
         match2bis = new MatchedPartDict(tokenizedInput, 1, 2, "United States");
@@ -166,9 +166,27 @@ public class FieldExtractionFunctionTest {
         String field = "Bear, Polar bear, Teddy Bear, Canada, the United States, clermont ferrand.";
 
         Map<String, List<String>> expectedMatches = new HashMap<>();
-        expectedMatches.put("COUNTRY", Arrays.asList("Canada", "United States"));
+        expectedMatches.put("COUNTRY", Arrays.asList("United States", "Canada"));
         expectedMatches.put("FR_COMMUNE", Collections.singletonList("clermont ferrand"));
-        expectedMatches.put("ANIMAL", Arrays.asList("Bear", "bear", "Bear"));
+        expectedMatches.put("ANIMAL", Arrays.asList("Bear"));
+
+        assertEquals(expectedMatches, function.extractFieldParts(field));
+    }
+
+    @Test
+    public void notMockedClermont() {
+        DictionarySnapshot snapshot = new StandardDictionarySnapshotProvider().get();
+
+        CategoryRegistryManager crm = CategoryRegistryManager.getInstance();
+        ExtractFromDictionary efd_commune = new ExtractFromDictionary(snapshot,
+                crm.getCategoryMetadataByName(SemanticCategoryEnum.FR_COMMUNE.getId()));
+
+        FieldExtractionFunction function = new FieldExtractionFunction(Arrays.asList(efd_commune));
+
+        String field = "clermont ferrand.";
+
+        Map<String, List<String>> expectedMatches = new HashMap<>();
+        expectedMatches.put("FR_COMMUNE", Collections.singletonList("clermont ferrand"));
 
         assertEquals(expectedMatches, function.extractFieldParts(field));
     }
