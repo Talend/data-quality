@@ -16,8 +16,6 @@ public class MatchedPartDict extends MatchedPart {
 
     private static String DASH = "-";
 
-    private static String QUOTE = "'";
-
     private static String SPACE = " ";
 
     public MatchedPartDict(TokenizedString originalField, int startToken, int endToken, String luceneMatch) {

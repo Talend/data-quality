@@ -209,7 +209,7 @@ public class ExtractFromDictionaryTest {
     }
 
     @Test
-    public void Susans() {
+    public void susans() {
         TokenizedString susan = new TokenizedString("Susan's");
         when(mockSearcher.searchPhraseInSemanticCategory(Matchers.anyString(), Matchers.anyString()))
                 .thenReturn(Collections.singletonList("Susan"));
@@ -276,7 +276,6 @@ public class ExtractFromDictionaryTest {
 
         ExtractFromDictionary dict = new ExtractFromDictionary(mockSnapshot, category);
 
-        String expected = "Rock 'n Roll";
         assertEquals(0, dict.getMatches(rock).size());
     }
 
@@ -288,7 +287,6 @@ public class ExtractFromDictionaryTest {
 
         ExtractFromDictionary dict = new ExtractFromDictionary(mockSnapshot, category);
 
-        String expected = "Rock n Roll";
         assertEquals(0, dict.getMatches(rock).size());
     }
 
