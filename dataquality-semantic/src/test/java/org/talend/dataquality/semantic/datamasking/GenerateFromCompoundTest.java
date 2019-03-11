@@ -167,7 +167,7 @@ public class GenerateFromCompoundTest {
         regex.setCategoryId("2");
         regex.setName("REGEX2");
         regex.setType(CategoryType.REGEX);
-        regex.setValue("[a-z]$");
+        regex.setValue("^[a-z]$");
 
         values.add(regex);
 

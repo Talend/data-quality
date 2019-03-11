@@ -25,6 +25,7 @@ import org.talend.dataquality.semantic.datamasking.model.CategoryValues;
 import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
 import org.talend.dataquality.semantic.statistics.SemanticQualityAnalyzer;
+import org.talend.dataquality.semantic.utils.RegexUtils;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -155,9 +156,9 @@ public class GenerateFromCompound extends FunctionString {
                 List values = (List) cats.getValue();
                 result = (String) values.get(r.nextInt(values.size()));
             } else if (REGEX.equals(type)) {
-                Generex generex = new Generex((String) cats.getValue(), r);
+                String regex = RegexUtils.removeStartingAndEndingAnchors((String) cats.getValue());
+                Generex generex = new Generex(regex, r);
                 result = generex.random();
-                result = result.substring(0, result.length() - 1);
             }
         }
         return result;
