@@ -42,8 +42,8 @@ public class ExtractFromRegex extends ExtractFromSemanticType {
     private boolean validBounds(TokenizedString tokenizedField, int start, int end) {
         String input = tokenizedField.getValue();
         return (start == 0 || tokenizedField.getSeparatorPattern().matcher(input.substring(start - 1, start)).matches())
-                && (end == input.length()
-                        || tokenizedField.getSeparatorPattern().matcher(input.substring(end, end + 1)).matches());
+                && (end == input.length() || tokenizedField.getSeparatorPattern().matcher(input.substring(end, end + 1)).matches()
+                        || ".".equals(input.substring(end, end + 1)));
     }
 
     private String getCleanedRegex() {

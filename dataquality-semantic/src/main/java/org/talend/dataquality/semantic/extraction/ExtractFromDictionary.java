@@ -22,7 +22,7 @@ public class ExtractFromDictionary extends ExtractFromSemanticType {
 
     private final LuceneIndex index;
 
-    private static final Pattern separatorPatternWithApostrophe = Pattern.compile("[\\p{Punct}\\s\\u00A0\\u2007\\u202F\\u3000]+");
+    private static final Pattern fullSeparatorPattern = Pattern.compile("[\\p{Punct}\\s\\u00A0\\u2007\\u202F\\u3000]+");
 
     protected ExtractFromDictionary(DictionarySnapshot snapshot, DQCategory category) {
         super(snapshot, category);
@@ -35,10 +35,14 @@ public class ExtractFromDictionary extends ExtractFromSemanticType {
 
         uniqueMatchedParts.addAll(getMatchPart(tokenizedField, tokenizedField.getTokens()));
 
-        if (tokenizedField.getValue().contains("'")) {
+        if (tokenizedField.getValue().contains("'") || tokenizedField.getValue().contains(".")) {
             List<String> tokensWithoutApostrophe = getTokensWithApostrophe(tokenizedField);
+
+            tokenizedField.getTokens().clear();
+            tokenizedField.getTokens().addAll(tokensWithoutApostrophe);
             uniqueMatchedParts.addAll(getMatchPart(tokenizedField, tokensWithoutApostrophe));
         }
+
         return new ArrayList(uniqueMatchedParts);
     }
 
@@ -55,7 +59,9 @@ public class ExtractFromDictionary extends ExtractFromSemanticType {
 
             int j = i;
             while (j < nbOfTokens) {
-                phrase.add(StringUtils.stripAccents(tokens.get(j)));
+                String tokenWithoutAccent = StringUtils.stripAccents(tokens.get(j));
+
+                phrase.add(tokenWithoutAccent);
                 List<String> matches = findMatches(phrase);
 
                 if (matches.isEmpty()) {
@@ -84,17 +90,10 @@ public class ExtractFromDictionary extends ExtractFromSemanticType {
     private List<String> getTokensWithApostrophe(TokenizedString tokenizedString) {
         List<String> tokens = tokenizedString.getTokens();
         List<String> tokensWithoutApostrophe = new ArrayList<>(
-                Arrays.asList(separatorPatternWithApostrophe.split(tokenizedString.getValue())));
+                Arrays.asList(fullSeparatorPattern.split(tokenizedString.getValue())));
 
         if (!tokensWithoutApostrophe.isEmpty() && tokensWithoutApostrophe.get(0).isEmpty()) {
             tokens.remove(0);
-        }
-
-        Iterator tokenIterator = tokensWithoutApostrophe.iterator();
-        while (tokenIterator.hasNext()) {
-            if (tokenIterator.next().toString().length() < 2) {
-                tokenIterator.remove();
-            }
         }
 
         return tokensWithoutApostrophe;
@@ -128,7 +127,12 @@ public class ExtractFromDictionary extends ExtractFromSemanticType {
         }
 
         for (int i = 0; i < tokens.size(); i++) {
-            if (!tokens.get(i).equalsIgnoreCase(phrase.get(i))) {
+            String word = phrase.get(i);
+            if (!tokens.get(i).equalsIgnoreCase(word)) {
+                if (i == tokens.size() - 1 && word.endsWith(".")) {
+                    word = word.substring(0, word.length() - 1);
+                    return tokens.get(i).equalsIgnoreCase(word);
+                }
                 return false;
             }
         }

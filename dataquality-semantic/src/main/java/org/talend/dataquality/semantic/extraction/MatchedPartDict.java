@@ -16,6 +16,8 @@ public class MatchedPartDict extends MatchedPart {
 
     private static String DASH = "-";
 
+    private static String QUOTE = "'";
+
     private static String SPACE = " ";
 
     public MatchedPartDict(TokenizedString originalField, int startToken, int endToken, String luceneMatch) {
@@ -30,7 +32,7 @@ public class MatchedPartDict extends MatchedPart {
     @Override
     protected void checkBounds(int start, int end) {
         if (start < 0 || end < 0 || end < start || end >= originalField.getTokens().size()) {
-            throw new IllegalArgumentException("Bounds for match are incorrect : start = {}, end = {}" + start + end);
+            throw new IllegalArgumentException("Bounds for match are incorrect : start = " + start + " end = " + end);
         }
     }
 
