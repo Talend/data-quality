@@ -42,11 +42,11 @@ public class ValueDataMasker implements Serializable {
         return function;
     }
 
-    DQCategory getCategory() {
+    public DQCategory getCategory() {
         return category;
     }
 
-    SemanticQualityAnalyzer getSemanticQualityAnalyzer() {
+    public SemanticQualityAnalyzer getSemanticQualityAnalyzer() {
         return semanticQualityAnalyzer;
     }
 
