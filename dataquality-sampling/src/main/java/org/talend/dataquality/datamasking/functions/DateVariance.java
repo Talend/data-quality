@@ -12,21 +12,22 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
+import static org.talend.dataquality.datamasking.FunctionMode.CONSISTENT;
+
 import java.util.Date;
 import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.dataquality.datamasking.FunctionMode;
-
-import static org.talend.dataquality.datamasking.FunctionMode.CONSISTENT;
+import org.talend.dataquality.datamasking.semantic.AbstractDateFunction;
 
 /**
  * created by jgonzalez on 18 juin 2015. This function will modify the input date by adding or retieving a number of
  * days lower than the parameter.
  *
  */
-public class DateVariance extends Function<Date> {
+public class DateVariance extends AbstractDateFunction {
 
     private static final long serialVersionUID = 7723968828358381315L;
 
@@ -60,7 +61,8 @@ public class DateVariance extends Function<Date> {
         return doGenerateMaskedField(date, rnd);
     }
 
-    private Date doGenerateMaskedField(Date date, Random r) {
+    @Override
+    protected Date doGenerateMaskedField(Date date, Random r) {
         if (date != null) {
             long variation;
             if (integerParam < 0) {

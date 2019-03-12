@@ -12,6 +12,8 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.semantic;
 
+import static org.talend.dataquality.datamasking.FunctionMode.CONSISTENT;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,15 +26,13 @@ import org.slf4j.LoggerFactory;
 import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.datamasking.functions.Function;
 
-import static org.talend.dataquality.datamasking.FunctionMode.CONSISTENT;
-
 public class DateFunctionAdapter extends Function<String> {
 
     private static final long serialVersionUID = -2845447810365033162L;
 
     private static final Logger LOG = LoggerFactory.getLogger(DateFunctionAdapter.class);
 
-    private Function<Date> function;
+    private AbstractDateFunction function;
 
     private List<SimpleDateFormat> dataFormatList = new ArrayList<SimpleDateFormat>();
 
@@ -42,7 +42,7 @@ public class DateFunctionAdapter extends Function<String> {
         function.setRandom(rand);
     }
 
-    public DateFunctionAdapter(Function<Date> functionToAdapt, List<String> datePatternList) {
+    public DateFunctionAdapter(AbstractDateFunction functionToAdapt, List<String> datePatternList) {
         function = functionToAdapt;
         rnd = functionToAdapt.getRandom();
         if (datePatternList != null) {
@@ -60,8 +60,6 @@ public class DateFunctionAdapter extends Function<String> {
     protected String doGenerateMaskedField(String input, FunctionMode mode) {
         Random r = rnd;
         if (CONSISTENT == mode) {
-            function.setSeed(seed);
-            function.setMaskingMode(mode);
             r = getRandomForObject(input);
         }
 
@@ -83,7 +81,7 @@ public class DateFunctionAdapter extends Function<String> {
                     continue;
                 }
                 final Date inputDate = sdf.parse(input);
-                final Date result = function.generateMaskedRow(inputDate);
+                final Date result = function.doGenerateMaskedField(inputDate, r);
                 return sdf.format(result);
             } catch (ParseException e) {
                 LOG.warn(e.getMessage());
@@ -95,7 +93,7 @@ public class DateFunctionAdapter extends Function<String> {
             final SimpleDateFormat sdf = new SimpleDateFormat(guess);
             try {
                 final Date inputDate = sdf.parse(input);
-                final Date result = function.generateMaskedRow(inputDate);
+                final Date result = function.doGenerateMaskedField(inputDate, r);
                 return sdf.format(result);
             } catch (ParseException e) {
                 LOG.warn(e.getMessage());

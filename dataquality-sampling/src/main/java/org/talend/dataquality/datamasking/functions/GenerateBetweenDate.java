@@ -15,17 +15,25 @@ package org.talend.dataquality.datamasking.functions;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
+
+import org.talend.dataquality.datamasking.semantic.AbstractDateFunction;
 
 /**
  * created by jgonzalez on 18 juin 2015. This function will return a date between the two given as parameters.
  *
  */
-public class GenerateBetweenDate extends Function<Date> {
+public class GenerateBetweenDate extends AbstractDateFunction {
 
     private static final long serialVersionUID = 7513182257849118816L;
 
     @Override
     protected Date doGenerateMaskedField(Date date) {
+        return doGenerateMaskedField(date, rnd);
+    }
+
+    @Override
+    protected Date doGenerateMaskedField(Date date, Random r) {
         if (parameters.length == 2) {
             SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy"); //$NON-NLS-1$
             Date minDate = null;
