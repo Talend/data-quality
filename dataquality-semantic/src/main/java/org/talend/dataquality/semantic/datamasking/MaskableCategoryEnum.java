@@ -25,7 +25,6 @@ public enum MaskableCategoryEnum {
     EMAIL("Email", FunctionType.MASK_EMAIL), //$NON-NLS-1$
     FULL_NAME("Full Name", FunctionType.REPLACE_CHARACTERS_WITH_GENERATION), //$NON-NLS-1$
     IPv4_ADDRESS("IPv4 Address", FunctionType.REPLACE_CHARACTERS_WITH_GENERATION), //$NON-NLS-1$
-    IPv6_ADDRESS("IPv6 Address", FunctionType.REPLACE_CHARACTERS_WITH_GENERATION), //$NON-NLS-1$
     GEO_COORDINATES_DEG("Geographic coordinates (degrees)", FunctionType.REPLACE_CHARACTERS_WITH_GENERATION), //$NON-NLS-1$
 
     US_PHONE("US Phone", FunctionType.GENERATE_PHONE_NUMBER_US), //$NON-NLS-1$
@@ -39,6 +38,8 @@ public enum MaskableCategoryEnum {
     US_SSN("US Social Security Number", FunctionType.GENERATE_SSN_US), //$NON-NLS-1$
     FR_SSN("FR Social Security Number", FunctionType.GENERATE_SSN_FRENCH), //$NON-NLS-1$
     UK_SSN("UK Social Security Number", FunctionType.GENERATE_SSN_UK), //$NON-NLS-1$
+
+    IBAN("IBAN", FunctionType.GENERATE_ACCOUNT_NUMBER_FORMAT), //$NON-NLS-1$
 
     MASTERCARD("Mastercard Credit Card", FunctionType.GENERATE_CREDIT_CARD_FORMAT_STRING), //$NON-NLS-1$
     US_CREDIT_CARD("AmEx Credit Card", FunctionType.GENERATE_CREDIT_CARD_FORMAT_STRING), //$NON-NLS-1$
@@ -57,7 +58,7 @@ public enum MaskableCategoryEnum {
      * SemanticCategoryEnum constructor.
      * 
      * @param displayName the category shown in Semantic Discovery wizard
-     * @param description the description of the category
+     * @param functionType the type of function, see {@link FunctionType}
      */
     private MaskableCategoryEnum(String displayName, FunctionType functionType) {
         this.displayName = displayName;
@@ -68,7 +69,7 @@ public enum MaskableCategoryEnum {
      * SemanticCategoryEnum constructor.
      * 
      * @param displayName the category shown in Semantic Discovery wizard
-     * @param description the description of the category
+     * @param functionType the type of function, see {@link FunctionType}
      * @param parameter the parameter which used by current functionType
      */
     private MaskableCategoryEnum(String displayName, FunctionType functionType, String parameter) {
