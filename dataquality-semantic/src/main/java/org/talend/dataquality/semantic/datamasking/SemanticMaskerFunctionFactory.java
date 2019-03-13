@@ -12,6 +12,11 @@
 // ============================================================================
 package org.talend.dataquality.semantic.datamasking;
 
+import static org.talend.dataquality.semantic.datamasking.FunctionBuilder.functionInitializer;
+
+import java.security.SecureRandom;
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +27,7 @@ import org.talend.dataquality.datamasking.TypeTester;
 import org.talend.dataquality.datamasking.functions.DateVariance;
 import org.talend.dataquality.datamasking.functions.Function;
 import org.talend.dataquality.datamasking.functions.ReplaceAll;
+import org.talend.dataquality.datamasking.semantic.AbstractDateFunction;
 import org.talend.dataquality.datamasking.semantic.DateFunctionAdapter;
 import org.talend.dataquality.datamasking.semantic.FluctuateNumericString;
 import org.talend.dataquality.datamasking.semantic.ReplaceCharactersWithGeneration;
@@ -32,12 +38,6 @@ import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
 import org.talend.dataquality.semantic.snapshot.StandardDictionarySnapshotProvider;
 import org.talend.dataquality.semantic.validator.GenerateValidator;
-
-import java.security.SecureRandom;
-import java.util.Date;
-import java.util.List;
-
-import static org.talend.dataquality.semantic.datamasking.FunctionBuilder.functionInitializer;
 
 public class SemanticMaskerFunctionFactory {
 
@@ -153,11 +153,10 @@ public class SemanticMaskerFunctionFactory {
                 FunctionMode.RANDOM);
     }
 
-    private static Function<String> adaptForDateFunction(List<String> datePatterns, Function<Date> functionToAdapt,
+    private static Function<String> adaptForDateFunction(List<String> datePatterns, AbstractDateFunction functionToAdapt,
             String extraParam) {
         functionToAdapt.parse(extraParam, true, null);
-        Function<String> function = new DateFunctionAdapter(functionToAdapt, datePatterns);
-        return function;
+        return new DateFunctionAdapter(functionToAdapt, datePatterns);
     }
 
     /**
@@ -175,7 +174,7 @@ public class SemanticMaskerFunctionFactory {
         try {
             if (FunctionType.KEEP_YEAR.equals(functionType) || FunctionType.DATE_VARIANCE.equals(functionType)) {
                 function = adaptForDateFunction(null,
-                        (Function<Date>) factory.getFunction(functionType, tester.getTypeByName(dataType)), extraParam);
+                        (AbstractDateFunction) factory.getFunction(functionType, tester.getTypeByName(dataType)), extraParam);
             } else if (FunctionType.NUMERIC_VARIANCE.equals(functionType)) {
                 function = new FluctuateNumericString();
             } else if (FunctionType.REPLACE_ALL.equals(functionType)) {

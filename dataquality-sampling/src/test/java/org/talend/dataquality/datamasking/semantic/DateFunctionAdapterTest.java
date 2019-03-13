@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Random;
 
 import org.junit.Test;
+import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.datamasking.functions.DateVariance;
 import org.talend.dataquality.duplicating.AllDataqualitySamplingTests;
 
@@ -42,6 +43,28 @@ public class DateFunctionAdapterTest {
         assertEquals("14.2.1999", function.generateMaskedRow("22.3.1999"));
         assertEquals("5000*24*70", function.generateMaskedRow("2015*11*15")); // replace chars when no date pattern is applicable
         assertEquals("Vbrs-Kqc-260", function.generateMaskedRow("Vkfz-Zps-550"));
+    }
+
+    @Test
+    public void testGenerateMaskedRowInConsistentMode() {
+        final DateVariance dv = new DateVariance();
+        dv.parse("31", true, null); // no need to pass a random object with fixed seed.
+        final List<String> patternList = Arrays
+                .asList(new String[] { "yyyy/MM/dd", "yyyy-MM-dd", "yyyy/MM/dd H:mm:ss", "AA9999" });
+        final DateFunctionAdapter function = new DateFunctionAdapter(dv, patternList);
+        function.setMaskingMode(FunctionMode.CONSISTENT);
+        function.setSeed("azer1!");
+
+        assertEquals(null, function.generateMaskedRow(null)); // return null when input is null
+        assertEquals("", function.generateMaskedRow("")); // return empty when input is empty
+        assertEquals("  \t", function.generateMaskedRow("  \t")); // return original value when input contains only whitespaces
+
+        assertEquals("2015-11-08", function.generateMaskedRow("2015-11-15")); // should mask
+        assertEquals("2015/10/21", function.generateMaskedRow("2015/11/15")); // should mask
+        assertEquals("2015/06/22 3:54:55", function.generateMaskedRow("2015/6/15 10:00:00"));
+        assertEquals("17.4.1999", function.generateMaskedRow("22.3.1999"));
+        assertEquals("4493*91*51", function.generateMaskedRow("2015*11*15")); // replace chars when no date pattern is applicable
+        assertEquals("Dhxu-Pud-099", function.generateMaskedRow("Vkfz-Zps-550"));
     }
 
 }

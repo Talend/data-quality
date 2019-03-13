@@ -12,6 +12,12 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions;
 
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.List;
+import java.util.Random;
+import java.util.regex.Pattern;
+
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
@@ -20,12 +26,6 @@ import org.slf4j.LoggerFactory;
 import org.talend.dataquality.datamasking.FormatPreservingMethod;
 import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.datamasking.generic.Alphabet;
-
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.List;
-import java.util.Random;
-import java.util.regex.Pattern;
 
 /**
  * created by jgonzalez on 18 juin 2015. This class is an abstract class that
@@ -117,7 +117,7 @@ public abstract class Function<T> implements Serializable {
      *
      * @param extraParameter The parameter we try to parse.
      * @param keepNullValues The parameter used for setKeepNull.
-     * @param rand           The parameter used for setRandomMWrapper.
+     * @param rand The parameter used for setRandomMWrapper.
      */
     public void parse(String extraParameter, boolean keepNullValues, Random rand) {
         if (extraParameter != null) {
@@ -269,9 +269,11 @@ public abstract class Function<T> implements Serializable {
     }
 
     protected Random getRandomForObject(Object toBeReplaced) {
-        Random random = new Random();
-        random.setSeed(toBeReplaced.hashCode() ^ seed.hashCode());
-        return random;
+        if (toBeReplaced == null) {
+            return new Random(seed.hashCode());
+        } else {
+            return new Random(toBeReplaced.hashCode() ^ seed.hashCode());
+        }
     }
 
     public void setSeed(String seed) {

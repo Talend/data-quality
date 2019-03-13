@@ -14,13 +14,16 @@ package org.talend.dataquality.datamasking.functions;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
+
+import org.talend.dataquality.datamasking.semantic.AbstractDateFunction;
 
 /**
  * created by jgonzalez on 18 juin 2015.This function will set the month and day fields of the date to January the
  * first, and won’t change the year.
  *
  */
-public class KeepYear extends Function<Date> {
+public class KeepYear extends AbstractDateFunction {
 
     private static final long serialVersionUID = 2836713659481652846L;
 
@@ -38,5 +41,10 @@ public class KeepYear extends Function<Date> {
         c.set(Calendar.MONTH, Calendar.JANUARY);
         newDate = c.getTime();
         return newDate;
+    }
+
+    @Override
+    protected Date doGenerateMaskedField(Date date, Random r) {
+        return doGenerateMaskedField(date);
     }
 }
