@@ -42,14 +42,6 @@ public class ValueDataMasker implements Serializable {
         return function;
     }
 
-    public DQCategory getCategory() {
-        return category;
-    }
-
-    public SemanticQualityAnalyzer getSemanticQualityAnalyzer() {
-        return semanticQualityAnalyzer;
-    }
-
     /**
      * ValueDataMasker constructor.
      *

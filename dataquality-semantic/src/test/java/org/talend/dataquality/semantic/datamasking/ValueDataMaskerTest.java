@@ -37,6 +37,8 @@ import org.talend.dataquality.semantic.api.CustomDictionaryHolder;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.model.DQDocument;
+import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
+import org.talend.dataquality.semantic.snapshot.StandardDictionarySnapshotProvider;
 import org.talend.dataquality.semantic.statistics.SemanticQualityAnalyzer;
 
 @PrepareForTest({ CustomDictionaryHolder.class, CategoryRegistryManager.class })
@@ -384,9 +386,11 @@ public class ValueDataMaskerTest extends CategoryRegistryManagerAbstract {
 
     @Test
     public void testMaskingIPV6() { // TDQ-16626: unplug the specific masking for IPV6
-        final ValueDataMasker masker = new ValueDataMasker(SemanticCategoryEnum.IPv6_ADDRESS.name(), "string");
-        final SemanticQualityAnalyzer semanticQualityAnalyzer = masker.getSemanticQualityAnalyzer();
-        final DQCategory categoryIPV6 = masker.getCategory();
+        final String ipv6Type = SemanticCategoryEnum.IPv6_ADDRESS.name();
+        final DictionarySnapshot dictionarySnapshot = new StandardDictionarySnapshotProvider().get();
+        final ValueDataMasker masker = new ValueDataMasker(ipv6Type, "string");
+        final SemanticQualityAnalyzer semanticQualityAnalyzer = new SemanticQualityAnalyzer(dictionarySnapshot, ipv6Type);
+        final DQCategory categoryIPV6 = dictionarySnapshot.getDQCategoryByName(ipv6Type);
 
         final String validIPV6 = "AB7C:A:1a:A1d2::b";
         String maskedValidIPV6 = masker.maskValue(validIPV6);
@@ -400,9 +404,11 @@ public class ValueDataMaskerTest extends CategoryRegistryManagerAbstract {
 
     @Test
     public void testMaskingIBAN() { // TDQ-16626: plug "Generate Account Number and keep original country" for IBAN
-        final ValueDataMasker masker = new ValueDataMasker(SemanticCategoryEnum.IBAN.name(), "string");
-        final SemanticQualityAnalyzer semanticQualityAnalyzer = masker.getSemanticQualityAnalyzer();
-        final DQCategory categoryIBAN = masker.getCategory();
+        final String ibanType = SemanticCategoryEnum.IBAN.name();
+        final DictionarySnapshot dictionarySnapshot = new StandardDictionarySnapshotProvider().get();
+        final ValueDataMasker masker = new ValueDataMasker(ibanType, "string");
+        final SemanticQualityAnalyzer semanticQualityAnalyzer = new SemanticQualityAnalyzer(dictionarySnapshot, ibanType);
+        final DQCategory categoryIBAN = dictionarySnapshot.getDQCategoryByName(ibanType);
 
         final String validIBAN = "FR7630006000011234567890189";
         String maskedValidIBAN = masker.maskValue(validIBAN);
