@@ -2,6 +2,8 @@ package org.talend.dataquality.semantic.extraction;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -105,6 +107,8 @@ public class ExtractFromDictionary extends ExtractFromSemanticType {
     }
 
     private int exactMatchIndex(List<String> phrase, List<String> matches) {
+        Collections.sort(matches, Comparator.comparingInt(String::length).reversed());
+
         for (int i = 0; i < matches.size(); i++) {
             List<String> matchTokens = TokenizedString.tokenize(StringUtils.stripAccents(matches.get(i)));
             if (equalsIgnoreCase(matchTokens, phrase)) {

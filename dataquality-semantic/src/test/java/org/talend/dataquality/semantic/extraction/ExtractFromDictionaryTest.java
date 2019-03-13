@@ -1033,4 +1033,16 @@ public class ExtractFromDictionaryTest {
         String expected = "az.er.";
         assertEquals(expected, dict.getMatches(tilde).get(0).getExactMatch());
     }
+
+    @Test
+    public void azer_2points() {
+        TokenizedString tilde = new TokenizedString("azer..");
+        when(mockSearcher.searchPhraseInSemanticCategory(Matchers.anyString(), Matchers.anyString())).thenReturn(Arrays
+                .asList("azer'", "azer''", "azer'''", "azer''''", "az'er'", "azer.", "azer..", "azer...", "azer....", "az.er."));
+
+        ExtractFromDictionary dict = new ExtractFromDictionary(mockSnapshot, category);
+
+        String expected = "azer..";
+        assertEquals(expected, dict.getMatches(tilde).get(0).getExactMatch());
+    }
 }
