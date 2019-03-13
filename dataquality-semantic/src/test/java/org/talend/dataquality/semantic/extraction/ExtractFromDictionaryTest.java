@@ -1025,8 +1025,9 @@ public class ExtractFromDictionaryTest {
     @Test
     public void azer_middlePoint() {
         TokenizedString tilde = new TokenizedString("az.er.");
-        when(mockSearcher.searchPhraseInSemanticCategory(Matchers.anyString(), Matchers.anyString())).thenReturn(Arrays
-                .asList("azer'", "azer''", "azer'''", "azer''''", "az'er'", "azer.", "azer..", "azer...", "azer....", "az.er."));
+        when(mockSearcher.searchPhraseInSemanticCategory(Matchers.anyString(), Matchers.anyString()))
+                .thenReturn(Arrays.asList("azer'", "azer''", "azer'''", "azer''''", "az'er'", "azer.", "azer..", "azer...",
+                        "azer....", "az.er.", "az\"er\""));
 
         ExtractFromDictionary dict = new ExtractFromDictionary(mockSnapshot, category);
 

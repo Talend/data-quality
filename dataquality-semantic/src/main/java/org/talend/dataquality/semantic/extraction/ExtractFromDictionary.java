@@ -37,7 +37,8 @@ public class ExtractFromDictionary extends ExtractFromSemanticType {
 
         uniqueMatchedParts.addAll(getMatchPart(tokenizedField, tokenizedField.getTokens()));
 
-        if (tokenizedField.getValue().contains("'") || tokenizedField.getValue().contains(".")) {
+        if (tokenizedField.getValue().contains("'") || tokenizedField.getValue().contains(".")
+                || tokenizedField.getValue().contains("\"")) {
             List<String> tokensWithoutApostrophe = getTokensWithApostrophe(tokenizedField);
 
             tokenizedField.getTokens().clear();
@@ -70,6 +71,7 @@ public class ExtractFromDictionary extends ExtractFromSemanticType {
                     break;
                 }
 
+                Collections.sort(matches, Comparator.comparingInt(String::length).reversed());
                 int match = exactMatchIndex(phrase, matches);
                 if (match > -1) {
                     luceneMatch = matches.get(match);
@@ -107,8 +109,6 @@ public class ExtractFromDictionary extends ExtractFromSemanticType {
     }
 
     private int exactMatchIndex(List<String> phrase, List<String> matches) {
-        Collections.sort(matches, Comparator.comparingInt(String::length).reversed());
-
         for (int i = 0; i < matches.size(); i++) {
             List<String> matchTokens = TokenizedString.tokenize(StringUtils.stripAccents(matches.get(i)));
             if (equalsIgnoreCase(matchTokens, phrase)) {
