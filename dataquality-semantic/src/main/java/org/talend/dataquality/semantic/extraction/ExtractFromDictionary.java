@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -38,11 +37,13 @@ public class ExtractFromDictionary extends ExtractFromSemanticType {
         uniqueMatchedParts.addAll(getMatchPart(tokenizedField, tokenizedField.getTokens()));
 
         if (tokenizedField.getValue().contains("'") || tokenizedField.getValue().contains(".")) {
+            TokenizedString clone = new TokenizedString(tokenizedField.getValue());
+
             List<String> tokensWithoutApostrophe = getTokensWithApostrophe(tokenizedField);
 
-            tokenizedField.getTokens().clear();
-            tokenizedField.getTokens().addAll(tokensWithoutApostrophe);
-            uniqueMatchedParts.addAll(getMatchPart(tokenizedField, tokensWithoutApostrophe));
+            clone.getTokens().clear();
+            clone.getTokens().addAll(tokensWithoutApostrophe);
+            uniqueMatchedParts.addAll(getMatchPart(clone, tokensWithoutApostrophe));
         }
 
         return new ArrayList(uniqueMatchedParts);
