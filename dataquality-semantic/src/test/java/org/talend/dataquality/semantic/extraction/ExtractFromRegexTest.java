@@ -53,7 +53,7 @@ public class ExtractFromRegexTest extends CategoryRegistryManagerAbstract {
         DQCategory category = CategoryRegistryManager.getInstance()
                 .getCategoryMetadataByName(SemanticCategoryEnum.FR_PHONE.getId());
         ExtractFromRegex efd = new ExtractFromRegex(dictionarySnapshot, category);
-        TokenizedString input = new TokenizedString("My phone is 0102030405.");
+        TokenizedString input = new TokenizedString("My phone is 0146250600.");
         MatchedPart expectedMatch = new MatchedPartRegex(input, 12, 22);
         List<MatchedPart> list = efd.getMatches(input);
         assertTrue("Expected : " + expectedMatch.getExactMatch() + " in " + list, list.contains(expectedMatch));

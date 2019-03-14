@@ -30,7 +30,7 @@ public class MatchedPartDict extends MatchedPart {
     @Override
     protected void checkBounds(int start, int end) {
         if (start < 0 || end < 0 || end < start || end >= originalField.getTokens().size()) {
-            throw new IllegalArgumentException("Bounds for match are incorrect : start = {}, end = {}" + start + end);
+            throw new IllegalArgumentException("Bounds for match are incorrect : start = " + start + " end = " + end);
         }
     }
 

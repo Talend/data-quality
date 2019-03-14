@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  */
 public class TokenizedString {
 
-    public static String SEPARATORS = "[[\\p{Punct}&&[^']]\\s\\u00A0\\u2007\\u202F\\u3000]+";
+    public static String SEPARATORS = "[[\\p{Punct}&&[^'.]]\\s\\u00A0\\u2007\\u202F\\u3000]+";
 
     private static final Pattern separatorPattern = Pattern.compile(SEPARATORS);
 
