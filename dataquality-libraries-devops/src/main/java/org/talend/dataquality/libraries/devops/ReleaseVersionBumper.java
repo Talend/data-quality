@@ -96,6 +96,10 @@ public class ReleaseVersionBumper {
             System.out.println("Updating: " + inputFile.getAbsolutePath());
             Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(inputFile);
 
+            // replace parent version
+            Node rootParentVersion = (Node) xPath.evaluate("/project/parent/version", doc, XPathConstants.NODE);
+            rootParentVersion.setTextContent(TARGET_VERSION);
+
             // replace version value of this project
             Node parentVersion = (Node) xPath.evaluate("/project/version", doc, XPathConstants.NODE);
             parentVersion.setTextContent(TARGET_VERSION);
