@@ -71,7 +71,7 @@ public class ReleaseVersionBumper {
     private ReleaseVersionBumper() throws TransformerConfigurationException, TransformerFactoryConfigurationError {
         xTransformer = TransformerFactory.newInstance().newTransformer();
         xTransformer.setOutputProperty(OutputKeys.INDENT, "yes");
-        xTransformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+        xTransformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
     }
 
     private void bumpPomVersion()
@@ -81,6 +81,15 @@ public class ReleaseVersionBumper {
         final String projectRoot = new File(resourcePath).getParentFile().getParentFile().getParentFile().getParentFile()
                 .getParentFile().getParentFile().getParentFile().getPath() + File.separator;
 
+        // update root pom file
+        String rootPomPath = "../pom.xml";
+        File rootPomFile = new File(projectRoot + rootPomPath);
+        Document rootDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(rootPomFile);
+        Node rootVersion = (Node) xPath.evaluate("/project/version", rootDoc, XPathConstants.NODE);
+        rootVersion.setTextContent(TARGET_VERSION);
+        xTransformer.transform(new DOMSource(rootDoc), new StreamResult(rootPomFile));
+
+        // update library parent pom file and all the modules
         String parentPomPath = "../dataquality-libraries/pom.xml";
         File inputFile = new File(projectRoot + parentPomPath);
         if (inputFile.exists()) {
