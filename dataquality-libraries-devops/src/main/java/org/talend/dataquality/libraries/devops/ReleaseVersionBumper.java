@@ -79,18 +79,18 @@ public class ReleaseVersionBumper {
 
         final String resourcePath = ReleaseVersionBumper.class.getResource(".").getFile();
         final String projectRoot = new File(resourcePath).getParentFile().getParentFile().getParentFile().getParentFile()
-                .getParentFile().getParentFile().getParentFile().getParentFile().getPath() + File.separator;
-        System.out.println("project root: " + projectRoot);
+                .getParentFile().getParentFile().getParentFile().getPath() + File.separator;
 
         // update root pom file
-        File rootPomFile = new File(projectRoot + "pom.xml");
+        String rootPomPath = "../pom.xml";
+        File rootPomFile = new File(projectRoot + rootPomPath);
         Document rootDoc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(rootPomFile);
         Node rootVersion = (Node) xPath.evaluate("/project/version", rootDoc, XPathConstants.NODE);
         rootVersion.setTextContent(TARGET_VERSION);
         xTransformer.transform(new DOMSource(rootDoc), new StreamResult(rootPomFile));
 
         // update library parent pom file and all the modules
-        String parentPomPath = "dataquality-libraries/pom.xml";
+        String parentPomPath = "../dataquality-libraries/pom.xml";
         File inputFile = new File(projectRoot + parentPomPath);
         if (inputFile.exists()) {
             System.out.println("Updating: " + inputFile.getAbsolutePath());
@@ -124,7 +124,7 @@ public class ReleaseVersionBumper {
             NodeList moduleNodes = (NodeList) xPath.evaluate("/project/modules/module", doc, XPathConstants.NODESET);
             for (int idx = 0; idx < moduleNodes.getLength(); idx++) {
                 String modulePath = moduleNodes.item(idx).getTextContent();
-                updateChildModules(new File(projectRoot + modulePath.replace("../", "") + "/pom.xml"));
+                updateChildModules(new File(projectRoot + modulePath + "/pom.xml"));
             }
         }
     }
