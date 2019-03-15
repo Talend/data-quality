@@ -181,6 +181,7 @@ public class ExtractFromDictionaryTest {
         TokenizedString input = new TokenizedString("Susan's");
         List<MatchedPart> expected = Collections.singletonList(new MatchedPartDict(input, 0, 0, "Susan"));
         List<MatchedPart> actual = efd.getMatches(input);
+        assertEquals(expected, actual);
         assertEquals("Susan", actual.get(0).getExactMatch());
     }
 
@@ -203,6 +204,7 @@ public class ExtractFromDictionaryTest {
         TokenizedString input = new TokenizedString("Angola'");
         List<MatchedPart> expected = Collections.singletonList(new MatchedPartDict(input, 0, 0, "Angola"));
         List<MatchedPart> actual = efd.getMatches(input);
+        assertEquals(expected, actual);
         assertEquals("Angola", actual.get(0).getExactMatch());
     }
 
