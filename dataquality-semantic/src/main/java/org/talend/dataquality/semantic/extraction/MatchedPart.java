@@ -114,7 +114,10 @@ public abstract class MatchedPart implements Comparable<MatchedPart> {
         }
 
         MatchedPart otherMatchedPart = (MatchedPart) o;
-        return originalField.toString().equals(otherMatchedPart.originalField.toString())
+        return originalField.getValue().equals(otherMatchedPart.originalField.getValue())
+                && originalField.getSeparators().equals(otherMatchedPart.originalField.getSeparators())
+                && originalField.isStartingWithSeparator() == otherMatchedPart.originalField.isStartingWithSeparator()
+                && originalField.isEndingWithSeparator() == otherMatchedPart.originalField.isEndingWithSeparator()
                 && tokenPositions.equals(otherMatchedPart.tokenPositions) && exactMatch.equals(otherMatchedPart.exactMatch);
     }
 }
