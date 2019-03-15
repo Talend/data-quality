@@ -39,7 +39,7 @@ public class ExtractFromDictionary extends ExtractFromSemanticType {
         if (tokenizedField.getValue().contains("'") || tokenizedField.getValue().contains(".")) {
             TokenizedString clone = new TokenizedString(tokenizedField.getValue());
 
-            List<String> tokensWithoutApostrophe = getTokensWithApostrophe(tokenizedField);
+            List<String> tokensWithoutApostrophe = getTokensWithoutApostropheAndDots(tokenizedField);
 
             clone.getTokens().clear();
             clone.getTokens().addAll(tokensWithoutApostrophe);
@@ -90,7 +90,7 @@ public class ExtractFromDictionary extends ExtractFromSemanticType {
         return matchedParts;
     }
 
-    private List<String> getTokensWithApostrophe(TokenizedString tokenizedString) {
+    private List<String> getTokensWithoutApostropheAndDots(TokenizedString tokenizedString) {
         List<String> tokens = tokenizedString.getTokens();
         List<String> tokensWithoutApostrophe = new ArrayList<>(
                 Arrays.asList(fullSeparatorPattern.split(tokenizedString.getValue())));
