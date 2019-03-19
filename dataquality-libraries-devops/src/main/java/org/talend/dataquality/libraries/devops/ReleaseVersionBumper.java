@@ -35,6 +35,7 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
+import javax.xml.xpath.XPathFactoryConfigurationException;
 
 import org.apache.commons.io.IOUtils;
 import org.w3c.dom.Document;
@@ -65,7 +66,17 @@ public class ReleaseVersionBumper {
 
     private static final String BUNDLE_VERSION_STRING = "Bundle-Version: ";
 
-    private XPath xPath = XPathFactory.newInstance().newXPath();
+    private XPathFactory getXPathFactory() {
+        XPathFactory xpf = XPathFactory.newInstance();
+        try {
+            xpf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        } catch (XPathFactoryConfigurationException e) {
+            System.out.println(e.getMessage());
+        }
+        return xpf;
+    }
+
+    private XPath xPath = getXPathFactory().newXPath();
 
     private Transformer xTransformer;
 
