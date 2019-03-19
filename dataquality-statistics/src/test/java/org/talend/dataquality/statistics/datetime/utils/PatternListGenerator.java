@@ -77,10 +77,12 @@ public class PatternListGenerator {
     };
 
     /**
-     * Important locales with which we need not only support their own pattern, but also the following combination in addition:
+     * Important locales with which we need not only support their own pattern, but also the following combination in
+     * addition:
      * 1. SHORT style date + MEDIUM style time
      * 2. MEDIUM style date + SHORT style time
-     * 3. all date patterns in OTHER_COMMON_PATTERNS_NEED_COMBINATION combined with the SHORT and MEDIUM style time of the
+     * 3. all date patterns in OTHER_COMMON_PATTERNS_NEED_COMBINATION combined with the SHORT and MEDIUM style time of
+     * the
      * following locales.
      */
     private static Locale[] primaryLocaleArray = new Locale[] { Locale.US, //
@@ -91,7 +93,8 @@ public class PatternListGenerator {
     };
 
     /**
-     * Add important date pattern here which need to be combined with SHORT and MEDIUM style time of the primary locales.
+     * Add important date pattern here which need to be combined with SHORT and MEDIUM style time of the primary
+     * locales.
      */
     private static List<LocaledPattern> OTHER_COMMON_PATTERNS_NEED_COMBINATION = new ArrayList<LocaledPattern>() {
 
@@ -114,7 +117,8 @@ public class PatternListGenerator {
     };
 
     /**
-     * Add other single patterns here which do not need to be combined with SHORT and MEDIUM style time of the primary locales.
+     * Add other single patterns here which do not need to be combined with SHORT and MEDIUM style time of the primary
+     * locales.
      */
     private static List<LocaledPattern> OTHER_COMMON_PATTERNS = new ArrayList<LocaledPattern>() {
 
@@ -124,11 +128,13 @@ public class PatternListGenerator {
             add(new LocaledPattern("MMM d yyyy", Locale.US, "OTHER", false));// Jan 18 2012
             add(new LocaledPattern("MMM.dd.yyyy", Locale.US, "OTHER", false));// Jan.02.2010
             add(new LocaledPattern("MMMM d yyyy", Locale.US, "OTHER", false));// January 18 2012
+            add(new LocaledPattern("yyyy-MM-dd HH:mm:ss.SSS", Locale.US, "OTHER", true)); // 2013-02-14 13:40:51.123
             add(new LocaledPattern("yyyy-MM-dd HH:mm:ss.S", Locale.US, "OTHER", true));// 2013-2-14 13:40:51.1
             add(new LocaledPattern("d/MMM/yyyy H:mm:ss Z", Locale.US, "OTHER", true));// 14/Feb/2013 13:40:51 +0100
             add(new LocaledPattern("dd-MMM-yy hh.mm.ss.nnnnnnnnn a", //
                     Locale.UK, "OTHER", true));// 18-Nov-86 01.00.00.000000000 AM
-            add(new LocaledPattern("EEE MMM dd HH:mm:ss z yyyy", Locale.US, "OTHER", true));// default format of java.util.Date
+            add(new LocaledPattern("EEE MMM dd HH:mm:ss z yyyy", Locale.US, "OTHER", true));// default format of
+                                                                                            // java.util.Date
             add(new LocaledPattern("dd/MMM/yy h:mm a", Locale.US, "OTHER", true)); // data time pattern from jira
             add(new LocaledPattern("yyyy/M/d", Locale.US, "OTHER", false)); // TDQ-13539
             add(new LocaledPattern("MM/dd/yyyy hh:mm:ss a", Locale.US, "OTHER", true)); // TDQ-11557

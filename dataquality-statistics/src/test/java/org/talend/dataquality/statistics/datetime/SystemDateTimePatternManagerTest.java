@@ -12,9 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.statistics.datetime;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -61,16 +59,32 @@ public class SystemDateTimePatternManagerTest {
 
     @Test
     public void testgetDateTimeFormatterByPattern() {
-        DateTimeFormatter dateTimeFormatterByPattern = SystemDateTimePatternManager.getDateTimeFormatterByPattern("dd/MM/yyyy",
+        DateTimeFormatter dateTimeFormatterByPattern = SystemDateTimePatternManager.getDateTimeFormatterByPattern("dd/MM/yyyy", //$NON-NLS-1$
                 Locale.ENGLISH);
         assertFalse(dateTimeFormatterByPattern == null);
         assertTrue(dateTimeFormatterByPattern.getResolverStyle() == ResolverStyle.STRICT);
-        assertEquals("17/08/2015", dateTimeFormatterByPattern.format(LocalDate.of(2015, 8, 17)));
-        dateTimeFormatterByPattern = SystemDateTimePatternManager.getDateTimeFormatterByPattern("yyyy-MM-dd G", Locale.US);
+        assertEquals("17/08/2015", dateTimeFormatterByPattern.format(LocalDate.of(2015, 8, 17))); //$NON-NLS-1$
+        dateTimeFormatterByPattern = SystemDateTimePatternManager.getDateTimeFormatterByPattern("yyyy-MM-dd G", Locale.US); //$NON-NLS-1$
         assertFalse(dateTimeFormatterByPattern == null);
-        assertEquals("2015-08-17 AD", dateTimeFormatterByPattern.format(LocalDate.of(2015, 8, 17)));
-        dateTimeFormatterByPattern = SystemDateTimePatternManager.getDateTimeFormatterByPattern("yyyy-MM-dd G", null);
+        assertEquals("2015-08-17 AD", dateTimeFormatterByPattern.format(LocalDate.of(2015, 8, 17))); //$NON-NLS-1$
+        dateTimeFormatterByPattern = SystemDateTimePatternManager.getDateTimeFormatterByPattern("yyyy-MM-dd G", null); //$NON-NLS-1$
         assertTrue(dateTimeFormatterByPattern == null);
+    }
+
+    @Test
+    public void testIsDateString() {
+        boolean isDate = SystemDateTimePatternManager.isDate("2013-02-14 13:40:51.123"); //$NON-NLS-1$
+        assertTrue(isDate);
+        isDate = SystemDateTimePatternManager.isDate("2013-12-04 13:40:51.123"); //$NON-NLS-1$
+        assertTrue(isDate);
+        isDate = SystemDateTimePatternManager.isDate("2013-13-04 13:40:51.123"); //$NON-NLS-1$
+        assertFalse(isDate);
+        isDate = SystemDateTimePatternManager.isDate("2013-12-04 25:40:51.123"); //$NON-NLS-1$
+        assertFalse(isDate);
+        isDate = SystemDateTimePatternManager.isDate("2013-12-04 13:40:61.123"); //$NON-NLS-1$
+        assertFalse(isDate);
+        isDate = SystemDateTimePatternManager.isDate("2013-12-04 13:60:51.123"); //$NON-NLS-1$
+        assertFalse(isDate);
     }
 
 }
