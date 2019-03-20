@@ -49,6 +49,12 @@ public class GenerateAccountNumberSimpleTest {
     }
 
     @Test
+    public void belgianIBan() {
+        output = gans.generateIban("BE63507336157537").toString();
+        assertEquals("BE08038405589322", output); //$NON-NLS-1$
+    }
+
+    @Test
     public void testNull() {
         gans.keepNull = true;
         output = gans.generateMaskedRow(null);
