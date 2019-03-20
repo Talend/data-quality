@@ -32,6 +32,7 @@ public abstract class GenerateAccountNumber extends Function<String> {
     private static final Map<Integer, Country> decryptionCode = new HashMap<Integer, Country>();
     static {
         decryptionCode.put(15, Country.CODE_15);
+        decryptionCode.put(16, Country.CODE_16);
         decryptionCode.put(18, Country.CODE_18);
         decryptionCode.put(19, Country.CODE_19);
         decryptionCode.put(20, Country.CODE_20);
