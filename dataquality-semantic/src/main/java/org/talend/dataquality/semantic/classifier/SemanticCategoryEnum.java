@@ -86,7 +86,6 @@ public enum SemanticCategoryEnum {
     HR_DEPARTMENT("5836fbb142b02a698752eed9", "HR Department", "Department or service name in company", CategoryType.DICT, false),
     FIRST_NAME("5836fbb142b02a698752eedd", "First Name", "First name", CategoryType.DICT, false),
     LAST_NAME("5836fbb942b02a6987534b81", "Last Name", "Last name", CategoryType.DICT, false),
-    CITY("5836fb7c42b02a69874fb511", "City", "City name (multilingual)", CategoryType.DICT, false),
     GENDER("5836fbc142b02a698753a93f", "Gender", "Gender (Multilingual)", CategoryType.DICT, true),
     JOB_TITLE("5836fbc142b02a698753a951", "Job Title", "Job Title (EN)", CategoryType.DICT, false),
     MONTH("5836fbc242b02a698753b2a3", "Month", "Month (Multilingual)", CategoryType.DICT, true),
