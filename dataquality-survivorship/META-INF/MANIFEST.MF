@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Survivorship runtime library
 Bundle-SymbolicName: org.talend.dataquality.survivorship
-Bundle-Version: 6.3.4
+Bundle-Version: 6.3.5.SNAPSHOT
 Bundle-ClassPath: .
 Bundle-Vendor: .Talend SA.
 Require-Bundle: org.drools.eclipse,
