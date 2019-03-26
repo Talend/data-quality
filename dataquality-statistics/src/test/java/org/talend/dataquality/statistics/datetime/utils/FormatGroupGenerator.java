@@ -82,8 +82,6 @@ public class FormatGroupGenerator {
 
         if (format.contains("'T'")) {
             code.append("T");
-        } else {
-            code.append(" ");
         }
 
         if (format.contains("hh")) {
