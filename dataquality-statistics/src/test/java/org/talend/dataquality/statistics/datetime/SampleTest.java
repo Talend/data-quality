@@ -375,24 +375,40 @@ public class SampleTest {
             { "yyyy-MM-ddXXX" })));
             put("1999-03-22T05:06:07.000[Europe/Paris]", new HashSet<String>(Arrays.asList(new String[] //
             { "yyyy-MM-dd'T'HH:mm:ss.SSS'['VV']'" })));
+            put("1999-03-22T05:06:07,000[Europe/Paris]", new HashSet<String>(Arrays.asList(new String[] //
+            { "yyyy-MM-dd'T'HH:mm:ss,SSS'['VV']'" })));
             put("1999-03-22T05:06:07.000", new HashSet<String>(Arrays.asList(new String[] //
             { "yyyy-MM-dd'T'HH:mm:ss.SSS" })));
+            put("1999-03-22T05:06:07,000", new HashSet<String>(Arrays.asList(new String[] //
+            { "yyyy-MM-dd'T'HH:mm:ss,SSS" })));
             put("1999-03-22T05:06:07", new HashSet<String>(Arrays.asList(new String[] //
             { "yyyy-MM-dd'T'HH:mm:ss" })));
             put("1999-03-22 05:06:07.000[Europe/Paris]", new HashSet<String>(Arrays.asList(new String[] //
             { "yyyy-MM-dd HH:mm:ss.SSS'['VV']'" })));
+            put("1999-03-22 05:06:07,000[Europe/Paris]", new HashSet<String>(Arrays.asList(new String[] //
+            { "yyyy-MM-dd HH:mm:ss,SSS'['VV']'" })));
             put("1999-03-22 05:06:07.000", new HashSet<String>(Arrays.asList(new String[] //
             { "yyyy-MM-dd HH:mm:ss.SSS" })));
+            put("1999-03-22 05:06:07,000", new HashSet<String>(Arrays.asList(new String[] //
+            { "yyyy-MM-dd HH:mm:ss,SSS" })));
             put("1999-03-22T05:06:07.000Z", new HashSet<String>(Arrays.asList(new String[] //
             { "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'" })));
+            put("1999-03-22T05:06:07,000Z", new HashSet<String>(Arrays.asList(new String[] //
+            { "yyyy-MM-dd'T'HH:mm:ss,SSS'Z'" })));
             put("1999-03-22 05:06:07.000Z", new HashSet<String>(Arrays.asList(new String[] //
             { "yyyy-MM-dd HH:mm:ss.SSS'Z'" })));
+            put("1999-03-22 05:06:07,000Z", new HashSet<String>(Arrays.asList(new String[] //
+            { "yyyy-MM-dd HH:mm:ss,SSS'Z'" })));
             put("1999-03-22T05:06:07.000+01:00", new HashSet<String>(Arrays.asList(new String[] //
             { "yyyy-MM-dd'T'HH:mm:ss.SSSXXX" })));
+            put("1999-03-22T05:06:07,000+01:00", new HashSet<String>(Arrays.asList(new String[] //
+            { "yyyy-MM-dd'T'HH:mm:ss,SSSXXX" })));
             put("1999-03-22T05:06:07+01:00", new HashSet<String>(Arrays.asList(new String[] //
             { "yyyy-MM-dd'T'HH:mm:ssXXX" })));
             put("1999-03-22 05:06:07.000+01:00", new HashSet<String>(Arrays.asList(new String[] //
             { "yyyy-MM-dd HH:mm:ss.SSSXXX" })));
+            put("1999-03-22 05:06:07,000+01:00", new HashSet<String>(Arrays.asList(new String[] //
+            { "yyyy-MM-dd HH:mm:ss,SSSXXX" })));
             put("1999-03-22 05:06:07+01:00", new HashSet<String>(Arrays.asList(new String[] //
             { "yyyy-MM-dd HH:mm:ssXXX" })));
             put("1999-081+01:00", new HashSet<String>(Arrays.asList(new String[] //
@@ -403,10 +419,14 @@ public class SampleTest {
             { "YYYY-'W'w-c" })));
             put("1999-03-22T05:06:07.000+01:00[Europe/Paris]", new HashSet<String>(Arrays.asList(new String[] //
             { "yyyy-MM-dd'T'HH:mm:ss.SSSXXX'['VV']'" })));
+            put("1999-03-22T05:06:07,000+01:00[Europe/Paris]", new HashSet<String>(Arrays.asList(new String[] //
+            { "yyyy-MM-dd'T'HH:mm:ss,SSSXXX'['VV']'" })));
             put("1999-03-22T05:06:07+01:00[Europe/Paris]", new HashSet<String>(Arrays.asList(new String[] //
             { "yyyy-MM-dd'T'HH:mm:ssXXX'['VV']'" })));
             put("1999-03-22 05:06:07.000+01:00[Europe/Paris]", new HashSet<String>(Arrays.asList(new String[] //
             { "yyyy-MM-dd HH:mm:ss.SSSXXX'['VV']'" })));
+            put("1999-03-22 05:06:07,000+01:00[Europe/Paris]", new HashSet<String>(Arrays.asList(new String[] //
+            { "yyyy-MM-dd HH:mm:ss,SSSXXX'['VV']'" })));
             put("1999-03-22 05:06:07+01:00[Europe/Paris]", new HashSet<String>(Arrays.asList(new String[] //
             { "yyyy-MM-dd HH:mm:ssXXX'['VV']'" })));
             put("Mon, 22 Mar 1999 05:06:07 +0100", new HashSet<String>(Arrays.asList(new String[] //
