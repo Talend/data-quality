@@ -80,6 +80,12 @@ public class FormatGroupGenerator {
             dateSeparator = "?";
         }
 
+        if (format.contains("'T'")) {
+            code.append("T");
+        } else {
+            code.append(" ");
+        }
+
         if (format.contains("hh")) {
             code.append("H");
         } else if (format.contains("h")) {
