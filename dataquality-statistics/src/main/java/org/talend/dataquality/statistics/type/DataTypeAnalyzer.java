@@ -19,7 +19,7 @@ import java.util.List;
 
 import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.ResizableList;
-import org.talend.dataquality.semantic.recognizer.LFUCache;
+import org.talend.dataquality.common.util.LFUCache;
 
 /**
  * Type inference executor which provide several methods computing the types.<br>
@@ -99,7 +99,7 @@ public class DataTypeAnalyzer implements Analyzer<DataTypeOccurences> {
                 dataType.increment(knownDataType);
             } else {
                 DataTypeEnum type = TypeInferenceUtils.getNativeDataType(value);
-                //STRING means we didn't find any native data types
+                // STRING means we didn't find any native data types
                 if (DataTypeEnum.STRING.equals(type) && isDate(value, frequentDatePatterns.get(i)))
                     type = DataTypeEnum.DATE;
                 knownDataTypeCache.put(value, type);

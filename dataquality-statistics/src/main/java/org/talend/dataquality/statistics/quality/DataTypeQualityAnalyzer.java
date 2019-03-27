@@ -21,7 +21,7 @@ import org.apache.commons.lang.StringUtils;
 import org.talend.dataquality.common.inference.QualityAnalyzer;
 import org.talend.dataquality.common.inference.ResizableList;
 import org.talend.dataquality.common.inference.ValueQualityStatistics;
-import org.talend.dataquality.semantic.recognizer.LFUCache;
+import org.talend.dataquality.common.util.LFUCache;
 import org.talend.dataquality.statistics.type.DataTypeEnum;
 import org.talend.dataquality.statistics.type.SortedList;
 import org.talend.dataquality.statistics.type.TypeInferenceUtils;

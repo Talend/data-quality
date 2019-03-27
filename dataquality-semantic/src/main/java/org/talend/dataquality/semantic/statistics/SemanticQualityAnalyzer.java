@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import org.talend.dataquality.common.inference.QualityAnalyzer;
 import org.talend.dataquality.common.inference.ResizableList;
 import org.talend.dataquality.common.inference.ValueQualityStatistics;
+import org.talend.dataquality.common.util.LFUCache;
 import org.talend.dataquality.semantic.classifier.ISubCategoryClassifier;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
 import org.talend.dataquality.semantic.classifier.impl.DataDictFieldClassifier;
@@ -35,7 +36,6 @@ import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.recognizer.CategoryRecognizer;
 import org.talend.dataquality.semantic.recognizer.DefaultCategoryRecognizer;
-import org.talend.dataquality.semantic.recognizer.LFUCache;
 import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
 
 /**

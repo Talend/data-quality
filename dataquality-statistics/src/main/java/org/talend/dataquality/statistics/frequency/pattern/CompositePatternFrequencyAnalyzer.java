@@ -21,7 +21,7 @@ import java.util.Map;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.talend.dataquality.common.inference.ResizableList;
-import org.talend.dataquality.semantic.recognizer.LFUCache;
+import org.talend.dataquality.common.util.LFUCache;
 import org.talend.dataquality.statistics.frequency.AbstractFrequencyAnalyzer;
 import org.talend.dataquality.statistics.frequency.recognition.AbstractPatternRecognizer;
 import org.talend.dataquality.statistics.frequency.recognition.DateTimePatternRecognizer;

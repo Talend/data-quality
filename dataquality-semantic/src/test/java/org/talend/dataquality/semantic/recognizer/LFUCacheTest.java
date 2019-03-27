@@ -11,6 +11,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.junit.Assert;
 import org.junit.Test;
+import org.talend.dataquality.common.util.LFUCache;
 
 public class LFUCacheTest {
 

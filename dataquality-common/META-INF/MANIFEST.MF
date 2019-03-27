@@ -9,7 +9,8 @@ Bundle-ClassPath: .
 Export-Package: org.talend.dataquality.common.exception,
  org.talend.dataquality.common.inference,
  org.talend.dataquality.common.pattern,
- org.talend.dataquality.common.regex
+ org.talend.dataquality.common.regex,
+ org.talend.dataquality.common.util
 Import-Package: com.fasterxml.jackson.annotation;version="[2.5.3,3.0.0)",
  org.apache.commons.io;version="[2.2.0,3.0.0)",
  org.apache.commons.lang3,
