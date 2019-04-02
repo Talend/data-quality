@@ -79,7 +79,7 @@ public class BlockingKeyHandler {
         String[] inputString = new String[inputObject.length];
         int index = 0;
         for (Object obj : inputObject) {
-            if (datePatternMap != null && obj != null && obj instanceof Date) {
+            if (!datePatternMap.isEmpty() && obj != null && obj instanceof Date) {
                 // Unified the date format. TDQ-14276
                 sdf.applyPattern(this.datePatternMap.get(String.valueOf(index)));
                 inputString[index++] = sdf.format(obj);
