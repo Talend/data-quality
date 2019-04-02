@@ -10,7 +10,7 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.dataquality.datamasking.functions.text;
+package org.talend.dataquality.datamasking.generic;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -25,8 +25,6 @@ import java.util.stream.Collectors;
 import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.datamasking.FormatPreservingMethod;
-import org.talend.dataquality.datamasking.functions.text.BijectiveSubstitutionFunction;
-import org.talend.dataquality.datamasking.generic.FieldDefinition;
 import org.talend.dataquality.datamasking.generic.FieldDefinition.FieldDefinitionType;
 import org.talend.dataquality.sampling.exception.DQRuntimeException;
 

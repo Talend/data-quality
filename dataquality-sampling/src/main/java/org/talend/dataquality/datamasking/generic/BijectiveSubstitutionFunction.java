@@ -1,4 +1,4 @@
-package org.talend.dataquality.datamasking.functions.text;
+package org.talend.dataquality.datamasking.generic;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,7 +14,6 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.dataquality.datamasking.functions.AbstractGenerateWithSecret;
-import org.talend.dataquality.datamasking.generic.FieldDefinition;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldDate;
 import org.talend.dataquality.datamasking.generic.fields.FieldEnum;
