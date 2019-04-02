@@ -1,7 +1,7 @@
-package org.talend.dataquality.datamasking.utils.ssn;
+package org.talend.dataquality.datamasking.functions.util;
 
 import org.junit.Test;
-import org.talend.dataquality.datamasking.utils.ssn.UtilsSsnFr;
+import org.talend.dataquality.datamasking.functions.util.UtilsSsnFr;
 
 import static org.junit.Assert.assertEquals;
 

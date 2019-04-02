@@ -21,7 +21,6 @@ import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.talend.dataquality.datamasking.functions.text.remove.BetweenIndexesRemove;
 
 public class BetweenIndexesRemoveTest {
 
@@ -56,7 +55,7 @@ public class BetweenIndexesRemoveTest {
             bir.parse("-2, 8", false);
             fail("should get exception with input " + Arrays.toString(bir.getParsedParameters())); //$NON-NLS-1$
         } catch (Exception e) {
-            assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$
+            assertTrue("expect illegal argument exception ", IllegalArgumentException.class.equals(e.getClass())); //$NON-NLS-1$
         }
         output = bir.generateMaskedRow(input);
         assertEquals("", output); //$NON-NLS-1$
@@ -68,7 +67,7 @@ public class BetweenIndexesRemoveTest {
             bir.parse("4, 2", false);
             fail("should get exception with input " + Arrays.toString(bir.getParsedParameters())); //$NON-NLS-1$
         } catch (Exception e) {
-            assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$
+            assertTrue("expect illegal argument exception ", IllegalArgumentException.class.equals(e.getClass())); //$NON-NLS-1$
         }
         output = bir.generateMaskedRow(input);
         assertEquals("", output); //$NON-NLS-1$
@@ -80,7 +79,7 @@ public class BetweenIndexesRemoveTest {
             bir.parse("1", false);
             fail("should get exception with input " + Arrays.toString(bir.getParsedParameters())); //$NON-NLS-1$
         } catch (Exception e) {
-            assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$
+            assertTrue("expect illegal argument exception ", IllegalArgumentException.class.equals(e.getClass())); //$NON-NLS-1$
         }
         output = bir.generateMaskedRow(input);
         assertEquals("", output); //$NON-NLS-1$

@@ -43,7 +43,8 @@ public abstract class GenerateCreditCard<T> extends Function<T> {
      * @return a boolean : true if the number is valid, false if not
      */
     public static boolean luhnTest(StringBuilder number) {
-        int s1 = 0, s2 = 0;
+        int s1 = 0;
+        int s2 = 0;
         String reverse = new StringBuffer(number).reverse().toString();
         for (int i = 0; i < reverse.length(); i++) {
             int digit = Character.digit(reverse.charAt(i), 10);

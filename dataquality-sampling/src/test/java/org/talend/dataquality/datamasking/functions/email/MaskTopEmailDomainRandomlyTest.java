@@ -13,6 +13,7 @@
 package org.talend.dataquality.datamasking.functions.email;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -106,7 +107,7 @@ public class MaskTopEmailDomainRandomlyTest {
 
         for (int i = 0; i < 20; i++) {
             output = maskTopEmailDomainRandomly.generateMaskedRow(mailStandard);
-            assertTrue(!output.equals(mailStandard));
+            assertFalse(output.equals(mailStandard));
         }
     }
 
@@ -117,7 +118,7 @@ public class MaskTopEmailDomainRandomlyTest {
 
         for (int i = 0; i < 20; i++) {
             output = maskTopEmailDomainRandomly.generateMaskedRow(mailMultipalDomaim);
-            assertTrue(!output.equals(mailStandard));
+            assertFalse(output.equals(mailStandard));
         }
     }
 

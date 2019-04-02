@@ -83,7 +83,7 @@ public class ReplaceNumericIntegerTest {
             rni.parse("r", false);
             fail("should get exception with input " + Arrays.toString(rni.getParsedParameters())); //$NON-NLS-1$
         } catch (Exception e) {
-            assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$
+            assertTrue("expect illegal argument exception ", IllegalArgumentException.class.equals(e.getClass())); //$NON-NLS-1$
         }
         output = rni.generateMaskedRow(input);
         assertEquals(0, output);
@@ -95,7 +95,7 @@ public class ReplaceNumericIntegerTest {
             rni.parse("10", false);
             fail("should get exception with input " + Arrays.toString(rni.getParsedParameters())); //$NON-NLS-1$
         } catch (Exception e) {
-            assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$
+            assertTrue("expect illegal argument exception ", IllegalArgumentException.class.equals(e.getClass())); //$NON-NLS-1$
         }
         output = rni.generateMaskedRow(input);
         assertEquals(0, output);

@@ -32,8 +32,6 @@ public class MaskFullEmailDomainByX extends MaskEmailByX {
      * Replaces all the domains by X with the original points
      * 
      * @param str
-     * @param sb
-     * @param count
      * @return masked full domain address
      */
     @Override

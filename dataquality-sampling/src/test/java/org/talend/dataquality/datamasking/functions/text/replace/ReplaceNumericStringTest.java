@@ -97,7 +97,7 @@ public class ReplaceNumericStringTest {
             rns.parse("0X", false);
             fail("should get exception with input " + Arrays.toString(rns.getParsedParameters())); //$NON-NLS-1$
         } catch (Exception e) {
-            assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$
+            assertTrue("expect illegal argument exception ", IllegalArgumentException.class.equals(e.getClass())); //$NON-NLS-1$
         }
     }
 }

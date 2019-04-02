@@ -13,6 +13,7 @@
 package org.talend.dataquality.datamasking.functions.email;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.net.URISyntaxException;
@@ -70,7 +71,7 @@ public class MaskFullEmailDomainRandomlyTest {
         maskEmailDomainName.parse("aol.com, att.net, comcast.net, facebook.com, gmail.com, gmx.com", false);
         for (int i = 0; i < 20; i++) {
             output = maskEmailDomainName.generateMaskedRow(mail);
-            assertTrue(!output.equals(mail));
+            assertFalse(output.equals(mail));
         }
     }
 
@@ -90,7 +91,7 @@ public class MaskFullEmailDomainRandomlyTest {
         maskEmailDomainName.parse(path, false);
         for (int i = 0; i < 20; i++) {
             output = maskEmailDomainName.generateMaskedRow(mail);
-            assertTrue(!output.equals(mail));
+            assertFalse(output.equals(mail));
         }
     }
 

@@ -12,7 +12,7 @@ import org.junit.Test;
 import org.talend.dataquality.datamasking.FormatPreservingMethod;
 import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.datamasking.functions.text.keep.KeepLastDigitsAndReplaceOtherDigits;
-import org.talend.dataquality.datamasking.utils.MockRandom;
+import org.talend.dataquality.datamasking.functions.util.MockRandom;
 
 public class KeepLastDigitsAndReplaceOtherDigitsTest {
 

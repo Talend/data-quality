@@ -68,7 +68,7 @@ public class ReplaceFirstCharsLongTest {
             rfcl.parse("7,x", false);
             fail("should get exception with input " + Arrays.toString(rfcl.getParsedParameters())); //$NON-NLS-1$
         } catch (Exception e) {
-            assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$
+            assertTrue("expect illegal argument exception ", IllegalArgumentException.class.equals(e.getClass())); //$NON-NLS-1$
         }
         output = rfcl.generateMaskedRow(input);
         assertEquals(0L, output); // $NON-NLS-1$

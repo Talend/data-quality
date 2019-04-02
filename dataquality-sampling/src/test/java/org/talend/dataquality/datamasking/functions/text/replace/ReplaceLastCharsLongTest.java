@@ -75,7 +75,7 @@ public class ReplaceLastCharsLongTest {
             rlcl.parse("0,x", false);
             fail("should get exception with input " + Arrays.toString(rlcl.getParsedParameters())); //$NON-NLS-1$
         } catch (Exception e) {
-            assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$
+            assertTrue("expect illegal argument exception ", IllegalArgumentException.class.equals(e.getClass())); //$NON-NLS-1$
         }
         assertEquals(0L, output); // $NON-NLS-1$
     }

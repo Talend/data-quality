@@ -83,7 +83,7 @@ public class ReplaceNumericLongTest {
             rnl.parse("10", false);
             fail("should get exception with input " + Arrays.toString(rnl.getParsedParameters())); //$NON-NLS-1$
         } catch (Exception e) {
-            assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$
+            assertTrue("expect illegal argument exception ", IllegalArgumentException.class.equals(e.getClass())); //$NON-NLS-1$
         }
     }
 }

@@ -18,7 +18,6 @@ import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.talend.dataquality.datamasking.functions.text.remove.RemoveFirstCharsInteger;
 
 /**
  * created by jgonzalez on 25 juin 2015 Detailled comment
@@ -40,7 +39,6 @@ public class RemoveFirstCharsIntegerTest {
     @Test
     public void defaultBehavior() {
         rfci.parse("2", false);
-        ;
         output = rfci.generateMaskedRow(input);
         assertEquals(6, output);
     }

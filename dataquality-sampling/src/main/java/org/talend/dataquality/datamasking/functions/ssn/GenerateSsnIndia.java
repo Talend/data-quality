@@ -15,7 +15,7 @@ package org.talend.dataquality.datamasking.functions.ssn;
 import java.util.Random;
 
 import org.talend.dataquality.datamasking.functions.FunctionString;
-import org.talend.dataquality.datamasking.utils.ssn.UtilsSsnIndia;
+import org.talend.dataquality.datamasking.functions.util.UtilsSsnIndia;
 
 /**
  * /**

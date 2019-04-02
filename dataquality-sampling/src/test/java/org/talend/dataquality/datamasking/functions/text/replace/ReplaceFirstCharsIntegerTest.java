@@ -90,7 +90,7 @@ public class ReplaceFirstCharsIntegerTest {
             rfci.parse("j", false);
             fail("should get exception with input " + Arrays.toString(rfci.getParsedParameters())); //$NON-NLS-1$
         } catch (Exception e) {
-            assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$
+            assertTrue("expect illegal argument exception ", IllegalArgumentException.class.equals(e.getClass())); //$NON-NLS-1$
         }
         output = rfci.generateMaskedRow(input);
         assertEquals(0, output); // $NON-NLS-1$

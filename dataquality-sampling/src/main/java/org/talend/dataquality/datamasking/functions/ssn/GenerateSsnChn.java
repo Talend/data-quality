@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.Random;
 
 import org.talend.dataquality.datamasking.functions.FunctionString;
+import org.talend.dataquality.datamasking.functions.util.UtilsSsnChn;
 import org.talend.dataquality.datamasking.generic.fields.FieldDate;
-import org.talend.dataquality.datamasking.utils.ssn.UtilsSsnChn;
 
 /**
  * @author dprot

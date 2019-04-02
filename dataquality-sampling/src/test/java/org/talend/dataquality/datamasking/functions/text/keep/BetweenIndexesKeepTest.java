@@ -21,7 +21,6 @@ import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.talend.dataquality.datamasking.functions.text.keep.BetweenIndexesKeep;
 
 /**
  * created by jgonzalez on 25 juin 2015 Detailled comment
@@ -67,7 +66,7 @@ public class BetweenIndexesKeepTest {
             bik.parse("0, 8", false);
             fail("should get exception with input " + Arrays.toString(bik.getParsedParameters())); //$NON-NLS-1$
         } catch (Exception e) {
-            assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$
+            assertTrue("expect illegal argument exception ", IllegalArgumentException.class.equals(e.getClass())); //$NON-NLS-1$
         }
         output = bik.generateMaskedRow(input);
         assertEquals("", output); //$NON-NLS-1$
@@ -79,7 +78,7 @@ public class BetweenIndexesKeepTest {
             bik.parse("1", false);
             fail("should get exception with input " + Arrays.toString(bik.getParsedParameters())); //$NON-NLS-1$
         } catch (Exception e) {
-            assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$
+            assertTrue("expect illegal argument exception ", IllegalArgumentException.class.equals(e.getClass())); //$NON-NLS-1$
         }
         output = bik.generateMaskedRow(input);
         assertEquals("", output); //$NON-NLS-1$
@@ -91,7 +90,7 @@ public class BetweenIndexesKeepTest {
             bik.parse("lk, df", false);
             fail("should get exception with input " + Arrays.toString(bik.getParsedParameters())); //$NON-NLS-1$
         } catch (Exception e) {
-            assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$
+            assertTrue("expect illegal argument exception ", IllegalArgumentException.class.equals(e.getClass())); //$NON-NLS-1$
         }
         output = bik.generateMaskedRow(input);
         assertEquals("", output); //$NON-NLS-1$
@@ -105,7 +104,7 @@ public class BetweenIndexesKeepTest {
     }
 
     @Test
-    public void TDP6249() {
+    public void testTDP6249() {
         bik.parse("5,452", false);
         output = bik.generateMaskedRow(input);
         assertEquals("e", output);

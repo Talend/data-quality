@@ -26,7 +26,6 @@ import org.junit.Test;
 import org.talend.dataquality.datamasking.FormatPreservingMethod;
 import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.datamasking.functions.text.Alphabet;
-import org.talend.dataquality.datamasking.functions.text.replace.BetweenIndexesReplace;
 
 /**
  * created by jgonzalez on 25 juin 2015 Detailled comment
@@ -124,7 +123,7 @@ public class BetweenIndexesReplaceTest {
             bir.parse("1", false);
             fail("should get exception with input " + Arrays.toString(bir.getParsedParameters())); //$NON-NLS-1$
         } catch (Exception e) {
-            assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$
+            assertTrue("expect illegal argument exception ", IllegalArgumentException.class.equals(e.getClass())); //$NON-NLS-1$
         }
         output = bir.generateMaskedRow(input);
         assertEquals("", output); //$NON-NLS-1$
@@ -136,7 +135,7 @@ public class BetweenIndexesReplaceTest {
             bir.parse("lk, df", false);
             fail("should get exception with input " + Arrays.toString(bir.getParsedParameters())); //$NON-NLS-1$
         } catch (Exception e) {
-            assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$
+            assertTrue("expect illegal argument exception ", IllegalArgumentException.class.equals(e.getClass())); //$NON-NLS-1$
         }
         output = bir.generateMaskedRow(input);
         assertEquals("", output);

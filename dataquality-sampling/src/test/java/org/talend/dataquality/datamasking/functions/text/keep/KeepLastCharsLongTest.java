@@ -67,7 +67,7 @@ public class KeepLastCharsLongTest {
             klag.parse("3,r", false);
             fail("should get exception with input " + Arrays.toString(klag.getParsedParameters())); //$NON-NLS-1$
         } catch (Exception e) {
-            assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$
+            assertTrue("expect illegal argument exception ", IllegalArgumentException.class.equals(e.getClass())); //$NON-NLS-1$
         }
         output = klag.generateMaskedRow(input);
         assertEquals(0L, output);

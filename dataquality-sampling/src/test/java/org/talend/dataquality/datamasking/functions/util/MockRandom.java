@@ -1,4 +1,4 @@
-package org.talend.dataquality.datamasking.utils;
+package org.talend.dataquality.datamasking.functions.util;
 
 import static org.junit.Assert.assertEquals;
 

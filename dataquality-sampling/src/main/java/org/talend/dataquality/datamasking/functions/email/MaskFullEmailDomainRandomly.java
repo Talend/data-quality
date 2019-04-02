@@ -32,8 +32,6 @@ public class MaskFullEmailDomainRandomly extends MaskEmailRandomly {
      * Replace full email domain by the given replacement
      * 
      * @param address
-     * @param replacement
-     * @param count
      * @return
      */
     @Override

@@ -15,7 +15,7 @@ package org.talend.dataquality.datamasking.functions.ssn;
 import java.util.Random;
 
 import org.talend.dataquality.datamasking.functions.FunctionString;
-import org.talend.dataquality.datamasking.utils.ssn.UtilsSsnFr;
+import org.talend.dataquality.datamasking.functions.util.UtilsSsnFr;
 
 /**
  * The first character has a range of (1, 99). The second character has a range of (1, 12). The third character has a

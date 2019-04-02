@@ -8,8 +8,6 @@ public class MaskEmailLocalPartRandomly extends MaskEmailRandomly {
      * Replace local part email by the given replacement
      * 
      * @param address
-     * @param replacement
-     * @param count
      * @return
      */
     @Override

@@ -65,7 +65,7 @@ public class ReplaceCharactersTest {
             rc.parse("12", false);
             fail("should get exception with input " + Arrays.toString(rc.getParsedParameters())); //$NON-NLS-1$
         } catch (Exception e) {
-            assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$
+            assertTrue("expect illegal argument exception ", IllegalArgumentException.class.equals(e.getClass())); //$NON-NLS-1$
         }
         output = rc.generateMaskedRow(input);
         assertEquals("", output); //$NON-NLS-1$

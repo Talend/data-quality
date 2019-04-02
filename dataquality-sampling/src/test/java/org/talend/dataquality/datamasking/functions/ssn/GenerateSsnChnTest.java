@@ -56,7 +56,7 @@ public class GenerateSsnChnTest {
         boolean res;
         for (int i = 0; i < 10; i++) {
             String tmp = gnf.generateMaskedRow(null);
-            res = !(tmp.charAt(0) == '9');
+            res = (tmp.charAt(0) != '9');
             assertTrue("wrong number : " + tmp, res); //$NON-NLS-1$
         }
     }

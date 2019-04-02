@@ -21,7 +21,6 @@ import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.talend.dataquality.datamasking.functions.text.keep.KeepLastCharsInteger;
 
 /**
  * created by jgonzalez on 30 juin 2015 Detailled comment
@@ -60,7 +59,7 @@ public class KeepLastCharsIntegerTest {
             klag.parse("-2", false);
             fail("should get exception with input " + Arrays.toString(klag.getParsedParameters())); //$NON-NLS-1$
         } catch (Exception e) {
-            assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$
+            assertTrue("expect illegal argument exception ", IllegalArgumentException.class.equals(e.getClass())); //$NON-NLS-1$
         }
         output = klag.generateMaskedRow(input);
         assertEquals(0, output);

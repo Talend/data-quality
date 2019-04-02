@@ -142,7 +142,7 @@ public class ReplaceAllTest {
             ra.parse("zi", false);
             fail("should get exception with input " + Arrays.toString(ra.getParsedParameters())); //$NON-NLS-1$
         } catch (Exception e) {
-            assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$
+            assertTrue("expect illegal argument exception ", IllegalArgumentException.class.equals(e.getClass())); //$NON-NLS-1$
         }
         output = ra.generateMaskedRow(input);
         assertEquals("", output); // $NON-NLS-1$

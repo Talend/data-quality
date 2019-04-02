@@ -1,4 +1,4 @@
-package org.talend.dataquality.datamasking.utils.ssn;
+package org.talend.dataquality.datamasking.functions.util;
 
 public class UtilsSsnIndia {
 

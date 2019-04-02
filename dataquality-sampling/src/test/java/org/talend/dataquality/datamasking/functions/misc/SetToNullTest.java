@@ -22,13 +22,11 @@ import org.junit.Test;
  */
 public class SetToNullTest {
 
-    private Object output;
-
     private SetToNull<?> stn = new SetToNull<>();
 
     @Test
     public void returnsNull() {
-        output = stn.generateMaskedRow(null);
+        Object output = stn.generateMaskedRow(null);
         assertNull(output);
     }
 

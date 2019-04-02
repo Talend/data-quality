@@ -53,7 +53,7 @@ public class RemoveLastCharsLongTest {
             rlci.parse(null, false);
             fail("should get exception with input " + Arrays.toString(rlci.getParsedParameters())); //$NON-NLS-1$
         } catch (Exception e) {
-            assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$
+            assertTrue("expect illegal argument exception ", IllegalArgumentException.class.equals(e.getClass())); //$NON-NLS-1$
         }
     }
 
@@ -77,7 +77,7 @@ public class RemoveLastCharsLongTest {
             rlci.parse("a", false);
             fail("should get exception with input " + Arrays.toString(rlci.getParsedParameters())); //$NON-NLS-1$
         } catch (Exception e) {
-            assertTrue("expect illegal argument exception ", e instanceof IllegalArgumentException); //$NON-NLS-1$
+            assertTrue("expect illegal argument exception ", IllegalArgumentException.class.equals(e.getClass())); //$NON-NLS-1$
         }
         output = rlci.generateMaskedRow(input);
         assertEquals(0, output);
