@@ -14,11 +14,11 @@ package org.talend.dataquality.datamasking.functions.generation;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.net.URISyntaxException;
 import java.util.Random;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -65,8 +65,8 @@ public class GenerateFromFileStringTest {
         GenerateFromFileString generateFromFileString = new GenerateFromFileString();
         generateFromFileString.parse("abc1", false);// invalid path //$NON-NLS-1$
         assertEquals("Parameters length should be 1", 1, generateFromFileString.getParsedParameters().length); //$NON-NLS-1$
-        Assert.assertTrue("Parameters should not be empty", generateFromFileString.getParsedParameters()[0].length() > 0); //$NON-NLS-1$
-        Assert.assertTrue("genericTokens should not be empty", generateFromFileString.genericTokens.get(0).length() > 0); //$NON-NLS-1$
+        assertTrue("Parameters should not be empty", generateFromFileString.getParsedParameters()[0].length() > 0); //$NON-NLS-1$
+        assertTrue("genericTokens should not be empty", generateFromFileString.genericTokens.get(0).length() > 0); //$NON-NLS-1$
 
     }
 
@@ -76,7 +76,7 @@ public class GenerateFromFileStringTest {
         generateFromFileString.parse("", false); //$NON-NLS-1$
         String parameterResult = generateFromFileString.getParsedParameters()[0];
         assertEquals("Parameters length should be 1", 1, generateFromFileString.getParsedParameters().length); //$NON-NLS-1$
-        Assert.assertTrue("Parameters should not be empty", //$NON-NLS-1$
+        assertTrue("Parameters should not be empty", //$NON-NLS-1$
                 parameterResult.length() > 0);
         assertEquals("genericTokens should not be empty", "Configuration issue (check your parameters)", //$NON-NLS-1$ //$NON-NLS-2$
                 generateFromFileString.genericTokens.get(0));

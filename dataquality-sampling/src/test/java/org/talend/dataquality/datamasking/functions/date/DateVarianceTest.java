@@ -12,12 +12,13 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions.date;
 
+import static org.junit.Assert.assertTrue;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -46,7 +47,7 @@ public class DateVarianceTest {
         for (int index = 0; index < 20; index++) {
             String output = sdf.format(dv.generateMaskedRow(input));
             boolean result = checkResult(output, "29-01-1992", "31-03-1992"); //$NON-NLS-1$ //$NON-NLS-2$
-            Assert.assertTrue("result date should between 29-01-1992 and 31-03-1992 but it is " + output, result); //$NON-NLS-1$
+            assertTrue("result date should between 29-01-1992 and 31-03-1992 but it is " + output, result); //$NON-NLS-1$
         }
     }
 
@@ -56,7 +57,7 @@ public class DateVarianceTest {
         for (int index = 0; index < 20; index++) {
             String output = sdf.format(dv.generateMaskedRow(input));
             boolean result = checkResult(output, "29-01-1992", "31-03-1992"); //$NON-NLS-1$ //$NON-NLS-2$
-            Assert.assertTrue("result date should between 29-01-1992 and 31-03-1992 but it is " + output, result); //$NON-NLS-1$
+            assertTrue("result date should between 29-01-1992 and 31-03-1992 but it is " + output, result); //$NON-NLS-1$
         }
     }
 
@@ -66,7 +67,7 @@ public class DateVarianceTest {
         for (int index = 0; index < 20; index++) {
             String output = sdf.format(dv.generateMaskedRow(input));
             boolean result = checkResult(output, "28-01-1992", "01-03-1992"); //$NON-NLS-1$ //$NON-NLS-2$
-            Assert.assertTrue("result date should between 28-01-1992 and 01-03-1992 but it is " + output, result); //$NON-NLS-1$
+            assertTrue("result date should between 28-01-1992 and 01-03-1992 but it is " + output, result); //$NON-NLS-1$
         }
     }
 
@@ -76,7 +77,7 @@ public class DateVarianceTest {
         for (int index = 0; index < 20; index++) {
             String output = sdf.format(dv.generateMaskedRow(input));
             boolean result = checkResult(output, "29-01-1992", "31-03-1992"); //$NON-NLS-1$ //$NON-NLS-2$
-            Assert.assertTrue("result date should between 29-01-1992 and 31-03-1992 but it is " + output, result); //$NON-NLS-1$
+            assertTrue("result date should between 29-01-1992 and 31-03-1992 but it is " + output, result); //$NON-NLS-1$
         }
     }
 
@@ -86,7 +87,7 @@ public class DateVarianceTest {
         for (int index = 0; index < 20; index++) {
             String output = sdf.format(dv.generateMaskedRow(input));
             boolean result = checkResult(output, "29-01-1992", "31-03-1992"); //$NON-NLS-1$ //$NON-NLS-2$
-            Assert.assertTrue("result date should between 29-01-1992 and 31-03-1992 but it is " + output, result); //$NON-NLS-1$
+            assertTrue("result date should between 29-01-1992 and 31-03-1992 but it is " + output, result); //$NON-NLS-1$
         }
     }
 
@@ -96,7 +97,7 @@ public class DateVarianceTest {
         for (int index = 0; index < 20; index++) {
             String output = sdf.format(dv.generateMaskedRow(input));
             boolean result = checkResult(output, "29-01-1992", "31-03-1992"); //$NON-NLS-1$ //$NON-NLS-2$
-            Assert.assertTrue("result date should between 29-01-1992 and 31-03-1992 but it is " + output, result); //$NON-NLS-1$
+            assertTrue("result date should between 29-01-1992 and 31-03-1992 but it is " + output, result); //$NON-NLS-1$
         }
     }
 
@@ -106,7 +107,7 @@ public class DateVarianceTest {
         for (int index = 0; index < 20; index++) {
             String output = sdf.format(dv.generateMaskedRow(input));
             boolean result = checkResult(output, "29-01-1992", "31-03-1992"); //$NON-NLS-1$ //$NON-NLS-2$
-            Assert.assertTrue("result date should between 29-01-1992 and 31-03-1992 but it is " + output, result); //$NON-NLS-1$
+            assertTrue("result date should between 29-01-1992 and 31-03-1992 but it is " + output, result); //$NON-NLS-1$
         }
     }
 

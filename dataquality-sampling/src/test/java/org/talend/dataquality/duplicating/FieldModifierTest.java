@@ -13,10 +13,10 @@
 package org.talend.dataquality.duplicating;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.util.Date;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -125,7 +125,7 @@ public class FieldModifierTest {
     public void testGenerateDuplicateDateFunctionIntStringCase1() {
         FieldModifier fieldModifier = new FieldModifier();
         Date generateDuplicate = fieldModifier.generateDuplicate(null, null, DEFAULT_MODIF_COUNT, EMPTY_STRING);
-        Assert.assertNull(generateDuplicate);
+        assertNull(generateDuplicate);
     }
 
     /**

@@ -12,16 +12,15 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions.number;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.talend.dataquality.datamasking.functions.number.NumericVarianceInteger;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Random;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * created by jgonzalez on 29 juin 2015 Detailled comment
@@ -118,9 +117,9 @@ public class NumericVarianceIntegerTest {
                 int.class, int.class);
         getNonOverAddResultMethod.setAccessible(true);
         Object invoke = getNonOverAddResultMethod.invoke(new NumericVarianceInteger(), Integer.MAX_VALUE, Integer.MIN_VALUE);
-        Assert.assertNotNull("Current result should be null", invoke); //$NON-NLS-1$
+        assertNotNull("Current result should be null", invoke); //$NON-NLS-1$
         assertEquals("Current type of result should be Integer but it is " + invoke.getClass().getSimpleName(), "Integer", invoke //$NON-NLS-1$
-                .getClass().getSimpleName()); //$NON-NLS-1$
+                .getClass().getSimpleName()); // $NON-NLS-1$
         assertEquals("Current result should be -1 but it is " + invoke.toString(), -1, invoke); //$NON-NLS-1$
     }
 
@@ -144,9 +143,9 @@ public class NumericVarianceIntegerTest {
                 int.class, int.class);
         getNonOverAddResultMethod.setAccessible(true);
         Object invoke = getNonOverAddResultMethod.invoke(new NumericVarianceInteger(), Integer.MAX_VALUE, Integer.MAX_VALUE);
-        Assert.assertNotNull("Current result should be null", invoke); //$NON-NLS-1$
+        assertNotNull("Current result should be null", invoke); //$NON-NLS-1$
         assertEquals("Current type of result should be Integer but it is " + invoke.getClass().getSimpleName(), "Integer", invoke //$NON-NLS-1$
-                .getClass().getSimpleName()); //$NON-NLS-1$
+                .getClass().getSimpleName()); // $NON-NLS-1$
         assertEquals("Current result should be 0 but it is " + invoke.toString(), 0, invoke); //$NON-NLS-1$
     }
 
@@ -170,9 +169,9 @@ public class NumericVarianceIntegerTest {
                 int.class, int.class);
         getNonOverAddResultMethod.setAccessible(true);
         Object invoke = getNonOverAddResultMethod.invoke(new NumericVarianceInteger(), Integer.MAX_VALUE, 0);
-        Assert.assertNotNull("Current result should be null", invoke); //$NON-NLS-1$
+        assertNotNull("Current result should be null", invoke); //$NON-NLS-1$
         assertEquals("Current type of result should be Integer but it is " + invoke.getClass().getSimpleName(), "Integer", invoke //$NON-NLS-1$
-                .getClass().getSimpleName()); //$NON-NLS-1$
+                .getClass().getSimpleName()); // $NON-NLS-1$
         assertEquals("Current result should be Integer.MAX_VALUE but it is " + invoke.toString(), Integer.MAX_VALUE, //$NON-NLS-1$
                 invoke);
     }
@@ -197,9 +196,9 @@ public class NumericVarianceIntegerTest {
                 int.class, int.class);
         getNonOverAddResultMethod.setAccessible(true);
         Object invoke = getNonOverAddResultMethod.invoke(new NumericVarianceInteger(), Integer.MAX_VALUE, 1);
-        Assert.assertNotNull("Current result should be null", invoke); //$NON-NLS-1$
+        assertNotNull("Current result should be null", invoke); //$NON-NLS-1$
         assertEquals("Current type of result should be Integer but it is " + invoke.getClass().getSimpleName(), "Integer", invoke //$NON-NLS-1$
-                .getClass().getSimpleName()); //$NON-NLS-1$
+                .getClass().getSimpleName()); // $NON-NLS-1$
         assertEquals("Current result should be 2147483646 but it is " + invoke.toString(), 2147483646, invoke); //$NON-NLS-1$
     }
 
@@ -223,9 +222,9 @@ public class NumericVarianceIntegerTest {
                 int.class, int.class);
         getNonOverAddResultMethod.setAccessible(true);
         Object invoke = getNonOverAddResultMethod.invoke(new NumericVarianceInteger(), Integer.MIN_VALUE, Integer.MIN_VALUE);
-        Assert.assertNotNull("Current result should be null", invoke); //$NON-NLS-1$
+        assertNotNull("Current result should be null", invoke); //$NON-NLS-1$
         assertEquals("Current type of result should be Integer but it is " + invoke.getClass().getSimpleName(), "Integer", invoke //$NON-NLS-1$
-                .getClass().getSimpleName()); //$NON-NLS-1$
+                .getClass().getSimpleName()); // $NON-NLS-1$
         assertEquals("Current result should be 0 but it is " + invoke.toString(), 0, invoke); //$NON-NLS-1$
     }
 
@@ -249,9 +248,9 @@ public class NumericVarianceIntegerTest {
                 int.class, int.class);
         getNonOverAddResultMethod.setAccessible(true);
         Object invoke = getNonOverAddResultMethod.invoke(new NumericVarianceInteger(), Integer.MIN_VALUE, -1);
-        Assert.assertNotNull("Current result should be null", invoke); //$NON-NLS-1$
+        assertNotNull("Current result should be null", invoke); //$NON-NLS-1$
         assertEquals("Current type of result should be Integer but it is " + invoke.getClass().getSimpleName(), "Integer", invoke //$NON-NLS-1$
-                .getClass().getSimpleName()); //$NON-NLS-1$
+                .getClass().getSimpleName()); // $NON-NLS-1$
         assertEquals("Current result should be -2147483647 but it is " + invoke.toString(), -2147483647, invoke); //$NON-NLS-1$
     }
 
@@ -275,9 +274,9 @@ public class NumericVarianceIntegerTest {
                 int.class, int.class);
         getNonOverAddResultMethod.setAccessible(true);
         Object invoke = getNonOverAddResultMethod.invoke(new NumericVarianceInteger(), Integer.MIN_VALUE, 0);
-        Assert.assertNotNull("Current result should be null", invoke); //$NON-NLS-1$
+        assertNotNull("Current result should be null", invoke); //$NON-NLS-1$
         assertEquals("Current type of result should be Integer but it is " + invoke.getClass().getSimpleName(), "Integer", invoke //$NON-NLS-1$
-                .getClass().getSimpleName()); //$NON-NLS-1$
+                .getClass().getSimpleName()); // $NON-NLS-1$
         assertEquals("Current result should be Integer.MIN_VALUE but it is " + invoke.toString(), -2147483648, invoke); //$NON-NLS-1$
     }
 
@@ -302,21 +301,21 @@ public class NumericVarianceIntegerTest {
         getNonOverMultiResultMethod.setAccessible(true);
         // Integer.MIN_VALUE*0
         Object invoke = getNonOverMultiResultMethod.invoke(new NumericVarianceInteger(), Integer.MIN_VALUE, 0);
-        Assert.assertNotNull("Current result should be null", invoke); //$NON-NLS-1$
+        assertNotNull("Current result should be null", invoke); //$NON-NLS-1$
         assertEquals("Current type of result should be Integer but it is " + invoke.getClass().getSimpleName(), "Integer", invoke //$NON-NLS-1$
-                .getClass().getSimpleName()); //$NON-NLS-1$
+                .getClass().getSimpleName()); // $NON-NLS-1$
         assertEquals("Current result should be 0 but it is " + invoke.toString(), 0, invoke); //$NON-NLS-1$
         // 0*Integer.MAX_VALUE
         invoke = getNonOverMultiResultMethod.invoke(new NumericVarianceInteger(), 0, Integer.MAX_VALUE);
-        Assert.assertNotNull("Current result should be null", invoke); //$NON-NLS-1$
+        assertNotNull("Current result should be null", invoke); //$NON-NLS-1$
         assertEquals("Current type of result should be Integer but it is " + invoke.getClass().getSimpleName(), "Integer", invoke //$NON-NLS-1$
-                .getClass().getSimpleName()); //$NON-NLS-1$
+                .getClass().getSimpleName()); // $NON-NLS-1$
         assertEquals("Current result should be 0 but it is " + invoke.toString(), 0, invoke); //$NON-NLS-1$
         // 0*0
         invoke = getNonOverMultiResultMethod.invoke(new NumericVarianceInteger(), 0, 0);
-        Assert.assertNotNull("Current result should be null", invoke); //$NON-NLS-1$
+        assertNotNull("Current result should be null", invoke); //$NON-NLS-1$
         assertEquals("Current type of result should be Integer but it is " + invoke.getClass().getSimpleName(), "Integer", invoke //$NON-NLS-1$
-                .getClass().getSimpleName()); //$NON-NLS-1$
+                .getClass().getSimpleName()); // $NON-NLS-1$
         assertEquals("Current result should be 0 but it is " + invoke.toString(), 0, invoke); //$NON-NLS-1$
     }
 
@@ -340,9 +339,9 @@ public class NumericVarianceIntegerTest {
                 int.class, int.class);
         getNonOverMultiResultMethod.setAccessible(true);
         Object invoke = getNonOverMultiResultMethod.invoke(new NumericVarianceInteger(), Integer.MIN_VALUE, Integer.MAX_VALUE);
-        Assert.assertNotNull("Current result should be null", invoke); //$NON-NLS-1$
+        assertNotNull("Current result should be null", invoke); //$NON-NLS-1$
         assertEquals("Current type of result should be Integer but it is " + invoke.getClass().getSimpleName(), "Integer", invoke //$NON-NLS-1$
-                .getClass().getSimpleName()); //$NON-NLS-1$
+                .getClass().getSimpleName()); // $NON-NLS-1$
         assertEquals("Current result should be Integer.MIN_VALUE but it is " + invoke.toString(), -2147483648, invoke); //$NON-NLS-1$
     }
 
@@ -366,9 +365,9 @@ public class NumericVarianceIntegerTest {
                 int.class, int.class);
         getNonOverMultiResultMethod.setAccessible(true);
         Object invoke = getNonOverMultiResultMethod.invoke(new NumericVarianceInteger(), Integer.MIN_VALUE, Integer.MIN_VALUE);
-        Assert.assertNotNull("Current result should be null", invoke); //$NON-NLS-1$
+        assertNotNull("Current result should be null", invoke); //$NON-NLS-1$
         assertEquals("Current type of result should be Integer but it is " + invoke.getClass().getSimpleName(), "Integer", invoke //$NON-NLS-1$
-                .getClass().getSimpleName()); //$NON-NLS-1$
+                .getClass().getSimpleName()); // $NON-NLS-1$
         assertEquals("Current result should be Integer.MAX_VALUE but it is " + invoke.toString(), 2147483647, invoke); //$NON-NLS-1$
     }
 
@@ -392,9 +391,9 @@ public class NumericVarianceIntegerTest {
                 int.class, int.class);
         getNonOverMultiResultMethod.setAccessible(true);
         Object invoke = getNonOverMultiResultMethod.invoke(new NumericVarianceInteger(), Integer.MAX_VALUE, Integer.MAX_VALUE);
-        Assert.assertNotNull("Current result should be null", invoke); //$NON-NLS-1$
+        assertNotNull("Current result should be null", invoke); //$NON-NLS-1$
         assertEquals("Current type of result should be Integer but it is " + invoke.getClass().getSimpleName(), "Integer", invoke //$NON-NLS-1$
-                .getClass().getSimpleName()); //$NON-NLS-1$
+                .getClass().getSimpleName()); // $NON-NLS-1$
         assertEquals("Current result should be Integer.MAX_VALUE but it is " + invoke.toString(), 2147483647, invoke); //$NON-NLS-1$
     }
 
@@ -418,15 +417,15 @@ public class NumericVarianceIntegerTest {
                 int.class, int.class);
         getNonOverMultiResultMethod.setAccessible(true);
         Object invoke = getNonOverMultiResultMethod.invoke(new NumericVarianceInteger(), Integer.MIN_VALUE, -2);
-        Assert.assertNotNull("Current result should be null", invoke); //$NON-NLS-1$
+        assertNotNull("Current result should be null", invoke); //$NON-NLS-1$
         assertEquals("Current type of result should be Integer but it is " + invoke.getClass().getSimpleName(), "Integer", invoke //$NON-NLS-1$
-                .getClass().getSimpleName()); //$NON-NLS-1$
+                .getClass().getSimpleName()); // $NON-NLS-1$
         assertEquals("Current result should be Integer.MAX_VALUE but it is " + invoke.toString(), 2147483647, invoke); //$NON-NLS-1$
         // when -2*Integer.MIN_VALUE we should ge same result
         invoke = getNonOverMultiResultMethod.invoke(new NumericVarianceInteger(), -2, Integer.MIN_VALUE);
-        Assert.assertNotNull("Current result should be null", invoke); //$NON-NLS-1$
+        assertNotNull("Current result should be null", invoke); //$NON-NLS-1$
         assertEquals("Current type of result should be Integer but it is " + invoke.getClass().getSimpleName(), "Integer", invoke //$NON-NLS-1$
-                .getClass().getSimpleName()); //$NON-NLS-1$
+                .getClass().getSimpleName()); // $NON-NLS-1$
         assertEquals("Current result should be Integer.MAX_VALUE but it is " + invoke.toString(), 2147483647, invoke); //$NON-NLS-1$
     }
 
@@ -451,27 +450,27 @@ public class NumericVarianceIntegerTest {
         getNonOverMultiResultMethod.setAccessible(true);
         // 99999999*100
         Object invoke = getNonOverMultiResultMethod.invoke(new NumericVarianceInteger(), 99999999, 100);
-        Assert.assertNotNull("Current result should be null", invoke); //$NON-NLS-1$
+        assertNotNull("Current result should be null", invoke); //$NON-NLS-1$
         assertEquals("Current type of result should be Integer but it is " + invoke.getClass().getSimpleName(), "Integer", invoke //$NON-NLS-1$
-                .getClass().getSimpleName()); //$NON-NLS-1$
+                .getClass().getSimpleName()); // $NON-NLS-1$
         assertEquals("Current result should be Integer.MAX_VALUE but it is " + invoke.toString(), 2099999979, invoke); //$NON-NLS-1$
         // 100*99999999
         invoke = getNonOverMultiResultMethod.invoke(new NumericVarianceInteger(), 100, 99999999);
-        Assert.assertNotNull("Current result should be null", invoke); //$NON-NLS-1$
+        assertNotNull("Current result should be null", invoke); //$NON-NLS-1$
         assertEquals("Current type of result should be Integer but it is " + invoke.getClass().getSimpleName(), "Integer", invoke //$NON-NLS-1$
-                .getClass().getSimpleName()); //$NON-NLS-1$
+                .getClass().getSimpleName()); // $NON-NLS-1$
         assertEquals("Current result should be Integer.MAX_VALUE but it is " + invoke.toString(), 2099999979, invoke); //$NON-NLS-1$
         // -100*99999999
         invoke = getNonOverMultiResultMethod.invoke(new NumericVarianceInteger(), -100, 99999999);
-        Assert.assertNotNull("Current result should be null", invoke); //$NON-NLS-1$
+        assertNotNull("Current result should be null", invoke); //$NON-NLS-1$
         assertEquals("Current type of result should be Integer but it is " + invoke.getClass().getSimpleName(), "Integer", invoke //$NON-NLS-1$
-                .getClass().getSimpleName()); //$NON-NLS-1$
+                .getClass().getSimpleName()); // $NON-NLS-1$
         assertEquals("Current result should be Integer.MAX_VALUE but it is " + invoke.toString(), -2099999979, invoke); //$NON-NLS-1$
         // 99999999*-100
         invoke = getNonOverMultiResultMethod.invoke(new NumericVarianceInteger(), -100, 99999999);
-        Assert.assertNotNull("Current result should be null", invoke); //$NON-NLS-1$
+        assertNotNull("Current result should be null", invoke); //$NON-NLS-1$
         assertEquals("Current type of result should be Integer but it is " + invoke.getClass().getSimpleName(), "Integer", invoke //$NON-NLS-1$
-                .getClass().getSimpleName()); //$NON-NLS-1$
+                .getClass().getSimpleName()); // $NON-NLS-1$
         assertEquals("Current result should be Integer.MAX_VALUE but it is " + invoke.toString(), -2099999979, invoke); //$NON-NLS-1$
     }
 

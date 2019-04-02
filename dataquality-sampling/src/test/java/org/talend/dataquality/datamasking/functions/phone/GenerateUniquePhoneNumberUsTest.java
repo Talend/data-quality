@@ -3,17 +3,14 @@ package org.talend.dataquality.datamasking.functions.phone;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Locale;
 import java.util.Random;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.datamasking.FormatPreservingMethod;
-import org.talend.dataquality.datamasking.functions.phone.AbstractGenerateUniquePhoneNumber;
-import org.talend.dataquality.datamasking.functions.phone.GeneratePhoneNumberUS;
-import org.talend.dataquality.datamasking.functions.phone.GenerateUniquePhoneNumberUs;
 
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
@@ -106,8 +103,8 @@ public class GenerateUniquePhoneNumberUsTest {
                     long rgenseed = System.nanoTime();
                     gnu.setRandom(new Random(rgenseed));
                     output = gnu.generateMaskedRow(input);
-                    Assert.assertTrue("Don't worry, report this line to Data Quality team: with a seed = " + rgenseed + ", "
-                            + input + " is valid, but after the masking " + output + " is not valid", isValidPhoneNumber(output));
+                    assertTrue("Don't worry, report this line to Data Quality team: with a seed = " + rgenseed + ", " + input
+                            + " is valid, but after the masking " + output + " is not valid", isValidPhoneNumber(output));
                 }
             }
         }

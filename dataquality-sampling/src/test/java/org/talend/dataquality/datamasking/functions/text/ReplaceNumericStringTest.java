@@ -19,7 +19,6 @@ import static org.junit.Assert.fail;
 import java.util.Arrays;
 import java.util.Random;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.datamasking.FunctionMode;
@@ -46,7 +45,7 @@ public class ReplaceNumericStringTest {
         ReplaceNumericString replaceNumericString = new ReplaceNumericString();
         replaceNumericString.parse("2", false); //$NON-NLS-1$
         assertEquals("Parameters length should be 1", 1, replaceNumericString.getParsedParameters().length); //$NON-NLS-1$
-        Assert.assertTrue("Parameters should be valid", replaceNumericString.isValidParameters); //$NON-NLS-1$
+        assertTrue("Parameters should be valid", replaceNumericString.isValidParameters); //$NON-NLS-1$
     }
 
     @Test

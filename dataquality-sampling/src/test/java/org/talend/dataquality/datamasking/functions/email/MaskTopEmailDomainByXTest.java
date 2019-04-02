@@ -13,8 +13,8 @@
 package org.talend.dataquality.datamasking.functions.email;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -99,7 +99,7 @@ public class MaskTopEmailDomainByXTest {
     public void testEmptyEmail() {
         maskTopEmailDomainByX.parse("", false);
         output = maskTopEmailDomainByX.generateMaskedRow("");
-        Assert.assertTrue(output.isEmpty());
+        assertTrue(output.isEmpty());
     }
 
     @Test

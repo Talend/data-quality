@@ -1,6 +1,7 @@
 package org.talend.dataquality.datamasking.shuffling;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,7 +9,6 @@ import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -104,8 +104,8 @@ public class ShuffleColumnWithPartitionTest {
             for (int row = 0; row < subRows.size(); row++) {
                 int idS = Integer.parseInt(subRows.get(row).get(0).toString());
                 // Partition runs well: id is in the range of partition
-                Assert.assertTrue(idS >= (partition * i + 1));
-                Assert.assertTrue(idS < (partition * (i + 1) + 1));
+                assertTrue(idS >= (partition * i + 1));
+                assertTrue(idS < (partition * (i + 1) + 1));
 
                 emailsO.add(fileData.get(row + partition * i).get(3).toString());
                 fnsO.add(fileData.get(row + partition * i).get(1).toString());
@@ -123,7 +123,7 @@ public class ShuffleColumnWithPartitionTest {
             for (int row = 0; row < subRows.size(); row++) {
                 // Partition runs well: email's original index is in the range of partition && Integration of data :
                 // email exists in the list
-                Assert.assertTrue(emailsO.contains(emailsS.get(row)));
+                assertTrue(emailsO.contains(emailsS.get(row)));
 
                 int ids = idsS.get(row);
                 int idO = ids - i * partition - 1;
@@ -146,7 +146,7 @@ public class ShuffleColumnWithPartitionTest {
                 // original position
                 String emailS = emailsS.get(row);
                 String emailO = emailsO.get(row);
-                Assert.assertTrue(ids != idO || !emailS.equals(emailO));
+                assertTrue(ids != idO || !emailS.equals(emailO));
             }
         }
     }

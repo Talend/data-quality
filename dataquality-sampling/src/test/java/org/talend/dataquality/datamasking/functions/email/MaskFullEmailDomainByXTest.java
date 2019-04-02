@@ -13,8 +13,8 @@
 package org.talend.dataquality.datamasking.functions.email;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-import org.junit.Assert;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
@@ -98,21 +98,21 @@ public class MaskFullEmailDomainByXTest {
     public void test3NullEmail() {
         maskEmailDomainByX.parse("", false);
         output = maskEmailDomainByX.generateMaskedRow(null);
-        Assert.assertTrue(output.isEmpty());
+        assertTrue(output.isEmpty());
     }
 
     @Test
     public void test3KeepNullEmail() {
         maskEmailDomainByX.parse("", true);
         output = maskEmailDomainByX.generateMaskedRow(null);
-        Assert.assertTrue(output == null);
+        assertTrue(output == null);
     }
 
     @Test
     public void test4EmptyEmail() {
         maskEmailDomainByX.parse("", false);
         output = maskEmailDomainByX.generateMaskedRow("");
-        Assert.assertTrue(output.isEmpty());
+        assertTrue(output.isEmpty());
     }
 
     @Test

@@ -13,13 +13,14 @@
 package org.talend.dataquality.datamasking.functions.email;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -72,7 +73,7 @@ public class MaskTopEmailDomainRandomlyTest {
 
         for (int i = 0; i < 20; i++) {
             output = maskTopEmailDomainRandomly.generateMaskedRow(mailStandard);
-            Assert.assertTrue(results.contains(output));
+            assertTrue(results.contains(output));
         }
     }
 
@@ -83,7 +84,7 @@ public class MaskTopEmailDomainRandomlyTest {
 
         for (int i = 0; i < 20; i++) {
             output = maskTopEmailDomainRandomly.generateMaskedRow(mailStandard);
-            Assert.assertTrue(results.contains(output));
+            assertTrue(results.contains(output));
         }
     }
 
@@ -94,7 +95,7 @@ public class MaskTopEmailDomainRandomlyTest {
 
         for (int i = 0; i < 20; i++) {
             output = maskTopEmailDomainRandomly.generateMaskedRow(mailMultipalDomaim);
-            Assert.assertTrue(results.contains(output));
+            assertTrue(results.contains(output));
         }
     }
 
@@ -105,7 +106,7 @@ public class MaskTopEmailDomainRandomlyTest {
 
         for (int i = 0; i < 20; i++) {
             output = maskTopEmailDomainRandomly.generateMaskedRow(mailStandard);
-            Assert.assertTrue(!output.equals(mailStandard));
+            assertTrue(!output.equals(mailStandard));
         }
     }
 
@@ -116,7 +117,7 @@ public class MaskTopEmailDomainRandomlyTest {
 
         for (int i = 0; i < 20; i++) {
             output = maskTopEmailDomainRandomly.generateMaskedRow(mailMultipalDomaim);
-            Assert.assertTrue(!output.equals(mailStandard));
+            assertTrue(!output.equals(mailStandard));
         }
     }
 
@@ -124,21 +125,21 @@ public class MaskTopEmailDomainRandomlyTest {
     public void testNullEmail() {
         maskTopEmailDomainRandomly.parse("", false);
         output = maskTopEmailDomainRandomly.generateMaskedRow(null);
-        Assert.assertTrue(output.isEmpty());
+        assertTrue(output.isEmpty());
     }
 
     @Test
     public void testKeepNullEmail() {
         maskTopEmailDomainRandomly.parse("", true);
         output = maskTopEmailDomainRandomly.generateMaskedRow(null);
-        Assert.assertNull(output);
+        assertNull(output);
     }
 
     @Test
     public void testEmptyEmail() {
         maskTopEmailDomainRandomly.parse("", false);
         output = maskTopEmailDomainRandomly.generateMaskedRow("");
-        Assert.assertTrue(output.isEmpty());
+        assertTrue(output.isEmpty());
     }
 
     @Test

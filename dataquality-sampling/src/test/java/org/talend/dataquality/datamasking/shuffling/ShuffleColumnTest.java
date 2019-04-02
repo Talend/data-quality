@@ -1,6 +1,7 @@
 package org.talend.dataquality.datamasking.shuffling;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -9,7 +10,6 @@ import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -125,10 +125,10 @@ public class ShuffleColumnTest {
             for (int position = 0; position < rows.size(); position++) {
                 int item = Integer.parseInt(rows.get(position).get(0).toString());
                 // the partition is good
-                Assert.assertTrue(item < partition * (i + 1));
-                Assert.assertTrue(item >= partition * i);
+                assertTrue(item < partition * (i + 1));
+                assertTrue(item >= partition * i);
                 // the position changes
-                Assert.assertTrue(item != position);
+                assertTrue(item != position);
             }
 
         }
@@ -163,10 +163,10 @@ public class ShuffleColumnTest {
             for (int position = 0; position < rows.size(); position++) {
                 int item = Integer.parseInt(rows.get(position).get(0).toString());
                 // the partition is good
-                Assert.assertTrue(item < partition * (i + 1));
-                Assert.assertTrue(item >= partition * i);
+                assertTrue(item < partition * (i + 1));
+                assertTrue(item >= partition * i);
                 // the position changes
-                Assert.assertTrue(item != position);
+                assertTrue(item != position);
             }
         }
         // test last rows
@@ -174,10 +174,10 @@ public class ShuffleColumnTest {
         for (int position = 0; position < rows.size(); position++) {
             int item = Integer.parseInt(rows.get(position).get(0).toString());
             // the partition is good
-            Assert.assertTrue(item < size);
-            Assert.assertTrue(item >= partition * (size / partition));
+            assertTrue(item < size);
+            assertTrue(item >= partition * (size / partition));
             // the position changes
-            Assert.assertTrue(item != position);
+            assertTrue(item != position);
         }
     }
 
@@ -257,9 +257,9 @@ public class ShuffleColumnTest {
 
         for (int i = 0; i < fileData.size(); i++) {
             // test whether all email address retain
-            Assert.assertTrue(emailSL.contains(emailL.get(i)));
+            assertTrue(emailSL.contains(emailL.get(i)));
             // test whether all name retain
-            Assert.assertTrue(firstNameColumnSL.contains(firstNameColumnSL.get(i)));
+            assertTrue(firstNameColumnSL.contains(firstNameColumnSL.get(i)));
 
             Object oid = idColumnL.get(i);
             Object nid = idColumnSL.get(i);
@@ -268,12 +268,12 @@ public class ShuffleColumnTest {
             Object nemail = emailSL.get(i);
             Object oName = firstNameColumnL.get(i);
             // test whether email and id information have all changed
-            Assert.assertTrue(!oid.equals(nid) || !oemail.equals(nemail));
+            assertTrue(!oid.equals(nid) || !oemail.equals(nemail));
 
             // test whether the id and first name's relation retains
             int sIdIndex = idColumnSL.indexOf(oid);
             Object sFirstName = firstNameColumnSL.get(sIdIndex);
-            Assert.assertTrue(oName.equals(sFirstName));
+            assertTrue(oName.equals(sFirstName));
         }
 
     }
@@ -345,9 +345,9 @@ public class ShuffleColumnTest {
 
         for (int i = 0; i < fileData.size(); i++) {
             // test whether all email address retain
-            Assert.assertTrue(emailSL.contains(emailL.get(i)));
+            assertTrue(emailSL.contains(emailL.get(i)));
             // test whether all name retain
-            Assert.assertTrue(firstNameColumnSL.contains(firstNameColumnSL.get(i)));
+            assertTrue(firstNameColumnSL.contains(firstNameColumnSL.get(i)));
 
             Object oid = idColumnL.get(i);
             Object nid = idColumnSL.get(i);
@@ -356,12 +356,12 @@ public class ShuffleColumnTest {
             Object nemail = emailSL.get(i);
             Object oName = firstNameColumnL.get(i);
             // test whether email and id information have all changed
-            Assert.assertTrue(!oid.equals(nid) || !oemail.equals(nemail));
+            assertTrue(!oid.equals(nid) || !oemail.equals(nemail));
 
             // test whether the id and first name's relation retains
             int sIdIndex = idColumnSL.indexOf(oid);
             Object sFirstName = firstNameColumnSL.get(sIdIndex);
-            Assert.assertTrue(oName.equals(sFirstName));
+            assertTrue(oName.equals(sFirstName));
 
         }
 
@@ -436,9 +436,9 @@ public class ShuffleColumnTest {
 
         for (int i = 0; i < fileData.size(); i++) {
             // test whether all email address retain
-            Assert.assertTrue(emailSL.contains(emailL.get(i)));
+            assertTrue(emailSL.contains(emailL.get(i)));
             // test whether all name retain
-            Assert.assertTrue(firstNameColumnSL.contains(firstNameColumnSL.get(i)));
+            assertTrue(firstNameColumnSL.contains(firstNameColumnSL.get(i)));
 
             Object oid = idColumnL.get(i);
             Object nid = idColumnSL.get(i);
@@ -447,12 +447,12 @@ public class ShuffleColumnTest {
             Object nemail = emailSL.get(i);
             Object oName = firstNameColumnL.get(i);
             // test whether email and id information have all changed
-            Assert.assertTrue(!oid.equals(nid) || !oemail.equals(nemail));
+            assertTrue(!oid.equals(nid) || !oemail.equals(nemail));
 
             // test whether the id and first name's relation retains
             int sIdIndex = idColumnSL.indexOf(oid);
             Object sFirstName = firstNameColumnSL.get(sIdIndex);
-            Assert.assertTrue(oName.equals(sFirstName));
+            assertTrue(oName.equals(sFirstName));
 
         }
         long time4 = System.currentTimeMillis();

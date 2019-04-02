@@ -1,13 +1,13 @@
 package org.talend.dataquality.datamasking.functions.email;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -50,7 +50,7 @@ public class MaskEmailLocalPartRandomlyTest {
         maskEmailLocalPart.parse("aol.com, att.net, comcast.net, facebook.com, gmail.com, gmx.com", false);
         for (int i = 0; i < 20; i++) {
             output = maskEmailLocalPart.generateMaskedRow(mail);
-            Assert.assertTrue(!output.equals(mail));
+            assertTrue(!output.equals(mail));
         }
     }
 
@@ -60,7 +60,7 @@ public class MaskEmailLocalPartRandomlyTest {
         List<String> results = Arrays.asList("nelson@talend.com", "quentin@talend.com");
         for (int i = 0; i < 20; i++) {
             output = maskEmailLocalPart.generateMaskedRow(mail);
-            Assert.assertTrue(results.contains(output));
+            assertTrue(results.contains(output));
         }
     }
 
@@ -70,7 +70,7 @@ public class MaskEmailLocalPartRandomlyTest {
         maskEmailLocalPart.parse(path, false);
         for (int i = 0; i < 20; i++) {
             output = maskEmailLocalPart.generateMaskedRow(mail);
-            Assert.assertTrue(!output.equals(mail));
+            assertTrue(!output.equals(mail));
         }
     }
 
@@ -78,20 +78,20 @@ public class MaskEmailLocalPartRandomlyTest {
     public void testNullEmail() {
         maskEmailLocalPart.parse("hehe", false);
         output = maskEmailLocalPart.generateMaskedRow(null);
-        Assert.assertTrue(output.isEmpty());
+        assertTrue(output.isEmpty());
     }
 
     @Test
     public void testNotKeepNullEmail() {
         maskEmailLocalPart.parse("hehe", true);
         output = maskEmailLocalPart.generateMaskedRow(null);
-        Assert.assertTrue(output == null);
+        assertTrue(output == null);
     }
 
     @Test
     public void testEmptyEmail() {
         output = maskEmailLocalPart.generateMaskedRow("");
-        Assert.assertTrue(output.isEmpty());
+        assertTrue(output.isEmpty());
     }
 
     @Test

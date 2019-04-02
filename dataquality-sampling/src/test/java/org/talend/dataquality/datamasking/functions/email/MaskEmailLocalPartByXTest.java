@@ -1,8 +1,8 @@
 package org.talend.dataquality.datamasking.functions.email;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 public class MaskEmailLocalPartByXTest {
@@ -69,21 +69,21 @@ public class MaskEmailLocalPartByXTest {
     public void test3NullEmail() {
         maskEmailLocalPartByX.parse("", false);
         output = maskEmailLocalPartByX.generateMaskedRow(null);
-        Assert.assertTrue(output.isEmpty());
+        assertTrue(output.isEmpty());
     }
 
     @Test
     public void test3KeepNullEmail() {
         maskEmailLocalPartByX.parse("", true);
         output = maskEmailLocalPartByX.generateMaskedRow(null);
-        Assert.assertTrue(output == null);
+        assertTrue(output == null);
     }
 
     @Test
     public void test4EmptyEmail() {
         maskEmailLocalPartByX.parse("", false);
         output = maskEmailLocalPartByX.generateMaskedRow("");
-        Assert.assertTrue(output.isEmpty());
+        assertTrue(output.isEmpty());
     }
 
     @Test
