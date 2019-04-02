@@ -352,4 +352,11 @@ public enum FunctionType {
         return this.category;
     }
 
+    protected static FunctionType getByName(String functionName) {
+        try {
+            return valueOf(functionName);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
 }

@@ -320,6 +320,38 @@ public class FunctionFactory<T> {
         return res;
     }
 
+    public Function<T> getFunction(String functionName, int javaType, String methodName)
+            throws InstantiationException, IllegalAccessException {
+        FunctionType type;
+        if (FunctionMode.CONSISTENT.equals(methodName)) {
+            type = FunctionType.getByName(functionName + "_CONSISTENT");
+        } else if (FormatPreservingMethod.AES_CBC_PRF.equals(methodName)
+                || FormatPreservingMethod.SHA2_HMAC_PRF.equals(methodName)) {
+            type = FunctionType.getByName(functionName + "_BIJECTIVE");
+        } else {
+            type = FunctionType.getByName(functionName);
+        }
+        if (type == null) {
+            if (functionName.contains("EMAIL")) {
+                if (FunctionMode.MASK_BY_CHARACTER.name().equals(methodName)) {
+                    type = FunctionType.getByName(functionName + "_BY_X");
+                } else if (FunctionMode.MASK_FROM_LIST.name().equals(methodName)) {
+                    type = FunctionType.getByName(functionName + "_RANDOMLY");
+                }
+            } else if (functionName.contains("GENERATE_FROM_LIST_OR_FILE")) {
+                if (FunctionMode.RANDOM.name().equals(methodName)) {
+                    type = FunctionType.GENERATE_FROM_LIST;
+                } else if (FunctionMode.CONSISTENT.name().equals(methodName)) {
+                    type = FunctionType.GENERATE_FROM_LIST_HASH;
+                }
+            }
+        }
+        if (type != null) {
+            return getFunction(type, javaType);
+        }
+        return null;
+    }
+
     /**
      * DOC jgonzalez Comment method "getFunction". This function is used to res = the correct function according to the
      * user choice.
