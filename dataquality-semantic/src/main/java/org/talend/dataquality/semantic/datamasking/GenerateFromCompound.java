@@ -63,7 +63,7 @@ public class GenerateFromCompound extends FunctionString {
 
     @Override
     protected String doGenerateMaskedFieldWithRandom(String str, Random r) {
-        String result = "";
+        String result = EMPTY_STRING;
         analyzer = new SemanticQualityAnalyzer(dictionarySnapshot,
                 new String[] { String.valueOf(categoryValues.stream().map(CategoryValues::getName).toArray()) });
         Optional<List<CategoryValues>> categoryValues = findMatchTypes(str);
@@ -140,7 +140,7 @@ public class GenerateFromCompound extends FunctionString {
 
     private String getMaskedValue(String value, Distribution distribution, Random r)
             throws IllegalAccessException, InstantiationException {
-        String result = "";
+        String result = EMPTY_STRING;
 
         String key = (String) distribution.sample();
         CategoryValues cats = categoryValues.stream().filter(cat -> key.equals(cat.getCategoryId())).findAny().get();

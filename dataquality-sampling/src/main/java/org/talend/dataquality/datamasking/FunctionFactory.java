@@ -27,11 +27,9 @@ public class FunctionFactory<T> {
 
     private Function<T> getFunction3(FunctionType type, int javaType) throws InstantiationException, IllegalAccessException {
         Function<T> res;
-        if (type == FunctionType.REPLACE_LAST_CHARS || type == FunctionType.REPLACE_LAST_CHARS_CONSISTENT
-                || type == FunctionType.REPLACE_LAST_CHARS_BIJECTIVE) {
+        if (type == FunctionType.REPLACE_LAST_CHARS) {
             res = handleReplaceLastCharsFunction(javaType);
-        } else if (type == FunctionType.REPLACE_NUMERIC || type == FunctionType.REPLACE_NUMERIC_CONSISTENT
-                || type == FunctionType.REPLACE_NUMERIC_BIJECTIVE) {
+        } else if (type == FunctionType.REPLACE_NUMERIC) {
             res = handleReplaceNumericFunction(javaType);
         } else {
             res = getFunction(type.getClazz());
@@ -113,8 +111,7 @@ public class FunctionFactory<T> {
             res = handleRemoveFirstCharsFunction(javaType);
         } else if (type == FunctionType.REMOVE_LAST_CHARS) {
             res = handleRemoveLastCharsFunction(javaType);
-        } else if (type == FunctionType.REPLACE_FIRST_CHARS || type == FunctionType.REPLACE_FIRST_CHARS_CONSISTENT
-                || type == FunctionType.REPLACE_FIRST_CHARS_BIJECTIVE) {
+        } else if (type == FunctionType.REPLACE_FIRST_CHARS) {
             res = handleReplaceFirstCharsFunction(javaType);
         } else {
             res = getFunction3(type, javaType);
@@ -322,15 +319,7 @@ public class FunctionFactory<T> {
 
     public Function<T> getFunction(String functionName, int javaType, String methodName)
             throws InstantiationException, IllegalAccessException {
-        FunctionType type;
-        if (FunctionMode.CONSISTENT.equals(methodName)) {
-            type = FunctionType.getByName(functionName + "_CONSISTENT");
-        } else if (FormatPreservingMethod.AES_CBC_PRF.equals(methodName)
-                || FormatPreservingMethod.SHA2_HMAC_PRF.equals(methodName)) {
-            type = FunctionType.getByName(functionName + "_BIJECTIVE");
-        } else {
-            type = FunctionType.getByName(functionName);
-        }
+        FunctionType type = FunctionType.getByName(functionName);
         if (type == null) {
             if (functionName.contains("EMAIL")) {
                 if (FunctionMode.MASK_BY_CHARACTER.name().equals(methodName)) {
@@ -364,11 +353,9 @@ public class FunctionFactory<T> {
      */
     public Function<T> getFunction(FunctionType type, int javaType) throws InstantiationException, IllegalAccessException {
         Function<T> res;
-        if (type == FunctionType.KEEP_FIRST_AND_GENERATE || type == FunctionType.KEEP_FIRST_AND_GENERATE_CONSISTENT
-                || type == FunctionType.KEEP_FIRST_AND_GENERATE_BIJECTIVE) {
+        if (type == FunctionType.KEEP_FIRST_AND_GENERATE) {
             res = handleKeepFirstAndGenerateFunction(javaType);
-        } else if (type == FunctionType.KEEP_LAST_AND_GENERATE || type == FunctionType.KEEP_LAST_AND_GENERATE_CONSISTENT
-                || type == FunctionType.KEEP_LAST_AND_GENERATE_BIJECTIVE) {
+        } else if (type == FunctionType.KEEP_LAST_AND_GENERATE) {
             res = handleKeepLastAndGenerateFunction(javaType);
         } else if (type == FunctionType.GENERATE_BETWEEN) {
             res = handleGenerateBetweenFunction(javaType);

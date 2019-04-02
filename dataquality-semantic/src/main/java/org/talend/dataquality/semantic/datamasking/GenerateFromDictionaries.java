@@ -50,7 +50,7 @@ public class GenerateFromDictionaries extends FunctionString {
         if (!valuesInDictionaries.isEmpty()) {
             return valuesInDictionaries.get(r.nextInt(valuesInDictionaries.size()));
         } else {
-            return "";
+            return EMPTY_STRING;
         }
     }
 

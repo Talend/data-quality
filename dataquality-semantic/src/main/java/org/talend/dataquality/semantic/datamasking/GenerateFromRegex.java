@@ -51,7 +51,7 @@ public class GenerateFromRegex extends FunctionString {
             return null;
         }
         if (StringUtils.isEmpty(str)) {
-            return "";
+            return EMPTY_STRING;
         }
 
         if (CONSISTENT == this.maskingMode) {

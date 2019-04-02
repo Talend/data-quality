@@ -32,7 +32,7 @@ public class GenerateFromPattern extends FunctionString {
 
     @Override
     protected String doGenerateMaskedFieldWithRandom(String str, Random r) {
-        StringBuilder result = new StringBuilder(EMPTY_STRING);
+        StringBuilder result = new StringBuilder();
         if (parameters == null) {
             return StringUtils.EMPTY;
         }

@@ -222,19 +222,13 @@ public enum FunctionType {
      * CHARACTER_HANDLING
      */
     REPLACE_ALL(ReplaceAll.class, FunctionCategory.CHARACTER_HANDLING),
-    REPLACE_ALL_CONSISTENT(ReplaceAll.class, FunctionCategory.CHARACTER_HANDLING),
-    REPLACE_ALL_BIJECTIVE(ReplaceAll.class, FunctionCategory.CHARACTER_HANDLING),
 
     REPLACE_FIRST_CHARS(ReplaceFirstChars.class, FunctionCategory.CHARACTER_HANDLING),
-    REPLACE_FIRST_CHARS_CONSISTENT(ReplaceFirstChars.class, FunctionCategory.CHARACTER_HANDLING),
-    REPLACE_FIRST_CHARS_BIJECTIVE(ReplaceFirstChars.class, FunctionCategory.CHARACTER_HANDLING),
     REPLACE_FIRST_CHARS_INT(ReplaceFirstCharsInteger.class, FunctionCategory.CHARACTER_HANDLING),
     REPLACE_FIRST_CHARS_LONG(ReplaceFirstCharsLong.class, FunctionCategory.CHARACTER_HANDLING),
     REPLACE_FIRST_CHARS_STRING(ReplaceFirstCharsString.class, FunctionCategory.CHARACTER_HANDLING),
 
     REPLACE_LAST_CHARS(ReplaceLastChars.class, FunctionCategory.CHARACTER_HANDLING),
-    REPLACE_LAST_CHARS_CONSISTENT(ReplaceLastChars.class, FunctionCategory.CHARACTER_HANDLING),
-    REPLACE_LAST_CHARS_BIJECTIVE(ReplaceLastChars.class, FunctionCategory.CHARACTER_HANDLING),
     REPLACE_LAST_CHARS_INT(ReplaceLastCharsInteger.class, FunctionCategory.CHARACTER_HANDLING),
     REPLACE_LAST_CHARS_LONG(ReplaceLastCharsLong.class, FunctionCategory.CHARACTER_HANDLING),
     REPLACE_LAST_CHARS_STRING(ReplaceLastCharsString.class, FunctionCategory.CHARACTER_HANDLING),
@@ -250,8 +244,6 @@ public enum FunctionType {
     REPLACE_CHARACTERS_WITH_GENERATION(ReplaceCharactersWithGeneration.class, FunctionCategory.CHARACTER_HANDLING),
 
     REPLACE_NUMERIC(ReplaceNumeric.class, FunctionCategory.CHARACTER_HANDLING),
-    REPLACE_NUMERIC_CONSISTENT(ReplaceNumeric.class, FunctionCategory.CHARACTER_HANDLING),
-    REPLACE_NUMERIC_BIJECTIVE(ReplaceNumeric.class, FunctionCategory.CHARACTER_HANDLING),
     REPLACE_NUMERIC_DOUBLE(ReplaceNumericDouble.class, FunctionCategory.CHARACTER_HANDLING),
     REPLACE_NUMERIC_FLOAT(ReplaceNumericFloat.class, FunctionCategory.CHARACTER_HANDLING),
     REPLACE_NUMERIC_INT(ReplaceNumericInteger.class, FunctionCategory.CHARACTER_HANDLING),
@@ -259,15 +251,11 @@ public enum FunctionType {
     REPLACE_NUMERIC_STRING(ReplaceNumericString.class, FunctionCategory.CHARACTER_HANDLING),
 
     KEEP_FIRST_AND_GENERATE(KeepFirstChars.class, FunctionCategory.CHARACTER_HANDLING),
-    KEEP_FIRST_AND_GENERATE_CONSISTENT(KeepFirstChars.class, FunctionCategory.CHARACTER_HANDLING),
-    KEEP_FIRST_AND_GENERATE_BIJECTIVE(KeepFirstChars.class, FunctionCategory.CHARACTER_HANDLING),
     KEEP_FIRST_AND_GENERATE_INT(KeepFirstCharsInteger.class, FunctionCategory.CHARACTER_HANDLING),
     KEEP_FIRST_AND_GENERATE_LONG(KeepFirstCharsLong.class, FunctionCategory.CHARACTER_HANDLING),
     KEEP_FIRST_AND_GENERATE_STRING(KeepFirstDigitsAndReplaceOtherDigits.class, FunctionCategory.CHARACTER_HANDLING),
 
     KEEP_LAST_AND_GENERATE(KeepLastChars.class, FunctionCategory.CHARACTER_HANDLING),
-    KEEP_LAST_AND_GENERATE_CONSISTENT(KeepLastChars.class, FunctionCategory.CHARACTER_HANDLING),
-    KEEP_LAST_AND_GENERATE_BIJECTIVE(KeepLastChars.class, FunctionCategory.CHARACTER_HANDLING),
     KEEP_LAST_AND_GENERATE_INT(KeepLastCharsInteger.class, FunctionCategory.CHARACTER_HANDLING),
     KEEP_LAST_AND_GENERATE_LONG(KeepLastCharsLong.class, FunctionCategory.CHARACTER_HANDLING),
     KEEP_LAST_AND_GENERATE_STRING(KeepLastDigitsAndReplaceOtherDigits.class, FunctionCategory.CHARACTER_HANDLING),

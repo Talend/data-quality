@@ -44,7 +44,7 @@ public class BetweenIndexesKeep extends BetweenIndexes {
 
     @Override
     protected String doGenerateMaskedField(String str, FunctionMode mode) {
-        throw new NotImplementedException("Not implemented.");
+        throw new NotImplementedException("Not implemented for Function: " + getClass().getName());
     }
 
     @Override

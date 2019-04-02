@@ -31,7 +31,7 @@ public class GeneratePhoneNumberUS extends FunctionString {
 
     @Override
     protected String doGenerateMaskedFieldWithRandom(String str, Random r) {
-        StringBuilder result = new StringBuilder(EMPTY_STRING);
+        StringBuilder result = new StringBuilder();
         result.append(r.nextInt(8) + 2);
         result.append(nextRandomDigit(r));
         result.append(nextDigitWithExclusion(result.charAt(1), r));

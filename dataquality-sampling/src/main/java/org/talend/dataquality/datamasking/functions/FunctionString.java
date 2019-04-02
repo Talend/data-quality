@@ -11,7 +11,7 @@ public abstract class FunctionString extends Function<String> {
 
     @Override
     protected String doGenerateMaskedField(String string) {
-        throw new NotImplementedException("Not implemented.");
+        throw new NotImplementedException("Not implemented for Function: " + getClass().getName());
     }
 
     @Override

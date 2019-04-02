@@ -12,9 +12,13 @@
 // ============================================================================
 package org.talend.dataquality.semantic.datamasking;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Random;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.talend.dataquality.datamasking.FunctionType;
@@ -29,27 +33,27 @@ public class SemanticMaskerFunctionFactoryTest extends CategoryRegistryManagerAb
     @Test
     public void createMaskerFunctionForSemanticCategory() {
         Function<String> function = SemanticMaskerFunctionFactory.createMaskerFunctionForSemanticCategory("DE_POSTAL_CODE", null);
-        Assert.assertEquals("ReplaceCharactersWithGeneration", function.getClass().getSimpleName());
+        assertEquals("ReplaceCharactersWithGeneration", function.getClass().getSimpleName());
     }
 
     @Test
     public void createDecimalMaskerFunctionForSemanticCategory() {
         Function<String> function = SemanticMaskerFunctionFactory.createMaskerFunctionForSemanticCategory("INVALID_NAME",
                 "decimal");
-        Assert.assertEquals("FluctuateNumericString", function.getClass().getSimpleName());
+        assertEquals("FluctuateNumericString", function.getClass().getSimpleName());
     }
 
     @Test
     public void createDateMaskerFunctionForSemanticCategory() {
         Function<String> function = SemanticMaskerFunctionFactory.createMaskerFunctionForSemanticCategory("INVALID_NAME", "date");
-        Assert.assertEquals("DateFunctionAdapter", function.getClass().getSimpleName());
+        assertEquals("DateFunctionAdapter", function.getClass().getSimpleName());
     }
 
     @Test
     public void createStringMaskerFunctionForSemanticCategory() {
         Function<String> function = SemanticMaskerFunctionFactory.createMaskerFunctionForSemanticCategory("INVALID_NAME",
                 "string");
-        Assert.assertEquals("ReplaceCharactersWithGeneration", function.getClass().getSimpleName());
+        assertEquals("ReplaceCharactersWithGeneration", function.getClass().getSimpleName());
     }
 
     /**
@@ -63,16 +67,16 @@ public class SemanticMaskerFunctionFactoryTest extends CategoryRegistryManagerAb
         Function<String> generateFromRegexFunction = SemanticMaskerFunctionFactory
                 .createMaskerFunctionForSemanticCategory("FR_POSTAL_CODE", "integer", null, null); //$NON-NLS-1$ //$NON-NLS-2$
         generateFromRegexFunction.setRandom(new Random(100L));
-        Assert.assertTrue("The Function should be instance of GenerateFromRegex class", //$NON-NLS-1$
+        assertTrue("The Function should be instance of GenerateFromRegex class", //$NON-NLS-1$
                 generateFromRegexFunction instanceof GenerateFromRegex);
         String generateMaskedRow = generateFromRegexFunction.generateMaskedRow("any input string"); //$NON-NLS-1$
-        Assert.assertEquals("The mask result should be 02779", "02779", generateMaskedRow); //$NON-NLS-1$//$NON-NLS-2$
+        assertEquals("The mask result should be 02779", "02779", generateMaskedRow); //$NON-NLS-1$//$NON-NLS-2$
 
         // when input data from name change to id
 
         generateFromRegexFunction = SemanticMaskerFunctionFactory
                 .createMaskerFunctionForSemanticCategory("583edc44ec06957a34fa643c", "integer", null, null); //$NON-NLS-1$ //$NON-NLS-2$
-        Assert.assertFalse("The Function should not be instance of GenerateFromRegex class", //$NON-NLS-1$
+        assertFalse("The Function should not be instance of GenerateFromRegex class", //$NON-NLS-1$
                 generateFromRegexFunction instanceof GenerateFromRegex);
 
         // category and dataType is not exist case
@@ -80,86 +84,59 @@ public class SemanticMaskerFunctionFactoryTest extends CategoryRegistryManagerAb
             generateFromRegexFunction = SemanticMaskerFunctionFactory.createMaskerFunctionForSemanticCategory("aaaaa", "bigdata", //$NON-NLS-1$//$NON-NLS-2$
                     null, null);
         } catch (IllegalArgumentException e) {
-            Assert.assertTrue("There should be a IllegalArgumentException", true); //$NON-NLS-1$
+            assertTrue("There should be a IllegalArgumentException", true); //$NON-NLS-1$
             return;
         }
-        Assert.assertTrue("this case there should be a exception", false); //$NON-NLS-1$
+        assertTrue("this case there should be a exception", false); //$NON-NLS-1$
     }
 
     @Test
     public void testGetFunctionByType() {
         Function function = SemanticMaskerFunctionFactory.getMaskerFunctionByFunctionName(FunctionType.BETWEEN_INDEXES_KEEP,
                 "string", "2,10");
-        Assert.assertEquals(FunctionType.BETWEEN_INDEXES_KEEP.getClazz(), function.getClass());
+        assertEquals(FunctionType.BETWEEN_INDEXES_KEEP.getClazz(), function.getClass());
 
         function = SemanticMaskerFunctionFactory.getMaskerFunctionByFunctionName(FunctionType.BETWEEN_INDEXES_REMOVE, "string",
                 "2,10");
-        Assert.assertEquals(FunctionType.BETWEEN_INDEXES_REMOVE.getClazz(), function.getClass());
+        assertEquals(FunctionType.BETWEEN_INDEXES_REMOVE.getClazz(), function.getClass());
 
         function = SemanticMaskerFunctionFactory.getMaskerFunctionByFunctionName(FunctionType.BETWEEN_INDEXES_REPLACE, "string",
                 "2,10");
-        Assert.assertEquals(FunctionType.BETWEEN_INDEXES_REPLACE.getClazz(), function.getClass());
+        assertEquals(FunctionType.BETWEEN_INDEXES_REPLACE.getClazz(), function.getClass());
 
         function = SemanticMaskerFunctionFactory.getMaskerFunctionByFunctionName(FunctionType.KEEP_YEAR, "string", "2,10");
-        Assert.assertNotEquals(FunctionType.KEEP_YEAR.getClazz(), function.getClass());
-        Assert.assertEquals(org.talend.dataquality.datamasking.semantic.DateFunctionAdapter.class, function.getClass());
+        assertNotEquals(FunctionType.KEEP_YEAR.getClazz(), function.getClass());
+        assertEquals(org.talend.dataquality.datamasking.semantic.DateFunctionAdapter.class, function.getClass());
 
         function = SemanticMaskerFunctionFactory.getMaskerFunctionByFunctionName(FunctionType.GENERATE_FROM_PATTERN, "String",
                 "2,10");
-        Assert.assertEquals(FunctionType.GENERATE_FROM_PATTERN.getClazz(), function.getClass());
+        assertEquals(FunctionType.GENERATE_FROM_PATTERN.getClazz(), function.getClass());
 
         function = SemanticMaskerFunctionFactory.getMaskerFunctionByFunctionName(FunctionType.REPLACE_ALL, "String", "X");
-        Assert.assertEquals(FunctionType.REPLACE_ALL.getClazz(), function.getClass());
-
-        function = SemanticMaskerFunctionFactory.getMaskerFunctionByFunctionName(FunctionType.REPLACE_ALL_BIJECTIVE, "String",
-                "X");
-        Assert.assertEquals(FunctionType.REPLACE_ALL.getClazz(), function.getClass());
+        assertEquals(FunctionType.REPLACE_ALL.getClazz(), function.getClass());
 
         function = SemanticMaskerFunctionFactory.getMaskerFunctionByFunctionName(FunctionType.REPLACE_CHARACTERS_BIJECTIVE,
                 "String", "X");
-        Assert.assertEquals(FunctionType.REPLACE_CHARACTERS.getClazz(), function.getClass());
+        assertEquals(FunctionType.REPLACE_CHARACTERS.getClazz(), function.getClass());
 
         function = SemanticMaskerFunctionFactory.getMaskerFunctionByFunctionName(FunctionType.REPLACE_FIRST_CHARS, "string",
                 "10");
-        Assert.assertEquals(FunctionType.REPLACE_FIRST_CHARS_STRING.getClazz(), function.getClass());
+        assertEquals(FunctionType.REPLACE_FIRST_CHARS_STRING.getClazz(), function.getClass());
 
         function = SemanticMaskerFunctionFactory.getMaskerFunctionByFunctionName(FunctionType.REPLACE_LAST_CHARS, "string", "5");
-        Assert.assertEquals(FunctionType.REPLACE_LAST_CHARS_STRING.getClazz(), function.getClass());
-
-        function = SemanticMaskerFunctionFactory.getMaskerFunctionByFunctionName(FunctionType.REPLACE_FIRST_CHARS_BIJECTIVE,
-                "string", "10");
-        Assert.assertEquals(FunctionType.REPLACE_FIRST_CHARS_STRING.getClazz(), function.getClass());
-
-        function = SemanticMaskerFunctionFactory.getMaskerFunctionByFunctionName(FunctionType.REPLACE_LAST_CHARS_BIJECTIVE,
-                "string", "5");
-        Assert.assertEquals(FunctionType.REPLACE_LAST_CHARS_STRING.getClazz(), function.getClass());
+        assertEquals(FunctionType.REPLACE_LAST_CHARS_STRING.getClazz(), function.getClass());
 
         function = SemanticMaskerFunctionFactory.getMaskerFunctionByFunctionName(FunctionType.REPLACE_NUMERIC, "integer", "5");
-        Assert.assertEquals(FunctionType.REPLACE_NUMERIC_INT.getClazz(), function.getClass());
-
-        function = SemanticMaskerFunctionFactory.getMaskerFunctionByFunctionName(FunctionType.REPLACE_NUMERIC_CONSISTENT,
-                "integer", "5");
-        Assert.assertEquals(FunctionType.REPLACE_NUMERIC_INT.getClazz(), function.getClass());
-
-        function = SemanticMaskerFunctionFactory.getMaskerFunctionByFunctionName(FunctionType.REPLACE_NUMERIC_BIJECTIVE,
-                "integer", "5");
-        Assert.assertEquals(FunctionType.REPLACE_NUMERIC_INT.getClazz(), function.getClass());
+        assertEquals(FunctionType.REPLACE_NUMERIC_INT.getClazz(), function.getClass());
 
         function = SemanticMaskerFunctionFactory.getMaskerFunctionByFunctionName(FunctionType.KEEP_FIRST_AND_GENERATE, "string",
                 "2");
-        Assert.assertEquals(FunctionType.KEEP_FIRST_AND_GENERATE_STRING.getClazz(), function.getClass());
+        assertEquals(FunctionType.KEEP_FIRST_AND_GENERATE_STRING.getClazz(), function.getClass());
 
         function = SemanticMaskerFunctionFactory.getMaskerFunctionByFunctionName(FunctionType.KEEP_LAST_AND_GENERATE, "string",
                 "2");
-        Assert.assertEquals(FunctionType.KEEP_LAST_AND_GENERATE_STRING.getClazz(), function.getClass());
+        assertEquals(FunctionType.KEEP_LAST_AND_GENERATE_STRING.getClazz(), function.getClass());
 
-        function = SemanticMaskerFunctionFactory.getMaskerFunctionByFunctionName(FunctionType.KEEP_LAST_AND_GENERATE_BIJECTIVE,
-                "string", "2");
-        Assert.assertEquals(FunctionType.KEEP_LAST_AND_GENERATE_STRING.getClazz(), function.getClass());
-
-        function = SemanticMaskerFunctionFactory.getMaskerFunctionByFunctionName(FunctionType.KEEP_FIRST_AND_GENERATE_BIJECTIVE,
-                "string", "2");
-        Assert.assertEquals(FunctionType.KEEP_FIRST_AND_GENERATE_STRING.getClazz(), function.getClass());
     }
 
 }
