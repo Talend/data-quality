@@ -340,9 +340,9 @@ public class FunctionFactory<T> {
                 }
             } else if (functionName.contains("GENERATE_FROM_LIST_OR_FILE")) {
                 if (FunctionMode.RANDOM.name().equals(methodName)) {
-                    type = FunctionType.GENERATE_FROM_LIST;
+                    type = FunctionType.GENERATE_FROM_FILE;
                 } else if (FunctionMode.CONSISTENT.name().equals(methodName)) {
-                    type = FunctionType.GENERATE_FROM_LIST_HASH;
+                    type = FunctionType.GENERATE_FROM_FILE_HASH;
                 }
             }
         }
