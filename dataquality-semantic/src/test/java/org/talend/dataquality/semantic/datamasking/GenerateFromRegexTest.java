@@ -16,7 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.talend.dataquality.datamasking.FunctionMode;
-import org.talend.dataquality.datamasking.functions.KeysLoader;
+import org.talend.dataquality.datamasking.functions.util.KeysLoader;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

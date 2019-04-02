@@ -26,7 +26,7 @@ import org.talend.dataquality.datamasking.FunctionType;
 import org.talend.dataquality.datamasking.TypeTester;
 import org.talend.dataquality.datamasking.functions.Function;
 import org.talend.dataquality.datamasking.functions.date.DateVariance;
-import org.talend.dataquality.datamasking.functions.text.ReplaceAll;
+import org.talend.dataquality.datamasking.functions.text.replace.ReplaceAll;
 import org.talend.dataquality.datamasking.semantic.AbstractDateFunction;
 import org.talend.dataquality.datamasking.semantic.DateFunctionAdapter;
 import org.talend.dataquality.datamasking.semantic.FluctuateNumericString;

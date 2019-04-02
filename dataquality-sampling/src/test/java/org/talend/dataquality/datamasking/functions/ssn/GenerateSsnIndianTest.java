@@ -21,7 +21,7 @@ import java.util.Random;
 import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.datamasking.FunctionMode;
-import org.talend.dataquality.utils.MockRandom;
+import org.talend.dataquality.datamasking.utils.MockRandom;
 
 /**
  * @author dprot

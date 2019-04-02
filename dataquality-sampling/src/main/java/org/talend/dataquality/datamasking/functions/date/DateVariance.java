@@ -20,7 +20,7 @@ import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.dataquality.datamasking.FunctionMode;
-import org.talend.dataquality.datamasking.functions.CharactersOperationUtils;
+import org.talend.dataquality.datamasking.functions.util.CharactersOperationUtils;
 import org.talend.dataquality.datamasking.semantic.AbstractDateFunction;
 
 /**

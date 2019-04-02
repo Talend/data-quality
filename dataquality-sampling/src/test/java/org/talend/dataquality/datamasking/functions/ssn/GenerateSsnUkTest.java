@@ -22,7 +22,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.datamasking.functions.Function;
-import org.talend.dataquality.utils.MockRandom;
+import org.talend.dataquality.datamasking.utils.MockRandom;
 
 /**
  * created by jgonzalez on 20 août 2015 Detailled comment

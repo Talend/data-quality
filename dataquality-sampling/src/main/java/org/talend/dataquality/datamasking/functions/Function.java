@@ -26,7 +26,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.dataquality.datamasking.FormatPreservingMethod;
 import org.talend.dataquality.datamasking.FunctionMode;
-import org.talend.dataquality.datamasking.generic.Alphabet;
+import org.talend.dataquality.datamasking.functions.text.Alphabet;
+import org.talend.dataquality.datamasking.functions.util.KeysLoader;
 
 /**
  * created by jgonzalez on 18 juin 2015. This class is an abstract class that

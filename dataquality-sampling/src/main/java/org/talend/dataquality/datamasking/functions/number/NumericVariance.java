@@ -16,8 +16,8 @@ import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.talend.dataquality.datamasking.functions.CharactersOperationUtils;
 import org.talend.dataquality.datamasking.functions.Function;
+import org.talend.dataquality.datamasking.functions.util.CharactersOperationUtils;
 
 /**
  * created by jgonzalez on 19 juin 2015. This function will modify the input data by multiplying it by a number between

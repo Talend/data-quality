@@ -14,6 +14,8 @@ import java.util.Set;
 import org.junit.Test;
 import org.talend.daikon.pattern.character.CharPattern;
 import org.talend.dataquality.datamasking.FormatPreservingMethod;
+import org.talend.dataquality.datamasking.functions.text.Alphabet;
+import org.talend.dataquality.datamasking.functions.text.GenerateFromAlphabet;
 
 public class GenerateFromAlphabetTest {
 

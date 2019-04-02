@@ -20,8 +20,6 @@ import org.talend.dataquality.common.pattern.TextPatternUtil;
 import org.talend.dataquality.datamasking.FormatPreservingMethod;
 import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.datamasking.functions.Function;
-import org.talend.dataquality.datamasking.generic.Alphabet;
-import org.talend.dataquality.datamasking.generic.GenerateFromAlphabet;
 
 /**
  * @author jteuladedenantes
