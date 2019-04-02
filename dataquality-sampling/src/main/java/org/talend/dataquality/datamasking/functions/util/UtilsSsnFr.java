@@ -5,10 +5,6 @@ import java.util.List;
 
 public class UtilsSsnFr {
 
-    private UtilsSsnFr() {
-
-    }
-
     private static final List<String> departments = Arrays.asList("01", "02", "03", "04", "05", "06", "07", "08", "09", "10",
             "11", "12", "13", "14", "15", "16", "17", "18", "19", "2A", "2B", "21", "22", "23", "24", "25", "26", "27", "28",
             "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47",
@@ -17,6 +13,10 @@ public class UtilsSsnFr {
             "86", "87", "88", "89", "90", "91", "92", "93", "94", "95", "96", "97", "98", "99");
 
     private static final int MOD97 = 97; // $NON-NLS-1$
+
+    private UtilsSsnFr() {
+
+    }
 
     public static List<String> getFrenchDepartments() {
         return departments;

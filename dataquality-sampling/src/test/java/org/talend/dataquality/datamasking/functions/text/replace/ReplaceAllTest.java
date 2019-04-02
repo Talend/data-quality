@@ -30,7 +30,6 @@ import org.talend.daikon.pattern.character.CharPattern;
 import org.talend.dataquality.datamasking.FormatPreservingMethod;
 import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.datamasking.functions.text.Alphabet;
-import org.talend.dataquality.datamasking.functions.text.replace.ReplaceAll;
 
 /**
  * created by jgonzalez on 25 juin 2015 Detailled comment
@@ -154,25 +153,19 @@ public class ReplaceAllTest {
         ra.parse("", false);
         ra.setAlphabet(Alphabet.BEST_GUESS);
         ra.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF, "data");
-        Map<String, String> inputOutput = new LinkedHashMap<String, String>() {
-
-            private static final long serialVersionUID = 1L;
-
-            {
-                put("abc123", "gvlc95"); // lower_latin + digit
-                put("123abc", "xohb4e"); // lower_latin + digit
-                put("abcd", "pwij"); // lower_latin
-                put("ぁｦアぁｦア", "こごヹｱﾑゔ"); // kanas
-                put("éaièE", "épàüV"); // lower_latin + lower_latin_rare + upper_latin
-                put("éaièE０ａＡ", "ñklÿV６ｕＣ"); // More than 5 patterns, plug pattern
-                put("一一", "顠枔"); // Kanji, plug pattern
-                put("一약", "璊얚"); // Kanji + hangul, plug pattern
-                put("\u3400\u3401", "㢴\uD84F\uDF90"); // kanji_rare, plug pattern
-                put("0aéBÈ０ａＡぁｦア一\u3400약", "5oþIÑ５ｕＡひｮア揹\uD876\uDEF8룵"); // all char patterns, plug pattern
-                put("\u3400", "\uD864\uDFC0"); // switch to consistent for the moment
-                put("\u4E00", "碽"); // Switch to consistent for the moment
-            }
-        };
+        Map<String, String> inputOutput = new LinkedHashMap<>();
+        inputOutput.put("abc123", "gvlc95"); // lower_latin + digit
+        inputOutput.put("123abc", "xohb4e"); // lower_latin + digit
+        inputOutput.put("abcd", "pwij"); // lower_latin
+        inputOutput.put("ぁｦアぁｦア", "こごヹｱﾑゔ"); // kanas
+        inputOutput.put("éaièE", "épàüV"); // lower_latin + lower_latin_rare + upper_latin
+        inputOutput.put("éaièE０ａＡ", "ñklÿV６ｕＣ"); // More than 5 patterns, plug pattern
+        inputOutput.put("一一", "顠枔"); // Kanji, plug pattern
+        inputOutput.put("一약", "璊얚"); // Kanji + hangul, plug pattern
+        inputOutput.put("\u3400\u3401", "㢴\uD84F\uDF90"); // kanji_rare, plug pattern
+        inputOutput.put("0aéBÈ０ａＡぁｦア一\u3400약", "5oþIÑ５ｕＡひｮア揹\uD876\uDEF8룵"); // all char patterns, plug pattern
+        inputOutput.put("\u3400", "\uD864\uDFC0"); // switch to consistent for the moment
+        inputOutput.put("\u4E00", "碽"); // Switch to consistent for the moment
 
         for (String input : inputOutput.keySet()) {
             String output = ra.generateMaskedRow(input, FunctionMode.BIJECTIVE);

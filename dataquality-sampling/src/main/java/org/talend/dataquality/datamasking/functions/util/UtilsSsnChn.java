@@ -13,10 +13,6 @@ import org.talend.dataquality.datamasking.functions.ssn.GenerateUniqueSsnChn;
 
 public class UtilsSsnChn {
 
-    private UtilsSsnChn() {
-
-    }
-
     private static final Logger LOGGER = LoggerFactory.getLogger(UtilsSsnChn.class);
 
     private static final List<Integer> keyWeight = Collections
@@ -26,6 +22,10 @@ public class UtilsSsnChn {
 
     private static final List<String> keyString = Collections
             .unmodifiableList(Arrays.asList("1", "0", "X", "9", "8", "7", "6", "5", "4", "3", "2"));
+
+    private UtilsSsnChn() {
+
+    }
 
     public static final List<String> readChinaRegionFile() {
         // Region code

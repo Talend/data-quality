@@ -16,6 +16,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Random;
 
@@ -84,10 +85,10 @@ public class SemanticMaskerFunctionFactoryTest extends CategoryRegistryManagerAb
             generateFromRegexFunction = SemanticMaskerFunctionFactory.createMaskerFunctionForSemanticCategory("aaaaa", "bigdata", //$NON-NLS-1$//$NON-NLS-2$
                     null, null);
         } catch (IllegalArgumentException e) {
-            assertTrue("There should be a IllegalArgumentException", true); //$NON-NLS-1$
+            assertTrue("There should be a IllegalArgumentException", IllegalArgumentException.class.equals(e.getClass())); //$NON-NLS-1$
             return;
         }
-        assertTrue("this case there should be a exception", false); //$NON-NLS-1$
+        fail("expected to get an exception but actually not"); //$NON-NLS-1$
     }
 
     @Test

@@ -2,10 +2,6 @@ package org.talend.dataquality.datamasking.functions.util;
 
 public class UtilsSsnIndia {
 
-    private UtilsSsnIndia() {
-
-    }
-
     // The multiplication table (for checksum)
     private static final int[][] D = new int[][] { { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }, { 1, 2, 3, 4, 0, 6, 7, 8, 9, 5 },
             { 2, 3, 4, 0, 1, 7, 8, 9, 5, 6 }, { 3, 4, 0, 1, 2, 8, 9, 5, 6, 7 }, { 4, 0, 1, 2, 3, 9, 5, 6, 7, 8 },
@@ -19,6 +15,10 @@ public class UtilsSsnIndia {
 
     // The inverse table (for checksum)
     private static final int[] INV = { 0, 4, 3, 2, 1, 5, 6, 7, 8, 9 };
+
+    private UtilsSsnIndia() {
+
+    }
 
     /**
      * Compute the key for an Indian SSN
