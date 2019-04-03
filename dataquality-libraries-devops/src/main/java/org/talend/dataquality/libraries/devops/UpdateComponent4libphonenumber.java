@@ -97,17 +97,14 @@ public class UpdateComponent4libphonenumber {
                             if (line.contains(depName)) {
                                 LOGGER.info(depName);
                                 // MODULE field
-                                line = line
-                                        .replaceAll(depName + "-\\d\\d?.\\d\\d?.\\d\\d?(.jar)?\"", //$NON-NLS-1$
-                                                depName + "-" + DEP_VERSION_MAP.get(depName) + ".jar\""); //$NON-NLS-1$ //$NON-NLS-2$
+                                line = line.replaceAll(depName + "-\\d\\d?.\\d\\d?.\\d\\d?(.jar)?\"", //$NON-NLS-1$
+                                        depName + "-" + DEP_VERSION_MAP.get(depName) + ".jar\""); //$NON-NLS-1$ //$NON-NLS-2$
                                 // MVN field
-                                line = line
-                                        .replaceAll(depName + "-\\d\\d?.\\d\\d?.\\d\\d?", //$NON-NLS-1$
-                                                depName + "-" + DEP_VERSION_MAP.get(depName)); //$NON-NLS-1$
+                                line = line.replaceAll(depName + "-\\d\\d?.\\d\\d?.\\d\\d?", //$NON-NLS-1$
+                                        depName + "-" + DEP_VERSION_MAP.get(depName)); //$NON-NLS-1$
                                 // UrlPath field
-                                line = line
-                                        .replaceAll(depName + "-\\d\\d?.\\d\\d?.\\d\\d?.jar\"", depName //$NON-NLS-1$
-                                                + "-" + DEP_VERSION_MAP.get(depName) + ".jar\""); //$NON-NLS-1$ //$NON-NLS-2$
+                                line = line.replaceAll(depName + "-\\d\\d?.\\d\\d?.\\d\\d?.jar\"", depName //$NON-NLS-1$
+                                        + "-" + DEP_VERSION_MAP.get(depName) + ".jar\""); //$NON-NLS-1$ //$NON-NLS-2$
                             }
                         }
                         IOUtils.write(line + "\n", fos); //$NON-NLS-1$
