@@ -29,8 +29,7 @@ import org.slf4j.LoggerFactory;
  * 
  * Usage:
  * 1. update the expect version in DEP_VERSION_MAP field.
- * 2. tell the application if need to USE_SNAPSHOT_VERSION.
- * 3. Run this class as Java application.
+ * 2. Run this class as Java application.
  * 
  * @author msjian
  */
@@ -62,12 +61,14 @@ public class UpdateComponent4libphonenumber {
 
     private static final long serialVersionUID = 1L;
 
+    // when update, change the new version here.
+    private static final String LIBPHONENUMBER_VERSION = "8.10.7"; //$NON-NLS-1$
+
     static {
-        // when update, change the new version here.
-        DEP_VERSION_MAP.put("carrier", "1.85"); //$NON-NLS-1$ //$NON-NLS-2$
-        DEP_VERSION_MAP.put("geocoder", "2.95"); //$NON-NLS-1$ //$NON-NLS-2$
-        DEP_VERSION_MAP.put("libphonenumber", "8.10.7"); //$NON-NLS-1$ //$NON-NLS-2$
-        DEP_VERSION_MAP.put("prefixmapper", "2.113"); //$NON-NLS-1$ //$NON-NLS-2$
+        // DEP_VERSION_MAP.put("carrier", "1.85"); //$NON-NLS-1$ //$NON-NLS-2$
+        // DEP_VERSION_MAP.put("geocoder", "2.95"); //$NON-NLS-1$ //$NON-NLS-2$
+        DEP_VERSION_MAP.put("libphonenumber", LIBPHONENUMBER_VERSION); //$NON-NLS-1$
+        // DEP_VERSION_MAP.put("prefixmapper", "2.113"); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     private static void handleComponentDefinition(File f) {
