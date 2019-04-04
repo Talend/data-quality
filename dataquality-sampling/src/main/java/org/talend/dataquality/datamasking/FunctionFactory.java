@@ -317,9 +317,23 @@ public class FunctionFactory<T> {
         return res;
     }
 
+    /**
+     * Instantiate the data masking Function according to the function name, data type and method.
+     * This method is mainly used by tDataMasking components in the studio.
+     *
+     * @param functionName the name of the function
+     * @param javaType the data type
+     * @param methodName the name of the method
+     * @return
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     */
     public Function<T> getFunction(String functionName, int javaType, String methodName)
             throws InstantiationException, IllegalAccessException {
+        // try to get the FunctionType if it is defined.
         FunctionType type = FunctionType.getByName(functionName);
+
+        // if not defined in FunctionType, handle the specific names.
         if (type == null) {
             if (functionName.contains("EMAIL")) {
                 if (FunctionMode.MASK_BY_CHARACTER.name().equals(methodName)) {
@@ -327,7 +341,7 @@ public class FunctionFactory<T> {
                 } else if (FunctionMode.MASK_FROM_LIST.name().equals(methodName)) {
                     type = FunctionType.getByName(functionName + "_RANDOMLY");
                 }
-            } else if (functionName.contains("GENERATE_FROM_LIST_OR_FILE")) {
+            } else if ("GENERATE_FROM_LIST_OR_FILE".equals(functionName)) {
                 if (FunctionMode.RANDOM.name().equals(methodName)) {
                     type = FunctionType.GENERATE_FROM_FILE;
                 } else if (FunctionMode.CONSISTENT.name().equals(methodName)) {
@@ -338,7 +352,7 @@ public class FunctionFactory<T> {
         if (type != null) {
             return getFunction(type, javaType);
         }
-        return null;
+        throw new IllegalArgumentException("No function found with the given parameter.");
     }
 
     /**

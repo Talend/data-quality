@@ -142,10 +142,6 @@ public enum FunctionType {
     MASK_TOP_LEVEL_EMAIL_DOMAIN_BY_X(MaskTopEmailDomainByX.class, FunctionCategory.EMAIL_MASKING),
     MASK_TOP_LEVEL_EMAIL_DOMAIN_RANDOMLY(MaskTopEmailDomainRandomly.class, FunctionCategory.EMAIL_MASKING),
 
-    MASK_EMAIL_LOCALPART(MaskEmailLocalPartByX.class, FunctionCategory.EMAIL_MASKING),
-    MASK_FULL_EMAIL_DOMAIN(MaskFullEmailDomainByX.class, FunctionCategory.EMAIL_MASKING),
-    MASK_TOP_LEVEL_EMAIL_DOMAIN(MaskTopEmailDomainByX.class, FunctionCategory.EMAIL_MASKING),
-
     /**
      * SSN_GENERATION
      */
