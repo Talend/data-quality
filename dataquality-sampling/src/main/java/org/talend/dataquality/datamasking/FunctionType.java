@@ -156,11 +156,11 @@ public enum FunctionType {
     /**
      * PHONE_GENERATION
      */
-    GENERATE_PHONE_NUMBER_FRENCH(GeneratePhoneNumberFrench.class, FunctionCategory.PHONE_GENENRATION),
-    GENERATE_PHONE_NUMBER_GERMANY(GeneratePhoneNumberGermany.class, FunctionCategory.PHONE_GENENRATION),
-    GENERATE_PHONE_NUMBER_JAPAN(GeneratePhoneNumberJapan.class, FunctionCategory.PHONE_GENENRATION),
-    GENERATE_PHONE_NUMBER_UK(GeneratePhoneNumberUK.class, FunctionCategory.PHONE_GENENRATION),
-    GENERATE_PHONE_NUMBER_US(GeneratePhoneNumberUS.class, FunctionCategory.PHONE_GENENRATION),
+    GENERATE_PHONE_NUMBER_FRENCH(GeneratePhoneNumberFrench.class, FunctionCategory.PHONE_GENERATION),
+    GENERATE_PHONE_NUMBER_GERMANY(GeneratePhoneNumberGermany.class, FunctionCategory.PHONE_GENERATION),
+    GENERATE_PHONE_NUMBER_JAPAN(GeneratePhoneNumberJapan.class, FunctionCategory.PHONE_GENERATION),
+    GENERATE_PHONE_NUMBER_UK(GeneratePhoneNumberUK.class, FunctionCategory.PHONE_GENERATION),
+    GENERATE_PHONE_NUMBER_US(GeneratePhoneNumberUS.class, FunctionCategory.PHONE_GENERATION),
 
     /**
      * DATE_GENERATION
@@ -298,7 +298,7 @@ public enum FunctionType {
     MASK_ADDRESS(MaskAddress.class, FunctionCategory.ADDRESS_MASKING),
 
     /**
-     * CREDIT_CARD_GENENRATION
+     * CREDIT_CARD_GENERATION
      */
     GENERATE_CREDIT_CARD_FORMAT(GenerateCreditCardSimple.class, FunctionCategory.CREDIT_CARD_GENERATION),
     GENERATE_CREDIT_CARD_FORMAT_LONG(GenerateCreditCardFormatLong.class, FunctionCategory.CREDIT_CARD_GENERATION),
