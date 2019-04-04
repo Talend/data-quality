@@ -32,11 +32,6 @@ public class GenerateSsnIndia extends FunctionString {
     private static final long serialVersionUID = -8621894245597689328L;
 
     @Override
-    protected String doGenerateMaskedField(String str) {
-        return doGenerateMaskedFieldWithRandom(str, rnd);
-    }
-
-    @Override
     protected String doGenerateMaskedFieldWithRandom(String str, Random r) {
         StringBuilder result = new StringBuilder();
         result.append(1 + r.nextInt(9));

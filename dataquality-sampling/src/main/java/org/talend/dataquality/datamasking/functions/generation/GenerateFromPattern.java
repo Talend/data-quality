@@ -26,11 +26,6 @@ public class GenerateFromPattern extends FunctionString {
     private static final long serialVersionUID = 7920843158759995757L;
 
     @Override
-    protected String doGenerateMaskedField(String str) {
-        return doGenerateMaskedFieldWithRandom(str, rnd);
-    }
-
-    @Override
     protected String doGenerateMaskedFieldWithRandom(String str, Random r) {
         StringBuilder result = new StringBuilder();
         if (parameters == null) {

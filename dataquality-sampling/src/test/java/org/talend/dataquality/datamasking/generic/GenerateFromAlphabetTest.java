@@ -105,7 +105,6 @@ public class GenerateFromAlphabetTest {
         StringBuilder stringBuilder = new StringBuilder();
         for (Integer codePoint : output)
             stringBuilder.append(Character.toChars(codePoint));
-        System.out.println(stringBuilder.toString());
         assertTrue("x--\uD85D\uDCBD€".equals(stringBuilder.toString()));
     }
 
@@ -115,7 +114,6 @@ public class GenerateFromAlphabetTest {
         GenerateFromAlphabet generateFromAlphabet = new GenerateFromAlphabet(alphabet, FormatPreservingMethod.SHA2_HMAC_PRF, "");
         Set<String> outputs = new LinkedHashSet<>();
         int sizeKatakana = CharPattern.FULLWIDTH_KATAKANA.getCodePointSize();
-        System.out.println(sizeKatakana);
         for (int k = 0; k < sizeKatakana; k++) {
             for (char i = '0'; i <= '9'; i++) {
                 List<Integer> input = new ArrayList<>();

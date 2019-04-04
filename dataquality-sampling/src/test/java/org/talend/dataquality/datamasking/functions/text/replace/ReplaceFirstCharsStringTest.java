@@ -22,7 +22,6 @@ import java.util.Random;
 import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.datamasking.FunctionMode;
-import org.talend.dataquality.datamasking.functions.text.replace.ReplaceFirstCharsString;
 
 /**
  * created by jgonzalez on 29 juin 2015 Detailled comment
@@ -51,23 +50,25 @@ public class ReplaceFirstCharsStringTest {
     @Test
     public void random() {
         rfcs.parse("3,y", false);
-        output = rfcs.generateMaskedRow(input, FunctionMode.RANDOM);
+        output = rfcs.generateMaskedRow(input);
         assertEquals("yyy456", output);
     }
 
     @Test
     public void consistent() {
+        rfcs.setMaskingMode(FunctionMode.CONSISTENT);
         rfcs.parse("3", false);
-        output = rfcs.generateMaskedRow(input, FunctionMode.CONSISTENT);
-        assertEquals(output, rfcs.generateMaskedRow(input, FunctionMode.CONSISTENT));
+        output = rfcs.generateMaskedRow(input);
+        assertEquals(output, rfcs.generateMaskedRow(input));
     }
 
     @Test
     public void consistentNoSeed() {
+        rfcs.setMaskingMode(FunctionMode.CONSISTENT);
         rfcs.setRandom(null);
         rfcs.parse("3", false);
-        output = rfcs.generateMaskedRow(input, FunctionMode.CONSISTENT);
-        assertEquals(output, rfcs.generateMaskedRow(input, FunctionMode.CONSISTENT));
+        output = rfcs.generateMaskedRow(input);
+        assertEquals(output, rfcs.generateMaskedRow(input));
     }
 
     @Test

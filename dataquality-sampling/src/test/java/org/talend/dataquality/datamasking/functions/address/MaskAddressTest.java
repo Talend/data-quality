@@ -99,9 +99,10 @@ public class MaskAddressTest {
 
     @Test
     public void consistentMasking() {
+        ma.setMaskingMode(FunctionMode.CONSISTENT);
         ma.setSeed("aSeed");
-        String result1 = ma.generateMaskedRow("9876543210 Golden State Freeway", FunctionMode.CONSISTENT);
-        String result2 = ma.generateMaskedRow("9876543210 Golden State Freeway", FunctionMode.CONSISTENT);
+        String result1 = ma.generateMaskedRow("9876543210 Golden State Freeway");
+        String result2 = ma.generateMaskedRow("9876543210 Golden State Freeway");
         assertEquals(result2, result1);
     }
 }

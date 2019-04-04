@@ -22,7 +22,6 @@ import java.util.Random;
 import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.datamasking.FunctionMode;
-import org.talend.dataquality.datamasking.functions.text.replace.ReplaceFirstCharsLong;
 
 /**
  * created by jgonzalez on 30 juin 2015 Detailled comment
@@ -51,7 +50,7 @@ public class ReplaceFirstCharsLongTest {
     @Test
     public void random() {
         rfcl.parse("3", false);
-        output = rfcl.generateMaskedRow(input, FunctionMode.RANDOM);
+        output = rfcl.generateMaskedRow(input);
         assertEquals(38456, output); // $NON-NLS-1$
     }
 
@@ -83,17 +82,19 @@ public class ReplaceFirstCharsLongTest {
 
     @Test
     public void consistent() {
+        rfcl.setMaskingMode(FunctionMode.CONSISTENT);
         rfcl.parse("3", false);
-        output = rfcl.generateMaskedRow(input, FunctionMode.CONSISTENT);
-        assertEquals(output, (long) rfcl.generateMaskedRow(input, FunctionMode.CONSISTENT));
+        output = rfcl.generateMaskedRow(input);
+        assertEquals(output, (long) rfcl.generateMaskedRow(input));
     }
 
     @Test
     public void consistentNoSeed() {
+        rfcl.setMaskingMode(FunctionMode.CONSISTENT);
         rfcl.setRandom(null);
         rfcl.parse("3", false);
-        output = rfcl.generateMaskedRow(input, FunctionMode.CONSISTENT);
-        assertEquals(output, (long) rfcl.generateMaskedRow(input, FunctionMode.CONSISTENT));
+        output = rfcl.generateMaskedRow(input);
+        assertEquals(output, (long) rfcl.generateMaskedRow(input));
     }
 
 }

@@ -19,7 +19,6 @@ import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.datamasking.functions.util.CharactersOperationUtils;
 import org.talend.dataquality.datamasking.semantic.AbstractDateFunction;
 
@@ -49,17 +48,12 @@ public class DateVariance extends AbstractDateFunction {
     }
 
     @Override
-    protected Date doGenerateMaskedField(Date date, FunctionMode mode) {
+    protected Date doGenerateMaskedField(Date date) {
         Random r = rnd;
-        if (CONSISTENT == mode) {
+        if (CONSISTENT == maskingMode) {
             r = getRandomForObject(date);
         }
         return doGenerateMaskedField(date, r);
-    }
-
-    @Override
-    protected Date doGenerateMaskedField(Date date) {
-        return doGenerateMaskedField(date, rnd);
     }
 
     @Override

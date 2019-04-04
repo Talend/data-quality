@@ -11,7 +11,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.datamasking.FormatPreservingMethod;
 import org.talend.dataquality.datamasking.FunctionMode;
-import org.talend.dataquality.datamasking.functions.text.keep.KeepFirstDigitsAndReplaceOtherDigits;
 import org.talend.dataquality.datamasking.functions.util.MockRandom;
 
 public class KeepFirstDigitsAndReplaceOtherDigitsTest {
@@ -37,22 +36,25 @@ public class KeepFirstDigitsAndReplaceOtherDigitsTest {
     @Test
     public void random() {
         kfag.parse("3", false);
-        output = kfag.generateMaskedRow(input, FunctionMode.RANDOM);
+        kfag.setMaskingMode(FunctionMode.RANDOM);
+        output = kfag.generateMaskedRow(input);
         assertEquals("a1b2c3d038", output); //$NON-NLS-1$
     }
 
     @Test
     public void consistent() {
         kfag.parse("3", false);
-        output = kfag.generateMaskedRow(input, FunctionMode.CONSISTENT);
-        assertEquals(output, kfag.generateMaskedRow(input, FunctionMode.CONSISTENT)); //$NON-NLS-1$
+        kfag.setMaskingMode(FunctionMode.CONSISTENT);
+        output = kfag.generateMaskedRow(input);
+        assertEquals(output, kfag.generateMaskedRow(input)); // $NON-NLS-1$
     }
 
     @Test
     public void bijectiveReplaceOnlyDigits() {
         kfag.parse("2", false);
+        kfag.setMaskingMode(FunctionMode.BIJECTIVE);
         kfag.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF, "data");
-        String output = kfag.generateMaskedRow(input, FunctionMode.BIJECTIVE);
+        String output = kfag.generateMaskedRow(input);
         assertEquals(input.length(), output.length());
         assertEquals('d', output.charAt(6));
     }
@@ -60,6 +62,7 @@ public class KeepFirstDigitsAndReplaceOtherDigitsTest {
     @Test
     public void bijective() {
         kfag.parse("1", false);
+        kfag.setMaskingMode(FunctionMode.BIJECTIVE);
         kfag.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF, "data");
         Set<String> outputSet = new HashSet<>();
         for (int i = 0; i < 1000; i++) {
@@ -70,40 +73,44 @@ public class KeepFirstDigitsAndReplaceOtherDigitsTest {
                 sb.append(0);
             }
             String input = sb.append(i).toString();
-            outputSet.add(kfag.generateMaskedRow(input, FunctionMode.BIJECTIVE));
+            outputSet.add(kfag.generateMaskedRow(input));
         }
-        assertEquals(1000, outputSet.size()); //$NON-NLS-1$
+        assertEquals(1000, outputSet.size()); // $NON-NLS-1$
     }
 
     @Test
     public void bijectiveReturnsNullIfOneDigitToReplace() {
         kfag.parse("2", false);
+        kfag.setMaskingMode(FunctionMode.BIJECTIVE);
         kfag.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF, "data");
-        String output = kfag.generateMaskedRow("abc123", FunctionMode.BIJECTIVE);
+        String output = kfag.generateMaskedRow("abc123");
         assertNull(output);
     }
 
     @Test
     public void bijectiveReturnsNullIfSmallerThanParam() {
         kfag.parse("2", false);
+        kfag.setMaskingMode(FunctionMode.BIJECTIVE);
         kfag.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF, "data");
-        String output = kfag.generateMaskedRow("a", FunctionMode.BIJECTIVE);
+        String output = kfag.generateMaskedRow("a");
         assertNull(output);
     }
 
     @Test
     public void randomReturnsInputIfSmallerThanParam() {
         kfag.parse("2", false);
+        kfag.setMaskingMode(FunctionMode.RANDOM);
         kfag.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF, "data");
-        String output = kfag.generateMaskedRow("a", FunctionMode.RANDOM);
+        String output = kfag.generateMaskedRow("a");
         assertEquals("a", output);
     }
 
     @Test
     public void consistentNoSeed() {
         kfag.parse("3", false);
-        output = kfag.generateMaskedRow(input, FunctionMode.CONSISTENT);
-        assertEquals(output, kfag.generateMaskedRow(input, FunctionMode.CONSISTENT)); //$NON-NLS-1$
+        kfag.setMaskingMode(FunctionMode.CONSISTENT);
+        output = kfag.generateMaskedRow(input);
+        assertEquals(output, kfag.generateMaskedRow(input)); // $NON-NLS-1$
     }
 
     @Test

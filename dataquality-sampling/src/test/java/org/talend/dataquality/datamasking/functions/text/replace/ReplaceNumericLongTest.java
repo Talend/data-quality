@@ -22,7 +22,6 @@ import java.util.Random;
 import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.datamasking.FunctionMode;
-import org.talend.dataquality.datamasking.functions.text.replace.ReplaceNumericLong;
 
 /**
  * created by jgonzalez on 25 juin 2015 Detailled comment
@@ -51,7 +50,7 @@ public class ReplaceNumericLongTest {
     @Test
     public void random() {
         rnl.parse("6", false);
-        output = rnl.generateMaskedRow(input, FunctionMode.RANDOM);
+        output = rnl.generateMaskedRow(input);
         assertEquals(666, output);
     }
 
@@ -64,17 +63,19 @@ public class ReplaceNumericLongTest {
 
     @Test
     public void consistent() {
+        rnl.setMaskingMode(FunctionMode.CONSISTENT);
         rnl.parse(" ", false);
-        output = rnl.generateMaskedRow(input, FunctionMode.CONSISTENT);
-        assertEquals(output, (long) rnl.generateMaskedRow(input, FunctionMode.CONSISTENT)); // $NON-NLS-1$
+        output = rnl.generateMaskedRow(input);
+        assertEquals(output, (long) rnl.generateMaskedRow(input)); // $NON-NLS-1$
     }
 
     @Test
     public void consistentNoSeed() {
+        rnl.setMaskingMode(FunctionMode.CONSISTENT);
         rnl.setRandom(null);
         rnl.parse(" ", false);
-        output = rnl.generateMaskedRow(input, FunctionMode.CONSISTENT);
-        assertEquals(output, (long) rnl.generateMaskedRow(input, FunctionMode.CONSISTENT)); // $NON-NLS-1$
+        output = rnl.generateMaskedRow(input);
+        assertEquals(output, (long) rnl.generateMaskedRow(input)); // $NON-NLS-1$
     }
 
     @Test

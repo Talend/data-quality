@@ -80,9 +80,10 @@ public class GenerateSsnIndianTest {
 
     @Test
     public void consistentMasking() {
+        gni.setMaskingMode(FunctionMode.CONSISTENT);
         gni.setSeed("aSeed");
-        String result1 = gni.generateMaskedRow("112345678907", FunctionMode.CONSISTENT);
-        String result2 = gni.generateMaskedRow("112345678907", FunctionMode.CONSISTENT);
+        String result1 = gni.generateMaskedRow("112345678907");
+        String result2 = gni.generateMaskedRow("112345678907");
         assertEquals(result2, result1);
     }
 

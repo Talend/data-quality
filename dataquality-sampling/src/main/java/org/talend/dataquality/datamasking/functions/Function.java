@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -199,10 +198,6 @@ public abstract class Function<T> implements Serializable {
     }
 
     public T generateMaskedRow(T t) {
-        return generateMaskedRow(t, maskingMode);
-    }
-
-    public T generateMaskedRow(T t, FunctionMode mode) {
         if (t == null && keepNull) {
             return null;
         }
@@ -211,11 +206,15 @@ public abstract class Function<T> implements Serializable {
             return t;
         }
 
-        try {
-            return doGenerateMaskedField(t, mode);
-        } catch (NotImplementedException e) {
-            return doGenerateMaskedField(t);
-        }
+        return doGenerateMaskedField(t);
+    }
+
+    /**
+     * @deprecated the mode should be configured setMaskingMode method.
+     */
+    public T generateMaskedRow(T t, FunctionMode mode) {
+        setMaskingMode(mode);
+        return doGenerateMaskedField(t);
     }
 
     /**
@@ -253,10 +252,6 @@ public abstract class Function<T> implements Serializable {
      * @return A new value after applying the function.
      */
     protected abstract T doGenerateMaskedField(T t);
-
-    protected T doGenerateMaskedField(T t, FunctionMode mode) {
-        throw new NotImplementedException("Not implemented.");
-    }
 
     public void setSecret(FormatPreservingMethod method, String secret) {
         throw new UnsupportedOperationException("The class " + this.getClass().getName() + " should not use a secret.");

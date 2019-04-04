@@ -39,21 +39,16 @@ public class KeepFirstDigitsAndReplaceOtherDigits extends Function<String> {
 
     @Override
     protected String doGenerateMaskedField(String str) {
-        return doGenerateMaskedField(str, FunctionMode.RANDOM);
-    }
-
-    @Override
-    protected String doGenerateMaskedField(String str, FunctionMode mode) {
         if (integerParam < 0)
             return EMPTY_STRING;
 
         if (str == null || integerParam >= str.trim().length()) {
-            return mode == FunctionMode.BIJECTIVE ? null : str;
+            return maskingMode == FunctionMode.BIJECTIVE ? null : str;
         }
 
         StringBuilder sb = new StringBuilder(str.trim());
 
-        switch (mode) {
+        switch (maskingMode) {
         case CONSISTENT:
             generateConsistentDigits(sb);
             break;

@@ -25,7 +25,6 @@ import java.util.Random;
 import org.apache.commons.math3.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.datamasking.functions.Function;
 import org.talend.dataquality.datamasking.functions.FunctionString;
 import org.talend.dataquality.datamasking.semantic.ReplaceCharactersWithGeneration;
@@ -50,16 +49,6 @@ public class GenerateFromCompound extends FunctionString {
     private DictionarySnapshot dictionarySnapshot = null;
 
     private SemanticQualityAnalyzer analyzer = null;
-
-    @Override
-    protected String doGenerateMaskedField(String str, FunctionMode mode) {
-        return super.doGenerateMaskedField(str, mode);
-    }
-
-    @Override
-    protected String doGenerateMaskedField(String value) {
-        return doGenerateMaskedFieldWithRandom(value, rnd);
-    }
 
     @Override
     protected String doGenerateMaskedFieldWithRandom(String str, Random r) {

@@ -26,7 +26,6 @@ import org.junit.Test;
 import org.talend.dataquality.datamasking.FormatPreservingMethod;
 import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.datamasking.functions.text.Alphabet;
-import org.talend.dataquality.datamasking.functions.text.replace.ReplaceCharacters;
 
 /**
  * created by jgonzalez on 25 juin 2015 Detailled comment
@@ -80,25 +79,28 @@ public class ReplaceCharactersTest {
 
     @Test
     public void consistent() {
+        rc.setMaskingMode(FunctionMode.CONSISTENT);
         rc.parse(" ", false);
-        output = rc.generateMaskedRow(input, FunctionMode.CONSISTENT);
-        assertEquals(output, rc.generateMaskedRow(input, FunctionMode.CONSISTENT)); // $NON-NLS-1$
+        output = rc.generateMaskedRow(input);
+        assertEquals(output, rc.generateMaskedRow(input)); // $NON-NLS-1$
     }
 
     @Test
     public void consistentNoSeed() {
+        rc.setMaskingMode(FunctionMode.CONSISTENT);
         rc.setRandom(null);
         rc.parse(" ", false);
-        output = rc.generateMaskedRow(input, FunctionMode.CONSISTENT);
-        assertEquals(output, rc.generateMaskedRow(input, FunctionMode.CONSISTENT)); // $NON-NLS-1$
+        output = rc.generateMaskedRow(input);
+        assertEquals(output, rc.generateMaskedRow(input)); // $NON-NLS-1$
     }
 
     @Test
     public void bijectiveReplaceOnlyCharactersFromAlphabet() {
+        rc.setMaskingMode(FunctionMode.BIJECTIVE);
         rc.parse("", false);
         rc.setAlphabet(Alphabet.LATIN_LETTERS);
         rc.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF, "data");
-        String output = rc.generateMaskedRow(input, FunctionMode.BIJECTIVE);
+        String output = rc.generateMaskedRow(input);
         assertEquals("input : " + input + "\noutput : " + output, input.length(), output.length());
         assertEquals(input.substring(3, 6), output.substring(3, 6));
     }
@@ -107,6 +109,7 @@ public class ReplaceCharactersTest {
     public void bijective() {
         Alphabet alphabet = Alphabet.LATIN_LETTERS;
         rc.parse("", false);
+        rc.setMaskingMode(FunctionMode.BIJECTIVE);
         rc.setAlphabet(alphabet);
         rc.setSecret(FormatPreservingMethod.AES_CBC_PRF, "data");
         Set<String> outputSet = new HashSet<>();
@@ -117,7 +120,7 @@ public class ReplaceCharactersTest {
                 String input = prefix + String.valueOf(Character.toChars(alphabet.getCharactersMap().get(i)))
                         + String.valueOf(Character.toChars(alphabet.getCharactersMap().get(j))) + suffix;
 
-                outputSet.add(rc.generateMaskedRow(input, FunctionMode.BIJECTIVE));
+                outputSet.add(rc.generateMaskedRow(input));
             }
         }
         assertEquals((int) Math.pow(alphabet.getRadix(), 2), outputSet.size()); // $NON-NLS-1$

@@ -12,8 +12,6 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.semantic;
 
-import static org.talend.dataquality.datamasking.FunctionMode.CONSISTENT;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -57,17 +55,10 @@ public class DateFunctionAdapter extends Function<String> {
     }
 
     @Override
-    protected String doGenerateMaskedField(String input, FunctionMode mode) {
-        Random r = rnd;
-        if (CONSISTENT == mode) {
-            r = getRandomForObject(input);
-        }
-
-        return doGenerateMaskedField(input, r);
-    }
-
-    @Override
     protected String doGenerateMaskedField(String input) {
+        if (FunctionMode.CONSISTENT == maskingMode) {
+            return doGenerateMaskedField(input, getRandomForObject(input));
+        }
         return doGenerateMaskedField(input, rnd);
     }
 

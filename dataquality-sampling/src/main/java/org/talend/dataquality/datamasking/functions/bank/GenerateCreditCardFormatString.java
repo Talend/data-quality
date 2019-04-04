@@ -17,7 +17,6 @@ import static org.talend.dataquality.datamasking.FunctionMode.CONSISTENT;
 import java.util.Random;
 
 import org.apache.commons.lang3.StringUtils;
-import org.talend.dataquality.datamasking.FunctionMode;
 
 /**
  * created by jgonzalez on 19 juin 2015. See GenerateCreditCardFormat.
@@ -28,16 +27,10 @@ public class GenerateCreditCardFormatString extends GenerateCreditCardFormat<Str
     private static final long serialVersionUID = 3682663337119470753L;
 
     @Override
-    protected String doGenerateMaskedField(String str, FunctionMode mode) {
-        Random r = rnd;
-        if (CONSISTENT == mode)
-            r = getRandomForObject(str);
-
-        return doGenerateMaskedField(str, r);
-    }
-
-    @Override
     protected String doGenerateMaskedField(String str) {
+        if (CONSISTENT == maskingMode) {
+            return doGenerateMaskedField(str, getRandomForObject(str));
+        }
         return doGenerateMaskedField(str, rnd);
     }
 

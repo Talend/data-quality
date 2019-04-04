@@ -22,7 +22,6 @@ import java.util.Random;
 import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.datamasking.FunctionMode;
-import org.talend.dataquality.datamasking.functions.text.replace.ReplaceFirstCharsInteger;
 
 /**
  * created by jgonzalez on 30 juin 2015 Detailled comment
@@ -51,23 +50,25 @@ public class ReplaceFirstCharsIntegerTest {
     @Test
     public void random() {
         rfci.parse("3", false);
-        output = rfci.generateMaskedRow(input, FunctionMode.RANDOM);
+        output = rfci.generateMaskedRow(input);
         assertEquals(38456, output); // $NON-NLS-1$
     }
 
     @Test
     public void consistent() {
+        rfci.setMaskingMode(FunctionMode.CONSISTENT);
         rfci.parse("3", false);
-        output = rfci.generateMaskedRow(input, FunctionMode.CONSISTENT);
-        assertEquals(output, (int) rfci.generateMaskedRow(input, FunctionMode.CONSISTENT));
+        output = rfci.generateMaskedRow(input);
+        assertEquals(output, (int) rfci.generateMaskedRow(input));
     }
 
     @Test
     public void consistentNoSeed() {
+        rfci.setMaskingMode(FunctionMode.CONSISTENT);
         rfci.setRandom(null);
         rfci.parse("3", false);
-        output = rfci.generateMaskedRow(input, FunctionMode.CONSISTENT);
-        assertEquals(output, (int) rfci.generateMaskedRow(input, FunctionMode.CONSISTENT));
+        output = rfci.generateMaskedRow(input);
+        assertEquals(output, (int) rfci.generateMaskedRow(input));
     }
 
     @Test

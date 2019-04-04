@@ -83,9 +83,10 @@ public class GeneratePhoneNumberFrenchTest {
 
     @Test
     public void consistentMasking() {
+        gpn.setMaskingMode(FunctionMode.CONSISTENT);
         gpn.setSeed("aSeed");
-        String result1 = gpn.generateMaskedRow("+33 112345678", FunctionMode.CONSISTENT);
-        String result2 = gpn.generateMaskedRow("+33 112345678", FunctionMode.CONSISTENT);
+        String result1 = gpn.generateMaskedRow("+33 112345678");
+        String result2 = gpn.generateMaskedRow("+33 112345678");
         assertEquals(result2, result1);
     }
 }

@@ -12,11 +12,9 @@
 // ============================================================================
 package org.talend.dataquality.semantic.datamasking;
 
-import org.apache.commons.lang3.StringUtils;
-import org.junit.Assert;
-import org.junit.Test;
-import org.talend.dataquality.datamasking.FunctionMode;
-import org.talend.dataquality.datamasking.functions.util.KeysLoader;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -26,9 +24,11 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import org.apache.commons.lang3.StringUtils;
+import org.junit.Assert;
+import org.junit.Test;
+import org.talend.dataquality.datamasking.FunctionMode;
+import org.talend.dataquality.datamasking.functions.util.KeysLoader;
 
 /**
  * The Function which used to generate data by regex
@@ -73,27 +73,27 @@ public class GenerateFromRegexTest {
 
     /**
      * Test method for
-     * {@link org.talend.dataquality.semantic.datamasking.GenerateFromRegex#doGenerateMaskedField(java.lang.String)}.
+     * {@link org.talend.dataquality.semantic.datamasking.GenerateFromRegex#generateMaskedRow(java.lang.String)}.
      * case 1 keepNull is true and inputValue is null
      */
     @Test
     public void testDoGenerateMaskedFieldStringCase1() {
         GenerateFromRegex regexFunction = new GenerateFromRegex();
         regexFunction.parse("(0033 ?|\\+33 ?|0)[1-9]([-. ]?[0-9]{2}){4}", true); //$NON-NLS-1$
-        String maskResult = regexFunction.doGenerateMaskedField(null);
+        String maskResult = regexFunction.generateMaskedRow(null);
         assertNull("maskResult should be null", maskResult); //$NON-NLS-1$
     }
 
     /**
      * Test method for
-     * {@link org.talend.dataquality.semantic.datamasking.GenerateFromRegex#doGenerateMaskedField(java.lang.String)}.
+     * {@link org.talend.dataquality.semantic.datamasking.GenerateFromRegex#generateMaskedRow(java.lang.String)}.
      * case 2 keepNull is true and inputValue is empty
      */
     @Test
     public void testDoGenerateMaskedFieldStringCase2() {
         GenerateFromRegex regexFunction = new GenerateFromRegex();
         regexFunction.parse("(0033 ?|\\+33 ?|0)[1-9]([-. ]?[0-9]{2}){4}", true); //$NON-NLS-1$
-        String maskResult = regexFunction.doGenerateMaskedField(StringUtils.EMPTY);
+        String maskResult = regexFunction.generateMaskedRow(StringUtils.EMPTY);
         assertEquals("maskResult should be EMPTY", StringUtils.EMPTY, maskResult); //$NON-NLS-1$
     }
 
@@ -108,8 +108,8 @@ public class GenerateFromRegexTest {
         regexFunction.setSeed("12345");
         regexFunction.setMaskingMode(FunctionMode.CONSISTENT);
         regexFunction.parse("(0033 ?|\\+33 ?|0)[1-9]([-. ]?[0-9]{2}){4}", true); //$NON-NLS-1$
-        String maskResult = regexFunction.generateMaskedRow("+33145263761", FunctionMode.CONSISTENT);
-        String maskResult2 = regexFunction.generateMaskedRow("+33145263761", FunctionMode.CONSISTENT);
+        String maskResult = regexFunction.generateMaskedRow("+33145263761");
+        String maskResult2 = regexFunction.generateMaskedRow("+33145263761");
         assertEquals("+33 198-78 21 59", maskResult);
         assertEquals(maskResult2, maskResult);
     }
@@ -132,7 +132,7 @@ public class GenerateFromRegexTest {
         GenerateFromRegex regexFunction = new GenerateFromRegex();
         regexFunction.parse(regexStr, true);
         regexFunction.setRandom(random);
-        String maskResult = regexFunction.doGenerateMaskedField("any not empty value"); //$NON-NLS-1$
+        String maskResult = regexFunction.generateMaskedRow("any not empty value"); //$NON-NLS-1$
         Pattern compile = Pattern.compile(regexStr);
         Matcher matcher = compile.matcher(maskResult);
 
@@ -156,7 +156,7 @@ public class GenerateFromRegexTest {
             if (!compile.matcher(inputData).matches()) {
                 continue;
             }
-            String maskResult = regexFunction.doGenerateMaskedField(inputData);
+            String maskResult = regexFunction.generateMaskedRow(inputData);
             Matcher matcher = compile.matcher(maskResult);
 
             assertEquals("maskResult is correct result:" + maskResult, matcher.matches(), assertTrue); //$NON-NLS-1$
@@ -232,7 +232,7 @@ public class GenerateFromRegexTest {
         GenerateFromRegex regexFunction = new GenerateFromRegex();
         regexFunction.parse("^alcool|bière|tequila|pastis|champagne$", true);
         regexFunction.setRandom(new Random(12345));
-        String maskResult = regexFunction.doGenerateMaskedField("ABC");
+        String maskResult = regexFunction.generateMaskedRow("ABC");
         assertEquals("unexpected mask result! ", "pastis", maskResult);
     }
 

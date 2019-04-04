@@ -22,7 +22,6 @@ import java.util.Random;
 import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.datamasking.FunctionMode;
-import org.talend.dataquality.datamasking.functions.text.replace.ReplaceNumericInteger;
 
 /**
  * created by jgonzalez on 25 juin 2015 Detailled comment
@@ -51,7 +50,7 @@ public class ReplaceNumericIntegerTest {
     @Test
     public void random() {
         rni.parse("6", false);
-        output = rni.generateMaskedRow(input, FunctionMode.RANDOM);
+        output = rni.generateMaskedRow(input);
         assertEquals(666, output);
     }
 
@@ -64,17 +63,19 @@ public class ReplaceNumericIntegerTest {
 
     @Test
     public void consistent() {
+        rni.setMaskingMode(FunctionMode.CONSISTENT);
         rni.parse(" ", false);
-        output = rni.generateMaskedRow(input, FunctionMode.CONSISTENT);
-        assertEquals(output, (int) rni.generateMaskedRow(input, FunctionMode.CONSISTENT)); // $NON-NLS-1$
+        output = rni.generateMaskedRow(input);
+        assertEquals(output, (int) rni.generateMaskedRow(input)); // $NON-NLS-1$
     }
 
     @Test
     public void consistentNoSeed() {
+        rni.setMaskingMode(FunctionMode.CONSISTENT);
         rni.setRandom(null);
         rni.parse(" ", false);
-        output = rni.generateMaskedRow(input, FunctionMode.CONSISTENT);
-        assertEquals(output, (int) rni.generateMaskedRow(input, FunctionMode.CONSISTENT)); // $NON-NLS-1$
+        output = rni.generateMaskedRow(input);
+        assertEquals(output, (int) rni.generateMaskedRow(input)); // $NON-NLS-1$
     }
 
     @Test

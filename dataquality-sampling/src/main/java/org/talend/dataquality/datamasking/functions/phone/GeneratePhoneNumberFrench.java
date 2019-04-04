@@ -24,11 +24,6 @@ public class GeneratePhoneNumberFrench extends FunctionString {
     private static final long serialVersionUID = -1118298923509759266L;
 
     @Override
-    protected String doGenerateMaskedField(String str) {
-        return doGenerateMaskedFieldWithRandom(str, rnd);
-    }
-
-    @Override
     protected String doGenerateMaskedFieldWithRandom(String str, Random r) {
         StringBuilder result = new StringBuilder("+33 "); //$NON-NLS-1$
         result.append(r.nextInt(9) + 1);

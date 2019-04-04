@@ -60,17 +60,10 @@ public class GenerateBetweenNumeric extends GenerateBetween<String> {
     }
 
     @Override
-    protected String doGenerateMaskedField(String input, FunctionMode mode) {
-        Random r = rnd;
-        if (FunctionMode.CONSISTENT == mode)
-            r = getRandomForObject(input);
-
-        return doGenerateMaskedFieldWithRandom(input, r);
-
-    }
-
-    @Override
     protected String doGenerateMaskedField(String input) {
+        if (FunctionMode.CONSISTENT == maskingMode) {
+            return doGenerateMaskedFieldWithRandom(input, getRandomForObject(input));
+        }
         return doGenerateMaskedFieldWithRandom(input, rnd);
     }
 

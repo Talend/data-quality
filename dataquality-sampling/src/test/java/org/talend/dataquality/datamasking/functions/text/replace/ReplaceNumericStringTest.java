@@ -58,7 +58,7 @@ public class ReplaceNumericStringTest {
     @Test
     public void random() {
         rns.parse("0", false);
-        output = rns.generateMaskedRow(input, FunctionMode.RANDOM);
+        output = rns.generateMaskedRow(input);
         assertEquals("abc000def", output); //$NON-NLS-1$
     }
 
@@ -78,17 +78,19 @@ public class ReplaceNumericStringTest {
 
     @Test
     public void consistent() {
+        rns.setMaskingMode(FunctionMode.CONSISTENT);
         rns.parse(" ", false);
-        output = rns.generateMaskedRow(input, FunctionMode.CONSISTENT);
-        assertEquals(output, rns.generateMaskedRow(input, FunctionMode.CONSISTENT)); // $NON-NLS-1$
+        output = rns.generateMaskedRow(input);
+        assertEquals(output, rns.generateMaskedRow(input)); // $NON-NLS-1$
     }
 
     @Test
     public void consistentNoSeed() {
+        rns.setMaskingMode(FunctionMode.CONSISTENT);
         rns.setRandom(null);
         rns.parse(" ", false);
-        output = rns.generateMaskedRow(input, FunctionMode.CONSISTENT);
-        assertEquals(output, rns.generateMaskedRow(input, FunctionMode.CONSISTENT)); // $NON-NLS-1$
+        output = rns.generateMaskedRow(input);
+        assertEquals(output, rns.generateMaskedRow(input)); // $NON-NLS-1$
     }
 
     @Test

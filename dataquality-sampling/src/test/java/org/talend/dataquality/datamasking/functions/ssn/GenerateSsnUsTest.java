@@ -127,9 +127,10 @@ public class GenerateSsnUsTest {
 
     @Test
     public void consistentMasking() {
+        gsus.setMaskingMode(FunctionMode.CONSISTENT);
         gsus.setSeed("aSeed");
-        String result1 = gsus.generateMaskedRow("530-49-7984", FunctionMode.CONSISTENT);
-        String result2 = gsus.generateMaskedRow("530-49-7984", FunctionMode.CONSISTENT);
+        String result1 = gsus.generateMaskedRow("530-49-7984");
+        String result2 = gsus.generateMaskedRow("530-49-7984");
         assertEquals(result2, result1);
     }
 }

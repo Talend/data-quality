@@ -24,11 +24,6 @@ public class GeneratePhoneNumberJapan extends FunctionString {
     private static final long serialVersionUID = -1152538201280991701L;
 
     @Override
-    protected String doGenerateMaskedField(String str) {
-        return doGenerateMaskedFieldWithRandom(str, rnd);
-    }
-
-    @Override
     protected String doGenerateMaskedFieldWithRandom(String str, Random r) {
         StringBuilder result = new StringBuilder("03-"); //$NON-NLS-1$
         addFourRandomDigit(result, r);

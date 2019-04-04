@@ -19,7 +19,6 @@ import java.util.Random;
 import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.datamasking.FunctionMode;
-import org.talend.dataquality.datamasking.functions.text.replace.ReplaceLastCharsInteger;
 
 /**
  * created by jgonzalez on 1 juil. 2015 Detailled comment
@@ -42,35 +41,37 @@ public class ReplaceLastCharsIntegerTest {
     public void defaultBehavior() {
         rlci.parse("3", false);
         output = rlci.generateMaskedRow(input);
-        assertEquals(123038, output); //$NON-NLS-1$
+        assertEquals(123038, output); // $NON-NLS-1$
     }
 
     @Test
     public void random() {
         rlci.parse("3", false);
-        output = rlci.generateMaskedRow(input, FunctionMode.RANDOM);
-        assertEquals(123038, output); //$NON-NLS-1$
+        output = rlci.generateMaskedRow(input);
+        assertEquals(123038, output); // $NON-NLS-1$
     }
 
     @Test
     public void dummyHighParameter() {
         rlci.parse("7", false);
         output = rlci.generateMaskedRow(input);
-        assertEquals(38405, output); //$NON-NLS-1$
+        assertEquals(38405, output); // $NON-NLS-1$
     }
 
     @Test
     public void consistent() {
+        rlci.setMaskingMode(FunctionMode.CONSISTENT);
         rlci.parse("3", false);
-        output = rlci.generateMaskedRow(input, FunctionMode.CONSISTENT);
-        assertEquals(output, rlci.generateMaskedRow(input, FunctionMode.CONSISTENT).intValue());
+        output = rlci.generateMaskedRow(input);
+        assertEquals(output, rlci.generateMaskedRow(input).intValue());
     }
 
     @Test
     public void consistentNoSeed() {
+        rlci.setMaskingMode(FunctionMode.CONSISTENT);
         rlci.setRandom(null);
         rlci.parse("3", false);
-        output = rlci.generateMaskedRow(input, FunctionMode.CONSISTENT);
-        assertEquals(output, rlci.generateMaskedRow(input, FunctionMode.CONSISTENT).intValue());
+        output = rlci.generateMaskedRow(input);
+        assertEquals(output, rlci.generateMaskedRow(input).intValue());
     }
 }

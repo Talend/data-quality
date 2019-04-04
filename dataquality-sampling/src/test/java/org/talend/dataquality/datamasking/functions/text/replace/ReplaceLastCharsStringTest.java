@@ -19,7 +19,6 @@ import java.util.Random;
 import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.datamasking.FunctionMode;
-import org.talend.dataquality.datamasking.functions.text.replace.ReplaceLastCharsString;
 
 /**
  * created by jgonzalez on 29 juin 2015 Detailled comment
@@ -48,7 +47,7 @@ public class ReplaceLastCharsStringTest {
     @Test
     public void random() {
         rlcs.parse("3", false);
-        output = rlcs.generateMaskedRow(input, FunctionMode.RANDOM);
+        output = rlcs.generateMaskedRow(input);
         assertEquals("123038", output);
     }
 
@@ -68,16 +67,18 @@ public class ReplaceLastCharsStringTest {
 
     @Test
     public void consistent() {
+        rlcs.setMaskingMode(FunctionMode.CONSISTENT);
         rlcs.parse("3", false);
-        output = rlcs.generateMaskedRow(input, FunctionMode.CONSISTENT);
-        assertEquals(output, rlcs.generateMaskedRow(input, FunctionMode.CONSISTENT));
+        output = rlcs.generateMaskedRow(input);
+        assertEquals(output, rlcs.generateMaskedRow(input));
     }
 
     @Test
     public void consistentNoSeed() {
+        rlcs.setMaskingMode(FunctionMode.CONSISTENT);
         rlcs.setRandom(null);
         rlcs.parse("3", false);
-        output = rlcs.generateMaskedRow(input, FunctionMode.CONSISTENT);
-        assertEquals(output, rlcs.generateMaskedRow(input, FunctionMode.CONSISTENT));
+        output = rlcs.generateMaskedRow(input);
+        assertEquals(output, rlcs.generateMaskedRow(input));
     }
 }

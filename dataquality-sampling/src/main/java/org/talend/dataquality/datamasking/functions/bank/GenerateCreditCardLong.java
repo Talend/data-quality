@@ -12,12 +12,6 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.functions.bank;
 
-import org.talend.dataquality.datamasking.FunctionMode;
-
-import java.util.Random;
-
-import static org.talend.dataquality.datamasking.FunctionMode.CONSISTENT;
-
 /**
  * created by jgonzalez on 19 juin 2015. See GenerateCreditCardSimple.
  *
@@ -25,15 +19,6 @@ import static org.talend.dataquality.datamasking.FunctionMode.CONSISTENT;
 public class GenerateCreditCardLong extends GenerateCreditCardSimple<Long> {
 
     private static final long serialVersionUID = 7201691028765322530L;
-
-    @Override
-    protected Long doGenerateMaskedField(Long l, FunctionMode mode) {
-        Random r = rnd;
-        if (CONSISTENT == mode)
-            r = getRandomForObject(l);
-        generateCreditCard(r);
-        return number;
-    }
 
     @Override
     protected Long doGenerateMaskedField(Long l) {

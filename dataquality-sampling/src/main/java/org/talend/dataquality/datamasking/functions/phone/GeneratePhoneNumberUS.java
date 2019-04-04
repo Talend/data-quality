@@ -25,11 +25,6 @@ public class GeneratePhoneNumberUS extends FunctionString {
     private static final long serialVersionUID = 1160032103743243299L;
 
     @Override
-    protected String doGenerateMaskedField(String str) {
-        return doGenerateMaskedFieldWithRandom(str, rnd);
-    }
-
-    @Override
     protected String doGenerateMaskedFieldWithRandom(String str, Random r) {
         StringBuilder result = new StringBuilder();
         result.append(r.nextInt(8) + 2);

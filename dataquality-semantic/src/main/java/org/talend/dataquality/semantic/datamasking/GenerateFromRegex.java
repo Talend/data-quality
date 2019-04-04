@@ -35,16 +35,6 @@ public class GenerateFromRegex extends FunctionString {
 
     private static final String[] invalidKw = { "(?:", "(?!", "(?=", "[[:space:]]", "[[:digit:]]", "\\u" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.talend.dataquality.datamasking.functions.Function#doGenerateMaskedFieldWithRandom(java.lang.Object)
-     */
-    @Override
-    protected String doGenerateMaskedField(String inputValue) {
-        return doGenerateMaskedFieldWithRandom(inputValue, rnd);
-    }
-
     @Override
     protected String doGenerateMaskedFieldWithRandom(String str, Random r) {
         if (keepNull && str == null) {

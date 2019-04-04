@@ -28,15 +28,10 @@ public class FluctuateNumericString extends NumericVariance<String> {
     private static final Pattern patternInteger = Pattern.compile("^(\\+|-)?\\d+$");
 
     @Override
-    protected String doGenerateMaskedField(String str, FunctionMode mode) {
-        Random r = rnd;
-        if (FunctionMode.CONSISTENT == mode)
-            r = getRandomForObject(str);
-        return doGenerateMaskedField(str, r);
-    }
-
-    @Override
     protected String doGenerateMaskedField(String input) {
+        if (FunctionMode.CONSISTENT == maskingMode) {
+            return doGenerateMaskedField(input, getRandomForObject(input));
+        }
         return doGenerateMaskedField(input, rnd);
     }
 

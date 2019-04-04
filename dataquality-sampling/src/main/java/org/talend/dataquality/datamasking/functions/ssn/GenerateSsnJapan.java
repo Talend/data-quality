@@ -26,11 +26,6 @@ public class GenerateSsnJapan extends FunctionString {
     private static final long serialVersionUID = -8621894245597689328L;
 
     @Override
-    protected String doGenerateMaskedField(String str) {
-        return doGenerateMaskedFieldWithRandom(str, rnd);
-    }
-
-    @Override
     protected String doGenerateMaskedFieldWithRandom(String str, Random r) {
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < 12; ++i) {

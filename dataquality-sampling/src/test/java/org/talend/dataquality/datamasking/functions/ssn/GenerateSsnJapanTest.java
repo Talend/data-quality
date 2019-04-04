@@ -67,9 +67,10 @@ public class GenerateSsnJapanTest {
 
     @Test
     public void consistentMasking() {
+        gnj.setMaskingMode(FunctionMode.CONSISTENT);
         gnj.setSeed("aSeed");
-        String result1 = gnj.generateMaskedRow("038405589322", FunctionMode.CONSISTENT);
-        String result2 = gnj.generateMaskedRow("038405589322", FunctionMode.CONSISTENT);
+        String result1 = gnj.generateMaskedRow("038405589322");
+        String result2 = gnj.generateMaskedRow("038405589322");
         assertEquals(result2, result1);
     }
 }

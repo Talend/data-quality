@@ -62,9 +62,10 @@ public class GenerateCreditCardFormatLongTest {
 
     @Test
     public void consistentMasking() {
+        gccfl.setMaskingMode(FunctionMode.CONSISTENT);
         gccfl.setSeed("aSeed");
-        long result1 = gccfl.generateMaskedRow(4384055893226268L, FunctionMode.CONSISTENT);
-        long result2 = gccfl.generateMaskedRow(4384055893226268L, FunctionMode.CONSISTENT);
+        long result1 = gccfl.generateMaskedRow(4384055893226268L);
+        long result2 = gccfl.generateMaskedRow(4384055893226268L);
         assertEquals(result2, result1);
     }
 

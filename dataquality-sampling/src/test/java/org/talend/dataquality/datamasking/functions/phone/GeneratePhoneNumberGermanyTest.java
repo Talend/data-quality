@@ -84,9 +84,10 @@ public class GeneratePhoneNumberGermanyTest {
 
     @Test
     public void consistentMasking() {
+        gpng.setMaskingMode(FunctionMode.CONSISTENT);
         gpng.setSeed("aSeed");
-        String result1 = gpng.generateMaskedRow("030 12345678", FunctionMode.CONSISTENT);
-        String result2 = gpng.generateMaskedRow("030 12345678", FunctionMode.CONSISTENT);
+        String result1 = gpng.generateMaskedRow("030 12345678");
+        String result2 = gpng.generateMaskedRow("030 12345678");
         assertEquals(result2, result1);
     }
 }

@@ -66,7 +66,7 @@ public class NumericVarianceIntegerTest {
 
     /**
      * 
-     * {@link org.talend.dataquality.datamasking.functions.number.NumericVarianceInteger#doGenerateMaskedField(Integer)}
+     * {@link org.talend.dataquality.datamasking.functions.number.NumericVarianceInteger#generateMaskedRow(Integer)}
      */
     @Test
     public void testOverFlowCase() {

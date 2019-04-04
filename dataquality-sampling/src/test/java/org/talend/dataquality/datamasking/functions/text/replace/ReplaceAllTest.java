@@ -66,36 +66,40 @@ public class ReplaceAllTest {
 
     @Test
     public void randomWithSurrogate() {
-        output = ra.generateMaskedRow("\uD840\uDC40\uD840\uDFD3\uD841\uDC01\uD840\uDFD3", FunctionMode.RANDOM);
+        output = ra.generateMaskedRow("\uD840\uDC40\uD840\uDFD3\uD841\uDC01\uD840\uDFD3");
         assertEquals(4, output.codePoints().count()); // $NON-NLS-1$
     }
 
     @Test
     public void consistent() {
-        output = ra.generateMaskedRow(input, FunctionMode.CONSISTENT);
-        assertEquals(output, ra.generateMaskedRow(input, FunctionMode.CONSISTENT)); // $NON-NLS-1$
+        ra.setMaskingMode(FunctionMode.CONSISTENT);
+        output = ra.generateMaskedRow(input);
+        assertEquals(output, ra.generateMaskedRow(input)); // $NON-NLS-1$
     }
 
     @Test
     public void noSeedConsistent() {
+        ra.setMaskingMode(FunctionMode.CONSISTENT);
         ra.setRandom(null);
         ra.parse(" ", false);
-        output = ra.generateMaskedRow(input, FunctionMode.CONSISTENT);
-        assertEquals(output, ra.generateMaskedRow(input, FunctionMode.CONSISTENT)); // $NON-NLS-1$
+        output = ra.generateMaskedRow(input);
+        assertEquals(output, ra.generateMaskedRow(input)); // $NON-NLS-1$
     }
 
     @Test
     public void consistentWithSurrogate() {
-        output = ra.generateMaskedRow("\uD840\uDC40\uD840\uDFD3\uD841\uDC01\uD840\uDFD3", FunctionMode.CONSISTENT);
-        assertEquals(output, ra.generateMaskedRow("\uD840\uDC40\uD840\uDFD3\uD841\uDC01\uD840\uDFD3", FunctionMode.CONSISTENT));
+        ra.setMaskingMode(FunctionMode.CONSISTENT);
+        output = ra.generateMaskedRow("\uD840\uDC40\uD840\uDFD3\uD841\uDC01\uD840\uDFD3");
+        assertEquals(output, ra.generateMaskedRow("\uD840\uDC40\uD840\uDFD3\uD841\uDC01\uD840\uDFD3"));
     }
 
     @Test
     public void bijectiveWithSurrogate() {
+        ra.setMaskingMode(FunctionMode.BIJECTIVE);
         ra.setAlphabet(alphabet);
         ra.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF, "data");
         String input = "abc\uD840\uDC40\uD840\uDFD3\uD841\uDC01\uD840\uDFD3efgh";
-        String output = ra.generateMaskedRow(input, FunctionMode.BIJECTIVE);
+        String output = ra.generateMaskedRow(input);
         assertEquals(input.length(), output.length());
         assertEquals(input.substring(3, 11), output.substring(3, 11));
     }
@@ -103,15 +107,17 @@ public class ReplaceAllTest {
     @Test
     public void bijectiveTooShortValue() {
         String input = "a";
+        ra.setMaskingMode(FunctionMode.BIJECTIVE);
         ra.setAlphabet(alphabet);
         ra.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF, "data");
-        String output = ra.generateMaskedRow(input, FunctionMode.BIJECTIVE);
+        String output = ra.generateMaskedRow(input);
         assertNull(output);
     }
 
     @Test
     public void bijectivity() {
         ra.setRandom(null);
+        ra.setMaskingMode(FunctionMode.BIJECTIVE);
         ra.setAlphabet(alphabet);
         ra.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF, "data");
         Set<String> outputSet = new HashSet<>();
@@ -122,7 +128,7 @@ public class ReplaceAllTest {
                 String input = prefix + String.valueOf(Character.toChars(alphabet.getCharactersMap().get(i)))
                         + String.valueOf(Character.toChars(alphabet.getCharactersMap().get(j))) + suffix;
 
-                outputSet.add(ra.generateMaskedRow(input, FunctionMode.BIJECTIVE));
+                outputSet.add(ra.generateMaskedRow(input));
             }
         }
         assertEquals((int) Math.pow(alphabet.getRadix(), 2), outputSet.size()); // $NON-NLS-1$
@@ -151,6 +157,7 @@ public class ReplaceAllTest {
     public void bijectiveBestGuess() {
 
         ra.parse("", false);
+        ra.setMaskingMode(FunctionMode.BIJECTIVE);
         ra.setAlphabet(Alphabet.BEST_GUESS);
         ra.setSecret(FormatPreservingMethod.SHA2_HMAC_PRF, "data");
         Map<String, String> inputOutput = new LinkedHashMap<>();
@@ -168,7 +175,7 @@ public class ReplaceAllTest {
         inputOutput.put("\u4E00", "碽"); // Switch to consistent for the moment
 
         for (String input : inputOutput.keySet()) {
-            String output = ra.generateMaskedRow(input, FunctionMode.BIJECTIVE);
+            String output = ra.generateMaskedRow(input);
             assertEquals(inputOutput.get(input), output);
             assertTrue("The same charPatterns are present", checkPatterns(input, output));
         }

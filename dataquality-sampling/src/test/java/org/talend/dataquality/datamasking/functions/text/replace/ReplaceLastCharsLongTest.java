@@ -22,7 +22,6 @@ import java.util.Random;
 import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.datamasking.FunctionMode;
-import org.talend.dataquality.datamasking.functions.text.replace.ReplaceLastCharsLong;
 
 /**
  * created by jgonzalez on 1 juil. 2015 Detailled comment
@@ -51,7 +50,7 @@ public class ReplaceLastCharsLongTest {
     @Test
     public void random() {
         rlcl.parse("3", false);
-        output = rlcl.generateMaskedRow(input, FunctionMode.RANDOM);
+        output = rlcl.generateMaskedRow(input);
         assertEquals(123038, output); // $NON-NLS-1$
     }
 
@@ -82,17 +81,19 @@ public class ReplaceLastCharsLongTest {
 
     @Test
     public void consistent() {
+        rlcl.setMaskingMode(FunctionMode.CONSISTENT);
         rlcl.parse("3", false);
-        output = rlcl.generateMaskedRow(input, FunctionMode.CONSISTENT);
-        assertEquals(output, (long) rlcl.generateMaskedRow(input, FunctionMode.CONSISTENT));
+        output = rlcl.generateMaskedRow(input);
+        assertEquals(output, (long) rlcl.generateMaskedRow(input));
     }
 
     @Test
     public void consistentNoSeed() {
+        rlcl.setMaskingMode(FunctionMode.CONSISTENT);
         rlcl.setRandom(null);
         rlcl.parse("3", false);
-        output = rlcl.generateMaskedRow(input, FunctionMode.CONSISTENT);
-        assertEquals(output, (long) rlcl.generateMaskedRow(input, FunctionMode.CONSISTENT));
+        output = rlcl.generateMaskedRow(input);
+        assertEquals(output, (long) rlcl.generateMaskedRow(input));
     }
 
 }

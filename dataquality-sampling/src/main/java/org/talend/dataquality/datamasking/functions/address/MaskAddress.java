@@ -41,11 +41,6 @@ public class MaskAddress extends FunctionString {
             "VLE", "VOIE", "VORORT", "VÍA", "WAY", "WEG", "ZONA", "ZONE", "ÁREA", "ÜBER"));
 
     @Override
-    protected String doGenerateMaskedField(String str) {
-        return doGenerateMaskedFieldWithRandom(str, rnd);
-    }
-
-    @Override
     protected String doGenerateMaskedFieldWithRandom(String str, Random r) {
         StringBuilder sb = new StringBuilder();
         if (str != null && !EMPTY_STRING.equals(str) && !(" ").equals(str)) { //$NON-NLS-1$

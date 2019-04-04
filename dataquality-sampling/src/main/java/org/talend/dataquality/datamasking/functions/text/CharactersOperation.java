@@ -18,7 +18,6 @@ import java.util.Random;
 
 import org.talend.dataquality.common.pattern.TextPatternUtil;
 import org.talend.dataquality.datamasking.FormatPreservingMethod;
-import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.datamasking.functions.Function;
 
 /**
@@ -98,11 +97,6 @@ public abstract class CharactersOperation<T> extends Function<T> {
 
     @Override
     protected T doGenerateMaskedField(T t) {
-        return doGenerateMaskedField(t, FunctionMode.RANDOM);
-    }
-
-    @Override
-    protected T doGenerateMaskedField(T t, FunctionMode mode) {
         if (!isValidParameters || t == null) {
             return getDefaultOutput();
         }
@@ -115,7 +109,7 @@ public abstract class CharactersOperation<T> extends Function<T> {
         sb.append(str, 0, str.offsetByCodePoints(0, beginAux));
         if (!toRemove) {
             String replacedString;
-            switch (mode) {
+            switch (maskingMode) {
             case CONSISTENT:
                 replacedString = generateConsistentString(str, beginAux, endAux);
                 break;

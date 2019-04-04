@@ -30,11 +30,6 @@ public class GenerateSsnChn extends FunctionString {
     private static final long serialVersionUID = 8845031997964609626L;
 
     @Override
-    protected String doGenerateMaskedField(String str) {
-        return doGenerateMaskedFieldWithRandom(str, rnd);
-    }
-
-    @Override
     protected String doGenerateMaskedFieldWithRandom(String str, Random r) {
         StringBuilder result = new StringBuilder();
 
