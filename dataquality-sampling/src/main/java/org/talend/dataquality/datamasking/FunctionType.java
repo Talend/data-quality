@@ -127,94 +127,6 @@ import org.talend.dataquality.datamasking.semantic.ReplaceCharactersWithGenerati
 public enum FunctionType {
 
     /**
-     * SET_TO_NULL
-     */
-    SET_TO_NULL(SetToNull.class, FunctionCategory.SET_TO_NULL),
-
-    /**
-     * EMAIL_MASKING
-     */
-    MASK_EMAIL(MaskEmailLocalPartByX.class, FunctionCategory.EMAIL_MASKING),
-    MASK_EMAIL_LOCALPART_BY_X(MaskEmailLocalPartByX.class, FunctionCategory.EMAIL_MASKING),
-    MASK_EMAIL_LOCALPART_RANDOMLY(MaskEmailLocalPartRandomly.class, FunctionCategory.EMAIL_MASKING),
-    MASK_FULL_EMAIL_DOMAIN_BY_X(MaskFullEmailDomainByX.class, FunctionCategory.EMAIL_MASKING),
-    MASK_FULL_EMAIL_DOMAIN_RANDOMLY(MaskFullEmailDomainRandomly.class, FunctionCategory.EMAIL_MASKING),
-    MASK_TOP_LEVEL_EMAIL_DOMAIN_BY_X(MaskTopEmailDomainByX.class, FunctionCategory.EMAIL_MASKING),
-    MASK_TOP_LEVEL_EMAIL_DOMAIN_RANDOMLY(MaskTopEmailDomainRandomly.class, FunctionCategory.EMAIL_MASKING),
-
-    /**
-     * SSN_GENERATION
-     */
-    GENERATE_SSN_CHINA(GenerateSsnChn.class, FunctionCategory.SSN_GENERATION),
-    GENERATE_SSN_FRENCH(GenerateSsnFr.class, FunctionCategory.SSN_GENERATION),
-    GENERATE_SSN_GERMANY(GenerateSsnGermany.class, FunctionCategory.SSN_GENERATION),
-    GENERATE_SSN_INDIA(GenerateSsnIndia.class, FunctionCategory.SSN_GENERATION),
-    GENERATE_SSN_JAPAN(GenerateSsnJapan.class, FunctionCategory.SSN_GENERATION),
-    GENERATE_SSN_UK(GenerateSsnUk.class, FunctionCategory.SSN_GENERATION),
-    GENERATE_SSN_US(GenerateSsnUs.class, FunctionCategory.SSN_GENERATION),
-
-    /**
-     * PHONE_GENERATION
-     */
-    GENERATE_PHONE_NUMBER_FRENCH(GeneratePhoneNumberFrench.class, FunctionCategory.PHONE_GENERATION),
-    GENERATE_PHONE_NUMBER_GERMANY(GeneratePhoneNumberGermany.class, FunctionCategory.PHONE_GENERATION),
-    GENERATE_PHONE_NUMBER_JAPAN(GeneratePhoneNumberJapan.class, FunctionCategory.PHONE_GENERATION),
-    GENERATE_PHONE_NUMBER_UK(GeneratePhoneNumberUK.class, FunctionCategory.PHONE_GENERATION),
-    GENERATE_PHONE_NUMBER_US(GeneratePhoneNumberUS.class, FunctionCategory.PHONE_GENERATION),
-
-    /**
-     * DATE_GENERATION
-     */
-    GENERATE_FROM_FILE_STRING_PROVIDED(GenerateFromFileStringProvided.class, FunctionCategory.DATA_GENERATION),
-    GENERATE_FROM_PATTERN(GenerateFromPattern.class, FunctionCategory.DATA_GENERATION),
-    GENERATE_UUID(GenerateUuid.class, FunctionCategory.DATA_GENERATION),
-
-    GENERATE_SEQUENCE(null, FunctionCategory.DATA_GENERATION),
-    GENERATE_SEQUENCE_DOUBLE(GenerateSequenceDouble.class, FunctionCategory.DATA_GENERATION),
-    GENERATE_SEQUENCE_FLOAT(GenerateSequenceFloat.class, FunctionCategory.DATA_GENERATION),
-    GENERATE_SEQUENCE_INT(GenerateSequenceInteger.class, FunctionCategory.DATA_GENERATION),
-    GENERATE_SEQUENCE_LONG(GenerateSequenceLong.class, FunctionCategory.DATA_GENERATION),
-    GENERATE_SEQUENCE_STRING(GenerateSequenceString.class, FunctionCategory.DATA_GENERATION),
-
-    GENERATE_FROM_FILE(GenerateFromFile.class, FunctionCategory.DATA_GENERATION),
-    GENERATE_FROM_FILE_INT(GenerateFromFileInteger.class, FunctionCategory.DATA_GENERATION),
-    GENERATE_FROM_FILE_LONG(GenerateFromFileLong.class, FunctionCategory.DATA_GENERATION),
-    GENERATE_FROM_FILE_STRING(GenerateFromFileString.class, FunctionCategory.DATA_GENERATION),
-    GENERATE_FROM_FILE_HASH(GenerateFromFileHash.class, FunctionCategory.DATA_GENERATION),
-    GENERATE_FROM_FILE_HASH_INT(GenerateFromFileHashInteger.class, FunctionCategory.DATA_GENERATION),
-    GENERATE_FROM_FILE_HASH_LONG(GenerateFromFileHashLong.class, FunctionCategory.DATA_GENERATION),
-    GENERATE_FROM_FILE_HASH_STRING(GenerateFromFileHashString.class, FunctionCategory.DATA_GENERATION),
-
-    GENERATE_FROM_LIST(GenerateFromFile.class, FunctionCategory.DATA_GENERATION),
-    GENERATE_FROM_LIST_INT(GenerateFromFileInteger.class, FunctionCategory.DATA_GENERATION),
-    GENERATE_FROM_LIST_LONG(GenerateFromFileLong.class, FunctionCategory.DATA_GENERATION),
-    GENERATE_FROM_LIST_STRING(GenerateFromFileString.class, FunctionCategory.DATA_GENERATION),
-    GENERATE_FROM_LIST_HASH(GenerateFromFileHash.class, FunctionCategory.DATA_GENERATION),
-    GENERATE_FROM_LIST_HASH_INT(GenerateFromFileHashInteger.class, FunctionCategory.DATA_GENERATION),
-    GENERATE_FROM_LIST_HASH_LONG(GenerateFromFileHashLong.class, FunctionCategory.DATA_GENERATION),
-    GENERATE_FROM_LIST_HASH_STRING(GenerateFromFileHashString.class, FunctionCategory.DATA_GENERATION),
-
-    /**
-     * SSN_MASKING
-     */
-    GENERATE_UNIQUE_SSN_CHINA(GenerateUniqueSsnChn.class, FunctionCategory.SSN_MASKING),
-    GENERATE_UNIQUE_SSN_FRENCH(GenerateUniqueSsnFr.class, FunctionCategory.SSN_MASKING),
-    GENERATE_UNIQUE_SSN_GERMANY(GenerateUniqueSsnGermany.class, FunctionCategory.SSN_MASKING),
-    GENERATE_UNIQUE_SSN_INDIA(GenerateUniqueSsnIndia.class, FunctionCategory.SSN_MASKING),
-    GENERATE_UNIQUE_SSN_JAPAN(GenerateUniqueSsnJapan.class, FunctionCategory.SSN_MASKING),
-    GENERATE_UNIQUE_SSN_UK(GenerateUniqueSsnUk.class, FunctionCategory.SSN_MASKING),
-    GENERATE_UNIQUE_SSN_US(GenerateUniqueSsnUs.class, FunctionCategory.SSN_MASKING),
-
-    /**
-     * PHONE_MASKING
-     */
-    GENERATE_UNIQUE_PHONE_NUMBER_FRENCH(GenerateUniquePhoneNumberFr.class, FunctionCategory.PHONE_MASKING),
-    GENERATE_UNIQUE_PHONE_NUMBER_GERMANY(GenerateUniquePhoneNumberGermany.class, FunctionCategory.PHONE_MASKING),
-    GENERATE_UNIQUE_PHONE_NUMBER_JAPAN(GenerateUniquePhoneNumberJapan.class, FunctionCategory.PHONE_MASKING),
-    GENERATE_UNIQUE_PHONE_NUMBER_UK(GenerateUniquePhoneNumberUk.class, FunctionCategory.PHONE_MASKING),
-    GENERATE_UNIQUE_PHONE_NUMBER_US(GenerateUniquePhoneNumberUs.class, FunctionCategory.PHONE_MASKING),
-
-    /**
      * CHARACTER_HANDLING
      */
     REPLACE_ALL(ReplaceAll.class, FunctionCategory.CHARACTER_HANDLING),
@@ -293,9 +205,10 @@ public enum FunctionType {
     NUMERIC_VARIANCE_LONG(NumericVarianceLong.class, FunctionCategory.NUMBER_HANDLING),
 
     /**
-     * ADDRESS_MASKING
+     * BANK_ACCOUNT_GENERATION
      */
-    MASK_ADDRESS(MaskAddress.class, FunctionCategory.ADDRESS_MASKING),
+    GENERATE_ACCOUNT_NUMBER(GenerateAccountNumberSimple.class, FunctionCategory.BANK_ACCOUNT_GENERATION),
+    GENERATE_ACCOUNT_NUMBER_FORMAT(GenerateAccountNumberFormat.class, FunctionCategory.BANK_ACCOUNT_GENERATION),
 
     /**
      * CREDIT_CARD_GENERATION
@@ -308,10 +221,97 @@ public enum FunctionType {
     GENERATE_CREDIT_CARD_STRING(GenerateCreditCardString.class, FunctionCategory.CREDIT_CARD_GENERATION),
 
     /**
-     * BANK_ACCOUNT_GENERATION
+     * DATA_GENERATION
      */
-    GENERATE_ACCOUNT_NUMBER(GenerateAccountNumberSimple.class, FunctionCategory.BANK_ACCOUNT_GENERATION),
-    GENERATE_ACCOUNT_NUMBER_FORMAT(GenerateAccountNumberFormat.class, FunctionCategory.BANK_ACCOUNT_GENERATION);
+    GENERATE_FROM_FILE_STRING_PROVIDED(GenerateFromFileStringProvided.class, FunctionCategory.DATA_GENERATION),
+    GENERATE_FROM_PATTERN(GenerateFromPattern.class, FunctionCategory.DATA_GENERATION),
+    GENERATE_UUID(GenerateUuid.class, FunctionCategory.DATA_GENERATION),
+
+    GENERATE_SEQUENCE(null, FunctionCategory.DATA_GENERATION),
+    GENERATE_SEQUENCE_DOUBLE(GenerateSequenceDouble.class, FunctionCategory.DATA_GENERATION),
+    GENERATE_SEQUENCE_FLOAT(GenerateSequenceFloat.class, FunctionCategory.DATA_GENERATION),
+    GENERATE_SEQUENCE_INT(GenerateSequenceInteger.class, FunctionCategory.DATA_GENERATION),
+    GENERATE_SEQUENCE_LONG(GenerateSequenceLong.class, FunctionCategory.DATA_GENERATION),
+    GENERATE_SEQUENCE_STRING(GenerateSequenceString.class, FunctionCategory.DATA_GENERATION),
+
+    GENERATE_FROM_FILE(GenerateFromFile.class, FunctionCategory.DATA_GENERATION),
+    GENERATE_FROM_FILE_INT(GenerateFromFileInteger.class, FunctionCategory.DATA_GENERATION),
+    GENERATE_FROM_FILE_LONG(GenerateFromFileLong.class, FunctionCategory.DATA_GENERATION),
+    GENERATE_FROM_FILE_STRING(GenerateFromFileString.class, FunctionCategory.DATA_GENERATION),
+    GENERATE_FROM_FILE_HASH(GenerateFromFileHash.class, FunctionCategory.DATA_GENERATION),
+    GENERATE_FROM_FILE_HASH_INT(GenerateFromFileHashInteger.class, FunctionCategory.DATA_GENERATION),
+    GENERATE_FROM_FILE_HASH_LONG(GenerateFromFileHashLong.class, FunctionCategory.DATA_GENERATION),
+    GENERATE_FROM_FILE_HASH_STRING(GenerateFromFileHashString.class, FunctionCategory.DATA_GENERATION),
+
+    GENERATE_FROM_LIST(GenerateFromFile.class, FunctionCategory.DATA_GENERATION),
+    GENERATE_FROM_LIST_INT(GenerateFromFileInteger.class, FunctionCategory.DATA_GENERATION),
+    GENERATE_FROM_LIST_LONG(GenerateFromFileLong.class, FunctionCategory.DATA_GENERATION),
+    GENERATE_FROM_LIST_STRING(GenerateFromFileString.class, FunctionCategory.DATA_GENERATION),
+    GENERATE_FROM_LIST_HASH(GenerateFromFileHash.class, FunctionCategory.DATA_GENERATION),
+    GENERATE_FROM_LIST_HASH_INT(GenerateFromFileHashInteger.class, FunctionCategory.DATA_GENERATION),
+    GENERATE_FROM_LIST_HASH_LONG(GenerateFromFileHashLong.class, FunctionCategory.DATA_GENERATION),
+    GENERATE_FROM_LIST_HASH_STRING(GenerateFromFileHashString.class, FunctionCategory.DATA_GENERATION),
+
+    /**
+     * PHONE_GENERATION
+     */
+    GENERATE_PHONE_NUMBER_FRENCH(GeneratePhoneNumberFrench.class, FunctionCategory.PHONE_GENERATION),
+    GENERATE_PHONE_NUMBER_GERMANY(GeneratePhoneNumberGermany.class, FunctionCategory.PHONE_GENERATION),
+    GENERATE_PHONE_NUMBER_JAPAN(GeneratePhoneNumberJapan.class, FunctionCategory.PHONE_GENERATION),
+    GENERATE_PHONE_NUMBER_UK(GeneratePhoneNumberUK.class, FunctionCategory.PHONE_GENERATION),
+    GENERATE_PHONE_NUMBER_US(GeneratePhoneNumberUS.class, FunctionCategory.PHONE_GENERATION),
+
+    /**
+     * SSN_GENERATION
+     */
+    GENERATE_SSN_CHINA(GenerateSsnChn.class, FunctionCategory.SSN_GENERATION),
+    GENERATE_SSN_FRENCH(GenerateSsnFr.class, FunctionCategory.SSN_GENERATION),
+    GENERATE_SSN_GERMANY(GenerateSsnGermany.class, FunctionCategory.SSN_GENERATION),
+    GENERATE_SSN_INDIA(GenerateSsnIndia.class, FunctionCategory.SSN_GENERATION),
+    GENERATE_SSN_JAPAN(GenerateSsnJapan.class, FunctionCategory.SSN_GENERATION),
+    GENERATE_SSN_UK(GenerateSsnUk.class, FunctionCategory.SSN_GENERATION),
+    GENERATE_SSN_US(GenerateSsnUs.class, FunctionCategory.SSN_GENERATION),
+
+    /**
+     * ADDRESS_MASKING
+     */
+    MASK_ADDRESS(MaskAddress.class, FunctionCategory.ADDRESS_MASKING),
+
+    /**
+     * EMAIL_MASKING
+     */
+    MASK_EMAIL(MaskEmailLocalPartByX.class, FunctionCategory.EMAIL_MASKING),
+    MASK_EMAIL_LOCALPART_BY_X(MaskEmailLocalPartByX.class, FunctionCategory.EMAIL_MASKING),
+    MASK_EMAIL_LOCALPART_RANDOMLY(MaskEmailLocalPartRandomly.class, FunctionCategory.EMAIL_MASKING),
+    MASK_FULL_EMAIL_DOMAIN_BY_X(MaskFullEmailDomainByX.class, FunctionCategory.EMAIL_MASKING),
+    MASK_FULL_EMAIL_DOMAIN_RANDOMLY(MaskFullEmailDomainRandomly.class, FunctionCategory.EMAIL_MASKING),
+    MASK_TOP_LEVEL_EMAIL_DOMAIN_BY_X(MaskTopEmailDomainByX.class, FunctionCategory.EMAIL_MASKING),
+    MASK_TOP_LEVEL_EMAIL_DOMAIN_RANDOMLY(MaskTopEmailDomainRandomly.class, FunctionCategory.EMAIL_MASKING),
+
+    /**
+     * PHONE_MASKING
+     */
+    GENERATE_UNIQUE_PHONE_NUMBER_FRENCH(GenerateUniquePhoneNumberFr.class, FunctionCategory.PHONE_MASKING),
+    GENERATE_UNIQUE_PHONE_NUMBER_GERMANY(GenerateUniquePhoneNumberGermany.class, FunctionCategory.PHONE_MASKING),
+    GENERATE_UNIQUE_PHONE_NUMBER_JAPAN(GenerateUniquePhoneNumberJapan.class, FunctionCategory.PHONE_MASKING),
+    GENERATE_UNIQUE_PHONE_NUMBER_UK(GenerateUniquePhoneNumberUk.class, FunctionCategory.PHONE_MASKING),
+    GENERATE_UNIQUE_PHONE_NUMBER_US(GenerateUniquePhoneNumberUs.class, FunctionCategory.PHONE_MASKING),
+
+    /**
+     * SSN_MASKING
+     */
+    GENERATE_UNIQUE_SSN_CHINA(GenerateUniqueSsnChn.class, FunctionCategory.SSN_MASKING),
+    GENERATE_UNIQUE_SSN_FRENCH(GenerateUniqueSsnFr.class, FunctionCategory.SSN_MASKING),
+    GENERATE_UNIQUE_SSN_GERMANY(GenerateUniqueSsnGermany.class, FunctionCategory.SSN_MASKING),
+    GENERATE_UNIQUE_SSN_INDIA(GenerateUniqueSsnIndia.class, FunctionCategory.SSN_MASKING),
+    GENERATE_UNIQUE_SSN_JAPAN(GenerateUniqueSsnJapan.class, FunctionCategory.SSN_MASKING),
+    GENERATE_UNIQUE_SSN_UK(GenerateUniqueSsnUk.class, FunctionCategory.SSN_MASKING),
+    GENERATE_UNIQUE_SSN_US(GenerateUniqueSsnUs.class, FunctionCategory.SSN_MASKING),
+
+    /**
+     * SET_TO_NULL
+     */
+    SET_TO_NULL(SetToNull.class, FunctionCategory.SET_TO_NULL);
 
     private final Class<?> clazz;
 
