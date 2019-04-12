@@ -15,6 +15,7 @@ import org.talend.dataquality.datamasking.FormatPreservingMethod;
 import org.talend.dataquality.datamasking.SecretManager;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
+import org.talend.dataquality.datamasking.generic.patterns.EncryptionPatterns;
 import org.talend.dataquality.datamasking.generic.patterns.GenerateFormatPreservingPatterns;
 
 import com.idealista.fpe.algorithm.Cipher;
@@ -128,7 +129,7 @@ public class GenerateFromAlphabet implements Serializable {
                 positions.add(String.valueOf(position));
             }
         }
-        GenerateFormatPreservingPatterns generateFormatPreservingPatterns = new GenerateFormatPreservingPatterns(10, fields);
+        GenerateFormatPreservingPatterns generateFormatPreservingPatterns = new EncryptionPatterns(10, fields);
         StringBuilder maskedPositions = generateFormatPreservingPatterns.generateUniquePattern(positions, secretMng);
         return getMaskedCodePoints(maskedPositions, fields, originalCodePoints);
     }

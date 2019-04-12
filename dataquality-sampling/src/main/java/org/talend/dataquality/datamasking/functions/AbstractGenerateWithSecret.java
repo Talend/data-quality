@@ -4,7 +4,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.talend.dataquality.datamasking.FormatPreservingMethod;
 import org.talend.dataquality.datamasking.SecretManager;
 import org.talend.dataquality.datamasking.generic.patterns.AbstractGeneratePattern;
-import org.talend.dataquality.datamasking.generic.patterns.GenerateFormatPreservingPatterns;
+import org.talend.dataquality.datamasking.generic.patterns.DecryptionPatterns;
+import org.talend.dataquality.datamasking.generic.patterns.EncryptionPatterns;
 import org.talend.dataquality.datamasking.utils.crypto.BasicSpec;
 
 /**
@@ -42,7 +43,10 @@ public abstract class AbstractGenerateWithSecret extends Function<String> {
         if (FormatPreservingMethod.BASIC == secretMng.getMethod()) {
             secretMng.setKey(super.rnd.nextInt() % BasicSpec.BASIC_KEY_BOUND + BasicSpec.BASIC_KEY_OFFSET);
         } else {
-            pattern = new GenerateFormatPreservingPatterns(pattern.getFields());
+            if (isEncrypting)
+                pattern = new EncryptionPatterns(pattern.getFields());
+            else
+                pattern = new DecryptionPatterns(pattern.getFields());
         }
     }
 

@@ -10,7 +10,8 @@ import org.talend.dataquality.datamasking.SecretManager;
 import org.talend.dataquality.datamasking.functions.AbstractGenerateWithSecret;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
-import org.talend.dataquality.datamasking.generic.patterns.GenerateFormatPreservingPatterns;
+import org.talend.dataquality.datamasking.generic.patterns.DecryptionPatterns;
+import org.talend.dataquality.datamasking.generic.patterns.EncryptionPatterns;
 import org.talend.dataquality.datamasking.generic.patterns.GenerateUniqueRandomPatterns;
 
 /**
@@ -32,7 +33,10 @@ public abstract class AbstractGenerateUniquePhoneNumber extends AbstractGenerate
         if (FormatPreservingMethod.BASIC == secretMng.getMethod()) {
             secretMng.setKey(super.rnd.nextInt(Integer.MAX_VALUE - 1000000) + 1000000);
         } else {
-            pattern = new GenerateFormatPreservingPatterns(10, pattern.getFields());
+            if (isEncrypting)
+                pattern = new EncryptionPatterns(10, pattern.getFields());
+            else
+                pattern = new DecryptionPatterns(10, pattern.getFields());
         }
     }
 

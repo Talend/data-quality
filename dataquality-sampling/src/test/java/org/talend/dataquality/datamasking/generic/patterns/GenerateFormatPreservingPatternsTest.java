@@ -12,6 +12,20 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.generic.patterns;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,20 +40,12 @@ import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldEnum;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
 
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import static org.junit.Assert.*;
-
 @RunWith(MockitoJUnitRunner.class)
 public class GenerateFormatPreservingPatternsTest {
 
-    private GenerateFormatPreservingPatterns pattern;
+    private GenerateFormatPreservingPatterns encryptPattern;
+
+    private GenerateFormatPreservingPatterns decryptPattern;
 
     @Mock
     private com.idealista.fpe.algorithm.ff1.Cipher mockCipher;
@@ -52,16 +58,17 @@ public class GenerateFormatPreservingPatternsTest {
 
     @Before
     public void setUp() {
-        // pattern we want to test
-        List<AbstractField> fields = new ArrayList<AbstractField>();
-        List<String> enums = new ArrayList<String>(Arrays.asList("O", "P", "G", "U", "M", "S"));
+        // encryptPattern we want to test
+        List<AbstractField> fields = new ArrayList<>();
+        List<String> enums = new ArrayList<>(Arrays.asList("O", "P", "G", "U", "M", "S"));
         fields.add(new FieldEnum(enums, 1));
-        enums = new ArrayList<String>(Arrays.asList("SF", "KI", "QG", "DU"));
+        enums = new ArrayList<>(Arrays.asList("SF", "KI", "QG", "DU"));
         fields.add(new FieldEnum(enums, 2));
         fields.add(new FieldInterval(BigInteger.ZERO, BigInteger.valueOf(50)));
         fields.add(new FieldInterval(BigInteger.valueOf(5), BigInteger.valueOf(20)));
 
-        pattern = new GenerateFormatPreservingPatterns(2, fields);
+        encryptPattern = new EncryptionPatterns(2, fields);
+        decryptPattern = new DecryptionPatterns(2, fields);
         minValue = "OSF0005";
         maxValue = "SDU5020";
 
@@ -73,7 +80,7 @@ public class GenerateFormatPreservingPatternsTest {
         List<AbstractField> fields = new ArrayList<>();
         fields.add(new FieldInterval(BigInteger.ZERO, BigInteger.valueOf(9)));
 
-        GenerateFormatPreservingPatterns arabicDigits = new GenerateFormatPreservingPatterns(fields);
+        GenerateFormatPreservingPatterns arabicDigits = new EncryptionPatterns(fields);
         assertEquals(10, arabicDigits.getRadix());
     }
 
@@ -82,7 +89,7 @@ public class GenerateFormatPreservingPatternsTest {
         List<AbstractField> fields = new ArrayList<>();
         fields.add(new FieldInterval(BigInteger.ZERO, BigInteger.valueOf(255)));
 
-        GenerateFormatPreservingPatterns octet = new GenerateFormatPreservingPatterns(fields);
+        GenerateFormatPreservingPatterns octet = new EncryptionPatterns(fields);
         assertEquals(2, octet.getRadix());
     }
 
@@ -94,7 +101,7 @@ public class GenerateFormatPreservingPatternsTest {
         BigInteger card = new BigInteger("1" + new String(new char[10000]).replace("\0", "0"), 2);
         fields.add(new FieldInterval(BigInteger.ONE, card));
 
-        GenerateFormatPreservingPatterns bigPattern = new GenerateFormatPreservingPatterns(fields);
+        GenerateFormatPreservingPatterns bigPattern = new EncryptionPatterns(fields);
         assertEquals(2, bigPattern.getRadix());
     }
 
@@ -106,7 +113,7 @@ public class GenerateFormatPreservingPatternsTest {
         BigInteger card = new BigInteger("1" + new String(new char[10000]).replace("\0", "0"), 2).add(BigInteger.valueOf(-1L));
         fields.add(new FieldInterval(BigInteger.ONE, card));
 
-        GenerateFormatPreservingPatterns bigPattern = new GenerateFormatPreservingPatterns(fields);
+        GenerateFormatPreservingPatterns bigPattern = new EncryptionPatterns(fields);
         assertEquals(2, bigPattern.getRadix());
     }
 
@@ -118,7 +125,7 @@ public class GenerateFormatPreservingPatternsTest {
         BigInteger card = new BigInteger("1" + new String(new char[10000]).replace("\0", "0"), 2).add(BigInteger.ONE);
         fields.add(new FieldInterval(BigInteger.ONE, card));
 
-        GenerateFormatPreservingPatterns bigPattern = new GenerateFormatPreservingPatterns(fields);
+        GenerateFormatPreservingPatterns bigPattern = new EncryptionPatterns(fields);
         assertNotEquals(2, bigPattern.getRadix());
     }
 
@@ -132,7 +139,7 @@ public class GenerateFormatPreservingPatternsTest {
 
         fields.add(new FieldInterval(BigInteger.ONE, card));
 
-        GenerateFormatPreservingPatterns bigPattern = new GenerateFormatPreservingPatterns(fields);
+        GenerateFormatPreservingPatterns bigPattern = new EncryptionPatterns(fields);
         assertEquals(35, bigPattern.getRadix());
     }
 
@@ -145,14 +152,14 @@ public class GenerateFormatPreservingPatternsTest {
         BigInteger card = new BigInteger("1" + new String(new char[1000]).replace("\0", "0"), 35).add(BigInteger.ONE);
         fields.add(new FieldInterval(BigInteger.ONE, card));
 
-        GenerateFormatPreservingPatterns bigPattern = new GenerateFormatPreservingPatterns(fields);
+        GenerateFormatPreservingPatterns bigPattern = new EncryptionPatterns(fields);
         assertNotEquals(35, bigPattern.getRadix());
     }
 
     @Test
     public void worksForAllRadix() {
         for (int i = Character.MIN_RADIX; i <= Character.MAX_RADIX; i++) {
-            GenerateFormatPreservingPatterns pat = new GenerateFormatPreservingPatterns(i, pattern.getFields());
+            GenerateFormatPreservingPatterns pat = new EncryptionPatterns(i, encryptPattern.getFields());
             StringBuilder output = pat.generateUniquePattern(Arrays.asList("U", "KI", "45", "12"), secretMng);
             assertNotNull("Masking did not work with radix value of : " + i, output);
         }
@@ -161,7 +168,7 @@ public class GenerateFormatPreservingPatternsTest {
     @Test
     public void transformMinRankValue() throws NoSuchFieldException {
 
-        GenerateFormatPreservingPatterns mockPattern = new GenerateFormatPreservingPatterns(10,
+        GenerateFormatPreservingPatterns mockPattern = new EncryptionPatterns(10,
                 Collections.singletonList(new FieldInterval(BigInteger.ZERO, BigInteger.TEN)));
 
         Mockito.when(mockCipher.encrypt(Matchers.any(), Matchers.any(), Matchers.any(), Matchers.any()))
@@ -178,7 +185,7 @@ public class GenerateFormatPreservingPatternsTest {
     @Test
     public void transformMaxRankValue() throws NoSuchFieldException {
 
-        GenerateFormatPreservingPatterns mockPattern = new GenerateFormatPreservingPatterns(10,
+        GenerateFormatPreservingPatterns mockPattern = new EncryptionPatterns(10,
                 Collections.singletonList(new FieldInterval(BigInteger.ZERO, BigInteger.TEN)));
 
         Mockito.when(mockCipher.encrypt(Matchers.any(), Matchers.any(), Matchers.any(), Matchers.any()))
@@ -195,7 +202,7 @@ public class GenerateFormatPreservingPatternsTest {
     @Test
     public void generateUniqueStringAES() {
         SecretManager AESSecMng = new SecretManager(FormatPreservingMethod.AES_CBC_PRF, "#Datadriven2018");
-        StringBuilder result = pattern.generateUniqueString(Arrays.asList("U", "KI", "45", "12"), AESSecMng).orElse(null);
+        StringBuilder result = encryptPattern.generateUniqueString(Arrays.asList("U", "KI", "45", "12"), AESSecMng).orElse(null);
 
         String expected;
         if (AESSecMng.getCryptoSpec().getKeyLength() == 32) {
@@ -209,7 +216,7 @@ public class GenerateFormatPreservingPatternsTest {
 
     @Test
     public void generateUniqueStringHMAC() {
-        StringBuilder result = pattern.generateUniqueString(Arrays.asList("U", "KI", "45", "12"), secretMng).orElse(null);
+        StringBuilder result = encryptPattern.generateUniqueString(Arrays.asList("U", "KI", "45", "12"), secretMng).orElse(null);
 
         String expected;
         if (secretMng.getCryptoSpec().getKeyLength() == 32) {
@@ -223,38 +230,39 @@ public class GenerateFormatPreservingPatternsTest {
 
     @Test
     public void maskMinRankValue() {
-        StringBuilder result = pattern.generateUniqueString(Arrays.asList("O", "SF", "00", "5"), secretMng).orElse(null);
+        StringBuilder result = encryptPattern.generateUniqueString(Arrays.asList("O", "SF", "00", "5"), secretMng).orElse(null);
         assertNotNull(result);
         assertNotEquals(minValue, result.toString());
     }
 
     @Test
     public void maskMaxRankValue() {
-        StringBuilder result = pattern.generateUniqueString(Arrays.asList("S", "DU", "50", "20"), secretMng).orElse(null);
+        StringBuilder result = encryptPattern.generateUniqueString(Arrays.asList("S", "DU", "50", "20"), secretMng).orElse(null);
         assertNotNull(result);
         assertNotEquals(maxValue, result.toString());
     }
 
     @Test
     public void maskOutLimitValue() {
-        StringBuilder result = pattern.generateUniqueString(Arrays.asList("U", "KI", "52", "12"), secretMng).orElse(null);
+        StringBuilder result = encryptPattern.generateUniqueString(Arrays.asList("U", "KI", "52", "12"), secretMng).orElse(null);
         assertNull(result);
     }
 
     @Test
     public void ensureUniqueness() {
         Set<StringBuilder> uniqueSetTocheck = new HashSet<StringBuilder>();
-        for (BigInteger i = BigInteger.ZERO; i.compareTo(pattern.getFields().get(0).getWidth()) < 0; i = i.add(BigInteger.ONE)) {
-            for (BigInteger j = BigInteger.ZERO; j.compareTo(pattern.getFields().get(1).getWidth()) < 0; j = j
+        for (BigInteger i = BigInteger.ZERO; i.compareTo(encryptPattern.getFields().get(0).getWidth()) < 0; i = i
+                .add(BigInteger.ONE)) {
+            for (BigInteger j = BigInteger.ZERO; j.compareTo(encryptPattern.getFields().get(1).getWidth()) < 0; j = j
                     .add(BigInteger.ONE)) {
-                for (BigInteger k = BigInteger.ZERO; k.compareTo(pattern.getFields().get(2).getWidth()) < 0; k = k
+                for (BigInteger k = BigInteger.ZERO; k.compareTo(encryptPattern.getFields().get(2).getWidth()) < 0; k = k
                         .add(BigInteger.ONE)) {
-                    for (BigInteger l = BigInteger.ZERO; l.compareTo(pattern.getFields().get(3).getWidth()) < 0; l = l
+                    for (BigInteger l = BigInteger.ZERO; l.compareTo(encryptPattern.getFields().get(3).getWidth()) < 0; l = l
                             .add(BigInteger.ONE)) {
-                        StringBuilder uniqueMaskedNumber = pattern.generateUniqueString(
-                                new ArrayList<String>(
-                                        Arrays.asList(pattern.getFields().get(0).decode(i), pattern.getFields().get(1).decode(j),
-                                                pattern.getFields().get(2).decode(k), pattern.getFields().get(3).decode(l))),
+                        StringBuilder uniqueMaskedNumber = encryptPattern.generateUniqueString(
+                                new ArrayList<String>(Arrays.asList(encryptPattern.getFields().get(0).decode(i),
+                                        encryptPattern.getFields().get(1).decode(j), encryptPattern.getFields().get(2).decode(k),
+                                        encryptPattern.getFields().get(3).decode(l))),
                                 secretMng).orElse(null);
 
                         assertFalse(" we found twice the uniqueMaskedNumberList " + uniqueMaskedNumber,
@@ -264,5 +272,50 @@ public class GenerateFormatPreservingPatternsTest {
                 }
             }
         }
+    }
+
+    @Test
+    public void encryptDecryptAES() {
+        SecretManager AESSecMng = new SecretManager(FormatPreservingMethod.AES_CBC_PRF, "#Datadriven2018");
+        String input = "UKI4512";
+        String encrypted = encryptPattern.generateUniqueString(convert(input), AESSecMng).orElse(null).toString();
+        String decrypted = decryptPattern.generateUniqueString(convert(encrypted), AESSecMng).orElse(null).toString();
+        assertEquals(input, decrypted);
+    }
+
+    @Test
+    public void encryptDecryptHMAC() {
+        String input = "UKI4512";
+        String encrypted = encryptPattern.generateUniqueString(convert(input), secretMng).orElse(null).toString();
+        String decrypted = decryptPattern.generateUniqueString(convert(encrypted), secretMng).orElse(null).toString();
+        assertEquals(input, decrypted);
+    }
+
+    @Test
+    public void encryptDecryptAESDifferentPwd() {
+        SecretManager AESSecMngEncrypt = new SecretManager(FormatPreservingMethod.AES_CBC_PRF, "#Datadriven2018");
+        SecretManager AESSecMngDecrypt = new SecretManager(FormatPreservingMethod.AES_CBC_PRF, "#Datadriven201");
+        String input = "UKI4512";
+        String encrypted = encryptPattern.generateUniqueString(convert(input), AESSecMngEncrypt).orElse(null).toString();
+        String decrypted = decryptPattern.generateUniqueString(convert(encrypted), AESSecMngDecrypt).orElse(null).toString();
+        assertNotEquals(input, decrypted);
+    }
+
+    @Test
+    public void encryptDecryptDifferentMethod() {
+        SecretManager AESSecMngEncrypt = new SecretManager(FormatPreservingMethod.AES_CBC_PRF, "#Datadriven2018");
+        String input = "UKI4512";
+        String encrypted = encryptPattern.generateUniqueString(convert(input), AESSecMngEncrypt).orElse(null).toString();
+        String decrypted = decryptPattern.generateUniqueString(convert(encrypted), secretMng).orElse(null).toString();
+        assertNotEquals(input, decrypted);
+    }
+
+    private List<String> convert(String input) {
+        List<String> list = new ArrayList<>();
+        list.add(input.substring(0, 1));
+        list.add(input.substring(1, 3));
+        list.add(input.substring(3, 5));
+        list.add(input.substring(5, 7));
+        return list;
     }
 }

@@ -63,6 +63,8 @@ public abstract class Function<T> implements Serializable {
 
     protected boolean keepFormat = false;
 
+    protected boolean isEncrypting = true;
+
     protected String seed = RandomStringUtils.randomAlphanumeric(4);
 
     protected FunctionMode maskingMode = FunctionMode.RANDOM;
@@ -291,5 +293,13 @@ public abstract class Function<T> implements Serializable {
 
     public FunctionMode getMaskingMode() {
         return maskingMode;
+    }
+
+    public boolean isEncrypting() {
+        return isEncrypting;
+    }
+
+    public void setEncrypting(boolean encrypting) {
+        isEncrypting = encrypting;
     }
 }
