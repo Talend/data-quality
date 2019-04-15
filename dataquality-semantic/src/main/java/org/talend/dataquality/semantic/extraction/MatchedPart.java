@@ -94,7 +94,7 @@ public abstract class MatchedPart implements Comparable<MatchedPart> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(originalField, exactMatch, tokenPositions, priority);
+        return Objects.hash(exactMatch);
     }
 
     @Override
@@ -114,10 +114,6 @@ public abstract class MatchedPart implements Comparable<MatchedPart> {
         }
 
         MatchedPart otherMatchedPart = (MatchedPart) o;
-        return originalField.getValue().equals(otherMatchedPart.originalField.getValue())
-                && originalField.getSeparators().equals(otherMatchedPart.originalField.getSeparators())
-                && originalField.isStartingWithSeparator() == otherMatchedPart.originalField.isStartingWithSeparator()
-                && originalField.isEndingWithSeparator() == otherMatchedPart.originalField.isEndingWithSeparator()
-                && tokenPositions.equals(otherMatchedPart.tokenPositions) && exactMatch.equals(otherMatchedPart.exactMatch);
+        return originalField.equals(otherMatchedPart.originalField) && exactMatch.equals(otherMatchedPart.exactMatch);
     }
 }

@@ -1045,4 +1045,21 @@ public class ExtractFromDictionaryTest {
         String expected = "azer..";
         assertEquals(expected, dict.getMatches(tilde).get(0).getExactMatch());
     }
+
+    @Test
+    public void gender() {
+        DQCategory firstname = CategoryRegistryManager.getInstance()
+                .getCategoryMetadataByName(SemanticCategoryEnum.GENDER.getId());
+
+        ExtractFromDictionary efd = new ExtractFromDictionary(snapshot, firstname);
+        // input contains à with accent, the spelling is incorrect, but it should still match "Brazil" without accent in
+        // dico
+        TokenizedString input = new TokenizedString("Male and Female");
+        List<MatchedPart> expected = new ArrayList<>();
+        expected.add(new MatchedPartDict(input, 0, 0, "Male"));
+        expected.add(new MatchedPartDict(input, 2, 2, "Female"));
+
+        List<MatchedPart> actual = efd.getMatches(input);
+        assertEquals(expected, actual);
+    }
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -32,7 +33,7 @@ public class ExtractFromDictionary extends ExtractFromSemanticType {
 
     @Override
     public List<MatchedPart> getMatches(TokenizedString tokenizedField) {
-        Set<MatchedPart> uniqueMatchedParts = new TreeSet<>();
+        Set<MatchedPart> uniqueMatchedParts = new LinkedHashSet<>();
 
         uniqueMatchedParts.addAll(getMatchPart(tokenizedField, tokenizedField.getTokens()));
 

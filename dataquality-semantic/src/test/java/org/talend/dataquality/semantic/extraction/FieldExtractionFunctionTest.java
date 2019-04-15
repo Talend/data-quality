@@ -166,9 +166,9 @@ public class FieldExtractionFunctionTest {
         String field = "Bear, Polar bear, Teddy Bear, Canada, the United States, clermont ferrand.";
 
         Map<String, List<String>> expectedMatches = new HashMap<>();
-        expectedMatches.put("COUNTRY", Arrays.asList("United States", "Canada"));
+        expectedMatches.put("COUNTRY", Arrays.asList("Canada", "United States"));
         expectedMatches.put("FR_COMMUNE", Collections.singletonList("clermont ferrand"));
-        expectedMatches.put("ANIMAL", Arrays.asList("Bear"));
+        expectedMatches.put("ANIMAL", Arrays.asList("Bear", "bear"));
 
         assertEquals(expectedMatches, function.extractFieldParts(field));
     }
