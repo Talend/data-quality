@@ -1,6 +1,5 @@
 package org.talend.dataquality.datamasking.generic.patterns;
 
-import java.math.BigInteger;
 import java.util.List;
 
 import org.talend.dataquality.datamasking.SecretManager;
@@ -27,7 +26,7 @@ public class EncryptionPatterns extends GenerateFormatPreservingPatterns {
      *
      * However this method can be slow if there are a lot of invalid values
      * in the domain used ({@code [0, radix^numeralRank.length[ }).
-     * That is why we {@link #computeOptimalRadix(BigInteger)} is called during instantiation.
+     * That is why we {@link #computeOptimalRadix(java.math.BigInteger)} is called during instantiation.
      *
      * @param strs the string fields to encode
      * @param secretMng, the SecretManager instance providing the secrets to generate a unique string
