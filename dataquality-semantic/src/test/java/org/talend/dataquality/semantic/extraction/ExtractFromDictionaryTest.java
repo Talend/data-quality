@@ -1052,8 +1052,7 @@ public class ExtractFromDictionaryTest {
                 .getCategoryMetadataByName(SemanticCategoryEnum.GENDER.getId());
 
         ExtractFromDictionary efd = new ExtractFromDictionary(snapshot, firstname);
-        // input contains à with accent, the spelling is incorrect, but it should still match "Brazil" without accent in
-        // dico
+
         TokenizedString input = new TokenizedString("Male and Female");
         List<MatchedPart> expected = new ArrayList<>();
         expected.add(new MatchedPartDict(input, 0, 0, "Male"));
