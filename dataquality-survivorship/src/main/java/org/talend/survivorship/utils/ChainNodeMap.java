@@ -15,6 +15,7 @@ package org.talend.survivorship.utils;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import org.talend.survivorship.action.handler.AbstractChainOfResponsibilityHandler;
 
@@ -52,14 +53,51 @@ public class ChainNodeMap extends HashMap<String, AbstractChainOfResponsibilityH
      */
     public void linkNodes(int executeIndex, AbstractChainOfResponsibilityHandler value) {
         orderMap.put(executeIndex, value);
-        AbstractChainOfResponsibilityHandler preNode = orderMap.get(executeIndex - 1);
-        AbstractChainOfResponsibilityHandler nextNode = orderMap.get(executeIndex + 1);
+        AbstractChainOfResponsibilityHandler preNode = findpreviousNode(executeIndex);
+        AbstractChainOfResponsibilityHandler nextNode = findNextNode(executeIndex, findMaxIndex());
         if (preNode != null) {
             preNode.linkUISuccessor(value);
         }
         if (nextNode != null) {
             value.linkUISuccessor(nextNode);
         }
+    }
+
+    private int findMaxIndex() {
+        Set<Integer> keySet = orderMap.keySet();
+        Integer maxIndex = orderMap.size();
+        for (Integer currentIndex : keySet) {
+            if (maxIndex < currentIndex) {
+                maxIndex = currentIndex;
+            }
+        }
+        return maxIndex;
+    }
+
+    private AbstractChainOfResponsibilityHandler findNextNode(int currentIndex, int maxIndex) {
+        if (currentIndex >= maxIndex) {
+            return null;
+        }
+        int findIndex = currentIndex;
+        AbstractChainOfResponsibilityHandler nextNode = orderMap.get(findIndex + 1);
+        if (nextNode == null) {
+            findIndex = findIndex + 1;
+            return findNextNode(findIndex, maxIndex);
+        }
+        return nextNode;
+    }
+
+    private AbstractChainOfResponsibilityHandler findpreviousNode(int currentIndex) {
+        if (currentIndex < 0) {
+            return null;
+        }
+        int findIndex = currentIndex;
+        AbstractChainOfResponsibilityHandler previousNode = orderMap.get(findIndex - 1);
+        if (previousNode == null) {
+            findIndex = findIndex - 1;
+            return findpreviousNode(findIndex);
+        }
+        return previousNode;
     }
 
     /**
