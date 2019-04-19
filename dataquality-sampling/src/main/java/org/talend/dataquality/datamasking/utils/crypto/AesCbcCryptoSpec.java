@@ -41,8 +41,8 @@ public class AesCbcCryptoSpec implements AbstractCryptoSpec {
     }
 
     private int computeKeyLength() {
-        String javaVersion = System.getProperty("java.runtime.version");
-        String[] javaVersionElements = javaVersion.split("\\.|_|-b");
+        String javaVersion = Runtime.class.getPackage().getImplementationVersion();
+        String[] javaVersionElements = javaVersion.split("\\.|_|-");
 
         String major1 = javaVersionElements[0];
         String major2 = javaVersionElements[1];
