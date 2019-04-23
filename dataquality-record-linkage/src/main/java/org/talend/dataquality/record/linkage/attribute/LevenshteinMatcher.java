@@ -28,6 +28,7 @@ public class LevenshteinMatcher extends AbstractAttributeMatcher {
      * @see org.talend.dataquality.record.linkage.attribute.AbstractAttributeMatcher#getWeight(java.lang.String,
      * java.lang.String)
      */
+    @Override
     public double getWeight(String str1, String str2) {
         // get the max possible levenstein distance score for string
         int maxLen = Math.max(str1.length(), str2.length());
@@ -47,6 +48,7 @@ public class LevenshteinMatcher extends AbstractAttributeMatcher {
      * 
      * @see org.talend.dataquality.record.linkage.attribute.IAttributeMatcher#getMatchType()
      */
+    @Override
     public AttributeMatcherType getMatchType() {
         return AttributeMatcherType.LEVENSHTEIN;
     }

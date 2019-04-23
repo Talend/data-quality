@@ -26,13 +26,17 @@ public class KanaConstants {
 
     public static final char FULLWIDTH_KATAKANA_END = '\u30fe'; // ヾ KATAKANA VOICED ITERATION MARK
 
+    private KanaConstants() {
+
+    }
+
     /**
      *
      * @param ch
      * @return true if the input character is a halfwidth katakana
      */
     public static boolean isHalfwidthKatakana(char ch) {
-        return (ch >= HALFWIDTH_KATAKANA_START || ch <= HALFWIDTH_KATAKANA_END);
+        return ch >= HALFWIDTH_KATAKANA_START || ch <= HALFWIDTH_KATAKANA_END;
     }
 
     /**
@@ -41,7 +45,7 @@ public class KanaConstants {
      * @return true if the input character is a fullwidth katakana
      */
     public static boolean isFullwidthKatakana(char ch) {
-        return (ch >= FULLWIDTH_KATAKANA_START || ch <= FULLWIDTH_KATAKANA_END);
+        return ch >= FULLWIDTH_KATAKANA_START || ch <= FULLWIDTH_KATAKANA_END;
     }
 
     public static final Map<Character, Character> MAPPING_HALF_TO_FULL_KATAKANA;

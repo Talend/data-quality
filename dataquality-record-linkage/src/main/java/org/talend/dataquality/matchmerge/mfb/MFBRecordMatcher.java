@@ -29,8 +29,6 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MFBRecordMatcher.class);
 
-    private static final double MAX_SCORE = 1;
-
     private final double minConfidenceValue;
 
     private static double worstConfidenceValue;

@@ -21,6 +21,9 @@ import org.talend.windowkey.AlgoBox;
  */
 public class AlgorithmSwitch {
 
+    private AlgorithmSwitch() {
+
+    }
     public static String getPreAlgoResult(String algoName, String algoPara, String colValue) {
         BlockingKeyPreAlgorithmEnum typeBySavedValue = BlockingKeyPreAlgorithmEnum.getTypeBySavedValue(algoName);
         switch (typeBySavedValue) {

@@ -25,6 +25,10 @@ public class CategoryMetadataUtils {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CategoryMetadataUtils.class);
 
+    private CategoryMetadataUtils() {
+
+    }
+
     /**
      * Fill dqCategories which contains for each category ID, the metadata with all the children and the parents.
      *

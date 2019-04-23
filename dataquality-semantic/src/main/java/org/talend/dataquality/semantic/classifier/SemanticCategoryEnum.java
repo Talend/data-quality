@@ -337,6 +337,6 @@ public enum SemanticCategoryEnum {
         if ("".equals(catId)) {
             return UNKNOWN;
         }
-        return (DEFAULT_CATEGORY_NAMES.contains(catId)) ? valueOf(catId) : null;
+        return DEFAULT_CATEGORY_NAMES.contains(catId) ? valueOf(catId) : null;
     }
 }

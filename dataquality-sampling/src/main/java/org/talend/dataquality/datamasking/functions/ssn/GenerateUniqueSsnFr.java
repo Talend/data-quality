@@ -62,6 +62,7 @@ public class GenerateUniqueSsnFr extends AbstractGenerateUniqueSsn {
         return createFieldsListFromPattern();
     }
 
+    @Override
     protected List<String> splitFields(String str) {
         // read the input str
         List<String> strs = new ArrayList<>();

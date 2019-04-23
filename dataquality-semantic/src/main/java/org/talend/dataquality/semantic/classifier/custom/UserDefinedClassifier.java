@@ -219,11 +219,9 @@ public class UserDefinedClassifier extends AbstractSubCategoryClassifier {
             return false;
         }
         for (ISubCategory category : getClassifiers()) {
-            if (categoryId.equals(category.getId())) {
-                if (category.getValidator() instanceof UserDefinedRegexValidator) {
-                    AbstractRegexSemanticValidator validator = (AbstractRegexSemanticValidator) category.getValidator();
-                    return validator.getGenerexCompliant();
-                }
+            if (categoryId.equals(category.getId()) && category.getValidator() instanceof UserDefinedRegexValidator) {
+                AbstractRegexSemanticValidator validator = (AbstractRegexSemanticValidator) category.getValidator();
+                return validator.getGenerexCompliant();
             }
         }
         return false;

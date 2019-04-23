@@ -26,6 +26,7 @@ public class LCSMatcher extends AbstractAttributeMatcher {
      * 
      * @see org.talend.dataquality.record.linkage.attribute.IAttributeMatcher#getMatchType()
      */
+    @Override
     public AttributeMatcherType getMatchType() {
         return AttributeMatcherType.LCS;
     }
@@ -36,6 +37,7 @@ public class LCSMatcher extends AbstractAttributeMatcher {
      * @see org.talend.dataquality.record.linkage.attribute.AbstractAttributeMatcher#getWeight(java.lang.String,
      * java.lang.String)
      */
+    @Override
     public double getWeight(String string1, String string2) {
         final int lcs = longestSubstr(string1, string2);
         long maxLength = Math.max(string1.codePoints().count(), string2.codePoints().count());

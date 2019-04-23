@@ -54,6 +54,7 @@ public class FastReservoirSampleCollector<T> extends AbstractReservoirSampleColl
         this.rand = new SecureRandom();
     }
 
+    @Override
     protected void addIt(final List<T> candidates, T v) {
 
         if (count < nbSamples) {

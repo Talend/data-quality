@@ -29,10 +29,12 @@ class ProcessQueue<T> implements Queue<T> {
         this.initialContent = initialContent;
     }
 
+    @Override
     public boolean add(T t) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public boolean offer(T t) {
         return additionalContent.offer(t);
     }
@@ -104,6 +106,7 @@ class ProcessQueue<T> implements Queue<T> {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public boolean addAll(Collection<? extends T> c) {
         throw new UnsupportedOperationException();
     }

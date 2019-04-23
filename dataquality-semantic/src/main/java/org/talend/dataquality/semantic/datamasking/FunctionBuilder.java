@@ -4,6 +4,10 @@ import org.talend.dataquality.datamasking.functions.Function;
 
 public class FunctionBuilder {
 
+    private FunctionBuilder() {
+
+    }
+
     public static Function<String> functionInitializer(MaskableCategoryEnum cat)
             throws IllegalAccessException, InstantiationException {
         Function function = (Function<String>) cat.getFunctionType().getClazz().newInstance();

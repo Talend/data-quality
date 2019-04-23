@@ -42,7 +42,7 @@ import com.mifmif.common.regex.Generex;
  */
 public class GenerateFromCompound extends FunctionString {
 
-    private Logger LOGGER = LoggerFactory.getLogger(GenerateFromCompound.class);
+    private final Logger log = LoggerFactory.getLogger(GenerateFromCompound.class);
 
     private List<CategoryValues> categoryValues = null;
 
@@ -55,13 +55,13 @@ public class GenerateFromCompound extends FunctionString {
         String result = EMPTY_STRING;
         analyzer = new SemanticQualityAnalyzer(dictionarySnapshot,
                 new String[] { String.valueOf(categoryValues.stream().map(CategoryValues::getName).toArray()) });
-        Optional<List<CategoryValues>> categoryValues = findMatchTypes(str);
-        if (categoryValues.isPresent()) {
-            Distribution distribution = processDistribution(categoryValues.get(), r);
+        Optional<List<CategoryValues>> categValues = findMatchTypes(str);
+        if (categValues.isPresent()) {
+            Distribution distribution = processDistribution(categValues.get(), r);
             try {
                 result = getMaskedValue(str, distribution, r);
             } catch (IllegalAccessException | InstantiationException e) {
-                LOGGER.info(e.getMessage(), e);
+                log.info(e.getMessage(), e);
             }
         } else {
             ReplaceCharactersWithGeneration function = new ReplaceCharactersWithGeneration();
@@ -116,12 +116,13 @@ public class GenerateFromCompound extends FunctionString {
 
         List<Pair<String, Double>> probabilities = new ArrayList<>();
 
-        categories.forEach(categoryValues -> {
-            if (DICT.equals(categoryValues.getType()))
+        categories.forEach(categValues -> {
+            if (DICT.equals(categValues.getType()))
                 probabilities.add(
-                        new Pair(categoryValues.getCategoryId(), ((double) ((List) categoryValues.getValue()).size() / nbElem)));
-            else if (REGEX.equals(categoryValues.getType()))
-                probabilities.add(new Pair(categoryValues.getCategoryId(), (double) largestDict / nbElem));
+                                new Pair(categValues.getCategoryId(),
+                                        (double) ((List) categValues.getValue()).size() / nbElem));
+            else if (REGEX.equals(categValues.getType()))
+                probabilities.add(new Pair(categValues.getCategoryId(), (double) largestDict / nbElem));
         });
 
         return new Distribution(probabilities, r);

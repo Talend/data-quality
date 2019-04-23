@@ -208,10 +208,12 @@ public class StringsClusterAnalyzer implements Serializable {
             this.iterator = iterator;
         }
 
+        @Override
         public boolean hasNext() {
             return iterator.hasNext();
         }
 
+        @Override
         public Record next() {
             final String[] values = iterator.next();
             final Attribute value = new Attribute("col0");

@@ -50,7 +50,7 @@ public class UserDefinedRE2JRegexValidator extends UserDefinedRegexValidator {
         if (str == null || caseSensitiveRe2JPattern == null || caseInsensitiveRe2JPattern == null)
             return false;
 
-        return (caseSensitive ? caseSensitiveRe2JPattern.matcher(str.trim()).find()
-                : caseInsensitiveRe2JPattern.matcher(str.trim()).find());
+        return caseSensitive ? caseSensitiveRe2JPattern.matcher(str.trim()).find()
+                : caseInsensitiveRe2JPattern.matcher(str.trim()).find();
     }
 }

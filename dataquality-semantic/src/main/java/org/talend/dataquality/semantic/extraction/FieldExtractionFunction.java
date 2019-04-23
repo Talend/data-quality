@@ -40,7 +40,7 @@ public class FieldExtractionFunction {
 
     private List<ExtractFromSemanticType> functions;
 
-    private final Logger LOGGER = LoggerFactory.getLogger(FieldExtractionFunction.class);
+    private final Logger log = LoggerFactory.getLogger(FieldExtractionFunction.class);
 
     protected FieldExtractionFunction(List<ExtractFromSemanticType> functions) {
         this.functions = functions;
@@ -67,7 +67,7 @@ public class FieldExtractionFunction {
                 matchesByCategory.put(function.getCategoryName(), matchString);
                 matches.addAll(functionMatches);
             } catch (IllegalArgumentException exception) {
-                LOGGER.info(exception.getMessage(), exception);
+                log.info(exception.getMessage(), exception);
             }
         }
         Collections.sort(matches);

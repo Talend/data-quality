@@ -59,15 +59,15 @@ public enum Alphabet {
         charPatternCharacterMap = new HashMap<>();
         charPatternRankMap = new HashMap<>();
         for (CharPattern charPattern : CharPattern.values()) {
-            Map<Integer, Integer> charactersMap = new HashMap<>();
-            Map<Integer, Integer> ranksMap = new HashMap<>();
+            Map<Integer, Integer> charsMap = new HashMap<>();
+            Map<Integer, Integer> rankingMap = new HashMap<>();
             for (int pos = 0; pos < charPattern.getCodePointSize(); pos++) {
                 Integer codePoint = charPattern.getCodePointAt(pos);
-                charactersMap.put(pos, codePoint);
-                ranksMap.put(codePoint, pos);
+                charsMap.put(pos, codePoint);
+                rankingMap.put(codePoint, pos);
             }
-            charPatternCharacterMap.put(charPattern, charactersMap);
-            charPatternRankMap.put(charPattern, ranksMap);
+            charPatternCharacterMap.put(charPattern, charsMap);
+            charPatternRankMap.put(charPattern, rankingMap);
         }
     }
 

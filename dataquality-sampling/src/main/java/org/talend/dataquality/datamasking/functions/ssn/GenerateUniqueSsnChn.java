@@ -50,6 +50,7 @@ public class GenerateUniqueSsnChn extends AbstractGenerateUniqueSsn {
         return fields;
     }
 
+    @Override
     protected List<String> splitFields(String str) {
         // read the input str
         List<String> strs = new ArrayList<>();

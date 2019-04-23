@@ -22,6 +22,10 @@ public class TdqCategoriesFactory {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TdqCategoriesFactory.class);
 
+    private TdqCategoriesFactory() {
+
+    }
+
     public static final TdqCategories createEmptyTdqCategories() {
         return new TdqCategories( //
                 new BroadcastMetadataObject(Collections.emptyMap()), //

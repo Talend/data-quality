@@ -238,20 +238,20 @@ public abstract class GenerateFormatPreservingPatterns extends AbstractGenerateP
 
         int optimalRadix = Character.MIN_RADIX;
         double maxDensity = 0D;
-        for (int radix = Character.MIN_RADIX; radix <= Character.MAX_RADIX; radix++) {
+        for (int rx = Character.MIN_RADIX; rx <= Character.MAX_RADIX; rx++) {
             // The remainder of the euclidean division by 1 is only the decimal part of the value.
-            int ceilLog = (int) Math.ceil(cardLog / Math.log(radix));
+            int ceilLog = (int) Math.ceil(cardLog / Math.log(rx));
 
             // Compare the cardinality and radix ^ ( ceil( log_radix(N) ))
-            BigInteger radixPow = BigInteger.valueOf(radix).pow(ceilLog);
+            BigInteger radixPow = BigInteger.valueOf(rx).pow(ceilLog);
             int compare = card.compareTo(radixPow);
 
             if (compare == 0) {
-                return radix; // The cardinality is a perfect power of radix.
+                return rx; // The cardinality is a perfect power of radix.
             } else if (compare < 0) {
                 double density = new BigDecimal(card).divide(new BigDecimal(radixPow), MC).doubleValue();
                 if (Double.compare(density, maxDensity) > 0) {
-                    optimalRadix = radix;
+                    optimalRadix = rx;
                     maxDensity = density;
                 }
             } // else the pattern is too sparse on the current radix.

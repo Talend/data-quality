@@ -37,6 +37,7 @@ public class SoundexFRMatcher extends AbstractAttributeMatcher {
      * 
      * @see org.talend.dataquality.record.linkage.attribute.IAttributeMatcher#getMatchType()
      */
+    @Override
     public AttributeMatcherType getMatchType() {
         return AttributeMatcherType.SOUNDEX_FR;
     }
@@ -47,6 +48,7 @@ public class SoundexFRMatcher extends AbstractAttributeMatcher {
      * @see org.talend.dataquality.record.linkage.attribute.AbstractAttributeMatcher#getWeight(java.lang.String,
      * java.lang.String)
      */
+    @Override
     public double getWeight(String str1, String str2) {
         if (str1 == null) {
             return (str2 == null) ? 1 : 0;

@@ -214,6 +214,7 @@ public abstract class Function<T> implements Serializable {
     /**
      * @deprecated the mode should be configured setMaskingMode method.
      */
+    @Deprecated
     public T generateMaskedRow(T t, FunctionMode mode) {
         setMaskingMode(mode);
         return doGenerateMaskedField(t);

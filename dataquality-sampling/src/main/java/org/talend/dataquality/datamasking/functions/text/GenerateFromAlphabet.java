@@ -244,7 +244,7 @@ public class GenerateFromAlphabet implements Serializable {
         int rank = 0;
         for (CharPattern charPattern : charPatternSet) {
             if (charPattern.contains(codePoint))
-                return (rank + alphabet.getCharPatternRankMap().get(charPattern).get(codePoint));
+                return rank + alphabet.getCharPatternRankMap().get(charPattern).get(codePoint);
             else
                 rank += alphabet.getCharPatternRankMap().get(charPattern).size();
         }

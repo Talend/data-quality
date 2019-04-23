@@ -66,11 +66,11 @@ public class CharWidthConverter {
         for (int i = 0; i < sb.length(); i++) {
             final char ch = sb.charAt(i);
             if (ch >= '!' && ch <= '~') {
-                if ((ch >= '0' && ch <= '9')) {
+                if (ch >= '0' && ch <= '9') {
                     if (config.isConvertDigit()) {
                         sb.setCharAt(i, (char) (ch + HALF_FULL_ASCII_DIFF));
                     }
-                } else if ((ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z')) {
+                } else if (ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z') {
                     if (config.isConvertLetter()) {
                         sb.setCharAt(i, (char) (ch + HALF_FULL_ASCII_DIFF));
                     }
@@ -104,8 +104,8 @@ public class CharWidthConverter {
         final StringBuilder sb = new StringBuilder(input);
         for (int i = 0; i < sb.length(); i++) {
             char ch = sb.charAt(i);
-            if ((ch >= '！' && ch <= '～')) {
-                if ((ch >= '０' && ch <= '９')) {
+            if (ch >= '！' && ch <= '～') {
+                if (ch >= '０' && ch <= '９') {
                     if (config.isConvertDigit()) {
                         sb.setCharAt(i, (char) (ch - HALF_FULL_ASCII_DIFF));
                     }

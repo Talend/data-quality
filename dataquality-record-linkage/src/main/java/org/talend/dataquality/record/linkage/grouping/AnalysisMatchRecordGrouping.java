@@ -37,7 +37,7 @@ public class AnalysisMatchRecordGrouping extends AbstractRecordGrouping<Object> 
      */
     private static final String ISMASTER = "true"; //$NON-NLS-1$
 
-    private static Logger LOG = LoggerFactory.getLogger(AnalysisMatchRecordGrouping.class);
+    private final Logger log = LoggerFactory.getLogger(AnalysisMatchRecordGrouping.class);
 
     private List<String[]> resultStrList = new ArrayList<String[]>();
 
@@ -119,9 +119,9 @@ public class AnalysisMatchRecordGrouping extends AbstractRecordGrouping<Object> 
             }
             end();
         } catch (IOException e) {
-            LOG.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
         } catch (InterruptedException e) {
-            LOG.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             // clean up state...
             Thread.currentThread().interrupt();
         }

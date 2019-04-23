@@ -48,6 +48,10 @@ public class SurvivorshipUtils {
 
     public static final String DATA_TYPE = "DATA_TYPE"; //$NON-NLS-1$
 
+    private SurvivorshipUtils() {
+
+    }
+
     /**
      * 
      * zshen Comment method "createSurvivorShipAlgorithmParams".
