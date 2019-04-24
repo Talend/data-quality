@@ -118,9 +118,8 @@ public class GenerateFromCompound extends FunctionString {
 
         categories.forEach(categValues -> {
             if (DICT.equals(categValues.getType()))
-                probabilities.add(
-                                new Pair(categValues.getCategoryId(),
-                                        (double) ((List) categValues.getValue()).size() / nbElem));
+                probabilities
+                        .add(new Pair(categValues.getCategoryId(), (double) ((List) categValues.getValue()).size() / nbElem));
             else if (REGEX.equals(categValues.getType()))
                 probabilities.add(new Pair(categValues.getCategoryId(), (double) largestDict / nbElem));
         });
