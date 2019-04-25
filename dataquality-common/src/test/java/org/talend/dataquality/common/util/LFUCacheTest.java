@@ -1,4 +1,4 @@
-package org.talend.dataquality.semantic.recognizer;
+package org.talend.dataquality.common.util;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -7,11 +7,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
-import org.talend.dataquality.common.util.LFUCache;
 
 public class LFUCacheTest {
 
@@ -59,14 +57,10 @@ public class LFUCacheTest {
         List<String[]> records = new ArrayList<String[]>();
         try {
             Reader reader = new FileReader(LFUCacheTest.class.getResource(path).getPath());
-            CSVFormat csvFormat = CSVFormat.DEFAULT.withDelimiter(';').withFirstRecordAsHeader();
-            Iterable<CSVRecord> csvRecords = csvFormat.parse(reader);
+            List<String> lines = IOUtils.readLines(reader);
 
-            for (CSVRecord csvRecord : csvRecords) {
-                String[] values = new String[csvRecord.size()];
-                for (int i = 0; i < csvRecord.size(); i++) {
-                    values[i] = csvRecord.get(i);
-                }
+            for (int i = 1; i < lines.size(); i++) {
+                String[] values = lines.get(i).split(";");
                 records.add(values);
             }
         } catch (IOException e) {
