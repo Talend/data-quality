@@ -1,8 +1,5 @@
 package org.talend.dataquality.semantic.extraction;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -10,6 +7,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class that handles the extraction of the parts of a field that matches with elements in the given semantic categories.
@@ -40,7 +40,7 @@ public class FieldExtractionFunction {
 
     private List<ExtractFromSemanticType> functions;
 
-    private final Logger log = LoggerFactory.getLogger(FieldExtractionFunction.class);
+    private static final Logger log = LoggerFactory.getLogger(FieldExtractionFunction.class);
 
     protected FieldExtractionFunction(List<ExtractFromSemanticType> functions) {
         this.functions = functions;

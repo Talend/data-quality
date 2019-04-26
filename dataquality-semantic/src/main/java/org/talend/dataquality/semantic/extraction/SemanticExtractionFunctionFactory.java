@@ -27,19 +27,20 @@ public class SemanticExtractionFunctionFactory {
     public static FieldExtractionFunction createFieldExtractionFunction(List<String> categoryList,
             DictionarySnapshot dictionarySnapshot) {
 
-        dictionarySnapshot = dictionarySnapshot != null ? dictionarySnapshot : new StandardDictionarySnapshotProvider().get();
+        DictionarySnapshot tempDictionarySnapshot = dictionarySnapshot != null ? dictionarySnapshot
+                : new StandardDictionarySnapshotProvider().get();
 
         List<ExtractFromSemanticType> extractFunctions = new ArrayList<>();
         for (String semanticCategory : categoryList) {
 
-            DQCategory category = dictionarySnapshot != null ? dictionarySnapshot.getDQCategoryByName(semanticCategory)
+            DQCategory category = tempDictionarySnapshot != null ? tempDictionarySnapshot.getDQCategoryByName(semanticCategory)
                     : CategoryRegistryManager.getInstance().getCategoryMetadataByName(semanticCategory);
 
             if (category == null) {
                 throw new IllegalArgumentException("Invalid Semantic Category Name : " + semanticCategory);
             }
 
-            ExtractFromSemanticType function = getFunction(category, dictionarySnapshot);
+            ExtractFromSemanticType function = getFunction(category, tempDictionarySnapshot);
 
             if (function != null) {
                 extractFunctions.add(function);

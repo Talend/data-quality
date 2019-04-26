@@ -65,19 +65,6 @@ public enum MaskableCategoryEnum {
         this.functionType = functionType;
     }
 
-    /**
-     * SemanticCategoryEnum constructor.
-     * 
-     * @param displayName the category shown in Semantic Discovery wizard
-     * @param functionType the type of function, see {@link FunctionType}
-     * @param parameter the parameter which used by current functionType
-     */
-    private MaskableCategoryEnum(String displayName, FunctionType functionType, String parameter) {
-        this(displayName, functionType);
-        this.parameter = parameter;
-
-    }
-
     public String getId() {
         return name();
     }

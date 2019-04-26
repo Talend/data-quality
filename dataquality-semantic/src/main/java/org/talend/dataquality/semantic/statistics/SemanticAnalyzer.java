@@ -20,8 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.Metadata;
 import org.talend.dataquality.common.inference.ResizableList;
@@ -40,8 +38,6 @@ import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
 public class SemanticAnalyzer implements Analyzer<SemanticType> {
 
     private static final long serialVersionUID = 6808620909722453108L;
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(SemanticQualityAnalyzer.class);
 
     private static float DEFAULT_WEIGHT_VALUE = 0.1f;
 

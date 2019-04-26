@@ -5,6 +5,7 @@ public class DQSemanticRuntimeException extends RuntimeException {
     private static final long serialVersionUID = -617440686721994515L;
 
     public DQSemanticRuntimeException() {
+        // No need to implement
     }
 
     public DQSemanticRuntimeException(String message) {

@@ -38,6 +38,7 @@ public interface CategoryRecognizer {
      * @deprecated
      * Use getResult(String columnName, float weight) instead
      */
+    @Deprecated
     Collection<CategoryFrequency> getResult();
 
     /**

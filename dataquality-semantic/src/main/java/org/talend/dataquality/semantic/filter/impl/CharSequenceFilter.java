@@ -37,6 +37,7 @@ public class CharSequenceFilter implements ISemanticFilter {
     }
 
     public CharSequenceFilter() {
+        // No need to implement
     }
 
     public CharSequenceFilter(CharSequenceFilterType type, String param) {

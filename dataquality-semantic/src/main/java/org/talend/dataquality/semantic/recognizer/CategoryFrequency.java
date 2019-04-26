@@ -37,6 +37,7 @@ public class CategoryFrequency implements Comparable<CategoryFrequency>, Seriali
      * used for the deserialization
      */
     public CategoryFrequency() {
+        // No need to implement
     }
 
     /**
@@ -103,6 +104,7 @@ public class CategoryFrequency implements Comparable<CategoryFrequency>, Seriali
      * @deprecated use getScore() instead
      * @return
      */
+    @Deprecated
     public float getFrequency() {
         return score;
     }
@@ -153,9 +155,9 @@ public class CategoryFrequency implements Comparable<CategoryFrequency>, Seriali
     public int compareTo(CategoryFrequency o) {
         // The EMPTY category must always be ranked after the others
 
-        int count = Float.compare(this.getScore(), o.getScore());
-        if (count != 0) {
-            return count;
+        int count2 = Float.compare(this.getScore(), o.getScore());
+        if (count2 != 0) {
+            return count2;
         } else {
             int level = -Integer.compare(this.getCategoryLevel(), o.getCategoryLevel());
             if (level != 0) {

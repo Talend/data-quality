@@ -3,6 +3,7 @@ package org.talend.dataquality.semantic.exception;
 public class DQException extends Exception {
 
     public DQException() {
+        // No need to implement
     }
 
     public DQException(String message) {

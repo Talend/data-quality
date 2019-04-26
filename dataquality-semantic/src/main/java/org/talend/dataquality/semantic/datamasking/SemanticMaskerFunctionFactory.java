@@ -87,17 +87,16 @@ public class SemanticMaskerFunctionFactory {
                     }
                     break;
                 case COMPOUND:
-
                     DictionarySnapshot snapshotCompound = dictionarySnapshot != null ? dictionarySnapshot
                             : new StandardDictionarySnapshotProvider().get();
-
                     List types = GenerateValidator.initSemanticTypes(snapshotCompound, category, null);
-                    if (types.size() > 0) {
+                    if (!types.isEmpty()) {
                         function = new GenerateFromCompound();
                         ((GenerateFromCompound) function).setDictionarySnapshot(snapshotCompound);
                         ((GenerateFromCompound) function).setCategoryValues(types);
                     }
-
+                    break;
+                default:
                     break;
                 }
                 if (function != null)

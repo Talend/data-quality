@@ -138,14 +138,14 @@ public class DefaultCategoryRecognizer implements CategoryRecognizer {
         case BLANK:
             emptyCount++;
             break;
+        default:
         }
         return subCategorySet;
     }
 
     @Override
     public void prepare() {
-        // dictionary.initIndex();
-        // keyword.initIndex();
+        // no need to implement
     }
 
     @Override
@@ -171,9 +171,8 @@ public class DefaultCategoryRecognizer implements CategoryRecognizer {
             for (String id : ids) {
                 categoryToLevel.put(id, 0);
                 DQCategory meta = metadata.get(id);
-                if (meta != null) {
-                    if (!CollectionUtils.isEmpty(meta.getParents()))
-                        incrementAncestorsCategories(categoryToLevel, id);
+                if (meta != null && !CollectionUtils.isEmpty(meta.getParents())) {
+                    incrementAncestorsCategories(categoryToLevel, id);
                 }
             }
             for (Map.Entry<String, Integer> entry : categoryToLevel.entrySet()) {

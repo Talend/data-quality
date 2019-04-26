@@ -27,8 +27,6 @@ public class SemanticCategory implements Cloneable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SemanticCategory.class);
 
-    // TODO private CategoryFrequency categoryFrequency;
-
     /**
      * 
      * SemanticCategory constructor comment.
