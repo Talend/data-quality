@@ -54,8 +54,7 @@ public class GenerateBetweenDate extends AbstractDateFunction {
             long min = minDate.getTime();
             long max = maxDate.getTime();
             long number = min + ((long) (rnd.nextDouble() * (max - min)));
-            Date newDate = new Date(number);
-            return newDate;
+            return new Date(number);
         } else {
             return new Date(System.currentTimeMillis());
         }

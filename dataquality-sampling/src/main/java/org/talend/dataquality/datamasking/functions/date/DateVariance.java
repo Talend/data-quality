@@ -69,8 +69,7 @@ public class DateVariance extends AbstractDateFunction {
                 variation = Math.round((r.nextDouble() * 2 - 1) * integerParam * NB_MS_PER_DAY);
             } while (variation == 0);
             Long originalDate = date.getTime();
-            Date newDate = new Date(originalDate + variation);
-            return newDate;
+            return new Date(originalDate + variation);
         } else {
             return new Date(System.currentTimeMillis());
         }

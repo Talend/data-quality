@@ -66,16 +66,6 @@ public class ReleaseVersionBumper {
 
     private static final String BUNDLE_VERSION_STRING = "Bundle-Version: ";
 
-    private XPathFactory getXPathFactory() {
-        XPathFactory xpf = XPathFactory.newInstance();
-        try {
-            xpf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-        } catch (XPathFactoryConfigurationException e) {
-            System.out.println(e.getMessage());
-        }
-        return xpf;
-    }
-
     private XPath xPath = getXPathFactory().newXPath();
 
     private Transformer xTransformer;
@@ -84,6 +74,16 @@ public class ReleaseVersionBumper {
         xTransformer = TransformerFactory.newInstance().newTransformer();
         xTransformer.setOutputProperty(OutputKeys.INDENT, "yes");
         xTransformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+    }
+
+    private XPathFactory getXPathFactory() {
+        XPathFactory xpf = XPathFactory.newInstance();
+        try {
+            xpf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        } catch (XPathFactoryConfigurationException e) {
+            System.out.println(e.getMessage());
+        }
+        return xpf;
     }
 
     private void bumpPomVersion()

@@ -31,6 +31,30 @@ public class ListDomainsCheckerImpl extends AbstractEmailChecker {
 
     private Map<String, Pattern> listDomainsPatterns = new HashMap<String, Pattern>();
 
+    /**
+     * DOC talend ListDomainsCheckerImpl constructor comment.
+     * 
+     * @param isBlackListDomains
+     * @param listDomains
+     */
+    public ListDomainsCheckerImpl(boolean isBlackListDomains, List<String> listDomains) {
+        super();
+        this.isBlackListDomains = isBlackListDomains;
+        this.listDomains = listDomains;
+
+        // pre-compile the converted patterns to get better performance
+        if (listDomains != null) {
+            for (String domainPattern : listDomains) {
+                boolean isNeedConversion = domainPattern.indexOf('*') >= 0;
+                if (isNeedConversion) {
+                    String convertedPattern = domainPattern.replace("*", "[\\p{Alnum}-.]*").replace(".", "\\."); //$NON-NLS-1$ //$NON-NLS-2$
+                    Pattern domainPattern2 = Pattern.compile(convertedPattern);
+                    listDomainsPatterns.put(domainPattern, domainPattern2);
+                }
+            }
+        }
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -96,30 +120,6 @@ public class ListDomainsCheckerImpl extends AbstractEmailChecker {
             }
         }
         return false;
-    }
-
-    /**
-     * DOC talend ListDomainsCheckerImpl constructor comment.
-     * 
-     * @param isBlackListDomains
-     * @param listDomains
-     */
-    public ListDomainsCheckerImpl(boolean isBlackListDomains, List<String> listDomains) {
-        super();
-        this.isBlackListDomains = isBlackListDomains;
-        this.listDomains = listDomains;
-
-        // pre-compile the converted patterns to get better performance
-        if (listDomains != null) {
-            for (String domainPattern : listDomains) {
-                boolean isNeedConversion = domainPattern.indexOf('*') >= 0;
-                if (isNeedConversion) {
-                    String convertedPattern = domainPattern.replace("*", "[\\p{Alnum}-.]*").replace(".", "\\."); //$NON-NLS-1$ //$NON-NLS-2$
-                    Pattern domainPattern2 = Pattern.compile(convertedPattern);
-                    listDomainsPatterns.put(domainPattern, domainPattern2);
-                }
-            }
-        }
     }
 
 }

@@ -12,7 +12,7 @@
 	<name>dataquality-sampling</name>
 	<description>Reservoir sampling, data masking, data duplication</description>
 	<build>
-        <plugins>
+     <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>

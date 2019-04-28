@@ -26,28 +26,6 @@ public class KanaConstants {
 
     public static final char FULLWIDTH_KATAKANA_END = '\u30fe'; // ヾ KATAKANA VOICED ITERATION MARK
 
-    private KanaConstants() {
-
-    }
-
-    /**
-     *
-     * @param ch
-     * @return true if the input character is a halfwidth katakana
-     */
-    public static boolean isHalfwidthKatakana(char ch) {
-        return ch >= HALFWIDTH_KATAKANA_START || ch <= HALFWIDTH_KATAKANA_END;
-    }
-
-    /**
-     *
-     * @param ch
-     * @return true if the input character is a fullwidth katakana
-     */
-    public static boolean isFullwidthKatakana(char ch) {
-        return ch >= FULLWIDTH_KATAKANA_START || ch <= FULLWIDTH_KATAKANA_END;
-    }
-
     public static final Map<Character, Character> MAPPING_HALF_TO_FULL_KATAKANA;
     static {
         MAPPING_HALF_TO_FULL_KATAKANA = new HashMap<>();
@@ -240,6 +218,28 @@ public class KanaConstants {
         MAPPING_HALFWIDTH_DIACRITIC_SUFFIXES.put('プ', HALFWIDTH_ASPIRATED_MARK);
         MAPPING_HALFWIDTH_DIACRITIC_SUFFIXES.put('ペ', HALFWIDTH_ASPIRATED_MARK);
         MAPPING_HALFWIDTH_DIACRITIC_SUFFIXES.put('ポ', HALFWIDTH_ASPIRATED_MARK);
+    }
+
+    private KanaConstants() {
+
+    }
+
+    /**
+     *
+     * @param ch
+     * @return true if the input character is a halfwidth katakana
+     */
+    public static boolean isHalfwidthKatakana(char ch) {
+        return ch >= HALFWIDTH_KATAKANA_START || ch <= HALFWIDTH_KATAKANA_END;
+    }
+
+    /**
+     *
+     * @param ch
+     * @return true if the input character is a fullwidth katakana
+     */
+    public static boolean isFullwidthKatakana(char ch) {
+        return ch >= FULLWIDTH_KATAKANA_START || ch <= FULLWIDTH_KATAKANA_END;
     }
 
 }

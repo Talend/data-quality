@@ -149,6 +149,12 @@ public abstract class Function<T> implements Serializable {
         return parameters;
     }
 
+    /**
+     * @Deprecated
+     * @param extraParameter
+     * @param keepNullValues
+     * @param rand
+     */
     @Deprecated
     public void parse(String extraParameter, boolean keepNullValues, Random rand) {
         parse(extraParameter, keepNullValues);

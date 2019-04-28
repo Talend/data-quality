@@ -24,10 +24,12 @@ public class DQPublicationAction extends DQAction {
 
     private List<DQDocument> documents;
 
+    @Override
     public String getId() {
         return id;
     }
 
+    @Override
     public void setId(String id) {
         this.id = id;
     }

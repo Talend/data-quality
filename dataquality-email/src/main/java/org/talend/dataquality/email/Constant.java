@@ -18,10 +18,6 @@ package org.talend.dataquality.email;
  */
 public final class Constant {
 
-    private Constant() {
-        // nothing here
-    }
-
     public static final char LEFT_BRACKET = '<'; // $NON-NLS-1$
 
     public static final char RIGHT_END = '>'; // $NON-NLS-1$
@@ -31,4 +27,9 @@ public final class Constant {
     public static final char SLASH = '\\'; // $NON-NLS-1$
 
     public static final char AT = '@';
+
+    private Constant() {
+        // nothing here
+    }
+
 }

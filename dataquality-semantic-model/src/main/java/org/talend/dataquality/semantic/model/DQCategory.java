@@ -77,7 +77,7 @@ public class DQCategory implements Serializable {
     }
 
     public DQCategory() {
-
+        // No need to implement
     }
 
     public static DQCategoryBuilder newBuilder() {

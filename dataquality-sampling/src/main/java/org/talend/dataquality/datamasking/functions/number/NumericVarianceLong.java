@@ -26,8 +26,7 @@ public class NumericVarianceLong extends NumericVariance<Long> {
             return 0L;
         } else {
             init();
-            long value = l * ((long) rate + 100) / 100;
-            return value;
+            return l * ((long) rate + 100) / 100;
         }
     }
 }

@@ -36,10 +36,6 @@ import org.slf4j.LoggerFactory;
  */
 public class UpdateComponentDefinition {
 
-    private UpdateComponentDefinition() {
-        // no need to implement
-    }
-
     private static final Logger LOGGER = LoggerFactory.getLogger(UpdateComponentDefinition.class);
 
     // the location of local git repo, supposing the data-quality repo is cloned in the same folder of tdq-studio-ee
@@ -77,6 +73,10 @@ public class UpdateComponentDefinition {
         DEP_VERSION_MAP.put("org.talend.dataquality.survivorship", DQ_LIB_VERSION); //$NON-NLS-1$
         DEP_VERSION_MAP.put("org.talend.dataquality.text.japanese", DQ_LIB_VERSION); //$NON-NLS-1$
         DEP_VERSION_MAP.put("org.talend.dataquality.statistics", DQ_LIB_VERSION); //$NON-NLS-1$
+    }
+
+    private UpdateComponentDefinition() {
+        // no need to implement
     }
 
     private static void handleComponentDefinition(File f) {

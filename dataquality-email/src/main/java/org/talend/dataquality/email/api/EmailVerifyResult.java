@@ -26,15 +26,6 @@ public enum EmailVerifyResult {
     private String resultValue;
 
     /**
-     * Getter for resultValue.
-     * 
-     * @return the resultValue
-     */
-    public String getResultValue() {
-        return this.resultValue;
-    }
-
-    /**
      * Sets the resultValue.
      * 
      * @param resultValue the resultValue to set
@@ -45,6 +36,15 @@ public enum EmailVerifyResult {
 
     private EmailVerifyResult(String resultValue) {
         this.setResultValue(resultValue);
+    }
+
+    /**
+     * Getter for resultValue.
+     * 
+     * @return the resultValue
+     */
+    public String getResultValue() {
+        return this.resultValue;
     }
 
 }

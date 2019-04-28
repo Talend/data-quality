@@ -35,10 +35,6 @@ import org.slf4j.LoggerFactory;
  */
 public class UpdateComponent4libphonenumber {
 
-    private UpdateComponent4libphonenumber() {
-        // no need to implement
-    }
-
     private static final Logger LOGGER = LoggerFactory.getLogger(UpdateComponent4libphonenumber.class);
 
     // the location of local git repo, supposing the data-quality repo is cloned in the same folder of tdq-studio-ee
@@ -69,6 +65,10 @@ public class UpdateComponent4libphonenumber {
         // DEP_VERSION_MAP.put("geocoder", "2.95"); //$NON-NLS-1$ //$NON-NLS-2$
         DEP_VERSION_MAP.put("libphonenumber", LIBPHONENUMBER_VERSION); //$NON-NLS-1$
         // DEP_VERSION_MAP.put("prefixmapper", "2.113"); //$NON-NLS-1$ //$NON-NLS-2$
+    }
+
+    private UpdateComponent4libphonenumber() {
+        // no need to implement
     }
 
     private static void handleComponentDefinition(File f) {

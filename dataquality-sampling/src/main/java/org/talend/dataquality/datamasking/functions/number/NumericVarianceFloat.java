@@ -26,8 +26,7 @@ public class NumericVarianceFloat extends NumericVariance<Float> {
             return 0.0f;
         } else {
             init();
-            float value = f * ((float) rate + 100) / 100;
-            return value;
+            return f * ((float) rate + 100) / 100;
         }
     }
 }

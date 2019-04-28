@@ -81,8 +81,7 @@ public abstract class GenerateCreditCard<T> extends Function<T> {
                 break;
             }
         }
-        Long result = Long.parseLong(res.toString());
-        return result;
+        return Long.parseLong(res.toString());
     }
 
     public StringBuilder generateCreditCardFormat(CreditCardType cct, String str, Random r) {
@@ -147,8 +146,7 @@ public abstract class GenerateCreditCard<T> extends Function<T> {
                 break;
             }
         }
-        Long result = Long.parseLong(res.toString());
-        return result;
+        return Long.parseLong(res.toString());
     }
 
     /**

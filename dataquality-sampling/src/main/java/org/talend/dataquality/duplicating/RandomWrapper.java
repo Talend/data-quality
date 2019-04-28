@@ -29,16 +29,15 @@ public class RandomWrapper extends Random {
 
     private final AtomicLong seed;
 
-    public Random getRandom() {
-        return random;
-    }
-
-    public long getSeed() {
-        return seed.get();
-    }
+    private static final AtomicLong seedUniquifier = new AtomicLong(8682522807148012L);
 
     public RandomWrapper() {
         this(seedUniquifier() ^ System.nanoTime());
+    }
+
+    public RandomWrapper(long seed) {
+        this.seed = new AtomicLong(seed);
+        random = new Random(seed);
     }
 
     private static long seedUniquifier() {
@@ -53,11 +52,12 @@ public class RandomWrapper extends Random {
         }
     }
 
-    private static final AtomicLong seedUniquifier = new AtomicLong(8682522807148012L);
+    public Random getRandom() {
+        return random;
+    }
 
-    public RandomWrapper(long seed) {
-        this.seed = new AtomicLong(seed);
-        random = new Random(seed);
+    public long getSeed() {
+        return seed.get();
     }
 
     @Override

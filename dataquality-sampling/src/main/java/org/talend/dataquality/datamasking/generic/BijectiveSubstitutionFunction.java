@@ -26,6 +26,8 @@ import org.talend.dataquality.sampling.exception.DQRuntimeException;
  */
 public class BijectiveSubstitutionFunction extends AbstractGenerateWithSecret {
 
+    private static final String THE_MINIMUM_VALUE = "The minimum value ";
+
     private static final long serialVersionUID = 8900059408697610292L;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BijectiveSubstitutionFunction.class);
@@ -87,10 +89,10 @@ public class BijectiveSubstitutionFunction extends AbstractGenerateWithSecret {
      */
     private void handleIntervalCase(List<AbstractField> fieldList, FieldDefinition definition) {
         if (definition.getMin().signum() < 0) {
-            throw new DQRuntimeException("The minimum value " + definition.getMin() + " must be positive"); //$NON-NLS-1$ //$NON-NLS-2$
+            throw new DQRuntimeException(THE_MINIMUM_VALUE + definition.getMin() + " must be positive"); //$NON-NLS-1$ //$NON-NLS-2$
         }
         if (definition.getMin().compareTo(definition.getMax()) > 0) {
-            throw new DQRuntimeException("The minimum value " + definition.getMin() //$NON-NLS-1$
+            throw new DQRuntimeException(THE_MINIMUM_VALUE + definition.getMin() //$NON-NLS-1$
                     + " has to be less than the maximum value " + definition.getMax()); //$NON-NLS-1$
         }
         fieldList.add(new FieldInterval(definition.getMin(), definition.getMax()));
@@ -105,7 +107,7 @@ public class BijectiveSubstitutionFunction extends AbstractGenerateWithSecret {
     private void handleDatePatternCase(List<AbstractField> fieldList, FieldDefinition definition) {
         if (definition.getMin().compareTo(BigInteger.valueOf(1000)) < 0
                 || definition.getMin().compareTo(BigInteger.valueOf(9999)) > 0) {
-            throw new DQRuntimeException("The minimum value " + definition.getMin() + " must be between 1000 and 9999"); //$NON-NLS-1$ //$NON-NLS-2$
+            throw new DQRuntimeException(THE_MINIMUM_VALUE + definition.getMin() + " must be between 1000 and 9999"); //$NON-NLS-1$ //$NON-NLS-2$
         }
         if (definition.getMax().compareTo(BigInteger.valueOf(1000)) < 0
                 || definition.getMax().compareTo(BigInteger.valueOf(9999)) > 0) {

@@ -110,9 +110,7 @@ public class DurationConverter {
         }
 
         double days = handleDays(value);
-        double result = handleFinalResult(value, days);
-
-        return result;
+        return handleFinalResult(value, days);
     }
 
     private double handleFinalResult(double value, double days) {

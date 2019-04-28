@@ -34,12 +34,6 @@ public class DateFunctionAdapter extends Function<String> {
 
     private List<SimpleDateFormat> dataFormatList = new ArrayList<SimpleDateFormat>();
 
-    @Override
-    public void setRandom(Random rand) {
-        super.setRandom(rand);
-        function.setRandom(rand);
-    }
-
     public DateFunctionAdapter(AbstractDateFunction functionToAdapt, List<String> datePatternList) {
         function = functionToAdapt;
         rnd = functionToAdapt.getRandom();
@@ -52,6 +46,12 @@ public class DateFunctionAdapter extends Function<String> {
                 }
             }
         }
+    }
+
+    @Override
+    public void setRandom(Random rand) {
+        super.setRandom(rand);
+        function.setRandom(rand);
     }
 
     @Override
