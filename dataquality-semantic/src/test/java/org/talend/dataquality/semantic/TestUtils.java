@@ -19,11 +19,10 @@ public class TestUtils {
      * @param tenantID
      */
     public static void mockWithTenant(String tenantID) {
-        PowerMockito.mockStatic(TenancyContextHolder.class);
-        TenancyContextHolder holder = mock(TenancyContextHolder.class);
         TenancyContext tenancyContext = mock(TenancyContext.class);
-        Optional<Tenant> optionalTenant = Optional.of(new DefaultTenant(tenantID, null));
-        when(holder.getContext()).thenReturn(tenancyContext);
-        when(tenancyContext.getOptionalTenant()).thenReturn(optionalTenant);
+        when(tenancyContext.getOptionalTenant()).thenReturn(Optional.of(new DefaultTenant(tenantID, null)));
+
+        PowerMockito.mockStatic(TenancyContextHolder.class);
+        when(TenancyContextHolder.getContext()).thenReturn(tenancyContext);
     }
 }

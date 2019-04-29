@@ -33,7 +33,7 @@ import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.internal.util.reflection.FieldSetter;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.talend.dataquality.datamasking.FormatPreservingMethod;
 import org.talend.dataquality.datamasking.SecretManager;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
@@ -174,7 +174,7 @@ public class GenerateFormatPreservingPatternsTest {
         Mockito.when(mockCipher.encrypt(Matchers.any(), Matchers.any(), Matchers.any(), Matchers.any()))
                 .thenReturn(new int[] { 0, 0 });
 
-        new FieldSetter(mockPattern, GenerateFormatPreservingPatterns.class.getDeclaredField("cipher")).set(mockCipher);
+        FieldSetter.setField(mockPattern, GenerateFormatPreservingPatterns.class.getDeclaredField("cipher"), mockCipher);
 
         List<String> input = new ArrayList<>();
         input.add("00");
@@ -191,7 +191,7 @@ public class GenerateFormatPreservingPatternsTest {
         Mockito.when(mockCipher.encrypt(Matchers.any(), Matchers.any(), Matchers.any(), Matchers.any()))
                 .thenReturn(new int[] { 1, 0 });
 
-        new FieldSetter(mockPattern, GenerateFormatPreservingPatterns.class.getDeclaredField("cipher")).set(mockCipher);
+        FieldSetter.setField(mockPattern, GenerateFormatPreservingPatterns.class.getDeclaredField("cipher"), mockCipher);
 
         List<String> input = new ArrayList<>();
         input.add("10");

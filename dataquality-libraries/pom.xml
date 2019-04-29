@@ -23,7 +23,8 @@
 		<java.version>1.8</java.version>
 		<assertj.version>3.0.0</assertj.version>
 		<junit.version>4.12</junit.version>
-		<mockito.version>1.10.19</mockito.version>
+		<mockito.version>2.23.4</mockito.version>
+		<powermock.version>2.0.2</powermock.version>
 		<re2j.version>1.2</re2j.version>
 		<org.talend.daikon.version>0.31.3</org.talend.daikon.version>
 	</properties>
@@ -144,6 +145,26 @@
 				<artifactId>mockito-core</artifactId>
 				<version>${mockito.version}</version>
 			</dependency>
+
+			<dependency>
+				<groupId>org.powermock</groupId>
+				<artifactId>powermock-module-junit4</artifactId>
+				<version>${powermock.version}</version>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.powermock</groupId>
+				<artifactId>powermock-api-mockito2</artifactId>
+				<version>${powermock.version}</version>
+				<scope>test</scope>
+				<exclusions>
+					<exclusion>
+						<groupId>org.mockito</groupId>
+						<artifactId>mockito-core</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<build>
@@ -197,7 +218,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
-					<version>2.18.1</version>
+					<version>3.0.0-M3</version>
 					<configuration>
 						<systemPropertyVariables>
 							<java.io.tmpdir>${project.build.directory}</java.io.tmpdir>
@@ -207,7 +228,7 @@
 				<plugin>
 					<groupId>org.jacoco</groupId>
 					<artifactId>jacoco-maven-plugin</artifactId>
-					<version>0.7.4.201502262128</version>
+					<version>0.8.3</version>
 					<configuration>
 					    <excludes>
 					        <exclude>*</exclude>

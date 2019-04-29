@@ -14,7 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.mockito.internal.util.reflection.Whitebox;
+import org.mockito.internal.util.reflection.FieldSetter;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -40,7 +40,7 @@ public class CustomRegexClassifierAccessTest {
     @Before
     public void setUp() throws Exception {
         PowerMockito.mockStatic(CategoryRegistryManager.class);
-        CategoryRegistryManager manager = mock(CategoryRegistryManager.class);
+        CategoryRegistryManager manager = Mockito.mock(CategoryRegistryManager.class);
         when(manager.getLocalRegistryPath()).thenReturn("./target");
 
         mapperMock = Mockito.mock(ObjectMapper.class);
@@ -63,16 +63,16 @@ public class CustomRegexClassifierAccessTest {
     }
 
     @Test
-    public void getRegExsEmptyFile() throws IOException {
-        Whitebox.setInternalState(access, "mapper", mapperMock);
+    public void getRegExsEmptyFile() throws IOException, NoSuchFieldException {
+        FieldSetter.setField(access, access.getClass().getDeclaredField("mapper"), mapperMock);
         when(mapperMock.readValue(any(File.class), any(TypeReference.class))).thenThrow(JsonMappingException.class);
 
         assertNull(access.getRegExs());
     }
 
     @Test
-    public void getRegExsErrorFile() throws IOException {
-        Whitebox.setInternalState(access, "mapper", mapperMock);
+    public void getRegExsErrorFile() throws IOException, NoSuchFieldException {
+        FieldSetter.setField(access, access.getClass().getDeclaredField("mapper"), mapperMock);
         when(mapperMock.readValue(any(File.class), any(TypeReference.class))).thenThrow(IOException.class);
 
         assertNull(access.getRegExs());
