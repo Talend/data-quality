@@ -12,21 +12,22 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.utils.crypto;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.BadPaddingException;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -46,27 +47,35 @@ public class AesPrf extends AbstractPrf {
 
     private byte[] initializationVector = Arrays.copyOf(new byte[] { 0x00 }, 16);
 
+    private Cipher cipher;
+
     public AesPrf(AbstractCryptoSpec cryptoSpec, SecretKey secret) {
         super(cryptoSpec, secret);
+    }
+
+    protected boolean init() {
+        try {
+            cipher = Cipher.getInstance(cryptoSpec.getCipherAlgorithm());
+            SecretKeySpec spec = new SecretKeySpec(secret.getEncoded(), cryptoSpec.getKeyAlgorithm());
+            cipher.init(Cipher.ENCRYPT_MODE, spec, new IvParameterSpec(initializationVector));
+            return true;
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
+            LOGGER.error("Invalid algorithm name defined in the specifications : " + cryptoSpec.getCipherAlgorithm(), e);
+        } catch (InvalidKeyException | InvalidAlgorithmParameterException e) {
+            LOGGER.error(
+                    "Illegal key size or parameters. This is usually because the current Java version does not support AES-256."
+                            + " In order to support it, please update the java version or install Java Cryptography Extension (JCE).",
+                    e);
+        }
+        return false;
     }
 
     @Override
     public byte[] apply(byte[] text) {
         try {
-            Cipher cipher = Cipher.getInstance(cryptoSpec.getCipherAlgorithm());
-            SecretKeySpec spec = new SecretKeySpec(secret.getEncoded(), cryptoSpec.getKeyAlgorithm());
-            cipher.init(Cipher.ENCRYPT_MODE, spec, new IvParameterSpec(initializationVector));
             byte[] result = cipher.doFinal(text);
             result = Arrays.copyOfRange(result, result.length - initializationVector.length, result.length);
             return result;
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
-            LOGGER.error("Invalid algorithm name defined in the specifications : " + cryptoSpec.getCipherAlgorithm(), e);
-        } catch (InvalidKeyException | InvalidAlgorithmParameterException e) {
-            LOGGER.error(
-                    "Invalid specifications for the cipher ! " + "Wrong key : "
-                            + new String(secret.getEncoded(), StandardCharsets.UTF_8) + " or wrong key algorithm : "
-                            + cryptoSpec.getKeyAlgorithm() + " or wrong Initial Vector" + Arrays.toString(initializationVector),
-                    e);
         } catch (IllegalBlockSizeException | BadPaddingException e) {
             LOGGER.error("Problem with the input block to encrypt, may be due to bad plaintext split. Input = "
                     + new String(text, StandardCharsets.UTF_8), e);

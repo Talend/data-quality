@@ -12,14 +12,15 @@
 // ============================================================================
 package org.talend.dataquality.datamasking.utils.crypto;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.crypto.Mac;
-import javax.crypto.SecretKey;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+
+import javax.crypto.Mac;
+import javax.crypto.SecretKey;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -37,16 +38,17 @@ public class HmacPrf extends AbstractPrf {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HmacPrf.class);
 
+    private Mac hmac;
+
     public HmacPrf(AbstractCryptoSpec cryptoSpec, SecretKey secret) {
         super(cryptoSpec, secret);
     }
 
-    @Override
-    public byte[] apply(byte[] text) {
+    protected boolean init() {
         try {
-            Mac hmac = Mac.getInstance(cryptoSpec.getCipherAlgorithm());
+            hmac = Mac.getInstance(cryptoSpec.getCipherAlgorithm());
             hmac.init(secret);
-            return hmac.doFinal(text);
+            return true;
         } catch (NoSuchAlgorithmException e) {
             LOGGER.error("Invalid algorithm name defined in the specifications : " + cryptoSpec.getCipherAlgorithm(), e);
         } catch (InvalidKeyException e) {
@@ -58,7 +60,11 @@ public class HmacPrf extends AbstractPrf {
                 LOGGER.error("The secret has a format unsupported by java.String : " + secret.getFormat(), e1);
             }
         }
-        return new byte[] {};
+        return false;
     }
 
+    @Override
+    public byte[] apply(byte[] text) {
+        return hmac.doFinal(text);
+    }
 }

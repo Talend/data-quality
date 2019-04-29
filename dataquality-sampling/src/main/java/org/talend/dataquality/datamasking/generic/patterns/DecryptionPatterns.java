@@ -18,9 +18,9 @@ public class DecryptionPatterns extends GenerateFormatPreservingPatterns {
     }
 
     /**
-     * This method generates a unique pattern using FF1 encryption.
+     * This method generates a unique pattern using FF1 decryption.
      * <br>
-     * If the encrypted result is not a valid pattern, it is re-encrypted until the output is a valid pattern.
+     * If the decrypted result is not a valid pattern, it is re-decrypted until the output is a valid pattern.
      * This method is called cycle-walking and ensures that the output is valid and unique for the original input.
      * <br>
      *
@@ -28,7 +28,7 @@ public class DecryptionPatterns extends GenerateFormatPreservingPatterns {
      * in the domain used ({@code [0, radix^numeralRank.length[ }).
      * That is why we {@link #computeOptimalRadix(java.math.BigInteger)} is called during instantiation.
      *
-     * @param strs the string fields to encode
+     * @param strs the string fields to decode
      * @param secretMng, the SecretManager instance providing the secrets to generate a unique string
      *
      * @see #transform(int[])

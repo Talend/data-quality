@@ -17,6 +17,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assume.assumeTrue;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ import org.talend.dataquality.datamasking.SecretManager;
 import org.talend.dataquality.datamasking.generic.fields.AbstractField;
 import org.talend.dataquality.datamasking.generic.fields.FieldEnum;
 import org.talend.dataquality.datamasking.generic.fields.FieldInterval;
+import org.talend.dataquality.datamasking.utils.crypto.CipherParameterChecker;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GenerateFormatPreservingPatternsTest {
@@ -201,15 +203,11 @@ public class GenerateFormatPreservingPatternsTest {
 
     @Test
     public void generateUniqueStringAES() {
+        assumeTrue(CipherParameterChecker.IS_AES256_SUPPORTED);
         SecretManager AESSecMng = new SecretManager(FormatPreservingMethod.AES_CBC_PRF, "#Datadriven2018");
         StringBuilder result = encryptPattern.generateUniqueString(Arrays.asList("U", "KI", "45", "12"), AESSecMng).orElse(null);
 
-        String expected;
-        if (AESSecMng.getCryptoSpec().getKeyLength() == 32) {
-            expected = "OKI0208";
-        } else {
-            expected = "SKI1816";
-        }
+        String expected = "OKI0208";
         assertNotNull(result);
         assertEquals(expected, result.toString());
     }
@@ -218,12 +216,7 @@ public class GenerateFormatPreservingPatternsTest {
     public void generateUniqueStringHMAC() {
         StringBuilder result = encryptPattern.generateUniqueString(Arrays.asList("U", "KI", "45", "12"), secretMng).orElse(null);
 
-        String expected;
-        if (secretMng.getCryptoSpec().getKeyLength() == 32) {
-            expected = "OKI1514";
-        } else {
-            expected = "OSF4017";
-        }
+        String expected = "OKI1514";
         assertNotNull(result);
         assertEquals(expected, result.toString());
     }
@@ -276,6 +269,7 @@ public class GenerateFormatPreservingPatternsTest {
 
     @Test
     public void encryptDecryptAES() {
+        assumeTrue(CipherParameterChecker.IS_AES256_SUPPORTED);
         SecretManager AESSecMng = new SecretManager(FormatPreservingMethod.AES_CBC_PRF, "#Datadriven2018");
         String input = "UKI4512";
         String encrypted = encryptPattern.generateUniqueString(convert(input), AESSecMng).orElse(null).toString();
@@ -287,12 +281,16 @@ public class GenerateFormatPreservingPatternsTest {
     public void encryptDecryptHMAC() {
         String input = "UKI4512";
         String encrypted = encryptPattern.generateUniqueString(convert(input), secretMng).orElse(null).toString();
+        String encrypted2 = encryptPattern.generateUniqueString(convert(input), secretMng).orElse(null).toString();
+        System.out.println(encrypted);
+        System.out.println(encrypted2);
         String decrypted = decryptPattern.generateUniqueString(convert(encrypted), secretMng).orElse(null).toString();
         assertEquals(input, decrypted);
     }
 
     @Test
     public void encryptDecryptAESDifferentPwd() {
+        assumeTrue(CipherParameterChecker.IS_AES256_SUPPORTED);
         SecretManager AESSecMngEncrypt = new SecretManager(FormatPreservingMethod.AES_CBC_PRF, "#Datadriven2018");
         SecretManager AESSecMngDecrypt = new SecretManager(FormatPreservingMethod.AES_CBC_PRF, "#Datadriven201");
         String input = "UKI4512";
@@ -303,6 +301,7 @@ public class GenerateFormatPreservingPatternsTest {
 
     @Test
     public void encryptDecryptDifferentMethod() {
+        assumeTrue(CipherParameterChecker.IS_AES256_SUPPORTED);
         SecretManager AESSecMngEncrypt = new SecretManager(FormatPreservingMethod.AES_CBC_PRF, "#Datadriven2018");
         String input = "UKI4512";
         String encrypted = encryptPattern.generateUniqueString(convert(input), AESSecMngEncrypt).orElse(null).toString();

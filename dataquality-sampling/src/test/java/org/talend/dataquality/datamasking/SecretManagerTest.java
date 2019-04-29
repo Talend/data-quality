@@ -15,12 +15,14 @@ package org.talend.dataquality.datamasking;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeTrue;
 
 import java.util.Random;
 
 import org.apache.commons.codec.binary.Hex;
 import org.junit.Test;
 import org.talend.dataquality.datamasking.utils.crypto.AesPrf;
+import org.talend.dataquality.datamasking.utils.crypto.CipherParameterChecker;
 import org.talend.dataquality.datamasking.utils.crypto.HmacPrf;
 
 import com.idealista.fpe.component.functions.prf.PseudoRandomFunction;
@@ -41,6 +43,7 @@ public class SecretManagerTest {
 
     @Test
     public void getPRFWithEachMethod() {
+        assumeTrue(CipherParameterChecker.IS_AES256_SUPPORTED);
         SecretManager secMng = new SecretManager(FormatPreservingMethod.AES_CBC_PRF, "Password");
         PseudoRandomFunction prf = secMng.getPseudoRandomFunction();
         assertTrue("The PRF is not of the correct type (AesPrf) !", prf instanceof AesPrf);
@@ -55,12 +58,7 @@ public class SecretManagerTest {
         SecretManager secMng = new SecretManager(FormatPreservingMethod.SHA2_HMAC_PRF, "ARandomPassword921");
         byte[] res = secMng.getPseudoRandomFunction().apply("abcde".getBytes());
 
-        String expected;
-        if (secMng.getCryptoSpec().getKeyLength() == 32) {
-            expected = "6a4fb8b769575e2f30658e56d1c632e076c8e7e325d9c7939eabdc9d455ddb43";
-        } else {
-            expected = "7afdf81ff65d04dfa071e76ba6abdf21e7f5e04d69d614ed24e77a4fee326ebd";
-        }
+        String expected = "6a4fb8b769575e2f30658e56d1c632e076c8e7e325d9c7939eabdc9d455ddb43";
         assertEquals(expected, Hex.encodeHexString(res));
     }
 
@@ -69,12 +67,7 @@ public class SecretManagerTest {
         SecretManager secMng = new SecretManager(FormatPreservingMethod.SHA2_HMAC_PRF, "Pa$$_With%Spe{ial_Ch@rs");
         byte[] res = secMng.getPseudoRandomFunction().apply("abcde".getBytes());
 
-        String expected;
-        if (secMng.getCryptoSpec().getKeyLength() == 32) {
-            expected = "8b40b26aac1b24d20927872342f5d75002b942817779f2b2b7de5ffa8813d15f";
-        } else {
-            expected = "4a1d0087927696b419a94418478465ca5f70a3c2c588028ad7c599adc0707e48";
-        }
+        String expected = "8b40b26aac1b24d20927872342f5d75002b942817779f2b2b7de5ffa8813d15f";
         assertEquals(expected, Hex.encodeHexString(res));
     }
 
@@ -87,6 +80,7 @@ public class SecretManagerTest {
 
     @Test
     public void getPrfNoPasswordAES() {
+        assumeTrue(CipherParameterChecker.IS_AES256_SUPPORTED);
         SecretManager secMng = new SecretManager(FormatPreservingMethod.AES_CBC_PRF, null);
         // AES supports only multiples of 16-byte inputs
         byte[] input = new byte[16];
@@ -94,4 +88,5 @@ public class SecretManagerTest {
         byte[] res = secMng.getPseudoRandomFunction().apply(input);
         assertNotNull(res);
     }
+
 }

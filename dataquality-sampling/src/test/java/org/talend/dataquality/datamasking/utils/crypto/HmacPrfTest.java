@@ -1,14 +1,15 @@
 package org.talend.dataquality.datamasking.utils.crypto;
 
+import java.security.SecureRandom;
+
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
-import java.security.SecureRandom;
 
 @RunWith(MockitoJUnitRunner.class)
 public class HmacPrfTest {
@@ -25,10 +26,12 @@ public class HmacPrfTest {
         SecretKey secret = generateRandomSecretKey();
 
         HmacPrf prf = new HmacPrf(spec, secret);
-        prf.apply(input);
+        if (prf.init()) {
+            prf.apply(input);
 
-        // This method should be called to display the incorrect algorithm name after the catch of 'NoSuchAlgorithmException'.
-        Mockito.verify(spec, Mockito.atLeast(2)).getCipherAlgorithm();
+            // This method should be called to display the incorrect algorithm name after the catch of 'NoSuchAlgorithmException'.
+            Mockito.verify(spec, Mockito.atLeast(2)).getCipherAlgorithm();
+        }
     }
 
     // Copy of the method SecretManager method which is private

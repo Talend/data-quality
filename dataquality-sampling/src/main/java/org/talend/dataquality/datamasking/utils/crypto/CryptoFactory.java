@@ -1,8 +1,8 @@
 package org.talend.dataquality.datamasking.utils.crypto;
 
-import org.talend.dataquality.datamasking.FormatPreservingMethod;
-
 import javax.crypto.SecretKey;
+
+import org.talend.dataquality.datamasking.FormatPreservingMethod;
 
 /**
  * Factory for constructing the {@link AbstractPrf} and {@link AbstractCryptoSpec}
@@ -48,7 +48,10 @@ public class CryptoFactory {
         } else if (spec instanceof HmacSha2CryptoSpec) {
             prf = new HmacPrf(spec, secret);
         }
-
-        return prf;
+        if (prf.init()) {
+            return prf;
+        } else {
+            throw new IllegalArgumentException("Could not init pseudo random function with the given parameters.");
+        }
     }
 }

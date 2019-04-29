@@ -2,6 +2,7 @@ package org.talend.dataquality.datamasking.functions.text.keep;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assume.assumeTrue;
 
 import java.util.HashSet;
 import java.util.Random;
@@ -12,6 +13,7 @@ import org.junit.Test;
 import org.talend.dataquality.datamasking.FormatPreservingMethod;
 import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.datamasking.functions.util.MockRandom;
+import org.talend.dataquality.datamasking.utils.crypto.CipherParameterChecker;
 
 public class KeepLastDigitsAndReplaceOtherDigitsTest {
 
@@ -68,6 +70,7 @@ public class KeepLastDigitsAndReplaceOtherDigitsTest {
 
     @Test
     public void bijective() {
+        assumeTrue(CipherParameterChecker.IS_AES256_SUPPORTED);
         kfag.parse("1", false);
         kfag.setMaskingMode(FunctionMode.BIJECTIVE);
         kfag.setSecret(FormatPreservingMethod.AES_CBC_PRF, "data");

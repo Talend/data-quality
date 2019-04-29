@@ -15,6 +15,7 @@ package org.talend.dataquality.datamasking.functions.text.replace;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.junit.Assume.assumeTrue;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -26,6 +27,7 @@ import org.junit.Test;
 import org.talend.dataquality.datamasking.FormatPreservingMethod;
 import org.talend.dataquality.datamasking.FunctionMode;
 import org.talend.dataquality.datamasking.functions.text.Alphabet;
+import org.talend.dataquality.datamasking.utils.crypto.CipherParameterChecker;
 
 /**
  * created by jgonzalez on 25 juin 2015 Detailled comment
@@ -79,6 +81,7 @@ public class BetweenIndexesReplaceTest {
 
     @Test
     public void bijective() {
+        assumeTrue(CipherParameterChecker.IS_AES256_SUPPORTED);
         Alphabet alphabet = Alphabet.DEFAULT_LATIN;
         bir.parse("2, 4", false);
         bir.setMaskingMode(FunctionMode.BIJECTIVE);

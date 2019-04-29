@@ -3,6 +3,7 @@ package org.talend.dataquality.datamasking.generic;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,19 +17,17 @@ import org.talend.daikon.pattern.character.CharPattern;
 import org.talend.dataquality.datamasking.FormatPreservingMethod;
 import org.talend.dataquality.datamasking.functions.text.Alphabet;
 import org.talend.dataquality.datamasking.functions.text.GenerateFromAlphabet;
+import org.talend.dataquality.datamasking.utils.crypto.CipherParameterChecker;
 
 public class GenerateFromAlphabetTest {
-
-    private FormatPreservingMethod method = FormatPreservingMethod.AES_CBC_PRF;
 
     private String password = "data";
 
     private Alphabet defaultAlphabet = Alphabet.DEFAULT_LATIN;
 
-    private GenerateFromAlphabet gfa = new GenerateFromAlphabet(defaultAlphabet, method, password);
-
     @Test
     public void worksWithAllAlphabets() {
+        assumeTrue(CipherParameterChecker.IS_AES256_SUPPORTED);
         for (Alphabet alphabet : Alphabet.values()) {
             if (!Alphabet.BEST_GUESS.equals(alphabet)) {
                 List<Integer> input = new ArrayList<>();
@@ -36,7 +35,7 @@ public class GenerateFromAlphabetTest {
                 input.add(alphabet.getCharactersMap().get(1));
                 input.add(alphabet.getCharactersMap().get(2));
 
-                GenerateFromAlphabet gfa = new GenerateFromAlphabet(alphabet, method, password);
+                GenerateFromAlphabet gfa = new GenerateFromAlphabet(alphabet, FormatPreservingMethod.AES_CBC_PRF, password);
                 List<Integer> output = gfa.generateUniqueCodePoints(input);
                 assertFalse("Alphabet " + alphabet + " is not masked properly.", output.isEmpty());
             }
@@ -45,6 +44,8 @@ public class GenerateFromAlphabetTest {
 
     @Test
     public void maskTooShortString() {
+        assumeTrue(CipherParameterChecker.IS_AES256_SUPPORTED);
+        GenerateFromAlphabet gfa = new GenerateFromAlphabet(defaultAlphabet, FormatPreservingMethod.AES_CBC_PRF, password);
         List<Integer> input = new ArrayList<>();
         input.add(defaultAlphabet.getCharactersMap().get(0));
         List<Integer> result = gfa.generateUniqueCodePoints(input);
@@ -53,7 +54,8 @@ public class GenerateFromAlphabetTest {
 
     @Test
     public void maskTooShortNumber() {
-        GenerateFromAlphabet gfa = new GenerateFromAlphabet(Alphabet.DIGITS, method, password);
+        assumeTrue(CipherParameterChecker.IS_AES256_SUPPORTED);
+        GenerateFromAlphabet gfa = new GenerateFromAlphabet(Alphabet.DIGITS, FormatPreservingMethod.AES_CBC_PRF, password);
         List<Integer> input = new ArrayList<>();
         input.add(Alphabet.DIGITS.getCharactersMap().get(0));
         List<Integer> result = gfa.generateUniqueDigits(input);
@@ -62,8 +64,9 @@ public class GenerateFromAlphabetTest {
 
     @Test
     public void generateDigitsBijectiveWithAES() {
+        assumeTrue(CipherParameterChecker.IS_AES256_SUPPORTED);
         Alphabet digits = Alphabet.DIGITS;
-        GenerateFromAlphabet gfa = new GenerateFromAlphabet(digits, method, password);
+        GenerateFromAlphabet gfa = new GenerateFromAlphabet(digits, FormatPreservingMethod.AES_CBC_PRF, password);
         Set<List<Integer>> generatedDigits = new HashSet<>();
         for (int i = 0; i < digits.getRadix(); i++) {
             for (int j = 0; j < digits.getRadix(); j++) {
@@ -131,6 +134,8 @@ public class GenerateFromAlphabetTest {
 
     @Test
     public void generateCodePointsBijectiveWithAES() {
+        assumeTrue(CipherParameterChecker.IS_AES256_SUPPORTED);
+        GenerateFromAlphabet gfa = new GenerateFromAlphabet(defaultAlphabet, FormatPreservingMethod.AES_CBC_PRF, password);
         Set<List<Integer>> generatedCodePoints = new HashSet<>();
         for (int i = 0; i < defaultAlphabet.getRadix(); i++) {
             for (int j = 0; j < defaultAlphabet.getRadix(); j++) {

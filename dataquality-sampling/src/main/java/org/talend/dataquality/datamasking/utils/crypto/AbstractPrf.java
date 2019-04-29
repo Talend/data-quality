@@ -28,4 +28,6 @@ public abstract class AbstractPrf implements PseudoRandomFunction, Serializable 
         this.cryptoSpec = cryptoSpec;
         this.secret = secret;
     }
+
+    protected abstract boolean init();
 }
