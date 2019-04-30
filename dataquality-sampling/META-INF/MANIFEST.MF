@@ -38,7 +38,7 @@ Import-Package: com.google.i18n.phonenumbers,
  org.apache.commons.io;version="[2.2.0,3.0.0)",
  org.apache.commons.lang3,
  org.apache.commons.lang3.tuple,
- org.apache.commons.math3.distribution,
+ org.apache.commons.math3.distribution;version="3.3.0",
  org.slf4j;version="[1.7.0,2.0.0)",
  org.talend.daikon.number;version="[0.26.0,1.0.0)",
  org.talend.daikon.pattern.character;version="[0.26.0,1.0.0]"
