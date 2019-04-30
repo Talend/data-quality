@@ -62,9 +62,11 @@ public class AesPrf extends AbstractPrf {
         } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
             LOGGER.error("Invalid algorithm name defined in the specifications : " + cryptoSpec.getCipherAlgorithm(), e);
         } catch (InvalidKeyException | InvalidAlgorithmParameterException e) {
-            LOGGER.error("Illegal key size or parameters. This is because AES-256 is not supported by the current JVM version: "
-                    + System.getProperty("java.version")
-                    + " Please update to a newer JVM version or install the Java Cryptography Extension (JCE) to support it.", e);
+            LOGGER.error(
+                    "Illegal key size or parameters. This is because AES-256 is not supported by the current JVM version: "
+                            + System.getProperty("java.version")
+                            + " Please update to a newer JVM version or install the Java Cryptography Extension (JCE) to support it.",
+                    e);
         }
         return false;
     }
