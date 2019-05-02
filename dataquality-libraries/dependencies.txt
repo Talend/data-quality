@@ -1,0 +1,421 @@
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] dataquality-libraries                                              [pom]
+[INFO] dataquality-libraries-devops                                       [jar]
+[INFO] dataquality-common                                              [bundle]
+[INFO] dataquality-record-linkage                                      [bundle]
+[INFO] dataquality-phone                                               [bundle]
+[INFO] dataquality-sampling                                            [bundle]
+[INFO] dataquality-standardization                                     [bundle]
+[INFO] dataquality-semantic-model                                      [bundle]
+[INFO] dataquality-semantic                                            [bundle]
+[INFO] dataquality-statistics                                          [bundle]
+[INFO] dataquality-wordnet                                             [bundle]
+[INFO] dataquality-email                                               [bundle]
+[INFO] dataquality-survivorship                                        [bundle]
+[INFO] dataquality-converters                                          [bundle]
+[INFO] dataquality-text-japanese                                       [bundle]
+[INFO] 
+[INFO] ------------< org.talend.dataquality:dataquality-libraries >------------
+[INFO] Building dataquality-libraries 6.4.1-SNAPSHOT                     [1/15]
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:2.10:tree (default-cli) @ dataquality-libraries ---
+[INFO] org.talend.dataquality:dataquality-libraries:pom:6.4.1-SNAPSHOT
+[INFO] 
+[INFO] --------< org.talend.dataquality:dataquality-libraries-devops >---------
+[INFO] Building dataquality-libraries-devops 6.4.1-SNAPSHOT              [2/15]
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:2.10:tree (default-cli) @ dataquality-libraries-devops ---
+[INFO] org.talend.dataquality:dataquality-libraries-devops:jar:6.4.1-SNAPSHOT
+[INFO] +- commons-io:commons-io:jar:2.4:compile
+[INFO] +- org.slf4j:slf4j-api:jar:1.7.12:compile
+[INFO] +- log4j:log4j:jar:1.2.17:runtime
+[INFO] \- org.slf4j:slf4j-log4j12:jar:1.7.12:runtime
+[INFO] 
+[INFO] -------------< org.talend.dataquality:dataquality-common >--------------
+[INFO] Building dataquality-common 6.4.1-SNAPSHOT                        [3/15]
+[INFO] -------------------------------[ bundle ]-------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:2.10:tree (default-cli) @ dataquality-common ---
+[INFO] org.talend.dataquality:dataquality-common:bundle:6.4.1-SNAPSHOT
+[INFO] +- com.fasterxml.jackson.core:jackson-annotations:jar:2.9.8:compile
+[INFO] +- org.talend.daikon:daikon:jar:0.31.3:compile
+[INFO] |  +- org.apache.avro:avro:jar:1.8.1:compile
+[INFO] |  |  +- com.thoughtworks.paranamer:paranamer:jar:2.7:compile
+[INFO] |  |  +- org.xerial.snappy:snappy-java:jar:1.1.1.3:compile
+[INFO] |  |  +- org.apache.commons:commons-compress:jar:1.8.1:compile
+[INFO] |  |  \- org.tukaani:xz:jar:1.5:compile
+[INFO] |  +- org.codehaus.jackson:jackson-core-asl:jar:1.9.14-TALEND:compile
+[INFO] |  +- org.codehaus.jackson:jackson-mapper-asl:jar:1.9.14-TALEND:compile
+[INFO] |  +- javax.servlet:javax.servlet-api:jar:3.0.1:compile
+[INFO] |  +- javax.inject:javax.inject:jar:1:compile
+[INFO] |  +- commons-codec:commons-codec:jar:1.6:compile
+[INFO] |  +- com.cedarsoftware:json-io:jar:4.9.9-TALEND:compile
+[INFO] |  \- org.talend.daikon:daikon-exception:jar:0.31.3:compile
+[INFO] +- commons-io:commons-io:jar:2.4:compile
+[INFO] +- org.apache.commons:commons-lang3:jar:3.4:compile
+[INFO] +- commons-pool:commons-pool:jar:1.6:compile
+[INFO] +- com.clearspring.analytics:stream:jar:2.7.0:compile
+[INFO] |  \- it.unimi.dsi:fastutil:jar:6.5.7:compile
+[INFO] +- junit:junit:jar:4.12:test
+[INFO] |  \- org.hamcrest:hamcrest-core:jar:1.3:test
+[INFO] +- log4j:log4j:jar:1.2.17:test
+[INFO] +- org.slf4j:slf4j-api:jar:1.7.12:compile
+[INFO] \- org.slf4j:slf4j-log4j12:jar:1.7.12:test
+[INFO] 
+[INFO] ---------< org.talend.dataquality:dataquality-record-linkage >----------
+[INFO] Building dataquality-record-linkage 6.4.1-SNAPSHOT                [4/15]
+[INFO] -------------------------------[ bundle ]-------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:2.10:tree (default-cli) @ dataquality-record-linkage ---
+[INFO] org.talend.dataquality:dataquality-record-linkage:bundle:6.4.1-SNAPSHOT
+[INFO] +- commons-lang:commons-lang:jar:2.6:compile
+[INFO] +- commons-io:commons-io:jar:2.4:compile
+[INFO] +- commons-codec:commons-codec:jar:1.6:compile
+[INFO] +- commons-collections:commons-collections:jar:3.2.2:compile
+[INFO] +- log4j:log4j:jar:1.2.17:test
+[INFO] +- org.slf4j:slf4j-api:jar:1.7.12:compile
+[INFO] +- org.slf4j:slf4j-log4j12:jar:1.7.12:test
+[INFO] \- junit:junit:jar:4.12:test
+[INFO]    \- org.hamcrest:hamcrest-core:jar:1.3:test
+[INFO] 
+[INFO] --------------< org.talend.dataquality:dataquality-phone >--------------
+[INFO] Building dataquality-phone 6.4.1-SNAPSHOT                         [5/15]
+[INFO] -------------------------------[ bundle ]-------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:2.10:tree (default-cli) @ dataquality-phone ---
+[INFO] org.talend.dataquality:dataquality-phone:bundle:6.4.1-SNAPSHOT
+[INFO] +- org.apache.commons:commons-lang3:jar:3.4:compile
+[INFO] +- com.googlecode.libphonenumber:libphonenumber:jar:8.10.5:compile
+[INFO] +- com.googlecode.libphonenumber:geocoder:jar:2.111:compile
+[INFO] +- com.googlecode.libphonenumber:carrier:jar:1.101:compile
+[INFO] +- com.googlecode.libphonenumber:prefixmapper:jar:2.111:compile
+[INFO] +- junit:junit:jar:4.12:test
+[INFO] |  \- org.hamcrest:hamcrest-core:jar:1.3:test
+[INFO] +- org.slf4j:slf4j-api:jar:1.7.12:compile
+[INFO] +- org.slf4j:slf4j-log4j12:jar:1.7.12:test
+[INFO] \- log4j:log4j:jar:1.2.17:test
+[INFO] 
+[INFO] ------------< org.talend.dataquality:dataquality-sampling >-------------
+[INFO] Building dataquality-sampling 6.4.1-SNAPSHOT                      [6/15]
+[INFO] -------------------------------[ bundle ]-------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:2.8:tree (default-cli) @ dataquality-sampling ---
+[INFO] org.talend.dataquality:dataquality-sampling:bundle:6.4.1-SNAPSHOT
+[INFO] +- org.talend.dataquality:dataquality-common:jar:6.4.1-SNAPSHOT:compile
+[INFO] |  +- com.fasterxml.jackson.core:jackson-annotations:jar:2.9.8:compile
+[INFO] |  +- org.apache.commons:commons-lang3:jar:3.4:compile
+[INFO] |  +- commons-pool:commons-pool:jar:1.6:compile
+[INFO] |  +- com.clearspring.analytics:stream:jar:2.7.0:compile
+[INFO] |  |  \- it.unimi.dsi:fastutil:jar:6.5.7:compile
+[INFO] |  \- org.slf4j:slf4j-api:jar:1.7.12:compile
+[INFO] +- org.apache.commons:commons-math3:jar:3.3:compile
+[INFO] +- commons-io:commons-io:jar:2.4:compile
+[INFO] +- commons-codec:commons-codec:jar:1.6:compile
+[INFO] +- org.talend.daikon:daikon:jar:0.31.3:compile
+[INFO] |  +- org.apache.avro:avro:jar:1.8.1:compile
+[INFO] |  |  +- com.thoughtworks.paranamer:paranamer:jar:2.7:compile
+[INFO] |  |  +- org.xerial.snappy:snappy-java:jar:1.1.1.3:compile
+[INFO] |  |  +- org.apache.commons:commons-compress:jar:1.8.1:compile
+[INFO] |  |  \- org.tukaani:xz:jar:1.5:compile
+[INFO] |  +- org.codehaus.jackson:jackson-core-asl:jar:1.9.14-TALEND:compile
+[INFO] |  +- org.codehaus.jackson:jackson-mapper-asl:jar:1.9.14-TALEND:compile
+[INFO] |  +- javax.servlet:javax.servlet-api:jar:3.0.1:compile
+[INFO] |  +- javax.inject:javax.inject:jar:1:compile
+[INFO] |  +- com.cedarsoftware:json-io:jar:4.9.9-TALEND:compile
+[INFO] |  \- org.talend.daikon:daikon-exception:jar:0.31.3:compile
+[INFO] +- junit:junit:jar:4.12:test
+[INFO] |  \- org.hamcrest:hamcrest-core:jar:1.3:test
+[INFO] +- org.mockito:mockito-core:jar:1.10.19:test
+[INFO] |  \- org.objenesis:objenesis:jar:2.1:test
+[INFO] +- org.assertj:assertj-core:jar:3.0.0:test
+[INFO] +- log4j:log4j:jar:1.2.17:test
+[INFO] +- com.googlecode.libphonenumber:libphonenumber:jar:8.9.6:test
+[INFO] \- com.idealista:format-preserving-encryption:jar:1.0.0:compile
+[INFO] 
+[INFO] ---------< org.talend.dataquality:dataquality-standardization >---------
+[INFO] Building dataquality-standardization 6.4.1-SNAPSHOT               [7/15]
+[INFO] -------------------------------[ bundle ]-------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:2.10:tree (default-cli) @ dataquality-standardization ---
+[INFO] org.talend.dataquality:dataquality-standardization:bundle:6.4.1-SNAPSHOT
+[INFO] +- org.apache.lucene:lucene-core:jar:4.10.4:compile
+[INFO] +- org.apache.lucene:lucene-analyzers-common:jar:4.10.4:compile
+[INFO] +- org.apache.lucene:lucene-queryparser:jar:4.10.4:compile
+[INFO] |  +- org.apache.lucene:lucene-queries:jar:4.10.4:compile
+[INFO] |  \- org.apache.lucene:lucene-sandbox:jar:4.10.4:compile
+[INFO] +- commons-lang:commons-lang:jar:2.6:compile
+[INFO] +- junit:junit:jar:4.12:test
+[INFO] |  \- org.hamcrest:hamcrest-core:jar:1.3:test
+[INFO] +- org.mockito:mockito-core:jar:1.10.19:test
+[INFO] |  \- org.objenesis:objenesis:jar:2.1:test
+[INFO] +- org.powermock:powermock-module-junit4:jar:1.6.5:test
+[INFO] |  \- org.powermock:powermock-module-junit4-common:jar:1.6.5:test
+[INFO] |     +- org.powermock:powermock-core:jar:1.6.5:test
+[INFO] |     |  \- org.javassist:javassist:jar:3.20.0-GA:test
+[INFO] |     \- org.powermock:powermock-reflect:jar:1.6.5:test
+[INFO] +- org.powermock:powermock-api-mockito:jar:1.6.5:test
+[INFO] |  \- org.powermock:powermock-api-mockito-common:jar:1.6.5:test
+[INFO] |     \- org.powermock:powermock-api-support:jar:1.6.5:test
+[INFO] +- commons-io:commons-io:jar:2.4:test
+[INFO] +- log4j:log4j:jar:1.2.17:test
+[INFO] +- org.slf4j:slf4j-api:jar:1.7.12:compile
+[INFO] \- org.slf4j:slf4j-log4j12:jar:1.7.12:test
+[INFO] 
+[INFO] ---------< org.talend.dataquality:dataquality-semantic-model >----------
+[INFO] Building dataquality-semantic-model 6.4.1-SNAPSHOT                [8/15]
+[INFO] -------------------------------[ bundle ]-------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:2.10:tree (default-cli) @ dataquality-semantic-model ---
+[INFO] org.talend.dataquality:dataquality-semantic-model:bundle:6.4.1-SNAPSHOT
+[INFO] +- org.apache.commons:commons-lang3:jar:3.3.2:compile
+[INFO] \- com.fasterxml.jackson.core:jackson-annotations:jar:2.9.8:compile
+[INFO] 
+[INFO] ------------< org.talend.dataquality:dataquality-semantic >-------------
+[INFO] Building dataquality-semantic 6.4.1-SNAPSHOT                      [9/15]
+[INFO] -------------------------------[ bundle ]-------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:2.8:tree (default-cli) @ dataquality-semantic ---
+[INFO] org.talend.dataquality:dataquality-semantic:bundle:6.4.1-SNAPSHOT
+[INFO] +- org.talend.daikon:multitenant-core:jar:0.31.3:compile
+[INFO] +- org.apache.lucene:lucene-suggest:jar:4.10.4:compile
+[INFO] |  +- org.apache.lucene:lucene-analyzers-common:jar:4.10.4:compile
+[INFO] |  +- org.apache.lucene:lucene-core:jar:4.10.4:compile
+[INFO] |  +- org.apache.lucene:lucene-misc:jar:4.10.4:compile
+[INFO] |  \- org.apache.lucene:lucene-queries:jar:4.10.4:compile
+[INFO] +- org.talend.dataquality:dataquality-common:jar:6.4.1-SNAPSHOT:compile
+[INFO] |  +- com.fasterxml.jackson.core:jackson-annotations:jar:2.9.8:compile
+[INFO] |  +- org.talend.daikon:daikon:jar:0.31.3:compile
+[INFO] |  |  +- org.apache.avro:avro:jar:1.8.1:compile
+[INFO] |  |  |  +- com.thoughtworks.paranamer:paranamer:jar:2.7:compile
+[INFO] |  |  |  +- org.xerial.snappy:snappy-java:jar:1.1.1.3:compile
+[INFO] |  |  |  +- org.apache.commons:commons-compress:jar:1.8.1:compile
+[INFO] |  |  |  \- org.tukaani:xz:jar:1.5:compile
+[INFO] |  |  +- org.codehaus.jackson:jackson-core-asl:jar:1.9.14-TALEND:compile
+[INFO] |  |  +- org.codehaus.jackson:jackson-mapper-asl:jar:1.9.14-TALEND:compile
+[INFO] |  |  +- javax.servlet:javax.servlet-api:jar:3.0.1:compile
+[INFO] |  |  +- javax.inject:javax.inject:jar:1:compile
+[INFO] |  |  +- com.cedarsoftware:json-io:jar:4.9.9-TALEND:compile
+[INFO] |  |  \- org.talend.daikon:daikon-exception:jar:0.31.3:compile
+[INFO] |  +- commons-io:commons-io:jar:2.4:compile
+[INFO] |  +- commons-pool:commons-pool:jar:1.6:compile
+[INFO] |  \- com.clearspring.analytics:stream:jar:2.7.0:compile
+[INFO] |     \- it.unimi.dsi:fastutil:jar:6.5.7:compile
+[INFO] +- org.talend.dataquality:dataquality-record-linkage:jar:6.4.1-SNAPSHOT:compile
+[INFO] |  +- commons-lang:commons-lang:jar:2.6:compile
+[INFO] |  +- commons-codec:commons-codec:jar:1.6:compile
+[INFO] |  \- commons-collections:commons-collections:jar:3.2.2:compile
+[INFO] +- org.talend.dataquality:dataquality-semantic-model:jar:6.4.1-SNAPSHOT:compile
+[INFO] +- org.talend.dataquality:dataquality-phone:jar:6.4.1-SNAPSHOT:compile
+[INFO] |  +- com.googlecode.libphonenumber:libphonenumber:jar:8.10.5:compile
+[INFO] |  +- com.googlecode.libphonenumber:geocoder:jar:2.111:compile
+[INFO] |  +- com.googlecode.libphonenumber:carrier:jar:1.101:compile
+[INFO] |  \- com.googlecode.libphonenumber:prefixmapper:jar:2.111:compile
+[INFO] +- org.talend.dataquality:dataquality-sampling:jar:6.4.1-SNAPSHOT:compile
+[INFO] |  +- org.apache.commons:commons-math3:jar:3.3:compile
+[INFO] |  \- com.idealista:format-preserving-encryption:jar:1.0.0:compile
+[INFO] +- org.apache.commons:commons-lang3:jar:3.4:compile
+[INFO] +- com.fasterxml.jackson.core:jackson-databind:jar:2.9.8:compile
+[INFO] |  \- com.fasterxml.jackson.core:jackson-core:jar:2.9.8:compile
+[INFO] +- org.apache.commons:commons-csv:jar:1.3:test
+[INFO] +- commons-validator:commons-validator:jar:1.5.1:compile
+[INFO] |  +- commons-beanutils:commons-beanutils:jar:1.9.2:compile
+[INFO] |  +- commons-digester:commons-digester:jar:1.8.1:compile
+[INFO] |  \- commons-logging:commons-logging:jar:1.2:compile
+[INFO] +- com.google.re2j:re2j:jar:1.2:compile
+[INFO] +- com.github.mifmif:generex:jar:1.0.2:compile
+[INFO] +- dk.brics:automaton:jar:1.12-1:compile
+[INFO] +- log4j:log4j:jar:1.2.17:test
+[INFO] +- org.slf4j:slf4j-api:jar:1.7.12:compile
+[INFO] +- org.slf4j:slf4j-log4j12:jar:1.7.12:test
+[INFO] +- junit:junit:jar:4.12:test
+[INFO] |  \- org.hamcrest:hamcrest-core:jar:1.3:test
+[INFO] +- org.mockito:mockito-core:jar:1.10.19:test
+[INFO] |  \- org.objenesis:objenesis:jar:2.1:test
+[INFO] +- org.powermock:powermock-module-junit4:jar:1.6.5:test
+[INFO] |  \- org.powermock:powermock-module-junit4-common:jar:1.6.5:test
+[INFO] |     +- org.powermock:powermock-core:jar:1.6.5:test
+[INFO] |     |  \- org.javassist:javassist:jar:3.20.0-GA:test
+[INFO] |     \- org.powermock:powermock-reflect:jar:1.6.5:test
+[INFO] +- org.powermock:powermock-api-mockito:jar:1.6.5:test
+[INFO] |  \- org.powermock:powermock-api-mockito-common:jar:1.6.5:test
+[INFO] |     \- org.powermock:powermock-api-support:jar:1.6.5:test
+[INFO] \- org.skyscreamer:jsonassert:jar:1.5.0:test
+[INFO]    \- com.vaadin.external.google:android-json:jar:0.0.20131108.vaadin1:test
+[INFO] 
+[INFO] -----------< org.talend.dataquality:dataquality-statistics >------------
+[INFO] Building dataquality-statistics 6.4.1-SNAPSHOT                   [10/15]
+[INFO] -------------------------------[ bundle ]-------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:2.10:tree (default-cli) @ dataquality-statistics ---
+[INFO] org.talend.dataquality:dataquality-statistics:bundle:6.4.1-SNAPSHOT
+[INFO] +- org.talend.daikon:daikon:jar:0.31.3:compile
+[INFO] |  +- org.apache.avro:avro:jar:1.8.1:compile
+[INFO] |  |  +- com.thoughtworks.paranamer:paranamer:jar:2.7:compile
+[INFO] |  |  +- org.xerial.snappy:snappy-java:jar:1.1.1.3:compile
+[INFO] |  |  +- org.apache.commons:commons-compress:jar:1.8.1:compile
+[INFO] |  |  \- org.tukaani:xz:jar:1.5:compile
+[INFO] |  +- org.codehaus.jackson:jackson-core-asl:jar:1.9.14-TALEND:compile
+[INFO] |  +- org.codehaus.jackson:jackson-mapper-asl:jar:1.9.14-TALEND:compile
+[INFO] |  +- org.apache.commons:commons-lang3:jar:3.4:compile
+[INFO] |  +- javax.servlet:javax.servlet-api:jar:3.0.1:compile
+[INFO] |  +- javax.inject:javax.inject:jar:1:compile
+[INFO] |  +- commons-codec:commons-codec:jar:1.6:compile
+[INFO] |  +- com.cedarsoftware:json-io:jar:4.9.9-TALEND:compile
+[INFO] |  \- org.talend.daikon:daikon-exception:jar:0.31.3:compile
+[INFO] +- org.talend.dataquality:dataquality-common:jar:6.4.1-SNAPSHOT:compile
+[INFO] |  +- com.fasterxml.jackson.core:jackson-annotations:jar:2.9.8:compile
+[INFO] |  +- commons-io:commons-io:jar:2.4:compile
+[INFO] |  \- commons-pool:commons-pool:jar:1.6:compile
+[INFO] +- org.talend.dataquality:dataquality-semantic:jar:6.4.1-SNAPSHOT:compile
+[INFO] |  +- org.talend.daikon:multitenant-core:jar:0.31.3:compile
+[INFO] |  +- org.apache.lucene:lucene-suggest:jar:4.10.4:compile
+[INFO] |  |  +- org.apache.lucene:lucene-analyzers-common:jar:4.10.4:compile
+[INFO] |  |  +- org.apache.lucene:lucene-core:jar:4.10.4:compile
+[INFO] |  |  +- org.apache.lucene:lucene-misc:jar:4.10.4:compile
+[INFO] |  |  \- org.apache.lucene:lucene-queries:jar:4.10.4:compile
+[INFO] |  +- org.talend.dataquality:dataquality-record-linkage:jar:6.4.1-SNAPSHOT:compile
+[INFO] |  |  \- commons-collections:commons-collections:jar:3.2.2:compile
+[INFO] |  +- org.talend.dataquality:dataquality-semantic-model:jar:6.4.1-SNAPSHOT:compile
+[INFO] |  +- org.talend.dataquality:dataquality-phone:jar:6.4.1-SNAPSHOT:compile
+[INFO] |  |  +- com.googlecode.libphonenumber:libphonenumber:jar:8.10.5:compile
+[INFO] |  |  +- com.googlecode.libphonenumber:geocoder:jar:2.111:compile
+[INFO] |  |  +- com.googlecode.libphonenumber:carrier:jar:1.101:compile
+[INFO] |  |  \- com.googlecode.libphonenumber:prefixmapper:jar:2.111:compile
+[INFO] |  +- org.talend.dataquality:dataquality-sampling:jar:6.4.1-SNAPSHOT:compile
+[INFO] |  |  \- com.idealista:format-preserving-encryption:jar:1.0.0:compile
+[INFO] |  +- com.fasterxml.jackson.core:jackson-databind:jar:2.9.8:compile
+[INFO] |  |  \- com.fasterxml.jackson.core:jackson-core:jar:2.9.8:compile
+[INFO] |  +- commons-validator:commons-validator:jar:1.5.1:compile
+[INFO] |  |  +- commons-beanutils:commons-beanutils:jar:1.9.2:compile
+[INFO] |  |  +- commons-digester:commons-digester:jar:1.8.1:compile
+[INFO] |  |  \- commons-logging:commons-logging:jar:1.2:compile
+[INFO] |  +- com.google.re2j:re2j:jar:1.2:compile
+[INFO] |  +- com.github.mifmif:generex:jar:1.0.2:compile
+[INFO] |  \- dk.brics:automaton:jar:1.12-1:compile
+[INFO] +- commons-lang:commons-lang:jar:2.6:compile
+[INFO] +- org.apache.commons:commons-math3:jar:3.3:compile
+[INFO] +- com.clearspring.analytics:stream:jar:2.9.0:compile
+[INFO] |  \- it.unimi.dsi:fastutil:jar:6.5.7:compile
+[INFO] +- org.slf4j:slf4j-api:jar:1.7.12:compile
+[INFO] +- org.apache.logging.log4j:log4j-slf4j-impl:jar:2.4.1:test
+[INFO] +- org.apache.logging.log4j:log4j-api:jar:2.4.1:test
+[INFO] +- org.apache.logging.log4j:log4j-core:jar:2.4.1:test
+[INFO] +- org.apache.commons:commons-csv:jar:1.3:test
+[INFO] \- junit:junit:jar:4.12:test
+[INFO]    \- org.hamcrest:hamcrest-core:jar:1.3:test
+[INFO] 
+[INFO] -------------< org.talend.dataquality:dataquality-wordnet >-------------
+[INFO] Building dataquality-wordnet 6.4.1-SNAPSHOT                      [11/15]
+[INFO] -------------------------------[ bundle ]-------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:2.10:tree (default-cli) @ dataquality-wordnet ---
+[INFO] org.talend.dataquality:dataquality-wordnet:bundle:6.4.1-SNAPSHOT
+[INFO] +- edu.mit:jwi:jar:2.2.3:compile
+[INFO] +- junit:junit:jar:4.12:test
+[INFO] |  \- org.hamcrest:hamcrest-core:jar:1.3:test
+[INFO] +- log4j:log4j:jar:1.2.17:test
+[INFO] +- org.slf4j:slf4j-api:jar:1.7.12:compile
+[INFO] \- org.slf4j:slf4j-log4j12:jar:1.7.12:test
+[INFO] 
+[INFO] --------------< org.talend.dataquality:dataquality-email >--------------
+[INFO] Building dataquality-email 6.4.1-SNAPSHOT                        [12/15]
+[INFO] -------------------------------[ bundle ]-------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:2.10:tree (default-cli) @ dataquality-email ---
+[INFO] org.talend.dataquality:dataquality-email:bundle:6.4.1-SNAPSHOT
+[INFO] +- commons-lang:commons-lang:jar:2.6:compile
+[INFO] +- junit:junit:jar:4.12:test
+[INFO] |  \- org.hamcrest:hamcrest-core:jar:1.3:test
+[INFO] +- log4j:log4j:jar:1.2.17:test
+[INFO] +- org.slf4j:slf4j-api:jar:1.7.12:compile
+[INFO] \- org.slf4j:slf4j-log4j12:jar:1.7.12:test
+[INFO] 
+[INFO] ----------< org.talend.dataquality:dataquality-survivorship >-----------
+[INFO] Building dataquality-survivorship 6.4.1-SNAPSHOT                 [13/15]
+[INFO] -------------------------------[ bundle ]-------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:2.10:tree (default-cli) @ dataquality-survivorship ---
+[INFO] org.talend.dataquality:dataquality-survivorship:bundle:6.4.1-SNAPSHOT
+[INFO] +- org.drools:drools-core:jar:6.2.0.Final:compile
+[INFO] |  +- org.mvel:mvel2:jar:2.2.4.Final:compile
+[INFO] |  +- org.kie:kie-api:jar:6.2.0.Final:compile
+[INFO] |  +- org.kie:kie-internal:jar:6.2.0.Final:compile
+[INFO] |  \- commons-codec:commons-codec:jar:1.6:compile
+[INFO] +- org.jbpm:jbpm-bpmn2:jar:6.2.0.Final:compile
+[INFO] |  +- org.drools:drools-compiler:jar:6.2.0.Final:compile
+[INFO] |  |  +- org.antlr:antlr-runtime:jar:3.5:compile
+[INFO] |  |  +- org.eclipse.jdt.core.compiler:ecj:jar:4.3.1:compile
+[INFO] |  |  +- com.thoughtworks.xstream:xstream:jar:1.4.7:compile
+[INFO] |  |  |  +- xmlpull:xmlpull:jar:1.1.3.1:compile
+[INFO] |  |  |  \- xpp3:xpp3_min:jar:1.1.4c:compile
+[INFO] |  |  \- com.google.protobuf:protobuf-java:jar:2.5.0:compile
+[INFO] |  +- org.jbpm:jbpm-flow-builder:jar:6.2.0.Final:compile
+[INFO] |  \- org.jbpm:jbpm-flow:jar:6.2.0.Final:compile
+[INFO] |     \- joda-time:joda-time:jar:1.6.2:compile
+[INFO] +- junit:junit:jar:4.12:test
+[INFO] |  \- org.hamcrest:hamcrest-core:jar:1.3:test
+[INFO] +- log4j:log4j:jar:1.2.17:test
+[INFO] +- org.slf4j:slf4j-api:jar:1.7.12:compile
+[INFO] \- org.slf4j:slf4j-log4j12:jar:1.7.12:test
+[INFO] 
+[INFO] -----------< org.talend.dataquality:dataquality-converters >------------
+[INFO] Building dataquality-converters 6.4.1-SNAPSHOT                   [14/15]
+[INFO] -------------------------------[ bundle ]-------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:2.10:tree (default-cli) @ dataquality-converters ---
+[INFO] org.talend.dataquality:dataquality-converters:bundle:6.4.1-SNAPSHOT
+[INFO] +- commons-lang:commons-lang:jar:2.6:compile
+[INFO] +- junit:junit:jar:4.12:test
+[INFO] |  \- org.hamcrest:hamcrest-core:jar:1.3:test
+[INFO] +- log4j:log4j:jar:1.2.17:test
+[INFO] +- org.slf4j:slf4j-api:jar:1.7.12:compile
+[INFO] \- org.slf4j:slf4j-log4j12:jar:1.7.12:test
+[INFO] 
+[INFO] ----------< org.talend.dataquality:dataquality-text-japanese >----------
+[INFO] Building dataquality-text-japanese 6.4.1-SNAPSHOT                [15/15]
+[INFO] -------------------------------[ bundle ]-------------------------------
+[INFO] 
+[INFO] --- maven-dependency-plugin:2.10:tree (default-cli) @ dataquality-text-japanese ---
+[INFO] org.talend.dataquality:dataquality-text-japanese:bundle:6.4.1-SNAPSHOT
+[INFO] +- org.talend.dataquality:dataquality-converters:jar:6.4.1-SNAPSHOT:compile
+[INFO] |  \- commons-lang:commons-lang:jar:2.6:compile
+[INFO] +- com.atilika.kuromoji:kuromoji-core:jar:0.9.0:compile
+[INFO] +- com.atilika.kuromoji:kuromoji-ipadic:jar:0.9.0:test
+[INFO] +- com.atilika.kuromoji:kuromoji-jumandic:jar:0.9.0:test
+[INFO] +- com.atilika.kuromoji:kuromoji-naist-jdic:jar:0.9.0:test
+[INFO] +- com.atilika.kuromoji:kuromoji-unidic:jar:0.9.0:test
+[INFO] +- com.atilika.kuromoji:kuromoji-unidic-kanaaccent:jar:0.9.0:test
+[INFO] +- junit:junit:jar:4.12:test
+[INFO] |  \- org.hamcrest:hamcrest-core:jar:1.3:test
+[INFO] +- log4j:log4j:jar:1.2.17:test
+[INFO] +- org.slf4j:slf4j-api:jar:1.7.12:compile
+[INFO] \- org.slf4j:slf4j-log4j12:jar:1.7.12:test
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary:
+[INFO] 
+[INFO] dataquality-libraries 6.4.1-SNAPSHOT ............... SUCCESS [  0.415 s]
+[INFO] dataquality-libraries-devops ....................... SUCCESS [  0.021 s]
+[INFO] dataquality-common ................................. SUCCESS [  0.041 s]
+[INFO] dataquality-record-linkage ......................... SUCCESS [  0.009 s]
+[INFO] dataquality-phone .................................. SUCCESS [  0.011 s]
+[INFO] dataquality-sampling ............................... SUCCESS [  0.245 s]
+[INFO] dataquality-standardization ........................ SUCCESS [  0.040 s]
+[INFO] dataquality-semantic-model ......................... SUCCESS [  0.006 s]
+[INFO] dataquality-semantic ............................... SUCCESS [  0.075 s]
+[INFO] dataquality-statistics ............................. SUCCESS [  0.045 s]
+[INFO] dataquality-wordnet ................................ SUCCESS [  0.005 s]
+[INFO] dataquality-email .................................. SUCCESS [  0.005 s]
+[INFO] dataquality-survivorship ........................... SUCCESS [  0.092 s]
+[INFO] dataquality-converters ............................. SUCCESS [  0.004 s]
+[INFO] dataquality-text-japanese 6.4.1-SNAPSHOT ........... SUCCESS [  0.011 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 1.686 s
+[INFO] Finished at: 2019-05-02T09:16:07+02:00
+[INFO] ------------------------------------------------------------------------
