@@ -19,7 +19,6 @@ import static org.talend.dataquality.semantic.TestUtils.mockWithTenant;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -38,7 +37,6 @@ import org.talend.dataquality.semantic.CategoryRegistryManagerAbstract;
 import org.talend.dataquality.semantic.api.CategoryRegistryManager;
 import org.talend.dataquality.semantic.api.CustomDictionaryHolder;
 import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
-import org.talend.dataquality.semantic.model.CategoryType;
 import org.talend.dataquality.semantic.model.DQCategory;
 import org.talend.dataquality.semantic.model.DQDocument;
 import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
@@ -367,7 +365,6 @@ public class ValueDataMaskerTest extends CategoryRegistryManagerAbstract {
 
     /**
      * Test method for {@link org.talend.dataquality.datamasking.DataMasker#process(java.lang.Object, boolean)}.
-     *
      */
     @Test
     public void testProcess() {

@@ -42,7 +42,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -196,7 +195,7 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
 
         createRepos(stagingPath, prodPath, metadataStagingPath, dicoStagingPath, regexStagingPath);
 
-        Mockito.when(new CustomRegexClassifierAccess(any(CustomDictionaryHolder.class))).thenReturn(customRegexClassifierAccess);
+        when(new CustomRegexClassifierAccess(any(CustomDictionaryHolder.class))).thenReturn(customRegexClassifierAccess);
 
         holder.publishDirectory();
 
@@ -254,7 +253,7 @@ public class CustomDictionaryHolderTest extends CategoryRegistryManagerAbstract 
 
         createRepos(stagingPath, metadataStagingPath, dicoStagingPath, regexStagingPath);
 
-        Mockito.when(new CustomRegexClassifierAccess(any(CustomDictionaryHolder.class))).thenReturn(customRegexClassifierAccess);
+        when(new CustomRegexClassifierAccess(any(CustomDictionaryHolder.class))).thenReturn(customRegexClassifierAccess);
 
         holder.publishDirectory();
 
