@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>dataquality-parent</artifactId>
+        <groupId>org.talend.dataquality</groupId>
+        <version>6.4.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>release-changelog</artifactId>
+
+    <name>release-changelog</name>
+
+    <properties>
+        <!-- skip the deployment for this pom, not necessary -->
+        <maven.deploy.skip>true</maven.deploy.skip>
+        <!-- Used by daikon-documentation, here for documentation purposes -->
+        <user/>
+        <password/>
+        <version/>
+        <output/>
+        <project/>
+        <talend_snapshots>https://artifacts-zl.talend.com/nexus/content/repositories/TalendOpenSourceSnapshot/
+        </talend_snapshots>
+        <talend_releases>https://artifacts-zl.talend.com/nexus/content/repositories/TalendOpenSourceRelease/
+        </talend_releases>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.talend.daikon</groupId>
+                <artifactId>daikon-documentation</artifactId>
+                <version>1.2.0-SNAPSHOT</version>
+                <executions>
+                    <execution>
+                        <id>release-notes</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>release-notes</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>talend-opensource-snapshot</id>
+            <name>talend-opensource-snapshot</name>
+            <url>${talend_snapshots}</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+        <pluginRepository>
+            <id>talend-opensource-release</id>
+            <name>talend-opensource-release</name>
+            <url>${talend_releases}</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
+</project>
