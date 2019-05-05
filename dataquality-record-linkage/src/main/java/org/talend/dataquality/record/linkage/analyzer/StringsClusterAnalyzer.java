@@ -69,7 +69,7 @@ public class StringsClusterAnalyzer implements Serializable {
                 new SurvivorShipAlgorithmEnum[] { SurvivorShipAlgorithmEnum.MOST_COMMON }, //
                 new String[] { StringUtils.EMPTY }, //
                 new double[] { 1.0 }, //
-                new IAttributeMatcher.NullOption[] { IAttributeMatcher.NullOption.nullMatchNull }, //
+                new IAttributeMatcher.NullOption[] { IAttributeMatcher.NullOption.NullMatchNull }, //
                 new SubString[] { SubString.NO_SUBSTRING }, //
                 StringUtils.EMPTY);
         mergeResult = crossBlockMatch.execute(records.iterator());
@@ -177,7 +177,7 @@ public class StringsClusterAnalyzer implements Serializable {
                 new SurvivorShipAlgorithmEnum[] { SurvivorShipAlgorithmEnum.MOST_COMMON }, //
                 new String[] { StringUtils.EMPTY }, //
                 new double[] { 1.0 }, //
-                new IAttributeMatcher.NullOption[] { IAttributeMatcher.NullOption.nullMatchNull }, //
+                new IAttributeMatcher.NullOption[] { IAttributeMatcher.NullOption.NullMatchNull }, //
                 new SubString[] { SubString.NO_SUBSTRING }, //
                 StringUtils.EMPTY);
         final Iterator<String[]> iterator = blockValues.iterator();

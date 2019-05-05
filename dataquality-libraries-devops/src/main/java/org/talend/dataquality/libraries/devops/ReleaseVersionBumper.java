@@ -38,6 +38,8 @@ import javax.xml.xpath.XPathFactory;
 import javax.xml.xpath.XPathFactoryConfigurationException;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -57,6 +59,8 @@ import org.xml.sax.SAXException;
  * @author sizhaoliu
  */
 public class ReleaseVersionBumper {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReleaseVersionBumper.class);
 
     private static final String TARGET_VERSION = "6.4.1-SNAPSHOT";
 
@@ -81,7 +85,7 @@ public class ReleaseVersionBumper {
         try {
             xpf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
         } catch (XPathFactoryConfigurationException e) {
-            System.out.println(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
         return xpf;
     }
@@ -108,7 +112,7 @@ public class ReleaseVersionBumper {
         String parentPomPath = "../dataquality-libraries/pom.xml";
         File inputFile = new File(projectRoot + parentPomPath);
         if (inputFile.exists()) {
-            System.out.println("Updating: " + inputFile.getAbsolutePath());
+            LOGGER.info("Updating: " + inputFile.getAbsolutePath());
             Document doc = dbf.newDocumentBuilder().parse(inputFile);
 
             // replace parent version
@@ -147,7 +151,7 @@ public class ReleaseVersionBumper {
     private void updateChildModules(File inputFile)
             throws IOException, SAXException, ParserConfigurationException, XPathExpressionException, TransformerException {
         if (inputFile.exists()) {
-            System.out.println("Updating: " + inputFile.getAbsolutePath());
+            LOGGER.info("Updating: " + inputFile.getAbsolutePath());
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
             dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
@@ -169,7 +173,7 @@ public class ReleaseVersionBumper {
     private void updateManifestVersion(Path manifestPath) throws IOException {
         File manifestFile = manifestPath.toFile();
         if (manifestFile.exists()) {
-            System.out.println("Updating: " + manifestFile.getAbsolutePath());
+            LOGGER.info("Updating: " + manifestFile.getAbsolutePath());
             FileInputStream fis = new FileInputStream(manifestFile);
             List<String> lines = IOUtils.readLines(fis);
             FileOutputStream fos = new FileOutputStream(manifestFile);

@@ -112,7 +112,7 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
     }
 
     /**
-     * @deprecated {@link IRecordMatcher#setRecordMatchThreshold(double)}
+     * @deprecated replaced by {@link IRecordMatcher#setRecordMatchThreshold(double)}
      */
     @Deprecated
     @Override
@@ -152,7 +152,9 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
         this.originalInputColumnSize = originalInputColumnSize;
     }
 
-    /*
+    /**
+     * @deprecated
+     * 
      * set if need to compute group quality.
      */
     @Deprecated
@@ -172,7 +174,6 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
     @Override
     public void setIsDisplayAttLabels(Boolean isDisplayAttLabels) {
         this.isDisplayAttLabels = isDisplayAttLabels;
-
     }
 
     /*
@@ -181,7 +182,6 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
      */
     public void setIsGIDStringType(Boolean isGIDStringType) {
         this.isGIDStringType = isGIDStringType;
-
     }
 
     /*

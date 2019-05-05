@@ -106,7 +106,7 @@ public class MFBOrderTest extends TestCase {
                 new SurvivorShipAlgorithmEnum[] { mergeAlgo }, // merge algos
                 new String[] { "" }, // merge params //$NON-NLS-1$
                 new double[] { 1 }, // weights
-                new IAttributeMatcher.NullOption[] { IAttributeMatcher.NullOption.nullMatchAll }, // null optino
+                new IAttributeMatcher.NullOption[] { IAttributeMatcher.NullOption.NullMatchAll }, // null optino
                 new SubString[] { SubString.NO_SUBSTRING }, // substring option
                 "MFB" // source //$NON-NLS-1$
         );

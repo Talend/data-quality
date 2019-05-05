@@ -28,7 +28,7 @@ public class DataDictFieldClassifier implements ISubCategoryClassifier {
 
     private static final long serialVersionUID = 6174669848299972111L;
 
-    private final int MAX_TOKEN_FOR_KEYWORDS = 3;
+    private static final int MAX_TOKEN_FOR_KEYWORDS = 3;
 
     private Index sharedDictionary;
 

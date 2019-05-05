@@ -42,7 +42,9 @@ import com.mifmif.common.regex.Generex;
  */
 public class GenerateFromCompound extends FunctionString {
 
-    private final Logger log = LoggerFactory.getLogger(GenerateFromCompound.class);
+    private static final long serialVersionUID = -2098232246954624570L;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(GenerateFromCompound.class);
 
     private List<CategoryValues> categoryValues = null;
 
@@ -61,7 +63,7 @@ public class GenerateFromCompound extends FunctionString {
             try {
                 result = getMaskedValue(str, distribution, r);
             } catch (IllegalAccessException | InstantiationException e) {
-                log.info(e.getMessage(), e);
+                LOGGER.info(e.getMessage(), e);
             }
         } else {
             ReplaceCharactersWithGeneration function = new ReplaceCharactersWithGeneration();

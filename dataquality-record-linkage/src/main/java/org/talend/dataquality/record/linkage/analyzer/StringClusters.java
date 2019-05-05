@@ -12,6 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.record.linkage.analyzer;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -19,7 +20,9 @@ import java.util.Set;
 /**
  * Holds all the clusters for a column.
  */
-public class StringClusters implements Iterable<StringClusters.StringCluster> {
+public class StringClusters implements Iterable<StringClusters.StringCluster>, Serializable {
+
+    private static final long serialVersionUID = -1247237099794980278L;
 
     private final Set<StringCluster> allClusters = new HashSet<StringCluster>();
 

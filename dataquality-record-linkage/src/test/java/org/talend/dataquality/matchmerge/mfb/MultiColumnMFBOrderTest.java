@@ -128,8 +128,8 @@ public class MultiColumnMFBOrderTest extends TestCase {
                 new SurvivorShipAlgorithmEnum[] { mergeAlgo, mergeAlgo }, // merge algos
                 new String[] { "", "" }, // merge params //$NON-NLS-1$ //$NON-NLS-2$
                 new double[] { 6, 4 }, // weights
-                new IAttributeMatcher.NullOption[] { IAttributeMatcher.NullOption.nullMatchAll,
-                        IAttributeMatcher.NullOption.nullMatchAll }, // null optino
+                new IAttributeMatcher.NullOption[] { IAttributeMatcher.NullOption.NullMatchAll,
+                        IAttributeMatcher.NullOption.NullMatchAll }, // null optino
                 new SubString[] { SubString.NO_SUBSTRING, SubString.NO_SUBSTRING }, // substring option
                 "MFB" // source //$NON-NLS-1$
         );

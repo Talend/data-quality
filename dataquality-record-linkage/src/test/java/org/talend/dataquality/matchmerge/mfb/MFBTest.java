@@ -82,7 +82,7 @@ public class MFBTest extends TestCase {
         Iterator<Record> iterator = new RecordIterator(totalCount, recordGenerator);
         MatchMergeAlgorithm algorithm = MFB.build(new AttributeMatcherType[] { matchAlgorithm }, new String[] { "" },
                 new float[] { 1 }, 0, new SurvivorShipAlgorithmEnum[] { SurvivorShipAlgorithmEnum.LONGEST }, new String[] { "" },
-                new double[] { 1 }, new IAttributeMatcher.NullOption[] { IAttributeMatcher.NullOption.nullMatchAll },
+                new double[] { 1 }, new IAttributeMatcher.NullOption[] { IAttributeMatcher.NullOption.NullMatchAll },
                 new SubString[] { SubString.NO_SUBSTRING }, "MFB");
         List<Record> mergedRecords = algorithm.execute(iterator);
         assertEquals(constantNumber, mergedRecords.size());
@@ -132,7 +132,7 @@ public class MFBTest extends TestCase {
         MatchMergeAlgorithm algorithm = MFB.build(new AttributeMatcherType[] { matchAlgorithm }, new String[] { "" },
                 new float[] { 1 }, 0, new SurvivorShipAlgorithmEnum[] { SurvivorShipAlgorithmEnum.CONCATENATE },
                 new String[] { separator }, new double[] { 1 },
-                new IAttributeMatcher.NullOption[] { IAttributeMatcher.NullOption.nullMatchAll },
+                new IAttributeMatcher.NullOption[] { IAttributeMatcher.NullOption.NullMatchAll },
                 new SubString[] { SubString.NO_SUBSTRING }, "MFB");
         List<Record> mergedRecords = algorithm.execute(iterator);
         assertEquals(constantNumber, mergedRecords.size());
@@ -190,7 +190,7 @@ public class MFBTest extends TestCase {
         MatchMergeAlgorithm algorithm = MFB.build(new AttributeMatcherType[] { matchAlgorithm }, new String[] { "" },
                 new float[] { 0.5f }, 0, new SurvivorShipAlgorithmEnum[] { SurvivorShipAlgorithmEnum.MOST_COMMON },
                 new String[] { "" }, new double[] { 1 },
-                new IAttributeMatcher.NullOption[] { IAttributeMatcher.NullOption.nullMatchAll },
+                new IAttributeMatcher.NullOption[] { IAttributeMatcher.NullOption.NullMatchAll },
                 new SubString[] { SubString.NO_SUBSTRING }, "MFB");
         List<Record> mergedRecords = algorithm.execute(iterator);
         assertEquals(1, mergedRecords.size());
@@ -240,7 +240,7 @@ public class MFBTest extends TestCase {
         MatchMergeAlgorithm algorithm = MFB.build(new AttributeMatcherType[] { matchAlgorithm }, new String[] { "" },
                 new float[] { 1 }, 0, new SurvivorShipAlgorithmEnum[] { SurvivorShipAlgorithmEnum.LONGEST }, new String[] { "" },
                 new double[] { 1 }, // Mark rule with a weight of 1.
-                new IAttributeMatcher.NullOption[] { IAttributeMatcher.NullOption.nullMatchAll },
+                new IAttributeMatcher.NullOption[] { IAttributeMatcher.NullOption.NullMatchAll },
                 new SubString[] { SubString.NO_SUBSTRING }, "MFB");
         List<Record> mergedRecords = algorithm.execute(iterator);
         assertEquals(constantNumber, mergedRecords.size());
@@ -255,7 +255,7 @@ public class MFBTest extends TestCase {
                 new SurvivorShipAlgorithmEnum[] { SurvivorShipAlgorithmEnum.LONGEST }, new String[] { "" }, new double[] { 4 }, // Mark rule with a weight of 4 -> should not affect overall score since
                 // score is
                 // normalized.
-                new IAttributeMatcher.NullOption[] { IAttributeMatcher.NullOption.nullMatchAll },
+                new IAttributeMatcher.NullOption[] { IAttributeMatcher.NullOption.NullMatchAll },
                 new SubString[] { SubString.NO_SUBSTRING }, "MFB");
         mergedRecords = algorithm.execute(iterator);
         assertEquals(constantNumber, mergedRecords.size());

@@ -32,12 +32,9 @@ import org.talend.dataquality.record.linkage.grouping.swoosh.SurvivorShipAlgorit
  */
 public class AnalysisMatchRecordGrouping extends AbstractRecordGrouping<Object> {
 
-    /**
-     * 
-     */
     private static final String ISMASTER = "true"; //$NON-NLS-1$
 
-    private final Logger log = LoggerFactory.getLogger(AnalysisMatchRecordGrouping.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AnalysisMatchRecordGrouping.class);
 
     private List<String[]> resultStrList = new ArrayList<String[]>();
 
@@ -63,12 +60,11 @@ public class AnalysisMatchRecordGrouping extends AbstractRecordGrouping<Object> 
     }
 
     public AnalysisMatchRecordGrouping() {
-
+        // empty default constructor
     }
 
     public void addRuleMatcher(List<Map<String, String>> ruleMatcherConvertResult) {
         addMatchRule(ruleMatcherConvertResult);
-
     }
 
     /*
@@ -119,9 +115,9 @@ public class AnalysisMatchRecordGrouping extends AbstractRecordGrouping<Object> 
             }
             end();
         } catch (IOException e) {
-            log.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
         } catch (InterruptedException e) {
-            log.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
             // clean up state...
             Thread.currentThread().interrupt();
         }

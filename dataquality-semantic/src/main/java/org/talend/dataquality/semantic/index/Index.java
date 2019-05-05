@@ -12,6 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.semantic.index;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -20,7 +21,7 @@ import org.talend.dataquality.semantic.model.DQCategory;
 /**
  * created by talend on 2015-07-28 Detailled comment.
  */
-public interface Index {
+public interface Index extends Serializable {
 
     void initIndex();
 

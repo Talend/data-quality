@@ -23,9 +23,9 @@ public interface IAttributeMatcher {
      * The different ways to handle a comparison with null values.
      */
     public static enum NullOption {
-        nullMatchNull, // null = null
-        nullMatchAll, // null = any string
-        nullMatchNone // null != null
+        NullMatchNull, // null = null
+        NullMatchAll, // null = any string
+        NullMatchNone // null != null
     }
 
     /**

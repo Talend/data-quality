@@ -26,7 +26,7 @@ public abstract class AbstractAttributeMatcher implements IAttributeMatcher, ITo
 
     private static final long serialVersionUID = -21096755142812677L;
 
-    private NullOption nullOption = NullOption.nullMatchNull;
+    private NullOption nullOption = NullOption.NullMatchNull;
 
     private String attributeName = null;
 
@@ -62,17 +62,17 @@ public abstract class AbstractAttributeMatcher implements IAttributeMatcher, ITo
         boolean str1IsNull = isNullOrEmpty(str1);
         boolean str2IsNull = isNullOrEmpty(str2);
         switch (nullOption) {
-        case nullMatchAll:
+        case NullMatchAll:
             if (str1IsNull || str2IsNull) {
                 return 1.0;
             }
             break;
-        case nullMatchNone:
+        case NullMatchNone:
             if (str1IsNull || str2IsNull) {
                 return 0.0;
             }
             break;
-        case nullMatchNull:
+        case NullMatchNull:
             if (str1IsNull && str2IsNull) // both null => match
                 return 1.0;
             else if (str1IsNull || str2IsNull) // only one null => non-match
@@ -441,14 +441,14 @@ public abstract class AbstractAttributeMatcher implements IAttributeMatcher, ITo
      */
     @Override
     public void setNullOption(String option) {
-        if (IAttributeMatcher.NullOption.nullMatchAll.name().equalsIgnoreCase(option)) {
-            this.nullOption = IAttributeMatcher.NullOption.nullMatchAll;
-        } else if (IAttributeMatcher.NullOption.nullMatchNone.name().equalsIgnoreCase(option)) {
-            this.nullOption = IAttributeMatcher.NullOption.nullMatchNone;
-        } else if (IAttributeMatcher.NullOption.nullMatchNull.name().equalsIgnoreCase(option)) {
-            this.nullOption = IAttributeMatcher.NullOption.nullMatchNull;
+        if (IAttributeMatcher.NullOption.NullMatchAll.name().equalsIgnoreCase(option)) {
+            this.nullOption = IAttributeMatcher.NullOption.NullMatchAll;
+        } else if (IAttributeMatcher.NullOption.NullMatchNone.name().equalsIgnoreCase(option)) {
+            this.nullOption = IAttributeMatcher.NullOption.NullMatchNone;
+        } else if (IAttributeMatcher.NullOption.NullMatchNull.name().equalsIgnoreCase(option)) {
+            this.nullOption = IAttributeMatcher.NullOption.NullMatchNull;
         } else {
-            this.nullOption = IAttributeMatcher.NullOption.nullMatchNull;
+            this.nullOption = IAttributeMatcher.NullOption.NullMatchNull;
         }
     }
 

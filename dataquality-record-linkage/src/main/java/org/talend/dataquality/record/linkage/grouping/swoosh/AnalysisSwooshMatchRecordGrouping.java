@@ -46,7 +46,7 @@ public class AnalysisSwooshMatchRecordGrouping extends AnalysisMatchRecordGroupi
     }
 
     public AnalysisSwooshMatchRecordGrouping() {
-
+        // empty default constructor
     }
 
     @Override

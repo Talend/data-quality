@@ -1,5 +1,6 @@
 package org.talend.dataquality.semantic.snapshot;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,7 +13,9 @@ import org.talend.dataquality.semantic.model.DQCategory;
  * Used for discovery and validation
  * contains information to access indexes for read only
  */
-public class DictionarySnapshot {
+public class DictionarySnapshot implements Serializable {
+
+    private static final long serialVersionUID = -6215879188951573104L;
 
     private Map<String, DQCategory> metadata;
 

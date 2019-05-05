@@ -35,7 +35,7 @@ import org.talend.dataquality.record.linkage.grouping.swoosh.RichRecord;
  */
 public class ResultSetIterator implements Iterator<Record> {
 
-    private final Logger log = LoggerFactory.getLogger(ResultSetIterator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ResultSetIterator.class);
 
     private final java.sql.Connection connection;
 
@@ -74,7 +74,7 @@ public class ResultSetIterator implements Iterator<Record> {
             try {
                 close();
             } catch (SQLException e1) {
-                log.debug(e1.getMessage(), e1);
+                LOGGER.debug(e1.getMessage(), e1);
                 throw new DQRecordLinkageRuntimeException("Could not close the connection", e); //$NON-NLS-1$
             }
             throw new DQRecordLinkageRuntimeException("Could not move to next result", e); //$NON-NLS-1$
@@ -102,7 +102,7 @@ public class ResultSetIterator implements Iterator<Record> {
                     // when the value is null, do not turn to "null"
                     value = object == null ? null : String.valueOf(object);
                 } catch (SQLException ex) {
-                    log.debug(ex.getMessage(), ex);
+                    LOGGER.debug(ex.getMessage(), ex);
                     // TDQ-11425 if SQLException, keep the current value is null and continue.
                 }
                 attribute.setValue(value);
@@ -110,7 +110,7 @@ public class ResultSetIterator implements Iterator<Record> {
             }
             return new RichRecord(attributes, String.valueOf(index++), 0, StringUtils.EMPTY);
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
             throw new DQRecordLinkageRuntimeException("Could not build next result", e); //$NON-NLS-1$
         }
     }

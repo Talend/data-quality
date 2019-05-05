@@ -43,6 +43,10 @@ public class SemanticMaskerFunctionFactory {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SemanticMaskerFunctionFactory.class);
 
+    private SemanticMaskerFunctionFactory() {
+        // empty default constructor
+    }
+
     public static Function<String> createMaskerFunctionForSemanticCategory(String semanticCategory, String dataType) {
         return createMaskerFunctionForSemanticCategory(semanticCategory, dataType, null, null);
     }

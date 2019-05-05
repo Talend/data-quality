@@ -22,6 +22,7 @@
 
 package org.talend.windowkey;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
@@ -33,7 +34,9 @@ import org.apache.commons.lang.StringUtils;
  * 
  * Minor changes done
  */
-public class FingerprintKeyer {
+public class FingerprintKeyer implements Serializable {
+
+    private static final long serialVersionUID = -1874933453576608132L;
 
     private static final Pattern alphanum = Pattern.compile("\\p{Punct}|\\p{Cntrl}"); //$NON-NLS-1$
 

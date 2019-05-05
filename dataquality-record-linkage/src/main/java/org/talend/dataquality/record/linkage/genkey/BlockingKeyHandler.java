@@ -12,6 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.record.linkage.genkey;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,7 +24,9 @@ import java.util.Map.Entry;
 /**
  * generate the blocking key for each selected columns
  */
-public class BlockingKeyHandler {
+public class BlockingKeyHandler implements Serializable {
+
+    private static final long serialVersionUID = 1454587736909853728L;
 
     private List<Object[]> inputData = new ArrayList<Object[]>();
 

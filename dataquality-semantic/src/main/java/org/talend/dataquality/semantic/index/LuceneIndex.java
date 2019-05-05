@@ -41,6 +41,8 @@ import org.talend.dataquality.semantic.model.DQCategory;
  */
 public class LuceneIndex implements Index {
 
+    private static final long serialVersionUID = -5204817779377650373L;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(LuceneIndex.class);
 
     private final DictionarySearcher searcher;

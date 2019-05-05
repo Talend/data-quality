@@ -12,12 +12,16 @@
 // ============================================================================
 package org.talend.dataquality.record.linkage.analyzer;
 
+import java.io.Serializable;
+
 import org.talend.dataquality.record.linkage.constant.AttributeMatcherType;
 
 /**
  * Use to match & merge values between different blocks.
  */
-public class PostMerge {
+public class PostMerge implements Serializable {
+
+    private static final long serialVersionUID = 2043501709176462242L;
 
     AttributeMatcherType matcher;
 

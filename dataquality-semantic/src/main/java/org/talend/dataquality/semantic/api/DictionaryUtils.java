@@ -34,6 +34,8 @@ import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.semantic.classifier.custom.UserDefinedCategory;
 import org.talend.dataquality.semantic.classifier.custom.UserDefinedRE2JRegexValidator;
 import org.talend.dataquality.semantic.classifier.custom.UserDefinedRegexValidator;
@@ -49,6 +51,8 @@ import org.talend.dataquality.semantic.model.DQValidator;
 import org.talend.dataquality.semantic.model.ValidationMode;
 
 public class DictionaryUtils {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(DictionaryUtils.class);
 
     public static final FieldType FIELD_TYPE_SYN = new FieldType();
 
@@ -90,7 +94,7 @@ public class DictionaryUtils {
         for (String value : values) {
             if (value != null) {
                 if (containsControlChars(value)) {
-                    System.out.println("The value [" + value
+                    LOGGER.info("The value [" + value
                             + "] contains at least one ISO control character and is not added to the index of " + word + ".");
                     continue;
                 }

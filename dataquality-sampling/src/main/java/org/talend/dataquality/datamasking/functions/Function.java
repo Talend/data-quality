@@ -150,7 +150,7 @@ public abstract class Function<T> implements Serializable {
     }
 
     /**
-     * @Deprecated
+     * @Deprecated replaced by {@link #parse(String, boolean)}
      * @param extraParameter
      * @param keepNullValues
      * @param rand

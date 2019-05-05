@@ -40,12 +40,12 @@ public class AbstractGenerateKey {
     /**
      * generate the blocking key for each columns
      * 
-     * @param BlockKeyDefinitions
+     * @param blockKeyDefinitions
      * @param dataMap
      * @param inputString
      */
-    public void generateKey(List<Map<String, String>> BlockKeyDefinitions, Map<String, String> dataMap, String[] inputString) {
-        String genKey = getGenKey(BlockKeyDefinitions, dataMap);
+    public void generateKey(List<Map<String, String>> blockKeyDefinitions, Map<String, String> dataMap, String[] inputString) {
+        String genKey = getGenKey(blockKeyDefinitions, dataMap);
         appendGenKeyResult(inputString, genKey);
 
     }

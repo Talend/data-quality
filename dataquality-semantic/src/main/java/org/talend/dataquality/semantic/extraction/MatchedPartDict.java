@@ -60,15 +60,15 @@ public class MatchedPartDict extends MatchedPart {
         }
     }
 
-    private static String longestCommonSubstring(String S1, String S2) {
+    private static String longestCommonSubstring(String s1, String s2) {
         int start = 0;
         int max = 0;
-        for (int i = 0; i < S1.length(); i++) {
-            for (int j = 0; j < S2.length(); j++) {
+        for (int i = 0; i < s1.length(); i++) {
+            for (int j = 0; j < s2.length(); j++) {
                 int x = 0;
-                while (S1.charAt(i + x) == S2.charAt(j + x)) {
+                while (s1.charAt(i + x) == s2.charAt(j + x)) {
                     x++;
-                    if (((i + x) >= S1.length()) || ((j + x) >= S2.length()))
+                    if (((i + x) >= s1.length()) || ((j + x) >= s2.length()))
                         break;
                 }
                 if (x > max) {
@@ -77,6 +77,6 @@ public class MatchedPartDict extends MatchedPart {
                 }
             }
         }
-        return S1.substring(start, (start + max));
+        return s1.substring(start, (start + max));
     }
 }

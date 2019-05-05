@@ -40,7 +40,7 @@ import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
  */
 public class CustomDictionaryHolder {
 
-    private final Logger log = LoggerFactory.getLogger(CustomDictionaryHolder.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CustomDictionaryHolder.class);
 
     private static final String INITIALIZE_ACCESS = "Initialize %s %s access for [%s]";
 
@@ -137,7 +137,7 @@ public class CustomDictionaryHolder {
 
     private synchronized void ensureMetadataIndexAccess() {
         if (customMetadataIndexAccess == null) {
-            log.info(String.format(INITIALIZE_ACCESS, CUSTOM, METADATA_SUBFOLDER_NAME, tenantID));
+            LOGGER.info(String.format(INITIALIZE_ACCESS, CUSTOM, METADATA_SUBFOLDER_NAME, tenantID));
             String metadataIndexPath = getIndexFolderPath(true, METADATA_SUBFOLDER_NAME);
             File folder = new File(metadataIndexPath);
             if (!folder.exists()) {
@@ -147,7 +147,7 @@ public class CustomDictionaryHolder {
                 customMetadataIndexAccess = new CustomMetadataIndexAccess(FSDirectory.open(folder));
                 metadata = customMetadataIndexAccess.readCategoryMedatada();
             } catch (IOException e) {
-                log.error(e.getMessage(), e);
+                LOGGER.error(e.getMessage(), e);
             }
         }
     }
@@ -155,7 +155,7 @@ public class CustomDictionaryHolder {
     private synchronized void ensureDocumentDictIndexAccess() {
         ensureMetadataIndexAccess();
         if (customDocumentIndexAccess == null) {
-            log.info(String.format(INITIALIZE_ACCESS, CUSTOM, DICTIONARY_SUBFOLDER_NAME, tenantID));
+            LOGGER.info(String.format(INITIALIZE_ACCESS, CUSTOM, DICTIONARY_SUBFOLDER_NAME, tenantID));
             String dataDictIndexPath = getIndexFolderPath(true, DICTIONARY_SUBFOLDER_NAME);
             File folder = new File(dataDictIndexPath);
             if (!folder.exists()) {
@@ -165,14 +165,14 @@ public class CustomDictionaryHolder {
                 dataDictDirectory = FSDirectory.open(folder);
                 customDocumentIndexAccess = new CustomDocumentIndexAccess(dataDictDirectory);
             } catch (IOException e) {
-                log.error(e.getMessage(), e);
+                LOGGER.error(e.getMessage(), e);
             }
         }
     }
 
     private synchronized void ensureRepublishDataDictIndexAccess() {
         if (customRepublishDataDictIndexAccess == null) {
-            log.info(String.format(INITIALIZE_ACCESS, REPUBLISH_FOLDER_NAME, DICTIONARY_SUBFOLDER_NAME, tenantID));
+            LOGGER.info(String.format(INITIALIZE_ACCESS, REPUBLISH_FOLDER_NAME, DICTIONARY_SUBFOLDER_NAME, tenantID));
             String dataDictIndexPath = getIndexFolderPath(false, DICTIONARY_SUBFOLDER_NAME);
             File folder = new File(dataDictIndexPath);
             if (!folder.exists()) {
@@ -181,7 +181,7 @@ public class CustomDictionaryHolder {
             try {
                 customRepublishDataDictIndexAccess = new CustomDocumentIndexAccess(FSDirectory.open(folder));
             } catch (IOException e) {
-                log.error(e.getMessage(), e);
+                LOGGER.error(e.getMessage(), e);
             }
         }
     }
@@ -189,7 +189,7 @@ public class CustomDictionaryHolder {
     private synchronized void ensureRepublishMetadataIndexAccess() {
         if (customRepublishMetadataIndexAccess == null) {
 
-            log.info(String.format(INITIALIZE_ACCESS, REPUBLISH_FOLDER_NAME, METADATA_SUBFOLDER_NAME, tenantID));
+            LOGGER.info(String.format(INITIALIZE_ACCESS, REPUBLISH_FOLDER_NAME, METADATA_SUBFOLDER_NAME, tenantID));
             String dataDictIndexPath = getIndexFolderPath(false, METADATA_SUBFOLDER_NAME);
             File folder = new File(dataDictIndexPath);
             if (!folder.exists()) {
@@ -198,7 +198,7 @@ public class CustomDictionaryHolder {
             try {
                 customRepublishMetadataIndexAccess = new CustomMetadataIndexAccess(FSDirectory.open(folder));
             } catch (IOException e) {
-                log.error(e.getMessage(), e);
+                LOGGER.error(e.getMessage(), e);
             }
         }
     }
@@ -346,7 +346,7 @@ public class CustomDictionaryHolder {
                 customRepublishDataDictIndexAccess.close();
             }
         } catch (IOException e) {
-            log.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
         } finally {
             customRepublishMetadataIndexAccess = null;
             customRepublishDataDictIndexAccess = null;
@@ -356,7 +356,7 @@ public class CustomDictionaryHolder {
 
     private synchronized void ensureRegexClassifierAccess() {
         if (customRegexClassifierAccess == null) {
-            log.info(String.format(INITIALIZE_ACCESS, CUSTOM, REGEX_SUBFOLDER_NAME, tenantID));
+            LOGGER.info(String.format(INITIALIZE_ACCESS, CUSTOM, REGEX_SUBFOLDER_NAME, tenantID));
             customRegexClassifierAccess = new CustomRegexClassifierAccess(this);
             regexClassifier = customRegexClassifierAccess.readUserDefinedClassifier();
         }
@@ -364,7 +364,7 @@ public class CustomDictionaryHolder {
 
     private synchronized void ensureRepublishRegexClassifierAccess() {
         if (customRepublishRegexClassifierAccess == null) {
-            log.info(String.format(INITIALIZE_ACCESS, REPUBLISH_FOLDER_NAME, REGEX_SUBFOLDER_NAME, tenantID));
+            LOGGER.info(String.format(INITIALIZE_ACCESS, REPUBLISH_FOLDER_NAME, REGEX_SUBFOLDER_NAME, tenantID));
             customRepublishRegexClassifierAccess = new CustomRegexClassifierAccess(
                     getIndexFolderPath(false, REGEX_SUBFOLDER_NAME + File.separator + REGEX_CATEGORIZER_FILE_NAME));
         }
@@ -508,7 +508,8 @@ public class CustomDictionaryHolder {
 
     /**
      * republish a category
-     *
+     * 
+     * @deprecated replaced by {@link #republishCategories(List)}
      * @param category
      */
     @Deprecated
@@ -573,19 +574,19 @@ public class CustomDictionaryHolder {
         if (!backup.exists() && stagingIndexes.exists()) {
             if (productionIndexes.exists()) {
                 try {
-                    log.info("[Post Republish] backup prod");
+                    LOGGER.info("[Post Republish] backup prod");
                     FileUtils.copyDirectory(productionIndexes, backup);
                     copyStagingToProd(stagingIndexes, backup, productionIndexes);
                 } catch (IOException exception) { // --- Catch the error when copying from backup to prod
-                    log.error(exception.getMessage(), exception);
+                    LOGGER.error(exception.getMessage(), exception);
                 } finally { // --- whatever happened just before, we want to remove the backup directory
-                    log.info("[Post Republish] delete backup");
+                    LOGGER.info("[Post Republish] delete backup");
                     FileUtils.deleteDirectory(backup);
                 }
             } else {
                 FileUtils.copyDirectory(stagingIndexes, productionIndexes);
             }
-            log.info("[Post Republish] delete staging contents");
+            LOGGER.info("[Post Republish] delete staging contents");
             FileUtils.deleteDirectory(stagingIndexes);
 
             reloadCategoryMetadata();
@@ -594,7 +595,7 @@ public class CustomDictionaryHolder {
 
     private void copyStagingToProd(File stagingIndexes, File backup, File productionIndexes) throws IOException {
         try {
-            log.info("[Post Republish] insert staging directory into prod");
+            LOGGER.info("[Post Republish] insert staging directory into prod");
             File metadataFolder = new File(stagingIndexes.getAbsolutePath() + File.separator + METADATA_SUBFOLDER_NAME);
             if (metadataFolder.exists()) {
                 ensureMetadataIndexAccess();
@@ -614,7 +615,7 @@ public class CustomDictionaryHolder {
                 customRegexClassifierAccess.copyStagingContent(regexFile.getAbsolutePath());
             }
         } catch (IOException exception) { // --- Catch the error when copying from staging to prod
-            log.error(exception.getMessage(), exception);
+            LOGGER.error(exception.getMessage(), exception);
             // --- Copy the backup to prod
             FileUtils.cleanDirectory(productionIndexes);
             FileUtils.copyDirectory(backup, productionIndexes);
@@ -634,12 +635,12 @@ public class CustomDictionaryHolder {
     }
 
     public void delete() {
-        log.info("Delete data for tenant " + tenantID);
+        LOGGER.info("Delete data for tenant " + tenantID);
         File rootFolder = new File(CategoryRegistryManager.getLocalRegistryPath() + File.separator + tenantID);
         try {
             FileUtils.deleteDirectory(rootFolder);
         } catch (IOException e) {
-            log.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
         }
     }
 }

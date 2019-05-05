@@ -18,9 +18,9 @@ import java.util.Locale;
 
 public class JapaneseNumberNormalizer {
 
-    private static final String negativeString = "マイナス";
+    private static final String NEGATIVE_STRING = "マイナス";
 
-    private static final String negativeChar = "-";
+    private static final String NEGATIVE_CHAR = "-";
 
     private static char NO_NUMERAL = Character.MAX_VALUE;
 
@@ -461,10 +461,10 @@ public class JapaneseNumberNormalizer {
     }
 
     private boolean isNegativeSign(String numberStr) {
-        if (numberStr.startsWith(negativeChar) && numberStr.lastIndexOf(negativeChar) == 0) {
+        if (numberStr.startsWith(NEGATIVE_CHAR) && numberStr.lastIndexOf(NEGATIVE_CHAR) == 0) {
             return true;
-        } else if (numberStr.startsWith(negativeString) && numberStr.length() > negativeString.length()
-                && numberStr.lastIndexOf(negativeString) == 0) {
+        } else if (numberStr.startsWith(NEGATIVE_STRING) && numberStr.length() > NEGATIVE_STRING.length()
+                && numberStr.lastIndexOf(NEGATIVE_STRING) == 0) {
             return true;
         }
         return false;
@@ -473,7 +473,7 @@ public class JapaneseNumberNormalizer {
     private int getNegativeStartIndex(String numberStr) {
         if (numberStr.charAt(0) == '-') {
             return 1;
-        } else if (numberStr.startsWith(negativeString)) {
+        } else if (numberStr.startsWith(NEGATIVE_STRING)) {
             return 4;
         }
         return -1;
