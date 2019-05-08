@@ -142,7 +142,7 @@ public class AbstractAttributeMatcherTest {
                 continue; // do not handle this case.
             }
             IAttributeMatcher matcher = AttributeMatcherFactory.createMatcher(type);
-            matcher.setNullOption(NullOption.NullMatchAll);
+            matcher.setNullOption(NullOption.nullMatchAll);
             Assert.assertEquals(1.0d, matcher.getMatchingWeight(null, null), 0);
             Assert.assertEquals(1.0d, matcher.getMatchingWeight(null, "toto"), 0);
             Assert.assertEquals(1.0d, matcher.getMatchingWeight("", "toto"), 0);
@@ -151,7 +151,7 @@ public class AbstractAttributeMatcherTest {
             Assert.assertEquals(1.0d, matcher.getMatchingWeight(null, "Ä"), 0);
 
             // change option
-            matcher.setNullOption(NullOption.NullMatchNone);
+            matcher.setNullOption(NullOption.nullMatchNone);
             Assert.assertEquals(0.0d, matcher.getMatchingWeight(null, null), 0);
             Assert.assertEquals(0.0d, matcher.getMatchingWeight(null, "toto"), 0);
             Assert.assertEquals(0.0d, matcher.getMatchingWeight("", "toto"), 0);
@@ -160,7 +160,7 @@ public class AbstractAttributeMatcherTest {
             Assert.assertEquals(0.0d, matcher.getMatchingWeight(null, "Ä"), 0);
 
             // change option
-            matcher.setNullOption(NullOption.NullMatchNull);
+            matcher.setNullOption(NullOption.nullMatchNull);
             Assert.assertEquals(1.0d, matcher.getMatchingWeight(null, null), 0);
             Assert.assertEquals(0.0d, matcher.getMatchingWeight(null, "toto"), 0);
             Assert.assertEquals(0.0d, matcher.getMatchingWeight("", "toto"), 0);
