@@ -42,11 +42,19 @@ public class JulianDayConverterTest {
 
     private String julianDay = "2457892"; //$NON-NLS-1$
 
+    private String julianDay_1 = "2468849"; //$NON-NLS-1$
+
     private String modiJulianDay = "57891"; //$NON-NLS-1$
+
+    private String modiJulianDay_1 = "68848"; //$NON-NLS-1$
 
     private String rataDie = "736467"; //$NON-NLS-1$
 
+    private String rataDie_1 = "747424"; //$NON-NLS-1$
+
     private String epochDay = "17304"; //$NON-NLS-1$
+
+    private String epochDay_1 = "28261"; //$NON-NLS-1$
 
     private String ISOEarStr = " AD"; //$NON-NLS-1$
 
@@ -146,16 +154,16 @@ public class JulianDayConverterTest {
     @Test
     public void testCalendarJapaToNumber() {
         JulianDayConverter jc = new JulianDayConverter(JapaneseChronology.INSTANCE, ChronoField.EPOCH_DAY);
-        assertEquals(epochDay, jc.convert(calendarJapa));
+        assertEquals(epochDay_1, jc.convert(calendarJapa));
 
         jc = new JulianDayConverter(JapaneseChronology.INSTANCE, JulianFields.JULIAN_DAY);
-        assertEquals(julianDay, jc.convert(calendarJapa));
+        assertEquals(julianDay_1, jc.convert(calendarJapa));
 
         jc = new JulianDayConverter(JapaneseChronology.INSTANCE, JulianFields.MODIFIED_JULIAN_DAY);
-        assertEquals(modiJulianDay, jc.convert(calendarJapa));
+        assertEquals(modiJulianDay_1, jc.convert(calendarJapa));
 
         jc = new JulianDayConverter(JapaneseChronology.INSTANCE, JulianFields.RATA_DIE);
-        assertEquals(rataDie, jc.convert(calendarJapa));
+        assertEquals(rataDie_1, jc.convert(calendarJapa));
     }
 
     @Test
@@ -295,7 +303,7 @@ public class JulianDayConverterTest {
         assertEquals("18/五月/2017", jc.convert(modiJulianDay)); //$NON-NLS-1$
 
         jc = new JulianDayConverter(JapaneseChronology.INSTANCE, null, Locale.US, JulianFields.MODIFIED_JULIAN_DAY);
-        assertEquals(modiJulianDay, jc.convert(calendarJapa));
+        assertEquals(modiJulianDay_1, jc.convert(calendarJapa));
     }
 
 }
