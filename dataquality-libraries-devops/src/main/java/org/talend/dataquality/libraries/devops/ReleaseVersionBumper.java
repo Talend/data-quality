@@ -62,7 +62,7 @@ public class ReleaseVersionBumper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReleaseVersionBumper.class);
 
-    private static final String TARGET_VERSION = "6.4.1-SNAPSHOT";
+    private static final String TARGET_VERSION = "7.0.0-SNAPSHOT";
 
     private static final String TARGET_DAIKON_VERSION = "0.31.3";
 

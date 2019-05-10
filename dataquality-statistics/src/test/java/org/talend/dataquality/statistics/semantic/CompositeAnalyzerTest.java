@@ -45,13 +45,13 @@ public class CompositeAnalyzerTest extends SemanticStatisticsTestBase {
     }
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         final DictionarySnapshot dictionarySnapshot = new StandardDictionarySnapshotProvider().get();
         analyzer = Analyzers.with(new DataTypeAnalyzer(), new SemanticAnalyzer(dictionarySnapshot));
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         analyzer.end();
     }
 

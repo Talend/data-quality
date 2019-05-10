@@ -16,8 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.NullArgumentException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.QualityAnalyzer;
 import org.talend.dataquality.common.inference.ValueQualityStatistics;
@@ -117,7 +115,7 @@ public class ValueQualityAnalyzer implements Analyzer<ValueQualityStatistics> {
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() {
     }
 
 }

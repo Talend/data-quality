@@ -2,45 +2,15 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Sampling Library
 Bundle-SymbolicName: org.talend.dataquality.sampling
-Bundle-Version: 6.4.1.SNAPSHOT
+Bundle-Version: 7.0.0.SNAPSHOT
 Bundle-Vendor: .Talend SA.
-Export-Package: org.talend.dataquality.datamasking,
- org.talend.dataquality.datamasking.functions,
- org.talend.dataquality.datamasking.functions.address,
- org.talend.dataquality.datamasking.functions.bank,
- org.talend.dataquality.datamasking.functions.date,
- org.talend.dataquality.datamasking.functions.email,
- org.talend.dataquality.datamasking.functions.generation,
- org.talend.dataquality.datamasking.functions.misc,
- org.talend.dataquality.datamasking.functions.number,
- org.talend.dataquality.datamasking.functions.phone,
- org.talend.dataquality.datamasking.functions.ssn,
- org.talend.dataquality.datamasking.functions.text,
- org.talend.dataquality.datamasking.functions.text.keep,
- org.talend.dataquality.datamasking.functions.text.remove,
- org.talend.dataquality.datamasking.functions.text.replace,
- org.talend.dataquality.datamasking.functions.util,
- org.talend.dataquality.datamasking.generic,
- org.talend.dataquality.datamasking.generic.fields,
- org.talend.dataquality.datamasking.generic.patterns,
- org.talend.dataquality.datamasking.semantic,
- org.talend.dataquality.datamasking.shuffling,
- org.talend.dataquality.datamasking.utils.crypto,
- org.talend.dataquality.duplicating,
+Export-Package: org.talend.dataquality.duplicating,
  org.talend.dataquality.sampling,
  org.talend.dataquality.sampling.exception,
  org.talend.dataquality.sampling.parallel
-Bundle-ClassPath: .,
- lib/format-preserving-encryption.jar
-Import-Package: com.google.i18n.phonenumbers,
- org.apache.commons.codec.binary,
- org.apache.commons.codec.language,
- org.apache.commons.io;version="[2.2.0,3.0.0)",
- org.apache.commons.lang3,
+Import-Package: org.apache.commons.codec.language,
  org.apache.commons.lang3.tuple,
  org.apache.commons.math3.distribution;version="3.3.0",
- org.slf4j;version="[1.7.0,2.0.0)",
- org.talend.daikon.number;version="[0.26.0,1.0.0)",
- org.talend.daikon.pattern.character;version="[0.26.0,1.0.0]"
+ org.slf4j;version="[1.7.0,2.0.0)"
 Require-Bundle: org.talend.dataquality.common,
  org.talend.testutils;resolution:=optional

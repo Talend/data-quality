@@ -11,9 +11,7 @@ This repository contains the source files of Talend Data Quality libraries.
 | [dataquality-email](dataquality-email)                    | *Email validation library*        |
 | [dataquality-libraries](dataquality-libraries)            | *Parent pom aggregating other library projects, devops tools*        |
 | [dataquality-record-linkage](dataquality-record-linkage)  | *Record Matching algorithms, blocking key calculation and T-Swoosh* |
-| [dataquality-sampling](dataquality-sampling)              | *Reservoir sampling, data masking, data duplication*                 |
-| [dataquality-semantic-model](dataquality-semantic-model)  | *Definition of semantic category related objects*                      |
-| [dataquality-semantic](dataquality-semantic)              | *API for semantic category analysis*                                 |
+| [dataquality-sampling](dataquality-sampling)              | *Reservoir sampling, data duplication*                 |
 | [dataquality-standardization](dataquality-standardization)| *Standardization library based on Apache Lucene*                     |
 | [dataquality-statistics](dataquality-statistics)          | *API for data analysis and statistics (require JDK1.8)*              |
 | [dataquality-wordnet](dataquality-wordnet)                | *Content validation API based on WordNet dictionary*                 |

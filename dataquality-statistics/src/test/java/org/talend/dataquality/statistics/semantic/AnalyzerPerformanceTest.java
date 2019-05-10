@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,7 +57,7 @@ public class AnalyzerPerformanceTest {
     };
 
     @BeforeClass
-    public static void setupBuilder() throws URISyntaxException {
+    public static void setupBuilder() {
         CategoryRegistryManager.setLocalRegistryPath(TARGET_TEST_CRM_PATH);
         dictionarySnapshot = new StandardDictionarySnapshotProvider().get();
     }
@@ -71,8 +70,7 @@ public class AnalyzerPerformanceTest {
                 new CardinalityAnalyzer(), //
                 new DataTypeAnalyzer(), //
                 new DataTypeFrequencyAnalyzer(), //
-                new CompositePatternFrequencyAnalyzer(types), //
-                new SemanticAnalyzer(dictionarySnapshot) //
+                new CompositePatternFrequencyAnalyzer(types), new SemanticAnalyzer(dictionarySnapshot) //
         );
     }
 
@@ -162,7 +160,7 @@ public class AnalyzerPerformanceTest {
     }
 
     private static List<String[]> getRecords(String path) {
-        List<String[]> records = new ArrayList<String[]>();
+        List<String[]> records = new ArrayList<>();
         try {
             Reader reader = new FileReader(AnalyzerPerformanceTest.class.getResource(path).getPath());
             CSVFormat csvFormat = CSVFormat.DEFAULT.withDelimiter(';').withFirstRecordAsHeader();

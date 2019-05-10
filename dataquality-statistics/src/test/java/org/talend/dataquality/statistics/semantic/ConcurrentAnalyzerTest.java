@@ -12,7 +12,8 @@
 // ============================================================================
 package org.talend.dataquality.statistics.semantic;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public class ConcurrentAnalyzerTest extends SemanticStatisticsTestBase {
     }
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         errorOccurred.set(false);
     }
 
@@ -55,22 +56,9 @@ public class ConcurrentAnalyzerTest extends SemanticStatisticsTestBase {
     public void testThreadSafeConcurrentAccess() {
         try {
             final DictionarySnapshot dictionarySnapshot = new StandardDictionarySnapshotProvider().get();
-            AnalyzerSupplier<Analyzer<SemanticType>> supplier = new AnalyzerSupplier<Analyzer<SemanticType>>() {
-
-                @Override
-                public Analyzer<SemanticType> get() {
-                    return new SemanticAnalyzer(dictionarySnapshot);
-                }
-
-            };
+            AnalyzerSupplier<Analyzer<SemanticType>> supplier = () -> new SemanticAnalyzer(dictionarySnapshot);
             final Analyzer<SemanticType> analyzer = ConcurrentAnalyzer.make(supplier, 2);
-            Runnable r = new Runnable() {
-
-                @Override
-                public void run() {
-                    doConcurrentAccess(analyzer, true);
-                }
-            };
+            Runnable r = () -> doConcurrentAccess(analyzer, true);
             List<Thread> workers = new ArrayList<>();
 
             for (int i = 0; i < 20; i++) {
@@ -82,7 +70,7 @@ public class ConcurrentAnalyzerTest extends SemanticStatisticsTestBase {
             for (Thread worker : workers) {
                 worker.join();
             }
-            assertEquals("ConcurrentAccess not failed", false, errorOccurred.get());
+            assertFalse("ConcurrentAccess not failed", errorOccurred.get());
         } catch (InterruptedException e) {
             e.printStackTrace();
             fail("Thread has been interrupted");
@@ -93,14 +81,7 @@ public class ConcurrentAnalyzerTest extends SemanticStatisticsTestBase {
     public void testThreadUnsafeConcurrentAccess() throws Exception {
         final DictionarySnapshot dictionarySnapshot = new StandardDictionarySnapshotProvider().get();
         try (Analyzer<SemanticType> analyzer = new SemanticAnalyzer(dictionarySnapshot)) {
-            Runnable r = new Runnable() {
-
-                @Override
-                public void run() {
-                    doConcurrentAccess(analyzer, false);
-                }
-
-            };
+            Runnable r = () -> doConcurrentAccess(analyzer, false);
             List<Thread> workers = new ArrayList<>();
             for (int i = 0; i < 20; i++) {
                 workers.add(new Thread(r));
@@ -111,7 +92,7 @@ public class ConcurrentAnalyzerTest extends SemanticStatisticsTestBase {
             for (Thread worker : workers) {
                 worker.join();
             }
-            assertEquals("ConcurrentAccess failed", true, errorOccurred.get());
+            assertTrue("ConcurrentAccess failed", errorOccurred.get());
         }
     }
 
@@ -161,6 +142,7 @@ public class ConcurrentAnalyzerTest extends SemanticStatisticsTestBase {
             try {
                 semanticAnalyzer.close();
             } catch (Exception e) {
+                // TODO : Solve this issue
                 throw new RuntimeException(e);
             }
         }

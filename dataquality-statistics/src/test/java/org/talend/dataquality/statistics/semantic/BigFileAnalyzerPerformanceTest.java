@@ -129,7 +129,7 @@ public class BigFileAnalyzerPerformanceTest {
             "", "", "", "", "", "", "", "", "", };
 
     @BeforeClass
-    public static void setupBuilder() throws URISyntaxException {
+    public static void setupBuilder() {
         dictionarySnapshot = new StandardDictionarySnapshotProvider().get();
     }
 
@@ -186,7 +186,7 @@ public class BigFileAnalyzerPerformanceTest {
     }
 
     private static List<String[]> getRecords(String path) {
-        List<String[]> records = new ArrayList<String[]>();
+        List<String[]> records = new ArrayList<>();
         try {
             Reader reader = new FileReader(BigFileAnalyzerPerformanceTest.class.getResource(path).getPath());
             CSVFormat csvFormat = CSVFormat.DEFAULT.withDelimiter(';').withFirstRecordAsHeader();

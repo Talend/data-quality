@@ -17,7 +17,6 @@ import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -56,7 +55,7 @@ public class ValueQualityAnalyzerTest {
             throw new IllegalArgumentException("Input stream cannot be null.");
         }
         try {
-            List<String[]> records = new ArrayList<String[]>();
+            List<String[]> records = new ArrayList<>();
             final List<String> lines = IOUtils.readLines(inputStream);
             for (String line : lines) {
                 String[] record = StringUtils.splitByWholeSeparatorPreserveAllTokens(line, separator);
@@ -81,11 +80,11 @@ public class ValueQualityAnalyzerTest {
     }
 
     @Test
-    public void testValueQualityAnalyzerWithoutSemanticQuality() throws URISyntaxException {
+    public void testValueQualityAnalyzerWithoutSemanticQuality() {
 
-        DataTypeQualityAnalyzer dataTypeQualityAnalyzer = new DataTypeQualityAnalyzer(
-                new DataTypeEnum[] { DataTypeEnum.INTEGER, DataTypeEnum.STRING, DataTypeEnum.STRING, DataTypeEnum.STRING,
-                        DataTypeEnum.DATE, DataTypeEnum.STRING, DataTypeEnum.DATE, DataTypeEnum.INTEGER, DataTypeEnum.DOUBLE });
+        DataTypeQualityAnalyzer dataTypeQualityAnalyzer = new DataTypeQualityAnalyzer(DataTypeEnum.INTEGER, DataTypeEnum.STRING,
+                DataTypeEnum.STRING, DataTypeEnum.STRING, DataTypeEnum.DATE, DataTypeEnum.STRING, DataTypeEnum.DATE,
+                DataTypeEnum.INTEGER, DataTypeEnum.DOUBLE);
         String[] semanticTypes = new String[] { SemanticCategoryEnum.UNKNOWN.name(), SemanticCategoryEnum.UNKNOWN.name(),
                 SemanticCategoryEnum.UNKNOWN.name(), SemanticCategoryEnum.UNKNOWN.name(), SemanticCategoryEnum.UNKNOWN.name(),
                 SemanticCategoryEnum.UNKNOWN.name(), SemanticCategoryEnum.UNKNOWN.name(), SemanticCategoryEnum.UNKNOWN.name(),
@@ -120,7 +119,7 @@ public class ValueQualityAnalyzerTest {
     }
 
     @Test
-    public void testValueQualityAnalyzerWithSemanticQuality() throws URISyntaxException {
+    public void testValueQualityAnalyzerWithSemanticQuality() {
 
         final List<String[]> records = new ArrayList<String[]>() {
 
@@ -147,7 +146,7 @@ public class ValueQualityAnalyzerTest {
             private static final long serialVersionUID = 1L;
 
             {
-                add(new HashSet<String>());
+                add(new HashSet<>());
                 add(new HashSet<String>() {
 
                     private static final long serialVersionUID = 1L;
@@ -157,7 +156,7 @@ public class ValueQualityAnalyzerTest {
                         add("ORZ");
                     }
                 });
-                add(new HashSet<String>());
+                add(new HashSet<>());
             }
         };
         final List<Set<String>> EXPECTED_UNKNOWN_VALUES = new ArrayList<Set<String>>() {
@@ -165,14 +164,14 @@ public class ValueQualityAnalyzerTest {
             private static final long serialVersionUID = 1L;
 
             {
-                add(new HashSet<String>());
-                add(new HashSet<String>());
-                add(new HashSet<String>());
+                add(new HashSet<>());
+                add(new HashSet<>());
+                add(new HashSet<>());
             }
         };
 
-        final DataTypeQualityAnalyzer dataTypeQualityAnalyzer = new DataTypeQualityAnalyzer(
-                new DataTypeEnum[] { DataTypeEnum.INTEGER, DataTypeEnum.STRING, DataTypeEnum.STRING });
+        final DataTypeQualityAnalyzer dataTypeQualityAnalyzer = new DataTypeQualityAnalyzer(DataTypeEnum.INTEGER,
+                DataTypeEnum.STRING, DataTypeEnum.STRING);
 
         final String[] semanticTypes = new String[] { SemanticCategoryEnum.UNKNOWN.name(),
                 SemanticCategoryEnum.US_STATE_CODE.name(), SemanticCategoryEnum.FR_COMMUNE.name() };

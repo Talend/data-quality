@@ -4,67 +4,23 @@
 	<parent>
 		<groupId>org.talend.dataquality</groupId>
 		<artifactId>dataquality-libraries</artifactId>
-		<version>6.4.1-SNAPSHOT</version>
+		<version>7.0.0-SNAPSHOT</version>
 		<relativePath>../dataquality-libraries</relativePath>
 	</parent>
 	<artifactId>dataquality-sampling</artifactId>
 	<packaging>bundle</packaging>
 	<name>dataquality-sampling</name>
 	<description>Reservoir sampling, data masking, data duplication</description>
-	<build>
-     <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.8</version>
-                <executions>
-                    <execution>
-                        <id>copy-maven-repository</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                        <configuration>
-                            <stripVersion>true</stripVersion>
-                            <outputDirectory>${project.basedir}/lib</outputDirectory>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>com.idealista</groupId>
-                                    <artifactId>format-preserving-encryption</artifactId>
-                                    <version>1.0.0</version>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <extensions>true</extensions>
-                <configuration>
-                    <instructions>
-                        <Include-Resource>{maven-resources},lib/format-preserving-encryption.jar=lib/format-preserving-encryption.jar,licenses=licenses</Include-Resource>
-                    </instructions>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-	<dependencies>
-		<dependency>
-			<groupId>org.talend.dataquality</groupId>
-			<artifactId>dataquality-common</artifactId>
-			<version>${project.parent.version}</version>
-		</dependency>
 
+	<dependencies>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-math3</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
 		</dependency>
 
 		<dependency>
@@ -73,23 +29,8 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.talend.daikon</groupId>
-			<artifactId>daikon</artifactId>
-		</dependency>
-
-		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.assertj</groupId>
-			<artifactId>assertj-core</artifactId>
 			<scope>test</scope>
 		</dependency>
 
@@ -97,21 +38,18 @@
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>com.googlecode.libphonenumber</groupId>
-			<artifactId>libphonenumber</artifactId>
-			<version>8.9.6</version>
 			<scope>test</scope>
 		</dependency>
 
-		<!-- used for FPE masking.
-		https://github.com/idealista/format-preserving-encryption-java-->
 		<dependency>
-			<groupId>com.idealista</groupId>
-			<artifactId>format-preserving-encryption</artifactId>
-			<version>1.0.0</version>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
