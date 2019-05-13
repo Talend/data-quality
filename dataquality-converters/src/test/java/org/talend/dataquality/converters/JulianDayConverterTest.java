@@ -17,6 +17,7 @@ import static org.junit.Assert.assertEquals;
 import java.time.chrono.HijrahChronology;
 import java.time.chrono.IsoChronology;
 import java.time.chrono.JapaneseChronology;
+import java.time.chrono.JapaneseEra;
 import java.time.chrono.MinguoChronology;
 import java.time.chrono.ThaiBuddhistChronology;
 import java.time.temporal.ChronoField;
@@ -30,6 +31,15 @@ import org.junit.Test;
  */
 public class JulianDayConverterTest {
 
+    public static boolean isReiwaEraSupported() {
+        try {
+            JapaneseEra.valueOf("Reiwa");
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+        return true;
+    }
+
     private String calendarISO = "2017-05-18"; //$NON-NLS-1$
 
     private String calendarJapa = "0029-05-18"; //$NON-NLS-1$
@@ -42,11 +52,19 @@ public class JulianDayConverterTest {
 
     private String julianDay = "2457892"; //$NON-NLS-1$
 
+    private String julianDay_1 = "2468849"; //$NON-NLS-1$
+
     private String modiJulianDay = "57891"; //$NON-NLS-1$
+
+    private String modiJulianDay_1 = "68848"; //$NON-NLS-1$
 
     private String rataDie = "736467"; //$NON-NLS-1$
 
+    private String rataDie_1 = "747424"; //$NON-NLS-1$
+
     private String epochDay = "17304"; //$NON-NLS-1$
+
+    private String epochDay_1 = "28261"; //$NON-NLS-1$
 
     private String ISOEarStr = " AD"; //$NON-NLS-1$
 
@@ -146,16 +164,32 @@ public class JulianDayConverterTest {
     @Test
     public void testCalendarJapaToNumber() {
         JulianDayConverter jc = new JulianDayConverter(JapaneseChronology.INSTANCE, ChronoField.EPOCH_DAY);
-        assertEquals(epochDay, jc.convert(calendarJapa));
+        if (isReiwaEraSupported()) {
+            assertEquals(epochDay_1, jc.convert(calendarJapa));
+        } else {
+            assertEquals(epochDay, jc.convert(calendarJapa));
+        }
 
         jc = new JulianDayConverter(JapaneseChronology.INSTANCE, JulianFields.JULIAN_DAY);
-        assertEquals(julianDay, jc.convert(calendarJapa));
+        if (isReiwaEraSupported()) {
+            assertEquals(julianDay_1, jc.convert(calendarJapa));
+        } else {
+            assertEquals(julianDay, jc.convert(calendarJapa));
+        }
 
         jc = new JulianDayConverter(JapaneseChronology.INSTANCE, JulianFields.MODIFIED_JULIAN_DAY);
-        assertEquals(modiJulianDay, jc.convert(calendarJapa));
+        if (isReiwaEraSupported()) {
+            assertEquals(modiJulianDay_1, jc.convert(calendarJapa));
+        } else {
+            assertEquals(modiJulianDay, jc.convert(calendarJapa));
+        }
 
         jc = new JulianDayConverter(JapaneseChronology.INSTANCE, JulianFields.RATA_DIE);
-        assertEquals(rataDie, jc.convert(calendarJapa));
+        if (isReiwaEraSupported()) {
+            assertEquals(rataDie_1, jc.convert(calendarJapa));
+        } else {
+            assertEquals(rataDie, jc.convert(calendarJapa));
+        }
     }
 
     @Test
@@ -282,8 +316,9 @@ public class JulianDayConverterTest {
         jc = new JulianDayConverter(IsoChronology.INSTANCE, "dd-LLL-yyyy HH:mm:ss", Locale.UK, JulianFields.RATA_DIE); //$NON-NLS-1$
         assertEquals(rataDie, jc.convert("18-May-2017 02:03:04")); //$NON-NLS-1$
         // Don't remove these case!Locale.US with 'LLLL' format doesn't work for JDK 8,it should be work for JDK9.
-        //        jc = new JulianDayConverter(JulianFields.JULIAN_DAY, IsoChronology.INSTANCE, "dd-LLL-yyyy", Locale.UK); //$NON-NLS-1$
-        //        assertEquals("18-May-2017", jc.convert(julianDay)); //$NON-NLS-1$
+        // jc = new JulianDayConverter(JulianFields.JULIAN_DAY, IsoChronology.INSTANCE, "dd-LLL-yyyy", Locale.UK);
+        // //$NON-NLS-1$
+        // assertEquals("18-May-2017", jc.convert(julianDay)); //$NON-NLS-1$
     }
 
     @Test
@@ -291,11 +326,15 @@ public class JulianDayConverterTest {
         JulianDayConverter jc = new JulianDayConverter(JulianFields.JULIAN_DAY, IsoChronology.INSTANCE, "dd/MM/yyyy", Locale.UK); //$NON-NLS-1$
         assertEquals("18/05/2017", jc.convert(julianDay)); //$NON-NLS-1$
 
-        jc = new JulianDayConverter(JulianFields.MODIFIED_JULIAN_DAY, IsoChronology.INSTANCE, "dd/LLL/yyyy", Locale.CHINESE); //$NON-NLS-1$
+        jc = new JulianDayConverter(JulianFields.MODIFIED_JULIAN_DAY, IsoChronology.INSTANCE, "dd/LLL/yyyy", //$NON-NLS-1$
+                Locale.CHINESE);
         assertEquals("18/五月/2017", jc.convert(modiJulianDay)); //$NON-NLS-1$
 
         jc = new JulianDayConverter(JapaneseChronology.INSTANCE, null, Locale.US, JulianFields.MODIFIED_JULIAN_DAY);
-        assertEquals(modiJulianDay, jc.convert(calendarJapa));
+        if (isReiwaEraSupported()) {
+            assertEquals(modiJulianDay_1, jc.convert(calendarJapa));
+        } else {
+            assertEquals(modiJulianDay, jc.convert(calendarJapa));
+        }
     }
-
 }
