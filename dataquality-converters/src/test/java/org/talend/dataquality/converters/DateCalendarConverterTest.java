@@ -31,6 +31,7 @@ import java.time.chrono.MinguoChronology;
 import java.time.chrono.ThaiBuddhistChronology;
 import java.util.Locale;
 
+import org.apache.commons.lang.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -67,6 +68,10 @@ public class DateCalendarConverterTest {
     private static final String JAPANESE_DATE_WITH_ERA_1 = "0031-04-30 平成"; //$NON-NLS-1$
 
     private static final String JAPANESE_DATE_WITH_ERA_2 = "0001-05-01 令和"; //$NON-NLS-1$
+
+    private static final String JAPANESE_DATE_WITH_ERA_3 = "0031-05-01 平成"; //$NON-NLS-1$
+
+    private static final String JAPANESE_DATE_WITH_ERA_4 = "0001-04-30 令和"; //$NON-NLS-1$
 
     private static final String MINGUO_STR = "0085-10-29"; //$NON-NLS-1$
 
@@ -140,9 +145,9 @@ public class DateCalendarConverterTest {
         assertEquals(HIJRAH_STR, new DateCalendarConverter(IsoChronology.INSTANCE, HijrahChronology.INSTANCE).convert(ISO_STR));
         assertEquals(JAPANESE_STR,
                 new DateCalendarConverter(IsoChronology.INSTANCE, JapaneseChronology.INSTANCE).convert(ISO_STR));
+        assertEquals(JAPANESE_STR_1,
+                new DateCalendarConverter(IsoChronology.INSTANCE, JapaneseChronology.INSTANCE).convert(ISO_STR_1));
         if (isReiwaEraSupported()) {
-            assertEquals(JAPANESE_STR_1,
-                    new DateCalendarConverter(IsoChronology.INSTANCE, JapaneseChronology.INSTANCE).convert(ISO_STR_1));
             assertEquals(JAPANESE_STR_2,
                     new DateCalendarConverter(IsoChronology.INSTANCE, JapaneseChronology.INSTANCE).convert(ISO_STR_2));
         }
@@ -237,11 +242,16 @@ public class DateCalendarConverterTest {
     public void testConvert_JapaneseDateTo() {
         assertEquals(ISO_STR, new DateCalendarConverter(PATTERN_WITH_G, null, JapaneseChronology.INSTANCE, IsoChronology.INSTANCE,
                 Locale.JAPAN, Locale.US).convert(JAPANESE_DATE_WITH_ERA));
+        assertEquals(ISO_STR_1, new DateCalendarConverter(PATTERN_WITH_G, null, JapaneseChronology.INSTANCE,
+                IsoChronology.INSTANCE, Locale.JAPAN, Locale.US).convert(JAPANESE_DATE_WITH_ERA_1));
         if (isReiwaEraSupported()) {
-            assertEquals(ISO_STR_1, new DateCalendarConverter(PATTERN_WITH_G, null, JapaneseChronology.INSTANCE,
-                    IsoChronology.INSTANCE, Locale.JAPAN, Locale.US).convert(JAPANESE_DATE_WITH_ERA_1));
             assertEquals(ISO_STR_2, new DateCalendarConverter(PATTERN_WITH_G, null, JapaneseChronology.INSTANCE,
                     IsoChronology.INSTANCE, Locale.JAPAN, Locale.US).convert(JAPANESE_DATE_WITH_ERA_2));
+            assertEquals(StringUtils.EMPTY, new DateCalendarConverter(PATTERN_WITH_G, null, JapaneseChronology.INSTANCE,
+                    IsoChronology.INSTANCE, Locale.JAPAN, Locale.US).convert(JAPANESE_DATE_WITH_ERA_3));
+        } else {
+            assertEquals(StringUtils.EMPTY, new DateCalendarConverter(PATTERN_WITH_G, null, JapaneseChronology.INSTANCE,
+                    IsoChronology.INSTANCE, Locale.JAPAN, Locale.US).convert(JAPANESE_DATE_WITH_ERA_4));
         }
         assertEquals(HIJRAH_STR, new DateCalendarConverter(PATTERN_WITH_G, null, JapaneseChronology.INSTANCE,
                 HijrahChronology.INSTANCE, Locale.JAPAN, Locale.US).convert(JAPANESE_DATE_WITH_ERA));
