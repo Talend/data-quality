@@ -26,10 +26,12 @@ import java.time.chrono.Chronology;
 import java.time.chrono.HijrahChronology;
 import java.time.chrono.IsoChronology;
 import java.time.chrono.JapaneseChronology;
+import java.time.chrono.JapaneseEra;
 import java.time.chrono.MinguoChronology;
 import java.time.chrono.ThaiBuddhistChronology;
 import java.util.Locale;
 
+import org.apache.commons.lang.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -49,11 +51,27 @@ public class DateCalendarConverterTest {
 
     private static final String ISO_STR = "1996-10-29"; //$NON-NLS-1$
 
+    private static final String ISO_STR_1 = "2019-04-30"; //$NON-NLS-1$
+
+    private static final String ISO_STR_2 = "2019-05-01"; //$NON-NLS-1$
+
     private static final String HIJRAH_STR = "1417-06-16"; //$NON-NLS-1$
 
     private static final String JAPANESE_STR = "0008-10-29";//$NON-NLS-1$
 
+    private static final String JAPANESE_STR_1 = "0031-04-30";//$NON-NLS-1$
+
+    private static final String JAPANESE_STR_2 = "0001-05-01";//$NON-NLS-1$
+
     private static final String JAPANESE_DATE_WITH_ERA = "0008-10-29 平成"; //$NON-NLS-1$
+
+    private static final String JAPANESE_DATE_WITH_ERA_1 = "0031-04-30 平成"; //$NON-NLS-1$
+
+    private static final String JAPANESE_DATE_WITH_ERA_2 = "0001-05-01 令和"; //$NON-NLS-1$
+
+    private static final String JAPANESE_DATE_WITH_ERA_3 = "0031-05-01 平成"; //$NON-NLS-1$
+
+    private static final String JAPANESE_DATE_WITH_ERA_4 = "0001-04-30 令和"; //$NON-NLS-1$
 
     private static final String MINGUO_STR = "0085-10-29"; //$NON-NLS-1$
 
@@ -113,11 +131,26 @@ public class DateCalendarConverterTest {
 
     private static final String PATTERN_WITH_G = "yyyy-MM-dd G"; //$NON-NLS-1$
 
+    public static boolean isReiwaEraSupported() {
+        try {
+            JapaneseEra.valueOf("Reiwa");
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+        return true;
+    }
+
     @Test
     public void testConvert_IsoDateTo() {
         assertEquals(HIJRAH_STR, new DateCalendarConverter(IsoChronology.INSTANCE, HijrahChronology.INSTANCE).convert(ISO_STR));
         assertEquals(JAPANESE_STR,
                 new DateCalendarConverter(IsoChronology.INSTANCE, JapaneseChronology.INSTANCE).convert(ISO_STR));
+        assertEquals(JAPANESE_STR_1,
+                new DateCalendarConverter(IsoChronology.INSTANCE, JapaneseChronology.INSTANCE).convert(ISO_STR_1));
+        if (isReiwaEraSupported()) {
+            assertEquals(JAPANESE_STR_2,
+                    new DateCalendarConverter(IsoChronology.INSTANCE, JapaneseChronology.INSTANCE).convert(ISO_STR_2));
+        }
         assertEquals(MINGUO_STR, new DateCalendarConverter(IsoChronology.INSTANCE, MinguoChronology.INSTANCE).convert(ISO_STR));
         assertEquals(THAIBUDDHIST_STR,
                 new DateCalendarConverter(IsoChronology.INSTANCE, ThaiBuddhistChronology.INSTANCE).convert(ISO_STR));
@@ -209,6 +242,17 @@ public class DateCalendarConverterTest {
     public void testConvert_JapaneseDateTo() {
         assertEquals(ISO_STR, new DateCalendarConverter(PATTERN_WITH_G, null, JapaneseChronology.INSTANCE, IsoChronology.INSTANCE,
                 Locale.JAPAN, Locale.US).convert(JAPANESE_DATE_WITH_ERA));
+        assertEquals(ISO_STR_1, new DateCalendarConverter(PATTERN_WITH_G, null, JapaneseChronology.INSTANCE,
+                IsoChronology.INSTANCE, Locale.JAPAN, Locale.US).convert(JAPANESE_DATE_WITH_ERA_1));
+        if (isReiwaEraSupported()) {
+            assertEquals(ISO_STR_2, new DateCalendarConverter(PATTERN_WITH_G, null, JapaneseChronology.INSTANCE,
+                    IsoChronology.INSTANCE, Locale.JAPAN, Locale.US).convert(JAPANESE_DATE_WITH_ERA_2));
+            assertEquals(StringUtils.EMPTY, new DateCalendarConverter(PATTERN_WITH_G, null, JapaneseChronology.INSTANCE,
+                    IsoChronology.INSTANCE, Locale.JAPAN, Locale.US).convert(JAPANESE_DATE_WITH_ERA_3));
+        } else {
+            assertEquals(StringUtils.EMPTY, new DateCalendarConverter(PATTERN_WITH_G, null, JapaneseChronology.INSTANCE,
+                    IsoChronology.INSTANCE, Locale.JAPAN, Locale.US).convert(JAPANESE_DATE_WITH_ERA_4));
+        }
         assertEquals(HIJRAH_STR, new DateCalendarConverter(PATTERN_WITH_G, null, JapaneseChronology.INSTANCE,
                 HijrahChronology.INSTANCE, Locale.JAPAN, Locale.US).convert(JAPANESE_DATE_WITH_ERA));
         assertEquals(MINGUO_STR, new DateCalendarConverter(PATTERN_WITH_G, null, JapaneseChronology.INSTANCE,
@@ -333,7 +377,8 @@ public class DateCalendarConverterTest {
                 InputStream dateStream = this.getClass().getResourceAsStream("dateList.txt"); //$NON-NLS-1$
                 BufferedReader br = null;
                 try {
-                    br = new BufferedReader(new InputStreamReader(dateStream, "UTF-8")); //$NON-NLS-1$ //for Hindi language
+                    br = new BufferedReader(new InputStreamReader(dateStream, "UTF-8")); //$NON-NLS-1$ //for Hindi
+                                                                                         // language
                                                                                          // Double-byte type
                 } catch (UnsupportedEncodingException e) {
                     LOGGER.error(e.getMessage(), e);
@@ -346,8 +391,8 @@ public class DateCalendarConverterTest {
                         dateCalendarConverter.convert(line);
                     }
                     long endTime = System.currentTimeMillis();
-                    System.out.println("the execution time of " + sourceChronology.getId() + "-->" + targetChronology.getId() //$NON-NLS-1$ //$NON-NLS-2$
-                            + " : " + (endTime - startTime) + "ms"); //$NON-NLS-1$ //$NON-NLS-2$
+                    System.out.println("the execution time of " + sourceChronology.getId() + "-->" //$NON-NLS-1$ //$NON-NLS-2$
+                            + targetChronology.getId() + " : " + (endTime - startTime) + "ms"); //$NON-NLS-1$ //$NON-NLS-2$
                 } catch (FileNotFoundException e) {
                     LOGGER.error(e.getMessage(), e);
                     Assert.fail(e.getMessage());
@@ -380,8 +425,8 @@ public class DateCalendarConverterTest {
         assertEquals("", //$NON-NLS-1$
                 new DateCalendarConverter(IsoChronology.INSTANCE, MinguoChronology.INSTANCE).convert("2017-04-32")); //$NON-NLS-1$
         assertEquals("", //$NON-NLS-1$
-                new DateCalendarConverter("yyyy-MM-dd G", PATTERN, IsoChronology.INSTANCE, ThaiBuddhistChronology.INSTANCE) //$NON-NLS-1$
-                        .convert("2017-02-30 AD")); //$NON-NLS-1$
+                new DateCalendarConverter("yyyy-MM-dd G", PATTERN, IsoChronology.INSTANCE, //$NON-NLS-1$
+                        ThaiBuddhistChronology.INSTANCE).convert("2017-02-30 AD")); //$NON-NLS-1$
 
         assertEquals(ISODateValid,
                 new DateCalendarConverter(ThaiBuddhistChronology.INSTANCE, IsoChronology.INSTANCE).convert("2560-02-28")); //$NON-NLS-1$
