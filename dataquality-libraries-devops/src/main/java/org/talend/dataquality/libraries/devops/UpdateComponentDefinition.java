@@ -49,7 +49,7 @@ public class UpdateComponentDefinition {
 
     private static final String DQ_LIB_VERSION = "6.4.1-SNAPSHOT"; //$NON-NLS-1$
 
-    private static final String DAIKON_VERSION = "0.31.3"; //$NON-NLS-1$
+    private static final String DAIKON_VERSION = "0.31.5-SNAPSHOT"; //$NON-NLS-1$
 
     private static final String[] PROVIDERS = new String[] { //
             "/org.talend.designer.components.tdqprovider", // //$NON-NLS-1$
@@ -64,6 +64,7 @@ public class UpdateComponentDefinition {
 
     static {
         DEP_VERSION_MAP.put("daikon", DAIKON_VERSION); //$NON-NLS-1$
+        DEP_VERSION_MAP.put("daikon-exception", DAIKON_VERSION); //$NON-NLS-1$
         DEP_VERSION_MAP.put("org.talend.dataquality.common", DQ_LIB_VERSION); //$NON-NLS-1$
         DEP_VERSION_MAP.put("org.talend.dataquality.converters", DQ_LIB_VERSION); //$NON-NLS-1$
         DEP_VERSION_MAP.put("org.talend.dataquality.record.linkage", DQ_LIB_VERSION); //$NON-NLS-1$
@@ -111,8 +112,9 @@ public class UpdateComponentDefinition {
                                 line = line.replaceAll(depName + "/\\d\\d?.\\d\\d?.\\d\\d?(-SNAPSHOT)?(.jar)?\"", //$NON-NLS-1$
                                         depName + "/" + DEP_VERSION_MAP.get(depName) + "$2\""); //$NON-NLS-1$ //$NON-NLS-2$
                                 // UrlPath field
-                                line = line.replaceAll(depName + "_\\d\\d?.\\d\\d?.\\d\\d?(.SNAPSHOT)?.jar\"", depName //$NON-NLS-1$
-                                        + "_" + DEP_VERSION_MAP.get(depName).replace('-', '.') + ".jar\""); //$NON-NLS-1$ //$NON-NLS-2$
+                                line = line.replaceAll(depName.replace('-', '.') + "_\\d\\d?.\\d\\d?.\\d\\d?(.SNAPSHOT)?.jar\"", //$NON-NLS-1$
+                                        depName.replace('-', '.') + "_" + DEP_VERSION_MAP.get(depName).replace('-', '.') //$NON-NLS-1$
+                                                + ".jar\""); //$NON-NLS-1$
                             }
                         }
                         IOUtils.write(line + "\n", fos); //$NON-NLS-1$
