@@ -1,6 +1,7 @@
 package org.talend.dataquality.common.pattern;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.regex.Pattern;
 
 import org.junit.Before;
@@ -159,7 +161,7 @@ public class TextPatternUtilTest {
             Integer codePoint = input.codePointAt(i);
             Integer replaceCodePoint = TextPatternUtil.replaceCharacter(codePoint, random);
             String errorMessage = "Character " + input.charAt(i) + " does not have the codepoint " + replaceCodePoint;
-            assertTrue(errorMessage, codePoint == replaceCodePoint);
+            assertSame(errorMessage, codePoint, replaceCodePoint);
         }
     }
 
@@ -186,10 +188,24 @@ public class TextPatternUtilTest {
         assertTrue(charPatternSet.contains(CharPattern.LOWER_LATIN));
         assertTrue(charPatternSet.contains(CharPattern.LOWER_LATIN_RARE));
         assertTrue(charPatternSet.contains(CharPattern.UPPER_LATIN));
-        assertTrue(filteredCodepoints.get(0) == (int) 'a');
-        assertTrue(filteredCodepoints.get(1) == (int) 'é');
-        assertTrue(filteredCodepoints.get(2) == (int) 'A');
-        assertTrue(filteredCodepoints.get(3) == (int) 'b');
-        assertTrue(charPatternSet.size() == 3);
+        assertEquals((int) 'a', (int) filteredCodepoints.get(0));
+        assertEquals((int) 'é',(int) filteredCodepoints.get(1));
+        assertEquals((int) 'A', (int) filteredCodepoints.get(2));
+        assertEquals((int) 'b', (int) filteredCodepoints.get(3));
+        assertEquals(3, charPatternSet.size());
+    }
+
+    @Test
+    public void findPatternSetAlwaysWithSameOrder() {
+        List<Integer> codepoints1 = Arrays.asList((int) 'a', (int) 'b', (int) 'c', (int) '1', (int) '2', (int) '3');
+        List<Integer> codepoints2 = Arrays.asList((int) '1', (int) '2', (int) '3', (int) 'a', (int) 'b', (int) 'c');
+
+        Set<CharPattern> set1 = TextPatternUtil.getCharPatterns(codepoints1, new ArrayList<>());
+        Set<CharPattern> set2 = TextPatternUtil.getCharPatterns(codepoints2, new ArrayList<>());
+        List<CharPattern> list1 = new ArrayList<>(set1);
+        List<CharPattern> list2 = new ArrayList<>(set2);
+
+        assertTrue(set1 instanceof SortedSet);
+        assertEquals(list1, list2);
     }
 }
