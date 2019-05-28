@@ -3,12 +3,12 @@
 	<parent>
 		<groupId>org.talend.dataquality</groupId>
 		<artifactId>dataquality-parent</artifactId>
-		<version>7.0.0-SNAPSHOT</version>
+		<version>7.0.0</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>dataquality-libraries</artifactId>
-	<version>7.0.0-SNAPSHOT</version>
+	<version>7.0.0</version>
 	<packaging>pom</packaging>
 	<name>dataquality-libraries</name>
 	<description>Parent pom aggregating other library projects, devops tools</description>
@@ -26,7 +26,7 @@
 		<mockito.version>2.23.4</mockito.version>
 		<powermock.version>2.0.2</powermock.version>
 		<re2j.version>1.2</re2j.version>
-		<org.talend.daikon.version>0.31.3</org.talend.daikon.version>
+		<org.talend.daikon.version>0.31.4</org.talend.daikon.version>
 	</properties>
 
 	<modules>

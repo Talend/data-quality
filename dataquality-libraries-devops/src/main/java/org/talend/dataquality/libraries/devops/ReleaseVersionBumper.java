@@ -58,9 +58,9 @@ import org.xml.sax.SAXException;
  */
 public class ReleaseVersionBumper {
 
-    private static final String TARGET_VERSION = "7.0.0-SNAPSHOT";
+    private static final String TARGET_VERSION = "7.0.0";
 
-    private static final String TARGET_DAIKON_VERSION = "0.31.3";
+    private static final String TARGET_DAIKON_VERSION = "0.31.4";
 
     private static final String DAIKON_VERSION_PROPERTY_NAME = "org.talend.daikon.version";
 
