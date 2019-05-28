@@ -21,8 +21,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Java application for updating libphonenumber jars used in studio components.
@@ -34,8 +32,6 @@ import org.slf4j.LoggerFactory;
  * @author msjian
  */
 public class UpdateComponent4libphonenumber {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(UpdateComponent4libphonenumber.class);
 
     // the location of local git repo, supposing the data-quality repo is cloned in the same folder of tdq-studio-ee
     private static final String GIT_REPO_ROOT = "../.."; //$NON-NLS-1$
@@ -90,12 +86,12 @@ public class UpdateComponent4libphonenumber {
                 }
 
                 if (needUpdate) {
-                    LOGGER.info("Updating: " + compoDefFile.getName()); //$NON-NLS-1$
+                    System.out.println("Updating: " + compoDefFile.getName()); // NOSONAR
                     FileOutputStream fos = new FileOutputStream(compoDefFile);
                     for (String line : lines) {
                         for (String depName : DEP_VERSION_MAP.keySet()) {
                             if (line.contains(depName)) {
-                                LOGGER.info(depName);
+                                System.out.println(depName); // NOSONAR
                                 // MODULE field
                                 line = line.replaceAll(depName + "-\\d\\d?.\\d\\d?.\\d\\d?(.jar)?\"", //$NON-NLS-1$
                                         depName + "-" + DEP_VERSION_MAP.get(depName) + ".jar\""); //$NON-NLS-1$ //$NON-NLS-2$
@@ -113,7 +109,7 @@ public class UpdateComponent4libphonenumber {
 
                 }
             } catch (IOException e) {
-                LOGGER.error(e.getMessage(), e);
+                e.printStackTrace(); // NOSONAR
             }
 
         }
@@ -127,7 +123,7 @@ public class UpdateComponent4libphonenumber {
 
         for (String provider : PROVIDERS) {
             String componentRootPath = projectRoot + TDQ_STUDIO_EE_ROOT + MAIN_PLUGINS_FOLDER + provider + COMPONENTS_FOLDER;
-            LOGGER.info("\nProvider: " + provider); //$NON-NLS-1$
+            System.out.println("\nProvider: " + provider); // NOSONAR
             File componentRoot = new File(componentRootPath);
             if (componentRoot.isDirectory()) {
                 File[] files = componentRoot.listFiles();
