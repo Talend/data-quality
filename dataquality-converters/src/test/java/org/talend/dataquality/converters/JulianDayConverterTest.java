@@ -36,7 +36,11 @@ public class JulianDayConverterTest {
         try {
             JapaneseEra.valueOf("Reiwa");
         } catch (IllegalArgumentException e) {
-            return false;
+            try {
+                JapaneseEra.valueOf("NewEra");
+            } catch (IllegalArgumentException e2) {
+                return false;
+            }
         }
         return true;
     }
