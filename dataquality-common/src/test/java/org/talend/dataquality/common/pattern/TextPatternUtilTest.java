@@ -189,7 +189,7 @@ public class TextPatternUtilTest {
         assertTrue(charPatternSet.contains(CharPattern.LOWER_LATIN_RARE));
         assertTrue(charPatternSet.contains(CharPattern.UPPER_LATIN));
         assertEquals((int) 'a', (int) filteredCodepoints.get(0));
-        assertEquals((int) 'é',(int) filteredCodepoints.get(1));
+        assertEquals((int) 'é', (int) filteredCodepoints.get(1));
         assertEquals((int) 'A', (int) filteredCodepoints.get(2));
         assertEquals((int) 'b', (int) filteredCodepoints.get(3));
         assertEquals(3, charPatternSet.size());
