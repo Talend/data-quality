@@ -238,7 +238,7 @@ public class PatternListGenerator {
             if (PRINT_DETAILED_RESULTS) {
                 System.out.println("--------------------Date Style: " + style + "-----------------------");
             }
-            for (String lang : SystemDateTimePatternManager.ISO_LANGUAGE_LIST) {
+            for (String lang : SystemDateTimePatternManager.getSupportedIsoLanguages()) {
                 getFormatByStyle(style, style, true, false, new Locale(lang), false);// Date Only
             }
         }
@@ -246,7 +246,7 @@ public class PatternListGenerator {
             if (PRINT_DETAILED_RESULTS) {
                 System.out.println("--------------------DateTime Style: " + style + "-----------------------");
             }
-            for (String lang : SystemDateTimePatternManager.ISO_LANGUAGE_LIST) {
+            for (String lang : SystemDateTimePatternManager.getSupportedIsoLanguages()) {
                 getFormatByStyle(style, style, true, true, new Locale(lang), false);// DateTime
             }
         }

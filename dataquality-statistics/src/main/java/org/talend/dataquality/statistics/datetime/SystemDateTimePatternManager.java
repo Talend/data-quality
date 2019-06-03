@@ -55,9 +55,9 @@ public class SystemDateTimePatternManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SystemDateTimePatternManager.class);
 
-    public static final String[] ISO_LANGUAGE_LIST = new String[] { "ar", "be", "bg", "ca", "cs", "da", "de", "el", "en", "es",
-            "et", "fi", "fr", "ga", "iw", "hr", "hu", "in", "in", "is", "it", "iw", "ja", "ko", "lt", "lv", "mk", "ms", "mt",
-            "nb", "nl", "nn", "no", "pl", "pt", "ro", "ru", "sk", "sl", "sq", "sr", "sv", "th", "tr", "uk", "vi", "zh" };
+    private static final String[] SUPPORTED_ISO_LANGUAGES = new String[] { "ar", "be", "bg", "ca", "cs", "da", "de", "el", "en",
+            "es", "et", "fi", "fr", "ga", "iw", "hr", "hu", "in", "in", "is", "it", "iw", "ja", "ko", "lt", "lv", "mk", "ms",
+            "mt", "nb", "nl", "nn", "no", "pl", "pt", "ro", "ru", "sk", "sl", "sq", "sr", "sv", "th", "tr", "uk", "vi", "zh" };
 
     private static final List<Map<Pattern, String>> DATE_PATTERN_GROUP_LIST = new ArrayList<>();
 
@@ -108,6 +108,10 @@ public class SystemDateTimePatternManager {
 
     }
 
+    public static String[] getSupportedIsoLanguages() {
+        return SUPPORTED_ISO_LANGUAGES;
+    }
+
     private static void loadLanguagesDatesWords() {
         for (Locale locale : getDistinctLanguagesLocales()) {
             final DateFormatSymbols dfs = new DateFormatSymbols(locale);
@@ -145,7 +149,7 @@ public class SystemDateTimePatternManager {
         for (String lang : new String[] { "en", "fr", "de", "it", "es", "ja", "zh" }) {
             locales.add(Locale.forLanguageTag(lang));
         }
-        for (String lang : ISO_LANGUAGE_LIST) {
+        for (String lang : SUPPORTED_ISO_LANGUAGES) {
             Locale locale = Locale.forLanguageTag(lang);
             if (StringUtils.isNotEmpty(locale.getLanguage())) {
                 locales.add(locale);
@@ -242,8 +246,8 @@ public class SystemDateTimePatternManager {
      * @return true is the value valids the preconditions
      */
     private static boolean checkDatesPreconditions(String value) {
-        return (StringUtils.isNotEmpty(value) && value.length() >= 6 && value.length() <= 64
-                && PATTERN_FILTER_DATE.matcher(value).find() && checkEnoughDigits(value));
+        return StringUtils.isNotEmpty(value) && value.length() >= 6 && value.length() <= 64
+                && PATTERN_FILTER_DATE.matcher(value).find() && checkEnoughDigits(value);
     }
 
     /**
