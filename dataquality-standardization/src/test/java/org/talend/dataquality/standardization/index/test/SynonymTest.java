@@ -43,9 +43,6 @@ import junit.framework.TestCase;
  */
 public class SynonymTest extends TestCase {
 
-    /**
-     * 
-     */
     private static final String FIELD_NAME = "name";
 
     private static final String directoryPath = "data/test";
@@ -72,7 +69,6 @@ public class SynonymTest extends TestCase {
 
             w.close();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -96,22 +92,19 @@ public class SynonymTest extends TestCase {
             is.search(q, collector);
 
             ScoreDoc[] scoreDocs = collector.topDocs().scoreDocs;
+            assertEquals(2, scoreDocs.length);
             System.out.println("nb doc= " + scoreDocs.length);
             for (ScoreDoc scoreDoc : scoreDocs) {
                 System.out.println(scoreDoc);
             }
 
         } catch (ParseException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (CorruptIndexException e) {
-
             e.printStackTrace();
         } catch (IOException e) {
-
             e.printStackTrace();
         }
-
     }
 
     static Analyzer createAnalyzer() {
