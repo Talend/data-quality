@@ -36,11 +36,17 @@ public class AbstractAttributeMatcherTest {
             { AttributeMatcherType.EXACT.toString(), "E", "E", "1.0" },
             { AttributeMatcherType.EXACT.toString(), "E", "e", "0.0" },
             { AttributeMatcherType.EXACT.toString(), "A", "Ä", "0.0" },
+            { AttributeMatcherType.EXACT.toString(), "中文", "中国", "0.0" },
+            { AttributeMatcherType.EXACT.toString(), "中文", "中问", "0.0" },
+            { AttributeMatcherType.EXACT.toString(), "中文", "中文", "1.0" },
 
             // tests for ExactIgnoreCase matcher
             { AttributeMatcherType.EXACT_IGNORE_CASE.toString(), "E", "e", "1.0" },
             { AttributeMatcherType.EXACT_IGNORE_CASE.toString(), "Î", "î", "1.0" },
             { AttributeMatcherType.EXACT_IGNORE_CASE.toString(), "A", "Ä", "0.0" },
+            { AttributeMatcherType.EXACT_IGNORE_CASE.toString(), "中文", "中国", "0.0" },
+            { AttributeMatcherType.EXACT_IGNORE_CASE.toString(), "中文", "中问", "0.0" },
+            { AttributeMatcherType.EXACT_IGNORE_CASE.toString(), "中文", "中文", "1.0" },
 
             // tests for Soundex matcher
             { AttributeMatcherType.SOUNDEX.toString(), "kate", "Cade", "0.75" },
@@ -51,7 +57,6 @@ public class AbstractAttributeMatcherTest {
             { AttributeMatcherType.SOUNDEX.toString(), "A", "Ä", "0.0" },
 
             // tests for SoundexFR matcher
-
             { AttributeMatcherType.SOUNDEX_FR.toString(), "kate", "Cade", "0.75" },
             { AttributeMatcherType.SOUNDEX_FR.toString(), "unmottreslong", "unautremotlong", "0.25" },
             { AttributeMatcherType.SOUNDEX_FR.toString(), "steff", "stephanie", "0.75" },
@@ -66,6 +71,9 @@ public class AbstractAttributeMatcherTest {
             { AttributeMatcherType.DOUBLE_METAPHONE.toString(), "Sebastiao", "Sepastien", "0.75" },
             { AttributeMatcherType.DOUBLE_METAPHONE.toString(), "Sizhao", "sejao", "1.0" },
             { AttributeMatcherType.DOUBLE_METAPHONE.toString(), "A", "Ä", "0.0" },
+            { AttributeMatcherType.DOUBLE_METAPHONE.toString(), "中文", "中国", "0.0" },
+            { AttributeMatcherType.DOUBLE_METAPHONE.toString(), "中文", "中问", "0.0" },
+            { AttributeMatcherType.DOUBLE_METAPHONE.toString(), "中文", "中文", "1.0" },
 
             // tests for Levenshtein matcher
             { AttributeMatcherType.LEVENSHTEIN.toString(), "kate", "Cade", "0.5" },
@@ -74,6 +82,9 @@ public class AbstractAttributeMatcherTest {
             { AttributeMatcherType.LEVENSHTEIN.toString(), "Sebastiao", "Sepastien", "0.67" },
             { AttributeMatcherType.LEVENSHTEIN.toString(), "Sizhao", "sejao", "0.33" },
             { AttributeMatcherType.LEVENSHTEIN.toString(), "A", "Ä", "0.0" },
+            { AttributeMatcherType.LEVENSHTEIN.toString(), "中文", "中国", "0.5" },
+            { AttributeMatcherType.LEVENSHTEIN.toString(), "中文", "中问", "0.5" },
+            { AttributeMatcherType.LEVENSHTEIN.toString(), "中文", "中文", "1.0" },
 
             // tests for Jaro(-Winkler) matcher
             { AttributeMatcherType.JARO.toString(), "kate", "Cade", "0.66" },
@@ -82,6 +93,9 @@ public class AbstractAttributeMatcherTest {
             { AttributeMatcherType.JARO.toString(), "Sebastiao", "Sepastien", "0.78" },
             { AttributeMatcherType.JARO.toString(), "Sizhao", "sejao", "0.57" },
             { AttributeMatcherType.JARO.toString(), "A", "Ä", "0.0" },
+            { AttributeMatcherType.JARO.toString(), "中文", "中国", "0.6666666865348816" },
+            { AttributeMatcherType.JARO.toString(), "中文", "中问", "0.6666666865348816" },
+            { AttributeMatcherType.JARO.toString(), "中文", "中文", "1.0" },
 
             // tests for LCS matcher
             { AttributeMatcherType.LCS.toString(), "kate", "Cade", "0.25" },
@@ -89,7 +103,10 @@ public class AbstractAttributeMatcherTest {
             { AttributeMatcherType.LCS.toString(), "steff", "stephanie", "0.33" },
             { AttributeMatcherType.LCS.toString(), "Sebastiao", "Sepastien", "0.44" },
             { AttributeMatcherType.LCS.toString(), "Sizhao", "sejao", "0.33" },
-            { AttributeMatcherType.LCS.toString(), "A", "Ä", "0.0" },
+            { AttributeMatcherType.LCS.toString(), "A", "Ä", "0.0" }, { AttributeMatcherType.LCS.toString(), "中文", "中国", "0.50" },
+            { AttributeMatcherType.LCS.toString(), "中文", "中问", "0.50" },
+            { AttributeMatcherType.LCS.toString(), "中文", "中文", "1.0" },
+            { AttributeMatcherType.LCS.toString(), "自由的全书百科", "自由的维基百科", "0.42857142857142855" },
 
             // tests for Qgrams matcher
             { AttributeMatcherType.Q_GRAMS.toString(), "kate", "Cade", "0.16" },
@@ -98,6 +115,10 @@ public class AbstractAttributeMatcherTest {
             { AttributeMatcherType.Q_GRAMS.toString(), "Sebastiao", "Sepastien", "0.36" },
             { AttributeMatcherType.Q_GRAMS.toString(), "Sizhao", "sejao", "0.26" },
             { AttributeMatcherType.Q_GRAMS.toString(), "A", "Ä", "0.0" },
+            { AttributeMatcherType.Q_GRAMS.toString(), "中文", "中国", "0.25" },
+            { AttributeMatcherType.Q_GRAMS.toString(), "中文", "中问", "0.25" },
+            { AttributeMatcherType.Q_GRAMS.toString(), "中文", "中文", "1.0" },
+            { AttributeMatcherType.Q_GRAMS.toString(), "自由的全书百科", "自由的维基百科", "0.5555555820465088" },
 
             // tests for Hamming matcher
             { AttributeMatcherType.HAMMING.toString(), "kate", "Cade", "0.5" },
