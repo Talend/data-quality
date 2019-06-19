@@ -14,6 +14,8 @@ package org.talend.dataquality.statistics.quality;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.when;
+import static org.talend.dataquality.statistics.type.DataTypeEnum.STRING;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,13 +28,11 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.talend.dataquality.common.inference.QualityAnalyzer;
 import org.talend.dataquality.common.inference.ValueQualityStatistics;
-import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
-import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
-import org.talend.dataquality.semantic.snapshot.StandardDictionarySnapshotProvider;
-import org.talend.dataquality.semantic.statistics.SemanticQualityAnalyzer;
 import org.talend.dataquality.statistics.type.DataTypeEnum;
 
 /**
@@ -42,13 +42,6 @@ import org.talend.dataquality.statistics.type.DataTypeEnum;
 public class ValueQualityAnalyzerTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ValueQualityAnalyzerTest.class);
-
-    private static DictionarySnapshot dictionarySnapshot;
-
-    @BeforeClass
-    public static void setCategoryRegistryPath() {
-        dictionarySnapshot = new StandardDictionarySnapshotProvider().get();
-    }
 
     public static List<String[]> getRecords(InputStream inputStream, String separator) {
         if (inputStream == null) {
@@ -82,16 +75,13 @@ public class ValueQualityAnalyzerTest {
     @Test
     public void testValueQualityAnalyzerWithoutSemanticQuality() {
 
-        DataTypeQualityAnalyzer dataTypeQualityAnalyzer = new DataTypeQualityAnalyzer(DataTypeEnum.INTEGER, DataTypeEnum.STRING,
-                DataTypeEnum.STRING, DataTypeEnum.STRING, DataTypeEnum.DATE, DataTypeEnum.STRING, DataTypeEnum.DATE,
-                DataTypeEnum.INTEGER, DataTypeEnum.DOUBLE);
-        String[] semanticTypes = new String[] { SemanticCategoryEnum.UNKNOWN.name(), SemanticCategoryEnum.UNKNOWN.name(),
-                SemanticCategoryEnum.UNKNOWN.name(), SemanticCategoryEnum.UNKNOWN.name(), SemanticCategoryEnum.UNKNOWN.name(),
-                SemanticCategoryEnum.UNKNOWN.name(), SemanticCategoryEnum.UNKNOWN.name(), SemanticCategoryEnum.UNKNOWN.name(),
-                SemanticCategoryEnum.UNKNOWN.name() };
-        SemanticQualityAnalyzer semanticQualityAnalyzer = new SemanticQualityAnalyzer(dictionarySnapshot, semanticTypes);
+        DataTypeQualityAnalyzer dataTypeQualityAnalyzer = new DataTypeQualityAnalyzer(DataTypeEnum.INTEGER, STRING, STRING,
+                STRING, DataTypeEnum.DATE, STRING, DataTypeEnum.DATE, DataTypeEnum.INTEGER, DataTypeEnum.DOUBLE);
 
-        ValueQualityAnalyzer valueQualityAnalyzer = new ValueQualityAnalyzer(dataTypeQualityAnalyzer, semanticQualityAnalyzer);
+        QualityAnalyzer analyzer = Mockito.mock(QualityAnalyzer.class);
+        when(analyzer.getTypes()).thenReturn(new String[] { "UNKNOWN", "UNKNOWN", "UNKNOWN", "UNKNOWN", "UNKNOWN", "UNKNOWN",
+                "UNKNOWN", "UNKNOWN", "UNKNOWN" });
+        ValueQualityAnalyzer valueQualityAnalyzer = new ValueQualityAnalyzer(dataTypeQualityAnalyzer, analyzer);
         valueQualityAnalyzer.init();
 
         final List<String[]> records = getRecords(this.getClass().getResourceAsStream("../data/customers_100.csv"));
@@ -100,7 +90,7 @@ public class ValueQualityAnalyzerTest {
             valueQualityAnalyzer.analyze(record);
         }
 
-        for (int i = 0; i < semanticTypes.length; i++) {
+        for (int i = 0; i < dataTypeQualityAnalyzer.getResult().size(); i++) {
             ValueQualityStatistics dataTypeQualityResult = dataTypeQualityAnalyzer.getResult().get(i);
             ValueQualityStatistics aggregatedResult = valueQualityAnalyzer.getResult().get(i);
             assertEquals("unexpected ValidCount on Column " + i, dataTypeQualityResult.getValidCount(),
@@ -119,89 +109,75 @@ public class ValueQualityAnalyzerTest {
     }
 
     @Test
-    public void testValueQualityAnalyzerWithSemanticQuality() {
+    public void valueQualityResultWithoutSemantic() {
+        ValueQualityStatistics expectedResult = new ValueQualityStatistics();
+        expectedResult.setInvalidCount(1);
+        expectedResult.setValidCount(234);
+        expectedResult.setUnknownCount(345);
 
-        final List<String[]> records = new ArrayList<String[]>() {
+        List<ValueQualityStatistics> expectedResults = new ArrayList<>();
+        expectedResults.add(expectedResult);
 
-            private static final long serialVersionUID = 1L;
+        DataTypeQualityAnalyzer dataTypeQualityAnalyzer = Mockito.mock(DataTypeQualityAnalyzer.class);
+        when(dataTypeQualityAnalyzer.getResult()).thenReturn(expectedResults);
 
-            {
-                add(new String[] { "1", "UT", "Nantes" });
-                add(new String[] { "2", "MN", "Suresnes" });
-                add(new String[] { "3", "MO", "Paris" });
-                add(new String[] { "4", "", "Lyon" });
-                add(new String[] { "5", "IL", "Marseille" });
-                add(new String[] { "6", "ORZ", "" });
-                add(new String[] { "7", " ", "Toulouse" });
-                add(new String[] { "8", "LOL", "Lille" });
-            }
-        };
+        ValueQualityAnalyzer valueQualityAnalyzer = new ValueQualityAnalyzer(dataTypeQualityAnalyzer, null);
 
-        final int[] EXPECTED_VALID_COUNT = { 8, 4, 7 };
-        final int[] EXPECTED_EMPTY_COUNT = { 0, 2, 1 };
-        final int[] EXPECTED_INVALID_COUNT = { 0, 2, 0 };
-        final int[] EXPECTED_UNKNOWN_COUNT = { 0, 0, 0 };
-        final List<Set<String>> EXPECTED_INVALID_VALUES = new ArrayList<Set<String>>() {
+        List<ValueQualityStatistics> results = valueQualityAnalyzer.getResult();
+        assertEquals(expectedResults.size(), results.size());
 
-            private static final long serialVersionUID = 1L;
+        ValueQualityStatistics statistics = results.get(0);
+        assertEquals(1, statistics.getInvalidCount());
+        assertEquals(234, statistics.getValidCount());
+        assertEquals(345, statistics.getUnknownCount());
 
-            {
-                add(new HashSet<>());
-                add(new HashSet<String>() {
-
-                    private static final long serialVersionUID = 1L;
-
-                    {
-                        add("LOL");
-                        add("ORZ");
-                    }
-                });
-                add(new HashSet<>());
-            }
-        };
-        final List<Set<String>> EXPECTED_UNKNOWN_VALUES = new ArrayList<Set<String>>() {
-
-            private static final long serialVersionUID = 1L;
-
-            {
-                add(new HashSet<>());
-                add(new HashSet<>());
-                add(new HashSet<>());
-            }
-        };
-
-        final DataTypeQualityAnalyzer dataTypeQualityAnalyzer = new DataTypeQualityAnalyzer(DataTypeEnum.INTEGER,
-                DataTypeEnum.STRING, DataTypeEnum.STRING);
-
-        final String[] semanticTypes = new String[] { SemanticCategoryEnum.UNKNOWN.name(),
-                SemanticCategoryEnum.US_STATE_CODE.name(), SemanticCategoryEnum.FR_COMMUNE.name() };
-
-        final SemanticQualityAnalyzer semanticQualityAnalyzer = new SemanticQualityAnalyzer(dictionarySnapshot, semanticTypes);
-
-        final ValueQualityAnalyzer valueQualityAnalyzer = new ValueQualityAnalyzer(dataTypeQualityAnalyzer,
-                semanticQualityAnalyzer);
-        valueQualityAnalyzer.init();
-
-        for (String[] record : records) {
-            valueQualityAnalyzer.analyze(record);
-        }
-
-        for (int i = 0; i < EXPECTED_INVALID_VALUES.size(); i++) {
-            ValueQualityStatistics aggregatedResult = valueQualityAnalyzer.getResult().get(i);
-            assertEquals("unexpected ValidCount on Column " + i, EXPECTED_VALID_COUNT[i], aggregatedResult.getValidCount());
-            assertEquals("unexpected EmptyCount on Column " + i, EXPECTED_EMPTY_COUNT[i], aggregatedResult.getEmptyCount());
-            assertEquals("unexpected InvalidCount on Column " + i, EXPECTED_INVALID_COUNT[i], aggregatedResult.getInvalidCount());
-            assertEquals("unexpected InvalidValues on Column " + i, EXPECTED_INVALID_VALUES.get(i),
-                    aggregatedResult.getInvalidValues());
-            assertEquals("unexpected UnknownCount on Column " + i, EXPECTED_UNKNOWN_COUNT[i], aggregatedResult.getUnknownCount());
-            assertEquals("unexpected UnknownValues on Column " + i, EXPECTED_UNKNOWN_VALUES.get(i),
-                    aggregatedResult.getUnknownValues());
-        }
-
-        try {
-            valueQualityAnalyzer.close();
-        } catch (Exception e) {
-            fail(e.getMessage());
-        }
     }
+
+    @Test
+    public void valueQualityResultWithSemantic() {
+        ValueQualityStatistics expectedDataTypeResult = new ValueQualityStatistics();
+        expectedDataTypeResult.setInvalidCount(1);
+        expectedDataTypeResult.setValidCount(234);
+        expectedDataTypeResult.setUnknownCount(345);
+
+        ValueQualityStatistics expectedDataTypeResultTwo = new ValueQualityStatistics();
+        expectedDataTypeResultTwo.setInvalidCount(2);
+        expectedDataTypeResultTwo.setValidCount(456);
+        expectedDataTypeResultTwo.setUnknownCount(789);
+
+        List<ValueQualityStatistics> expectedDataTypeResults = new ArrayList<>();
+        expectedDataTypeResults.add(expectedDataTypeResult);
+        expectedDataTypeResults.add(expectedDataTypeResultTwo);
+
+        DataTypeQualityAnalyzer dataTypeQualityAnalyzer = Mockito.mock(DataTypeQualityAnalyzer.class);
+        when(dataTypeQualityAnalyzer.getResult()).thenReturn(expectedDataTypeResults);
+
+        ValueQualityStatistics expectedSemanticResult = new ValueQualityStatistics();
+        expectedSemanticResult.setInvalidCount(14);
+        expectedSemanticResult.setValidCount(7683);
+        expectedSemanticResult.setUnknownCount(9874);
+
+        List<ValueQualityStatistics> expectedSemanticResults = new ArrayList<>();
+        expectedSemanticResults.add(expectedSemanticResult);
+
+        QualityAnalyzer analyzer = Mockito.mock(QualityAnalyzer.class);
+        when(analyzer.getTypes()).thenReturn(new String[] { "FR COMMUNE", "UNKNOWN" });
+        when(analyzer.getResult()).thenReturn(expectedSemanticResults);
+
+        ValueQualityAnalyzer valueQualityAnalyzer = new ValueQualityAnalyzer(dataTypeQualityAnalyzer, analyzer);
+
+        List<ValueQualityStatistics> results = valueQualityAnalyzer.getResult();
+        assertEquals(2, results.size());
+
+        ValueQualityStatistics semanticStatistics = results.get(0);
+        assertEquals(14, semanticStatistics.getInvalidCount());
+        assertEquals(7683, semanticStatistics.getValidCount());
+        assertEquals(9874, semanticStatistics.getUnknownCount());
+
+        ValueQualityStatistics dataTypeStatistics = results.get(1);
+        assertEquals(2, dataTypeStatistics.getInvalidCount());
+        assertEquals(456, dataTypeStatistics.getValidCount());
+        assertEquals(789, dataTypeStatistics.getUnknownCount());
+    }
+
 }

@@ -22,15 +22,13 @@ import org.slf4j.LoggerFactory;
 import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.Analyzers;
 import org.talend.dataquality.common.inference.Analyzers.Result;
-import org.talend.dataquality.semantic.api.CategoryRegistryManager;
-import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
-import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
-import org.talend.dataquality.semantic.snapshot.StandardDictionarySnapshotProvider;
-import org.talend.dataquality.semantic.statistics.SemanticAnalyzer;
-import org.talend.dataquality.semantic.statistics.SemanticType;
+import org.talend.dataquality.common.inference.ValueQualityStatistics;
 import org.talend.dataquality.statistics.cardinality.CardinalityAnalyzer;
+import org.talend.dataquality.statistics.cardinality.CardinalityStatistics;
 import org.talend.dataquality.statistics.frequency.DataTypeFrequencyAnalyzer;
+import org.talend.dataquality.statistics.frequency.DataTypeFrequencyStatistics;
 import org.talend.dataquality.statistics.frequency.pattern.CompositePatternFrequencyAnalyzer;
+import org.talend.dataquality.statistics.frequency.pattern.PatternFrequencyStatistics;
 import org.talend.dataquality.statistics.numeric.quantile.QuantileAnalyzer;
 import org.talend.dataquality.statistics.numeric.summary.SummaryAnalyzer;
 import org.talend.dataquality.statistics.quality.DataTypeQualityAnalyzer;
@@ -45,8 +43,6 @@ public class AnalyzerPerformanceTest {
 
     private static Logger log = LoggerFactory.getLogger(AnalyzerPerformanceTest.class);
 
-    private static DictionarySnapshot dictionarySnapshot;
-
     private static final List<String[]> records_card_exceptions = getRecords("Card_Exceptions_Preparation.csv");
 
     private final DataTypeEnum[] types_card_exceptions = new DataTypeEnum[] { //
@@ -56,12 +52,6 @@ public class AnalyzerPerformanceTest {
             DataTypeEnum.INTEGER, DataTypeEnum.STRING, DataTypeEnum.DATE, DataTypeEnum.DATE, DataTypeEnum.STRING,//
     };
 
-    @BeforeClass
-    public static void setupBuilder() {
-        CategoryRegistryManager.setLocalRegistryPath(TARGET_TEST_CRM_PATH);
-        dictionarySnapshot = new StandardDictionarySnapshotProvider().get();
-    }
-
     private Analyzer<Result> setupBaselineAnalyzers(DataTypeEnum[] types) {
         // Analysis.QUALITY, Analysis.CARDINALITY, Analysis.TYPE, Analysis.FREQUENCY, Analysis.PATTERNS,
         // Analysis.SEMANTIC
@@ -70,8 +60,7 @@ public class AnalyzerPerformanceTest {
                 new CardinalityAnalyzer(), //
                 new DataTypeAnalyzer(), //
                 new DataTypeFrequencyAnalyzer(), //
-                new CompositePatternFrequencyAnalyzer(types), new SemanticAnalyzer(dictionarySnapshot) //
-        );
+                new CompositePatternFrequencyAnalyzer(types));
     }
 
     private Analyzer<Result> setupAdvancedAnalyzers() {
@@ -104,41 +93,19 @@ public class AnalyzerPerformanceTest {
 
         // Composite result assertions (there should be a DataType and a SemanticType)
         for (Analyzers.Result columnResult : result) {
+            assertNotNull(columnResult.get(CardinalityStatistics.class));
+            assertNotNull(columnResult.get(ValueQualityStatistics.class));
             assertNotNull(columnResult.get(DataTypeOccurences.class));
-            assertNotNull(columnResult.get(SemanticType.class));
+            assertNotNull(columnResult.get(DataTypeFrequencyStatistics.class));
+            assertNotNull(columnResult.get(PatternFrequencyStatistics.class));
         }
+
         // Data type assertions
         for (int i = 0; i < types_card_exceptions.length; i++) {
             assertEquals("Unexpected DataType on column " + i, types_card_exceptions[i],
                     result.get(i).get(DataTypeOccurences.class).getSuggestedType());
         }
 
-        // Semantic types assertions
-        String[] expectedCategories = new String[] { "", //
-                SemanticCategoryEnum.US_STATE_CODE.getId(), //
-                "", //
-                "", //
-                "", //
-                "", //
-                "", //
-                "", //
-                "", //
-                "", //
-                "", //
-                "", //
-                "", //
-                "", //
-                "", //
-                "", //
-                "", //
-                "", //
-                "", //
-                "" //
-        };
-        for (int i = 0; i < expectedCategories.length; i++) {
-            assertEquals("Unexpected SemanticType on column " + i, expectedCategories[i],
-                    result.get(i).get(SemanticType.class).getSuggestedCategory());
-        }
     }
 
     @Test

@@ -23,31 +23,23 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.talend.dataquality.common.inference.Analyzer;
 import org.talend.dataquality.common.inference.Analyzers;
-import org.talend.dataquality.semantic.api.CategoryRegistryManager;
-import org.talend.dataquality.semantic.classifier.SemanticCategoryEnum;
-import org.talend.dataquality.semantic.snapshot.DictionarySnapshot;
-import org.talend.dataquality.semantic.snapshot.StandardDictionarySnapshotProvider;
-import org.talend.dataquality.semantic.statistics.SemanticAnalyzer;
-import org.talend.dataquality.semantic.statistics.SemanticType;
+import org.talend.dataquality.statistics.cardinality.CardinalityAnalyzer;
+import org.talend.dataquality.statistics.cardinality.CardinalityStatistics;
 import org.talend.dataquality.statistics.type.DataTypeAnalyzer;
 import org.talend.dataquality.statistics.type.DataTypeEnum;
 import org.talend.dataquality.statistics.type.DataTypeOccurences;
 
 public class CompositeAnalyzerTest extends SemanticStatisticsTestBase {
 
-    private static final String TARGET_TEST_CRM_PATH = "target/test_crm";
-
     Analyzer<Analyzers.Result> analyzer = null;
 
     @BeforeClass
     public static void before() {
-        CategoryRegistryManager.setLocalRegistryPath(TARGET_TEST_CRM_PATH);
     }
 
     @Before
     public void setUp() {
-        final DictionarySnapshot dictionarySnapshot = new StandardDictionarySnapshotProvider().get();
-        analyzer = Analyzers.with(new DataTypeAnalyzer(), new SemanticAnalyzer(dictionarySnapshot));
+        analyzer = Analyzers.with(new DataTypeAnalyzer(), new CardinalityAnalyzer());
     }
 
     @After
@@ -66,7 +58,7 @@ public class CompositeAnalyzerTest extends SemanticStatisticsTestBase {
         // Composite result assertions (there should be a DataType and a SemanticType)
         for (Analyzers.Result columnResult : result) {
             assertNotNull(columnResult.get(DataTypeOccurences.class));
-            assertNotNull(columnResult.get(SemanticType.class));
+            assertNotNull(columnResult.get(CardinalityStatistics.class));
         }
         // Data type assertions
         assertEquals(DataTypeEnum.INTEGER, result.get(0).get(DataTypeOccurences.class).getSuggestedType());
@@ -87,6 +79,30 @@ public class CompositeAnalyzerTest extends SemanticStatisticsTestBase {
         assertEquals(DataTypeEnum.STRING, result.get(15).get(DataTypeOccurences.class).getSuggestedType());
         assertEquals(DataTypeEnum.STRING, result.get(16).get(DataTypeOccurences.class).getSuggestedType());
         assertEquals(DataTypeEnum.STRING, result.get(17).get(DataTypeOccurences.class).getSuggestedType());
+
+        assertEquals(100, result.get(0).get(CardinalityStatistics.class).getDistinctCount());
+        assertEquals(100, result.get(1).get(CardinalityStatistics.class).getDistinctCount());
+        assertEquals(86, result.get(2).get(CardinalityStatistics.class).getDistinctCount());
+        assertEquals(80, result.get(3).get(CardinalityStatistics.class).getDistinctCount());
+        assertEquals(71, result.get(4).get(CardinalityStatistics.class).getDistinctCount());
+        assertEquals(18, result.get(5).get(CardinalityStatistics.class).getDistinctCount());
+        assertEquals(18, result.get(6).get(CardinalityStatistics.class).getDistinctCount());
+        assertEquals(25, result.get(7).get(CardinalityStatistics.class).getDistinctCount());
+        assertEquals(12, result.get(8).get(CardinalityStatistics.class).getDistinctCount());
+        assertEquals(51, result.get(9).get(CardinalityStatistics.class).getDistinctCount());
+        assertEquals(7, result.get(10).get(CardinalityStatistics.class).getDistinctCount());
+        assertEquals(1, result.get(11).get(CardinalityStatistics.class).getDistinctCount());
+        assertEquals(38, result.get(12).get(CardinalityStatistics.class).getDistinctCount());
+        assertEquals(19, result.get(13).get(CardinalityStatistics.class).getDistinctCount());
+        assertEquals(5, result.get(14).get(CardinalityStatistics.class).getDistinctCount());
+        assertEquals(3, result.get(15).get(CardinalityStatistics.class).getDistinctCount());
+        assertEquals(2, result.get(16).get(CardinalityStatistics.class).getDistinctCount());
+        assertEquals(5, result.get(17).get(CardinalityStatistics.class).getDistinctCount());
+
+        for (int i = 0; i < 18; i++) {
+            assertEquals(100, result.get(i).get(CardinalityStatistics.class).getCount());
+        }
+        /*
         // Semantic types assertions
         String[] expectedCategories = new String[] { "", //
                 "", //
@@ -109,6 +125,6 @@ public class CompositeAnalyzerTest extends SemanticStatisticsTestBase {
         };
         for (int i = 0; i < expectedCategories.length; i++) {
             assertEquals(expectedCategories[i], result.get(i).get(SemanticType.class).getSuggestedCategory());
-        }
+        }*/
     }
 }
