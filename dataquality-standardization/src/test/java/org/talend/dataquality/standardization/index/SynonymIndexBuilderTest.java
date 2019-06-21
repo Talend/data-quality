@@ -92,13 +92,6 @@ public class SynonymIndexBuilderTest {
 
     @Override
     public void finalize() throws Exception {
-        //
-        // try {
-        // builder.closeIndex();
-        // } catch (Exception e) {
-        // // TODO Auto-generated catch block
-        // e.printStackTrace();
-        // }
     }
 
     void insertDocuments(SynonymIndexBuilder builder) throws IOException {

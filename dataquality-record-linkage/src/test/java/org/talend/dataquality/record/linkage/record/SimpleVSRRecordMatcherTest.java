@@ -324,9 +324,32 @@ public class SimpleVSRRecordMatcherTest {
      * Test method for
      * {@link org.talend.dataquality.record.linkage.record.AbstractRecordMatcher#setAttributeGroups(int[][])}.
      */
-    public void testSetAttributeGroups() {
-        // TODO fail("Not yet implemented");
+    @Test
+    public void testSetAttributeGroupsWithoutGroups() {
+        IRecordMatcher match = RecordMatcherFactory.createMatcher(RecordMatcherType.simpleVSRMatcher);
+        assertTrue(match.setAttributeGroups(null));
+    }
 
+    /**
+     * Test method for
+     * {@link org.talend.dataquality.record.linkage.record.AbstractRecordMatcher#setAttributeGroups(int[][])}.
+     */
+    @Test
+    public void testSetAttributeGroupsWithGroupsBadLength() {
+        IRecordMatcher match = RecordMatcherFactory.createMatcher(RecordMatcherType.simpleVSRMatcher);
+        match.setRecordSize(2);
+        assertFalse(match.setAttributeGroups(new int[][] { { 1, 2, 3, 4 }, { 1, 2, 3, 4 }, { 1, 2, 3, 4 } }));
+    }
+
+    /**
+     * Test method for
+     * {@link org.talend.dataquality.record.linkage.record.AbstractRecordMatcher#setAttributeGroups(int[][])}.
+     */
+    @Test
+    public void testSetAttributeGroupsWithGroupsGoodLength() {
+        IRecordMatcher match = RecordMatcherFactory.createMatcher(RecordMatcherType.simpleVSRMatcher);
+        match.setRecordSize(3);
+        assertTrue(match.setAttributeGroups(new int[][] { { 1, 2, 3, 4 }, { 1, 2, 3, 4 }, { 1, 2, 3, 4 } }));
     }
 
     /**
@@ -370,15 +393,6 @@ public class SimpleVSRRecordMatcherTest {
         } catch (Exception e) {
             assertTrue(e != null && e instanceof IllegalArgumentException);
         }
-    }
-
-    /**
-     * Test method for
-     * {@link org.talend.dataquality.record.linkage.record.AbstractRecordMatcher#internalScalarProduct(double[], double[])}
-     * .
-     */
-    public void testInternalScalarProduct() {
-        // TODO fail("Not yet implemented");
     }
 
     // The matcing probilities weight with

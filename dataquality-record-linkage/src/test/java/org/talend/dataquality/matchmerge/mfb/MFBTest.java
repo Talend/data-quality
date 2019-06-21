@@ -45,38 +45,7 @@ public class MFBTest extends TestCase {
 
     private static void testConstant(final int constantNumber, int totalCount, AttributeMatcherType matchAlgorithm) {
         Map<String, ValueGenerator> generators = new HashMap<String, ValueGenerator>();
-        generators.put("name", new ValueGenerator() {
-
-            int index = 0;
-
-            @Override
-            public int getColumnIndex() {
-                return index;
-            }
-
-            @Override
-            public String newValue() {
-                return CONSTANTS[index++ % constantNumber];
-            }
-
-            @Override
-            public Object getAttribute() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public int getReferenceColumnIndex() {
-                // TODO Auto-generated method stub
-                return 0;
-            }
-
-            @Override
-            public String getReferenceValue() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-        });
+        generators.put("name", createValueGenerator(constantNumber));
         RecordGenerator recordGenerator = new RecordGenerator();
         recordGenerator.setMatchKeyMap(generators);
         Iterator<Record> iterator = new RecordIterator(totalCount, recordGenerator);
@@ -94,38 +63,7 @@ public class MFBTest extends TestCase {
     private static void testConcatenateParameter(final int constantNumber, int totalCount, AttributeMatcherType matchAlgorithm,
             String separator) {
         Map<String, ValueGenerator> generators = new HashMap<String, ValueGenerator>();
-        generators.put("name", new ValueGenerator() {
-
-            int index = 0;
-
-            @Override
-            public int getColumnIndex() {
-                return index;
-            }
-
-            @Override
-            public String newValue() {
-                return CONSTANTS[index++ % constantNumber];
-            }
-
-            @Override
-            public Object getAttribute() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public int getReferenceColumnIndex() {
-                // TODO Auto-generated method stub
-                return 0;
-            }
-
-            @Override
-            public String getReferenceValue() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-        });
+        generators.put("name", createValueGenerator(constantNumber));
         RecordGenerator recordGenerator = new RecordGenerator();
         recordGenerator.setMatchKeyMap(generators);
         Iterator<Record> iterator = new RecordIterator(totalCount, recordGenerator);
@@ -152,38 +90,7 @@ public class MFBTest extends TestCase {
 
     private static void testSimilar(final int similarNumber, int totalCount, AttributeMatcherType matchAlgorithm) {
         Map<String, ValueGenerator> generators = new HashMap<String, ValueGenerator>();
-        generators.put("name", new ValueGenerator() {
-
-            int index = 0;
-
-            @Override
-            public int getColumnIndex() {
-                return index;
-            }
-
-            @Override
-            public String newValue() {
-                return SIMILARS[index++ % similarNumber];
-            }
-
-            @Override
-            public Object getAttribute() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public int getReferenceColumnIndex() {
-                // TODO Auto-generated method stub
-                return 0;
-            }
-
-            @Override
-            public String getReferenceValue() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-        });
+        generators.put("name", createSimilarValueGenerator(similarNumber));
         RecordGenerator recordGenerator = new RecordGenerator();
         recordGenerator.setMatchKeyMap(generators);
         Iterator<Record> iterator = new RecordIterator(totalCount, recordGenerator);
@@ -201,38 +108,7 @@ public class MFBTest extends TestCase {
 
     private static void testWeight(final int constantNumber, int totalCount, AttributeMatcherType matchAlgorithm) {
         Map<String, ValueGenerator> generators = new HashMap<String, ValueGenerator>();
-        generators.put("name", new ValueGenerator() {
-
-            int index = 0;
-
-            @Override
-            public int getColumnIndex() {
-                return index;
-            }
-
-            @Override
-            public String newValue() {
-                return CONSTANTS[index++ % constantNumber];
-            }
-
-            @Override
-            public Object getAttribute() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public int getReferenceColumnIndex() {
-                // TODO Auto-generated method stub
-                return 0;
-            }
-
-            @Override
-            public String getReferenceValue() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-        });
+        generators.put("name", createValueGenerator(constantNumber));
         // Runs a first match with a weight 1
         RecordGenerator recordGenerator = new RecordGenerator();
         recordGenerator.setMatchKeyMap(generators);
@@ -355,4 +231,67 @@ public class MFBTest extends TestCase {
         assertEquals(left, mergeValue);
     }
 
+    private static ValueGenerator createSimilarValueGenerator(int constantNumber) {
+        return new ValueGenerator() {
+
+            int index = 0;
+
+            @Override
+            public int getColumnIndex() {
+                return index;
+            }
+
+            @Override
+            public String newValue() {
+                return SIMILARS[index++ % constantNumber];
+            }
+
+            @Override
+            public Object getAttribute() {
+                return null;
+            }
+
+            @Override
+            public int getReferenceColumnIndex() {
+                return 0;
+            }
+
+            @Override
+            public String getReferenceValue() {
+                return null;
+            }
+        };
+    }
+
+    private static ValueGenerator createValueGenerator(int constantNumber) {
+        return new ValueGenerator() {
+
+            int index = 0;
+
+            @Override
+            public int getColumnIndex() {
+                return index;
+            }
+
+            @Override
+            public String newValue() {
+                return CONSTANTS[index++ % constantNumber];
+            }
+
+            @Override
+            public Object getAttribute() {
+                return null;
+            }
+
+            @Override
+            public int getReferenceColumnIndex() {
+                return 0;
+            }
+
+            @Override
+            public String getReferenceValue() {
+                return null;
+            }
+        };
+    }
 }

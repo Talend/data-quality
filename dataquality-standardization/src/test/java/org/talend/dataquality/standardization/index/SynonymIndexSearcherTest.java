@@ -12,6 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.standardization.index;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
@@ -232,9 +233,12 @@ public class SynonymIndexSearcherTest {
             printLineToConsole("out= " + outputRecord);
         }
 
-        searcher.close();
+        assertEquals(3, output.size());
+        assertArrayEquals(new String[] { "I.B.M.", "ANPE" }, output.get(0).getRecord());
+        assertArrayEquals(new String[] { "IRTY", "ANPE" }, output.get(1).getRecord());
+        assertArrayEquals(new String[] { "ISDF", "ANPE" }, output.get(2).getRecord());
 
-        // FIXME add assertions here (or create a junit test for SynonymRecordSearcher instead)
+        searcher.close();
 
     }
 

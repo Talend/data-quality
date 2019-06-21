@@ -81,7 +81,6 @@ public class MyDistance extends AbstractAttributeMatcher {
      */
     @Override
     public float getThreshold() {
-        // TODO Auto-generated method stub
         return 0.88f;
     }
 
@@ -92,7 +91,6 @@ public class MyDistance extends AbstractAttributeMatcher {
      */
     @Override
     public double getWeight() {
-        // TODO Auto-generated method stub
         return 1.0;
     }
 

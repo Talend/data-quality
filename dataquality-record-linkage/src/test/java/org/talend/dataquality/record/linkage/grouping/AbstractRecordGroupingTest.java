@@ -104,8 +104,6 @@ public class AbstractRecordGroupingTest {
 
             @Override
             protected void outputRow(RichRecord row) {
-                // TODO Auto-generated method stub
-
             }
 
         };
