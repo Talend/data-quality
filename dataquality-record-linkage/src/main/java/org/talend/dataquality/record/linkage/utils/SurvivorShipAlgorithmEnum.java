@@ -114,7 +114,7 @@ public enum SurvivorShipAlgorithmEnum {
      * @return the dataType
      */
     public DefaultSurvivorShipDataTypeEnum[] getDataType() {
-        if (this == MOST_COMMON || this == MOST_RECENT || this == MOST_ANCIENT) {
+        if (this.dataType.length == 0) {
             return DefaultSurvivorShipDataTypeEnum.values();
         }
         return this.dataType;
