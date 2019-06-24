@@ -15,6 +15,7 @@ package org.talend.dataquality.standardization;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
+import org.talend.dataquality.standardization.action.SynonymReplaceActionTest;
 import org.talend.dataquality.standardization.index.CombinedQueryTest;
 import org.talend.dataquality.standardization.index.SynonymIndexBuilderTest;
 import org.talend.dataquality.standardization.index.SynonymIndexSearcherTest;
@@ -27,7 +28,7 @@ import org.talend.dataquality.standardization.record.SynonymRecordSearcherTest;
  */
 @RunWith(Suite.class)
 @SuiteClasses({ SynonymRecordSearcherTest.class, FirstNameStandardizeTest.class, CombinedQueryTest.class,
-        SynonymIndexBuilderTest.class, SynonymIndexSearcherTest.class, SynonymTest.class })
+        SynonymIndexBuilderTest.class, SynonymIndexSearcherTest.class, SynonymTest.class, SynonymReplaceActionTest.class })
 public class AllDQStandardizationTests {
 
 }
