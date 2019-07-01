@@ -12,6 +12,7 @@
 // ============================================================================
 package org.talend.survivorship.action.handler;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -281,7 +282,10 @@ public class HandlerParameter {
         if (originalSet instanceof SubDataSet) {
             originalSet = ((SubDataSet) originalSet).getOrignialDataSet();
         }
-        originalSet.getConflictList().get(index).remove(realColName);
+        List<HashSet<String>> conflictList = originalSet.getConflictList();
+        if (conflictList.size() > 0) {
+            originalSet.getConflictList().get(index).remove(realColName);
+        }
     }
 
 }

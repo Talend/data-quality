@@ -174,4 +174,64 @@ public class HandlerParameterTest {
 
     }
 
+    /**
+     * Test method for
+     * {@link org.talend.survivorship.action.handler.HandlerParameter#removeFromConflictList(java.lang.Integer, java.lang.String)}
+     * 
+     * No exception and result is correctly
+     */
+    @Test
+    public void testRemoveFromConflictListForSubDataSetWithConflictListIsEmpty() {
+        Column col1 = new Column("city1", "String");
+        Column col2 = new Column("city2", "String");
+        List<Column> columns = new ArrayList<>();
+        columns.add(col1);
+        columns.add(col2);
+        DataSet dataset = new DataSet(columns);
+        // first record
+        Record record1 = new Record();
+        record1.setId(1);
+        Attribute att1 = new Attribute(record1, col1, "value1");
+        Attribute att2 = new Attribute(record1, col2, "value2");
+        record1.putAttribute("city1", att1);
+        record1.putAttribute("city2", att2);
+        col1.putAttribute(record1, att1);
+        col2.putAttribute(record1, att2);
+        dataset.getRecordList().add(record1);
+        // second record
+        record1 = new Record();
+        record1.setId(2);
+        att1 = new Attribute(record1, col1, "value3");
+        att2 = new Attribute(record1, col2, "value4");
+        record1.putAttribute("city1", att1);
+        record1.putAttribute("city2", att2);
+        col1.putAttribute(record1, att1);
+        col2.putAttribute(record1, att2);
+        dataset.getRecordList().add(record1);
+        List<Integer> conflictRowNum = new ArrayList<>();
+        conflictRowNum.add(0);
+        dataset.getConflictDataMap().get().put("city2", conflictRowNum);
+        ISurvivorshipAction action = RuleDefinition.Function.MostCommon.getAction();
+        Column refColumn = col1;
+        Column tarColumn = col2;
+        String ruleName = "rule1";
+        String expression = null;
+        boolean isIgnoreBlank = false;
+        String fillColumn = "city2";
+        boolean isDealDup = false;
+        Map<String, Integer> columnIndexMap = new HashMap<>();
+        columnIndexMap.put("city1", 0);
+        columnIndexMap.put("city2", 1);
+        FunctionParameter functionParameter = new FunctionParameter(action, expression, isIgnoreBlank, isDealDup);
+        List<HashSet<String>> conflictList = dataset.getConflictList();
+
+        // add some value into conflictList and test removeFromConflictList
+        HandlerParameter handlerParameter = new HandlerParameter(new SubDataSet(dataset, null), refColumn, tarColumn, ruleName,
+                columnIndexMap, fillColumn, functionParameter);
+        handlerParameter.removeFromConflictList(0, "city1");
+        handlerParameter.removeFromConflictList(1, "city2");
+        Assert.assertEquals("The size of conflict list should be 0", 0, handlerParameter.getDataset().getConflictList().size());
+
+    }
+
 }
