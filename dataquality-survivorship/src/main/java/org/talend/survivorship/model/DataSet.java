@@ -319,7 +319,11 @@ public class DataSet {
     public void arrangeConflictCol(String conflictCol, SurvivedResult survivoredRowNum) {
         List<Integer> orignalList = conflictDataMap.get().get(conflictCol);
         Object survivShipResult = this.survivorMap.get(conflictCol);
-        if (orignalList == null) {
+        // conflictList.size() == 0 case will genereate after do {@link HandlerParameter#updateDataSet()}
+        // Consisder copy conflictList in {@link SubDataSet#createSubDataSet(String)} too when any issue generate and
+        // conflictList is not empty.
+        // Note that conflictList never be null
+        if (orignalList == null || conflictList.size() == 0) {
             return;
         }
         for (int index : orignalList) {
