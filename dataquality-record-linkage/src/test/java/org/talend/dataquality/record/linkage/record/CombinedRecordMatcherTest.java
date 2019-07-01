@@ -270,8 +270,7 @@ public class CombinedRecordMatcherTest {
      */
     @Test
     public void testSetAttributeMatchers() {
-        for (RecordMatcherType type : RecordMatcherType.values()) { // FIXME handle t-swoosh
-            // FIXME no RecordMatcher exists for T_SwooshAlgorithm currently
+        for (RecordMatcherType type : RecordMatcherType.values()) {
             if (RecordMatcherType.T_SwooshAlgorithm.equals(type)) {
                 continue;
             }

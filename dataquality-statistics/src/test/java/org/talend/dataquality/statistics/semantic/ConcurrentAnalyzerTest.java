@@ -359,7 +359,6 @@ public class ConcurrentAnalyzerTest extends SemanticStatisticsTestBase {
             try {
                 semanticAnalyzer.close();
             } catch (Exception e) {
-                // TODO : Solve this issue
                 throw new RuntimeException(e);
             }
         }

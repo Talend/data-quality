@@ -39,7 +39,6 @@ public class Range implements Comparable<Range> {
 
     @Override
     public int compareTo(Range another) {
-        // TODO only take account the "lower" ?
         if (lower < another.lower) {
             return -1;
         } else if (lower > another.lower) {

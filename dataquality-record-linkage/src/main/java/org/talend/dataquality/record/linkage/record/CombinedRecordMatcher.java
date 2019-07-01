@@ -45,7 +45,6 @@ public class CombinedRecordMatcher extends AbstractRecordMatcher {
     public double getMatchingWeight(String[] record1, String[] record2) {
         double matchingWeight = 0;
         for (IRecordMatcher matcher : matchers) {
-            // TODO optimization could be done here when some attribute distances must not be computed again.
             double currentWeight = matcher.getMatchingWeight(record1, record2);
             if (currentWeight < matchingWeight) {
                 continue; // a better match already exists

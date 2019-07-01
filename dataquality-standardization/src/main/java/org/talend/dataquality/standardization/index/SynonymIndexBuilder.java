@@ -255,7 +255,6 @@ public class SynonymIndexBuilder {
         default:
             error.set(false, Messages.getString("SynonymIndexBuilder.documents", docs.totalHits, word));//$NON-NLS-1$
         }
-        // FIXME avoid use of idxSearcher?
         idxSearcher.close();
         return nbDocs;
     }
@@ -514,10 +513,8 @@ public class SynonymIndexBuilder {
      * @throws IOException
      */
     private TopDocs searchDocumentByWord(String word) throws IOException {
-        TopDocs docs;
-        // FIXME can we avoid the creation of a new searcher (use IndexReader.reopen?)
         SynonymIndexSearcher newSynIdxSearcher = getNewSynIdxSearcher();
-        docs = newSynIdxSearcher.searchDocumentByWord(word);
+        TopDocs docs = newSynIdxSearcher.searchDocumentByWord(word);
         newSynIdxSearcher.close();
         return docs;
     }

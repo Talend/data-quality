@@ -16,8 +16,8 @@ import org.talend.survivorship.model.DataSet;
 
 /**
  * Detect the existence of a String in a given index.
- * <p>
- * TODO complete MatchDictionaryService
+ * 
+ * @deprecated not implemented. to be removed in the next major release.
  */
 public class MatchDictionaryService extends AbstractService {
 
@@ -37,8 +37,7 @@ public class MatchDictionaryService extends AbstractService {
      */
     @Override
     public void init() {
-        // TODO Auto-generated method stub
-
+        // not implemented
     }
 
 }

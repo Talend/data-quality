@@ -171,7 +171,7 @@ public class SynonymRecordSearcher {
 
         private static void updateOutputRec(OutputRecord outputRec, int idx, WordResult wordResult) {
             outputRec.record[idx] = wordResult.word;
-            outputRec.score += wordResult.score; // TODO add multiplicative weight here if needed
+            outputRec.score += wordResult.score;
             outputRec.scores += "|" + wordResult.score;//$NON-NLS-1$
             if (Float.compare(wordResult.score, 0.0F) != 0) {
                 outputRec.nbMatch++;

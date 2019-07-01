@@ -123,10 +123,6 @@ public class CombinedQueryTest {
             }
         }
         searcher.close();
-
-        // TODO check that the best matching is the exact string.
-        // assertEquals("the best matching should be the exact string", 2,docs.scoreDocs[0].doc);
-
     }
 
     /**

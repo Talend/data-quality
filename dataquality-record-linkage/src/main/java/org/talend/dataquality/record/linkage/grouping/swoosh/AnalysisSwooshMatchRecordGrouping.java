@@ -33,7 +33,7 @@ public class AnalysisSwooshMatchRecordGrouping extends AnalysisMatchRecordGroupi
 
     private Map<Integer, Attribute> attributesAsMatchKey;
 
-    //used for the chart in the analysis
+    // used for the chart in the analysis
     private boolean needMatchInEnd = true;
 
     /**
@@ -81,7 +81,7 @@ public class AnalysisSwooshMatchRecordGrouping extends AnalysisMatchRecordGroupi
     }
 
     @Override
-    public void doGroup(RichRecord currentRecord) {//used only for analysis running
+    public void doGroup(RichRecord currentRecord) {// used only for analysis running
         // translate the record's attribute to -->origalRow, and attributes only contain match keys
         translateRecordForSwoosh(currentRecord);
 
@@ -115,8 +115,8 @@ public class AnalysisSwooshMatchRecordGrouping extends AnalysisMatchRecordGroupi
     }
 
     @Override
-    public void end() throws IOException, InterruptedException {//used for analysis only 
-        if (needMatchInEnd) {//used for the "chart" in the analysis
+    public void end() throws IOException, InterruptedException {// used for analysis only
+        if (needMatchInEnd) {// used for the "chart" in the analysis
             combinedRecordMatcher.setDisplayLabels(true);
             swooshGrouping.swooshMatch(combinedRecordMatcher, survivorShipAlgorithmParams);
         }
@@ -124,7 +124,6 @@ public class AnalysisSwooshMatchRecordGrouping extends AnalysisMatchRecordGroupi
         // out put
         swooshGrouping.afterAllRecordFinished();
 
-        //TODO: check if it needed
         if (matchResultConsumer.isKeepDataInMemory()) {
             for (RichRecord row : tmpMatchResult) {
                 // For swoosh algorithm, the GID can only be know after all of the records are computed.
@@ -146,7 +145,7 @@ public class AnalysisSwooshMatchRecordGrouping extends AnalysisMatchRecordGroupi
 
     /**
      * used for analysis and tMatchGroup, and only after swoosh match finished.
-     *  */
+     */
     @Override
     protected void outputRow(RichRecord row) {
         if (matchResultConsumer != null && matchResultConsumer.isKeepDataInMemory()) {
@@ -166,17 +165,17 @@ public class AnalysisSwooshMatchRecordGrouping extends AnalysisMatchRecordGroupi
     }
 
     protected List<DQAttribute<?>> getValuesFromOriginRow(RichRecord row) {
-        //1, get the pure data
+        // 1, get the pure data
         List<DQAttribute<?>> row2 = row.getOutputRow(swooshGrouping.getOldGID2New(), this.isLinkToPrevious);
 
-        //2, get the additional columns like GID, 
+        // 2, get the additional columns like GID,
         row2.add(row.getGID());
         row2.add(row.getGRP_SIZE());
         row2.add(row.getMASTER());
         row2.add(row.getSCORE());
         row2.add(row.getGRP_QUALITY());
 
-        //3, get other additional column by different options. 
+        // 3, get other additional column by different options.
         if (this.isOutputDistDetails()) {
             row2.add(row.getATTRIBUTE_SCORE());
         }

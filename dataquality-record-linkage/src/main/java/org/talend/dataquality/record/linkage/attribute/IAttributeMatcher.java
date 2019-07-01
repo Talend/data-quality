@@ -44,8 +44,6 @@ public interface IAttributeMatcher {
      */
     AttributeMatcherType getMatchType();
 
-    // TODO handle other types of data
-
     /**
      * Method "setNullOption" sets the option about the comparison of null values.
      * 

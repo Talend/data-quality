@@ -79,19 +79,14 @@ public class SynonymIndexBuilderTest {
     }
 
     SynonymIndexSearcher getSearcher(SynonymIndexBuilder builder) {
-        SynonymIndexSearcher searcher = new SynonymIndexSearcher();
+        SynonymIndexSearcher searcher = new SynonymIndexSearcher(path);
         try {
             searcher.setAnalyzer(builder.getAnalyzer());
-            searcher.openIndexInFS(path);
         } catch (IOException e) {
             e.printStackTrace();
         }
         searcher.setTopDocLimit(5);
         return searcher;
-    }
-
-    @Override
-    public void finalize() throws Exception {
     }
 
     void insertDocuments(SynonymIndexBuilder builder) throws IOException {
@@ -215,9 +210,8 @@ public class SynonymIndexBuilderTest {
         synIdxBuild.commit();
         synIdxBuild.closeIndex();
 
-        SynonymIndexSearcher search = new SynonymIndexSearcher();
+        SynonymIndexSearcher search = new SynonymIndexSearcher(idxPath);
         search.setTopDocLimit(maxDoc); // retrieve all possible documents
-        search.openIndexInFS(idxPath);
         TopDocs salutDocs = search.searchDocumentByWord(word);
         assertEquals(maxDoc, salutDocs.totalHits);
         for (ScoreDoc scoreDoc : salutDocs.scoreDocs) {
@@ -427,7 +421,6 @@ public class SynonymIndexBuilderTest {
         File indexfile = new File(indexPath);
         assertEquals(true, indexfile.exists());
 
-        // TODO test with lock?
         synonymIndexBuilder.insertDocument("salut", "toto");
         synonymIndexBuilder.commit();
         synonymIndexBuilder.closeIndex();

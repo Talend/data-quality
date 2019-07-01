@@ -54,7 +54,7 @@ public abstract class AbstractRecordMatcher implements IRecordMatcher {
     /**
      * Indices of records to be compared (without the blocked indices).
      */
-    protected int[] usedIndicesNotblocked = null; // TODO to be reset
+    protected int[] usedIndicesNotblocked = null;
 
     /**
      * The attribute matching weigths computed by each attribute matcher.

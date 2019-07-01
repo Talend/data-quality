@@ -99,7 +99,6 @@ public class AbstractGenerateKey {
         int idx = 0;
         for (Map<String, String> blockKey : blockKeyDefinitions) {
             String colName = blockKey.get(MatchAnalysisConstant.PRECOLUMN);
-            // TODO zshen Check if the parameter can be internally set.
             String colValue = getAlgoForEachColumn(dataMap.get(colName), blockKey, parameters);
             blockKeyArray[idx] = colValue;
             idx++;

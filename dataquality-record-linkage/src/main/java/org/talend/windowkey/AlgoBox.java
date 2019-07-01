@@ -17,9 +17,6 @@ import java.util.StringTokenizer;
 import org.talend.dataquality.record.linkage.utils.AsciiUtils;
 
 /**
- * FIXME this class should not provide static utilities.
- * 
- * FIXME all internal strings should be made constant.
  * 
  */
 public class AlgoBox {

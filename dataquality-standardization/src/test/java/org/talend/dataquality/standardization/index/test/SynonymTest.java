@@ -75,7 +75,6 @@ public class SynonymTest extends TestCase {
     }
 
     public void testSearch() {
-        // TODO search for steph
         Directory dir = null;
         IndexSearcher is = null;
         try {
