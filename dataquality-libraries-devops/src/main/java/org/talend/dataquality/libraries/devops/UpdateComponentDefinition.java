@@ -43,7 +43,7 @@ public class UpdateComponentDefinition {
 
     private static final String COMPONENTS_FOLDER = "/components"; //$NON-NLS-1$
 
-    private static final String DQ_LIB_VERSION = "7.0.2-SNAPSHOT"; //$NON-NLS-1$
+    private static final String DQ_LIB_VERSION = "7.1.0-SNAPSHOT"; //$NON-NLS-1$
 
     private static final String DAIKON_VERSION = "0.31.8"; //$NON-NLS-1$
 
