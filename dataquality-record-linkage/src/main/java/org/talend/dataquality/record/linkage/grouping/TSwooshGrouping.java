@@ -243,7 +243,7 @@ public class TSwooshGrouping<TYPE> {
                         Integer referenceColumnIndex = getColumnIndex();
                         String referenceColumnIndexStr = recordMap.get(IRecordGrouping.REFERENCE_COLUMN_IDX);
 
-                        if (referenceColumnIndexStr != null) {
+                        if (!StringUtils.isEmpty(referenceColumnIndexStr)) {
                             referenceColumnIndex = Integer.valueOf(referenceColumnIndexStr);
                             String matchType = recordMap.get("MATCHING_TYPE"); //$NON-NLS-1$
                             if (matchType != null && "dummy".equalsIgnoreCase(matchType)) { //$NON-NLS-1$
