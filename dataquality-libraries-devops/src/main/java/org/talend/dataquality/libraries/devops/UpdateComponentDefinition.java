@@ -45,6 +45,8 @@ public class UpdateComponentDefinition {
 
     private static final String DQ_LIB_VERSION = "7.1.1-SNAPSHOT"; //$NON-NLS-1$
 
+    private static final String DQ_LIB_EE_VERSION = "7.1.1-SNAPSHOT"; //$NON-NLS-1$
+
     private static final String DAIKON_VERSION = "0.31.8"; //$NON-NLS-1$
 
     private static final String[] PROVIDERS = new String[] { //
@@ -59,8 +61,11 @@ public class UpdateComponentDefinition {
     private static final long serialVersionUID = 1L;
 
     static {
+        // Daikon
         DEP_VERSION_MAP.put("daikon", DAIKON_VERSION); //$NON-NLS-1$
         DEP_VERSION_MAP.put("daikon-exception", DAIKON_VERSION); //$NON-NLS-1$
+
+        // DQ lib SE
         DEP_VERSION_MAP.put("org.talend.dataquality.common", DQ_LIB_VERSION); //$NON-NLS-1$
         DEP_VERSION_MAP.put("org.talend.dataquality.converters", DQ_LIB_VERSION); //$NON-NLS-1$
         DEP_VERSION_MAP.put("org.talend.dataquality.record.linkage", DQ_LIB_VERSION); //$NON-NLS-1$
@@ -70,6 +75,9 @@ public class UpdateComponentDefinition {
         DEP_VERSION_MAP.put("org.talend.dataquality.survivorship", DQ_LIB_VERSION); //$NON-NLS-1$
         DEP_VERSION_MAP.put("org.talend.dataquality.text.japanese", DQ_LIB_VERSION); //$NON-NLS-1$
         DEP_VERSION_MAP.put("org.talend.dataquality.statistics", DQ_LIB_VERSION); //$NON-NLS-1$
+
+        // DQ lib EE
+        DEP_VERSION_MAP.put("org.talend.dataquality.datamasking", DQ_LIB_EE_VERSION); //$NON-NLS-1$
     }
 
     private UpdateComponentDefinition() {
