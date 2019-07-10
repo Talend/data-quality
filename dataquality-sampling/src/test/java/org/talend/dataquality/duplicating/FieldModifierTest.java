@@ -13,6 +13,7 @@
 package org.talend.dataquality.duplicating;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 
 import java.util.Date;
@@ -119,7 +120,7 @@ public class FieldModifierTest {
      * {@link org.talend.dataquality.duplicating.FieldModifier#generateDuplicate(java.util.Date, org.talend.dataquality.duplicating.FieldModifier.Function, int, java.lang.String)}
      * .
      * 
-     * case1 date is null case
+     * case1  Function and date are both  null case
      */
     @Test
     public void testGenerateDuplicateDateFunctionIntStringCase1() {
@@ -133,7 +134,7 @@ public class FieldModifierTest {
      * {@link org.talend.dataquality.duplicating.FieldModifier#generateDuplicate(java.util.Date, org.talend.dataquality.duplicating.FieldModifier.Function, int, java.lang.String)}
      * .
      * 
-     * case2 function is null case
+     * case2 only function is null case
      */
     @Test
     public void testGenerateDuplicateDateFunctionIntStringCase2() {
@@ -143,4 +144,71 @@ public class FieldModifierTest {
         assertEquals(generateDuplicate, date);
     }
 
+    /**
+     * Test method for
+     * {@link org.talend.dataquality.duplicating.FieldModifier#generateDuplicate(java.util.Date, org.talend.dataquality.duplicating.FieldModifier.Function, int, java.lang.String)}
+     * .
+     * 
+     * case3 Only date is null case
+     */
+    @Test
+    public void testGenerateDuplicateDateFunctionIntStringCase3() {
+        FieldModifier fieldModifier = new FieldModifier();
+        for (Function function : Function.values()) {
+            //test when the Date is null,then the method will be return null
+            Date generateDuplicate = fieldModifier.generateDuplicate(null, function, DEFAULT_MODIF_COUNT, EMPTY_STRING);
+            assertEquals(generateDuplicate, null);
+        }
+    }
+
+    /**
+     * Test method for
+     * {@link org.talend.dataquality.duplicating.FieldModifier#generateDuplicate(java.util.Date, org.talend.dataquality.duplicating.FieldModifier.Function, int, java.lang.String)}
+     * .
+     * 
+     * case4 function is REPLACE_BY_RANDOM_DATE case
+     */
+    @Test
+    public void testGenerateDuplicateDateFunctionIntStringCase4() {
+        FieldModifier fieldModifier = new FieldModifier();
+        //test REPLACE_BY_RANDOM_DATE
+        Date date = new Date();
+        Date generateDuplicate = fieldModifier.generateDuplicate(date, Function.REPLACE_BY_RANDOM_DATE, DEFAULT_MODIF_COUNT,
+                EMPTY_STRING);
+        assertNotEquals(date, generateDuplicate);
+    }
+
+    /**
+     * Test method for
+     * {@link org.talend.dataquality.duplicating.FieldModifier#generateDuplicate(java.util.Date, org.talend.dataquality.duplicating.FieldModifier.Function, int, java.lang.String)}
+     * .
+     * 
+     * case5 function is MODIFY_DATE_VALUE case
+     */
+    @Test
+    public void testGenerateDuplicateDateFunctionIntStringCase5() {
+        FieldModifier fieldModifier = new FieldModifier();
+        //test MODIFY_DATE_VALUE
+        Date date = new Date();
+        Date generateDuplicate = fieldModifier.generateDuplicate(date, Function.MODIFY_DATE_VALUE, DEFAULT_MODIF_COUNT,
+                EMPTY_STRING);
+        assertNotEquals(date, generateDuplicate);
+    }
+
+    /**
+     * Test method for
+     * {@link org.talend.dataquality.duplicating.FieldModifier#generateDuplicate(java.util.Date, org.talend.dataquality.duplicating.FieldModifier.Function, int, java.lang.String)}
+     * .
+     * 
+     * case6 function is SWITCH_DAY_MONTH_VALUE case
+     */
+    @Test
+    public void testGenerateDuplicateDateFunctionIntStringCase6() {
+        FieldModifier fieldModifier = new FieldModifier();
+        //test MODIFY_DATE_VALUE
+        Date date = new Date();
+        Date generateDuplicate = fieldModifier.generateDuplicate(date, Function.SWITCH_DAY_MONTH_VALUE, DEFAULT_MODIF_COUNT,
+                EMPTY_STRING);
+        assertNotEquals(date, generateDuplicate);
+    }
 }
