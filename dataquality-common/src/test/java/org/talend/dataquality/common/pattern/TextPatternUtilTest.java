@@ -210,149 +210,149 @@ public class TextPatternUtilTest {
         assertEquals(list1, list2);
     }
 
-	@Test
-	public void replaceStringCodePointsWithMulticharacter() {
-		Random random = new Random(123);
-		String input = "abc";
-		String changedCharacter = "eom";
+    @Test
+    public void replaceStringCodePointsWithMulticharacter() {
+        Random random = new Random(123);
+        String input = "abc";
+        String changedCharacter = "eom";
 
-		for (int i = 0; i < input.length(); i++) {
-			String inputChar = input.substring(i, i + 1);
-			String replaceChar = changedCharacter.substring(i, i + 1);
-			Integer codePoint = replaceChar.codePointAt(0);
-			List<Integer> repalceStringCodePoint = TextPatternUtil.replaceStringCodePoints(inputChar, random);
-			assertEquals(codePoint, repalceStringCodePoint.get(0));
-		}
-	}
+        for (int i = 0; i < input.length(); i++) {
+            String inputChar = input.substring(i, i + 1);
+            String replaceChar = changedCharacter.substring(i, i + 1);
+            Integer codePoint = replaceChar.codePointAt(0);
+            List<Integer> repalceStringCodePoint = TextPatternUtil.replaceStringCodePoints(inputChar, random);
+            assertEquals(codePoint, repalceStringCodePoint.get(0));
+        }
+    }
 
-	@Test
-	public void replaceStringCodePointsWithoneCharacterFromMultiCharacter() {
+    @Test
+    public void replaceStringCodePointsWithoneCharacterFromMultiCharacter() {
 
-		Random random = new Random(123);
-		String input = "testFor@hooseOnecharater";
-		String replaceByCharacter = input.substring(7);
-		if (replaceByCharacter == "@") {
-			Integer codePoint = "9".codePointAt(0);
-			List<Integer> repalceStringCodePoint = TextPatternUtil.replaceStringCodePoints(replaceByCharacter, random);
-			assertEquals(codePoint, repalceStringCodePoint.get(0));
-			}
+        Random random = new Random(123);
+        String input = "testFor@hooseOnecharater";
+        String replaceByCharacter = input.substring(7);
+        if (replaceByCharacter == "@") {
+            Integer codePoint = "9".codePointAt(0);
+            List<Integer> repalceStringCodePoint = TextPatternUtil.replaceStringCodePoints(replaceByCharacter, random);
+            assertEquals(codePoint, repalceStringCodePoint.get(0));
+        }
 
-	}
+    }
 
-	@Test
-	public void replaceStringCodePointsWithInvalidReplace() {
+    @Test
+    public void replaceStringCodePointsWithInvalidReplace() {
 
-		Random random = new Random(123);
-		String input = "test@sina.com";
-		String replaceByCharacter = input.substring(4);
-		if (replaceByCharacter == "@") {
-			Integer codePoint = "9".codePointAt(0);
-			List<Integer> repalceStringCodePoint = TextPatternUtil.replaceStringCodePoints(replaceByCharacter, random);
-			assertEquals(codePoint, repalceStringCodePoint.get(0));
+        Random random = new Random(123);
+        String input = "test@sina.com";
+        String replaceByCharacter = input.substring(4);
+        if (replaceByCharacter == "@") {
+            Integer codePoint = "9".codePointAt(0);
+            List<Integer> repalceStringCodePoint = TextPatternUtil.replaceStringCodePoints(replaceByCharacter, random);
+            assertEquals(codePoint, repalceStringCodePoint.get(0));
 
-		}
+        }
 
-	}
+    }
 
-	@Test
-	public void replaceStringCodePointsFromMulticharacter() {
-		Random random = new Random(123);
-		String input = "b";
-		Integer codePoint = "feiop".codePointAt(1);
-		List<Integer> repalceStringCodePoint = TextPatternUtil.replaceStringCodePoints(input, random);
-		assertEquals(codePoint, repalceStringCodePoint.get(0));
+    @Test
+    public void replaceStringCodePointsFromMulticharacter() {
+        Random random = new Random(123);
+        String input = "b";
+        Integer codePoint = "feiop".codePointAt(1);
+        List<Integer> repalceStringCodePoint = TextPatternUtil.replaceStringCodePoints(input, random);
+        assertEquals(codePoint, repalceStringCodePoint.get(0));
 
-	}
+    }
 
-	@Test
-	public void replaceStringCodePointsWithOnecharacter() {
-		Random random = new Random(123);
-		String input = "c";
-		Integer codePoint = "e".codePointAt(0);
-		List<Integer> repalceStringCodePoint = TextPatternUtil.replaceStringCodePoints(input, random);
-		assertEquals(codePoint, repalceStringCodePoint.get(0));
+    @Test
+    public void replaceStringCodePointsWithOnecharacter() {
+        Random random = new Random(123);
+        String input = "c";
+        Integer codePoint = "e".codePointAt(0);
+        List<Integer> repalceStringCodePoint = TextPatternUtil.replaceStringCodePoints(input, random);
+        assertEquals(codePoint, repalceStringCodePoint.get(0));
 
-	}
+    }
 
-	@Test
-	public void replaceStringCodePointsWithOneNumber() {
-		Random random = new Random(123);
-		String input = "8";
-		Integer codePoint = "2".codePointAt(0);
-		List<Integer> repalceStringCodePoint = TextPatternUtil.replaceStringCodePoints(input, random);
-		assertEquals(codePoint, repalceStringCodePoint.get(0));
+    @Test
+    public void replaceStringCodePointsWithOneNumber() {
+        Random random = new Random(123);
+        String input = "8";
+        Integer codePoint = "2".codePointAt(0);
+        List<Integer> repalceStringCodePoint = TextPatternUtil.replaceStringCodePoints(input, random);
+        assertEquals(codePoint, repalceStringCodePoint.get(0));
 
-	}
+    }
 
-	@Test
-	public void replaceStringCodePointsWithOneCapital() {
-		Random random = new Random(123);
-		String input = "P";
-		Integer codePoint = "E".codePointAt(0);
-		List<Integer> repalceStringCodePoint = TextPatternUtil.replaceStringCodePoints(input, random);
-		assertEquals(codePoint, repalceStringCodePoint.get(0));
+    @Test
+    public void replaceStringCodePointsWithOneCapital() {
+        Random random = new Random(123);
+        String input = "P";
+        Integer codePoint = "E".codePointAt(0);
+        List<Integer> repalceStringCodePoint = TextPatternUtil.replaceStringCodePoints(input, random);
+        assertEquals(codePoint, repalceStringCodePoint.get(0));
 
-	}
+    }
 
-	@Test
-	public void replacePatternCharacterWithLowerLetter() {
-		Random random = new Random(677899);
+    @Test
+    public void replacePatternCharacterWithLowerLetter() {
+        Random random = new Random(677899);
 
-		char character = 'a';
-		int input = Integer.valueOf(character);
-		Integer codePoint = "d".codePointAt(0);
-		char[] repalceStringCodePoint = TextPatternUtil.replacePatternCharacter(input, random);
-		Assert.assertEquals(codePoint.intValue(), new String(repalceStringCodePoint).codePointAt(0));
+        char character = 'a';
+        int input = Integer.valueOf(character);
+        Integer codePoint = "d".codePointAt(0);
+        char[] repalceStringCodePoint = TextPatternUtil.replacePatternCharacter(input, random);
+        Assert.assertEquals(codePoint.intValue(), new String(repalceStringCodePoint).codePointAt(0));
 
-	}
+    }
 
-	@Test
-	public void replacePatternCharacterWithNumber() {
-		Random random = new Random(569888);
-		char character = '9';
-		int input = Integer.valueOf(character);
-		Integer codePoint = "4".codePointAt(0);
-		char[] replaceCharacter = TextPatternUtil.replacePatternCharacter(input, random);
-		Assert.assertEquals(codePoint.intValue(), new String(replaceCharacter).codePointAt(0));
-	}
+    @Test
+    public void replacePatternCharacterWithNumber() {
+        Random random = new Random(569888);
+        char character = '9';
+        int input = Integer.valueOf(character);
+        Integer codePoint = "4".codePointAt(0);
+        char[] replaceCharacter = TextPatternUtil.replacePatternCharacter(input, random);
+        Assert.assertEquals(codePoint.intValue(), new String(replaceCharacter).codePointAt(0));
+    }
 
-	@Test
-	public void replacePatternCharacterWithHangulo() {
-		Random random = new Random(569888);
-		char n = 'G';
-		int input = Integer.valueOf(n);
-		Integer codePoint = "훨".codePointAt(0);
-		char[] replaceCharacter = TextPatternUtil.replacePatternCharacter(input, random);
-		Assert.assertEquals(codePoint.intValue(), new String(replaceCharacter).codePointAt(0));
-	}
+    @Test
+    public void replacePatternCharacterWithHangulo() {
+        Random random = new Random(569888);
+        char n = 'G';
+        int input = Integer.valueOf(n);
+        Integer codePoint = "훨".codePointAt(0);
+        char[] replaceCharacter = TextPatternUtil.replacePatternCharacter(input, random);
+        Assert.assertEquals(codePoint.intValue(), new String(replaceCharacter).codePointAt(0));
+    }
 
-	@Test
-	public void replacePatternCharacterWithFullKArakana() {
-		Random random = new Random(569888);
-		char n = 'K';
-		int input = Integer.valueOf(n);
-		Integer codePoint = "ゥ".codePointAt(0);
-		char[] replaceCharacter = TextPatternUtil.replacePatternCharacter(input, random);
-		Assert.assertEquals(codePoint.intValue(), new String(replaceCharacter).codePointAt(0));
-	}
+    @Test
+    public void replacePatternCharacterWithFullKArakana() {
+        Random random = new Random(569888);
+        char n = 'K';
+        int input = Integer.valueOf(n);
+        Integer codePoint = "ゥ".codePointAt(0);
+        char[] replaceCharacter = TextPatternUtil.replacePatternCharacter(input, random);
+        Assert.assertEquals(codePoint.intValue(), new String(replaceCharacter).codePointAt(0));
+    }
 
-	@Test
-	public void replacePatternCharacterWithhalfKankana() {
-		Random random = new Random(569888);
-		char n = 'k';
-		int input = Integer.valueOf(n);
-		Integer codePoint = "ﾖ".codePointAt(0);
-		char[] replaceCharacter = TextPatternUtil.replacePatternCharacter(input, random);
-		Assert.assertEquals(codePoint.intValue(), new String(replaceCharacter).codePointAt(0));
-	}
+    @Test
+    public void replacePatternCharacterWithhalfKankana() {
+        Random random = new Random(569888);
+        char n = 'k';
+        int input = Integer.valueOf(n);
+        Integer codePoint = "ﾖ".codePointAt(0);
+        char[] replaceCharacter = TextPatternUtil.replacePatternCharacter(input, random);
+        Assert.assertEquals(codePoint.intValue(), new String(replaceCharacter).codePointAt(0));
+    }
 
-	@Test
-	public void replacePatternCharacterWithKanji() {
-		Random random = new Random(569888);
-		char n = 'C';
-		int input = Integer.valueOf(n);
-		Integer codePoint = "嬶".codePointAt(0);
-		char[] replaceCharacter = TextPatternUtil.replacePatternCharacter(input, random);
-		Assert.assertEquals(codePoint.intValue(), new String(replaceCharacter).codePointAt(0));
-	}
+    @Test
+    public void replacePatternCharacterWithKanji() {
+        Random random = new Random(569888);
+        char n = 'C';
+        int input = Integer.valueOf(n);
+        Integer codePoint = "嬶".codePointAt(0);
+        char[] replaceCharacter = TextPatternUtil.replacePatternCharacter(input, random);
+        Assert.assertEquals(codePoint.intValue(), new String(replaceCharacter).codePointAt(0));
+    }
 }
