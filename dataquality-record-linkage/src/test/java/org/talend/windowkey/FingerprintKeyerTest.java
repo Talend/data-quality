@@ -78,12 +78,12 @@ public class FingerprintKeyerTest {
 
         char[] input = { '\u00C0', '\u00C1', '\u00C2', '\u00C3', '\u00C4', '\u00C5', '\u00E0', '\u00E1', '\u00E2', '\u00E3',
                 '\u00E4', '\u00E5', '\u0100', '\u0101', '\u0102', '\u0103', '\u0104', '\u0105' };
-        char expextedValue = 'a';
+        char expectedValue = 'a';
 
         for (int i = 0; i < input.length; i++) {
 
             Object invoke1 = method.invoke(keyer, input[i]);
-            Assert.assertEquals(expextedValue, invoke1.toString().codePointAt(0));
+            Assert.assertEquals(expectedValue, invoke1.toString().codePointAt(0));
         }
 
     }
@@ -95,10 +95,10 @@ public class FingerprintKeyerTest {
         Method method = keyer.getClass().getDeclaredMethod("translate", new Class[] { char.class });
         method.setAccessible(true);
         char[] input = { '\u00C7', '\u00E7', '\u0106', '\u0107', '\u0108', '\u0109', '\u010A', '\u010B', '\u010C', '\u010D' };
-        char expextedValue = 'c';
+        char expectedValue = 'c';
         for (int i = 0; i < input.length; i++) {
             Object invoke1 = method.invoke(keyer, input[i]);
-            Assert.assertEquals(expextedValue, invoke1.toString().codePointAt(0));
+            Assert.assertEquals(expectedValue, invoke1.toString().codePointAt(0));
         }
 
     }
@@ -110,10 +110,10 @@ public class FingerprintKeyerTest {
         Method method = keyer.getClass().getDeclaredMethod("translate", new Class[] { char.class });
         method.setAccessible(true);
         char[] input = { '\u00D0', '\u00F0', '\u010E', '\u010F', '\u0110', '\u0111' };
-        char expextedValue = 'd';
+        char expectedValue = 'd';
         for (int i = 0; i < input.length; i++) {
             Object invoke1 = method.invoke(keyer, input[i]);
-            Assert.assertEquals(expextedValue, invoke1.toString().codePointAt(0));
+            Assert.assertEquals(expectedValue, invoke1.toString().codePointAt(0));
         }
 
     }
@@ -126,10 +126,10 @@ public class FingerprintKeyerTest {
         method.setAccessible(true);
         char[] input = { '\u00C8', '\u00C9', '\u00CA', '\u00CB', '\u00E8', '\u00E9', '\u00EA', '\u00EB', '\u0112', '\u0113',
                 '\u0114', '\u0115', '\u0116', '\u0117', '\u0118', '\u0119', '\u011A', '\u011B' };
-        char expextedValue = 'e';
+        char expectedValue = 'e';
         for (int i = 0; i < input.length; i++) {
             Object invoke1 = method.invoke(keyer, input[i]);
-            Assert.assertEquals(expextedValue, invoke1.toString().codePointAt(0));
+            Assert.assertEquals(expectedValue, invoke1.toString().codePointAt(0));
         }
 
     }
@@ -141,10 +141,10 @@ public class FingerprintKeyerTest {
         Method method = keyer.getClass().getDeclaredMethod("translate", new Class[] { char.class });
         method.setAccessible(true);
         char[] input = { '\u011C', '\u011D', '\u011E', '\u011F', '\u0120', '\u0121', '\u0122', '\u0123' };
-        char expextedValue = 'g';
+        char expectedValue = 'g';
         for (int i = 0; i < input.length; i++) {
             Object invoke1 = method.invoke(keyer, input[i]);
-            Assert.assertEquals(expextedValue, invoke1.toString().codePointAt(0));
+            Assert.assertEquals(expectedValue, invoke1.toString().codePointAt(0));
         }
 
     }
@@ -156,10 +156,10 @@ public class FingerprintKeyerTest {
         Method method = keyer.getClass().getDeclaredMethod("translate", new Class[] { char.class });
         method.setAccessible(true);
         char[] input = { '\u0124', '\u0125', '\u0126', '\u0127' };
-        char expextedValue = 'h';
+        char expectedValue = 'h';
         for (int i = 0; i < input.length; i++) {
             Object invoke1 = method.invoke(keyer, input[i]);
-            Assert.assertEquals(expextedValue, invoke1.toString().codePointAt(0));
+            Assert.assertEquals(expectedValue, invoke1.toString().codePointAt(0));
         }
 
     }
@@ -172,10 +172,10 @@ public class FingerprintKeyerTest {
         method.setAccessible(true);
         char[] input = { '\u00CC', '\u00CD', '\u00CE', '\u00CF', '\u00EC', '\u00ED', '\u00EE', '\u00EF', '\u0128', '\u0129',
                 '\u012A', '\u012B', '\u012C', '\u012D', '\u012E', '\u012F', '\u0130', '\u0131' };
-        char expextedValue = 'i';
+        char expectedValue = 'i';
         for (int i = 0; i < input.length; i++) {
             Object invoke1 = method.invoke(keyer, input[i]);
-            Assert.assertEquals(expextedValue, invoke1.toString().codePointAt(0));
+            Assert.assertEquals(expectedValue, invoke1.toString().codePointAt(0));
         }
 
     }
@@ -187,10 +187,10 @@ public class FingerprintKeyerTest {
         Method method = keyer.getClass().getDeclaredMethod("translate", new Class[] { char.class });
         method.setAccessible(true);
         char[] input = { '\u0134', '\u0135' };
-        char expextedValue = 'j';
+        char expectedValue = 'j';
         for (int i = 0; i < input.length; i++) {
             Object invoke1 = method.invoke(keyer, input[i]);
-            Assert.assertEquals(expextedValue, invoke1.toString().codePointAt(0));
+            Assert.assertEquals(expectedValue, invoke1.toString().codePointAt(0));
         }
 
     }
@@ -202,10 +202,10 @@ public class FingerprintKeyerTest {
         Method method = keyer.getClass().getDeclaredMethod("translate", new Class[] { char.class });
         method.setAccessible(true);
         char[] input = { '\u0136', '\u0137', '\u0138' };
-        char expextedValue = 'k';
+        char expectedValue = 'k';
         for (int i = 0; i < input.length; i++) {
             Object invoke1 = method.invoke(keyer, input[i]);
-            Assert.assertEquals(expextedValue, invoke1.toString().codePointAt(0));
+            Assert.assertEquals(expectedValue, invoke1.toString().codePointAt(0));
         }
 
     }
@@ -217,10 +217,10 @@ public class FingerprintKeyerTest {
         Method method = keyer.getClass().getDeclaredMethod("translate", new Class[] { char.class });
         method.setAccessible(true);
         char[] input = { '\u0139', '\u013A', '\u013B', '\u013C', '\u013D', '\u013E', '\u013F', '\u0140', '\u0141', '\u0142' };
-        char expextedValue = 'l';
+        char expectedValue = 'l';
         for (int i = 0; i < input.length; i++) {
             Object invoke1 = method.invoke(keyer, input[i]);
-            Assert.assertEquals(expextedValue, invoke1.toString().codePointAt(0));
+            Assert.assertEquals(expectedValue, invoke1.toString().codePointAt(0));
         }
 
     }
@@ -233,10 +233,10 @@ public class FingerprintKeyerTest {
         method.setAccessible(true);
         char[] input = { '\u00D1', '\u00F1', '\u0143', '\u0144', '\u0145', '\u0146', '\u0147', '\u0148', '\u0149', '\u014A',
                 '\u014B' };
-        char expextedValue = 'n';
+        char expectedValue = 'n';
         for (int i = 0; i < input.length; i++) {
             Object invoke1 = method.invoke(keyer, input[i]);
-            Assert.assertEquals(expextedValue, invoke1.toString().codePointAt(0));
+            Assert.assertEquals(expectedValue, invoke1.toString().codePointAt(0));
         }
 
     }
@@ -249,10 +249,10 @@ public class FingerprintKeyerTest {
         method.setAccessible(true);
         char[] input = { '\u00D2', '\u00D3', '\u00D4', '\u00D5', '\u00D6', '\u00D8', '\u00F2', '\u00F3', '\u00F4', '\u00F5',
                 '\u00F6', '\u00F8', '\u014C', '\u014D', '\u014E', '\u014F', '\u0150', '\u0151' };
-        char expextedValue = 'o';
+        char expectedValue = 'o';
         for (int i = 0; i < input.length; i++) {
             Object invoke1 = method.invoke(keyer, input[i]);
-            Assert.assertEquals(expextedValue, invoke1.toString().codePointAt(0));
+            Assert.assertEquals(expectedValue, invoke1.toString().codePointAt(0));
         }
 
     }
@@ -264,10 +264,10 @@ public class FingerprintKeyerTest {
         Method method = keyer.getClass().getDeclaredMethod("translate", new Class[] { char.class });
         method.setAccessible(true);
         char[] input = { '\u0154', '\u0155', '\u0156', '\u0157', '\u0158', '\u0159' };
-        char expextedValue = 'r';
+        char expectedValue = 'r';
         for (int i = 0; i < input.length; i++) {
             Object invoke1 = method.invoke(keyer, input[i]);
-            Assert.assertEquals(expextedValue, invoke1.toString().codePointAt(0));
+            Assert.assertEquals(expectedValue, invoke1.toString().codePointAt(0));
         }
 
     }
@@ -279,10 +279,10 @@ public class FingerprintKeyerTest {
         Method method = keyer.getClass().getDeclaredMethod("translate", new Class[] { char.class });
         method.setAccessible(true);
         char[] input = { '\u015A', '\u015B', '\u015C', '\u015D', '\u015E', '\u015F', '\u0160', '\u0161', '\u017F' };
-        char expextedValue = 's';
+        char expectedValue = 's';
         for (int i = 0; i < input.length; i++) {
             Object invoke1 = method.invoke(keyer, input[i]);
-            Assert.assertEquals(expextedValue, invoke1.toString().codePointAt(0));
+            Assert.assertEquals(expectedValue, invoke1.toString().codePointAt(0));
         }
 
     }
@@ -294,10 +294,10 @@ public class FingerprintKeyerTest {
         Method method = keyer.getClass().getDeclaredMethod("translate", new Class[] { char.class });
         method.setAccessible(true);
         char[] input = { '\u0162', '\u0163', '\u0164', '\u0165', '\u0166', '\u0167' };
-        char expextedValue = 't';
+        char expectedValue = 't';
         for (int i = 0; i < input.length; i++) {
             Object invoke1 = method.invoke(keyer, input[i]);
-            Assert.assertEquals(expextedValue, invoke1.toString().codePointAt(0));
+            Assert.assertEquals(expectedValue, invoke1.toString().codePointAt(0));
         }
 
     }
@@ -310,10 +310,10 @@ public class FingerprintKeyerTest {
         method.setAccessible(true);
         char[] input = { '\u00D9', '\u00DA', '\u00DB', '\u00DC', '\u00F9', '\u00FA', '\u00FB', '\u00FC', '\u0168', '\u0169',
                 '\u016A', '\u016B', '\u016C', '\u016D', '\u016E', '\u016F', '\u0170', '\u0171', '\u0172', '\u0173' };
-        char expextedValue = 'u';
+        char expectedValue = 'u';
         for (int i = 0; i < input.length; i++) {
             Object invoke1 = method.invoke(keyer, input[i]);
-            Assert.assertEquals(expextedValue, invoke1.toString().codePointAt(0));
+            Assert.assertEquals(expectedValue, invoke1.toString().codePointAt(0));
         }
 
     }
@@ -325,10 +325,10 @@ public class FingerprintKeyerTest {
         Method method = keyer.getClass().getDeclaredMethod("translate", new Class[] { char.class });
         method.setAccessible(true);
         char[] input = { '\u0174', '\u0175' };
-        char expextedValue = 'w';
+        char expectedValue = 'w';
         for (int i = 0; i < input.length; i++) {
             Object invoke1 = method.invoke(keyer, input[i]);
-            Assert.assertEquals(expextedValue, invoke1.toString().codePointAt(0));
+            Assert.assertEquals(expectedValue, invoke1.toString().codePointAt(0));
         }
 
     }
@@ -340,10 +340,10 @@ public class FingerprintKeyerTest {
         Method method = keyer.getClass().getDeclaredMethod("translate", new Class[] { char.class });
         method.setAccessible(true);
         char[] input = { '\u00DD', '\u00FD', '\u00FF', '\u0176', '\u0177', '\u0178' };
-        char expextedValue = 'y';
+        char expectedValue = 'y';
         for (int i = 0; i < input.length; i++) {
             Object invoke1 = method.invoke(keyer, input[i]);
-            Assert.assertEquals(expextedValue, invoke1.toString().codePointAt(0));
+            Assert.assertEquals(expectedValue, invoke1.toString().codePointAt(0));
         }
 
     }
@@ -355,10 +355,10 @@ public class FingerprintKeyerTest {
         Method method = keyer.getClass().getDeclaredMethod("translate", new Class[] { char.class });
         method.setAccessible(true);
         char[] input = { '\u0179', '\u017A', '\u017B', '\u017C', '\u017D', '\u017E' };
-        char expextedValue = 'z';
+        char expectedValue = 'z';
         for (int i = 0; i < input.length; i++) {
             Object invoke1 = method.invoke(keyer, input[i]);
-            Assert.assertEquals(expextedValue, invoke1.toString().codePointAt(0));
+            Assert.assertEquals(expectedValue, invoke1.toString().codePointAt(0));
         }
 
     }
