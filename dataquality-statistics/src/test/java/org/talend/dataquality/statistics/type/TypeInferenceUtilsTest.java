@@ -221,6 +221,55 @@ public class TypeInferenceUtilsTest {
         assertFalse(TypeInferenceUtils.isDate("22 18月 1999"));
     }
 
+    @Test
+    public void testGetBigInteger() {
+        String[] invalidBigIntegerValues = { "", "test", "*", "L789", "12/02/2019", "   ", "456L", "2.68435E+8", "1005,123",
+                "123.123" };
+        for (String value : invalidBigIntegerValues) {
+            Assert.assertNull(TypeInferenceUtils.getBigInteger(value));
+        }
+        Assert.assertEquals("1", TypeInferenceUtils.getBigInteger("001").toString());
+        Assert.assertEquals("123", TypeInferenceUtils.getBigInteger("123").toString());
+        Assert.assertEquals("0", TypeInferenceUtils.getBigInteger("0").toString());
+        Assert.assertEquals("-1000", TypeInferenceUtils.getBigInteger("-1000").toString());
+    }
+
+    @Test
+    public void testIsNumber() {
+        Assert.assertTrue(TypeInferenceUtils.isNumber("1045.35")); // valid double number
+        Assert.assertTrue(TypeInferenceUtils.isNumber("123"));// valid int number
+        Assert.assertFalse(TypeInferenceUtils.isNumber("1 045.35"));
+        Assert.assertFalse(TypeInferenceUtils.isNumber("123L"));
+    }
+
+    @Test
+    public void testGetDataType() {
+        Assert.assertEquals(DataTypeEnum.BOOLEAN, TypeInferenceUtils.getDataType("true"));
+        Assert.assertEquals(DataTypeEnum.INTEGER, TypeInferenceUtils.getDataType("123"));
+        Assert.assertEquals(DataTypeEnum.DOUBLE, TypeInferenceUtils.getDataType("1045.35"));
+        Assert.assertEquals(DataTypeEnum.STRING, TypeInferenceUtils.getDataType("abc"));
+        Assert.assertEquals(DataTypeEnum.DATE, TypeInferenceUtils.getDataType("2019-12-25"));
+        Assert.assertEquals(DataTypeEnum.TIME, TypeInferenceUtils.getDataType("15:23:56"));
+        Assert.assertEquals(DataTypeEnum.EMPTY, TypeInferenceUtils.getDataType("    "));
+    }
+
+    @Test
+    public void testIsValid() {
+        Assert.assertTrue(TypeInferenceUtils.isValid(DataTypeEnum.BOOLEAN, "true"));
+        Assert.assertTrue(TypeInferenceUtils.isValid(DataTypeEnum.INTEGER, "123"));
+        Assert.assertTrue(TypeInferenceUtils.isValid(DataTypeEnum.DOUBLE, "1045.35"));
+        Assert.assertTrue(TypeInferenceUtils.isValid(DataTypeEnum.STRING, "abc"));
+        Assert.assertTrue(TypeInferenceUtils.isValid(DataTypeEnum.DATE, "2019-12-25"));
+        Assert.assertFalse(TypeInferenceUtils.isValid(DataTypeEnum.TIME, "15:23:56"));
+        Assert.assertFalse(TypeInferenceUtils.isValid(DataTypeEnum.EMPTY, ""));
+    }
+
+    @Test
+    public void testIsTime() {
+        Assert.assertTrue(TypeInferenceUtils.isTime("12:53:27"));
+        Assert.assertTrue(TypeInferenceUtils.isTime("23:53:27"));
+    }
+
     private List<String> loadData(String path) throws IOException {
         List<String> values = IOUtils.readLines(this.getClass().getResourceAsStream(path), "UTF-8");
         return values;
