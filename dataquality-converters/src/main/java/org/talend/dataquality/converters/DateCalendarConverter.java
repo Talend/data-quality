@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.time.chrono.ChronoLocalDate;
 import java.time.chrono.Chronology;
 import java.time.chrono.IsoChronology;
+import java.time.chrono.JapaneseChronology;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DecimalStyle;
@@ -46,6 +47,8 @@ public class DateCalendarConverter {
     public static final String DEFAULT_INPUT_PATTERN = "yyyy-MM-dd";//$NON-NLS-1$
 
     public static final String DEFAULT_OUTPUT_PATTERN = "yyyy-MM-dd";//$NON-NLS-1$
+
+    public static final String DEFAULT_OUTPUT_PATTERN_WITH_ERA = "yyyy-MM-dd G";//$NON-NLS-1$
 
     public static final Locale DEFAULT_OUTPUT_LOCALE = Locale.getDefault();
 
@@ -139,7 +142,12 @@ public class DateCalendarConverter {
         this.inputChronologyType = inputChronologyType == null ? IsoChronology.INSTANCE : inputChronologyType;
         this.outputChronologyType = outputChronologyType == null ? IsoChronology.INSTANCE : outputChronologyType;
         this.inputFormatPattern = inputFormatPattern == null ? DEFAULT_INPUT_PATTERN : inputFormatPattern;
-        this.outputFormatPattern = outputFormatPattern == null ? DEFAULT_OUTPUT_PATTERN : outputFormatPattern;
+        if (outputFormatPattern == null) {
+            this.outputFormatPattern = JapaneseChronology.INSTANCE.equals(this.outputChronologyType)
+                    ? DEFAULT_OUTPUT_PATTERN_WITH_ERA : DEFAULT_OUTPUT_PATTERN;
+        } else {
+            this.outputFormatPattern = outputFormatPattern;
+        }
 
         // TDQ-14421 use ResolverStyle.STRICT to validate a date. such as "2017-02-29" should be
         // invalid.STRICT model for pattern without G,should replace 'y' with 'u'.see Java DOC.

@@ -14,6 +14,7 @@ package org.talend.dataquality.statistics.datetime;
 
 import java.time.chrono.HijrahChronology;
 import java.time.chrono.JapaneseChronology;
+import java.time.chrono.JapaneseEra;
 import java.time.chrono.MinguoChronology;
 import java.time.chrono.ThaiBuddhistChronology;
 import java.time.format.DateTimeFormatter;
@@ -33,6 +34,17 @@ public class ChronologyParameterManager {
     private static final Locale DEFAULT_LOCALE = Locale.US;
 
     private static Map<String, Locale> localeEraMap = null;
+
+    protected static final boolean IS_REIWA_ERA_SUPPORTED = isReiwaEraSupported();
+
+    private static boolean isReiwaEraSupported() {
+        try {
+            JapaneseEra.valueOf("Reiwa");
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+        return true;
+    }
 
     private ChronologyParameterManager() {
 
@@ -85,6 +97,7 @@ public class ChronologyParameterManager {
             localeEraMap.put("平成", Locale.JAPANESE); //$NON-NLS-1$
             localeEraMap.put("昭和", Locale.JAPANESE); //$NON-NLS-1$
             localeEraMap.put("大正", Locale.JAPANESE); //$NON-NLS-1$
+            localeEraMap.put("令和", Locale.JAPANESE); //$NON-NLS-1$
             localeEraMap.put("هـ", new Locale("ar")); //$NON-NLS-1$//$NON-NLS-2$
             localeEraMap.put("民國", Locale.TRADITIONAL_CHINESE); //$NON-NLS-1$
             localeEraMap.put("民國前", Locale.TRADITIONAL_CHINESE); //$NON-NLS-1$

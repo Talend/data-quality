@@ -15,6 +15,7 @@ package org.talend.dataquality.statistics.datetime;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeTrue;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -24,6 +25,18 @@ import java.util.Locale;
 import org.junit.Test;
 
 public class SystemDateTimePatternManagerTest {
+
+    @Test
+    public void datesWithJapaneseChronologyWithNewReiwaEraInJapanese() {
+        // ignored if the Reiwa era is not supported in the current JVM
+        assumeTrue(ChronologyParameterManager.IS_REIWA_ERA_SUPPORTED);
+        assertTrue(SystemDateTimePatternManager.isDate("0017-02-28 令和")); //$NON-NLS-1$
+    }
+
+    @Test
+    public void datesWithJapaneseChronologyWithHeiseiEraInJapanese() {
+        assertTrue(SystemDateTimePatternManager.isDate("0017-02-28 平成")); //$NON-NLS-1$
+    }
 
     @Test
     public void BadMonthName_TDQ13347() {

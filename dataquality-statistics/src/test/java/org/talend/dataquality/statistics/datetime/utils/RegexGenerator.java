@@ -73,8 +73,8 @@ public class RegexGenerator {
 
             put("VV", "(?:\\p{L}{4,10}\\/\\p{L}{4,15})");
 
-            // replace the 'G' char by 'AD|BC|هـ|明治|平成|昭和|大正|民國|民國前|พ.ศ.|ปีก่อนคริสต์กาลที่'
-            put("G", "(AD|BC|هـ|明治|平成|昭和|大正|民國|民國前|พ.ศ.|ปีก่อนคริสต์กาลที่)");
+            // replace the 'G' by a regex which supports eras in different chronologies
+            put("G", "(\\p{L}{2,18})");
 
             put("'", "");
         }

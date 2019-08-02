@@ -181,7 +181,7 @@ public class FormatGroupGenerator {
         String samplingParent = new File(targetPath).getParentFile().getParentFile().getParentFile().getParentFile()
                 .getParentFile().getParentFile().getParentFile().getParentFile().getParentFile().getPath();
         String samplingPath = samplingParent + pathSeparator
-                + "dataquality-sampling/src/main/resources/org/talend/dataquality/org.talend.dataquality.dictionary/semantic/DateRegexesGrouped.txt"; //$NON-NLS-1$
+                + "../data-quality-ee/dataquality-datamasking/src/main/resources/org/talend/dataquality/datamasking/semantic/DateRegexesGrouped.txt"; //$NON-NLS-1$
         IOUtils.write(sb.toString(), new FileOutputStream(new File(samplingPath)));
     }
 }

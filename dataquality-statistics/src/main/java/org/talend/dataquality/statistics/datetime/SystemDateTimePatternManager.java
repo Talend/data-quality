@@ -15,10 +15,12 @@ package org.talend.dataquality.statistics.datetime;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormatSymbols;
+import java.time.chrono.JapaneseEra;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
+import java.time.format.TextStyle;
 import java.time.temporal.TemporalAccessor;
 import java.time.temporal.TemporalQueries;
 import java.util.ArrayList;
@@ -55,6 +57,9 @@ public class SystemDateTimePatternManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SystemDateTimePatternManager.class);
 
+    /*
+     * Have a fixed list of supported languages to avoid behaviour changes across different Java version. see TDQ-16983
+     */
     private static final String[] SUPPORTED_ISO_LANGUAGES = new String[] { "ar", "be", "bg", "ca", "cs", "da", "de", "el", "en",
             "es", "et", "fi", "fr", "ga", "iw", "hr", "hu", "in", "in", "is", "it", "iw", "ja", "ko", "lt", "lv", "mk", "ms",
             "mt", "nb", "nl", "nn", "no", "pl", "pt", "ro", "ru", "sk", "sl", "sq", "sr", "sv", "th", "tr", "uk", "vi", "zh" };
@@ -74,7 +79,7 @@ public class SystemDateTimePatternManager {
     private static final String ERAS = "ERAS";
 
     /**
-     * give for a worg group, the list of words and their locales
+     * Map between the word group name, and the list of words and their locales
      * The word groups available are MONTHS, SHORT_MONTHS, WEEKDAYS, SHORT_WEEKDAYS, AM_PM and ERAS
      * For example, "MONTHS" -> < february -> [en] ; février -> [fr] >
      */
@@ -115,16 +120,22 @@ public class SystemDateTimePatternManager {
     private static void loadLanguagesDatesWords() {
         for (Locale locale : getDistinctLanguagesLocales()) {
             final DateFormatSymbols dfs = new DateFormatSymbols(locale);
-            buildWordsToLocales(MONTHS, Arrays.asList(dfs.getMonths()), locale);
-            buildWordsToLocales(SHORT_MONTHS, Arrays.asList(dfs.getShortMonths()), locale);
-            buildWordsToLocales(WEEKDAYS, Arrays.asList(dfs.getWeekdays()), locale);
-            buildWordsToLocales(SHORT_WEEKDAYS, Arrays.asList(dfs.getShortWeekdays()), locale);
-            buildWordsToLocales(AM_PM, Arrays.asList(dfs.getAmPmStrings()), locale);
-            buildWordsToLocales(ERAS, Arrays.asList(dfs.getEras()), locale);
+            buildWordsToLocales(MONTHS, new HashSet<>(Arrays.asList(dfs.getMonths())), locale);
+            buildWordsToLocales(SHORT_MONTHS, new HashSet<>(Arrays.asList(dfs.getShortMonths())), locale);
+            buildWordsToLocales(WEEKDAYS, new HashSet<>(Arrays.asList(dfs.getWeekdays())), locale);
+            buildWordsToLocales(SHORT_WEEKDAYS, new HashSet<>(Arrays.asList(dfs.getShortWeekdays())), locale);
+            buildWordsToLocales(AM_PM, new HashSet<>(Arrays.asList(dfs.getAmPmStrings())), locale);
+            buildWordsToLocales(ERAS, new HashSet<>(Arrays.asList(dfs.getEras())), locale);
         }
+
+        // load ERAs in Japanese chronology
+        final Set<String> japaneseEraSet = Arrays.asList(JapaneseEra.values()).stream() //
+                .map(e -> e.getDisplayName(TextStyle.FULL, Locale.JAPANESE)) //
+                .collect(Collectors.toSet());
+        buildWordsToLocales(ERAS, japaneseEraSet, Locale.JAPANESE);
     }
 
-    private static void buildWordsToLocales(final String wordGroup, final List<String> languagesWords, Locale currentLocale) {
+    private static void buildWordsToLocales(final String wordGroup, final Set<String> languagesWords, Locale currentLocale) {
         Map<String, Set<Locale>> languagesDatesWords = WORD_GROUPS_TO_LANGUAGES_DATES_WORDS.get(wordGroup);
         if (languagesDatesWords == null) {
             languagesDatesWords = new HashMap<>();
@@ -149,8 +160,8 @@ public class SystemDateTimePatternManager {
         for (String lang : new String[] { "en", "fr", "de", "it", "es", "ja", "zh" }) {
             locales.add(Locale.forLanguageTag(lang));
         }
-        for (String lang : SUPPORTED_ISO_LANGUAGES) {
-            Locale locale = Locale.forLanguageTag(lang);
+        for (Locale lang : Locale.getAvailableLocales()) {
+            Locale locale = lang;// Locale.forLanguageTag(lang);
             if (StringUtils.isNotEmpty(locale.getLanguage())) {
                 locales.add(locale);
             }
