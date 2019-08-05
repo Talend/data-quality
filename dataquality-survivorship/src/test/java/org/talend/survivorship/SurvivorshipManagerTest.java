@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.kie.internal.KnowledgeBase;
@@ -85,36 +84,6 @@ public class SurvivorshipManagerTest {
      */
     @Test
     public void testInitKnowledgeBase() {
-        manager.initKnowledgeBase();
-        KnowledgeBase base = manager.getKnowledgeBase();
-        assertNotNull("Model is null", base.getFactType(SampleData.PKG_NAME, "RecordIn")); //$NON-NLS-1$ //$NON-NLS-2$
-
-        assertNotNull(base.getRule(SampleData.PKG_NAME, SampleData.RULES[0].getRuleName()));
-        assertNotNull(base.getProcess(SampleData.PKG_NAME + ".SurvivorFlow")); //$NON-NLS-1$
-
-    }
-
-    /**
-     * Test method for {@link org.talend.survivorship.SurvivorshipManager#initKnowledgeBase()}.
-     */
-    @Test
-    public void testInitKnowledgeBaseWithUTF8() {
-        manager.setCharSetName("UTF8");
-        manager.initKnowledgeBase();
-        KnowledgeBase base = manager.getKnowledgeBase();
-        assertNotNull("Model is null", base.getFactType(SampleData.PKG_NAME, "RecordIn")); //$NON-NLS-1$ //$NON-NLS-2$
-
-        assertNotNull(base.getRule(SampleData.PKG_NAME, SampleData.RULES[0].getRuleName()));
-        assertNotNull(base.getProcess(SampleData.PKG_NAME + ".SurvivorFlow")); //$NON-NLS-1$
-
-    }
-
-    /**
-     * Test method for {@link org.talend.survivorship.SurvivorshipManager#initKnowledgeBase()}.
-     */
-    @Test
-    public void testInitKnowledgeBaseWithGBK() {
-        manager.setCharSetName("GBK");
         manager.initKnowledgeBase();
         KnowledgeBase base = manager.getKnowledgeBase();
         assertNotNull("Model is null", base.getFactType(SampleData.PKG_NAME, "RecordIn")); //$NON-NLS-1$ //$NON-NLS-2$
@@ -1433,22 +1402,4 @@ public class SurvivorshipManagerTest {
         return result;
 
     }
-
-    @Test
-    public void testGetCharSetName() {
-        Assert.assertEquals("The default value of CharSetName should be empty", null, manager.getCharSetName());
-    }
-
-    @Test
-    public void testSetCharSetNameString() {
-        manager.setCharSetName("UTF8");
-        Assert.assertEquals("The default value of CharSetName should be empty", "UTF8", manager.getCharSetName());
-        manager.setCharSetName("");
-        Assert.assertEquals("The default value of CharSetName should be empty", "", manager.getCharSetName());
-        manager.setCharSetName(null);
-        Assert.assertEquals("The default value of CharSetName should be empty", null, manager.getCharSetName());
-        manager.setCharSetName("GBK");
-        Assert.assertEquals("The default value of CharSetName should be empty", "GBK", manager.getCharSetName());
-    }
-
 }

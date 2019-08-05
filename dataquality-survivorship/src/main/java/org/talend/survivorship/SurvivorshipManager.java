@@ -77,8 +77,6 @@ public class SurvivorshipManager extends KnowledgeManager {
 
     private ChainNodeMap chainMap;
 
-    private String charSetName;
-
     /**
      * SurvivorshipManager constructor.
      * 
@@ -146,27 +144,23 @@ public class SurvivorshipManager extends KnowledgeManager {
         kbuilder.add(newResource(packagePath //
                 + SurvivorshipConstants.DROOLS //
                 + SurvivorshipConstants.VERSION_SUFFIX //
-                + SurvivorshipConstants.PKG_ITEM_EXTENSION, isClassPathResource, charSetName), ResourceType.DRL);
+                + SurvivorshipConstants.PKG_ITEM_EXTENSION, isClassPathResource), ResourceType.DRL);
 
         // add rule definitions
         for (RuleDefinition definition : ruleDefinitionList) {
             if (definition.getOrder().equals(Order.SEQ)) {
-                kbuilder.add(
-                        newResource(packagePath //
-                                + definition.getRuleName() //
-                                + SurvivorshipConstants.VERSION_SUFFIX //
-                                + SurvivorshipConstants.RULE_ITEM_EXTENSION, isClassPathResource, charSetName),
-                        ResourceType.DRL);
+                kbuilder.add(newResource(packagePath //
+                        + definition.getRuleName() //
+                        + SurvivorshipConstants.VERSION_SUFFIX //
+                        + SurvivorshipConstants.RULE_ITEM_EXTENSION, isClassPathResource), ResourceType.DRL);
             }
         }
 
         // add survivorship work flow
-        kbuilder.add(
-                newResource(packagePath //
-                        + SurvivorshipConstants.SURVIVOR_FLOW //
-                        + SurvivorshipConstants.VERSION_SUFFIX //
-                        + SurvivorshipConstants.FLOW_ITEM_EXTENSION, isClassPathResource, charSetName),
-                ResourceType.BPMN2);
+        kbuilder.add(newResource(packagePath //
+                + SurvivorshipConstants.SURVIVOR_FLOW //
+                + SurvivorshipConstants.VERSION_SUFFIX //
+                + SurvivorshipConstants.FLOW_ITEM_EXTENSION, isClassPathResource), ResourceType.BPMN2);
 
         KnowledgeBuilderErrors errors = kbuilder.getErrors();
         if (errors.size() > 0) {
@@ -233,23 +227,12 @@ public class SurvivorshipManager extends KnowledgeManager {
     /**
      * Support to create resource from jar file
      */
-    public static Resource newResource(String packagePath, boolean isClassPathResource, String charSet) {
+    public static Resource newResource(String packagePath, boolean isClassPathResource) {
         if (isClassPathResource) {// the resource is in ClassPath,e.g, OSGI bundle or TIC
-            if (charSet == null || charSet.isEmpty()) {
-                return ResourceFactory.newClassPathResource(packagePath);
-            } else {
-                return ResourceFactory.newClassPathResource(packagePath, charSet);
-            }
+            return ResourceFactory.newClassPathResource(packagePath);
         } else {
             return ResourceFactory.newFileResource(packagePath);
         }
-    }
-
-    /**
-     * Support to create resource from jar file
-     */
-    public static Resource newResource(String packagePath, boolean isClassPathResource) {
-        return newResource(packagePath, isClassPathResource, null);
     }
 
     /**
@@ -628,23 +611,4 @@ public class SurvivorshipManager extends KnowledgeManager {
     public HashSet<String> getConflictsOfSurvivor() {
         return dataset.getConflictsOfSurvivor();
     }
-
-    /**
-     * Getter for charSetName.
-     * 
-     * @return the charSetName
-     */
-    public String getCharSetName() {
-        return this.charSetName;
-    }
-
-    /**
-     * Sets the charSetName.
-     * 
-     * @param charSetName the charSetName to set
-     */
-    public void setCharSetName(String charSetName) {
-        this.charSetName = charSetName;
-    }
-
 }
