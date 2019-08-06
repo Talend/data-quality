@@ -133,8 +133,27 @@ public class RangeTest {
     public void testEqualsObject() {
         Range r = new Range(10.0, 10.0);
         Range r1 = new Range(10.0, 10.0);
-        r.equals(r1);
-
+        Assert.assertTrue(r.equals(r1));
     }
 
+    @Test
+    public void testEqualsObject2WithNull() {
+        Range r = new Range(10.0, 10.0);
+        Range r1 = null;
+        Assert.assertFalse(r.equals(r1));
+    }
+
+    @Test
+    public void testEqualsObjectWithTwodifferentData() {
+        Range r = new Range(10.0, 10.0);
+        Range r1 = new Range(0.0, 0.0);
+        Assert.assertFalse(r.equals(r1));
+    }
+
+    @Test
+    public void testEqualsObjectWithonediferentData() {
+        Range r = new Range(10.0, 10.0);
+        Range r1 = new Range(0.0, 10.0);
+        Assert.assertFalse(r.equals(r1));
+    }
 }
