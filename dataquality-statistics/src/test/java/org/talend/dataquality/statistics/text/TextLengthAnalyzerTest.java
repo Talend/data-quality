@@ -112,6 +112,75 @@ public class TextLengthAnalyzerTest {
         // Avg
         Assert.assertNull(stats.getAvgTextLength());
         Assert.assertEquals(0, stats.getAvgTextLengthIgnoreBlank(), 0);
+
+        Assert.assertEquals(0, stats.getCount(), 0);
+        Assert.assertEquals(0, stats.getCountIgnoreBlank(), 0);
     }
 
+    @Test
+    public void testNullString() {
+        Assert.assertEquals(0, analyzer.getResult().size(), 0);
+        Assert.assertTrue(analyzer.analyze(null));
+        Assert.assertEquals(0, analyzer.getResult().size(), 0);
+    }
+
+    @Test
+    public void testGetterSetter() {
+        String[] data = new String[] { null };
+        for (String value : data) {
+            analyzer.analyze(value);
+        }
+        TextLengthStatistics stats = analyzer.getResult().get(0);
+
+        // set general values
+        stats.setMinTextLength(1);
+        stats.setMinTextLengthIgnoreBlank(1);
+        stats.setMaxTextLength(6);
+        stats.setMaxTextLengthIgnoreBlank(5);
+        stats.setSumTextLength(12);
+        stats.setSumTextLengthIgnoreBlank(6);
+        stats.setCount(3);
+        stats.setCountIgnoreBlank(2);
+
+        Assert.assertEquals(1, stats.getMinTextLength(), 0);
+        Assert.assertEquals(1, stats.getMinTextLengthIgnoreBlank(), 0);
+        Assert.assertEquals(6, stats.getMaxTextLength(), 0);
+        Assert.assertEquals(5, stats.getMaxTextLengthIgnoreBlank(), 0);
+        Assert.assertEquals(12, stats.getSumTextLength(), 0);
+        Assert.assertEquals(6, stats.getSumTextLengthIgnoreBlank(), 0);
+        Assert.assertEquals(3, stats.getCount(), 0);
+        Assert.assertEquals(2, stats.getCountIgnoreBlank(), 0);
+        Assert.assertEquals(4, stats.getAvgTextLength(), 0);
+        Assert.assertEquals(3, stats.getAvgTextLengthIgnoreBlank(), 0);
+
+        // set null values.
+        stats.setMinTextLength(null);
+        stats.setMinTextLengthIgnoreBlank(null);
+        stats.setMaxTextLength(0);
+        stats.setMaxTextLengthIgnoreBlank(null);
+        stats.setSumTextLength(null);
+        stats.setSumTextLengthIgnoreBlank(null);
+        stats.setCount(0);
+        stats.setCountIgnoreBlank(0);
+
+        Assert.assertEquals(0, stats.getMinTextLength(), 0);
+        Assert.assertEquals(0, stats.getAvgTextLengthIgnoreBlank(), 0);
+        Assert.assertEquals(0, stats.getMaxTextLength(), 0);
+        Assert.assertEquals(0, stats.getMaxTextLength(), 0);
+        Assert.assertEquals(0, stats.getMaxTextLengthIgnoreBlank(), 0);
+        Assert.assertNull(stats.getAvgTextLength());
+        Assert.assertEquals(0, stats.getAvgTextLengthIgnoreBlank(), 0);
+        Assert.assertEquals(0, stats.getCount(), 0);
+        Assert.assertEquals(0, stats.getCountIgnoreBlank(), 0);
+
+        // set bigger value
+        stats.setSumTextLength(Integer.MAX_VALUE);
+        stats.setSumTextLengthIgnoreBlank(Integer.MAX_VALUE);
+        stats.setCount(100);
+        stats.setCountIgnoreBlank(1000);
+        Assert.assertEquals(21474836.47, stats.getAvgTextLength(), 0);
+        Assert.assertEquals(2147483.647, stats.getAvgTextLengthIgnoreBlank(), 0);
+        Assert.assertEquals(100, stats.getCount(), 0);
+        Assert.assertEquals(1000, stats.getCountIgnoreBlank(), 0);
+    }
 }
