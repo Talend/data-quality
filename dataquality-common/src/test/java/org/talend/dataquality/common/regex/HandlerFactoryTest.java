@@ -18,4 +18,21 @@ public class HandlerFactoryTest {
         // --- Known limit of the actual implementation
         Assert.assertEquals(chainResponsibilityHandler.handleRequest("Kー"), "KK");
     }
+
+    @Test
+    public void createLatinPatternHandler() {
+        ChainResponsibilityHandler chainResponsibilityHandler = HandlerFactory.createLatinPatternHandler();
+        Assert.assertEquals(chainResponsibilityHandler.handleRequest("ACD"), "AAA");
+        Assert.assertEquals(chainResponsibilityHandler.handleRequest("åæç"), "aaa");
+        Assert.assertEquals(chainResponsibilityHandler.handleRequest("úêðñ"), "aaaa");
+        Assert.assertEquals(chainResponsibilityHandler.handleRequest("APZ"), "AAA");
+        Assert.assertEquals(chainResponsibilityHandler.handleRequest("Mk0"), "Aa9");
+    }
+
+    @Test
+    public void createLatinPatternHandlerWithnumber() {
+        ChainResponsibilityHandler chainResponsibilityHandler = HandlerFactory.createLatinPatternHandler();
+        Assert.assertEquals(chainResponsibilityHandler.handleRequest("098"), "999");
+
+    }
 }
