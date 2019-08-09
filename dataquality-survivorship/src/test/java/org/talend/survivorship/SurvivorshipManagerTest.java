@@ -1402,4 +1402,44 @@ public class SurvivorshipManagerTest {
         return result;
 
     }
+    
+    @Test
+    public void testRunSessionWithJavaMostCommon2Longest2MostRecent() {
+
+        manager = new SurvivorshipManager(SampleData.RULE_PATH,
+                SampleDataConflictMostCommon2Longest2MostRecent.PKG_NAME_CONFLICT_FRE_LONG_RECENT);
+
+        for (String str : SampleDataConflict.COLUMNS_CONFLICT.keySet()) {
+            Column column = new Column(str, SampleDataConflict.COLUMNS_CONFLICT.get(str));
+            if (column.getName().equals("firstName")) { //$NON-NLS-1$
+                for (ConflictRuleDefinition element : SampleDataConflictMostCommon2Longest2MostRecent.RULES_CONFLICT_RESOLVE) {
+                    column.getConflictResolveList().add(element);
+                }
+            }
+            manager.getColumnList().add(column);
+        }
+        for (RuleDefinition element : SampleDataConflictMostCommon2Longest2MostRecent.RULES_CONFLICT_FRE_LONG_RECENT) {
+            manager.addRuleDefinition(element);
+        }
+
+        manager.initKnowledgeBase();
+        manager.checkConflictRuleValid();
+       Object [][] mm= getTableValue("/org.talend.survivorship.conflict/conflicts.csv", 11, 9, 1);
+       for(int i=0;i<mm.length;i++) {
+    	   for(int j=0;j<mm [i].length;j++) {
+    		   System.out.println(mm[i][j]);
+    	   }
+    	   
+       }
+        manager.runSessionWithJava(mm); //$NON-NLS-1$
+        //Retrieve result
+        HashSet<String> conflictsOfSurvivor=manager.getConflictsOfSurvivor();
+        assertEquals("The size of conflictsOfSurvivor should be 0", 0, conflictsOfSurvivor.size());
+        Map<String, Object> survivorMap =manager.getSurvivorMap();
+        assertTrue("The SurvivorMap should not be null", survivorMap != null);
+        Object firstNameObj = survivorMap.get("firstName"); //$NON-NLS-1$
+        String resultStr = (String) firstNameObj;
+        assertEquals("The resultStr should be Tony", "Tony", //$NON-NLS-1$ //$NON-NLS-2$
+                resultStr);
+    }
 }

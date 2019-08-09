@@ -538,4 +538,17 @@ public class SynonymIndexSearcherTest {
             System.out.print(text);
         }
     }
+    
+    @Test
+    public void testGetMaxDoc() {
+        SynonymIndexSearcher search = new SynonymIndexSearcher();
+        try {
+            search.openIndexInFS(SynonymIndexBuilderTest.path);
+        } catch (IOException e) {
+            fail(e.getMessage());
+        }
+        doAssertEquals("the unexpect max document number of the index", 7, search.getMaxDoc());
+        search.close();
+    }
+
 }
