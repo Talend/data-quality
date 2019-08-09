@@ -538,7 +538,7 @@ public class SynonymIndexSearcherTest {
             System.out.print(text);
         }
     }
-    
+
     @Test
     public void testGetMaxDoc() {
         SynonymIndexSearcher search = new SynonymIndexSearcher();

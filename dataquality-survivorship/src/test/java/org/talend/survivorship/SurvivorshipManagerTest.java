@@ -1402,7 +1402,7 @@ public class SurvivorshipManagerTest {
         return result;
 
     }
-    
+
     @Test
     public void testRunSessionWithJavaMostCommon2Longest2MostRecent() {
 
@@ -1424,18 +1424,18 @@ public class SurvivorshipManagerTest {
 
         manager.initKnowledgeBase();
         manager.checkConflictRuleValid();
-       Object [][] mm= getTableValue("/org.talend.survivorship.conflict/conflicts.csv", 11, 9, 1);
-       for(int i=0;i<mm.length;i++) {
-    	   for(int j=0;j<mm [i].length;j++) {
-    		   System.out.println(mm[i][j]);
-    	   }
-    	   
-       }
+        Object[][] mm = getTableValue("/org.talend.survivorship.conflict/conflicts.csv", 11, 9, 1);
+        for (int i = 0; i < mm.length; i++) {
+            for (int j = 0; j < mm[i].length; j++) {
+                System.out.println(mm[i][j]);
+            }
+
+        }
         manager.runSessionWithJava(mm); //$NON-NLS-1$
         //Retrieve result
-        HashSet<String> conflictsOfSurvivor=manager.getConflictsOfSurvivor();
+        HashSet<String> conflictsOfSurvivor = manager.getConflictsOfSurvivor();
         assertEquals("The size of conflictsOfSurvivor should be 0", 0, conflictsOfSurvivor.size());
-        Map<String, Object> survivorMap =manager.getSurvivorMap();
+        Map<String, Object> survivorMap = manager.getSurvivorMap();
         assertTrue("The SurvivorMap should not be null", survivorMap != null);
         Object firstNameObj = survivorMap.get("firstName"); //$NON-NLS-1$
         String resultStr = (String) firstNameObj;
