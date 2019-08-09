@@ -3623,6 +3623,80 @@ public class SwooshRecordGroupingTest {
         }
     }
 
+    /*
+     * Test case for TDQ-17160
+     */
+    @Test
+    public void testSwoosh_one_grpQuality_0()
+            throws IOException, InterruptedException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+        List<List<Map<String, String>>> matchingRulesAll_tMatchGroup_1 = new ArrayList<List<Map<String, String>>>();
+        List<Map<String, String>> matcherList_tMatchGroup_1 = null;
+        Map<String, String> tmpMap_tMatchGroup_1 = null;
+        List<Map<String, String>> defaultSurvivorshipRules_tMatchGroup_1 = new ArrayList<Map<String, String>>();
+        matcherList_tMatchGroup_1 = new ArrayList<Map<String, String>>();
+        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "0.85", "", "gender", "1", "Exact", "NO", 1 + "", "nullMatchNull",
+                0.9 + "", "TSWOOSH_MATCHER");
+        matcherList_tMatchGroup_1.add(tmpMap_tMatchGroup_1);
+        matchingRulesAll_tMatchGroup_1.add(matcherList_tMatchGroup_1);
+
+        // master rows in a group
+        final List<row2Struct> masterRows_tMatchGroup_1 = new ArrayList<row2Struct>();
+        // all rows in a group
+        final List<row2Struct> groupRows_tMatchGroup_1 = new ArrayList<row2Struct>();
+        // this Map key is MASTER GID,value is this MASTER index of all
+        // MASTERS.it will be used to get DUPLICATE GRP_QUALITY from
+        // MASTER and only in case of separate output.
+        final Map<String, Integer> indexMap_tMatchGroup_1 = new HashMap<String, Integer>();
+
+        // TDQ-9172 reuse JAVA API at here.
+        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 = createComponent(masterRows_tMatchGroup_1,
+                groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
+
+        recordGroupImp_tMatchGroup_1.setRecordLinkAlgorithm(RecordMatcherType.T_SwooshAlgorithm);
+        // add mutch rules
+        for (List<Map<String, String>> matcherList : matchingRulesAll_tMatchGroup_1) {
+            recordGroupImp_tMatchGroup_1.addMatchRule(matcherList);
+        }
+        recordGroupImp_tMatchGroup_1.initialize();
+        // init the parameters of the tswoosh algorithm
+        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String", "id_String",
+                "id_Integer", "id_Boolean", "id_Double", "id_Double", null);
+        Map<String, String> columnWithIndex_tMatchGroup_1 = fillColumn("0", "1", "2", "3", "4", "5", "6", "7", null);
+
+        SurvivorShipAlgorithmParams survivorShipAlgorithmParams_tMatchGroup_1 = SurvivorshipUtils
+                .createSurvivorShipAlgorithmParams((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1,
+                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1, columnWithType_tMatchGroup_1,
+                        columnWithIndex_tMatchGroup_1);
+        ((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1)
+                .setSurvivorShipAlgorithmParams(survivorShipAlgorithmParams_tMatchGroup_1);
+        initialize(recordGroupImp_tMatchGroup_1);
+
+        inputList = new ArrayList<String[]>();
+        for (int i = 1; i <= 8; i++) {
+            String[] fields = { i + "", "Beijing", "China" };
+            inputList.add(fields);
+        }
+
+        for (String[] inputRow : inputList) { // loop on each data
+            recordGroupImp_tMatchGroup_1.doGroup(inputRow);
+        } // while
+
+        recordGroupImp_tMatchGroup_1.end();
+        groupRows_tMatchGroup_1.addAll(masterRows_tMatchGroup_1);
+
+        Collections.sort(groupRows_tMatchGroup_1);
+        // assert
+        Assert.assertTrue(groupRows_tMatchGroup_1.size() > 0);
+        for (row2Struct one : groupRows_tMatchGroup_1) {
+            // System.out.println(one.customer_id + "--" + one.city + "--" + one.country + "--" + one.GID + "--" +
+            // one.GRP_QUALITY+ "--" + one.MASTER);
+            if (one.MASTER) {
+                Assert.assertTrue(0 == one.GRP_QUALITY && 1 == one.SCORE);
+
+            }
+        }
+    }
+
     @Test
     public void testSwooshMultipasstMatchGroup_grpQuality()
             throws IOException, InterruptedException, InstantiationException, IllegalAccessException, ClassNotFoundException {
