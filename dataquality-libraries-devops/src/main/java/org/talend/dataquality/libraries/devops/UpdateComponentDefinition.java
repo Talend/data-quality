@@ -43,11 +43,11 @@ public class UpdateComponentDefinition {
 
     private static final String COMPONENTS_FOLDER = "/components"; //$NON-NLS-1$
 
-    private static final String DQ_LIB_VERSION = "7.1.1-SNAPSHOT"; //$NON-NLS-1$
+    private static final String DQ_LIB_VERSION = "7.2.0-SNAPSHOT"; //$NON-NLS-1$
 
-    private static final String DQ_LIB_EE_VERSION = "7.1.1-SNAPSHOT"; //$NON-NLS-1$
+    private static final String DQ_LIB_EE_VERSION = "7.2.0-SNAPSHOT"; //$NON-NLS-1$
 
-    private static final String DAIKON_VERSION = "0.31.8"; //$NON-NLS-1$
+    private static final String DAIKON_VERSION = "0.31.9-SNAPSHOT"; //$NON-NLS-1$
 
     private static final String[] PROVIDERS = new String[] { //
             "/org.talend.designer.components.tdqprovider", // //$NON-NLS-1$
@@ -64,6 +64,7 @@ public class UpdateComponentDefinition {
         // Daikon
         DEP_VERSION_MAP.put("daikon", DAIKON_VERSION); //$NON-NLS-1$
         DEP_VERSION_MAP.put("daikon-exception", DAIKON_VERSION); //$NON-NLS-1$
+        DEP_VERSION_MAP.put("crypto-utils", DAIKON_VERSION); //$NON-NLS-1$
 
         // DQ lib SE
         DEP_VERSION_MAP.put("org.talend.dataquality.common", DQ_LIB_VERSION); //$NON-NLS-1$
