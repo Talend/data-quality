@@ -57,22 +57,22 @@ public class DateCalendarConverter {
     /**
      * the input date text format pattern, default is "yyyy-MM-dd".
      */
-    protected String inputFormatPattern = DEFAULT_PATTERN;
+    protected String inputFormatPattern;
 
     /**
      * the output date text format pattern, default is "yyyy-MM-dd".
      */
-    protected String outputFormatPattern = DEFAULT_PATTERN;
+    protected String outputFormatPattern;
 
     /**
      * an optional input Chronology. default is IsoChronology
      */
-    protected Chronology inputChronologyType = IsoChronology.INSTANCE;
+    protected Chronology inputChronologyType;
 
     /**
      * an optional output Chronology. default is IsoChronology
      */
-    protected Chronology outputChronologyType = IsoChronology.INSTANCE;
+    protected Chronology outputChronologyType;
 
     /**
      * the input DateTimeFormatter(which will be created with inputFormatPattern and inputChronologyType).
