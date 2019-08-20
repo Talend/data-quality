@@ -78,7 +78,7 @@ public class JulianDayConverter extends DateCalendarConverter {
             TemporalField outputTemporalField) {
         this.convertCalendarToTemporal = true;
         super.inputChronologyType = inputChronologyType;
-        super.inputFormatPattern = inputFormatPattern != null ? inputFormatPattern : DEFAULT_INPUT_PATTERN;
+        super.inputFormatPattern = inputFormatPattern != null ? inputFormatPattern : DEFAULT_PATTERN;
         this.outputTemporalField = outputTemporalField;
         Locale locale = inputLocale != null ? inputLocale : Locale.getDefault(Locale.Category.FORMAT);
         super.inputDateTimeFormatter = new DateTimeFormatterBuilder().parseLenient().appendPattern(super.inputFormatPattern)

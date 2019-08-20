@@ -44,11 +44,11 @@ public class DateCalendarConverter {
 
     private static final Logger LOG = LoggerFactory.getLogger(DateCalendarConverter.class);
 
-    public static final String DEFAULT_INPUT_PATTERN = "yyyy-MM-dd";//$NON-NLS-1$
+    public static final String DEFAULT_PATTERN = "yyyy-MM-dd";//$NON-NLS-1$
 
-    public static final String DEFAULT_OUTPUT_PATTERN = "yyyy-MM-dd";//$NON-NLS-1$
+    private static final String PATTERN_SUFFIX_ERA = "G"; //$NON-NLS-1$
 
-    public static final String DEFAULT_OUTPUT_PATTERN_WITH_ERA = "yyyy-MM-dd G";//$NON-NLS-1$
+    public static final String DEFAULT_PATTERN_WITH_ERA = DEFAULT_PATTERN + ' ' + PATTERN_SUFFIX_ERA;//$NON-NLS-1$
 
     public static final Locale DEFAULT_OUTPUT_LOCALE = Locale.getDefault();
 
@@ -57,12 +57,12 @@ public class DateCalendarConverter {
     /**
      * the input date text format pattern, default is "yyyy-MM-dd".
      */
-    protected String inputFormatPattern = DEFAULT_INPUT_PATTERN;
+    protected String inputFormatPattern = DEFAULT_PATTERN;
 
     /**
      * the output date text format pattern, default is "yyyy-MM-dd".
      */
-    protected String outputFormatPattern = DEFAULT_OUTPUT_PATTERN;
+    protected String outputFormatPattern = DEFAULT_PATTERN;
 
     /**
      * an optional input Chronology. default is IsoChronology
@@ -84,10 +84,8 @@ public class DateCalendarConverter {
      */
     protected DateTimeFormatter outputDateTimeFormatter;
 
-    private static final String PATTERN_SUFFIX_ERA = "G"; //$NON-NLS-1$
-
     public DateCalendarConverter() {
-        this(DEFAULT_INPUT_PATTERN, DEFAULT_OUTPUT_PATTERN, IsoChronology.INSTANCE, IsoChronology.INSTANCE, DEFAULT_INPUT_LOCALE,
+        this(DEFAULT_PATTERN, DEFAULT_PATTERN, IsoChronology.INSTANCE, IsoChronology.INSTANCE, DEFAULT_INPUT_LOCALE,
                 DEFAULT_OUTPUT_LOCALE);
     }
 
@@ -98,7 +96,7 @@ public class DateCalendarConverter {
      * @param outputChronologyType
      */
     public DateCalendarConverter(Chronology inputChronologyType, Chronology outputChronologyType) {
-        this(DEFAULT_INPUT_PATTERN, DEFAULT_OUTPUT_PATTERN, inputChronologyType, outputChronologyType, DEFAULT_INPUT_LOCALE,
+        this(DEFAULT_PATTERN, DEFAULT_PATTERN, inputChronologyType, outputChronologyType, DEFAULT_INPUT_LOCALE,
                 DEFAULT_OUTPUT_LOCALE);
     }
 
@@ -141,10 +139,10 @@ public class DateCalendarConverter {
             Chronology outputChronologyType) {
         this.inputChronologyType = inputChronologyType == null ? IsoChronology.INSTANCE : inputChronologyType;
         this.outputChronologyType = outputChronologyType == null ? IsoChronology.INSTANCE : outputChronologyType;
-        this.inputFormatPattern = inputFormatPattern == null ? DEFAULT_INPUT_PATTERN : inputFormatPattern;
+        this.inputFormatPattern = inputFormatPattern == null ? DEFAULT_PATTERN : inputFormatPattern;
         if (outputFormatPattern == null) {
             this.outputFormatPattern = JapaneseChronology.INSTANCE.equals(this.outputChronologyType)
-                    ? DEFAULT_OUTPUT_PATTERN_WITH_ERA : DEFAULT_OUTPUT_PATTERN;
+                    ? DEFAULT_PATTERN_WITH_ERA : DEFAULT_PATTERN;
         } else {
             this.outputFormatPattern = outputFormatPattern;
         }
