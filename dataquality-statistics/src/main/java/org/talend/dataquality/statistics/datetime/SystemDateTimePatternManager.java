@@ -136,19 +136,12 @@ public class SystemDateTimePatternManager {
     }
 
     private static void buildWordsToLocales(final String wordGroup, final Set<String> languagesWords, Locale currentLocale) {
-        Map<String, Set<Locale>> languagesDatesWords = WORD_GROUPS_TO_LANGUAGES_DATES_WORDS.get(wordGroup);
-        if (languagesDatesWords == null) {
-            languagesDatesWords = new HashMap<>();
-            WORD_GROUPS_TO_LANGUAGES_DATES_WORDS.put(wordGroup, languagesDatesWords);
-        }
+        Map<String, Set<Locale>> languagesDatesWords = WORD_GROUPS_TO_LANGUAGES_DATES_WORDS.computeIfAbsent(wordGroup,
+                k -> new HashMap<>());
         for (String languageWord : languagesWords) {
             if (StringUtils.isNotEmpty(languageWord)) {
                 String lowerCaseLanguageWord = languageWord.toLowerCase();
-                Set<Locale> locales = languagesDatesWords.get(lowerCaseLanguageWord);
-                if (locales == null) {
-                    locales = new HashSet<>();
-                    languagesDatesWords.put(lowerCaseLanguageWord, locales);
-                }
+                Set<Locale> locales = languagesDatesWords.computeIfAbsent(lowerCaseLanguageWord, k -> new HashSet<>());
                 locales.add(currentLocale);
             }
         }
@@ -161,9 +154,8 @@ public class SystemDateTimePatternManager {
             locales.add(Locale.forLanguageTag(lang));
         }
         for (Locale lang : Locale.getAvailableLocales()) {
-            Locale locale = lang;// Locale.forLanguageTag(lang);
-            if (StringUtils.isNotEmpty(locale.getLanguage())) {
-                locales.add(locale);
+            if (StringUtils.isNotEmpty(lang.getLanguage())) {
+                locales.add(lang);
             }
         }
         return locales;
@@ -432,8 +424,7 @@ public class SystemDateTimePatternManager {
         if (formatter != null) {
             try {
                 final TemporalAccessor temporal = formatter.parse(value);
-                if (temporal != null && (temporal.query(TemporalQueries.localDate()) != null
-                        || temporal.query(TemporalQueries.localTime()) != null)) {
+                if (temporal.query(TemporalQueries.localDate()) != null || temporal.query(TemporalQueries.localTime()) != null) {
                     return true;
                 }
             } catch (DateTimeParseException e) {
@@ -453,15 +444,14 @@ public class SystemDateTimePatternManager {
         }
 
         Optional<Pair<Pattern, DateTimeFormatter>> foundPattern = findOneDatePattern(value);
-        foundPattern.ifPresent(pattern -> orderedPatterns.addNewValue(pattern));
+        foundPattern.ifPresent(orderedPatterns::addNewValue);
         return foundPattern.isPresent();
     }
 
     public static Set<String> getDatePatterns() {
         Set<String> patterns = new HashSet<>();
         for (Map<Pattern, String> datePatternGroup : DATE_PATTERN_GROUP_LIST)
-            for (String pattern : datePatternGroup.values())
-                patterns.add(pattern);
+            patterns.addAll(datePatternGroup.values());
         return patterns;
     }
 
@@ -497,7 +487,7 @@ public class SystemDateTimePatternManager {
         if (CollectionUtils.isNotEmpty(wordGroups)) {
             if (matcher.groupCount() == wordGroups.size()) {
                 List<Map<String, Set<Locale>>> languagesDatesWords = wordGroups.stream()
-                        .map(wordGroup -> WORD_GROUPS_TO_LANGUAGES_DATES_WORDS.get(wordGroup)).collect(Collectors.toList());
+                        .map(WORD_GROUPS_TO_LANGUAGES_DATES_WORDS::get).collect(Collectors.toList());
                 Set<Locale> locales = findLocales(languagesDatesWords, matcher);
                 if (CollectionUtils.isNotEmpty(locales)) {
                     return findDateTimeFormatter(value, pattern, locales);

@@ -25,29 +25,34 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Manage some Chronology parameters.
  */
 public class ChronologyParameterManager {
 
+    private static final Logger logger = LoggerFactory.getLogger(ChronologyParameterManager.class);
+
     private static final Locale DEFAULT_LOCALE = Locale.US;
+
+    protected static final boolean IS_REIWA_ERA_SUPPORTED = isReiwaEraSupported();
 
     private static Map<String, Locale> localeEraMap = null;
 
-    protected static final boolean IS_REIWA_ERA_SUPPORTED = isReiwaEraSupported();
+    private ChronologyParameterManager() {
+
+    }
 
     private static boolean isReiwaEraSupported() {
         try {
             JapaneseEra.valueOf("Reiwa");
         } catch (IllegalArgumentException e) {
+            logger.error("'Reiwa' era is not supported by current java version");
             return false;
         }
         return true;
-    }
-
-    private ChronologyParameterManager() {
-
     }
 
     /**

@@ -44,9 +44,9 @@ public class DateCalendarConverter {
 
     private static final Logger LOG = LoggerFactory.getLogger(DateCalendarConverter.class);
 
-    public static final String DEFAULT_PATTERN = "yyyy-MM-dd";//$NON-NLS-1$
-
     private static final String PATTERN_SUFFIX_ERA = "G"; //$NON-NLS-1$
+
+    public static final String DEFAULT_PATTERN = "yyyy-MM-dd";//$NON-NLS-1$
 
     public static final String DEFAULT_PATTERN_WITH_ERA = DEFAULT_PATTERN + ' ' + PATTERN_SUFFIX_ERA;//$NON-NLS-1$
 
@@ -141,8 +141,8 @@ public class DateCalendarConverter {
         this.outputChronologyType = outputChronologyType == null ? IsoChronology.INSTANCE : outputChronologyType;
         this.inputFormatPattern = inputFormatPattern == null ? DEFAULT_PATTERN : inputFormatPattern;
         if (outputFormatPattern == null) {
-            this.outputFormatPattern = JapaneseChronology.INSTANCE.equals(this.outputChronologyType)
-                    ? DEFAULT_PATTERN_WITH_ERA : DEFAULT_PATTERN;
+            this.outputFormatPattern = JapaneseChronology.INSTANCE.equals(this.outputChronologyType) ? DEFAULT_PATTERN_WITH_ERA
+                    : DEFAULT_PATTERN;
         } else {
             this.outputFormatPattern = outputFormatPattern;
         }
