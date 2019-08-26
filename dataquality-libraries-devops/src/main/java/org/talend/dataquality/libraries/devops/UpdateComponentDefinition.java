@@ -43,11 +43,11 @@ public class UpdateComponentDefinition {
 
     private static final String COMPONENTS_FOLDER = "/components"; //$NON-NLS-1$
 
-    private static final String DQ_LIB_VERSION = "7.2.0-SNAPSHOT"; //$NON-NLS-1$
+    private static final String DQ_LIB_VERSION = "7.2.1-SNAPSHOT"; //$NON-NLS-1$
 
     private static final String DQ_LIB_EE_VERSION = "7.1.1-SNAPSHOT"; //$NON-NLS-1$
 
-    private static final String DAIKON_VERSION = "0.31.8"; //$NON-NLS-1$
+    private static final String DAIKON_VERSION = "1.6.0"; //$NON-NLS-1$
 
     private static final String[] PROVIDERS = new String[] { //
             "/org.talend.designer.components.tdqprovider", // //$NON-NLS-1$
