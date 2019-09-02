@@ -39,6 +39,23 @@ public class SystemDateTimePatternManagerTest {
     }
 
     @Test
+    public void datesWithMingoChronology() {
+        assertTrue(SystemDateTimePatternManager.isDate("0017-02-28 民國")); //$NON-NLS-1$
+        assertTrue(SystemDateTimePatternManager.isDate("0017-02-28 民國前")); //$NON-NLS-1$
+    }
+
+    @Test
+    public void datesWithHijrahChronology() {
+        assertTrue(SystemDateTimePatternManager.isDate("1345-02-28 هـ")); //$NON-NLS-1$
+    }
+
+    @Test
+    public void datesWithThaiBuddhistChronology() {
+        assertTrue(SystemDateTimePatternManager.isDate("1345-02-28 พ.ศ.")); //$NON-NLS-1$
+        assertTrue(SystemDateTimePatternManager.isDate("1345-02-28 ปีก่อนคริสต์กาลที่")); //$NON-NLS-1$
+    }
+
+    @Test
     public void BadMonthName_TDQ13347() {
         assertFalse(SystemDateTimePatternManager.isDate("01 TOTO 2015")); //$NON-NLS-1$
         assertTrue(SystemDateTimePatternManager.isDate("01 JANUARY 2015")); //$NON-NLS-1$

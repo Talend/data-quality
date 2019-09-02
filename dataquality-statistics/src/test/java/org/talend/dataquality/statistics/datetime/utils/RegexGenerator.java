@@ -74,7 +74,8 @@ public class RegexGenerator {
             put("VV", "(?:\\p{L}{4,10}\\/\\p{L}{4,15})");
 
             // replace the 'G' by a regex which supports eras in different chronologies
-            put("G", "(\\p{L}{2,18})");
+            // Note: the Thai chars are supported in \p{L}, but do not work in our regex, we still need to enumerate them here.
+            put("G", "(\\p{L}{2,18}|พ.ศ.|ปีก่อนคริสต์กาลที่)");
 
             put("'", "");
         }

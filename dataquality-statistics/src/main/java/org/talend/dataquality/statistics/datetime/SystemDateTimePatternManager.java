@@ -106,6 +106,9 @@ public class SystemDateTimePatternManager {
 
     static {
         loadLanguagesDatesWords();
+
+        loadErasInNonIsoChronologies();
+
         // Load date patterns
         loadPatterns("DateRegexesGrouped.txt", DATE_PATTERN_GROUP_LIST);
         // Load time patterns
@@ -127,12 +130,29 @@ public class SystemDateTimePatternManager {
             buildWordsToLocales(AM_PM, new HashSet<>(Arrays.asList(dfs.getAmPmStrings())), locale);
             buildWordsToLocales(ERAS, new HashSet<>(Arrays.asList(dfs.getEras())), locale);
         }
+    }
 
+    private static void loadErasInNonIsoChronologies() {
         // load ERAs in Japanese chronology
         final Set<String> japaneseEraSet = Arrays.asList(JapaneseEra.values()).stream() //
                 .map(e -> e.getDisplayName(TextStyle.FULL, Locale.JAPANESE)) //
                 .collect(Collectors.toSet());
         buildWordsToLocales(ERAS, japaneseEraSet, Locale.JAPANESE);
+
+        // Note: the era.getDisplayName() method only works for JapaneseChronology above, but does not work for the other non-ISO
+        // chronologies below, as it always return AD or BC in English. We need to hard code these eras here.
+
+        // load ERAs in Minguo chronology
+        final Set<String> mingoEraSet = new HashSet<>(Arrays.asList("民國", "民國前"));
+        buildWordsToLocales(ERAS, mingoEraSet, Locale.TRADITIONAL_CHINESE);
+
+        // load ERA in Hijrah chronology
+        final Set<String> hijrahEraSet = Collections.singleton("هـ");
+        buildWordsToLocales(ERAS, hijrahEraSet, Locale.forLanguageTag("ar"));
+
+        // load ERAs in Thai-Buddhist chronology
+        final Set<String> thaiBuddhistEraSet = new HashSet<>(Arrays.asList("พ.ศ.", "ปีก่อนคริสต์กาลที่"));
+        buildWordsToLocales(ERAS, thaiBuddhistEraSet, Locale.forLanguageTag("th"));
     }
 
     private static void buildWordsToLocales(final String wordGroup, final Set<String> languagesWords, Locale currentLocale) {
