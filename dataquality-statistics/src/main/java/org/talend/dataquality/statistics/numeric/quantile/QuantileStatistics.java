@@ -59,4 +59,8 @@ public class QuantileStatistics {
         return median.evaluate(percentage * 100);
     }
 
+    public List<Double> getData() {
+        return data;
+    }
+
 }
