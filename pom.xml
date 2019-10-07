@@ -34,6 +34,16 @@
         <talend_snapshots_deployment>https://artifacts-oss.talend.com/nexus/content/repositories/TalendOpenSourceSnapshot/</talend_snapshots_deployment>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-compress</artifactId>
+                <version>1.19</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <distributionManagement>
         <snapshotRepository>
             <id>talend_nexus_deployment</id>
