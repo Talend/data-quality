@@ -28,6 +28,7 @@ import org.talend.dataquality.statistics.type.TypeInferenceUtils;
  * @author zhao
  *
  */
+@Deprecated
 public class QuantileAnalyzer extends NumericalStatisticsAnalyzer<QuantileStatistics> {
 
     private static final long serialVersionUID = 6841816568752139978L;
