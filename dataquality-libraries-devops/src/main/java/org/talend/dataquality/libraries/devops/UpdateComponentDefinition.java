@@ -43,9 +43,7 @@ public class UpdateComponentDefinition {
 
     private static final String COMPONENTS_FOLDER = "/components"; //$NON-NLS-1$
 
-    private static final String DQ_LIB_VERSION = "7.3.0-SNAPSHOT"; //$NON-NLS-1$
-
-    private static final String DQ_LIB_EE_VERSION = "7.3.0-SNAPSHOT"; //$NON-NLS-1$
+    private static final String DQ_LIB_VERSION = "12.4.0-SNAPSHOT"; //$NON-NLS-1$
 
     private static final String DAIKON_VERSION = "1.6.0"; //$NON-NLS-1$
 
@@ -56,9 +54,7 @@ public class UpdateComponentDefinition {
             "/org.talend.designer.components.tdqsparkstprovider",// //$NON-NLS-1$
     };
 
-    private static final Map<String, String> DEP_VERSION_MAP = new HashMap<String, String>();
-
-    private static final long serialVersionUID = 1L;
+    private static final Map<String, String> DEP_VERSION_MAP = new HashMap<>();
 
     static {
         // Daikon
@@ -75,9 +71,6 @@ public class UpdateComponentDefinition {
         DEP_VERSION_MAP.put("org.talend.dataquality.survivorship", DQ_LIB_VERSION); //$NON-NLS-1$
         DEP_VERSION_MAP.put("org.talend.dataquality.text.japanese", DQ_LIB_VERSION); //$NON-NLS-1$
         DEP_VERSION_MAP.put("org.talend.dataquality.statistics", DQ_LIB_VERSION); //$NON-NLS-1$
-
-        // DQ lib EE
-        DEP_VERSION_MAP.put("org.talend.dataquality.datamasking", DQ_LIB_EE_VERSION); //$NON-NLS-1$
     }
 
     private UpdateComponentDefinition() {
