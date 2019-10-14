@@ -23,7 +23,7 @@ import org.talend.dataquality.statistics.type.DataTypeEnum;
  * @author zhao
  *
  */
-public class QuantileAnalyzer extends QuantileAbstractAnalyzer<QuantileStatistics> {
+public class QuantileAnalyzer extends AbstractQuantileAnalyzer<QuantileStatistics> {
 
     private static final long serialVersionUID = 6841816568752139978L;
 

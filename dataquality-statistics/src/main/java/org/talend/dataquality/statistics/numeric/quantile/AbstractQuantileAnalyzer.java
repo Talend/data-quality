@@ -28,9 +28,9 @@ import org.talend.dataquality.statistics.type.TypeInferenceUtils;
  * @author zhao
  *
  */
-public abstract class QuantileAbstractAnalyzer<T extends QuantileStatistics> extends NumericalStatisticsAnalyzer<T> {
+public abstract class AbstractQuantileAnalyzer<T extends QuantileStatistics> extends NumericalStatisticsAnalyzer<T> {
 
-    public QuantileAbstractAnalyzer(DataTypeEnum[] types) {
+    public AbstractQuantileAnalyzer(DataTypeEnum[] types) {
         super(types);
     }
 
