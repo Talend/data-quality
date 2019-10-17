@@ -12,15 +12,16 @@
 // ============================================================================
 package org.talend.dataquality.libraries.devops;
 
+import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.io.IOUtils;
 
 /**
  * Java application for updating libphonenumber jars used in studio components.
@@ -49,9 +50,7 @@ public class UpdateComponent4libphonenumber {
             "/org.talend.designer.components.tdqsparkstprovider",// //$NON-NLS-1$
     };
 
-    private static final Map<String, String> DEP_VERSION_MAP = new HashMap<String, String>();
-
-    private static final long serialVersionUID = 1L;
+    private static final Map<String, String> DEP_VERSION_MAP = new HashMap<>();
 
     // when update, change the new version here.
     private static final String LIBPHONENUMBER_VERSION = "8.10.7"; //$NON-NLS-1$
@@ -68,12 +67,10 @@ public class UpdateComponent4libphonenumber {
     }
 
     private static void handleComponentDefinition(File f) {
-        File compoDefFile = new File(f.getAbsolutePath() + "/" + f.getName() + "_java.xml"); //$NON-NLS-1$ //$NON-NLS-2$
-
-        if (compoDefFile.exists()) {
+        Path filePath = Paths.get(f.getAbsolutePath() + "/" + f.getName() + "_java.xml"); //$NON-NLS-1$ //$NON-NLS-2$
+        if (Files.exists(filePath)) {
             try {
-                FileInputStream file = new FileInputStream(compoDefFile);
-                List<String> lines = IOUtils.readLines(file);
+                List<String> lines = Files.readAllLines(filePath);
 
                 boolean needUpdate = false;
                 for (String line : lines) {
@@ -86,8 +83,8 @@ public class UpdateComponent4libphonenumber {
                 }
 
                 if (needUpdate) {
-                    System.out.println("Updating: " + compoDefFile.getName()); // NOSONAR
-                    FileOutputStream fos = new FileOutputStream(compoDefFile);
+                    System.out.println("Updating: " + f.getName()); // NOSONAR
+                    DataOutputStream writer = new DataOutputStream(Files.newOutputStream(filePath));
                     for (String line : lines) {
                         for (String depName : DEP_VERSION_MAP.keySet()) {
                             if (line.contains(depName)) {
@@ -103,9 +100,9 @@ public class UpdateComponent4libphonenumber {
                                         + "-" + DEP_VERSION_MAP.get(depName) + ".jar\""); //$NON-NLS-1$ //$NON-NLS-2$
                             }
                         }
-                        IOUtils.write(line + "\n", fos); //$NON-NLS-1$
+                        writer.write((line + "\n").getBytes(StandardCharsets.UTF_8)); //$NON-NLS-1$
                     }
-                    fos.close();
+                    writer.close();
 
                 }
             } catch (IOException e) {
