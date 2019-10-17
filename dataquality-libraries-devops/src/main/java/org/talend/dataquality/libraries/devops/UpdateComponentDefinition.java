@@ -30,7 +30,6 @@ import java.util.Map;
  * 1. update the DQ_LIB_VERSION version
  * 2. update DAIKON_VERSION version.
  * 3. Run this class as Java application.
- *
  */
 public class UpdateComponentDefinition {
 
@@ -47,7 +46,7 @@ public class UpdateComponentDefinition {
 
     private static final String DAIKON_VERSION = "0.31.10-SNAPSHOT"; //$NON-NLS-1$
 
-    private static final String[] PROVIDERS = new String[]{ //
+    private static final String[] PROVIDERS = new String[] { //
             "/org.talend.designer.components.tdqprovider", // //$NON-NLS-1$
             "/org.talend.designer.components.tdqhadoopprovider", // //$NON-NLS-1$
             "/org.talend.designer.components.tdqsparkprovider", // //$NON-NLS-1$

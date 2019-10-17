@@ -29,7 +29,6 @@ import java.util.Map;
  * Usage:
  * 1. update the expect version in DEP_VERSION_MAP field.
  * 2. Run this class as Java application.
- *
  */
 public class UpdateComponent4libphonenumber {
 
@@ -42,7 +41,7 @@ public class UpdateComponent4libphonenumber {
 
     private static final String COMPONENTS_FOLDER = "/components"; //$NON-NLS-1$
 
-    private static final String[] PROVIDERS = new String[]{ //
+    private static final String[] PROVIDERS = new String[] { //
             "/org.talend.designer.components.tdqprovider", // //$NON-NLS-1$
             "/org.talend.designer.components.tdqhadoopprovider", // //$NON-NLS-1$
             "/org.talend.designer.components.tdqsparkprovider", // //$NON-NLS-1$

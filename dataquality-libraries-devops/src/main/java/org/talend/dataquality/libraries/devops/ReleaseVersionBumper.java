@@ -53,7 +53,6 @@ import org.xml.sax.SAXException;
  * 1. put the expected snapshot or release version into the TARGET_VERSION field and run the current class as Java application.
  * 2. update the p2 dependency declaration in studio-se-master and studio-full-master repositories.
  * 3. Run {@link UpdateComponentDefinition} to update the components.
- *
  */
 public class ReleaseVersionBumper {
 
@@ -174,7 +173,8 @@ public class ReleaseVersionBumper {
             for (String line : lines) {
                 if (line.startsWith(BUNDLE_VERSION_STRING)) {
 
-                    writer.write((BUNDLE_VERSION_STRING + TARGET_VERSION.replace("-", ".") + "\n").getBytes(StandardCharsets.UTF_8));
+                    writer.write(
+                            (BUNDLE_VERSION_STRING + TARGET_VERSION.replace("-", ".") + "\n").getBytes(StandardCharsets.UTF_8));
                 } else {
                     writer.write((line + "\n").getBytes(StandardCharsets.UTF_8));
                 }
