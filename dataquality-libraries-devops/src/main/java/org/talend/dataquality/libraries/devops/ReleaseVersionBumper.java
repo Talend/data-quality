@@ -54,7 +54,6 @@ import org.xml.sax.SAXException;
  * 2. update the p2 dependency declaration in studio-se-master and studio-full-master repositories.
  * 3. Run {@link UpdateComponentDefinition} to update the components.
  *
- * @author sizhaoliu
  */
 public class ReleaseVersionBumper {
 

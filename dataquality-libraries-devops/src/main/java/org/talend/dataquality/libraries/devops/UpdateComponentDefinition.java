@@ -31,7 +31,6 @@ import java.util.Map;
  * 2. update DAIKON_VERSION version.
  * 3. Run this class as Java application.
  *
- * @author sizhaoliu
  */
 public class UpdateComponentDefinition {
 

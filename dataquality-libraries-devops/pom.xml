@@ -12,10 +12,4 @@
 	<name>dataquality-libraries-devops</name>
 	<description>DevOps tools for Data Quality libraries.</description>
 
-	<dependencies>
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-		</dependency>
-    </dependencies>
 </project>

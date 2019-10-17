@@ -30,7 +30,6 @@ import java.util.Map;
  * 1. update the expect version in DEP_VERSION_MAP field.
  * 2. Run this class as Java application.
  *
- * @author msjian
  */
 public class UpdateComponent4libphonenumber {
 
