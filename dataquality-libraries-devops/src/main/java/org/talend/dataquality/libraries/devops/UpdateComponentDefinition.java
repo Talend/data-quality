@@ -12,22 +12,23 @@
 // ============================================================================
 package org.talend.dataquality.libraries.devops;
 
+import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.io.IOUtils;
 
 /**
  * Java application for updating DQ library versions used in studio components.
  * 
  * Usage:
- * 1. update the expect version in DEP_VERSION_MAP field.
- * 2. tell the application if need to USE_SNAPSHOT_VERSION.
+ * 1. update the DQ_LIB_VERSION version
+ * 2. update DAIKON_VERSION version.
  * 3. Run this class as Java application.
  * 
  * @author sizhaoliu
@@ -43,9 +44,9 @@ public class UpdateComponentDefinition {
 
     private static final String COMPONENTS_FOLDER = "/components"; //$NON-NLS-1$
 
-    private static final String DQ_LIB_VERSION = "12.4.0-SNAPSHOT"; //$NON-NLS-1$
+    private static final String DQ_LIB_VERSION = "7.3.0-SNAPSHOT"; //$NON-NLS-1$
 
-    private static final String DAIKON_VERSION = "1.6.0"; //$NON-NLS-1$
+    private static final String DAIKON_VERSION = "0.31.0"; //$NON-NLS-1$
 
     private static final String[] PROVIDERS = new String[] { //
             "/org.talend.designer.components.tdqprovider", // //$NON-NLS-1$
@@ -78,13 +79,10 @@ public class UpdateComponentDefinition {
     }
 
     private static void handleComponentDefinition(File f) {
-        File compoDefFile = new File(f.getAbsolutePath() + "/" + f.getName() + "_java.xml"); //$NON-NLS-1$ //$NON-NLS-2$
-
-        if (compoDefFile.exists()) {
+        Path filePath = Paths.get(f.getAbsolutePath() + "/" + f.getName() + "_java.xml"); //$NON-NLS-1$ //$NON-NLS-2$
+        if (Files.exists(filePath)) {
             try {
-                FileInputStream file = new FileInputStream(compoDefFile);
-                List<String> lines = IOUtils.readLines(file);
-
+                List<String> lines = Files.readAllLines(filePath);
                 boolean needUpdate = false;
                 for (String line : lines) {
                     for (String depName : DEP_VERSION_MAP.keySet()) {
@@ -96,8 +94,8 @@ public class UpdateComponentDefinition {
                 }
 
                 if (needUpdate) {
-                    System.out.println("Updating: " + compoDefFile.getName()); // NOSONAR
-                    FileOutputStream fos = new FileOutputStream(compoDefFile);
+                    System.out.println("Updating: " + f.getName()); // NOSONAR
+                    DataOutputStream writer = new DataOutputStream(Files.newOutputStream(filePath));
                     for (String line : lines) {
                         for (String depName : DEP_VERSION_MAP.keySet()) {
                             if (line.contains(depName)) {
@@ -114,9 +112,9 @@ public class UpdateComponentDefinition {
                                                 + ".jar\""); //$NON-NLS-1$
                             }
                         }
-                        IOUtils.write(line + "\n", fos); //$NON-NLS-1$
+                        writer.write((line + "\n").getBytes(StandardCharsets.UTF_8)); //$NON-NLS-1$
                     }
-                    fos.close();
+                    writer.close();
 
                 }
             } catch (IOException e) {
