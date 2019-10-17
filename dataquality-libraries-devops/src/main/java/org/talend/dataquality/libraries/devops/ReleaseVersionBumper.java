@@ -48,12 +48,12 @@ import org.xml.sax.SAXException;
  * Please note that this tool works when there are only trivial version changes. For major/minor version changes, some manual
  * changes need to be done.
  * It's always recommended to verify all changed file before committing the changes.
- * 
+ * <p>
  * Usage:
  * 1. put the expected snapshot or release version into the TARGET_VERSION field and run the current class as Java application.
  * 2. update the p2 dependency declaration in studio-se-master and studio-full-master repositories.
  * 3. Run {@link UpdateComponentDefinition} to update the components.
- * 
+ *
  * @author sizhaoliu
  */
 public class ReleaseVersionBumper {
