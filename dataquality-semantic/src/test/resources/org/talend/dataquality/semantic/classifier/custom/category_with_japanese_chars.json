@@ -1,0 +1,21 @@
+{
+  "classifiers": [
+    {
+      "id": "583edc44ec06957a34fa6430",
+      "description": "HiraganaKatakanaKanji",
+      "mainCategory": "AlphaNumeric",
+      "name": "EMAIL",
+      "label": "Email",
+      "filter": {
+        "filterParam": "@",
+        "filterType": "MUST_CONTAIN"
+      },
+      "validator": {
+        "re2jCompliant": true,
+        "patternString": "/[一-龠]+|[ぁ-ゔ]+|[ァ-ヴー]+|[a-zA-Z0-9]+|[ａ-ｚＡ-Ｚ０-９]+[々〆〤]+/u",
+        "subValidatorClassName": null,
+        "unknownField": "who knows me"
+      }
+    }
+  ]
+}

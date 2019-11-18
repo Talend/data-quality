@@ -200,6 +200,18 @@
 					</execution>
 				</executions>
 			</plugin>
+
+			<plugin>
+				<!-- make support chinese in test  -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.20</version>
+				<configuration>
+					<forkMode>once</forkMode>
+					<argLine>${argLine} -Dfile.encoding=CP1252</argLine>   <!-- define to test encoding problem -->
+				</configuration>
+			</plugin>
+
 		</plugins>
 	</build>
 </project>

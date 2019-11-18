@@ -19,6 +19,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
@@ -99,20 +100,21 @@ public class UDCategorySerDeser {
      * @throws IOException
      */
     public static UserDefinedClassifier readJsonFile(URI uri) throws IOException {
-        InputStream ins = uri.toURL().openStream();
-        final String content = IOUtils.toString(ins);
-        IOUtils.closeQuietly(ins);
-        try {
-            List<UserDefinedCategory> list = mapper.readValue(content, new TypeReference<List<UserDefinedCategory>>() {
-            });
-            JsonNode arrayNode = mapper.valueToTree(list);
-            ObjectNode objNode = mapper.createObjectNode();
-            objNode.set("classifiers", arrayNode);
-            return readJsonFile(objNode.toString());
-        } catch (Exception e) {
-            LOGGER.trace(e.getMessage(), e);
-            // try another format with "classifier" node.
-            return readJsonFile(content);
+        try (InputStream ins = uri.toURL().openStream()) {
+            final String content = IOUtils.toString(ins, StandardCharsets.UTF_8.name());
+
+            try {
+                List<UserDefinedCategory> list = mapper.readValue(content, new TypeReference<List<UserDefinedCategory>>() {
+                });
+                JsonNode arrayNode = mapper.valueToTree(list);
+                ObjectNode objNode = mapper.createObjectNode();
+                objNode.set("classifiers", arrayNode);
+                return readJsonFile(objNode.toString());
+            } catch (Exception e) {
+                LOGGER.trace(e.getMessage(), e);
+                // try another format with "classifier" node.
+                return readJsonFile(content);
+            }
         }
     }
 

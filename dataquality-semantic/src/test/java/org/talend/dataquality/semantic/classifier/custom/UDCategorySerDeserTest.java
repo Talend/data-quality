@@ -22,6 +22,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -62,6 +64,15 @@ public class UDCategorySerDeserTest {
         assertNotNull(userDefinedClassifier);
         int nbCat = userDefinedClassifier.getClassifiers().size();
         assertTrue("Expected to read at least 10 category but only get " + nbCat, nbCat > 9); //$NON-NLS-1$
+    }
+
+    @Test
+    public void testReadJsonFileJapaneseChar() throws IOException, URISyntaxException {
+        URI japaneseChars = UDCategorySerDeserTest.class.getResource("category_with_japanese_chars.json").toURI();
+        UserDefinedClassifier userDefinedClassifier = UDCategorySerDeser.readJsonFile(japaneseChars);
+
+        assertNotNull(userDefinedClassifier);
+        assertEquals("Unexpected category size!", 1, userDefinedClassifier.getClassifiers().size()); //$NON-NLS-1$
     }
 
     @Test
