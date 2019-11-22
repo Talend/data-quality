@@ -6,14 +6,13 @@ Bundle-Version: 8.0.0.SNAPSHOT
 Bundle-Vendor: .Talend SA.
 Require-Bundle: org.slf4j.api,
  org.eclipse.m2e.maven.runtime.slf4j.simple,
- org.talend.libraries.apache.lucene4,
+ org.talend.libraries.apache.lucene6,
  org.apache.commons.io,
  org.apache.commons.lang,
  org.junit;resolution:=optional,
  org.talend.testutils;resolution:=optional
 Bundle-ClassPath: .
-Export-Package: org.talend.dataquality.standardization,
- org.talend.dataquality.standardization.action,
+Export-Package: org.talend.dataquality.standardization.action,
  org.talend.dataquality.standardization.constant,
  org.talend.dataquality.standardization.exception,
  org.talend.dataquality.standardization.i18n,

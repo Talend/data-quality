@@ -14,7 +14,6 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.search.SearcherManager;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
-import org.apache.lucene.util.Version;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -41,8 +40,7 @@ public class SynonymReplaceActionTest {
     private Directory createLuceneDirectory() throws IOException {
         RAMDirectory testDir = new RAMDirectory();
 
-        IndexWriter writer = new IndexWriter(testDir,
-                new IndexWriterConfig(Version.LATEST, new StandardAnalyzer(CharArraySet.EMPTY_SET)));
+        IndexWriter writer = new IndexWriter(testDir, new IndexWriterConfig(new StandardAnalyzer(CharArraySet.EMPTY_SET)));
 
         Document doc = new Document();
 

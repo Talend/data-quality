@@ -53,7 +53,7 @@ public class Explainer {
         }
         String indexDir = args[0];
         String queryExpression = args[1];
-        Directory directory = FSDirectory.open(new File(indexDir));
+        Directory directory = FSDirectory.open(new File(indexDir).toPath());
         QueryParser parser = new QueryParser("contents", new SimpleAnalyzer());
         Query query = parser.parse(queryExpression);
         System.out.println("Query: " + queryExpression);

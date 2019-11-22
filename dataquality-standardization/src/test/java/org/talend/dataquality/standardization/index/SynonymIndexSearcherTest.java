@@ -40,7 +40,7 @@ import org.talend.dataquality.standardization.record.SynonymRecordSearcher;
  */
 public class SynonymIndexSearcherTest {
 
-    boolean showInConsole = false;
+    boolean showInConsole = true;
 
     private boolean doAsserts = true;
 
@@ -349,14 +349,9 @@ public class SynonymIndexSearcherTest {
         synIdxBuilderTest.insertDocuments(synonymIdxBuilder, synonyms4newoptions);
         synonymIdxBuilder.closeIndex();
 
-        SynonymIndexSearcher searcher = new SynonymIndexSearcher();
+        SynonymIndexSearcher searcher = new SynonymIndexSearcher(path);
         searcher.setTopDocLimit(30);
         searcher.setMaxEdits(2);
-        try {
-            searcher.openIndexInFS(path);
-        } catch (IOException e) {
-            fail(e.getMessage());
-        }
 
         for (String key : ExpectResults4MatchAny.keySet()) {
             printLineToConsole("\n-------------------Searching for <" + key + ">--------------------");
@@ -373,7 +368,9 @@ public class SynonymIndexSearcherTest {
                     String[] syns = document.getValues(SynonymIndexSearcher.F_SYN);
                     printToConsole(docs.scoreDocs[i] + "\n\t" + document.getValues(SynonymIndexSearcher.F_WORD)[0] + " -> ");
                     printLineToConsole(Arrays.asList(syns).toString());
-                    doAssertEquals("unexpected hit!", expected.get(key)[i].intValue(), docs.scoreDocs[i].doc);
+                    // doAssertEquals("unexpected hit!", expected.get(key)[i].intValue(), docs.scoreDocs[i].doc);
+                    doAssertEquals("unexpected hit when searching for [" + key + "] in " + mode + " mode.",
+                            expected.get(key)[i].intValue(), docs.scoreDocs[i].doc);
                 }
 
             }
@@ -393,7 +390,7 @@ public class SynonymIndexSearcherTest {
 
         {
             put("Dulux Trade", new Integer[] { 0, 1, 2, 4, 3 });
-            put("Trade", new Integer[] { 3, 1, 0, 2, 4 });
+            put("Trade", new Integer[] { 3, 0, 2, 4, 1 });
 
             put("Big Blue", new Integer[] { 6, 5 });
             put("Business International", new Integer[] { 5 });
@@ -410,7 +407,7 @@ public class SynonymIndexSearcherTest {
 
         {
             put("Dulux Trade", new Integer[] { 0, 1, 2 });
-            put("Trade", new Integer[] { 3, 1, 0, 2, 4 });
+            put("Trade", new Integer[] { 3, 0, 2, 4, 1 });
 
             put("Big Blue", new Integer[] { 6, 5 });
             put("Business International", new Integer[] {});
@@ -428,7 +425,7 @@ public class SynonymIndexSearcherTest {
 
         {
             put("Dulux Trade", new Integer[] { 0, 1, 2, 4 });
-            put("Trade", new Integer[] { 3, 1, 0, 2, 4 });
+            put("Trade", new Integer[] { 3, 0, 2, 4, 1 });
 
             put("Big Blue", new Integer[] { 6, 5 });
             put("Business International", new Integer[] { 5 });
@@ -465,7 +462,7 @@ public class SynonymIndexSearcherTest {
         {
 
             put("Dulux Trade", new Integer[] { 0, 1, 2, 4, 3 });
-            put("Trade", new Integer[] { 3, 1, 0, 2, 4 });
+            put("Trade", new Integer[] { 3, 0, 2, 4, 1 });
 
             put("Big Blue", new Integer[] { 6, 5, 8 });
             put("Business International", new Integer[] { 5 });
@@ -473,7 +470,7 @@ public class SynonymIndexSearcherTest {
 
             put("ALMOND/WH", new Integer[] { 7 });
 
-            put("QUICK FOX", new Integer[] { 12, 11, 8, 9, 10, 13 });
+            put("QUICK FOX", new Integer[] { 11, 12, 8, 9, 10, 13 });
         }
     };
 
@@ -483,7 +480,7 @@ public class SynonymIndexSearcherTest {
 
         {
             put("Dulux Trade", new Integer[] { 0, 1, 2, 4 });
-            put("Trade", new Integer[] { 3, 1, 0, 2, 4 });
+            put("Trade", new Integer[] { 3, 0, 2, 4, 1 });
 
             put("Big Blue", new Integer[] { 6, 5 });
             put("Business International", new Integer[] { 5 });
@@ -491,7 +488,7 @@ public class SynonymIndexSearcherTest {
 
             put("ALMOND/WH", new Integer[] { 7 });
 
-            put("QUICK FOX", new Integer[] { 12, 11, 8, 9, 10 });
+            put("QUICK FOX", new Integer[] { 11, 12, 8, 9, 10 });
         }
     };
 
