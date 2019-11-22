@@ -25,8 +25,8 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import org.apache.lucene.analysis.CharArraySet;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.analysis.util.CharArraySet;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.search.TopDocs;
 import org.junit.Before;
@@ -505,6 +505,12 @@ public class SynonymIndexSearcherTest {
             put("MATCH_ALL_FUZZY", ExpectResults4MatchAllFuzzy);
         }
     };
+
+    private void doAssertEquals(String string, long expectedLongValue, long actualLongValue) {
+        if (doAsserts) {
+            assertEquals(string, expectedLongValue, actualLongValue);
+        }
+    }
 
     private void doAssertEquals(String string, int intValue, int doc) {
         if (doAsserts) {
