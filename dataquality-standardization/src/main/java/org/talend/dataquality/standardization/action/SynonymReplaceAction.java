@@ -51,7 +51,7 @@ public class SynonymReplaceAction implements ITalendStrConversionAction {
             }
             try {
                 TopDocs docs = searcher.searchDocumentBySynonym(str);
-                if (docs.totalHits > 0) {
+                if (docs.totalHits.value > 0) {
                     Document doc = searcher.getDocument(docs.scoreDocs[0].doc);
                     List<String> replaceList = new ArrayList<String>();
                     String word = doc.getValues(SynonymIndexSearcher.F_WORD)[0];

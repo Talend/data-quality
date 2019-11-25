@@ -40,7 +40,7 @@ import org.talend.dataquality.standardization.record.SynonymRecordSearcher;
  */
 public class SynonymIndexSearcherTest {
 
-    boolean showInConsole = true;
+    boolean showInConsole = false;
 
     private boolean doAsserts = true;
 
@@ -103,14 +103,14 @@ public class SynonymIndexSearcherTest {
         for (int i = 0; i < bigblue.length; i++) {
             String toFind = bigblue[i];
             TopDocs doc = searcher.searchDocumentByWord(toFind);
-            doAssertEquals("we should have found no document, check the code", true, doc.totalHits == 0);
+            doAssertEquals("we should have found no document, check the code", true, doc.totalHits.value == 0);
         }
         String words[] = { "I.B.M.", "ANPE" };
         for (int i = 0; i < words.length; i++) {
             String w = words[i];
             TopDocs doc = searcher.searchDocumentByWord(w);
             doAssertEquals("we should have found at least one document, check the list of synonyms or the code", false,
-                    doc.totalHits == 0);
+                    doc.totalHits.value == 0);
         }
 
         searcher.close();
@@ -124,7 +124,7 @@ public class SynonymIndexSearcherTest {
         TopDocs docs = searcher.searchDocumentBySynonym("ibm");
         printLineToConsole(docs.totalHits + " documents found.");
 
-        doAssertEquals("unexpected totalHits size!", 3, docs.totalHits);
+        doAssertEquals("unexpected totalHits size!", 3, docs.totalHits.value);
         doAssertEquals(true, searcher.getTopDocLimit() >= docs.scoreDocs.length);
         for (int i = 0; i < docs.scoreDocs.length; i++) {
             int docNumber = docs.scoreDocs[i].doc;
@@ -138,7 +138,7 @@ public class SynonymIndexSearcherTest {
             String toFind = bigblue[i];
             TopDocs doc = searcher.searchDocumentBySynonym(toFind);
             doAssertEquals("we should have found at least one document, check the list of synonyms or the code", false,
-                    doc.totalHits == 0);
+                    doc.totalHits.value == 0);
 
         }
 
@@ -189,7 +189,7 @@ public class SynonymIndexSearcherTest {
         TopDocs docsField2 = searcher.searchDocumentBySynonym(row1Label);
         printLineToConsole(docsField2.totalHits + " documents found for " + row1Label);
 
-        for (int i = 0; i < docsField2.totalHits; i++) {
+        for (int i = 0; i < docsField2.totalHits.value; i++) {
             int docNumber = docsField2.scoreDocs[i].doc;
             printToConsole("\ndoc=" + docNumber + "\tscore=" + docsField2.scoreDocs[i].score);
             // Document doc = builder.getSearcher().doc(docs.scoreDocs[i].doc);
@@ -198,10 +198,10 @@ public class SynonymIndexSearcherTest {
         }
 
         // build output by a cross product of matched results
-        for (int i = 0; i < docsField1.totalHits; i++) {
+        for (int i = 0; i < docsField1.totalHits.value; i++) {
             int docNumber = docsField1.scoreDocs[i].doc;
             String word1 = searcher.getWordByDocNumber(docNumber);
-            for (int j = 0; j < docsField2.totalHits; j++) {
+            for (int j = 0; j < docsField2.totalHits.value; j++) {
                 int docNumber2 = docsField2.scoreDocs[j].doc;
                 String word2 = searcher.getWordByDocNumber(docNumber2);
                 printLineToConsole("output row = " + word1 + " , " + word2);
@@ -257,7 +257,7 @@ public class SynonymIndexSearcherTest {
             fail(e.getMessage());
         }
         TopDocs docs = search.searchDocumentByWord("IAIDQ");
-        doAssertEquals(false, docs.totalHits == 0);
+        doAssertEquals(false, docs.totalHits.value == 0);
         Document document = search.getDocument(docs.scoreDocs[0].doc);
         assertNotNull(document);
         String[] values = document.getValues(SynonymIndexSearcher.F_WORD);
@@ -351,7 +351,7 @@ public class SynonymIndexSearcherTest {
 
         SynonymIndexSearcher searcher = new SynonymIndexSearcher(path);
         searcher.setTopDocLimit(30);
-        searcher.setMaxEdits(2);
+        searcher.setMaxEdits(1);
 
         for (String key : ExpectResults4MatchAny.keySet()) {
             printLineToConsole("\n-------------------Searching for <" + key + ">--------------------");
@@ -362,8 +362,8 @@ public class SynonymIndexSearcherTest {
                 searcher.setSearchMode(mode);
                 TopDocs docs = searcher.searchDocumentBySynonym(key);
                 LinkedHashMap<String, Integer[]> expected = ExpectResults4NewOptions.get(mode.toString());
-                doAssertEquals("unexpected totalHits size!", expected.get(key).length, docs.totalHits);
-                for (int i = 0; i < docs.totalHits; i++) {
+                doAssertEquals("unexpected totalHits size!", expected.get(key).length, docs.totalHits.value);
+                for (int i = 0; i < docs.totalHits.value; i++) {
                     Document document = searcher.getDocument(docs.scoreDocs[i].doc);
                     String[] syns = document.getValues(SynonymIndexSearcher.F_SYN);
                     printToConsole(docs.scoreDocs[i] + "\n\t" + document.getValues(SynonymIndexSearcher.F_WORD)[0] + " -> ");
@@ -464,13 +464,13 @@ public class SynonymIndexSearcherTest {
             put("Dulux Trade", new Integer[] { 0, 1, 2, 4, 3 });
             put("Trade", new Integer[] { 3, 0, 2, 4, 1 });
 
-            put("Big Blue", new Integer[] { 6, 5, 8 });
+            put("Big Blue", new Integer[] { 6, 5 });
             put("Business International", new Integer[] { 5 });
             put("International Business", new Integer[] { 5 });
 
             put("ALMOND/WH", new Integer[] { 7 });
 
-            put("QUICK FOX", new Integer[] { 11, 12, 8, 9, 10, 13 });
+            put("QUICK FOX", new Integer[] { 11, 8, 9, 10, 12, 13 });
         }
     };
 
@@ -488,7 +488,7 @@ public class SynonymIndexSearcherTest {
 
             put("ALMOND/WH", new Integer[] { 7 });
 
-            put("QUICK FOX", new Integer[] { 11, 12, 8, 9, 10 });
+            put("QUICK FOX", new Integer[] { 11, 8, 9, 10, 12 });
         }
     };
 

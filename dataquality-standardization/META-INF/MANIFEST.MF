@@ -6,7 +6,7 @@ Bundle-Version: 8.0.0.SNAPSHOT
 Bundle-Vendor: .Talend SA.
 Require-Bundle: org.slf4j.api,
  org.eclipse.m2e.maven.runtime.slf4j.simple,
- org.talend.libraries.apache.lucene6,
+ org.talend.libraries.apache.lucene8,
  org.apache.commons.io,
  org.apache.commons.lang,
  org.junit;resolution:=optional,

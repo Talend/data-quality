@@ -20,16 +20,15 @@ import java.util.List;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.CharArraySet;
+import org.apache.lucene.analysis.StopFilter;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.core.LowerCaseFilter;
 import org.apache.lucene.analysis.miscellaneous.ASCIIFoldingFilter;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.analysis.standard.StandardFilter;
 import org.apache.lucene.analysis.standard.StandardTokenizer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.index.MultiFields;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
@@ -43,7 +42,6 @@ import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.Bits;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -242,7 +240,7 @@ public class SynonymIndexSearcher {
             TopDocs docs;
             final IndexSearcher searcher = mgr.acquire();
             docs = searcher.search(query, topDocLimit);
-            if (docs.totalHits > 0) {
+            if (docs.totalHits.value > 0) {
                 Document doc = searcher.doc(docs.scoreDocs[0].doc);
                 String[] synonyms = doc.getValues(F_SYN);
                 return synonyms.length;
@@ -263,16 +261,10 @@ public class SynonymIndexSearcher {
     public Document getDocument(int docNum) {
         Document doc = null;
         try {
-            final IndexSearcher searcher = mgr.acquire();
+            IndexSearcher searcher = mgr.acquire();
             IndexReader reader = searcher.getIndexReader();
-            Bits liveDocs = MultiFields.getLiveDocs(reader);
-            if (liveDocs != null && !liveDocs.get(docNum)) {
-                return null;
-            } else {
-                doc = reader.document(docNum);
-                mgr.release(searcher);
-                return doc;
-            }
+            doc = reader.document(docNum);
+            mgr.release(searcher);
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         }
@@ -542,7 +534,7 @@ public class SynonymIndexSearcher {
     public static List<String> getTokensFromAnalyzer(String input) throws IOException {
         StandardTokenizer tokenStream = new StandardTokenizer();
         tokenStream.setReader(new StringReader(input));
-        TokenStream result = new StandardFilter(tokenStream);
+        TokenStream result = new StopFilter(tokenStream, CharArraySet.EMPTY_SET);
         result = new LowerCaseFilter(result);
         result = new ASCIIFoldingFilter(result);
         CharTermAttribute charTermAttribute = result.addAttribute(CharTermAttribute.class);
@@ -555,5 +547,9 @@ public class SynonymIndexSearcher {
         }
         result.close();
         return termList;
+    }
+
+    public static void main(String args[]) throws IOException {
+        System.out.println(SynonymIndexSearcher.getTokensFromAnalyzer("ALMOND/WH"));
     }
 }

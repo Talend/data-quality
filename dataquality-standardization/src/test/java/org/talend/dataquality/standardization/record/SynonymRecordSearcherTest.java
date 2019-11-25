@@ -184,7 +184,7 @@ public class SynonymRecordSearcherTest {
             int hits = 1;
             for (int i = 0; i < record.length; i++) {
                 topDocs = recSearcher.getSearcher(i).searchDocumentBySynonym(record[i]);
-                hits *= topDocs.totalHits;
+                hits *= topDocs.totalHits.value;
             }
 
             List<OutputRecord> results = recSearcher.search(resultLimit, record);

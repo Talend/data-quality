@@ -20,9 +20,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.CharArraySet;
+import org.apache.lucene.analysis.StopFilter;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.core.LowerCaseFilter;
-import org.apache.lucene.analysis.standard.StandardFilter;
 import org.apache.lucene.analysis.standard.StandardTokenizer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.index.Term;
@@ -84,7 +85,7 @@ public class FirstNameStandardize {
     private List<String> getTokensFromAnalyzer(String input) throws IOException {
         StandardTokenizer tokenStream = new StandardTokenizer();
         tokenStream.setReader(new StringReader(input));
-        TokenStream result = new StandardFilter(tokenStream);
+        TokenStream result = new StopFilter(tokenStream, CharArraySet.EMPTY_SET);
         result = new LowerCaseFilter(result);
         CharTermAttribute charTermAttribute = result.addAttribute(CharTermAttribute.class);
 

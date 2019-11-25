@@ -128,7 +128,7 @@ public class SynonymIndexBuilder {
      * @throws IOException
      */
     public boolean insertDocumentIfNotExists(String word, String synonyms) throws IOException {
-        if (searchDocumentByWord(word).totalHits == 0) {
+        if (searchDocumentByWord(word).totalHits.value == 0) {
             getWriter().addDocument(generateDocument(word, synonyms));
             return true;
         } // else
@@ -151,9 +151,9 @@ public class SynonymIndexBuilder {
     public int updateDocument(String word, String synonyms) throws IOException {
         int nbUpdatedDocuments = 0;
         TopDocs docs = searchDocumentByWord(word);
-        if (docs.totalHits == 0) {
+        if (docs.totalHits.value == 0) {
             // do nothing
-        } else if (docs.totalHits == 1) {
+        } else if (docs.totalHits.value == 1) {
             getWriter().updateDocument(new Term(SynonymIndexSearcher.F_WORDTERM, word.trim().toLowerCase()),
                     generateDocument(word, synonyms));
             nbUpdatedDocuments = 1;
@@ -173,10 +173,10 @@ public class SynonymIndexBuilder {
      */
     public int deleteDocumentByWord(String word) throws IOException {
         TopDocs docs = searchDocumentByWord(word);
-        if (docs.totalHits == 0) {
+        if (docs.totalHits.value == 0) {
             error.set(false, Messages.getString("SynonymIndexBuilder.doesnotExsit", word));//$NON-NLS-1$
             return 0;
-        } else if (docs.totalHits == 1) {
+        } else if (docs.totalHits.value == 1) {
             getWriter().deleteDocuments(new Term(SynonymIndexSearcher.F_WORDTERM, word.trim().toLowerCase()));
             return 1;
         } else {
@@ -218,9 +218,9 @@ public class SynonymIndexBuilder {
         TopDocs docs = idxSearcher.searchDocumentByWord(word);
 
         int nbDocs = 0;
-        if (docs.totalHits == 0) {
+        if (docs.totalHits.value == 0) {
             error.set(false, Messages.getString("SynonymIndexBuilder.document", word));//$NON-NLS-1$
-        } else if (docs.totalHits == 1) {
+        } else if (docs.totalHits.value == 1) {
             Document doc = idxSearcher.getDocument(docs.scoreDocs[0].doc);
             String[] synonyms = doc.getValues(SynonymIndexSearcher.F_SYN);
             Set<String> synonymList = new HashSet<String>();
@@ -271,10 +271,10 @@ public class SynonymIndexBuilder {
         SynonymIndexSearcher newSynIdxSearcher = getNewSynIdxSearcher();
         TopDocs docs = newSynIdxSearcher.searchDocumentByWord(word);
 
-        if (docs.totalHits == 0) {
+        if (docs.totalHits.value == 0) {
             error.set(false, Messages.getString("SynonymIndexBuilder.documentNotExsit", word));//$NON-NLS-1$
             deleted = 0;
-        } else if (docs.totalHits == 1) {
+        } else if (docs.totalHits.value == 1) {
             Document doc = newSynIdxSearcher.getDocument(docs.scoreDocs[0].doc);
             String[] synonyms = doc.getValues(SynonymIndexSearcher.F_SYN);
             Set<String> synonymList = new HashSet<String>();
@@ -420,7 +420,7 @@ public class SynonymIndexBuilder {
      */
     public int getNumDocs() {
         try {
-            return this.getWriter().numDocs();
+            return this.getWriter().getDocStats().numDocs;
         } catch (IOException e) {
             LOG.error(e.getMessage(), e);
             return -1;

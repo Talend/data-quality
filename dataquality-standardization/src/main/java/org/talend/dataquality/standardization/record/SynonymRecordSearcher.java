@@ -204,7 +204,7 @@ public class SynonymRecordSearcher {
                 SynonymIndexSearcher searcher = searchers[i];
                 TopDocs docs = searcher.searchDocumentBySynonym(field);
 
-                int nbDocs = (int) Math.min((long) searcher.getTopDocLimit(), docs.totalHits);
+                int nbDocs = (int) Math.min((long) searcher.getTopDocLimit(), docs.totalHits.value);
 
                 // store all found words in a list of results for this field
                 for (int j = 0; j < nbDocs; j++) {
