@@ -25,10 +25,12 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.lucene.analysis.CharArraySet;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.search.TopDocs;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.standardization.index.SynonymIndexSearcher.SynonymSearchMode;
@@ -44,6 +46,8 @@ public class SynonymIndexSearcherTest {
 
     private boolean doAsserts = true;
 
+    private static final String INDEX_PATH = "target/test_data/index_searcher_test";
+
     /**
      *
      */
@@ -58,12 +62,15 @@ public class SynonymIndexSearcherTest {
     public void setUp() throws Exception {
         // create the index
         this.synIdxBuilderTest = new SynonymIndexBuilderTest();
-        synIdxBuilderTest.setUp();
-
         SynonymIndexBuilder synonymIdxBuilder = new SynonymIndexBuilder();
-        synonymIdxBuilder.initIndexInFS(SynonymIndexBuilderTest.path);
+        synonymIdxBuilder.initIndexInFS(INDEX_PATH);
         synIdxBuilderTest.insertDocuments(synonymIdxBuilder);
         synonymIdxBuilder.closeIndex();
+    }
+
+    @After
+    public void cleanUp() throws IOException {
+        FileUtils.deleteDirectory(new File(INDEX_PATH));
     }
 
     /**
@@ -84,7 +91,7 @@ public class SynonymIndexSearcherTest {
         }
         // use an existing index folder.
         try {
-            searcher.openIndexInFS(SynonymIndexBuilderTest.path);
+            searcher.openIndexInFS(INDEX_PATH);
         } catch (IOException e) {
             fail(e.getMessage());
         }
@@ -156,7 +163,7 @@ public class SynonymIndexSearcherTest {
         SynonymIndexSearcher searcher = new SynonymIndexSearcher();
         try {
             // searcher.setAnalyzer(builder.getAnalyzer());
-            searcher.openIndexInFS(SynonymIndexBuilderTest.path);
+            searcher.openIndexInFS(INDEX_PATH);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -237,7 +244,7 @@ public class SynonymIndexSearcherTest {
     public void testGetSynonymCount() {
         SynonymIndexSearcher search = new SynonymIndexSearcher();
         try {
-            search.openIndexInFS(SynonymIndexBuilderTest.path);
+            search.openIndexInFS(INDEX_PATH);
         } catch (IOException e) {
             fail(e.getMessage());
         }
@@ -252,7 +259,7 @@ public class SynonymIndexSearcherTest {
     public void testGetDocument() {
         SynonymIndexSearcher search = new SynonymIndexSearcher();
         try {
-            search.openIndexInFS(SynonymIndexBuilderTest.path);
+            search.openIndexInFS(INDEX_PATH);
         } catch (IOException e) {
             fail(e.getMessage());
         }
@@ -273,7 +280,7 @@ public class SynonymIndexSearcherTest {
     public void testGetWordByDocNumber() {
         SynonymIndexSearcher search = new SynonymIndexSearcher();
         try {
-            search.openIndexInFS(SynonymIndexBuilderTest.path);
+            search.openIndexInFS(INDEX_PATH);
         } catch (IOException e) {
             fail(e.getMessage());
         }
@@ -300,7 +307,7 @@ public class SynonymIndexSearcherTest {
     public void testGetSynonymsByDocNumber() {
         SynonymIndexSearcher search = new SynonymIndexSearcher();
         try {
-            search.openIndexInFS(SynonymIndexBuilderTest.path);
+            search.openIndexInFS(INDEX_PATH);
         } catch (IOException e) {
             fail(e.getMessage());
         }
@@ -330,7 +337,7 @@ public class SynonymIndexSearcherTest {
     public void testGetNumDocs() {
         SynonymIndexSearcher search = new SynonymIndexSearcher();
         try {
-            search.openIndexInFS(SynonymIndexBuilderTest.path);
+            search.openIndexInFS(INDEX_PATH);
         } catch (IOException e) {
             fail(e.getMessage());
         }
@@ -341,17 +348,20 @@ public class SynonymIndexSearcherTest {
 
     @Test
     public void testSearchDocumentBySynonymWithNewOptions() throws IOException {
-        final String path = "data/quick_brown_dog_index";
-        synIdxBuilderTest.setUp();
         SynonymIndexBuilder synonymIdxBuilder = new SynonymIndexBuilder();
-        synonymIdxBuilder.deleteIndexFromFS(path);
-        synonymIdxBuilder.initIndexInFS(path);
+        synonymIdxBuilder.deleteIndexFromFS(INDEX_PATH);
+        synonymIdxBuilder.initIndexInFS(INDEX_PATH);
         synIdxBuilderTest.insertDocuments(synonymIdxBuilder, synonyms4newoptions);
         synonymIdxBuilder.closeIndex();
 
-        SynonymIndexSearcher searcher = new SynonymIndexSearcher(path);
+        SynonymIndexSearcher searcher = new SynonymIndexSearcher(INDEX_PATH);
         searcher.setTopDocLimit(30);
         searcher.setMaxEdits(1);
+        try {
+            searcher.openIndexInFS(INDEX_PATH);
+        } catch (IOException e) {
+            fail(e.getMessage());
+        }
 
         for (String key : ExpectResults4MatchAny.keySet()) {
             printLineToConsole("\n-------------------Searching for <" + key + ">--------------------");
@@ -546,7 +556,7 @@ public class SynonymIndexSearcherTest {
     public void testGetMaxDoc() {
         SynonymIndexSearcher search = new SynonymIndexSearcher();
         try {
-            search.openIndexInFS(SynonymIndexBuilderTest.path);
+            search.openIndexInFS(INDEX_PATH);
         } catch (IOException e) {
             fail(e.getMessage());
         }
