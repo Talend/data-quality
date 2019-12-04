@@ -5,7 +5,7 @@ Email validation API
 
 -------------
 
-More information can be found [here](https://github.com/Talend/data-quality/blob/master/dataquality-email/changelog.txt).
+More information can be found [here](https://github.com/Talend/data-quality/blob/master/dataquality-email/CHANGELOG.md).
 
 Where can I get the latest release?
 -----------------------------------

@@ -6,7 +6,7 @@ Data Quality Common Library is the low level library containing interfaces and c
 Changelog
 -------------
 
-More information can be found [here](https://github.com/Talend/data-quality/blob/master/dataquality-common/changelog.txt).
+More information can be found [here](https://github.com/Talend/data-quality/blob/master/dataquality-common/CHANGELOG.md).
 
 Where can I get the latest release?
 -----------------------------------

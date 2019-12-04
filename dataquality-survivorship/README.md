@@ -5,7 +5,7 @@ Data Survivorship library.
 
 -------------
 
-More information can be found [here](https://github.com/Talend/data-quality/blob/master/dataquality-survivorship/changelog.txt).
+More information can be found [here](https://github.com/Talend/data-quality/blob/master/dataquality-survivorship/CHANGELOG.md).
 
 Where can I get the latest release?
 -----------------------------------

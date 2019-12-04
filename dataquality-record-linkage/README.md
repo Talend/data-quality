@@ -6,7 +6,7 @@ Record Matching algorithms, blocking key calculationn and T-Swoosh
 Changelog
 -------------
 
-More information can be found [here](https://github.com/Talend/data-quality/blob/master/dataquality-record-linkage/changelog.txt).
+More information can be found [here](https://github.com/Talend/data-quality/blob/master/dataquality-record-linkage/CHANGELOG.md).
 
 Where can I get the latest release?
 -----------------------------------

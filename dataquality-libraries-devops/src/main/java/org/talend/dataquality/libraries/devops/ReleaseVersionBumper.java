@@ -19,7 +19,11 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -63,6 +67,16 @@ public class ReleaseVersionBumper {
     private static final String DAIKON_VERSION_PROPERTY_NAME = "org.talend.daikon.version";
 
     private static final String BUNDLE_VERSION_STRING = "Bundle-Version: ";
+
+    private static final String UNRELEASED_TAG = "## [Unreleased]";
+
+    private static final List<String> COMMIT_CATEGORIES = Arrays.asList("### Added", "### Changed", "### Removed",
+            "### Deprecated", "### Fixed", "### Security");
+
+    private static final String NA_TAG = "N/A";
+
+    private static String UNRELEASED_LABEL = UNRELEASED_TAG + "\n"
+            + COMMIT_CATEGORIES.stream().map(s -> s + "\n" + NA_TAG).collect(Collectors.joining("\n")) + "\n\n";
 
     private XPath xPath = getXPathFactory().newXPath();
 
@@ -137,12 +151,64 @@ public class ReleaseVersionBumper {
             NodeList moduleNodes = (NodeList) xPath.evaluate("/project/modules/module", doc, XPathConstants.NODESET);
             for (int idx = 0; idx < moduleNodes.getLength(); idx++) {
                 String modulePath = moduleNodes.item(idx).getTextContent();
-                updateChildModules(new File(projectRoot + modulePath + "/pom.xml"));
+                updateChildPOM(new File(projectRoot + modulePath + "/pom.xml"));
+                updateChangeLog(Paths.get(projectRoot, modulePath, "CHANGELOG.md"));
             }
+            // Update root changelog
+            updateChangeLog(Paths.get(projectRoot, "../", "CHANGELOG.md"));
         }
     }
 
-    private void updateChildModules(File inputFile)
+    private void updateChangeLog(Path inputPath) throws IOException {
+        if (inputPath.toFile().exists()) {
+            System.out.println("Updating: " + inputPath.toString()); // NOSONAR
+            List<String> lines = Files.readAllLines(inputPath);
+            DataOutputStream writer = new DataOutputStream(Files.newOutputStream(inputPath));
+            if (!TARGET_VERSION.contains("SNAPSHOT")) {
+                // If releasing, put the version and the date in the changelog
+                String commitCategory = null;
+                for (String line : lines) {
+                    if (line.startsWith(UNRELEASED_TAG)) {
+                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                        writer.write(("## [" + TARGET_VERSION + "] - " + format.format(new Date()) + "\n")
+                                .getBytes(StandardCharsets.UTF_8));
+                    } else {
+                        // Remove N/A categories
+                        if (commitCategory != null) {
+                            if (!line.equals(NA_TAG)) {
+                                writer.write((commitCategory + "\n").getBytes(StandardCharsets.UTF_8));
+                                writer.write((line + "\n").getBytes(StandardCharsets.UTF_8));
+                            }
+                            commitCategory = null;
+                        } else {
+                            if (COMMIT_CATEGORIES.contains(line))
+                                commitCategory = line;
+                            else
+                                writer.write((line + "\n").getBytes(StandardCharsets.UTF_8));
+                        }
+                    }
+                }
+            } else {
+                // If bumping to next version, prepare the empty scope
+                boolean firstTime = true;
+                for (String line : lines) {
+                    if (firstTime && line.startsWith("## [")) {
+                        // Update only if previous version was a released one
+                        if (!line.startsWith(UNRELEASED_TAG))
+                            writer.write((UNRELEASED_LABEL).getBytes(StandardCharsets.UTF_8));
+                        writer.write((line + "\n").getBytes(StandardCharsets.UTF_8));
+                        firstTime = false;
+                    } else {
+                        writer.write((line + "\n").getBytes(StandardCharsets.UTF_8));
+                    }
+                }
+            }
+            writer.flush();
+            writer.close();
+        }
+    }
+
+    private void updateChildPOM(File inputFile)
             throws IOException, SAXException, ParserConfigurationException, XPathExpressionException, TransformerException {
         if (inputFile.exists()) {
             System.out.println("Updating: " + inputFile.getAbsolutePath()); // NOSONAR

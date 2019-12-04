@@ -283,7 +283,7 @@
 						<Built-By>.Talend SA.</Built-By>
 						<Import-Package/>
 						<Private-Package/>
-						<Include-Resource>{maven-resources},changelog.txt,LICENSE.txt</Include-Resource>
+						<Include-Resource>{maven-resources},CHANGELOG.md,LICENSE.txt</Include-Resource>
 					</instructions>
 				</configuration>
 			</plugin>

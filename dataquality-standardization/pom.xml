@@ -96,7 +96,7 @@
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
-						<Include-Resource>{maven-resources},changelog.txt,src/main/resources/messages.properties</Include-Resource>
+						<Include-Resource>{maven-resources},CHANGELOG.md,src/main/resources/messages.properties</Include-Resource>
 					</instructions>
 				</configuration>
 			</plugin>

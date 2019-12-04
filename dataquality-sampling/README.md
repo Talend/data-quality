@@ -6,7 +6,7 @@ Reservoir sampling, data masking, data duplication
 Changelog
 -------------
 
-More information can be found [here](https://github.com/Talend/data-quality/blob/master/dataquality-sampling/changelog.txt).
+More information can be found [here](https://github.com/Talend/data-quality/blob/master/dataquality-sampling/CHANGELOG.md).
 
 Where can I get the latest release?
 -----------------------------------

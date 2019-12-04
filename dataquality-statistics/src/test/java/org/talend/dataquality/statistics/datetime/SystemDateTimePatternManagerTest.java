@@ -35,6 +35,8 @@ public class SystemDateTimePatternManagerTest {
 
     @Test
     public void datesWithJapaneseChronologyWithHeiseiEraInJapanese() {
+        // ignored if the Reiwa era is not supported in the current JVM
+        assumeTrue(ChronologyParameterManager.IS_REIWA_ERA_SUPPORTED);
         assertTrue(SystemDateTimePatternManager.isDate("0017-02-28 平成")); //$NON-NLS-1$
     }
 

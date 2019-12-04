@@ -5,7 +5,7 @@ API for all types of convert functions
 
 -------------
 
-More information can be found [here](https://github.com/Talend/data-quality/blob/master/dataquality-converters/changelog.txt).
+More information can be found [here](https://github.com/Talend/data-quality/blob/master/dataquality-converters/CHANGELOG.md).
 
 Where can I get the latest release?
 -----------------------------------
