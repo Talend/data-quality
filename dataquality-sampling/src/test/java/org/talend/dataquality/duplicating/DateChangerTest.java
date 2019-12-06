@@ -32,7 +32,7 @@ public class DateChangerTest {
     @Before
     public void setUp() throws Exception {
         dateToModify = sdf.parse("13-08-1982"); //$NON-NLS-1$ 
-        dateChanger.setSeed(AllDataqualitySamplingTests.RANDOM_SEED);
+        dateChanger.setSeed(TestConstants.RANDOM_SEED);
     }
 
     @Test

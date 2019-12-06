@@ -567,7 +567,7 @@ public class SampleTest {
             if (sample.contains(".PD")) {
                 continue;
             }
-            Set<String> patternSet = SystemDateTimePatternManager.datePatternReplace(sample);
+            Set<String> patternSet = SystemDateTimePatternManager.getDatePatterns(sample).keySet();
             assertEquals("Unexpected Format Set on sample <" + sample + ">", EXPECTED_FORMATS.get(sample), patternSet);
         }
     }
@@ -582,7 +582,7 @@ public class SampleTest {
             if (!"".equals(line.trim())) {
                 String[] sampleLine = line.trim().split("\t");
                 String sample = sampleLine[0];
-                Set<String> patternSet = SystemDateTimePatternManager.datePatternReplace(sample);
+                Set<String> patternSet = SystemDateTimePatternManager.getDatePatterns(sample).keySet();
 
                 if (patternSet.size() > 0) {
                     sb.append("put(\"").append(sample).append("\", new HashSet<String>(Arrays.asList(new String[] //\n\t{ ");

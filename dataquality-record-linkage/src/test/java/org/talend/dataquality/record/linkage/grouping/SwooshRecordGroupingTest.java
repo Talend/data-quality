@@ -1427,8 +1427,8 @@ public class SwooshRecordGroupingTest {
         int groupOfthree = 0;
         Assert.assertTrue(groupRows_tMatchGroup_1.size() > 0);
         for (row4Struct one : groupRows_tMatchGroup_1) {
-            System.out.println(one.id + "--" + one.name + "--" + one.address + "--" + one.provinceID + "--" + one.GID + "--"
-                    + one.GRP_QUALITY + "--" + one.MASTER + "--" + one.SCORE);
+            // System.out.println(one.id + "--" + one.name + "--" + one.address + "--" + one.provinceID + "--" + one.GID + "--"
+            // + one.GRP_QUALITY + "--" + one.MASTER + "--" + one.SCORE);
             if (one.id == 6 && one.MASTER == true) {
                 Assert.assertEquals(0.6111111111111112d, one.GRP_QUALITY.doubleValue(), 0.0000000000000007d);
             } else if (one.id == 2 && one.MASTER == true) {
@@ -3763,8 +3763,8 @@ public class SwooshRecordGroupingTest {
         Collections.sort(groupRows_tMatchGroup_1);
         Assert.assertTrue(groupRows_tMatchGroup_1.size() > 0);
         for (row2Struct one : groupRows_tMatchGroup_1) {
-            System.out.println(one.customer_id + "--" + one.city + "--" + one.country + "--" + one.GID + "--" + one.GRP_QUALITY
-                    + "--" + one.MASTER + "--" + one.SCORE);
+            // System.out.println(one.customer_id + "--" + one.city + "--" + one.country + "--" + one.GID + "--" + one.GRP_QUALITY
+            // + "--" + one.MASTER + "--" + one.SCORE);
             if (one.MASTER) {
                 if (one.customer_id == 8) {
                     Assert.assertTrue(0.8 == one.GRP_QUALITY);

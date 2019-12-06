@@ -18,7 +18,7 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.talend.dataquality.duplicating.AllDataqualitySamplingTests;
+import org.talend.dataquality.duplicating.TestConstants;
 
 public class FastReservoirSamplerTest {
 
@@ -44,7 +44,7 @@ public class FastReservoirSamplerTest {
 
     @Test
     public void testSample() {
-        sampler = new FastReservoirSampler<TestRowStruct>(SAMPLE_SIZE, AllDataqualitySamplingTests.RANDOM_SEED);
+        sampler = new FastReservoirSampler<TestRowStruct>(SAMPLE_SIZE, TestConstants.RANDOM_SEED);
         sampler.clear();
         for (TestRowStruct row : testers) {
             sampler.onNext(row);

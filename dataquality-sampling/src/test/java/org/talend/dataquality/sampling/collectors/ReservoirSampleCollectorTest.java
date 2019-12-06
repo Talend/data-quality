@@ -19,7 +19,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import org.junit.Test;
-import org.talend.dataquality.duplicating.AllDataqualitySamplingTests;
+import org.talend.dataquality.duplicating.TestConstants;
 
 public class ReservoirSampleCollectorTest {
 
@@ -33,8 +33,7 @@ public class ReservoirSampleCollectorTest {
     public void testSample() {
         final Stream<Integer> stream = IntStream.range(0, ORIGINAL_COUNT).boxed();
 
-        final List<Integer> sampleList = stream
-                .collect(new ReservoirSampleCollector<>(SAMPLE_SIZE, AllDataqualitySamplingTests.RANDOM_SEED));
+        final List<Integer> sampleList = stream.collect(new ReservoirSampleCollector<>(SAMPLE_SIZE, TestConstants.RANDOM_SEED));
 
         assertEquals("Unexpected sample size!", EXPECTED_SAMPLES.length, sampleList.size());
         for (int i = 0; i < sampleList.size(); i++) {

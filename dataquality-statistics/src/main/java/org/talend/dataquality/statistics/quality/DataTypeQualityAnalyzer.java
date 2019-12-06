@@ -14,7 +14,6 @@ package org.talend.dataquality.statistics.quality;
 
 import static org.talend.dataquality.statistics.datetime.SystemDateTimePatternManager.isDate;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -40,8 +39,6 @@ public class DataTypeQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
 
     private final ResizableList<LFUCache> knownDataTypeCaches = new ResizableList<>(LFUCache.class);
 
-    private List<String> customDateTimePatterns = new ArrayList<>();
-
     public DataTypeQualityAnalyzer(DataTypeEnum[] types, boolean isStoreInvalidValues) {
         this.isStoreInvalidValues = isStoreInvalidValues;
         setTypes(types);
@@ -49,13 +46,6 @@ public class DataTypeQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
 
     public DataTypeQualityAnalyzer(DataTypeEnum... types) {
         setTypes(types);
-    }
-
-    @Deprecated
-    public void addCustomDateTimePattern(String pattern) {
-        if (StringUtils.isNotBlank(pattern)) {
-            customDateTimePatterns.add(pattern);
-        }
     }
 
     @Override

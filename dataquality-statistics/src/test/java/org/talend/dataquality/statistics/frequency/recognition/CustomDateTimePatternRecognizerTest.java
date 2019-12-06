@@ -19,21 +19,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.talend.dataquality.statistics.frequency.pattern.CompositePatternFrequencyAnalyzer;
 import org.talend.dataquality.statistics.frequency.pattern.PatternFrequencyStatistics;
 
 public class CustomDateTimePatternRecognizerTest {
-
-    @Before
-    public void setUp() throws Exception {
-    }
-
-    @After
-    public void tearDown() throws Exception {
-    }
 
     @Test
     public void testRecognize() {
@@ -43,7 +33,7 @@ public class CustomDateTimePatternRecognizerTest {
         DateTimePatternRecognizer recognizer = new DateTimePatternRecognizer();
         recognizers.add(recognizer);
         recognizers.add(new LatinExtendedCharPatternRecognizer());
-        recognizers.add(new EastAsianCharPatternRecognizer());
+        recognizers.add(new GenericCharPatternRecognizer());
 
         CompositePatternFrequencyAnalyzer analyzer = new CompositePatternFrequencyAnalyzer(recognizers);
         final List<String> DATETIME_TO_TEST = new ArrayList<String>() {
@@ -91,13 +81,14 @@ public class CustomDateTimePatternRecognizerTest {
         for (String str : DATETIME_TO_TEST) {
             analyzer.analyze(str);
         }
+        analyzer.close();
 
         List<PatternFrequencyStatistics> statsList = analyzer.getResult();
         PatternFrequencyStatistics stats = statsList.get(0);
         Map<String, Long> topK = stats.getTopK(10);
         assertEquals(EXPECTED_PATTERN_MAP.size(), topK.size());
         for (String key : topK.keySet()) {
-            // System.out.println("put(\"" + key + "\", " + topK.get(key) + "L);");
+            System.out.println("put(\"" + key + "\", " + topK.get(key) + "L);");
             assertEquals("Unexpected pattern count on pattern <" + key + ">", EXPECTED_PATTERN_MAP.get(key), topK.get(key));
         }
 

@@ -28,12 +28,6 @@ public abstract class QualityAnalyzer<T, Q> implements Analyzer<T> {
         return types;
     }
 
-    /**
-     * @deprecated use {@link #addParameters(java.util.HashMap)} instead with
-     * {@link Parameters.QualityParam#STORE_VALUE}
-     * @param isStoreInvalidValues
-     */
-    @Deprecated
     public void setStoreInvalidValues(boolean isStoreInvalidValues) {
         this.isStoreInvalidValues = isStoreInvalidValues;
     }

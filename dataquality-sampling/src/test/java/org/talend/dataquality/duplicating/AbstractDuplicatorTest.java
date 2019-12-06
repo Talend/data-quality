@@ -49,7 +49,7 @@ public class AbstractDuplicatorTest {
         for (int i = 0; i < distroNames.length; i++) {
 
             AbstractDuplicator<row1Struct, row2Struct> duplicator = new AbstractDuplicator<row1Struct, row2Struct>(
-                    grp_size_expectation, duplicate_percentage, distroNames[i], AllDataqualitySamplingTests.RANDOM_SEED) {
+                    grp_size_expectation, duplicate_percentage, distroNames[i], TestConstants.RANDOM_SEED) {
 
                 @Override
                 protected row2Struct generateOutput(row1Struct v, boolean isOriginal) {

@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 N/A
 ### Removed
-N/A
+- chore(TDQ-17788): remove deprecated class MatchDictionaryService
 ### Deprecated
 N/A
 ### Fixed

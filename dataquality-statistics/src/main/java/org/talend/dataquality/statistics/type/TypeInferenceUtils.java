@@ -13,11 +13,8 @@
 package org.talend.dataquality.statistics.type;
 
 import java.math.BigInteger;
-import java.util.List;
-import java.util.Locale;
 import java.util.regex.Pattern;
 
-import org.talend.dataquality.statistics.datetime.CustomDateTimePatternManager;
 import org.talend.dataquality.statistics.datetime.SystemDateTimePatternManager;
 
 /**
@@ -142,35 +139,6 @@ public class TypeInferenceUtils {
     }
 
     /**
-     * Detect if the given value is a date type using the given custom date patterns first. <br>
-     * Date regex used to match: http://regexlib.com/REDetails.aspx?regexp_id=361 ,and regex matching yyy-MM-dd
-     * HH:mm:ss.SSS
-     *
-     * @param value the value to be detected.
-     * @param customDatePatterns optional custom date patterns to use before the registered ones.
-     * @return true if the value is a date type, false otherwise.
-     */
-    @Deprecated
-    public static boolean isDate(String value, List<String> customDatePatterns) {
-        return CustomDateTimePatternManager.isDate(value, customDatePatterns);
-    }
-
-    /**
-     * Detect if the given value is a date type using the given custom date patterns first. <br>
-     * Date regex used to match: http://regexlib.com/REDetails.aspx?regexp_id=361 ,and regex matching yyy-MM-dd
-     * HH:mm:ss.SSS
-     *
-     * @param value the value to be detected.
-     * @param customDatePatterns optional custom date patterns to use before the registered ones.
-     * @param locale the locale to use to parse the date.
-     * @return true if the value is a date type, false otherwise.
-     */
-    @Deprecated
-    public static boolean isDate(String value, List<String> customDatePatterns, Locale locale) {
-        return CustomDateTimePatternManager.isDate(value, customDatePatterns, locale);
-    }
-
-    /**
      * Detect if the given value is a time type.
      * 
      * @param value
@@ -218,7 +186,7 @@ public class TypeInferenceUtils {
 
     public static DataTypeEnum getDataType(String value) {
         DataTypeEnum dataTypeEnum = getNativeDataType(value);
-        //STRING means we didn't find any native data types
+        // STRING means we didn't find any native data types
         if (DataTypeEnum.STRING.equals(dataTypeEnum)) {
             if (isDate(value)) {
                 // 5. detect date
@@ -231,24 +199,9 @@ public class TypeInferenceUtils {
         return dataTypeEnum;
     }
 
-    @Deprecated
-    public static DataTypeEnum getDataType(String value, List<String> customDateTimePatterns) {
-        DataTypeEnum dataTypeEnum = getNativeDataType(value);
-        //STRING means we didn't find any native data types
-        if (DataTypeEnum.STRING.equals(dataTypeEnum)) {
-            if (isDate(value, customDateTimePatterns)) {
-                // 5. detect date
-                dataTypeEnum = DataTypeEnum.DATE;
-            } else if (isTime(value)) {
-                // 6. detect date
-                dataTypeEnum = DataTypeEnum.TIME;
-            }
-        }
-        return dataTypeEnum;
-    }
-
     /**
      * discovery for native/basic data types
+     * 
      * @param value to discover
      * @return the discovered data type
      */

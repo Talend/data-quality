@@ -50,16 +50,6 @@ public class DataTypeAnalyzer implements Analyzer<DataTypeOccurences> {
     public DataTypeAnalyzer() {
     }
 
-    /**
-     * Create a DataTypeAnalyzer with the given custom date patterns.
-     *
-     * @param customDateTimePatterns the patterns to use.
-     */
-    @Deprecated
-    public DataTypeAnalyzer(List<String> customDateTimePatterns) {
-        this.customDateTimePatterns.addAll(customDateTimePatterns);
-    }
-
     public void init() {
         dataTypeResults.clear();
         frequentDatePatterns.clear();

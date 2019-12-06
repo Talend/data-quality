@@ -34,7 +34,7 @@ public class FieldModifierTest {
 
     @Before
     public void before() {
-        dataModifier.setSeed(AllDataqualitySamplingTests.RANDOM_SEED);
+        dataModifier.setSeed(TestConstants.RANDOM_SEED);
     }
 
     private static final String STRING_TO_TEST = "Suresnes"; //$NON-NLS-1$

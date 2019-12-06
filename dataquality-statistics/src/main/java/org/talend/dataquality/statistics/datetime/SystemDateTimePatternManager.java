@@ -322,13 +322,12 @@ public class SystemDateTimePatternManager {
 
     /**
      * Replace the value with date pattern string.
-     * 
+     *
      * @param value
-     * @return date pattern string.
+     * @return the list of found patterns AND the group with the pattern and the regex for the cache
      */
-    @Deprecated
-    public static Set<String> datePatternReplace(String value) {
-        return getDateTimePatterns(DATE_PATTERN_GROUP_LIST, value, new SortedList<>()).keySet();
+    public static Map<String, Locale> getDatePatterns(String value) {
+        return getDateTimePatterns(DATE_PATTERN_GROUP_LIST, value, new SortedList<>());
     }
 
     /**
@@ -340,17 +339,6 @@ public class SystemDateTimePatternManager {
      */
     public static Map<String, Locale> getDatePatterns(String value, SortedList<Map<Pattern, String>> frequentDatePatternsCache) {
         return getDateTimePatterns(DATE_PATTERN_GROUP_LIST, value, frequentDatePatternsCache);
-    }
-
-    /**
-     * Replace the value with time pattern string.
-     * 
-     * @param value
-     * @return
-     */
-    @Deprecated
-    public static Map<String, Locale> timePatternReplace(String value) {
-        return getDateTimePatterns(TIME_PATTERN_GROUP_LIST, value, new SortedList<>());
     }
 
     /**
@@ -480,7 +468,6 @@ public class SystemDateTimePatternManager {
         return patterns;
     }
 
-    @Deprecated
     public static boolean isMatchDateTimePattern(String value, String pattern, Locale locale) {
         return findDateTimeFormatter(value, pattern, locale).isPresent();
     }

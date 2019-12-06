@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - feat(TDQ-17504): upgrade to lucene 8 in standardization library for studio
 ### Removed
-N/A
+- chore(TDQ-17788): remove unused AllDQStandardizationTests class
 ### Deprecated
 N/A
 ### Fixed

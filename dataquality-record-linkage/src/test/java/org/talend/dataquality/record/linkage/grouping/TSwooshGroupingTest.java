@@ -179,8 +179,8 @@ public class TSwooshGroupingTest {
         for (RichRecord rr : result) {
             String s = rr.getGID() == null ? rr.getGroupId() : rr.getGID().getValue();
             String t = rr.getGRP_SIZE() == null ? rr.getGrpSize() + "" : rr.getGRP_SIZE().getValue();
-            System.err.println("--" + rr.getAttributes().get(0).getValue() + "--" + s + "==" + rr.isMaster() + "==" + t + "=="
-                    + rr.getGroupQuality());
+            // System.err.println("--" + rr.getAttributes().get(0).getValue() + "--" + s + "==" + rr.isMaster() + "==" + t + "=="
+            // + rr.getGroupQuality());
             if (rr.isMaster()) {
                 Attribute attribute = rr.getAttributes().get(0);
                 if ("singlerecord".equals(attribute.getValue()) && rr.getGRP_SIZE().getValue().equals("1") //$NON-NLS-1$
@@ -190,7 +190,7 @@ public class TSwooshGroupingTest {
                         && rr.getGRP_QUALITY().getValue().equals("1.0")) {
                     nullMasterIsExist = true;
                 } else if ("lilis".equals(rr.getAttributes().get(0).getValue()) && StringUtils.equals(t, "4") //$NON-NLS-1$
-                        && rr.getGroupQuality() == 0.6666666666666667) {// && rr.getGrpSize() == 5 
+                        && rr.getGroupQuality() == 0.6666666666666667) {// && rr.getGrpSize() == 5
                     lilisMasterIsExist = true;
                 } else if ("zhaoszhao".equals(rr.getAttributes().get(0).getValue()) && rr.getGrpSize() == 2 //$NON-NLS-1$
                         && rr.getGroupQuality() == 0.8) {
@@ -246,9 +246,9 @@ public class TSwooshGroupingTest {
         List<String[]> inputDataList_2 = new ArrayList<>();
         inputDataList_1
                 .add(new String[] { "5", "John B. Doe", "UK", "F", "8cda2151-f4f7-4141-8bb2-271c872a9576", "1", "true", "1.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
-                        "1.0" });//$NON-NLS-1$ 
+                        "1.0" });//$NON-NLS-1$
         inputDataList_1.add(new String[] { "1", "John Doe", "FR", "F", "ebb0c52a-6418-438f-995a-3cb361e5a82a", "2", "true", "1.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
-                "0.9" });//$NON-NLS-1$ 
+                "0.9" });//$NON-NLS-1$
         inputDataList_1
                 .add(new String[] { "2", "Jon Doe", "FR", "F", "ebb0c52a-6418-438f-995a-3cb361e5a82a", "0", "false", "0.9", "0.0" //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
         });
@@ -258,7 +258,7 @@ public class TSwooshGroupingTest {
                 "0.8333333333333334", "0.0" });//$NON-NLS-1$ //$NON-NLS-2$
         inputDataList_2
                 .add(new String[] { "1", "John Doe", "FR", "M", "ebb0c52a-6418-438f-995a-3cb361e5a82a", "0", "false", "0.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
-                        "1.0" });//$NON-NLS-1$ 
+                        "1.0" });//$NON-NLS-1$
         inputDataList_2.add(new String[] { "6", "John Doe", "UK", "M", "139af1e9-76df-4014-b3f9-a9db21516e70", "1", "true", "1.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
                 "1.0" }); //$NON-NLS-1$
         inputDataList_2.add(new String[] { "4", "Johnny Doe", "US", "M", "539379d2-6a03-41eb-8ef0-72ff1a0a694a", "0", "false", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$//$NON-NLS-7$
@@ -309,8 +309,8 @@ public class TSwooshGroupingTest {
             String s = rr.getGroupId() == null ? rr.getGID().getValue() : rr.getGroupId();
             String t = rr.getGRP_SIZE() == null ? rr.getGrpSize() + "" : rr.getGRP_SIZE().getValue(); //$NON-NLS-1$
             String id = rr.getAttributes().get(0).getValue();
-            System.err.println("--" + rr.getAttributes().get(0).getValue() + "--" + s + "==" + rr.isMaster() + "==" + t + "==" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-                    + rr.getGroupQuality());
+            // System.err.println("--" + rr.getAttributes().get(0).getValue() + "--" + s + "==" + rr.isMaster() + "==" + t + "=="
+            // + rr.getGroupQuality());
             if ("4".equals(id)) { //$NON-NLS-1$
                 isOutput4 = true;
                 if (updated4GID.equals(s)) {
@@ -351,7 +351,7 @@ public class TSwooshGroupingTest {
         // look as block 2
         List<String[]> inputDataList_2 = new ArrayList<>();
         inputDataList_1.add(new String[] { "1", "John Doe", "FR", "F", "ebb0c52a-6418-438f-995a-3cb361e5a82a", "2", "true", "1.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
-                "0.9" });//$NON-NLS-1$ 
+                "0.9" });//$NON-NLS-1$
         inputDataList_1
                 .add(new String[] { "2", "Jon Doe", "FR", "F", "ebb0c52a-6418-438f-995a-3cb361e5a82a", "0", "false", "0.9", "0.0" //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
         });
@@ -361,7 +361,7 @@ public class TSwooshGroupingTest {
                 "0.8333333333333334", "0.0" });//$NON-NLS-1$ //$NON-NLS-2$
         inputDataList_2
                 .add(new String[] { "1", "John Doe", "FR", "M", "ebb0c52a-6418-438f-995a-3cb361e5a82a", "0", "false", "0.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
-                        "1.0" });//$NON-NLS-1$ 
+                        "1.0" });//$NON-NLS-1$
         inputDataList_2.add(new String[] { "4", "Johnny Doe", "US", "M", "539379d2-6a03-41eb-8ef0-72ff1a0a694a", "0", "false", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$//$NON-NLS-7$
                 "0.8333333333333334", "0.0" });//$NON-NLS-1$ //$NON-NLS-2$
 
@@ -406,8 +406,8 @@ public class TSwooshGroupingTest {
             String s = rr.getGroupId() == null ? rr.getGID().getValue() : rr.getGroupId();
             String t = rr.getGRP_SIZE() == null ? rr.getGrpSize() + "" : rr.getGRP_SIZE().getValue(); //$NON-NLS-1$
             String id = rr.getAttributes().get(0).getValue();
-            System.err.println("--" + rr.getAttributes().get(0).getValue() + "--" + s + "==" + rr.isMaster() + "==" + t + "==" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-                    + rr.getGroupQuality());
+            // System.err.println("--" + rr.getAttributes().get(0).getValue() + "--" + s + "==" + rr.isMaster() + "==" + t + "=="
+            // + rr.getGroupQuality());
             if ("4".equals(id)) { //$NON-NLS-1$
                 isOutput4 = true;
                 if (updated4GID.equals(s)) {
@@ -423,6 +423,7 @@ public class TSwooshGroupingTest {
     @Test
     /**
      * *
+     * 
      * <pre>
      * |=-+------------+---------+---------+------------------------------------+--------+------+-----+----------=|
      * |id|name        |blockkey1|blockkey2|GID                                 |GRP_SIZE|MASTER|SCORE|GRP_QUALITY|
@@ -440,6 +441,7 @@ public class TSwooshGroupingTest {
      * Test case for TDQ-13490
      * Expected:
      * 1. id "4" GRP_SIZE 2
+     * 
      * @return
      */
     public void testSwooshMatchWithMultipassWithblock3() {
@@ -448,13 +450,13 @@ public class TSwooshGroupingTest {
         // look as block 2
         List<String[]> inputDataList_2 = new ArrayList<>();
         inputDataList_1.add(new String[] { "1", "John Doe", "FR", "F", "dbf300e2-e8ea-4231-87bd-ac2992488f16", "2", "true", "1.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
-                "0.9" });//$NON-NLS-1$ 
+                "0.9" });//$NON-NLS-1$
         inputDataList_1
                 .add(new String[] { "2", "Jon Doe", "FR", "F", "dbf300e2-e8ea-4231-87bd-ac2992488f16", "0", "false", "0.9", "0.0" //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
         });
         inputDataList_2
                 .add(new String[] { "1", "John Doe", "FR", "M", "dbf300e2-e8ea-4231-87bd-ac2992488f16", "0", "false", "0.9", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
-                        "0.0" });//$NON-NLS-1$ 
+                        "0.0" });//$NON-NLS-1$
         inputDataList_1.add(new String[] { "3", "John Doe", "US", "F", "975b6a73-88b2-446b-b2fe-be53faf1a6d1", "1", "true", "1.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$//$NON-NLS-7$//$NON-NLS-8$
                 "1.0" });//$NON-NLS-1$
         inputDataList_2.add(new String[] { "4", "Johnny Doe", "US", "M", "fe87468b-e74b-49d7-84ac-84537e623e00", "2", "true", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$//$NON-NLS-7$
@@ -502,8 +504,8 @@ public class TSwooshGroupingTest {
         for (RichRecord rr : result) {
             String s = rr.getGroupId() == null ? rr.getGID().getValue() : rr.getGroupId();
             String t = rr.getGRP_SIZE() == null ? rr.getGrpSize() + "" : rr.getGRP_SIZE().getValue(); //$NON-NLS-1$
-            System.err.println("--" + rr.getAttributes().get(0).getValue() + "--" + s + "==" + rr.isMaster() + "==" + t + "==" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-                    + rr.getGroupQuality());
+            // System.err.println("--" + rr.getAttributes().get(0).getValue() + "--" + s + "==" + rr.isMaster() + "==" + t + "=="
+            // + rr.getGroupQuality());
             // find id is 4 master data
             if ("fe87468b-e74b-49d7-84ac-84537e623e00".equals(s) && rr.isMaster()) { //$NON-NLS-1$
                 grpSize = t;

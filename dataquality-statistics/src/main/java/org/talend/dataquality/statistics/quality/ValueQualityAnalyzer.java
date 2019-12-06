@@ -49,18 +49,6 @@ public class ValueQualityAnalyzer implements Analyzer<ValueQualityStatistics> {
         this(dataTypeQualityAnalyzer, semanticQualityAnalyzer, true);
     }
 
-    /**
-     * @deprecated use
-     * {@link DataTypeQualityAnalyzer#DataTypeQualityAnalyzer(org.talend.datascience.common.inference.type.DataTypeEnum[], boolean)}
-     * instead
-     * @param types
-     * @param isStoreInvalidValues
-     */
-    @Deprecated
-    public ValueQualityAnalyzer(DataTypeEnum[] types, boolean isStoreInvalidValues) {
-        this(new DataTypeQualityAnalyzer(types, isStoreInvalidValues), null, isStoreInvalidValues);
-    }
-
     @Override
     public void init() {
         dataTypeQualityAnalyzer.init();
@@ -69,15 +57,11 @@ public class ValueQualityAnalyzer implements Analyzer<ValueQualityStatistics> {
         }
     }
 
-    /**
-     * @deprecated use {@link #addParameters(java.util.Map)} instead
-     * @param isStoreInvalidValues
-     */
     public void setStoreInvalidValues(boolean isStoreInvalidValues) {
         dataTypeQualityAnalyzer.setStoreInvalidValues(isStoreInvalidValues);
-        if (semanticQualityAnalyzer != null)
+        if (semanticQualityAnalyzer != null) {
             semanticQualityAnalyzer.setStoreInvalidValues(isStoreInvalidValues);
-
+        }
     }
 
     @Override
