@@ -94,7 +94,7 @@ public class CustomRegexClassifierAccess {
     public List<ISubCategory> getRegExs() {
         List<ISubCategory> regExs = null;
         try {
-            regExs = mapper.readValue(regExFile, new TypeReference<List<UserDefinedCategory>>() {
+            regExs = mapper.readValue(regExFile, new TypeReference<List<ISubCategory>>() {
             });
         } catch (JsonMappingException jsonE) {
             if (!jsonE.getMessage().contains("No content"))

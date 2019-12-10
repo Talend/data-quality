@@ -23,13 +23,13 @@ public class CategoryFrequency implements Comparable<CategoryFrequency>, Seriali
 
     private static final long serialVersionUID = -3859689633174391877L;
 
-    String categoryName;
+    private String categoryName;
 
-    String categoryLabel;
+    private String categoryLabel;
 
     long count;
 
-    int categoryLevel;
+    private int categoryLevel;
 
     float score;
 
@@ -101,7 +101,6 @@ public class CategoryFrequency implements Comparable<CategoryFrequency>, Seriali
 
     /**
      * @deprecated use getScore() instead
-     * @return
      */
     public float getFrequency() {
         return score;
@@ -168,7 +167,7 @@ public class CategoryFrequency implements Comparable<CategoryFrequency>, Seriali
                     return cat2.ordinal() - cat1.ordinal();
                 } else if (cat1 == null && cat2 != null) {
                     return 1;
-                } else if (cat2 == null && cat1 != null) {
+                } else if (cat1 != null) {
                     return -1;
                 } else {
                     return o.getCategoryId().compareTo(this.getCategoryId());
