@@ -548,8 +548,4 @@ public class SynonymIndexSearcher {
         result.close();
         return termList;
     }
-
-    public static void main(String args[]) throws IOException {
-        System.out.println(SynonymIndexSearcher.getTokensFromAnalyzer("ALMOND/WH"));
-    }
 }

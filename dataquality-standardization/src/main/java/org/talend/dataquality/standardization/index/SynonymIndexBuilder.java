@@ -151,13 +151,11 @@ public class SynonymIndexBuilder {
     public int updateDocument(String word, String synonyms) throws IOException {
         int nbUpdatedDocuments = 0;
         TopDocs docs = searchDocumentByWord(word);
-        if (docs.totalHits.value == 0) {
-            // do nothing
-        } else if (docs.totalHits.value == 1) {
+        if (docs.totalHits.value == 1) {
             getWriter().updateDocument(new Term(SynonymIndexSearcher.F_WORDTERM, word.trim().toLowerCase()),
                     generateDocument(word, synonyms));
             nbUpdatedDocuments = 1;
-        } else {
+        } else if (docs.totalHits.value != 0) {
             nbUpdatedDocuments = -1;// to avoid insertion by the component when nbUpdatedDocuments == 0
             error.set(false, Messages.getString("SynonymIndexBuilder.documents", docs.totalHits, word));//$NON-NLS-1$
         }
