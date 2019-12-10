@@ -12,23 +12,28 @@
 	<name>dataquality-standardization</name>
 	<description>Standardization library based on Apache Lucene</description>
 
+	<properties>
+		<lucene.version>8.3.1</lucene.version>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.lucene</groupId>
 			<artifactId>lucene-core</artifactId>
-			<version>8.3.0</version>
+			<version>${lucene.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.lucene</groupId>
 			<artifactId>lucene-analyzers-common</artifactId>
-			<version>8.3.0</version>
+			<version>${lucene.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.lucene</groupId>
 			<artifactId>lucene-queryparser</artifactId>
-			<version>8.3.0</version>
+			<version>${lucene.version}</version>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>
