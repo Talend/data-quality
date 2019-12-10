@@ -14,6 +14,7 @@ package org.talend.dataquality.standardization.index;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -95,7 +96,7 @@ public class SynonymIndexBuilder {
         }
 
         try {
-            indexDir = FSDirectory.open(file.toPath());
+            indexDir = FSDirectory.open(Paths.get(path));
         } catch (IOException e) {
             LOG.info(e.getMessage(), e);
             error.set(false, Messages.getString("SynonymIndexBuilder.failLoad"));//$NON-NLS-1$

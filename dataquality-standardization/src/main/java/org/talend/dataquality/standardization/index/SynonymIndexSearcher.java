@@ -12,9 +12,9 @@
 // ============================================================================
 package org.talend.dataquality.standardization.index;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -158,7 +158,7 @@ public class SynonymIndexSearcher {
      * @throws java.io.IOException if file does not exist, or any other problem
      */
     public void openIndexInFS(String path) throws IOException {
-        FSDirectory indexDir = FSDirectory.open(new File(path).toPath());
+        FSDirectory indexDir = FSDirectory.open(Paths.get(path));
         mgr = new SearcherManager(indexDir, null);
     }
 

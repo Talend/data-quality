@@ -14,8 +14,8 @@ package org.talend.dataquality.standardization.query;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.core.SimpleAnalyzer;
@@ -88,7 +88,7 @@ public class FirstNameStandardizeTest {
      */
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
-        Directory dir = FSDirectory.open(new File(indexfolder).toPath());
+        Directory dir = FSDirectory.open(Paths.get(indexfolder));
         IndexReader reader = DirectoryReader.open(dir);
         searcher = new IndexSearcher(reader);
         searchAnalyzer = new SimpleAnalyzer();
