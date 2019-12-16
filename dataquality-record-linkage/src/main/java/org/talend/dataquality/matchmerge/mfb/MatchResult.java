@@ -86,7 +86,9 @@ public class MatchResult {
     public boolean isMatch() {
         int i = 0;
         for (Score score : scores) {
-            if (score.score < getThresholds().get(i++)) {
+            double differ = getThresholds().get(i++) - score.score;
+            // when the differ smaller than 0.000001, the common standard will consider they are equal.
+            if (differ > 0.000001) {
                 return false;
             }
         }
