@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - chore(TDQ-17710): Adopt the "Keep a Changelog" format for changelogs
 ### Changed
-N/A
+- TDQ-17709 tMatchGroup equality with threshold
 ### Removed
 N/A
 ### Deprecated
