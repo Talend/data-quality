@@ -4,7 +4,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.talend.dataquality.record.linkage.constant.AttributeMatcherType;
 
-
 public class MatchResultTest {
 
     @Test

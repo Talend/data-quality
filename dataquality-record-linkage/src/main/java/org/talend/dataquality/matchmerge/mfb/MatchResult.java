@@ -88,7 +88,7 @@ public class MatchResult {
     public boolean isMatch() {
         int i = 0;
         for (Score score : scores) {
-            // when the differ smaller than EQUALDIFFER, the common standard will consider they are equal.
+            // when the differ smaller than THRESHOLD, the common standard will consider they are equal.
             if (getThresholds().get(i++) - score.score > THRESHOLD) {
                 return false;
             }
