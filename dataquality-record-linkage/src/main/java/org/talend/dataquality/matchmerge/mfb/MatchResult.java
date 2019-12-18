@@ -29,6 +29,8 @@ public class MatchResult {
 
     private final List<Double> worstConfidenceValueScoreList;
 
+    private final double EQUALDIFFER = 0.0000001;
+
     public MatchResult(int size) {
         scores = new ArrayList<Score>(size + 1);
         thresholds = new ArrayList<Float>(size + 1);
@@ -86,9 +88,8 @@ public class MatchResult {
     public boolean isMatch() {
         int i = 0;
         for (Score score : scores) {
-            double differ = getThresholds().get(i++) - score.score;
-            // when the differ smaller than 0.000001, the common standard will consider they are equal.
-            if (differ > 0.000001) {
+            // when the differ smaller than EQUALDIFFER, the common standard will consider they are equal.
+            if (getThresholds().get(i++) - score.score > EQUALDIFFER) {
                 return false;
             }
         }
