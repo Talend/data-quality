@@ -20,6 +20,8 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.matchmerge.Attribute;
 import org.talend.dataquality.matchmerge.SubString;
 import org.talend.dataquality.matchmerge.mfb.MFBAttributeMatcher;
@@ -78,6 +80,8 @@ import org.talend.dataquality.record.linkage.utils.SurvivorShipAlgorithmEnum;
  * </pre>
  */
 public class TSwooshGroupingTest {
+
+    private static Logger log = LoggerFactory.getLogger(TSwooshGroupingTest.class);
 
     public List<RichRecord> result = new ArrayList<>();
 
@@ -179,8 +183,8 @@ public class TSwooshGroupingTest {
         for (RichRecord rr : result) {
             String s = rr.getGID() == null ? rr.getGroupId() : rr.getGID().getValue();
             String t = rr.getGRP_SIZE() == null ? rr.getGrpSize() + "" : rr.getGRP_SIZE().getValue();
-            // System.err.println("--" + rr.getAttributes().get(0).getValue() + "--" + s + "==" + rr.isMaster() + "==" + t + "=="
-            // + rr.getGroupQuality());
+            log.trace("--" + rr.getAttributes().get(0).getValue() + "--" + s + "==" + rr.isMaster() + "==" + t + "=="
+                    + rr.getGroupQuality());
             if (rr.isMaster()) {
                 Attribute attribute = rr.getAttributes().get(0);
                 if ("singlerecord".equals(attribute.getValue()) && rr.getGRP_SIZE().getValue().equals("1") //$NON-NLS-1$
@@ -309,8 +313,8 @@ public class TSwooshGroupingTest {
             String s = rr.getGroupId() == null ? rr.getGID().getValue() : rr.getGroupId();
             String t = rr.getGRP_SIZE() == null ? rr.getGrpSize() + "" : rr.getGRP_SIZE().getValue(); //$NON-NLS-1$
             String id = rr.getAttributes().get(0).getValue();
-            // System.err.println("--" + rr.getAttributes().get(0).getValue() + "--" + s + "==" + rr.isMaster() + "==" + t + "=="
-            // + rr.getGroupQuality());
+            log.trace("--" + rr.getAttributes().get(0).getValue() + "--" + s + "==" + rr.isMaster() + "==" + t + "=="
+                    + rr.getGroupQuality());
             if ("4".equals(id)) { //$NON-NLS-1$
                 isOutput4 = true;
                 if (updated4GID.equals(s)) {
@@ -406,8 +410,8 @@ public class TSwooshGroupingTest {
             String s = rr.getGroupId() == null ? rr.getGID().getValue() : rr.getGroupId();
             String t = rr.getGRP_SIZE() == null ? rr.getGrpSize() + "" : rr.getGRP_SIZE().getValue(); //$NON-NLS-1$
             String id = rr.getAttributes().get(0).getValue();
-            // System.err.println("--" + rr.getAttributes().get(0).getValue() + "--" + s + "==" + rr.isMaster() + "==" + t + "=="
-            // + rr.getGroupQuality());
+            log.trace("--" + rr.getAttributes().get(0).getValue() + "--" + s + "==" + rr.isMaster() + "==" + t + "=="
+                    + rr.getGroupQuality());
             if ("4".equals(id)) { //$NON-NLS-1$
                 isOutput4 = true;
                 if (updated4GID.equals(s)) {
@@ -504,8 +508,8 @@ public class TSwooshGroupingTest {
         for (RichRecord rr : result) {
             String s = rr.getGroupId() == null ? rr.getGID().getValue() : rr.getGroupId();
             String t = rr.getGRP_SIZE() == null ? rr.getGrpSize() + "" : rr.getGRP_SIZE().getValue(); //$NON-NLS-1$
-            // System.err.println("--" + rr.getAttributes().get(0).getValue() + "--" + s + "==" + rr.isMaster() + "==" + t + "=="
-            // + rr.getGroupQuality());
+            log.trace("--" + rr.getAttributes().get(0).getValue() + "--" + s + "==" + rr.isMaster() + "==" + t + "=="
+                    + rr.getGroupQuality());
             // find id is 4 master data
             if ("fe87468b-e74b-49d7-84ac-84537e623e00".equals(s) && rr.isMaster()) { //$NON-NLS-1$
                 grpSize = t;
