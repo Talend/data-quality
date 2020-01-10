@@ -88,7 +88,7 @@ public class CustomDateTimePatternRecognizerTest {
         Map<String, Long> topK = stats.getTopK(10);
         assertEquals(EXPECTED_PATTERN_MAP.size(), topK.size());
         for (String key : topK.keySet()) {
-            System.out.println("put(\"" + key + "\", " + topK.get(key) + "L);");
+            // System.out.println("put(\"" + key + "\", " + topK.get(key) + "L);");
             assertEquals("Unexpected pattern count on pattern <" + key + ">", EXPECTED_PATTERN_MAP.get(key), topK.get(key));
         }
 
