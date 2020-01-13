@@ -210,19 +210,18 @@ public class ReleaseVersionBumper {
             // If releasing, put the version and the date in the changelog
             String commitCategory = null;
             boolean isNewCommitCategory = false;
+            boolean isHeader = true;
+            boolean isFooter = false;
             for (String line : lines) {
                 if (line.startsWith(UNRELEASED_TAG)) {
                     writeDate(writer);
+                    isHeader = false;
+                } else if (line.startsWith("## [") && !isFooter && !isHeader) {
+                    isFooter = true;
+                    writer.write(("\n" + line + "\n").getBytes(StandardCharsets.UTF_8));
+                } else if (isHeader || isFooter){
+                    writer.write((line + "\n").getBytes(StandardCharsets.UTF_8));
                 } else {
-                    // if at the next already released version, just do a simple copy
-                    if (line.startsWith("## [")) {
-                        writer.write("\n".getBytes(StandardCharsets.UTF_8));
-                        isCommitFilled = true;
-                    }
-                    if (isCommitFilled) {
-                        writer.write((line + "\n").getBytes(StandardCharsets.UTF_8));
-                        continue;
-                    }
                     // Otherwise, remove N/A categories and store temporarily all the commits to be put in the root
                     // changelog
                     if (line.trim().isEmpty())
@@ -258,13 +257,12 @@ public class ReleaseVersionBumper {
     }
 
     private void fillParentChangelog(Path inputPath) throws IOException {
-        if (inputPath.toFile().exists()) {
+        if (inputPath.toFile().exists() && hasCommit()) {
             System.out.println("Filling: " + inputPath.toString()); // NOSONAR
             List<String> lines = Files.readAllLines(inputPath);
             DataOutputStream writer = new DataOutputStream(Files.newOutputStream(inputPath));
             boolean isFilled = false;
             // If releasing, put the version and the date in the changelog
-            String commitCategory = null;
             for (String line : lines) {
                 if (!isFilled && line.startsWith("## [")) {
                     fillParent(writer);
@@ -275,6 +273,14 @@ public class ReleaseVersionBumper {
             writer.flush();
             writer.close();
         }
+    }
+
+    private boolean hasCommit() {
+        for (String commitCategory : commits.keySet()){
+            if (!commits.get(commitCategory).isEmpty())
+                return true;
+        }
+        return false;
     }
 
     private void fillParent(DataOutputStream writer) throws IOException {
