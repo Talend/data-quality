@@ -219,7 +219,7 @@ public class ReleaseVersionBumper {
                 } else if (line.startsWith("## [") && !isFooter && !isHeader) {
                     isFooter = true;
                     writer.write(("\n" + line + "\n").getBytes(StandardCharsets.UTF_8));
-                } else if (isHeader || isFooter){
+                } else if (isHeader || isFooter) {
                     writer.write((line + "\n").getBytes(StandardCharsets.UTF_8));
                 } else {
                     // Otherwise, remove N/A categories and store temporarily all the commits to be put in the root
@@ -276,7 +276,7 @@ public class ReleaseVersionBumper {
     }
 
     private boolean hasCommit() {
-        for (String commitCategory : commits.keySet()){
+        for (String commitCategory : commits.keySet()) {
             if (!commits.get(commitCategory).isEmpty())
                 return true;
         }
