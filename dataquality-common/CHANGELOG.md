@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - chore(TDQ-17788): cancel the deprecation of setStoreInvalidValues in Quality Analyzers
 ### Removed
-- chore(TDQ-17788): remove deprecated class
+- chore(TDQ-17788): remove deprecated class HiraganaSmall
 - chore(TDQ-17788): remove unused Tests class
 ### Deprecated
 N/A
