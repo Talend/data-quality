@@ -86,8 +86,7 @@ public final class StringComparisonUtil implements Serializable {
             // compare char with range of characters to either side
             // MOD scorreia 2010-01-25 for identical strings, this method should return the full input string. I checked
             // against second string and it now gives the same results
-            for (int j = Math.max(0, i - distanceSep); !foundIt
-                    && j < Math.min(i + distanceSep + 1, cpArray2.length); j++) {
+            for (int j = Math.max(0, i - distanceSep); !foundIt && j < Math.min(i + distanceSep + 1, cpArray2.length); j++) {
                 // check if found
                 if (cpArray2[j] == codePoint) {
                     foundIt = true;
