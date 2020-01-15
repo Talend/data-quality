@@ -59,6 +59,7 @@ public class StringComparisonUtilTest {
         assertEquals(0, StringComparisonUtil.difference(str1, str5));
         assertEquals(0, StringComparisonUtil.difference(" ", "")); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals(1, StringComparisonUtil.difference(" ", "  ")); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals(0, StringComparisonUtil.difference(null, null));
         // TDQ-15079: Support Chinese　and surrogate pair characters
         assertEquals(2, StringComparisonUtil.difference(str6, str7));
         assertEquals(1, StringComparisonUtil.difference(str8, str9));
@@ -81,6 +82,8 @@ public class StringComparisonUtilTest {
         assertEquals("ab", StringComparisonUtil.getCommonCharacters(str1, str4, 1).toString()); //$NON-NLS-1$
         assertEquals("bc", StringComparisonUtil.getCommonCharacters(str1, str5, 1).toString()); //$NON-NLS-1$
         assertEquals(" ", StringComparisonUtil.getCommonCharacters(" ", "  ", 1).toString()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        assertEquals("", StringComparisonUtil.getCommonCharacters(null, "  ", 1).toString()); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("", StringComparisonUtil.getCommonCharacters(null, null, 1).toString()); //$NON-NLS-1$
         // TDQ-15079: Support Chinese　and surrogate pair characters
         assertEquals(str7, StringComparisonUtil.getCommonCharacters(str6, str7, 1).toString());
         assertEquals(str9, StringComparisonUtil.getCommonCharacters(str8, str9, 1).toString());

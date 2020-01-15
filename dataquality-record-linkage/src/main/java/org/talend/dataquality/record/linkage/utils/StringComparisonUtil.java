@@ -48,14 +48,13 @@ public final class StringComparisonUtil implements Serializable {
         if (str1 == null || str2 == null) {
             return 0;
         }
-        int str1CPCount = str1.codePointCount(0, str1.length());
-        int str2CPCount = str2.codePointCount(0, str2.length());
-        int lengthToMatch = Math.min(str1CPCount, str2CPCount);
+        int[] cpArray1 = stringToCodePointArray(str1);
+        int[] cpArray2 = stringToCodePointArray(str2);
+        int lengthToMatch = Math.min(cpArray1.length, cpArray2.length);
         int diff = 0;
+
         for (int i = 0; i < lengthToMatch; i++) {
-            String subStr1 = getSurrPairSubString(str1, i, 1);
-            String subStr2 = getSurrPairSubString(str2, i, 1);
-            if (subStr1.equals(subStr2)) {
+            if (cpArray1[i] == cpArray2[i]) {
                 diff++;
             }
         }
@@ -77,32 +76,28 @@ public final class StringComparisonUtil implements Serializable {
     public static StringBuilder getCommonCharacters(final String string1, final String string2, final int distanceSep) {
         // create a return buffer of characters
         final StringBuilder returnCommons = new StringBuilder();
-        // create a copy of string2 for processing
-        final StringBuilder copy = new StringBuilder(string2);
+        int[] cpArray1 = stringToCodePointArray(string1);
+        int[] cpArray2 = stringToCodePointArray(string2);
         // iterate over string1
-        long str1CPCount = string1.codePoints().count();
-        long str2CPCount = string2.codePoints().count();
-        for (int i = 0; i < str1CPCount; i++) {
-            String subStr1 = getSurrPairSubString(string1, i, 1);
+        for (int i = 0; i < cpArray1.length; i++) {
+            final int codePoint = cpArray1[i];
             // set boolean for quick loop exit if found
             boolean foundIt = false;
             // compare char with range of characters to either side
             // MOD scorreia 2010-01-25 for identical strings, this method should return the full input string. I checked
             // against second string and it now gives the same results
-            for (int j = Math.max(0, i - distanceSep); !foundIt && j < Math.min(i + distanceSep + 1, str2CPCount); j++) {
+            for (int j = Math.max(0, i - distanceSep); !foundIt
+                    && j < Math.min(i + distanceSep + 1, cpArray2.length); j++) {
                 // check if found
-                String subStr2 = getSurrPairSubString(copy.toString(), j, 1);
-                if (subStr2.equals(subStr1)) {
+                if (cpArray2[j] == codePoint) {
                     foundIt = true;
                     // append character found
-                    returnCommons.append(subStr1);
-                    // Surrogate Pair String has 2 chars,delete one and replace another one to 0
-                    if (Character.isSurrogate(copy.charAt(j))) {
-                        copy.delete(j, j + 1);
-                    }
-                    // alter copied string2 for processing
-                    copy.setCharAt(j, (char) 0);
+                    returnCommons.append(String.valueOf(Character.toChars(codePoint)));
+                    // replace it with -1 so that it will false when compare later
+                    cpArray2[j] = -1;
+
                 }
+
             }
         }
         return returnCommons;
@@ -119,36 +114,41 @@ public final class StringComparisonUtil implements Serializable {
         if (string1 == null || string2 == null) {
             return 0;
         }
-        int str1CPCount = string1.codePointCount(0, string1.length());
-        int str2CPCount = string2.codePointCount(0, string2.length());
-        final int n = Math.min(MINPREFIXTESTLENGTH, Math.min(str1CPCount, str2CPCount));
+        int[] cpArray1 = stringToCodePointArray(string1);
+        int[] cpArray2 = stringToCodePointArray(string2);
+        int lengthToMatch = Math.min(cpArray1.length, cpArray2.length);
+
+        final int min = Math.min(MINPREFIXTESTLENGTH, lengthToMatch);
         // check for prefix similarity of length n
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < min; i++) {
             // check the prefix is the same so far
-            String subStr1 = getSurrPairSubString(string1, i, 1);
-            String subStr2 = getSurrPairSubString(string2, i, 1);
-            if (!subStr1.equals(subStr2)) {
+            if (cpArray1[i] != cpArray2[i]) {
                 // not the same so return as far as got
                 return i;
             }
         }
-        return n; // first n characters are the same
+        return min; // first n characters are the same
     }
 
     /**
-     * Get subString from a surrogate pair String,of course support non-surrogate String
-     * 
+     * @Description: support surrogate pair and improve the performance.
+     * refer to https://www.ibm.com/developerworks/library/j-unicode/
      * @param str
-     * @param start
-     * @param offset
      * @return
      */
-    private static String getSurrPairSubString(String str, int start, int offset) {
-        // get codepoint counts offset as a sub string start index
-        if (StringUtils.isEmpty(str) || start >= str.codePoints().count()) {
-            return StringUtils.EMPTY;
+    private static int[] stringToCodePointArray(String str) {
+        if (StringUtils.isEmpty(str)) {
+            return new int[0];
         }
-        int startIndex = str.offsetByCodePoints(0, start);
-        return str.substring(startIndex, str.offsetByCodePoints(startIndex, offset));
+        char[] charArray = str.toCharArray(); // a char array copied from str
+        int length = charArray.length; // the length of charArray
+        int[] newCharArray = new int[Character.codePointCount(charArray, 0, length)];
+        int index = 0; // an index for charArray
+
+        for (int i = 0, cp; i < length; i += Character.charCount(cp)) {
+            cp = Character.codePointAt(charArray, i);
+            newCharArray[index++] = cp;
+        }
+        return newCharArray;
     }
 }
