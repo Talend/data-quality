@@ -58,8 +58,10 @@ pipeline {
             steps {
                 container('talend-jdk8-builder-base') {
                     configFileProvider([configFile(fileId: 'maven-settings-nexus-zl', variable: 'MAVEN_SETTINGS')]) {
-                        sh 'mvn --version'
-                        sh 'mvn clean test -B --fail-at-end -s $MAVEN_SETTINGS'
+                        wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'xterm']) {
+                            sh 'mvn --version'
+                            sh 'mvn clean test -B --fail-at-end -s $MAVEN_SETTINGS'
+                        }
                     }
                 }
             }
@@ -79,8 +81,10 @@ pipeline {
             steps {
                 container('talend-jdk8-builder-base') {
                     configFileProvider([configFile(fileId: 'maven-settings-nexus-zl', variable: 'MAVEN_SETTINGS')]) {
-                        echo "Deploy DQ Libs SE jar on Nexus"
-                        sh 'mvn clean deploy -DskipTests -B -s $MAVEN_SETTINGS'
+                        wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'xterm']) {
+                            echo "Deploy DQ Libs SE jar on Nexus"
+                            sh 'mvn clean deploy -DskipTests -B -s $MAVEN_SETTINGS'
+                        }
                     }
                 }
             }
