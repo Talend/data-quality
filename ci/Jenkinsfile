@@ -58,7 +58,6 @@ pipeline {
             steps {
                 container('talend-jdk8-builder-base') {
                     configFileProvider([configFile(fileId: 'maven-settings-nexus-zl', variable: 'MAVEN_SETTINGS')]) {
-                        echo "Testing DQ Se Libs"
                         sh 'mvn --version'
                         sh 'mvn clean test -B --fail-at-end -s $MAVEN_SETTINGS'
                     }
@@ -90,15 +89,9 @@ pipeline {
 
 
     post {
-        always {
-            echo "POST STAGE"
-            echo "\nEnv Branch NAME = ${env.BRANCH_NAME}"
-            echo "\n branch global var = ${branch}"
-            echo "\n local environment var = ${CURRENT_BRANCH}"
-        }
         success {
             script {
-                if (${CURRENT_BRANCH} == 'master' || ${CURRENT_BRANCH} == 'afournier/tests_CI_Jenkins2') {
+                if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'PR-757') {
                     slackSend(color: '#82bd41', channel: "${SLACK_CHANNEL}", message: "SUCCESS: `${env.JOB_NAME.replaceAll('%2F', '/')}` #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
                 }
             }
