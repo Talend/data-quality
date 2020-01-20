@@ -97,7 +97,7 @@ pipeline {
             }
         }
         failure {
-            slackSend(color: '#e96065', channel: "${SLACK_CHANNEL}", message: "ERROR: `${env.JOB_NAME.replaceAll('%2F', '/')}` #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
+            slackSend(color: '#e96065', channel: "${SLACK_CHANNEL}", message: "FAILED: `${env.JOB_NAME.replaceAll('%2F', '/')}` #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
         }
 
         unstable {
