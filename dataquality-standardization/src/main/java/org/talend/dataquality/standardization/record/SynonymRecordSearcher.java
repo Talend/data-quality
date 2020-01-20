@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -28,7 +28,7 @@ import org.talend.dataquality.standardization.index.SynonymIndexSearcher;
 
 /**
  * @author scorreia
- * 
+ *
  * This class searches in a list of indexes.
  */
 public class SynonymRecordSearcher {
@@ -41,7 +41,7 @@ public class SynonymRecordSearcher {
 
     /**
      * SynonymRecordSearcher constructor.
-     * 
+     *
      * @param size the size of the record which will be searched
      */
     public SynonymRecordSearcher(int size) {
@@ -71,7 +71,7 @@ public class SynonymRecordSearcher {
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see java.lang.Object#toString()
          */
         @Override
@@ -82,11 +82,11 @@ public class SynonymRecordSearcher {
     } // EOC WordResult
 
     /**
-     * 
+     *
      * @author scorreia
-     * 
+     *
      * RecordResult: a class that transforms an input record into a list of output records.
-     * 
+     *
      */
     static class RecordResult {
 
@@ -103,7 +103,7 @@ public class SynonymRecordSearcher {
 
         /**
          * Method "computeOutputRows" computes the output rows
-         * 
+         *
          * @return the list of OutputRecords
          */
         public List<OutputRecord> computeOutputRows() {
@@ -114,7 +114,7 @@ public class SynonymRecordSearcher {
 
         /**
          * Method "computeOutputRows".
-         * 
+         *
          * @param recordLength the record length
          * @param foundWords the list of word result that constitute the begining of the current output record
          * @param wrs the list of remaining word results
@@ -181,7 +181,7 @@ public class SynonymRecordSearcher {
 
     /**
      * method "search".
-     * 
+     *
      * @param maxNbOutputResults the number of results to return
      * @param record a list of fields that will be search in the indexes (all fields of the record will be searched)
      * @throws java.io.IOException
@@ -204,7 +204,7 @@ public class SynonymRecordSearcher {
                 SynonymIndexSearcher searcher = searchers[i];
                 TopDocs docs = searcher.searchDocumentBySynonym(field);
 
-                int nbDocs = Math.min(searcher.getTopDocLimit(), docs.totalHits);
+                int nbDocs = (int) Math.min((long) searcher.getTopDocLimit(), docs.totalHits.value);
 
                 // store all found words in a list of results for this field
                 for (int j = 0; j < nbDocs; j++) {
@@ -238,7 +238,7 @@ public class SynonymRecordSearcher {
 
     /**
      * Method "addSearcher" add a searcher to the list of searchers at the given column index.
-     * 
+     *
      * @param searcher the searcher
      * @param columnIndex the column index
      */
@@ -252,7 +252,7 @@ public class SynonymRecordSearcher {
 
     /**
      * Method "getSearcher".
-     * 
+     *
      * @param columnIndex the column index
      * @return the SynonymIndexSearcher added at this column index.
      */

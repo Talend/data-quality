@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -20,14 +20,16 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.CharArraySet;
+import org.apache.lucene.analysis.StopFilter;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.core.LowerCaseFilter;
-import org.apache.lucene.analysis.standard.StandardFilter;
 import org.apache.lucene.analysis.standard.StandardTokenizer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.BoostQuery;
 import org.apache.lucene.search.FuzzyQuery;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
@@ -61,11 +63,11 @@ public class FirstNameStandardize {
     public void getFuzzySearch(String input, TopDocsCollector<?> collector) throws DQException {
         Query q = new FuzzyQuery(new Term(PluginConstant.FIRST_NAME_STANDARDIZE_NAME, input));
         Query qalias = new FuzzyQuery(new Term(PluginConstant.FIRST_NAME_STANDARDIZE_ALIAS, input));
-        BooleanQuery combinedQuery = new BooleanQuery();
+        BooleanQuery.Builder combinedQuery = new BooleanQuery.Builder();
         combinedQuery.add(q, BooleanClause.Occur.SHOULD);
         combinedQuery.add(qalias, BooleanClause.Occur.SHOULD);
         try {
-            searcher.search(combinedQuery, collector);
+            searcher.search(combinedQuery.build(), collector);
         } catch (IOException e) {
             throw new DQException(e);
         }
@@ -81,8 +83,9 @@ public class FirstNameStandardize {
     }
 
     private List<String> getTokensFromAnalyzer(String input) throws IOException {
-        StandardTokenizer tokenStream = new StandardTokenizer(new StringReader(input));
-        TokenStream result = new StandardFilter(tokenStream);
+        StandardTokenizer tokenStream = new StandardTokenizer();
+        tokenStream.setReader(new StringReader(input));
+        TokenStream result = new StopFilter(tokenStream, CharArraySet.EMPTY_SET);
         result = new LowerCaseFilter(result);
         CharTermAttribute charTermAttribute = result.addAttribute(CharTermAttribute.class);
 
@@ -110,34 +113,34 @@ public class FirstNameStandardize {
             genderText = information2value.get(PluginConstant.FIRST_NAME_STANDARDIZE_GENDER);
         }
 
-        BooleanQuery combinedQuery = new BooleanQuery();
+        BooleanQuery.Builder combinedQuery = new BooleanQuery.Builder();
 
-        BooleanQuery nameQueries = new BooleanQuery();
+        BooleanQuery.Builder nameQueries = new BooleanQuery.Builder();
         // always add a non-fuzzy query on each token.
         List<String> tokens = getTokensFromAnalyzer(inputName);
         for (String token : tokens) {
             Query termQuery = getTermQuery(PluginConstant.FIRST_NAME_STANDARDIZE_NAME, token, false);
-            termQuery.setBoost(2);
-            nameQueries.add(termQuery, BooleanClause.Occur.SHOULD);
+            Query boostedTermQuery = new BoostQuery(termQuery, 2);
+            nameQueries.add(boostedTermQuery, BooleanClause.Occur.SHOULD);
         }
 
         Query nameTermQuery = getTermQuery(PluginConstant.FIRST_NAME_STANDARDIZE_NAMETERM, inputName.toLowerCase(), fuzzySearch);
         nameQueries.add(nameTermQuery, BooleanClause.Occur.SHOULD);
 
-        combinedQuery.add(nameQueries, BooleanClause.Occur.MUST);
+        combinedQuery.add(nameQueries.build(), BooleanClause.Occur.MUST);
 
         if (countryText != null && !"".equals(countryText)) {//$NON-NLS-1$
             Query countryQuery = getTermQuery(PluginConstant.FIRST_NAME_STANDARDIZE_COUNTRY, countryText, false);
-            countryQuery.setBoost(5);
-            combinedQuery.add(countryQuery, BooleanClause.Occur.SHOULD);
+            Query boostedCountryQuery = new BoostQuery(countryQuery, 5);
+            combinedQuery.add(boostedCountryQuery, BooleanClause.Occur.SHOULD);
         }
         if (genderText != null && !"".equals(genderText)) {//$NON-NLS-1$
             Query genderQuery = getTermQuery(PluginConstant.FIRST_NAME_STANDARDIZE_GENDER, genderText, false);
-            genderQuery.setBoost(5);
-            combinedQuery.add(genderQuery, BooleanClause.Occur.SHOULD);
+            Query boostedGenderQuery = new BoostQuery(genderQuery, 5);
+            combinedQuery.add(boostedGenderQuery, BooleanClause.Occur.SHOULD);
         }
 
-        TopDocs matches = searcher.search(combinedQuery, 10);
+        TopDocs matches = searcher.search(combinedQuery.build(), 10);
 
         return matches.scoreDocs;
     }

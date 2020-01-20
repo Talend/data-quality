@@ -16,7 +16,7 @@ N/A
 ### Fixed
 N/A
 ### Security
-N/A
+- chore(TDQ-17923): Rely on daikon's jackson version (currently 2.10.1)
 
 ## [6.0.0] - 2018-07-03
 - TDQ-15013 remove deprecated methods

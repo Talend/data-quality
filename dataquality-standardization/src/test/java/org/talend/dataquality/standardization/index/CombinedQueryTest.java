@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -14,13 +14,16 @@ package org.talend.dataquality.standardization.index;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.lucene.search.TopDocs;
+import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -29,7 +32,7 @@ import org.junit.Test;
  */
 public class CombinedQueryTest {
 
-    private static final String PATH = "data/test_combined";
+    private static final String INDEX_PATH = "target/test_data/test_combined";
 
     /**
      * ATTENTION: Be careful when changing this list of synonyms, they are also use in SynonymIndexSearcherTest.
@@ -81,13 +84,18 @@ public class CombinedQueryTest {
     @BeforeClass
     public static void setUp() throws Exception {
         SynonymIndexBuilder builder = new SynonymIndexBuilder();
-        builder.deleteIndexFromFS(PATH);
+        builder.deleteIndexFromFS(INDEX_PATH);
         // clear any existing files
-        assertEquals(builder.getError().getMessage(), true, builder.deleteIndexFromFS(PATH));
+        assertEquals(builder.getError().getMessage(), true, builder.deleteIndexFromFS(INDEX_PATH));
 
-        builder.initIndexInFS(PATH);
+        builder.initIndexInFS(INDEX_PATH);
         insertDocuments(builder);
         builder.closeIndex();
+    }
+
+    @After
+    public void cleanup() throws Exception {
+        FileUtils.deleteDirectory(new File(INDEX_PATH));
     }
 
     static void insertDocuments(SynonymIndexBuilder build) throws IOException {
@@ -134,7 +142,7 @@ public class CombinedQueryTest {
         SynonymIndexSearcher searcher = new SynonymIndexSearcher();
         try {
             // searcher.setAnalyzer(builder.getAnalyzer());
-            searcher.openIndexInFS(PATH);
+            searcher.openIndexInFS(INDEX_PATH);
         } catch (IOException e) {
             e.printStackTrace();
         }

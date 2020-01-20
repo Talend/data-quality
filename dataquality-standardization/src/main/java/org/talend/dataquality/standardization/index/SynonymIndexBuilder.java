@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -14,27 +14,26 @@ package org.talend.dataquality.standardization.index;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.CharArraySet;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.analysis.util.CharArraySet;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.FieldType;
 import org.apache.lucene.document.StringField;
-import org.apache.lucene.index.CheckIndex;
-import org.apache.lucene.index.CheckIndex.Status;
 import org.apache.lucene.index.CorruptIndexException;
+import org.apache.lucene.index.IndexOptions;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.Version;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.talend.dataquality.standardization.i18n.Messages;
@@ -97,7 +96,7 @@ public class SynonymIndexBuilder {
         }
 
         try {
-            indexDir = FSDirectory.open(file);
+            indexDir = FSDirectory.open(Paths.get(path));
         } catch (IOException e) {
             LOG.info(e.getMessage(), e);
             error.set(false, Messages.getString("SynonymIndexBuilder.failLoad"));//$NON-NLS-1$
@@ -130,7 +129,7 @@ public class SynonymIndexBuilder {
      * @throws IOException
      */
     public boolean insertDocumentIfNotExists(String word, String synonyms) throws IOException {
-        if (searchDocumentByWord(word).totalHits == 0) {
+        if (searchDocumentByWord(word).totalHits.value == 0) {
             getWriter().addDocument(generateDocument(word, synonyms));
             return true;
         } // else
@@ -153,18 +152,13 @@ public class SynonymIndexBuilder {
     public int updateDocument(String word, String synonyms) throws IOException {
         int nbUpdatedDocuments = 0;
         TopDocs docs = searchDocumentByWord(word);
-        switch (docs.totalHits) {
-        case 0:
-            break;
-        case 1:
+        if (docs.totalHits.value == 1) {
             getWriter().updateDocument(new Term(SynonymIndexSearcher.F_WORDTERM, word.trim().toLowerCase()),
                     generateDocument(word, synonyms));
             nbUpdatedDocuments = 1;
-            break;
-        default:
+        } else if (docs.totalHits.value != 0) {
             nbUpdatedDocuments = -1;// to avoid insertion by the component when nbUpdatedDocuments == 0
             error.set(false, Messages.getString("SynonymIndexBuilder.documents", docs.totalHits, word));//$NON-NLS-1$
-            break;
         }
         return nbUpdatedDocuments;
 
@@ -178,16 +172,14 @@ public class SynonymIndexBuilder {
      */
     public int deleteDocumentByWord(String word) throws IOException {
         TopDocs docs = searchDocumentByWord(word);
-        switch (docs.totalHits) {
-        case 0:
+        if (docs.totalHits.value == 0) {
             error.set(false, Messages.getString("SynonymIndexBuilder.doesnotExsit", word));//$NON-NLS-1$
             return 0;
-        case 1:
+        } else if (docs.totalHits.value == 1) {
             getWriter().deleteDocuments(new Term(SynonymIndexSearcher.F_WORDTERM, word.trim().toLowerCase()));
             return 1;
-        default:
+        } else {
             error.set(false, Messages.getString("SynonymIndexBuilder.documents", docs.totalHits, word));//$NON-NLS-1$
-            break;
         }
         return 0;
     }
@@ -225,11 +217,9 @@ public class SynonymIndexBuilder {
         TopDocs docs = idxSearcher.searchDocumentByWord(word);
 
         int nbDocs = 0;
-        switch (docs.totalHits) {
-        case 0:
+        if (docs.totalHits.value == 0) {
             error.set(false, Messages.getString("SynonymIndexBuilder.document", word));//$NON-NLS-1$
-            break;
-        case 1: // don't do anything if several documents match
+        } else if (docs.totalHits.value == 1) {
             Document doc = idxSearcher.getDocument(docs.scoreDocs[0].doc);
             String[] synonyms = doc.getValues(SynonymIndexSearcher.F_SYN);
             Set<String> synonymList = new HashSet<String>();
@@ -251,8 +241,7 @@ public class SynonymIndexBuilder {
                 getWriter().updateDocument(new Term(SynonymIndexSearcher.F_WORDTERM, word.trim().toLowerCase()), doc);
                 nbDocs = 1;
             }
-            break;
-        default:
+        } else {
             error.set(false, Messages.getString("SynonymIndexBuilder.documents", docs.totalHits, word));//$NON-NLS-1$
         }
         idxSearcher.close();
@@ -281,12 +270,10 @@ public class SynonymIndexBuilder {
         SynonymIndexSearcher newSynIdxSearcher = getNewSynIdxSearcher();
         TopDocs docs = newSynIdxSearcher.searchDocumentByWord(word);
 
-        switch (docs.totalHits) {
-        case 0:
+        if (docs.totalHits.value == 0) {
             error.set(false, Messages.getString("SynonymIndexBuilder.documentNotExsit", word));//$NON-NLS-1$
             deleted = 0;
-            break;
-        case 1:
+        } else if (docs.totalHits.value == 1) {
             Document doc = newSynIdxSearcher.getDocument(docs.scoreDocs[0].doc);
             String[] synonyms = doc.getValues(SynonymIndexSearcher.F_SYN);
             Set<String> synonymList = new HashSet<String>();
@@ -309,8 +296,7 @@ public class SynonymIndexBuilder {
                 doc = generateDocument(doc.getValues(SynonymIndexSearcher.F_WORD)[0], synonymList);
                 getWriter().updateDocument(new Term(SynonymIndexSearcher.F_WORDTERM, word.toLowerCase()), doc);
             }
-            break;
-        default:// don't do anything if more than one document is found
+        } else { // don't do anything if more than one document is found
             error.set(false, Messages.getString("SynonymIndexBuilder.documents", docs.totalHits, word));//$NON-NLS-1$
         }
 
@@ -339,36 +325,18 @@ public class SynonymIndexBuilder {
                     return false;
                 }
             } else {
-                Status status = null;
-                FSDirectory directory = null;
-                try {
-                    directory = FSDirectory.open(folder);
-                    CheckIndex check = new CheckIndex(directory);
-                    status = check.checkIndex();
-                } catch (IOException e) {
-                    LOG.error(e.getMessage(), e);
-                } finally {
-                    if (directory != null) {
-                        directory.close();
-                    }
-                }
                 boolean allDeleted = true;
-                if (status == null || status.missingSegments) {
-                    error.set(false, Messages.getString("SynonymIndexBuilder.notAnIndexFolder", folder.getAbsolutePath()));//$NON-NLS-1$
-                    return false;
-                } else {// an index already exists in folder
-                    for (File f : filelist) {
-                        if (!f.delete() && allDeleted) {
-                            allDeleted = false;
-                        }
-                    }
-                    if (allDeleted && !folder.delete()) {
+                for (File f : filelist) {
+                    if (!f.delete() && allDeleted) {
                         allDeleted = false;
                     }
-                    if (!allDeleted) {
-                        error.set(false, Messages.getString("SynonymIndexBuilder.couldNotDelete", folder.getAbsolutePath()));//$NON-NLS-1$
-                        return false;
-                    }
+                }
+                if (allDeleted && !folder.delete()) {
+                    allDeleted = false;
+                }
+                if (!allDeleted) {
+                    error.set(false, Messages.getString("SynonymIndexBuilder.couldNotDelete", folder.getAbsolutePath()));//$NON-NLS-1$
+                    return false;
                 }
             }
         } else {// folder is a file
@@ -438,7 +406,7 @@ public class SynonymIndexBuilder {
      */
     IndexWriter getWriter() throws IOException {
         if (writer == null) {
-            IndexWriterConfig config = new IndexWriterConfig(Version.LATEST, this.getAnalyzer());
+            IndexWriterConfig config = new IndexWriterConfig(this.getAnalyzer());
             writer = new IndexWriter(indexDir, config);
         }
         return this.writer;
@@ -451,7 +419,7 @@ public class SynonymIndexBuilder {
      */
     public int getNumDocs() {
         try {
-            return this.getWriter().numDocs();
+            return this.getWriter().getDocStats().numDocs;
         } catch (IOException e) {
             LOG.error(e.getMessage(), e);
             return -1;
@@ -485,7 +453,7 @@ public class SynonymIndexBuilder {
         Document doc = new Document();
         FieldType ft = new FieldType();
         ft.setStored(true);
-        ft.setIndexed(true);
+        ft.setIndexOptions(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS);
         ft.setOmitNorms(true);
         ft.freeze();
 

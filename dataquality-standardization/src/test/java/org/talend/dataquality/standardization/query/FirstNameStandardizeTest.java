@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -14,8 +14,8 @@ package org.talend.dataquality.standardization.query;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.core.SimpleAnalyzer;
@@ -43,12 +43,12 @@ public class FirstNameStandardizeTest {
 
     private static final String inputName = "Michel"; //$NON-NLS-1$
 
-    private static final String[][] expected = { { "Michel", "AUS", "MITCHEL", "MICHELE", "MICHEL" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+    private static final String[][] expected = { { "Michel", "AUS", "MICHEL", "MICHELE", "MICHEL" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
             { "Michel", "BEL", "MICHEL", "MICHEL", "MICHEL" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
             { "Michel", "DEU", "MICHEL", "MICHEL", "MICHEL" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
             { "Michel", "ESP", "MICHEL", "MICHEL", "MICHEL" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
             { "Michel", "FRA", "MICHEL", "MICHEL", "MICHEL" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-            { "Michel", "ITA", "MICHELA", "MICHELA", "MICHELE" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+            { "Michel", "ITA", "MICHELE", "MICHELA", "MICHELE" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
             { "Michel", "RUS", "MICHEL", "MICHEL", "MICHEL" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
             { "Michel", "USA", "MICHEL", "MICHEL", "MICHEL" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 
@@ -78,8 +78,8 @@ public class FirstNameStandardizeTest {
             { "Bernard", "M", "BERNARD" }, { "Michel", "M", "MICHEL" }, { "Nicole", "F", "NICOLE" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
             { "Pierre", "M", "PIERRE" }, { "George", "M", "GEORGE" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
             { "Jacques", "M", "JACQUES" }, { "Didier", "M", "DIDIER" }, { "Roger", "M", "ROGER" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
-            { null, "M", "" }, { "", "F", "" }, { "M.", "M", "" }, { "M", "M", "" }, { "Philipp", "M", "PHILIPP" }, //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$//$NON-NLS-7$//$NON-NLS-8$//$NON-NLS-9$//$NON-NLS-10$//$NON-NLS-11$//$NON-NLS-12$//$NON-NLS-13$//$NON-NLS-14$
-            { "Habert", "M", "HOBERT" } }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            { null, "M", "" }, { "", "F", "" }, { "R.", "M", "" }, { "M", "M", "" }, { "Philipp", "M", "PHILIPP" }, //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$//$NON-NLS-7$//$NON-NLS-8$//$NON-NLS-9$//$NON-NLS-10$//$NON-NLS-11$//$NON-NLS-12$//$NON-NLS-13$//$NON-NLS-14$
+            { "Habert", "M", "HUBERT" } }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
     /**
      * DOC sizhaoliu Comment method "setUpBeforeClass".
@@ -88,7 +88,7 @@ public class FirstNameStandardizeTest {
      */
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
-        Directory dir = FSDirectory.open(new File(indexfolder));
+        Directory dir = FSDirectory.open(Paths.get(indexfolder));
         IndexReader reader = DirectoryReader.open(dir);
         searcher = new IndexSearcher(reader);
         searchAnalyzer = new SimpleAnalyzer();
@@ -114,7 +114,7 @@ public class FirstNameStandardizeTest {
             assertEquals("MICHEL", res); //$NON-NLS-1$
 
             res = fnameStandardize.replaceNameWithCountryInfo(inputName, "ITA", true); //$NON-NLS-1$
-            assertEquals("MICHELA", res); //$NON-NLS-1$
+            assertEquals("MICHELE", res); //$NON-NLS-1$
 
             res = fnameStandardize.replaceNameWithCountryInfo(inputName, "", true); //$NON-NLS-1$
             assertEquals("MICHEL", res); //$NON-NLS-1$
@@ -126,7 +126,7 @@ public class FirstNameStandardizeTest {
             assertEquals("MICHEL", res); //$NON-NLS-1$
 
             res = fnameStandardize.replaceNameWithCountryGenderInfo(inputName, "ITA", "", true); //$NON-NLS-1$ //$NON-NLS-2$
-            assertEquals("MICHELA", res); //$NON-NLS-1$
+            assertEquals("MICHELE", res); //$NON-NLS-1$
 
             res = fnameStandardize.replaceNameWithGenderInfo(inputName, "F", true); //$NON-NLS-1$
             assertEquals("MICHEL", res); //$NON-NLS-1$

@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -12,7 +12,7 @@
 // ============================================================================
 package org.talend.dataquality.standardization.index;
 
-import java.io.File;
+import java.nio.file.Paths;
 
 import org.apache.lucene.analysis.core.SimpleAnalyzer;
 import org.apache.lucene.document.Document;
@@ -53,7 +53,7 @@ public class Explainer {
         }
         String indexDir = args[0];
         String queryExpression = args[1];
-        Directory directory = FSDirectory.open(new File(indexDir));
+        Directory directory = FSDirectory.open(Paths.get(indexDir));
         QueryParser parser = new QueryParser("contents", new SimpleAnalyzer());
         Query query = parser.parse(queryExpression);
         System.out.println("Query: " + queryExpression);

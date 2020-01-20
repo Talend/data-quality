@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2016 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2019 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -18,6 +18,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -25,8 +26,10 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.search.TopDocs;
+import org.junit.After;
 import org.junit.Test;
 import org.talend.dataquality.standardization.index.SynonymIndexBuilder;
 import org.talend.dataquality.standardization.index.SynonymIndexBuilderTest;
@@ -57,6 +60,13 @@ public class SynonymRecordSearcherTest {
     };
 
     private static final boolean showInConsole = false;
+
+    private static final String INDEX_PATH = "target/test_data/record_searcher_idx/";
+
+    @After
+    public void cleanUp() throws IOException {
+        FileUtils.deleteDirectory(new File(INDEX_PATH));
+    }
 
     @Test
     public void testRecordResultCompute() {
@@ -172,8 +182,8 @@ public class SynonymRecordSearcherTest {
     public void testSearch(String[] record, int topDocLimit, int resultLimit, String fileIndex) {
         SynonymRecordSearcher recSearcher = new SynonymRecordSearcher(record.length);
         for (int i = 0; i < record.length; i++) {
-            initIdx(("data/idx") + fileIndex + (i + 1));//$NON-NLS-1$
-            final String indexPath = "data/idx" + fileIndex + (i + 1); //$NON-NLS-1$
+            final String indexPath = INDEX_PATH + fileIndex + (i + 1);
+            initIdx(indexPath);
             SynonymIndexSearcher searcher = new SynonymIndexSearcher(indexPath);
             searcher.setTopDocLimit(topDocLimit);
             recSearcher.addSearcher(searcher, i);
@@ -184,7 +194,7 @@ public class SynonymRecordSearcherTest {
             int hits = 1;
             for (int i = 0; i < record.length; i++) {
                 topDocs = recSearcher.getSearcher(i).searchDocumentBySynonym(record[i]);
-                hits *= topDocs.totalHits;
+                hits *= topDocs.totalHits.value;
             }
 
             List<OutputRecord> results = recSearcher.search(resultLimit, record);

@@ -20,9 +20,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.xml.XMLConstants;
@@ -49,12 +52,14 @@ import org.xml.sax.SAXException;
 
 /**
  * Application to bump versions automatically to facilitate DQ library releases.
- * Please note that this tool works when there are only trivial version changes. For major/minor version changes, some manual
+ * Please note that this tool works when there are only trivial version changes. For major/minor version changes, some
+ * manual
  * changes need to be done.
  * It's always recommended to verify all changed file before committing the changes.
  * <p>
  * Usage:
- * 1. put the expected snapshot or release version into the TARGET_VERSION field and run the current class as Java application.
+ * 1. put the expected snapshot or release version into the TARGET_VERSION field and run the current class as Java
+ * application.
  * 2. update the p2 dependency declaration in studio-se-master and studio-full-master repositories.
  * 3. Run {@link UpdateComponentDefinition} to update the components.
  */
@@ -75,6 +80,8 @@ public class ReleaseVersionBumper {
 
     private static final String NA_TAG = "N/A";
 
+    private static Map<String, List<String>> commits = new LinkedHashMap<>();
+
     private static String UNRELEASED_LABEL = UNRELEASED_TAG + "\n"
             + COMMIT_CATEGORIES.stream().map(s -> s + "\n" + NA_TAG).collect(Collectors.joining("\n")) + "\n\n";
 
@@ -86,6 +93,12 @@ public class ReleaseVersionBumper {
         xTransformer = TransformerFactory.newInstance().newTransformer();
         xTransformer.setOutputProperty(OutputKeys.INDENT, "yes");
         xTransformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+    }
+
+    public static void main(String[] args) throws TransformerFactoryConfigurationError, XPathExpressionException, IOException,
+            SAXException, ParserConfigurationException, TransformerException {
+        ReleaseVersionBumper appli = new ReleaseVersionBumper();
+        appli.bumpPomVersion();
     }
 
     private XPathFactory getXPathFactory() {
@@ -147,65 +160,140 @@ public class ReleaseVersionBumper {
             Path manifestPath = Paths.get(inputFile.getParentFile().getAbsolutePath(), "META-INF", "MANIFEST.MF");
             updateManifestVersion(manifestPath);
 
+            boolean isReleasing = !TARGET_VERSION.contains("SNAPSHOT");
+            if (isReleasing)
+                COMMIT_CATEGORIES.forEach(cat -> commits.put(cat, new ArrayList<>()));
+
             // update modules
             NodeList moduleNodes = (NodeList) xPath.evaluate("/project/modules/module", doc, XPathConstants.NODESET);
             for (int idx = 0; idx < moduleNodes.getLength(); idx++) {
                 String modulePath = moduleNodes.item(idx).getTextContent();
                 updateChildPOM(new File(projectRoot + modulePath + "/pom.xml"));
-                updateChangeLog(Paths.get(projectRoot, modulePath, "CHANGELOG.md"));
+                if (isReleasing)
+                    updateChangeLogForRelease(Paths.get(projectRoot, modulePath, "CHANGELOG.md"), modulePath.replace("../", ""));
+                else
+                    updateChangeLogForSnapshot(Paths.get(projectRoot, modulePath, "CHANGELOG.md"));
             }
             // Update root changelog
-            updateChangeLog(Paths.get(projectRoot, "../", "CHANGELOG.md"));
+            if (isReleasing)
+                fillParentChangelog(Paths.get(projectRoot, "../", "CHANGELOG.md"));
         }
     }
 
-    private void updateChangeLog(Path inputPath) throws IOException {
+    private void updateChangeLogForSnapshot(Path inputPath) throws IOException {
         if (inputPath.toFile().exists()) {
             System.out.println("Updating: " + inputPath.toString()); // NOSONAR
             List<String> lines = Files.readAllLines(inputPath);
             DataOutputStream writer = new DataOutputStream(Files.newOutputStream(inputPath));
-            if (!TARGET_VERSION.contains("SNAPSHOT")) {
-                // If releasing, put the version and the date in the changelog
-                String commitCategory = null;
-                for (String line : lines) {
-                    if (line.startsWith(UNRELEASED_TAG)) {
-                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                        writer.write(("## [" + TARGET_VERSION + "] - " + format.format(new Date()) + "\n")
-                                .getBytes(StandardCharsets.UTF_8));
+            // If bumping to next version, prepare the empty scope
+            boolean firstTime = true;
+            for (String line : lines) {
+                if (firstTime && line.startsWith("## [")) {
+                    // Update only if previous version was a released one
+                    if (!line.startsWith(UNRELEASED_TAG))
+                        writer.write((UNRELEASED_LABEL).getBytes(StandardCharsets.UTF_8));
+                    firstTime = false;
+                }
+                writer.write((line + "\n").getBytes(StandardCharsets.UTF_8));
+            }
+            writer.flush();
+            writer.close();
+        }
+    }
+
+    private void updateChangeLogForRelease(Path inputPath, String moduleName) throws IOException {
+        if (inputPath.toFile().exists()) {
+            System.out.println("Updating: " + inputPath.toString()); // NOSONAR
+            List<String> lines = Files.readAllLines(inputPath);
+            DataOutputStream writer = new DataOutputStream(Files.newOutputStream(inputPath));
+            boolean isCommitFilled = false;
+            // If releasing, put the version and the date in the changelog
+            String commitCategory = null;
+            boolean isNewCommitCategory = false;
+            boolean isHeader = true;
+            boolean isFooter = false;
+            for (String line : lines) {
+                if (line.startsWith(UNRELEASED_TAG)) {
+                    writeDate(writer);
+                    isHeader = false;
+                } else if (line.startsWith("## [") && !isFooter && !isHeader) {
+                    isFooter = true;
+                    writer.write(("\n" + line + "\n").getBytes(StandardCharsets.UTF_8));
+                } else if (isHeader || isFooter) {
+                    writer.write((line + "\n").getBytes(StandardCharsets.UTF_8));
+                } else {
+                    // Otherwise, remove N/A categories and store temporarily all the commits to be put in the root
+                    // changelog
+                    if (line.trim().isEmpty())
+                        continue;
+
+                    if (COMMIT_CATEGORIES.contains(line)) {
+                        commitCategory = line;
+                        isNewCommitCategory = true;
                     } else {
-                        // Remove N/A categories
-                        if (commitCategory != null) {
+                        if (isNewCommitCategory) {
                             if (!line.equals(NA_TAG)) {
                                 writer.write((commitCategory + "\n").getBytes(StandardCharsets.UTF_8));
+                                isNewCommitCategory = false;
                                 writer.write((line + "\n").getBytes(StandardCharsets.UTF_8));
+                                commits.get(commitCategory).add(line + " [" + moduleName + "]");
                             }
-                            commitCategory = null;
                         } else {
-                            if (COMMIT_CATEGORIES.contains(line))
-                                commitCategory = line;
-                            else
-                                writer.write((line + "\n").getBytes(StandardCharsets.UTF_8));
+                            writer.write((line + "\n").getBytes(StandardCharsets.UTF_8));
+                            if (commitCategory != null)
+                                commits.get(commitCategory).add(line + " [" + moduleName + "]");
                         }
-                    }
-                }
-            } else {
-                // If bumping to next version, prepare the empty scope
-                boolean firstTime = true;
-                for (String line : lines) {
-                    if (firstTime && line.startsWith("## [")) {
-                        // Update only if previous version was a released one
-                        if (!line.startsWith(UNRELEASED_TAG))
-                            writer.write((UNRELEASED_LABEL).getBytes(StandardCharsets.UTF_8));
-                        writer.write((line + "\n").getBytes(StandardCharsets.UTF_8));
-                        firstTime = false;
-                    } else {
-                        writer.write((line + "\n").getBytes(StandardCharsets.UTF_8));
                     }
                 }
             }
             writer.flush();
             writer.close();
         }
+    }
+
+    private void writeDate(DataOutputStream writer) throws IOException {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        writer.write(String.format("## [%s] - %s\n", TARGET_VERSION, format.format(new Date())).getBytes(StandardCharsets.UTF_8));
+    }
+
+    private void fillParentChangelog(Path inputPath) throws IOException {
+        if (inputPath.toFile().exists() && hasCommit()) {
+            System.out.println("Filling: " + inputPath.toString()); // NOSONAR
+            List<String> lines = Files.readAllLines(inputPath);
+            DataOutputStream writer = new DataOutputStream(Files.newOutputStream(inputPath));
+            boolean isFilled = false;
+            // If releasing, put the version and the date in the changelog
+            for (String line : lines) {
+                if (!isFilled && line.startsWith("## [")) {
+                    fillParent(writer);
+                    isFilled = true;
+                }
+                writer.write((line + "\n").getBytes(StandardCharsets.UTF_8));
+            }
+            writer.flush();
+            writer.close();
+        }
+    }
+
+    private boolean hasCommit() {
+        for (String commitCategory : commits.keySet()) {
+            if (!commits.get(commitCategory).isEmpty())
+                return true;
+        }
+        return false;
+    }
+
+    private void fillParent(DataOutputStream writer) throws IOException {
+        writeDate(writer);
+        for (String commitCategory : commits.keySet()) {
+            List<String> categoryCommits = commits.get(commitCategory);
+            if (!categoryCommits.isEmpty()) {
+                writer.write((commitCategory + "\n").getBytes(StandardCharsets.UTF_8));
+                for (String commit : categoryCommits)
+                    writer.write((commit + "\n").getBytes(StandardCharsets.UTF_8));
+            }
+        }
+        writer.write(("\n").getBytes(StandardCharsets.UTF_8));
     }
 
     private void updateChildPOM(File inputFile)
@@ -248,12 +336,6 @@ public class ReleaseVersionBumper {
             writer.flush();
             writer.close();
         }
-    }
-
-    public static void main(String[] args) throws TransformerFactoryConfigurationError, XPathExpressionException, IOException,
-            SAXException, ParserConfigurationException, TransformerException {
-        ReleaseVersionBumper appli = new ReleaseVersionBumper();
-        appli.bumpPomVersion();
     }
 
 }
