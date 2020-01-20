@@ -58,6 +58,7 @@ pipeline {
             steps {
                 container('talend-jdk8-builder-base') {
                     configFileProvider([configFile(fileId: 'maven-settings-nexus-zl', variable: 'MAVEN_SETTINGS')]) {
+                        sh 'java -version'
                         sh 'mvn --version'
                         sh 'mvn clean test -B --fail-at-end -s $MAVEN_SETTINGS'
                     }
@@ -87,7 +88,6 @@ pipeline {
         }
     }
 
-
     post {
         success {
             script {
@@ -97,16 +97,27 @@ pipeline {
             }
         }
         failure {
-            slackSend(color: '#e96065', channel: "${SLACK_CHANNEL}", message: "FAILED: `${env.JOB_NAME.replaceAll('%2F', '/')}` #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
+            script {
+                if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME =~ 'maintenance.*') {
+                    slackSend(color: '#e96065', channel: "${SLACK_CHANNEL}", message: "FAILED: `${env.JOB_NAME.replaceAll('%2F', '/')}` #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
+                }
+            }
         }
 
         unstable {
-            slackSend(color: '#ea8330', channel: "${SLACK_CHANNEL}", message: "UNSTABLE: `${env.JOB_NAME.replaceAll('%2F', '/')}` #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
+            script {
+                if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME =~ 'maintenance.*') {
+                    slackSend(color: '#ea8330', channel: "${SLACK_CHANNEL}", message: "UNSTABLE: `${env.JOB_NAME.replaceAll('%2F', '/')}` #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
+                }
+            }
         }
 
         aborted {
-            slackSend(color: '#c6c6c6', channel: "${SLACK_CHANNEL}", message: "ABORTED: `${env.JOB_NAME.replaceAll('%2F', '/')}` #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
+            script {
+                if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME =~ 'maintenance.*') {
+                    slackSend(color: '#c6c6c6', channel: "${SLACK_CHANNEL}", message: "ABORTED: `${env.JOB_NAME.replaceAll('%2F', '/')}` #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
+                }
+            }
         }
     }
-
 }
