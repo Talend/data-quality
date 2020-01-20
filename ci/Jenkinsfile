@@ -39,7 +39,7 @@ pipeline {
         // Only keep the 10 most recent builds for master branch, 2 for the other branches
         buildDiscarder(logRotator(artifactNumToKeepStr: '5', numToKeepStr: env.BRANCH_NAME == 'master' ? '10' : '2'))
         disableConcurrentBuilds()
-        //ansiColor('xterm')
+        ansiColor('xterm')
         timeout(time: 1, unit: 'HOURS')
     }
 
