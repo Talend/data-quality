@@ -91,13 +91,13 @@ pipeline {
     post {
         success {
             script {
-                if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'afournier/tests_CI_Jenkins2') {
+                if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME == "afournier/tests_CI_Jenkins2") {
                     slackSend(color: '#82bd41', channel: "${SLACK_CHANNEL}", message: "SUCCESS: `${env.JOB_NAME.replaceAll('%2F', '/')}` #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
                 }
             }
         }
         failure {
-            slackSend (color: '#e96065', channel: "${SLACK_CHANNEL}", message: "ABORTED: `${env.JOB_NAME.replaceAll('%2F', '/')}` #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
+            slackSend (color: '#e96065', channel: "${SLACK_CHANNEL}", message: "ERROR: `${env.JOB_NAME.replaceAll('%2F', '/')}` #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
         }
 
         unstable {
