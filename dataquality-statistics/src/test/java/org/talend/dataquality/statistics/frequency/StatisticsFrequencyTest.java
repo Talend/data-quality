@@ -33,33 +33,6 @@ public class StatisticsFrequencyTest {
     }
 
     @Test
-    public void testGetPage() {
-        // when
-        Map<String, Long> page0 = stats.getPage(0, 2);
-        Map<String, Long> page2 = stats.getPage(2, 2);
-
-        // expect
-        Assert.assertEquals(2, page0.keySet().size());
-        Assert.assertEquals(Long.valueOf(10), page0.get("10"));
-        Assert.assertEquals(Long.valueOf(9), page0.get("9"));
-        // page 1 should be 8 and 7
-        Assert.assertEquals(2, page2.keySet().size());
-        Assert.assertEquals(Long.valueOf(6), page2.get("6"));
-        Assert.assertEquals(Long.valueOf(5), page2.get("5"));
-
-        // another page and size
-        Map<String, Long> page3 = stats.getPage(3, 3);
-        Assert.assertEquals(1, page3.keySet().size());
-        Assert.assertEquals(Long.valueOf(1), page3.get("1"));
-    }
-
-    @Test
-    public void testGetTotal() {
-        // expect
-        Assert.assertEquals(10, stats.getTotal());
-    }
-
-    @Test
     public void getTopK() {
         // when
         Map<String, Long> results = stats.getTopK(3);
@@ -69,14 +42,5 @@ public class StatisticsFrequencyTest {
         Assert.assertEquals(Long.valueOf(10), results.get("10"));
         Assert.assertEquals(Long.valueOf(9), results.get("9"));
         Assert.assertEquals(Long.valueOf(8), results.get("8"));
-    }
-
-    @Test
-    public void getAll() {
-        // when
-        Map<String, Long> results = stats.getAll();
-
-        // expect
-        Assert.assertEquals(10, results.keySet().size());
     }
 }
