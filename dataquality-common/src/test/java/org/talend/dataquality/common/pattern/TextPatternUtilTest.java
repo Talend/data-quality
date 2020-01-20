@@ -27,11 +27,6 @@ public class TextPatternUtilTest {
     }
 
     @Test
-    public void failingTest() {
-        assertTrue(false);
-    }
-
-    @Test
     public void testFindPattern() {
 
         checkPattern("ケーキ", "KKK");
