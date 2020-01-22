@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - chore(TDQ-17710): Adopt the "Keep a Changelog" format for changelogs
+- chore(TDQ-17993): Support German timezone strings for any default JVM locale
 ### Changed
 - chore(TDS-764): adding getter to retrieve statistics map
 ### Removed
