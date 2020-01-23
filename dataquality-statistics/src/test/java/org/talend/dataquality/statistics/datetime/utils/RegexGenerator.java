@@ -35,7 +35,7 @@ public class RegexGenerator {
             // regex with numbers
             put("XXX", "[+-](?:0[0-9]|1[0-2]):00");
             put("Z", "[+-](?:0[0-9]|1[0-2])00");
-            put("z", "[A-Z]{2,5}");
+            put("z", "([A-Z]{2,5})");
             put("c", "[1-7]");
             put("w", "(?:[1-4]?[0-9]|5[0-2])");
             put("DDD", "[0-9]{1,3}");

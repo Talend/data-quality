@@ -73,6 +73,8 @@ public class SystemDateTimePatternManager {
 
     private static final String ERAS = "ERAS";
 
+    private static final String TIMEZONES = "TIMEZONES";
+
     /**
      * give for a worg group, the list of words and their locales
      * The word groups available are MONTHS, SHORT_MONTHS, WEEKDAYS, SHORT_WEEKDAYS, AM_PM and ERAS
@@ -83,7 +85,8 @@ public class SystemDateTimePatternManager {
     /**
      * give for each patterns, the list of word groups to check.
      * The word groups available are MONTHS, SHORT_MONTHS, WEEKDAYS, SHORT_WEEKDAYS, AM_PM and ERAS
-     * For example the pattern "EEEE, MMMM d, yyyy h:mm:ss a z" is associated to the list ["MONTHS"; "WEEKDAYS"; "AM_PM"]
+     * For example the pattern "EEEE, MMMM d, yyyy h:mm:ss a z" is associated to the list ["MONTHS"; "WEEKDAYS";
+     * "AM_PM"]
      *
      */
     private static final Map<String, List<String>> PATTERN_TO_WORD_GROUPS = new HashMap<>();
@@ -113,31 +116,32 @@ public class SystemDateTimePatternManager {
     }
 
     private static void loadLanguagesDatesWords() {
-        for (Locale locale : getDistinctLanguagesLocales()) {
+        for (Locale locale : LOCALES) {
             final DateFormatSymbols dfs = new DateFormatSymbols(locale);
-            buildWordsToLocales(MONTHS, Arrays.asList(dfs.getMonths()), locale);
-            buildWordsToLocales(SHORT_MONTHS, Arrays.asList(dfs.getShortMonths()), locale);
-            buildWordsToLocales(WEEKDAYS, Arrays.asList(dfs.getWeekdays()), locale);
-            buildWordsToLocales(SHORT_WEEKDAYS, Arrays.asList(dfs.getShortWeekdays()), locale);
-            buildWordsToLocales(AM_PM, Arrays.asList(dfs.getAmPmStrings()), locale);
-            buildWordsToLocales(ERAS, Arrays.asList(dfs.getEras()), locale);
+
+            buildWordsToLocales(MONTHS, new HashSet<>(Arrays.asList(dfs.getMonths())), locale);
+            buildWordsToLocales(SHORT_MONTHS, new HashSet<>(Arrays.asList(dfs.getShortMonths())), locale);
+            buildWordsToLocales(WEEKDAYS, new HashSet<>(Arrays.asList(dfs.getWeekdays())), locale);
+            buildWordsToLocales(SHORT_WEEKDAYS, new HashSet<>(Arrays.asList(dfs.getShortWeekdays())), locale);
+            buildWordsToLocales(AM_PM, new HashSet<>(Arrays.asList(dfs.getAmPmStrings())), locale);
+            buildWordsToLocales(ERAS, new HashSet<>(Arrays.asList(dfs.getEras())), locale);
+
+            final Set<String> zoneStringSet = new HashSet<>();
+            for (String[] zoneStrings : dfs.getZoneStrings()) {
+                zoneStringSet.add(zoneStrings[2]); // short name of zone in standard time
+                zoneStringSet.add(zoneStrings[4]); // short name of zone in daylight saving time
+            }
+            buildWordsToLocales(TIMEZONES, zoneStringSet, locale);
         }
     }
 
-    private static void buildWordsToLocales(final String wordGroup, final List<String> languagesWords, Locale currentLocale) {
-        Map<String, Set<Locale>> languagesDatesWords = WORD_GROUPS_TO_LANGUAGES_DATES_WORDS.get(wordGroup);
-        if (languagesDatesWords == null) {
-            languagesDatesWords = new HashMap<>();
-            WORD_GROUPS_TO_LANGUAGES_DATES_WORDS.put(wordGroup, languagesDatesWords);
-        }
+    private static void buildWordsToLocales(final String wordGroup, final Set<String> languagesWords, Locale currentLocale) {
+        Map<String, Set<Locale>> languagesDatesWords = WORD_GROUPS_TO_LANGUAGES_DATES_WORDS.computeIfAbsent(wordGroup,
+                k -> new HashMap<>());
         for (String languageWord : languagesWords) {
             if (StringUtils.isNotEmpty(languageWord)) {
                 String lowerCaseLanguageWord = languageWord.toLowerCase();
-                Set<Locale> locales = languagesDatesWords.get(lowerCaseLanguageWord);
-                if (locales == null) {
-                    locales = new HashSet<>();
-                    languagesDatesWords.put(lowerCaseLanguageWord, locales);
-                }
+                Set<Locale> locales = languagesDatesWords.computeIfAbsent(lowerCaseLanguageWord, k -> new HashSet<>());
                 locales.add(currentLocale);
             }
         }
@@ -145,16 +149,10 @@ public class SystemDateTimePatternManager {
 
     private static Set<Locale> getDistinctLanguagesLocales() {
         Set<Locale> locales = new LinkedHashSet<>();
-        // we add these specific languages first because they are the most frequent.
-        for (String lang : new String[] { "en", "fr", "de", "it", "es", "ja", "zh" }) {
+        for (String lang : SUPPORTED_ISO_LANGUAGES) {
             locales.add(Locale.forLanguageTag(lang));
         }
-        for (String lang : SUPPORTED_ISO_LANGUAGES) {
-            Locale locale = Locale.forLanguageTag(lang);
-            if (StringUtils.isNotEmpty(locale.getLanguage())) {
-                locales.add(locale);
-            }
-        }
+
         return locales;
     }
 
@@ -198,6 +196,8 @@ public class SystemDateTimePatternManager {
             languagesWordsList.add(ERAS);
         if (format.contains("a"))
             languagesWordsList.add(AM_PM);
+        if (format.contains("z"))
+            languagesWordsList.add(TIMEZONES);
         PATTERN_TO_WORD_GROUPS.put(format, languagesWordsList);
     }
 
@@ -512,14 +512,16 @@ public class SystemDateTimePatternManager {
         while (groupIndex <= matcher.groupCount()) {
             Set<Locale> tmpLocales = null;
             String group = matcher.group(groupIndex++).toLowerCase();
+
             // for each group, we search for the right map of words
             for (Map<String, Set<Locale>> wordToLocal : wordToLocalList) {
                 tmpLocales = wordToLocal.get(group);
                 if (tmpLocales != null) { // found
                     if (CollectionUtils.isEmpty(locales))
-                        locales = tmpLocales;
+                        locales.addAll(tmpLocales);
                     else
-                        locales.retainAll(tmpLocales); // we do the intersection between the sets "locales" and "tmpLocales"
+                        locales.retainAll(tmpLocales); // we do the intersection between the sets "locales" and
+                    // "tmpLocales"
                     break; // we don't have to iterate anymore
                 }
             }

@@ -186,8 +186,6 @@ public class CustomDateTimePatternManagerTest {
 
     @Test
     public void testDateWithLocaleDE() {
-        // simulate a JVM
-        Locale.setDefault(Locale.GERMANY);
 
         final List<String> pattern = Collections.<String> singletonList("MMMM d ?? yyyy");
         final String[] dates = new String[] { "January 9 ?? 1970", // EN
