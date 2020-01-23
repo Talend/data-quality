@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - chore(TDS-764): adding getter to retrieve statistics map
 - chore(TDQ-17788): cancel the deprecation of setStoreInvalidValues in QualityAnalyzer implementations
 ### Removed
-- chore(TDQ-17788): remove deprecated classes EastAsianCharPatternRecognizer and DateTimePatternManager
+- chore(TDQ-17788): remove deprecated classes EastAsianCharPatternRecognizer, DateTimePatternManager, and CustomDateTimePatternPatternManager
 - chore(TDQ-17788): remove a deprecated constructor of ValueQualityAnalyzer
 - chore(TDQ-17788): remove deprecated methods in class SystemDateTimePatternManager and TypeInferenceUtils
 ### Deprecated
