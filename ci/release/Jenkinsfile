@@ -209,7 +209,7 @@ EOF
     post {
         failure {
             script {
-                pr_msg = getPRMessage($target_dq_lib_version)
+                pr_msg = getPRMessage(target_dq_lib_version)
                 slackSend(color: '#e96065', channel: "${SLACK_CHANNEL}", message: "FAILED to submit the PR : \"$pr_msg\" `${env.JOB_NAME.replaceAll('%2F', '/')}` #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
             }
         }
