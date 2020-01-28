@@ -191,7 +191,7 @@ EOF
                             echo "PR Link = $pr_link"
                         }
                         sh """#! /bin/sh
-                        if [ "$pr_link" != "null" ]
+                        if [ ! -n "$pr_link" ]
                         then
                             echo -e "The pull request url: $pr_link\\nPlease review and merge it from Github Web UI."
                         else
