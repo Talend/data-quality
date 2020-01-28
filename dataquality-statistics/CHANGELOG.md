@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.0.0] - 2020-01-28
 ### Added
 - chore(TDQ-17710): Adopt the "Keep a Changelog" format for changelogs
 - chore(TDQ-17993): Support German timezone strings for any default JVM locale
@@ -15,12 +15,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - chore(TDQ-17788): remove deprecated classes EastAsianCharPatternRecognizer, DateTimePatternManager, and CustomDateTimePatternPatternManager
 - chore(TDQ-17788): remove a deprecated constructor of ValueQualityAnalyzer
 - chore(TDQ-17788): remove deprecated methods in class SystemDateTimePatternManager and TypeInferenceUtils
-### Deprecated
-N/A
-### Fixed
-N/A
-### Security
-N/A
 
 ## [6.0.0] - 2018-07-03
 - TDQ-14001 improve pattern regex to valid asian languages
