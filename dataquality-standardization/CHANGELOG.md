@@ -4,19 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [8.0.0] - 2020-02-03
 ### Added
 - chore(TDQ-17710): Adopt the "Keep a Changelog" format for changelogs
 ### Changed
 - feat(TDQ-17504): upgrade to lucene 8 in standardization library for studio
 ### Removed
 - chore(TDQ-17788): remove unused AllDQStandardizationTests class
-### Deprecated
-N/A
-### Fixed
-N/A
-### Security
-N/A
 
 ## [v6.0.0] - 2018-07-03
 - TDQ-15012 add dependencies in manifest
