@@ -8,18 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [8.0.0] - 2020-02-03
 ### Added
-- chore(TDQ-17710): Adopt the "Keep a Changelog" format for changelogs [dataquality-common]
-- chore(TDQ-17710): Adopt the "Keep a Changelog" format for changelogs [dataquality-record-linkage]
-- chore(TDQ-17710): Adopt the "Keep a Changelog" format for changelogs [dataquality-phone]
-- chore(TDQ-17710): Adopt the "Keep a Changelog" format for changelogs [dataquality-sampling]
-- chore(TDQ-17710): Adopt the "Keep a Changelog" format for changelogs [dataquality-standardization]
-- chore(TDQ-17710): Adopt the "Keep a Changelog" format for changelogs [dataquality-statistics]
+- chore(TDQ-17710): Adopt the "Keep a Changelog" format for changelogs [all modules]
 - chore(TDQ-17993): Support German timezone strings for any default JVM locale [dataquality-statistics]
-- chore(TDQ-17710): Adopt the "Keep a Changelog" format for changelogs [dataquality-wordnet]
-- chore(TDQ-17710): Adopt the "Keep a Changelog" format for changelogs [dataquality-email]
-- chore(TDQ-17710): Adopt the "Keep a Changelog" format for changelogs [dataquality-survivorship]
-- chore(TDQ-17710): Adopt the "Keep a Changelog" format for changelogs [dataquality-converters]
-- chore(TDQ-17710): Adopt the "Keep a Changelog" format for changelogs [dataquality-text-japanese]
 ### Changed
 - chore(TDQ-17788): cancel the deprecation of setStoreInvalidValues in Quality Analyzers [dataquality-common]
 - chore(TDQ-17788): change RandomWrapper class to package protected [dataquality-sampling]
@@ -43,16 +33,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 - chore(TDQ-17923): Rely on daikon's jackson version (currently 2.10.1) [dataquality-common]
 
-## [Unreleased]
-### Added
-- chore(TDQ-17710): Adopt the "Keep a Changelog" format for changelogs
-### Changed
-N/A
-### Removed
-N/A
-### Deprecated
-N/A
-### Fixed
-N/A
-### Security
-N/A
