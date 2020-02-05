@@ -1,0 +1,123 @@
+#!/usr/bin/groovy
+
+/**
+ * Jenkins pipeline to take care of the Continuous Integration for TDP
+ */
+
+// Constants
+
+def AWS_POD_LABEL = "TDQ-SE-${UUID.randomUUID().toString()}"
+
+pipeline {
+    agent {
+        kubernetes {
+            label AWS_POD_LABEL
+            yaml """
+                apiVersion: v1
+                kind: Pod
+                spec:
+                  imagePullSecrets:
+                  - name: talend-registry
+                  containers:
+                  - name: talend-jdk8-builder-base
+                    image: artifactory.datapwn.com/tlnd-docker-dev/talend/common/tsbi/jdk8-builder-base:1.16.0-20200106163950
+                    tty: true
+                    command:
+                    - cat
+                    volumeMounts:
+                    - name: m2
+                      mountPath: /root/.m2/repository
+                  volumes:
+                  - name: m2
+                    hostPath:
+                      path: /tmp/jenkins/tsbi/m2
+            """
+        }
+    }
+
+    options {
+        // Only keep the 10 most recent builds for master branch, 2 for the other branches
+        buildDiscarder(logRotator(artifactNumToKeepStr: '5', numToKeepStr: env.BRANCH_NAME == 'master' ? '10' : '2'))
+        disableConcurrentBuilds()
+        ansiColor('xterm')
+        timeout(time: 1, unit: 'HOURS')
+    }
+
+    environment {
+        SLACK_CHANNEL = 'tdq_ci'
+    }
+
+    stages {
+
+        /*
+         * Build stage:
+         *      - compile DQ SE Libs
+         *      - launch all TUs
+         */
+        stage('Build & Test') {
+            steps {
+                container('talend-jdk8-builder-base') {
+                    configFileProvider([configFile(fileId: 'maven-settings-nexus-zl', variable: 'MAVEN_SETTINGS')]) {
+                        sh 'java -version'
+                        sh 'mvn --version'
+                        sh 'mvn clean test -B --fail-at-end -s $MAVEN_SETTINGS'
+                    }
+                }
+            }
+            post {
+                always {
+                    junit testResults: '**/target/surefire-reports/*.xml'
+                }
+            }
+        }
+
+        /*
+        * Publishing artifact stage (only if it is a releasable branch):
+        *       - Deploy every DQ-SE module jar on Nexus
+         */
+        stage('Publishing artifact') {
+            when { expression { return env.BRANCH_NAME == 'master' || env.BRANCH_NAME =~ 'maintenance.*' } }
+            steps {
+                container('talend-jdk8-builder-base') {
+                    configFileProvider([configFile(fileId: 'maven-settings-nexus-zl', variable: 'MAVEN_SETTINGS')]) {
+                        echo "Deploy DQ Libs SE jar on Nexus"
+                        sh 'mvn clean deploy -DskipTests -B -s $MAVEN_SETTINGS'
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            script {
+                if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME =~ 'maintenance.*') {
+                    slackSend(color: '#82bd41', channel: "${SLACK_CHANNEL}", message: "SUCCESS: `${env.JOB_NAME.replaceAll('%2F', '/')}` #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
+                }
+            }
+        }
+        failure {
+            script {
+                if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME =~ 'maintenance.*') {
+                    slackSend(color: '#e96065', channel: "${SLACK_CHANNEL}", message: "FAILED: `${env.JOB_NAME.replaceAll('%2F', '/')}` #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
+                }
+            }
+        }
+
+        unstable {
+            script {
+                if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME =~ 'maintenance.*') {
+                    slackSend(color: '#ea8330', channel: "${SLACK_CHANNEL}", message: "UNSTABLE: `${env.JOB_NAME.replaceAll('%2F', '/')}` #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
+                }
+            }
+        }
+
+        aborted {
+            script {
+                if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME =~ 'maintenance.*') {
+                    slackSend(color: '#c6c6c6', channel: "${SLACK_CHANNEL}", message: "ABORTED: `${env.JOB_NAME.replaceAll('%2F', '/')}` #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
+                }
+            }
+        }
+    }
+}

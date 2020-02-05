@@ -1,0 +1,220 @@
+#!/usr/bin/groovy
+
+/**
+ * Jenkins pipeline to take care of the Continuous Integration for TDQ
+ */
+
+// Constants
+
+def AWS_POD_LABEL = "TDQ-RELEASE-${UUID.randomUUID().toString()}"
+def containerName = "talend-${TSBI_BUILD_IMAGE_NAME}"
+
+def getPRMessage(target_dq_lib_version) {
+    if (target_dq_lib_version.contains("SNAPSHOT")) {
+        return "chore(Jenkins): Bump to next dev version ${target_dq_lib_version}"
+    } else {
+        return "chore(Jenkins): Release DQ libraries ${target_dq_lib_version}"
+    }
+}
+
+pipeline {
+    agent {
+        kubernetes {
+            label AWS_POD_LABEL
+            yaml """
+                apiVersion: v1
+                kind: Pod
+                spec:
+                  imagePullSecrets:
+                  - name: talend-registry
+                  containers:
+                  - name: ${containerName}
+                    image: artifactory.datapwn.com/tlnd-docker-dev/talend/common/tsbi/jdk8-builder-base:1.16.0-20200106163950
+                    tty: true
+                    command:
+                    - cat
+                    volumeMounts:
+                    - name: m2
+                      mountPath: /root/.m2/repository
+                  volumes:
+                  - name: m2
+                    hostPath:
+                      path: /tmp/jenkins/tsbi/m2
+            """
+        }
+    }
+
+    options {
+        // Only keep the 10 most recent builds for master branch, 2 for the other branches
+        buildDiscarder(logRotator(artifactNumToKeepStr: '5', numToKeepStr: '10'))
+        disableConcurrentBuilds()
+        ansiColor('xterm')
+        timeout(time: 1, unit: 'HOURS')
+    }
+
+    environment {
+        SLACK_CHANNEL = 'tdq_ci'
+    }
+
+    parameters {
+        string(
+                name: "target_dq_lib_version",
+                description: "Target DQ Lib SE version",
+                defaultValue: "0.0.0")
+        choice(
+                name: 'branch',
+                description: 'Branch',
+                choices: [
+                        'master',
+                        'maintenance/6.1',
+                        'maintenance/6.2',
+                        'maintenance/6.3',
+                        'maintenance/6.4',
+                        'maintenance/7.0',
+                        'maintenance/7.1',
+                        'maintenance/7.2',
+                        'maintenance/7.3',
+                        'maintenance/7.4'
+                ])
+    }
+
+    stages {
+
+        /*
+         * Prepare Release
+         * Update target versions in ReleaseVersionBumper
+         */
+        stage('Prepare ReleaseVersionBumper') {
+            steps {
+                container("${containerName}") {
+                    sh """#! /bin/sh
+                        set -e
+                        echo target_dq_lib_version=${target_dq_lib_version}
+                        sed -i "s/String TARGET_VERSION = .*;/String TARGET_VERSION = \\"${target_dq_lib_version}\\";/" dataquality-libraries-devops/src/main/java/org/talend/dataquality/libraries/devops/ReleaseVersionBumper.java
+                       """
+                }
+            }
+        }
+
+        /*
+         * Update lib versions
+         */
+        stage('Update Lib Version') {
+            steps {
+                container("${containerName}") {
+                    sh """#! /bin/sh
+                        set -e
+                        set +x
+                        mvn package -V -pl dataquality-libraries-devops/
+                        java -cp dataquality-libraries-devops/target/classes/ org.talend.dataquality.libraries.devops.ReleaseVersionBumper
+                       """
+                }
+            }
+        }
+
+        /*
+         * Perform the Pull Request :
+         *  - Prepare for Commit and Pull Request
+         *  - Commit & Push changes on new Branch
+         *  - Send the Pull Request
+         */
+        stage('Perform Pull Request') {
+            steps {
+                container("${containerName}") {
+                    withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GIT_LOGIN', passwordVariable: 'GIT_TOKEN')]) {
+                        sh """#! /bin/sh
+                        set +x
+                        echo https://$GIT_LOGIN:$GIT_TOKEN@github.com > /tmp/.git-credentials
+                        git config credential.helper 'store --file /tmp/.git-credentials'
+                        git config user.name "build-talend-tdq"
+                        git config user.email "build-talend-tdq@talend.com"
+                        git status
+                        """
+                        script {
+                            pr_msg = getPRMessage(target_dq_lib_version)
+                            hasChanged = sh(returnStdout: true, script: 'git status | grep \'Changes not staged for commit\' > /dev/null; echo $?').trim()
+                        }
+                        sh """#! /bin/sh
+                        set +x
+                        if [ $hasChanged != "0" ]
+                        then
+                            echo "Nothing need to be committed, the modules are already in the correct version."
+                            exit 0
+                        fi
+                        git diff
+                        git add *.MF
+                        git add *.java
+                        git add */pom.xml
+                        git add pom.xml
+                        git add *.md
+                        git add */*.md
+                        git status
+                        git commit -m "$pr_msg"
+                        git push -f origin HEAD:refs/heads/update_version_to_${target_dq_lib_version}
+                        cat > pull-request.json << EOF
+                        {
+                          "title": "$pr_msg",
+                          "body": "$pr_msg, please help review it!",
+                          "head": "update_version_to_${target_dq_lib_version}",
+                          "base": "$branch"
+                        }
+EOF
+                        """
+                        script {
+                            sh(script: 'cat pull-request.json')
+                            sh(returnStdout: true, script: "curl -s -H 'Authorization: token $GIT_TOKEN'  https://api.github.com/rate_limit > github_data.var").trim()
+                            // Add double quotes before every element of the json
+                            sh(returnStdout: true, script: "sed -i 's#\\([a-zA-Z_]\\+\\):#\"\\1\":#g' github_data.var")
+                            sh(script: 'cat github_data.var')
+                            remaining = sh(returnStdout: true, script: "jq '.rate.remaining' github_data.var").trim() as Integer
+                            reset = sh(returnStdout: true, script: "jq '.rate.reset' github_data.var").trim() as Long
+                            now = sh(returnStdout: true, script: 'date +%s').trim() as Long
+                            wait = sh(returnStdout: true, script: "echo \$(($reset-$now))").trim() as Long
+                            waitUntil = sh(returnStdout: true, script: "date -d @$reset").trim()
+                        }
+                        sh """#! /bin/sh
+                        set +x
+                        echo "Remaining API call number: $remaining"
+            
+                        if [ $remaining -lt 3 ]
+                        then
+                            # Wait for API rate limit reset on GITHUB_TOKEN
+                            echo "Now is $now"
+                            echo "Waiting until $waitUntil for api rate limit reset."
+                            sleep $wait
+                        fi
+            
+                        curl -s -H "Authorization: token $GIT_TOKEN" -X POST https://api.github.com/repos/Talend/data-quality/pulls -d @pull-request.json -o result.json
+                        """
+                        script {
+                            pr_link = sh(returnStdout: true, script: "cat result.json | jq '.html_url' | sed 's/\"//g'").trim()
+                            echo "PR Link = $pr_link"
+                            if (pr_link != "null") {
+                                echo "The pull request url: $pr_link\nPlease review and merge it from Github Web UI."
+
+                            } else {
+                                echo "Failed to create pull request, details as below:"
+                                sh(script: 'cat result.json; exit 1')
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        failure {
+            script {
+                pr_msg = getPRMessage(target_dq_lib_version)
+                slackSend(color: '#e96065', channel: "${SLACK_CHANNEL}", message: "FAILED to submit the PR : \"$pr_msg\" `${env.JOB_NAME.replaceAll('%2F', '/')}` #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
+            }
+        }
+
+        aborted {
+            script {
+                slackSend(color: '#c6c6c6', channel: "${SLACK_CHANNEL}", message: "ABORTED job for the release of DQ Libs $target_dq_lib_version on branch $branch : `${env.JOB_NAME.replaceAll('%2F', '/')}` #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
+            }
+        }
+    }
+}
