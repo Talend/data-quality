@@ -60,7 +60,8 @@ public class PhoneNumberHandlerBase {
             final CharSequence cs = data.toString();
             phonenumber = GOOGLE_PHONE_UTIL.parse(cs, regionCode);
         } catch (NumberParseException e) {
-            LOG.info("Phone number parsing exception with " + data, e); //$NON-NLS-1$
+            LOG.info("Phone number parsing exception: " + e.getMessage());
+            LOG.debug("Phone number parsing exception with input data: " + data); //$NON-NLS-1$
             return null;
         }
         return phonenumber;
@@ -83,7 +84,8 @@ public class PhoneNumberHandlerBase {
             final CharSequence cs = data.toString();
             phonenumber = GOOGLE_PHONE_UTIL.parse(cs, regionCode);
         } catch (NumberParseException e) {
-            LOG.error(e.getMessage(), e);
+            LOG.info("Phone number parsing exception: " + e.getMessage());
+            LOG.debug("Phone number parsing exception with input data: " + data); //$NON-NLS-1$
             return false;
         }
         return GOOGLE_PHONE_UTIL.isValidNumberForRegion(phonenumber, regionCode);

@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 N/A
 ### Changed
-N/A
+chore(TDQ-18056): change stack trace to DEBUG level in PhoneHandlerBase for invalid phones
 ### Removed
 N/A
 ### Deprecated
