@@ -44,7 +44,7 @@ public class UpdateComponentDefinition {
 
     private static final String DQ_LIB_VERSION = "7.4.2-SNAPSHOT"; //$NON-NLS-1$
 
-    private static final String DAIKON_VERSION = "0.31.10-SNAPSHOT"; //$NON-NLS-1$
+    private static final String DAIKON_VERSION = ""; //$NON-NLS-1$
 
     private static final String[] PROVIDERS = new String[] { //
             "/org.talend.designer.components.tdqprovider", // //$NON-NLS-1$
@@ -81,34 +81,32 @@ public class UpdateComponentDefinition {
         if (Files.exists(filePath)) {
             try {
                 List<String> lines = Files.readAllLines(filePath);
-                boolean needUpdate = false;
+                Map<String, String> linesToUpdate = new HashMap<>();
                 for (String line : lines) {
                     for (String depName : DEP_VERSION_MAP.keySet()) {
-                        if (line.contains(depName)) {
-                            needUpdate = true;
-                            break;
+                        if (line.contains(depName) && !DEP_VERSION_MAP.get(depName).isEmpty()) {
+                            linesToUpdate.put(line, depName);
                         }
                     }
                 }
 
-                if (needUpdate) {
+                if (!linesToUpdate.isEmpty()) {
                     System.out.println("Updating: " + f.getName()); // NOSONAR
                     DataOutputStream writer = new DataOutputStream(Files.newOutputStream(filePath));
                     for (String line : lines) {
-                        for (String depName : DEP_VERSION_MAP.keySet()) {
-                            if (line.contains(depName)) {
-                                System.out.println(depName); // NOSONAR
-                                // MODULE field
-                                line = line.replaceAll(depName + "-\\d\\d?.\\d\\d?.\\d\\d?(-SNAPSHOT)?(.jar)?\"", //$NON-NLS-1$
-                                        depName + "-" + DEP_VERSION_MAP.get(depName) + "$2\""); //$NON-NLS-1$ //$NON-NLS-2$
-                                // MVN field
-                                line = line.replaceAll(depName + "/\\d\\d?.\\d\\d?.\\d\\d?(-SNAPSHOT)?(.jar)?\"", //$NON-NLS-1$
-                                        depName + "/" + DEP_VERSION_MAP.get(depName) + "$2\""); //$NON-NLS-1$ //$NON-NLS-2$
-                                // UrlPath field
-                                line = line.replaceAll(depName.replace('-', '.') + "_\\d\\d?.\\d\\d?.\\d\\d?(.SNAPSHOT)?.jar\"", //$NON-NLS-1$
-                                        depName.replace('-', '.') + "_" + DEP_VERSION_MAP.get(depName).replace('-', '.') //$NON-NLS-1$
-                                                + ".jar\""); //$NON-NLS-1$
-                            }
+                        if (linesToUpdate.containsKey(line)) {
+                            String depName = linesToUpdate.get(line);
+                            System.out.println(depName); // NOSONAR
+                            // MODULE field
+                            line = line.replaceAll(depName + "-\\d\\d?.\\d\\d?.\\d\\d?(-SNAPSHOT)?(.jar)?\"", //$NON-NLS-1$
+                                    depName + "-" + DEP_VERSION_MAP.get(depName) + "$2\""); //$NON-NLS-1$ //$NON-NLS-2$
+                            // MVN field
+                            line = line.replaceAll(depName + "/\\d\\d?.\\d\\d?.\\d\\d?(-SNAPSHOT)?(.jar)?\"", //$NON-NLS-1$
+                                    depName + "/" + DEP_VERSION_MAP.get(depName) + "$2\""); //$NON-NLS-1$ //$NON-NLS-2$
+                            // UrlPath field
+                            line = line.replaceAll(depName.replace('-', '.') + "_\\d\\d?.\\d\\d?.\\d\\d?(.SNAPSHOT)?.jar\"", //$NON-NLS-1$
+                                    depName.replace('-', '.') + "_" //$NON-NLS-1$
+                                            + DEP_VERSION_MAP.get(depName).replace('-', '.') + ".jar\""); //$NON-NLS-1$
                         }
                         writer.write((line + "\n").getBytes(StandardCharsets.UTF_8)); //$NON-NLS-1$
                     }
