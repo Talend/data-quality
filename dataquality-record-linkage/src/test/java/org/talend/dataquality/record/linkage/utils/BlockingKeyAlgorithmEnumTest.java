@@ -28,20 +28,21 @@ public class BlockingKeyAlgorithmEnumTest {
 
     /**
      * Test method for
-     * {@link org.talend.dataquality.record.linkage.utils.BlockingKeyAlgorithmEnum#getTypeByValue(java.lang.String)} . case1
+     * {@link org.talend.dataquality.record.linkage.utils.BlockingKeyAlgorithmEnum#getTypeByValue(java.lang.String)} .
+     * case1
      * all of normal case
      */
     @Test
     public void testGetTypeByValue1() {
         for (BlockingKeyAlgorithmEnum type : BlockingKeyAlgorithmEnum.values()) {
             BlockingKeyAlgorithmEnum enumByValue = BlockingKeyAlgorithmEnum.getTypeByValue(type.getValue());
-            BlockingKeyAlgorithmEnum enumByValueLowerCase = BlockingKeyAlgorithmEnum
-                    .getTypeByValue(type.getValue().toLowerCase());
+            BlockingKeyAlgorithmEnum enumByValueLowerCase =
+                    BlockingKeyAlgorithmEnum.getTypeByValue(type.getValue().toLowerCase());
 
-            BlockingKeyAlgorithmEnum enumTypeByComponentValueName = BlockingKeyAlgorithmEnum
-                    .getTypeBySavedValue(type.getComponentValueName());
-            BlockingKeyAlgorithmEnum enumTypeByComponentValueNameLowerCase = BlockingKeyAlgorithmEnum
-                    .getTypeBySavedValue(type.getComponentValueName().toLowerCase());
+            BlockingKeyAlgorithmEnum enumTypeByComponentValueName =
+                    BlockingKeyAlgorithmEnum.getTypeBySavedValue(type.getComponentValueName());
+            BlockingKeyAlgorithmEnum enumTypeByComponentValueNameLowerCase =
+                    BlockingKeyAlgorithmEnum.getTypeBySavedValue(type.getComponentValueName().toLowerCase());
 
             // Assert no one is null
             assertNotNull(enumByValue);

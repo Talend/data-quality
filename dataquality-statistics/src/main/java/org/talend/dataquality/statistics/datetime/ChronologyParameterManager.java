@@ -121,8 +121,11 @@ public class ChronologyParameterManager {
      */
     public static DateTimeFormatter getDateTimeFormatterWithChronology(String pattern, Locale locale) {
 
-        DateTimeFormatter formatter = new DateTimeFormatterBuilder().parseCaseInsensitive().appendPattern(pattern)
-                .toFormatter(locale).withResolverStyle(ResolverStyle.STRICT);
+        DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+                .parseCaseInsensitive()
+                .appendPattern(pattern)
+                .toFormatter(locale)
+                .withResolverStyle(ResolverStyle.STRICT);
         if (Locale.JAPANESE.equals(locale)) {
             return formatter.withChronology(JapaneseChronology.INSTANCE);
         } else if (Locale.TRADITIONAL_CHINESE.equals(locale)) {

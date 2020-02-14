@@ -54,7 +54,8 @@ public class TextPatternUtilTest {
         Random random = new Random();
         CharPattern charPattern = CharPattern.LOWER_LATIN;
         replaceCharMatch((int) 'a', (int) 'z', charPattern, random);
-        assertEquals(String.format("Pattern %s has a size issue", charPattern), globalCount, charPattern.getCodePointSize());
+        assertEquals(String.format("Pattern %s has a size issue", charPattern), globalCount,
+                charPattern.getCodePointSize());
     }
 
     @Test
@@ -63,7 +64,8 @@ public class TextPatternUtilTest {
         CharPattern charPattern = CharPattern.LOWER_LATIN_RARE;
         replaceCharMatch((int) 'ß', (int) 'ö', charPattern, random);
         replaceCharMatch((int) 'ø', (int) 'ÿ', charPattern, random);
-        assertEquals(String.format("Pattern %s has a size issue", charPattern), globalCount, charPattern.getCodePointSize());
+        assertEquals(String.format("Pattern %s has a size issue", charPattern), globalCount,
+                charPattern.getCodePointSize());
     }
 
     @Test
@@ -71,7 +73,8 @@ public class TextPatternUtilTest {
         Random random = new Random();
         CharPattern charPattern = CharPattern.UPPER_LATIN;
         replaceCharMatch((int) 'A', (int) 'Z', charPattern, random);
-        assertEquals(String.format("Pattern %s has a size issue", charPattern), globalCount, charPattern.getCodePointSize());
+        assertEquals(String.format("Pattern %s has a size issue", charPattern), globalCount,
+                charPattern.getCodePointSize());
     }
 
     @Test
@@ -80,7 +83,8 @@ public class TextPatternUtilTest {
         CharPattern charPattern = CharPattern.UPPER_LATIN_RARE;
         replaceCharMatch((int) 'À', (int) 'Ö', charPattern, random);
         replaceCharMatch((int) 'Ø', (int) 'Þ', charPattern, random);
-        assertEquals(String.format("Pattern %s has a size issue", charPattern), globalCount, charPattern.getCodePointSize());
+        assertEquals(String.format("Pattern %s has a size issue", charPattern), globalCount,
+                charPattern.getCodePointSize());
     }
 
     @Test
@@ -90,7 +94,8 @@ public class TextPatternUtilTest {
 
         replaceCharMatch(0x3041, 0x3096, charPattern, random);
         replaceCharMatch(0x309D, 0x309E, charPattern, random);
-        assertEquals(String.format("Pattern %s has a size issue", charPattern), globalCount, charPattern.getCodePointSize());
+        assertEquals(String.format("Pattern %s has a size issue", charPattern), globalCount,
+                charPattern.getCodePointSize());
     }
 
     @Test
@@ -100,7 +105,8 @@ public class TextPatternUtilTest {
 
         replaceCharMatch(0xFF66, 0xFF6F, charPattern, random);
         replaceCharMatch(0xFF70, 0xFF9D, charPattern, random);
-        assertEquals(String.format("Pattern %s has a size issue", charPattern), globalCount, charPattern.getCodePointSize());
+        assertEquals(String.format("Pattern %s has a size issue", charPattern), globalCount,
+                charPattern.getCodePointSize());
     }
 
     @Test
@@ -110,7 +116,8 @@ public class TextPatternUtilTest {
         replaceCharMatch(0x30A1, 0x30FA, charPattern, random);
         replaceCharMatch(0x30FD, 0x30FE, charPattern, random);
         replaceCharMatch(0x31F0, 0x31FF, charPattern, random);
-        assertEquals(String.format("Pattern %s has a size issue", charPattern), globalCount, charPattern.getCodePointSize());
+        assertEquals(String.format("Pattern %s has a size issue", charPattern), globalCount,
+                charPattern.getCodePointSize());
     }
 
     @Test
@@ -123,7 +130,8 @@ public class TextPatternUtilTest {
         replaceCharMatch(0x3021, 0x3029, charPattern, random); // Symbol and punctuation added for TDQ-11343
         replaceCharMatch(0x3038, 0x303B, charPattern, random); // Symbol and punctuation added for TDQ-11343
 
-        assertEquals(String.format("Pattern %s has a size issue", charPattern), globalCount, charPattern.getCodePointSize());
+        assertEquals(String.format("Pattern %s has a size issue", charPattern), globalCount,
+                charPattern.getCodePointSize());
     }
 
     @Test
@@ -143,7 +151,8 @@ public class TextPatternUtilTest {
         replaceCharMatch(0x2E80, 0x2E99, charPattern, random); // Radical supplement part 1
         replaceCharMatch(0x2E9B, 0x2EF3, charPattern, random); // Radical supplement part 2
 
-        assertEquals(String.format("Pattern %s has a size issue", charPattern), globalCount, charPattern.getCodePointSize());
+        assertEquals(String.format("Pattern %s has a size issue", charPattern), globalCount,
+                charPattern.getCodePointSize());
     }
 
     @Test
@@ -151,7 +160,8 @@ public class TextPatternUtilTest {
         Random random = new Random();
         CharPattern charPattern = CharPattern.HANGUL;
         replaceCharMatch(0xAC00, 0xD7AF, charPattern, random);
-        assertEquals(String.format("Pattern %s has a size issue", charPattern), globalCount, charPattern.getCodePointSize());
+        assertEquals(String.format("Pattern %s has a size issue", charPattern), globalCount,
+                charPattern.getCodePointSize());
     }
 
     @Test

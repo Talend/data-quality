@@ -20,7 +20,8 @@ import org.talend.survivorship.model.RuleDefinition.Order;
 
 public class SampleDataConflictShortest2OtherColumnDuplicateSurvivedValue {
 
-    public static final String PKG_NAME_CONFLICT_TWO_TARGET_SAME_RESULT_REFERENCE_COLUMN = "org.talend.survivorship.conflict.short_reference_column"; //$NON-NLS-1$
+    public static final String PKG_NAME_CONFLICT_TWO_TARGET_SAME_RESULT_REFERENCE_COLUMN =
+            "org.talend.survivorship.conflict.short_reference_column"; //$NON-NLS-1$
 
     public static final RuleDefinition[] RULES_CONFLICT_TWO_TARGET_SAME_RESULT_REFERENCE_COLUMN = {
             new RuleDefinition(Order.SEQ, "shortest_city1", "city1", //$NON-NLS-1$ //$NON-NLS-2$
@@ -30,8 +31,8 @@ public class SampleDataConflictShortest2OtherColumnDuplicateSurvivedValue {
                     Function.Shortest, null, "city2", false) }; //$NON-NLS-1$
 
     public static final ConflictRuleDefinition[] RULES_CONFLICT_RESOLVE = {
-            new ConflictRuleDefinition(new DefFunParameter("city2", Function.RemoveDuplicate, null, "city1", null), Order.SEQ, //$NON-NLS-1$//$NON-NLS-2$
-                    "city1_removeDup_city2", false, false, 0),
+            new ConflictRuleDefinition(new DefFunParameter("city2", Function.RemoveDuplicate, null, "city1", null), //$NON-NLS-1$//$NON-NLS-2$
+                    Order.SEQ, "city1_removeDup_city2", false, false, 0),
             new ConflictRuleDefinition(new DefFunParameter("city2", Function.SurviveAs, null, "city1", null), Order.SEQ, //$NON-NLS-1$//$NON-NLS-2$
                     "city1_mappingTo_city2", false, false, 1) };
 

@@ -35,8 +35,8 @@ public class MatchRegexActionTest {
         String ruleName = null;
         String expression = "^[A-Z]\\\\w*$"; //$NON-NLS-1$
         boolean ignoreBlanks = false;
-        ActionParameter actionParaneter = new ActionParameter(dataset, inputData, rowNum, column, ruleName, expression,
-                ignoreBlanks);
+        ActionParameter actionParaneter =
+                new ActionParameter(dataset, inputData, rowNum, column, ruleName, expression, ignoreBlanks);
 
         MatchRegexAction matchRegexAction = new MatchRegexAction();
         boolean checkCanHandle = matchRegexAction.canHandle(actionParaneter);
@@ -57,8 +57,8 @@ public class MatchRegexActionTest {
         String ruleName = null;
         String expression = "^[A-Z]\\\\w*$"; //$NON-NLS-1$
         boolean ignoreBlanks = false;
-        ActionParameter actionParaneter = new ActionParameter(dataset, inputData, rowNum, column, ruleName, expression,
-                ignoreBlanks);
+        ActionParameter actionParaneter =
+                new ActionParameter(dataset, inputData, rowNum, column, ruleName, expression, ignoreBlanks);
 
         MatchRegexAction matchRegexAction = new MatchRegexAction();
         boolean checkCanHandle = matchRegexAction.canHandle(actionParaneter);
@@ -79,8 +79,8 @@ public class MatchRegexActionTest {
         String ruleName = null;
         String expression = "^[A-Z]\\\\w*$"; //$NON-NLS-1$
         boolean ignoreBlanks = false;
-        ActionParameter actionParaneter = new ActionParameter(dataset, inputData, rowNum, column, ruleName, expression,
-                ignoreBlanks);
+        ActionParameter actionParaneter =
+                new ActionParameter(dataset, inputData, rowNum, column, ruleName, expression, ignoreBlanks);
 
         MatchRegexAction matchRegexAction = new MatchRegexAction();
         boolean checkCanHandle = matchRegexAction.canHandle(actionParaneter);
@@ -101,8 +101,8 @@ public class MatchRegexActionTest {
         String ruleName = null;
         String expression = null;
         boolean ignoreBlanks = false;
-        ActionParameter actionParaneter = new ActionParameter(dataset, inputData, rowNum, column, ruleName, expression,
-                ignoreBlanks);
+        ActionParameter actionParaneter =
+                new ActionParameter(dataset, inputData, rowNum, column, ruleName, expression, ignoreBlanks);
 
         MatchRegexAction matchRegexAction = new MatchRegexAction();
         boolean checkCanHandle = matchRegexAction.canHandle(actionParaneter);

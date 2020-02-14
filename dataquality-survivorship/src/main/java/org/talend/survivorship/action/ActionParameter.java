@@ -57,8 +57,8 @@ public class ActionParameter {
     /**
      * constructor of ActionParameter.
      */
-    public ActionParameter(DataSet dataset, Object inputData, int rowNum, String column, String ruleName, String expression,
-            boolean ignoreBlanks) {
+    public ActionParameter(DataSet dataset, Object inputData, int rowNum, String column, String ruleName,
+            String expression, boolean ignoreBlanks) {
         this.dataset = dataset;
         this.inputData = inputData;
         this.rowNum = rowNum;

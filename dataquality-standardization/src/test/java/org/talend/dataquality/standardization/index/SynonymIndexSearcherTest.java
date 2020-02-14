@@ -152,7 +152,8 @@ public class SynonymIndexSearcherTest {
         searcher.close();
     }
 
-    private static final String LOREM_IPSUM = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem. Proin ut ligula vel nunc egestas porttitor. Morbi lectus risus, iaculis vel, suscipit quis, luctus non, massa. Fusce ac turpis quis ligula lacinia aliquet. Mauris ipsum. Nulla metus metus, ullamcorper vel, tincidunt sed, euismod in, nibh. Quisque volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante. Sed lacinia, urna non tincidunt mattis, tortor neque adipiscing diam, a cursus ipsum ante quis turpis. Nulla facilisi. Ut fringilla. Suspendisse potenti. Nunc feugiat mi a tellus consequat imperdiet. Vestibulum sapien. Proin quam. Etiam ultrices. Suspendisse in justo eu magna luctus suscipit. Sed lectus. Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi lacinia molestie dui. Praesent blandit dolor. Sed non quam. In vel mi sit amet augue congue elementum. Morbi in ipsum sit amet pede facilisis laoreet. Donec lacus nunc, viverra nec, blandit vel, egestas et, augue. Vestibulum tincidunt malesuada tellus. Ut ultrices ultrices enim. Curabitur sit amet mauris. Morbi in dui quis est pulvinar ullamcorper. Nulla facilisi. Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue. Proin sodales libero eget ante. Nulla quam. Aenean laoreet. Vestibulum nisi lectus, commodo ac, facilisis ac, ultricies eu, pede. Ut orci risus, accumsan porttitor, cursus quis, aliquet eget, justo. Sed pretium blandit orci. Ut eu diam at pede suscipit sodales. Aenean lectus elit, fermentum non, convallis id, sagittis at, neque. Nullam mauris orci, aliquet et, iaculis et, viverra vitae, ligula. Nulla ut felis in purus aliquam imperdiet. Maecenas aliquet mollis lectus. Vivamus consectetuer risus et tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem. Proin ut ligula vel nunc egestas porttitor. Morbi lectus risus, iaculis vel, suscipit quis, luctus non, massa. Fusce ac turpis quis ligula lacinia aliquet. Mauris ipsum. Nulla metus metus, ullamcorper vel, tincidunt sed, euismod in, nibh. Quisque volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante. Sed lacinia, urna non tincidunt mattis, tortor neque adipiscing diam, a cursus ipsum ante quis turpis. Nulla facilisi. Ut fringilla. Suspendisse potenti. Nunc feugiat mi a tellus consequat imperdiet. Vestibulum sapien. Proin quam. Etiam ultrices. Suspendisse in justo eu magna luctus suscipit. Sed lectus. Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi lacinia molestie dui. Praesent blandit dolor. Sed non quam. In vel mi sit amet augue congue elementum. Morbi in ipsum sit amet pede facilisis laoreet. Donec lacus nunc, viverra nec, blandit vel, egestas et, augue. Vestibulum tincidunt malesuada tellus. Ut ultrices ultrices enim. Curabitur sit amet mauris. Morbi in dui quis est pulvinar ullamcorper. Nulla facilisi. Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue. Proin sodales libero eget ante. Nulla quam. Aenean laoreet. Vestibulum nisi lectus, commodo ac, facilisis ac, ultricies eu, pede. Ut orci risus, accumsan porttitor, cursus quis, aliquet eget, justo. Sed pretium blandit orci. Ut eu diam at pede suscipit sodales. Aenean lectus elit, fermentum non, convallis id, sagittis at, neque. Nullam mauris orci, aliquet et, iaculis et, viverra vitae, ligula. Nulla ut felis in purus aliquam imperdiet. Maecenas aliquet mollis lectus. Vivamus consectetuer risus et tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem. Proin ut ligula vel nunc egestas porttitor. Morbi lectus risus, iaculis vel, suscipit quis, luctus non, massa. Fusce ac turpis quis ligula lacinia aliquet. Mauris ipsum. Nulla metus metus, ullamcorper vel, tincidunt sed, euismod in, nibh. Quisque volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante. Sed lacinia, urna non tincidunt mattis, tortor neque adipiscing diam, a cursus ipsum ante quis turpis. Nulla facilisi. Ut fringilla. Suspendisse potenti. Nunc feugiat mi a tellus consequat imperdiet. Vestibulum sapien. Proin quam. Etiam ultrices. Suspendisse in justo eu magna luctus suscipit. Sed lectus. Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi lacinia molestie dui. Praesent blandit dolor. Sed non quam. In vel mi sit amet augue congue elementum. Morbi in ipsum si.";
+    private static final String LOREM_IPSUM =
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem. Proin ut ligula vel nunc egestas porttitor. Morbi lectus risus, iaculis vel, suscipit quis, luctus non, massa. Fusce ac turpis quis ligula lacinia aliquet. Mauris ipsum. Nulla metus metus, ullamcorper vel, tincidunt sed, euismod in, nibh. Quisque volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante. Sed lacinia, urna non tincidunt mattis, tortor neque adipiscing diam, a cursus ipsum ante quis turpis. Nulla facilisi. Ut fringilla. Suspendisse potenti. Nunc feugiat mi a tellus consequat imperdiet. Vestibulum sapien. Proin quam. Etiam ultrices. Suspendisse in justo eu magna luctus suscipit. Sed lectus. Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi lacinia molestie dui. Praesent blandit dolor. Sed non quam. In vel mi sit amet augue congue elementum. Morbi in ipsum sit amet pede facilisis laoreet. Donec lacus nunc, viverra nec, blandit vel, egestas et, augue. Vestibulum tincidunt malesuada tellus. Ut ultrices ultrices enim. Curabitur sit amet mauris. Morbi in dui quis est pulvinar ullamcorper. Nulla facilisi. Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue. Proin sodales libero eget ante. Nulla quam. Aenean laoreet. Vestibulum nisi lectus, commodo ac, facilisis ac, ultricies eu, pede. Ut orci risus, accumsan porttitor, cursus quis, aliquet eget, justo. Sed pretium blandit orci. Ut eu diam at pede suscipit sodales. Aenean lectus elit, fermentum non, convallis id, sagittis at, neque. Nullam mauris orci, aliquet et, iaculis et, viverra vitae, ligula. Nulla ut felis in purus aliquam imperdiet. Maecenas aliquet mollis lectus. Vivamus consectetuer risus et tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem. Proin ut ligula vel nunc egestas porttitor. Morbi lectus risus, iaculis vel, suscipit quis, luctus non, massa. Fusce ac turpis quis ligula lacinia aliquet. Mauris ipsum. Nulla metus metus, ullamcorper vel, tincidunt sed, euismod in, nibh. Quisque volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante. Sed lacinia, urna non tincidunt mattis, tortor neque adipiscing diam, a cursus ipsum ante quis turpis. Nulla facilisi. Ut fringilla. Suspendisse potenti. Nunc feugiat mi a tellus consequat imperdiet. Vestibulum sapien. Proin quam. Etiam ultrices. Suspendisse in justo eu magna luctus suscipit. Sed lectus. Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi lacinia molestie dui. Praesent blandit dolor. Sed non quam. In vel mi sit amet augue congue elementum. Morbi in ipsum sit amet pede facilisis laoreet. Donec lacus nunc, viverra nec, blandit vel, egestas et, augue. Vestibulum tincidunt malesuada tellus. Ut ultrices ultrices enim. Curabitur sit amet mauris. Morbi in dui quis est pulvinar ullamcorper. Nulla facilisi. Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue. Proin sodales libero eget ante. Nulla quam. Aenean laoreet. Vestibulum nisi lectus, commodo ac, facilisis ac, ultricies eu, pede. Ut orci risus, accumsan porttitor, cursus quis, aliquet eget, justo. Sed pretium blandit orci. Ut eu diam at pede suscipit sodales. Aenean lectus elit, fermentum non, convallis id, sagittis at, neque. Nullam mauris orci, aliquet et, iaculis et, viverra vitae, ligula. Nulla ut felis in purus aliquam imperdiet. Maecenas aliquet mollis lectus. Vivamus consectetuer risus et tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem. Proin ut ligula vel nunc egestas porttitor. Morbi lectus risus, iaculis vel, suscipit quis, luctus non, massa. Fusce ac turpis quis ligula lacinia aliquet. Mauris ipsum. Nulla metus metus, ullamcorper vel, tincidunt sed, euismod in, nibh. Quisque volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante. Sed lacinia, urna non tincidunt mattis, tortor neque adipiscing diam, a cursus ipsum ante quis turpis. Nulla facilisi. Ut fringilla. Suspendisse potenti. Nunc feugiat mi a tellus consequat imperdiet. Vestibulum sapien. Proin quam. Etiam ultrices. Suspendisse in justo eu magna luctus suscipit. Sed lectus. Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi lacinia molestie dui. Praesent blandit dolor. Sed non quam. In vel mi sit amet augue congue elementum. Morbi in ipsum si.";
 
     /**
      * DOC scorreia Comment method "getSearcher".
@@ -376,7 +377,8 @@ public class SynonymIndexSearcherTest {
                 for (int i = 0; i < docs.totalHits.value; i++) {
                     Document document = searcher.getDocument(docs.scoreDocs[i].doc);
                     String[] syns = document.getValues(SynonymIndexSearcher.F_SYN);
-                    printToConsole(docs.scoreDocs[i] + "\n\t" + document.getValues(SynonymIndexSearcher.F_WORD)[0] + " -> ");
+                    printToConsole(
+                            docs.scoreDocs[i] + "\n\t" + document.getValues(SynonymIndexSearcher.F_WORD)[0] + " -> ");
                     printLineToConsole(Arrays.asList(syns).toString());
                     // doAssertEquals("unexpected hit!", expected.get(key)[i].intValue(), docs.scoreDocs[i].doc);
                     doAssertEquals("unexpected hit when searching for [" + key + "] in " + mode + " mode.",
@@ -388,133 +390,141 @@ public class SynonymIndexSearcherTest {
 
     }
 
-    public static final String[][] synonyms4newoptions = { { "Dulux Trade", "ABC DEF" }, { "GHI JKL", "Dulux Trade" },
-            { "Dulux Trade Red Paint 5L", "DEF ABC" }, { "Trade", "PPP" }, { "Trade Dulux", "PPP" },
-            { "IBM", "International Business Machines|Big Blue" }, { "Big Blue", "IBM" }, { "ALMOND/WH", "ALMOND/WHITE" },
-            { "The quick brown fox jumps over the lazy dog", "" }, { "The quick brown fox", "" },
-            { "The quick brown lazy fox", "" }, { "quick fox", "" }, { "quic fax", "" }, { "quick", "" } };
+    public static final String[][] synonyms4newoptions =
+            { { "Dulux Trade", "ABC DEF" }, { "GHI JKL", "Dulux Trade" }, { "Dulux Trade Red Paint 5L", "DEF ABC" },
+                    { "Trade", "PPP" }, { "Trade Dulux", "PPP" }, { "IBM", "International Business Machines|Big Blue" },
+                    { "Big Blue", "IBM" }, { "ALMOND/WH", "ALMOND/WHITE" },
+                    { "The quick brown fox jumps over the lazy dog", "" }, { "The quick brown fox", "" },
+                    { "The quick brown lazy fox", "" }, { "quick fox", "" }, { "quic fax", "" }, { "quick", "" } };
 
-    public static final LinkedHashMap<String, Integer[]> ExpectResults4MatchAny = new LinkedHashMap<String, Integer[]>() {
+    public static final LinkedHashMap<String, Integer[]> ExpectResults4MatchAny =
+            new LinkedHashMap<String, Integer[]>() {
 
-        private static final long serialVersionUID = 1L;
+                private static final long serialVersionUID = 1L;
 
-        {
-            put("Dulux Trade", new Integer[] { 0, 1, 2, 4, 3 });
-            put("Trade", new Integer[] { 3, 0, 2, 4, 1 });
+                {
+                    put("Dulux Trade", new Integer[] { 0, 1, 2, 4, 3 });
+                    put("Trade", new Integer[] { 3, 0, 2, 4, 1 });
 
-            put("Big Blue", new Integer[] { 6, 5 });
-            put("Business International", new Integer[] { 5 });
-            put("International Business", new Integer[] { 5 });
+                    put("Big Blue", new Integer[] { 6, 5 });
+                    put("Business International", new Integer[] { 5 });
+                    put("International Business", new Integer[] { 5 });
 
-            put("ALMOND/WH", new Integer[] { 7 });
-            put("QUICK FOX", new Integer[] { 11, 8, 9, 10, 13 });
-        }
-    };
+                    put("ALMOND/WH", new Integer[] { 7 });
+                    put("QUICK FOX", new Integer[] { 11, 8, 9, 10, 13 });
+                }
+            };
 
-    public static final LinkedHashMap<String, Integer[]> ExpectResults4MatchPartial = new LinkedHashMap<String, Integer[]>() {
+    public static final LinkedHashMap<String, Integer[]> ExpectResults4MatchPartial =
+            new LinkedHashMap<String, Integer[]>() {
 
-        private static final long serialVersionUID = 1L;
+                private static final long serialVersionUID = 1L;
 
-        {
-            put("Dulux Trade", new Integer[] { 0, 1, 2 });
-            put("Trade", new Integer[] { 3, 0, 2, 4, 1 });
+                {
+                    put("Dulux Trade", new Integer[] { 0, 1, 2 });
+                    put("Trade", new Integer[] { 3, 0, 2, 4, 1 });
 
-            put("Big Blue", new Integer[] { 6, 5 });
-            put("Business International", new Integer[] {});
-            put("International Business", new Integer[] { 5 });
+                    put("Big Blue", new Integer[] { 6, 5 });
+                    put("Business International", new Integer[] {});
+                    put("International Business", new Integer[] { 5 });
 
-            put("ALMOND/WH", new Integer[] { 7 });
+                    put("ALMOND/WH", new Integer[] { 7 });
 
-            put("QUICK FOX", new Integer[] { 11, 8, 9 });
-        }
-    };
+                    put("QUICK FOX", new Integer[] { 11, 8, 9 });
+                }
+            };
 
-    public static final LinkedHashMap<String, Integer[]> ExpectResults4MatchAll = new LinkedHashMap<String, Integer[]>() {
+    public static final LinkedHashMap<String, Integer[]> ExpectResults4MatchAll =
+            new LinkedHashMap<String, Integer[]>() {
 
-        private static final long serialVersionUID = 1L;
+                private static final long serialVersionUID = 1L;
 
-        {
-            put("Dulux Trade", new Integer[] { 0, 1, 2, 4 });
-            put("Trade", new Integer[] { 3, 0, 2, 4, 1 });
+                {
+                    put("Dulux Trade", new Integer[] { 0, 1, 2, 4 });
+                    put("Trade", new Integer[] { 3, 0, 2, 4, 1 });
 
-            put("Big Blue", new Integer[] { 6, 5 });
-            put("Business International", new Integer[] { 5 });
-            put("International Business", new Integer[] { 5 });
+                    put("Big Blue", new Integer[] { 6, 5 });
+                    put("Business International", new Integer[] { 5 });
+                    put("International Business", new Integer[] { 5 });
 
-            put("ALMOND/WH", new Integer[] { 7 });
+                    put("ALMOND/WH", new Integer[] { 7 });
 
-            put("QUICK FOX", new Integer[] { 11, 8, 9, 10 });
-        }
-    };
+                    put("QUICK FOX", new Integer[] { 11, 8, 9, 10 });
+                }
+            };
 
-    public static final LinkedHashMap<String, Integer[]> ExpectResults4MatchExact = new LinkedHashMap<String, Integer[]>() {
+    public static final LinkedHashMap<String, Integer[]> ExpectResults4MatchExact =
+            new LinkedHashMap<String, Integer[]>() {
 
-        private static final long serialVersionUID = 1L;
+                private static final long serialVersionUID = 1L;
 
-        {
-            put("Dulux Trade", new Integer[] { 0, 1 });
-            put("Trade", new Integer[] { 3 });
+                {
+                    put("Dulux Trade", new Integer[] { 0, 1 });
+                    put("Trade", new Integer[] { 3 });
 
-            put("Big Blue", new Integer[] { 6, 5 });
-            put("Business International", new Integer[] {});
-            put("International Business", new Integer[] {});
+                    put("Big Blue", new Integer[] { 6, 5 });
+                    put("Business International", new Integer[] {});
+                    put("International Business", new Integer[] {});
 
-            put("ALMOND/WH", new Integer[] { 7 });
+                    put("ALMOND/WH", new Integer[] { 7 });
 
-            put("QUICK FOX", new Integer[] { 11 });
-        }
-    };
+                    put("QUICK FOX", new Integer[] { 11 });
+                }
+            };
 
-    public static final LinkedHashMap<String, Integer[]> ExpectResults4MatchAnyFuzzy = new LinkedHashMap<String, Integer[]>() {
+    public static final LinkedHashMap<String, Integer[]> ExpectResults4MatchAnyFuzzy =
+            new LinkedHashMap<String, Integer[]>() {
 
-        private static final long serialVersionUID = 1L;
+                private static final long serialVersionUID = 1L;
 
-        {
+                {
 
-            put("Dulux Trade", new Integer[] { 0, 1, 2, 4, 3 });
-            put("Trade", new Integer[] { 3, 0, 2, 4, 1 });
+                    put("Dulux Trade", new Integer[] { 0, 1, 2, 4, 3 });
+                    put("Trade", new Integer[] { 3, 0, 2, 4, 1 });
 
-            put("Big Blue", new Integer[] { 6, 5 });
-            put("Business International", new Integer[] { 5 });
-            put("International Business", new Integer[] { 5 });
+                    put("Big Blue", new Integer[] { 6, 5 });
+                    put("Business International", new Integer[] { 5 });
+                    put("International Business", new Integer[] { 5 });
 
-            put("ALMOND/WH", new Integer[] { 7 });
+                    put("ALMOND/WH", new Integer[] { 7 });
 
-            put("QUICK FOX", new Integer[] { 11, 8, 9, 10, 12, 13 });
-        }
-    };
+                    put("QUICK FOX", new Integer[] { 11, 8, 9, 10, 12, 13 });
+                }
+            };
 
-    public static final LinkedHashMap<String, Integer[]> ExpectResults4MatchAllFuzzy = new LinkedHashMap<String, Integer[]>() {
+    public static final LinkedHashMap<String, Integer[]> ExpectResults4MatchAllFuzzy =
+            new LinkedHashMap<String, Integer[]>() {
 
-        private static final long serialVersionUID = 1L;
+                private static final long serialVersionUID = 1L;
 
-        {
-            put("Dulux Trade", new Integer[] { 0, 1, 2, 4 });
-            put("Trade", new Integer[] { 3, 0, 2, 4, 1 });
+                {
+                    put("Dulux Trade", new Integer[] { 0, 1, 2, 4 });
+                    put("Trade", new Integer[] { 3, 0, 2, 4, 1 });
 
-            put("Big Blue", new Integer[] { 6, 5 });
-            put("Business International", new Integer[] { 5 });
-            put("International Business", new Integer[] { 5 });
+                    put("Big Blue", new Integer[] { 6, 5 });
+                    put("Business International", new Integer[] { 5 });
+                    put("International Business", new Integer[] { 5 });
 
-            put("ALMOND/WH", new Integer[] { 7 });
+                    put("ALMOND/WH", new Integer[] { 7 });
 
-            put("QUICK FOX", new Integer[] { 11, 8, 9, 10, 12 });
-        }
-    };
+                    put("QUICK FOX", new Integer[] { 11, 8, 9, 10, 12 });
+                }
+            };
 
-    public static final LinkedHashMap<String, LinkedHashMap<String, Integer[]>> ExpectResults4NewOptions = new LinkedHashMap<String, LinkedHashMap<String, Integer[]>>() {
+    public static final LinkedHashMap<String, LinkedHashMap<String, Integer[]>> ExpectResults4NewOptions =
+            new LinkedHashMap<String, LinkedHashMap<String, Integer[]>>() {
 
-        private static final long serialVersionUID = 1L;
+                private static final long serialVersionUID = 1L;
 
-        {
-            put("MATCH_ANY", ExpectResults4MatchAny);
-            put("MATCH_PARTIAL", ExpectResults4MatchPartial);
-            put("MATCH_ALL", ExpectResults4MatchAll);
-            put("MATCH_EXACT", ExpectResults4MatchExact);
-            put("MATCH_ANY_FUZZY", ExpectResults4MatchAnyFuzzy);
-            put("MATCH_ALL_FUZZY", ExpectResults4MatchAllFuzzy);
-        }
-    };
+                {
+                    put("MATCH_ANY", ExpectResults4MatchAny);
+                    put("MATCH_PARTIAL", ExpectResults4MatchPartial);
+                    put("MATCH_ALL", ExpectResults4MatchAll);
+                    put("MATCH_EXACT", ExpectResults4MatchExact);
+                    put("MATCH_ANY_FUZZY", ExpectResults4MatchAnyFuzzy);
+                    put("MATCH_ALL_FUZZY", ExpectResults4MatchAllFuzzy);
+                }
+            };
 
     private void doAssertEquals(String string, long expectedLongValue, long actualLongValue) {
         if (doAsserts) {

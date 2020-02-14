@@ -44,7 +44,8 @@ public class ExpressionAction extends AbstractSurvivorshipAction {
         try {
             if (actionParameter.getInputData() != null && actionParameter.getInputData() instanceof Number) {
 
-                return (Boolean) engine.eval(actionParameter.getInputData().toString() + actionParameter.getExpression());
+                return (Boolean) engine
+                        .eval(actionParameter.getInputData().toString() + actionParameter.getExpression());
             } else if (actionParameter.getInputData() != null && actionParameter.getInputData() instanceof Date) {
                 String varName = actionParameter.getColumn() + "Date"; //$NON-NLS-1$
                 engine.put(varName, actionParameter.getInputData());

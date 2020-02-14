@@ -64,8 +64,8 @@ public class DataSet {
 
     private NumberService ns;
 
-    private SoftReference<HashMap<String, List<Integer>>> conflictDataMap = new SoftReference<>(
-            new HashMap<String, List<Integer>>());
+    private SoftReference<HashMap<String, List<Integer>>> conflictDataMap =
+            new SoftReference<>(new HashMap<String, List<Integer>>());
 
     /**
      * DataSet constructor.
@@ -218,9 +218,11 @@ public class DataSet {
                         boolean isIgnoreBlank = ruleDef.isIgnoreBlanks();
                         String fillColumn = ruleDef.getFillColumn();
                         boolean isDealDup = ruleDef.isDuplicateSurCheck();
-                        FunctionParameter functionParameter = new FunctionParameter(action, expression, isIgnoreBlank, isDealDup);
-                        CRCRHandler newCrcrHandler = HandlerFactory.getInstance().createCRCRHandler(new HandlerParameter(this,
-                                refColumn, tarColumn, cRuleName, this.getColumnIndexMap(), fillColumn, functionParameter));
+                        FunctionParameter functionParameter =
+                                new FunctionParameter(action, expression, isIgnoreBlank, isDealDup);
+                        CRCRHandler newCrcrHandler =
+                                HandlerFactory.getInstance().createCRCRHandler(new HandlerParameter(this, refColumn,
+                                        tarColumn, cRuleName, this.getColumnIndexMap(), fillColumn, functionParameter));
                         // If crcrHandler is exist already then put it into map else don't put it again just link it
                         // with others
                         if (crcrHandler == null) {

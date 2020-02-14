@@ -19,7 +19,8 @@ public class DQStatisticsRuntimeException extends RuntimeException {
         super(message, cause);
     }
 
-    public DQStatisticsRuntimeException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public DQStatisticsRuntimeException(String message, Throwable cause, boolean enableSuppression,
+            boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

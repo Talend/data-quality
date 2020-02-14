@@ -20,7 +20,8 @@ public class DQCommonRuntimeException extends RuntimeException {
         super(message, cause);
     }
 
-    public DQCommonRuntimeException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public DQCommonRuntimeException(String message, Throwable cause, boolean enableSuppression,
+            boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

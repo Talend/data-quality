@@ -75,8 +75,10 @@ public class MFBOrderTest extends TestCase {
             add(new Record(Arrays.asList(new Attribute[] { new Attribute("A7", 0, "ABCDXXXXXX") }), "R7", 999L, "MFB")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
             add(new Record(Arrays.asList(new Attribute[] { new Attribute("A8", 0, "ABCXXXXXXX") }), "R8", 999L, "MFB")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
             add(new Record(Arrays.asList(new Attribute[] { new Attribute("A9", 0, "ABXXXXXXXX") }), "R9", 999L, "MFB")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A10", 0, "AXXXXXXXX") }), "R10", 999L, "MFB")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A11", 0, "XXXXXXXXX") }), "R11", 999L, "MFB")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A10", 0, "AXXXXXXXX") }), "R10", 999L, //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+                    "MFB")); //$NON-NLS-1$
+            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A11", 0, "XXXXXXXXX") }), "R11", 999L, //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+                    "MFB")); //$NON-NLS-1$
         }
     };
 
@@ -84,10 +86,12 @@ public class MFBOrderTest extends TestCase {
 
         {
             add(new Record(Arrays.asList(new Attribute[] { new Attribute("A1", 0, "ABCDEFGHIJ") }), "R1", 999L, "MFB")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A11", 0, "XXXXXXXXX") }), "R11", 999L, "MFB")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A11", 0, "XXXXXXXXX") }), "R11", 999L, //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+                    "MFB")); //$NON-NLS-1$
             add(new Record(Arrays.asList(new Attribute[] { new Attribute("A4", 0, "ABCDEFGXXX") }), "R4", 999L, "MFB")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
             add(new Record(Arrays.asList(new Attribute[] { new Attribute("A7", 0, "ABCDXXXXXX") }), "R7", 999L, "MFB")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A10", 0, "AXXXXXXXX") }), "R10", 999L, "MFB")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+            add(new Record(Arrays.asList(new Attribute[] { new Attribute("A10", 0, "AXXXXXXXX") }), "R10", 999L, //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+                    "MFB")); //$NON-NLS-1$
             add(new Record(Arrays.asList(new Attribute[] { new Attribute("A2", 0, "ABCDEFGHIX") }), "R2", 999L, "MFB")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
             add(new Record(Arrays.asList(new Attribute[] { new Attribute("A6", 0, "ABCDEXXXXX") }), "R6", 999L, "MFB")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
             add(new Record(Arrays.asList(new Attribute[] { new Attribute("A3", 0, "ABCDEFGHXX") }), "R3", 999L, "MFB")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
@@ -97,7 +101,8 @@ public class MFBOrderTest extends TestCase {
         }
     };
 
-    private MatchMergeAlgorithm buildMFB(float attrThreshold, double minConfidence, SurvivorShipAlgorithmEnum mergeAlgo) {
+    private MatchMergeAlgorithm buildMFB(float attrThreshold, double minConfidence,
+            SurvivorShipAlgorithmEnum mergeAlgo) {
         return MFB.build( //
                 new AttributeMatcherType[] { AttributeMatcherType.LEVENSHTEIN }, // algorithms
                 new String[] { "" }, // algo params //$NON-NLS-1$
@@ -201,7 +206,8 @@ public class MFBOrderTest extends TestCase {
 
     private void printResult(List<Record> mergedRecords) {
         for (Record rec : mergedRecords) {
-            List<String> attrList = rec.getAttributes().stream().map(attr -> attr.getValue()).collect(Collectors.toList());
+            List<String> attrList =
+                    rec.getAttributes().stream().map(attr -> attr.getValue()).collect(Collectors.toList());
             System.out.println("  " + rec + " " + attrList + "   Confidence: " + rec.getConfidence()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         }
     }

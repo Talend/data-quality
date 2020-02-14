@@ -169,7 +169,8 @@ public class SurvivorshipManagerTest {
     @Test
     public void testRunSessionMostCommon2MostRecent() {
 
-        manager = new SurvivorshipManager(SampleData.RULE_PATH, SampleDataConflictMostCommon2MostRecent.PKG_NAME_CONFLICT);
+        manager = new SurvivorshipManager(SampleData.RULE_PATH,
+                SampleDataConflictMostCommon2MostRecent.PKG_NAME_CONFLICT);
 
         for (String str : SampleDataConflict.COLUMNS_CONFLICT.keySet()) {
             Column column = new Column(str, SampleDataConflict.COLUMNS_CONFLICT.get(str));
@@ -212,7 +213,8 @@ public class SurvivorshipManagerTest {
     @Test
     public void testRunSessionMostCommon2MostRecentDisable() {
 
-        manager = new SurvivorshipManager(SampleData.RULE_PATH, SampleDataConflictMostCommon2MostRecent.PKG_NAME_CONFLICT);
+        manager = new SurvivorshipManager(SampleData.RULE_PATH,
+                SampleDataConflictMostCommon2MostRecent.PKG_NAME_CONFLICT);
 
         for (String str : SampleDataConflict.COLUMNS_CONFLICT.keySet()) {
             Column column = new Column(str, SampleDataConflict.COLUMNS_CONFLICT.get(str));
@@ -299,7 +301,8 @@ public class SurvivorshipManagerTest {
     @Test
     public void testRunSessionMostCommon2Longest() {
 
-        manager = new SurvivorshipManager(SampleData.RULE_PATH, SampleDataConflictMostCommon2Longest.PKG_NAME_CONFLICT_FRE_LONG);
+        manager = new SurvivorshipManager(SampleData.RULE_PATH,
+                SampleDataConflictMostCommon2Longest.PKG_NAME_CONFLICT_FRE_LONG);
 
         for (String str : SampleDataConflict.COLUMNS_CONFLICT.keySet()) {
             Column column = new Column(str, SampleDataConflict.COLUMNS_CONFLICT.get(str));
@@ -806,7 +809,8 @@ public class SurvivorshipManagerTest {
     @Test
     public void testRunSessionMoreThanOneGroupThenFillEmtpyBy() {
 
-        manager = new SurvivorshipManager(SampleData.RULE_PATH, SampleDataConflictMutilGroupFillEmptyBy.PKG_NAME_CONFLICT);
+        manager = new SurvivorshipManager(SampleData.RULE_PATH,
+                SampleDataConflictMutilGroupFillEmptyBy.PKG_NAME_CONFLICT);
 
         for (String str : SampleDataConflict.COLUMNS_CONFLICT.keySet()) {
             Column column = new Column(str, SampleDataConflict.COLUMNS_CONFLICT.get(str));
@@ -863,7 +867,8 @@ public class SurvivorshipManagerTest {
     @Test
     public void testRunSessionMoreThanOneGroupCollictColumnDisNormal() {
 
-        manager = new SurvivorshipManager(SampleData.RULE_PATH, SampleDataConflictMutilGroupConflictDisError.PKG_NAME_CONFLICT);
+        manager = new SurvivorshipManager(SampleData.RULE_PATH,
+                SampleDataConflictMutilGroupConflictDisError.PKG_NAME_CONFLICT);
 
         for (String str : SampleDataConflict.COLUMNS_CONFLICT.keySet()) {
             Column column = new Column(str, SampleDataConflict.COLUMNS_CONFLICT.get(str));
@@ -1047,10 +1052,12 @@ public class SurvivorshipManagerTest {
         }
         manager.dataset = new DataSet(manager.getColumnList());
         Map<String, List<String>> checkConflictRuleValid = manager.checkConflictRuleValid();
-        assertEquals("All of rule should be valid so that the size of map should be 0", 0, checkConflictRuleValid.size()); //$NON-NLS-1$
+        assertEquals("All of rule should be valid so that the size of map should be 0", 0, //$NON-NLS-1$
+                checkConflictRuleValid.size());
         assertEquals("column oder size should be 9 because of there are 9 columns", 9, //$NON-NLS-1$
                 manager.getDataSet().getColumnOrder().size());
-        assertEquals("The first one should be firstName", "firstName", manager.getDataSet().getColumnOrder().get(0).getName()); //$NON-NLS-1$ //$NON-NLS-2$
+        assertEquals("The first one should be firstName", "firstName", //$NON-NLS-1$//$NON-NLS-2$
+                manager.getDataSet().getColumnOrder().get(0).getName());
         assertEquals("The first one should be city1", "city1", manager.getDataSet().getColumnOrder().get(1).getName()); //$NON-NLS-1$ //$NON-NLS-2$
         assertEquals("The first one should be city2", "city2", manager.getDataSet().getColumnOrder().get(2).getName()); //$NON-NLS-1$ //$NON-NLS-2$
 
@@ -1139,7 +1146,8 @@ public class SurvivorshipManagerTest {
     @Test
     public void testRunSessionExecuteWithUIOrderRevmoveIsSecondOne() {
 
-        manager = new SurvivorshipManager(SampleData.RULE_PATH, SampleDataConflictExecuteRulesWithUIOrder.PKG_NAME_CONFLICT);
+        manager = new SurvivorshipManager(SampleData.RULE_PATH,
+                SampleDataConflictExecuteRulesWithUIOrder.PKG_NAME_CONFLICT);
 
         for (String str : SampleDataConflict.COLUMNS_CONFLICT.keySet()) {
             Column column = new Column(str, SampleDataConflict.COLUMNS_CONFLICT.get(str));
@@ -1189,7 +1197,8 @@ public class SurvivorshipManagerTest {
     @Test
     public void testRunSessionExecuteWithUIOrderRevmoveIsFirstOne() {
 
-        manager = new SurvivorshipManager(SampleData.RULE_PATH, SampleDataConflictExecuteRulesWithUIOrder.PKG_NAME_CONFLICT);
+        manager = new SurvivorshipManager(SampleData.RULE_PATH,
+                SampleDataConflictExecuteRulesWithUIOrder.PKG_NAME_CONFLICT);
 
         for (String str : SampleDataConflict.COLUMNS_CONFLICT.keySet()) {
             Column column = new Column(str, SampleDataConflict.COLUMNS_CONFLICT.get(str));
@@ -1239,7 +1248,8 @@ public class SurvivorshipManagerTest {
     @Test
     public void testRunSessionExecuteWithUIOrderRevmoveFirstRuleIsInvalid() {
 
-        manager = new SurvivorshipManager(SampleData.RULE_PATH, SampleDataConflictExecuteRulesWithUIOrder.PKG_NAME_CONFLICT);
+        manager = new SurvivorshipManager(SampleData.RULE_PATH,
+                SampleDataConflictExecuteRulesWithUIOrder.PKG_NAME_CONFLICT);
 
         for (String str : SampleDataConflict.COLUMNS_CONFLICT.keySet()) {
             Column column = new Column(str, SampleDataConflict.COLUMNS_CONFLICT.get(str));

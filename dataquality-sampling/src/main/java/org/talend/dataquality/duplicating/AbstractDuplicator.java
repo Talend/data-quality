@@ -44,7 +44,8 @@ public abstract class AbstractDuplicator<I, O> {
         distribution = DistributionFactory.createDistribution(distributionName, expectation);
     }
 
-    public AbstractDuplicator(double expectation, double duplicatesPercentage, String distributionName, long distributionSeed) {
+    public AbstractDuplicator(double expectation, double duplicatesPercentage, String distributionName,
+            long distributionSeed) {
         this(expectation, duplicatesPercentage, distributionName);
         rnd = new RandomWrapper(distributionSeed);
         distribution.reseedRandomGenerator(distributionSeed);

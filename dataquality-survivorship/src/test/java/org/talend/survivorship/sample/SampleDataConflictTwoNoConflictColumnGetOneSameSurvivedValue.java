@@ -18,7 +18,8 @@ import org.talend.survivorship.model.RuleDefinition.Order;
 
 public class SampleDataConflictTwoNoConflictColumnGetOneSameSurvivedValue {
 
-    public static final String PKG_NAME_CONFLICT_TWO_TARGET_ONE_COLUMN = "org.talend.survivorship.conflict.two_target_one_column"; //$NON-NLS-1$
+    public static final String PKG_NAME_CONFLICT_TWO_TARGET_ONE_COLUMN =
+            "org.talend.survivorship.conflict.two_target_one_column"; //$NON-NLS-1$
 
     public static final RuleDefinition[] RULES_CONFLICT_TWO_TARGET_ONE_COLUMN = {
             new RuleDefinition(Order.SEQ, "more_recent_birthday", "birthday", //$NON-NLS-1$ //$NON-NLS-2$

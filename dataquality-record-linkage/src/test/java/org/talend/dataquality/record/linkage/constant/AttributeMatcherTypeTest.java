@@ -26,20 +26,22 @@ import org.junit.Test;
 public class AttributeMatcherTypeTest {
 
     /**
-     * Test method for {@link org.talend.dataquality.record.linkage.constant.AttributeMatcherType#get(java.lang.String)} . case1
+     * Test method for {@link org.talend.dataquality.record.linkage.constant.AttributeMatcherType#get(java.lang.String)}
+     * . case1
      * all of normal case
      */
     @Test
     public void testGetCase1() {
         for (AttributeMatcherType type : AttributeMatcherType.values()) {
             AttributeMatcherType attributeMatcherTypeByName = AttributeMatcherType.get(type.name());
-            AttributeMatcherType attributeMatcherTypeByComponentValue = AttributeMatcherType.get(type.getComponentValue());
+            AttributeMatcherType attributeMatcherTypeByComponentValue =
+                    AttributeMatcherType.get(type.getComponentValue());
             AttributeMatcherType attributeMatcherTypeByLName = AttributeMatcherType.get(type.name().toLowerCase());
-            AttributeMatcherType attributeMatcherTypeByLComponentValue = AttributeMatcherType
-                    .get(type.getComponentValue().toLowerCase());
+            AttributeMatcherType attributeMatcherTypeByLComponentValue =
+                    AttributeMatcherType.get(type.getComponentValue().toLowerCase());
             AttributeMatcherType attributeMatcherTypeByUName = AttributeMatcherType.get(type.name().toUpperCase());
-            AttributeMatcherType attributeMatcherTypeByUComponentValue = AttributeMatcherType
-                    .get(type.getComponentValue().toUpperCase());
+            AttributeMatcherType attributeMatcherTypeByUComponentValue =
+                    AttributeMatcherType.get(type.getComponentValue().toUpperCase());
             // Assert no one is null
             assertNotNull(attributeMatcherTypeByName);
             assertNotNull(attributeMatcherTypeByComponentValue);

@@ -23,14 +23,16 @@ public class LatinLowercasedLettersTest {
     @Test
     public void recognizeCharacters() {
         LatinLettersSmall latinLettersSmall = new LatinLettersSmall();
-        String handleRequest = latinLettersSmall.handleRequest("abcdefghijklmnopqrstuvwxyzàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿß"); //$NON-NLS-1$
+        String handleRequest =
+                latinLettersSmall.handleRequest("abcdefghijklmnopqrstuvwxyzàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿß"); //$NON-NLS-1$
         Assert.assertEquals("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", handleRequest); //$NON-NLS-1$
     }
 
     @Test
     public void unrecognizeCharacters() {
         LatinLettersSmall latinLettersSmall = new LatinLettersSmall();
-        String handleRequest = latinLettersSmall.handleRequest("ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞ"); //$NON-NLS-1$
+        String handleRequest =
+                latinLettersSmall.handleRequest("ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞ"); //$NON-NLS-1$
         Assert.assertEquals("ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞ", handleRequest); //$NON-NLS-1$
     }
 

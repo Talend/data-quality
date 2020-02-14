@@ -321,7 +321,8 @@ public class SynonymIndexBuilder {
             File[] filelist = folder.listFiles();
             if (filelist.length == 0) {// folder is empty
                 if (!folder.delete()) {
-                    error.set(false, Messages.getString("SynonymIndexBuilder.couldNotDelete", folder.getAbsolutePath()));//$NON-NLS-1$
+                    error.set(false,
+                            Messages.getString("SynonymIndexBuilder.couldNotDelete", folder.getAbsolutePath()));//$NON-NLS-1$
                     return false;
                 }
             } else {
@@ -335,7 +336,8 @@ public class SynonymIndexBuilder {
                     allDeleted = false;
                 }
                 if (!allDeleted) {
-                    error.set(false, Messages.getString("SynonymIndexBuilder.couldNotDelete", folder.getAbsolutePath()));//$NON-NLS-1$
+                    error.set(false,
+                            Messages.getString("SynonymIndexBuilder.couldNotDelete", folder.getAbsolutePath()));//$NON-NLS-1$
                     return false;
                 }
             }

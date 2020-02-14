@@ -28,16 +28,16 @@ public class DistanceConverterTest {
     @Test
     public void testConvertDoubleNan() {
         double nan = Double.NaN;
-        DistanceConverter converter = new DistanceConverter(DistanceConverter.DEFAULT_DISTANCE_FROM,
-                DistanceConverter.DEFAULT_DISTANCE_TO);
+        DistanceConverter converter =
+                new DistanceConverter(DistanceConverter.DEFAULT_DISTANCE_FROM, DistanceConverter.DEFAULT_DISTANCE_TO);
         assertEquals(nan, converter.convert(nan), delta);
     }
 
     @Test
     public void testConvertZero() {
         double zero = 0.0;
-        DistanceConverter converter = new DistanceConverter(DistanceConverter.DEFAULT_DISTANCE_FROM,
-                DistanceConverter.DEFAULT_DISTANCE_TO);
+        DistanceConverter converter =
+                new DistanceConverter(DistanceConverter.DEFAULT_DISTANCE_FROM, DistanceConverter.DEFAULT_DISTANCE_TO);
         assertEquals(zero, converter.convert(zero), delta);
     }
 

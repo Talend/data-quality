@@ -51,8 +51,8 @@ public class MFBRecordMerger implements IRecordMerger {
         List<Attribute> r1 = record1.getAttributes();
         List<Attribute> r2 = record2.getAttributes();
         // Takes most recent as timestamp for the merged record.
-        long mergedRecordTimestamp = record1.getTimestamp() > record2.getTimestamp() ? record1.getTimestamp()
-                : record2.getTimestamp();
+        long mergedRecordTimestamp =
+                record1.getTimestamp() > record2.getTimestamp() ? record1.getTimestamp() : record2.getTimestamp();
         Record mergedRecord = createNewRecord(record1, record2, mergedRecordTimestamp);
         for (int k = 0; k < r1.size(); k++) {
             Attribute a = new Attribute(r1.get(k).getLabel(), r1.get(k).getColumnIndex(), r1.get(k).getValue(),
@@ -91,8 +91,8 @@ public class MFBRecordMerger implements IRecordMerger {
                     String rightCompareValue = rightValue;
                     int referenceColumnIndex = leftAttribute.getReferenceColumnIndex();
 
-                    if ((referenceColumnIndex != i)
-                            && (datePatternMap == null || datePatternMap.get(String.valueOf(referenceColumnIndex)) != null)) {
+                    if ((referenceColumnIndex != i) && (datePatternMap == null
+                            || datePatternMap.get(String.valueOf(referenceColumnIndex)) != null)) {
                         leftCompareValue = leftAttribute.getCompareValue();
                         rightCompareValue = rightAttribute.getCompareValue();
                     } else {
@@ -118,7 +118,8 @@ public class MFBRecordMerger implements IRecordMerger {
                 }
             }
         }
-        mergedRecord.setRelatedIds(new HashSet<String>(record1.getRelatedIds().size() + record2.getRelatedIds().size() + 2));
+        mergedRecord.setRelatedIds(
+                new HashSet<String>(record1.getRelatedIds().size() + record2.getRelatedIds().size() + 2));
         mergedRecord.getRelatedIds().add(record1.getId());
         mergedRecord.getRelatedIds().add(record2.getId());
         mergedRecord.getRelatedIds().addAll(record1.getRelatedIds());
@@ -145,8 +146,8 @@ public class MFBRecordMerger implements IRecordMerger {
      * @param mostRecent
      * @return
      */
-    protected String compareAsDate(String leftValue, String rightValue, SurvivorShipAlgorithmEnum mostDate, String columnIndex,
-            long leftTimeStamp, long rightTimeStamp) {
+    protected String compareAsDate(String leftValue, String rightValue, SurvivorShipAlgorithmEnum mostDate,
+            String columnIndex, long leftTimeStamp, long rightTimeStamp) {
         try {
             String datePattern = null;
             if (datePatternMap == null) {
@@ -210,8 +211,8 @@ public class MFBRecordMerger implements IRecordMerger {
      * @return the merged value.
      */
     protected String createMergeValue(String leftSource, String rightSource, String parameter, long leftTimeStamp,
-            long rightTimeStamp, SurvivorShipAlgorithmEnum survivorShipAlgorithmEnum, String leftValue, String rightValue,
-            String mergedValue, AttributeValues<String> mergedValues) {
+            long rightTimeStamp, SurvivorShipAlgorithmEnum survivorShipAlgorithmEnum, String leftValue,
+            String rightValue, String mergedValue, AttributeValues<String> mergedValues) {
         BigDecimal leftNumberValue;
         BigDecimal rightNumberValue;
         if (leftValue == null) {

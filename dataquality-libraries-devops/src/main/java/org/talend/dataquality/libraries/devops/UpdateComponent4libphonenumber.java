@@ -113,11 +113,19 @@ public class UpdateComponent4libphonenumber {
     public static void main(String[] args) {
 
         final String resourcePath = UpdateComponent4libphonenumber.class.getResource(".").getFile(); //$NON-NLS-1$
-        final String projectRoot = new File(resourcePath).getParentFile().getParentFile().getParentFile().getParentFile()
-                .getParentFile().getParentFile().getParentFile().getPath() + File.separator;
+        final String projectRoot = new File(resourcePath)
+                .getParentFile()
+                .getParentFile()
+                .getParentFile()
+                .getParentFile()
+                .getParentFile()
+                .getParentFile()
+                .getParentFile()
+                .getPath() + File.separator;
 
         for (String provider : PROVIDERS) {
-            String componentRootPath = projectRoot + TDQ_STUDIO_EE_ROOT + MAIN_PLUGINS_FOLDER + provider + COMPONENTS_FOLDER;
+            String componentRootPath =
+                    projectRoot + TDQ_STUDIO_EE_ROOT + MAIN_PLUGINS_FOLDER + provider + COMPONENTS_FOLDER;
             System.out.println("\nProvider: " + provider); // NOSONAR
             File componentRoot = new File(componentRootPath);
             if (componentRoot.isDirectory()) {

@@ -89,7 +89,8 @@ public enum AttributeMatcherType {
      */
     public static AttributeMatcherType get(String componentValue) {
         for (AttributeMatcherType type : AttributeMatcherType.values()) {
-            if (type.name().equalsIgnoreCase(componentValue) || type.getComponentValue().equalsIgnoreCase(componentValue)) {
+            if (type.name().equalsIgnoreCase(componentValue)
+                    || type.getComponentValue().equalsIgnoreCase(componentValue)) {
                 return type;
             }
         }

@@ -34,8 +34,8 @@ public class SmallestActionTest {
         String ruleName = "rule1";
         String expression = "Tony,Green";
         boolean ignoreBlanks = false;
-        ActionParameter actionParameter = new ActionParameter(dataset, inputData, rowNum, column, ruleName, expression,
-                ignoreBlanks);
+        ActionParameter actionParameter =
+                new ActionParameter(dataset, inputData, rowNum, column, ruleName, expression, ignoreBlanks);
         SmallestAction smallestAction = new SmallestAction();
         boolean checkCanHandle = smallestAction.canHandle(actionParameter);
         Assert.assertFalse("100 is not a String so that result should be false", checkCanHandle);

@@ -51,10 +51,13 @@ public class DateTimePatternRecognizer extends AbstractPatternRecognizer {
             return result;
         }
         if (stringToRecognize != null && stringToRecognize.length() > 6) {
-            final Map<String, Locale> datePatternAfterReplace = getDatePatterns(stringToRecognize, frequentDatePatterns);
+            final Map<String, Locale> datePatternAfterReplace =
+                    getDatePatterns(stringToRecognize, frequentDatePatterns);
 
-            result.setResult(MapUtils.isNotEmpty(datePatternAfterReplace) ? datePatternAfterReplace
-                    : Collections.singletonMap(stringToRecognize, null), MapUtils.isNotEmpty(datePatternAfterReplace));
+            result.setResult(
+                    MapUtils.isNotEmpty(datePatternAfterReplace) ? datePatternAfterReplace
+                            : Collections.singletonMap(stringToRecognize, null),
+                    MapUtils.isNotEmpty(datePatternAfterReplace));
         }
         return result;
     }

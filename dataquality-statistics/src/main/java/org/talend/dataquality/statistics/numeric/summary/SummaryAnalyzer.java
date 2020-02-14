@@ -47,10 +47,11 @@ public class SummaryAnalyzer extends NumericalStatisticsAnalyzer<SummaryStatisti
         DataTypeEnum[] types = getTypes();
 
         if (record.length != types.length)
-            throw new IllegalArgumentException("Each column of the record should be declared a DataType.Type corresponding! \n"
-                    + types.length + " type(s) declared in this summary analyzer but " + record.length
-                    + " column(s) was found in this record. \n"
-                    + "Using method: setTypes(DataType.Type[] types) to set the types.");
+            throw new IllegalArgumentException(
+                    "Each column of the record should be declared a DataType.Type corresponding! \n" + types.length
+                            + " type(s) declared in this summary analyzer but " + record.length
+                            + " column(s) was found in this record. \n"
+                            + "Using method: setTypes(DataType.Type[] types) to set the types.");
 
         summaryStats.resize(record.length);
 

@@ -124,7 +124,8 @@ public class FirstNameStandardize {
             nameQueries.add(boostedTermQuery, BooleanClause.Occur.SHOULD);
         }
 
-        Query nameTermQuery = getTermQuery(PluginConstant.FIRST_NAME_STANDARDIZE_NAMETERM, inputName.toLowerCase(), fuzzySearch);
+        Query nameTermQuery =
+                getTermQuery(PluginConstant.FIRST_NAME_STANDARDIZE_NAMETERM, inputName.toLowerCase(), fuzzySearch);
         nameQueries.add(nameTermQuery, BooleanClause.Occur.SHOULD);
 
         combinedQuery.add(nameQueries.build(), BooleanClause.Occur.MUST);
@@ -157,8 +158,8 @@ public class FirstNameStandardize {
         return getFinalAccurateResult(inputName, results);
     }
 
-    public String replaceNameWithCountryGenderInfo(String inputName, String inputCountry, String inputGender, boolean fuzzyQuery)
-            throws IOException {
+    public String replaceNameWithCountryGenderInfo(String inputName, String inputCountry, String inputGender,
+            boolean fuzzyQuery) throws IOException {
         Map<String, String> indexFields = new HashMap<String, String>();
         indexFields.put("country", inputCountry);//$NON-NLS-1$
         indexFields.put("gender", inputGender);//$NON-NLS-1$
@@ -166,14 +167,16 @@ public class FirstNameStandardize {
         return getFinalAccurateResult(inputName, results);
     }
 
-    public String replaceNameWithCountryInfo(String inputName, String inputCountry, boolean fuzzyQuery) throws IOException {
+    public String replaceNameWithCountryInfo(String inputName, String inputCountry, boolean fuzzyQuery)
+            throws IOException {
         Map<String, String> indexFields = new HashMap<String, String>();
         indexFields.put("country", inputCountry);//$NON-NLS-1$
         ScoreDoc[] results = standardize(inputName, indexFields, fuzzyQuery);
         return getFinalAccurateResult(inputName, results);
     }
 
-    public String replaceNameWithGenderInfo(String inputName, String inputGender, boolean fuzzyQuery) throws IOException {
+    public String replaceNameWithGenderInfo(String inputName, String inputGender, boolean fuzzyQuery)
+            throws IOException {
         Map<String, String> indexFields = new HashMap<String, String>();
         indexFields.put("gender", inputGender);//$NON-NLS-1$
         ScoreDoc[] results = standardize(inputName, indexFields, fuzzyQuery);

@@ -64,10 +64,11 @@ public class HistogramAnalyzer extends NumericalStatisticsAnalyzer<HistogramStat
         DataTypeEnum[] types = getTypes();
 
         if (record.length != types.length)
-            throw new IllegalArgumentException("Each column of the record should be declared a DataType.Type corresponding! \n"
-                    + types.length + " type(s) declared in this histogram analyzer but " + record.length
-                    + " column(s) was found in this record. \n"
-                    + "Using method: setTypes(DataType.Type[] types) to set the types. ");
+            throw new IllegalArgumentException(
+                    "Each column of the record should be declared a DataType.Type corresponding! \n" + types.length
+                            + " type(s) declared in this histogram analyzer but " + record.length
+                            + " column(s) was found in this record. \n"
+                            + "Using method: setTypes(DataType.Type[] types) to set the types. ");
 
         if (stats.resize(record.length)) {
             int colIdx = 0;

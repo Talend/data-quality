@@ -168,7 +168,8 @@ public abstract class AbstractRecordMatcher implements IRecordMatcher {
         for (int i = 0; i < recordSize; i++) {
             final double w = weights[i];
             if (w < 0) {
-                throw new IllegalArgumentException(Messages.getString("AbstractRecordMatcher.InvalideAttributeWeight", w)); //$NON-NLS-1$
+                throw new IllegalArgumentException(
+                        Messages.getString("AbstractRecordMatcher.InvalideAttributeWeight", w)); //$NON-NLS-1$
             }
             total += w;
             if (Double.compare(w, 0.0) != 0) {

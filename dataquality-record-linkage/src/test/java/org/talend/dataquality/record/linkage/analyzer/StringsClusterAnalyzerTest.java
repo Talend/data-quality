@@ -35,8 +35,8 @@ public class StringsClusterAnalyzerTest {
 
     private static void assertTShirtsResult(StringClusters clusters) {
         Map<String, List<String>> expectedClusters = new HashMap<>();
-        expectedClusters.put("Black T-shirt", Arrays.asList("Blck T-shirt", "Black T-shirt", "Black Tshirt", "Black T-shirt",
-                "Black T-Shirt", "Black T-shirT"));
+        expectedClusters.put("Black T-shirt", Arrays.asList("Blck T-shirt", "Black T-shirt", "Black Tshirt",
+                "Black T-shirt", "Black T-Shirt", "Black T-shirT"));
         expectedClusters.put("Blck T-shirt", Collections.singletonList("Blck T-shirt"));
         expectedClusters.put("White T-shirt", Collections.singletonList("White T-shirt"));
         for (StringClusters.StringCluster cluster : clusters) {

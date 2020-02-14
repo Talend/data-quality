@@ -89,16 +89,18 @@ public class HandlerParameterTest {
         hashSet.add("city2");
         conflictList.add(hashSet);
         // add some value into conflictList and test removeFromConflictList
-        HandlerParameter handlerParameter = new HandlerParameter(dataset, refColumn, tarColumn, ruleName, columnIndexMap,
-                fillColumn, functionParameter);
+        HandlerParameter handlerParameter = new HandlerParameter(dataset, refColumn, tarColumn, ruleName,
+                columnIndexMap, fillColumn, functionParameter);
         handlerParameter.removeFromConflictList(0, "city1");
         handlerParameter.removeFromConflictList(1, "city2");
         Assert.assertEquals("The size of conflict list should be 1", 1, conflictList.get(0).size());
         Assert.assertEquals("The size of conflict list should be 1", 1, conflictList.get(1).size());
         String conflictColumnForFirstRecored = conflictList.get(0).iterator().next();
         String conflictColumnForSecondRecored = conflictList.get(1).iterator().next();
-        Assert.assertEquals("The conflict column in first record should be city2", "city2", conflictColumnForFirstRecored);
-        Assert.assertEquals("The conflict column in second record should be city1", "city1", conflictColumnForSecondRecored);
+        Assert.assertEquals("The conflict column in first record should be city2", "city2",
+                conflictColumnForFirstRecored);
+        Assert.assertEquals("The conflict column in second record should be city1", "city1",
+                conflictColumnForSecondRecored);
 
     }
 
@@ -161,16 +163,18 @@ public class HandlerParameterTest {
         hashSet.add("city2");
         conflictList.add(hashSet);
         // add some value into conflictList and test removeFromConflictList
-        HandlerParameter handlerParameter = new HandlerParameter(new SubDataSet(dataset, null), refColumn, tarColumn, ruleName,
-                columnIndexMap, fillColumn, functionParameter);
+        HandlerParameter handlerParameter = new HandlerParameter(new SubDataSet(dataset, null), refColumn, tarColumn,
+                ruleName, columnIndexMap, fillColumn, functionParameter);
         handlerParameter.removeFromConflictList(0, "city1");
         handlerParameter.removeFromConflictList(1, "city2");
         Assert.assertEquals("The size of conflict list should be 1", 1, conflictList.get(0).size());
         Assert.assertEquals("The size of conflict list should be 1", 1, conflictList.get(1).size());
         String conflictColumnForFirstRecored = conflictList.get(0).iterator().next();
         String conflictColumnForSecondRecored = conflictList.get(1).iterator().next();
-        Assert.assertEquals("The conflict column in first record should be city2", "city2", conflictColumnForFirstRecored);
-        Assert.assertEquals("The conflict column in second record should be city1", "city1", conflictColumnForSecondRecored);
+        Assert.assertEquals("The conflict column in first record should be city2", "city2",
+                conflictColumnForFirstRecored);
+        Assert.assertEquals("The conflict column in second record should be city1", "city1",
+                conflictColumnForSecondRecored);
 
     }
 
@@ -226,11 +230,12 @@ public class HandlerParameterTest {
         List<HashSet<String>> conflictList = dataset.getConflictList();
 
         // add some value into conflictList and test removeFromConflictList
-        HandlerParameter handlerParameter = new HandlerParameter(new SubDataSet(dataset, null), refColumn, tarColumn, ruleName,
-                columnIndexMap, fillColumn, functionParameter);
+        HandlerParameter handlerParameter = new HandlerParameter(new SubDataSet(dataset, null), refColumn, tarColumn,
+                ruleName, columnIndexMap, fillColumn, functionParameter);
         handlerParameter.removeFromConflictList(0, "city1");
         handlerParameter.removeFromConflictList(1, "city2");
-        Assert.assertEquals("The size of conflict list should be 0", 0, handlerParameter.getDataset().getConflictList().size());
+        Assert.assertEquals("The size of conflict list should be 0", 0,
+                handlerParameter.getDataset().getConflictList().size());
 
     }
 

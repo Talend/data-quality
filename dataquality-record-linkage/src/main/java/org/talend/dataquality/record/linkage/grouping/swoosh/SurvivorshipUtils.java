@@ -69,8 +69,9 @@ public class SurvivorshipUtils {
             List<Map<String, String>> particularDefaultSurvivorshipDefinitions, Map<String, String> columnWithType,
             Map<String, String> columnWithIndex) {
 
-        return createSurvivorShipAlgorithmParams(new ComponentMatchParameterAdapter(analysisMatchRecordGrouping, joinKeyRules,
-                defaultSurvivorshipRules, particularDefaultSurvivorshipDefinitions, columnWithType, columnWithIndex));
+        return createSurvivorShipAlgorithmParams(
+                new ComponentMatchParameterAdapter(analysisMatchRecordGrouping, joinKeyRules, defaultSurvivorshipRules,
+                        particularDefaultSurvivorshipDefinitions, columnWithType, columnWithIndex));
 
     }
 
@@ -101,7 +102,8 @@ public class SurvivorshipUtils {
             }
 
         }
-        survivorShipAlgorithmParams.setSurviorShipAlgos(survFunctions.toArray(new SurvivorshipFunction[survFunctions.size()]));
+        survivorShipAlgorithmParams
+                .setSurviorShipAlgos(survFunctions.toArray(new SurvivorshipFunction[survFunctions.size()]));
 
         // Set default survivorship functions.
         Map<Integer, SurvivorshipFunction> defaultSurvRules = new HashMap<>();
@@ -130,7 +132,8 @@ public class SurvivorshipUtils {
         CombinedRecordMatcher combinedRecordMatcher = analysisMatchRecordGrouping.getCombinedRecordMatcher();
         survivorShipAlgorithmParams.setRecordMatcher(combinedRecordMatcher);
         Map<IRecordMatcher, SurvivorshipFunction[]> survAlgos = new HashMap<>();
-        Map<Integer, SurvivorshipFunction> colIdx2DefaultSurvFunc = survivorShipAlgorithmParams.getDefaultSurviorshipRules();
+        Map<Integer, SurvivorshipFunction> colIdx2DefaultSurvFunc =
+                survivorShipAlgorithmParams.getDefaultSurviorshipRules();
         int matchRuleIdx = -1;
         for (List<Map<String, String>> matchrule : joinKeyRules) {
             matchRuleIdx++;
@@ -144,7 +147,8 @@ public class SurvivorshipUtils {
                 String matcherType = mkDef.get(IRecordGrouping.MATCHING_TYPE);
                 if (AttributeMatcherType.DUMMY.name().equalsIgnoreCase(matcherType)) {
                     // Find the func from default survivorship rule.
-                    surFuncsInMatcher[idx] = colIdx2DefaultSurvFunc.get(Integer.valueOf(mkDef.get(IRecordGrouping.COLUMN_IDX)));
+                    surFuncsInMatcher[idx] =
+                            colIdx2DefaultSurvFunc.get(Integer.valueOf(mkDef.get(IRecordGrouping.COLUMN_IDX)));
                     if (surFuncsInMatcher[idx] == null) {
                         // Use CONCATENATE by default if not specified .
                         surFuncsInMatcher[idx] = survivorShipAlgorithmParams.new SurvivorshipFunction();
@@ -180,13 +184,15 @@ public class SurvivorshipUtils {
      * @param columnMap
      * @return
      */
-    public static SurvivorShipAlgorithmParams createSurvivorShipAlgorithmParams(MatchParameterAdapter parameterAdapter) {
+    public static SurvivorShipAlgorithmParams
+            createSurvivorShipAlgorithmParams(MatchParameterAdapter parameterAdapter) {
         SurvivorShipAlgorithmParams survivorShipAlgorithmParams = new SurvivorShipAlgorithmParams();
 
         // Survivorship functions.
         List<SurvivorshipFunction> survFunctions = parameterAdapter.getAllSurvivorshipFunctions();
 
-        survivorShipAlgorithmParams.setSurviorShipAlgos(survFunctions.toArray(new SurvivorshipFunction[survFunctions.size()]));
+        survivorShipAlgorithmParams
+                .setSurviorShipAlgos(survFunctions.toArray(new SurvivorshipFunction[survFunctions.size()]));
 
         // Set default survivorship functions.
         Map<Integer, SurvivorshipFunction> defaultSurvRules = parameterAdapter.getDefaultSurviorShipRules();
@@ -196,8 +202,8 @@ public class SurvivorshipUtils {
         // Set the record matcher
         CombinedRecordMatcher combinedRecordMatcher = parameterAdapter.getCombinedRecordMatcher();
         survivorShipAlgorithmParams.setRecordMatcher(combinedRecordMatcher);
-        Map<IRecordMatcher, SurvivorshipFunction[]> survAlgos = parameterAdapter.getSurvivorshipAlgosMap(defaultSurvRules,
-                survFunctions);
+        Map<IRecordMatcher, SurvivorshipFunction[]> survAlgos =
+                parameterAdapter.getSurvivorshipAlgosMap(defaultSurvRules, survFunctions);
 
         survivorShipAlgorithmParams.setSurvivorshipAlgosMap(survAlgos);
 
@@ -211,8 +217,8 @@ public class SurvivorshipUtils {
      * @param survDef
      * @return
      */
-    protected static SurvivorshipFunction createSurvivorshipFunction(SurvivorShipAlgorithmParams survivorShipAlgorithmParams,
-            Map<String, String> survDef) {
+    protected static SurvivorshipFunction createSurvivorshipFunction(
+            SurvivorShipAlgorithmParams survivorShipAlgorithmParams, Map<String, String> survDef) {
         SurvivorshipFunction func = survivorShipAlgorithmParams.new SurvivorshipFunction();
         func.setSurvivorShipKey(survDef.get("ATTRIBUTE_NAME")); //$NON-NLS-1$
         func.setParameter(survDef.get(PARAMETER));

@@ -101,8 +101,8 @@ public class TypeInferenceUtilsTest {
     @Test
     public void testFullwidthNumbers() {
         String[] fullWidthIntegerValues = { "９９９９９９", "＋９９９９９９", "－９９９９９９" };
-        String[] fullWidthDoubleValues = { "３．１４", "１００", "－２．０", "＋２．０", "１．０ｅ－０４", "１．０ｅ＋４", "１Ｅ－４", "１．０　ｅ－４", "１　Ｅ＋１２", "２５％",
-                "５８９．９４　％", "１．６５Ｅ－５％" };
+        String[] fullWidthDoubleValues = { "３．１４", "１００", "－２．０", "＋２．０", "１．０ｅ－０４", "１．０ｅ＋４", "１Ｅ－４", "１．０　ｅ－４",
+                "１　Ｅ＋１２", "２５％", "５８９．９４　％", "１．６５Ｅ－５％" };
         for (String value : Arrays.asList(fullWidthIntegerValues)) {
             Assert.assertTrue(value + " is expected to be a valid Integer(full width) but actually not.",
                     TypeInferenceUtils.isInteger(value));
@@ -116,11 +116,11 @@ public class TypeInferenceUtilsTest {
 
     @Test
     public void testIsDouble() {
-        String[] validEnDoubleValues = { "0.8", "1.2", "100", "100.0", "-2.0", "1.0e-04", "1.0e+4", "1E-4", "1.0 e-4", "1 E+12",
-                "25%", "589.94 %", "1.65E-5%" };
+        String[] validEnDoubleValues = { "0.8", "1.2", "100", "100.0", "-2.0", "1.0e-04", "1.0e+4", "1E-4", "1.0 e-4",
+                "1 E+12", "25%", "589.94 %", "1.65E-5%" };
         String[] validFrDoubleValues = { "0,9", "1,0e-4", "8,9568%" };
-        String[] invalidDoubleValues = { "NaN", "3.4d", "123L", "123l", " 0.8", "0.8 ", "0. 8", "1. 0e-4", "1.0e -4", "3%4",
-                "8%E6", "123%.4" };
+        String[] invalidDoubleValues = { "NaN", "3.4d", "123L", "123l", " 0.8", "0.8 ", "0. 8", "1. 0e-4", "1.0e -4",
+                "3%4", "8%E6", "123%.4" };
 
         for (String value : (String[]) ArrayUtils.addAll(validEnDoubleValues, validFrDoubleValues)) {
             Assert.assertTrue(value + " is expected to be a valid decimal value but actually not.",
@@ -138,7 +138,8 @@ public class TypeInferenceUtilsTest {
 
         String[] validEnDoubleValues = { "5538297118", "1045.35", "1,045.35", "1,045", "1,045,350", "2.68435E+17",
                 "268 435 000 000 000 000", "265" + '\u00A0' + "435" + '\u2007' + "000" + '\u202F' + "000" };
-        String[] validFrDoubleValues = { "1045,35", "1 045,35", "1.045,35", "1.045", "1 045", "1.045.350", "1 045 350" };
+        String[] validFrDoubleValues =
+                { "1045,35", "1 045,35", "1.045,35", "1.045", "1 045", "1.045.350", "1 045 350" };
         String[] invalidDoubleValues = { "1 045.35", // no space allowed in US format
                 "1.045.35", "1,045,35", // decimal point should not repeat
                 "1,045 35", "1.045 35", // no space is allowed in decimal part
@@ -223,8 +224,8 @@ public class TypeInferenceUtilsTest {
 
     @Test
     public void testGetBigInteger() {
-        String[] invalidBigIntegerValues = { "", "test", "*", "L789", "12/02/2019", "   ", "456L", "2.68435E+8", "1005,123",
-                "123.123" };
+        String[] invalidBigIntegerValues =
+                { "", "test", "*", "L789", "12/02/2019", "   ", "456L", "2.68435E+8", "1005,123", "123.123" };
         for (String value : invalidBigIntegerValues) {
             Assert.assertNull(TypeInferenceUtils.getBigInteger(value));
         }

@@ -75,12 +75,13 @@ public class ValueQualityAnalyzerTest {
     @Test
     public void testValueQualityAnalyzerWithoutSemanticQuality() {
 
-        DataTypeQualityAnalyzer dataTypeQualityAnalyzer = new DataTypeQualityAnalyzer(DataTypeEnum.INTEGER, STRING, STRING,
-                STRING, DataTypeEnum.DATE, STRING, DataTypeEnum.DATE, DataTypeEnum.INTEGER, DataTypeEnum.DOUBLE);
+        DataTypeQualityAnalyzer dataTypeQualityAnalyzer =
+                new DataTypeQualityAnalyzer(DataTypeEnum.INTEGER, STRING, STRING, STRING, DataTypeEnum.DATE, STRING,
+                        DataTypeEnum.DATE, DataTypeEnum.INTEGER, DataTypeEnum.DOUBLE);
 
         QualityAnalyzer analyzer = Mockito.mock(QualityAnalyzer.class);
-        when(analyzer.getTypes()).thenReturn(new String[] { "UNKNOWN", "UNKNOWN", "UNKNOWN", "UNKNOWN", "UNKNOWN", "UNKNOWN",
-                "UNKNOWN", "UNKNOWN", "UNKNOWN" });
+        when(analyzer.getTypes()).thenReturn(new String[] { "UNKNOWN", "UNKNOWN", "UNKNOWN", "UNKNOWN", "UNKNOWN",
+                "UNKNOWN", "UNKNOWN", "UNKNOWN", "UNKNOWN" });
         ValueQualityAnalyzer valueQualityAnalyzer = new ValueQualityAnalyzer(dataTypeQualityAnalyzer, analyzer);
         valueQualityAnalyzer.init();
 

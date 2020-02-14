@@ -63,15 +63,17 @@ public class SampleDataConflictCheckRule {
                     Function.MostCommon, null, "id", false) }; //$NON-NLS-1$
 
     public static final ConflictRuleDefinition[] RULES_CONFLICT_RESOLVE_CASE3 = {
-            new ConflictRuleDefinition(Order.SEQ, "longest_city1", "city1", Function.SurviveAs, null, "city2", false, null, //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-                    false),
-            new ConflictRuleDefinition(Order.SEQ, "longest_city1", "minddleName", Function.SurviveAs, null, "city2", false, null, //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-                    false),
-            new ConflictRuleDefinition(Order.SEQ, "longest_city2", "id", Function.SurviveAs, null, "city1", false, null, true), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-            new ConflictRuleDefinition(Order.SEQ, "longest_city2", "firstName", Function.SurviveAs, null, "city1", false, null, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            new ConflictRuleDefinition(Order.SEQ, "longest_city1", "city1", Function.SurviveAs, null, "city2", false, //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+                    null, false),
+            new ConflictRuleDefinition(Order.SEQ, "longest_city1", "minddleName", Function.SurviveAs, null, "city2", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+                    false, null, false),
+            new ConflictRuleDefinition(Order.SEQ, "longest_city2", "id", Function.SurviveAs, null, "city1", false, null, //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
                     true),
-            new ConflictRuleDefinition(Order.SEQ, "longest_city2", "city2", Function.SurviveAs, null, "id", false, null, true), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-            new ConflictRuleDefinition(Order.SEQ, "longest_city2", "lastName", Function.SurviveAs, null, "id", false, null, //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-                    true) };
+            new ConflictRuleDefinition(Order.SEQ, "longest_city2", "firstName", Function.SurviveAs, null, "city1", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+                    false, null, true),
+            new ConflictRuleDefinition(Order.SEQ, "longest_city2", "city2", Function.SurviveAs, null, "id", false, null, //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+                    true),
+            new ConflictRuleDefinition(Order.SEQ, "longest_city2", "lastName", Function.SurviveAs, null, "id", false, //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+                    null, true) };
 
 }

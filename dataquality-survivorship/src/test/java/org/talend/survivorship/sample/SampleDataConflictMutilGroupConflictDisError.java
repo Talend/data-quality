@@ -29,10 +29,8 @@ public class SampleDataConflictMutilGroupConflictDisError {
                     Function.Longest, null, "lastName", false) }; //$NON-NLS-1$
 
     public static final ConflictRuleDefinition[] RULES_CONFLICT_RESOLVE = {
-            new ConflictRuleDefinition(new DefFunParameter("lastName", Function.SurviveAs, null, "firstName", null), Order.CR, //$NON-NLS-1$//$NON-NLS-2$
-                    "CR1", //$NON-NLS-1$
-                    false, false, 0),
-            new ConflictRuleDefinition(new DefFunParameter("lastName", Function.MostCommon, null, "lastName", null), Order.CR, //$NON-NLS-1$//$NON-NLS-2$
-                    "CR2", //$NON-NLS-1$
-                    false, false, 1) };
+            new ConflictRuleDefinition(new DefFunParameter("lastName", Function.SurviveAs, null, "firstName", null), //$NON-NLS-1$//$NON-NLS-2$
+                    Order.CR, "CR1", false, false, 0),
+            new ConflictRuleDefinition(new DefFunParameter("lastName", Function.MostCommon, null, "lastName", null), //$NON-NLS-1$//$NON-NLS-2$
+                    Order.CR, "CR2", false, false, 1) };
 }

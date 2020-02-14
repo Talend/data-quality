@@ -55,8 +55,8 @@ public class MetaphoneMatcherTest {
         a = "JohnFit";
         b = "JohnFitzgeraldKennedy";
         matchingWeight = metaphoneMatcher.getMatchingWeight(a, b);
-        assertTrue("input strings are not the same but Metaphone should not be able to distinguish between " + a + " and " + b,
-                1.0d == matchingWeight);
+        assertTrue("input strings are not the same but Metaphone should not be able to distinguish between " + a
+                + " and " + b, 1.0d == matchingWeight);
 
         a = "\n";
         b = "Hulme";

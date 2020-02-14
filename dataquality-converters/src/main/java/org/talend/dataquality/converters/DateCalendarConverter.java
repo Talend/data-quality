@@ -141,8 +141,8 @@ public class DateCalendarConverter {
         this.outputChronologyType = outputChronologyType == null ? IsoChronology.INSTANCE : outputChronologyType;
         this.inputFormatPattern = inputFormatPattern == null ? DEFAULT_PATTERN : inputFormatPattern;
         if (outputFormatPattern == null) {
-            this.outputFormatPattern = JapaneseChronology.INSTANCE.equals(this.outputChronologyType) ? DEFAULT_PATTERN_WITH_ERA
-                    : DEFAULT_PATTERN;
+            this.outputFormatPattern = JapaneseChronology.INSTANCE.equals(this.outputChronologyType)
+                    ? DEFAULT_PATTERN_WITH_ERA : DEFAULT_PATTERN;
         } else {
             this.outputFormatPattern = outputFormatPattern;
         }
@@ -152,12 +152,19 @@ public class DateCalendarConverter {
         if (!this.inputFormatPattern.contains(PATTERN_SUFFIX_ERA)) {
             this.inputFormatPattern = this.inputFormatPattern.replace('y', 'u');
         }
-        this.inputDateTimeFormatter = new DateTimeFormatterBuilder().parseLenient().appendPattern(this.inputFormatPattern)
-                .toFormatter().withChronology(this.inputChronologyType).withResolverStyle(ResolverStyle.STRICT)
+        this.inputDateTimeFormatter = new DateTimeFormatterBuilder()
+                .parseLenient()
+                .appendPattern(this.inputFormatPattern)
+                .toFormatter()
+                .withChronology(this.inputChronologyType)
+                .withResolverStyle(ResolverStyle.STRICT)
                 .withDecimalStyle(DecimalStyle.of(Locale.getDefault(Locale.Category.FORMAT)));
 
-        this.outputDateTimeFormatter = new DateTimeFormatterBuilder().parseLenient().appendPattern(this.outputFormatPattern)
-                .toFormatter().withChronology(this.outputChronologyType)
+        this.outputDateTimeFormatter = new DateTimeFormatterBuilder()
+                .parseLenient()
+                .appendPattern(this.outputFormatPattern)
+                .toFormatter()
+                .withChronology(this.outputChronologyType)
                 .withDecimalStyle(DecimalStyle.of(Locale.getDefault(Locale.Category.FORMAT)));
     }
 

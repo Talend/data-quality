@@ -30,18 +30,18 @@ public class TokenizedResolutionMethodTest {
     @Test
     public void testGetTypeByValueWithDefaultCase1() {
         for (TokenizedResolutionMethod type : TokenizedResolutionMethod.values()) {
-            TokenizedResolutionMethod TokenizedResolutionMethodByName = TokenizedResolutionMethod
-                    .getTypeByValueWithDefault(type.name());
-            TokenizedResolutionMethod TokenizedResolutionMethodByComponentValue = TokenizedResolutionMethod
-                    .getTypeByValueWithDefault(type.getComponentValue());
-            TokenizedResolutionMethod TokenizedResolutionMethodByLName = TokenizedResolutionMethod
-                    .getTypeByValueWithDefault(type.name().toLowerCase());
-            TokenizedResolutionMethod TokenizedResolutionMethodByLComponentValue = TokenizedResolutionMethod
-                    .getTypeByValueWithDefault(type.getComponentValue().toLowerCase());
-            TokenizedResolutionMethod TokenizedResolutionMethodByUName = TokenizedResolutionMethod
-                    .getTypeByValueWithDefault(type.name().toUpperCase());
-            TokenizedResolutionMethod TokenizedResolutionMethodByUComponentValue = TokenizedResolutionMethod
-                    .getTypeByValueWithDefault(type.getComponentValue().toUpperCase());
+            TokenizedResolutionMethod TokenizedResolutionMethodByName =
+                    TokenizedResolutionMethod.getTypeByValueWithDefault(type.name());
+            TokenizedResolutionMethod TokenizedResolutionMethodByComponentValue =
+                    TokenizedResolutionMethod.getTypeByValueWithDefault(type.getComponentValue());
+            TokenizedResolutionMethod TokenizedResolutionMethodByLName =
+                    TokenizedResolutionMethod.getTypeByValueWithDefault(type.name().toLowerCase());
+            TokenizedResolutionMethod TokenizedResolutionMethodByLComponentValue =
+                    TokenizedResolutionMethod.getTypeByValueWithDefault(type.getComponentValue().toLowerCase());
+            TokenizedResolutionMethod TokenizedResolutionMethodByUName =
+                    TokenizedResolutionMethod.getTypeByValueWithDefault(type.name().toUpperCase());
+            TokenizedResolutionMethod TokenizedResolutionMethodByUComponentValue =
+                    TokenizedResolutionMethod.getTypeByValueWithDefault(type.getComponentValue().toUpperCase());
 
             assertEquals(TokenizedResolutionMethodByName, TokenizedResolutionMethod.NO);
             assertEquals(TokenizedResolutionMethodByLName, TokenizedResolutionMethod.NO);
@@ -64,12 +64,14 @@ public class TokenizedResolutionMethodTest {
      */
     @Test
     public void testGetTypeByValueWithDefaultCase2() {
-        TokenizedResolutionMethod TokenizedResolutionMethodByNull = TokenizedResolutionMethod.getTypeByValueWithDefault(null);
+        TokenizedResolutionMethod TokenizedResolutionMethodByNull =
+                TokenizedResolutionMethod.getTypeByValueWithDefault(null);
         assertEquals(TokenizedResolutionMethod.NO, TokenizedResolutionMethodByNull);
-        TokenizedResolutionMethod TokenizedResolutionMethodByEmpty = TokenizedResolutionMethod.getTypeByValueWithDefault(""); //$NON-NLS-1$
+        TokenizedResolutionMethod TokenizedResolutionMethodByEmpty =
+                TokenizedResolutionMethod.getTypeByValueWithDefault(""); //$NON-NLS-1$
         assertEquals(TokenizedResolutionMethod.NO, TokenizedResolutionMethodByEmpty);
-        TokenizedResolutionMethod TokenizedResolutionMethodByOtherWord = TokenizedResolutionMethod
-                .getTypeByValueWithDefault("111111"); //$NON-NLS-1$
+        TokenizedResolutionMethod TokenizedResolutionMethodByOtherWord =
+                TokenizedResolutionMethod.getTypeByValueWithDefault("111111"); //$NON-NLS-1$
         assertEquals(TokenizedResolutionMethod.NO, TokenizedResolutionMethodByOtherWord);
     }
 

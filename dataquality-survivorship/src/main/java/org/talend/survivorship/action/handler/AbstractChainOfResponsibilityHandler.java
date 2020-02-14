@@ -123,9 +123,12 @@ public abstract class AbstractChainOfResponsibilityHandler {
      * @return true when current inputdata is adopt to require else false
      */
     protected boolean canHandle(Object inputData, String expression, int rowNum) {
-        return this.handlerParameter.getAction().canHandle(new ActionParameter(handlerParameter.getDataset(),
-                handlerParameter.getRefInputData((Object[]) inputData), rowNum, handlerParameter.getReferenceColumn().getName(),
-                handlerParameter.getRuleName(), expression, handlerParameter.isIgnoreBlank()));
+        return this.handlerParameter
+                .getAction()
+                .canHandle(new ActionParameter(handlerParameter.getDataset(),
+                        handlerParameter.getRefInputData((Object[]) inputData), rowNum,
+                        handlerParameter.getReferenceColumn().getName(), handlerParameter.getRuleName(), expression,
+                        handlerParameter.isIgnoreBlank()));
     }
 
     /**

@@ -50,7 +50,8 @@ public class EmailVerify implements IEmailChecker {
     public EmailVerify addLocalPartRegexChecker(String localPartRegexExpress, boolean isLocalPartCaseSensitive,
             boolean isLocalPartShort) {
         if (!StringUtils.isBlank(localPartRegexExpress)) {
-            addChecker(new LocalPartRegexCheckerImpl(localPartRegexExpress, isLocalPartShort, isLocalPartCaseSensitive));
+            addChecker(
+                    new LocalPartRegexCheckerImpl(localPartRegexExpress, isLocalPartShort, isLocalPartCaseSensitive));
         }
         return this;
     }
@@ -88,10 +89,11 @@ public class EmailVerify implements IEmailChecker {
     }
 
     public EmailVerify addLocalPartColumnContentChecker(boolean isColumnContent, boolean isCaseSensitive,
-            String usedCaseToGenerate, String nFOfFirst, String nLOfFirst, String nFOfLast, String nLOfLast, String separator) {
+            String usedCaseToGenerate, String nFOfFirst, String nLOfFirst, String nFOfLast, String nLOfLast,
+            String separator) {
         if (isColumnContent) {
-            addChecker(new LocalPartColumnContentCheckerImpl(nFOfFirst, nLOfFirst, nFOfLast, nLOfLast, separator, isCaseSensitive,
-                    usedCaseToGenerate));
+            addChecker(new LocalPartColumnContentCheckerImpl(nFOfFirst, nLOfFirst, nFOfLast, nLOfLast, separator,
+                    isCaseSensitive, usedCaseToGenerate));
         }
         return this;
     }

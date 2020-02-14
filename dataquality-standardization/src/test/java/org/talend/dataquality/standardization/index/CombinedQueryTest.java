@@ -47,7 +47,8 @@ public class CombinedQueryTest {
             //
             { "111", "AA BB CC" }, { "222", "AA|BB CC|333" }, { "333", "AA BB|CC|DD|222" },
             //
-            { "222 333", "XXX|YYY|ZZZ" }, { "222 444", "XXX|YYY|ZZZ|WWW" }, { "YYY", "222 333" }, { "YYY", "222 444 | ZZZ" },
+            { "222 333", "XXX|YYY|ZZZ" }, { "222 444", "XXX|YYY|ZZZ|WWW" }, { "YYY", "222 333" },
+            { "YYY", "222 444 | ZZZ" },
             //
             { "XXX", "AA2|AA3|AA4|AA5|YYY" }, { "A YYY ZZZ", "ZZZ|WWW" }, { "XXX", "AA2|AA3|AA4|AA5|YYY" },
             { "A YYY ZZZ", "ZZZ|WWW" }, { "XXX", "AA2|AA3|AA4|AA5|YYY" }, { "A YYY ZZZ", "ZZZ|WWW" },

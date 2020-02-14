@@ -40,7 +40,11 @@ public abstract class AbstractFrequencyStatistics {
     }
 
     public Map<String, Long> getTopK(int topk) {
-        return value2freq.entrySet().stream().sorted(Map.Entry.<String, Long> comparingByValue().reversed()).limit(topk)
+        return value2freq
+                .entrySet()
+                .stream()
+                .sorted(Map.Entry.<String, Long> comparingByValue().reversed())
+                .limit(topk)
                 .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue(), (v1, v2) -> v2, LinkedHashMap::new));
     }
 

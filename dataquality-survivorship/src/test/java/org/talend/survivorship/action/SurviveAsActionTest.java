@@ -29,7 +29,8 @@ public class SurviveAsActionTest {
 
     /**
      * Test method for
-     * {@link org.talend.survivorship.action.SurviveAsAction#canHandle(org.talend.survivorship.action.ActionParameter)} .
+     * {@link org.talend.survivorship.action.SurviveAsAction#canHandle(org.talend.survivorship.action.ActionParameter)}
+     * .
      */
     @Test
     public void testCheckCanHandle() {
@@ -84,16 +85,18 @@ public class SurviveAsActionTest {
         String ruleName = "rule1"; //$NON-NLS-1$
         String expression = "Tony,Green"; //$NON-NLS-1$
         boolean ignoreBlanks = false;
-        ActionParameter actionParameter = new ActionParameter(dataset, inputData, rowNum, column, ruleName, expression,
-                ignoreBlanks);
+        ActionParameter actionParameter =
+                new ActionParameter(dataset, inputData, rowNum, column, ruleName, expression, ignoreBlanks);
         SurviveAsAction survivedValuePassAction = new SurviveAsAction();
         boolean checkCanHandle = survivedValuePassAction.canHandle(actionParameter);
-        Assert.assertTrue("intput data is same with survived value both null so that result should be true", checkCanHandle); //$NON-NLS-1$
+        Assert.assertTrue("intput data is same with survived value both null so that result should be true", //$NON-NLS-1$
+                checkCanHandle);
 
         inputData = 0;
         actionParameter = new ActionParameter(dataset, inputData, rowNum, column, ruleName, expression, ignoreBlanks);
         checkCanHandle = survivedValuePassAction.canHandle(actionParameter);
-        Assert.assertFalse("intput data is not same with survived value so that result should be false", checkCanHandle); //$NON-NLS-1$
+        Assert.assertFalse("intput data is not same with survived value so that result should be false", //$NON-NLS-1$
+                checkCanHandle);
     }
 
     /**
@@ -112,8 +115,8 @@ public class SurviveAsActionTest {
         String ruleName = "rule1"; //$NON-NLS-1$
         String expression = "Tony,Green"; //$NON-NLS-1$
         boolean ignoreBlanks = false;
-        ActionParameter actionParameter = new ActionParameter(dataset, inputData, rowNum, column, ruleName, expression,
-                ignoreBlanks);
+        ActionParameter actionParameter =
+                new ActionParameter(dataset, inputData, rowNum, column, ruleName, expression, ignoreBlanks);
         SurviveAsAction survivedValuePassAction = new SurviveAsAction();
         boolean checkCanHandle = survivedValuePassAction.canHandle(actionParameter);
         Assert.assertFalse("can not get survivorIndex for column city2 so that result should be false", checkCanHandle); //$NON-NLS-1$

@@ -25,7 +25,8 @@ public class SurvivorShipAlgorithmParams {
 
     private IRecordMatcher recordMatcher = null;
 
-    protected Map<IRecordMatcher, SurvivorshipFunction[]> survivorshipAlgosMap = new HashMap<IRecordMatcher, SurvivorshipFunction[]>();
+    protected Map<IRecordMatcher, SurvivorshipFunction[]> survivorshipAlgosMap =
+            new HashMap<IRecordMatcher, SurvivorshipFunction[]>();
 
     /**
      * The order in array is conform to the matching key order choosen.

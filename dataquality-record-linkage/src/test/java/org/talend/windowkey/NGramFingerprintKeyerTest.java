@@ -25,22 +25,24 @@ public class NGramFingerprintKeyerTest {
     @SuppressWarnings("nls")
     private static final String[][] testStr = { { "Acorn", "accoorrn" }, { "Aret Big Cust", "arbicuetgcigresttbus" },
             { "Big Arêt Cust", "arbicugaigresttcuset" }, { "Cust Aret Big ", "arbicuetigresttatbus" },
-            { "Cust-Aret Big ", "arbicuetigresttatbus" }, { "Big Data for big business", "afatbibudaesfogbgdiginneorrbsisstaus" },
+            { "Cust-Aret Big ", "arbicuetigresttatbus" },
+            { "Big Data for big business", "afatbibudaesfogbgdiginneorrbsisstaus" },
             { "Data for big business", "afatbibudaesfogbiginneorrbsisstaus" }, { "A A A", "aa" }, { "I.BM.", "bmib" },
-            { "I.B.M.", "bmib" }, { "IBM", "bmib" }, { "Bird Conservation Region", "atbicodcegergiioirnrnsonrdrervsetiva" },
-            { "Bird bird Conservation Region", "atbicodbdcegergiioirnrnsonrdrervsetiva" }, { "15", "15" }, { "PT-r2", "ptr2tr" },
-            { "élément", "enlementelem" }, { "32 €", "2€32" } };
+            { "I.B.M.", "bmib" }, { "IBM", "bmib" },
+            { "Bird Conservation Region", "atbicodcegergiioirnrnsonrdrervsetiva" },
+            { "Bird bird Conservation Region", "atbicodbdcegergiioirnrnsonrdrervsetiva" }, { "15", "15" },
+            { "PT-r2", "ptr2tr" }, { "élément", "enlementelem" }, { "32 €", "2€32" } };
 
     @SuppressWarnings("nls")
-    private static final String[][] test3gram = { { "Acorn", "acocororn" }, { "Aret Big Cust", "arebigcusetbgcuigcrettbiust" },
-            { "Big Arêt Cust", "arebigcusgarigarettcuustetc" }, { "Cust Aret Big ", "arebigcusetbretstatartbiust" },
-            { "Cust-Aret Big ", "arebigcusetbretstatartbiust" },
+    private static final String[][] test3gram = { { "Acorn", "acocororn" },
+            { "Aret Big Cust", "arebigcusetbgcuigcrettbiust" }, { "Big Arêt Cust", "arebigcusgarigarettcuustetc" },
+            { "Cust Aret Big ", "arebigcusetbretstatartbiust" }, { "Cust-Aret Big ", "arebigcusetbretstatartbiust" },
             { "Big Data for big business", "afoatabigbusdatessforgbugdaigbigdinenesorbrbisintafusi" },
             { "Data for big business", "afoatabigbusdatessforgbuigbinenesorbrbisintafusi" }, { "A A A", "aaa" },
             { "I.BM.", "ibm" }, { "I.B.M.", "ibm" }, { "IBM", "ibm" },
             { "Bird Conservation Region", "atibircondcoegiervgioionirdnrenseonronsrdcregrvasertiovat" },
-            { "Bird bird Conservation Region", "atibircondbidcoegiervgioionirdnrenseonronsrdbrdcregrvasertiovat" }, { "15", "" },
-            { "PT-r2", "ptrtr2" }, { "élément", "entlemmeneleeme" }, { "32 €", "32€" } };
+            { "Bird bird Conservation Region", "atibircondbidcoegiervgioionirdnrenseonronsrdbrdcregrvasertiovat" },
+            { "15", "" }, { "PT-r2", "ptrtr2" }, { "élément", "entlemmeneleeme" }, { "32 €", "32€" } };
 
     /**
      * Test method for {@link org.talend.windowkey.NGramFingerprintKeyer#key(java.lang.String, java.lang.Object[])}.

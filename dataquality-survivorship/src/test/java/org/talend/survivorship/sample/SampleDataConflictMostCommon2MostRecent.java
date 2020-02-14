@@ -22,15 +22,16 @@ public class SampleDataConflictMostCommon2MostRecent {
 
     public static final String PKG_NAME_CONFLICT = "org.talend.survivorship.conflict"; //$NON-NLS-1$
 
-    public static final RuleDefinition[] RULES_CONFLICT = { new RuleDefinition(Order.SEQ, "more_common_birthday", "birthday", //$NON-NLS-1$ //$NON-NLS-2$
-            Function.MostCommon, null, "birthday", false) }; //$NON-NLS-1$
+    public static final RuleDefinition[] RULES_CONFLICT =
+            { new RuleDefinition(Order.SEQ, "more_common_birthday", "birthday", //$NON-NLS-1$ //$NON-NLS-2$
+                    Function.MostCommon, null, "birthday", false) }; //$NON-NLS-1$
 
-    public static final ConflictRuleDefinition[] RULES_CONFLICT_RESOLVE = { new ConflictRuleDefinition(
-            new DefFunParameter("birthday", Function.MostRecent, null, "birthday", null), Order.SEQ, "more_recent_birthday", //$NON-NLS-1$ //$NON-NLS-2$
-            false, false, 0) };
+    public static final ConflictRuleDefinition[] RULES_CONFLICT_RESOLVE =
+            { new ConflictRuleDefinition(new DefFunParameter("birthday", Function.MostRecent, null, "birthday", null), //$NON-NLS-1$//$NON-NLS-2$
+                    Order.SEQ, "more_recent_birthday", false, false, 0) };
 
-    public static final ConflictRuleDefinition[] RULES_CONFLICT_RESOLVE_DISABLE = { new ConflictRuleDefinition(
-            new DefFunParameter("birthday", Function.MostRecent, null, "birthday", null), Order.SEQ, "more_recent_birthday", //$NON-NLS-1$ //$NON-NLS-2$
-            false, false, true, 0) };
+    public static final ConflictRuleDefinition[] RULES_CONFLICT_RESOLVE_DISABLE =
+            { new ConflictRuleDefinition(new DefFunParameter("birthday", Function.MostRecent, null, "birthday", null), //$NON-NLS-1$//$NON-NLS-2$
+                    Order.SEQ, "more_recent_birthday", false, false, true, 0) };
 
 }

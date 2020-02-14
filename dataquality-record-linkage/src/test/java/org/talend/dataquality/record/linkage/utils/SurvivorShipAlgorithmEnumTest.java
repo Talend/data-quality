@@ -28,20 +28,21 @@ public class SurvivorShipAlgorithmEnumTest {
 
     /**
      * Test method for
-     * {@link org.talend.dataquality.record.linkage.utils.SurvivorShipAlgorithmEnum#getTypeByValue(java.lang.String)} . case1
+     * {@link org.talend.dataquality.record.linkage.utils.SurvivorShipAlgorithmEnum#getTypeByValue(java.lang.String)} .
+     * case1
      * all of normal case
      */
     @Test
     public void testGetTypeByValue1() {
         for (SurvivorShipAlgorithmEnum type : SurvivorShipAlgorithmEnum.values()) {
             SurvivorShipAlgorithmEnum enumByValue = SurvivorShipAlgorithmEnum.getTypeByValue(type.getValue());
-            SurvivorShipAlgorithmEnum enumByValueLowerCase = SurvivorShipAlgorithmEnum
-                    .getTypeByValue(type.getValue().toLowerCase());
+            SurvivorShipAlgorithmEnum enumByValueLowerCase =
+                    SurvivorShipAlgorithmEnum.getTypeByValue(type.getValue().toLowerCase());
 
-            SurvivorShipAlgorithmEnum enumTypeByComponentValueName = SurvivorShipAlgorithmEnum
-                    .getTypeBySavedValue(type.getComponentValueName());
-            SurvivorShipAlgorithmEnum enumTypeByComponentValueNameLowerCase = SurvivorShipAlgorithmEnum
-                    .getTypeBySavedValue(type.getComponentValueName().toLowerCase());
+            SurvivorShipAlgorithmEnum enumTypeByComponentValueName =
+                    SurvivorShipAlgorithmEnum.getTypeBySavedValue(type.getComponentValueName());
+            SurvivorShipAlgorithmEnum enumTypeByComponentValueNameLowerCase =
+                    SurvivorShipAlgorithmEnum.getTypeBySavedValue(type.getComponentValueName().toLowerCase());
 
             // Assert no one is null
             assertNotNull(enumByValue);

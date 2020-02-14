@@ -34,8 +34,8 @@ public class ShortestActionTest {
         String ruleName = "rule1"; //$NON-NLS-1$
         String expression = "Tony,Green"; //$NON-NLS-1$
         boolean ignoreBlanks = false;
-        ActionParameter actionParameter = new ActionParameter(dataset, inputData, rowNum, column, ruleName, expression,
-                ignoreBlanks);
+        ActionParameter actionParameter =
+                new ActionParameter(dataset, inputData, rowNum, column, ruleName, expression, ignoreBlanks);
         ShortestAction shortestAction = new ShortestAction();
         boolean checkCanHandle = shortestAction.canHandle(actionParameter);
         Assert.assertFalse("100 is not a String so that result should be false", checkCanHandle); //$NON-NLS-1$

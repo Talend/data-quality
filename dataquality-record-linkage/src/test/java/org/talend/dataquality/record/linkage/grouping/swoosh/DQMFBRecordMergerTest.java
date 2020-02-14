@@ -36,7 +36,8 @@ public class DQMFBRecordMergerTest {
     @Test
     public void testMerge1() throws ParseException {
         DQMFBRecordMerger dqMFBRecordMerger = new DQMFBRecordMerger(null, null,
-                new SurvivorShipAlgorithmEnum[] { SurvivorShipAlgorithmEnum.MOST_RECENT }, initSurvivorShipAlgorithmParams());
+                new SurvivorShipAlgorithmEnum[] { SurvivorShipAlgorithmEnum.MOST_RECENT },
+                initSurvivorShipAlgorithmParams());
         Map<String, String> patternMap = new HashMap<>();
         String datePattern = "dd-MM-yyyy"; //$NON-NLS-1$
         patternMap.put("0", datePattern); //$NON-NLS-1$
@@ -56,12 +57,15 @@ public class DQMFBRecordMergerTest {
         Attribute attribute2 = new Attribute(colName, 0, inputColValue, 1);
         attribute2.setReferenceValue(referenceValue);
         r2Arributes.add(attribute2);
-        RichRecord record1 = new RichRecord(r1Arributes, "record1", simpleDateFormat.parse("02-02-2000").getTime(), "MFB"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-        RichRecord record2 = new RichRecord(r2Arributes, "record2", simpleDateFormat.parse("03-03-3000").getTime(), "MFB"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        RichRecord record1 =
+                new RichRecord(r1Arributes, "record1", simpleDateFormat.parse("02-02-2000").getTime(), "MFB"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        RichRecord record2 =
+                new RichRecord(r2Arributes, "record2", simpleDateFormat.parse("03-03-3000").getTime(), "MFB"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         record1.setOriginRow(initDQAttribute("02-02-2000", "03-03-2003", "beijing")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         record2.setOriginRow(initDQAttribute("06-06-2006", "05-05-2005", "shanghai")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         RichRecord createNewRecord = (RichRecord) dqMFBRecordMerger.createNewRecord(record1, record2, 0);
-        Assert.assertEquals("Merge value should be shanghai", "shanghai", createNewRecord.getOriginRow().get(2).getValue()); //$NON-NLS-1$ //$NON-NLS-2$
+        Assert.assertEquals("Merge value should be shanghai", "shanghai", //$NON-NLS-1$//$NON-NLS-2$
+                createNewRecord.getOriginRow().get(2).getValue());
         Assert.assertEquals("Merge reference value should be 05-05-2005", "05-05-2005", //$NON-NLS-1$//$NON-NLS-2$
                 createNewRecord.getOriginRow().get(2).getReferenceValue());
         Assert.assertEquals("Merge reference column index value should be 1", 1, //$NON-NLS-1$
@@ -77,7 +81,8 @@ public class DQMFBRecordMergerTest {
     @Test
     public void testMerge2() throws ParseException {
         DQMFBRecordMerger dqMFBRecordMerger = new DQMFBRecordMerger(null, null,
-                new SurvivorShipAlgorithmEnum[] { SurvivorShipAlgorithmEnum.MOST_RECENT }, initSurvivorShipAlgorithmParams());
+                new SurvivorShipAlgorithmEnum[] { SurvivorShipAlgorithmEnum.MOST_RECENT },
+                initSurvivorShipAlgorithmParams());
         Map<String, String> patternMap = new HashMap<>();
         String datePattern = "dd-MM-yyyy"; //$NON-NLS-1$
         patternMap.put("0", datePattern); //$NON-NLS-1$
@@ -96,13 +101,16 @@ public class DQMFBRecordMergerTest {
         Attribute attribute2 = new Attribute(colName, 0, inputColValue, 1);
         attribute2.setReferenceValue(referenceValue);
         r2Arributes.add(attribute2);
-        RichRecord record1 = new RichRecord(r1Arributes, "record1", simpleDateFormat.parse("02-02-2000").getTime(), "MFB"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-        RichRecord record2 = new RichRecord(r2Arributes, "record2", simpleDateFormat.parse("03-03-3000").getTime(), "MFB"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        RichRecord record1 =
+                new RichRecord(r1Arributes, "record1", simpleDateFormat.parse("02-02-2000").getTime(), "MFB"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        RichRecord record2 =
+                new RichRecord(r2Arributes, "record2", simpleDateFormat.parse("03-03-3000").getTime(), "MFB"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         record1.setOriginRow(initDQAttribute("02-02-2000", "03-03-2003", "beijing")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         record2.setOriginRow(initDQAttribute("06-06-2006", "05-05-2005", "shanghai")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         RichRecord createNewRecord = (RichRecord) dqMFBRecordMerger.createNewRecord(record1, record2, 0);
         // compare timestamp in this case
-        Assert.assertEquals("Merge value should be shanghai", "shanghai", createNewRecord.getOriginRow().get(2).getValue()); //$NON-NLS-1$ //$NON-NLS-2$
+        Assert.assertEquals("Merge value should be shanghai", "shanghai", //$NON-NLS-1$//$NON-NLS-2$
+                createNewRecord.getOriginRow().get(2).getValue());
         Assert.assertEquals("Merge reference value should be 05-05-2005", "05-05-2005", //$NON-NLS-1$//$NON-NLS-2$
                 createNewRecord.getOriginRow().get(2).getReferenceValue());
         Assert.assertEquals("Merge reference column index value should be 1", 1, //$NON-NLS-1$
@@ -118,7 +126,8 @@ public class DQMFBRecordMergerTest {
     @Test
     public void testMerge3() throws ParseException {
         DQMFBRecordMerger dqMFBRecordMerger = new DQMFBRecordMerger(null, null,
-                new SurvivorShipAlgorithmEnum[] { SurvivorShipAlgorithmEnum.MOST_RECENT }, initSurvivorShipAlgorithmParams());
+                new SurvivorShipAlgorithmEnum[] { SurvivorShipAlgorithmEnum.MOST_RECENT },
+                initSurvivorShipAlgorithmParams());
         Map<String, String> patternMap = new HashMap<>();
         String datePattern = "dd-MM-yyyy"; //$NON-NLS-1$
         patternMap.put("0", datePattern); //$NON-NLS-1$
@@ -137,13 +146,16 @@ public class DQMFBRecordMergerTest {
         Attribute attribute2 = new Attribute(colName, 0, inputColValue, 1);
         attribute2.setReferenceValue(referenceValue);
         r2Arributes.add(attribute2);
-        RichRecord record1 = new RichRecord(r1Arributes, "record1", simpleDateFormat.parse("02-02-2000").getTime(), "MFB"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-        RichRecord record2 = new RichRecord(r2Arributes, "record2", simpleDateFormat.parse("03-03-3000").getTime(), "MFB"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        RichRecord record1 =
+                new RichRecord(r1Arributes, "record1", simpleDateFormat.parse("02-02-2000").getTime(), "MFB"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        RichRecord record2 =
+                new RichRecord(r2Arributes, "record2", simpleDateFormat.parse("03-03-3000").getTime(), "MFB"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         record1.setOriginRow(initDQAttribute("02-02-2000", "03-03-2003", "beijing")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         record2.setOriginRow(initDQAttribute("06-06-2006", "05-05-2005", "shanghai")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         RichRecord createNewRecord = (RichRecord) dqMFBRecordMerger.createNewRecord(record1, record2, 0);
         // compare timestamp in this case
-        Assert.assertEquals("Merge value should be shanghai", "shanghai", createNewRecord.getOriginRow().get(2).getValue()); //$NON-NLS-1$ //$NON-NLS-2$
+        Assert.assertEquals("Merge value should be shanghai", "shanghai", //$NON-NLS-1$//$NON-NLS-2$
+                createNewRecord.getOriginRow().get(2).getValue());
         Assert.assertEquals("Merge reference value should be shanghai", "shanghai", //$NON-NLS-1$//$NON-NLS-2$
                 createNewRecord.getOriginRow().get(2).getReferenceValue());
         Assert.assertEquals("Merge reference column index value should be 1", 1, //$NON-NLS-1$

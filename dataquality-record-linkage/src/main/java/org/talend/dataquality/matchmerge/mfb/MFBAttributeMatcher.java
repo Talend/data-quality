@@ -36,7 +36,8 @@ public class MFBAttributeMatcher implements IAttributeMatcher, ITokenization {
         this.weight = weight;
     }
 
-    public static MFBAttributeMatcher wrap(IAttributeMatcher matcher, double weight, double threshold, SubString subString) {
+    public static MFBAttributeMatcher wrap(IAttributeMatcher matcher, double weight, double threshold,
+            SubString subString) {
         return new MFBAttributeMatcher(matcher, weight, threshold, subString);
     }
 
@@ -47,8 +48,10 @@ public class MFBAttributeMatcher implements IAttributeMatcher, ITokenization {
         if (subString.needSubStringOperation()) {
             int beginIndex = subString.getBeginIndex();
             int endIndex = subString.getEndIndex();
-            newStr1 = newStr1.substring(newStr1.offsetByCodePoints(0, beginIndex), newStr1.offsetByCodePoints(0, endIndex));
-            newStr2 = newStr2.substring(newStr2.offsetByCodePoints(0, beginIndex), newStr2.offsetByCodePoints(0, endIndex));
+            newStr1 = newStr1.substring(newStr1.offsetByCodePoints(0, beginIndex),
+                    newStr1.offsetByCodePoints(0, endIndex));
+            newStr2 = newStr2.substring(newStr2.offsetByCodePoints(0, beginIndex),
+                    newStr2.offsetByCodePoints(0, endIndex));
         }
         double matchingWeight = delegate.getMatchingWeight(newStr1, newStr2);
         return matchingWeight;

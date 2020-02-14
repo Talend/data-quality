@@ -90,8 +90,8 @@ public class CRCRHandlerTest {
         hashSet.add("city2");
         conflictList.add(hashSet);
         FunctionParameter functionParameter = new FunctionParameter(action, expression, isIgnoreBlank, isDealDup);
-        HandlerParameter handlerParameter = new HandlerParameter(dataset, refColumn, tarColumn, ruleName, columnIndexMap,
-                fillColumn, functionParameter);
+        HandlerParameter handlerParameter = new HandlerParameter(dataset, refColumn, tarColumn, ruleName,
+                columnIndexMap, fillColumn, functionParameter);
         CRCRHandler crcrHandler = new CRCRHandler(handlerParameter);
         DataSet subDataset = null;
         for (int index = 0; index < 5; index++) {
@@ -99,8 +99,8 @@ public class CRCRHandlerTest {
 
             if (index == 0) {
                 subDataset = crcrHandler.getHandlerParameter().getDataset();
-                Assert.assertNotEquals("subDataset should be create so that dataset should different with subDataset", dataset,
-                        subDataset);
+                Assert.assertNotEquals("subDataset should be create so that dataset should different with subDataset",
+                        dataset, subDataset);
             } else {
                 Assert.assertEquals("crcrHandler only should be execute one time so that dataset will not change agian",
                         subDataset, crcrHandler.getHandlerParameter().getDataset());
@@ -181,14 +181,14 @@ public class CRCRHandlerTest {
         columnIndexMap.put("city1", 0);
         columnIndexMap.put("city2", 1);
         FunctionParameter functionParameter1 = new FunctionParameter(action1, expression, isIgnoreBlank, isDealDup);
-        HandlerParameter handlerParameter1 = new HandlerParameter(dataset, refColumn, tarColumn, ruleName, columnIndexMap,
-                fillColumn, functionParameter1);
+        HandlerParameter handlerParameter1 = new HandlerParameter(dataset, refColumn, tarColumn, ruleName,
+                columnIndexMap, fillColumn, functionParameter1);
         handlerParameter1.getConflictDataIndexList().add(1);
         handlerParameter1.getConflictDataIndexList().add(2);
         CRCRHandler crcrHandler1 = new CRCRHandler(handlerParameter1);
         FunctionParameter functionParameter2 = new FunctionParameter(action2, expression, isIgnoreBlank, isDealDup);
-        HandlerParameter handlerParameter2 = new HandlerParameter(dataset, refColumn, tarColumn, ruleName, columnIndexMap,
-                fillColumn, functionParameter2);
+        HandlerParameter handlerParameter2 = new HandlerParameter(dataset, refColumn, tarColumn, ruleName,
+                columnIndexMap, fillColumn, functionParameter2);
         CRCRHandler crcrHandler2 = new CRCRHandler(handlerParameter2);
         crcrHandler1.linkSuccessor(crcrHandler2);
         crcrHandler1.linkUISuccessor(crcrHandler2);
@@ -199,8 +199,8 @@ public class CRCRHandlerTest {
 
             if (index == 0) {
                 subDataset = crcrHandler1.getHandlerParameter().getDataset();
-                Assert.assertNotEquals("subDataset should be create so that dataset should different with subDataset", dataset,
-                        subDataset);
+                Assert.assertNotEquals("subDataset should be create so that dataset should different with subDataset",
+                        dataset, subDataset);
             } else {
                 Assert.assertEquals("crcrHandler only should be execute one time so that dataset will not change agian",
                         subDataset, crcrHandler1.getHandlerParameter().getDataset());
@@ -208,13 +208,16 @@ public class CRCRHandlerTest {
         }
         Assert.assertEquals("The size of conflict list should be 1", 1, conflictList.get(0).size());
         String conflictColumnForFirstRecored = conflictList.get(0).iterator().next();
-        Assert.assertEquals("The conflict column in first record should be city1", "city1", conflictColumnForFirstRecored);
+        Assert.assertEquals("The conflict column in first record should be city1", "city1",
+                conflictColumnForFirstRecored);
         Assert.assertEquals("The size of conflict list should be 1", 1, conflictList.get(1).size());
         conflictColumnForFirstRecored = conflictList.get(1).iterator().next();
-        Assert.assertEquals("The conflict column in first record should be city1", "city1", conflictColumnForFirstRecored);
+        Assert.assertEquals("The conflict column in first record should be city1", "city1",
+                conflictColumnForFirstRecored);
         Assert.assertEquals("The size of conflict list should be 1", 1, conflictList.get(2).size());
         conflictColumnForFirstRecored = conflictList.get(2).iterator().next();
-        Assert.assertEquals("The conflict column in first record should be city1", "city1", conflictColumnForFirstRecored);
+        Assert.assertEquals("The conflict column in first record should be city1", "city1",
+                conflictColumnForFirstRecored);
     }
 
     /**
@@ -225,8 +228,8 @@ public class CRCRHandlerTest {
         HandlerParameter handlerParameter = createHandlerParameter(null);
         CRCRHandler crcrHandler = new CRCRHandler(handlerParameter);
         crcrHandler.handleRequest();
-        Assert.assertEquals("The record of dataset is empty so that no subDataset generated", handlerParameter.getDataset(), //$NON-NLS-1$
-                crcrHandler.getHandlerParameter().getDataset());
+        Assert.assertEquals("The record of dataset is empty so that no subDataset generated", //$NON-NLS-1$
+                handlerParameter.getDataset(), crcrHandler.getHandlerParameter().getDataset());
     }
 
     /**
@@ -241,9 +244,12 @@ public class CRCRHandlerTest {
         preConflictRowNum.put(2, "city1");
         preConflictRowNum.put(3, "city2");
         crcrHandler.initConflictRowNum(preConflictRowNum);
-        Assert.assertEquals("the column name of record 1 should be city1", "city1", crcrHandler.conflictingRowNumbers.get(1));
-        Assert.assertEquals("the column name of record 2 should be city1", "city1", crcrHandler.conflictingRowNumbers.get(2));
-        Assert.assertEquals("the column name of record 3 should be city2", "city2", crcrHandler.conflictingRowNumbers.get(3));
+        Assert.assertEquals("the column name of record 1 should be city1", "city1",
+                crcrHandler.conflictingRowNumbers.get(1));
+        Assert.assertEquals("the column name of record 2 should be city1", "city1",
+                crcrHandler.conflictingRowNumbers.get(2));
+        Assert.assertEquals("the column name of record 3 should be city2", "city2",
+                crcrHandler.conflictingRowNumbers.get(3));
     }
 
     /**
@@ -266,8 +272,8 @@ public class CRCRHandlerTest {
         boolean isDealDup = false;
         Map<String, Integer> columnIndexMap = new HashMap<>();
         FunctionParameter functionParameter = new FunctionParameter(action, expression, isIgnoreBlank, isDealDup);
-        HandlerParameter handlerParameter = new HandlerParameter(dataset, refColumn, tarColumn, ruleName, columnIndexMap,
-                fillColumn, functionParameter);
+        HandlerParameter handlerParameter = new HandlerParameter(dataset, refColumn, tarColumn, ruleName,
+                columnIndexMap, fillColumn, functionParameter);
         return handlerParameter;
     }
 
@@ -306,8 +312,8 @@ public class CRCRHandlerTest {
         columnIndexMap.put("city1", 0);
         columnIndexMap.put("city2", 1);
         FunctionParameter functionParameter = new FunctionParameter(action, expression, isIgnoreBlank, isDealDup);
-        HandlerParameter handlerParameter = new HandlerParameter(dataset, refColumn, tarColumn, ruleName, columnIndexMap,
-                fillColumn, functionParameter);
+        HandlerParameter handlerParameter = new HandlerParameter(dataset, refColumn, tarColumn, ruleName,
+                columnIndexMap, fillColumn, functionParameter);
         CRCRHandler crcrHandler = new CRCRHandler(handlerParameter);
         Map<Integer, String> preConflictRowNum = new HashMap<>();
         preConflictRowNum.put(0, "city1");
@@ -334,7 +340,8 @@ public class CRCRHandlerTest {
         AbstractChainOfResponsibilityHandler link1 = crcr1.linkSuccessor(crcr2);
         AbstractChainOfResponsibilityHandler link2 = crcr2.linkSuccessor(mtcr);
         Assert.assertEquals("link1 should same with crcr2", link1, crcr2);
-        Assert.assertEquals("link2 should keep crcr2 too because of mtcr is not conflict resolve handler", link2, crcr2);
+        Assert.assertEquals("link2 should keep crcr2 too because of mtcr is not conflict resolve handler", link2,
+                crcr2);
     }
 
     /**

@@ -39,8 +39,8 @@ public class ExpressionActionTest {
         String ruleName = null;
         String expression = ">1"; //$NON-NLS-1$
         boolean ignoreBlanks = false;
-        ActionParameter actionParaneter = new ActionParameter(dataset, inputData, rowNum, column, ruleName, expression,
-                ignoreBlanks);
+        ActionParameter actionParaneter =
+                new ActionParameter(dataset, inputData, rowNum, column, ruleName, expression, ignoreBlanks);
 
         ExpressionAction expressionAction = new ExpressionAction();
         boolean checkCanHandle = expressionAction.canHandle(actionParaneter);
@@ -62,8 +62,8 @@ public class ExpressionActionTest {
         String ruleName = null;
         String expression = ".getTime()<new Date().getTime()"; //$NON-NLS-1$
         boolean ignoreBlanks = false;
-        ActionParameter actionParaneter = new ActionParameter(dataset, inputData, rowNum, column, ruleName, expression,
-                ignoreBlanks);
+        ActionParameter actionParaneter =
+                new ActionParameter(dataset, inputData, rowNum, column, ruleName, expression, ignoreBlanks);
 
         ExpressionAction expressionAction = new ExpressionAction();
         boolean checkCanHandle = expressionAction.canHandle(actionParaneter);
@@ -85,8 +85,8 @@ public class ExpressionActionTest {
         String ruleName = null;
         String expression = ".equals(\"string1\")"; //$NON-NLS-1$
         boolean ignoreBlanks = false;
-        ActionParameter actionParaneter = new ActionParameter(dataset, inputData, rowNum, column, ruleName, expression,
-                ignoreBlanks);
+        ActionParameter actionParaneter =
+                new ActionParameter(dataset, inputData, rowNum, column, ruleName, expression, ignoreBlanks);
 
         ExpressionAction expressionAction = new ExpressionAction();
         boolean checkCanHandle = expressionAction.canHandle(actionParaneter);
@@ -108,8 +108,8 @@ public class ExpressionActionTest {
         String ruleName = null;
         String expression = ".equals(\"string1\")"; //$NON-NLS-1$
         boolean ignoreBlanks = false;
-        ActionParameter actionParaneter = new ActionParameter(dataset, inputData, rowNum, column, ruleName, expression,
-                ignoreBlanks);
+        ActionParameter actionParaneter =
+                new ActionParameter(dataset, inputData, rowNum, column, ruleName, expression, ignoreBlanks);
 
         ExpressionAction expressionAction = new ExpressionAction();
         boolean checkCanHandle = expressionAction.canHandle(actionParaneter);
@@ -131,12 +131,13 @@ public class ExpressionActionTest {
         String ruleName = null;
         String expression = ".equals(\"string1\")"; //$NON-NLS-1$
         boolean ignoreBlanks = false;
-        ActionParameter actionParaneter = new ActionParameter(dataset, inputData, rowNum, column, ruleName, expression,
-                ignoreBlanks);
+        ActionParameter actionParaneter =
+                new ActionParameter(dataset, inputData, rowNum, column, ruleName, expression, ignoreBlanks);
 
         ExpressionAction expressionAction = new ExpressionAction();
         boolean checkCanHandle = expressionAction.canHandle(actionParaneter);
-        Assert.assertEquals("The result of checkCanHandle shuold be false because of expression is null", false, checkCanHandle); //$NON-NLS-1$
+        Assert.assertEquals("The result of checkCanHandle shuold be false because of expression is null", false, //$NON-NLS-1$
+                checkCanHandle);
     }
 
 }

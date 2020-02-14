@@ -28,7 +28,7 @@ public class SampleDataConflictMostCommon2OtherSurvivedValue {
             new RuleDefinition(Order.SEQ, "most_common_city1", "city1", //$NON-NLS-1$
                     Function.MostCommon, null, "city1", false) }; //$NON-NLS-1$
 
-    public static final ConflictRuleDefinition[] RULES_CONFLICT_RESOLVE = { new ConflictRuleDefinition(
-            new DefFunParameter("firstName", Function.SurviveAs, null, "city1", null), Order.CR, "more_recent_birthday", //$NON-NLS-1$ //$NON-NLS-2$
-            false, false, 0) };
+    public static final ConflictRuleDefinition[] RULES_CONFLICT_RESOLVE =
+            { new ConflictRuleDefinition(new DefFunParameter("firstName", Function.SurviveAs, null, "city1", null), //$NON-NLS-1$//$NON-NLS-2$
+                    Order.CR, "more_recent_birthday", false, false, 0) };
 }

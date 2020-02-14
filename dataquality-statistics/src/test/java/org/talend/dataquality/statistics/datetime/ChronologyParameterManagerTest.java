@@ -47,7 +47,8 @@ public class ChronologyParameterManagerTest {
     public void testgetDateTimeFormatterWithChronology() {
         String pattern = "yyyy-MM-dd G"; //$NON-NLS-1$
         Locale locale = Locale.JAPANESE;
-        DateTimeFormatter dateTimeFormatter = ChronologyParameterManager.getDateTimeFormatterWithChronology(pattern, locale);
+        DateTimeFormatter dateTimeFormatter =
+                ChronologyParameterManager.getDateTimeFormatterWithChronology(pattern, locale);
         assertEquals(JapaneseChronology.INSTANCE, dateTimeFormatter.getChronology());
 
         locale = Locale.TAIWAN;

@@ -59,10 +59,11 @@ public class TDigestAnalyzer extends NumericalStatisticsAnalyzer<TDigestQuantile
         DataTypeEnum[] types = this.getTypes();
 
         if (record.length != types.length)
-            throw new IllegalArgumentException("Each column of the record should be declared a DataType.Type corresponding! \n"
-                    + types.length + " type(s) declared in this T-Digest analyzer but " + record.length
-                    + " column(s) was found in this record. \n"
-                    + "Using method: setTypes(DataType.Type[] types) to set the types.");
+            throw new IllegalArgumentException(
+                    "Each column of the record should be declared a DataType.Type corresponding! \n" + types.length
+                            + " type(s) declared in this T-Digest analyzer but " + record.length
+                            + " column(s) was found in this record. \n"
+                            + "Using method: setTypes(DataType.Type[] types) to set the types.");
 
         stats.resize(record.length);
 

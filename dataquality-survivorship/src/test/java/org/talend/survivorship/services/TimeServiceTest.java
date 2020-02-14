@@ -255,22 +255,28 @@ public class TimeServiceTest {
     private Object[][] generateInputData() {
 
         return new Object[][] {
-                { SampleData.stringToDate("2000-05-05", "yyyy-MM-dd"), SampleData.stringToDate("2000-01-01", "yyyy-MM-dd"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+                { SampleData.stringToDate("2000-05-05", "yyyy-MM-dd"), //$NON-NLS-1$//$NON-NLS-2$
+                        SampleData.stringToDate("2000-01-01", "yyyy-MM-dd"), //$NON-NLS-1$ //$NON-NLS-2$
                         SampleData.stringToDate("2000-03-03", "yyyy-MM-dd"), //$NON-NLS-1$//$NON-NLS-2$
                         SampleData.stringToDate("2000-03-03", "yyyy-MM-dd") }, //$NON-NLS-1$ //$NON-NLS-2$
-                { SampleData.stringToDate("2000-03-03", "yyyy-MM-dd"), SampleData.stringToDate("2000-01-01", "yyyy-MM-dd"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+                { SampleData.stringToDate("2000-03-03", "yyyy-MM-dd"), //$NON-NLS-1$//$NON-NLS-2$
+                        SampleData.stringToDate("2000-01-01", "yyyy-MM-dd"), //$NON-NLS-1$ //$NON-NLS-2$
                         SampleData.stringToDate("2000-05-05", "yyyy-MM-dd"), //$NON-NLS-1$//$NON-NLS-2$
                         SampleData.stringToDate("2000-04-04", "yyyy-MM-dd") }, //$NON-NLS-1$ //$NON-NLS-2$
-                { SampleData.stringToDate("2000-01-01", "yyyy-MM-dd"), SampleData.stringToDate("2000-01-01", "yyyy-MM-dd"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+                { SampleData.stringToDate("2000-01-01", "yyyy-MM-dd"), //$NON-NLS-1$//$NON-NLS-2$
+                        SampleData.stringToDate("2000-01-01", "yyyy-MM-dd"), //$NON-NLS-1$ //$NON-NLS-2$
                         SampleData.stringToDate("2000-04-04", "yyyy-MM-dd"), //$NON-NLS-1$//$NON-NLS-2$
                         SampleData.stringToDate("2000-04-04", "yyyy-MM-dd") }, //$NON-NLS-1$ //$NON-NLS-2$
-                { SampleData.stringToDate("2000-02-02", "yyyy-MM-dd"), SampleData.stringToDate("2000-01-01", "yyyy-MM-dd"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+                { SampleData.stringToDate("2000-02-02", "yyyy-MM-dd"), //$NON-NLS-1$//$NON-NLS-2$
+                        SampleData.stringToDate("2000-01-01", "yyyy-MM-dd"), //$NON-NLS-1$ //$NON-NLS-2$
                         SampleData.stringToDate("2000-01-01", "yyyy-MM-dd"), //$NON-NLS-1$//$NON-NLS-2$
                         SampleData.stringToDate("2000-03-03", "yyyy-MM-dd") }, //$NON-NLS-1$ //$NON-NLS-2$
-                { SampleData.stringToDate("2000-04-04", "yyyy-MM-dd"), SampleData.stringToDate("2000-01-01", "yyyy-MM-dd"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+                { SampleData.stringToDate("2000-04-04", "yyyy-MM-dd"), //$NON-NLS-1$//$NON-NLS-2$
+                        SampleData.stringToDate("2000-01-01", "yyyy-MM-dd"), //$NON-NLS-1$ //$NON-NLS-2$
                         SampleData.stringToDate("2000-06-06", "yyyy-MM-dd"), //$NON-NLS-1$//$NON-NLS-2$
                         SampleData.stringToDate("2000-03-03", "yyyy-MM-dd") }, //$NON-NLS-1$ //$NON-NLS-2$
-                { SampleData.stringToDate("2000-06-06", "yyyy-MM-dd"), SampleData.stringToDate("2000-01-01", "yyyy-MM-dd"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+                { SampleData.stringToDate("2000-06-06", "yyyy-MM-dd"), //$NON-NLS-1$//$NON-NLS-2$
+                        SampleData.stringToDate("2000-01-01", "yyyy-MM-dd"), //$NON-NLS-1$ //$NON-NLS-2$
                         SampleData.stringToDate("2000-02-02", "yyyy-MM-dd"), //$NON-NLS-1$//$NON-NLS-2$
                         SampleData.stringToDate("2000-04-04", "yyyy-MM-dd") } }; //$NON-NLS-1$ //$NON-NLS-2$
     }

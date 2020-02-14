@@ -47,13 +47,15 @@ public class FieldModifierTest {
 
     @Test
     public void testSetToNull() {
-        Object dup = dataModifier.generateDuplicate(STRING_TO_TEST, Function.SET_TO_NULL, DEFAULT_MODIF_COUNT, EMPTY_STRING);
+        Object dup =
+                dataModifier.generateDuplicate(STRING_TO_TEST, Function.SET_TO_NULL, DEFAULT_MODIF_COUNT, EMPTY_STRING);
         assertEquals(null, dup);
     }
 
     @Test
     public void testSetToBlank() {
-        Object dup = dataModifier.generateDuplicate(STRING_TO_TEST, Function.SET_TO_BLANK, DEFAULT_MODIF_COUNT, EMPTY_STRING);
+        Object dup = dataModifier.generateDuplicate(STRING_TO_TEST, Function.SET_TO_BLANK, DEFAULT_MODIF_COUNT,
+                EMPTY_STRING);
         assertEquals(EMPTY_STRING, dup);
     }
 
@@ -61,14 +63,16 @@ public class FieldModifierTest {
     public void testReplaceLetters() {
 
         String EXPECTED_WORD = "SuPesKeZ"; //$NON-NLS-1$
-        Object dup = dataModifier.generateDuplicate(STRING_TO_TEST, Function.REPLACE_LETTER, DEFAULT_MODIF_COUNT, EMPTY_STRING);
+        Object dup = dataModifier.generateDuplicate(STRING_TO_TEST, Function.REPLACE_LETTER, DEFAULT_MODIF_COUNT,
+                EMPTY_STRING);
         assertEquals(EXPECTED_WORD, dup);
     }
 
     @Test
     public void testAddLetters() {
         String EXPECTED_WORD = "SuresPKneZs"; //$NON-NLS-1$
-        Object dup = dataModifier.generateDuplicate(STRING_TO_TEST, Function.ADD_LETTER, DEFAULT_MODIF_COUNT, EMPTY_STRING);
+        Object dup =
+                dataModifier.generateDuplicate(STRING_TO_TEST, Function.ADD_LETTER, DEFAULT_MODIF_COUNT, EMPTY_STRING);
         assertEquals(EXPECTED_WORD, dup);
 
     }
@@ -76,42 +80,48 @@ public class FieldModifierTest {
     @Test
     public void testRemoveLetters() {
         String EXPECTED_WORD = "Suese"; //$NON-NLS-1$
-        Object dup = dataModifier.generateDuplicate(STRING_TO_TEST, Function.REMOVE_LETTER, DEFAULT_MODIF_COUNT, EMPTY_STRING);
+        Object dup = dataModifier.generateDuplicate(STRING_TO_TEST, Function.REMOVE_LETTER, DEFAULT_MODIF_COUNT,
+                EMPTY_STRING);
         assertEquals(EXPECTED_WORD, dup);
     }
 
     @Test
     public void testReplaceDigits() {
         String EXPECTED_NUMBER = "12120"; //$NON-NLS-1$
-        Object dup = dataModifier.generateDuplicate(NUMBER_TO_TEST, Function.REPLACE_DIGIT, DEFAULT_MODIF_COUNT, EMPTY_STRING);
+        Object dup = dataModifier.generateDuplicate(NUMBER_TO_TEST, Function.REPLACE_DIGIT, DEFAULT_MODIF_COUNT,
+                EMPTY_STRING);
         assertEquals(EXPECTED_NUMBER, dup);
     }
 
     @Test
     public void testAddDigits() {
         String EXPECTED_NUMBER = "92121510"; //$NON-NLS-1$
-        Object dup = dataModifier.generateDuplicate(NUMBER_TO_TEST, Function.ADD_DIGIT, DEFAULT_MODIF_COUNT, EMPTY_STRING);
+        Object dup =
+                dataModifier.generateDuplicate(NUMBER_TO_TEST, Function.ADD_DIGIT, DEFAULT_MODIF_COUNT, EMPTY_STRING);
         assertEquals(EXPECTED_NUMBER, dup);
     }
 
     @Test
     public void testRemoveDigits() {
         String EXPECTED_NUMBER = "92"; //$NON-NLS-1$
-        Object dup = dataModifier.generateDuplicate(NUMBER_TO_TEST, Function.REMOVE_DIGIT, DEFAULT_MODIF_COUNT, EMPTY_STRING);
+        Object dup = dataModifier.generateDuplicate(NUMBER_TO_TEST, Function.REMOVE_DIGIT, DEFAULT_MODIF_COUNT,
+                EMPTY_STRING);
         assertEquals(EXPECTED_NUMBER, dup);
     }
 
     @Test
     public void testExchageChars() {
         String EXPECTED_WORD = "Susernes"; //$NON-NLS-1$
-        Object dup = dataModifier.generateDuplicate(STRING_TO_TEST, Function.EXCHANGE_CHAR, DEFAULT_MODIF_COUNT, EMPTY_STRING);
+        Object dup = dataModifier.generateDuplicate(STRING_TO_TEST, Function.EXCHANGE_CHAR, DEFAULT_MODIF_COUNT,
+                EMPTY_STRING);
         assertEquals(EXPECTED_WORD, dup);
     }
 
     @Test
     public void testSoundexReplace() {
         String EXPECTED_WORD = "Suresmek"; //$NON-NLS-1$
-        Object dup = dataModifier.generateDuplicate(STRING_TO_TEST, Function.SOUNDEX_REPLACE, DEFAULT_MODIF_COUNT, EMPTY_STRING);
+        Object dup = dataModifier.generateDuplicate(STRING_TO_TEST, Function.SOUNDEX_REPLACE, DEFAULT_MODIF_COUNT,
+                EMPTY_STRING);
         assertEquals(EXPECTED_WORD, dup);
     }
 
@@ -173,8 +183,8 @@ public class FieldModifierTest {
         FieldModifier fieldModifier = new FieldModifier();
         //test REPLACE_BY_RANDOM_DATE
         Date date = new Date();
-        Date generateDuplicate = fieldModifier.generateDuplicate(date, Function.REPLACE_BY_RANDOM_DATE, DEFAULT_MODIF_COUNT,
-                EMPTY_STRING);
+        Date generateDuplicate = fieldModifier.generateDuplicate(date, Function.REPLACE_BY_RANDOM_DATE,
+                DEFAULT_MODIF_COUNT, EMPTY_STRING);
         assertNotEquals(date, generateDuplicate);
     }
 
@@ -190,8 +200,8 @@ public class FieldModifierTest {
         FieldModifier fieldModifier = new FieldModifier();
         //test MODIFY_DATE_VALUE
         Date date = new Date();
-        Date generateDuplicate = fieldModifier.generateDuplicate(date, Function.MODIFY_DATE_VALUE, DEFAULT_MODIF_COUNT,
-                EMPTY_STRING);
+        Date generateDuplicate =
+                fieldModifier.generateDuplicate(date, Function.MODIFY_DATE_VALUE, DEFAULT_MODIF_COUNT, EMPTY_STRING);
         assertNotEquals(date, generateDuplicate);
     }
 
@@ -207,8 +217,8 @@ public class FieldModifierTest {
         FieldModifier fieldModifier = new FieldModifier();
         //test MODIFY_DATE_VALUE
         Date date = new Date();
-        Date generateDuplicate = fieldModifier.generateDuplicate(date, Function.SWITCH_DAY_MONTH_VALUE, DEFAULT_MODIF_COUNT,
-                EMPTY_STRING);
+        Date generateDuplicate = fieldModifier.generateDuplicate(date, Function.SWITCH_DAY_MONTH_VALUE,
+                DEFAULT_MODIF_COUNT, EMPTY_STRING);
         assertNotEquals(date, generateDuplicate);
     }
 }

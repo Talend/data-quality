@@ -45,7 +45,8 @@ public enum SurvivorShipAlgorithmEnum {
 
     private DefaultSurvivorShipDataTypeEnum[] dataType;
 
-    SurvivorShipAlgorithmEnum(int index, String value, String componentValueName, DefaultSurvivorShipDataTypeEnum... dataType) {
+    SurvivorShipAlgorithmEnum(int index, String value, String componentValueName,
+            DefaultSurvivorShipDataTypeEnum... dataType) {
         this.index = index;
         this.value = value;
         this.componentValueName = componentValueName;

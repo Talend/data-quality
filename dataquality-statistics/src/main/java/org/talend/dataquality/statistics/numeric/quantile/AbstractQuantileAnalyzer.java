@@ -44,10 +44,11 @@ public abstract class AbstractQuantileAnalyzer<T extends QuantileStatistics> ext
     public boolean analyze(String... record) {
         DataTypeEnum[] types = getTypes();
         if (record.length != types.length)
-            throw new IllegalArgumentException("Each column of the record should be declared a DataType.Type corresponding! \n"
-                    + types.length + " type(s) declared in this quantile analyzer but " + record.length
-                    + " column(s) was found in this record. \n"
-                    + "Using method: setTypes(DataType.Type[] types) to set the types.");
+            throw new IllegalArgumentException(
+                    "Each column of the record should be declared a DataType.Type corresponding! \n" + types.length
+                            + " type(s) declared in this quantile analyzer but " + record.length
+                            + " column(s) was found in this record. \n"
+                            + "Using method: setTypes(DataType.Type[] types) to set the types.");
 
         getStats().resize(record.length);
         for (int idx : this.getStatColIdx()) {// analysis each numerical column in the record

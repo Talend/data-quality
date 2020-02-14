@@ -23,7 +23,8 @@ public class ExcludeValuesActionTest {
 
     /**
      * Test method for
-     * {@link org.talend.survivorship.action.ExcludeValuesAction#canHandle(org.talend.survivorship.action.ActionParameter)}.
+     * {@link org.talend.survivorship.action.ExcludeValuesAction#canHandle(org.talend.survivorship.action.ActionParameter)}
+     * .
      */
     @Test
     public void testCheckCanHandle() {
@@ -34,8 +35,8 @@ public class ExcludeValuesActionTest {
         String ruleName = "rule1";
         String expression = "Tony|Green";
         boolean ignoreBlanks = false;
-        ActionParameter actionParameter = new ActionParameter(dataset, inputData, rowNum, column, ruleName, expression,
-                ignoreBlanks);
+        ActionParameter actionParameter =
+                new ActionParameter(dataset, inputData, rowNum, column, ruleName, expression, ignoreBlanks);
         ExcludeValuesAction exclusivenessAction = new ExcludeValuesAction();
         boolean checkCanHandle = exclusivenessAction.canHandle(actionParameter);
         Assert.assertFalse("Tony is a constant value so that result should be false", checkCanHandle);

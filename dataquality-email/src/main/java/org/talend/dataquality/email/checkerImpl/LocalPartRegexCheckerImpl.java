@@ -31,8 +31,8 @@ public class LocalPartRegexCheckerImpl extends AbstractEmailChecker {
 
         String localPart = isShort ? translateToRegex(regex) : regex;
         if (localPart != null) {
-            localpartPattern = isCaseSensitive ? Pattern.compile(localPart)
-                    : Pattern.compile(localPart, Pattern.CASE_INSENSITIVE);
+            localpartPattern =
+                    isCaseSensitive ? Pattern.compile(localPart) : Pattern.compile(localPart, Pattern.CASE_INSENSITIVE);
         }
     }
 

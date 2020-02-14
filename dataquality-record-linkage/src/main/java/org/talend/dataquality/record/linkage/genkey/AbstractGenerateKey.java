@@ -44,7 +44,8 @@ public class AbstractGenerateKey {
      * @param dataMap
      * @param inputString
      */
-    public void generateKey(List<Map<String, String>> blockKeyDefinitions, Map<String, String> dataMap, String[] inputString) {
+    public void generateKey(List<Map<String, String>> blockKeyDefinitions, Map<String, String> dataMap,
+            String[] inputString) {
         String genKey = getGenKey(blockKeyDefinitions, dataMap);
         appendGenKeyResult(inputString, genKey);
 

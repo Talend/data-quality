@@ -51,8 +51,8 @@ public class HistogramParameter {
 
     public void setDefaultParameters(double defaultMin, double defaultMax, int defaultNumBins) {
         if (defaultMax < defaultMin || defaultNumBins < 0)
-            throw new IllegalArgumentException("Max = " + defaultMax + ", Min = " + defaultMin + ", numBins =" + defaultNumBins
-                    + "\n Max must greater than Min and numBins must be a positive integers(>0)!");
+            throw new IllegalArgumentException("Max = " + defaultMax + ", Min = " + defaultMin + ", numBins ="
+                    + defaultNumBins + "\n Max must greater than Min and numBins must be a positive integers(>0)!");
         this.defaultMin = defaultMin;
         this.defaultMax = defaultMax;
         this.defaultNumBins = defaultNumBins;

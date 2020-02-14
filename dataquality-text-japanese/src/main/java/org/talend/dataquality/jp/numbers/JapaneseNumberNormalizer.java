@@ -481,8 +481,8 @@ public class JapaneseNumberNormalizer {
 
     private boolean isNumeric(NumberBuffer buffer, int position) {
         char c = buffer.charAt(position);
-        return isArabicNumeral(c) || isDecimalPoint(c) || isKanjiNumeral(c) || isKanjiExponent(c) || isNegativeSign(buffer.string)
-                || isThousandSeparator(c);
+        return isArabicNumeral(c) || isDecimalPoint(c) || isKanjiNumeral(c) || isKanjiExponent(c)
+                || isNegativeSign(buffer.string) || isThousandSeparator(c);
     }
 
     /**
@@ -497,7 +497,8 @@ public class JapaneseNumberNormalizer {
         int positionOfLine = numberStr.indexOf(cutOffLineJP);
         if (positionOfLine > -1) {
             // format the numerator
-            NumberBuffer numeratorBuffer = new NumberBuffer(numberStr.substring(positionOfLine + 2, numberStr.length()));
+            NumberBuffer numeratorBuffer =
+                    new NumberBuffer(numberStr.substring(positionOfLine + 2, numberStr.length()));
             if (containDecimalPoint(numeratorBuffer)) {// TDQ-16372 Decimal and fraction never used together
                 return numberNotTrimmed;
             }

@@ -64,8 +64,8 @@ public class TextTransliteratorTest {
         expectedTextList.add("カアサン");
 
         for (int i = 0; i < testTextList.size(); i++) {
-            final String katakanaReading = transliterator.transliterate(testTextList.get(i), TransliterateType.KATAKANA_READING,
-                    delimiter);
+            final String katakanaReading =
+                    transliterator.transliterate(testTextList.get(i), TransliterateType.KATAKANA_READING, delimiter);
             assertEquals(expectedTextList.get(i), katakanaReading);
         }
     }
@@ -89,8 +89,8 @@ public class TextTransliteratorTest {
         expectedTextList.add("カーサン");
 
         for (int i = 0; i < testTextList.size(); i++) {
-            final String katakanaPronunciation = transliterator.transliterate(testTextList.get(i),
-                    TransliterateType.KATAKANA_PRONUNCIATION);
+            final String katakanaPronunciation =
+                    transliterator.transliterate(testTextList.get(i), TransliterateType.KATAKANA_PRONUNCIATION);
             assertEquals(expectedTextList.get(i), katakanaPronunciation);
         }
     }
@@ -163,7 +163,8 @@ public class TextTransliteratorTest {
         expectedTextList.add("kâsan");
 
         for (int i = 0; i < testTextList.size(); i++) {
-            final String kunrei_shiki = transliterator.transliterate(testTextList.get(i), TransliterateType.KUNREI_SHIKI);
+            final String kunrei_shiki =
+                    transliterator.transliterate(testTextList.get(i), TransliterateType.KUNREI_SHIKI);
             assertEquals(expectedTextList.get(i), kunrei_shiki);
         }
     }

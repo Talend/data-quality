@@ -57,17 +57,19 @@ public class DataTypeOccurences implements Serializable {
         if (count != 0) {
             // --- Any integer is a double
             if (typeOccurences.containsKey(DataTypeEnum.DOUBLE) && typeOccurences.containsKey(DataTypeEnum.INTEGER)) {
-                final long doubleOccurrences = typeOccurences.get(DataTypeEnum.DOUBLE) + typeOccurences.get(DataTypeEnum.INTEGER);
+                final long doubleOccurrences =
+                        typeOccurences.get(DataTypeEnum.DOUBLE) + typeOccurences.get(DataTypeEnum.INTEGER);
                 typeOccurences.put(DataTypeEnum.DOUBLE, doubleOccurrences);
             }
 
-            Comparator<Map.Entry<DataTypeEnum, Long>> decreasingOccurrenceComparator = new Comparator<Map.Entry<DataTypeEnum, Long>>() {
+            Comparator<Map.Entry<DataTypeEnum, Long>> decreasingOccurrenceComparator =
+                    new Comparator<Map.Entry<DataTypeEnum, Long>>() {
 
-                @Override
-                public int compare(Map.Entry<DataTypeEnum, Long> o1, Map.Entry<DataTypeEnum, Long> o2) {
-                    return Long.compare(o2.getValue(), o1.getValue());
-                }
-            };
+                        @Override
+                        public int compare(Map.Entry<DataTypeEnum, Long> o1, Map.Entry<DataTypeEnum, Long> o2) {
+                            return Long.compare(o2.getValue(), o1.getValue());
+                        }
+                    };
             // sort the non empty types by decreasing occurrences number
             Collections.sort(sortedTypeOccurrences, decreasingOccurrenceComparator);
 

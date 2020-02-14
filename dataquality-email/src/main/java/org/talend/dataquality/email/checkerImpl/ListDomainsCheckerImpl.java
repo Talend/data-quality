@@ -109,7 +109,8 @@ public class ListDomainsCheckerImpl extends AbstractEmailChecker {
             if (isNeedConversion) {
                 Pattern domainPattern2 = listDomainsPatterns.get(domainPattern);
 
-                if (domainPattern2.matcher(domainPart).matches() && EmailValidator.getInstance().isValidDomain(domainPart)) {
+                if (domainPattern2.matcher(domainPart).matches()
+                        && EmailValidator.getInstance().isValidDomain(domainPart)) {
                     return true;
                 }
             } else {

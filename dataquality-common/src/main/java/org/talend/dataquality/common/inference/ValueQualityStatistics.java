@@ -110,7 +110,7 @@ public class ValueQualityStatistics implements Serializable {
     @Override
     public String toString() {
         return "ValueQuality{" + "valid=" + validCount + ", empty=" + emptyCount + ", invalid=" + invalidCount + '}'
-                + ", unknown=" + unknownCount + '}' + "InvalidValues{" + invalidValues + "}" + " UnknownValues{" + unknownValues
-                + "}";
+                + ", unknown=" + unknownCount + '}' + "InvalidValues{" + invalidValues + "}" + " UnknownValues{"
+                + unknownValues + "}";
     }
 }

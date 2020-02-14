@@ -79,7 +79,8 @@ public class JulianDayConverterTest {
 
     @Test
     public void testJulianToCalendar() {
-        JulianDayConverter jc = new JulianDayConverter(JulianFields.JULIAN_DAY, IsoChronology.INSTANCE, null, Locale.US);
+        JulianDayConverter jc =
+                new JulianDayConverter(JulianFields.JULIAN_DAY, IsoChronology.INSTANCE, null, Locale.US);
         assertEquals(calendarISO + ISOEarStr, jc.convert(julianDay));
 
         jc = new JulianDayConverter(JulianFields.JULIAN_DAY, JapaneseChronology.INSTANCE, outputPattern, outputLocale);
@@ -91,23 +92,28 @@ public class JulianDayConverterTest {
         jc = new JulianDayConverter(JulianFields.JULIAN_DAY, MinguoChronology.INSTANCE, outputPattern, outputLocale);
         assertEquals(calendarMingGuo, jc.convert(julianDay));
 
-        jc = new JulianDayConverter(JulianFields.JULIAN_DAY, ThaiBuddhistChronology.INSTANCE, outputPattern, outputLocale);
+        jc = new JulianDayConverter(JulianFields.JULIAN_DAY, ThaiBuddhistChronology.INSTANCE, outputPattern,
+                outputLocale);
         assertEquals(calendarThaiBudd, jc.convert(julianDay));
 
     }
 
     @Test
     public void testModifyJulianToCalendar() {
-        JulianDayConverter jc = new JulianDayConverter(JulianFields.MODIFIED_JULIAN_DAY, IsoChronology.INSTANCE, null, Locale.US);
+        JulianDayConverter jc =
+                new JulianDayConverter(JulianFields.MODIFIED_JULIAN_DAY, IsoChronology.INSTANCE, null, Locale.US);
         assertEquals(calendarISO + ISOEarStr, jc.convert(modiJulianDay));
 
-        jc = new JulianDayConverter(JulianFields.MODIFIED_JULIAN_DAY, JapaneseChronology.INSTANCE, outputPattern, outputLocale);
+        jc = new JulianDayConverter(JulianFields.MODIFIED_JULIAN_DAY, JapaneseChronology.INSTANCE, outputPattern,
+                outputLocale);
         assertEquals(calendarJapa, jc.convert(modiJulianDay));
 
-        jc = new JulianDayConverter(JulianFields.MODIFIED_JULIAN_DAY, HijrahChronology.INSTANCE, outputPattern, outputLocale);
+        jc = new JulianDayConverter(JulianFields.MODIFIED_JULIAN_DAY, HijrahChronology.INSTANCE, outputPattern,
+                outputLocale);
         assertEquals(calendarHijr, jc.convert(modiJulianDay));
 
-        jc = new JulianDayConverter(JulianFields.MODIFIED_JULIAN_DAY, MinguoChronology.INSTANCE, outputPattern, outputLocale);
+        jc = new JulianDayConverter(JulianFields.MODIFIED_JULIAN_DAY, MinguoChronology.INSTANCE, outputPattern,
+                outputLocale);
         assertEquals(calendarMingGuo, jc.convert(modiJulianDay));
 
         jc = new JulianDayConverter(JulianFields.MODIFIED_JULIAN_DAY, ThaiBuddhistChronology.INSTANCE, outputPattern,
@@ -129,7 +135,8 @@ public class JulianDayConverterTest {
         jc = new JulianDayConverter(JulianFields.RATA_DIE, MinguoChronology.INSTANCE, outputPattern, outputLocale);
         assertEquals(calendarMingGuo, jc.convert(rataDie));
 
-        jc = new JulianDayConverter(JulianFields.RATA_DIE, ThaiBuddhistChronology.INSTANCE, outputPattern, outputLocale);
+        jc = new JulianDayConverter(JulianFields.RATA_DIE, ThaiBuddhistChronology.INSTANCE, outputPattern,
+                outputLocale);
         assertEquals(calendarThaiBudd, jc.convert(rataDie));
     }
 
@@ -147,7 +154,8 @@ public class JulianDayConverterTest {
         jc = new JulianDayConverter(ChronoField.EPOCH_DAY, MinguoChronology.INSTANCE, outputPattern, outputLocale);
         assertEquals(calendarMingGuo, jc.convert(epochDay));
 
-        jc = new JulianDayConverter(ChronoField.EPOCH_DAY, ThaiBuddhistChronology.INSTANCE, outputPattern, outputLocale);
+        jc = new JulianDayConverter(ChronoField.EPOCH_DAY, ThaiBuddhistChronology.INSTANCE, outputPattern,
+                outputLocale);
         assertEquals(calendarThaiBudd, jc.convert(epochDay));
     }
 
@@ -313,7 +321,8 @@ public class JulianDayConverterTest {
 
     @Test
     public void testCalendarToNumberWithInputMonthLabel() {
-        JulianDayConverter jc = new JulianDayConverter(IsoChronology.INSTANCE, "dd-LLL-yyyy", Locale.UK, JulianFields.JULIAN_DAY); //$NON-NLS-1$
+        JulianDayConverter jc =
+                new JulianDayConverter(IsoChronology.INSTANCE, "dd-LLL-yyyy", Locale.UK, JulianFields.JULIAN_DAY); //$NON-NLS-1$
         assertEquals(julianDay, jc.convert("18-May-2017")); //$NON-NLS-1$
         jc = new JulianDayConverter(IsoChronology.INSTANCE, "yyyy-LLL-dd", //$NON-NLS-1$
                 Locale.CHINESE, JulianFields.MODIFIED_JULIAN_DAY);
@@ -328,7 +337,8 @@ public class JulianDayConverterTest {
 
     @Test
     public void testNumberToCalendarWithOutputPattern() {
-        JulianDayConverter jc = new JulianDayConverter(JulianFields.JULIAN_DAY, IsoChronology.INSTANCE, "dd/MM/yyyy", Locale.UK); //$NON-NLS-1$
+        JulianDayConverter jc =
+                new JulianDayConverter(JulianFields.JULIAN_DAY, IsoChronology.INSTANCE, "dd/MM/yyyy", Locale.UK); //$NON-NLS-1$
         assertEquals("18/05/2017", jc.convert(julianDay)); //$NON-NLS-1$
 
         jc = new JulianDayConverter(JulianFields.MODIFIED_JULIAN_DAY, IsoChronology.INSTANCE, "dd/LLL/yyyy", //$NON-NLS-1$

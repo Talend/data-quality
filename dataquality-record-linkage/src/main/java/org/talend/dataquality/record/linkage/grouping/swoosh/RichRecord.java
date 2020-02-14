@@ -344,7 +344,8 @@ public class RichRecord extends Record {
         }
         this.gMaster = new DQAttribute<>(SwooshConstants.IS_MASTER, originRow.size(), true);
         this.gScore = new DQAttribute<>(SwooshConstants.SCORE2, originRow.size(), 1.0);
-        this.gQuality = new DQAttribute<>(SwooshConstants.GROUP_QUALITY, originRow.size(), String.valueOf(groupQuality));
+        this.gQuality =
+                new DQAttribute<>(SwooshConstants.GROUP_QUALITY, originRow.size(), String.valueOf(groupQuality));
         this.gAttributeScore = new DQAttribute<>(SwooshConstants.ATTRIBUTE_SCORES, originRow.size(), StringUtils.EMPTY);
 
     }
@@ -362,7 +363,8 @@ public class RichRecord extends Record {
         this.gMaster = new DQAttribute<>(SwooshConstants.IS_MASTER, originRow.size(), true);
         this.gScore = new DQAttribute<>(SwooshConstants.SCORE2, originRow.size(), 1.0);
         if (this.groupQuality > 0 && this.groupQuality < 1.0) {
-            this.gQuality = new DQAttribute<>(SwooshConstants.GROUP_QUALITY, originRow.size(), String.valueOf(this.groupQuality));
+            this.gQuality = new DQAttribute<>(SwooshConstants.GROUP_QUALITY, originRow.size(),
+                    String.valueOf(this.groupQuality));
         } else {
             this.gQuality = new DQAttribute<>(SwooshConstants.GROUP_QUALITY, originRow.size(), "1.0");
         }
@@ -435,8 +437,8 @@ public class RichRecord extends Record {
                 String finalQuality = "1.0";
                 if (this.gQuality != null && gQuality.getValue() != null) {
                     if (Double.compare(this.groupQuality, 0.0) > 0) {
-                        finalQuality = Double.parseDouble(gQuality.getValue()) > groupQuality ? String.valueOf(groupQuality)
-                                : gQuality.getValue();
+                        finalQuality = Double.parseDouble(gQuality.getValue()) > groupQuality
+                                ? String.valueOf(groupQuality) : gQuality.getValue();
                     } else {
                         finalQuality = gQuality.getValue();
                     }
@@ -446,7 +448,8 @@ public class RichRecord extends Record {
 
                 this.gQuality = new DQAttribute<>(SwooshConstants.GROUP_QUALITY, originRow.size(), finalQuality);
 
-                this.gAttributeScore = new DQAttribute<>(SwooshConstants.ATTRIBUTE_SCORES, originRow.size(), StringUtils.EMPTY);
+                this.gAttributeScore =
+                        new DQAttribute<>(SwooshConstants.ATTRIBUTE_SCORES, originRow.size(), StringUtils.EMPTY);
 
             }
         } else {// for not master

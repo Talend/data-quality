@@ -46,10 +46,9 @@ public class MTCRHandler extends AbstractChainOfResponsibilityHandler {
      */
     @Override
     protected void doHandle(Object inputData, int rowNum, String ruleName) {
-        this.getHandlerParameter().getAction()
-                .handle(new ActionParameter(getHandlerParameter().getDataset(), inputData, rowNum,
-                        getHandlerParameter().getTargetColumn().getName(), ruleName, getHandlerParameter().getExpression(),
-                        getHandlerParameter().isIgnoreBlank()));
+        this.getHandlerParameter().getAction().handle(new ActionParameter(getHandlerParameter().getDataset(), inputData,
+                rowNum, getHandlerParameter().getTargetColumn().getName(), ruleName,
+                getHandlerParameter().getExpression(), getHandlerParameter().isIgnoreBlank()));
     }
 
 }

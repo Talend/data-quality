@@ -50,7 +50,8 @@ public enum BlockingKeyAlgorithmEnum {
 
     private String defaultValue;
 
-    BlockingKeyAlgorithmEnum(int index, String value, String componentValueName, boolean isTakeParameter, String defaultValue) {
+    BlockingKeyAlgorithmEnum(int index, String value, String componentValueName, boolean isTakeParameter,
+            String defaultValue) {
         this.index = index;
         this.value = value;
         this.componentValueName = componentValueName;

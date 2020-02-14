@@ -40,7 +40,8 @@ public class SynonymReplaceActionTest {
     private Directory createLuceneDirectory() throws IOException {
         RAMDirectory testDir = new RAMDirectory();
 
-        IndexWriter writer = new IndexWriter(testDir, new IndexWriterConfig(new StandardAnalyzer(CharArraySet.EMPTY_SET)));
+        IndexWriter writer =
+                new IndexWriter(testDir, new IndexWriterConfig(new StandardAnalyzer(CharArraySet.EMPTY_SET)));
 
         Document doc = new Document();
 

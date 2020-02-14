@@ -59,7 +59,8 @@ public class CombinedRulesDemo {
 
     public static SurvivorshipManager initManager(RuleDefinition[] ruleSet) {
         // 1. Instantiate <code>SurvivorshipManager</code>.
-        SurvivorshipManager manager = new SurvivorshipManager(CombinedRulesTestData.RULE_PATH, CombinedRulesTestData.PKG_NAME);
+        SurvivorshipManager manager =
+                new SurvivorshipManager(CombinedRulesTestData.RULE_PATH, CombinedRulesTestData.PKG_NAME);
 
         // 2. Add column informations and rule definitions.
         for (String str : CombinedRulesTestData.COLUMNS.keySet()) {

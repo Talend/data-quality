@@ -26,10 +26,10 @@ public class QGramTokenizerTest {
 
     private static final String INPUT = "DOC scorreia  class global comment. Detailled comment";
 
-    private static final String expected[] = { "##D", "#DO", "DOC", "OC ", "C s", " sc", "sco", "cor", "orr", "rre", "rei", "eia",
-            "ia ", "a  ", "  c", " cl", "cla", "las", "ass", "ss ", "s g", " gl", "glo", "lob", "oba", "bal", "al ", "l c", " co",
-            "com", "omm", "mme", "men", "ent", "nt.", "t. ", ". D", " De", "Det", "eta", "tai", "ail", "ill", "lle", "led", "ed ",
-            "d c", " co", "com", "omm", "mme", "men", "ent", "nt#", "t##" };
+    private static final String expected[] = { "##D", "#DO", "DOC", "OC ", "C s", " sc", "sco", "cor", "orr", "rre",
+            "rei", "eia", "ia ", "a  ", "  c", " cl", "cla", "las", "ass", "ss ", "s g", " gl", "glo", "lob", "oba",
+            "bal", "al ", "l c", " co", "com", "omm", "mme", "men", "ent", "nt.", "t. ", ". D", " De", "Det", "eta",
+            "tai", "ail", "ill", "lle", "led", "ed ", "d c", " co", "com", "omm", "mme", "men", "ent", "nt#", "t##" };
 
     /**
      * Test method for

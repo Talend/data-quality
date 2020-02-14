@@ -182,8 +182,8 @@ public class MultiPassGroupingCallBack<T> extends GroupingCallBack<T> {
      */
     private void setOldGrpQuality(RichRecord richRecord, Double value) {
         if (richRecord.getGRP_QUALITY() == null) {
-            richRecord.setGRP_QUALITY(
-                    new DQAttribute<>(SwooshConstants.GROUP_QUALITY, richRecord.getRecordSize(), String.valueOf(value)));
+            richRecord.setGRP_QUALITY(new DQAttribute<>(SwooshConstants.GROUP_QUALITY, richRecord.getRecordSize(),
+                    String.valueOf(value)));
         } else {
             richRecord.getGRP_QUALITY().setValue(String.valueOf(value));
         }

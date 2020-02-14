@@ -29,10 +29,9 @@ public class SampleDataConflictOtherColumn2MostCommon2ConstantEmptyDuplicate {
                     Function.MostCommon, null, "lastName", false) }; //$NON-NLS-1$
 
     public static final ConflictRuleDefinition[] RULES_CONFLICT_RESOLVE = {
-            new ConflictRuleDefinition(new DefFunParameter("city2", Function.Shortest, null, "firstName", null), Order.SEQ, //$NON-NLS-1$//$NON-NLS-2$
-                    "shortest_city2", false, false, 0),
-            new ConflictRuleDefinition(
-                    new DefFunParameter("lastName", Function.ExcludeValues, "Green,Blue", "lastName", "firstName"), Order.SEQ, //$NON-NLS-1$//$NON-NLS-2$
-                    "exclusiveness_lastName", false, true, 1) };
+            new ConflictRuleDefinition(new DefFunParameter("city2", Function.Shortest, null, "firstName", null), //$NON-NLS-1$//$NON-NLS-2$
+                    Order.SEQ, "shortest_city2", false, false, 0),
+            new ConflictRuleDefinition(new DefFunParameter("lastName", Function.ExcludeValues, "Green,Blue", "lastName", //$NON-NLS-1$//$NON-NLS-2$
+                    "firstName"), Order.SEQ, "exclusiveness_lastName", false, true, 1) };
 
 }

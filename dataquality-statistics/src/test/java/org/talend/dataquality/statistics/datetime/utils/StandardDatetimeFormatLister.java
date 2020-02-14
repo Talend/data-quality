@@ -15,7 +15,8 @@ import java.util.Locale;
  */
 public class StandardDatetimeFormatLister {
 
-    private final static ZonedDateTime ZONED_DATE_TIME = ZonedDateTime.of(1999, 3, 22, 5, 6, 7, 888, ZoneId.of("Europe/Paris"));
+    private final static ZonedDateTime ZONED_DATE_TIME =
+            ZonedDateTime.of(1999, 3, 22, 5, 6, 7, 888, ZoneId.of("Europe/Paris"));
 
     private static final boolean PRINT_DETAILED_RESULTS = true;
 
@@ -27,8 +28,8 @@ public class StandardDatetimeFormatLister {
             Locale.JAPAN, //
     };
 
-    private final static FormatStyle[] FORMAT_STYLES = new FormatStyle[] { FormatStyle.SHORT, FormatStyle.MEDIUM,
-            FormatStyle.LONG, FormatStyle.FULL };
+    private final static FormatStyle[] FORMAT_STYLES =
+            new FormatStyle[] { FormatStyle.SHORT, FormatStyle.MEDIUM, FormatStyle.LONG, FormatStyle.FULL };
 
     private List<LocaledPattern> processBaseDateTimePatternsByLocales() {
         List<LocaledPattern> dateTimePatterns = new ArrayList<LocaledPattern>();
@@ -52,8 +53,8 @@ public class StandardDatetimeFormatLister {
         return dateTimePatterns;
     }
 
-    private void getFormatByStyle(FormatStyle dateStyle, FormatStyle timeStyle, boolean isDateRequired, boolean isTimeRequired,
-            Locale locale, boolean keepLongMonthAndSpecificChars) {
+    private void getFormatByStyle(FormatStyle dateStyle, FormatStyle timeStyle, boolean isDateRequired,
+            boolean isTimeRequired, Locale locale, boolean keepLongMonthAndSpecificChars) {
         String pattern = DateTimeFormatterBuilder.getLocalizedDateTimePattern(//
                 isDateRequired ? dateStyle : null, isTimeRequired ? timeStyle : null, IsoChronology.INSTANCE, locale);//
         LocaledPattern lp = new LocaledPattern(pattern, locale, dateStyle.name(), isTimeRequired);

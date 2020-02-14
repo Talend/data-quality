@@ -149,10 +149,12 @@ public class SurvivorshipManager extends KnowledgeManager {
         // add rule definitions
         for (RuleDefinition definition : ruleDefinitionList) {
             if (definition.getOrder().equals(Order.SEQ)) {
-                kbuilder.add(newResource(packagePath //
-                        + definition.getRuleName() //
-                        + SurvivorshipConstants.VERSION_SUFFIX //
-                        + SurvivorshipConstants.RULE_ITEM_EXTENSION, isClassPathResource), ResourceType.DRL);
+                kbuilder.add(
+                        newResource(packagePath //
+                                + definition.getRuleName() //
+                                + SurvivorshipConstants.VERSION_SUFFIX //
+                                + SurvivorshipConstants.RULE_ITEM_EXTENSION, isClassPathResource),
+                        ResourceType.DRL);
             }
         }
 
@@ -365,16 +367,17 @@ public class SurvivorshipManager extends KnowledgeManager {
                     if (cycDepenStatus.get(conflictTargetColumnName) == null) {
                         cycDepenStatus.put(conflictTargetColumnName, new ArrayList<String>());
                     }
-                    boolean checkCycDependency = checkCycDependency(conflictTargetColumnName, conflictRefColumnName, executeOrder,
-                            cycDepenStatus);
+                    boolean checkCycDependency = checkCycDependency(conflictTargetColumnName, conflictRefColumnName,
+                            executeOrder, cycDepenStatus);
                     if (!checkCycDependency) {
                         List<String> messageList = returnMap.get(conflictRefColumnName);
                         if (messageList == null) {
                             messageList = new ArrayList<>();
                             returnMap.put(conflictRefColumnName, messageList);
                         }
-                        String errorMessage = conflictTargetColumnName + " cannot be survived as " + conflictRefColumnName //$NON-NLS-1$
-                                + " because of circular dependency"; //$NON-NLS-1$
+                        String errorMessage =
+                                conflictTargetColumnName + " cannot be survived as " + conflictRefColumnName //$NON-NLS-1$
+                                        + " because of circular dependency"; //$NON-NLS-1$
                         if (!messageList.contains(errorMessage)) {
                             messageList.add(errorMessage);
                         }
@@ -425,7 +428,8 @@ public class SurvivorshipManager extends KnowledgeManager {
                 if (cycDepenStatus.get(targetColumnName) == null) {
                     cycDepenStatus.put(targetColumnName, new ArrayList<String>());
                 }
-                if (!checkCycDependency(targetColumnName, conRuleDef.getReferenceColumn(), executeOrder, cycDepenStatus)) {
+                if (!checkCycDependency(targetColumnName, conRuleDef.getReferenceColumn(), executeOrder,
+                        cycDepenStatus)) {
                     return false;
                 }
             }
@@ -444,7 +448,8 @@ public class SurvivorshipManager extends KnowledgeManager {
      * @param sourceColumnName
      * @param targetColumnName
      */
-    private boolean checkStatusMap(Map<String, List<String>> cycDepenStatus, String sourceColumnName, String targetColumnName) {
+    private boolean checkStatusMap(Map<String, List<String>> cycDepenStatus, String sourceColumnName,
+            String targetColumnName) {
         List<String> list = cycDepenStatus.get(targetColumnName);
         if (list == null) {
             return true;
@@ -529,8 +534,8 @@ public class SurvivorshipManager extends KnowledgeManager {
      * @return new mutli-condiation handler
      */
     private MCCRHandler createMCHandler(RuleDefinition rd) {
-        FunctionParameter functionParameter = new FunctionParameter(rd.getFunction().getAction(), rd.getOperation(),
-                rd.isIgnoreBlanks(), false);
+        FunctionParameter functionParameter =
+                new FunctionParameter(rd.getFunction().getAction(), rd.getOperation(), rd.isIgnoreBlanks(), false);
         HandlerParameter handlerParameter = new HandlerParameter(dataset, getColumnByName(rd.getReferenceColumn()),
                 getColumnByName(rd.getTargetColumn()), rd.getRuleName(), getColumnIndexMap(), null, functionParameter);
         return new MCCRHandler(handlerParameter);
@@ -543,8 +548,8 @@ public class SurvivorshipManager extends KnowledgeManager {
      * @return new mutli-target handler
      */
     private MTCRHandler createMTHandler(RuleDefinition perviousSEQRd, RuleDefinition rd) {
-        FunctionParameter functionParameter = new FunctionParameter(perviousSEQRd.getFunction().getAction(), rd.getOperation(),
-                rd.isIgnoreBlanks(), false);
+        FunctionParameter functionParameter = new FunctionParameter(perviousSEQRd.getFunction().getAction(),
+                rd.getOperation(), rd.isIgnoreBlanks(), false);
         return new MTCRHandler(new HandlerParameter(dataset, getColumnByName(perviousSEQRd.getReferenceColumn()),
                 getColumnByName(rd.getTargetColumn()), perviousSEQRd.getRuleName(), getColumnIndexMap(), null,
                 functionParameter));

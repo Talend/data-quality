@@ -63,7 +63,8 @@ public class PerformanceTest {
         final long cpuAfter = mxBean.getCurrentThreadCpuTime();
 
         final long difference = cpuAfter - cpuBefore;
-        assertTrue("The method isDate() is slower than expected. Actual CPU time spent: " + difference, difference < 20e8);
+        assertTrue("The method isDate() is slower than expected. Actual CPU time spent: " + difference,
+                difference < 20e8);
     }
 
     @Test
@@ -97,7 +98,8 @@ public class PerformanceTest {
         final long cpuAfter = mxBean.getCurrentThreadCpuTime();
 
         final long difference = cpuAfter - cpuBefore;
-        assertTrue("The method getPatterns() is slower than expected. Actual CPU time spent: " + difference, difference < 25e8);
+        assertTrue("The method getPatterns() is slower than expected. Actual CPU time spent: " + difference,
+                difference < 25e8);
     }
 
 }

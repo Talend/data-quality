@@ -26,14 +26,16 @@ import org.junit.Test;
 public class HandleNullEnumTest {
 
     /**
-     * Test method for {@link org.talend.dataquality.record.linkage.utils.HandleNullEnum#getTypeByValue(java.lang.String)} . case1
+     * Test method for
+     * {@link org.talend.dataquality.record.linkage.utils.HandleNullEnum#getTypeByValue(java.lang.String)} . case1
      * all of normal case
      */
     @Test
     public void testGetTypeByValue1() {
         for (HandleNullEnum type : HandleNullEnum.values()) {
             HandleNullEnum handleNullEnumTypeByValue = HandleNullEnum.getTypeByValue(type.getValue());
-            HandleNullEnum handleNullEnumTypeByValueLowerCase = HandleNullEnum.getTypeByValue(type.getValue().toLowerCase());
+            HandleNullEnum handleNullEnumTypeByValueLowerCase =
+                    HandleNullEnum.getTypeByValue(type.getValue().toLowerCase());
             // Assert no one is null
             assertNotNull(handleNullEnumTypeByValue);
             assertNotNull(handleNullEnumTypeByValueLowerCase);

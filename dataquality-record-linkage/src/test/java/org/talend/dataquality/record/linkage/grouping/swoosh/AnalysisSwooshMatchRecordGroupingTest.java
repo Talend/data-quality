@@ -38,8 +38,8 @@ public class AnalysisSwooshMatchRecordGroupingTest {
         originRow.add(new DQAttribute<>(SwooshConstants.GROUP_QUALITY, 0, "1.0")); //$NON-NLS-1$
         RichRecord richRecord = new RichRecord("1", 0l, "a"); //$NON-NLS-1$ //$NON-NLS-2$
         JunitResultConsumer resultConsumer = new JunitResultConsumer();
-        AnalysisSwooshMatchRecordGrouping analysisSwooshMatchRecordGrouping = new AnalysisSwooshMatchRecordGrouping(
-                resultConsumer);
+        AnalysisSwooshMatchRecordGrouping analysisSwooshMatchRecordGrouping =
+                new AnalysisSwooshMatchRecordGrouping(resultConsumer);
         richRecord.setRecordSize(1);
         richRecord.setOriginRow(originRow);
         richRecord.setGrpSize(1);
@@ -136,8 +136,8 @@ public class AnalysisSwooshMatchRecordGroupingTest {
         richRecord.setMaster(false);
         richRecord.setGroupQuality(groupQuality);
         JunitResultConsumer resultConsumer = new JunitResultConsumer();
-        AnalysisSwooshMatchRecordGrouping analysisSwooshMatchRecordGrouping = new AnalysisSwooshMatchRecordGrouping(
-                resultConsumer);
+        AnalysisSwooshMatchRecordGrouping analysisSwooshMatchRecordGrouping =
+                new AnalysisSwooshMatchRecordGrouping(resultConsumer);
         analysisSwooshMatchRecordGrouping.outputRow(richRecord);
         Object[] result = resultConsumer.getResult();
         Assert.assertTrue("can not get correct result", result.length > 0); //$NON-NLS-1$

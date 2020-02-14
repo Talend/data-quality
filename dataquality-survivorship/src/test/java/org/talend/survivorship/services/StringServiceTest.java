@@ -26,7 +26,8 @@ import org.talend.survivorship.model.DataSet;
 public class StringServiceTest {
 
     /**
-     * Test method for {@link org.talend.survivorship.services.StringService#putAttributeValues(java.lang.String, boolean)}.
+     * Test method for
+     * {@link org.talend.survivorship.services.StringService#putAttributeValues(java.lang.String, boolean)}.
      */
     @Test
     public void testPutAttributeValues() {
@@ -41,7 +42,8 @@ public class StringServiceTest {
         Assert.assertEquals("secondShortestValueMap size should be 2", 2, ss.secondShortestValueMap.size()); //$NON-NLS-1$
         Assert.assertEquals("shortestValueMap size should be 2", 2, ss.shortestValueMap.size()); //$NON-NLS-1$
 
-        Assert.assertEquals("The result of firstName column should be 1", 1, ss.longestValueMap.get("firstName").size()); //$NON-NLS-1$ //$NON-NLS-2$
+        Assert.assertEquals("The result of firstName column should be 1", 1, //$NON-NLS-1$
+                ss.longestValueMap.get("firstName").size()); //$NON-NLS-1$
         // there is not 6 because of some data is duplicated
         Assert.assertEquals("The result of lastName column should be 3", 3, ss.longestValueMap.get("lastName").size()); //$NON-NLS-1$ //$NON-NLS-2$
 
@@ -52,16 +54,22 @@ public class StringServiceTest {
                 ss.secondLongestValueMap.get("lastName").size()); //$NON-NLS-1$
 
         Assert.assertEquals("The second ShortestValueMap of firstName column should be 3", 3, //$NON-NLS-1$
-                ss.secondShortestValueMap.get("firstName") //$NON-NLS-1$
+                ss.secondShortestValueMap
+                        .get("firstName") //$NON-NLS-1$
                         .size());
         Assert.assertEquals("The second ShortestValueMap of lastName column should be 0", 0, //$NON-NLS-1$
-                ss.secondShortestValueMap.get("lastName") //$NON-NLS-1$
+                ss.secondShortestValueMap
+                        .get("lastName") //$NON-NLS-1$
                         .size());
 
-        Assert.assertEquals("The shortestValueMap of firstName column should be 1", 1, ss.shortestValueMap.get("firstName") //$NON-NLS-1$ //$NON-NLS-2$
-                .size());
-        Assert.assertEquals("The shortestValueMap of lastName column should be 3", 3, ss.shortestValueMap.get("lastName") //$NON-NLS-1$ //$NON-NLS-2$
-                .size());
+        Assert.assertEquals("The shortestValueMap of firstName column should be 1", 1, //$NON-NLS-1$
+                ss.shortestValueMap
+                        .get("firstName") //$NON-NLS-1$
+                        .size());
+        Assert.assertEquals("The shortestValueMap of lastName column should be 3", 3, //$NON-NLS-1$
+                ss.shortestValueMap
+                        .get("lastName") //$NON-NLS-1$
+                        .size());
 
         ss.init();
     }

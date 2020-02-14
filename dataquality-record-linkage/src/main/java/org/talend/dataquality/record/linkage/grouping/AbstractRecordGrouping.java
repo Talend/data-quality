@@ -217,7 +217,8 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
             // In case of current component is linked to previous, and the record is NOT master, just put it to the
             // output and continue;
             if (isLinkToPrevious && !isMaster(inputRow[originalInputColumnSize + 2])) {
-                TYPE[] inputRowWithExtColumns = createNewInputRowForMultPass(inputRow, originalInputColumnSize + extSize);
+                TYPE[] inputRowWithExtColumns =
+                        createNewInputRowForMultPass(inputRow, originalInputColumnSize + extSize);
                 outputRow(inputRowWithExtColumns);
                 return;
             }
@@ -263,7 +264,8 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
             String[] masterMatchRecord = new String[lookupDataArray.length];
             // Find the match record from master record.
             for (int idx = 0; idx < lookupDataArray.length; idx++) {
-                Object masterObj = masterRecord[Integer.parseInt(matchingRule.get(idx).get(IRecordGrouping.COLUMN_IDX))];
+                Object masterObj =
+                        masterRecord[Integer.parseInt(matchingRule.get(idx).get(IRecordGrouping.COLUMN_IDX))];
                 masterMatchRecord[idx] = masterObj == null ? null : String.valueOf(masterObj);
             }
             double matchingProba = combinedRecordMatcher.getMatchingWeight(masterMatchRecord, lookupDataArray);
@@ -275,14 +277,19 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
                 if (isLinkToPrevious) {
                     int masterGRPSize = Integer.parseInt(String.valueOf(masterRecord[originalInputColumnSize + 1]));
                     if (masterGRPSize == 1) {
-                        inputRow[originalInputColumnSize + 1] = incrementGroupSize(inputRow[originalInputColumnSize + 1]);
-                        TYPE[] inputRowWithExtColumns = createNewInputRowForMultPass(inputRow, originalInputColumnSize + extSize);
+                        inputRow[originalInputColumnSize + 1] =
+                                incrementGroupSize(inputRow[originalInputColumnSize + 1]);
+                        TYPE[] inputRowWithExtColumns =
+                                createNewInputRowForMultPass(inputRow, originalInputColumnSize + extSize);
                         // since the 'masterRecord' will be output as a duplicate,if the masterRecord Gneed GRP_QUALITY
                         // is less than Input,should set masterRecord GRP_QUALITY to 'inputRow_with_extColumns' at here.
-                        double inputGRP = Double.parseDouble(String.valueOf(inputRowWithExtColumns[originalInputColumnSize + 4]));
-                        double masterGRP = Double.parseDouble(String.valueOf(masterRecord[originalInputColumnSize + 4]));
+                        double inputGRP =
+                                Double.parseDouble(String.valueOf(inputRowWithExtColumns[originalInputColumnSize + 4]));
+                        double masterGRP =
+                                Double.parseDouble(String.valueOf(masterRecord[originalInputColumnSize + 4]));
                         if (masterGRP < inputGRP) {
-                            inputRowWithExtColumns[originalInputColumnSize + 4] = masterRecord[originalInputColumnSize + 4];
+                            inputRowWithExtColumns[originalInputColumnSize + 4] =
+                                    masterRecord[originalInputColumnSize + 4];
                         }
 
                         updateWithExtendedColumn(masterRecord, inputRowWithExtColumns, matchingProba, distanceDetails,
@@ -294,8 +301,8 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
                     }
                 }
 
-                masterRecord[masterRecord.length - extSize + 1] = incrementGroupSize(
-                        masterRecord[masterRecord.length - extSize + 1]);
+                masterRecord[masterRecord.length - extSize + 1] =
+                        incrementGroupSize(masterRecord[masterRecord.length - extSize + 1]);
 
                 // Duplicated record
                 updateWithExtendedColumn(inputRow, masterRecord, matchingProba, distanceDetails, columnDelimiter);
@@ -419,8 +426,8 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
         multiMatchRules.clear();
     }
 
-    private void updateWithExtendedColumn(TYPE[] inputRow, TYPE[] masterRecord, double matchingProba, String distanceDetails,
-            String delimiter) throws IOException, InterruptedException {
+    private void updateWithExtendedColumn(TYPE[] inputRow, TYPE[] masterRecord, double matchingProba,
+            String distanceDetails, String delimiter) throws IOException, InterruptedException {
         TYPE[] duplicateRecord = createTYPEArray(masterRecord.length);
         for (int idx = 0; idx < inputRow.length; idx++) {
             duplicateRecord[idx] = inputRow[idx];

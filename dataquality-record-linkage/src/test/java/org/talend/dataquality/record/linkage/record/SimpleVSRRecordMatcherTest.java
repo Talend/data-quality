@@ -43,9 +43,9 @@ public class SimpleVSRRecordMatcherTest {
 
     public static final String[][] RECORDS2 = { { "seb", "tlend", "sursnes" }, { "sebas", "taland", "suresnes" }, };
 
-    public static final double[][] ALLATTRIBUTEWEIGHTS = { { 1, 1, 1 }, { 1, 1, 0 }, { 1, 0, 1 }, { 0, 1, 1 }, { 0, 0, 1 },
-            { 0, 0, 1 }, { 0, 1, 0 }, { 1, 0, 0 }, { 0, 0, 0 }, { 0.4, 0.2, 1 }, { 0, 0, 1.5 }, { 20, 100, 10 }, { 1, 2, 3 },
-            { 20, 40, 60 } };
+    public static final double[][] ALLATTRIBUTEWEIGHTS =
+            { { 1, 1, 1 }, { 1, 1, 0 }, { 1, 0, 1 }, { 0, 1, 1 }, { 0, 0, 1 }, { 0, 0, 1 }, { 0, 1, 0 }, { 1, 0, 0 },
+                    { 0, 0, 0 }, { 0.4, 0.2, 1 }, { 0, 0, 1.5 }, { 20, 100, 10 }, { 1, 2, 3 }, { 20, 40, 60 } };
 
     // The value of the thresholds
     private static final double ACCEPTABLE_THRESHOLD = 0.95;
@@ -53,11 +53,12 @@ public class SimpleVSRRecordMatcherTest {
     private static final double UNACCEPTABLE_THRESHOLD = 0.8;
 
     // 2 samples of data
-    private static final String[][] MAINRECORDS = { { "seb", "talend", "suresnes", "data not used in record matching" },
-            { "seb", "talend", "suresns", null }, { "seb", "tlend", "sursnes", null }, { "sebas", "taland", "suresnes", null } };
+    private static final String[][] MAINRECORDS =
+            { { "seb", "talend", "suresnes", "data not used in record matching" }, { "seb", "talend", "suresns", null },
+                    { "seb", "tlend", "sursnes", null }, { "sebas", "taland", "suresnes", null } };
 
-    private static final String[][] LOOKUPRECORDS = { { "seb", "tlend", "sursnes", null },
-            { "sebas", "taland", "suresnes", null }, };
+    private static final String[][] LOOKUPRECORDS =
+            { { "seb", "tlend", "sursnes", null }, { "sebas", "taland", "suresnes", null }, };
 
     // the algorithms selected by the user for each of the 3 join keys
     private static final String[] ATTRIBUTEMATCHERALGORITHMS = { "Exact", "DOUBLE_METAPHONE", "LEVENSHTEIN" };
@@ -94,7 +95,8 @@ public class SimpleVSRRecordMatcherTest {
                     try {
                         matchingProba = match.getMatchingWeight(record1, record2);
                         assertEquals(MATCH_PROBS[weightIdx][matchIdx], matchingProba, EPSILON);
-                        System.out.println("P(" + printRecord(record1) + " = " + printRecord(record2) + ") =" + matchingProba);
+                        System.out.println(
+                                "P(" + printRecord(record1) + " = " + printRecord(record2) + ") =" + matchingProba);
                     } catch (ArrayIndexOutOfBoundsException idxOutExc) {
                         // When record size is less than the expected (set in the parameter setup), the index out of
                         // bounds exception is expected. It means that the client must handle this exception
@@ -151,7 +153,8 @@ public class SimpleVSRRecordMatcherTest {
         List<Integer> listIndices = new ArrayList<Integer>();
         for (int i = 0; i < attributeMatchers.length; i++) {
             AttributeMatcherType matchType = attributeMatchers[i].getMatchType();
-            if (AttributeMatcherType.EXACT.equals(matchType) || AttributeMatcherType.EXACT_IGNORE_CASE.equals(matchType)) {
+            if (AttributeMatcherType.EXACT.equals(matchType)
+                    || AttributeMatcherType.EXACT_IGNORE_CASE.equals(matchType)) {
                 listIndices.add(i);
             }
         }
@@ -172,19 +175,22 @@ public class SimpleVSRRecordMatcherTest {
                 idx++;
                 if (matchingProba >= ACCEPTABLE_THRESHOLD) {
                     // put this record in the "matches" flow
-                    System.out.println(" MATCH P(" + printRecord(record1) + " = " + printRecord(record2) + ") =" + matchingProba
-                            + " DETAILS=" + printRecord(recordMatcher.getCurrentAttributeMatchingWeights()));
+                    System.out.println(
+                            " MATCH P(" + printRecord(record1) + " = " + printRecord(record2) + ") =" + matchingProba
+                                    + " DETAILS=" + printRecord(recordMatcher.getCurrentAttributeMatchingWeights()));
                     continue;
                 }
                 if (UNACCEPTABLE_THRESHOLD < matchingProba && matchingProba < ACCEPTABLE_THRESHOLD) {
                     // put this record in the "possible maches" flow
-                    System.out.println("  POSSIBLE MATCH P(" + printRecord(record1) + " = " + printRecord(record2) + ") ="
-                            + matchingProba + " DETAILS=" + printRecord(recordMatcher.getCurrentAttributeMatchingWeights()));
+                    System.out.println("  POSSIBLE MATCH P(" + printRecord(record1) + " = " + printRecord(record2)
+                            + ") =" + matchingProba + " DETAILS="
+                            + printRecord(recordMatcher.getCurrentAttributeMatchingWeights()));
                     continue;
                 }
                 // put this record in the "non-matches" flow
-                System.out.println("!match P(" + printRecord(record1) + " = " + printRecord(record2) + ") =" + matchingProba
-                        + " DETAILS=" + printRecord(recordMatcher.getCurrentAttributeMatchingWeights()));
+                System.out.println(
+                        "!match P(" + printRecord(record1) + " = " + printRecord(record2) + ") =" + matchingProba
+                                + " DETAILS=" + printRecord(recordMatcher.getCurrentAttributeMatchingWeights()));
             }
         }
     }
@@ -245,15 +251,17 @@ public class SimpleVSRRecordMatcherTest {
         }
         recordMatcher.setAttributeMatchers(attributeMatchers);
 
-        double[] attributeWeight = { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
-                1.0 };
+        double[] attributeWeight =
+                { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
         // set the weights chosen by the user
         assertTrue(recordMatcher.setAttributeWeights(attributeWeight));
 
-        String[] record1 = { "aTO1mK", "dXatJF", "6vVVQl", "5ILPaE", "cwBh91", "WEWkkS", "cIWupW", "2fj8BW", "melpcx", "8MOIxp",
-                "NrJKCh", "XgFwsN", "f8OXQS", "iSJjtn", "Nflx4L", "lEEXi8", "mLi1Fy", "JiQvqQ", "onvRDZ", "JiQvqQ", "onvRDZ" };
-        String[] record2 = { "ThSymJ", "ymLm1u", "ZM7ilc", "0nCUz8", "SOPHs7", "boqY3Y", "OWzqig", "eypLAO", "rJzJGe", "fwhrJT",
-                "j8Ekqm", "8q9Jcr", "sSKY7P", "SQxLve", "vQRPJd", "gqvZeq", "ENchvh", "YKHGxQ", "xgkjjf", "JiQvqQ", "onvRDZ" };
+        String[] record1 = { "aTO1mK", "dXatJF", "6vVVQl", "5ILPaE", "cwBh91", "WEWkkS", "cIWupW", "2fj8BW", "melpcx",
+                "8MOIxp", "NrJKCh", "XgFwsN", "f8OXQS", "iSJjtn", "Nflx4L", "lEEXi8", "mLi1Fy", "JiQvqQ", "onvRDZ",
+                "JiQvqQ", "onvRDZ" };
+        String[] record2 = { "ThSymJ", "ymLm1u", "ZM7ilc", "0nCUz8", "SOPHs7", "boqY3Y", "OWzqig", "eypLAO", "rJzJGe",
+                "fwhrJT", "j8Ekqm", "8q9Jcr", "sSKY7P", "SQxLve", "vQRPJd", "gqvZeq", "ENchvh", "YKHGxQ", "xgkjjf",
+                "JiQvqQ", "onvRDZ" };
 
         // /////////// MAIN LOOP now /////////////// compute proba
         final double matchingProba = recordMatcher.getMatchingWeight(record1, record1);
@@ -397,31 +405,31 @@ public class SimpleVSRRecordMatcherTest {
 
     // The matcing probilities weight with
 
-    private static double[] MATCH_PROBS_WITH_DISTINCE = new double[] { 0.9583333333333333, 0.0, 0.9047619047619047, 0.0, 1.0, 0.0,
-            0.0, 1.0 };
+    private static double[] MATCH_PROBS_WITH_DISTINCE =
+            new double[] { 0.9583333333333333, 0.0, 0.9047619047619047, 0.0, 1.0, 0.0, 0.0, 1.0 };
 
     // The matching probabilities weights.
     private static double[][] MATCH_PROBS = new double[][] {
             { 0.649999992052714, 0.6407407283782959, 0.649999992052714, 0.30740739504496256, 1.0, 0.2800000031789144,
                     0.2800000031789144, 1.0 },
-            { 0.9749999880790711, 0.46111109256744387, 0.9749999880790711, 0.46111109256744387, 1.0, 0.42000000476837157,
-                    0.42000000476837157, 1.0 },
+            { 0.9749999880790711, 0.46111109256744387, 0.9749999880790711, 0.46111109256744387, 1.0,
+                    0.42000000476837157, 0.42000000476837157, 1.0 },
             { 0.5, 0.5, 0.5, 0.0, 1.0, 0.0, 0.0, 1.0 },
-            { 0.47499998807907107, 0.9611110925674439, 0.47499998807907107, 0.46111109256744387, 1.0, 0.42000000476837157,
-                    0.42000000476837157, 1.0 },
+            { 0.47499998807907107, 0.9611110925674439, 0.47499998807907107, 0.46111109256744387, 1.0,
+                    0.42000000476837157, 0.42000000476837157, 1.0 },
             { 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0 }, { 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0 },
             { 0.9499999761581421, 0.9222221851348877, 0.9499999761581421, 0.9222221851348877, 1.0, 0.8400000095367431,
                     0.8400000095367431, 1.0 },
             { 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0 }, { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
-            { 0.36874999701976774, 0.7402777731418609, 0.36874999701976774, 0.11527777314186097, 1.0, 0.10500000119209289,
-                    0.10500000119209289, 1.0 },
+            { 0.36874999701976774, 0.7402777731418609, 0.36874999701976774, 0.11527777314186097, 1.0,
+                    0.10500000119209289, 0.10500000119209289, 1.0 },
             { 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0 },
             { 0.8846153662754941, 0.7863247577960676, 0.8846153662754941, 0.7094016808729906, 1.0, 0.6461538534898025,
                     0.6461538534898025, 1.0 },
-            { 0.48333332538604745, 0.8074073950449625, 0.48333332538604745, 0.30740739504496256, 1.0, 0.2800000031789144,
-                    0.2800000031789144, 1.0 },
-            { 0.48333332538604745, 0.8074073950449625, 0.48333332538604745, 0.30740739504496256, 1.0, 0.2800000031789144,
-                    0.2800000031789144, 1.0 } };
+            { 0.48333332538604745, 0.8074073950449625, 0.48333332538604745, 0.30740739504496256, 1.0,
+                    0.2800000031789144, 0.2800000031789144, 1.0 },
+            { 0.48333332538604745, 0.8074073950449625, 0.48333332538604745, 0.30740739504496256, 1.0,
+                    0.2800000031789144, 0.2800000031789144, 1.0 } };
 
     private static boolean expectedReturnedValue(double[] attributeWeights) {
         if (attributeWeights == null) {
@@ -458,7 +466,8 @@ public class SimpleVSRRecordMatcherTest {
 
         assertEquals(1.0d, matcher.getMatchingWeight(RECORDS1[1], RECORDS1[1]), EPSILON);
         labeledAttributeMatchWeights = matcher.getLabeledAttributeMatchWeights();
-        assertEquals("Computation done and exact match. Result should be 1", "EMAIL: 1.0", labeledAttributeMatchWeights);
+        assertEquals("Computation done and exact match. Result should be 1", "EMAIL: 1.0",
+                labeledAttributeMatchWeights);
 
     }
 }

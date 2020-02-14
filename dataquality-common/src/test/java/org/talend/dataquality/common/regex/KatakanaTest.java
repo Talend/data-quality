@@ -22,7 +22,8 @@ public class KatakanaTest {
 
     /**
      * Test method for
-     * {@link org.talend.dataquality.statistics.frequency.regex.ChainResponsibilityHandler#handleRequest(java.lang.String)}. case1
+     * {@link org.talend.dataquality.statistics.frequency.regex.ChainResponsibilityHandler#handleRequest(java.lang.String)}
+     * . case1
      * K
      */
     @Test

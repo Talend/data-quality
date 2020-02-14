@@ -104,8 +104,8 @@ public class CRCRHandler extends AbstractChainOfResponsibilityHandler {
             // ConflictDataIndexList be clear
             this.getHandlerParameter().updateDataSet();
             if (this.getPreSuccessor() != null) {
-                ((SubDataSet) this.getHandlerParameter().getDataset()).getFillAttributeMap()
-                        .putAll(((SubDataSet) this.getPreSuccessor().getHandlerParameter().getDataset()).getFillAttributeMap());
+                ((SubDataSet) this.getHandlerParameter().getDataset()).getFillAttributeMap().putAll(
+                        ((SubDataSet) this.getPreSuccessor().getHandlerParameter().getDataset()).getFillAttributeMap());
             }
 
             List<Integer> removedIndexList = new ArrayList<>();
@@ -193,8 +193,8 @@ public class CRCRHandler extends AbstractChainOfResponsibilityHandler {
             if (survivoredRowNum.isResolved()) {
                 originalSet.getConflictsOfSurvivor().remove(conflictCol);
             }
-            Object survivedVlaue = originalSet.getValueAfterFiled(survivoredRowNum.getRowNum() - 1,
-                    survivoredRowNum.getColumnName());
+            Object survivedVlaue =
+                    originalSet.getValueAfterFiled(survivoredRowNum.getRowNum() - 1, survivoredRowNum.getColumnName());
             originalSet.getSurvivorMap().put(conflictCol, survivedVlaue);
             originalSet.getSurvivorIndexMap().put(conflictCol, survivoredRowNum.getRowNum());
             originalSet.arrangeConflictCol(conflictCol, survivoredRowNum);
@@ -221,7 +221,8 @@ public class CRCRHandler extends AbstractChainOfResponsibilityHandler {
         String tarName = this.getHandlerParameter().getTargetColumn().getName();
         if (dataset instanceof SubDataSet) {
 
-            Attribute attribute = this.getHandlerParameter().getDataset().getRecordList().get(index).getAttribute(tarName);
+            Attribute attribute =
+                    this.getHandlerParameter().getDataset().getRecordList().get(index).getAttribute(tarName);
             FilledAttribute filledAttribute = ((SubDataSet) dataset).getFillAttributeMap().get(attribute);
             if (filledAttribute != null) {
                 return filledAttribute.getColumn().getName();
@@ -406,7 +407,8 @@ public class CRCRHandler extends AbstractChainOfResponsibilityHandler {
         }
 
         if (this.getHandlerParameter().getAction() instanceof ExcludeValuesAction) {
-            return ExcludeValuesAction.checkUnexpectedValue(this.getHandlerParameter().getExpression(), targetInputData);
+            return ExcludeValuesAction.checkUnexpectedValue(this.getHandlerParameter().getExpression(),
+                    targetInputData);
         }
 
         return false;
@@ -437,8 +439,8 @@ public class CRCRHandler extends AbstractChainOfResponsibilityHandler {
         Iterator<Integer> iterator = this.conflictingRowNumbers.keySet().iterator();
         while (iterator.hasNext()) {
             Integer index = iterator.next();
-            setContainer.add(
-                    this.getHandlerParameter().getDataset().getValueAfterFiled(index - 1, this.conflictingRowNumbers.get(index)));
+            setContainer.add(this.getHandlerParameter().getDataset().getValueAfterFiled(index - 1,
+                    this.conflictingRowNumbers.get(index)));
         }
         return setContainer.size() == 1;
     }

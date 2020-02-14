@@ -35,7 +35,8 @@ public class ComponentSwooshMatchRecordGrouping extends AnalysisSwooshMatchRecor
 
         matchFinished = false;
         if (isLinkToPrevious) {// use multipass
-            swooshGrouping.swooshMatchWithMultipass(combinedRecordMatcher, survivorShipAlgorithmParams, originalInputColumnSize);
+            swooshGrouping.swooshMatchWithMultipass(combinedRecordMatcher, survivorShipAlgorithmParams,
+                    originalInputColumnSize);
         } else {
             // during the match, the output in processing will not output really
             swooshGrouping.swooshMatch(combinedRecordMatcher, survivorShipAlgorithmParams);

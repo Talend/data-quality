@@ -28,20 +28,21 @@ public class BlockingKeyPostAlgorithmEnumTest {
 
     /**
      * Test method for
-     * {@link org.talend.dataquality.record.linkage.utils.BlockingKeyPostAlgorithmEnum#getTypeByValue(java.lang.String)} . case1
+     * {@link org.talend.dataquality.record.linkage.utils.BlockingKeyPostAlgorithmEnum#getTypeByValue(java.lang.String)}
+     * . case1
      * all of normal case
      */
     @Test
     public void testGetTypeByValue1() {
         for (BlockingKeyPostAlgorithmEnum type : BlockingKeyPostAlgorithmEnum.values()) {
             BlockingKeyPostAlgorithmEnum enumByValue = BlockingKeyPostAlgorithmEnum.getTypeByValue(type.getValue());
-            BlockingKeyPostAlgorithmEnum enumByValueLowerCase = BlockingKeyPostAlgorithmEnum
-                    .getTypeByValue(type.getValue().toLowerCase());
+            BlockingKeyPostAlgorithmEnum enumByValueLowerCase =
+                    BlockingKeyPostAlgorithmEnum.getTypeByValue(type.getValue().toLowerCase());
 
-            BlockingKeyPostAlgorithmEnum enumTypeByComponentValueName = BlockingKeyPostAlgorithmEnum
-                    .getTypeBySavedValue(type.getComponentValueName());
-            BlockingKeyPostAlgorithmEnum enumTypeByComponentValueNameLowerCase = BlockingKeyPostAlgorithmEnum
-                    .getTypeBySavedValue(type.getComponentValueName().toLowerCase());
+            BlockingKeyPostAlgorithmEnum enumTypeByComponentValueName =
+                    BlockingKeyPostAlgorithmEnum.getTypeBySavedValue(type.getComponentValueName());
+            BlockingKeyPostAlgorithmEnum enumTypeByComponentValueNameLowerCase =
+                    BlockingKeyPostAlgorithmEnum.getTypeBySavedValue(type.getComponentValueName().toLowerCase());
             BlockingKeyPostAlgorithmEnum enumByIndex = BlockingKeyPostAlgorithmEnum.getTypeByIndex(type.getIndex());
 
             // Assert no one is null

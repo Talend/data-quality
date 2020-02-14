@@ -179,18 +179,18 @@ public class WordPatternRecognizerTest {
             if (issues.get(i).intValue() == issues.get(i - 1).intValue() + 1) {
                 if (i == issues.size() - 1)
                     System.out.print(start + " " + Integer.toHexString(start) + "  -  " + issues.get(i).intValue() + " "
-                            + Integer.toHexString(issues.get(i).intValue()) + " (" + (issues.get(i).intValue() - start + 1)
-                            + " codepoints)\n");
+                            + Integer.toHexString(issues.get(i).intValue()) + " ("
+                            + (issues.get(i).intValue() - start + 1) + " codepoints)\n");
             } else {
                 System.out.print(start + " " + Integer.toHexString(start) + "  -  " + issues.get(i - 1).intValue() + " "
-                        + Integer.toHexString(issues.get(i - 1).intValue()) + " (" + (issues.get(i - 1).intValue() - start + 1)
-                        + " codepoints)\n");
+                        + Integer.toHexString(issues.get(i - 1).intValue()) + " ("
+                        + (issues.get(i - 1).intValue() - start + 1) + " codepoints)\n");
                 start = issues.get(i).intValue();
             }
         }
         if (start == issues.get(issues.size() - 1).intValue())
-            System.out.print(start + " " + Integer.toHexString(start) + "  -  " + start + " " + Integer.toHexString(start)
-                    + " (1 codepoint)\n");
+            System.out.print(start + " " + Integer.toHexString(start) + "  -  " + start + " "
+                    + Integer.toHexString(start) + " (1 codepoint)\n");
 
         System.out.println("Issue with " + issues.size() + " codepoints");
     }

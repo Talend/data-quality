@@ -42,7 +42,8 @@ public class TextTokenizer extends TextTokenizerBase {
         private static final TextTokenizer INSTANCE = new TextTokenizer();
     }
 
-    public static TextTokenizer getInstance() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+    public static TextTokenizer getInstance()
+            throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         return LazyHolder.INSTANCE;
     }
 

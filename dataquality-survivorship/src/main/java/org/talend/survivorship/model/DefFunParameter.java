@@ -38,7 +38,8 @@ public class DefFunParameter {
      * @param targetColumn
      * @param fillColumn
      */
-    public DefFunParameter(String referenceColumn, Function function, String operation, String targetColumn, String fillColumn) {
+    public DefFunParameter(String referenceColumn, Function function, String operation, String targetColumn,
+            String fillColumn) {
         super();
         this.referenceColumn = referenceColumn;
         this.function = function;

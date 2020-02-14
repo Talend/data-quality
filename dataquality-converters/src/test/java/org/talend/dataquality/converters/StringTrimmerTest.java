@@ -181,7 +181,8 @@ public class StringTrimmerTest {
         long duration2 = System.currentTimeMillis() - start;
         if (runNumber == 1) {
             System.out.println("Original trimmer implementation: " + duration2);
-            Assert.assertTrue("New StringTrimmer implementation should be faster than original implemenation. Run: " + runNumber,
+            Assert.assertTrue(
+                    "New StringTrimmer implementation should be faster than original implemenation. Run: " + runNumber,
                     duration1 <= (duration2 + 10));
         }
     }

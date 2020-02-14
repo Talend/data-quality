@@ -35,7 +35,8 @@ public class DQMFBRecordMerger extends MFBRecordMerger {
 
     private SurvivorShipAlgorithmParams matchMergeParam = null;
 
-    public DQMFBRecordMerger(String mergedRecordSource, String[] parameters, SurvivorShipAlgorithmEnum[] typeMergeTable) {
+    public DQMFBRecordMerger(String mergedRecordSource, String[] parameters,
+            SurvivorShipAlgorithmEnum[] typeMergeTable) {
         super(mergedRecordSource, parameters, typeMergeTable);
     }
 
@@ -85,7 +86,8 @@ public class DQMFBRecordMerger extends MFBRecordMerger {
         RichRecord richRecord1 = (RichRecord) record1;
         RichRecord richRecord2 = (RichRecord) record2;
         RichRecord mergedRecord = new RichRecord(record1.getId(), mergedRecordTimestamp, mergedRecordSource);
-        DQAttribute<?>[] mergedRows = richRecord1.getOriginRow().toArray(new DQAttribute<?>[richRecord1.getOriginRow().size()]);
+        DQAttribute<?>[] mergedRows =
+                richRecord1.getOriginRow().toArray(new DQAttribute<?>[richRecord1.getOriginRow().size()]);
 
         // Merge columns which are not maching keys using default survior rules.
         List<Attribute> matchingAttributes = record1.getAttributes();
@@ -99,7 +101,8 @@ public class DQMFBRecordMerger extends MFBRecordMerger {
             }
             // added merge function for all columns which don't contain survivorship function
             if (!isMatchKeyIndex) {
-                Map<Integer, SurvivorshipFunction> defaultSurvivorshipFuncs = matchMergeParam.getDefaultSurviorshipRules();
+                Map<Integer, SurvivorshipFunction> defaultSurvivorshipFuncs =
+                        matchMergeParam.getDefaultSurviorshipRules();
                 SurvivorshipFunction survivorshipFunc = defaultSurvivorshipFuncs.get(colIdx);
                 if (survivorshipFunc == null || survivorshipFunc.getSurvivorShipAlgoEnum() == null) {
                     // No default survivorship function was set.
@@ -144,13 +147,16 @@ public class DQMFBRecordMerger extends MFBRecordMerger {
                         String rightCompareValue = rightValue;
 
                         if (referenceColumnIndex != null && !referenceColumnIndex.equals(colIdx)
-                                && (datePatternMap == null || datePatternMap.get(referenceColumnIndex.toString()) != null)) {
+                                && (datePatternMap == null
+                                        || datePatternMap.get(referenceColumnIndex.toString()) != null)) {
                             leftCompareValue = richRecord1.getOriginRow().get(colIdx).getReferenceValue();
                             rightCompareValue = richRecord2.getOriginRow().get(colIdx).getReferenceValue();
                             leftCompareValue = leftCompareValue == null
-                                    ? richRecord1.getOriginRow().get(referenceColumnIndex).getValue() : leftCompareValue;
+                                    ? richRecord1.getOriginRow().get(referenceColumnIndex).getValue()
+                                    : leftCompareValue;
                             rightCompareValue = rightCompareValue == null
-                                    ? richRecord2.getOriginRow().get(referenceColumnIndex).getValue() : rightCompareValue;
+                                    ? richRecord2.getOriginRow().get(referenceColumnIndex).getValue()
+                                    : rightCompareValue;
                         } else {
                             referenceColumnIndex = colIdx;
                         }
@@ -215,7 +221,8 @@ public class DQMFBRecordMerger extends MFBRecordMerger {
         }
 
         if (StringUtils.isNotBlank(value1) && StringUtils.isNotBlank(value2)) {
-            if (Double.compare(1.0, Double.parseDouble(value1)) == 0 && Double.compare(1.0, Double.parseDouble(value2)) == 0) {
+            if (Double.compare(1.0, Double.parseDouble(value1)) == 0
+                    && Double.compare(1.0, Double.parseDouble(value2)) == 0) {
                 return gQuality1;
             }
             if (Double.compare(gQuality1, 0.0) > 0) {

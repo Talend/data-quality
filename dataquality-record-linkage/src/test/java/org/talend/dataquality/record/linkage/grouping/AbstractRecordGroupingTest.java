@@ -134,7 +134,8 @@ public class AbstractRecordGroupingTest {
         customRecords.put(IRecordGrouping.MATCHING_TYPE, "CUSTOM"); //$NON-NLS-1$
         customRecords.put(IRecordGrouping.TOKENIZATION_TYPE, TokenizedResolutionMethod.NO.toString()); // $NON-NLS-1$
         customRecords.put(IRecordGrouping.CUSTOMER_MATCH_CLASS, "testCustomMatcher.myCustomMatcherNullMatchAll"); //$NON-NLS-1$
-        customRecords.put(IRecordGrouping.JAR_PATH, this.getClass().getResource("custom/CustomMatcherTest1.jar").getPath()); //$NON-NLS-1$
+        customRecords.put(IRecordGrouping.JAR_PATH,
+                this.getClass().getResource("custom/CustomMatcherTest1.jar").getPath()); //$NON-NLS-1$
         customRecords.put(IRecordGrouping.CONFIDENCE_WEIGHT, String.valueOf(0.9));
         customRecords.put(IRecordGrouping.ATTRIBUTE_THRESHOLD, String.valueOf(2));
         matchingRule.add(customRecords);

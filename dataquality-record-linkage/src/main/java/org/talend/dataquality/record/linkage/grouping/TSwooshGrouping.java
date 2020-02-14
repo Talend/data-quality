@@ -248,8 +248,10 @@ public class TSwooshGrouping<TYPE> {
                             String matchType = recordMap.get("MATCHING_TYPE"); //$NON-NLS-1$
                             if (matchType != null && "dummy".equalsIgnoreCase(matchType)) { //$NON-NLS-1$
                                 Integer inputColumnIndex = Integer.valueOf(recordMap.get(IRecordGrouping.COLUMN_IDX));
-                                SurvivorshipFunction survivorshipFunction = defaultSurviorshipRules.get(inputColumnIndex);
-                                if (survivorshipFunction != null && survivorshipFunction.getReferenceColumnIndex() != null) {
+                                SurvivorshipFunction survivorshipFunction =
+                                        defaultSurviorshipRules.get(inputColumnIndex);
+                                if (survivorshipFunction != null
+                                        && survivorshipFunction.getReferenceColumnIndex() != null) {
                                     referenceColumnIndex = survivorshipFunction.getReferenceColumnIndex();
                                 }
                             }
@@ -264,7 +266,8 @@ public class TSwooshGrouping<TYPE> {
                         if (matchType != null && "dummy".equalsIgnoreCase(matchType)) { //$NON-NLS-1$
                             Integer inputColumnIndex = Integer.valueOf(recordMap.get(IRecordGrouping.COLUMN_IDX));
                             SurvivorshipFunction survivorshipFunction = defaultSurviorshipRules.get(inputColumnIndex);
-                            if (survivorshipFunction != null && survivorshipFunction.getReferenceColumnIndex() != null) {
+                            if (survivorshipFunction != null
+                                    && survivorshipFunction.getReferenceColumnIndex() != null) {
                                 referenceColumnIndex = survivorshipFunction.getReferenceColumnIndex();
                             }
                         }
@@ -338,7 +341,8 @@ public class TSwooshGrouping<TYPE> {
      */
     private MatchMergeAlgorithm createTswooshAlgorithm(IRecordMatcher combinedRecordMatcher,
             SurvivorShipAlgorithmParams survParams, MatchMergeAlgorithm.Callback callback) {
-        SurvivorShipAlgorithmEnum[] surviorShipAlgos = new SurvivorShipAlgorithmEnum[survParams.getSurviorShipAlgos().length];
+        SurvivorShipAlgorithmEnum[] surviorShipAlgos =
+                new SurvivorShipAlgorithmEnum[survParams.getSurviorShipAlgos().length];
         String[] funcParams = new String[surviorShipAlgos.length];
         int idx = 0;
         for (SurvivorshipFunction func : survParams.getSurviorShipAlgos()) {
@@ -409,7 +413,8 @@ public class TSwooshGrouping<TYPE> {
         List<RecordGenerator> notMasterRecords = new ArrayList<>();
         for (RecordGenerator record : rcdsGenerators) {
             List<DQAttribute<?>> originalRow = record.getOriginalRow();
-            if (!StringUtils.equalsIgnoreCase("true", StringUtils.normalizeSpace(originalRow.get(indexGID2 + 2).getValue()))) { //$NON-NLS-1$
+            if (!StringUtils.equalsIgnoreCase("true", //$NON-NLS-1$
+                    StringUtils.normalizeSpace(originalRow.get(indexGID2 + 2).getValue()))) {
                 List<List<DQAttribute<?>>> list = groupRows.get(originalRow.get(indexGID2).getValue());
                 if (list == null) {
                     list = new ArrayList<>();
@@ -429,8 +434,9 @@ public class TSwooshGrouping<TYPE> {
         totalCount = totalCount - notMasterRecords.size();
 
         // match the masters
-        org.talend.dataquality.record.linkage.grouping.callback.MultiPassGroupingCallBack multiPassGroupingCallBack = new org.talend.dataquality.record.linkage.grouping.callback.MultiPassGroupingCallBack<>(
-                this.oldGID2New, this.recordGrouping, this.groupRows);
+        org.talend.dataquality.record.linkage.grouping.callback.MultiPassGroupingCallBack multiPassGroupingCallBack =
+                new org.talend.dataquality.record.linkage.grouping.callback.MultiPassGroupingCallBack<>(this.oldGID2New,
+                        this.recordGrouping, this.groupRows);
         multiPassGroupingCallBack.setGIDindex(indexGID2);
         swooshMatch(combinedRecordMatcher, survivorShipAlgorithmParams, multiPassGroupingCallBack);
 
@@ -478,7 +484,8 @@ public class TSwooshGrouping<TYPE> {
         if (!remainNoMasterLs.isEmpty()) {
             for (List<DQAttribute<?>> originalRow : remainNoMasterLs) {
                 String gid = oldGID2New.get(originalRow.get(indexGID2).getValue());
-                RichRecord createRecord = createRecord(originalRow, gid != null ? gid : originalRow.get(indexGID2).getValue());
+                RichRecord createRecord =
+                        createRecord(originalRow, gid != null ? gid : originalRow.get(indexGID2).getValue());
                 output(createRecord);
             }
         }

@@ -58,7 +58,8 @@ public class PatternMatcherTest {
 
     @Test
     public void matcherPatternEmail() {
-        Assert.assertTrue(PatternMatcher.matchWordPattern("user.lastname@talend.com", "[word].[word]@[word].[word]", false));
+        Assert.assertTrue(
+                PatternMatcher.matchWordPattern("user.lastname@talend.com", "[word].[word]@[word].[word]", false));
     }
 
     @Test

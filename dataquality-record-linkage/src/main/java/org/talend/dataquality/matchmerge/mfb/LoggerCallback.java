@@ -38,9 +38,18 @@ public class LoggerCallback implements MatchMergeAlgorithm.Callback {
             StringBuilder messagesBuilder = new StringBuilder();
             int i = 0;
             for (MatchResult.Score score : matchResult.getScores()) {
-                messagesBuilder.append("\t\t").append(score.algorithm.getComponentValue()).append("('").append(score.values[0])
-                        .append("', '").append(score.values[1]).append("') = ").append(score.score).append(" (>= ")
-                        .append(matchResult.getThresholds().get(i)).append(")");
+                messagesBuilder
+                        .append("\t\t")
+                        .append(score.algorithm.getComponentValue())
+                        .append("('")
+                        .append(score.values[0])
+                        .append("', '")
+                        .append(score.values[1])
+                        .append("') = ")
+                        .append(score.score)
+                        .append(" (>= ")
+                        .append(matchResult.getThresholds().get(i))
+                        .append(")");
                 i++;
             }
             messagesBuilder.append('\n');
@@ -53,7 +62,8 @@ public class LoggerCallback implements MatchMergeAlgorithm.Callback {
     public void onNewMerge(Record record) {
         if (LOGGER.isInfoEnabled()) {
             if (record.getRelatedIds().size() > 1) {
-                LOGGER.info("\t(+) New merge: #" + record.getId() + " (groups " + record.getRelatedIds().size() + " records).");
+                LOGGER.info("\t(+) New merge: #" + record.getId() + " (groups " + record.getRelatedIds().size()
+                        + " records).");
             } else {
                 LOGGER.info("\t(+) New merge: #" + record.getId() + " (unique record).");
             }
@@ -61,7 +71,12 @@ public class LoggerCallback implements MatchMergeAlgorithm.Callback {
         if (LOGGER.isDebugEnabled()) {
             StringBuilder messageBuilder = new StringBuilder();
             for (Attribute attribute : record.getAttributes()) {
-                messageBuilder.append("\t\t").append(attribute.getLabel()).append(": '").append(attribute.getValue()).append("'");
+                messageBuilder
+                        .append("\t\t")
+                        .append(attribute.getLabel())
+                        .append(": '")
+                        .append(attribute.getValue())
+                        .append("'");
             }
             LOGGER.debug(messageBuilder.toString());
         }
@@ -88,9 +103,20 @@ public class LoggerCallback implements MatchMergeAlgorithm.Callback {
                 } else {
                     compareSymbol = ">="; //$NON-NLS-1$
                 }
-                messagesBuilder.append("\t\t").append(score.algorithm.getComponentValue()).append("('").append(score.values[0])
-                        .append("', '").append(score.values[1]).append("') = ").append(score.score).append(" (")
-                        .append(compareSymbol).append(" ").append(threshold).append(")");
+                messagesBuilder
+                        .append("\t\t")
+                        .append(score.algorithm.getComponentValue())
+                        .append("('")
+                        .append(score.values[0])
+                        .append("', '")
+                        .append(score.values[1])
+                        .append("') = ")
+                        .append(score.score)
+                        .append(" (")
+                        .append(compareSymbol)
+                        .append(" ")
+                        .append(threshold)
+                        .append(")");
                 i++;
             }
             messagesBuilder.append('\n');

@@ -18,10 +18,11 @@ import org.talend.survivorship.model.RuleDefinition.Order;
 
 public class SampleDataConflictMostCommonAndNoIgnoreBlank {
 
-    public static final String PKG_NAME_CONFLICT_FRE_LONG_RECENT_WITHOUT_IGNORE_BLANK = "org.talend.survivorship.conflict.fre_long_recent_without_ignore_blank"; //$NON-NLS-1$
+    public static final String PKG_NAME_CONFLICT_FRE_LONG_RECENT_WITHOUT_IGNORE_BLANK =
+            "org.talend.survivorship.conflict.fre_long_recent_without_ignore_blank"; //$NON-NLS-1$
 
-    public static final RuleDefinition[] RULES_CONFLICT_FRE_LONG_RECENT_NO_IGNORE_BLANK = {
-            new RuleDefinition(Order.SEQ, "more_common_firstName", "firstName", //$NON-NLS-1$ //$NON-NLS-2$
+    public static final RuleDefinition[] RULES_CONFLICT_FRE_LONG_RECENT_NO_IGNORE_BLANK =
+            { new RuleDefinition(Order.SEQ, "more_common_firstName", "firstName", //$NON-NLS-1$ //$NON-NLS-2$
                     Function.MostCommon, null, "firstName", false) }; //$NON-NLS-1$
 
 }

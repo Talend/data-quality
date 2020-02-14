@@ -257,8 +257,8 @@ public class MFBRecordMergerTest {
     @Test
     public void testMerge7() throws ParseException {
         String[] data = new String[] { "0", "1", "2", "3", "16", "17", "18", "19", "19" };
-        MFBRecordMerger mfbRecordMerger = new MFBRecordMerger(null, data,
-                new SurvivorShipAlgorithmEnum[] { SurvivorShipAlgorithmEnum.LARGEST });
+        MFBRecordMerger mfbRecordMerger =
+                new MFBRecordMerger(null, data, new SurvivorShipAlgorithmEnum[] { SurvivorShipAlgorithmEnum.LARGEST });
         Map<String, String> patternMap = new HashMap<>();
         String datePattern = "dd/MM/yyyy"; //$NON-NLS-1$
         patternMap.put("1", datePattern); //$NON-NLS-1$
@@ -331,14 +331,14 @@ public class MFBRecordMergerTest {
                 new SurvivorShipAlgorithmEnum[] { SurvivorShipAlgorithmEnum.MOST_RECENT });
         String left = "05-05-2005";
         String right = "06-07-2019";
-        String mergeValue = mFBRecordMerger.createMergeValue("MFB", "MFB", null, 1, 2, SurvivorShipAlgorithmEnum.MOST_RECENT,
-                left, right, null, null);
+        String mergeValue = mFBRecordMerger.createMergeValue("MFB", "MFB", null, 1, 2,
+                SurvivorShipAlgorithmEnum.MOST_RECENT, left, right, null, null);
         assertEquals(right, mergeValue);
 
         left = "06-07-2019";
         right = "05-05-2005";
-        mergeValue = mFBRecordMerger.createMergeValue("MFB", "MFB", null, 2, 1, SurvivorShipAlgorithmEnum.MOST_RECENT, left,
-                right, null, null);
+        mergeValue = mFBRecordMerger.createMergeValue("MFB", "MFB", null, 2, 1, SurvivorShipAlgorithmEnum.MOST_RECENT,
+                left, right, null, null);
         assertEquals(left, mergeValue);
     }
 
@@ -355,14 +355,14 @@ public class MFBRecordMergerTest {
                 new SurvivorShipAlgorithmEnum[] { SurvivorShipAlgorithmEnum.MOST_RECENT });
         String left = "05-05-2005";
         String right = "06-07-2019";
-        String mergeValue = mFBRecordMerger.createMergeValue("MFB", "MFB", null, 1, 2, SurvivorShipAlgorithmEnum.MOST_ANCIENT,
-                left, right, null, null);
+        String mergeValue = mFBRecordMerger.createMergeValue("MFB", "MFB", null, 1, 2,
+                SurvivorShipAlgorithmEnum.MOST_ANCIENT, left, right, null, null);
         assertEquals(left, mergeValue);
 
         left = "06-07-2019";
         right = "05-05-2005";
-        mergeValue = mFBRecordMerger.createMergeValue("MFB", "MFB", null, 2, 1, SurvivorShipAlgorithmEnum.MOST_ANCIENT, left,
-                right, null, null);
+        mergeValue = mFBRecordMerger.createMergeValue("MFB", "MFB", null, 2, 1, SurvivorShipAlgorithmEnum.MOST_ANCIENT,
+                left, right, null, null);
         assertEquals(right, mergeValue);
     }
 
@@ -379,14 +379,14 @@ public class MFBRecordMergerTest {
                 new SurvivorShipAlgorithmEnum[] { SurvivorShipAlgorithmEnum.MOST_RECENT });
         String left = "";
         String right = "true";
-        String mergeValue = mFBRecordMerger.createMergeValue("MFB", "MFB", null, 1, 2, SurvivorShipAlgorithmEnum.PREFER_TRUE,
-                left, right, null, null);
+        String mergeValue = mFBRecordMerger.createMergeValue("MFB", "MFB", null, 1, 2,
+                SurvivorShipAlgorithmEnum.PREFER_TRUE, left, right, null, null);
         assertEquals("true", mergeValue);
 
         left = "false";
         right = "false";
-        mergeValue = mFBRecordMerger.createMergeValue("MFB", "MFB", null, 2, 1, SurvivorShipAlgorithmEnum.PREFER_TRUE, left,
-                right, null, null);
+        mergeValue = mFBRecordMerger.createMergeValue("MFB", "MFB", null, 2, 1, SurvivorShipAlgorithmEnum.PREFER_TRUE,
+                left, right, null, null);
         assertEquals("false", mergeValue);
     }
 
@@ -403,14 +403,14 @@ public class MFBRecordMergerTest {
                 new SurvivorShipAlgorithmEnum[] { SurvivorShipAlgorithmEnum.MOST_RECENT });
         String left = "true";
         String right = "true";
-        String mergeValue = mFBRecordMerger.createMergeValue("MFB", "MFB", null, 1, 2, SurvivorShipAlgorithmEnum.PREFER_FALSE,
-                left, right, null, null);
+        String mergeValue = mFBRecordMerger.createMergeValue("MFB", "MFB", null, 1, 2,
+                SurvivorShipAlgorithmEnum.PREFER_FALSE, left, right, null, null);
         assertEquals("true", mergeValue);
 
         left = "true";
         right = "false";
-        mergeValue = mFBRecordMerger.createMergeValue("MFB", "MFB", null, 2, 1, SurvivorShipAlgorithmEnum.PREFER_FALSE, left,
-                right, null, null);
+        mergeValue = mFBRecordMerger.createMergeValue("MFB", "MFB", null, 2, 1, SurvivorShipAlgorithmEnum.PREFER_FALSE,
+                left, right, null, null);
         assertEquals("false", mergeValue);
     }
 
@@ -429,18 +429,18 @@ public class MFBRecordMergerTest {
         String right = "true";
         String mergeValue = null;
         try {
-            mFBRecordMerger.createMergeValue("MFB", "MFB", null, 1, 2, SurvivorShipAlgorithmEnum.MOST_TRUSTED_SOURCE, left, right,
-                    null, null);
+            mFBRecordMerger.createMergeValue("MFB", "MFB", null, 1, 2, SurvivorShipAlgorithmEnum.MOST_TRUSTED_SOURCE,
+                    left, right, null, null);
         } catch (IllegalStateException e) {
             Assert.assertEquals("Survivorship 'most trusted source' must specify a trusted source.", e.getMessage());
         }
 
-        mergeValue = mFBRecordMerger.createMergeValue("MFB", "MFB", "MFB", 2, 1, SurvivorShipAlgorithmEnum.MOST_TRUSTED_SOURCE,
-                left, right, null, null);
+        mergeValue = mFBRecordMerger.createMergeValue("MFB", "MFB", "MFB", 2, 1,
+                SurvivorShipAlgorithmEnum.MOST_TRUSTED_SOURCE, left, right, null, null);
         assertEquals("true", mergeValue);
 
-        mergeValue = mFBRecordMerger.createMergeValue("MFB", "MFB", "test", 2, 1, SurvivorShipAlgorithmEnum.MOST_TRUSTED_SOURCE,
-                left, right, null, null);
+        mergeValue = mFBRecordMerger.createMergeValue("MFB", "MFB", "test", 2, 1,
+                SurvivorShipAlgorithmEnum.MOST_TRUSTED_SOURCE, left, right, null, null);
         assertEquals("false", mergeValue);
     }
 }

@@ -27,7 +27,8 @@ public class LocalPartRegexCheckerImplTest {
     LocalPartRegexCheckerImpl localPartCheck;
 
     /**
-     * Test method for {@link org.talend.dataquality.email.checkerImpl.LocalPartRegexCheckerImpl#check(java.lang.String)}.
+     * Test method for
+     * {@link org.talend.dataquality.email.checkerImpl.LocalPartRegexCheckerImpl#check(java.lang.String)}.
      */
     @Test
     public void testCheck_validate() {
@@ -155,19 +156,22 @@ public class LocalPartRegexCheckerImplTest {
         regularPattern = "<tal>?<end>*"; //$NON-NLS-1$
         convertedPattern = localPartCheck.translateToRegex(regularPattern);
 
-        expectedRegex = "tal[^\\s\\p{Cntrl}\\(\\)<>@,;:'\\\\\\\"\\.\\[\\]]end[^\\s\\p{Cntrl}\\(\\)<>@,;:'\\\\\\\"\\.\\[\\]]*"; //$NON-NLS-1$
+        expectedRegex =
+                "tal[^\\s\\p{Cntrl}\\(\\)<>@,;:'\\\\\\\"\\.\\[\\]]end[^\\s\\p{Cntrl}\\(\\)<>@,;:'\\\\\\\"\\.\\[\\]]*"; //$NON-NLS-1$
         assertEquals(expectedRegex, convertedPattern);
 
         regularPattern = "<tal>?<+end>*"; //$NON-NLS-1$
         convertedPattern = localPartCheck.translateToRegex(regularPattern);
 
-        expectedRegex = "tal[^\\s\\p{Cntrl}\\(\\)<>@,;:'\\\\\\\"\\.\\[\\]]+end[^\\s\\p{Cntrl}\\(\\)<>@,;:'\\\\\\\"\\.\\[\\]]*"; //$NON-NLS-1$
+        expectedRegex =
+                "tal[^\\s\\p{Cntrl}\\(\\)<>@,;:'\\\\\\\"\\.\\[\\]]+end[^\\s\\p{Cntrl}\\(\\)<>@,;:'\\\\\\\"\\.\\[\\]]*"; //$NON-NLS-1$
         assertEquals(expectedRegex, convertedPattern);
 
         regularPattern = "<tal>?<\\+end>*"; //$NON-NLS-1$
         convertedPattern = localPartCheck.translateToRegex(regularPattern);
 
-        expectedRegex = "tal[^\\s\\p{Cntrl}\\(\\)<>@,;:'\\\\\\\"\\.\\[\\]]\\+end[^\\s\\p{Cntrl}\\(\\)<>@,;:'\\\\\\\"\\.\\[\\]]*"; //$NON-NLS-1$
+        expectedRegex =
+                "tal[^\\s\\p{Cntrl}\\(\\)<>@,;:'\\\\\\\"\\.\\[\\]]\\+end[^\\s\\p{Cntrl}\\(\\)<>@,;:'\\\\\\\"\\.\\[\\]]*"; //$NON-NLS-1$
         assertEquals(expectedRegex, convertedPattern);
 
         regularPattern = "a<[._-]?>w"; //$NON-NLS-1$

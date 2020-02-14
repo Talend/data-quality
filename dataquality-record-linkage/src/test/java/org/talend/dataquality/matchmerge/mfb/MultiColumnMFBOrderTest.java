@@ -119,7 +119,8 @@ public class MultiColumnMFBOrderTest extends TestCase {
         }
     };
 
-    private MatchMergeAlgorithm buildMFB(float[] attrThresholds, double minConfidence, SurvivorShipAlgorithmEnum mergeAlgo) {
+    private MatchMergeAlgorithm buildMFB(float[] attrThresholds, double minConfidence,
+            SurvivorShipAlgorithmEnum mergeAlgo) {
         return MFB.build( //
                 new AttributeMatcherType[] { AttributeMatcherType.LEVENSHTEIN, AttributeMatcherType.LEVENSHTEIN }, // algorithms
                 new String[] { "", "" }, // algo params //$NON-NLS-1$ //$NON-NLS-2$
@@ -181,7 +182,8 @@ public class MultiColumnMFBOrderTest extends TestCase {
 
     public void testABCDEConcat() {
         System.out.println("\n--------------- Concat  -----------------------"); //$NON-NLS-1$
-        MatchMergeAlgorithm algorithm = buildMFB(new float[] { 0.7f, 0.4f }, 0.4, SurvivorShipAlgorithmEnum.CONCATENATE);
+        MatchMergeAlgorithm algorithm =
+                buildMFB(new float[] { 0.7f, 0.4f }, 0.4, SurvivorShipAlgorithmEnum.CONCATENATE);
         System.out.println("Order 1:  "); //$NON-NLS-1$
         List<Record> mergeRecordList1 = algorithm.execute(listOrder1.iterator(), callback);
         printResult(mergeRecordList1);
@@ -224,7 +226,8 @@ public class MultiColumnMFBOrderTest extends TestCase {
 
     private void printResult(List<Record> mergedRecords) {
         for (Record rec : mergedRecords) {
-            List<String> attrList = rec.getAttributes().stream().map(attr -> attr.getValue()).collect(Collectors.toList());
+            List<String> attrList =
+                    rec.getAttributes().stream().map(attr -> attr.getValue()).collect(Collectors.toList());
             System.out.println("  " + rec + " " + attrList + "   Confidence: " + rec.getConfidence()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         }
     }

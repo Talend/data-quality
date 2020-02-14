@@ -60,9 +60,10 @@ public class SystemDateTimePatternManager {
     /*
      * Have a fixed list of supported languages to avoid behaviour changes across different Java version. see TDQ-16983
      */
-    private static final String[] SUPPORTED_ISO_LANGUAGES = new String[] { "ar", "be", "bg", "ca", "cs", "da", "de", "el", "en",
-            "es", "et", "fi", "fr", "ga", "iw", "hr", "hu", "in", "in", "is", "it", "iw", "ja", "ko", "lt", "lv", "mk", "ms",
-            "mt", "nb", "nl", "nn", "no", "pl", "pt", "ro", "ru", "sk", "sl", "sq", "sr", "sv", "th", "tr", "uk", "vi", "zh" };
+    private static final String[] SUPPORTED_ISO_LANGUAGES =
+            new String[] { "ar", "be", "bg", "ca", "cs", "da", "de", "el", "en", "es", "et", "fi", "fr", "ga", "iw",
+                    "hr", "hu", "in", "in", "is", "it", "iw", "ja", "ko", "lt", "lv", "mk", "ms", "mt", "nb", "nl",
+                    "nn", "no", "pl", "pt", "ro", "ru", "sk", "sl", "sq", "sr", "sv", "th", "tr", "uk", "vi", "zh" };
 
     private static final List<Map<Pattern, String>> DATE_PATTERN_GROUP_LIST = new ArrayList<>();
 
@@ -143,7 +144,9 @@ public class SystemDateTimePatternManager {
 
     private static void loadErasInNonIsoChronologies() {
         // load ERAs in Japanese chronology
-        final Set<String> japaneseEraSet = Arrays.asList(JapaneseEra.values()).stream() //
+        final Set<String> japaneseEraSet = Arrays
+                .asList(JapaneseEra.values())
+                .stream() //
                 .map(e -> e.getDisplayName(TextStyle.FULL, Locale.JAPANESE)) //
                 .collect(Collectors.toSet());
         buildWordsToLocales(ERAS, japaneseEraSet, Locale.JAPANESE);
@@ -164,9 +167,10 @@ public class SystemDateTimePatternManager {
         buildWordsToLocales(ERAS, thaiBuddhistEraSet, Locale.forLanguageTag("th"));
     }
 
-    private static void buildWordsToLocales(final String wordGroup, final Set<String> languagesWords, Locale currentLocale) {
-        Map<String, Set<Locale>> languagesDatesWords = WORD_GROUPS_TO_LANGUAGES_DATES_WORDS.computeIfAbsent(wordGroup,
-                k -> new HashMap<>());
+    private static void buildWordsToLocales(final String wordGroup, final Set<String> languagesWords,
+            Locale currentLocale) {
+        Map<String, Set<Locale>> languagesDatesWords =
+                WORD_GROUPS_TO_LANGUAGES_DATES_WORDS.computeIfAbsent(wordGroup, k -> new HashMap<>());
         for (String languageWord : languagesWords) {
             if (StringUtils.isNotEmpty(languageWord)) {
                 String lowerCaseLanguageWord = languageWord.toLowerCase();
@@ -298,8 +302,8 @@ public class SystemDateTimePatternManager {
         return false;
     }
 
-    private static Optional<Pair<Pattern, DateTimeFormatter>> findOneDateTimePattern(List<Map<Pattern, String>> patternGroupList,
-            String value) {
+    private static Optional<Pair<Pattern, DateTimeFormatter>>
+            findOneDateTimePattern(List<Map<Pattern, String>> patternGroupList, String value) {
         // Check the value with a list of regex patterns
         for (Map<Pattern, String> patternMap : patternGroupList) {
             boolean isFoundRegex = false;
@@ -307,8 +311,8 @@ public class SystemDateTimePatternManager {
                 Matcher matcher = entry.getKey().matcher(value);
                 if (matcher.find()) {
                     isFoundRegex = true;
-                    Optional<DateTimeFormatter> dateTimeFormatter = validateWithPatternInAnyLocale(value, entry.getValue(),
-                            matcher);
+                    Optional<DateTimeFormatter> dateTimeFormatter =
+                            validateWithPatternInAnyLocale(value, entry.getValue(), matcher);
                     if (dateTimeFormatter.isPresent())
                         return Optional.of(Pair.of(entry.getKey(), dateTimeFormatter.get()));
                 }
@@ -337,7 +341,8 @@ public class SystemDateTimePatternManager {
      * @param frequentDatePatternsCache
      * @return the list of found patterns AND the group with the pattern and the regex for the cache
      */
-    public static Map<String, Locale> getDatePatterns(String value, SortedList<Map<Pattern, String>> frequentDatePatternsCache) {
+    public static Map<String, Locale> getDatePatterns(String value,
+            SortedList<Map<Pattern, String>> frequentDatePatternsCache) {
         return getDateTimePatterns(DATE_PATTERN_GROUP_LIST, value, frequentDatePatternsCache);
     }
 
@@ -356,8 +361,8 @@ public class SystemDateTimePatternManager {
         if (StringUtils.isEmpty(value)) {
             return Collections.singletonMap(StringUtils.EMPTY, null);
         }
-        Optional<Map<String, Locale>> foundFrequentDatePatterns = findValueInFrequentDatePatternsCache(value,
-                frequentDatePatternsCache);
+        Optional<Map<String, Locale>> foundFrequentDatePatterns =
+                findValueInFrequentDatePatternsCache(value, frequentDatePatternsCache);
         if (foundFrequentDatePatterns.isPresent())
             return foundFrequentDatePatterns.get();
         Map<String, Locale> resultMap = new HashMap<>();
@@ -387,7 +392,8 @@ public class SystemDateTimePatternManager {
         return Optional.empty();
     }
 
-    private static boolean isFoundRegex(String value, Map<Pattern, String> groupPattern, Map<String, Locale> resultMap) {
+    private static boolean isFoundRegex(String value, Map<Pattern, String> groupPattern,
+            Map<String, Locale> resultMap) {
         boolean isFoundRegex = false;
         for (Entry<Pattern, String> entry : groupPattern.entrySet()) {
             Matcher matcher = entry.getKey().matcher(value);
@@ -421,8 +427,11 @@ public class SystemDateTimePatternManager {
                     // TDQ-14421 use ResolverStyle.STRICT to validate a date. such as "2017-02-29" should be
                     // invalid.STRICT model for pattern without G,should replace 'y' with 'u'.see Java DOC.
                     String customPatternStrict = customPattern.replace('y', 'u');
-                    formatter = new DateTimeFormatterBuilder().parseCaseInsensitive().appendPattern(customPatternStrict)
-                            .toFormatter(locale).withResolverStyle(ResolverStyle.STRICT);
+                    formatter = new DateTimeFormatterBuilder()
+                            .parseCaseInsensitive()
+                            .appendPattern(customPatternStrict)
+                            .toFormatter(locale)
+                            .withResolverStyle(ResolverStyle.STRICT);
                 }
             } catch (IllegalArgumentException e) {
                 LOGGER.debug(e.getMessage(), e);
@@ -437,7 +446,8 @@ public class SystemDateTimePatternManager {
         if (formatter != null) {
             try {
                 final TemporalAccessor temporal = formatter.parse(value);
-                if (temporal.query(TemporalQueries.localDate()) != null || temporal.query(TemporalQueries.localTime()) != null) {
+                if (temporal.query(TemporalQueries.localDate()) != null
+                        || temporal.query(TemporalQueries.localTime()) != null) {
                     return true;
                 }
             } catch (DateTimeParseException e) {
@@ -450,7 +460,8 @@ public class SystemDateTimePatternManager {
     public static boolean isDate(String value, SortedList<Pair<Pattern, DateTimeFormatter>> orderedPatterns) {
         for (int j = 0; j < orderedPatterns.size(); j++) {
             Pair<Pattern, DateTimeFormatter> cachedPattern = orderedPatterns.get(j).getLeft();
-            if (cachedPattern.getLeft().matcher(value).find() && isMatchDateTimePattern(value, cachedPattern.getRight())) {
+            if (cachedPattern.getLeft().matcher(value).find()
+                    && isMatchDateTimePattern(value, cachedPattern.getRight())) {
                 orderedPatterns.increment(j);
                 return true;
             }
@@ -477,7 +488,8 @@ public class SystemDateTimePatternManager {
         return findDateTimeFormatter(value, pattern, LOCALES).isPresent();
     }
 
-    private static Optional<DateTimeFormatter> findDateTimeFormatter(String value, String pattern, Set<Locale> locales) {
+    private static Optional<DateTimeFormatter> findDateTimeFormatter(String value, String pattern,
+            Set<Locale> locales) {
         for (Locale locale : locales) {
             final Optional<DateTimeFormatter> dateTimeFormatter = findDateTimeFormatter(value, pattern, locale);
             if (dateTimeFormatter.isPresent())
@@ -494,12 +506,13 @@ public class SystemDateTimePatternManager {
      * @param matcher the regex matcher
      * @return the date time format if found
      */
-    private static Optional<DateTimeFormatter> validateWithPatternInAnyLocale(String value, String pattern, Matcher matcher) {
+    private static Optional<DateTimeFormatter> validateWithPatternInAnyLocale(String value, String pattern,
+            Matcher matcher) {
         List<String> wordGroups = PATTERN_TO_WORD_GROUPS.get(pattern);
         if (CollectionUtils.isNotEmpty(wordGroups)) {
             if (matcher.groupCount() == wordGroups.size()) {
-                List<Map<String, Set<Locale>>> languagesDatesWords = wordGroups.stream()
-                        .map(WORD_GROUPS_TO_LANGUAGES_DATES_WORDS::get).collect(Collectors.toList());
+                List<Map<String, Set<Locale>>> languagesDatesWords =
+                        wordGroups.stream().map(WORD_GROUPS_TO_LANGUAGES_DATES_WORDS::get).collect(Collectors.toList());
                 Set<Locale> locales = findLocales(languagesDatesWords, matcher);
                 if (CollectionUtils.isNotEmpty(locales)) {
                     return findDateTimeFormatter(value, pattern, locales);

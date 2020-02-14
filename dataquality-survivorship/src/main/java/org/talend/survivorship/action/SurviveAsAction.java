@@ -22,7 +22,8 @@ public class SurviveAsAction extends AbstractSurvivorshipAction {
     /*
      * (non-Javadoc)
      * 
-     * @see org.talend.survivorship.action.AbstractSurvivoredAction#checkCanHandle(org.talend.survivorship.action.ActionParameter)
+     * @see org.talend.survivorship.action.AbstractSurvivoredAction#checkCanHandle(org.talend.survivorship.action.
+     * ActionParameter)
      */
     @Override
     public boolean canHandle(ActionParameter actionParameter) {
@@ -32,8 +33,8 @@ public class SurviveAsAction extends AbstractSurvivorshipAction {
         if (survivedValueIndex == null) {
             return false;
         }
-        Object refSurvivedValue = actionParameter.getDataset().getRecordList().get(survivedValueIndex).getAttribute(refColumn)
-                .getValue();
+        Object refSurvivedValue =
+                actionParameter.getDataset().getRecordList().get(survivedValueIndex).getAttribute(refColumn).getValue();
         Object inputData = actionParameter.getInputData();
         if (inputData == null && refSurvivedValue == null) {
             return true;

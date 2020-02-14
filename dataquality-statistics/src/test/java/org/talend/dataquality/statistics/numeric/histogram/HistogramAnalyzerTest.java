@@ -212,8 +212,9 @@ public class HistogramAnalyzerTest {
         HistogramColumnParameter column2Param = new HistogramColumnParameter();
         column2Param.setParameters(0, 9, 4);
         histogramParameter.putColumnParameter(1, column2Param);
-        HistogramAnalyzer analyzer = createAnalyzer(
-                new DataTypeEnum[] { DataTypeEnum.INTEGER, DataTypeEnum.INTEGER, DataTypeEnum.STRING }, histogramParameter);
+        HistogramAnalyzer analyzer =
+                createAnalyzer(new DataTypeEnum[] { DataTypeEnum.INTEGER, DataTypeEnum.INTEGER, DataTypeEnum.STRING },
+                        histogramParameter);
         for (String[] d : data) {
             analyzer.analyze(d);
         }
@@ -338,7 +339,8 @@ public class HistogramAnalyzerTest {
         int binIdx = 0;
         for (Entry<Range, Long> histEntry : histograms.entrySet()) {
             @SuppressWarnings("unchecked")
-            Entry<Range, Long> histEntryOfAnalyzer = (Entry<Range, Long>) histogramFromAnalyzer.entrySet().toArray()[binIdx];
+            Entry<Range, Long> histEntryOfAnalyzer =
+                    (Entry<Range, Long>) histogramFromAnalyzer.entrySet().toArray()[binIdx];
             Assert.assertEquals(histEntry.getKey().getLower(), histEntryOfAnalyzer.getKey().getLower(), 0.001);
             Assert.assertEquals(histEntry.getKey().getUpper(), histEntryOfAnalyzer.getKey().getUpper(), 0.001);
             Assert.assertEquals(histEntry.getValue(), histEntryOfAnalyzer.getValue());

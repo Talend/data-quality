@@ -218,7 +218,8 @@ public class StringsClusterAnalyzer implements Serializable {
             final String[] values = iterator.next();
             final Attribute value = new Attribute("col0");
             value.setValue(values[0]);
-            return new Record(Collections.singletonList(value), currentBlockIndex + "-" + String.valueOf(index++), 0, "");
+            return new Record(Collections.singletonList(value), currentBlockIndex + "-" + String.valueOf(index++), 0,
+                    "");
         }
 
         @Override

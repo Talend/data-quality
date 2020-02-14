@@ -182,7 +182,10 @@ public abstract class WordPatternRecognizer extends AbstractPatternRecognizer {
         KATAKANA(WordPattern.KATAKANA.getPattern(), WordPattern.KATAKANA_SEQUENCE.getPattern(), null),
         HANGUL(WordPattern.HANGUL.getPattern(), WordPattern.HANGUL_SEQUENCE.getPattern(), null),
         NUMERIC(WordPattern.DIGIT.getPattern(), WordPattern.NUMBER.getPattern(), null),
-        UPPER_CASE(WordPattern.UPPER_CHAR.getPattern(), WordPattern.UPPER_WORD.getPattern(), WordPattern.WORD.getPattern()),
+        UPPER_CASE(
+                WordPattern.UPPER_CHAR.getPattern(),
+                WordPattern.UPPER_WORD.getPattern(),
+                WordPattern.WORD.getPattern()),
         NOT_UPPER_CASE(WordPattern.LOWER_CHAR.getPattern(), WordPattern.LOWER_WORD.getPattern(), null);
 
         /**
@@ -316,7 +319,8 @@ public abstract class WordPatternRecognizer extends AbstractPatternRecognizer {
             int pos = start;
             switch (this) {
             case ALPHABETIC:
-                while (pos < ca.length && (isLetter(Character.codePointAt(ca, pos)) || isDigit(Character.codePointAt(ca, pos)))) {
+                while (pos < ca.length
+                        && (isLetter(Character.codePointAt(ca, pos)) || isDigit(Character.codePointAt(ca, pos)))) {
                     pos++;
                 }
                 break;

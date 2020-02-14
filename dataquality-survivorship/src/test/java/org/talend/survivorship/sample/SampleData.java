@@ -68,7 +68,8 @@ public final class SampleData {
 
     public static final RuleDefinition[] RULES = {
             new RuleDefinition(Order.SEQ, "CompletenessRule", null, Function.MostComplete, null, "completeness", true), //$NON-NLS-1$ //$NON-NLS-2$
-            new RuleDefinition(Order.SEQ, "LengthAcct", "acctName", Function.Expression, ".length > 11", "acctName", true), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+            new RuleDefinition(Order.SEQ, "LengthAcct", "acctName", Function.Expression, ".length > 11", "acctName", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
+                    true),
             new RuleDefinition(Order.SEQ, "LongestAddr", "addr", Function.Longest, null, "addr", true), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
             new RuleDefinition(Order.SEQ, "HighScore", "score", Function.Expression, " > 0.95", "score", true), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
             new RuleDefinition(Order.SEQ, "MostCommonCity", "city", Function.MostCommon, null, "city", true), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -78,10 +79,11 @@ public final class SampleData {
             new RuleDefinition(Order.MT, null, null, null, null, "country", true), //$NON-NLS-1$
             new RuleDefinition(Order.SEQ, "LatestPhone", "date", Function.MostRecent, null, "date", true), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
             new RuleDefinition(Order.MT, null, null, null, null, "phone", true), //$NON-NLS-1$
-            new RuleDefinition(Order.SEQ, "firstNameRule", "firstName", Function.MatchRegex, "^\\\\w{2}$", "firstName", true) }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+            new RuleDefinition(Order.SEQ, "firstNameRule", "firstName", Function.MatchRegex, "^\\\\w{2}$", "firstName", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
+                    true) };
 
-    public static final RuleDefinition[] RULES_CONFLICT_FRE_NULL_FRE = {
-            new RuleDefinition(Order.SEQ, "more_common_middleName", "middleName", //$NON-NLS-1$ //$NON-NLS-2$
+    public static final RuleDefinition[] RULES_CONFLICT_FRE_NULL_FRE =
+            { new RuleDefinition(Order.SEQ, "more_common_middleName", "middleName", //$NON-NLS-1$ //$NON-NLS-2$
                     Function.MostCommon, null, "middleName", false) }; //$NON-NLS-1$
 
     public static final HashMap<String, Object> EXPECTED_SURVIVOR = new HashMap<String, Object>() {

@@ -46,8 +46,8 @@ public class SurvivorshipUtilsTest {
         List<List<java.util.Map<String, String>>> matchingRulesAll_tMatchGroup_1 = matcherListInit(true);
         AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 = new SwooshMatchRecordGroupingImpl();
         recordGroupImp_tMatchGroup_1.setOrginalInputColumnSize(3);
-        recordGroupImp_tMatchGroup_1
-                .setRecordLinkAlgorithm(org.talend.dataquality.record.linkage.constant.RecordMatcherType.T_SwooshAlgorithm);
+        recordGroupImp_tMatchGroup_1.setRecordLinkAlgorithm(
+                org.talend.dataquality.record.linkage.constant.RecordMatcherType.T_SwooshAlgorithm);
         // add mutch rules
         for (java.util.List<java.util.Map<String, String>> matcherList : matchingRulesAll_tMatchGroup_1) {
             recordGroupImp_tMatchGroup_1.addMatchRule(matcherList);
@@ -79,15 +79,16 @@ public class SurvivorshipUtilsTest {
         columnWithType_tMatchGroup_1.put("MATCHING_DISTANCES", //$NON-NLS-1$
                 "id_String"); //$NON-NLS-1$
         columnWithIndex_tMatchGroup_1.put("MATCHING_DISTANCES", "9"); //$NON-NLS-1$ //$NON-NLS-2$
-        SurvivorShipAlgorithmParams createSurvivorShipAlgorithmParams = SurvivorshipUtils.createSurvivorShipAlgorithmParams(
-                (AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1, matchingRulesAll_tMatchGroup_1,
-                defaultSurvivorshipRules_tMatchGroup_1, columnWithType_tMatchGroup_1, columnWithIndex_tMatchGroup_1);
-        Map<IRecordMatcher, SurvivorshipFunction[]> survivorshipAlgosMap = createSurvivorShipAlgorithmParams
-                .getSurvivorshipAlgosMap();
-        SurvivorshipFunction[] survivorshipFunctions1 = survivorshipAlgosMap
-                .get(recordGroupImp_tMatchGroup_1.getCombinedRecordMatcher().getMatchers().get(0));
-        SurvivorshipFunction[] survivorshipFunctions2 = survivorshipAlgosMap
-                .get(recordGroupImp_tMatchGroup_1.getCombinedRecordMatcher().getMatchers().get(1));
+        SurvivorShipAlgorithmParams createSurvivorShipAlgorithmParams = SurvivorshipUtils
+                .createSurvivorShipAlgorithmParams((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1,
+                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1,
+                        columnWithType_tMatchGroup_1, columnWithIndex_tMatchGroup_1);
+        Map<IRecordMatcher, SurvivorshipFunction[]> survivorshipAlgosMap =
+                createSurvivorShipAlgorithmParams.getSurvivorshipAlgosMap();
+        SurvivorshipFunction[] survivorshipFunctions1 =
+                survivorshipAlgosMap.get(recordGroupImp_tMatchGroup_1.getCombinedRecordMatcher().getMatchers().get(0));
+        SurvivorshipFunction[] survivorshipFunctions2 =
+                survivorshipAlgosMap.get(recordGroupImp_tMatchGroup_1.getCombinedRecordMatcher().getMatchers().get(1));
 
         Assert.assertNotNull(survivorshipFunctions1);
         Assert.assertNotNull(survivorshipFunctions2);
@@ -125,8 +126,8 @@ public class SurvivorshipUtilsTest {
         List<List<java.util.Map<String, String>>> matchingRulesAll_tMatchGroup_1 = matcherListInit(false);
         AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 = new SwooshMatchRecordGroupingImpl();
         recordGroupImp_tMatchGroup_1.setOrginalInputColumnSize(3);
-        recordGroupImp_tMatchGroup_1
-                .setRecordLinkAlgorithm(org.talend.dataquality.record.linkage.constant.RecordMatcherType.T_SwooshAlgorithm);
+        recordGroupImp_tMatchGroup_1.setRecordLinkAlgorithm(
+                org.talend.dataquality.record.linkage.constant.RecordMatcherType.T_SwooshAlgorithm);
         // add mutch rules
         for (java.util.List<java.util.Map<String, String>> matcherList : matchingRulesAll_tMatchGroup_1) {
             recordGroupImp_tMatchGroup_1.addMatchRule(matcherList);
@@ -134,7 +135,8 @@ public class SurvivorshipUtilsTest {
         recordGroupImp_tMatchGroup_1.initialize();
 
         java.util.List<java.util.Map<String, String>> defaultSurvivorshipRules_tMatchGroup_1 = initDefaultRules();
-        java.util.List<java.util.Map<String, String>> particularDefaultSurvivorshipDefinitions = initParticularDefaultRules();
+        java.util.List<java.util.Map<String, String>> particularDefaultSurvivorshipDefinitions =
+                initParticularDefaultRules();
         java.util.Map<String, String> columnWithIndex_tMatchGroup_1 = new java.util.HashMap<>();
         java.util.Map<String, String> columnWithType_tMatchGroup_1 = new java.util.HashMap<>();
 
@@ -159,16 +161,17 @@ public class SurvivorshipUtilsTest {
         columnWithType_tMatchGroup_1.put("MATCHING_DISTANCES", //$NON-NLS-1$
                 "id_String"); //$NON-NLS-1$
         columnWithIndex_tMatchGroup_1.put("MATCHING_DISTANCES", "9"); //$NON-NLS-1$ //$NON-NLS-2$
-        SurvivorShipAlgorithmParams createSurvivorShipAlgorithmParams = SurvivorshipUtils.createSurvivorShipAlgorithmParams(
-                (AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1, matchingRulesAll_tMatchGroup_1,
-                defaultSurvivorshipRules_tMatchGroup_1, particularDefaultSurvivorshipDefinitions, columnWithType_tMatchGroup_1,
-                columnWithIndex_tMatchGroup_1);
-        Map<IRecordMatcher, SurvivorshipFunction[]> survivorshipAlgosMap = createSurvivorShipAlgorithmParams
-                .getSurvivorshipAlgosMap();
-        SurvivorshipFunction[] survivorshipFunctions1 = survivorshipAlgosMap
-                .get(recordGroupImp_tMatchGroup_1.getCombinedRecordMatcher().getMatchers().get(0));
-        SurvivorshipFunction[] survivorshipFunctions2 = survivorshipAlgosMap
-                .get(recordGroupImp_tMatchGroup_1.getCombinedRecordMatcher().getMatchers().get(1));
+        SurvivorShipAlgorithmParams createSurvivorShipAlgorithmParams = SurvivorshipUtils
+                .createSurvivorShipAlgorithmParams((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1,
+                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1,
+                        particularDefaultSurvivorshipDefinitions, columnWithType_tMatchGroup_1,
+                        columnWithIndex_tMatchGroup_1);
+        Map<IRecordMatcher, SurvivorshipFunction[]> survivorshipAlgosMap =
+                createSurvivorShipAlgorithmParams.getSurvivorshipAlgosMap();
+        SurvivorshipFunction[] survivorshipFunctions1 =
+                survivorshipAlgosMap.get(recordGroupImp_tMatchGroup_1.getCombinedRecordMatcher().getMatchers().get(0));
+        SurvivorshipFunction[] survivorshipFunctions2 =
+                survivorshipAlgosMap.get(recordGroupImp_tMatchGroup_1.getCombinedRecordMatcher().getMatchers().get(1));
 
         Assert.assertNotNull(survivorshipFunctions1);
         Assert.assertNotNull(survivorshipFunctions2);
@@ -206,8 +209,8 @@ public class SurvivorshipUtilsTest {
         List<List<java.util.Map<String, String>>> matchingRulesAll_tMatchGroup_1 = matcherListInit(true);
         AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 = new SwooshMatchRecordGroupingImpl();
         recordGroupImp_tMatchGroup_1.setOrginalInputColumnSize(3);
-        recordGroupImp_tMatchGroup_1
-                .setRecordLinkAlgorithm(org.talend.dataquality.record.linkage.constant.RecordMatcherType.T_SwooshAlgorithm);
+        recordGroupImp_tMatchGroup_1.setRecordLinkAlgorithm(
+                org.talend.dataquality.record.linkage.constant.RecordMatcherType.T_SwooshAlgorithm);
         // add mutch rules
         for (java.util.List<java.util.Map<String, String>> matcherList : matchingRulesAll_tMatchGroup_1) {
             recordGroupImp_tMatchGroup_1.addMatchRule(matcherList);
@@ -215,7 +218,8 @@ public class SurvivorshipUtilsTest {
         recordGroupImp_tMatchGroup_1.initialize();
 
         java.util.List<java.util.Map<String, String>> defaultSurvivorshipRules_tMatchGroup_1 = initDefaultRules();
-        java.util.List<java.util.Map<String, String>> particularDefaultSurvivorshipDefinitions = initParticularDefaultRules();
+        java.util.List<java.util.Map<String, String>> particularDefaultSurvivorshipDefinitions =
+                initParticularDefaultRules();
         java.util.Map<String, String> columnWithIndex_tMatchGroup_1 = new java.util.HashMap<>();
         java.util.Map<String, String> columnWithType_tMatchGroup_1 = new java.util.HashMap<>();
 
@@ -240,16 +244,17 @@ public class SurvivorshipUtilsTest {
         columnWithType_tMatchGroup_1.put("MATCHING_DISTANCES", //$NON-NLS-1$
                 "id_String"); //$NON-NLS-1$
         columnWithIndex_tMatchGroup_1.put("MATCHING_DISTANCES", "9"); //$NON-NLS-1$ //$NON-NLS-2$
-        SurvivorShipAlgorithmParams createSurvivorShipAlgorithmParams = SurvivorshipUtils.createSurvivorShipAlgorithmParams(
-                (AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1, matchingRulesAll_tMatchGroup_1,
-                defaultSurvivorshipRules_tMatchGroup_1, particularDefaultSurvivorshipDefinitions, columnWithType_tMatchGroup_1,
-                columnWithIndex_tMatchGroup_1);
-        Map<IRecordMatcher, SurvivorshipFunction[]> survivorshipAlgosMap = createSurvivorShipAlgorithmParams
-                .getSurvivorshipAlgosMap();
-        SurvivorshipFunction[] survivorshipFunctions1 = survivorshipAlgosMap
-                .get(recordGroupImp_tMatchGroup_1.getCombinedRecordMatcher().getMatchers().get(0));
-        SurvivorshipFunction[] survivorshipFunctions2 = survivorshipAlgosMap
-                .get(recordGroupImp_tMatchGroup_1.getCombinedRecordMatcher().getMatchers().get(1));
+        SurvivorShipAlgorithmParams createSurvivorShipAlgorithmParams = SurvivorshipUtils
+                .createSurvivorShipAlgorithmParams((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1,
+                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1,
+                        particularDefaultSurvivorshipDefinitions, columnWithType_tMatchGroup_1,
+                        columnWithIndex_tMatchGroup_1);
+        Map<IRecordMatcher, SurvivorshipFunction[]> survivorshipAlgosMap =
+                createSurvivorShipAlgorithmParams.getSurvivorshipAlgosMap();
+        SurvivorshipFunction[] survivorshipFunctions1 =
+                survivorshipAlgosMap.get(recordGroupImp_tMatchGroup_1.getCombinedRecordMatcher().getMatchers().get(0));
+        SurvivorshipFunction[] survivorshipFunctions2 =
+                survivorshipAlgosMap.get(recordGroupImp_tMatchGroup_1.getCombinedRecordMatcher().getMatchers().get(1));
 
         Assert.assertNotNull(survivorshipFunctions1);
         Assert.assertNotNull(survivorshipFunctions2);
@@ -287,8 +292,8 @@ public class SurvivorshipUtilsTest {
         List<List<java.util.Map<String, String>>> matchingRulesAll_tMatchGroup_1 = matcherListInit(false);
         AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 = new SwooshMatchRecordGroupingImpl();
         recordGroupImp_tMatchGroup_1.setOrginalInputColumnSize(3);
-        recordGroupImp_tMatchGroup_1
-                .setRecordLinkAlgorithm(org.talend.dataquality.record.linkage.constant.RecordMatcherType.T_SwooshAlgorithm);
+        recordGroupImp_tMatchGroup_1.setRecordLinkAlgorithm(
+                org.talend.dataquality.record.linkage.constant.RecordMatcherType.T_SwooshAlgorithm);
         // add mutch rules
         for (java.util.List<java.util.Map<String, String>> matcherList : matchingRulesAll_tMatchGroup_1) {
             recordGroupImp_tMatchGroup_1.addMatchRule(matcherList);
@@ -320,15 +325,16 @@ public class SurvivorshipUtilsTest {
         columnWithType_tMatchGroup_1.put("MATCHING_DISTANCES", //$NON-NLS-1$
                 "id_String"); //$NON-NLS-1$
         columnWithIndex_tMatchGroup_1.put("MATCHING_DISTANCES", "9"); //$NON-NLS-1$ //$NON-NLS-2$
-        SurvivorShipAlgorithmParams createSurvivorShipAlgorithmParams = SurvivorshipUtils.createSurvivorShipAlgorithmParams(
-                (AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1, matchingRulesAll_tMatchGroup_1,
-                defaultSurvivorshipRules_tMatchGroup_1, columnWithType_tMatchGroup_1, columnWithIndex_tMatchGroup_1);
-        Map<IRecordMatcher, SurvivorshipFunction[]> survivorshipAlgosMap = createSurvivorShipAlgorithmParams
-                .getSurvivorshipAlgosMap();
-        SurvivorshipFunction[] survivorshipFunctions1 = survivorshipAlgosMap
-                .get(recordGroupImp_tMatchGroup_1.getCombinedRecordMatcher().getMatchers().get(0));
-        SurvivorshipFunction[] survivorshipFunctions2 = survivorshipAlgosMap
-                .get(recordGroupImp_tMatchGroup_1.getCombinedRecordMatcher().getMatchers().get(1));
+        SurvivorShipAlgorithmParams createSurvivorShipAlgorithmParams = SurvivorshipUtils
+                .createSurvivorShipAlgorithmParams((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1,
+                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1,
+                        columnWithType_tMatchGroup_1, columnWithIndex_tMatchGroup_1);
+        Map<IRecordMatcher, SurvivorshipFunction[]> survivorshipAlgosMap =
+                createSurvivorShipAlgorithmParams.getSurvivorshipAlgosMap();
+        SurvivorshipFunction[] survivorshipFunctions1 =
+                survivorshipAlgosMap.get(recordGroupImp_tMatchGroup_1.getCombinedRecordMatcher().getMatchers().get(0));
+        SurvivorshipFunction[] survivorshipFunctions2 =
+                survivorshipAlgosMap.get(recordGroupImp_tMatchGroup_1.getCombinedRecordMatcher().getMatchers().get(1));
 
         Assert.assertNotNull(survivorshipFunctions1);
         Assert.assertNotNull(survivorshipFunctions2);
@@ -357,7 +363,8 @@ public class SurvivorshipUtilsTest {
      * @return
      */
     private List<Map<String, String>> initDefaultRules() {
-        java.util.List<java.util.Map<String, String>> defaultSurvivorshipRules_tMatchGroup_1 = new java.util.ArrayList<>();
+        java.util.List<java.util.Map<String, String>> defaultSurvivorshipRules_tMatchGroup_1 =
+                new java.util.ArrayList<>();
         java.util.Map<String, String> realSurShipMap_tMatchGroup_1 = null;
         realSurShipMap_tMatchGroup_1 = new java.util.HashMap<>();
         realSurShipMap_tMatchGroup_1.put("SURVIVORSHIP_FUNCTION", //$NON-NLS-1$
@@ -374,7 +381,8 @@ public class SurvivorshipUtilsTest {
      * @return
      */
     private List<Map<String, String>> initParticularDefaultRules() {
-        java.util.List<java.util.Map<String, String>> defaultSurvivorshipRules_tMatchGroup_1 = new java.util.ArrayList<>();
+        java.util.List<java.util.Map<String, String>> defaultSurvivorshipRules_tMatchGroup_1 =
+                new java.util.ArrayList<>();
         java.util.Map<String, String> realSurShipMap_tMatchGroup_1 = null;
         realSurShipMap_tMatchGroup_1 = new java.util.HashMap<>();
         realSurShipMap_tMatchGroup_1.put("SURVIVORSHIP_FUNCTION", //$NON-NLS-1$
@@ -391,7 +399,8 @@ public class SurvivorshipUtilsTest {
      * @return
      */
     private List<List<Map<String, String>>> matcherListInit(boolean uppercase) {
-        java.util.List<java.util.List<java.util.Map<String, String>>> matchingRulesAll_tMatchGroup_1 = new java.util.ArrayList<>();
+        java.util.List<java.util.List<java.util.Map<String, String>>> matchingRulesAll_tMatchGroup_1 =
+                new java.util.ArrayList<>();
         List<java.util.Map<String, String>> matcherList_tMatchGroup_1 = new ArrayList<>();
         Map<String, String> tmpMap_tMatchGroup_1 = new java.util.HashMap<>();
         tmpMap_tMatchGroup_1.put("MATCHING_TYPE", getDummyStr(uppercase)); //$NON-NLS-1$ 
@@ -464,10 +473,12 @@ public class SurvivorshipUtilsTest {
 
         tmpMap_tMatchGroup_1.put("ATTRIBUTE_NAME", "gender"); //$NON-NLS-1$ //$NON-NLS-2$
 
-        tmpMap_tMatchGroup_1.put("SURVIVORSHIP_FUNCTION", //$NON-NLS-1$
-                SurvivorShipAlgorithmEnum
-                        .getTypeByIndex((int) Math.round(Math.random() * (SurvivorShipAlgorithmEnum.getAllTypes().length - 1)))
-                        .getComponentValueName());
+        tmpMap_tMatchGroup_1
+                .put("SURVIVORSHIP_FUNCTION", //$NON-NLS-1$
+                        SurvivorShipAlgorithmEnum
+                                .getTypeByIndex((int) Math
+                                        .round(Math.random() * (SurvivorShipAlgorithmEnum.getAllTypes().length - 1)))
+                                .getComponentValueName());
 
         tmpMap_tMatchGroup_1.put("HANDLE_NULL", "nullMatchNull"); //$NON-NLS-1$ //$NON-NLS-2$
 
@@ -524,10 +535,12 @@ public class SurvivorshipUtilsTest {
 
         tmpMap_tMatchGroup_1.put("ATTRIBUTE_NAME", "name"); //$NON-NLS-1$ //$NON-NLS-2$
         // get a random algorithm the result alaways be default one (most common)
-        tmpMap_tMatchGroup_1.put("SURVIVORSHIP_FUNCTION", //$NON-NLS-1$
-                SurvivorShipAlgorithmEnum
-                        .getTypeByIndex((int) Math.round(Math.random() * (SurvivorShipAlgorithmEnum.getAllTypes().length - 1)))
-                        .getComponentValueName());
+        tmpMap_tMatchGroup_1
+                .put("SURVIVORSHIP_FUNCTION", //$NON-NLS-1$
+                        SurvivorShipAlgorithmEnum
+                                .getTypeByIndex((int) Math
+                                        .round(Math.random() * (SurvivorShipAlgorithmEnum.getAllTypes().length - 1)))
+                                .getComponentValueName());
 
         tmpMap_tMatchGroup_1.put("HANDLE_NULL", "nullMatchNull"); //$NON-NLS-1$ //$NON-NLS-2$
 
@@ -573,10 +586,12 @@ public class SurvivorshipUtilsTest {
 
         tmpMap_tMatchGroup_1.put("ATTRIBUTE_NAME", "gender"); //$NON-NLS-1$ //$NON-NLS-2$
 
-        tmpMap_tMatchGroup_1.put("SURVIVORSHIP_FUNCTION", //$NON-NLS-1$
-                SurvivorShipAlgorithmEnum
-                        .getTypeByIndex((int) Math.round(Math.random() * (SurvivorShipAlgorithmEnum.getAllTypes().length - 1)))
-                        .getComponentValueName());
+        tmpMap_tMatchGroup_1
+                .put("SURVIVORSHIP_FUNCTION", //$NON-NLS-1$
+                        SurvivorShipAlgorithmEnum
+                                .getTypeByIndex((int) Math
+                                        .round(Math.random() * (SurvivorShipAlgorithmEnum.getAllTypes().length - 1)))
+                                .getComponentValueName());
 
         tmpMap_tMatchGroup_1.put("HANDLE_NULL", "nullMatchNull"); //$NON-NLS-1$ //$NON-NLS-2$
 

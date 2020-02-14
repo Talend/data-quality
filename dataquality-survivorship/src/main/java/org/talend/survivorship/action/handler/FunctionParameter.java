@@ -30,7 +30,8 @@ public class FunctionParameter {
 
     private Function function;
 
-    public FunctionParameter(ISurvivorshipAction action, String expression, boolean isIgnoreBlank, boolean isRemoveDuplicate) {
+    public FunctionParameter(ISurvivorshipAction action, String expression, boolean isIgnoreBlank,
+            boolean isRemoveDuplicate) {
         this.action = action;
         this.function = Function.getFunction(action);
         this.expression = expression;

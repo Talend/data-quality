@@ -39,7 +39,8 @@ public class SynonymIndexBuilderTest {
      * ATTENTION: Be careful when changing this list of synonyms, they are also use in SynonymIndexSearcherTest.
      */
     public static String[][] synonyms = { { "I.B.M.", "IBM|International Business Machines|Big Blue" },
-            { "IRTY", "IBM|International Business Machines" }, { "ISDF", "IBM|International Business Machines|Big Blue" },
+            { "IRTY", "IBM|International Business Machines" },
+            { "ISDF", "IBM|International Business Machines|Big Blue" },
             { "ANPE", "A.N.P.E.|Agence Nationale Pour l'Emploi|Pôle Emploi" },
             { "TEST", "A.N.P.E.|Agence Nationale Pour l'Emploi|Pôle Emploi" }, { "Sécurité Sociale", "Sécu|SS|CPAM" },
             { "IAIDQ", "International Association for Information & Data Quality|Int. Assoc. Info & DQ" }, };
@@ -175,7 +176,8 @@ public class SynonymIndexBuilderTest {
         assertEquals("The document should not be inserted here", nbDocInIndex, synIdxBuild.getNumDocs());
 
         nbUpdatedDocuments = synIdxBuild.updateDocument(word, "new syn");
-        assertEquals("no update should be done because several documents match the word " + word, -1, nbUpdatedDocuments);
+        assertEquals("no update should be done because several documents match the word " + word, -1,
+                nbUpdatedDocuments);
 
         nbUpdatedDocuments = synIdxBuild.updateDocument(toupdate, "a new list of 3 synonyms|test|ok");
         assertEquals("One document should be updated", 1, nbUpdatedDocuments);

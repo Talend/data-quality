@@ -35,9 +35,9 @@ public class WordNetDictionary {
 
     private static WordNetDictionary instance = null;
 
-    private static final List<String> ENGLISH_STOP_WORDS_SET = Arrays.asList("a", "an", "and", "are", "as", "at", "be", "but",
-            "by", "for", "if", "in", "into", "is", "it", "no", "not", "of", "on", "or", "such", "that", "the", "their", "then",
-            "there", "these", "they", "this", "to", "was", "will", "with");
+    private static final List<String> ENGLISH_STOP_WORDS_SET = Arrays.asList("a", "an", "and", "are", "as", "at", "be",
+            "but", "by", "for", "if", "in", "into", "is", "it", "no", "not", "of", "on", "or", "such", "that", "the",
+            "their", "then", "there", "these", "they", "this", "to", "was", "will", "with");
 
     private WordNetDictionary() {
         initDictinary();

@@ -32,9 +32,9 @@ public final class CombinedRulesTestData {
 
     public static final String PKG_NAME = "org.talend.survivorship.combined";
 
-    public static final Object[][] SAMPLE_INPUT_1 = {
-            { "1", "Internet", stringToDate("01/01/2016", "dd/MM/yyyy"), "test1@taland.com", "0123456789", "A", 2 },
-            { "2", "Europe", stringToDate("02/02/2016", "dd/MM/yyyy"), "test2@talend.com", "", "A", 0 }, };
+    public static final Object[][] SAMPLE_INPUT_1 =
+            { { "1", "Internet", stringToDate("01/01/2016", "dd/MM/yyyy"), "test1@taland.com", "0123456789", "A", 2 },
+                    { "2", "Europe", stringToDate("02/02/2016", "dd/MM/yyyy"), "test2@talend.com", "", "A", 0 }, };
 
     public static final Object[][] SAMPLE_INPUT_2 = {
             { "3", "Europe", stringToDate("01/01/2016", "dd/MM/yyyy"), "titi@test.com", "+33(0)3 33 33 33 33", "B", 3 },
@@ -56,16 +56,18 @@ public final class CombinedRulesTestData {
     };
 
     public static final RuleDefinition[] RULES_1 = {
-            new RuleDefinition(Order.SEQ, "EmFiliale", "filiale", Function.Expression, ".equals(\"Internet\")", "email", true), //
+            new RuleDefinition(Order.SEQ, "EmFiliale", "filiale", Function.Expression, ".equals(\"Internet\")", "email",
+                    true), //
             new RuleDefinition(Order.SEQ, "EmRecent", "modif_date", Function.MostRecent, "", "email", true), //
 
     };
 
-    public static final RuleDefinition[] RULES_2 = {
-            new RuleDefinition(Order.SEQ, "EmRecent", "modif_date", Function.MostRecent, "", "modif_date", true), //
-            new RuleDefinition(Order.MT, null, null, null, null, "email", true), //
-            new RuleDefinition(Order.SEQ, "Emfiliale", "filiale", Function.Expression, ".equals(\"Internet\")", "email", true), //
-    };
+    public static final RuleDefinition[] RULES_2 =
+            { new RuleDefinition(Order.SEQ, "EmRecent", "modif_date", Function.MostRecent, "", "modif_date", true), //
+                    new RuleDefinition(Order.MT, null, null, null, null, "email", true), //
+                    new RuleDefinition(Order.SEQ, "Emfiliale", "filiale", Function.Expression, ".equals(\"Internet\")",
+                            "email", true), //
+            };
 
     public static final HashMap<String, Object> EXPECTED_SURVIVOR_GRP1_WITH_RULESET_1 = new HashMap<String, Object>() {
 

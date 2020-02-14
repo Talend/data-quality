@@ -22,7 +22,8 @@ public class HiraganaTest {
 
     /**
      * Test method for
-     * {@link org.talend.dataquality.statistics.frequency.regex.ChainResponsibilityHandler#handleRequest(java.lang.String)}.
+     * {@link org.talend.dataquality.statistics.frequency.regex.ChainResponsibilityHandler#handleRequest(java.lang.String)}
+     * .
      */
     @Test
     public void testHandleRequest() {

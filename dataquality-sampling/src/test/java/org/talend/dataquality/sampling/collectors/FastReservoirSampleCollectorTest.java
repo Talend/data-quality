@@ -33,8 +33,8 @@ public class FastReservoirSampleCollectorTest {
     public void testSample() {
         final Stream<Integer> stream = IntStream.range(0, ORIGINAL_COUNT).boxed();
         long t0 = System.nanoTime();
-        final List<Integer> sampleList = stream
-                .collect(new FastReservoirSampleCollector<>(SAMPLE_SIZE, TestConstants.RANDOM_SEED));
+        final List<Integer> sampleList =
+                stream.collect(new FastReservoirSampleCollector<>(SAMPLE_SIZE, TestConstants.RANDOM_SEED));
 
         assertEquals("Unexpected sample size!", EXPECTED_SAMPLES.length, sampleList.size());
         for (int i = 0; i < sampleList.size(); i++) {

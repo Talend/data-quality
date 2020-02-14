@@ -124,7 +124,8 @@ public class ComponentMatchParameterAdapter extends MatchParameterAdapter {
                     if (refColumnIndex != null) {
                         referenceColumnIndex = Integer.parseInt(refColumnIndex);
                     }
-                    putNewSurvFunc(defaultSurvRules, colIndex, columnName, pdefaultSurvivdef.get(SurvivorshipUtils.PARAMETER),
+                    putNewSurvFunc(defaultSurvRules, colIndex, columnName,
+                            pdefaultSurvivdef.get(SurvivorshipUtils.PARAMETER),
                             pdefaultSurvivdef.get(SurvivorshipUtils.SURVIVORSHIP_FUNCTION), referenceColumnName,
                             referenceColumnIndex);
                     break;
@@ -148,7 +149,8 @@ public class ComponentMatchParameterAdapter extends MatchParameterAdapter {
                         referenceColumnIndex = Integer.parseInt(refColumnIndex);
                     }
                     putNewSurvFunc(defaultSurvRules, colIndex, columnName, defSurvDef.get(SurvivorshipUtils.PARAMETER),
-                            defSurvDef.get(SurvivorshipUtils.SURVIVORSHIP_FUNCTION), referenceColumnName, referenceColumnIndex);
+                            defSurvDef.get(SurvivorshipUtils.SURVIVORSHIP_FUNCTION), referenceColumnName,
+                            referenceColumnIndex);
                     break;
                 }
             } // End for: if no func defined, then the value will be taken from one of the records in a group (1st
@@ -193,7 +195,8 @@ public class ComponentMatchParameterAdapter extends MatchParameterAdapter {
                 String matcherType = mkDef.get(IRecordGrouping.MATCHING_TYPE);
                 if (AttributeMatcherType.DUMMY.name().equalsIgnoreCase(matcherType)) {
                     // Find the func from default survivorship rule.
-                    surFuncsInMatcher[idx] = colIdx2DefaultSurvFunc.get(Integer.valueOf(mkDef.get(IRecordGrouping.COLUMN_IDX)));
+                    surFuncsInMatcher[idx] =
+                            colIdx2DefaultSurvFunc.get(Integer.valueOf(mkDef.get(IRecordGrouping.COLUMN_IDX)));
                     if (surFuncsInMatcher[idx] == null) {
                         // Use CONCATENATE by default if not specified .
                         surFuncsInMatcher[idx] = new SurvivorShipAlgorithmParams().new SurvivorshipFunction();

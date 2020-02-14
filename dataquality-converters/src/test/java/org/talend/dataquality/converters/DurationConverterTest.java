@@ -58,17 +58,15 @@ public class DurationConverterTest {
     @Test
     public void testConvertZero() {
         double zero = 0;
-        assertEquals(zero,
-                new DurationConverter(DurationConverter.DEFAULT_FROM_UNIT, DurationConverter.DEFAULT_TO_UNIT).convert(zero),
-                delta);
+        assertEquals(zero, new DurationConverter(DurationConverter.DEFAULT_FROM_UNIT, DurationConverter.DEFAULT_TO_UNIT)
+                .convert(zero), delta);
     }
 
     @Test
     public void testConvertDoubleNan() {
         double nan = Double.NaN;
-        assertEquals(nan,
-                new DurationConverter(DurationConverter.DEFAULT_FROM_UNIT, DurationConverter.DEFAULT_TO_UNIT).convert(nan),
-                delta);
+        assertEquals(nan, new DurationConverter(DurationConverter.DEFAULT_FROM_UNIT, DurationConverter.DEFAULT_TO_UNIT)
+                .convert(nan), delta);
     }
 
     @Test
@@ -189,6 +187,7 @@ public class DurationConverterTest {
         assertEquals(hour, new DurationConverter(ChronoUnit.MILLIS, ChronoUnit.HOURS).convert(millisecond), delta);
         assertEquals(minute, new DurationConverter(ChronoUnit.MILLIS, ChronoUnit.MINUTES).convert(millisecond), delta);
         assertEquals(second, new DurationConverter(ChronoUnit.MILLIS, ChronoUnit.SECONDS).convert(millisecond), delta);
-        assertEquals(millisecond, new DurationConverter(ChronoUnit.MILLIS, ChronoUnit.MILLIS).convert(millisecond), delta);
+        assertEquals(millisecond, new DurationConverter(ChronoUnit.MILLIS, ChronoUnit.MILLIS).convert(millisecond),
+                delta);
     }
 }

@@ -28,7 +28,8 @@ import org.talend.dataquality.statistics.datetime.SystemDateTimePatternManager;
 /**
  * Generator of date format groups to improve the performance.
  * Before, we have to try over all regex patterns in order to find out all possible matches.
- * Now, We made exlusive groups of patterns, and we just need to go over by group, and stops at the group where at least one of
+ * Now, We made exlusive groups of patterns, and we just need to go over by group, and stops at the group where at least
+ * one of
  * regexes matches the data.
  */
 public class FormatGroupGenerator {
@@ -119,8 +120,11 @@ public class FormatGroupGenerator {
 
     public static void generateDateRegexGroups() throws IOException {
 
-        InputStream stream = new FileInputStream(SystemDateTimePatternManager.class.getResource("DateRegexes.txt").getFile()
-                .replace("target" + File.separator + "classes", "src" + File.separator + "main" + File.separator + "resources"));
+        InputStream stream = new FileInputStream(SystemDateTimePatternManager.class
+                .getResource("DateRegexes.txt")
+                .getFile()
+                .replace("target" + File.separator + "classes",
+                        "src" + File.separator + "main" + File.separator + "resources"));
         List<String> lines = IOUtils.readLines(stream);
         Map<String, String> formatRegexMap = new LinkedHashMap<String, String>();
         for (String line : lines) {
@@ -178,8 +182,17 @@ public class FormatGroupGenerator {
                 "src" + pathSeparator + "main" + pathSeparator + "resources");
         IOUtils.write(sb.toString(), new FileOutputStream(new File(srcPath)));
         // Update DateRegexesGrouped.txt in "dataquality-sampling" at the same time.
-        String samplingParent = new File(targetPath).getParentFile().getParentFile().getParentFile().getParentFile()
-                .getParentFile().getParentFile().getParentFile().getParentFile().getParentFile().getPath();
+        String samplingParent = new File(targetPath)
+                .getParentFile()
+                .getParentFile()
+                .getParentFile()
+                .getParentFile()
+                .getParentFile()
+                .getParentFile()
+                .getParentFile()
+                .getParentFile()
+                .getParentFile()
+                .getPath();
         String samplingPath = samplingParent + pathSeparator
                 + "../data-quality-ee/dataquality-datamasking/src/main/resources/org/talend/dataquality/datamasking/semantic/DateRegexesGrouped.txt"; //$NON-NLS-1$
         IOUtils.write(sb.toString(), new FileOutputStream(new File(samplingPath)));

@@ -46,14 +46,17 @@ public class HammingMatcherTest {
 
         b = "molequz";
         double matchingWeight2 = hammingMatcher.getMatchingWeight(a, b);
-        assertTrue("input strings are the same => result should be between 0 and 1.", matchingWeight2 < 1 && matchingWeight2 > 0);
+        assertTrue("input strings are the same => result should be between 0 and 1.",
+                matchingWeight2 < 1 && matchingWeight2 > 0);
 
-        assertTrue("from ('molequz', 'malequz'), 'malequz' is more similar to 'malequa'  => matchingWeight2 < matchingWeight1.",
+        assertTrue(
+                "from ('molequz', 'malequz'), 'malequz' is more similar to 'malequa'  => matchingWeight2 < matchingWeight1.",
                 matchingWeight2 < matchingWeight1);
 
         b = "molequ";
         matchingWeight1 = hammingMatcher.getMatchingWeight(a, b);
-        assertTrue("strings " + a + " and " + b + " have not the same length => result should be 0.", 0.0d == matchingWeight1);
+        assertTrue("strings " + a + " and " + b + " have not the same length => result should be 0.",
+                0.0d == matchingWeight1);
 
     }
 

@@ -37,8 +37,8 @@ public class SampleDataRegexFunction {
         }
     };
 
-    public static final RuleDefinition[] RULES = {
-            new RuleDefinition(Order.SEQ, "firstNameRule", "firstName", Function.MatchRegex, "^\\\\w{2}$", "firstName", true) }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+    public static final RuleDefinition[] RULES = { new RuleDefinition(Order.SEQ, "firstNameRule", "firstName", //$NON-NLS-1$//$NON-NLS-2$
+            Function.MatchRegex, "^\\\\w{2}$", "firstName", true) }; //$NON-NLS-1$ //$NON-NLS-2$
 
     public static final HashMap<String, Object> EXPECTED_SURVIVOR = new HashMap<String, Object>() {
 

@@ -100,7 +100,8 @@ public class AnalysisSwooshMatchRecordGrouping extends AnalysisMatchRecordGroupi
         List<Attribute> matchAttrs = new ArrayList<>();
         List<DQAttribute<?>> rowList = new ArrayList<>();
         for (Attribute attribute : currentRecord.getAttributes()) {
-            DQAttribute<String> attri = new DQAttribute<>(attribute.getLabel(), attribute.getColumnIndex(), attribute.getValue());
+            DQAttribute<String> attri =
+                    new DQAttribute<>(attribute.getLabel(), attribute.getColumnIndex(), attribute.getValue());
             rowList.add(attri);
             // if the current attribute is definde as a match key.
             Attribute matchkey = attributesAsMatchKey.get(attribute.getColumnIndex());

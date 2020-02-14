@@ -42,9 +42,10 @@ public class MinMaxValueAnalyzerTest {
     @Test
     public void testAnalyzeDoubleIntegerMixed() {
 
-        String[][] test2Cols_Double_Int = new String[][] { { "20", "20" }, { "1.0", "1.0" }, { "3", "3" }, { "4.5", "4.5" },
-                { "8.0", "8" } };
-        SummaryAnalyzer analyzer = new SummaryAnalyzer(new DataTypeEnum[] { DataTypeEnum.DOUBLE, DataTypeEnum.INTEGER });
+        String[][] test2Cols_Double_Int =
+                new String[][] { { "20", "20" }, { "1.0", "1.0" }, { "3", "3" }, { "4.5", "4.5" }, { "8.0", "8" } };
+        SummaryAnalyzer analyzer =
+                new SummaryAnalyzer(new DataTypeEnum[] { DataTypeEnum.DOUBLE, DataTypeEnum.INTEGER });
         for (String[] values : test2Cols_Double_Int) {
             analyzer.analyze(values);
         }
@@ -60,8 +61,8 @@ public class MinMaxValueAnalyzerTest {
     @Test
     public void testAnalyzeStr() {
 
-        String[][] test2Cols_Double_Str = new String[][] { { "a str", "a" }, { "1.0", "b" }, { "3", "c" }, { "4.5", "4.5" },
-                { "8.0", "8.0" } };
+        String[][] test2Cols_Double_Str =
+                new String[][] { { "a str", "a" }, { "1.0", "b" }, { "3", "c" }, { "4.5", "4.5" }, { "8.0", "8.0" } };
         SummaryAnalyzer analyzer = new SummaryAnalyzer(new DataTypeEnum[] { DataTypeEnum.DOUBLE, DataTypeEnum.STRING });
         for (String[] values : test2Cols_Double_Str) {
             analyzer.analyze(values);

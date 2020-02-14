@@ -59,7 +59,8 @@ public class TextTokenizerTest {
         final TextTokenizer defaultTextTokenizer = TextTokenizer.getInstance();
         for (String text : textsWithExpectedTokenizedString.keySet()) {
             assertEquals(textsWithExpectedTokenizedString.get(text), defaultTextTokenizer.getTokenizedString(text));
-            assertEquals(textsWithExpectedTokenizedString.get(text), defaultTextTokenizer.getTokenizedString(text, delimiter));
+            assertEquals(textsWithExpectedTokenizedString.get(text),
+                    defaultTextTokenizer.getTokenizedString(text, delimiter));
         }
 
     }

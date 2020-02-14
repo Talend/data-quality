@@ -27,7 +27,8 @@ public class CardinalityAnalyzer implements Analyzer<CardinalityStatistics> {
 
     private static final long serialVersionUID = 1386109348901204598L;
 
-    private ResizableList<CardinalityStatistics> cardinalityStatistics = new ResizableList<>(CardinalityStatistics.class);
+    private ResizableList<CardinalityStatistics> cardinalityStatistics =
+            new ResizableList<>(CardinalityStatistics.class);
 
     @Override
     public boolean analyze(String... record) {

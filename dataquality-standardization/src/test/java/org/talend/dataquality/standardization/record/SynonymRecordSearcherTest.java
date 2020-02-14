@@ -103,8 +103,8 @@ public class SynonymRecordSearcherTest {
 
         List<OutputRecord> expectedOutputRows = null;
         expectedOutputRows = new ArrayList<OutputRecord>();
-        SynonymRecordSearcher.RecordResult.computeOutputRows(wordresults.length, new ArrayList<WordResult>(), recRes.wordResults,
-                expectedOutputRows);
+        SynonymRecordSearcher.RecordResult.computeOutputRows(wordresults.length, new ArrayList<WordResult>(),
+                recRes.wordResults, expectedOutputRows);
         for (OutputRecord outputRecord : expectedOutputRows) {
             printLineToConsole(outputRecord.toString());
         }

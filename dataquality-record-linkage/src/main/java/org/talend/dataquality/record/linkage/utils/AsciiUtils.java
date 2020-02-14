@@ -13,7 +13,8 @@
 package org.talend.dataquality.record.linkage.utils;
 
 /**
- * Utility class for removal of accents in texts. This solution handles only the accented letters in latin-1 suppliment charset,
+ * Utility class for removal of accents in texts. This solution handles only the accented letters in latin-1 suppliment
+ * charset,
  * but is much faster than StringUtils.stripAccents(input) from Apache Commons Lang package.
  */
 public final class AsciiUtils {

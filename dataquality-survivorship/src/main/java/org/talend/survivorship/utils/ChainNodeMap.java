@@ -40,7 +40,8 @@ public class ChainNodeMap extends HashMap<String, AbstractChainOfResponsibilityH
      * 
      * @see java.util.HashMap#put(java.lang.Object, java.lang.Object)
      */
-    public AbstractChainOfResponsibilityHandler put(String key, AbstractChainOfResponsibilityHandler value, int executeIndex) {
+    public AbstractChainOfResponsibilityHandler put(String key, AbstractChainOfResponsibilityHandler value,
+            int executeIndex) {
         linkNodes(executeIndex, value);
         return super.put(key, value);
     }

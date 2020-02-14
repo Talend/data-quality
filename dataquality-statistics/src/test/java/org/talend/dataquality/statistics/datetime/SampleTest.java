@@ -585,7 +585,8 @@ public class SampleTest {
                 Set<String> patternSet = SystemDateTimePatternManager.getDatePatterns(sample).keySet();
 
                 if (patternSet.size() > 0) {
-                    sb.append("put(\"").append(sample).append("\", new HashSet<String>(Arrays.asList(new String[] //\n\t{ ");
+                    sb.append("put(\"").append(sample).append(
+                            "\", new HashSet<String>(Arrays.asList(new String[] //\n\t{ ");
                     datesWithMultipleFormats.add(sample);
                     for (String p : patternSet) {
                         sb.append("\"").append(p).append("\",");

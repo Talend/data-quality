@@ -58,8 +58,8 @@ public class QuantileAnalyzerTest {
         Assert.assertEquals(6.25, tanalyzer.getResult().get(0).getUpperQuartile(), 0);
         Assert.assertEquals(2.3, tanalyzer.getResult().get(0).getQuantile(0.3), 0.001);
 
-        data = new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18",
-                "19", "20", "21" };
+        data = new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16",
+                "17", "18", "19", "20", "21" };
         analyzer.init();
         tanalyzer.init();
         for (String value : data) {

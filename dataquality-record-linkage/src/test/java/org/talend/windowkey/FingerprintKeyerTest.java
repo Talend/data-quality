@@ -32,10 +32,10 @@ public class FingerprintKeyerTest {
     private static final String testStr[][] = { { "Acorn", "acorn" }, { "Woodpecker", "woodpecker" },
             { "Bird Conservation Region", "bird conservation region" }, { "15", "15" }, { "PT-r2", "ptr2" },
             { "élément", "element" }, { "32 €", "32 €" }, { "Acorn", "acorn" }, { "Aret Big Cust", "aret big cust" },
-            { "Big Arêt Cust", "aret big cust" }, { "Cust Aret Big ", "aret big cust" }, { "Cust-Aret Big ", "big custaret" },
-            { "Big Data for big business", "big business data for" }, { "Data for big business", "big business data for" },
-            { "A A A", "a" }, { "I.BM.", "ibm" }, { "I.B.M.", "ibm" }, { "IBM", "ibm" },
-            { "Bird Conservation Region", "bird conservation region" },
+            { "Big Arêt Cust", "aret big cust" }, { "Cust Aret Big ", "aret big cust" },
+            { "Cust-Aret Big ", "big custaret" }, { "Big Data for big business", "big business data for" },
+            { "Data for big business", "big business data for" }, { "A A A", "a" }, { "I.BM.", "ibm" },
+            { "I.B.M.", "ibm" }, { "IBM", "ibm" }, { "Bird Conservation Region", "bird conservation region" },
             { "Bird bird Conservation Region", "bird conservation region" }, { "15", "15" }, { "PT-r2", "ptr2" },
             { "élément", "element" }, { "32 €", "32 €" } };
 
@@ -76,8 +76,8 @@ public class FingerprintKeyerTest {
         Method method = keyer.getClass().getDeclaredMethod("translate", new Class[] { char.class });
         method.setAccessible(true);
 
-        char[] input = { '\u00C0', '\u00C1', '\u00C2', '\u00C3', '\u00C4', '\u00C5', '\u00E0', '\u00E1', '\u00E2', '\u00E3',
-                '\u00E4', '\u00E5', '\u0100', '\u0101', '\u0102', '\u0103', '\u0104', '\u0105' };
+        char[] input = { '\u00C0', '\u00C1', '\u00C2', '\u00C3', '\u00C4', '\u00C5', '\u00E0', '\u00E1', '\u00E2',
+                '\u00E3', '\u00E4', '\u00E5', '\u0100', '\u0101', '\u0102', '\u0103', '\u0104', '\u0105' };
         char expectedValue = 'a';
 
         for (int i = 0; i < input.length; i++) {
@@ -94,7 +94,8 @@ public class FingerprintKeyerTest {
         FingerprintKeyer keyer = new FingerprintKeyer();
         Method method = keyer.getClass().getDeclaredMethod("translate", new Class[] { char.class });
         method.setAccessible(true);
-        char[] input = { '\u00C7', '\u00E7', '\u0106', '\u0107', '\u0108', '\u0109', '\u010A', '\u010B', '\u010C', '\u010D' };
+        char[] input =
+                { '\u00C7', '\u00E7', '\u0106', '\u0107', '\u0108', '\u0109', '\u010A', '\u010B', '\u010C', '\u010D' };
         char expectedValue = 'c';
         for (int i = 0; i < input.length; i++) {
             Object invoke1 = method.invoke(keyer, input[i]);
@@ -124,8 +125,8 @@ public class FingerprintKeyerTest {
         FingerprintKeyer keyer = new FingerprintKeyer();
         Method method = keyer.getClass().getDeclaredMethod("translate", new Class[] { char.class });
         method.setAccessible(true);
-        char[] input = { '\u00C8', '\u00C9', '\u00CA', '\u00CB', '\u00E8', '\u00E9', '\u00EA', '\u00EB', '\u0112', '\u0113',
-                '\u0114', '\u0115', '\u0116', '\u0117', '\u0118', '\u0119', '\u011A', '\u011B' };
+        char[] input = { '\u00C8', '\u00C9', '\u00CA', '\u00CB', '\u00E8', '\u00E9', '\u00EA', '\u00EB', '\u0112',
+                '\u0113', '\u0114', '\u0115', '\u0116', '\u0117', '\u0118', '\u0119', '\u011A', '\u011B' };
         char expectedValue = 'e';
         for (int i = 0; i < input.length; i++) {
             Object invoke1 = method.invoke(keyer, input[i]);
@@ -170,8 +171,8 @@ public class FingerprintKeyerTest {
         FingerprintKeyer keyer = new FingerprintKeyer();
         Method method = keyer.getClass().getDeclaredMethod("translate", new Class[] { char.class });
         method.setAccessible(true);
-        char[] input = { '\u00CC', '\u00CD', '\u00CE', '\u00CF', '\u00EC', '\u00ED', '\u00EE', '\u00EF', '\u0128', '\u0129',
-                '\u012A', '\u012B', '\u012C', '\u012D', '\u012E', '\u012F', '\u0130', '\u0131' };
+        char[] input = { '\u00CC', '\u00CD', '\u00CE', '\u00CF', '\u00EC', '\u00ED', '\u00EE', '\u00EF', '\u0128',
+                '\u0129', '\u012A', '\u012B', '\u012C', '\u012D', '\u012E', '\u012F', '\u0130', '\u0131' };
         char expectedValue = 'i';
         for (int i = 0; i < input.length; i++) {
             Object invoke1 = method.invoke(keyer, input[i]);
@@ -216,7 +217,8 @@ public class FingerprintKeyerTest {
         FingerprintKeyer keyer = new FingerprintKeyer();
         Method method = keyer.getClass().getDeclaredMethod("translate", new Class[] { char.class });
         method.setAccessible(true);
-        char[] input = { '\u0139', '\u013A', '\u013B', '\u013C', '\u013D', '\u013E', '\u013F', '\u0140', '\u0141', '\u0142' };
+        char[] input =
+                { '\u0139', '\u013A', '\u013B', '\u013C', '\u013D', '\u013E', '\u013F', '\u0140', '\u0141', '\u0142' };
         char expectedValue = 'l';
         for (int i = 0; i < input.length; i++) {
             Object invoke1 = method.invoke(keyer, input[i]);
@@ -231,8 +233,8 @@ public class FingerprintKeyerTest {
         FingerprintKeyer keyer = new FingerprintKeyer();
         Method method = keyer.getClass().getDeclaredMethod("translate", new Class[] { char.class });
         method.setAccessible(true);
-        char[] input = { '\u00D1', '\u00F1', '\u0143', '\u0144', '\u0145', '\u0146', '\u0147', '\u0148', '\u0149', '\u014A',
-                '\u014B' };
+        char[] input = { '\u00D1', '\u00F1', '\u0143', '\u0144', '\u0145', '\u0146', '\u0147', '\u0148', '\u0149',
+                '\u014A', '\u014B' };
         char expectedValue = 'n';
         for (int i = 0; i < input.length; i++) {
             Object invoke1 = method.invoke(keyer, input[i]);
@@ -247,8 +249,8 @@ public class FingerprintKeyerTest {
         FingerprintKeyer keyer = new FingerprintKeyer();
         Method method = keyer.getClass().getDeclaredMethod("translate", new Class[] { char.class });
         method.setAccessible(true);
-        char[] input = { '\u00D2', '\u00D3', '\u00D4', '\u00D5', '\u00D6', '\u00D8', '\u00F2', '\u00F3', '\u00F4', '\u00F5',
-                '\u00F6', '\u00F8', '\u014C', '\u014D', '\u014E', '\u014F', '\u0150', '\u0151' };
+        char[] input = { '\u00D2', '\u00D3', '\u00D4', '\u00D5', '\u00D6', '\u00D8', '\u00F2', '\u00F3', '\u00F4',
+                '\u00F5', '\u00F6', '\u00F8', '\u014C', '\u014D', '\u014E', '\u014F', '\u0150', '\u0151' };
         char expectedValue = 'o';
         for (int i = 0; i < input.length; i++) {
             Object invoke1 = method.invoke(keyer, input[i]);
@@ -308,8 +310,9 @@ public class FingerprintKeyerTest {
         FingerprintKeyer keyer = new FingerprintKeyer();
         Method method = keyer.getClass().getDeclaredMethod("translate", new Class[] { char.class });
         method.setAccessible(true);
-        char[] input = { '\u00D9', '\u00DA', '\u00DB', '\u00DC', '\u00F9', '\u00FA', '\u00FB', '\u00FC', '\u0168', '\u0169',
-                '\u016A', '\u016B', '\u016C', '\u016D', '\u016E', '\u016F', '\u0170', '\u0171', '\u0172', '\u0173' };
+        char[] input = { '\u00D9', '\u00DA', '\u00DB', '\u00DC', '\u00F9', '\u00FA', '\u00FB', '\u00FC', '\u0168',
+                '\u0169', '\u016A', '\u016B', '\u016C', '\u016D', '\u016E', '\u016F', '\u0170', '\u0171', '\u0172',
+                '\u0173' };
         char expectedValue = 'u';
         for (int i = 0; i < input.length; i++) {
             Object invoke1 = method.invoke(keyer, input[i]);

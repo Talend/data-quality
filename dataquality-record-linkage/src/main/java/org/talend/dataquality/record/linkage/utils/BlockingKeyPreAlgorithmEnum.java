@@ -24,8 +24,18 @@ import org.apache.commons.lang.StringUtils;
 public enum BlockingKeyPreAlgorithmEnum {
     NON_ALGO(0, "-", "NON_ALGO", false, StringUtils.EMPTY), //$NON-NLS-1$//$NON-NLS-2$
     REMOVE_MARKS(1, "remove diacritical marks", "removeDiacriticalMarks", false, StringUtils.EMPTY), //$NON-NLS-1$ //$NON-NLS-2$
-    REMOVE_MARKS_THEN_LOWER_CASE(2, "remove diacritical marks and lower case", "removeDMAndLowerCase", false, StringUtils.EMPTY), //$NON-NLS-1$ //$NON-NLS-2$
-    REMOVE_MARKS_THEN_UPPER_CASE(3, "remove diacritical marks and upper case", "removeDMAndUpperCase", false, StringUtils.EMPTY), //$NON-NLS-1$ //$NON-NLS-2$
+    REMOVE_MARKS_THEN_LOWER_CASE(
+            2,
+            "remove diacritical marks and lower case", //$NON-NLS-1$
+            "removeDMAndLowerCase", //$NON-NLS-1$
+            false,
+            StringUtils.EMPTY),
+    REMOVE_MARKS_THEN_UPPER_CASE(
+            3,
+            "remove diacritical marks and upper case", //$NON-NLS-1$
+            "removeDMAndUpperCase", //$NON-NLS-1$
+            false,
+            StringUtils.EMPTY),
     LOWER_CASE(4, "lower case", "lowerCase", false, StringUtils.EMPTY), //$NON-NLS-1$ //$NON-NLS-2$
     UPPER_CASE(5, "upper case", "upperCase", false, StringUtils.EMPTY), //$NON-NLS-1$ //$NON-NLS-2$
     LEFT_CHAR(6, "add left position character", "add_Left_Char", true, StringUtils.EMPTY), //$NON-NLS-1$ //$NON-NLS-2$ 

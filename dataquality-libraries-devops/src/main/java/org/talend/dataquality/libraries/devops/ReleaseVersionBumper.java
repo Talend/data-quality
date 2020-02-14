@@ -75,8 +75,8 @@ public class ReleaseVersionBumper {
 
     private static final String UNRELEASED_TAG = "## [Unreleased]";
 
-    private static final List<String> COMMIT_CATEGORIES = Arrays.asList("### Added", "### Changed", "### Removed",
-            "### Deprecated", "### Fixed", "### Security");
+    private static final List<String> COMMIT_CATEGORIES =
+            Arrays.asList("### Added", "### Changed", "### Removed", "### Deprecated", "### Fixed", "### Security");
 
     private static final String NA_TAG = "N/A";
 
@@ -95,8 +95,8 @@ public class ReleaseVersionBumper {
         xTransformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
     }
 
-    public static void main(String[] args) throws TransformerFactoryConfigurationError, XPathExpressionException, IOException,
-            SAXException, ParserConfigurationException, TransformerException {
+    public static void main(String[] args) throws TransformerFactoryConfigurationError, XPathExpressionException,
+            IOException, SAXException, ParserConfigurationException, TransformerException {
         ReleaseVersionBumper appli = new ReleaseVersionBumper();
         appli.bumpPomVersion();
     }
@@ -111,12 +111,19 @@ public class ReleaseVersionBumper {
         return xpf;
     }
 
-    private void bumpPomVersion()
-            throws IOException, SAXException, ParserConfigurationException, XPathExpressionException, TransformerException {
+    private void bumpPomVersion() throws IOException, SAXException, ParserConfigurationException,
+            XPathExpressionException, TransformerException {
 
         final String resourcePath = ReleaseVersionBumper.class.getResource(".").getFile();
-        final String projectRoot = new File(resourcePath).getParentFile().getParentFile().getParentFile().getParentFile()
-                .getParentFile().getParentFile().getParentFile().getPath() + File.separator;
+        final String projectRoot = new File(resourcePath)
+                .getParentFile()
+                .getParentFile()
+                .getParentFile()
+                .getParentFile()
+                .getParentFile()
+                .getParentFile()
+                .getParentFile()
+                .getPath() + File.separator;
 
         // update root pom file
         String rootPomPath = "../pom.xml";
@@ -145,7 +152,8 @@ public class ReleaseVersionBumper {
             parentVersion.setTextContent(TARGET_VERSION);
 
             // replace property value of this project
-            NodeList propertyNodes = ((Node) xPath.evaluate("/project/properties", doc, XPathConstants.NODE)).getChildNodes();
+            NodeList propertyNodes =
+                    ((Node) xPath.evaluate("/project/properties", doc, XPathConstants.NODE)).getChildNodes();
             for (int idx = 0; idx < propertyNodes.getLength(); idx++) {
                 Node node = propertyNodes.item(idx);
                 String propertyName = node.getNodeName();
@@ -170,7 +178,8 @@ public class ReleaseVersionBumper {
                 String modulePath = moduleNodes.item(idx).getTextContent();
                 updateChildPOM(new File(projectRoot + modulePath + "/pom.xml"));
                 if (isReleasing)
-                    updateChangeLogForRelease(Paths.get(projectRoot, modulePath, "CHANGELOG.md"), modulePath.replace("../", ""));
+                    updateChangeLogForRelease(Paths.get(projectRoot, modulePath, "CHANGELOG.md"),
+                            modulePath.replace("../", ""));
                 else
                     updateChangeLogForSnapshot(Paths.get(projectRoot, modulePath, "CHANGELOG.md"));
             }
@@ -253,7 +262,9 @@ public class ReleaseVersionBumper {
 
     private void writeDate(DataOutputStream writer) throws IOException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        writer.write(String.format("## [%s] - %s\n", TARGET_VERSION, format.format(new Date())).getBytes(StandardCharsets.UTF_8));
+        writer.write(String
+                .format("## [%s] - %s\n", TARGET_VERSION, format.format(new Date()))
+                .getBytes(StandardCharsets.UTF_8));
     }
 
     private void fillParentChangelog(Path inputPath) throws IOException {
@@ -296,8 +307,8 @@ public class ReleaseVersionBumper {
         writer.write(("\n").getBytes(StandardCharsets.UTF_8));
     }
 
-    private void updateChildPOM(File inputFile)
-            throws IOException, SAXException, ParserConfigurationException, XPathExpressionException, TransformerException {
+    private void updateChildPOM(File inputFile) throws IOException, SAXException, ParserConfigurationException,
+            XPathExpressionException, TransformerException {
         if (inputFile.exists()) {
             System.out.println("Updating: " + inputFile.getAbsolutePath()); // NOSONAR
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -327,8 +338,8 @@ public class ReleaseVersionBumper {
             for (String line : lines) {
                 if (line.startsWith(BUNDLE_VERSION_STRING)) {
 
-                    writer.write(
-                            (BUNDLE_VERSION_STRING + TARGET_VERSION.replace("-", ".") + "\n").getBytes(StandardCharsets.UTF_8));
+                    writer.write((BUNDLE_VERSION_STRING + TARGET_VERSION.replace("-", ".") + "\n")
+                            .getBytes(StandardCharsets.UTF_8));
                 } else {
                     writer.write((line + "\n").getBytes(StandardCharsets.UTF_8));
                 }

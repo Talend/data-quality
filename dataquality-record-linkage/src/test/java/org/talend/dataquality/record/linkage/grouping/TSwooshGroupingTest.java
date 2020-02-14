@@ -94,39 +94,49 @@ public class TSwooshGroupingTest {
     public void testSwooshMatchWithMultipass() {
         // init data
         List<String[]> inputDataList = new ArrayList<>();
-        inputDataList.add(new String[] { "10", "nihaosnihao", "hello", "0ca5ee30-6377-4995-8f93-7f167bc5e16e", "2", "true", "1.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
-                "0.8333333333333334", "", "true" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        inputDataList.add(
+                new String[] { "10", "nihaosnihao", "hello", "0ca5ee30-6377-4995-8f93-7f167bc5e16e", "2", "true", "1.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
+                        "0.8333333333333334", "", "true" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         inputDataList.add(new String[] { "9", "nihao", "gogogo", "0ca5ee30-6377-4995-8f93-7f167bc5e16e", "0", "false", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
                 "0.8333333333333334", "0.0", "id:0.8333333333333334", "false" });//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
         inputDataList.add(new String[] { "10", "nihaos", "hello", "0ca5ee30-6377-4995-8f93-7f167bc5e16e", "0", "false", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
                 "0.8333333333333334", "0.0", "id:0.8333333333333334", "false" });//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-        inputDataList
-                .add(new String[] { "12", "12345", "singlerecord", "3f1839cf-bf43-449e-9003-84747cc92a84", "1", "true", "1.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
-                        "1.0", "", "true" });//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-        inputDataList
-                .add(new String[] { "11", "16", "hello", "4149c23f-046d-4a2b-a04d-354e5fbf6afc", "1", "true", "1.0", "1.0", "", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
+        inputDataList.add(new String[] { "12", "12345", "singlerecord", "3f1839cf-bf43-449e-9003-84747cc92a84", "1", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$
+                "true", "1.0", //$NON-NLS-1$ //$NON-NLS-2$
+                "1.0", "", "true" });//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        inputDataList.add(new String[] { "11", "16", "hello", "4149c23f-046d-4a2b-a04d-354e5fbf6afc", "1", "true", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$
+                "1.0", "1.0", "", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                "true" });//$NON-NLS-1$
+        inputDataList.add(
+                new String[] { "6", "33", null, "66cf5b44-f290-46e9-ab88-3c0779d9fc7b", "2", "true", "1.0", "1.0", "", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
                         "true" });//$NON-NLS-1$
-        inputDataList.add(new String[] { "6", "33", null, "66cf5b44-f290-46e9-ab88-3c0779d9fc7b", "2", "true", "1.0", "1.0", "", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
-                "true" });//$NON-NLS-1$
-        inputDataList.add(new String[] { "5", "3", null, "66cf5b44-f290-46e9-ab88-3c0779d9fc7b", "0", "false", "1.0", "0.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
-                "id:1.0", "false" });//$NON-NLS-1$ //$NON-NLS-2$
-        inputDataList.add(new String[] { "6", "3", null, "66cf5b44-f290-46e9-ab88-3c0779d9fc7b", "0", "false", "1.0", "0.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
-                "id:1.0", "false" });//$NON-NLS-1$ //$NON-NLS-2$
-        inputDataList.add(new String[] { "4", "2", "lis", "70ae237d-c24d-4ffc-b82e-bf111b9c441f", "1", "true", "1.0", "1.0", "", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
-                "true" });//$NON-NLS-1$
-        inputDataList.add(new String[] { "2", "111", "li", "7da41ca8-a4b0-4bf4-8d4d-bb53edfd97ef", "3", "true", "1.0", "1.0", "", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
-                "true" });//$NON-NLS-1$
-        inputDataList.add(new String[] { "1", "1", "li", "7da41ca8-a4b0-4bf4-8d4d-bb53edfd97ef", "0", "false", "1.0", "0.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
-                "id:1.0", "false" });//$NON-NLS-1$ //$NON-NLS-2$
-        inputDataList.add(new String[] { "2", "1", "wang", "7da41ca8-a4b0-4bf4-8d4d-bb53edfd97ef", "0", "false", "1.0", "0.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
-                "id:1.0", "false" });//$NON-NLS-1$ //$NON-NLS-2$
-        inputDataList.add(new String[] { "3", "1", "zhang", "7da41ca8-a4b0-4bf4-8d4d-bb53edfd97ef", "0", "false", "1.0", "0.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
-                "id:1.0", "false" });//$NON-NLS-1$ //$NON-NLS-2$
-        inputDataList.add(new String[] { "7", "12", "zhao", "aa210319-0ed9-4075-903e-9cd6b25735e1", "1", "true", "1.0", "1.0", "", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
-                "true" });//$NON-NLS-1$
         inputDataList
-                .add(new String[] { "8", "13", "zhaos", "e5e55f2f-2dfd-4773-8c02-9acbaa13c278", "1", "true", "1.0", "1.0", "", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
+                .add(new String[] { "5", "3", null, "66cf5b44-f290-46e9-ab88-3c0779d9fc7b", "0", "false", "1.0", "0.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
+                        "id:1.0", "false" });//$NON-NLS-1$ //$NON-NLS-2$
+        inputDataList
+                .add(new String[] { "6", "3", null, "66cf5b44-f290-46e9-ab88-3c0779d9fc7b", "0", "false", "1.0", "0.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
+                        "id:1.0", "false" });//$NON-NLS-1$ //$NON-NLS-2$
+        inputDataList.add(
+                new String[] { "4", "2", "lis", "70ae237d-c24d-4ffc-b82e-bf111b9c441f", "1", "true", "1.0", "1.0", "", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
                         "true" });//$NON-NLS-1$
+        inputDataList.add(
+                new String[] { "2", "111", "li", "7da41ca8-a4b0-4bf4-8d4d-bb53edfd97ef", "3", "true", "1.0", "1.0", "", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
+                        "true" });//$NON-NLS-1$
+        inputDataList
+                .add(new String[] { "1", "1", "li", "7da41ca8-a4b0-4bf4-8d4d-bb53edfd97ef", "0", "false", "1.0", "0.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
+                        "id:1.0", "false" });//$NON-NLS-1$ //$NON-NLS-2$
+        inputDataList.add(
+                new String[] { "2", "1", "wang", "7da41ca8-a4b0-4bf4-8d4d-bb53edfd97ef", "0", "false", "1.0", "0.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
+                        "id:1.0", "false" });//$NON-NLS-1$ //$NON-NLS-2$
+        inputDataList.add(
+                new String[] { "3", "1", "zhang", "7da41ca8-a4b0-4bf4-8d4d-bb53edfd97ef", "0", "false", "1.0", "0.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
+                        "id:1.0", "false" });//$NON-NLS-1$ //$NON-NLS-2$
+        inputDataList.add(
+                new String[] { "7", "12", "zhao", "aa210319-0ed9-4075-903e-9cd6b25735e1", "1", "true", "1.0", "1.0", "", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
+                        "true" });//$NON-NLS-1$
+        inputDataList.add(new String[] { "8", "13", "zhaos", "e5e55f2f-2dfd-4773-8c02-9acbaa13c278", "1", "true", "1.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$//$NON-NLS-7$
+                "1.0", "", //$NON-NLS-1$ //$NON-NLS-2$
+                "true" });//$NON-NLS-1$
 
         Map<String, String> matchRuleMap = new HashMap<>();
         matchRuleMap.put("MATCHING_TYPE", "Levenshtein"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -163,7 +173,8 @@ public class TSwooshGroupingTest {
         mfbRecordMatcher.setRecordSize(1);
         LevenshteinMatcher levenshteinMatcher = new LevenshteinMatcher();
         levenshteinMatcher.setAttributeName("name"); //$NON-NLS-1$
-        MFBAttributeMatcher mfbattMatcher = MFBAttributeMatcher.wrap(levenshteinMatcher, 1.0, 0.25, new SubString(-1, 0));
+        MFBAttributeMatcher mfbattMatcher =
+                MFBAttributeMatcher.wrap(levenshteinMatcher, 1.0, 0.25, new SubString(-1, 0));
         mfbRecordMatcher.setAttributeMatchers(new IAttributeMatcher[] { mfbattMatcher });
         combinMatcher.add(mfbRecordMatcher);
         // mfbRecordMatcher.getMatchingWeight(null, null);
@@ -248,25 +259,30 @@ public class TSwooshGroupingTest {
         List<String[]> inputDataList_1 = new ArrayList<>();
         // look as block 2
         List<String[]> inputDataList_2 = new ArrayList<>();
-        inputDataList_1
-                .add(new String[] { "5", "John B. Doe", "UK", "F", "8cda2151-f4f7-4141-8bb2-271c872a9576", "1", "true", "1.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
-                        "1.0" });//$NON-NLS-1$
-        inputDataList_1.add(new String[] { "1", "John Doe", "FR", "F", "ebb0c52a-6418-438f-995a-3cb361e5a82a", "2", "true", "1.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
-                "0.9" });//$NON-NLS-1$
-        inputDataList_1
-                .add(new String[] { "2", "Jon Doe", "FR", "F", "ebb0c52a-6418-438f-995a-3cb361e5a82a", "0", "false", "0.9", "0.0" //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
+        inputDataList_1.add(new String[] { "5", "John B. Doe", "UK", "F", "8cda2151-f4f7-4141-8bb2-271c872a9576", "1", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$
+                "true", "1.0", //$NON-NLS-1$ //$NON-NLS-2$
+                "1.0" });//$NON-NLS-1$
+        inputDataList_1.add(
+                new String[] { "1", "John Doe", "FR", "F", "ebb0c52a-6418-438f-995a-3cb361e5a82a", "2", "true", "1.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
+                        "0.9" });//$NON-NLS-1$
+        inputDataList_1.add(new String[] { "2", "Jon Doe", "FR", "F", "ebb0c52a-6418-438f-995a-3cb361e5a82a", "0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$
+                "false", "0.9", "0.0" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         });
-        inputDataList_1.add(new String[] { "3", "John Doe", "US", "F", "539379d2-6a03-41eb-8ef0-72ff1a0a694a", "0", "true", "1.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$//$NON-NLS-7$//$NON-NLS-8$
-                "0.8333333333333334" });//$NON-NLS-1$
-        inputDataList_1.add(new String[] { "3", "John Doe", "US", "F", "539379d2-6a03-41eb-8ef0-72ff1a0a694a", "0", "false", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$//$NON-NLS-7$
-                "0.8333333333333334", "0.0" });//$NON-NLS-1$ //$NON-NLS-2$
-        inputDataList_2
-                .add(new String[] { "1", "John Doe", "FR", "M", "ebb0c52a-6418-438f-995a-3cb361e5a82a", "0", "false", "0.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
+        inputDataList_1.add(
+                new String[] { "3", "John Doe", "US", "F", "539379d2-6a03-41eb-8ef0-72ff1a0a694a", "0", "true", "1.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$//$NON-NLS-7$//$NON-NLS-8$
+                        "0.8333333333333334" });//$NON-NLS-1$
+        inputDataList_1
+                .add(new String[] { "3", "John Doe", "US", "F", "539379d2-6a03-41eb-8ef0-72ff1a0a694a", "0", "false", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$//$NON-NLS-7$
+                        "0.8333333333333334", "0.0" });//$NON-NLS-1$ //$NON-NLS-2$
+        inputDataList_2.add(
+                new String[] { "1", "John Doe", "FR", "M", "ebb0c52a-6418-438f-995a-3cb361e5a82a", "0", "false", "0.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
                         "1.0" });//$NON-NLS-1$
-        inputDataList_2.add(new String[] { "6", "John Doe", "UK", "M", "139af1e9-76df-4014-b3f9-a9db21516e70", "1", "true", "1.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
-                "1.0" }); //$NON-NLS-1$
-        inputDataList_2.add(new String[] { "4", "Johnny Doe", "US", "M", "539379d2-6a03-41eb-8ef0-72ff1a0a694a", "0", "false", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$//$NON-NLS-7$
-                "0.8333333333333334", "0.0" });//$NON-NLS-1$ //$NON-NLS-2$
+        inputDataList_2.add(
+                new String[] { "6", "John Doe", "UK", "M", "139af1e9-76df-4014-b3f9-a9db21516e70", "1", "true", "1.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
+                        "1.0" }); //$NON-NLS-1$
+        inputDataList_2
+                .add(new String[] { "4", "Johnny Doe", "US", "M", "539379d2-6a03-41eb-8ef0-72ff1a0a694a", "0", "false", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$//$NON-NLS-7$
+                        "0.8333333333333334", "0.0" });//$NON-NLS-1$ //$NON-NLS-2$
 
         List<List<Map<String, String>>> ruleMapListList = createMatchRules();
         TempRecordGrouping tempRecordGrouping = new TempRecordGrouping();
@@ -354,20 +370,24 @@ public class TSwooshGroupingTest {
         List<String[]> inputDataList_1 = new ArrayList<>();
         // look as block 2
         List<String[]> inputDataList_2 = new ArrayList<>();
-        inputDataList_1.add(new String[] { "1", "John Doe", "FR", "F", "ebb0c52a-6418-438f-995a-3cb361e5a82a", "2", "true", "1.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
-                "0.9" });//$NON-NLS-1$
-        inputDataList_1
-                .add(new String[] { "2", "Jon Doe", "FR", "F", "ebb0c52a-6418-438f-995a-3cb361e5a82a", "0", "false", "0.9", "0.0" //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
+        inputDataList_1.add(
+                new String[] { "1", "John Doe", "FR", "F", "ebb0c52a-6418-438f-995a-3cb361e5a82a", "2", "true", "1.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
+                        "0.9" });//$NON-NLS-1$
+        inputDataList_1.add(new String[] { "2", "Jon Doe", "FR", "F", "ebb0c52a-6418-438f-995a-3cb361e5a82a", "0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$
+                "false", "0.9", "0.0" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         });
-        inputDataList_1.add(new String[] { "3", "John Doe", "US", "F", "539379d2-6a03-41eb-8ef0-72ff1a0a694a", "0", "true", "1.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$//$NON-NLS-7$//$NON-NLS-8$
-                "0.8333333333333334" });//$NON-NLS-1$
-        inputDataList_1.add(new String[] { "3", "John Doe", "US", "F", "539379d2-6a03-41eb-8ef0-72ff1a0a694a", "0", "false", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$//$NON-NLS-7$
-                "0.8333333333333334", "0.0" });//$NON-NLS-1$ //$NON-NLS-2$
-        inputDataList_2
-                .add(new String[] { "1", "John Doe", "FR", "M", "ebb0c52a-6418-438f-995a-3cb361e5a82a", "0", "false", "0.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
+        inputDataList_1.add(
+                new String[] { "3", "John Doe", "US", "F", "539379d2-6a03-41eb-8ef0-72ff1a0a694a", "0", "true", "1.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$//$NON-NLS-7$//$NON-NLS-8$
+                        "0.8333333333333334" });//$NON-NLS-1$
+        inputDataList_1
+                .add(new String[] { "3", "John Doe", "US", "F", "539379d2-6a03-41eb-8ef0-72ff1a0a694a", "0", "false", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$//$NON-NLS-7$
+                        "0.8333333333333334", "0.0" });//$NON-NLS-1$ //$NON-NLS-2$
+        inputDataList_2.add(
+                new String[] { "1", "John Doe", "FR", "M", "ebb0c52a-6418-438f-995a-3cb361e5a82a", "0", "false", "0.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
                         "1.0" });//$NON-NLS-1$
-        inputDataList_2.add(new String[] { "4", "Johnny Doe", "US", "M", "539379d2-6a03-41eb-8ef0-72ff1a0a694a", "0", "false", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$//$NON-NLS-7$
-                "0.8333333333333334", "0.0" });//$NON-NLS-1$ //$NON-NLS-2$
+        inputDataList_2
+                .add(new String[] { "4", "Johnny Doe", "US", "M", "539379d2-6a03-41eb-8ef0-72ff1a0a694a", "0", "false", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$//$NON-NLS-7$
+                        "0.8333333333333334", "0.0" });//$NON-NLS-1$ //$NON-NLS-2$
 
         List<List<Map<String, String>>> ruleMapListList = createMatchRules();
         TempRecordGrouping tempRecordGrouping = new TempRecordGrouping();
@@ -453,22 +473,27 @@ public class TSwooshGroupingTest {
         List<String[]> inputDataList_1 = new ArrayList<>();
         // look as block 2
         List<String[]> inputDataList_2 = new ArrayList<>();
-        inputDataList_1.add(new String[] { "1", "John Doe", "FR", "F", "dbf300e2-e8ea-4231-87bd-ac2992488f16", "2", "true", "1.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
-                "0.9" });//$NON-NLS-1$
-        inputDataList_1
-                .add(new String[] { "2", "Jon Doe", "FR", "F", "dbf300e2-e8ea-4231-87bd-ac2992488f16", "0", "false", "0.9", "0.0" //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
+        inputDataList_1.add(
+                new String[] { "1", "John Doe", "FR", "F", "dbf300e2-e8ea-4231-87bd-ac2992488f16", "2", "true", "1.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
+                        "0.9" });//$NON-NLS-1$
+        inputDataList_1.add(new String[] { "2", "Jon Doe", "FR", "F", "dbf300e2-e8ea-4231-87bd-ac2992488f16", "0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$
+                "false", "0.9", "0.0" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         });
-        inputDataList_2
-                .add(new String[] { "1", "John Doe", "FR", "M", "dbf300e2-e8ea-4231-87bd-ac2992488f16", "0", "false", "0.9", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
+        inputDataList_2.add(
+                new String[] { "1", "John Doe", "FR", "M", "dbf300e2-e8ea-4231-87bd-ac2992488f16", "0", "false", "0.9", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
                         "0.0" });//$NON-NLS-1$
-        inputDataList_1.add(new String[] { "3", "John Doe", "US", "F", "975b6a73-88b2-446b-b2fe-be53faf1a6d1", "1", "true", "1.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$//$NON-NLS-7$//$NON-NLS-8$
-                "1.0" });//$NON-NLS-1$
-        inputDataList_2.add(new String[] { "4", "Johnny Doe", "US", "M", "fe87468b-e74b-49d7-84ac-84537e623e00", "2", "true", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$//$NON-NLS-7$
-                "1.0", "1.0" });//$NON-NLS-1$ //$NON-NLS-2$
-        inputDataList_2.add(new String[] { "4", "Johnny Doe", "US", "M", "fe87468b-e74b-49d7-84ac-84537e623e00", "0", "true", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$//$NON-NLS-7$
-                "1.0", "0.0" });//$NON-NLS-1$ //$NON-NLS-2$
-        inputDataList_2.add(new String[] { "5", "Johnny Doe", "US", "M", "fe87468b-e74b-49d7-84ac-84537e623e00", "0", "false", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$//$NON-NLS-7$
-                "1", "0" });//$NON-NLS-1$ //$NON-NLS-2$
+        inputDataList_1.add(
+                new String[] { "3", "John Doe", "US", "F", "975b6a73-88b2-446b-b2fe-be53faf1a6d1", "1", "true", "1.0", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$//$NON-NLS-7$//$NON-NLS-8$
+                        "1.0" });//$NON-NLS-1$
+        inputDataList_2
+                .add(new String[] { "4", "Johnny Doe", "US", "M", "fe87468b-e74b-49d7-84ac-84537e623e00", "2", "true", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$//$NON-NLS-7$
+                        "1.0", "1.0" });//$NON-NLS-1$ //$NON-NLS-2$
+        inputDataList_2
+                .add(new String[] { "4", "Johnny Doe", "US", "M", "fe87468b-e74b-49d7-84ac-84537e623e00", "0", "true", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$//$NON-NLS-7$
+                        "1.0", "0.0" });//$NON-NLS-1$ //$NON-NLS-2$
+        inputDataList_2
+                .add(new String[] { "5", "Johnny Doe", "US", "M", "fe87468b-e74b-49d7-84ac-84537e623e00", "0", "false", //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$//$NON-NLS-7$
+                        "1", "0" });//$NON-NLS-1$ //$NON-NLS-2$
 
         List<List<Map<String, String>>> ruleMapListList = createMatchRules();
         TempRecordGrouping tempRecordGrouping = new TempRecordGrouping();
@@ -544,7 +569,8 @@ public class TSwooshGroupingTest {
         mfbRecordMatcher.setRecordSize(1);
         LevenshteinMatcher levenshteinMatcher = new LevenshteinMatcher();
         levenshteinMatcher.setAttributeName("name"); //$NON-NLS-1$
-        MFBAttributeMatcher mfbattMatcher = MFBAttributeMatcher.wrap(levenshteinMatcher, 1.0, 0.8, new SubString(-1, 0));
+        MFBAttributeMatcher mfbattMatcher =
+                MFBAttributeMatcher.wrap(levenshteinMatcher, 1.0, 0.8, new SubString(-1, 0));
         mfbRecordMatcher.setAttributeMatchers(new IAttributeMatcher[] { mfbattMatcher });
         return mfbRecordMatcher;
     }

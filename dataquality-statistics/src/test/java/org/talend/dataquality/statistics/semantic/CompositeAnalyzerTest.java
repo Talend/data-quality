@@ -49,7 +49,8 @@ public class CompositeAnalyzerTest extends SemanticStatisticsTestBase {
 
     @Test
     public void testDataTypeAndSemantic() {
-        final List<String[]> records = getRecords(SemanticStatisticsTestBase.class.getResourceAsStream("employee_100.csv"));
+        final List<String[]> records =
+                getRecords(SemanticStatisticsTestBase.class.getResourceAsStream("employee_100.csv"));
         for (String[] record : records) {
             analyzer.analyze(record);
         }

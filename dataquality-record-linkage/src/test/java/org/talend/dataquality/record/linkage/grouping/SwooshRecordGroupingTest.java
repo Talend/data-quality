@@ -104,7 +104,8 @@ public class SwooshRecordGroupingTest {
         recordGroup.setIsLinkToPrevious(Boolean.FALSE);
         List<Map<String, String>> matchingRule = new ArrayList<Map<String, String>>();
 
-        Map<String, String> lnameRecords = createTmpMap(null, "1", null, "ID", "0", "JARO_WINKLER", "NO", "1", null, null, null);
+        Map<String, String> lnameRecords =
+                createTmpMap(null, "1", null, "ID", "0", "JARO_WINKLER", "NO", "1", null, null, null);
 
         matchingRule.add(lnameRecords);
 
@@ -210,8 +211,8 @@ public class SwooshRecordGroupingTest {
 
         List<Map<String, String>> matchingRule = new ArrayList<Map<String, String>>();
 
-        Map<String, String> lnameRecords = createTmpMap(null, "0.9", null, "NAME", "1", "JARO_WINKLER", "NO", "1", null, null,
-                null);
+        Map<String, String> lnameRecords =
+                createTmpMap(null, "0.9", null, "NAME", "1", "JARO_WINKLER", "NO", "1", null, null, null);
         matchingRule.add(lnameRecords);
 
         recordGroup.addMatchRule(matchingRule);
@@ -252,7 +253,8 @@ public class SwooshRecordGroupingTest {
                 } else {
                     Assert.assertEquals(4, Integer.valueOf((String) rds[rds.length - 5]).intValue());
                     // Group quality.
-                    Assert.assertEquals(0.9666666746139526, Double.valueOf((String) rds[rds.length - 2]).doubleValue(), 0d);
+                    Assert.assertEquals(0.9666666746139526, Double.valueOf((String) rds[rds.length - 2]).doubleValue(),
+                            0d);
                     // Assert the merged value is the "most common" value.
                     Assert.assertEquals("Amburgay", rds[1]);
                     // Longest
@@ -269,15 +271,15 @@ public class SwooshRecordGroupingTest {
     }
 
     @Test
-    public void testSwooshIntMatchGroup()
-            throws IOException, InterruptedException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+    public void testSwooshIntMatchGroup() throws IOException, InterruptedException, InstantiationException,
+            IllegalAccessException, ClassNotFoundException {
         List<List<Map<String, String>>> matchingRulesAll_tMatchGroup_1 = new ArrayList<List<Map<String, String>>>();
         List<Map<String, String>> matcherList_tMatchGroup_1 = null;
         Map<String, String> tmpMap_tMatchGroup_1 = null;
         List<Map<String, String>> defaultSurvivorshipRules_tMatchGroup_1 = new ArrayList<Map<String, String>>();
         matcherList_tMatchGroup_1 = new ArrayList<Map<String, String>>();
-        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "1", "", "country", "2", "Exact", "NO", 1 + "", "nullMatchNull",
-                0.85 + "", "TSWOOSH_MATCHER");
+        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "1", "", "country", "2", "Exact", "NO", 1 + "",
+                "nullMatchNull", 0.85 + "", "TSWOOSH_MATCHER");
         matcherList_tMatchGroup_1.add(tmpMap_tMatchGroup_1);
         matchingRulesAll_tMatchGroup_1.add(matcherList_tMatchGroup_1);
 
@@ -291,8 +293,8 @@ public class SwooshRecordGroupingTest {
         final Map<String, Integer> indexMap_tMatchGroup_1 = new HashMap<String, Integer>();
 
         // TDQ-9172 reuse JAVA API at here.
-        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 = createComponent(masterRows_tMatchGroup_1,
-                groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
+        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 =
+                createComponent(masterRows_tMatchGroup_1, groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
 
         recordGroupImp_tMatchGroup_1.setRecordLinkAlgorithm(RecordMatcherType.T_SwooshAlgorithm);
         // add mutch rules
@@ -301,14 +303,14 @@ public class SwooshRecordGroupingTest {
         }
         recordGroupImp_tMatchGroup_1.initialize();
         // init the parameters of the tswoosh algorithm
-        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String", "id_String",
-                "id_Integer", "id_Boolean", "id_Double", "id_Double", null);
+        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String",
+                "id_String", "id_Integer", "id_Boolean", "id_Double", "id_Double", null);
         Map<String, String> columnWithIndex_tMatchGroup_1 = fillColumn("0", "1", "2", "3", "4", "5", "6", "7", null);
 
         SurvivorShipAlgorithmParams survivorShipAlgorithmParams_tMatchGroup_1 = SurvivorshipUtils
                 .createSurvivorShipAlgorithmParams((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1,
-                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1, columnWithType_tMatchGroup_1,
-                        columnWithIndex_tMatchGroup_1);
+                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1,
+                        columnWithType_tMatchGroup_1, columnWithIndex_tMatchGroup_1);
         ((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1)
                 .setSurvivorShipAlgorithmParams(survivorShipAlgorithmParams_tMatchGroup_1);
         initialize(recordGroupImp_tMatchGroup_1);
@@ -348,15 +350,15 @@ public class SwooshRecordGroupingTest {
     }
 
     @Test
-    public void testSwooshMultipasstMatchGroup()
-            throws IOException, InterruptedException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+    public void testSwooshMultipasstMatchGroup() throws IOException, InterruptedException, InstantiationException,
+            IllegalAccessException, ClassNotFoundException {
         List<List<Map<String, String>>> matchingRulesAll_tMatchGroup_1 = new ArrayList<List<Map<String, String>>>();
         List<Map<String, String>> matcherList_tMatchGroup_1 = null;
         Map<String, String> tmpMap_tMatchGroup_1 = null;
         List<Map<String, String>> defaultSurvivorshipRules_tMatchGroup_1 = new ArrayList<Map<String, String>>();
         matcherList_tMatchGroup_1 = new ArrayList<Map<String, String>>();
-        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "1", "", "country", "2", "Exact", "NO", 1 + "", "nullMatchNull",
-                0.85 + "", "TSWOOSH_MATCHER");
+        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "1", "", "country", "2", "Exact", "NO", 1 + "",
+                "nullMatchNull", 0.85 + "", "TSWOOSH_MATCHER");
         matcherList_tMatchGroup_1.add(tmpMap_tMatchGroup_1);
         matchingRulesAll_tMatchGroup_1.add(matcherList_tMatchGroup_1);
         // master rows in a group
@@ -369,8 +371,8 @@ public class SwooshRecordGroupingTest {
         final Map<String, Integer> indexMap_tMatchGroup_1 = new HashMap<String, Integer>();
 
         // TDQ-9172 reuse JAVA API at here.
-        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 = createComponent(masterRows_tMatchGroup_1,
-                groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
+        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 =
+                createComponent(masterRows_tMatchGroup_1, groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
 
         recordGroupImp_tMatchGroup_1.setRecordLinkAlgorithm(RecordMatcherType.T_SwooshAlgorithm);
         // add mutch rules
@@ -380,14 +382,14 @@ public class SwooshRecordGroupingTest {
         recordGroupImp_tMatchGroup_1.initialize();
         // init the parameters of the tswoosh algorithm
 
-        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String", "id_String",
-                "id_Integer", "id_Boolean", "id_Double", "id_Double", "id_String");
+        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String",
+                "id_String", "id_Integer", "id_Boolean", "id_Double", "id_Double", "id_String");
         Map<String, String> columnWithIndex_tMatchGroup_1 = fillColumn("0", "1", "2", "3", "4", "5", "6", "7", "8");
 
         SurvivorShipAlgorithmParams survivorShipAlgorithmParams_tMatchGroup_1 = SurvivorshipUtils
                 .createSurvivorShipAlgorithmParams((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1,
-                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1, columnWithType_tMatchGroup_1,
-                        columnWithIndex_tMatchGroup_1);
+                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1,
+                        columnWithType_tMatchGroup_1, columnWithIndex_tMatchGroup_1);
         ((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1)
                 .setSurvivorShipAlgorithmParams(survivorShipAlgorithmParams_tMatchGroup_1);
         initialize(recordGroupImp_tMatchGroup_1);
@@ -431,28 +433,30 @@ public class SwooshRecordGroupingTest {
     }
 
     @Test
-    public void testSwooshMultipasstMatchGroupWithReferenceColumn()
-            throws IOException, InterruptedException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+    public void testSwooshMultipasstMatchGroupWithReferenceColumn() throws IOException, InterruptedException,
+            InstantiationException, IllegalAccessException, ClassNotFoundException {
         List<List<Map<String, String>>> matchingRulesAll_tMatchGroup_1 = new ArrayList<List<Map<String, String>>>();
         List<Map<String, String>> matcherList_tMatchGroup_1 = null;
         Map<String, String> tmpMap_tMatchGroup_1 = null;
         matcherList_tMatchGroup_1 = new ArrayList<Map<String, String>>();
-        tmpMap_tMatchGroup_1 = createTmpMap("MostRecent", "0.1", "", "name", "1", "Levenshtein", "NO", 1 + "", "nullMatchNull",
-                0.5 + "", "TSWOOSH_MATCHER", "date1", "3");
+        tmpMap_tMatchGroup_1 = createTmpMap("MostRecent", "0.1", "", "name", "1", "Levenshtein", "NO", 1 + "",
+                "nullMatchNull", 0.5 + "", "TSWOOSH_MATCHER", "date1", "3");
         matcherList_tMatchGroup_1.add(tmpMap_tMatchGroup_1);
         matchingRulesAll_tMatchGroup_1.add(matcherList_tMatchGroup_1);
         // master rows in a group
-        final List<row2StructForReferenceColumn> masterRows_tMatchGroup_1 = new ArrayList<row2StructForReferenceColumn>();
+        final List<row2StructForReferenceColumn> masterRows_tMatchGroup_1 =
+                new ArrayList<row2StructForReferenceColumn>();
         // all rows in a group
-        final List<row2StructForReferenceColumn> groupRows_tMatchGroup_1 = new ArrayList<row2StructForReferenceColumn>();
+        final List<row2StructForReferenceColumn> groupRows_tMatchGroup_1 =
+                new ArrayList<row2StructForReferenceColumn>();
         // this Map key is MASTER GID,value is this MASTER index of all
         // MASTERS.it will be used to get DUPLICATE GRP_QUALITY from
         // MASTER and only in case of separate output.
         final Map<String, Integer> indexMap_tMatchGroup_1 = new HashMap<String, Integer>();
 
         // TDQ-9172 reuse JAVA API at here.
-        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 = createComponentForReferenceColumn(masterRows_tMatchGroup_1,
-                groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
+        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 = createComponentForReferenceColumn(
+                masterRows_tMatchGroup_1, groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
 
         recordGroupImp_tMatchGroup_1.setRecordLinkAlgorithm(RecordMatcherType.T_SwooshAlgorithm);
         // add mutch rules
@@ -462,17 +466,19 @@ public class SwooshRecordGroupingTest {
         recordGroupImp_tMatchGroup_1.initialize();
         // init the parameters of the tswoosh algorithm
 
-        Map<String, String> columnWithType_tMatchGroup_1 = fillColumnForReference("id_Integer", "id_String", "id_Integer",
-                "id_Date", "id_Date", "id_String", "id_Integer", "id_Boolean", "id_Double", "id_Double");
-        Map<String, String> columnWithIndex_tMatchGroup_1 = fillColumnForReference("0", "1", "2", "3", "4", "5", "6", "7", "8",
-                "9");
+        Map<String, String> columnWithType_tMatchGroup_1 = fillColumnForReference("id_Integer", "id_String",
+                "id_Integer", "id_Date", "id_Date", "id_String", "id_Integer", "id_Boolean", "id_Double", "id_Double");
+        Map<String, String> columnWithIndex_tMatchGroup_1 =
+                fillColumnForReference("0", "1", "2", "3", "4", "5", "6", "7", "8", "9");
         Map<String, String> columnDatePatternMap = new HashMap<>();
         columnDatePatternMap.put("3", "yyyy-MM-dd");
         columnDatePatternMap.put("4", "yyyy-MM-dd");
         recordGroupImp_tMatchGroup_1.setColumnDatePatternMap(columnDatePatternMap);
 
-        java.util.List<java.util.Map<String, String>> defaultSurvivorshipRules_tMatchGroup_1 = new java.util.ArrayList<java.util.Map<String, String>>();
-        java.util.List<java.util.Map<String, String>> particularSurvivorshipRules_tMatchGroup_1 = new java.util.ArrayList<java.util.Map<String, String>>();
+        java.util.List<java.util.Map<String, String>> defaultSurvivorshipRules_tMatchGroup_1 =
+                new java.util.ArrayList<java.util.Map<String, String>>();
+        java.util.List<java.util.Map<String, String>> particularSurvivorshipRules_tMatchGroup_1 =
+                new java.util.ArrayList<java.util.Map<String, String>>();
         java.util.Map<String, String> realSurShipMap_tMatchGroup_1 = null;
         realSurShipMap_tMatchGroup_1 = new java.util.HashMap<String, String>();
         realSurShipMap_tMatchGroup_1.put("DATA_TYPE", "NUMBER");
@@ -494,11 +500,12 @@ public class SwooshRecordGroupingTest {
         realSurShipMap_tMatchGroup_1.put("SURVIVORSHIP_FUNCTION", "MostRecent");
         particularSurvivorshipRules_tMatchGroup_1.add(realSurShipMap_tMatchGroup_1);
 
-        SurvivorShipAlgorithmParams survivorShipAlgorithmParams_tMatchGroup_1 = SurvivorshipUtils
-                .createSurvivorShipAlgorithmParams(
+        SurvivorShipAlgorithmParams survivorShipAlgorithmParams_tMatchGroup_1 =
+                SurvivorshipUtils.createSurvivorShipAlgorithmParams(
                         (org.talend.dataquality.record.linkage.grouping.swoosh.AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1,
                         matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1,
-                        particularSurvivorshipRules_tMatchGroup_1, columnWithType_tMatchGroup_1, columnWithIndex_tMatchGroup_1);
+                        particularSurvivorshipRules_tMatchGroup_1, columnWithType_tMatchGroup_1,
+                        columnWithIndex_tMatchGroup_1);
         ((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1)
                 .setSurvivorShipAlgorithmParams(survivorShipAlgorithmParams_tMatchGroup_1);
         initialize(recordGroupImp_tMatchGroup_1);
@@ -551,15 +558,15 @@ public class SwooshRecordGroupingTest {
     }
 
     @Test
-    public void testSwooshMultipasstMatchGroup_3groups()
-            throws IOException, InterruptedException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+    public void testSwooshMultipasstMatchGroup_3groups() throws IOException, InterruptedException,
+            InstantiationException, IllegalAccessException, ClassNotFoundException {
         List<List<Map<String, String>>> matchingRulesAll_tMatchGroup_1 = new ArrayList<List<Map<String, String>>>();
         List<Map<String, String>> matcherList_tMatchGroup_1 = null;
         Map<String, String> tmpMap_tMatchGroup_1 = null;
         List<Map<String, String>> defaultSurvivorshipRules_tMatchGroup_1 = new ArrayList<Map<String, String>>();
         matcherList_tMatchGroup_1 = new ArrayList<Map<String, String>>();
-        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "1", "", "country", "2", "Exact", "NO", 1 + "", "nullMatchNull",
-                0.85 + "", "TSWOOSH_MATCHER");
+        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "1", "", "country", "2", "Exact", "NO", 1 + "",
+                "nullMatchNull", 0.85 + "", "TSWOOSH_MATCHER");
         matcherList_tMatchGroup_1.add(tmpMap_tMatchGroup_1);
         matchingRulesAll_tMatchGroup_1.add(matcherList_tMatchGroup_1);
         // master rows in a group
@@ -572,8 +579,8 @@ public class SwooshRecordGroupingTest {
         final Map<String, Integer> indexMap_tMatchGroup_1 = new HashMap<String, Integer>();
 
         // TDQ-9172 reuse JAVA API at here.
-        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 = createComponent(masterRows_tMatchGroup_1,
-                groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
+        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 =
+                createComponent(masterRows_tMatchGroup_1, groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
 
         recordGroupImp_tMatchGroup_1.setRecordLinkAlgorithm(RecordMatcherType.T_SwooshAlgorithm);
         // add mutch rules
@@ -582,14 +589,14 @@ public class SwooshRecordGroupingTest {
         }
         recordGroupImp_tMatchGroup_1.initialize();
         // init the parameters of the tswoosh algorithm
-        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String", "id_String",
-                "id_Integer", "id_Boolean", "id_Double", "id_Double", "id_String");
+        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String",
+                "id_String", "id_Integer", "id_Boolean", "id_Double", "id_Double", "id_String");
         Map<String, String> columnWithIndex_tMatchGroup_1 = fillColumn("0", "1", "2", "3", "4", "5", "6", "7", "8");
 
         SurvivorShipAlgorithmParams survivorShipAlgorithmParams_tMatchGroup_1 = SurvivorshipUtils
                 .createSurvivorShipAlgorithmParams((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1,
-                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1, columnWithType_tMatchGroup_1,
-                        columnWithIndex_tMatchGroup_1);
+                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1,
+                        columnWithType_tMatchGroup_1, columnWithIndex_tMatchGroup_1);
         ((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1)
                 .setSurvivorShipAlgorithmParams(survivorShipAlgorithmParams_tMatchGroup_1);
         initialize(recordGroupImp_tMatchGroup_1);
@@ -638,15 +645,15 @@ public class SwooshRecordGroupingTest {
     }
 
     @Test
-    public void testSwooshMultipasstMatchGroup_withNoNewMasterIn2ndPass()
-            throws IOException, InterruptedException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+    public void testSwooshMultipasstMatchGroup_withNoNewMasterIn2ndPass() throws IOException, InterruptedException,
+            InstantiationException, IllegalAccessException, ClassNotFoundException {
         List<List<Map<String, String>>> matchingRulesAll_tMatchGroup_1 = new ArrayList<List<Map<String, String>>>();
         List<Map<String, String>> matcherList_tMatchGroup_1 = null;
         Map<String, String> tmpMap_tMatchGroup_1 = null;
         List<Map<String, String>> defaultSurvivorshipRules_tMatchGroup_1 = new ArrayList<Map<String, String>>();
         matcherList_tMatchGroup_1 = new ArrayList<Map<String, String>>();
-        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "1", "", "country", "2", "Exact", "NO", 1 + "", "nullMatchNull",
-                0.85 + "", "TSWOOSH_MATCHER");
+        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "1", "", "country", "2", "Exact", "NO", 1 + "",
+                "nullMatchNull", 0.85 + "", "TSWOOSH_MATCHER");
         matcherList_tMatchGroup_1.add(tmpMap_tMatchGroup_1);
         matchingRulesAll_tMatchGroup_1.add(matcherList_tMatchGroup_1);
         // master rows in a group
@@ -659,8 +666,8 @@ public class SwooshRecordGroupingTest {
         final Map<String, Integer> indexMap_tMatchGroup_1 = new HashMap<String, Integer>();
 
         // TDQ-9172 reuse JAVA API at here.
-        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 = createComponent(masterRows_tMatchGroup_1,
-                groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
+        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 =
+                createComponent(masterRows_tMatchGroup_1, groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
 
         recordGroupImp_tMatchGroup_1.setRecordLinkAlgorithm(RecordMatcherType.T_SwooshAlgorithm);
         // add mutch rules
@@ -669,14 +676,14 @@ public class SwooshRecordGroupingTest {
         }
         recordGroupImp_tMatchGroup_1.initialize();
         // init the parameters of the tswoosh algorithm
-        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String", "id_String",
-                "id_Integer", "id_Boolean", "id_Double", "id_Double", "id_String");
+        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String",
+                "id_String", "id_Integer", "id_Boolean", "id_Double", "id_Double", "id_String");
         Map<String, String> columnWithIndex_tMatchGroup_1 = fillColumn("0", "1", "2", "3", "4", "5", "6", "7", "8");
 
         SurvivorShipAlgorithmParams survivorShipAlgorithmParams_tMatchGroup_1 = SurvivorshipUtils
                 .createSurvivorShipAlgorithmParams((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1,
-                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1, columnWithType_tMatchGroup_1,
-                        columnWithIndex_tMatchGroup_1);
+                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1,
+                        columnWithType_tMatchGroup_1, columnWithIndex_tMatchGroup_1);
         ((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1)
                 .setSurvivorShipAlgorithmParams(survivorShipAlgorithmParams_tMatchGroup_1);
         initialize(recordGroupImp_tMatchGroup_1);
@@ -711,15 +718,15 @@ public class SwooshRecordGroupingTest {
     }
 
     @Test
-    public void testSwooshIntMatchGroup_withBlocks()
-            throws IOException, InterruptedException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+    public void testSwooshIntMatchGroup_withBlocks() throws IOException, InterruptedException, InstantiationException,
+            IllegalAccessException, ClassNotFoundException {
         List<List<Map<String, String>>> matchingRulesAll_tMatchGroup_1 = new ArrayList<List<Map<String, String>>>();
         List<Map<String, String>> matcherList_tMatchGroup_1 = null;
         Map<String, String> tmpMap_tMatchGroup_1 = null;
         List<Map<String, String>> defaultSurvivorshipRules_tMatchGroup_1 = new ArrayList<Map<String, String>>();
         matcherList_tMatchGroup_1 = new ArrayList<Map<String, String>>();
-        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "1", "", "country", "2", "Exact", "NO", 1 + "", "nullMatchNull",
-                0.85 + "", "TSWOOSH_MATCHER");
+        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "1", "", "country", "2", "Exact", "NO", 1 + "",
+                "nullMatchNull", 0.85 + "", "TSWOOSH_MATCHER");
         matcherList_tMatchGroup_1.add(tmpMap_tMatchGroup_1);
         matchingRulesAll_tMatchGroup_1.add(matcherList_tMatchGroup_1);
         // master rows in a group
@@ -732,8 +739,8 @@ public class SwooshRecordGroupingTest {
         final Map<String, Integer> indexMap_tMatchGroup_1 = new HashMap<String, Integer>();
 
         // TDQ-9172 reuse JAVA API at here.
-        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 = createComponent(masterRows_tMatchGroup_1,
-                groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
+        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 =
+                createComponent(masterRows_tMatchGroup_1, groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
 
         recordGroupImp_tMatchGroup_1.setRecordLinkAlgorithm(RecordMatcherType.T_SwooshAlgorithm);
         // add mutch rules
@@ -742,14 +749,14 @@ public class SwooshRecordGroupingTest {
         }
         recordGroupImp_tMatchGroup_1.initialize();
         // init the parameters of the tswoosh algorithm
-        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String", "id_String",
-                "id_Integer", "id_Boolean", "id_Double", "id_Double", null);
+        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String",
+                "id_String", "id_Integer", "id_Boolean", "id_Double", "id_Double", null);
         Map<String, String> columnWithIndex_tMatchGroup_1 = fillColumn("0", "1", "2", "3", "4", "5", "6", "7", null);
 
         SurvivorShipAlgorithmParams survivorShipAlgorithmParams_tMatchGroup_1 = SurvivorshipUtils
                 .createSurvivorShipAlgorithmParams((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1,
-                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1, columnWithType_tMatchGroup_1,
-                        columnWithIndex_tMatchGroup_1);
+                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1,
+                        columnWithType_tMatchGroup_1, columnWithIndex_tMatchGroup_1);
         ((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1)
                 .setSurvivorShipAlgorithmParams(survivorShipAlgorithmParams_tMatchGroup_1);
         initialize(recordGroupImp_tMatchGroup_1);
@@ -806,15 +813,15 @@ public class SwooshRecordGroupingTest {
     }
 
     @Test
-    public void testSwooshIntMatchGroup_withoutBlocks()
-            throws IOException, InterruptedException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+    public void testSwooshIntMatchGroup_withoutBlocks() throws IOException, InterruptedException,
+            InstantiationException, IllegalAccessException, ClassNotFoundException {
         List<List<Map<String, String>>> matchingRulesAll_tMatchGroup_1 = new ArrayList<List<Map<String, String>>>();
         List<Map<String, String>> matcherList_tMatchGroup_1 = null;
         Map<String, String> tmpMap_tMatchGroup_1 = null;
         List<Map<String, String>> defaultSurvivorshipRules_tMatchGroup_1 = new ArrayList<Map<String, String>>();
         matcherList_tMatchGroup_1 = new ArrayList<Map<String, String>>();
-        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "1", "", "country", "2", "Exact", "NO", 1 + "", "nullMatchNull",
-                0.85 + "", "TSWOOSH_MATCHER");
+        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "1", "", "country", "2", "Exact", "NO", 1 + "",
+                "nullMatchNull", 0.85 + "", "TSWOOSH_MATCHER");
         matcherList_tMatchGroup_1.add(tmpMap_tMatchGroup_1);
         matchingRulesAll_tMatchGroup_1.add(matcherList_tMatchGroup_1);
         // master rows in a group
@@ -827,8 +834,8 @@ public class SwooshRecordGroupingTest {
         final Map<String, Integer> indexMap_tMatchGroup_1 = new HashMap<String, Integer>();
 
         // TDQ-9172 reuse JAVA API at here.
-        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 = createComponent(masterRows_tMatchGroup_1,
-                groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
+        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 =
+                createComponent(masterRows_tMatchGroup_1, groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
 
         recordGroupImp_tMatchGroup_1.setRecordLinkAlgorithm(RecordMatcherType.T_SwooshAlgorithm);
         // add mutch rules
@@ -837,14 +844,14 @@ public class SwooshRecordGroupingTest {
         }
         recordGroupImp_tMatchGroup_1.initialize();
         // init the parameters of the tswoosh algorithm
-        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String", "id_String",
-                "id_Integer", "id_Boolean", "id_Double", "id_Double", null);
+        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String",
+                "id_String", "id_Integer", "id_Boolean", "id_Double", "id_Double", null);
         Map<String, String> columnWithIndex_tMatchGroup_1 = fillColumn("0", "1", "2", "3", "4", "5", "6", "7", null);
 
         SurvivorShipAlgorithmParams survivorShipAlgorithmParams_tMatchGroup_1 = SurvivorshipUtils
                 .createSurvivorShipAlgorithmParams((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1,
-                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1, columnWithType_tMatchGroup_1,
-                        columnWithIndex_tMatchGroup_1);
+                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1,
+                        columnWithType_tMatchGroup_1, columnWithIndex_tMatchGroup_1);
         ((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1)
                 .setSurvivorShipAlgorithmParams(survivorShipAlgorithmParams_tMatchGroup_1);
         initialize(recordGroupImp_tMatchGroup_1);
@@ -910,8 +917,8 @@ public class SwooshRecordGroupingTest {
         List<Map<String, String>> matcherList_tMatchGroup_1 = null;
         Map<String, String> tmpMap_tMatchGroup_1 = null;
         matcherList_tMatchGroup_1 = new ArrayList<Map<String, String>>();
-        tmpMap_tMatchGroup_1 = createTmpMap("MostCommon", "1", "", "stu_Address", "2", "Exact", "NO", 1 + "", "nullMatchNull",
-                0.85 + "", "TSWOOSH_MATCHER");
+        tmpMap_tMatchGroup_1 = createTmpMap("MostCommon", "1", "", "stu_Address", "2", "Exact", "NO", 1 + "",
+                "nullMatchNull", 0.85 + "", "TSWOOSH_MATCHER");
         matcherList_tMatchGroup_1.add(tmpMap_tMatchGroup_1);
         matchingRulesAll_tMatchGroup_1.add(matcherList_tMatchGroup_1);
         Map<String, String> columnWithType_tMatchGroup_1 = new HashMap<String, String>();
@@ -963,12 +970,13 @@ public class SwooshRecordGroupingTest {
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
             Assert.fail("initial failed :" + e.getMessage());
         }
-        SurvivorShipAlgorithmParams survivorShipAlgorithmParams_tMatchGroup_1 = SurvivorshipUtils
-                .createSurvivorShipAlgorithmParams(analysisSwooshMatchRecordGrouping, matchingRulesAll_tMatchGroup_1,
-                        defaultSurvivorshipRules_tMatchGroup_1, columnWithType_tMatchGroup_1, columnWithIndex_tMatchGroup_1);
+        SurvivorShipAlgorithmParams survivorShipAlgorithmParams_tMatchGroup_1 =
+                SurvivorshipUtils.createSurvivorShipAlgorithmParams(analysisSwooshMatchRecordGrouping,
+                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1,
+                        columnWithType_tMatchGroup_1, columnWithIndex_tMatchGroup_1);
 
-        Map<Integer, SurvivorshipFunction> defaultSurviorshipRules = survivorShipAlgorithmParams_tMatchGroup_1
-                .getDefaultSurviorshipRules();
+        Map<Integer, SurvivorshipFunction> defaultSurviorshipRules =
+                survivorShipAlgorithmParams_tMatchGroup_1.getDefaultSurviorshipRules();
         Iterator<Integer> keys = defaultSurviorshipRules.keySet().iterator();
         boolean containID = false, containAdd = false, containBIT = false;
         while (keys.hasNext()) {
@@ -980,15 +988,18 @@ public class SwooshRecordGroupingTest {
             if ("id".equals(survivorshipFunction.getSurvivorShipKey())) {
                 containID = true;
                 Assert.assertTrue(next.intValue() == 0);
-                Assert.assertEquals(SurvivorShipAlgorithmEnum.MOST_RECENT, survivorshipFunction.getSurvivorShipAlgoEnum());
+                Assert.assertEquals(SurvivorShipAlgorithmEnum.MOST_RECENT,
+                        survivorshipFunction.getSurvivorShipAlgoEnum());
             } else if ("stu_Address".equals(survivorshipFunction.getSurvivorShipKey())) {
                 containAdd = true;
                 Assert.assertTrue(next.intValue() == 2);
-                Assert.assertEquals(SurvivorShipAlgorithmEnum.MOST_COMMON, survivorshipFunction.getSurvivorShipAlgoEnum());
+                Assert.assertEquals(SurvivorShipAlgorithmEnum.MOST_COMMON,
+                        survivorshipFunction.getSurvivorShipAlgoEnum());
             } else if ("stu_BIT".equals(survivorshipFunction.getSurvivorShipKey())) {
                 containBIT = true;
                 Assert.assertTrue(next.intValue() == 8);
-                Assert.assertEquals(SurvivorShipAlgorithmEnum.CONCATENATE, survivorshipFunction.getSurvivorShipAlgoEnum());
+                Assert.assertEquals(SurvivorShipAlgorithmEnum.CONCATENATE,
+                        survivorshipFunction.getSurvivorShipAlgoEnum());
             }
         }
         Assert.assertTrue(containID);
@@ -997,15 +1008,15 @@ public class SwooshRecordGroupingTest {
     }
 
     @Test
-    public void testSwooshMultipasstMatchGroup_oneRecord()
-            throws IOException, InterruptedException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+    public void testSwooshMultipasstMatchGroup_oneRecord() throws IOException, InterruptedException,
+            InstantiationException, IllegalAccessException, ClassNotFoundException {
         List<List<Map<String, String>>> matchingRulesAll_tMatchGroup_1 = new ArrayList<List<Map<String, String>>>();
         List<Map<String, String>> matcherList_tMatchGroup_1 = null;
         Map<String, String> tmpMap_tMatchGroup_1 = null;
         List<Map<String, String>> defaultSurvivorshipRules_tMatchGroup_1 = new ArrayList<Map<String, String>>();
         matcherList_tMatchGroup_1 = new ArrayList<Map<String, String>>();
-        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "1", "", "country", "2", "Exact", "NO", 1 + "", "nullMatchNull",
-                0.85 + "", "TSWOOSH_MATCHER");
+        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "1", "", "country", "2", "Exact", "NO", 1 + "",
+                "nullMatchNull", 0.85 + "", "TSWOOSH_MATCHER");
         matcherList_tMatchGroup_1.add(tmpMap_tMatchGroup_1);
         matchingRulesAll_tMatchGroup_1.add(matcherList_tMatchGroup_1);
         // master rows in a group
@@ -1018,8 +1029,8 @@ public class SwooshRecordGroupingTest {
         final Map<String, Integer> indexMap_tMatchGroup_1 = new HashMap<String, Integer>();
 
         // TDQ-9172 reuse JAVA API at here.
-        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 = createComponent(masterRows_tMatchGroup_1,
-                groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
+        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 =
+                createComponent(masterRows_tMatchGroup_1, groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
 
         recordGroupImp_tMatchGroup_1.setRecordLinkAlgorithm(RecordMatcherType.T_SwooshAlgorithm);
         // add mutch rules
@@ -1028,14 +1039,14 @@ public class SwooshRecordGroupingTest {
         }
         recordGroupImp_tMatchGroup_1.initialize();
         // init the parameters of the tswoosh algorithm
-        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String", "id_String",
-                "id_Integer", "id_Boolean", "id_Double", "id_Double", "id_String");
+        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String",
+                "id_String", "id_Integer", "id_Boolean", "id_Double", "id_Double", "id_String");
         Map<String, String> columnWithIndex_tMatchGroup_1 = fillColumn("0", "1", "2", "3", "4", "5", "6", "7", "8");
 
         SurvivorShipAlgorithmParams survivorShipAlgorithmParams_tMatchGroup_1 = SurvivorshipUtils
                 .createSurvivorShipAlgorithmParams((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1,
-                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1, columnWithType_tMatchGroup_1,
-                        columnWithIndex_tMatchGroup_1);
+                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1,
+                        columnWithType_tMatchGroup_1, columnWithIndex_tMatchGroup_1);
         ((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1)
                 .setSurvivorShipAlgorithmParams(survivorShipAlgorithmParams_tMatchGroup_1);
         initialize(recordGroupImp_tMatchGroup_1);
@@ -1071,15 +1082,15 @@ public class SwooshRecordGroupingTest {
     }
 
     @Test
-    public void testSwooshMultipasstMatchGroup_differentRecord()
-            throws IOException, InterruptedException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+    public void testSwooshMultipasstMatchGroup_differentRecord() throws IOException, InterruptedException,
+            InstantiationException, IllegalAccessException, ClassNotFoundException {
         List<List<Map<String, String>>> matchingRulesAll_tMatchGroup_1 = new ArrayList<List<Map<String, String>>>();
         List<Map<String, String>> matcherList_tMatchGroup_1 = null;
         Map<String, String> tmpMap_tMatchGroup_1 = null;
         List<Map<String, String>> defaultSurvivorshipRules_tMatchGroup_1 = new ArrayList<Map<String, String>>();
         matcherList_tMatchGroup_1 = new ArrayList<Map<String, String>>();
-        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "1", "", "country", "2", "Exact", "NO", 1 + "", "nullMatchNull",
-                0.85 + "", "TSWOOSH_MATCHER");
+        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "1", "", "country", "2", "Exact", "NO", 1 + "",
+                "nullMatchNull", 0.85 + "", "TSWOOSH_MATCHER");
         matcherList_tMatchGroup_1.add(tmpMap_tMatchGroup_1);
         matchingRulesAll_tMatchGroup_1.add(matcherList_tMatchGroup_1);
         // master rows in a group
@@ -1092,8 +1103,8 @@ public class SwooshRecordGroupingTest {
         final Map<String, Integer> indexMap_tMatchGroup_1 = new HashMap<String, Integer>();
 
         // TDQ-9172 reuse JAVA API at here.
-        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 = createComponent(masterRows_tMatchGroup_1,
-                groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
+        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 =
+                createComponent(masterRows_tMatchGroup_1, groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
 
         recordGroupImp_tMatchGroup_1.setRecordLinkAlgorithm(RecordMatcherType.T_SwooshAlgorithm);
         // add mutch rules
@@ -1102,14 +1113,14 @@ public class SwooshRecordGroupingTest {
         }
         recordGroupImp_tMatchGroup_1.initialize();
         // init the parameters of the tswoosh algorithm
-        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String", "id_String",
-                "id_Integer", "id_Boolean", "id_Double", "id_Double", "id_String");
+        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String",
+                "id_String", "id_Integer", "id_Boolean", "id_Double", "id_Double", "id_String");
         Map<String, String> columnWithIndex_tMatchGroup_1 = fillColumn("0", "1", "2", "3", "4", "5", "6", "7", "8");
 
         SurvivorShipAlgorithmParams survivorShipAlgorithmParams_tMatchGroup_1 = SurvivorshipUtils
                 .createSurvivorShipAlgorithmParams((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1,
-                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1, columnWithType_tMatchGroup_1,
-                        columnWithIndex_tMatchGroup_1);
+                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1,
+                        columnWithType_tMatchGroup_1, columnWithIndex_tMatchGroup_1);
         ((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1)
                 .setSurvivorShipAlgorithmParams(survivorShipAlgorithmParams_tMatchGroup_1);
         initialize(recordGroupImp_tMatchGroup_1);
@@ -1151,15 +1162,15 @@ public class SwooshRecordGroupingTest {
     }
 
     @Test
-    public void testSwooshMultipasstMatchGroup_score()
-            throws IOException, InterruptedException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+    public void testSwooshMultipasstMatchGroup_score() throws IOException, InterruptedException, InstantiationException,
+            IllegalAccessException, ClassNotFoundException {
         List<List<Map<String, String>>> matchingRulesAll_tMatchGroup_1 = new ArrayList<List<Map<String, String>>>();
         List<Map<String, String>> matcherList_tMatchGroup_1 = null;
         Map<String, String> tmpMap_tMatchGroup_1 = null;
         List<Map<String, String>> defaultSurvivorshipRules_tMatchGroup_1 = new ArrayList<Map<String, String>>();
         matcherList_tMatchGroup_1 = new ArrayList<Map<String, String>>();
-        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "0.86", "", "country", "2", "Jaro", "NO", 1 + "", "nullMatchNull",
-                0.85 + "", "TSWOOSH_MATCHER");
+        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "0.86", "", "country", "2", "Jaro", "NO", 1 + "",
+                "nullMatchNull", 0.85 + "", "TSWOOSH_MATCHER");
         matcherList_tMatchGroup_1.add(tmpMap_tMatchGroup_1);
         matchingRulesAll_tMatchGroup_1.add(matcherList_tMatchGroup_1);
         // master rows in a group
@@ -1172,8 +1183,8 @@ public class SwooshRecordGroupingTest {
         final Map<String, Integer> indexMap_tMatchGroup_1 = new HashMap<String, Integer>();
 
         // TDQ-9172 reuse JAVA API at here.
-        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 = createComponent(masterRows_tMatchGroup_1,
-                groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
+        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 =
+                createComponent(masterRows_tMatchGroup_1, groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
 
         recordGroupImp_tMatchGroup_1.setRecordLinkAlgorithm(RecordMatcherType.T_SwooshAlgorithm);
         // add mutch rules
@@ -1182,14 +1193,14 @@ public class SwooshRecordGroupingTest {
         }
         recordGroupImp_tMatchGroup_1.initialize();
         // init the parameters of the tswoosh algorithm
-        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String", "id_String",
-                "id_Integer", "id_Boolean", "id_Double", "id_Double", "id_String");
+        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String",
+                "id_String", "id_Integer", "id_Boolean", "id_Double", "id_Double", "id_String");
         Map<String, String> columnWithIndex_tMatchGroup_1 = fillColumn("0", "1", "2", "3", "4", "5", "6", "7", "8");
 
         SurvivorShipAlgorithmParams survivorShipAlgorithmParams_tMatchGroup_1 = SurvivorshipUtils
                 .createSurvivorShipAlgorithmParams((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1,
-                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1, columnWithType_tMatchGroup_1,
-                        columnWithIndex_tMatchGroup_1);
+                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1,
+                        columnWithType_tMatchGroup_1, columnWithIndex_tMatchGroup_1);
         ((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1)
                 .setSurvivorShipAlgorithmParams(survivorShipAlgorithmParams_tMatchGroup_1);
         initialize(recordGroupImp_tMatchGroup_1);
@@ -1230,21 +1241,21 @@ public class SwooshRecordGroupingTest {
     }
 
     @Test
-    public void testSwooshIntMatchGroup_multipleRules()
-            throws IOException, InterruptedException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+    public void testSwooshIntMatchGroup_multipleRules() throws IOException, InterruptedException,
+            InstantiationException, IllegalAccessException, ClassNotFoundException {
         List<List<Map<String, String>>> matchingRulesAll_tMatchGroup_1 = new ArrayList<List<Map<String, String>>>();
         List<Map<String, String>> matcherList_tMatchGroup_1 = null;
         Map<String, String> tmpMap_tMatchGroup_1 = null;
         List<Map<String, String>> defaultSurvivorshipRules_tMatchGroup_1 = new ArrayList<Map<String, String>>();
         matcherList_tMatchGroup_1 = new ArrayList<Map<String, String>>(3);
-        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "1", "", "stuID", "0", "dummy", "NO", 0 + "", "nullMatchNull", null,
-                null);
+        tmpMap_tMatchGroup_1 =
+                createTmpMap("CONCATENATE", "1", "", "stuID", "0", "dummy", "NO", 0 + "", "nullMatchNull", null, null);
         matcherList_tMatchGroup_1.add(0, tmpMap_tMatchGroup_1);
-        tmpMap_tMatchGroup_1 = createTmpMap("Concatenate", "1", "", "stuAddress", "1", "Exact", "NO", 1 + "", "nullMatchNull",
-                0.86 + "", "TSWOOSH_MATCHER");
+        tmpMap_tMatchGroup_1 = createTmpMap("Concatenate", "1", "", "stuAddress", "1", "Exact", "NO", 1 + "",
+                "nullMatchNull", 0.86 + "", "TSWOOSH_MATCHER");
         matcherList_tMatchGroup_1.add(1, tmpMap_tMatchGroup_1);
-        tmpMap_tMatchGroup_1 = createTmpMap("Concatenate", "1", "", "stuProvinceID", "2", "Exact", "NO", 2 + "", "nullMatchNull",
-                0.86 + "", "TSWOOSH_MATCHER");
+        tmpMap_tMatchGroup_1 = createTmpMap("Concatenate", "1", "", "stuProvinceID", "2", "Exact", "NO", 2 + "",
+                "nullMatchNull", 0.86 + "", "TSWOOSH_MATCHER");
         matcherList_tMatchGroup_1.add(2, tmpMap_tMatchGroup_1);
         matchingRulesAll_tMatchGroup_1.add(matcherList_tMatchGroup_1);
         matcherList_tMatchGroup_1 = new ArrayList<Map<String, String>>();
@@ -1252,11 +1263,11 @@ public class SwooshRecordGroupingTest {
         tmpMap_tMatchGroup_1 = createTmpMap("Concatenate", "1.0", "", "stuProvinceID", "2", "dummy", "NO", 1 + "",
                 "nullMatchNull", 0 + "", null);
         matcherList_tMatchGroup_1.add(tmpMap_tMatchGroup_1);
-        tmpMap_tMatchGroup_1 = createTmpMap("Concatenate", "1.0", "", "stuID", "0", "Exact", "NO", 1 + "", "nullMatchNull",
-                0.85 + "", "TSWOOSH_MATCHER");
+        tmpMap_tMatchGroup_1 = createTmpMap("Concatenate", "1.0", "", "stuID", "0", "Exact", "NO", 1 + "",
+                "nullMatchNull", 0.85 + "", "TSWOOSH_MATCHER");
         matcherList_tMatchGroup_1.add(tmpMap_tMatchGroup_1);
-        tmpMap_tMatchGroup_1 = createTmpMap("Concatenate", "1.0", "", "stuAddress", "1", "dummy", "NO", 0 + "", "nullMatchNull",
-                null, null);
+        tmpMap_tMatchGroup_1 = createTmpMap("Concatenate", "1.0", "", "stuAddress", "1", "dummy", "NO", 0 + "",
+                "nullMatchNull", null, null);
         matcherList_tMatchGroup_1.add(tmpMap_tMatchGroup_1);
         Collections.sort(matcherList_tMatchGroup_1, new Comparator<Map<String, String>>() {
 
@@ -1278,8 +1289,8 @@ public class SwooshRecordGroupingTest {
         final Map<String, Integer> indexMap_tMatchGroup_1 = new HashMap<String, Integer>();
 
         // TDQ-9172 reuse JAVA API at here.
-        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 = createComponent(masterRows_tMatchGroup_1,
-                groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
+        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 =
+                createComponent(masterRows_tMatchGroup_1, groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
 
         recordGroupImp_tMatchGroup_1.setRecordLinkAlgorithm(RecordMatcherType.T_SwooshAlgorithm);
         // add mutch rules
@@ -1288,14 +1299,14 @@ public class SwooshRecordGroupingTest {
         }
         recordGroupImp_tMatchGroup_1.initialize();
         // init the parameters of the tswoosh algorithm
-        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String", "id_String",
-                "id_Integer", "id_Boolean", "id_Double", "id_Double", null);
+        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String",
+                "id_String", "id_Integer", "id_Boolean", "id_Double", "id_Double", null);
         Map<String, String> columnWithIndex_tMatchGroup_1 = fillColumn("0", "1", "2", "3", "4", "5", "6", "7", null);
 
         SurvivorShipAlgorithmParams survivorShipAlgorithmParams_tMatchGroup_1 = SurvivorshipUtils
                 .createSurvivorShipAlgorithmParams((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1,
-                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1, columnWithType_tMatchGroup_1,
-                        columnWithIndex_tMatchGroup_1);
+                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1,
+                        columnWithType_tMatchGroup_1, columnWithIndex_tMatchGroup_1);
         ((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1)
                 .setSurvivorShipAlgorithmParams(survivorShipAlgorithmParams_tMatchGroup_1);
         initialize(recordGroupImp_tMatchGroup_1);
@@ -1333,33 +1344,33 @@ public class SwooshRecordGroupingTest {
     }
 
     @Test
-    public void testSwooshIntMatchGroup_multipleRulesCase2()
-            throws IOException, InterruptedException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+    public void testSwooshIntMatchGroup_multipleRulesCase2() throws IOException, InterruptedException,
+            InstantiationException, IllegalAccessException, ClassNotFoundException {
         List<List<Map<String, String>>> matchingRulesAll_tMatchGroup_1 = new ArrayList<List<Map<String, String>>>();
         List<Map<String, String>> matcherList_tMatchGroup_1 = null;
         Map<String, String> tmpMap_tMatchGroup_1 = null;
         List<Map<String, String>> defaultSurvivorshipRules_tMatchGroup_1 = new ArrayList<Map<String, String>>();
         matcherList_tMatchGroup_1 = new ArrayList<Map<String, String>>(3);
-        tmpMap_tMatchGroup_1 = createTmpMap("Concatenate", "0.4", "", "name", "1", "Levenshtein", "NO", "1", "nullMatchNull",
-                "0.3", "TSWOOSH_MATCHER");
+        tmpMap_tMatchGroup_1 = createTmpMap("Concatenate", "0.4", "", "name", "1", "Levenshtein", "NO", "1",
+                "nullMatchNull", "0.3", "TSWOOSH_MATCHER");
         matcherList_tMatchGroup_1.add(0, tmpMap_tMatchGroup_1);
-        tmpMap_tMatchGroup_1 = createTmpMap("Concatenate", "1.0", "", "address", "2", "Exact", "NO", "1", "nullMatchNull", "0.3",
-                "TSWOOSH_MATCHER");
+        tmpMap_tMatchGroup_1 = createTmpMap("Concatenate", "1.0", "", "address", "2", "Exact", "NO", "1",
+                "nullMatchNull", "0.3", "TSWOOSH_MATCHER");
         matcherList_tMatchGroup_1.add(1, tmpMap_tMatchGroup_1);
-        tmpMap_tMatchGroup_1 = createTmpMap("MostCommon", "1.0", "", "provinceID", "3", "dummy", "NO", "0", "nullMatchNone", null,
-                null);
+        tmpMap_tMatchGroup_1 = createTmpMap("MostCommon", "1.0", "", "provinceID", "3", "dummy", "NO", "0",
+                "nullMatchNone", null, null);
         matcherList_tMatchGroup_1.add(2, tmpMap_tMatchGroup_1);
         matchingRulesAll_tMatchGroup_1.add(matcherList_tMatchGroup_1);
         matcherList_tMatchGroup_1 = new ArrayList<Map<String, String>>();
 
-        tmpMap_tMatchGroup_1 = createTmpMap("Concatenate", "0.4", "", "name", "1", "dummy", "NO", "0", "nullMatchNull", null,
-                null);
+        tmpMap_tMatchGroup_1 =
+                createTmpMap("Concatenate", "0.4", "", "name", "1", "dummy", "NO", "0", "nullMatchNull", null, null);
         matcherList_tMatchGroup_1.add(tmpMap_tMatchGroup_1);
-        tmpMap_tMatchGroup_1 = createTmpMap("Concatenate", "1.0", "", "address", "2", "dummy", "NO", "0", "nullMatchNull", null,
-                null);
+        tmpMap_tMatchGroup_1 =
+                createTmpMap("Concatenate", "1.0", "", "address", "2", "dummy", "NO", "0", "nullMatchNull", null, null);
         matcherList_tMatchGroup_1.add(tmpMap_tMatchGroup_1);
-        tmpMap_tMatchGroup_1 = createTmpMap("Concatenate", "1.0", "", "provinceID", "3", "Exact", "NO", "1", "nullMatchNone",
-                "0.3", "TSWOOSH_MATCHER");
+        tmpMap_tMatchGroup_1 = createTmpMap("Concatenate", "1.0", "", "provinceID", "3", "Exact", "NO", "1",
+                "nullMatchNone", "0.3", "TSWOOSH_MATCHER");
         matcherList_tMatchGroup_1.add(tmpMap_tMatchGroup_1);
         Collections.sort(matcherList_tMatchGroup_1, new Comparator<Map<String, String>>() {
 
@@ -1381,8 +1392,8 @@ public class SwooshRecordGroupingTest {
         final Map<String, Double> indexMap_tMatchGroup_1 = new HashMap<String, Double>();
 
         // TDQ-9172 reuse JAVA API at here.
-        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 = createComponentForRow4(masterRows_tMatchGroup_1,
-                groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
+        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 =
+                createComponentForRow4(masterRows_tMatchGroup_1, groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
 
         recordGroupImp_tMatchGroup_1.setRecordLinkAlgorithm(RecordMatcherType.T_SwooshAlgorithm);
         // add mutch rules
@@ -1391,14 +1402,15 @@ public class SwooshRecordGroupingTest {
         }
         recordGroupImp_tMatchGroup_1.initialize();
         // init the parameters of the tswoosh algorithm
-        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String", "id_Integer",
-                "id_String", "id_Integer", "id_Boolean", "id_Double", "id_Double", "id_String");
-        Map<String, String> columnWithIndex_tMatchGroup_1 = fillColumn("0", "1", "2", "3", "4", "5", "6", "7", "8", "9");
+        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String",
+                "id_Integer", "id_String", "id_Integer", "id_Boolean", "id_Double", "id_Double", "id_String");
+        Map<String, String> columnWithIndex_tMatchGroup_1 =
+                fillColumn("0", "1", "2", "3", "4", "5", "6", "7", "8", "9");
 
         SurvivorShipAlgorithmParams survivorShipAlgorithmParams_tMatchGroup_1 = SurvivorshipUtils
                 .createSurvivorShipAlgorithmParams((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1,
-                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1, columnWithType_tMatchGroup_1,
-                        columnWithIndex_tMatchGroup_1);
+                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1,
+                        columnWithType_tMatchGroup_1, columnWithIndex_tMatchGroup_1);
         ((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1)
                 .setSurvivorShipAlgorithmParams(survivorShipAlgorithmParams_tMatchGroup_1);
         initialize(recordGroupImp_tMatchGroup_1);
@@ -1458,94 +1470,96 @@ public class SwooshRecordGroupingTest {
     private AbstractRecordGrouping<Object> createComponentForRow4(final List<row4Struct> masterRows_tMatchGroup_1,
             final List<row4Struct> groupRows_tMatchGroup_1, final Map<String, Double> indexMap_tMatchGroup_1) {
         org.talend.dataquality.record.linkage.grouping.AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_2;
-        recordGroupImp_tMatchGroup_2 = new org.talend.dataquality.record.linkage.grouping.swoosh.ComponentSwooshMatchRecordGrouping() {
+        recordGroupImp_tMatchGroup_2 =
+                new org.talend.dataquality.record.linkage.grouping.swoosh.ComponentSwooshMatchRecordGrouping() {
 
-            @Override
-            protected void outputRow(Object[] row) {
-                row4Struct outStuct_tMatchGroup_2 = new row4Struct();
-                boolean isMaster = false;
+                    @Override
+                    protected void outputRow(Object[] row) {
+                        row4Struct outStuct_tMatchGroup_2 = new row4Struct();
+                        boolean isMaster = false;
 
-                if (0 < row.length) {
+                        if (0 < row.length) {
 
-                    try {
-                        outStuct_tMatchGroup_2.id = Integer.valueOf((String) row[0]);
-                    } catch (java.lang.NumberFormatException e) {
-                        outStuct_tMatchGroup_2.id = row[0] == null ? null : 0;
+                            try {
+                                outStuct_tMatchGroup_2.id = Integer.valueOf((String) row[0]);
+                            } catch (java.lang.NumberFormatException e) {
+                                outStuct_tMatchGroup_2.id = row[0] == null ? null : 0;
+                            }
+                        }
+
+                        if (1 < row.length) {
+                            outStuct_tMatchGroup_2.name = row[1] == null ? null : String.valueOf(row[1]);
+                        }
+
+                        if (2 < row.length) {
+                            outStuct_tMatchGroup_2.address = row[2] == null ? null : String.valueOf(row[2]);
+                        }
+
+                        if (3 < row.length) {
+
+                            try {
+                                outStuct_tMatchGroup_2.provinceID = Integer.valueOf((String) row[3]);
+                            } catch (java.lang.NumberFormatException e) {
+                                outStuct_tMatchGroup_2.provinceID = row[3] == null ? null : 0;
+                            }
+                        }
+
+                        if (4 < row.length) {
+                            outStuct_tMatchGroup_2.GID = row[4] == null ? null : String.valueOf(row[4]);
+                        }
+
+                        if (5 < row.length) {
+
+                            try {
+                                outStuct_tMatchGroup_2.GRP_SIZE = Integer.valueOf((String) row[5]);
+                            } catch (java.lang.NumberFormatException e) {
+                                outStuct_tMatchGroup_2.GRP_SIZE = row[5] == null ? null : 0;
+                            }
+                        }
+
+                        if (6 < row.length) {
+                            outStuct_tMatchGroup_2.MASTER = row[6] == null ? null : Boolean.valueOf((String) row[6]);
+                        }
+
+                        if (7 < row.length) {
+
+                            try {
+                                outStuct_tMatchGroup_2.SCORE = Double.valueOf((String) row[7]);
+                            } catch (java.lang.NumberFormatException e) {
+                                outStuct_tMatchGroup_2.SCORE = 0.0;
+                            }
+                        }
+
+                        if (8 < row.length) {
+
+                            try {
+                                outStuct_tMatchGroup_2.GRP_QUALITY = Double.valueOf((String) row[8]);
+                            } catch (java.lang.NumberFormatException e) {
+                                outStuct_tMatchGroup_2.GRP_QUALITY = 0.0;
+                            }
+                        }
+
+                        if (9 < row.length) {
+                            outStuct_tMatchGroup_2.MATCHING_DISTANCES = row[9] == null ? null : String.valueOf(row[9]);
+                        }
+
+                        if (outStuct_tMatchGroup_2.MASTER == true) {
+                            masterRows_tMatchGroup_1.add(outStuct_tMatchGroup_2);
+                            indexMap_tMatchGroup_1.put(String.valueOf(outStuct_tMatchGroup_2.GID),
+                                    outStuct_tMatchGroup_2.GRP_QUALITY);
+                        } else {
+                            groupRows_tMatchGroup_1.add(outStuct_tMatchGroup_2);
+                        }
                     }
-                }
 
-                if (1 < row.length) {
-                    outStuct_tMatchGroup_2.name = row[1] == null ? null : String.valueOf(row[1]);
-                }
-
-                if (2 < row.length) {
-                    outStuct_tMatchGroup_2.address = row[2] == null ? null : String.valueOf(row[2]);
-                }
-
-                if (3 < row.length) {
-
-                    try {
-                        outStuct_tMatchGroup_2.provinceID = Integer.valueOf((String) row[3]);
-                    } catch (java.lang.NumberFormatException e) {
-                        outStuct_tMatchGroup_2.provinceID = row[3] == null ? null : 0;
+                    @Override
+                    protected boolean isMaster(Object col) {
+                        return String.valueOf(col).equals("true");
                     }
-                }
-
-                if (4 < row.length) {
-                    outStuct_tMatchGroup_2.GID = row[4] == null ? null : String.valueOf(row[4]);
-                }
-
-                if (5 < row.length) {
-
-                    try {
-                        outStuct_tMatchGroup_2.GRP_SIZE = Integer.valueOf((String) row[5]);
-                    } catch (java.lang.NumberFormatException e) {
-                        outStuct_tMatchGroup_2.GRP_SIZE = row[5] == null ? null : 0;
-                    }
-                }
-
-                if (6 < row.length) {
-                    outStuct_tMatchGroup_2.MASTER = row[6] == null ? null : Boolean.valueOf((String) row[6]);
-                }
-
-                if (7 < row.length) {
-
-                    try {
-                        outStuct_tMatchGroup_2.SCORE = Double.valueOf((String) row[7]);
-                    } catch (java.lang.NumberFormatException e) {
-                        outStuct_tMatchGroup_2.SCORE = 0.0;
-                    }
-                }
-
-                if (8 < row.length) {
-
-                    try {
-                        outStuct_tMatchGroup_2.GRP_QUALITY = Double.valueOf((String) row[8]);
-                    } catch (java.lang.NumberFormatException e) {
-                        outStuct_tMatchGroup_2.GRP_QUALITY = 0.0;
-                    }
-                }
-
-                if (9 < row.length) {
-                    outStuct_tMatchGroup_2.MATCHING_DISTANCES = row[9] == null ? null : String.valueOf(row[9]);
-                }
-
-                if (outStuct_tMatchGroup_2.MASTER == true) {
-                    masterRows_tMatchGroup_1.add(outStuct_tMatchGroup_2);
-                    indexMap_tMatchGroup_1.put(String.valueOf(outStuct_tMatchGroup_2.GID), outStuct_tMatchGroup_2.GRP_QUALITY);
-                } else {
-                    groupRows_tMatchGroup_1.add(outStuct_tMatchGroup_2);
-                }
-            }
-
-            @Override
-            protected boolean isMaster(Object col) {
-                return String.valueOf(col).equals("true");
-            }
-        };
+                };
         recordGroupImp_tMatchGroup_2.setOrginalInputColumnSize(4);
-        recordGroupImp_tMatchGroup_2
-                .setRecordLinkAlgorithm(org.talend.dataquality.record.linkage.constant.RecordMatcherType.T_SwooshAlgorithm);
+        recordGroupImp_tMatchGroup_2.setRecordLinkAlgorithm(
+                org.talend.dataquality.record.linkage.constant.RecordMatcherType.T_SwooshAlgorithm);
         return recordGroupImp_tMatchGroup_2;
     }
 
@@ -1564,8 +1578,8 @@ public class SwooshRecordGroupingTest {
      * @param matching_distances
      * @return
      */
-    private Map<String, String> fillColumn(String id, String name, String address, String provinceID, String gid, String grp_size,
-            String master, String score, String grp_quality, String matching_distances) {
+    private Map<String, String> fillColumn(String id, String name, String address, String provinceID, String gid,
+            String grp_size, String master, String score, String grp_quality, String matching_distances) {
         Map<String, String> map = new HashMap<String, String>();
         if (id != null) {
             map.put("id", id);
@@ -1603,16 +1617,17 @@ public class SwooshRecordGroupingTest {
     }
 
     @Test
-    public void testSwooshIntMatchGroup_withCustomMatcher()
-            throws IOException, InterruptedException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+    public void testSwooshIntMatchGroup_withCustomMatcher() throws IOException, InterruptedException,
+            InstantiationException, IllegalAccessException, ClassNotFoundException {
         List<List<Map<String, String>>> matchingRulesAll_tMatchGroup_1 = new ArrayList<List<Map<String, String>>>();
         List<Map<String, String>> matcherList_tMatchGroup_1 = null;
         Map<String, String> tmpMap_tMatchGroup_1 = null;
         List<Map<String, String>> defaultSurvivorshipRules_tMatchGroup_1 = new ArrayList<Map<String, String>>();
         matcherList_tMatchGroup_1 = new ArrayList<Map<String, String>>();
-        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "1", "", "country", "2", "custom", "NO", 1 + "", "nullMatchNull",
-                0.85 + "", "TSWOOSH_MATCHER");
-        tmpMap_tMatchGroup_1.put("CUSTOMER_MATCH_CLASS", "org.talend.dataquality.record.linkage.grouping.MyDistance" + "");
+        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "1", "", "country", "2", "custom", "NO", 1 + "",
+                "nullMatchNull", 0.85 + "", "TSWOOSH_MATCHER");
+        tmpMap_tMatchGroup_1.put("CUSTOMER_MATCH_CLASS",
+                "org.talend.dataquality.record.linkage.grouping.MyDistance" + "");
         tmpMap_tMatchGroup_1.put("JAR_PATH",
                 "/home/runtime/TDQ_EE_NEW2/LOCAL_PROJECT/TDQ_Libraries/Indicators/User Defined Indicators/lib/test.mydistance.jar");
 
@@ -1629,8 +1644,8 @@ public class SwooshRecordGroupingTest {
         final Map<String, Integer> indexMap_tMatchGroup_1 = new HashMap<String, Integer>();
 
         // TDQ-9172 reuse JAVA API at here.
-        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 = createComponent(masterRows_tMatchGroup_1,
-                groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
+        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 =
+                createComponent(masterRows_tMatchGroup_1, groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
 
         recordGroupImp_tMatchGroup_1.setRecordLinkAlgorithm(RecordMatcherType.T_SwooshAlgorithm);
         // add mutch rules
@@ -1639,14 +1654,14 @@ public class SwooshRecordGroupingTest {
         }
         recordGroupImp_tMatchGroup_1.initialize();
         // init the parameters of the tswoosh algorithm
-        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String", "id_String",
-                "id_Integer", "id_Boolean", "id_Double", "id_Double", null);
+        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String",
+                "id_String", "id_Integer", "id_Boolean", "id_Double", "id_Double", null);
         Map<String, String> columnWithIndex_tMatchGroup_1 = fillColumn("0", "1", "2", "3", "4", "5", "6", "7", null);
 
         SurvivorShipAlgorithmParams survivorShipAlgorithmParams_tMatchGroup_1 = SurvivorshipUtils
                 .createSurvivorShipAlgorithmParams((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1,
-                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1, columnWithType_tMatchGroup_1,
-                        columnWithIndex_tMatchGroup_1);
+                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1,
+                        columnWithType_tMatchGroup_1, columnWithIndex_tMatchGroup_1);
         ((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1)
                 .setSurvivorShipAlgorithmParams(survivorShipAlgorithmParams_tMatchGroup_1);
         initialize(recordGroupImp_tMatchGroup_1);
@@ -1692,15 +1707,15 @@ public class SwooshRecordGroupingTest {
     }
 
     @Test
-    public void testSwooshIntMatchGroup_withDisplayAttLabels()
-            throws IOException, InterruptedException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+    public void testSwooshIntMatchGroup_withDisplayAttLabels() throws IOException, InterruptedException,
+            InstantiationException, IllegalAccessException, ClassNotFoundException {
         List<List<Map<String, String>>> matchingRulesAll_tMatchGroup_1 = new ArrayList<List<Map<String, String>>>();
         List<Map<String, String>> matcherList_tMatchGroup_1 = null;
         Map<String, String> tmpMap_tMatchGroup_1 = null;
         List<Map<String, String>> defaultSurvivorshipRules_tMatchGroup_1 = new ArrayList<Map<String, String>>();
         matcherList_tMatchGroup_1 = new ArrayList<Map<String, String>>();
-        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "1", "", "country", "2", "Exact", "NO", 1 + "", "nullMatchNull",
-                0.85 + "", "TSWOOSH_MATCHER");
+        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "1", "", "country", "2", "Exact", "NO", 1 + "",
+                "nullMatchNull", 0.85 + "", "TSWOOSH_MATCHER");
         matcherList_tMatchGroup_1.add(tmpMap_tMatchGroup_1);
         matchingRulesAll_tMatchGroup_1.add(matcherList_tMatchGroup_1);
 
@@ -1767,7 +1782,8 @@ public class SwooshRecordGroupingTest {
                 }
                 if (outStuct_tMatchGroup_1.MASTER == true) {
                     masterRows_tMatchGroup_1.add(outStuct_tMatchGroup_1);
-                    indexMap_tMatchGroup_1.put(String.valueOf(outStuct_tMatchGroup_1.GID), masterRows_tMatchGroup_1.size() - 1);
+                    indexMap_tMatchGroup_1.put(String.valueOf(outStuct_tMatchGroup_1.GID),
+                            masterRows_tMatchGroup_1.size() - 1);
                 } else {
                     groupRows_tMatchGroup_1.add(outStuct_tMatchGroup_1);
                 }
@@ -1786,16 +1802,16 @@ public class SwooshRecordGroupingTest {
         }
         recordGroupImp_tMatchGroup_1.initialize();
         // init the parameters of the tswoosh algorithm
-        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String", "id_String",
-                "id_Integer", "id_Boolean", "id_Double", "id_Double", null);
+        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String",
+                "id_String", "id_Integer", "id_Boolean", "id_Double", "id_Double", null);
         columnWithType_tMatchGroup_1.put("MATCHING_DISTANCES", "id_String");
         Map<String, String> columnWithIndex_tMatchGroup_1 = fillColumn("0", "1", "2", "3", "4", "5", "6", "7", null);
         columnWithIndex_tMatchGroup_1.put("MATCHING_DISTANCES", "8");
 
         SurvivorShipAlgorithmParams survivorShipAlgorithmParams_tMatchGroup_1 = SurvivorshipUtils
                 .createSurvivorShipAlgorithmParams((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1,
-                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1, columnWithType_tMatchGroup_1,
-                        columnWithIndex_tMatchGroup_1);
+                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1,
+                        columnWithType_tMatchGroup_1, columnWithIndex_tMatchGroup_1);
         ((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1)
                 .setSurvivorShipAlgorithmParams(survivorShipAlgorithmParams_tMatchGroup_1);
         initialize(recordGroupImp_tMatchGroup_1);
@@ -1830,15 +1846,15 @@ public class SwooshRecordGroupingTest {
     }
 
     @Test
-    public void testSwooshIntMatchGroup_scoreValues()
-            throws IOException, InterruptedException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+    public void testSwooshIntMatchGroup_scoreValues() throws IOException, InterruptedException, InstantiationException,
+            IllegalAccessException, ClassNotFoundException {
         List<List<Map<String, String>>> matchingRulesAll_tMatchGroup_1 = new ArrayList<List<Map<String, String>>>();
         List<Map<String, String>> matcherList_tMatchGroup_1 = null;
         Map<String, String> tmpMap_tMatchGroup_1 = null;
         List<Map<String, String>> defaultSurvivorshipRules_tMatchGroup_1 = new ArrayList<Map<String, String>>();
         matcherList_tMatchGroup_1 = new ArrayList<Map<String, String>>();
-        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "0.5", "", "city", "1", "Levenshtein", "NO", 1 + "", "nullMatchNull",
-                0.5 + "", "TSWOOSH_MATCHER");
+        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "0.5", "", "city", "1", "Levenshtein", "NO", 1 + "",
+                "nullMatchNull", 0.5 + "", "TSWOOSH_MATCHER");
         matcherList_tMatchGroup_1.add(tmpMap_tMatchGroup_1);
         matchingRulesAll_tMatchGroup_1.add(matcherList_tMatchGroup_1);
 
@@ -1905,7 +1921,8 @@ public class SwooshRecordGroupingTest {
                 }
                 if (outStuct_tMatchGroup_1.MASTER == true) {
                     masterRows_tMatchGroup_1.add(outStuct_tMatchGroup_1);
-                    indexMap_tMatchGroup_1.put(String.valueOf(outStuct_tMatchGroup_1.GID), masterRows_tMatchGroup_1.size() - 1);
+                    indexMap_tMatchGroup_1.put(String.valueOf(outStuct_tMatchGroup_1.GID),
+                            masterRows_tMatchGroup_1.size() - 1);
                 } else {
                     groupRows_tMatchGroup_1.add(outStuct_tMatchGroup_1);
                 }
@@ -1924,16 +1941,16 @@ public class SwooshRecordGroupingTest {
         }
         recordGroupImp_tMatchGroup_1.initialize();
         // init the parameters of the tswoosh algorithm
-        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String", "id_String",
-                "id_Integer", "id_Boolean", "id_Double", "id_Double", null);
+        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String",
+                "id_String", "id_Integer", "id_Boolean", "id_Double", "id_Double", null);
         columnWithType_tMatchGroup_1.put("MATCHING_DISTANCES", "id_String");
         Map<String, String> columnWithIndex_tMatchGroup_1 = fillColumn("0", "1", "2", "3", "4", "5", "6", "7", null);
         columnWithIndex_tMatchGroup_1.put("MATCHING_DISTANCES", "8");
 
         SurvivorShipAlgorithmParams survivorShipAlgorithmParams_tMatchGroup_1 = SurvivorshipUtils
                 .createSurvivorShipAlgorithmParams((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1,
-                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1, columnWithType_tMatchGroup_1,
-                        columnWithIndex_tMatchGroup_1);
+                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1,
+                        columnWithType_tMatchGroup_1, columnWithIndex_tMatchGroup_1);
         ((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1)
                 .setSurvivorShipAlgorithmParams(survivorShipAlgorithmParams_tMatchGroup_1);
         initialize(recordGroupImp_tMatchGroup_1);
@@ -1970,15 +1987,15 @@ public class SwooshRecordGroupingTest {
     }
 
     @Test
-    public void testSwooshMultipasstMatchGroup_withOutputDD()
-            throws IOException, InterruptedException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+    public void testSwooshMultipasstMatchGroup_withOutputDD() throws IOException, InterruptedException,
+            InstantiationException, IllegalAccessException, ClassNotFoundException {
         List<List<Map<String, String>>> matchingRulesAll_tMatchGroup_1 = new ArrayList<List<Map<String, String>>>();
         List<Map<String, String>> matcherList_tMatchGroup_1 = null;
         Map<String, String> tmpMap_tMatchGroup_1 = null;
         List<Map<String, String>> defaultSurvivorshipRules_tMatchGroup_1 = new ArrayList<Map<String, String>>();
         matcherList_tMatchGroup_1 = new ArrayList<Map<String, String>>();
-        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "1", "-", "country", "2", "Exact", "NO", 1 + "", "nullMatchNull",
-                0.85 + "", "TSWOOSH_MATCHER");
+        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "1", "-", "country", "2", "Exact", "NO", 1 + "",
+                "nullMatchNull", 0.85 + "", "TSWOOSH_MATCHER");
         matcherList_tMatchGroup_1.add(tmpMap_tMatchGroup_1);
         matchingRulesAll_tMatchGroup_1.add(matcherList_tMatchGroup_1);
         // master rows in a group
@@ -2047,7 +2064,8 @@ public class SwooshRecordGroupingTest {
 
                 if (outStuct_tMatchGroup_1.MASTER == true) {
                     masterRows_tMatchGroup_1.add(outStuct_tMatchGroup_1);
-                    indexMap_tMatchGroup_1.put(String.valueOf(outStuct_tMatchGroup_1.GID), masterRows_tMatchGroup_1.size() - 1);
+                    indexMap_tMatchGroup_1.put(String.valueOf(outStuct_tMatchGroup_1.GID),
+                            masterRows_tMatchGroup_1.size() - 1);
                 } else {
                     groupRows_tMatchGroup_1.add(outStuct_tMatchGroup_1);
                 }
@@ -2067,16 +2085,16 @@ public class SwooshRecordGroupingTest {
         recordGroupImp_tMatchGroup_1.initialize();
         // init the parameters of the tswoosh algorithm
 
-        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String", "id_String",
-                "id_Integer", "id_Boolean", "id_Double", "id_Double", "id_String");
+        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String",
+                "id_String", "id_Integer", "id_Boolean", "id_Double", "id_Double", "id_String");
         columnWithType_tMatchGroup_1.put("MATCHING_DISTANCES", "id_String");
         Map<String, String> columnWithIndex_tMatchGroup_1 = fillColumn("0", "1", "2", "3", "4", "5", "6", "7", "9");
         columnWithIndex_tMatchGroup_1.put("MATCHING_DISTANCES", "8");
 
         SurvivorShipAlgorithmParams survivorShipAlgorithmParams_tMatchGroup_1 = SurvivorshipUtils
                 .createSurvivorShipAlgorithmParams((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1,
-                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1, columnWithType_tMatchGroup_1,
-                        columnWithIndex_tMatchGroup_1);
+                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1,
+                        columnWithType_tMatchGroup_1, columnWithIndex_tMatchGroup_1);
         ((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1)
                 .setSurvivorShipAlgorithmParams(survivorShipAlgorithmParams_tMatchGroup_1);
         initialize(recordGroupImp_tMatchGroup_1);
@@ -2120,8 +2138,8 @@ public class SwooshRecordGroupingTest {
     }
 
     @Test
-    public void testSwooshIntMatchGroup_tdq11599Smallelst()
-            throws IOException, InterruptedException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+    public void testSwooshIntMatchGroup_tdq11599Smallelst() throws IOException, InterruptedException,
+            InstantiationException, IllegalAccessException, ClassNotFoundException {
         List<List<Map<String, String>>> matchingRulesAll_tMatchGroup_1 = new ArrayList<List<Map<String, String>>>();
         List<Map<String, String>> matcherList_tMatchGroup_1 = null;
         Map<String, String> tmpMap_tMatchGroup_1 = null;
@@ -2135,8 +2153,8 @@ public class SwooshRecordGroupingTest {
         defaultSurvivorshipRules_tMatchGroup_1.add(realSurShipMap_tMatchGroup_1);
 
         matcherList_tMatchGroup_1 = new ArrayList<Map<String, String>>();
-        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "1", "", "country", "2", "Exact", "NO", 1 + "", "nullMatchNull",
-                0.85 + "", "TSWOOSH_MATCHER");
+        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "1", "", "country", "2", "Exact", "NO", 1 + "",
+                "nullMatchNull", 0.85 + "", "TSWOOSH_MATCHER");
         matcherList_tMatchGroup_1.add(tmpMap_tMatchGroup_1);
         matchingRulesAll_tMatchGroup_1.add(matcherList_tMatchGroup_1);
 
@@ -2150,8 +2168,8 @@ public class SwooshRecordGroupingTest {
         final Map<String, Integer> indexMap_tMatchGroup_1 = new HashMap<String, Integer>();
 
         // TDQ-9172 reuse JAVA API at here.
-        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 = createComponent(masterRows_tMatchGroup_1,
-                groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
+        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 =
+                createComponent(masterRows_tMatchGroup_1, groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
 
         recordGroupImp_tMatchGroup_1.setRecordLinkAlgorithm(RecordMatcherType.T_SwooshAlgorithm);
         // add mutch rules
@@ -2160,14 +2178,14 @@ public class SwooshRecordGroupingTest {
         }
         recordGroupImp_tMatchGroup_1.initialize();
         // init the parameters of the tswoosh algorithm
-        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String", "id_String",
-                "id_Integer", "id_Boolean", "id_Double", "id_Double", null);
+        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String",
+                "id_String", "id_Integer", "id_Boolean", "id_Double", "id_Double", null);
         Map<String, String> columnWithIndex_tMatchGroup_1 = fillColumn("0", "1", "2", "3", "4", "5", "6", "7", null);
 
         SurvivorShipAlgorithmParams survivorShipAlgorithmParams_tMatchGroup_1 = SurvivorshipUtils
                 .createSurvivorShipAlgorithmParams((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1,
-                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1, columnWithType_tMatchGroup_1,
-                        columnWithIndex_tMatchGroup_1);
+                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1,
+                        columnWithType_tMatchGroup_1, columnWithIndex_tMatchGroup_1);
         ((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1)
                 .setSurvivorShipAlgorithmParams(survivorShipAlgorithmParams_tMatchGroup_1);
         initialize(recordGroupImp_tMatchGroup_1);
@@ -2212,8 +2230,8 @@ public class SwooshRecordGroupingTest {
     }
 
     @Test
-    public void testSwooshIntMatchGroup_tdq11599Largest()
-            throws IOException, InterruptedException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+    public void testSwooshIntMatchGroup_tdq11599Largest() throws IOException, InterruptedException,
+            InstantiationException, IllegalAccessException, ClassNotFoundException {
         List<List<Map<String, String>>> matchingRulesAll_tMatchGroup_1 = new ArrayList<List<Map<String, String>>>();
         List<Map<String, String>> matcherList_tMatchGroup_1 = null;
         Map<String, String> tmpMap_tMatchGroup_1 = null;
@@ -2227,8 +2245,8 @@ public class SwooshRecordGroupingTest {
         defaultSurvivorshipRules_tMatchGroup_1.add(realSurShipMap_tMatchGroup_1);
 
         matcherList_tMatchGroup_1 = new ArrayList<Map<String, String>>();
-        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "1", "", "country", "2", "Exact", "NO", 1 + "", "nullMatchNull",
-                0.85 + "", "TSWOOSH_MATCHER");
+        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "1", "", "country", "2", "Exact", "NO", 1 + "",
+                "nullMatchNull", 0.85 + "", "TSWOOSH_MATCHER");
         matcherList_tMatchGroup_1.add(tmpMap_tMatchGroup_1);
         matchingRulesAll_tMatchGroup_1.add(matcherList_tMatchGroup_1);
 
@@ -2242,8 +2260,8 @@ public class SwooshRecordGroupingTest {
         final Map<String, Integer> indexMap_tMatchGroup_1 = new HashMap<String, Integer>();
 
         // TDQ-9172 reuse JAVA API at here.
-        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 = createComponent(masterRows_tMatchGroup_1,
-                groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
+        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 =
+                createComponent(masterRows_tMatchGroup_1, groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
         recordGroupImp_tMatchGroup_1.setRecordLinkAlgorithm(RecordMatcherType.T_SwooshAlgorithm);
         // add mutch rules
         for (List<Map<String, String>> matcherList : matchingRulesAll_tMatchGroup_1) {
@@ -2251,16 +2269,16 @@ public class SwooshRecordGroupingTest {
         }
         recordGroupImp_tMatchGroup_1.initialize();
         // init the parameters of the tswoosh algorithm
-        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_Integer", "id_String", "id_String",
-                "id_Integer", "id_Boolean", "id_Double", "id_Double", null);
+        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_Integer", "id_String",
+                "id_String", "id_Integer", "id_Boolean", "id_Double", "id_Double", null);
         Map<String, String> columnWithIndex_tMatchGroup_1 = fillColumn("0", "1", "2", "3", "4", "5", "6", "7", null);
         columnWithType_tMatchGroup_1.put("MERGED_RECORD", "id_Object");
         columnWithIndex_tMatchGroup_1.put("MERGED_RECORD", "8");
 
         SurvivorShipAlgorithmParams survivorShipAlgorithmParams_tMatchGroup_1 = SurvivorshipUtils
                 .createSurvivorShipAlgorithmParams((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1,
-                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1, columnWithType_tMatchGroup_1,
-                        columnWithIndex_tMatchGroup_1);
+                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1,
+                        columnWithType_tMatchGroup_1, columnWithIndex_tMatchGroup_1);
         ((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1)
                 .setSurvivorShipAlgorithmParams(survivorShipAlgorithmParams_tMatchGroup_1);
         initialize(recordGroupImp_tMatchGroup_1);
@@ -2295,8 +2313,8 @@ public class SwooshRecordGroupingTest {
     }
 
     @Test
-    public void testSwooshIntMatchGroup_tdq14218mergeNULL()
-            throws IOException, InterruptedException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+    public void testSwooshIntMatchGroup_tdq14218mergeNULL() throws IOException, InterruptedException,
+            InstantiationException, IllegalAccessException, ClassNotFoundException {
         List<List<Map<String, String>>> matchingRulesAll_tMatchGroup_1 = new ArrayList<List<Map<String, String>>>();
         List<Map<String, String>> matcherList_tMatchGroup_1 = null;
         Map<String, String> tmpMap_tMatchGroup_1 = null;
@@ -2310,8 +2328,8 @@ public class SwooshRecordGroupingTest {
         defaultSurvivorshipRules_tMatchGroup_1.add(realSurShipMap_tMatchGroup_1);
 
         matcherList_tMatchGroup_1 = new ArrayList<Map<String, String>>();
-        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "1", "", "country", "2", "Exact", "NO", 1 + "", "nullMatchNull",
-                0.85 + "", "TSWOOSH_MATCHER");
+        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "1", "", "country", "2", "Exact", "NO", 1 + "",
+                "nullMatchNull", 0.85 + "", "TSWOOSH_MATCHER");
         matcherList_tMatchGroup_1.add(tmpMap_tMatchGroup_1);
         matchingRulesAll_tMatchGroup_1.add(matcherList_tMatchGroup_1);
 
@@ -2325,8 +2343,8 @@ public class SwooshRecordGroupingTest {
         final Map<String, Integer> indexMap_tMatchGroup_1 = new HashMap<String, Integer>();
 
         // TDQ-9172 reuse JAVA API at here.
-        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 = createComponent(masterRows_tMatchGroup_1,
-                groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
+        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 =
+                createComponent(masterRows_tMatchGroup_1, groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
 
         recordGroupImp_tMatchGroup_1.setRecordLinkAlgorithm(RecordMatcherType.T_SwooshAlgorithm);
         // add mutch rules
@@ -2335,14 +2353,14 @@ public class SwooshRecordGroupingTest {
         }
         recordGroupImp_tMatchGroup_1.initialize();
         // init the parameters of the tswoosh algorithm
-        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String", "id_String",
-                "id_Integer", "id_Boolean", "id_Double", "id_Double", null);
+        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String",
+                "id_String", "id_Integer", "id_Boolean", "id_Double", "id_Double", null);
         Map<String, String> columnWithIndex_tMatchGroup_1 = fillColumn("0", "1", "2", "3", "4", "5", "6", "7", null);
 
         SurvivorShipAlgorithmParams survivorShipAlgorithmParams_tMatchGroup_1 = SurvivorshipUtils
                 .createSurvivorShipAlgorithmParams((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1,
-                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1, columnWithType_tMatchGroup_1,
-                        columnWithIndex_tMatchGroup_1);
+                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1,
+                        columnWithType_tMatchGroup_1, columnWithIndex_tMatchGroup_1);
         ((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1)
                 .setSurvivorShipAlgorithmParams(survivorShipAlgorithmParams_tMatchGroup_1);
         initialize(recordGroupImp_tMatchGroup_1);
@@ -2502,8 +2520,8 @@ public class SwooshRecordGroupingTest {
         return map;
     }
 
-    private Map<String, String> fillColumnForReference(String id, String name, String number, String date1, String date2,
-            String gid, String grpSize, String master, String score, String grpQuality) {
+    private Map<String, String> fillColumnForReference(String id, String name, String number, String date1,
+            String date2, String gid, String grpSize, String master, String score, String grpQuality) {
         Map<String, String> map = new HashMap<String, String>();
         if (id != null) {
             map.put("id", id);
@@ -2593,7 +2611,8 @@ public class SwooshRecordGroupingTest {
                 // }
                 if (outStuct_tMatchGroup_1.MASTER == true) {
                     masterRows_tMatchGroup_1.add(outStuct_tMatchGroup_1);
-                    indexMap_tMatchGroup_1.put(String.valueOf(outStuct_tMatchGroup_1.GID), masterRows_tMatchGroup_1.size() - 1);
+                    indexMap_tMatchGroup_1.put(String.valueOf(outStuct_tMatchGroup_1.GID),
+                            masterRows_tMatchGroup_1.size() - 1);
                 } else {
                     groupRows_tMatchGroup_1.add(outStuct_tMatchGroup_1);
                 }
@@ -2610,138 +2629,142 @@ public class SwooshRecordGroupingTest {
 
     private AbstractRecordGrouping<Object> createComponentForReferenceColumn(
             final List<row2StructForReferenceColumn> masterRows_tMatchGroup_1,
-            final List<row2StructForReferenceColumn> groupRows_tMatchGroup_1, final Map<String, Integer> indexMap_tMatchGroup_1) {
+            final List<row2StructForReferenceColumn> groupRows_tMatchGroup_1,
+            final Map<String, Integer> indexMap_tMatchGroup_1) {
 
-        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 = new org.talend.dataquality.record.linkage.grouping.swoosh.ComponentSwooshMatchRecordGrouping() {
+        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 =
+                new org.talend.dataquality.record.linkage.grouping.swoosh.ComponentSwooshMatchRecordGrouping() {
 
-            @Override
-            protected void outputRow(Object[] row) {
-                row2StructForReferenceColumn outStuct_tMatchGroup_1 = new row2StructForReferenceColumn();
-                boolean isMaster = false;
+                    @Override
+                    protected void outputRow(Object[] row) {
+                        row2StructForReferenceColumn outStuct_tMatchGroup_1 = new row2StructForReferenceColumn();
+                        boolean isMaster = false;
 
-                if (0 < row.length) {
+                        if (0 < row.length) {
 
-                    try {
-                        outStuct_tMatchGroup_1.id = Integer.valueOf((String) row[0]);
-                    } catch (java.lang.NumberFormatException e) {
-                        outStuct_tMatchGroup_1.id = row[0] == null ? null : 0;
-                    }
-                }
-
-                if (1 < row.length) {
-                    outStuct_tMatchGroup_1.name = row[1] == null ? null : String.valueOf(row[1]);
-                }
-
-                if (2 < row.length) {
-
-                    try {
-                        outStuct_tMatchGroup_1.number = Integer.valueOf((String) row[2]);
-                    } catch (java.lang.NumberFormatException e) {
-                        outStuct_tMatchGroup_1.number = row[2] == null ? null : 0;
-                    }
-                }
-
-                if (3 < row.length) {
-                    String currentPattern = null;
-                    if (getColumnDatePatternMap() != null) {
-                        currentPattern = getColumnDatePatternMap().get("3");
-                    }
-                    if (currentPattern == null) {
-                        currentPattern = "yyyy-MM-dd";
-                    }
-                    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat(currentPattern);
-                    java.util.Date date = null;
-                    if (row[3] == null) {
-                        date = null;
-                    } else {
-                        try {
-                            date = sdf.parse((String) row[3]);
-                        } catch (java.text.ParseException e) {
-                            sdf = new java.text.SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", java.util.Locale.US);
                             try {
-                                date = sdf.parse((String) row[3]);
-                            } catch (java.text.ParseException e1) {
-
+                                outStuct_tMatchGroup_1.id = Integer.valueOf((String) row[0]);
+                            } catch (java.lang.NumberFormatException e) {
+                                outStuct_tMatchGroup_1.id = row[0] == null ? null : 0;
                             }
                         }
-                    }
-                    outStuct_tMatchGroup_1.date1 = date;
-                }
 
-                if (4 < row.length) {
-                    String currentPattern = null;
-                    if (getColumnDatePatternMap() != null) {
-                        currentPattern = getColumnDatePatternMap().get("4");
-                    }
-                    if (currentPattern == null) {
-                        currentPattern = "yyyy-MM-dd";
-                    }
-                    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat(currentPattern);
-                    java.util.Date date = null;
-                    if (row[4] == null) {
-                        date = null;
-                    } else {
-                        try {
-                            date = sdf.parse((String) row[4]);
-                        } catch (java.text.ParseException e) {
-                            sdf = new java.text.SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", java.util.Locale.US);
+                        if (1 < row.length) {
+                            outStuct_tMatchGroup_1.name = row[1] == null ? null : String.valueOf(row[1]);
+                        }
+
+                        if (2 < row.length) {
+
                             try {
-                                date = sdf.parse((String) row[4]);
-                            } catch (java.text.ParseException e1) {
-
+                                outStuct_tMatchGroup_1.number = Integer.valueOf((String) row[2]);
+                            } catch (java.lang.NumberFormatException e) {
+                                outStuct_tMatchGroup_1.number = row[2] == null ? null : 0;
                             }
                         }
+
+                        if (3 < row.length) {
+                            String currentPattern = null;
+                            if (getColumnDatePatternMap() != null) {
+                                currentPattern = getColumnDatePatternMap().get("3");
+                            }
+                            if (currentPattern == null) {
+                                currentPattern = "yyyy-MM-dd";
+                            }
+                            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat(currentPattern);
+                            java.util.Date date = null;
+                            if (row[3] == null) {
+                                date = null;
+                            } else {
+                                try {
+                                    date = sdf.parse((String) row[3]);
+                                } catch (java.text.ParseException e) {
+                                    sdf = new java.text.SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy",
+                                            java.util.Locale.US);
+                                    try {
+                                        date = sdf.parse((String) row[3]);
+                                    } catch (java.text.ParseException e1) {
+
+                                    }
+                                }
+                            }
+                            outStuct_tMatchGroup_1.date1 = date;
+                        }
+
+                        if (4 < row.length) {
+                            String currentPattern = null;
+                            if (getColumnDatePatternMap() != null) {
+                                currentPattern = getColumnDatePatternMap().get("4");
+                            }
+                            if (currentPattern == null) {
+                                currentPattern = "yyyy-MM-dd";
+                            }
+                            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat(currentPattern);
+                            java.util.Date date = null;
+                            if (row[4] == null) {
+                                date = null;
+                            } else {
+                                try {
+                                    date = sdf.parse((String) row[4]);
+                                } catch (java.text.ParseException e) {
+                                    sdf = new java.text.SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy",
+                                            java.util.Locale.US);
+                                    try {
+                                        date = sdf.parse((String) row[4]);
+                                    } catch (java.text.ParseException e1) {
+
+                                    }
+                                }
+                            }
+                            outStuct_tMatchGroup_1.date2 = date;
+                        }
+
+                        if (5 < row.length) {
+                            outStuct_tMatchGroup_1.GID = row[5] == null ? null : String.valueOf(row[5]);
+                        }
+
+                        if (6 < row.length) {
+
+                            try {
+                                outStuct_tMatchGroup_1.GRP_SIZE = Integer.valueOf((String) row[6]);
+                            } catch (java.lang.NumberFormatException e) {
+                                outStuct_tMatchGroup_1.GRP_SIZE = row[6] == null ? null : 0;
+                            }
+                        }
+
+                        if (7 < row.length) {
+                            outStuct_tMatchGroup_1.MASTER = row[7] == null ? null : Boolean.valueOf((String) row[7]);
+                        }
+
+                        if (8 < row.length) {
+
+                            try {
+                                outStuct_tMatchGroup_1.SCORE = Double.valueOf((String) row[8]);
+                            } catch (java.lang.NumberFormatException e) {
+                                outStuct_tMatchGroup_1.SCORE = 0.0;
+                            }
+                        }
+
+                        if (9 < row.length) {
+
+                            try {
+                                outStuct_tMatchGroup_1.GRP_QUALITY = Double.valueOf((String) row[9]);
+                            } catch (java.lang.NumberFormatException e) {
+                                outStuct_tMatchGroup_1.GRP_QUALITY = 0.0;
+                            }
+                        }
+
+                        if (outStuct_tMatchGroup_1.MASTER == true) {
+                            masterRows_tMatchGroup_1.add(outStuct_tMatchGroup_1);
+                        } else {
+                            groupRows_tMatchGroup_1.add(outStuct_tMatchGroup_1);
+                        }
                     }
-                    outStuct_tMatchGroup_1.date2 = date;
-                }
 
-                if (5 < row.length) {
-                    outStuct_tMatchGroup_1.GID = row[5] == null ? null : String.valueOf(row[5]);
-                }
-
-                if (6 < row.length) {
-
-                    try {
-                        outStuct_tMatchGroup_1.GRP_SIZE = Integer.valueOf((String) row[6]);
-                    } catch (java.lang.NumberFormatException e) {
-                        outStuct_tMatchGroup_1.GRP_SIZE = row[6] == null ? null : 0;
+                    @Override
+                    protected boolean isMaster(Object col) {
+                        return String.valueOf(col).equals("true");
                     }
-                }
-
-                if (7 < row.length) {
-                    outStuct_tMatchGroup_1.MASTER = row[7] == null ? null : Boolean.valueOf((String) row[7]);
-                }
-
-                if (8 < row.length) {
-
-                    try {
-                        outStuct_tMatchGroup_1.SCORE = Double.valueOf((String) row[8]);
-                    } catch (java.lang.NumberFormatException e) {
-                        outStuct_tMatchGroup_1.SCORE = 0.0;
-                    }
-                }
-
-                if (9 < row.length) {
-
-                    try {
-                        outStuct_tMatchGroup_1.GRP_QUALITY = Double.valueOf((String) row[9]);
-                    } catch (java.lang.NumberFormatException e) {
-                        outStuct_tMatchGroup_1.GRP_QUALITY = 0.0;
-                    }
-                }
-
-                if (outStuct_tMatchGroup_1.MASTER == true) {
-                    masterRows_tMatchGroup_1.add(outStuct_tMatchGroup_1);
-                } else {
-                    groupRows_tMatchGroup_1.add(outStuct_tMatchGroup_1);
-                }
-            }
-
-            @Override
-            protected boolean isMaster(Object col) {
-                return String.valueOf(col).equals("true");
-            }
-        };
+                };
         recordGroupImp_tMatchGroup_1.setOrginalInputColumnSize(3);
         return recordGroupImp_tMatchGroup_1;
     }
@@ -2852,8 +2875,8 @@ public class SwooshRecordGroupingTest {
      * attributes from Record).
      */
     @Test
-    public void testSwooshIntMatchGroup_passOriginal_1st()
-            throws IOException, InterruptedException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+    public void testSwooshIntMatchGroup_passOriginal_1st() throws IOException, InterruptedException,
+            InstantiationException, IllegalAccessException, ClassNotFoundException {
         List<List<Map<String, String>>> matchingRulesAll_tMatchGroup_1 = new ArrayList<List<Map<String, String>>>();
         List<Map<String, String>> matcherList_tMatchGroup_1 = null;
         Map<String, String> tmpMap_tMatchGroup_1 = null;
@@ -2936,7 +2959,8 @@ public class SwooshRecordGroupingTest {
 
                 if (outStuct_tMatchGroup_1.MASTER == true) {
                     masterRows_tMatchGroup_1.add(outStuct_tMatchGroup_1);
-                    indexMap_tMatchGroup_1.put(String.valueOf(outStuct_tMatchGroup_1.GID), masterRows_tMatchGroup_1.size() - 1);
+                    indexMap_tMatchGroup_1.put(String.valueOf(outStuct_tMatchGroup_1.GID),
+                            masterRows_tMatchGroup_1.size() - 1);
                 } else {
                     groupRows_tMatchGroup_1.add(outStuct_tMatchGroup_1);
                 }
@@ -2955,14 +2979,14 @@ public class SwooshRecordGroupingTest {
         }
         recordGroupImp_tMatchGroup_1.initialize();
         // init the parameters of the tswoosh algorithm
-        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String", "id_String",
-                "id_Integer", "id_Boolean", "id_Double", "id_Double", null);
+        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String",
+                "id_String", "id_Integer", "id_Boolean", "id_Double", "id_Double", null);
         Map<String, String> columnWithIndex_tMatchGroup_1 = fillColumn("0", "1", "2", "3", "4", "5", "6", "7", null);
 
         SurvivorShipAlgorithmParams survivorShipAlgorithmParams_tMatchGroup_1 = SurvivorshipUtils
                 .createSurvivorShipAlgorithmParams((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1,
-                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1, columnWithType_tMatchGroup_1,
-                        columnWithIndex_tMatchGroup_1);
+                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1,
+                        columnWithType_tMatchGroup_1, columnWithIndex_tMatchGroup_1);
         ((ComponentSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1)
                 .setSurvivorShipAlgorithmParams(survivorShipAlgorithmParams_tMatchGroup_1);
         initialize(recordGroupImp_tMatchGroup_1);
@@ -3020,8 +3044,8 @@ public class SwooshRecordGroupingTest {
      * Input of the 2nd tmatchgroup contains List<Attribute>, need to be handled. And should not be outputed.
      */
     @Test
-    public void testSwooshIntMatchGroup_passOriginal_2nd()
-            throws IOException, InterruptedException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+    public void testSwooshIntMatchGroup_passOriginal_2nd() throws IOException, InterruptedException,
+            InstantiationException, IllegalAccessException, ClassNotFoundException {
         List<List<Map<String, String>>> matchingRulesAll_tMatchGroup_1 = new ArrayList<List<Map<String, String>>>();
         List<Map<String, String>> matcherList_tMatchGroup_1 = null;
         Map<String, String> tmpMap_tMatchGroup_1 = null;
@@ -3106,7 +3130,8 @@ public class SwooshRecordGroupingTest {
 
                 if (outStuct_tMatchGroup_1.MASTER == true) {
                     masterRows_tMatchGroup_1.add(outStuct_tMatchGroup_1);
-                    indexMap_tMatchGroup_1.put(String.valueOf(outStuct_tMatchGroup_1.GID), masterRows_tMatchGroup_1.size() - 1);
+                    indexMap_tMatchGroup_1.put(String.valueOf(outStuct_tMatchGroup_1.GID),
+                            masterRows_tMatchGroup_1.size() - 1);
                 } else {
                     groupRows_tMatchGroup_1.add(outStuct_tMatchGroup_1);
                 }
@@ -3126,14 +3151,14 @@ public class SwooshRecordGroupingTest {
         recordGroupImp_tMatchGroup_1.initialize();
 
         // init the parameters of the tswoosh algorithm
-        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String", "id_String",
-                "id_Integer", "id_Boolean", "id_Double", "id_Double", null);
+        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String",
+                "id_String", "id_Integer", "id_Boolean", "id_Double", "id_Double", null);
         Map<String, String> columnWithIndex_tMatchGroup_1 = fillColumn("0", "1", "2", "3", "4", "5", "6", "7", null);
 
         SurvivorShipAlgorithmParams survivorShipAlgorithmParams_tMatchGroup_1 = SurvivorshipUtils
                 .createSurvivorShipAlgorithmParams((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1,
-                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1, columnWithType_tMatchGroup_1,
-                        columnWithIndex_tMatchGroup_1);
+                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1,
+                        columnWithType_tMatchGroup_1, columnWithIndex_tMatchGroup_1);
         ((ComponentSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1)
                 .setSurvivorShipAlgorithmParams(survivorShipAlgorithmParams_tMatchGroup_1);
         initialize(recordGroupImp_tMatchGroup_1);
@@ -3197,8 +3222,8 @@ public class SwooshRecordGroupingTest {
      * Input of the 2nd tmatchgroup contains List<Attribute>, need to be handled. And should not be outputed.
      */
     @Test
-    public void testSwooshIntMatchGroup_passOriginal_withOutputDetails()
-            throws IOException, InterruptedException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+    public void testSwooshIntMatchGroup_passOriginal_withOutputDetails() throws IOException, InterruptedException,
+            InstantiationException, IllegalAccessException, ClassNotFoundException {
         List<List<Map<String, String>>> matchingRulesAll_tMatchGroup_1 = new ArrayList<List<Map<String, String>>>();
         List<Map<String, String>> matcherList_tMatchGroup_1 = null;
         Map<String, String> tmpMap_tMatchGroup_1 = null;
@@ -3285,7 +3310,8 @@ public class SwooshRecordGroupingTest {
                 //
                 if (outStuct_tMatchGroup_1.MASTER == true) {
                     masterRows_tMatchGroup_1.add(outStuct_tMatchGroup_1);
-                    indexMap_tMatchGroup_1.put(String.valueOf(outStuct_tMatchGroup_1.GID), masterRows_tMatchGroup_1.size() - 1);
+                    indexMap_tMatchGroup_1.put(String.valueOf(outStuct_tMatchGroup_1.GID),
+                            masterRows_tMatchGroup_1.size() - 1);
                 } else {
                     groupRows_tMatchGroup_1.add(outStuct_tMatchGroup_1);
                 }
@@ -3305,16 +3331,16 @@ public class SwooshRecordGroupingTest {
         recordGroupImp_tMatchGroup_1.initialize();
 
         // init the parameters of the tswoosh algorithm
-        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String", "id_String",
-                "id_Integer", "id_Boolean", "id_Double", "id_Double", null);
+        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String",
+                "id_String", "id_Integer", "id_Boolean", "id_Double", "id_Double", null);
         columnWithType_tMatchGroup_1.put("MATCHING_DISTANCES", "id_String");
         Map<String, String> columnWithIndex_tMatchGroup_1 = fillColumn("0", "1", "2", "3", "4", "5", "6", "7", null);
         columnWithIndex_tMatchGroup_1.put("MATCHING_DISTANCES", "8");
 
         SurvivorShipAlgorithmParams survivorShipAlgorithmParams_tMatchGroup_1 = SurvivorshipUtils
                 .createSurvivorShipAlgorithmParams((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1,
-                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1, columnWithType_tMatchGroup_1,
-                        columnWithIndex_tMatchGroup_1);
+                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1,
+                        columnWithType_tMatchGroup_1, columnWithIndex_tMatchGroup_1);
         ((ComponentSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1)
                 .setSurvivorShipAlgorithmParams(survivorShipAlgorithmParams_tMatchGroup_1);
         initialize(recordGroupImp_tMatchGroup_1);
@@ -3379,8 +3405,8 @@ public class SwooshRecordGroupingTest {
     }
 
     @Test
-    public void testSwooshIntMatchGroup_removeTempMasters()
-            throws IOException, InterruptedException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+    public void testSwooshIntMatchGroup_removeTempMasters() throws IOException, InterruptedException,
+            InstantiationException, IllegalAccessException, ClassNotFoundException {
         List<List<Map<String, String>>> matchingRulesAll_tMatchGroup_1 = new ArrayList<List<Map<String, String>>>();
         List<Map<String, String>> matcherList_tMatchGroup_1 = null;
         Map<String, String> tmpMap_tMatchGroup_1 = null;
@@ -3465,7 +3491,8 @@ public class SwooshRecordGroupingTest {
 
                 if (outStuct_tMatchGroup_1.MASTER == true) {
                     masterRows_tMatchGroup_1.add(outStuct_tMatchGroup_1);
-                    indexMap_tMatchGroup_1.put(String.valueOf(outStuct_tMatchGroup_1.GID), masterRows_tMatchGroup_1.size() - 1);
+                    indexMap_tMatchGroup_1.put(String.valueOf(outStuct_tMatchGroup_1.GID),
+                            masterRows_tMatchGroup_1.size() - 1);
                 } else {
                     groupRows_tMatchGroup_1.add(outStuct_tMatchGroup_1);
                 }
@@ -3485,14 +3512,14 @@ public class SwooshRecordGroupingTest {
         recordGroupImp_tMatchGroup_1.initialize();
 
         // init the parameters of the tswoosh algorithm
-        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String", "id_String",
-                "id_Integer", "id_Boolean", "id_Double", "id_Double", null);
+        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String",
+                "id_String", "id_Integer", "id_Boolean", "id_Double", "id_Double", null);
         Map<String, String> columnWithIndex_tMatchGroup_1 = fillColumn("0", "1", "2", "3", "4", "5", "6", "7", null);
 
         SurvivorShipAlgorithmParams survivorShipAlgorithmParams_tMatchGroup_1 = SurvivorshipUtils
                 .createSurvivorShipAlgorithmParams((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1,
-                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1, columnWithType_tMatchGroup_1,
-                        columnWithIndex_tMatchGroup_1);
+                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1,
+                        columnWithType_tMatchGroup_1, columnWithIndex_tMatchGroup_1);
         ((ComponentSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1)
                 .setSurvivorShipAlgorithmParams(survivorShipAlgorithmParams_tMatchGroup_1);
         initialize(recordGroupImp_tMatchGroup_1);
@@ -3549,15 +3576,15 @@ public class SwooshRecordGroupingTest {
     }
 
     @Test
-    public void testSwoosh_one_grpQuality()
-            throws IOException, InterruptedException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+    public void testSwoosh_one_grpQuality() throws IOException, InterruptedException, InstantiationException,
+            IllegalAccessException, ClassNotFoundException {
         List<List<Map<String, String>>> matchingRulesAll_tMatchGroup_1 = new ArrayList<List<Map<String, String>>>();
         List<Map<String, String>> matcherList_tMatchGroup_1 = null;
         Map<String, String> tmpMap_tMatchGroup_1 = null;
         List<Map<String, String>> defaultSurvivorshipRules_tMatchGroup_1 = new ArrayList<Map<String, String>>();
         matcherList_tMatchGroup_1 = new ArrayList<Map<String, String>>();
-        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "0.79", "", "city", "1", "Levenshtein", "NO", 1 + "", "nullMatchNull",
-                0.7 + "", "TSWOOSH_MATCHER");
+        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "0.79", "", "city", "1", "Levenshtein", "NO", 1 + "",
+                "nullMatchNull", 0.7 + "", "TSWOOSH_MATCHER");
         matcherList_tMatchGroup_1.add(tmpMap_tMatchGroup_1);
         matchingRulesAll_tMatchGroup_1.add(matcherList_tMatchGroup_1);
 
@@ -3571,8 +3598,8 @@ public class SwooshRecordGroupingTest {
         final Map<String, Integer> indexMap_tMatchGroup_1 = new HashMap<String, Integer>();
 
         // TDQ-9172 reuse JAVA API at here.
-        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 = createComponent(masterRows_tMatchGroup_1,
-                groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
+        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 =
+                createComponent(masterRows_tMatchGroup_1, groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
 
         recordGroupImp_tMatchGroup_1.setRecordLinkAlgorithm(RecordMatcherType.T_SwooshAlgorithm);
         // add mutch rules
@@ -3581,14 +3608,14 @@ public class SwooshRecordGroupingTest {
         }
         recordGroupImp_tMatchGroup_1.initialize();
         // init the parameters of the tswoosh algorithm
-        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String", "id_String",
-                "id_Integer", "id_Boolean", "id_Double", "id_Double", null);
+        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String",
+                "id_String", "id_Integer", "id_Boolean", "id_Double", "id_Double", null);
         Map<String, String> columnWithIndex_tMatchGroup_1 = fillColumn("0", "1", "2", "3", "4", "5", "6", "7", null);
 
         SurvivorShipAlgorithmParams survivorShipAlgorithmParams_tMatchGroup_1 = SurvivorshipUtils
                 .createSurvivorShipAlgorithmParams((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1,
-                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1, columnWithType_tMatchGroup_1,
-                        columnWithIndex_tMatchGroup_1);
+                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1,
+                        columnWithType_tMatchGroup_1, columnWithIndex_tMatchGroup_1);
         ((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1)
                 .setSurvivorShipAlgorithmParams(survivorShipAlgorithmParams_tMatchGroup_1);
         initialize(recordGroupImp_tMatchGroup_1);
@@ -3627,15 +3654,15 @@ public class SwooshRecordGroupingTest {
      * Test case for TDQ-17160
      */
     @Test
-    public void testSwoosh_one_grpQuality_0()
-            throws IOException, InterruptedException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+    public void testSwoosh_one_grpQuality_0() throws IOException, InterruptedException, InstantiationException,
+            IllegalAccessException, ClassNotFoundException {
         List<List<Map<String, String>>> matchingRulesAll_tMatchGroup_1 = new ArrayList<List<Map<String, String>>>();
         List<Map<String, String>> matcherList_tMatchGroup_1 = null;
         Map<String, String> tmpMap_tMatchGroup_1 = null;
         List<Map<String, String>> defaultSurvivorshipRules_tMatchGroup_1 = new ArrayList<Map<String, String>>();
         matcherList_tMatchGroup_1 = new ArrayList<Map<String, String>>();
-        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "0.85", "", "gender", "1", "Exact", "NO", 1 + "", "nullMatchNull",
-                0.9 + "", "TSWOOSH_MATCHER");
+        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "0.85", "", "gender", "1", "Exact", "NO", 1 + "",
+                "nullMatchNull", 0.9 + "", "TSWOOSH_MATCHER");
         matcherList_tMatchGroup_1.add(tmpMap_tMatchGroup_1);
         matchingRulesAll_tMatchGroup_1.add(matcherList_tMatchGroup_1);
 
@@ -3649,8 +3676,8 @@ public class SwooshRecordGroupingTest {
         final Map<String, Integer> indexMap_tMatchGroup_1 = new HashMap<String, Integer>();
 
         // TDQ-9172 reuse JAVA API at here.
-        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 = createComponent(masterRows_tMatchGroup_1,
-                groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
+        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 =
+                createComponent(masterRows_tMatchGroup_1, groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
 
         recordGroupImp_tMatchGroup_1.setRecordLinkAlgorithm(RecordMatcherType.T_SwooshAlgorithm);
         // add mutch rules
@@ -3659,14 +3686,14 @@ public class SwooshRecordGroupingTest {
         }
         recordGroupImp_tMatchGroup_1.initialize();
         // init the parameters of the tswoosh algorithm
-        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String", "id_String",
-                "id_Integer", "id_Boolean", "id_Double", "id_Double", null);
+        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String",
+                "id_String", "id_Integer", "id_Boolean", "id_Double", "id_Double", null);
         Map<String, String> columnWithIndex_tMatchGroup_1 = fillColumn("0", "1", "2", "3", "4", "5", "6", "7", null);
 
         SurvivorShipAlgorithmParams survivorShipAlgorithmParams_tMatchGroup_1 = SurvivorshipUtils
                 .createSurvivorShipAlgorithmParams((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1,
-                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1, columnWithType_tMatchGroup_1,
-                        columnWithIndex_tMatchGroup_1);
+                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1,
+                        columnWithType_tMatchGroup_1, columnWithIndex_tMatchGroup_1);
         ((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1)
                 .setSurvivorShipAlgorithmParams(survivorShipAlgorithmParams_tMatchGroup_1);
         initialize(recordGroupImp_tMatchGroup_1);
@@ -3698,8 +3725,8 @@ public class SwooshRecordGroupingTest {
     }
 
     @Test
-    public void testSwooshMultipasstMatchGroup_grpQuality()
-            throws IOException, InterruptedException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+    public void testSwooshMultipasstMatchGroup_grpQuality() throws IOException, InterruptedException,
+            InstantiationException, IllegalAccessException, ClassNotFoundException {
         List<List<Map<String, String>>> matchingRulesAll_tMatchGroup_1 = new ArrayList<List<Map<String, String>>>();
         List<Map<String, String>> matcherList_tMatchGroup_1 = null;
         Map<String, String> tmpMap_tMatchGroup_1 = null;
@@ -3719,8 +3746,8 @@ public class SwooshRecordGroupingTest {
         final Map<String, Integer> indexMap_tMatchGroup_1 = new HashMap<String, Integer>();
 
         // TDQ-9172 reuse JAVA API at here.
-        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 = createComponent(masterRows_tMatchGroup_1,
-                groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
+        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 =
+                createComponent(masterRows_tMatchGroup_1, groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
 
         recordGroupImp_tMatchGroup_1.setRecordLinkAlgorithm(RecordMatcherType.T_SwooshAlgorithm);
         // add mutch rules
@@ -3729,14 +3756,14 @@ public class SwooshRecordGroupingTest {
         }
         recordGroupImp_tMatchGroup_1.initialize();
         // init the parameters of the tswoosh algorithm
-        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String", "id_String",
-                "id_Integer", "id_Boolean", "id_Double", "id_Double", "id_String");
+        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String",
+                "id_String", "id_Integer", "id_Boolean", "id_Double", "id_Double", "id_String");
         Map<String, String> columnWithIndex_tMatchGroup_1 = fillColumn("0", "1", "2", "3", "4", "5", "6", "7", "8");
 
         SurvivorShipAlgorithmParams survivorShipAlgorithmParams_tMatchGroup_1 = SurvivorshipUtils
                 .createSurvivorShipAlgorithmParams((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1,
-                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1, columnWithType_tMatchGroup_1,
-                        columnWithIndex_tMatchGroup_1);
+                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1,
+                        columnWithType_tMatchGroup_1, columnWithIndex_tMatchGroup_1);
         ((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1)
                 .setSurvivorShipAlgorithmParams(survivorShipAlgorithmParams_tMatchGroup_1);
         initialize(recordGroupImp_tMatchGroup_1);
@@ -3763,8 +3790,8 @@ public class SwooshRecordGroupingTest {
         Collections.sort(groupRows_tMatchGroup_1);
         Assert.assertTrue(groupRows_tMatchGroup_1.size() > 0);
         for (row2Struct one : groupRows_tMatchGroup_1) {
-            log.trace(one.customer_id + "--" + one.city + "--" + one.country + "--" + one.GID + "--" + one.GRP_QUALITY + "--"
-                    + one.MASTER + "--" + one.SCORE);
+            log.trace(one.customer_id + "--" + one.city + "--" + one.country + "--" + one.GID + "--" + one.GRP_QUALITY
+                    + "--" + one.MASTER + "--" + one.SCORE);
             if (one.MASTER) {
                 if (one.customer_id == 8) {
                     Assert.assertTrue(0.8 == one.GRP_QUALITY);
@@ -3782,33 +3809,33 @@ public class SwooshRecordGroupingTest {
     }
 
     @Test
-    public void testSwooshIntMatchGroup_withDisplayAttLabels_2Rules()
-            throws IOException, InterruptedException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+    public void testSwooshIntMatchGroup_withDisplayAttLabels_2Rules() throws IOException, InterruptedException,
+            InstantiationException, IllegalAccessException, ClassNotFoundException {
         List<List<Map<String, String>>> matchingRulesAll_tMatchGroup_1 = new ArrayList<List<Map<String, String>>>();
         List<Map<String, String>> matcherList_tMatchGroup_1 = null;
         Map<String, String> tmpMap_tMatchGroup_1 = null;
         List<Map<String, String>> defaultSurvivorshipRules_tMatchGroup_1 = new ArrayList<Map<String, String>>();
         matcherList_tMatchGroup_1 = new ArrayList<Map<String, String>>();
-        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "1", "", "customer_id", "0", "dummy", "NO", 0 + "", "nullMatchNull",
-                null, null);
+        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "1", "", "customer_id", "0", "dummy", "NO", 0 + "",
+                "nullMatchNull", null, null);
         matcherList_tMatchGroup_1.add(0, tmpMap_tMatchGroup_1);
         tmpMap_tMatchGroup_1 = createTmpMap("Concatenate", "1", "", "city", "1", "Exact", "NO", 1 + "", "nullMatchNull",
                 0.86 + "", "TSWOOSH_MATCHER");
         matcherList_tMatchGroup_1.add(1, tmpMap_tMatchGroup_1);
-        tmpMap_tMatchGroup_1 = createTmpMap("Concatenate", "1", "", "country", "2", "Exact", "NO", 2 + "", "nullMatchNull",
-                0.86 + "", "TSWOOSH_MATCHER");
+        tmpMap_tMatchGroup_1 = createTmpMap("Concatenate", "1", "", "country", "2", "Exact", "NO", 2 + "",
+                "nullMatchNull", 0.86 + "", "TSWOOSH_MATCHER");
         matcherList_tMatchGroup_1.add(2, tmpMap_tMatchGroup_1);
         matchingRulesAll_tMatchGroup_1.add(matcherList_tMatchGroup_1);
         matcherList_tMatchGroup_1 = new ArrayList<Map<String, String>>();
 
-        tmpMap_tMatchGroup_1 = createTmpMap("Concatenate", "1.0", "", "country", "2", "dummy", "NO", 1 + "", "nullMatchNull",
-                0 + "", null);
+        tmpMap_tMatchGroup_1 = createTmpMap("Concatenate", "1.0", "", "country", "2", "dummy", "NO", 1 + "",
+                "nullMatchNull", 0 + "", null);
         matcherList_tMatchGroup_1.add(tmpMap_tMatchGroup_1);
-        tmpMap_tMatchGroup_1 = createTmpMap("Concatenate", "1.0", "", "customer_id", "0", "Exact", "NO", 1 + "", "nullMatchNull",
-                0.85 + "", "TSWOOSH_MATCHER");
+        tmpMap_tMatchGroup_1 = createTmpMap("Concatenate", "1.0", "", "customer_id", "0", "Exact", "NO", 1 + "",
+                "nullMatchNull", 0.85 + "", "TSWOOSH_MATCHER");
         matcherList_tMatchGroup_1.add(tmpMap_tMatchGroup_1);
-        tmpMap_tMatchGroup_1 = createTmpMap("Concatenate", "1.0", "", "city", "1", "dummy", "NO", 0 + "", "nullMatchNull", null,
-                null);
+        tmpMap_tMatchGroup_1 =
+                createTmpMap("Concatenate", "1.0", "", "city", "1", "dummy", "NO", 0 + "", "nullMatchNull", null, null);
         matcherList_tMatchGroup_1.add(tmpMap_tMatchGroup_1);
         matchingRulesAll_tMatchGroup_1.add(matcherList_tMatchGroup_1);
 
@@ -3875,7 +3902,8 @@ public class SwooshRecordGroupingTest {
                 }
                 if (outStuct_tMatchGroup_1.MASTER == true) {
                     masterRows_tMatchGroup_1.add(outStuct_tMatchGroup_1);
-                    indexMap_tMatchGroup_1.put(String.valueOf(outStuct_tMatchGroup_1.GID), masterRows_tMatchGroup_1.size() - 1);
+                    indexMap_tMatchGroup_1.put(String.valueOf(outStuct_tMatchGroup_1.GID),
+                            masterRows_tMatchGroup_1.size() - 1);
                 } else {
                     groupRows_tMatchGroup_1.add(outStuct_tMatchGroup_1);
                 }
@@ -3894,16 +3922,16 @@ public class SwooshRecordGroupingTest {
         }
         recordGroupImp_tMatchGroup_1.initialize();
         // init the parameters of the tswoosh algorithm
-        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String", "id_String",
-                "id_Integer", "id_Boolean", "id_Double", "id_Double", null);
+        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String",
+                "id_String", "id_Integer", "id_Boolean", "id_Double", "id_Double", null);
         columnWithType_tMatchGroup_1.put("MATCHING_DISTANCES", "id_String");
         Map<String, String> columnWithIndex_tMatchGroup_1 = fillColumn("0", "1", "2", "3", "4", "5", "6", "7", null);
         columnWithIndex_tMatchGroup_1.put("MATCHING_DISTANCES", "8");
 
         SurvivorShipAlgorithmParams survivorShipAlgorithmParams_tMatchGroup_1 = SurvivorshipUtils
                 .createSurvivorShipAlgorithmParams((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1,
-                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1, columnWithType_tMatchGroup_1,
-                        columnWithIndex_tMatchGroup_1);
+                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1,
+                        columnWithType_tMatchGroup_1, columnWithIndex_tMatchGroup_1);
         ((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1)
                 .setSurvivorShipAlgorithmParams(survivorShipAlgorithmParams_tMatchGroup_1);
         initialize(recordGroupImp_tMatchGroup_1);
@@ -3960,15 +3988,15 @@ public class SwooshRecordGroupingTest {
     }
 
     @Test
-    public void testSwooshMultipasstMatchGroup_oneRecordOneGroup_14229()
-            throws IOException, InterruptedException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+    public void testSwooshMultipasstMatchGroup_oneRecordOneGroup_14229() throws IOException, InterruptedException,
+            InstantiationException, IllegalAccessException, ClassNotFoundException {
         List<List<Map<String, String>>> matchingRulesAll_tMatchGroup_1 = new ArrayList<List<Map<String, String>>>();
         List<Map<String, String>> matcherList_tMatchGroup_1 = null;
         Map<String, String> tmpMap_tMatchGroup_1 = null;
         List<Map<String, String>> defaultSurvivorshipRules_tMatchGroup_1 = new ArrayList<Map<String, String>>();
         matcherList_tMatchGroup_1 = new ArrayList<Map<String, String>>();
-        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "1", "", "country", "2", "Exact", "NO", 1 + "", "nullMatchNull",
-                0.85 + "", "TSWOOSH_MATCHER");
+        tmpMap_tMatchGroup_1 = createTmpMap("CONCATENATE", "1", "", "country", "2", "Exact", "NO", 1 + "",
+                "nullMatchNull", 0.85 + "", "TSWOOSH_MATCHER");
         matcherList_tMatchGroup_1.add(tmpMap_tMatchGroup_1);
         matchingRulesAll_tMatchGroup_1.add(matcherList_tMatchGroup_1);
         // master rows in a group
@@ -3981,8 +4009,8 @@ public class SwooshRecordGroupingTest {
         final Map<String, Integer> indexMap_tMatchGroup_1 = new HashMap<String, Integer>();
 
         // TDQ-9172 reuse JAVA API at here.
-        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 = createComponent(masterRows_tMatchGroup_1,
-                groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
+        AbstractRecordGrouping<Object> recordGroupImp_tMatchGroup_1 =
+                createComponent(masterRows_tMatchGroup_1, groupRows_tMatchGroup_1, indexMap_tMatchGroup_1);
 
         recordGroupImp_tMatchGroup_1.setRecordLinkAlgorithm(RecordMatcherType.T_SwooshAlgorithm);
         // add mutch rules
@@ -3991,14 +4019,14 @@ public class SwooshRecordGroupingTest {
         }
         recordGroupImp_tMatchGroup_1.initialize();
         // init the parameters of the tswoosh algorithm
-        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String", "id_String",
-                "id_Integer", "id_Boolean", "id_Double", "id_Double", "id_String");
+        Map<String, String> columnWithType_tMatchGroup_1 = fillColumn("id_Integer", "id_String", "id_String",
+                "id_String", "id_Integer", "id_Boolean", "id_Double", "id_Double", "id_String");
         Map<String, String> columnWithIndex_tMatchGroup_1 = fillColumn("0", "1", "2", "3", "4", "5", "6", "7", "8");
 
         SurvivorShipAlgorithmParams survivorShipAlgorithmParams_tMatchGroup_1 = SurvivorshipUtils
                 .createSurvivorShipAlgorithmParams((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1,
-                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1, columnWithType_tMatchGroup_1,
-                        columnWithIndex_tMatchGroup_1);
+                        matchingRulesAll_tMatchGroup_1, defaultSurvivorshipRules_tMatchGroup_1,
+                        columnWithType_tMatchGroup_1, columnWithIndex_tMatchGroup_1);
         ((AnalysisSwooshMatchRecordGrouping) recordGroupImp_tMatchGroup_1)
                 .setSurvivorShipAlgorithmParams(survivorShipAlgorithmParams_tMatchGroup_1);
         initialize(recordGroupImp_tMatchGroup_1);
@@ -4080,8 +4108,8 @@ public class SwooshRecordGroupingTest {
 
         List<Map<String, String>> matchingRule = new ArrayList<Map<String, String>>();
 
-        Map<String, String> lnameRecords = createTmpMap(null, "0.9", null, "NAME", "1", "JARO_WINKLER", "NO", "1", null, null,
-                null);
+        Map<String, String> lnameRecords =
+                createTmpMap(null, "0.9", null, "NAME", "1", "JARO_WINKLER", "NO", "1", null, null, null);
         matchingRule.add(lnameRecords);
 
         recordGroup.addMatchRule(matchingRule);
@@ -4173,8 +4201,8 @@ public class SwooshRecordGroupingTest {
 
         List<Map<String, String>> matchingRule = new ArrayList<Map<String, String>>();
 
-        Map<String, String> lnameRecords = createTmpMap(null, "0.9", null, "NAME", "1", "JARO_WINKLER", "NO", "1", null, null,
-                null);
+        Map<String, String> lnameRecords =
+                createTmpMap(null, "0.9", null, "NAME", "1", "JARO_WINKLER", "NO", "1", null, null, null);
         matchingRule.add(lnameRecords);
 
         recordGroup.addMatchRule(matchingRule);
@@ -4260,8 +4288,8 @@ public class SwooshRecordGroupingTest {
 
         List<Map<String, String>> matchingRule = new ArrayList<Map<String, String>>();
 
-        Map<String, String> lnameRecords = createTmpMap(null, "0.9", null, "NAME", "1", "JARO_WINKLER", "NO", "1", null, null,
-                null);
+        Map<String, String> lnameRecords =
+                createTmpMap(null, "0.9", null, "NAME", "1", "JARO_WINKLER", "NO", "1", null, null, null);
         matchingRule.add(lnameRecords);
 
         recordGroup.addMatchRule(matchingRule);

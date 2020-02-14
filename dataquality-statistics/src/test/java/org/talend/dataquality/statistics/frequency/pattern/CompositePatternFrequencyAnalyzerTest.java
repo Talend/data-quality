@@ -51,8 +51,8 @@ public class CompositePatternFrequencyAnalyzerTest {
 
     @Test
     public void testAnalyze() {
-        String[] data = new String[] { "John", "", "123Code", "111", "Zhao", "2015-08-20", "2012-02-12", "12/2/99", "Hois",
-                "2001年" };
+        String[] data = new String[] { "John", "", "123Code", "111", "Zhao", "2015-08-20", "2012-02-12", "12/2/99",
+                "Hois", "2001年" };
         for (String value : data) {
             patternFreqAnalyzer.analyze(value);
         }
@@ -84,8 +84,8 @@ public class CompositePatternFrequencyAnalyzerTest {
     public void testAnalyzerTwoColumns() {
 
         String[][] data = new String[][] { { "John", "filx" }, { "", "a" }, { "123Code", "3649273" }, { "111", "100" },
-                { "Zhao", "silL" }, { "2015-08-20", "2015-08-21" }, { "2012-02-12", "2022-9-12" }, { "12/2/99", "12/2/99" },
-                { "Hois", "*^2lii" }, { "2001年", "4445-" } };
+                { "Zhao", "silL" }, { "2015-08-20", "2015-08-21" }, { "2012-02-12", "2022-9-12" },
+                { "12/2/99", "12/2/99" }, { "Hois", "*^2lii" }, { "2001年", "4445-" } };
         for (String[] value : data) {
             patternFreqAnalyzer.analyze(value);
         }

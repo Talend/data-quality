@@ -222,7 +222,8 @@ public class NumberServiceTest {
      */
     private Object[][] generateInputData() {
 
-        return new Object[][] { { 5, 1, 3, 3 }, { 3, 1, 5, 4 }, { 1, 1, 4, 4 }, { 2, 1, 1, 3 }, { 4, 1, 6, 3 }, { 6, 1, 2, 4 } };
+        return new Object[][] { { 5, 1, 3, 3 }, { 3, 1, 5, 4 }, { 1, 1, 4, 4 }, { 2, 1, 1, 3 }, { 4, 1, 6, 3 },
+                { 6, 1, 2, 4 } };
     }
 
 }

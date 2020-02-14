@@ -25,13 +25,17 @@ public class AlgoBox {
 
     private static final NGramFingerprintKeyer NGRAMKEYER = new NGramFingerprintKeyer();
 
-    private static final org.apache.commons.codec.language.Soundex soundex = new org.apache.commons.codec.language.Soundex();
+    private static final org.apache.commons.codec.language.Soundex soundex =
+            new org.apache.commons.codec.language.Soundex();
 
-    private static final org.apache.commons.codec.language.DoubleMetaphone doublemetaphone = new org.apache.commons.codec.language.DoubleMetaphone();
+    private static final org.apache.commons.codec.language.DoubleMetaphone doublemetaphone =
+            new org.apache.commons.codec.language.DoubleMetaphone();
 
-    private static final org.apache.commons.codec.language.Metaphone metaphone = new org.apache.commons.codec.language.Metaphone();
+    private static final org.apache.commons.codec.language.Metaphone metaphone =
+            new org.apache.commons.codec.language.Metaphone();
 
-    private static final org.apache.commons.codec.language.ColognePhonetic colognePhonetic = new org.apache.commons.codec.language.ColognePhonetic();
+    private static final org.apache.commons.codec.language.ColognePhonetic colognePhonetic =
+            new org.apache.commons.codec.language.ColognePhonetic();
 
     /**
      * DOC ytao Comment method "main".
@@ -187,7 +191,8 @@ public class AlgoBox {
                 }
 
                 if (beginIndex <= endIndex) {
-                    return sInput.substring(sInput.offsetByCodePoints(0, beginIndex), sInput.offsetByCodePoints(0, endIndex));
+                    return sInput.substring(sInput.offsetByCodePoints(0, beginIndex),
+                            sInput.offsetByCodePoints(0, endIndex));
                 }
             }
         }

@@ -41,10 +41,11 @@ public class PatternListGenerator {
 
     private static Set<String> knownPatternList = new LinkedHashSet<String>();
 
-    private final static ZonedDateTime ZONED_DATE_TIME = ZonedDateTime.of(1999, 3, 22, 5, 6, 7, 888, ZoneId.of("Europe/Paris"));
+    private final static ZonedDateTime ZONED_DATE_TIME =
+            ZonedDateTime.of(1999, 3, 22, 5, 6, 7, 888, ZoneId.of("Europe/Paris"));
 
-    private final static FormatStyle[] FORMAT_STYLES = new FormatStyle[] { FormatStyle.SHORT, FormatStyle.MEDIUM,
-            FormatStyle.LONG, FormatStyle.FULL };
+    private final static FormatStyle[] FORMAT_STYLES =
+            new FormatStyle[] { FormatStyle.SHORT, FormatStyle.MEDIUM, FormatStyle.LONG, FormatStyle.FULL };
 
     private static final boolean PRINT_DETAILED_RESULTS = false;
 
@@ -190,8 +191,8 @@ public class PatternListGenerator {
                 isDateRequired ? dateStyle : null, isTimeRequired ? timeStyle : null, IsoChronology.INSTANCE, locale);//
 
         // ignore patterns with long month for additional languages
-        if (!keepLongMonthAndSpecificChars
-                && (pattern.contains("MMMM") || pattern.contains("MMM") || pattern.contains(" a") || pattern.contains("'"))) {
+        if (!keepLongMonthAndSpecificChars && (pattern.contains("MMMM") || pattern.contains("MMM")
+                || pattern.contains(" a") || pattern.contains("'"))) {
             return;
         }
 
@@ -296,11 +297,15 @@ public class PatternListGenerator {
         patternList.add(new LocaledPattern("YYYY'W'wc", Locale.US, "ISO", false)); // compact form
         patternList.add(new LocaledPattern("YYYY-'W'w-c", Locale.US, "ISO", false)); // extended form
         // 11. ISO_ZONED_DATE_TIME
-        patternList.add(new LocaledPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX'['VV']'", Locale.US, "ISO_ZONED_DATE_TIME", true));
-        patternList.add(new LocaledPattern("yyyy-MM-dd'T'HH:mm:ss,SSSXXX'['VV']'", Locale.US, "ISO_ZONED_DATE_TIME", true)); // TDQ-16796
+        patternList.add(
+                new LocaledPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX'['VV']'", Locale.US, "ISO_ZONED_DATE_TIME", true));
+        patternList.add(
+                new LocaledPattern("yyyy-MM-dd'T'HH:mm:ss,SSSXXX'['VV']'", Locale.US, "ISO_ZONED_DATE_TIME", true)); // TDQ-16796
         patternList.add(new LocaledPattern("yyyy-MM-dd'T'HH:mm:ssXXX'['VV']'", Locale.US, "ISO_ZONED_DATE_TIME", true));
-        patternList.add(new LocaledPattern("yyyy-MM-dd HH:mm:ss.SSSXXX'['VV']'", Locale.US, "ISO_ZONED_DATE_TIME", true));
-        patternList.add(new LocaledPattern("yyyy-MM-dd HH:mm:ss,SSSXXX'['VV']'", Locale.US, "ISO_ZONED_DATE_TIME", true)); // TDQ-16796
+        patternList
+                .add(new LocaledPattern("yyyy-MM-dd HH:mm:ss.SSSXXX'['VV']'", Locale.US, "ISO_ZONED_DATE_TIME", true));
+        patternList
+                .add(new LocaledPattern("yyyy-MM-dd HH:mm:ss,SSSXXX'['VV']'", Locale.US, "ISO_ZONED_DATE_TIME", true)); // TDQ-16796
         patternList.add(new LocaledPattern("yyyy-MM-dd HH:mm:ssXXX'['VV']'", Locale.US, "ISO_ZONED_DATE_TIME", true));
         // 12. RFC_1123_DATE_TIME
         patternList.add(new LocaledPattern("EEE, d MMM yyyy HH:mm:ss Z", Locale.US, "RFC1123_WITH_DAY", true));
@@ -381,14 +386,14 @@ public class PatternListGenerator {
 
                 String patternShort = DateTimeFormatterBuilder.getLocalizedDateTimePattern(//
                         null, FormatStyle.SHORT, IsoChronology.INSTANCE, locale);//
-                LocaledPattern combinedShortLP = new LocaledPattern(lp.pattern + " " + patternShort, locale,
-                        FormatStyle.SHORT.name(), true);
+                LocaledPattern combinedShortLP =
+                        new LocaledPattern(lp.pattern + " " + patternShort, locale, FormatStyle.SHORT.name(), true);
                 addLocaledPattern(combinedShortLP);
 
                 String patternMedium = DateTimeFormatterBuilder.getLocalizedDateTimePattern(//
                         null, FormatStyle.MEDIUM, IsoChronology.INSTANCE, locale);//
-                LocaledPattern combinedMediumLP = new LocaledPattern(lp.pattern + " " + patternMedium, locale,
-                        FormatStyle.MEDIUM.name(), true);
+                LocaledPattern combinedMediumLP =
+                        new LocaledPattern(lp.pattern + " " + patternMedium, locale, FormatStyle.MEDIUM.name(), true);
                 addLocaledPattern(combinedMediumLP);
 
             }
@@ -434,26 +439,32 @@ public class PatternListGenerator {
 
             String regex = regexGenerator.convertPatternToRegex(lp.pattern);
             dateRegexFileTextBuilder.append(lp.getPattern()).append("\t^").append(regex).append("$\n");
-            dateSampleFileTextBuilder.append(ZONED_DATE_TIME.format(DateTimeFormatter.ofPattern(lp.getPattern(), lp.getLocale())))
-                    .append("\t").append(lp.getPattern())//
-                    .append("\t").append(lp.getLocale())//
-                    .append("\t").append(lp.getFormatStyle())//
-                    .append("\t").append(lp.isWithTime()).append("\n");
+            dateSampleFileTextBuilder
+                    .append(ZONED_DATE_TIME.format(DateTimeFormatter.ofPattern(lp.getPattern(), lp.getLocale())))
+                    .append("\t")
+                    .append(lp.getPattern())//
+                    .append("\t")
+                    .append(lp.getLocale())//
+                    .append("\t")
+                    .append(lp.getFormatStyle())//
+                    .append("\t")
+                    .append(lp.isWithTime())
+                    .append("\n");
         }
 
         // Date Formats
-        String path = SystemDateTimePatternManager.class.getResource("DateFormats.txt").getFile()
-                .replace("target" + File.separator + "classes", "src" + File.separator + "main" + File.separator + "resources");
+        String path = SystemDateTimePatternManager.class.getResource("DateFormats.txt").getFile().replace(
+                "target" + File.separator + "classes", "src" + File.separator + "main" + File.separator + "resources");
         IOUtils.write(datePatternFileTextBuilder.toString(), new FileOutputStream(new File(path)));
 
         // Date Regexes
-        path = SystemDateTimePatternManager.class.getResource("DateRegexes.txt").getFile()
-                .replace("target" + File.separator + "classes", "src" + File.separator + "main" + File.separator + "resources");
+        path = SystemDateTimePatternManager.class.getResource("DateRegexes.txt").getFile().replace(
+                "target" + File.separator + "classes", "src" + File.separator + "main" + File.separator + "resources");
         IOUtils.write(dateRegexFileTextBuilder.toString(), new FileOutputStream(new File(path)));
 
         // Date Samples
-        path = SystemDateTimePatternManager.class.getResource("DateSampleTable.txt").getFile()
-                .replace("target" + File.separator + "classes", "src" + File.separator + "test" + File.separator + "resources");
+        path = SystemDateTimePatternManager.class.getResource("DateSampleTable.txt").getFile().replace(
+                "target" + File.separator + "classes", "src" + File.separator + "test" + File.separator + "resources");
         IOUtils.write(dateSampleFileTextBuilder.toString(), new FileOutputStream(new File(path)));
 
         // generate grouped Date Regexes
@@ -490,26 +501,32 @@ public class PatternListGenerator {
             String regex = regexGenerator.convertPatternToRegex(lp.pattern);
             timeRegexFileTextBuilder.append(lp.getPattern()).append("\t^").append(regex).append("$\n");
 
-            timeSampleFileTextBuilder.append(ZONED_DATE_TIME.format(DateTimeFormatter.ofPattern(lp.getPattern(), lp.getLocale())))
-                    .append("\t").append(lp.getPattern())//
-                    .append("\t").append(lp.getLocale())//
-                    .append("\t").append(lp.getFormatStyle())//
-                    .append("\t").append(lp.isWithTime()).append("\n");
+            timeSampleFileTextBuilder
+                    .append(ZONED_DATE_TIME.format(DateTimeFormatter.ofPattern(lp.getPattern(), lp.getLocale())))
+                    .append("\t")
+                    .append(lp.getPattern())//
+                    .append("\t")
+                    .append(lp.getLocale())//
+                    .append("\t")
+                    .append(lp.getFormatStyle())//
+                    .append("\t")
+                    .append(lp.isWithTime())
+                    .append("\n");
         }
 
         // Time Formats
-        String path = SystemDateTimePatternManager.class.getResource("TimeFormats.txt").getFile()
-                .replace("target" + File.separator + "classes", "src" + File.separator + "main" + File.separator + "resources");
+        String path = SystemDateTimePatternManager.class.getResource("TimeFormats.txt").getFile().replace(
+                "target" + File.separator + "classes", "src" + File.separator + "main" + File.separator + "resources");
         IOUtils.write(timePatternFileTextBuilder.toString(), new FileOutputStream(new File(path)));
 
         // Time Regexes
-        path = SystemDateTimePatternManager.class.getResource("TimeRegexes.txt").getFile()
-                .replace("target" + File.separator + "classes", "src" + File.separator + "main" + File.separator + "resources");
+        path = SystemDateTimePatternManager.class.getResource("TimeRegexes.txt").getFile().replace(
+                "target" + File.separator + "classes", "src" + File.separator + "main" + File.separator + "resources");
         IOUtils.write(timeRegexFileTextBuilder.toString(), new FileOutputStream(new File(path)));
 
         // Time Samples
-        path = SystemDateTimePatternManager.class.getResource("TimeSampleTable.txt").getFile()
-                .replace("target" + File.separator + "classes", "src" + File.separator + "test" + File.separator + "resources");
+        path = SystemDateTimePatternManager.class.getResource("TimeSampleTable.txt").getFile().replace(
+                "target" + File.separator + "classes", "src" + File.separator + "test" + File.separator + "resources");
         IOUtils.write(timeSampleFileTextBuilder.toString(), new FileOutputStream(new File(path)));
     }
 

@@ -32,17 +32,15 @@ public class SampleDataConflictExecuteRulesWithUIOrder {
             new ConflictRuleDefinition(new DefFunParameter("city1", Function.Longest, null, "city1", null), Order.SEQ, //$NON-NLS-1$//$NON-NLS-2$
                     "longest_city1", //$NON-NLS-1$
                     false, false, 0),
-            new ConflictRuleDefinition(new DefFunParameter("city1", Function.RemoveDuplicate, null, "city2", null), Order.SEQ, //$NON-NLS-1$//$NON-NLS-2$
-                    "revmove_duplicate_city2", //$NON-NLS-1$
-                    false, false, 1),
+            new ConflictRuleDefinition(new DefFunParameter("city1", Function.RemoveDuplicate, null, "city2", null), //$NON-NLS-1$//$NON-NLS-2$
+                    Order.SEQ, "revmove_duplicate_city2", false, false, 1),
             new ConflictRuleDefinition(new DefFunParameter("city2", Function.Longest, null, "city2", null), Order.SEQ, //$NON-NLS-1$//$NON-NLS-2$
                     "longest_city2", //$NON-NLS-1$
                     false, false, 2) };
 
     public static final ConflictRuleDefinition[] RULES_CONFLICT_RESOLVE_REMOVE_DUPLICATE_INVALID = {
-            new ConflictRuleDefinition(new DefFunParameter("city1", Function.RemoveDuplicate, null, "city2", null), Order.SEQ, //$NON-NLS-1$//$NON-NLS-2$
-                    "revmove_duplicate_city2", //$NON-NLS-1$
-                    false, false, 0),
+            new ConflictRuleDefinition(new DefFunParameter("city1", Function.RemoveDuplicate, null, "city2", null), //$NON-NLS-1$//$NON-NLS-2$
+                    Order.SEQ, "revmove_duplicate_city2", false, false, 0),
             new ConflictRuleDefinition(new DefFunParameter("city1", Function.Longest, null, "city1", null), Order.SEQ, //$NON-NLS-1$//$NON-NLS-2$
                     "longest_city1", //$NON-NLS-1$
                     false, false, 1),
@@ -50,13 +48,13 @@ public class SampleDataConflictExecuteRulesWithUIOrder {
                     "shortest_city2", //$NON-NLS-1$
                     false, false, 2) };
 
-    public static final ConflictRuleDefinition[] RULES_CONFLICT_RESOLVE_MATCH_REGEX_INVALID = {
-            new ConflictRuleDefinition(new DefFunParameter("city1", Function.MatchRegex, "beijing1", "city1", null), Order.SEQ, //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
-                    "matchRegex_city1", //$NON-NLS-1$
-                    false, false, 0),
+    public static final ConflictRuleDefinition[] RULES_CONFLICT_RESOLVE_MATCH_REGEX_INVALID =
+            { new ConflictRuleDefinition(new DefFunParameter("city1", Function.MatchRegex, "beijing1", "city1", null), //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+                    Order.SEQ, "matchRegex_city1", false, false, 0),
 
-            new ConflictRuleDefinition(new DefFunParameter("city2", Function.RemoveDuplicate, null, "city1", null), Order.SEQ, //$NON-NLS-1$//$NON-NLS-2$
-                    "revmove_duplicate_city2", //$NON-NLS-1$
-                    false, false, 1) };
+                    new ConflictRuleDefinition(
+                            new DefFunParameter("city2", Function.RemoveDuplicate, null, "city1", null), Order.SEQ, //$NON-NLS-1$//$NON-NLS-2$
+                            "revmove_duplicate_city2", //$NON-NLS-1$
+                            false, false, 1) };
 
 }

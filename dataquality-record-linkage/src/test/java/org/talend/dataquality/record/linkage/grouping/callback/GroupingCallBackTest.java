@@ -120,11 +120,13 @@ public class GroupingCallBackTest {
 
         groupingCallBack.onMatch(record1, record2, matchResult);
         Assert.assertEquals("The size of listResult should be 2", 2, listResult.size()); //$NON-NLS-1$
-        Assert.assertEquals("The Confidence value of record1 should be 0.1", "0.1", "" + listResult.get(0).getConfidence()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        Assert.assertEquals("The Confidence value of record1 should be 0.1", "0.1", //$NON-NLS-1$//$NON-NLS-2$
+                "" + listResult.get(0).getConfidence()); //$NON-NLS-1$
         Assert.assertNotNull("The groupid of record1 should not be null", listResult.get(0).getGroupId()); //$NON-NLS-1$
         Assert.assertEquals("The group size of record1 should be 0", 0, listResult.get(0).getGrpSize()); //$NON-NLS-1$
         Assert.assertFalse("The master of record1 should be false", listResult.get(0).isMaster()); //$NON-NLS-1$
-        Assert.assertEquals("\"The Confidence value of record2 should be 0.2", "0.2", "" + listResult.get(1).getConfidence()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        Assert.assertEquals("\"The Confidence value of record2 should be 0.2", "0.2", //$NON-NLS-1$//$NON-NLS-2$
+                "" + listResult.get(1).getConfidence()); //$NON-NLS-1$
         Assert.assertNotNull("The groupid of record2 should not be null", listResult.get(1).getGroupId()); //$NON-NLS-1$
         Assert.assertEquals("The group size of record2 should be 0", 0, listResult.get(1).getGrpSize()); //$NON-NLS-1$
         Assert.assertFalse("The master of record2 should be false", listResult.get(1).isMaster()); //$NON-NLS-1$
@@ -157,7 +159,8 @@ public class GroupingCallBackTest {
         record2.setGroupId("id2"); //$NON-NLS-1$
         groupingCallBack.onMatch(record1, record2, matchResult);
         Assert.assertEquals("The size of listResult should be 1", 1, listResult.size()); //$NON-NLS-1$
-        Assert.assertEquals("The Confidence value of record1 should be 0.1", "0.1", "" + listResult.get(0).getConfidence()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        Assert.assertEquals("The Confidence value of record1 should be 0.1", "0.1", //$NON-NLS-1$//$NON-NLS-2$
+                "" + listResult.get(0).getConfidence()); //$NON-NLS-1$
         Assert.assertEquals("The groupid of record1 should be id2", "id2", listResult.get(0).getGroupId()); //$NON-NLS-1$ //$NON-NLS-2$
         Assert.assertEquals("The group size of record1 should be 0", 0, listResult.get(0).getGrpSize()); //$NON-NLS-1$
         Assert.assertFalse("The master of record1 should be false", listResult.get(0).isMaster()); //$NON-NLS-1$
@@ -171,7 +174,8 @@ public class GroupingCallBackTest {
         record2.setMaster(true);
         groupingCallBack.onMatch(record1, record2, matchResult);
         Assert.assertEquals("The size of listResult should be 1", 1, listResult.size()); //$NON-NLS-1$
-        Assert.assertEquals("The Confidence value of record1 should be 0.2", "0.2", "" + listResult.get(0).getConfidence()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        Assert.assertEquals("The Confidence value of record1 should be 0.2", "0.2", //$NON-NLS-1$//$NON-NLS-2$
+                "" + listResult.get(0).getConfidence()); //$NON-NLS-1$
         Assert.assertEquals("The groupid of record2 should be id1", "id1", listResult.get(0).getGroupId()); //$NON-NLS-1$ //$NON-NLS-2$
         Assert.assertEquals("The group size of record2 should be 0", 0, listResult.get(0).getGrpSize()); //$NON-NLS-1$
         Assert.assertFalse("The master of record2 should be false", listResult.get(0).isMaster()); //$NON-NLS-1$

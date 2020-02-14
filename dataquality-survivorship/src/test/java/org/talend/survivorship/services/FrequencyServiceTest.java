@@ -86,12 +86,18 @@ public class FrequencyServiceTest {
         Assert.assertEquals("secondMaxOccurence size should be 2", 2, fs.secondMaxOccurence.size()); //$NON-NLS-1$
         Assert.assertEquals("The result of firstName column should be 6", 6, fs.frequencyMaps.get("firstName").size()); //$NON-NLS-1$ //$NON-NLS-2$
         Assert.assertEquals("The result of lastName column should be 3", 3, fs.frequencyMaps.get("lastName").size()); //$NON-NLS-1$ //$NON-NLS-2$
-        Assert.assertEquals("The maxOccurence of firstName column should be 1", 1, fs.maxOccurence.get("firstName").intValue()); //$NON-NLS-1$ //$NON-NLS-2$
-        Assert.assertEquals("The maxOccurence of lastName column should be 3", 3, fs.maxOccurence.get("lastName").intValue()); //$NON-NLS-1$ //$NON-NLS-2$
-        Assert.assertEquals("The secondMaxOccurence of firstName column should be 0", 0, fs.secondMaxOccurence.get("firstName") //$NON-NLS-1$ //$NON-NLS-2$
-                .intValue());
-        Assert.assertEquals("The secondMaxOccurence of lastName column should be 2", 2, fs.secondMaxOccurence.get("lastName") //$NON-NLS-1$ //$NON-NLS-2$
-                .intValue());
+        Assert.assertEquals("The maxOccurence of firstName column should be 1", 1, //$NON-NLS-1$
+                fs.maxOccurence.get("firstName").intValue()); //$NON-NLS-1$
+        Assert.assertEquals("The maxOccurence of lastName column should be 3", 3, //$NON-NLS-1$
+                fs.maxOccurence.get("lastName").intValue()); //$NON-NLS-1$
+        Assert.assertEquals("The secondMaxOccurence of firstName column should be 0", 0, //$NON-NLS-1$
+                fs.secondMaxOccurence
+                        .get("firstName") //$NON-NLS-1$
+                        .intValue());
+        Assert.assertEquals("The secondMaxOccurence of lastName column should be 2", 2, //$NON-NLS-1$
+                fs.secondMaxOccurence
+                        .get("lastName") //$NON-NLS-1$
+                        .intValue());
         fs.init();
     }
 
