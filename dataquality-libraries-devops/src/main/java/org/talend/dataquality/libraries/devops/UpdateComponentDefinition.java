@@ -98,19 +98,15 @@ public class UpdateComponentDefinition {
                             String depName = linesToUpdate.get(line);
                             System.out.println(depName); // NOSONAR
                             // MODULE field
-                            line = line
-                                    .replaceAll(depName + "-\\d\\d?.\\d\\d?.\\d\\d?(-SNAPSHOT)?(.jar)?\"", //$NON-NLS-1$
-                                            depName + "-" + DEP_VERSION_MAP.get(depName) + "$2\""); //$NON-NLS-1$ //$NON-NLS-2$
+                            line = line.replaceAll(depName + "-\\d\\d?.\\d\\d?.\\d\\d?(-SNAPSHOT)?(.jar)?\"", //$NON-NLS-1$
+                                    depName + "-" + DEP_VERSION_MAP.get(depName) + "$2\""); //$NON-NLS-1$ //$NON-NLS-2$
                             // MVN field
-                            line = line
-                                    .replaceAll(depName + "/\\d\\d?.\\d\\d?.\\d\\d?(-SNAPSHOT)?(.jar)?\"", //$NON-NLS-1$
-                                            depName + "/" + DEP_VERSION_MAP.get(depName) + "$2\""); //$NON-NLS-1$ //$NON-NLS-2$
+                            line = line.replaceAll(depName + "/\\d\\d?.\\d\\d?.\\d\\d?(-SNAPSHOT)?(.jar)?\"", //$NON-NLS-1$
+                                    depName + "/" + DEP_VERSION_MAP.get(depName) + "$2\""); //$NON-NLS-1$ //$NON-NLS-2$
                             // UrlPath field
-                            line = line
-                                    .replaceAll(
-                                            depName.replace('-', '.') + "_\\d\\d?.\\d\\d?.\\d\\d?(.SNAPSHOT)?.jar\"", //$NON-NLS-1$
-                                            depName.replace('-', '.') + "_" //$NON-NLS-1$
-                                                    + DEP_VERSION_MAP.get(depName).replace('-', '.') + ".jar\""); //$NON-NLS-1$
+                            line = line.replaceAll(depName.replace('-', '.') + "_\\d\\d?.\\d\\d?.\\d\\d?(.SNAPSHOT)?.jar\"", //$NON-NLS-1$
+                                    depName.replace('-', '.') + "_" //$NON-NLS-1$
+                                            + DEP_VERSION_MAP.get(depName).replace('-', '.') + ".jar\""); //$NON-NLS-1$
                         }
                         writer.write((line + "\n").getBytes(StandardCharsets.UTF_8)); //$NON-NLS-1$
                     }
@@ -127,19 +123,11 @@ public class UpdateComponentDefinition {
     public static void main(String[] args) {
 
         final String resourcePath = UpdateComponentDefinition.class.getResource(".").getFile(); //$NON-NLS-1$
-        final String projectRoot = new File(resourcePath)
-                .getParentFile()
-                .getParentFile()
-                .getParentFile()
-                .getParentFile()
-                .getParentFile()
-                .getParentFile()
-                .getParentFile()
-                .getPath() + File.separator;
+        final String projectRoot = new File(resourcePath).getParentFile().getParentFile().getParentFile().getParentFile()
+                .getParentFile().getParentFile().getParentFile().getPath() + File.separator;
 
         for (String provider : PROVIDERS) {
-            String componentRootPath =
-                    projectRoot + TDQ_STUDIO_EE_ROOT + MAIN_PLUGINS_FOLDER + provider + COMPONENTS_FOLDER;
+            String componentRootPath = projectRoot + TDQ_STUDIO_EE_ROOT + MAIN_PLUGINS_FOLDER + provider + COMPONENTS_FOLDER;
             System.out.println("\nProvider: " + provider); // NOSONAR
             File componentRoot = new File(componentRootPath);
             if (componentRoot.isDirectory()) {
