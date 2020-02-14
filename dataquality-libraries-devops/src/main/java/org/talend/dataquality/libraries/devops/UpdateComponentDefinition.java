@@ -12,25 +12,24 @@
 // ============================================================================
 package org.talend.dataquality.libraries.devops;
 
+import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.IOUtils;
-
 /**
  * Java application for updating DQ library versions used in studio components.
- * 
+ * <p>
  * Usage:
- * 1. update the expect version in DEP_VERSION_MAP field.
- * 2. tell the application if need to USE_SNAPSHOT_VERSION.
+ * 1. update the DQ_LIB_VERSION version
+ * 2. update DAIKON_VERSION version.
  * 3. Run this class as Java application.
- * 
- * @author sizhaoliu
  */
 public class UpdateComponentDefinition {
 
@@ -45,7 +44,7 @@ public class UpdateComponentDefinition {
 
     private static final String DQ_LIB_VERSION = "7.0.2-SNAPSHOT"; //$NON-NLS-1$
 
-    private static final String DAIKON_VERSION = "0.31.8"; //$NON-NLS-1$
+    private static final String DAIKON_VERSION = ""; //$NON-NLS-1$
 
     private static final String[] PROVIDERS = new String[] { //
             "/org.talend.designer.components.tdqprovider", // //$NON-NLS-1$
@@ -54,13 +53,14 @@ public class UpdateComponentDefinition {
             "/org.talend.designer.components.tdqsparkstprovider",// //$NON-NLS-1$
     };
 
-    private static final Map<String, String> DEP_VERSION_MAP = new HashMap<String, String>();
-
-    private static final long serialVersionUID = 1L;
+    private static final Map<String, String> DEP_VERSION_MAP = new HashMap<>();
 
     static {
+        // Daikon
         DEP_VERSION_MAP.put("daikon", DAIKON_VERSION); //$NON-NLS-1$
         DEP_VERSION_MAP.put("daikon-exception", DAIKON_VERSION); //$NON-NLS-1$
+
+        // DQ lib SE
         DEP_VERSION_MAP.put("org.talend.dataquality.common", DQ_LIB_VERSION); //$NON-NLS-1$
         DEP_VERSION_MAP.put("org.talend.dataquality.converters", DQ_LIB_VERSION); //$NON-NLS-1$
         DEP_VERSION_MAP.put("org.talend.dataquality.record.linkage", DQ_LIB_VERSION); //$NON-NLS-1$
@@ -77,45 +77,41 @@ public class UpdateComponentDefinition {
     }
 
     private static void handleComponentDefinition(File f) {
-        File compoDefFile = new File(f.getAbsolutePath() + "/" + f.getName() + "_java.xml"); //$NON-NLS-1$ //$NON-NLS-2$
-
-        if (compoDefFile.exists()) {
+        Path filePath = Paths.get(f.getAbsolutePath() + "/" + f.getName() + "_java.xml"); //$NON-NLS-1$ //$NON-NLS-2$
+        if (Files.exists(filePath)) {
             try {
-                FileInputStream file = new FileInputStream(compoDefFile);
-                List<String> lines = IOUtils.readLines(file);
-
-                boolean needUpdate = false;
+                List<String> lines = Files.readAllLines(filePath);
+                Map<String, String> linesToUpdate = new HashMap<>();
                 for (String line : lines) {
                     for (String depName : DEP_VERSION_MAP.keySet()) {
-                        if (line.contains(depName)) {
-                            needUpdate = true;
-                            break;
+                        if (line.contains(depName) && !DEP_VERSION_MAP.get(depName).isEmpty()) {
+                            linesToUpdate.put(line, depName);
                         }
                     }
                 }
 
-                if (needUpdate) {
-                    System.out.println("Updating: " + compoDefFile.getName()); // NOSONAR
-                    FileOutputStream fos = new FileOutputStream(compoDefFile);
+                if (!linesToUpdate.isEmpty()) {
+                    System.out.println("Updating: " + f.getName()); // NOSONAR
+                    DataOutputStream writer = new DataOutputStream(Files.newOutputStream(filePath));
                     for (String line : lines) {
-                        for (String depName : DEP_VERSION_MAP.keySet()) {
-                            if (line.contains(depName)) {
-                                System.out.println(depName); // NOSONAR
-                                // MODULE field
-                                line = line.replaceAll(depName + "-\\d\\d?.\\d\\d?.\\d\\d?(-SNAPSHOT)?(.jar)?\"", //$NON-NLS-1$
-                                        depName + "-" + DEP_VERSION_MAP.get(depName) + "$2\""); //$NON-NLS-1$ //$NON-NLS-2$
-                                // MVN field
-                                line = line.replaceAll(depName + "/\\d\\d?.\\d\\d?.\\d\\d?(-SNAPSHOT)?(.jar)?\"", //$NON-NLS-1$
-                                        depName + "/" + DEP_VERSION_MAP.get(depName) + "$2\""); //$NON-NLS-1$ //$NON-NLS-2$
-                                // UrlPath field
-                                line = line.replaceAll(depName.replace('-', '.') + "_\\d\\d?.\\d\\d?.\\d\\d?(.SNAPSHOT)?.jar\"", //$NON-NLS-1$
-                                        depName.replace('-', '.') + "_" + DEP_VERSION_MAP.get(depName).replace('-', '.') //$NON-NLS-1$
-                                                + ".jar\""); //$NON-NLS-1$
-                            }
+                        if (linesToUpdate.containsKey(line)) {
+                            String depName = linesToUpdate.get(line);
+                            System.out.println(depName); // NOSONAR
+                            // MODULE field
+                            line = line.replaceAll(depName + "-\\d\\d?.\\d\\d?.\\d\\d?(-SNAPSHOT)?(.jar)?\"", //$NON-NLS-1$
+                                    depName + "-" + DEP_VERSION_MAP.get(depName) + "$2\""); //$NON-NLS-1$ //$NON-NLS-2$
+                            // MVN field
+                            line = line.replaceAll(depName + "/\\d\\d?.\\d\\d?.\\d\\d?(-SNAPSHOT)?(.jar)?\"", //$NON-NLS-1$
+                                    depName + "/" + DEP_VERSION_MAP.get(depName) + "$2\""); //$NON-NLS-1$ //$NON-NLS-2$
+                            // UrlPath field
+                            line = line.replaceAll(
+                                    depName.replace('-', '.') + "_\\d\\d?.\\d\\d?.\\d\\d?(.SNAPSHOT)?.jar\"", //$NON-NLS-1$
+                                    depName.replace('-', '.') + "_" //$NON-NLS-1$
+                                            + DEP_VERSION_MAP.get(depName).replace('-', '.') + ".jar\""); //$NON-NLS-1$
                         }
-                        IOUtils.write(line + "\n", fos); //$NON-NLS-1$
+                        writer.write((line + "\n").getBytes(StandardCharsets.UTF_8)); //$NON-NLS-1$
                     }
-                    fos.close();
+                    writer.close();
 
                 }
             } catch (IOException e) {
@@ -128,11 +124,19 @@ public class UpdateComponentDefinition {
     public static void main(String[] args) {
 
         final String resourcePath = UpdateComponentDefinition.class.getResource(".").getFile(); //$NON-NLS-1$
-        final String projectRoot = new File(resourcePath).getParentFile().getParentFile().getParentFile().getParentFile()
-                .getParentFile().getParentFile().getParentFile().getPath() + File.separator;
+        final String projectRoot = new File(resourcePath)
+                .getParentFile()
+                .getParentFile()
+                .getParentFile()
+                .getParentFile()
+                .getParentFile()
+                .getParentFile()
+                .getParentFile()
+                .getPath() + File.separator;
 
         for (String provider : PROVIDERS) {
-            String componentRootPath = projectRoot + TDQ_STUDIO_EE_ROOT + MAIN_PLUGINS_FOLDER + provider + COMPONENTS_FOLDER;
+            String componentRootPath =
+                    projectRoot + TDQ_STUDIO_EE_ROOT + MAIN_PLUGINS_FOLDER + provider + COMPONENTS_FOLDER;
             System.out.println("\nProvider: " + provider); // NOSONAR
             File componentRoot = new File(componentRootPath);
             if (componentRoot.isDirectory()) {
