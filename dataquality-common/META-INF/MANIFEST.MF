@@ -6,7 +6,8 @@ Bundle-Version: 8.1.0.SNAPSHOT
 Bundle-Vendor: .Talend SA.
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
-Export-Package: org.talend.dataquality.common.exception,
+Export-Package: org.talend.dataquality.common.character,
+ org.talend.dataquality.common.exception,
  org.talend.dataquality.common.inference,
  org.talend.dataquality.common.pattern,
  org.talend.dataquality.common.regex,
