@@ -16,19 +16,14 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 
-import java.text.DateFormat;
-import java.time.Duration;
-import java.time.ZoneId;
-import java.time.temporal.TemporalAmount;
-import java.util.Date;
-import java.util.Locale;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.talend.dataquality.duplicating.FieldModifier.Function;
-import sun.util.calendar.ZoneInfo;
 
 public class FieldModifierTest {
 
@@ -56,7 +51,7 @@ public class FieldModifierTest {
     public void testSetToNull() {
         Object dup =
                 dataModifier.generateDuplicate(STRING_TO_TEST, Function.SET_TO_NULL, DEFAULT_MODIF_COUNT, EMPTY_STRING);
-        assertEquals(null, dup);
+        assertNull(dup);
     }
 
     @Test
@@ -174,7 +169,7 @@ public class FieldModifierTest {
         for (Function function : Function.values()) {
             // test when the Date is null,then the method will be return null
             Date generateDuplicate = fieldModifier.generateDuplicate(null, function, DEFAULT_MODIF_COUNT, EMPTY_STRING);
-            assertEquals(generateDuplicate, null);
+            assertNull(generateDuplicate);
         }
     }
 
