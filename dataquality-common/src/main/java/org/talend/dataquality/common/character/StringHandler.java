@@ -11,6 +11,13 @@ public final class StringHandler {
 
     public static final Set<Character> SPECIAL_CHARACTERS = new HashSet<>(Arrays.asList('&', '/'));
 
+    /**
+     * Convert the string to title case.
+     *
+     * @param str the string to convert.
+     * @param delimiters the delimiter pattern to split the string into words.
+     * @return the string with every word separated by {@param delimiters} in title case.
+     */
     public static String toTitleCase(String str, String delimiters) {
 
         if (StringUtils.isBlank(str)) {
@@ -38,6 +45,12 @@ public final class StringHandler {
         return StringUtils.trim(resultPlaceHolder.toString());
     }
 
+    /**
+     * Takes the first char of the string, ignoring numbers.
+     *
+     * @param str the input string.
+     * @return the first char of the string.
+     */
     public static String firstCharIgnoreNumeric(String str) {
 
         if (str == null || "".equals(str)) { //$NON-NLS-1$
@@ -55,6 +68,13 @@ public final class StringHandler {
         return "";
     }
 
+    /**
+     * Takes the first char of the string only if it is in upper case or among the supported
+     * {@link #SPECIAL_CHARACTERS}.
+     *
+     * @param str the input string.
+     * @return the first character of the string.
+     */
     public static String firstUpperOrSpecialIgnoreNumeric(String str) {
 
         if (str == null || "".equals(str)) { //$NON-NLS-1$
@@ -77,6 +97,12 @@ public final class StringHandler {
         return "";
     }
 
+    /**
+     * Take all the upper case letters and supported {@link #SPECIAL_CHARACTERS} in the string.
+     *
+     * @param str the input string.
+     * @return all the upper cases letters and {@link #SPECIAL_CHARACTERS} in the string.
+     */
     public static String allUpperAndSpecialIgnoreNumeric(String str) {
 
         if (str == null || "".equals(str)) { //$NON-NLS-1$
@@ -95,6 +121,15 @@ public final class StringHandler {
         return sb.toString();
     }
 
+    /**
+     * Take the first character of the string.
+     * If the first character is a digit, also keep all the directly following digits if any.
+     * If the first character is followed by a number, this number is kept.
+     * If the string starts with a number, the first non-numeric character is not kept.
+     *
+     * @param str the input string.
+     * @return the starting character (and the following number if any) or number of the string.
+     */
     public static String firstCharKeepNumeric(String str) {
 
         if (str == null || "".equals(str)) { //$NON-NLS-1$
@@ -120,6 +155,16 @@ public final class StringHandler {
         return sb.toString();
     }
 
+    /**
+     * Take the first uppercase or supported {@link #SPECIAL_CHARACTERS} of the string.
+     * If the first character is a digit, also keep all the directly following digits if any.
+     * If the first character is followed by a number, this number is kept.
+     * If the string starts with a number, the first non-numeric character is not kept.
+     *
+     * @param str the input string.
+     * @return the starting uppercase or supported {@link #SPECIAL_CHARACTERS} (and the following number if any) or
+     * number of the string.
+     */
     public static String firstUpperOrSpecialKeepNumeric(String str) {
 
         if (str == null || "".equals(str)) { //$NON-NLS-1$
@@ -147,6 +192,12 @@ public final class StringHandler {
         return sb.toString();
     }
 
+    /**
+     * Take all the uppercase letters, supported {@link #SPECIAL_CHARACTERS} and numbers of the string.
+     *
+     * @param str the input string.
+     * @return all the uppercase letters, supported {@link #SPECIAL_CHARACTERS} and numbers of the string.
+     */
     public static String allUpperAndSpecialKeepNumeric(String str) {
 
         if (str == null || "".equals(str)) { //$NON-NLS-1$

@@ -2,6 +2,12 @@ package org.talend.dataquality.common.character;
 
 public final class StringChecker {
 
+    /**
+     * Check if the string contains both lowercase and uppercase letters.
+     * 
+     * @param str the string to check.
+     * @return true if the string has at least one lowercase letter and one uppercase letter, false otherwise.
+     */
     public static boolean containsLowerAndUpperCase(String str) {
         boolean hasLowerCase = false;
         boolean hasUpperCase = false;
@@ -23,6 +29,14 @@ public final class StringChecker {
         return false;
     }
 
+    /**
+     * Check if the string is in Title case, i.e. if every word starts with 1 capital letter and the remaining is in
+     * lowercase. the string is split using a delimiter pattern.
+     * 
+     * @param str the string to check.
+     * @param delimiters the delimiter pattern to split the string.
+     * @return true if every word is in title case, false otherwise or if the string is null or empty.
+     */
     public static boolean isTitleCase(String str, String delimiters) {
         if (str == null || str.isEmpty()) {
             return false;
@@ -55,6 +69,12 @@ public final class StringChecker {
         return true;
     }
 
+    /**
+     * Check if the string contains uppercase letters.
+     *
+     * @param str the string to check.
+     * @return true if the string contains at least one uppercase letter, false otherwise.
+     */
     public static boolean containsUpperCase(String str) {
         int cpCount = str.codePointCount(0, str.length());
         for (int i = 0; i < cpCount; i++) {
@@ -67,6 +87,12 @@ public final class StringChecker {
         return false;
     }
 
+    /**
+     * Check if the string contains lowercase letters.
+     *
+     * @param str the string to check.
+     * @return true if the string contains at least one lowercase letter, false otherwise.
+     */
     public static boolean containsLowerCase(String str) {
         int cpCount = str.codePointCount(0, str.length());
         for (int i = 0; i < cpCount; i++) {
