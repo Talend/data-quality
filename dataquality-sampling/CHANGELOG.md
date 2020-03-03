@@ -14,7 +14,7 @@ N/A
 ### Deprecated
 N/A
 ### Fixed
-N/A
+- chore(TDQ-18085): Fix unstable date test using today's date
 ### Security
 N/A
 
