@@ -123,24 +123,31 @@ public class Acronym {
 
     public enum AcronymContraction {
 
-        FIRST_LETTERS_IGNORE_NUMERIC(false, StringHandler::firstCharIgnoreNumeric),
-        FIRST_UPPER_CASE_LETTERS_IGNORE_NUMERIC(false, StringHandler::firstUpperOrSpecialIgnoreNumeric),
-        ALL_UPPER_CASE_LETTERS_IGNORE_NUMERIC(false, StringHandler::allUpperAndSpecialIgnoreNumeric),
-        FIRST_LETTERS_KEEP_NUMERIC(true, StringHandler::firstCharKeepNumeric),
-        FIRST_UPPER_CASE_LETTERS_KEEP_NUMERIC(true, StringHandler::firstUpperOrSpecialKeepNumeric),
-        ALL_UPPER_CASE_LETTERS_KEEP_NUMERIC(true, StringHandler::allUpperAndSpecialKeepNumeric);
+        FIRST_LETTERS_IGNORE_NUMERIC(false, false, StringHandler::firstCharIgnoreNumeric),
+        FIRST_UPPER_CASE_LETTERS_IGNORE_NUMERIC(false, true, StringHandler::firstUpperOrSpecialIgnoreNumeric),
+        ALL_UPPER_CASE_LETTERS_IGNORE_NUMERIC(false, true, StringHandler::allUpperAndSpecialIgnoreNumeric),
+        FIRST_LETTERS_KEEP_NUMERIC(true, false, StringHandler::firstCharKeepNumeric),
+        FIRST_UPPER_CASE_LETTERS_KEEP_NUMERIC(true, true, StringHandler::firstUpperOrSpecialKeepNumeric),
+        ALL_UPPER_CASE_LETTERS_KEEP_NUMERIC(true, true, StringHandler::allUpperAndSpecialKeepNumeric);
 
         private final boolean keepDigits;
 
+        private final boolean isUpperCase;
+
         private final Function<String, String> function;
 
-        AcronymContraction(boolean keepDigits, Function<String, String> function) {
+        AcronymContraction(boolean keepDigits, boolean isUpperCase, Function<String, String> function) {
             this.keepDigits = keepDigits;
+            this.isUpperCase = isUpperCase;
             this.function = function;
         }
 
         public boolean keepsDigits() {
             return keepDigits;
+        }
+
+        public boolean isUpperCase() {
+            return isUpperCase;
         }
 
         public String apply(String str) {

@@ -13,11 +13,7 @@
 package org.talend.dataquality.common.inference;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 import org.talend.dataquality.common.exception.DQCommonRuntimeException;
 
