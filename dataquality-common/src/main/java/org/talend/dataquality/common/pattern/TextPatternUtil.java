@@ -1,6 +1,10 @@
 package org.talend.dataquality.common.pattern;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.talend.daikon.pattern.character.CharPattern;
 

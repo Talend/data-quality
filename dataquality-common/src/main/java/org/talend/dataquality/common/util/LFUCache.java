@@ -12,7 +12,12 @@
 // ============================================================================
 package org.talend.dataquality.common.util;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * LFU cache implementation based on http://dhruvbird.com/lfu.pdf, with some notable differences:

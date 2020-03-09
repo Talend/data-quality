@@ -1,8 +1,15 @@
 package org.talend.dataquality.common.pattern;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
+import java.util.SortedSet;
 import java.util.regex.Pattern;
 
 import org.junit.Assert;
