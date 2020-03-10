@@ -22,7 +22,7 @@ public class AcronymTest {
         Acronym acronym = Acronym
                 .newBuilder()
                 .withDelimiters(delimiters)
-                .withContraction(Acronym.AcronymContraction.FIRST_LETTERS_IGNORE_NUMERIC)
+                .withAbbreviationMode(Acronym.AbbreviationMode.FIRST_LETTERS_IGNORE_NUMERIC)
                 .withSeparator(Acronym.AcronymSeparator.NONE)
                 .build();
 
@@ -34,7 +34,7 @@ public class AcronymTest {
         Acronym acronym = Acronym
                 .newBuilder()
                 .withDelimiters(delimiters)
-                .withContraction(Acronym.AcronymContraction.FIRST_LETTERS_IGNORE_NUMERIC)
+                .withAbbreviationMode(Acronym.AbbreviationMode.FIRST_LETTERS_IGNORE_NUMERIC)
                 .withSeparator(Acronym.AcronymSeparator.NONE)
                 .build();
         List<String> expected =
@@ -51,7 +51,7 @@ public class AcronymTest {
         Acronym acronym = Acronym
                 .newBuilder()
                 .withDelimiters(delimiters)
-                .withContraction(Acronym.AcronymContraction.FIRST_LETTERS_KEEP_NUMERIC)
+                .withAbbreviationMode(Acronym.AbbreviationMode.FIRST_LETTERS_KEEP_NUMERIC)
                 .withSeparator(Acronym.AcronymSeparator.NONE)
                 .build();
         List<String> expected =
@@ -68,7 +68,7 @@ public class AcronymTest {
         Acronym acronym = Acronym
                 .newBuilder()
                 .withDelimiters(delimiters)
-                .withContraction(Acronym.AcronymContraction.FIRST_UPPER_CASE_LETTERS_IGNORE_NUMERIC)
+                .withAbbreviationMode(Acronym.AbbreviationMode.FIRST_UPPER_CASE_LETTERS_IGNORE_NUMERIC)
                 .withSeparator(Acronym.AcronymSeparator.NONE)
                 .build();
         List<String> expected = Arrays.asList("UNESCO", "T", "A", "ER", "BNL", "AMPL", "", "I/O", "AT&T", "C", "VUA");
@@ -84,7 +84,7 @@ public class AcronymTest {
         Acronym acronym = Acronym
                 .newBuilder()
                 .withDelimiters(delimiters)
-                .withContraction(Acronym.AcronymContraction.FIRST_UPPER_CASE_LETTERS_KEEP_NUMERIC)
+                .withAbbreviationMode(Acronym.AbbreviationMode.FIRST_UPPER_CASE_LETTERS_KEEP_NUMERIC)
                 .withSeparator(Acronym.AcronymSeparator.NONE)
                 .build();
         List<String> expected = Arrays.asList("UNESCO", "T", "A", "E2R", "BNL", "AMPL", "", "I/O", "AT&T", "3", "V5UA");
@@ -100,7 +100,7 @@ public class AcronymTest {
         Acronym acronym = Acronym
                 .newBuilder()
                 .withDelimiters(delimiters)
-                .withContraction(Acronym.AcronymContraction.ALL_UPPER_CASE_LETTERS_IGNORE_NUMERIC)
+                .withAbbreviationMode(Acronym.AbbreviationMode.ALL_UPPER_CASE_LETTERS_IGNORE_NUMERIC)
                 .withSeparator(Acronym.AcronymSeparator.NONE)
                 .build();
         List<String> expected =
@@ -117,7 +117,7 @@ public class AcronymTest {
         Acronym acronym = Acronym
                 .newBuilder()
                 .withDelimiters(delimiters)
-                .withContraction(Acronym.AcronymContraction.ALL_UPPER_CASE_LETTERS_KEEP_NUMERIC)
+                .withAbbreviationMode(Acronym.AbbreviationMode.ALL_UPPER_CASE_LETTERS_KEEP_NUMERIC)
                 .withSeparator(Acronym.AcronymSeparator.NONE)
                 .build();
         List<String> expected =
@@ -134,7 +134,7 @@ public class AcronymTest {
         Acronym acronym = Acronym
                 .newBuilder()
                 .withDelimiters(delimiters)
-                .withContraction(Acronym.AcronymContraction.FIRST_LETTERS_IGNORE_NUMERIC)
+                .withAbbreviationMode(Acronym.AbbreviationMode.FIRST_LETTERS_IGNORE_NUMERIC)
                 .withSeparator(Acronym.AcronymSeparator.PERIOD)
                 .build();
         List<String> expected = Arrays.asList("U.N.E.S.a.C.O.", "T.", "A.t.", "E.R.", "B.N.a.L.", "A.M.P.L.", "a.m.",
@@ -151,7 +151,7 @@ public class AcronymTest {
         Acronym acronym = Acronym
                 .newBuilder()
                 .withDelimiters(delimiters)
-                .withContraction(Acronym.AcronymContraction.FIRST_UPPER_CASE_LETTERS_IGNORE_NUMERIC)
+                .withAbbreviationMode(Acronym.AbbreviationMode.FIRST_UPPER_CASE_LETTERS_IGNORE_NUMERIC)
                 .withSeparator(Acronym.AcronymSeparator.SPACE)
                 .build();
         List<String> expected =
@@ -168,7 +168,7 @@ public class AcronymTest {
         Acronym acronym = Acronym
                 .newBuilder()
                 .withDelimiters(delimiters)
-                .withContraction(Acronym.AcronymContraction.FIRST_UPPER_CASE_LETTERS_IGNORE_NUMERIC)
+                .withAbbreviationMode(Acronym.AbbreviationMode.FIRST_UPPER_CASE_LETTERS_IGNORE_NUMERIC)
                 .withSeparator(Acronym.AcronymSeparator.DASH)
                 .build();
         List<String> expected =
@@ -185,7 +185,7 @@ public class AcronymTest {
         Acronym acronym = Acronym
                 .newBuilder()
                 .withDelimiters(delimiters)
-                .withContraction(Acronym.AcronymContraction.ALL_UPPER_CASE_LETTERS_KEEP_NUMERIC)
+                .withAbbreviationMode(Acronym.AbbreviationMode.ALL_UPPER_CASE_LETTERS_KEEP_NUMERIC)
                 .withSeparator(Acronym.AcronymSeparator.AS_IS)
                 .build();
         List<String> expected = Arrays.asList("UNE,SCO", "TNT", "ASYNC", "E-2-R", "BE,NELUX", "AT&TMPL", "", "I/O",

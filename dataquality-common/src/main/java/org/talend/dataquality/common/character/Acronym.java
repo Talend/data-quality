@@ -9,12 +9,12 @@ public class Acronym {
 
     private AcronymSeparator separator;
 
-    private AcronymContraction contraction;
+    private AbbreviationMode abbrevMode;
 
     private String delimiterPattern;
 
-    private Acronym(AcronymContraction contraction, AcronymSeparator separator, String delimiterPattern) {
-        this.contraction = contraction;
+    private Acronym(AbbreviationMode abbrevMode, AcronymSeparator separator, String delimiterPattern) {
+        this.abbrevMode = abbrevMode;
         this.separator = separator;
         this.delimiterPattern = delimiterPattern;
     }
@@ -23,8 +23,8 @@ public class Acronym {
         return separator;
     }
 
-    public AcronymContraction getContraction() {
-        return contraction;
+    public AbbreviationMode getAbbrevMode() {
+        return abbrevMode;
     }
 
     public String getDelimiterPattern() {
@@ -40,21 +40,21 @@ public class Acronym {
             return StringUtils.EMPTY;
         }
 
-        sb.append(contraction.apply(tokens.get(0)));
+        sb.append(abbrevMode.apply(tokens.get(0)));
         if (separator != AcronymSeparator.AS_IS) {
             for (int i = 1; i < tokens.size(); i++) {
-                String chars = contraction.apply(tokens.get(i));
+                String chars = abbrevMode.apply(tokens.get(i));
                 if (!chars.isEmpty()) {
-                    sb.append(separator.value).append(contraction.apply(tokens.get(i)));
+                    sb.append(separator.value).append(abbrevMode.apply(tokens.get(i)));
                 }
             }
         } else {
             List<String> separators = tokenizedString.getSeparators();
             int nextSeparator = tokenizedString.isStartingWithSeparator() ? 1 : 0;
             for (int i = 1; i < tokens.size(); i++) {
-                String chars = contraction.apply(tokens.get(i));
+                String chars = abbrevMode.apply(tokens.get(i));
                 if (!chars.isEmpty()) {
-                    sb.append(separators.get(nextSeparator).trim()).append(contraction.apply(tokens.get(i)));
+                    sb.append(separators.get(nextSeparator).trim()).append(abbrevMode.apply(tokens.get(i)));
                 }
                 nextSeparator++;
             }
@@ -75,15 +75,15 @@ public class Acronym {
 
         private AcronymSeparator separator;
 
-        private AcronymContraction contraction;
+        private AbbreviationMode abbrevMode;
 
         private String delimiterPattern;
 
         private AcronymBuilder() {
         }
 
-        public AcronymBuilder withContraction(AcronymContraction contraction) {
-            this.contraction = contraction;
+        public AcronymBuilder withAbbreviationMode(AbbreviationMode abbrevMode) {
+            this.abbrevMode = abbrevMode;
             return this;
         }
 
@@ -98,7 +98,7 @@ public class Acronym {
         }
 
         public Acronym build() {
-            return new Acronym(contraction, separator, delimiterPattern);
+            return new Acronym(abbrevMode, separator, delimiterPattern);
         }
     }
 
@@ -121,7 +121,7 @@ public class Acronym {
         }
     }
 
-    public enum AcronymContraction {
+    public enum AbbreviationMode {
 
         FIRST_LETTERS_IGNORE_NUMERIC(false, false, StringHandler::firstCharIgnoreNumeric),
         FIRST_UPPER_CASE_LETTERS_IGNORE_NUMERIC(false, true, StringHandler::firstUpperOrSpecialIgnoreNumeric),
@@ -132,13 +132,13 @@ public class Acronym {
 
         private final boolean keepDigits;
 
-        private final boolean isUpperCase;
+        private final boolean isUpperCaseMode;
 
         private final Function<String, String> function;
 
-        AcronymContraction(boolean keepDigits, boolean isUpperCase, Function<String, String> function) {
+        AbbreviationMode(boolean keepDigits, boolean isUpperCaseMode, Function<String, String> function) {
             this.keepDigits = keepDigits;
-            this.isUpperCase = isUpperCase;
+            this.isUpperCaseMode = isUpperCaseMode;
             this.function = function;
         }
 
@@ -146,8 +146,8 @@ public class Acronym {
             return keepDigits;
         }
 
-        public boolean isUpperCase() {
-            return isUpperCase;
+        public boolean isUpperCaseMode() {
+            return isUpperCaseMode;
         }
 
         public String apply(String str) {
