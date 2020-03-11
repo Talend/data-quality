@@ -40,9 +40,16 @@ public class Acronym {
             return StringUtils.EMPTY;
         }
 
-        sb.append(abbrevMode.apply(tokens.get(0)));
+        int start = 0;
+        String firstApplied;
+        do {
+            firstApplied = abbrevMode.apply(tokens.get(start));
+            start++;
+        } while (firstApplied.isEmpty() && start < tokens.size());
+
+        sb.append(firstApplied);
         if (separator != AcronymSeparator.AS_IS) {
-            for (int i = 1; i < tokens.size(); i++) {
+            for (int i = start; i < tokens.size(); i++) {
                 String chars = abbrevMode.apply(tokens.get(i));
                 if (!chars.isEmpty()) {
                     sb.append(separator.value).append(abbrevMode.apply(tokens.get(i)));

@@ -1,12 +1,19 @@
 package org.talend.dataquality.common.character;
 
 import static org.junit.Assert.assertEquals;
+import static org.talend.dataquality.common.character.Acronym.AbbreviationMode.ALL_UPPER_CASE_LETTERS_IGNORE_NUMERIC;
+import static org.talend.dataquality.common.character.Acronym.AbbreviationMode.ALL_UPPER_CASE_LETTERS_KEEP_NUMERIC;
+import static org.talend.dataquality.common.character.Acronym.AbbreviationMode.FIRST_LETTERS_IGNORE_NUMERIC;
+import static org.talend.dataquality.common.character.Acronym.AbbreviationMode.FIRST_LETTERS_KEEP_NUMERIC;
+import static org.talend.dataquality.common.character.Acronym.AbbreviationMode.FIRST_UPPER_CASE_LETTERS_IGNORE_NUMERIC;
+import static org.talend.dataquality.common.character.Acronym.AbbreviationMode.FIRST_UPPER_CASE_LETTERS_KEEP_NUMERIC;
 
 import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
+import org.talend.dataquality.common.character.Acronym.AcronymSeparator;
 
 public class AcronymTest {
 
@@ -19,24 +26,49 @@ public class AcronymTest {
 
     @Test
     public void transformNullString() {
-        Acronym acronym = Acronym
-                .newBuilder()
-                .withDelimiters(delimiters)
-                .withAbbreviationMode(Acronym.AbbreviationMode.FIRST_LETTERS_IGNORE_NUMERIC)
-                .withSeparator(Acronym.AcronymSeparator.NONE)
-                .build();
+        Acronym acronym = buildAcronym(FIRST_LETTERS_IGNORE_NUMERIC, AcronymSeparator.NONE);
 
         assertEquals(StringUtils.EMPTY, acronym.transform(null));
     }
 
     @Test
+    public void noTokenAppliedWithSeparator() {
+        Acronym acronym = buildAcronym(FIRST_LETTERS_IGNORE_NUMERIC, AcronymSeparator.DASH);
+
+        assertEquals(StringUtils.EMPTY, acronym.transform("06 01 02 03 04"));
+    }
+
+    @Test
+    public void noTokenAppliedWithSeparatorAsIs() {
+        Acronym acronym = buildAcronym(FIRST_LETTERS_IGNORE_NUMERIC, AcronymSeparator.AS_IS);
+
+        assertEquals(StringUtils.EMPTY, acronym.transform("06 01 02 03 04"));
+    }
+
+    @Test
+    public void firstTokenNotApplied() {
+        Acronym acronym = buildAcronym(FIRST_LETTERS_IGNORE_NUMERIC, AcronymSeparator.DASH);
+
+        assertEquals("D-O-F", acronym.transform("3 Degrees Of Freedom"));
+    }
+
+    @Test
+    public void middleTokenNotApplied() {
+        Acronym acronym = buildAcronym(FIRST_LETTERS_IGNORE_NUMERIC, AcronymSeparator.DASH);
+
+        assertEquals("D-O-F", acronym.transform("Degrees 3 Of Freedom"));
+    }
+
+    @Test
+    public void lastTokenNotApplied() {
+        Acronym acronym = buildAcronym(FIRST_LETTERS_IGNORE_NUMERIC, AcronymSeparator.DASH);
+
+        assertEquals("D-O-F", acronym.transform("Degrees Of Freedom 3"));
+    }
+
+    @Test
     public void firstLettersIgnoreNumericsNoSeparators() {
-        Acronym acronym = Acronym
-                .newBuilder()
-                .withDelimiters(delimiters)
-                .withAbbreviationMode(Acronym.AbbreviationMode.FIRST_LETTERS_IGNORE_NUMERIC)
-                .withSeparator(Acronym.AcronymSeparator.NONE)
-                .build();
+        Acronym acronym = buildAcronym(FIRST_LETTERS_IGNORE_NUMERIC, AcronymSeparator.NONE);
         List<String> expected =
                 Arrays.asList("UNESaCO", "T", "At", "ER", "BNaL", "AMPL", "am", "I/O", "AT&T", "Cc", "VUA");
 
@@ -48,12 +80,7 @@ public class AcronymTest {
 
     @Test
     public void firstLettersKeepNumericsNoSeparators() {
-        Acronym acronym = Acronym
-                .newBuilder()
-                .withDelimiters(delimiters)
-                .withAbbreviationMode(Acronym.AbbreviationMode.FIRST_LETTERS_KEEP_NUMERIC)
-                .withSeparator(Acronym.AcronymSeparator.NONE)
-                .build();
+        Acronym acronym = buildAcronym(FIRST_LETTERS_KEEP_NUMERIC, AcronymSeparator.NONE);
         List<String> expected =
                 Arrays.asList("UNESaCO", "T", "At", "E2R", "BNaL", "AMPL", "am", "I/O", "AT&T", "3c", "V5UA");
 
@@ -65,12 +92,7 @@ public class AcronymTest {
 
     @Test
     public void firstUpperCaseLettersIgnoreNumericsNoSeparators() {
-        Acronym acronym = Acronym
-                .newBuilder()
-                .withDelimiters(delimiters)
-                .withAbbreviationMode(Acronym.AbbreviationMode.FIRST_UPPER_CASE_LETTERS_IGNORE_NUMERIC)
-                .withSeparator(Acronym.AcronymSeparator.NONE)
-                .build();
+        Acronym acronym = buildAcronym(FIRST_UPPER_CASE_LETTERS_IGNORE_NUMERIC, AcronymSeparator.NONE);
         List<String> expected = Arrays.asList("UNESCO", "T", "A", "ER", "BNL", "AMPL", "", "I/O", "AT&T", "C", "VUA");
 
         assert (expected.size() == inputs.size());
@@ -81,12 +103,7 @@ public class AcronymTest {
 
     @Test
     public void firstUpperCaseLettersKeepNumericsNoSeparators() {
-        Acronym acronym = Acronym
-                .newBuilder()
-                .withDelimiters(delimiters)
-                .withAbbreviationMode(Acronym.AbbreviationMode.FIRST_UPPER_CASE_LETTERS_KEEP_NUMERIC)
-                .withSeparator(Acronym.AcronymSeparator.NONE)
-                .build();
+        Acronym acronym = buildAcronym(FIRST_UPPER_CASE_LETTERS_KEEP_NUMERIC, AcronymSeparator.NONE);
         List<String> expected = Arrays.asList("UNESCO", "T", "A", "E2R", "BNL", "AMPL", "", "I/O", "AT&T", "3", "V5UA");
 
         assert (expected.size() == inputs.size());
@@ -97,12 +114,7 @@ public class AcronymTest {
 
     @Test
     public void allUpperCaseLettersIgnoreNumericsNoSeparators() {
-        Acronym acronym = Acronym
-                .newBuilder()
-                .withDelimiters(delimiters)
-                .withAbbreviationMode(Acronym.AbbreviationMode.ALL_UPPER_CASE_LETTERS_IGNORE_NUMERIC)
-                .withSeparator(Acronym.AcronymSeparator.NONE)
-                .build();
+        Acronym acronym = buildAcronym(ALL_UPPER_CASE_LETTERS_IGNORE_NUMERIC, AcronymSeparator.NONE);
         List<String> expected =
                 Arrays.asList("UNESCO", "TNT", "ASYNC", "ER", "BENELUX", "AT&TMPL", "", "I/O", "AT&T", "COM", "VUA");
 
@@ -114,12 +126,7 @@ public class AcronymTest {
 
     @Test
     public void allUpperCaseLettersKeepNumericsNoSeparators() {
-        Acronym acronym = Acronym
-                .newBuilder()
-                .withDelimiters(delimiters)
-                .withAbbreviationMode(Acronym.AbbreviationMode.ALL_UPPER_CASE_LETTERS_KEEP_NUMERIC)
-                .withSeparator(Acronym.AcronymSeparator.NONE)
-                .build();
+        Acronym acronym = buildAcronym(ALL_UPPER_CASE_LETTERS_KEEP_NUMERIC, AcronymSeparator.NONE);
         List<String> expected =
                 Arrays.asList("UNESCO", "TNT", "ASYNC", "E2R", "BENELUX", "AT&TMPL", "", "I/O", "AT&T", "3COM", "V5UA");
 
@@ -131,12 +138,7 @@ public class AcronymTest {
 
     @Test
     public void firstLettersWithPeriods() {
-        Acronym acronym = Acronym
-                .newBuilder()
-                .withDelimiters(delimiters)
-                .withAbbreviationMode(Acronym.AbbreviationMode.FIRST_LETTERS_IGNORE_NUMERIC)
-                .withSeparator(Acronym.AcronymSeparator.PERIOD)
-                .build();
+        Acronym acronym = buildAcronym(FIRST_LETTERS_IGNORE_NUMERIC, AcronymSeparator.PERIOD);
         List<String> expected = Arrays.asList("U.N.E.S.a.C.O.", "T.", "A.t.", "E.R.", "B.N.a.L.", "A.M.P.L.", "a.m.",
                 "I./.O.", "A.T.&.T.", "C.c.", "V.U.A.");
 
@@ -148,12 +150,7 @@ public class AcronymTest {
 
     @Test
     public void firstUpperCaseLettersWithSpaces() {
-        Acronym acronym = Acronym
-                .newBuilder()
-                .withDelimiters(delimiters)
-                .withAbbreviationMode(Acronym.AbbreviationMode.FIRST_UPPER_CASE_LETTERS_IGNORE_NUMERIC)
-                .withSeparator(Acronym.AcronymSeparator.SPACE)
-                .build();
+        Acronym acronym = buildAcronym(FIRST_UPPER_CASE_LETTERS_IGNORE_NUMERIC, AcronymSeparator.SPACE);
         List<String> expected =
                 Arrays.asList("U N E S C O", "T", "A", "E R", "B N L", "A M P L", "", "I / O", "A T & T", "C", "V U A");
 
@@ -165,12 +162,7 @@ public class AcronymTest {
 
     @Test
     public void firstUpperCaseLettersWithDashes() {
-        Acronym acronym = Acronym
-                .newBuilder()
-                .withDelimiters(delimiters)
-                .withAbbreviationMode(Acronym.AbbreviationMode.FIRST_UPPER_CASE_LETTERS_IGNORE_NUMERIC)
-                .withSeparator(Acronym.AcronymSeparator.DASH)
-                .build();
+        Acronym acronym = buildAcronym(FIRST_UPPER_CASE_LETTERS_IGNORE_NUMERIC, AcronymSeparator.DASH);
         List<String> expected =
                 Arrays.asList("U-N-E-S-C-O", "T", "A", "E-R", "B-N-L", "A-M-P-L", "", "I-/-O", "A-T-&-T", "C", "V-U-A");
 
@@ -182,12 +174,8 @@ public class AcronymTest {
 
     @Test
     public void allUpperCaseLettersWithSeparatorsAsIs() {
-        Acronym acronym = Acronym
-                .newBuilder()
-                .withDelimiters(delimiters)
-                .withAbbreviationMode(Acronym.AbbreviationMode.ALL_UPPER_CASE_LETTERS_KEEP_NUMERIC)
-                .withSeparator(Acronym.AcronymSeparator.AS_IS)
-                .build();
+        Acronym acronym = buildAcronym(ALL_UPPER_CASE_LETTERS_KEEP_NUMERIC, AcronymSeparator.AS_IS);
+
         List<String> expected = Arrays.asList("UNE,SCO", "TNT", "ASYNC", "E-2-R", "BE,NELUX", "AT&TMPL", "", "I/O",
                 "AT&T", "3COM", "V5UA");
 
@@ -195,5 +183,14 @@ public class AcronymTest {
         for (int i = 0; i < inputs.size(); i++) {
             assertEquals(expected.get(i), acronym.transform(inputs.get(i)));
         }
+    }
+
+    private Acronym buildAcronym(Acronym.AbbreviationMode abbrevMode, AcronymSeparator separator) {
+        return Acronym
+                .newBuilder()
+                .withDelimiters(delimiters)
+                .withAbbreviationMode(abbrevMode)
+                .withSeparator(separator)
+                .build();
     }
 }
