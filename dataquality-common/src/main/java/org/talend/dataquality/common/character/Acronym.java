@@ -2,6 +2,8 @@ package org.talend.dataquality.common.character;
 
 import java.util.List;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -27,10 +29,6 @@ public class Acronym {
         return abbrevMode;
     }
 
-    public String getDelimiterPattern() {
-        return delimiterPattern;
-    }
-
     public String transform(String str) {
         StringBuilder sb = new StringBuilder();
         TokenizedString tokenizedString = new TokenizedString(str, delimiterPattern);
@@ -48,7 +46,7 @@ public class Acronym {
         } while (firstApplied.isEmpty() && start < tokens.size());
 
         sb.append(firstApplied);
-        if (separator != AcronymSeparator.AS_IS) {
+        if (separator != AcronymSeparator.KEEP_SPECIAL_CHARS) {
             for (int i = start; i < tokens.size(); i++) {
                 String chars = abbrevMode.apply(tokens.get(i));
                 if (!chars.isEmpty()) {
@@ -56,12 +54,15 @@ public class Acronym {
                 }
             }
         } else {
+            Pattern specialCharPattern = Pattern.compile(separator.getValue());
             List<String> separators = tokenizedString.getSeparators();
             int nextSeparator = tokenizedString.isStartingWithSeparator() ? 1 : 0;
             for (int i = 1; i < tokens.size(); i++) {
                 String chars = abbrevMode.apply(tokens.get(i));
                 if (!chars.isEmpty()) {
-                    sb.append(separators.get(nextSeparator).trim()).append(abbrevMode.apply(tokens.get(i)));
+
+                    sb.append(getSpecialChars(separators.get(nextSeparator), specialCharPattern)).append(
+                            abbrevMode.apply(tokens.get(i)));
                 }
                 nextSeparator++;
             }
@@ -72,6 +73,11 @@ public class Acronym {
         }
 
         return sb.toString();
+    }
+
+    private String getSpecialChars(String separator, Pattern specialCharPattern) {
+        Matcher matcher = specialCharPattern.matcher(separator);
+        return matcher.find() ? matcher.group() : "";
     }
 
     public static AcronymBuilder newBuilder() {
@@ -115,7 +121,7 @@ public class Acronym {
         DASH("-"),
         SPACE(" "),
         PERIOD("."),
-        AS_IS(null);
+        KEEP_SPECIAL_CHARS("[#$%&()\\-/=@_|~]");
 
         private String value;
 
@@ -131,11 +137,11 @@ public class Acronym {
     public enum AbbreviationMode {
 
         FIRST_LETTERS_IGNORE_NUMERIC(false, false, StringHandler::firstCharIgnoreNumeric),
-        FIRST_UPPER_CASE_LETTERS_IGNORE_NUMERIC(false, true, StringHandler::firstUpperOrSpecialIgnoreNumeric),
-        ALL_UPPER_CASE_LETTERS_IGNORE_NUMERIC(false, true, StringHandler::allUpperAndSpecialIgnoreNumeric),
+        FIRST_UPPER_CASE_LETTERS_IGNORE_NUMERIC(false, true, StringHandler::firstUpperIgnoreNumeric),
+        ALL_UPPER_CASE_LETTERS_IGNORE_NUMERIC(false, true, StringHandler::allUpperIgnoreNumeric),
         FIRST_LETTERS_KEEP_NUMERIC(true, false, StringHandler::firstCharKeepNumeric),
-        FIRST_UPPER_CASE_LETTERS_KEEP_NUMERIC(true, true, StringHandler::firstUpperOrSpecialKeepNumeric),
-        ALL_UPPER_CASE_LETTERS_KEEP_NUMERIC(true, true, StringHandler::allUpperAndSpecialKeepNumeric);
+        FIRST_UPPER_CASE_LETTERS_KEEP_NUMERIC(true, true, StringHandler::firstUpperKeepNumeric),
+        ALL_UPPER_CASE_LETTERS_KEEP_NUMERIC(true, true, StringHandler::allUpperKeepNumeric);
 
         private final boolean keepDigits;
 
