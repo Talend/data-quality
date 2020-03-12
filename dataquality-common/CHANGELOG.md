@@ -6,8 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- chore(TDQ-18062): Add package for character handling, move TokenizedString class from dataquality-semantic
-- feat(TDQ-18062) : Add Acronym class and string handling utilities for acronym creation
+- feat(TDQ-18062): Add StringChecker, StringHandler, TokenizedString and Acronym utility classes in new "character" package
 ### Changed
 N/A
 ### Removed

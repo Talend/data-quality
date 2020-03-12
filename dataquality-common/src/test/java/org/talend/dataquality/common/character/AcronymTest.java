@@ -1,12 +1,12 @@
 package org.talend.dataquality.common.character;
 
 import static org.junit.Assert.assertEquals;
-import static org.talend.dataquality.common.character.Acronym.AbbreviationMode.ALL_UPPER_CASE_LETTERS_IGNORE_NUMERIC;
-import static org.talend.dataquality.common.character.Acronym.AbbreviationMode.ALL_UPPER_CASE_LETTERS_KEEP_NUMERIC;
-import static org.talend.dataquality.common.character.Acronym.AbbreviationMode.FIRST_LETTERS_IGNORE_NUMERIC;
-import static org.talend.dataquality.common.character.Acronym.AbbreviationMode.FIRST_LETTERS_KEEP_NUMERIC;
-import static org.talend.dataquality.common.character.Acronym.AbbreviationMode.FIRST_UPPER_CASE_LETTERS_IGNORE_NUMERIC;
-import static org.talend.dataquality.common.character.Acronym.AbbreviationMode.FIRST_UPPER_CASE_LETTERS_KEEP_NUMERIC;
+import static org.talend.dataquality.common.character.AbbreviationMode.ALL_UPPER_CASE_LETTERS_IGNORE_NUMERIC;
+import static org.talend.dataquality.common.character.AbbreviationMode.ALL_UPPER_CASE_LETTERS_KEEP_NUMERIC;
+import static org.talend.dataquality.common.character.AbbreviationMode.FIRST_LETTERS_IGNORE_NUMERIC;
+import static org.talend.dataquality.common.character.AbbreviationMode.FIRST_LETTERS_KEEP_NUMERIC;
+import static org.talend.dataquality.common.character.AbbreviationMode.FIRST_UPPER_CASE_LETTERS_IGNORE_NUMERIC;
+import static org.talend.dataquality.common.character.AbbreviationMode.FIRST_UPPER_CASE_LETTERS_KEEP_NUMERIC;
 
 import java.util.Arrays;
 import java.util.List;
@@ -186,7 +186,7 @@ public class AcronymTest {
         }
     }
 
-    private Acronym buildAcronym(Acronym.AbbreviationMode abbrevMode, AcronymSeparator separator) {
+    private Acronym buildAcronym(AbbreviationMode abbrevMode, AcronymSeparator separator) {
         return Acronym
                 .newBuilder()
                 .withDelimiters(delimiters)
