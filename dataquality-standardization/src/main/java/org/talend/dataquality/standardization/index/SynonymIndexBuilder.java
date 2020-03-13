@@ -99,7 +99,7 @@ public class SynonymIndexBuilder {
             indexDir = FSDirectory.open(Paths.get(path));
         } catch (IOException e) {
             LOG.info(e.getMessage(), e);
-            error.set(false, Messages.getString("SynonymIndexBuilder.failLoad"));//$NON-NLS-1$
+            error.set(false, Messages.getString("SynonymIndexBuilder.failLoad", path));//$NON-NLS-1$
         }
     }
 

@@ -14,7 +14,7 @@ N/A
 ### Deprecated
 N/A
 ### Fixed
-N/A
+- chore(TDQ-18091) more clear error message.
 ### Security
 N/A
 
