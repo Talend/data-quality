@@ -60,7 +60,7 @@ pipeline {
                     configFileProvider([configFile(fileId: 'maven-settings-nexus-zl', variable: 'MAVEN_SETTINGS')]) {
                         sh 'java -version'
                         sh 'mvn --version'
-                        sh 'mvn clean test -B --fail-at-end -s $MAVEN_SETTINGS'
+                        sh 'mvn -U clean test -B --fail-at-end -s $MAVEN_SETTINGS'
                     }
                 }
             }
@@ -81,7 +81,7 @@ pipeline {
                 container('talend-jdk8-builder-base') {
                     configFileProvider([configFile(fileId: 'maven-settings-nexus-zl', variable: 'MAVEN_SETTINGS')]) {
                         echo "Deploy DQ Libs SE jar on Nexus"
-                        sh 'mvn clean deploy -DskipTests -B -s $MAVEN_SETTINGS'
+                        sh 'mvn deploy -DskipTests -B -s $MAVEN_SETTINGS'
                     }
                 }
             }

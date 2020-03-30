@@ -61,21 +61,6 @@ pipeline {
                 name: "target_dq_lib_version",
                 description: "Target DQ Lib SE version",
                 defaultValue: "0.0.0")
-        choice(
-                name: 'branch',
-                description: 'Branch',
-                choices: [
-                        'master',
-                        'maintenance/6.1',
-                        'maintenance/6.2',
-                        'maintenance/6.3',
-                        'maintenance/6.4',
-                        'maintenance/7.0',
-                        'maintenance/7.1',
-                        'maintenance/7.2',
-                        'maintenance/7.3',
-                        'maintenance/7.4'
-                ])
     }
 
     stages {
@@ -156,7 +141,7 @@ pipeline {
                           "title": "$pr_msg",
                           "body": "$pr_msg, please help review it!",
                           "head": "update_version_to_${target_dq_lib_version}",
-                          "base": "$branch"
+                          "base": "${env.BRANCH_NAME}"
                         }
 EOF
                         """
@@ -213,7 +198,7 @@ EOF
 
         aborted {
             script {
-                slackSend(color: '#c6c6c6', channel: "${SLACK_CHANNEL}", message: "ABORTED job for the release of DQ Libs $target_dq_lib_version on branch $branch : `${env.JOB_NAME.replaceAll('%2F', '/')}` #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
+                slackSend(color: '#c6c6c6', channel: "${SLACK_CHANNEL}", message: "ABORTED job for the release of DQ Libs $target_dq_lib_version on branch ${env.BRANCH_NAME} : `${env.JOB_NAME.replaceAll('%2F', '/')}` #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
             }
         }
     }
