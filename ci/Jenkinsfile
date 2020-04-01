@@ -79,9 +79,7 @@ pipeline {
                     configFileProvider([configFile(fileId: 'maven-settings-nexus-zl', variable: 'MAVEN_SETTINGS')]) {
                         withCredentials([usernamePassword(credentialsId: 'sonar-credentials',
                                 passwordVariable: 'SONAR_PASSWORD', usernameVariable: 'SONAR_LOGIN')]) {
-                            sh '''
-                                ./mvnw $SONAR_OPTS -Dsonar.login="$SONAR_LOGIN" -Dsonar.password="$SONAR_PASSWORD" sonar:sonar -s $MAVEN_SETTINGS
-                            '''
+                            sh 'mvn $SONAR_OPTS -Dsonar.login="$SONAR_LOGIN" -Dsonar.password="$SONAR_PASSWORD" sonar:sonar -s $MAVEN_SETTINGS'
                         }
                     }
                 }
