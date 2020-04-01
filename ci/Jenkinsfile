@@ -45,6 +45,7 @@ pipeline {
 
     environment {
         SLACK_CHANNEL = 'tdq_ci'
+        SONAR_OPTS = "-Dsonar.host.url=https://sonar.datapwn.com/ -Dsonar.projectKey=org.talend.dataquality:dataquality-parent:master -Dsonar.projectName=dataquality-parent:master"
     }
 
     stages {
@@ -70,6 +71,22 @@ pipeline {
                 }
             }
         }
+		
+		// JOB > PIPELINE : Sonar analysis       
+        stage("Sonarqube analysis") {
+            steps {
+                container('talend-jdk8-builder-base') {
+                    configFileProvider([configFile(fileId: 'maven-settings-nexus-zl', variable: 'MAVEN_SETTINGS')]) {
+                        withCredentials([usernamePassword(credentialsId: 'sonar-credentials',
+                                passwordVariable: 'SONAR_PASSWORD', usernameVariable: 'SONAR_LOGIN')]) {
+                            sh '''
+                                ./mvnw $SONAR_OPTS -Dsonar.login="$SONAR_LOGIN" -Dsonar.password="$SONAR_PASSWORD" sonar:sonar -s $MAVEN_SETTINGS
+                            '''
+                        }
+                    }
+                }
+            }
+        }      
 
         /*
         * Publishing artifact stage (only if it is a releasable branch):
