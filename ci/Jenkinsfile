@@ -45,6 +45,7 @@ pipeline {
 
     environment {
         SLACK_CHANNEL = 'tdq_ci'
+        SONAR_OPTS = "-Dsonar.host.url=https://sonar.datapwn.com/ -Dsonar.projectKey=org.talend.dataquality:dataquality-parent:${env.BRANCH_NAME} -Dsonar.projectName=dataquality-parent"
     }
 
     stages {
@@ -60,7 +61,7 @@ pipeline {
                     configFileProvider([configFile(fileId: 'maven-settings-nexus-zl', variable: 'MAVEN_SETTINGS')]) {
                         sh 'java -version'
                         sh 'mvn --version'
-                        sh 'mvn clean test -B --fail-at-end -s $MAVEN_SETTINGS'
+                        sh 'mvn -U clean test -B --fail-at-end -s $MAVEN_SETTINGS'
                     }
                 }
             }
@@ -70,6 +71,20 @@ pipeline {
                 }
             }
         }
+		
+		// JOB > PIPELINE : Sonar analysis       
+        stage("Sonarqube analysis") {
+            steps {
+                container('talend-jdk8-builder-base') {
+                    configFileProvider([configFile(fileId: 'maven-settings-nexus-zl', variable: 'MAVEN_SETTINGS')]) {
+                        withCredentials([usernamePassword(credentialsId: 'sonar-credentials',
+                                passwordVariable: 'SONAR_PASSWORD', usernameVariable: 'SONAR_LOGIN')]) {
+                            sh 'mvn $SONAR_OPTS -Dsonar.login="$SONAR_LOGIN" -Dsonar.password="$SONAR_PASSWORD" sonar:sonar -s $MAVEN_SETTINGS'
+                        }
+                    }
+                }
+            }
+        }      
 
         /*
         * Publishing artifact stage (only if it is a releasable branch):
@@ -81,7 +96,7 @@ pipeline {
                 container('talend-jdk8-builder-base') {
                     configFileProvider([configFile(fileId: 'maven-settings-nexus-zl', variable: 'MAVEN_SETTINGS')]) {
                         echo "Deploy DQ Libs SE jar on Nexus"
-                        sh 'mvn clean deploy -DskipTests -B -s $MAVEN_SETTINGS'
+                        sh 'mvn deploy -DskipTests -B -s $MAVEN_SETTINGS'
                     }
                 }
             }
