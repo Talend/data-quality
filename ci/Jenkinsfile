@@ -45,7 +45,7 @@ pipeline {
 
     environment {
         SLACK_CHANNEL = 'tdq_ci'
-        SONAR_OPTS = "-Dsonar.host.url=https://sonar.datapwn.com/ -Dsonar.projectKey=org.talend.dataquality:dataquality-parent:${env.BRANCH_NAME} -Dsonar.projectName=dataquality-parent"
+        SONAR_OPTS = "-Dsonar.host.url=https://sonar-eks.datapwn.com -Dsonar.projectKey=org.talend.dataquality:dataquality-parent -Dsonar.projectName=dataquality-parent:${env.BRANCH_NAME}"
     }
 
     stages {
