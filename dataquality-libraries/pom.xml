@@ -26,6 +26,7 @@
 		<powermock.version>2.0.2</powermock.version>
 		<re2j.version>1.2</re2j.version>
 		<org.talend.daikon.version>1.12.0</org.talend.daikon.version>
+		<sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
 	</properties>
 
 	<modules>
@@ -206,6 +207,16 @@
 					<groupId>org.jacoco</groupId>
 					<artifactId>jacoco-maven-plugin</artifactId>
 					<version>0.8.5</version>
+					<executions>
+						<execution>
+							<goals>
+								<goal>prepare-agent</goal>
+							</goals>
+						</execution>
+					</executions>
+					<configuration>
+						<destFile>${sonar.jacoco.reportPath}</destFile>
+					</configuration>
 				</plugin>
 			</plugins>
 		</pluginManagement>
