@@ -17,7 +17,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<slf4j.version>1.7.12</slf4j.version>
-		<log4j.version>1.2.17</log4j.version>
+		<log4j.version>2.13.2</log4j.version>
 		<log4j2.version>2.4.1</log4j2.version>
 		<java.version>1.8</java.version>
 		<assertj.version>3.0.0</assertj.version>
@@ -96,8 +96,8 @@
 				<scope>test</scope>
 			</dependency>
 			<dependency>
-				<groupId>log4j</groupId>
-				<artifactId>log4j</artifactId>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-core</artifactId>
 				<version>${log4j.version}</version>
 				<scope>test</scope>
 			</dependency>
