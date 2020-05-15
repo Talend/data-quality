@@ -20,19 +20,27 @@ en_CA	h:mm:ss 'o''clock' a z
 fr_CA	H' h 'mm z
 ja_JP	H'時'mm'分'ss'秒' z
 zh_CN	ahh'时'mm'分'ss'秒' z
-en_US	H:mmZ
+en_US	H:mmX
+en_US	H.mmX
+en_US	HH:mmX
+en_US	HH.mmX
+en_US	H:mm:ssX
+en_US	H.mm.ssX
+en_US	HH:mm:ssX
+en_US	HH.mm.ssX
+en_US	H:mmXX
+en_US	H.mmXX
+en_US	HH:mmXX
+en_US	HH.mmXX
+en_US	H:mm:ssXX
+en_US	H.mm.ssXX
+en_US	HH:mm:ssXX
+en_US	HH.mm.ssXX
 en_US	H:mmXXX
-en_US	HH:mmZ
-en_US	HH:mmXXX
-en_US	H.mmZ
 en_US	H.mmXXX
-en_US	HH.mmZ
+en_US	HH:mmXXX
 en_US	HH.mmXXX
-en_US	H:mm:ssZ
 en_US	H:mm:ssXXX
-en_US	HH:mm:ssZ
-en_US	HH:mm:ssXXX
-en_US	H.mm.ssZ
 en_US	H.mm.ssXXX
-en_US	HH.mm.ssZ
+en_US	HH:mm:ssXXX
 en_US	HH.mm.ssXXX

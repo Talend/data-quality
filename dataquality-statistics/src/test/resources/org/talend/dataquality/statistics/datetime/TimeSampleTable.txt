@@ -21,3 +21,27 @@ Sample	Pattern	Locale	FormatStyle	IsWithTime
 5 h 06 CET	H' h 'mm z	fr_CA	FULL	true
 5時06分07秒 CET	H'時'mm'分'ss'秒' z	ja_JP	FULL	true
 上午05时06分07秒 CET	ahh'时'mm'分'ss'秒' z	zh_CN	FULL	true
+5:06+01	H:mmX	en_US	OTHER	true
+5.06+01	H.mmX	en_US	OTHER	true
+05:06+01	HH:mmX	en_US	OTHER	true
+05.06+01	HH.mmX	en_US	OTHER	true
+5:06:07+01	H:mm:ssX	en_US	OTHER	true
+5.06.07+01	H.mm.ssX	en_US	OTHER	true
+05:06:07+01	HH:mm:ssX	en_US	OTHER	true
+05.06.07+01	HH.mm.ssX	en_US	OTHER	true
+5:06+0100	H:mmXX	en_US	OTHER	true
+5.06+0100	H.mmXX	en_US	OTHER	true
+05:06+0100	HH:mmXX	en_US	OTHER	true
+05.06+0100	HH.mmXX	en_US	OTHER	true
+5:06:07+0100	H:mm:ssXX	en_US	OTHER	true
+5.06.07+0100	H.mm.ssXX	en_US	OTHER	true
+05:06:07+0100	HH:mm:ssXX	en_US	OTHER	true
+05.06.07+0100	HH.mm.ssXX	en_US	OTHER	true
+5:06+01:00	H:mmXXX	en_US	OTHER	true
+5.06+01:00	H.mmXXX	en_US	OTHER	true
+05:06+01:00	HH:mmXXX	en_US	OTHER	true
+05.06+01:00	HH.mmXXX	en_US	OTHER	true
+5:06:07+01:00	H:mm:ssXXX	en_US	OTHER	true
+5.06.07+01:00	H.mm.ssXXX	en_US	OTHER	true
+05:06:07+01:00	HH:mm:ssXXX	en_US	OTHER	true
+05.06.07+01:00	HH.mm.ssXXX	en_US	OTHER	true

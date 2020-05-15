@@ -96,14 +96,18 @@ public final class AdditionalDateTimePatterns {
             // 7. ISO_OFFSET_DATE
             add(new LocaledPattern("yyyy-MM-ddXXX", Locale.US, "ISO_OFFSET_DATE", false));
             // 8. ISO_OFFSET_DATE_TIME
-            add(new LocaledPattern("yyyy-MM-dd'T'HH:mm:ssZ", Locale.US, "ISO_OFFSET_DATE_TIME", true));
+            add(new LocaledPattern("yyyy-MM-dd'T'HH:mm:ssZ", Locale.US, "ISO_OFFSET_DATE_TIME", true)); // TDQ-18441
+            add(new LocaledPattern("yyyy-MM-dd'T'HH:mm:ssX", Locale.US, "ISO_OFFSET_DATE_TIME", true)); // TDQ-18441
+            add(new LocaledPattern("yyyy-MM-dd'T'HH:mm:ssXX", Locale.US, "ISO_OFFSET_DATE_TIME", true)); // TDQ-18441
             add(new LocaledPattern("yyyy-MM-dd'T'HH:mm:ssXXX", Locale.US, "ISO_OFFSET_DATE_TIME", true));
             add(new LocaledPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.US, "ISO_OFFSET_DATE_TIME", true));
             add(new LocaledPattern("yyyy-MM-dd'T'HH:mm:ss,SSSXXX", Locale.US, "ISO_OFFSET_DATE_TIME", true)); // TDQ-16796
+            add(new LocaledPattern("yyyy-MM-dd HH:mm:ssZ", Locale.US, "ISO_OFFSET_DATE_TIME", true)); // TDQ-18441
+            add(new LocaledPattern("yyyy-MM-dd HH:mm:ssX", Locale.US, "ISO_OFFSET_DATE_TIME", true)); // TDQ-18441
+            add(new LocaledPattern("yyyy-MM-dd HH:mm:ssXX", Locale.US, "ISO_OFFSET_DATE_TIME", true)); // TDQ-18441
+            add(new LocaledPattern("yyyy-MM-dd HH:mm:ssXXX", Locale.US, "ISO_OFFSET_DATE_TIME", true));
             add(new LocaledPattern("yyyy-MM-dd HH:mm:ss.SSSXXX", Locale.US, "ISO_OFFSET_DATE_TIME", true));
             add(new LocaledPattern("yyyy-MM-dd HH:mm:ss,SSSXXX", Locale.US, "ISO_OFFSET_DATE_TIME", true)); // TDQ-16796
-            add(new LocaledPattern("yyyy-MM-dd HH:mm:ssZ", Locale.US, "ISO_OFFSET_DATE_TIME", true));
-            add(new LocaledPattern("yyyy-MM-dd HH:mm:ssXXX", Locale.US, "ISO_OFFSET_DATE_TIME", true));
 
             // 9. ISO_ORDINAL_DATE
             add(new LocaledPattern("yyyy-DDDXXX", Locale.US, "ISO", false));
@@ -130,21 +134,29 @@ public final class AdditionalDateTimePatterns {
 
         private static final long serialVersionUID = 1L;
         {
-            add(new LocaledPattern("H:mmZ", Locale.US, "OTHER", true));
+            add(new LocaledPattern("H:mmX", Locale.US, "OTHER", true));
+            add(new LocaledPattern("H.mmX", Locale.US, "OTHER", true));
+            add(new LocaledPattern("HH:mmX", Locale.US, "OTHER", true));
+            add(new LocaledPattern("HH.mmX", Locale.US, "OTHER", true));
+            add(new LocaledPattern("H:mm:ssX", Locale.US, "OTHER", true));
+            add(new LocaledPattern("H.mm.ssX", Locale.US, "OTHER", true));
+            add(new LocaledPattern("HH:mm:ssX", Locale.US, "OTHER", true));
+            add(new LocaledPattern("HH.mm.ssX", Locale.US, "OTHER", true));
+            add(new LocaledPattern("H:mmXX", Locale.US, "OTHER", true));
+            add(new LocaledPattern("H.mmXX", Locale.US, "OTHER", true));
+            add(new LocaledPattern("HH:mmXX", Locale.US, "OTHER", true));
+            add(new LocaledPattern("HH.mmXX", Locale.US, "OTHER", true));
+            add(new LocaledPattern("H:mm:ssXX", Locale.US, "OTHER", true));
+            add(new LocaledPattern("H.mm.ssXX", Locale.US, "OTHER", true));
+            add(new LocaledPattern("HH:mm:ssXX", Locale.US, "OTHER", true));
+            add(new LocaledPattern("HH.mm.ssXX", Locale.US, "OTHER", true));
             add(new LocaledPattern("H:mmXXX", Locale.US, "OTHER", true));
-            add(new LocaledPattern("HH:mmZ", Locale.US, "OTHER", true));
-            add(new LocaledPattern("HH:mmXXX", Locale.US, "OTHER", true));
-            add(new LocaledPattern("H.mmZ", Locale.US, "OTHER", true));
             add(new LocaledPattern("H.mmXXX", Locale.US, "OTHER", true));
-            add(new LocaledPattern("HH.mmZ", Locale.US, "OTHER", true));
+            add(new LocaledPattern("HH:mmXXX", Locale.US, "OTHER", true));
             add(new LocaledPattern("HH.mmXXX", Locale.US, "OTHER", true));
-            add(new LocaledPattern("H:mm:ssZ", Locale.US, "OTHER", true));
             add(new LocaledPattern("H:mm:ssXXX", Locale.US, "OTHER", true));
-            add(new LocaledPattern("HH:mm:ssZ", Locale.US, "OTHER", true));
-            add(new LocaledPattern("HH:mm:ssXXX", Locale.US, "OTHER", true));
-            add(new LocaledPattern("H.mm.ssZ", Locale.US, "OTHER", true));
             add(new LocaledPattern("H.mm.ssXXX", Locale.US, "OTHER", true));
-            add(new LocaledPattern("HH.mm.ssZ", Locale.US, "OTHER", true));
+            add(new LocaledPattern("HH:mm:ssXXX", Locale.US, "OTHER", true));
             add(new LocaledPattern("HH.mm.ssXXX", Locale.US, "OTHER", true));
         }
     };

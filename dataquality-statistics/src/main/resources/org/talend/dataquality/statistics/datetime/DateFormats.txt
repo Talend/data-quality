@@ -161,7 +161,6 @@ en_US	yyyyMMddZ
 en_US	yyyyMMdd
 en_US	yyyy-MM-dd G
 en_US	yyyy-MM-ddXXX
-en_US	yyyy-MM-dd
 en_US	yyyy-MM-dd'T'HH:mm:ss.SSS'['VV']'
 en_US	yyyy-MM-dd'T'HH:mm:ss,SSS'['VV']'
 en_US	yyyy-MM-dd'T'HH:mm:ss.SSS
@@ -171,22 +170,24 @@ en_US	yyyy-MM-dd HH:mm:ss.SSS'['VV']'
 en_US	yyyy-MM-dd HH:mm:ss,SSS'['VV']'
 en_US	yyyy-MM-dd HH:mm:ss.SSS
 en_US	yyyy-MM-dd HH:mm:ss,SSS
-en_US	yyyy-MM-dd HH:mm:ss
 en_US	yyyy-MM-dd'T'HH:mm:ss.SSS'Z'
 en_US	yyyy-MM-dd'T'HH:mm:ss,SSS'Z'
 en_US	yyyy-MM-dd'T'HH:mm:ss'Z'
 en_US	yyyy-MM-dd HH:mm:ss.SSS'Z'
 en_US	yyyy-MM-dd HH:mm:ss,SSS'Z'
 en_US	yyyy-MM-dd HH:mm:ss'Z'
-en_US	yyyy-MM-ddXXX
 en_US	yyyy-MM-dd'T'HH:mm:ssZ
+en_US	yyyy-MM-dd'T'HH:mm:ssX
+en_US	yyyy-MM-dd'T'HH:mm:ssXX
 en_US	yyyy-MM-dd'T'HH:mm:ssXXX
 en_US	yyyy-MM-dd'T'HH:mm:ss.SSSXXX
 en_US	yyyy-MM-dd'T'HH:mm:ss,SSSXXX
+en_US	yyyy-MM-dd HH:mm:ssZ
+en_US	yyyy-MM-dd HH:mm:ssX
+en_US	yyyy-MM-dd HH:mm:ssXX
+en_US	yyyy-MM-dd HH:mm:ssXXX
 en_US	yyyy-MM-dd HH:mm:ss.SSSXXX
 en_US	yyyy-MM-dd HH:mm:ss,SSSXXX
-en_US	yyyy-MM-dd HH:mm:ssZ
-en_US	yyyy-MM-dd HH:mm:ssXXX
 en_US	yyyy-DDDXXX
 en_US	YYYY'W'wc
 en_US	YYYY-'W'w-c

@@ -19,6 +19,7 @@ import static org.junit.Assume.assumeTrue;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.ResolverStyle;
 import java.util.Locale;
 
@@ -61,6 +62,24 @@ public class SystemDateTimePatternManagerTest {
         // newly supported
         assertTrue(SystemDateTimePatternManager.isDate("2020-04-29T08:49:29Z")); //$NON-NLS-1$
         assertTrue(SystemDateTimePatternManager.isDate("2020-04-29 08:49:29Z")); //$NON-NLS-1$
+    }
+
+    @Test
+    public void validateDatesWithOffsetTimeZones() {
+        assertTrue(SystemDateTimePatternManager.isDate("2020-04-29T08:49:29+0200")); //$NON-NLS-1$
+        assertTrue(SystemDateTimePatternManager.isDate("2020-04-29T08:49:29+01")); //$NON-NLS-1$
+        assertTrue(SystemDateTimePatternManager.isDate("2020-04-29 08:49:29+0200")); //$NON-NLS-1$
+        assertTrue(SystemDateTimePatternManager.isDate("2020-04-29 08:49:29+01")); //$NON-NLS-1$
+    }
+
+    @Test
+    public void validateTimesWithOffsetTimeZones() {
+        assertTrue(SystemDateTimePatternManager.isTime("08:49:29+02:00")); //$NON-NLS-1$
+        assertTrue(SystemDateTimePatternManager.isTime("08:49:29+0200")); //$NON-NLS-1$
+        assertTrue(SystemDateTimePatternManager.isTime("08:49:29+01")); //$NON-NLS-1$
+        assertTrue(SystemDateTimePatternManager.isTime("8.49.29+02:00")); //$NON-NLS-1$
+        assertTrue(SystemDateTimePatternManager.isTime("8.49.29+0200")); //$NON-NLS-1$
+        assertTrue(SystemDateTimePatternManager.isTime("8.49.29+01")); //$NON-NLS-1$
     }
 
     @Test

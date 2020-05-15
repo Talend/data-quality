@@ -294,7 +294,7 @@ public class PatternListGenerator {
         }
 
         // 3. ISO and RFC DateTimePatterns
-        knownLocaledPatternList.addAll(ISO_RFC_DATETIME_PATTERNS);
+        ISO_RFC_DATETIME_PATTERNS.forEach(PatternListGenerator::addLocaledPattern);
         int isoPatternCount = knownLocaledPatternList.size() - currentLocaledPatternSize;
         if (PRINT_DETAILED_RESULTS) {
             System.out.println("#DateTimePattern(ISO&RFC) = " + isoPatternCount + "\n");
@@ -404,9 +404,10 @@ public class PatternListGenerator {
     }
 
     private static void writeResource(String scope, String resourceName, String resourceContent) throws IOException {
+        String targetClassPath = "target" + File.separator + (scope.equals("main") ? "classes" : "test-classes");
         // Time Samples
         Path path = Paths.get(SystemDateTimePatternManager.class.getResource(resourceName).getFile().replace(
-                "target" + File.separator + "classes", "src" + File.separator + scope + File.separator + "resources"));
+                targetClassPath, "src" + File.separator + scope + File.separator + "resources"));
         Files.write(path, resourceContent.getBytes(StandardCharsets.UTF_8));
     }
 

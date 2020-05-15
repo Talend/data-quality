@@ -146,11 +146,11 @@ public class FormatGroupGenerator {
         Map<String, List<DateTimeFormatCode>> formatGroupMap = new LinkedHashMap<String, List<DateTimeFormatCode>>();
 
         for (DateTimeFormatCode fc : formatCodes) {
-            String aggreratedCode = fc.dateSeparator + fc.timeSeparator + fc.code;
-            List<DateTimeFormatCode> formatCodeSet = formatGroupMap.get(aggreratedCode);
+            String aggregatedCode = fc.dateSeparator + fc.timeSeparator + fc.code;
+            List<DateTimeFormatCode> formatCodeSet = formatGroupMap.get(aggregatedCode);
             if (formatCodeSet == null) {
                 formatCodeSet = new ArrayList<DateTimeFormatCode>();
-                formatGroupMap.put(aggreratedCode, formatCodeSet);
+                formatGroupMap.put(aggregatedCode, formatCodeSet);
             }
             formatCodeSet.add(fc);
         }
