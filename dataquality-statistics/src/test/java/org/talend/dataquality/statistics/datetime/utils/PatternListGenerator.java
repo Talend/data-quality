@@ -140,10 +140,8 @@ public class PatternListGenerator {
 
     private static void getFormatByStyle(FormatStyle dateStyle, FormatStyle timeStyle, boolean isDateRequired,
             boolean isTimeRequired, Locale locale, boolean keepLongMonthAndSpecificChars) {
-        String pattern = DateTimeFormatterBuilder
-                .getLocalizedDateTimePattern(//
-                        isDateRequired ? dateStyle : null, isTimeRequired ? timeStyle : null, IsoChronology.INSTANCE,
-                        locale);//
+        String pattern = DateTimeFormatterBuilder.getLocalizedDateTimePattern(//
+                isDateRequired ? dateStyle : null, isTimeRequired ? timeStyle : null, IsoChronology.INSTANCE, locale);//
 
         // ignore patterns with long month for additional languages
         if (!keepLongMonthAndSpecificChars && (pattern.contains("MMMM") || pattern.contains("MMM")
@@ -275,16 +273,14 @@ public class PatternListGenerator {
 
             for (Locale locale : primaryLocaleArray) {
 
-                String patternShort = DateTimeFormatterBuilder
-                        .getLocalizedDateTimePattern(//
-                                null, FormatStyle.SHORT, IsoChronology.INSTANCE, locale);//
+                String patternShort = DateTimeFormatterBuilder.getLocalizedDateTimePattern(//
+                        null, FormatStyle.SHORT, IsoChronology.INSTANCE, locale);//
                 LocaledPattern combinedShortLP =
                         new LocaledPattern(lp.pattern + " " + patternShort, locale, FormatStyle.SHORT.name(), true);
                 addLocaledPattern(combinedShortLP);
 
-                String patternMedium = DateTimeFormatterBuilder
-                        .getLocalizedDateTimePattern(//
-                                null, FormatStyle.MEDIUM, IsoChronology.INSTANCE, locale);//
+                String patternMedium = DateTimeFormatterBuilder.getLocalizedDateTimePattern(//
+                        null, FormatStyle.MEDIUM, IsoChronology.INSTANCE, locale);//
                 LocaledPattern combinedMediumLP =
                         new LocaledPattern(lp.pattern + " " + patternMedium, locale, FormatStyle.MEDIUM.name(), true);
                 addLocaledPattern(combinedMediumLP);
@@ -409,12 +405,8 @@ public class PatternListGenerator {
 
     private static void writeResource(String scope, String resourceName, String resourceContent) throws IOException {
         // Time Samples
-        Path path = Paths
-                .get(SystemDateTimePatternManager.class
-                        .getResource(resourceName)
-                        .getFile()
-                        .replace("target" + File.separator + "classes",
-                                "src" + File.separator + scope + File.separator + "resources"));
+        Path path = Paths.get(SystemDateTimePatternManager.class.getResource(resourceName).getFile().replace(
+                "target" + File.separator + "classes", "src" + File.separator + scope + File.separator + "resources"));
         Files.write(path, resourceContent.getBytes(StandardCharsets.UTF_8));
     }
 
