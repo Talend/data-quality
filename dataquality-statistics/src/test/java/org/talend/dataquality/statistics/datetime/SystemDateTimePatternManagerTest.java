@@ -65,6 +65,14 @@ public class SystemDateTimePatternManagerTest {
     }
 
     @Test
+    public void validateUnusualTimeZones() {
+        // Kiribati
+        assertTrue(SystemDateTimePatternManager.isDate("2020-04-29T08:49:29+14:00")); //$NON-NLS-1$
+        // Mumbai
+        assertTrue(SystemDateTimePatternManager.isDate("2020-04-29T08:49:29+05:30")); //$NON-NLS-1$
+    }
+
+    @Test
     public void validateDatesWithOffsetTimeZones() {
         assertTrue(SystemDateTimePatternManager.isDate("2020-04-29T08:49:29+0200")); //$NON-NLS-1$
         assertTrue(SystemDateTimePatternManager.isDate("2020-04-29T08:49:29+01")); //$NON-NLS-1$
