@@ -12,6 +12,13 @@
 // ============================================================================
 package org.talend.dataquality.matchmerge.mfb;
 
+import org.apache.commons.lang.StringUtils;
+import org.talend.dataquality.matchmerge.Attribute;
+import org.talend.dataquality.matchmerge.AttributeValues;
+import org.talend.dataquality.matchmerge.Record;
+import org.talend.dataquality.record.linkage.record.IRecordMerger;
+import org.talend.dataquality.record.linkage.utils.SurvivorShipAlgorithmEnum;
+
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -19,13 +26,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
-import org.talend.dataquality.matchmerge.Attribute;
-import org.talend.dataquality.matchmerge.AttributeValues;
-import org.talend.dataquality.matchmerge.Record;
-import org.talend.dataquality.record.linkage.record.IRecordMerger;
-import org.talend.dataquality.record.linkage.utils.SurvivorShipAlgorithmEnum;
 
 public class MFBRecordMerger implements IRecordMerger {
 
