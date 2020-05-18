@@ -19,7 +19,7 @@ import org.talend.dataquality.matchmerge.mfb.MFBRecordMatcher;
  * DOC zshen class global comment. Detailled comment
  */
 public class DQMFBRecordMatcher extends MFBRecordMatcher {
-	
+
     /**
      * DOC zshen DQMFBRecordMatcher constructor comment.
      * 
