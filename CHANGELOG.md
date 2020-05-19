@@ -8,28 +8,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [8.0.0] - 2020-02-03
 ### Added
-- chore(TDQ-17710): Adopt the "Keep a Changelog" format for changelogs [all modules]
-- chore(TDQ-17993): Support German timezone strings for any default JVM locale [dataquality-statistics]
+- chore([TDQ-17710](https://jira.talendforge.org/browse/TDQ-17710)): Adopt the "Keep a Changelog" format for changelogs [all modules]
+- chore([TDQ-17993](https://jira.talendforge.org/browse/TDQ-17993)): Support German timezone strings for any default JVM locale [dataquality-statistics]
 ### Changed
-- chore(TDQ-17788): cancel the deprecation of setStoreInvalidValues in Quality Analyzers [dataquality-common]
-- chore(TDQ-17788): change RandomWrapper class to package protected [dataquality-sampling]
-- feat(TDQ-17504): upgrade to lucene 8 in standardization library for studio [dataquality-standardization]
-- chore(TDS-764): adding getter to retrieve statistics map [dataquality-statistics]
-- chore(TDQ-17788): cancel the deprecation of setStoreInvalidValues in QualityAnalyzer implementations [dataquality-statistics]
+- chore([TDQ-17788](https://jira.talendforge.org/browse/TDQ-17788)): cancel the deprecation of setStoreInvalidValues in Quality Analyzers [dataquality-common]
+- chore([TDQ-17788](https://jira.talendforge.org/browse/TDQ-17788)): change RandomWrapper class to package protected [dataquality-sampling]
+- feat([TDQ-17504](https://jira.talendforge.org/browse/TDQ-17504)): upgrade to lucene 8 in standardization library for studio [dataquality-standardization]
+- chore([TDS-764](https://jira.talendforge.org/browse/TDS-764)): adding getter to retrieve statistics map [dataquality-statistics]
+- chore([TDQ-17788](https://jira.talendforge.org/browse/TDQ-17788)): cancel the deprecation of setStoreInvalidValues in QualityAnalyzer implementations [dataquality-statistics]
 ### Removed
-- chore(TDQ-17788): remove deprecated class HiraganaSmall [dataquality-common]
-- chore(TDQ-17788): remove unused Tests class [dataquality-common]
-- chore(TDQ-17788): remove unused AllRecordLinkageTests [dataquality-record-linkage]
-- chore(TDQ-17788): remove unused AllDataqualitySamplingTests class [dataquality-sampling]
-- chore(TDQ-17788): remove unused AllDQStandardizationTests class [dataquality-standardization]
-- chore(TDQ-17788): remove deprecated classes EastAsianCharPatternRecognizer, DateTimePatternManager, and CustomDateTimePatternPatternManager [dataquality-statistics]
-- chore(TDQ-17788): remove a deprecated constructor of ValueQualityAnalyzer [dataquality-statistics]
-- chore(TDQ-17788): remove deprecated methods in class SystemDateTimePatternManager and TypeInferenceUtils [dataquality-statistics]
-- chore(TDQ-17788): remove unused AllEmailTests class [dataquality-email]
-- chore(TDQ-17788): remove deprecated class MatchDictionaryService [dataquality-survivorship]
+- chore([TDQ-17788](https://jira.talendforge.org/browse/TDQ-17788)): remove deprecated class HiraganaSmall [dataquality-common]
+- chore([TDQ-17788](https://jira.talendforge.org/browse/TDQ-17788)): remove unused Tests class [dataquality-common]
+- chore([TDQ-17788](https://jira.talendforge.org/browse/TDQ-17788)): remove unused AllRecordLinkageTests [dataquality-record-linkage]
+- chore([TDQ-17788](https://jira.talendforge.org/browse/TDQ-17788)): remove unused AllDataqualitySamplingTests class [dataquality-sampling]
+- chore([TDQ-17788](https://jira.talendforge.org/browse/TDQ-17788)): remove unused AllDQStandardizationTests class [dataquality-standardization]
+- chore([TDQ-17788](https://jira.talendforge.org/browse/TDQ-17788)): remove deprecated classes EastAsianCharPatternRecognizer, DateTimePatternManager, and CustomDateTimePatternPatternManager [dataquality-statistics]
+- chore([TDQ-17788](https://jira.talendforge.org/browse/TDQ-17788)): remove a deprecated constructor of ValueQualityAnalyzer [dataquality-statistics]
+- chore([TDQ-17788](https://jira.talendforge.org/browse/TDQ-17788)): remove deprecated methods in class SystemDateTimePatternManager and TypeInferenceUtils [dataquality-statistics]
+- chore([TDQ-17788](https://jira.talendforge.org/browse/TDQ-17788)): remove unused AllEmailTests class [dataquality-email]
+- chore([TDQ-17788](https://jira.talendforge.org/browse/TDQ-17788)): remove deprecated class MatchDictionaryService [dataquality-survivorship]
 ### Fixed
-- fix(TDQ-17709): fix precision issues to ensure that two records match if the score is greater than or equal to the threshold [dataquality-record-linkage]
-- fix(TDQ-17851): improve the performance and support surrogate pair [dataquality-record-linkage]
+- fix([TDQ-17709](https://jira.talendforge.org/browse/TDQ-17709)): fix precision issues to ensure that two records match if the score is greater than or equal to the threshold [dataquality-record-linkage]
+- fix([TDQ-17851](https://jira.talendforge.org/browse/TDQ-17851)): improve the performance and support surrogate pair [dataquality-record-linkage]
 ### Security
-- chore(TDQ-17923): Rely on daikon's jackson version (currently 2.10.1) [dataquality-common]
+- chore([TDQ-17923](https://jira.talendforge.org/browse/TDQ-17923)): Rely on daikon's jackson version (currently 2.10.1) [dataquality-common]
 

@@ -20,9 +20,9 @@ N/A
 
 ## [8.0.0] - 2020-02-03
 ### Added
-- chore(TDQ-17710): Adopt the "Keep a Changelog" format for changelogs
+- chore([TDQ-17710](https://jira.talendforge.org/browse/TDQ-17710)): Adopt the "Keep a Changelog" format for changelogs
 ### Removed
-- chore(TDQ-17788): remove unused AllEmailTests class
+- chore([TDQ-17788](https://jira.talendforge.org/browse/TDQ-17788)): remove unused AllEmailTests class
 
 ## [6.0.0] - 2018-07-03
 ## [5.0.2] - 2018-04-04
@@ -30,7 +30,7 @@ N/A
 ## [5.0.0] - 2018-02-12
 
 ## [4.0.1] - 2017-12-08
-- TDQ-14481 multi tenant index
+- [TDQ-14481](https://jira.talendforge.org/browse/TDQ-14481) multi tenant index
 
 ## [1.2.1] - 2017-09-11
 ## [1.2.0] - 2017-08-24
@@ -39,15 +39,15 @@ N/A
 ## [1.1.1] - 2017-05-02
 
 ## [1.1.0] - 2017-04-07
-- TDQ-13127 code clean based on sonar tip.
+- [TDQ-13127](https://jira.talendforge.org/browse/TDQ-13127) code clean based on sonar tip.
 
 ## [1.0.6] - 2016-12-09
 
 ## [1.0.5] - 2016-12-02
-- TDQ-12656 code quality improvements
+- [TDQ-12656](https://jira.talendforge.org/browse/TDQ-12656) code quality improvements
 
 ## [1.0.2] - 2016-10-20
 
 ## [1.0.1] - 2016-09-28
-- TDQ-11093 create email valiation API
+- [TDQ-11093](https://jira.talendforge.org/browse/TDQ-11093) create email valiation API
     

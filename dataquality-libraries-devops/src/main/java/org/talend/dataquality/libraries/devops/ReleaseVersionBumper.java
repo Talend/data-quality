@@ -26,6 +26,8 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.xml.XMLConstants;
@@ -56,7 +58,6 @@ import org.xml.sax.SAXException;
  * manual
  * changes need to be done.
  * It's always recommended to verify all changed file before committing the changes.
- * <p>
  * Usage:
  * 1. put the expected snapshot or release version into the TARGET_VERSION field and run the current class as Java
  * application.
@@ -114,19 +115,12 @@ public class ReleaseVersionBumper {
     private void bumpPomVersion() throws IOException, SAXException, ParserConfigurationException,
             XPathExpressionException, TransformerException {
 
-        final String resourcePath = ReleaseVersionBumper.class.getResource(".").getFile();
-        final String projectRoot = new File(resourcePath)
-                .getParentFile()
-                .getParentFile()
-                .getParentFile()
-                .getParentFile()
-                .getParentFile()
-                .getParentFile()
-                .getParentFile()
-                .getPath() + File.separator;
+        final String resourcePath = ReleaseVersionBumper.class.getResource("/").getFile();
+        final String projectRoot =
+                new File(resourcePath).getParentFile().getParentFile().getParentFile().getPath() + File.separator;
 
         // update root pom file
-        String rootPomPath = "../pom.xml";
+        String rootPomPath = "pom.xml";
         File rootPomFile = new File(projectRoot + rootPomPath);
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
@@ -134,58 +128,68 @@ public class ReleaseVersionBumper {
         Document rootDoc = dbf.newDocumentBuilder().parse(rootPomFile);
         Node rootVersion = (Node) xPath.evaluate("/project/version", rootDoc, XPathConstants.NODE);
         rootVersion.setTextContent(TARGET_VERSION);
+        System.out.println("Updating " + rootPomPath);
         xTransformer.transform(new DOMSource(rootDoc), new StreamResult(rootPomFile));
 
-        // update library parent pom file and all the modules
-        String parentPomPath = "../dataquality-libraries/pom.xml";
-        File inputFile = new File(projectRoot + parentPomPath);
-        if (inputFile.exists()) {
-            System.out.println("Updating: " + inputFile.getAbsolutePath()); // NOSONAR
-            Document doc = dbf.newDocumentBuilder().parse(inputFile);
+        COMMIT_CATEGORIES.forEach(cat -> commits.put(cat, new ArrayList<>()));
+        updateModule(rootDoc, projectRoot, dbf);
+        fillParentChangelog(Paths.get(projectRoot, "CHANGELOG.md"));
+    }
 
+    private void updateModule(Document rootDoc, String projectRoot, DocumentBuilderFactory dbf)
+            throws XPathExpressionException, ParserConfigurationException, IOException, SAXException,
+            TransformerException {
+        NodeList moduleNodes = (NodeList) xPath.evaluate("/project/modules/module", rootDoc, XPathConstants.NODESET);
+        for (int moduleIdx = 0; moduleIdx < moduleNodes.getLength(); moduleIdx++) {
+            Node currentNode = moduleNodes.item(moduleIdx);
+            String module = currentNode.getTextContent();
+            String modulePath = projectRoot + "/" + module;
+            System.out.println("Updating: " + modulePath);
+
+            File inputFile = new File(modulePath + "/pom.xml");
+            Document doc = dbf.newDocumentBuilder().parse(inputFile);
             // replace parent version
             Node rootParentVersion = (Node) xPath.evaluate("/project/parent/version", doc, XPathConstants.NODE);
             rootParentVersion.setTextContent(TARGET_VERSION);
 
             // replace version value of this project
             Node parentVersion = (Node) xPath.evaluate("/project/version", doc, XPathConstants.NODE);
-            parentVersion.setTextContent(TARGET_VERSION);
+            if (parentVersion != null)
+                parentVersion.setTextContent(TARGET_VERSION);
 
             // replace property value of this project
-            NodeList propertyNodes =
-                    ((Node) xPath.evaluate("/project/properties", doc, XPathConstants.NODE)).getChildNodes();
-            for (int idx = 0; idx < propertyNodes.getLength(); idx++) {
-                Node node = propertyNodes.item(idx);
-                String propertyName = node.getNodeName();
-                if (DAIKON_VERSION_PROPERTY_NAME.equals(propertyName) && TARGET_DAIKON_VERSION.length() >= 5) {
-                    node.setTextContent(TARGET_DAIKON_VERSION);
+            Node propertiesNode = ((Node) xPath.evaluate("/project/properties", doc, XPathConstants.NODE));
+            if (propertiesNode != null) {
+                NodeList propertyNodes = propertiesNode.getChildNodes();
+                if (propertyNodes != null) {
+                    updateProperties(propertyNodes);
                 }
             }
             // re-write pom.xml file
             xTransformer.transform(new DOMSource(doc), new StreamResult(inputFile));
 
+            updateModule(doc, modulePath + "/", dbf);
+
             // update manifest of this project
             Path manifestPath = Paths.get(inputFile.getParentFile().getAbsolutePath(), "META-INF", "MANIFEST.MF");
             updateManifestVersion(manifestPath);
 
-            boolean isReleasing = !TARGET_VERSION.contains("SNAPSHOT");
-            if (isReleasing)
-                COMMIT_CATEGORIES.forEach(cat -> commits.put(cat, new ArrayList<>()));
-
-            // update modules
-            NodeList moduleNodes = (NodeList) xPath.evaluate("/project/modules/module", doc, XPathConstants.NODESET);
-            for (int idx = 0; idx < moduleNodes.getLength(); idx++) {
-                String modulePath = moduleNodes.item(idx).getTextContent();
-                updateChildPOM(new File(projectRoot + modulePath + "/pom.xml"));
-                if (isReleasing)
-                    updateChangeLogForRelease(Paths.get(projectRoot, modulePath, "CHANGELOG.md"),
-                            modulePath.replace("../", ""));
-                else
-                    updateChangeLogForSnapshot(Paths.get(projectRoot, modulePath, "CHANGELOG.md"));
+            if (!TARGET_VERSION.contains("SNAPSHOT")) {
+                updateChangeLogForRelease(Paths.get(projectRoot, module, "CHANGELOG.md"), module.replace("../", ""));
+            } else {
+                updateChangeLogForSnapshot(Paths.get(projectRoot, module, "CHANGELOG.md"));
             }
-            // Update root changelog
-            if (isReleasing)
-                fillParentChangelog(Paths.get(projectRoot, "../", "CHANGELOG.md"));
+            addHrefToPreviousChanges(Paths.get(projectRoot, module, "CHANGELOG.md"));
+        }
+    }
+
+    private void updateProperties(NodeList propertyNodes) {
+        for (int propertyIndex = 0; propertyIndex < propertyNodes.getLength(); propertyIndex++) {
+            Node node = propertyNodes.item(propertyIndex);
+            String propertyName = node.getNodeName();
+            if (DAIKON_VERSION_PROPERTY_NAME.equals(propertyName) && TARGET_DAIKON_VERSION.length() >= 5) {
+                node.setTextContent(TARGET_DAIKON_VERSION);
+            }
         }
     }
 
@@ -215,7 +219,6 @@ public class ReleaseVersionBumper {
             System.out.println("Updating: " + inputPath.toString()); // NOSONAR
             List<String> lines = Files.readAllLines(inputPath);
             DataOutputStream writer = new DataOutputStream(Files.newOutputStream(inputPath));
-            boolean isCommitFilled = false;
             // If releasing, put the version and the date in the changelog
             String commitCategory = null;
             boolean isNewCommitCategory = false;
@@ -244,13 +247,13 @@ public class ReleaseVersionBumper {
                             if (!line.equals(NA_TAG)) {
                                 writer.write((commitCategory + "\n").getBytes(StandardCharsets.UTF_8));
                                 isNewCommitCategory = false;
-                                writer.write((line + "\n").getBytes(StandardCharsets.UTF_8));
-                                commits.get(commitCategory).add(line + " [" + moduleName + "]");
+                                writer.write((addHref(line) + "\n").getBytes(StandardCharsets.UTF_8));
+                                commits.get(commitCategory).add(addHref(line) + " [" + moduleName + "]");
                             }
                         } else {
                             writer.write((line + "\n").getBytes(StandardCharsets.UTF_8));
                             if (commitCategory != null)
-                                commits.get(commitCategory).add(line + " [" + moduleName + "]");
+                                commits.get(commitCategory).add(addHref(line) + " [" + moduleName + "]");
                         }
                     }
                 }
@@ -258,6 +261,10 @@ public class ReleaseVersionBumper {
             writer.flush();
             writer.close();
         }
+    }
+
+    private String addHref(String line) {
+        return line.replaceAll("T[A-Z]{2}-\\d{3,5}", "[$0](https://jira.talendforge.org/browse/$0)");
     }
 
     private void writeDate(DataOutputStream writer) throws IOException {
@@ -307,28 +314,6 @@ public class ReleaseVersionBumper {
         writer.write(("\n").getBytes(StandardCharsets.UTF_8));
     }
 
-    private void updateChildPOM(File inputFile) throws IOException, SAXException, ParserConfigurationException,
-            XPathExpressionException, TransformerException {
-        if (inputFile.exists()) {
-            System.out.println("Updating: " + inputFile.getAbsolutePath()); // NOSONAR
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-            dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-            Document doc = dbf.newDocumentBuilder().parse(inputFile);
-
-            // replace parent version value
-            Node parentVersion = (Node) xPath.evaluate("/project/parent/version", doc, XPathConstants.NODE);
-            parentVersion.setTextContent(TARGET_VERSION);
-
-            // re-write pom.xml file
-            xTransformer.transform(new DOMSource(doc), new StreamResult(inputFile));
-
-            // update manifest file of child project
-            Path manifestPath = Paths.get(inputFile.getParentFile().getAbsolutePath(), "META-INF", "MANIFEST.MF");
-            updateManifestVersion(manifestPath);
-        }
-    }
-
     private void updateManifestVersion(Path manifestPath) throws IOException {
         if (Files.exists(manifestPath)) {
             System.out.println("Updating: " + manifestPath.toString()); // NOSONAR
@@ -337,7 +322,6 @@ public class ReleaseVersionBumper {
 
             for (String line : lines) {
                 if (line.startsWith(BUNDLE_VERSION_STRING)) {
-
                     writer.write((BUNDLE_VERSION_STRING + TARGET_VERSION.replace("-", ".") + "\n")
                             .getBytes(StandardCharsets.UTF_8));
                 } else {
@@ -349,4 +333,20 @@ public class ReleaseVersionBumper {
         }
     }
 
+    private void addHrefToPreviousChanges(Path changelogPath) throws IOException {
+        if (Files.exists(changelogPath)) {
+            System.out.println("Updating: " + changelogPath.toString()); // NOSONAR
+            List<String> lines = Files.readAllLines(changelogPath);
+            // If releasing, put the version and the date in the changelog
+            Pattern pattern = Pattern.compile("[\\( ]T..\\-\\d{1,5}[\\) ]");
+            for (int i = 0; i < lines.size(); i++) {
+                String line = lines.get(i);
+                Matcher matcher = pattern.matcher(line);
+                if (matcher.find()) {
+                    lines.set(i, addHref(line));
+                }
+            }
+            Files.write(changelogPath, lines);
+        }
+    }
 }

@@ -20,48 +20,48 @@ N/A
 
 ## [8.0.0] - 2020-02-03
 ### Added
-- chore(TDQ-17710): Adopt the "Keep a Changelog" format for changelogs
+- chore([TDQ-17710](https://jira.talendforge.org/browse/TDQ-17710)): Adopt the "Keep a Changelog" format for changelogs
 ### Removed
-- chore(TDQ-17788): remove deprecated class MatchDictionaryService
+- chore([TDQ-17788](https://jira.talendforge.org/browse/TDQ-17788)): remove deprecated class MatchDictionaryService
 
 ## [6.2.0] - 2019-01-02
-- TDQ-16242 All the rules of Confilt Resolution can not be executed if disable first one rule
+- [TDQ-16242](https://jira.talendforge.org/browse/TDQ-16242) All the rules of Confilt Resolution can not be executed if disable first one rule
     
 ## [6.0.0] - 2018-07-03
 ## [5.0.2] - 2018-04-04
-- TDQ-14225 output correct conflicting column
+- [TDQ-14225](https://jira.talendforge.org/browse/TDQ-14225) output correct conflicting column
   
 ## [5.0.1] - 2018-03-28
-- TDQ-14176 execute rules by the order defined in the UI for tRuleSurvivorship  
+- [TDQ-14176](https://jira.talendforge.org/browse/TDQ-14176) execute rules by the order defined in the UI for tRuleSurvivorship  
     
 ## [5.0.0] - 2018-02-12
 ## [4.0.1] - 2017-12-08
-- TDQ-14481 multi tenant index
-- TDQ-14308 tRuleSurvivorship fails on DataProc (REST APIs) cluster
+- [TDQ-14481](https://jira.talendforge.org/browse/TDQ-14481) multi tenant index
+- [TDQ-14308](https://jira.talendforge.org/browse/TDQ-14308) tRuleSurvivorship fails on DataProc (REST APIs) cluster
 
 ## [2.1.1] - 2017-09-11
 ## [2.1.0] - 2017-08-24
-- TDQ-13981 when tRuleSurvivorship input data has two groups can not use "fill empty by" function
-- TDQ-13983 "Conflict" column doesn't show conflict columnName when rules doesn't resolve the conflict
-- TDQ-13994 fix NPE with "Survivor As" function
-- TDQ-13984 "Remove Duplicate" can not run with combination of certain rules, the Conflict value show on a wrong row
+- [TDQ-13981](https://jira.talendforge.org/browse/TDQ-13981) when tRuleSurvivorship input data has two groups can not use "fill empty by" function
+- [TDQ-13983](https://jira.talendforge.org/browse/TDQ-13983) "Conflict" column doesn't show conflict columnName when rules doesn't resolve the conflict
+- [TDQ-13994](https://jira.talendforge.org/browse/TDQ-13994) fix NPE with "Survivor As" function
+- [TDQ-13984](https://jira.talendforge.org/browse/TDQ-13984) "Remove Duplicate" can not run with combination of certain rules, the Conflict value show on a wrong row
 
 ## [2.0.3] - 2017-06-09
-- TDQ-13798 tRuleSurvivorship improvements
+- [TDQ-13798](https://jira.talendforge.org/browse/TDQ-13798) tRuleSurvivorship improvements
 
 ## [2.0.2] - 2017-05-09
-- TDQ-13653 fixed the issue which result in wrong default survived value
+- [TDQ-13653](https://jira.talendforge.org/browse/TDQ-13653) fixed the issue which result in wrong default survived value
 
 ## [2.0.1] - 2017-05-02
 ## [2.0.0] - 2017-04-07
-- TDQ-12855 move to data-quality repo
+- [TDQ-12855](https://jira.talendforge.org/browse/TDQ-12855) move to data-quality repo
 
 ## [0.9.9] - 2011-12-2
-- TDQ-4092 job export issue fixed
+- [TDQ-4092](https://jira.talendforge.org/browse/TDQ-4092) job export issue fixed
 - path auto-correction for case-sensitive operation systems.
 
 ## [0.9.8] - 2011-11-21
-- TDQ-3986 fixed by setting "mvel2.disable.jit" argument
+- [TDQ-3986](https://jira.talendforge.org/browse/TDQ-3986) fixed by setting "mvel2.disable.jit" argument
 - removed sysout in studio console
 
 ## [0.9.7] - 2011-11-17
@@ -69,8 +69,8 @@ N/A
 - Changed "Operation" label to "Value"
 
 ## [0.9.6] - 2011-11-15
-- TDQ-3972 fixed
-- TDQ-3973 rename recNum to TALEND_INTERNAL_ID
+- [TDQ-3972](https://jira.talendforge.org/browse/TDQ-3972) fixed
+- [TDQ-3973](https://jira.talendforge.org/browse/TDQ-3973) rename recNum to TALEND_INTERNAL_ID
 - code cleansing
 
 ## [0.9.5] - 2011-11-08
