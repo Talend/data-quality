@@ -96,8 +96,8 @@ public class ReleaseVersionBumper {
         xTransformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
     }
 
-    public static void main(String[] args) throws TransformerFactoryConfigurationError, XPathExpressionException, IOException,
-            SAXException, ParserConfigurationException, TransformerException {
+    public static void main(String[] args) throws TransformerFactoryConfigurationError, XPathExpressionException,
+            IOException, SAXException, ParserConfigurationException, TransformerException {
         ReleaseVersionBumper appli = new ReleaseVersionBumper();
         appli.bumpPomVersion();
     }
@@ -112,12 +112,12 @@ public class ReleaseVersionBumper {
         return xpf;
     }
 
-    private void bumpPomVersion()
-            throws IOException, SAXException, ParserConfigurationException, XPathExpressionException, TransformerException {
+    private void bumpPomVersion() throws IOException, SAXException, ParserConfigurationException,
+            XPathExpressionException, TransformerException {
 
         final String resourcePath = ReleaseVersionBumper.class.getResource("/").getFile();
-        final String projectRoot = new File(resourcePath).getParentFile().getParentFile().getParentFile().getPath()
-                + File.separator;
+        final String projectRoot =
+                new File(resourcePath).getParentFile().getParentFile().getParentFile().getPath() + File.separator;
 
         // update root pom file
         String rootPomPath = "pom.xml";
@@ -137,7 +137,8 @@ public class ReleaseVersionBumper {
     }
 
     private void updateModule(Document rootDoc, String projectRoot, DocumentBuilderFactory dbf)
-            throws XPathExpressionException, ParserConfigurationException, IOException, SAXException, TransformerException {
+            throws XPathExpressionException, ParserConfigurationException, IOException, SAXException,
+            TransformerException {
         NodeList moduleNodes = (NodeList) xPath.evaluate("/project/modules/module", rootDoc, XPathConstants.NODESET);
         for (int moduleIdx = 0; moduleIdx < moduleNodes.getLength(); moduleIdx++) {
             Node currentNode = moduleNodes.item(moduleIdx);
