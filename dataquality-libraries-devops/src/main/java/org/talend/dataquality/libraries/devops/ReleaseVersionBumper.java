@@ -328,5 +328,4 @@ public class ReleaseVersionBumper {
             writer.close();
         }
     }
-
 }
