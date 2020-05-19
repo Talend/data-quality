@@ -20,14 +20,14 @@ N/A
 
 ## [8.0.0] - 2020-02-03
 ### Added
-- chore(TDQ-17710): Adopt the "Keep a Changelog" format for changelogs
+- chore([TDQ-17710](https://jira.talendforge.org/browse/TDQ-17710)): Adopt the "Keep a Changelog" format for changelogs
 
 ## [6.0.0] - 2018-07-03
 ## [5.0.2] - 2018-04-04
 ## [5.0.1] - 2018-03-28
 ## [5.0.0] - 2018-02-12
 ## [4.0.1] - 2017-12-08
-- TDQ-14481 multi tenant index
+- [TDQ-14481](https://jira.talendforge.org/browse/TDQ-14481) multi tenant index
 
 ## [1.3.1] - 2017-09-11
 ## [1.3.0] - 2017-08-24
