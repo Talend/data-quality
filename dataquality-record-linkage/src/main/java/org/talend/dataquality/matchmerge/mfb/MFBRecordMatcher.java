@@ -190,5 +190,21 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
         return new IteratorChain(Collections.singleton(comparedAttribute.getValue()).iterator(),
                 comparedAttribute.getValues().iterator());
     }
-
+    
+    /**
+     * TDQ-18347 , for : SurvivorShipAlgorithmEnum.CONCATENATE, the concatenated value of the master 
+     * will not attend the matching anymore, only use the original values to match from this issue
+     * This method is called from MFB.build, but not on DQ side
+     * @param surAlgorithms
+     */
+	public void setSurvivorShipFunction(SurvivorShipAlgorithmEnum[] surAlgorithms) {
+		if (surAlgorithms != null && surAlgorithms.length > 0) {
+			survivorshipFunctions = new String[surAlgorithms.length];
+			int index = 0;
+			for (SurvivorShipAlgorithmEnum sAlgorithm : surAlgorithms) {
+				survivorshipFunctions[index++] = sAlgorithm.getValue();
+			}
+		}
+		
+	}
 }

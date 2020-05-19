@@ -174,7 +174,7 @@ public class MFBOrderTest extends TestCase {
         List<Record> mergeRecordList3 = algorithm.execute(listOrder3.iterator(), callback);
         printResult(mergeRecordList3);
         Assert.assertTrue(assertResult(mergeRecordList1, mergeRecordList2));
-        Assert.assertTrue(assertResult(mergeRecordList1, mergeRecordList3, true, new Integer[] { 1 }));
+        Assert.assertTrue(assertResult(mergeRecordList1, mergeRecordList3));
     }
 
     private boolean assertResult(List<Record> expectMergeRecordList, List<Record> actualMergeRecordList) {
