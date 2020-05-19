@@ -26,6 +26,8 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.xml.XMLConstants;
@@ -176,6 +178,7 @@ public class ReleaseVersionBumper {
             } else {
                 updateChangeLogForSnapshot(Paths.get(projectRoot, module, "CHANGELOG.md"));
             }
+            addHrefToPreviousChanges(Paths.get(projectRoot, module, "CHANGELOG.md"));
         }
     }
 
@@ -326,6 +329,23 @@ public class ReleaseVersionBumper {
             }
             writer.flush();
             writer.close();
+        }
+    }
+
+    private void addHrefToPreviousChanges(Path changelogPath) throws IOException {
+        if (Files.exists(changelogPath)) {
+            System.out.println("Updating: " + changelogPath.toString()); // NOSONAR
+            List<String> lines = Files.readAllLines(changelogPath);
+            // If releasing, put the version and the date in the changelog
+            Pattern pattern = Pattern.compile("[\\( ]T..\\-\\d{1,5}[\\) ]");
+            for (int i = 0; i < lines.size(); i++) {
+                String line = lines.get(i);
+                Matcher matcher = pattern.matcher(line);
+                if (matcher.find()) {
+                    lines.set(i, addHref(line));
+                }
+            }
+            Files.write(changelogPath, lines);
         }
     }
 }

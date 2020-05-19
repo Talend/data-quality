@@ -20,8 +20,8 @@ N/A
 
 ## [8.1.0] - 2020-03-13
 ### Changed
-chore(TDQ-18056): change stack trace to DEBUG level in PhoneHandlerBase for invalid phones
+chore([TDQ-18056](https://jira.talendforge.org/browse/TDQ-18056)): change stack trace to DEBUG level in PhoneHandlerBase for invalid phones
 
 ## [8.0.0] - 2020-02-03
 ### Added
-- chore(TDQ-17710): Adopt the "Keep a Changelog" format for changelogs
+- chore([TDQ-17710](https://jira.talendforge.org/browse/TDQ-17710)): Adopt the "Keep a Changelog" format for changelogs

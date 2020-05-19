@@ -14,7 +14,7 @@ N/A
 ### Deprecated
 N/A
 ### Fixed
-- chore(TDQ-18091) more clear error message.
+- chore([TDQ-18091](https://jira.talendforge.org/browse/TDQ-18091)) more clear error message.
 ### Security
 N/A
 
@@ -22,44 +22,44 @@ N/A
 
 ## [8.0.0] - 2020-02-03
 ### Added
-- chore(TDQ-17710): Adopt the "Keep a Changelog" format for changelogs
+- chore([TDQ-17710](https://jira.talendforge.org/browse/TDQ-17710)): Adopt the "Keep a Changelog" format for changelogs
 ### Changed
-- feat(TDQ-17504): upgrade to lucene 8 in standardization library for studio
+- feat([TDQ-17504](https://jira.talendforge.org/browse/TDQ-17504)): upgrade to lucene 8 in standardization library for studio
 ### Removed
-- chore(TDQ-17788): remove unused AllDQStandardizationTests class
+- chore([TDQ-17788](https://jira.talendforge.org/browse/TDQ-17788)): remove unused AllDQStandardizationTests class
 
 ## [v6.0.0] - 2018-07-03
-- TDQ-15012 add dependencies in manifest
-- TDQ-14221 update google libphonenumber and log to info
-- TDQ-14221 extract informations for an international phone number
-- TDQ-11891 extract phone informations
-- TDQ-15013 remove deprecated methods
-- TDQ-15013 remove csv and main packages in standardization project
+- [TDQ-15012](https://jira.talendforge.org/browse/TDQ-15012) add dependencies in manifest
+- [TDQ-14221](https://jira.talendforge.org/browse/TDQ-14221) update google libphonenumber and log to info
+- [TDQ-14221](https://jira.talendforge.org/browse/TDQ-14221) extract informations for an international phone number
+- [TDQ-11891](https://jira.talendforge.org/browse/TDQ-11891) extract phone informations
+- [TDQ-15013](https://jira.talendforge.org/browse/TDQ-15013) remove deprecated methods
+- [TDQ-15013](https://jira.talendforge.org/browse/TDQ-15013) remove csv and main packages in standardization project
 
 ## [5.0.2] - 2018-04-04
 ## [5.0.1] - 2018-03-28
 ## [5.0.0] - 2018-02-12
 ## [4.0.1] - 2017-12-08
-- TDQ-14481 multi tenant index
+- [TDQ-14481](https://jira.talendforge.org/browse/TDQ-14481) multi tenant index
 
 ## [3.4.1] - 2017-09-11
 ## [3.4.0] - 2017-08-24
-- TDQ-12953 improve FirstNameStandardize class to get an accurate result.
-- TDQ-14152 TDQ-14236 upgrade libphonenumber related jars.
+- [TDQ-12953](https://jira.talendforge.org/browse/TDQ-12953) improve FirstNameStandardize class to get an accurate result.
+- [TDQ-14152](https://jira.talendforge.org/browse/TDQ-14152) [TDQ-14236](https://jira.talendforge.org/browse/TDQ-14236) upgrade libphonenumber related jars.
 
 ## [3.3.3] - 2017-06-09
 ## [3.3.2] - 2017-05-09
 ## [3.3.1] - 2017-05-02
 ## [3.3.0] - 2017-04-07
-- TDQ-13066 SynonymIndexBuilder.getDocument() should always return live records
+- [TDQ-13066](https://jira.talendforge.org/browse/TDQ-13066) SynonymIndexBuilder.getDocument() should always return live records
 
 ## [3.2.6] - 2016-12-09
 ## [3.2.5] - 2016-12-02
 ## [3.2.4] - 2016-10-20
-- TDQ-12143 make classes Serializable to support tSynonymSearch on spark
+- [TDQ-12143](https://jira.talendforge.org/browse/TDQ-12143) make classes Serializable to support tSynonymSearch on spark
 
 ## [3.2.3] - 2016-09-28
-- TDQ-12143 change org.talend.dataquality.standardization.index.Error class to Serializable to support tSynonymSearch on spark
+- [TDQ-12143](https://jira.talendforge.org/browse/TDQ-12143) change org.talend.dataquality.standardization.index.Error class to Serializable to support tSynonymSearch on spark
 
 ## [3.2.2] - 2016-09-16
 - move semantic dictionary search API to dataquality-semantic library
@@ -69,12 +69,12 @@ N/A
 - rename artifact ID to dataquality-standardization
 
 ## [3.1.0] - 2016-4-27 (for Studio 6.2.0)
-- TDQ-11701 Lucene Index issues 
+- [TDQ-11701](https://jira.talendforge.org/browse/TDQ-11701) Lucene Index issues 
 				* use searcher manager to handle concurrent index access
 				* release file handles correctly
 				* Removes non-needed dependency on sampling in semantic module.
 				* Reuses previously extracted files when found iso. traversing source JAR again and again.
-- TDQ-11440 Add google phone number API.Create an API to validate, format, enrich phone information
+- [TDQ-11440](https://jira.talendforge.org/browse/TDQ-11440) Add google phone number API.Create an API to validate, format, enrich phone information
 
 ## [3.0.2] - 2015-12-30
 - move to data-quality repository, change parent pom
@@ -82,10 +82,10 @@ N/A
 ## [3.0.1] - 2015-11-23
 - build standardazation library with new Maven mechanism
 - set default maxEdits parameter to 1 instead of 2
-- improvements about index matching(TDQ-11143):
+- improvements about index matching([TDQ-11143](https://jira.talendforge.org/browse/TDQ-11143)):
 - make method getTokensFromAnalyzer() public static and stripping accents
 - add 2 new search modes: MATCH_SEMANTIC_DICTIONARY and MATCH_SEMANTIC_KEYWORD
-- TDQ-11296 limit the token count for semantic queries to avoid lucene error
+- [TDQ-11296](https://jira.talendforge.org/browse/TDQ-11296) limit the token count for semantic queries to avoid lucene error
 
 ## [3.0.0] - 2015-10-28
 - upgrade lucene library to 4.10.4
@@ -95,7 +95,7 @@ N/A
 - add Matching Threshold option in SynonymIndexSearcher
 
 ## [2.0.2] - 2012-07-17 
-- correct some issues to improve match results of tFirstnameMatch (TDQ-1576) :  
+- correct some issues to improve match results of tFirstnameMatch ([TDQ-1576](https://jira.talendforge.org/browse/TDQ-1576)) :  
     -  for standard mode, removed the doc collector and augmented the similarity 
     -  for fuzzy mode, lowercase the word to assure the prefix is identical to indexed words 
 
@@ -104,8 +104,8 @@ N/A
   change the boost values without regeneration of the indexes "out of the box".
 
 ## [2.0.0] - 2012-03-06
-- improvements for better scoring with combined query across multiple fields. (related to TDQ-3606)
-- do not filter English stop words any more during indexing. (related to TDQ-3330)
+- improvements for better scoring with combined query across multiple fields. (related to [TDQ-3606](https://jira.talendforge.org/browse/TDQ-3606))
+- do not filter English stop words any more during indexing. (related to [TDQ-3330](https://jira.talendforge.org/browse/TDQ-3330))
 - added IndexMigrator to regenerate out-of-the-box indexes.
 
 ## [1.5.19] - 2011-11-23
