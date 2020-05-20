@@ -111,7 +111,7 @@ public class SampleTest {
     }
 
     @Test
-    public void uniquenessOfDateFormats() throws Exception {
+    public void uniquenessOfDateFormats() {
         for (int i = 1; i < DATE_SAMPLES.size(); i++) {
             String line = DATE_SAMPLES.get(i);
             if (!"".equals(line.trim())) {
