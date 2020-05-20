@@ -16,7 +16,7 @@ N/A
 ### Fixed
 N/A
 ### Security
-N/A
+- fix(TDQ-18383) Upgrade to log4j to log4j-core 2.13.2
 
 ## [8.0.0] - 2020-02-03
 ### Added
