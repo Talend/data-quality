@@ -46,42 +46,30 @@ public class SampleTest {
         private static final long serialVersionUID = 1L;
 
         {
-            put("22/03/99", new HashSet<>(Arrays
-                    .asList(//
-                            "d/MM/yy", "dd/MM/yy")));
-            put("22.03.99", new HashSet<>(Arrays
-                    .asList(//
-                            "dd.MM.yy", "d.MM.yy")));
-            put("22 mars 1999", new HashSet<>(Arrays
-                    .asList(//
-                            "d MMMM yyyy", "d MMM yyyy", "dd MMMM yyyy")));
-            put("22.03.1999", new HashSet<>(Arrays
-                    .asList(//
-                            "d.MM.yyyy", "dd.MM.yyyy")));
-            put("22-Mar-1999", new HashSet<>(Arrays
-                    .asList(//
-                            "dd-MMM-yyyy", "d-MMM-yyyy")));
-            put("22-mar-1999", new HashSet<>(Arrays
-                    .asList(//
-                            "dd-MMM-yyyy", "d-MMM-yyyy")));
-            put("22 March 1999", new HashSet<>(Arrays
-                    .asList(//
-                            "d MMMM yyyy", "dd MMMM yyyy")));
-            put("22 marzo 1999", new HashSet<>(Arrays
-                    .asList(//
-                            "d MMMM yyyy", "dd MMMM yyyy")));
-            put("22 mars 1999 05:06:07 CET", new HashSet<>(Arrays
-                    .asList(//
-                            "dd MMMM yyyy HH:mm:ss z", "d MMMM yyyy HH:mm:ss z")));
-            put("22 March 1999 05:06:07 CET", new HashSet<>(Arrays
-                    .asList(//
-                            "dd MMMM yyyy HH:mm:ss z", "d MMMM yyyy HH:mm:ss z")));
-            put("22.03.99 5:06", new HashSet<>(Arrays
-                    .asList(//
-                            "dd.MM.yy H:mm", "d.MM.yy H:mm")));
-            put("22.03.1999 5:06:07", new HashSet<>(Arrays
-                    .asList(//
-                            "dd.MM.yyyy H:mm:ss", "d.MM.yyyy H:mm:ss")));
+            put("22/03/99", new HashSet<>(Arrays.asList(//
+                    "d/MM/yy", "dd/MM/yy")));
+            put("22.03.99", new HashSet<>(Arrays.asList(//
+                    "dd.MM.yy", "d.MM.yy")));
+            put("22 mars 1999", new HashSet<>(Arrays.asList(//
+                    "d MMMM yyyy", "d MMM yyyy", "dd MMMM yyyy")));
+            put("22.03.1999", new HashSet<>(Arrays.asList(//
+                    "d.MM.yyyy", "dd.MM.yyyy")));
+            put("22-Mar-1999", new HashSet<>(Arrays.asList(//
+                    "dd-MMM-yyyy", "d-MMM-yyyy")));
+            put("22-mar-1999", new HashSet<>(Arrays.asList(//
+                    "dd-MMM-yyyy", "d-MMM-yyyy")));
+            put("22 March 1999", new HashSet<>(Arrays.asList(//
+                    "d MMMM yyyy", "dd MMMM yyyy")));
+            put("22 marzo 1999", new HashSet<>(Arrays.asList(//
+                    "d MMMM yyyy", "dd MMMM yyyy")));
+            put("22 mars 1999 05:06:07 CET", new HashSet<>(Arrays.asList(//
+                    "dd MMMM yyyy HH:mm:ss z", "d MMMM yyyy HH:mm:ss z")));
+            put("22 March 1999 05:06:07 CET", new HashSet<>(Arrays.asList(//
+                    "dd MMMM yyyy HH:mm:ss z", "d MMMM yyyy HH:mm:ss z")));
+            put("22.03.99 5:06", new HashSet<>(Arrays.asList(//
+                    "dd.MM.yy H:mm", "d.MM.yy H:mm")));
+            put("22.03.1999 5:06:07", new HashSet<>(Arrays.asList(//
+                    "dd.MM.yyyy H:mm:ss", "d.MM.yyyy H:mm:ss")));
         }
     };
 
@@ -106,7 +94,8 @@ public class SampleTest {
     public void testDatesWithMultipleFormats() {
         for (String sample : AMBIGUOUS_DATE_FORMATS.keySet()) {
             Set<String> patternSet = SystemDateTimePatternManager.getDatePatterns(sample).keySet();
-            assertEquals("Unexpected Format Set on sample <" + sample + ">", AMBIGUOUS_DATE_FORMATS.get(sample), patternSet);
+            assertEquals("Unexpected Format Set on sample <" + sample + ">", AMBIGUOUS_DATE_FORMATS.get(sample),
+                    patternSet);
         }
     }
 
