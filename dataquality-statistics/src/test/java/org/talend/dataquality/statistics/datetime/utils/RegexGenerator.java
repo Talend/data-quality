@@ -76,7 +76,7 @@ public class RegexGenerator {
 
             // replace the 'G' by a regex which supports eras in different chronologies
             // Note: the Thai chars are supported in \p{L}, but do not work in our regex, we still need to enumerate them here.
-            put("G", "(AD|BC|هـ|明治|平成|昭和|大正|民國|民國前|พ.ศ.|ปีก่อนคริสต์กาลที่)");
+            put("G", "(\\p{L}{2,18}|พ.ศ.|ปีก่อนคริสต์กาลที่)");
 
             put("'", "");
         }
