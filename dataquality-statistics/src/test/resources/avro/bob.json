@@ -1,0 +1,11 @@
+{
+  "firstname": "Bob",
+  "heroes": {},
+  "emails":  [],
+  "gender":  "M",
+  "location": {
+    "zipcode": { "null": null },
+    "city": "nantes",
+    "country": "france"
+  }
+}

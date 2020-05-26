@@ -14,9 +14,15 @@ package org.talend.dataquality.common.inference;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import static org.talend.dataquality.common.inference.AvroQualityAnalyzer.EMPTY_VALUE;
+import static org.talend.dataquality.common.inference.AvroQualityAnalyzer.INVALID_VALUE;
+import static org.talend.dataquality.common.inference.AvroQualityAnalyzer.VALID_VALUE;
 
 /**
  * created by talend on 2015-07-28 Detailled comment.
@@ -81,6 +87,22 @@ public class ValueQualityStatistics implements Serializable {
     @JsonIgnore
     public long getCount() {
         return validCount + emptyCount + invalidCount + unknownCount;
+    }
+
+    public ValueQualityStatistics mergeCounts(ValueQualityStatistics stats) {
+        validCount += stats.validCount;
+        invalidCount += stats.invalidCount;
+        emptyCount += stats.emptyCount;
+        return this;
+    }
+
+    public Map<String, Long> toMap() {
+        final Map<String, Long> map = new TreeMap<>();
+        map.put(Integer.toString(INVALID_VALUE), invalidCount);
+        map.put(Integer.toString(VALID_VALUE), validCount);
+        map.put(Integer.toString(EMPTY_VALUE), emptyCount);
+        map.put("total", invalidCount + validCount + emptyCount);
+        return map;
     }
 
     public void incrementValid() {

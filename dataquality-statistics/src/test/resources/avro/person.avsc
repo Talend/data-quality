@@ -1,0 +1,33 @@
+{
+  "namespace": "org.talend.dataquality.test.model",
+  "type": "record",
+  "name": "Person",
+  "fields": [
+    { "name": "firstname", "type": "string" },
+    { "name": "heroes", "type": { "type": "map", "values": "string" }},
+    { "name": "emails", "type": { "type": "array", "items": "string" }},
+    { "name": "gender", "type": { "name": "Gender", "type": "enum", "symbols": [ "M", "F" ]}},
+    { "name": "location", "type": {
+      "type": "record",
+      "name": "Location",
+      "fields": [
+        { "name": "zipcode", "type": [
+          "int",
+          "string",
+          "bytes",
+          "long",
+          "float",
+          "double",
+          "boolean",
+          "null",
+          { "type": "map", "values": "string" },
+          { "type": "array", "items": "string" },
+          { "type": "fixed", "name" : "ZipCodeFixed", "size" : 2 },
+          { "type": "enum", "name": "ZipCodeEnum", "symbols": [ "quatre", "cinq" ]},
+          { "type": "record", "name": "ZipCode", "fields": [ { "name": "code", "type": "int" } ]} ]},
+        { "name": "city", "type": "string" },
+        { "name": "country", "type": "string" }
+      ]
+    }}
+  ]
+}

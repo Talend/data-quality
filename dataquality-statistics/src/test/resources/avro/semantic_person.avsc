@@ -1,0 +1,199 @@
+{
+  "type": "record",
+  "name": "Person",
+  "namespace": "org.talend.dataquality.test.model",
+  "fields": [
+    {
+      "name": "firstname",
+      "type": {
+        "type": "string",
+        "talend.component.dqType": {
+          "dqType": "FIRST_NAME",
+          "dataType": "STRING"
+        }
+      }
+    },
+    {
+      "name": "heroes",
+      "type": {
+        "type": "map",
+        "values": {
+          "type": "string",
+          "talend.component.dqType": {
+            "dqType": "STRING",
+            "dataType": "STRING"
+          }
+        }
+      }
+    },
+    {
+      "name": "emails",
+      "type": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "talend.component.dqType": {
+            "dqType": "EMAIL",
+            "dataType": "STRING"
+          }
+        }
+      }
+    },
+    {
+      "name": "gender",
+      "type": {
+        "type": "enum",
+        "name": "Gender",
+        "symbols": [
+          "M",
+          "F"
+        ],
+        "talend.component.dqType": {
+          "dqType": "STRING",
+          "dataType": "STRING"
+        }
+      }
+    },
+    {
+      "name": "location",
+      "type": {
+        "type": "record",
+        "name": "Location",
+        "fields": [
+          {
+            "name": "zipcode",
+            "type": [
+              {
+                "type": "int",
+                "talend.component.dqType": {
+                  "dqType": "STRING",
+                  "dataType": "STRING"
+                }
+              },
+              {
+                "type": "string",
+                "talend.component.dqType": {
+                  "dqType": "STRING",
+                  "dataType": "STRING"
+                }
+              },
+              {
+                "type": "bytes",
+                "talend.component.dqType": {
+                  "dqType": "STRING",
+                  "dataType": "STRING"
+                }
+              },
+              {
+                "type": "long",
+                "talend.component.dqType": {
+                  "dqType": "STRING",
+                  "dataType": "STRING"
+                }
+              },
+              {
+                "type": "float",
+                "talend.component.dqType": {
+                  "dqType": "STRING",
+                  "dataType": "STRING"
+                }
+              },
+              {
+                "type": "double",
+                "talend.component.dqType": {
+                  "dqType": "STRING",
+                  "dataType": "STRING"
+                }
+              },
+              {
+                "type": "boolean",
+                "talend.component.dqType": {
+                  "dqType": "STRING",
+                  "dataType": "STRING"
+                }
+              },
+              "null",
+              {
+                "type": "map",
+                "values": {
+                  "type": "string",
+                  "talend.component.dqType": {
+                    "dqType": "STRING",
+                    "dataType": "STRING"
+                  }
+                }
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "talend.component.dqType": {
+                    "dqType": "STRING",
+                    "dataType": "STRING"
+                  }
+                }
+              },
+              {
+                "type": "fixed",
+                "name": "ZipCodeFixed",
+                "size": 2,
+                "talend.component.dqType": {
+                  "dqType": "STRING",
+                  "dataType": "STRING"
+                }
+              },
+              {
+                "type": "enum",
+                "name": "ZipCodeEnum",
+                "symbols": [
+                  "quatre",
+                  "cinq"
+                ],
+                "talend.component.dqType": {
+                  "dqType": "STRING",
+                  "dataType": "STRING"
+                }
+              },
+              {
+                "type": "record",
+                "name": "ZipCode",
+                "fields": [
+                  {
+                    "name": "code",
+                    "type": {
+                      "type": "int",
+                      "talend.component.dqType": {
+                        "dqType": "STRING",
+                        "dataType": "STRING"
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "city",
+            "type": {
+              "type": "string",
+              "talend.component.dqType": {
+                "dqType": "STRING",
+                "dataType": "INTEGER"
+              }
+            }
+          },
+          {
+            "name": "country",
+            "type": {
+              "type": "string",
+              "talend.component.dqType": {
+                "dqType": "COUNTRY",
+                "dataType": "STRING"
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
