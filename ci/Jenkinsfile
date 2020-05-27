@@ -8,6 +8,8 @@
 
 def AWS_POD_LABEL = "TDQ-SE-${UUID.randomUUID().toString()}"
 
+def SAFE_BRANCH_NAME = "${env.BRANCH_NAME.replaceAll("/", "_")}"
+
 pipeline {
     agent {
         kubernetes {
@@ -45,7 +47,8 @@ pipeline {
 
     environment {
         SLACK_CHANNEL = 'tdq_ci'
-        SONAR_OPTS = "-Dsonar.host.url=https://sonar-eks.datapwn.com -Dsonar.projectKey=org.talend.dataquality:dataquality-parent -Dsonar.projectName=dataquality-parent:${env.BRANCH_NAME}"
+        SONAR_OPTS = "-Dsonar.host.url=https://sonar-eks.datapwn.com -Dsonar.projectKey=org.talend.dataquality:dataquality-parent_$SAFE_BRANCH_NAME -Dsonar.projectName=dataquality-parent:$SAFE_BRANCH_NAME"
+        SONAR_URL = "https://sonar-eks.datapwn.com/dashboard?id=org.talend.dataquality%3Adataquality-parent_$SAFE_BRANCH_NAME"
     }
 
     stages {
@@ -107,7 +110,7 @@ pipeline {
         success {
             script {
                 if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME =~ 'maintenance.*') {
-                    slackSend(color: '#82bd41', channel: "${SLACK_CHANNEL}", message: "SUCCESS: `${env.JOB_NAME.replaceAll('%2F', '/')}` #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
+                    slackSend(color: '#82bd41', channel: "${SLACK_CHANNEL}", message: "SUCCESS: `${env.JOB_NAME.replaceAll('%2F', '/')}` #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>) (<${SONAR_URL}|Open Sonar Analysis)")
                 }
             }
         }
