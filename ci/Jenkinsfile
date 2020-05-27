@@ -110,7 +110,7 @@ pipeline {
         success {
             script {
                 if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME =~ 'maintenance.*') {
-                    slackSend(color: '#82bd41', channel: "${SLACK_CHANNEL}", message: "SUCCESS: `${env.JOB_NAME.replaceAll('%2F', '/')}` #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>) (<${SONAR_URL}|Open Sonar Analysis)")
+                    slackSend(color: '#82bd41', channel: "${SLACK_CHANNEL}", message: "SUCCESS: `${env.JOB_NAME.replaceAll('%2F', '/')}` #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>) (<${SONAR_URL}|Open Sonar Analysis>)")
                 }
             }
         }
