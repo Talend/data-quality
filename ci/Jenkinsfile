@@ -47,8 +47,9 @@ pipeline {
 
     environment {
         SLACK_CHANNEL = 'tdq_ci'
-        SONAR_OPTS = "-Dsonar.host.url=https://sonar-eks.datapwn.com -Dsonar.projectKey=org.talend.dataquality:dataquality-parent_$SAFE_BRANCH_NAME -Dsonar.projectName=dataquality-parent:$SAFE_BRANCH_NAME"
-        SONAR_URL = "https://sonar-eks.datapwn.com/dashboard?id=org.talend.dataquality%3Adataquality-parent_$SAFE_BRANCH_NAME"
+        SONAR_URL = "https://sonar-eks.datapwn.com"
+        SONAR_OPTS = "-Dsonar.host.url=${SONAR_URL} -Dsonar.projectKey=org.talend.dataquality:dataquality-parent_$SAFE_BRANCH_NAME -Dsonar.projectName=dataquality-parent:$SAFE_BRANCH_NAME"
+        SONAR_DASHBOARD_URL = "${SONAR_URL}/dashboard?id=org.talend.dataquality%3Adataquality-parent_$SAFE_BRANCH_NAME"
     }
 
     stages {
@@ -110,7 +111,7 @@ pipeline {
         success {
             script {
                 if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME =~ 'maintenance.*') {
-                    slackSend(color: '#82bd41', channel: "${SLACK_CHANNEL}", message: "SUCCESS: `${env.JOB_NAME.replaceAll('%2F', '/')}` #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>) (<${SONAR_URL}|Open Sonar Analysis>)")
+                    slackSend(color: '#82bd41', channel: "${SLACK_CHANNEL}", message: "SUCCESS: `${env.JOB_NAME.replaceAll('%2F', '/')}` #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>) (<${SONAR_DASHBOARD_URL}|Open Sonar Analysis>)")
                 }
             }
         }
