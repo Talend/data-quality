@@ -21,7 +21,7 @@
 		<dependency>
 			<groupId>com.googlecode.libphonenumber</groupId>
 			<artifactId>libphonenumber</artifactId>
-			<version>8.10.5</version>
+			<version>8.12.3</version>
 		</dependency>
 
 		<dependency>
