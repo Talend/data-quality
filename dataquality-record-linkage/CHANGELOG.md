@@ -18,9 +18,9 @@ N/A
 ### Security
 N/A
 
-## [8.0.1] - 2020-05-21
-### Security
-- fix([TDQ-18383](https://jira.talendforge.org/browse/TDQ-18383)) Upgrade to log4j to log4j-core 2.13.2
+## [8.0.1] - 2020-05-22
+### Fixed
+- TDQ-18347 Modify the CONcatenate function when matching: only use the original values to match, but not the concatenated value.
 
 ## [8.0.0] - 2020-02-03
 ### Added

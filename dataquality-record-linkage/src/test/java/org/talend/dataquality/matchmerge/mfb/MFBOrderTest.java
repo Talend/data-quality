@@ -1,10 +1,6 @@
 package org.talend.dataquality.matchmerge.mfb;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import junit.framework.TestCase;
 import org.junit.Assert;
 import org.talend.dataquality.matchmerge.Attribute;
 import org.talend.dataquality.matchmerge.MatchMergeAlgorithm;
@@ -15,7 +11,10 @@ import org.talend.dataquality.record.linkage.attribute.IAttributeMatcher;
 import org.talend.dataquality.record.linkage.constant.AttributeMatcherType;
 import org.talend.dataquality.record.linkage.utils.SurvivorShipAlgorithmEnum;
 
-import junit.framework.TestCase;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class MFBOrderTest extends TestCase {
 
@@ -175,7 +174,7 @@ public class MFBOrderTest extends TestCase {
         List<Record> mergeRecordList3 = algorithm.execute(listOrder3.iterator(), callback);
         printResult(mergeRecordList3);
         Assert.assertTrue(assertResult(mergeRecordList1, mergeRecordList2));
-        Assert.assertTrue(assertResult(mergeRecordList1, mergeRecordList3, true, new Integer[] { 1 }));
+        Assert.assertTrue(assertResult(mergeRecordList1, mergeRecordList3));
     }
 
     private boolean assertResult(List<Record> expectMergeRecordList, List<Record> actualMergeRecordList) {

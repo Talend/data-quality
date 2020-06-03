@@ -193,8 +193,8 @@ public class MultiColumnMFBOrderTest extends TestCase {
         System.out.println("\nOrder 3:  "); //$NON-NLS-1$
         List<Record> mergeRecordList3 = algorithm.execute(listOrder3.iterator(), callback);
         printResult(mergeRecordList3);
-        Assert.assertTrue(assertResult(mergeRecordList1, mergeRecordList2, true, new Integer[] { 0 }));
-        Assert.assertTrue(assertResult(mergeRecordList1, mergeRecordList3, true, new Integer[] { 0 }));
+        Assert.assertTrue(assertResult(mergeRecordList1, mergeRecordList2));
+        Assert.assertTrue(assertResult(mergeRecordList1, mergeRecordList3));
         Assert.assertTrue(assertResult(mergeRecordList2, mergeRecordList3));
     }
 

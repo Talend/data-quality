@@ -12,13 +12,6 @@
 // ============================================================================
 package org.talend.dataquality.record.linkage.grouping;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.atomic.AtomicLong;
-
 import org.apache.commons.lang.StringUtils;
 import org.talend.dataquality.matchmerge.SubString;
 import org.talend.dataquality.matchmerge.mfb.MFBAttributeMatcher;
@@ -31,11 +24,19 @@ import org.talend.dataquality.record.linkage.constant.TokenizedResolutionMethod;
 import org.talend.dataquality.record.linkage.grouping.swoosh.DQMFBRecordMatcher;
 import org.talend.dataquality.record.linkage.grouping.swoosh.RichRecord;
 import org.talend.dataquality.record.linkage.grouping.swoosh.SurvivorShipAlgorithmParams;
+import org.talend.dataquality.record.linkage.grouping.swoosh.SurvivorshipUtils;
 import org.talend.dataquality.record.linkage.record.CombinedRecordMatcher;
 import org.talend.dataquality.record.linkage.record.IRecordMatcher;
 import org.talend.dataquality.record.linkage.record.RecordMatcherFactory;
 import org.talend.dataquality.record.linkage.utils.CustomAttributeMatcherClassNameConvert;
 import org.talend.utils.classloader.TalendURLClassLoader;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * created by zhao on Jul 19, 2013 <br>
@@ -536,6 +537,7 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
         String[][] algorithmName = new String[recordSize][2];
         String[] arrMatchHandleNull = new String[recordSize];
         String[] customizedJarPath = new String[recordSize];
+        String[] survivorShipFunctions = new String[recordSize];
         TokenizedResolutionMethod[] tokenMethod = new TokenizedResolutionMethod[recordSize];
         double recordMatchThreshold = acceptableThreshold;// keep compatibility to older version.
         boolean isSwoosh = matchAlgo == RecordMatcherType.T_SwooshAlgorithm;
@@ -572,6 +574,8 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
                 recordMatchThreshold = Double.valueOf(rcdMathThresholdEach);
 
             }
+            //Added TDQ-18347.
+            survivorShipFunctions[keyIdx] = recordMap.get(SurvivorshipUtils.SURVIVORSHIP_FUNCTION);
             keyIdx++;
         }
         IAttributeMatcher[] attributeMatcher = new IAttributeMatcher[recordSize];
@@ -604,6 +608,7 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
         IRecordMatcher recordMatcher = RecordMatcherFactory.createMatcher(RecordMatcherType.simpleVSRMatcher);
         if (isSwoosh) {
             recordMatcher = new DQMFBRecordMatcher(recordMatchThreshold);
+            ((DQMFBRecordMatcher) recordMatcher).setSurvivorShipFunction(survivorShipFunctions);
         }
         recordMatcher.setRecordSize(recordSize);
         recordMatcher.setAttributeWeights(arrAttrWeights);

@@ -1,0 +1,10 @@
+0|F|A
+1|F|A
+2|M|C
+3|M|C
+4|F|AA
+5|M|CC
+6|F|AAA
+7|M|CCC
+8|M|C
+9|F|A

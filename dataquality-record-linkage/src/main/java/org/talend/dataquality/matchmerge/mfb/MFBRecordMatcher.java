@@ -12,10 +12,6 @@
 // ============================================================================
 package org.talend.dataquality.matchmerge.mfb;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.commons.collections.iterators.IteratorChain;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -24,6 +20,11 @@ import org.talend.dataquality.matchmerge.Attribute;
 import org.talend.dataquality.matchmerge.Record;
 import org.talend.dataquality.record.linkage.attribute.IAttributeMatcher;
 import org.talend.dataquality.record.linkage.record.AbstractRecordMatcher;
+import org.talend.dataquality.record.linkage.utils.SurvivorShipAlgorithmEnum;
+
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 public class MFBRecordMatcher extends AbstractRecordMatcher {
 
@@ -32,6 +33,9 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
     private final double minConfidenceValue;
 
     private static double worstConfidenceValue;
+
+    //Added TDQ-18347,20200515 , one key <-> one survivorship function
+    private static String[] survivorshipFunctions;
 
     public MFBRecordMatcher(double minConfidenceValue) {
         this.minConfidenceValue = minConfidenceValue;
@@ -72,7 +76,7 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
             Double rightWorstScore = getWorstScore(rightWorstConfidenceValueScoreList, matchIndex);
             // Find the first score to exceed threshold (if any).
             // use record1.getWorstConfidenceValueScoreList() to instead of some while in matchScore method
-            double score = matchScore(left, right, matcher, leftWorstScore, rightWorstScore);
+            double score = matchScore(left, right, matcher, leftWorstScore, rightWorstScore, matchIndex);
             attributeMatchingWeights[matchIndex] = score;
             result.setScore(matchIndex, matcher.getMatchType(), score, record1.getId(), left.getValue(),
                     record2.getId(), right.getValue());
@@ -118,15 +122,13 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
         record2.setConfidence(normalizedConfidence);
     }
 
+    @SuppressWarnings("unchecked")
     private static double matchScore(Attribute leftAttribute, Attribute rightAttribute, IAttributeMatcher matcher,
-            Double leftWorstScore, Double rightWorstScore) {
+            Double leftWorstScore, Double rightWorstScore, int matchIndex) {
         // Find the best score in values
         // 1- Try first values
-        String left = leftAttribute.getValue();
-        String right = rightAttribute.getValue();
         // 2- Compare using values that build attribute value (if any)
-        Iterator<String> leftValues =
-                new IteratorChain(Collections.singleton(left).iterator(), leftAttribute.getValues().iterator());
+        Iterator<String> leftValues = getAllComparedValues(leftAttribute, matchIndex);
 
         double maxScore = 0;
         double score = 0;
@@ -138,8 +140,7 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
 
         while (leftValues.hasNext()) {
             String leftValue = leftValues.next();
-            Iterator<String> rightValues =
-                    new IteratorChain(Collections.singleton(right).iterator(), rightAttribute.getValues().iterator());
+            Iterator<String> rightValues = getAllComparedValues(rightAttribute, matchIndex);
             while (rightValues.hasNext()) {
                 String rightValue = rightValues.next();
                 score = matcher.getMatchingWeight(leftValue, rightValue);
@@ -163,4 +164,47 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
         return this.worstConfidenceValue;
     }
 
+    /**
+     * keep survivorFunction in the matcher, maybe still need it in future
+     * @param survivorShipFunctions
+     */
+    public void setSurvivorShipFunction(String[] survivorShipFunctions) {
+        survivorshipFunctions = survivorShipFunctions;
+    }
+
+    /**
+     * TDQ-18347 when using CONCATENATE in match key, then no need to compare its concatednated value for generated masters.
+     * but for the first time, need to use its original value.
+     * @param comparedAttribute
+     * @return
+     */
+    protected static IteratorChain getAllComparedValues(Attribute comparedAttribute, int matchIndex) {
+        if (survivorshipFunctions != null && survivorshipFunctions.length > matchIndex
+                && SurvivorShipAlgorithmEnum.CONCATENATE
+                        .getValue()
+                        .equalsIgnoreCase(survivorshipFunctions[matchIndex])) {
+            if (comparedAttribute.getValues().size() > 0) {
+                return new IteratorChain(comparedAttribute.getValues().iterator());
+            }
+        }
+        return new IteratorChain(Collections.singleton(comparedAttribute.getValue()).iterator(),
+                comparedAttribute.getValues().iterator());
+    }
+
+    /**
+     * TDQ-18347 , for : SurvivorShipAlgorithmEnum.CONCATENATE, the concatenated value of the master 
+     * will not attend the matching anymore, only use the original values to match from this issue
+     * This method is called from MFB.build, but not on DQ side
+     * @param surAlgorithms
+     */
+    public void setSurvivorShipFunction(SurvivorShipAlgorithmEnum[] surAlgorithms) {
+        if (surAlgorithms != null && surAlgorithms.length > 0) {
+            survivorshipFunctions = new String[surAlgorithms.length];
+            int index = 0;
+            for (SurvivorShipAlgorithmEnum sAlgorithm : surAlgorithms) {
+                survivorshipFunctions[index++] = sAlgorithm.getValue();
+            }
+        }
+
+    }
 }
