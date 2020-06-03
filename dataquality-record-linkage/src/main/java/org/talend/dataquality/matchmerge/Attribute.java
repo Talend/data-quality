@@ -16,11 +16,11 @@
  */
 package org.talend.dataquality.matchmerge;
 
+import org.apache.commons.collections.iterators.IteratorChain;
+
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Iterator;
-
-import org.apache.commons.collections.iterators.IteratorChain;
 
 /**
  * A attribute is a "column" in a {@link org.talend.dataquality.matchmerge.Record record}.

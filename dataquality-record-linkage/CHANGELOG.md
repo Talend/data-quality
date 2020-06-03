@@ -18,7 +18,10 @@ N/A
 ### Security
 N/A
 
-## [7.4.1] - 2019-12-11
+## [7.4.1] - 2020-05-22
+### Fixed
+- TDQ-18347 Modify the CONcatenate function when matching: only use the original values to match, but not the concatenated value.
+
 ### Added
 - chore(TDQ-17710): Adopt the "Keep a Changelog" format for changelogs
 

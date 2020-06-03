@@ -78,7 +78,7 @@ public class MFB implements MatchMergeAlgorithm {
     public static MFB build(AttributeMatcherType[] algorithms, String[] algorithmParameters, float[] thresholds,
             double minConfidenceValue, SurvivorShipAlgorithmEnum[] merges, String[] mergesParameters, double[] weights,
             IAttributeMatcher.NullOption[] nullOptions, SubString[] subStrings, String mergedRecordSource) {
-        IRecordMatcher newMatcher = new MFBRecordMatcher(minConfidenceValue);
+        MFBRecordMatcher newMatcher = new MFBRecordMatcher(minConfidenceValue);
         newMatcher.setRecordSize(algorithms.length);
         // Create attribute match
         IAttributeMatcher[] attributeMatchers = new IAttributeMatcher[algorithms.length];
@@ -104,6 +104,8 @@ public class MFB implements MatchMergeAlgorithm {
         newMatcher.setRecordMatchThreshold(minConfidenceValue);
         // Attribute weights
         newMatcher.setAttributeWeights(weights);
+        //Survivorship function , TDQ-18347 
+        newMatcher.setSurvivorShipFunction(merges);
         // Create MFB instance
         return new MFB(newMatcher, new MFBRecordMerger(mergedRecordSource, mergesParameters, merges));
     }
