@@ -22,17 +22,24 @@ import static org.apache.avro.Schema.Type.INT;
 import static org.apache.avro.Schema.Type.LONG;
 import static org.apache.avro.Schema.Type.NULL;
 import static org.apache.avro.Schema.Type.STRING;
+import static org.talend.dataquality.common.util.QualityType.DISCOVERY;
 
 /**
  * Methods for Avro analyzers.
  */
 public class AvroUtils {
 
-    private static final String SEM_SCHEMA_DEF =
+    private static final String SEM_QUALITY_SCHEMA_DEF =
             "{ \"type\": \"record\"," + "    \"name\": \"quality_metadata\", \"namespace\": \"org.talend.dataquality\","
                     + "    \"fields\": [ { \"name\": \"validity\", \"type\": \"int\" } ] }";
 
-    public static final Schema SEM_SCHEMA = new Schema.Parser().parse(SEM_SCHEMA_DEF);
+    public static final Schema SEM_QUALITY_SCHEMA = new Schema.Parser().parse(SEM_QUALITY_SCHEMA_DEF);
+
+    private static final String SEM_DISCOVERY_SCHEMA_DEF = "{\"type\": \"record\","
+            + "\"name\": \"discovery_metadata\", \"namespace\": \"org.talend.dataquality\","
+            + "\"fields\":[{ \"type\":\"string\", \"name\":\"matching\"}, { \"type\":\"int\", \"name\":\"total\"}]}";
+
+    public static final Schema SEM_DISCOVERY_SCHEMA = new Schema.Parser().parse(SEM_DISCOVERY_SCHEMA_DEF);
 
     /**
      * From a record schema, create a semantic schema replacing type by a record with information about the quality.
@@ -40,38 +47,38 @@ public class AvroUtils {
      * @param sourceSchema Record schema
      * @return Semantic schema
      */
-    public static Schema createRecordSemanticSchema(Schema sourceSchema) {
-        final Schema semanticSchema = createSemanticSchemaForRecord(sourceSchema);
+    public static Schema createRecordSemanticSchema(Schema sourceSchema, QualityType type) {
+        final Schema semanticSchema = createSemanticSchemaForRecord(sourceSchema, type);
         return semanticSchema;
     }
 
-    private static Schema createSemanticSchemaForRecord(Schema recordSchema) {
+    private static Schema createSemanticSchemaForRecord(Schema recordSchema, QualityType type) {
         final SchemaBuilder.RecordBuilder<Schema> semanticRecordBuilder =
                 SchemaBuilder.record(recordSchema.getName()).namespace(recordSchema.getNamespace());
         final SchemaBuilder.FieldAssembler<Schema> fieldAssembler = semanticRecordBuilder.fields();
 
         for (Schema.Field field : recordSchema.getFields()) {
-            fieldAssembler.name(field.name()).type(createSemanticSchema(field.schema())).noDefault();
+            fieldAssembler.name(field.name()).type(createSemanticSchema(field.schema(), type)).noDefault();
         }
 
         return fieldAssembler.endRecord();
     }
 
-    private static Schema createSemanticSchema(Schema sourceSchema) {
+    private static Schema createSemanticSchema(Schema sourceSchema, QualityType type) {
         switch (sourceSchema.getType()) {
         case RECORD:
-            return createSemanticSchemaForRecord(sourceSchema);
+            return createSemanticSchemaForRecord(sourceSchema, type);
 
         case ARRAY:
-            return Schema.createArray(createSemanticSchema(sourceSchema.getElementType()));
+            return Schema.createArray(createSemanticSchema(sourceSchema.getElementType(), type));
 
         case MAP:
-            return Schema.createMap(createSemanticSchema(sourceSchema.getValueType()));
+            return Schema.createMap(createSemanticSchema(sourceSchema.getValueType(), type));
 
         case UNION:
             final Set<Schema> unionSchemas = new HashSet<>();
             for (Schema unionSchema : sourceSchema.getTypes()) {
-                unionSchemas.add(createSemanticSchema(unionSchema));
+                unionSchemas.add(createSemanticSchema(unionSchema, type));
             }
             return Schema.createUnion(new ArrayList<>(unionSchemas));
 
@@ -85,7 +92,10 @@ public class AvroUtils {
         case DOUBLE:
         case BOOLEAN:
         case NULL:
-            return SEM_SCHEMA;
+            if (DISCOVERY.equals(type))
+                return SEM_DISCOVERY_SCHEMA;
+            else
+                return SEM_QUALITY_SCHEMA;
         }
 
         return null;

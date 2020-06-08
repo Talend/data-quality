@@ -7,6 +7,7 @@ import org.apache.avro.generic.IndexedRecord;
 import org.talend.dataquality.common.inference.AvroQualityAnalyzer;
 import org.talend.dataquality.common.inference.ValueQualityStatistics;
 import org.talend.dataquality.common.util.LFUCache;
+import org.talend.dataquality.common.util.QualityType;
 import org.talend.dataquality.statistics.type.DataTypeEnum;
 import org.talend.dataquality.statistics.type.SortedList;
 import org.talend.dataquality.statistics.type.TypeInferenceUtils;
@@ -19,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static org.talend.dataquality.common.util.AvroUtils.SEM_SCHEMA;
+import static org.talend.dataquality.common.util.AvroUtils.SEM_QUALITY_SCHEMA;
 import static org.talend.dataquality.common.util.AvroUtils.copySchema;
 import static org.talend.dataquality.common.util.AvroUtils.createRecordSemanticSchema;
 import static org.talend.dataquality.common.util.AvroUtils.itemId;
@@ -69,7 +70,7 @@ public class AvroDataTypeQualityAnalyzer extends AvroQualityAnalyzer {
     private void initResultSchema(Schema semanticSchema) {
         this.semanticSchema = semanticSchema;
         this.globalQualitySchema = copySchema(this.semanticSchema);
-        this.recordQualitySchema = createRecordSemanticSchema(this.semanticSchema);
+        this.recordQualitySchema = createRecordSemanticSchema(this.semanticSchema, QualityType.VALIDATION);
     }
 
     private void analyzeRecord(String id, IndexedRecord record, GenericRecord resultRecord,
@@ -123,7 +124,7 @@ public class AvroDataTypeQualityAnalyzer extends AvroQualityAnalyzer {
                     .stream()
                     .filter((type) -> type.getName().equals(realItemSchema.getName()))
                     .findFirst()
-                    .orElse(SEM_SCHEMA);
+                    .orElse(SEM_QUALITY_SCHEMA);
             final Schema realSemanticSchema = semanticSchema.getTypes().get(typeIdx);
 
             return analyzeItem(itemId(itemId, realItemSchema.getName()), item, realItemSchema, realResultSchema,
@@ -139,14 +140,14 @@ public class AvroDataTypeQualityAnalyzer extends AvroQualityAnalyzer {
         case DOUBLE:
         case BOOLEAN:
             final Map props = (Map) semanticSchema.getObjectProp(DQTYPE_PROP_NAME);
-            final GenericRecord semRecord = new GenericData.Record(SEM_SCHEMA);
+            final GenericRecord semRecord = new GenericData.Record(SEM_QUALITY_SCHEMA);
             semRecord.put(VALIDITY_FIELD_NAME,
                     analyzeLeafValue(itemId, item, props.get(DQTYPE_DATATYPE_FIELD_NAME).toString()));
             return semRecord;
 
         case NULL:
             // No information in semantic schema
-            final GenericRecord nullSemRecord = new GenericData.Record(SEM_SCHEMA);
+            final GenericRecord nullSemRecord = new GenericData.Record(SEM_QUALITY_SCHEMA);
             nullSemRecord.put(VALIDITY_FIELD_NAME, analyzeLeafValue(itemId, item, null));
             return nullSemRecord;
 
