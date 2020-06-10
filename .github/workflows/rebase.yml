@@ -1,0 +1,19 @@
+name: Changelog Reminder
+on: 
+  pull_request:
+    types: [assigned, opened, synchronize, reopened, labeled, unlabeled]
+    branches:
+      - master
+jobs:
+  remind:
+    name: Changelog Reminder
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Changelog Reminder
+      uses: peterjgrainger/action-changelog-reminder@v1.2.0
+      with:
+        changelog_regex: 'CHANGELOG.md'
+        customPrMessage: 'Reminder: Please update the changelog'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
