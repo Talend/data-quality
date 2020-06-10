@@ -14,7 +14,7 @@ N/A
 ### Deprecated
 N/A
 ### Fixed
--fix ([TDQ-18347](https://jira.talendforge.org/browse/TDQ-18347) Modify the CONcatenate function when matching: only use the original values to match, but not the concatenated value. 
+- fix([TDQ-18347](https://jira.talendforge.org/browse/TDQ-18347)) Modify the concatenate function when matching: only use the original values to match, but not the concatenated value. 
 ### Security
 N/A
 
