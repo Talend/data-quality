@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [8.0.2] - 2020-06-09
 ### Fixed
-- [TDQ-18347](https://jira.talendforge.org/browse/TDQ-18347) Modify the CONcatenate function when matching: only use the original values to match, but not the concatenated value.
+- fix([TDQ-18347](https://jira.talendforge.org/browse/TDQ-18347)) Modify the concatenate function when matching: only use the original values to match, but not the concatenated value.
 
 ## [8.0.1] - 2020-05-21
 ### Security
