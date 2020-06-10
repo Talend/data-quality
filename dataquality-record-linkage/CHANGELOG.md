@@ -14,13 +14,9 @@ N/A
 ### Deprecated
 N/A
 ### Fixed
-N/A
+-fix ([TDQ-18347](https://jira.talendforge.org/browse/TDQ-18347) Modify the CONcatenate function when matching: only use the original values to match, but not the concatenated value. 
 ### Security
 N/A
-
-## [8.1.1] - 2020-05-22
-### Fixed
-- TDQ-18347 Modify the CONcatenate function when matching: only use the original values to match, but not the concatenated value.
 
 ## [8.1.0] - 2020-03-13
 
