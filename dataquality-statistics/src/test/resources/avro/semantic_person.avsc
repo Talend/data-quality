@@ -14,6 +14,16 @@
       }
     },
     {
+      "name": "birthdate",
+      "type": {
+        "type": "string",
+        "talend.component.dqType": {
+          "dqType": "STRING",
+          "dataType": "DATE"
+        }
+      }
+    },
+    {
       "name": "heroes",
       "type": {
         "type": "map",

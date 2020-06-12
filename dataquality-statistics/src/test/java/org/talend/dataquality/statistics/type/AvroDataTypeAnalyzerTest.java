@@ -1,4 +1,18 @@
-package org.talend.dataquality.statistics.quality;
+package org.talend.dataquality.statistics.type;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.talend.dataquality.common.inference.AvroQualityAnalyzer.GLOBAL_QUALITY_PROP_NAME;
+import static org.talend.dataquality.statistics.type.AvroDataTypeAnalyzer.DATA_TYPE_AGGREGATE;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericData;
@@ -12,25 +26,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Map;
+public class AvroDataTypeAnalyzerTest {
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.talend.dataquality.common.inference.AvroQualityAnalyzer.EMPTY_VALUE;
-import static org.talend.dataquality.common.inference.AvroQualityAnalyzer.GLOBAL_QUALITY_PROP_NAME;
-import static org.talend.dataquality.common.inference.AvroQualityAnalyzer.INVALID_VALUE;
-import static org.talend.dataquality.common.inference.AvroQualityAnalyzer.QUALITY_PROP_NAME;
-import static org.talend.dataquality.common.inference.AvroQualityAnalyzer.VALID_VALUE;
-
-public class AvroDataTypeQualityAnalyzerTest {
-
-    private AvroDataTypeQualityAnalyzer analyzer;
+    private AvroDataTypeAnalyzer analyzer;
 
     private Schema personSchema;
 
@@ -58,23 +56,12 @@ public class AvroDataTypeQualityAnalyzerTest {
         return Arrays.asList(filenames).stream().map(filename -> loadPerson(filename)).toArray(GenericRecord[]::new);
     }
 
-    private void checkQuality(Map<String, Long> prop, long expectedValid, long expectedNotValid, long expectedEmpty,
-            long expectedTotal) {
-        assertEquals(expectedValid, prop.get(Integer.toString(VALID_VALUE)).longValue());
-        assertEquals(expectedNotValid, prop.get(Integer.toString(INVALID_VALUE)).longValue());
-        assertEquals(expectedEmpty, prop.get(Integer.toString(EMPTY_VALUE)).longValue());
-        assertEquals(expectedTotal, prop.get("total").longValue());
-    }
-
     @Before
     public void setUp() throws URISyntaxException, IOException {
-        byte[] avsc = Files.readAllBytes(Paths.get(getClass().getResource("/avro/semantic_person.avsc").toURI()));
-        Schema schema = new Schema.Parser().parse(new String(avsc));
-        analyzer = new AvroDataTypeQualityAnalyzer();
-        analyzer.init(schema);
-
-        avsc = Files.readAllBytes(Paths.get(getClass().getResource("/avro/person.avsc").toURI()));
+        byte[] avsc = Files.readAllBytes(Paths.get(getClass().getResource("/avro/person.avsc").toURI()));
         personSchema = new Schema.Parser().parse(new String(avsc));
+        analyzer = new AvroDataTypeAnalyzer();
+        analyzer.init(personSchema);
     }
 
     @After
@@ -90,11 +77,11 @@ public class AvroDataTypeQualityAnalyzerTest {
         assertNotNull(result);
 
         Map<String, Long> prop = (Map) result.getObjectProp(GLOBAL_QUALITY_PROP_NAME);
-        checkQuality(prop, 0, 0, 0, 0);
+        // checkQuality(prop, 0, 0, 0, 0);
     }
 
     @Test
-    public void testGlobalQuality() {
+    public void testGlobalDataType() {
         GenericRecord[] records = loadPersons("alice", "bob", "charlie");
 
         for (GenericRecord record : records) {
@@ -104,13 +91,16 @@ public class AvroDataTypeQualityAnalyzerTest {
         Schema result = analyzer.getResult();
         assertNotNull(result);
 
-        Map<String, Long> prop = (Map) result.getObjectProp(GLOBAL_QUALITY_PROP_NAME);
-        checkQuality(prop, 15, 3, 2, 20);
+        List<Map<String, Object>> aggregations =
+                (List<Map<String, Object>>) result.getField("birthdate").schema().getObjectProp("dataTypeAggregate");
+
+        assertEquals(3l, aggregations.get(0).get("total"));
+        assertEquals(DataTypeEnum.DATE.toString(), aggregations.get(0).get("dataType"));
     }
 
     @Test
     public void testSimpleFields() throws IOException, URISyntaxException {
-        GenericRecord[] records = loadPersons("alice", "bob", "charlie");
+        GenericRecord[] records = loadPersons("alice");
         Iterator<IndexedRecord> outRecords = analyzer.analyze(records);
 
         // Check the output records
@@ -118,8 +108,8 @@ public class AvroDataTypeQualityAnalyzerTest {
         while (outRecords.hasNext()) {
             GenericRecord out = (GenericRecord) outRecords.next();
             GenericData.Record firstnameRecord = (GenericData.Record) out.get("firstname");
-            int validity = (int) firstnameRecord.get("validity");
-            assertEquals(1, validity);
+            DataTypeEnum dataType = (DataTypeEnum) firstnameRecord.get("dataType");
+            assertEquals(DataTypeEnum.STRING, dataType);
             count++;
         }
         assertEquals(records.length, count);
@@ -127,8 +117,9 @@ public class AvroDataTypeQualityAnalyzerTest {
         Schema result = analyzer.getResult();
         assertNotNull(result);
 
-        Map<String, Long> prop = (Map) result.getField("firstname").schema().getObjectProp(QUALITY_PROP_NAME);
-        checkQuality(prop, 3, 0, 0, 3);
+        List<Map<String, Object>> aggregation =
+                (List<Map<String, Object>>) result.getField("birthdate").schema().getObjectProp("dataTypeAggregate");
+        assertEquals(DataTypeEnum.DATE.toString(), aggregation.get(0).get("dataType"));
     }
 
     @Test
@@ -143,18 +134,19 @@ public class AvroDataTypeQualityAnalyzerTest {
 
         Schema specificZipcodeSchema =
                 zipcodeSchema.getTypes().stream().filter(s -> s.getType() == Schema.Type.STRING).findFirst().get();
-        Map<String, Long> prop = (Map) specificZipcodeSchema.getObjectProp(QUALITY_PROP_NAME);
-        checkQuality(prop, 1, 0, 0, 1);
+        List<Map<String, Object>> prop =
+                (List<Map<String, Object>>) specificZipcodeSchema.getObjectProp(DATA_TYPE_AGGREGATE);
+        assertEquals(1l, prop.get(0).get("total"));
 
         specificZipcodeSchema =
                 zipcodeSchema.getTypes().stream().filter(s -> s.getType() == Schema.Type.NULL).findFirst().get();
-        prop = (Map) specificZipcodeSchema.getObjectProp(QUALITY_PROP_NAME);
-        checkQuality(prop, 0, 0, 1, 1);
+        prop = (List<Map<String, Object>>) specificZipcodeSchema.getObjectProp(DATA_TYPE_AGGREGATE);
+        assertEquals(0, prop.size());
 
         specificZipcodeSchema =
                 zipcodeSchema.getTypes().stream().filter(s -> s.getType() == Schema.Type.RECORD).findFirst().get();
         Schema codeSchema = specificZipcodeSchema.getField("code").schema();
-        prop = (Map) codeSchema.getObjectProp(QUALITY_PROP_NAME);
-        checkQuality(prop, 1, 0, 0, 1);
+        prop = (List<Map<String, Object>>) codeSchema.getObjectProp(DATA_TYPE_AGGREGATE);
+        assertEquals(1l, prop.get(0).get("total"));
     }
 }

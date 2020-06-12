@@ -41,6 +41,13 @@ public class AvroUtils {
 
     public static final Schema SEM_DISCOVERY_SCHEMA = new Schema.Parser().parse(SEM_DISCOVERY_SCHEMA_DEF);
 
+    private static final String SEM_DISCOVERY_DATATYPE_SCHEMA_DEF =
+            "{\"type\": \"record\"," + "\"name\": \"datatype_metadata\", \"namespace\": \"org.talend.dataquality\","
+                    + "\"fields\":[{ \"type\":\"string\", \"name\":\"dataType\"}]}";
+
+    public static final Schema SEM_DISCOVERY_DATATYPE_SCHEMA =
+            new Schema.Parser().parse(SEM_DISCOVERY_DATATYPE_SCHEMA_DEF);
+
     /**
      * From a record schema, create a semantic schema replacing type by a record with information about the quality.
      *

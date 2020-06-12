@@ -1,5 +1,6 @@
 package org.talend.dataquality.statistics.quality;
 
+import it.unimi.dsi.fastutil.Hash;
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericRecord;
@@ -161,6 +162,9 @@ public class AvroDataTypeQualityAnalyzer extends AvroQualityAnalyzer {
         final String value = objValue == null ? "" : objValue.toString();
         final Boolean knownDataType = knownDataTypeCache.get(value);
         final ValueQualityStatistics valueQuality = getOrCreate(id, qualityResults, ValueQualityStatistics.class);
+
+        if (!frequentDatePatterns.containsKey(id))
+            frequentDatePatterns.put(id, new SortedList());
 
         if (knownDataType != null) {
             if (knownDataType) {

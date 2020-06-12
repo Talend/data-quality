@@ -4,6 +4,7 @@
   "name": "Person",
   "fields": [
     { "name": "firstname", "type": "string" },
+    { "name": "birthdate", "type": "string" },
     { "name": "heroes", "type": { "type": "map", "values": "string" }},
     { "name": "emails", "type": { "type": "array", "items": "string" }},
     { "name": "gender", "type": { "name": "Gender", "type": "enum", "symbols": [ "M", "F" ]}},

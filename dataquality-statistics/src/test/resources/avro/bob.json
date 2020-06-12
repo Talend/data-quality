@@ -1,5 +1,6 @@
 {
   "firstname": "Bob",
+  "birthdate" : "12/04/1980",
   "heroes": {},
   "emails":  [],
   "gender":  "M",
