@@ -14,7 +14,7 @@ N/A
 ### Deprecated
 N/A
 ### Fixed
-- chore([TDQ-18091](https://jira.talendforge.org/browse/TDQ-18091)) more clear error message.
+- chore(TDQ-18091) more clear error message.
 ### Security
 N/A
 
