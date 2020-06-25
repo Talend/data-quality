@@ -7,10 +7,8 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static org.apache.avro.Schema.Type.BOOLEAN;
 import static org.apache.avro.Schema.Type.BYTES;
@@ -115,53 +113,7 @@ public class AvroUtils {
      * @return New schema
      */
     public static Schema copySchema(Schema sourceSchema) {
-        final SchemaBuilder.RecordBuilder<Schema> qualityRecordBuilder =
-                SchemaBuilder.record(sourceSchema.getName()).namespace(sourceSchema.getNamespace());
-        final SchemaBuilder.FieldAssembler<Schema> fieldAssembler = qualityRecordBuilder.fields();
-
-        for (Schema.Field field : sourceSchema.getFields()) {
-            fieldAssembler.name(field.name()).type(createSchemaCopy(field.schema())).noDefault();
-        }
-
-        return fieldAssembler.endRecord();
-    }
-
-    private static Schema createSchemaCopy(Schema sourceSchema) {
-        switch (sourceSchema.getType()) {
-        case RECORD:
-            return copySchema(sourceSchema);
-
-        case ARRAY:
-            return Schema.createArray(createSchemaCopy(sourceSchema.getElementType()));
-
-        case MAP:
-            return Schema.createMap(createSchemaCopy(sourceSchema.getValueType()));
-
-        case UNION:
-            final List<Schema> types =
-                    sourceSchema.getTypes().stream().map(type -> createSchemaCopy(type)).collect(Collectors.toList());
-            return Schema.createUnion(types);
-
-        case ENUM:
-            return Schema.createEnum(sourceSchema.getName(), sourceSchema.getDoc(), sourceSchema.getNamespace(),
-                    sourceSchema.getEnumSymbols());
-
-        case FIXED:
-            return Schema.createFixed(sourceSchema.getName(), sourceSchema.getDoc(), sourceSchema.getNamespace(),
-                    sourceSchema.getFixedSize());
-
-        case STRING:
-        case BYTES:
-        case INT:
-        case LONG:
-        case FLOAT:
-        case DOUBLE:
-        case BOOLEAN:
-        case NULL:
-            return Schema.create(sourceSchema.getType());
-        }
-
-        return null;
+        return new Schema.Parser().parse(sourceSchema.toString());
     }
 
     public static boolean isPrimitiveType(Schema.Type type) {
