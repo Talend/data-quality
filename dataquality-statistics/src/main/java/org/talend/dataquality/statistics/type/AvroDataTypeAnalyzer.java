@@ -5,14 +5,10 @@ import static org.talend.dataquality.common.util.AvroUtils.SEM_DISCOVERY_SCHEMA;
 import static org.talend.dataquality.common.util.AvroUtils.itemId;
 import static org.talend.dataquality.statistics.datetime.SystemDateTimePatternManager.isDate;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import org.apache.avro.AvroRuntimeException;
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericRecord;
@@ -59,7 +55,7 @@ public class AvroDataTypeAnalyzer implements AvroAnalyzer {
     @Override
     public Iterator<IndexedRecord> analyze(IndexedRecord... records) {
         final List<IndexedRecord> resultRecords =
-                Arrays.asList(records).stream().map(record -> analyzeRecord(record)).collect(Collectors.toList());
+                Arrays.stream(records).map(this::analyzeRecord).collect(Collectors.toList());
 
         return resultRecords.iterator();
     }
@@ -79,12 +75,25 @@ public class AvroDataTypeAnalyzer implements AvroAnalyzer {
 
         for (Schema.Field field : schema.getFields()) {
             final String itemId = itemId(id, field.name());
-            final Schema fieldResultSchema = resultRecord.getSchema().getField(field.name()).schema();
-            final Schema fieldSemanticSchema = semanticSchema.getField(field.name()).schema();
-            final Object semRecord = analyzeItem(itemId, record.get(field.pos()), field.schema(), fieldResultSchema,
-                    fieldSemanticSchema);
+            final Optional<Schema> maybeFieldResultSchema =
+                    Optional.ofNullable(resultRecord.getSchema().getField(field.name())).map(Schema.Field::schema);
+            final Optional<Schema>  maybeFieldSemanticSchema =
+                    Optional.ofNullable(semanticSchema.getField(field.name())).map(Schema.Field::schema);
 
-            resultRecord.put(field.name(), semRecord);
+            if(maybeFieldResultSchema.isPresent())
+                if(maybeFieldSemanticSchema.isPresent()) {
+                    final Object semRecord = analyzeItem(
+                            itemId,
+                            record.get(field.pos()),
+                            field.schema(),
+                            maybeFieldResultSchema.get(),
+                            maybeFieldSemanticSchema.get());
+                    resultRecord.put(field.name(), semRecord);
+                } else {
+                    System.out.println(field.name() + " field is missing from semantic schema.");
+                } else {
+                System.out.println(field.name() + " field is missing from result record schema.");
+            }
         }
 
     }
@@ -208,7 +217,11 @@ public class AvroDataTypeAnalyzer implements AvroAnalyzer {
 
         case UNION:
             if (dataTypeResults.containsKey(fieldName)) {
-                schema.addProp(DATA_TYPE, dataTypeResults.get(fieldName).getTypeFrequencies());
+                try {
+                    schema.addProp(DATA_TYPE, dataTypeResults.get(fieldName).getTypeFrequencies());
+                } catch (AvroRuntimeException e) {
+                    System.out.println("Failed to add prop to field " + fieldName + ".");
+                }
             }
             for (Schema unionSchema : schema.getTypes()) {
                 updateDatatype(unionSchema, itemId(fieldName, unionSchema.getName()));
@@ -239,7 +252,13 @@ public class AvroDataTypeAnalyzer implements AvroAnalyzer {
                     res.add(result);
                 });
 
-                schema.addProp(DATA_TYPE_AGGREGATE, res);
+                try {
+                    schema.addProp(DATA_TYPE_AGGREGATE, res);
+                } catch (AvroRuntimeException e) {
+                    System.out.println(
+                            "Failed to add prop to referenced type " + fieldName +
+                                    ". The analyzer is not supporting schema with referenced types.");
+                }
             }
             break;
         }
