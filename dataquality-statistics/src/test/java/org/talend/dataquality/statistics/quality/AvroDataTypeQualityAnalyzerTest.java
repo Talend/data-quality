@@ -11,6 +11,7 @@ import org.apache.avro.io.Decoder;
 import org.apache.avro.io.DecoderFactory;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.talend.dataquality.statistics.type.AvroDataTypeAnalyzer;
 import org.talend.dataquality.statistics.type.AvroDataTypeAnalyzerTest;
@@ -162,12 +163,26 @@ public class AvroDataTypeQualityAnalyzerTest {
     }
 
     @Test
+    public void testSemanticSchemaNotMatchingRecord() {
+        try {
+            String path = AvroDataTypeAnalyzerTest.class.getResource("../sample/date.avro").getPath();
+            File dateAvroFile = new File(path);
+            DataFileReader<GenericRecord> dateAvroReader =
+                    new DataFileReader<>(dateAvroFile, new GenericDatumReader<>());
+            analyzer.analyze(dateAvroReader.next());
+            Schema result = analyzer.getResult();
+            assertNotNull(result);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
     public void testAvroDataTypeQualityAnalyzerOnPrimitiveSchemas() {
         try {
             String path = AvroDataTypeAnalyzerTest.class.getResource("../sample/primitive").getPath();
             File primitiveFolder = new File(path);
             for (final File fileEntry : Objects.requireNonNull(primitiveFolder.listFiles())) {
-                System.out.println(fileEntry);
                 DataFileReader<GenericRecord> dateAvroReader =
                         new DataFileReader<>(fileEntry, new GenericDatumReader<>());
                 AvroDataTypeAnalyzer discoveryAnalyzer = new AvroDataTypeAnalyzer();
@@ -175,7 +190,6 @@ public class AvroDataTypeQualityAnalyzerTest {
                 dateAvroReader.forEach(discoveryAnalyzer::analyze);
                 Schema discoveryResult = discoveryAnalyzer.getResult();
 
-                System.out.println(discoveryResult.toString());
                 AvroDataTypeQualityAnalyzer qualityAnalyzer = new AvroDataTypeQualityAnalyzer();
                 qualityAnalyzer.init(discoveryResult);
                 dateAvroReader = new DataFileReader<>(fileEntry, new GenericDatumReader<>());
@@ -183,6 +197,90 @@ public class AvroDataTypeQualityAnalyzerTest {
                 Schema validationResult = qualityAnalyzer.getResult();
 
                 assertNotNull(validationResult);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testAvroDataTypeQualityAnalyzerOnStructureSchemas() {
+        try {
+            String path = AvroDataTypeAnalyzerTest.class.getResource("../sample/structure").getPath();
+            File primitiveFolder = new File(path);
+            for (final File fileEntry : Objects.requireNonNull(primitiveFolder.listFiles())) {
+                DataFileReader<GenericRecord> dateAvroReader =
+                        new DataFileReader<>(fileEntry, new GenericDatumReader<>());
+                AvroDataTypeAnalyzer discoveryAnalyzer = new AvroDataTypeAnalyzer();
+                discoveryAnalyzer.init(dateAvroReader.getSchema());
+                dateAvroReader.forEach(discoveryAnalyzer::analyze);
+                Schema discoveryResult = discoveryAnalyzer.getResult();
+
+                AvroDataTypeQualityAnalyzer qualityAnalyzer = new AvroDataTypeQualityAnalyzer();
+                qualityAnalyzer.init(discoveryResult);
+                dateAvroReader = new DataFileReader<>(fileEntry, new GenericDatumReader<>());
+                dateAvroReader.forEach(qualityAnalyzer::analyze);
+                Schema validationResult = qualityAnalyzer.getResult();
+
+                assertNotNull(validationResult);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testAvroDataTypeQualityAnalyzerOnComplexSchemas() {
+        try {
+            String path = AvroDataTypeAnalyzerTest.class.getResource("../sample/complex").getPath();
+            File primitiveFolder = new File(path);
+            for (final File fileEntry : Objects.requireNonNull(primitiveFolder.listFiles())) {
+                DataFileReader<GenericRecord> dateAvroReader =
+                        new DataFileReader<>(fileEntry, new GenericDatumReader<>());
+                AvroDataTypeAnalyzer discoveryAnalyzer = new AvroDataTypeAnalyzer();
+                discoveryAnalyzer.init(dateAvroReader.getSchema());
+                dateAvroReader.forEach(discoveryAnalyzer::analyze);
+                Schema discoveryResult = discoveryAnalyzer.getResult();
+
+                AvroDataTypeQualityAnalyzer qualityAnalyzer = new AvroDataTypeQualityAnalyzer();
+                qualityAnalyzer.init(discoveryResult);
+                dateAvroReader = new DataFileReader<>(fileEntry, new GenericDatumReader<>());
+                dateAvroReader.forEach(qualityAnalyzer::analyze);
+                Schema validationResult = qualityAnalyzer.getResult();
+
+                assertNotNull(validationResult);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    @Ignore
+    public void testAvroDataTypeQualityAnalyzerOnBigSamples() {
+        try {
+            String path = AvroDataTypeAnalyzerTest.class.getResource("../sample").getPath();
+            File primitiveFolder = new File(path);
+            for (final File fileEntry : Objects.requireNonNull(primitiveFolder.listFiles())) {
+                if (fileEntry.isFile()) {
+                    System.out.println(fileEntry);
+                    DataFileReader<GenericRecord> dateAvroReader =
+                            new DataFileReader<>(fileEntry, new GenericDatumReader<>());
+                    AvroDataTypeAnalyzer discoveryAnalyzer = new AvroDataTypeAnalyzer();
+                    discoveryAnalyzer.init(dateAvroReader.getSchema());
+                    dateAvroReader.forEach(discoveryAnalyzer::analyze);
+                    Schema discoveryResult = discoveryAnalyzer.getResult();
+                    System.out.println(discoveryResult.toString());
+
+                    AvroDataTypeQualityAnalyzer qualityAnalyzer = new AvroDataTypeQualityAnalyzer();
+                    qualityAnalyzer.init(discoveryResult);
+                    dateAvroReader = new DataFileReader<>(fileEntry, new GenericDatumReader<>());
+                    dateAvroReader.forEach(qualityAnalyzer::analyze);
+                    Schema validationResult = qualityAnalyzer.getResult();
+                    System.out.println(validationResult.toString());
+
+                    assertNotNull(validationResult);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();

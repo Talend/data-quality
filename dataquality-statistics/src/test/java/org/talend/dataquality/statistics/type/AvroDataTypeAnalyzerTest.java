@@ -344,15 +344,17 @@ public class AvroDataTypeAnalyzerTest {
             String path = AvroDataTypeAnalyzerTest.class.getResource("../sample").getPath();
             File primitiveFolder = new File(path);
             for (final File fileEntry : Objects.requireNonNull(primitiveFolder.listFiles())) {
-                System.out.println("Analyzing  " + fileEntry);
-                DataFileReader<GenericRecord> dateAvroReader =
-                        new DataFileReader<>(fileEntry, new GenericDatumReader<>());
-                analyzer.init(dateAvroReader.getSchema());
+                if (fileEntry.isFile()) {
+                    System.out.println("Analyzing  " + fileEntry);
+                    DataFileReader<GenericRecord> dateAvroReader =
+                            new DataFileReader<>(fileEntry, new GenericDatumReader<>());
+                    analyzer.init(dateAvroReader.getSchema());
 
-                dateAvroReader.forEach(analyzer::analyze);
+                    dateAvroReader.forEach(analyzer::analyze);
 
-                Schema result = analyzer.getResult();
-                assertNotNull(result);
+                    Schema result = analyzer.getResult();
+                    assertNotNull(result);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();

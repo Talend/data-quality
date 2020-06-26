@@ -74,12 +74,22 @@ public class AvroDataTypeQualityAnalyzer extends AvroQualityAnalyzer {
 
         for (Schema.Field field : schema.getFields()) {
             final String itemId = itemId(id, field.name());
-            final Schema fieldResultSchema = resultRecord.getSchema().getField(field.name()).schema();
-            final Schema fieldSemanticSchema = recordSemanticSchema.getField(field.name()).schema();
-            final Object semRecord = analyzeItem(itemId, record.get(field.pos()), field.schema(), fieldResultSchema,
-                    fieldSemanticSchema);
+            final Optional<Schema> maybeFieldResultSchema =
+                    Optional.ofNullable(resultRecord.getSchema().getField(field.name())).map(Schema.Field::schema);
+            final Optional<Schema> maybeFieldSemanticSchema =
+                    Optional.ofNullable(recordSemanticSchema.getField(field.name())).map(Schema.Field::schema);
 
-            resultRecord.put(field.name(), semRecord);
+            if (maybeFieldResultSchema.isPresent())
+                if (maybeFieldSemanticSchema.isPresent()) {
+                    final Object semRecord = analyzeItem(itemId, record.get(field.pos()), field.schema(),
+                            maybeFieldResultSchema.get(), maybeFieldSemanticSchema.get());
+                    resultRecord.put(field.name(), semRecord);
+                } else {
+                    System.out.println(field.name() + " field is missing from semantic schema.");
+                }
+            else {
+                System.out.println(field.name() + " field is missing from result record schema.");
+            }
         }
     }
 
@@ -134,10 +144,11 @@ public class AvroDataTypeQualityAnalyzer extends AvroQualityAnalyzer {
         case FLOAT:
         case DOUBLE:
         case BOOLEAN:
-            final Map props = (Map) semanticSchema.getObjectProp(DQTYPE_PROP_NAME);
+            final Optional<Map> maybeProps = Optional.ofNullable((Map) semanticSchema.getObjectProp(DQTYPE_PROP_NAME));
             final GenericRecord semRecord = new GenericData.Record(SEM_QUALITY_SCHEMA);
-            semRecord.put(VALIDITY_FIELD_NAME,
-                    analyzeLeafValue(itemId, item, props.get(DQTYPE_DATATYPE_FIELD_NAME).toString()));
+            String semanticType =
+                    maybeProps.map(props -> props.get(DQTYPE_DATATYPE_FIELD_NAME).toString()).orElse(null);
+            semRecord.put(VALIDITY_FIELD_NAME, analyzeLeafValue(itemId, item, semanticType));
             return semRecord;
 
         case NULL:
@@ -173,6 +184,10 @@ public class AvroDataTypeQualityAnalyzer extends AvroQualityAnalyzer {
             if (TypeInferenceUtils.isEmpty(value)) {
                 valueQuality.incrementEmpty();
                 return EMPTY_VALUE;
+            } else if (semanticType == null) {
+                // None empty values for field without dqType are considered valid.
+                valueQuality.incrementValid();
+                return VALID_VALUE;
             } else if (DataTypeEnum.DATE == DataTypeEnum.valueOf(semanticType)
                     && isDate(value, frequentDatePatterns.get(id))) {
                 valueQuality.incrementValid();

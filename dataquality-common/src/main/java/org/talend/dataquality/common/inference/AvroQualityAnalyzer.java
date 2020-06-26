@@ -1,5 +1,6 @@
 package org.talend.dataquality.common.inference;
 
+import org.apache.avro.AvroRuntimeException;
 import org.apache.avro.Schema;
 import org.talend.dataquality.common.exception.DQCommonRuntimeException;
 
@@ -100,7 +101,11 @@ public abstract class AvroQualityAnalyzer implements AvroAnalyzer {
 
         case UNION:
             if (qualityResults.containsKey(prefix)) {
-                sourceSchema.addProp(QUALITY_PROP_NAME, getStatMap(prefix));
+                try {
+                    sourceSchema.addProp(QUALITY_PROP_NAME, getStatMap(prefix));
+                } catch (AvroRuntimeException e) {
+                    System.out.println("Failed to add prop to field " + sourceSchema.getName() + ".");
+                }
             }
             for (Schema unionSchema : sourceSchema.getTypes()) {
                 updateQuality(unionSchema, itemId(prefix, unionSchema.getName()));
@@ -119,7 +124,12 @@ public abstract class AvroQualityAnalyzer implements AvroAnalyzer {
         case DOUBLE:
         case BOOLEAN:
         case NULL:
-            sourceSchema.addProp(QUALITY_PROP_NAME, getStatMap(prefix));
+            try {
+                sourceSchema.addProp(QUALITY_PROP_NAME, getStatMap(prefix));
+            } catch (AvroRuntimeException e) {
+                System.out.println("Failed to add prop to referenced type " + sourceSchema.getName()
+                        + ". The analyzer is not supporting schema with referenced types.");
+            }
             break;
         }
 
