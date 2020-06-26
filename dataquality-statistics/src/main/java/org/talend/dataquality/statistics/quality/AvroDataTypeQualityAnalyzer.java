@@ -1,6 +1,5 @@
 package org.talend.dataquality.statistics.quality;
 
-import it.unimi.dsi.fastutil.Hash;
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericRecord;
@@ -14,7 +13,7 @@ import org.talend.dataquality.statistics.type.SortedList;
 import org.talend.dataquality.statistics.type.TypeInferenceUtils;
 
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.talend.dataquality.common.util.AvroUtils.SEM_QUALITY_SCHEMA;
 import static org.talend.dataquality.common.util.AvroUtils.copySchema;
@@ -29,7 +28,7 @@ import static org.talend.dataquality.statistics.datetime.SystemDateTimePatternMa
  * <ul>
  *     <li>create a new instance</li>
  *     <li>initialize the instance with a schema containing the data type (see {@link #init(Schema)})</li>
- *     <li>analyze records (see {@link #analyze(IndexedRecord...)}) as many times as needed: it returns a list of
+ *     <li>analyze records (see {@link #analyze(Stream<IndexedRecord>)}) as many times as needed: it returns a list of
  *         records with the result of the analysis</li>
  *     <li>finally, get the global result (see {@link #getResult()})</li>
  * </ul>
@@ -205,11 +204,8 @@ public class AvroDataTypeQualityAnalyzer extends AvroQualityAnalyzer {
     }
 
     @Override
-    public Iterator<IndexedRecord> analyze(IndexedRecord... records) {
-        final List<IndexedRecord> resultRecords =
-                Arrays.asList(records).stream().map(record -> analyzeRecord(record)).collect(Collectors.toList());
-
-        return resultRecords.iterator();
+    public Stream<IndexedRecord> analyze(Stream<IndexedRecord> records) {
+        return records.map(this::analyzeRecord);
     }
 
     private IndexedRecord analyzeRecord(IndexedRecord record) {

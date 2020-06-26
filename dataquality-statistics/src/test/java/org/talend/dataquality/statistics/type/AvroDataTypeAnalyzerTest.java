@@ -11,6 +11,8 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.avro.Schema;
 import org.apache.avro.file.DataFileReader;
@@ -100,8 +102,9 @@ public class AvroDataTypeAnalyzerTest {
 
     @Test
     public void testSimpleFields() throws IOException, URISyntaxException {
-        GenericRecord[] records = loadPersons("alice");
-        Iterator<IndexedRecord> outRecords = analyzer.analyze(records);
+        GenericRecord[] persons = loadPersons("alice");
+        Stream<IndexedRecord> records = Arrays.stream(persons);
+        Iterator<IndexedRecord> outRecords = analyzer.analyze(records).iterator();
 
         // Check the output records
         int count = 0;
@@ -112,7 +115,7 @@ public class AvroDataTypeAnalyzerTest {
             assertEquals(DataTypeEnum.STRING, dataType);
             count++;
         }
-        assertEquals(records.length, count);
+        assertEquals(persons.length, count);
 
         Schema result = analyzer.getResult();
         assertNotNull(result);
@@ -125,7 +128,7 @@ public class AvroDataTypeAnalyzerTest {
     @Test
     public void testUnion() throws IOException, URISyntaxException {
         GenericRecord[] records = loadPersons("alice", "bob", "charlie");
-        Iterator<IndexedRecord> outRecords = analyzer.analyze(records);
+        List<IndexedRecord> outRecords = analyzer.analyze(Arrays.stream(records)).collect(Collectors.toList());
 
         Schema result = analyzer.getResult();
         assertNotNull(result);
@@ -155,7 +158,8 @@ public class AvroDataTypeAnalyzerTest {
         try {
             String path = AvroDataTypeAnalyzerTest.class.getResource("../sample/date.avro").getPath();
             File dateAvroFile = new File(path);
-            DataFileReader<GenericRecord> dateAvroReader = new DataFileReader<>(dateAvroFile, new GenericDatumReader<>());
+            DataFileReader<GenericRecord> dateAvroReader =
+                    new DataFileReader<>(dateAvroFile, new GenericDatumReader<>());
             analyzer.analyze(dateAvroReader.next());
             Schema result = analyzer.getResult();
             assertNotNull(result);
@@ -207,7 +211,8 @@ public class AvroDataTypeAnalyzerTest {
             analyzer.init(dateAvroReader.getSchema());
             dateAvroReader.forEach(analyzer::analyze);
             Schema result = analyzer.getResult();
-            assertNotNull(result.getField("friends").schema().getElementType().getField("name").getProp(DATA_TYPE_AGGREGATE));
+            assertNotNull(
+                    result.getField("friends").schema().getElementType().getField("name").getProp(DATA_TYPE_AGGREGATE));
             assertNotNull(result);
         } catch (IOException e) {
             e.printStackTrace();
@@ -219,8 +224,9 @@ public class AvroDataTypeAnalyzerTest {
         try {
             String path = AvroDataTypeAnalyzerTest.class.getResource("../sample/complex").getPath();
             File primitiveFolder = new File(path);
-            for (final File fileEntry: Objects.requireNonNull(primitiveFolder.listFiles())) {
-                DataFileReader<GenericRecord> dateAvroReader = new DataFileReader<>(fileEntry, new GenericDatumReader<>());
+            for (final File fileEntry : Objects.requireNonNull(primitiveFolder.listFiles())) {
+                DataFileReader<GenericRecord> dateAvroReader =
+                        new DataFileReader<>(fileEntry, new GenericDatumReader<>());
                 analyzer.init(dateAvroReader.getSchema());
 
                 dateAvroReader.forEach(analyzer::analyze);
@@ -238,8 +244,9 @@ public class AvroDataTypeAnalyzerTest {
         try {
             String path = AvroDataTypeAnalyzerTest.class.getResource("../sample/primitive").getPath();
             File primitiveFolder = new File(path);
-            for (final File fileEntry: Objects.requireNonNull(primitiveFolder.listFiles())) {
-                DataFileReader<GenericRecord> dateAvroReader = new DataFileReader<>(fileEntry, new GenericDatumReader<>());
+            for (final File fileEntry : Objects.requireNonNull(primitiveFolder.listFiles())) {
+                DataFileReader<GenericRecord> dateAvroReader =
+                        new DataFileReader<>(fileEntry, new GenericDatumReader<>());
                 analyzer.init(dateAvroReader.getSchema());
 
                 dateAvroReader.forEach(analyzer::analyze);
@@ -257,8 +264,9 @@ public class AvroDataTypeAnalyzerTest {
         try {
             String path = AvroDataTypeAnalyzerTest.class.getResource("../sample/structure").getPath();
             File primitiveFolder = new File(path);
-            for (final File fileEntry: Objects.requireNonNull(primitiveFolder.listFiles())) {
-                DataFileReader<GenericRecord> dateAvroReader = new DataFileReader<>(fileEntry, new GenericDatumReader<>());
+            for (final File fileEntry : Objects.requireNonNull(primitiveFolder.listFiles())) {
+                DataFileReader<GenericRecord> dateAvroReader =
+                        new DataFileReader<>(fileEntry, new GenericDatumReader<>());
                 analyzer.init(dateAvroReader.getSchema());
 
                 dateAvroReader.forEach(analyzer::analyze);
@@ -271,14 +279,16 @@ public class AvroDataTypeAnalyzerTest {
         }
     }
 
-    @Test @Ignore
+    @Test
+    @Ignore
     public void testAvroDataTypeAnalyzerOnBigSamples() {
         try {
             String path = AvroDataTypeAnalyzerTest.class.getResource("../sample").getPath();
             File primitiveFolder = new File(path);
-            for (final File fileEntry: Objects.requireNonNull(primitiveFolder.listFiles())) {
+            for (final File fileEntry : Objects.requireNonNull(primitiveFolder.listFiles())) {
                 System.out.println("Analyzing  " + fileEntry);
-                DataFileReader<GenericRecord> dateAvroReader = new DataFileReader<>(fileEntry, new GenericDatumReader<>());
+                DataFileReader<GenericRecord> dateAvroReader =
+                        new DataFileReader<>(fileEntry, new GenericDatumReader<>());
                 analyzer.init(dateAvroReader.getSchema());
 
                 dateAvroReader.forEach(analyzer::analyze);

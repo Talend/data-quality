@@ -4,8 +4,8 @@ import org.apache.avro.Schema;
 import org.apache.avro.generic.IndexedRecord;
 
 import java.io.Serializable;
-import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Implements analysis on Avro records. Implementations are expected to be:
@@ -46,7 +46,7 @@ public interface AvroAnalyzer extends Serializable, AutoCloseable {
      * @param records A set of records.
      * @return a stream of *metadata* record out (1/0/-1 values).
      */
-    Iterator<IndexedRecord> analyze(IndexedRecord... records);
+    Stream<IndexedRecord> analyze(Stream<IndexedRecord> records);
 
     /**
      * Ends the analysis (implementations may perform result optimizations after the repeated call to

@@ -59,7 +59,7 @@ public class AvroUtilsTest {
         try {
             String path = AvroUtils.class.getResource("sample/primitive").getPath();
             File primitiveFolder = new File(path);
-            for (final File fileEntry: Objects.requireNonNull(primitiveFolder.listFiles())) {
+            for (final File fileEntry : Objects.requireNonNull(primitiveFolder.listFiles())) {
                 DataFileReader<GenericRecord> avro = new DataFileReader<>(fileEntry, new GenericDatumReader<>());
                 Schema schema = avro.getSchema();
                 Schema validationSchema = AvroUtils.createRecordSemanticSchema(schema, QualityType.VALIDATION);
@@ -67,8 +67,8 @@ public class AvroUtilsTest {
                 List<Schema> schemas = getAllSubSchemas(schema);
                 List<Schema> validationSchemas = getAllSubSchemas(validationSchema);
                 List<Schema> discoverySchemas = getAllSubSchemas(discoverySchema);
-                assertEquals((schemas.size()-1)*2+1, validationSchemas.size());
-                assertEquals((schemas.size()-1)*3+1, discoverySchemas.size());
+                assertEquals((schemas.size() - 1) * 2 + 1, validationSchemas.size());
+                assertEquals((schemas.size() - 1) * 3 + 1, discoverySchemas.size());
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -82,7 +82,7 @@ public class AvroUtilsTest {
         try {
             String path = AvroUtils.class.getResource("sample/complex").getPath();
             File primitiveFolder = new File(path);
-            for (final File fileEntry: Objects.requireNonNull(primitiveFolder.listFiles())) {
+            for (final File fileEntry : Objects.requireNonNull(primitiveFolder.listFiles())) {
                 DataFileReader<GenericRecord> avro = new DataFileReader<>(fileEntry, new GenericDatumReader<>());
                 Schema schema = avro.getSchema();
                 Schema validationSchema = AvroUtils.createRecordSemanticSchema(schema, QualityType.VALIDATION);
@@ -90,11 +90,23 @@ public class AvroUtilsTest {
                 List<Schema> schemas = getAllSubSchemas(schema);
                 List<Schema> validationSchemas = getAllSubSchemas(validationSchema);
                 List<Schema> discoverySchemas = getAllSubSchemas(discoverySchema);
-                Set<String> nonePrimitiveNames = schemas.stream().filter(s -> !AvroUtils.isPrimitiveType(s.getType(), true)).map(Schema::getName).collect(Collectors.toSet());
-                Set<String> nonePrimitiveNamesValidation = validationSchemas.stream().filter(s -> !AvroUtils.isPrimitiveType(s.getType())).map(Schema::getName).collect(Collectors.toSet());
-                Set<String> nonePrimitiveNamesDiscovery = discoverySchemas.stream().filter(s -> !AvroUtils.isPrimitiveType(s.getType())).map(Schema::getName).collect(Collectors.toSet());
-                assert(nonePrimitiveNamesValidation.containsAll(nonePrimitiveNames));
-                assert(nonePrimitiveNamesDiscovery.containsAll(nonePrimitiveNames));
+                Set<String> nonePrimitiveNames = schemas
+                        .stream()
+                        .filter(s -> !AvroUtils.isPrimitiveType(s.getType(), true))
+                        .map(Schema::getName)
+                        .collect(Collectors.toSet());
+                Set<String> nonePrimitiveNamesValidation = validationSchemas
+                        .stream()
+                        .filter(s -> !AvroUtils.isPrimitiveType(s.getType()))
+                        .map(Schema::getName)
+                        .collect(Collectors.toSet());
+                Set<String> nonePrimitiveNamesDiscovery = discoverySchemas
+                        .stream()
+                        .filter(s -> !AvroUtils.isPrimitiveType(s.getType()))
+                        .map(Schema::getName)
+                        .collect(Collectors.toSet());
+                assert (nonePrimitiveNamesValidation.containsAll(nonePrimitiveNames));
+                assert (nonePrimitiveNamesDiscovery.containsAll(nonePrimitiveNames));
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -108,7 +120,7 @@ public class AvroUtilsTest {
         try {
             String path = AvroUtils.class.getResource("sample/structure").getPath();
             File primitiveFolder = new File(path);
-            for (final File fileEntry: Objects.requireNonNull(primitiveFolder.listFiles())) {
+            for (final File fileEntry : Objects.requireNonNull(primitiveFolder.listFiles())) {
                 DataFileReader<GenericRecord> avro = new DataFileReader<>(fileEntry, new GenericDatumReader<>());
                 Schema schema = avro.getSchema();
                 Schema validationSchema = AvroUtils.createRecordSemanticSchema(schema, QualityType.VALIDATION);
@@ -116,11 +128,23 @@ public class AvroUtilsTest {
                 List<Schema> schemas = getAllSubSchemas(schema);
                 List<Schema> validationSchemas = getAllSubSchemas(validationSchema);
                 List<Schema> discoverySchemas = getAllSubSchemas(discoverySchema);
-                Set<String> nonePrimitiveNames = schemas.stream().filter(s -> !AvroUtils.isPrimitiveType(s.getType(), true)).map(Schema::getName).collect(Collectors.toSet());
-                Set<String> nonePrimitiveNamesValidation = validationSchemas.stream().filter(s -> !AvroUtils.isPrimitiveType(s.getType())).map(Schema::getName).collect(Collectors.toSet());
-                Set<String> nonePrimitiveNamesDiscovery = discoverySchemas.stream().filter(s -> !AvroUtils.isPrimitiveType(s.getType())).map(Schema::getName).collect(Collectors.toSet());
-                assert(nonePrimitiveNamesValidation.containsAll(nonePrimitiveNames));
-                assert(nonePrimitiveNamesDiscovery.containsAll(nonePrimitiveNames));
+                Set<String> nonePrimitiveNames = schemas
+                        .stream()
+                        .filter(s -> !AvroUtils.isPrimitiveType(s.getType(), true))
+                        .map(Schema::getName)
+                        .collect(Collectors.toSet());
+                Set<String> nonePrimitiveNamesValidation = validationSchemas
+                        .stream()
+                        .filter(s -> !AvroUtils.isPrimitiveType(s.getType()))
+                        .map(Schema::getName)
+                        .collect(Collectors.toSet());
+                Set<String> nonePrimitiveNamesDiscovery = discoverySchemas
+                        .stream()
+                        .filter(s -> !AvroUtils.isPrimitiveType(s.getType()))
+                        .map(Schema::getName)
+                        .collect(Collectors.toSet());
+                assert (nonePrimitiveNamesValidation.containsAll(nonePrimitiveNames));
+                assert (nonePrimitiveNamesDiscovery.containsAll(nonePrimitiveNames));
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -132,36 +156,40 @@ public class AvroUtilsTest {
     private static List<Schema> getAllSubSchemas(Schema sourceSchema) {
         List<Schema> subSchemas = Lists.newArrayList();
         switch (sourceSchema.getType()) {
-            case RECORD:
-                subSchemas = sourceSchema.getFields().stream().flatMap(field -> getAllSubSchemas(field.schema()).stream()).collect(Collectors.toList());
-                subSchemas.add(sourceSchema);
-                return subSchemas;
-            case ARRAY:
-                subSchemas = getAllSubSchemas(sourceSchema.getElementType());
-                subSchemas.add(sourceSchema);
-                return subSchemas;
-            case MAP:
-                subSchemas = getAllSubSchemas(sourceSchema.getValueType());
-                subSchemas.add(sourceSchema);
-                return subSchemas;
-            case UNION:
-                for (Schema unionSchema : sourceSchema.getTypes()) {
-                    subSchemas.addAll(Objects.requireNonNull(getAllSubSchemas(unionSchema)));
-                }
-                subSchemas.add(sourceSchema);
-                return subSchemas;
-            case ENUM:
-            case FIXED:
-            case STRING:
-            case BYTES:
-            case INT:
-            case LONG:
-            case FLOAT:
-            case DOUBLE:
-            case BOOLEAN:
-            case NULL:
-                subSchemas.add(sourceSchema);
-                return subSchemas;
+        case RECORD:
+            subSchemas = sourceSchema
+                    .getFields()
+                    .stream()
+                    .flatMap(field -> getAllSubSchemas(field.schema()).stream())
+                    .collect(Collectors.toList());
+            subSchemas.add(sourceSchema);
+            return subSchemas;
+        case ARRAY:
+            subSchemas = getAllSubSchemas(sourceSchema.getElementType());
+            subSchemas.add(sourceSchema);
+            return subSchemas;
+        case MAP:
+            subSchemas = getAllSubSchemas(sourceSchema.getValueType());
+            subSchemas.add(sourceSchema);
+            return subSchemas;
+        case UNION:
+            for (Schema unionSchema : sourceSchema.getTypes()) {
+                subSchemas.addAll(Objects.requireNonNull(getAllSubSchemas(unionSchema)));
+            }
+            subSchemas.add(sourceSchema);
+            return subSchemas;
+        case ENUM:
+        case FIXED:
+        case STRING:
+        case BYTES:
+        case INT:
+        case LONG:
+        case FLOAT:
+        case DOUBLE:
+        case BOOLEAN:
+        case NULL:
+            subSchemas.add(sourceSchema);
+            return subSchemas;
         }
 
         return null;

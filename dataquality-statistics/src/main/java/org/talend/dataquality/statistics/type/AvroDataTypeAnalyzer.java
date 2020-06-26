@@ -6,7 +6,7 @@ import static org.talend.dataquality.common.util.AvroUtils.itemId;
 import static org.talend.dataquality.statistics.datetime.SystemDateTimePatternManager.isDate;
 
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.avro.AvroRuntimeException;
 import org.apache.avro.Schema;
@@ -53,11 +53,8 @@ public class AvroDataTypeAnalyzer implements AvroAnalyzer {
     }
 
     @Override
-    public Iterator<IndexedRecord> analyze(IndexedRecord... records) {
-        final List<IndexedRecord> resultRecords =
-                Arrays.stream(records).map(this::analyzeRecord).collect(Collectors.toList());
-
-        return resultRecords.iterator();
+    public Stream<IndexedRecord> analyze(Stream<IndexedRecord> records) {
+        return records.map(this::analyzeRecord);
     }
 
     private IndexedRecord analyzeRecord(IndexedRecord record) {
@@ -77,21 +74,18 @@ public class AvroDataTypeAnalyzer implements AvroAnalyzer {
             final String itemId = itemId(id, field.name());
             final Optional<Schema> maybeFieldResultSchema =
                     Optional.ofNullable(resultRecord.getSchema().getField(field.name())).map(Schema.Field::schema);
-            final Optional<Schema>  maybeFieldSemanticSchema =
+            final Optional<Schema> maybeFieldSemanticSchema =
                     Optional.ofNullable(semanticSchema.getField(field.name())).map(Schema.Field::schema);
 
-            if(maybeFieldResultSchema.isPresent())
-                if(maybeFieldSemanticSchema.isPresent()) {
-                    final Object semRecord = analyzeItem(
-                            itemId,
-                            record.get(field.pos()),
-                            field.schema(),
-                            maybeFieldResultSchema.get(),
-                            maybeFieldSemanticSchema.get());
+            if (maybeFieldResultSchema.isPresent())
+                if (maybeFieldSemanticSchema.isPresent()) {
+                    final Object semRecord = analyzeItem(itemId, record.get(field.pos()), field.schema(),
+                            maybeFieldResultSchema.get(), maybeFieldSemanticSchema.get());
                     resultRecord.put(field.name(), semRecord);
                 } else {
                     System.out.println(field.name() + " field is missing from semantic schema.");
-                } else {
+                }
+            else {
                 System.out.println(field.name() + " field is missing from result record schema.");
             }
         }
@@ -255,9 +249,8 @@ public class AvroDataTypeAnalyzer implements AvroAnalyzer {
                 try {
                     schema.addProp(DATA_TYPE_AGGREGATE, res);
                 } catch (AvroRuntimeException e) {
-                    System.out.println(
-                            "Failed to add prop to referenced type " + fieldName +
-                                    ". The analyzer is not supporting schema with referenced types.");
+                    System.out.println("Failed to add prop to referenced type " + fieldName
+                            + ". The analyzer is not supporting schema with referenced types.");
                 }
             }
             break;

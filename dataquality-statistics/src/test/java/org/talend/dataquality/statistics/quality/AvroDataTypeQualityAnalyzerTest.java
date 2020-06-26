@@ -18,7 +18,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -111,7 +113,7 @@ public class AvroDataTypeQualityAnalyzerTest {
     @Test
     public void testSimpleFields() throws IOException, URISyntaxException {
         GenericRecord[] records = loadPersons("alice", "bob", "charlie");
-        Iterator<IndexedRecord> outRecords = analyzer.analyze(records);
+        Iterator<IndexedRecord> outRecords = analyzer.analyze(Arrays.stream(records)).iterator();
 
         // Check the output records
         int count = 0;
@@ -134,7 +136,7 @@ public class AvroDataTypeQualityAnalyzerTest {
     @Test
     public void testUnion() throws IOException, URISyntaxException {
         GenericRecord[] records = loadPersons("alice", "bob", "charlie");
-        Iterator<IndexedRecord> outRecords = analyzer.analyze(records);
+        List<IndexedRecord> outRecords = analyzer.analyze(Arrays.stream(records)).collect(Collectors.toList());
 
         Schema result = analyzer.getResult();
         assertNotNull(result);
