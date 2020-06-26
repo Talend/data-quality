@@ -23,10 +23,12 @@ import org.apache.avro.generic.IndexedRecord;
 import org.apache.avro.io.DatumReader;
 import org.apache.avro.io.Decoder;
 import org.apache.avro.io.DecoderFactory;
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.talend.dataquality.common.util.AvroUtils;
 
 public class AvroDataTypeAnalyzerTest {
 
@@ -172,6 +174,20 @@ public class AvroDataTypeAnalyzerTest {
     public void testAvroDataTypeAnalyzerOnSwitch() {
         try {
             String path = AvroDataTypeAnalyzerTest.class.getResource("../sample/Switch.avro").getPath();
+            Pair<Stream<IndexedRecord>, Schema> pair = AvroUtils.streamAvroFile(new File(path));
+            analyzer.init(pair.getRight());
+            List<IndexedRecord> results = analyzer.analyze(pair.getLeft()).collect(Collectors.toList());
+            Schema result = analyzer.getResult();
+            assertNotNull(result);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testAvroDataTypeAnalyzerOnNoFancy() {
+        try {
+            String path = AvroDataTypeAnalyzerTest.class.getResource("../sample/no-fancy-structures-10.avro").getPath();
             File fileEntry = new File(path);
             DataFileReader<GenericRecord> dateAvroReader = new DataFileReader<>(fileEntry, new GenericDatumReader<>());
             analyzer.init(dateAvroReader.getSchema());
@@ -213,6 +229,48 @@ public class AvroDataTypeAnalyzerTest {
             Schema result = analyzer.getResult();
             assertNotNull(
                     result.getField("friends").schema().getElementType().getField("name").getProp(DATA_TYPE_AGGREGATE));
+            assertNotNull(result);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testAvroDataTypeAnalyzerOnBigBusiness() {
+        try {
+            String path = AvroDataTypeAnalyzerTest.class.getResource("../sample/big_business.avro").getPath();
+            File fileEntry = new File(path);
+            DataFileReader<GenericRecord> dateAvroReader = new DataFileReader<>(fileEntry, new GenericDatumReader<>());
+            analyzer.init(dateAvroReader.getSchema());
+            dateAvroReader.forEach(analyzer::analyze);
+            Schema result = analyzer.getResult();
+
+            List<Map<String, Object>> prop = (List<Map<String, Object>>) result
+                    .getField("business_id")
+                    .schema()
+                    .getTypes()
+                    .get(1)
+                    .getObjectProp(DATA_TYPE_AGGREGATE);
+            assertEquals(1000l, prop.get(0).get("total"));
+
+            prop = (List<Map<String, Object>>) result
+                    .getField("business")
+                    .schema()
+                    .getTypes()
+                    .get(1)
+                    .getField("location")
+                    .schema()
+                    .getTypes()
+                    .get(1)
+                    .getField("taxReturnsFiled")
+                    .schema()
+                    .getTypes()
+                    .get(1)
+                    .getObjectProp(DATA_TYPE_AGGREGATE);
+            assertEquals(682l, prop.get(0).get("total"));
+            assertEquals("INTEGER", prop.get(0).get("dataType"));
+            assertEquals(318l, prop.get(1).get("total"));
+            assertEquals("EMPTY", prop.get(1).get("dataType"));
             assertNotNull(result);
         } catch (IOException e) {
             e.printStackTrace();
