@@ -205,10 +205,9 @@ public class AvroDataTypeAnalyzerTest {
             File fileEntry = new File(path);
             DataFileReader<GenericRecord> dateAvroReader = new DataFileReader<>(fileEntry, new GenericDatumReader<>());
             analyzer.init(dateAvroReader.getSchema());
-
             dateAvroReader.forEach(analyzer::analyze);
-
             Schema result = analyzer.getResult();
+            assertNotNull(result.getField("friends").schema().getElementType().getField("name").getProp(DATA_TYPE_AGGREGATE));
             assertNotNull(result);
         } catch (IOException e) {
             e.printStackTrace();
