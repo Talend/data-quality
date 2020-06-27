@@ -99,6 +99,14 @@ public abstract class AvroQualityAnalyzer implements AvroAnalyzer {
             }
             break;
 
+        case ARRAY:
+            updateQuality(sourceSchema.getElementType(), prefix);
+            break;
+
+        case MAP:
+            updateQuality(sourceSchema.getValueType(), prefix);
+            break;
+
         case UNION:
             if (qualityResults.containsKey(prefix)) {
                 try {
@@ -112,8 +120,6 @@ public abstract class AvroQualityAnalyzer implements AvroAnalyzer {
             }
             break;
 
-        case ARRAY:
-        case MAP:
         case ENUM:
         case FIXED:
         case STRING:
