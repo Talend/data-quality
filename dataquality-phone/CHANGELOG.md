@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 N/A
 ### Changed
-N/A
+-TDQ-18429 Upgrade versions of google phone library from 8.10.5 to 8.12.3
 ### Removed
 N/A
 ### Deprecated
