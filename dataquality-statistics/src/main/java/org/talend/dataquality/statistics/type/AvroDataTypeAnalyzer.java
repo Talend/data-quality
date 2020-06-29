@@ -209,6 +209,14 @@ public class AvroDataTypeAnalyzer implements AvroAnalyzer {
             }
             break;
 
+        case ARRAY:
+            updateDatatype(schema.getElementType(), fieldName);
+            break;
+
+        case MAP:
+            updateDatatype(schema.getValueType(), fieldName);
+            break;
+
         case UNION:
             if (dataTypeResults.containsKey(fieldName)) {
                 try {
@@ -222,8 +230,6 @@ public class AvroDataTypeAnalyzer implements AvroAnalyzer {
             }
             break;
 
-        case ARRAY:
-        case MAP:
         case ENUM:
         case FIXED:
         case STRING:

@@ -169,9 +169,18 @@ public class AvroDataTypeQualityAnalyzerTest {
             File dateAvroFile = new File(path);
             DataFileReader<GenericRecord> dateAvroReader =
                     new DataFileReader<>(dateAvroFile, new GenericDatumReader<>());
-            analyzer.analyze(dateAvroReader.next());
-            Schema result = analyzer.getResult();
-            assertNotNull(result);
+            AvroDataTypeAnalyzer discoveryAnalyzer = new AvroDataTypeAnalyzer();
+            discoveryAnalyzer.init(dateAvroReader.getSchema());
+            dateAvroReader.forEach(discoveryAnalyzer::analyze);
+            Schema discoveryResult = discoveryAnalyzer.getResult();
+
+            AvroDataTypeQualityAnalyzer qualityAnalyzer = new AvroDataTypeQualityAnalyzer();
+            qualityAnalyzer.init(discoveryResult);
+            dateAvroReader.sync(0);
+            dateAvroReader.forEach(qualityAnalyzer::analyze);
+            Schema validationResult = qualityAnalyzer.getResult();
+
+            assertNotNull(validationResult);
         } catch (IOException e) {
             e.printStackTrace();
         }
