@@ -174,9 +174,8 @@ public class ReleaseVersionBumper {
 
             for (String line : lines) {
                 if (line.startsWith(BUNDLE_VERSION_STRING)) {
-                    writer
-                            .write((BUNDLE_VERSION_STRING + TARGET_VERSION.replace("-", ".") + "\n")
-                                    .getBytes(StandardCharsets.UTF_8));
+                    writer.write(
+                            (BUNDLE_VERSION_STRING + TARGET_VERSION.replace("-", ".") + "\n").getBytes(StandardCharsets.UTF_8));
                 } else {
                     writer.write((line + "\n").getBytes(StandardCharsets.UTF_8));
                 }
