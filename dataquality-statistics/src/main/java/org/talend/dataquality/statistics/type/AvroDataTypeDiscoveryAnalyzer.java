@@ -272,21 +272,19 @@ public class AvroDataTypeDiscoveryAnalyzer implements AvroAnalyzer {
             if (dataTypeResults.containsKey(fieldName)) {
 
                 Map<String, Object> aggregate = Maps.newHashMap();
-                aggregate.put(FORCED_FIELD, false);
 
                 dataTypeResults
                         .get(fieldName)
                         .getTypeFrequencies()
                         .entrySet()
                         .stream()
-                        .max(new Comparator<Map.Entry<DataTypeEnum, Long>>() {
-
-                            @Override
-                            public int compare(Map.Entry<DataTypeEnum, Long> t0, Map.Entry<DataTypeEnum, Long> t1) {
-                                return t0.getValue().compareTo(t1.getValue());
-                            }
-                        })
-                        .map(entry -> aggregate.put(DATA_TYPE_FIELD, entry.getKey()));
+                        .filter(entry -> !entry.getKey().equals(DataTypeEnum.EMPTY))
+                        .max(entryComparator)
+                        .map(entry -> {
+                            aggregate.put(FORCED_FIELD, false);
+                            aggregate.put(DATA_TYPE_FIELD, entry.getKey());
+                            return null;
+                        });
 
                 List<Map<String, Object>> matchings = new ArrayList<>();
                 dataTypeResults.get(fieldName).getTypeFrequencies().forEach((key, value) -> {
@@ -307,6 +305,11 @@ public class AvroDataTypeDiscoveryAnalyzer implements AvroAnalyzer {
             break;
         }
     }
+
+    static final Comparator<Map.Entry<DataTypeEnum, Long>> entryComparator = (t0, t1) -> {
+        int dataTypeEnumComparaison = DataTypeEnum.dataTypeEnumComparator.compare(t0.getKey(), t1.getKey());
+        return dataTypeEnumComparaison != 0 ? dataTypeEnumComparaison : t0.getValue().compareTo(t1.getValue());
+    };
 
     @Override
     public List<Schema> getResults() {

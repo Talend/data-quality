@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.talend.dataquality.common.inference.AvroQualityAnalyzer.GLOBAL_QUALITY_PROP_NAME;
 import static org.talend.dataquality.statistics.type.AvroDataTypeDiscoveryAnalyzer.DATA_TYPE_AGGREGATE;
+import static org.talend.dataquality.statistics.type.DataTypeEnum.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +15,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import avro.shaded.com.google.common.collect.Maps;
 import org.apache.avro.Schema;
 import org.apache.avro.file.DataFileReader;
 import org.apache.avro.generic.GenericData;
@@ -296,15 +298,18 @@ public class AvroDataTypeDiscoveryAnalyzerTest {
             dateAvroReader.forEach(analyzer::analyze);
             Schema result = analyzer.getResult();
 
-            List<Map<String, Object>> prop = (List<Map<String, Object>>) result
+            Map<String, Object> aggregate = (Map<String, Object>) result
                     .getField("business_id")
                     .schema()
                     .getTypes()
                     .get(1)
                     .getObjectProp(DATA_TYPE_AGGREGATE);
-            assertEquals(1000l, prop.get(0).get("total"));
+            assertEquals(1000l,
+                    ((List<Map<String, Object>>) aggregate.get(AvroDataTypeDiscoveryAnalyzer.MATCHINGS_FIELD))
+                            .get(0)
+                            .get("total"));
 
-            prop = (List<Map<String, Object>>) result
+            aggregate = (Map<String, Object>) result
                     .getField("business")
                     .schema()
                     .getTypes()
@@ -318,10 +323,12 @@ public class AvroDataTypeDiscoveryAnalyzerTest {
                     .getTypes()
                     .get(1)
                     .getObjectProp(DATA_TYPE_AGGREGATE);
-            assertEquals(682l, prop.get(0).get("total"));
-            assertEquals("INTEGER", prop.get(0).get("dataType"));
-            assertEquals(318l, prop.get(1).get("total"));
-            assertEquals("EMPTY", prop.get(1).get("dataType"));
+            List<Map<String, Object>> matchings =
+                    ((List<Map<String, Object>>) aggregate.get(AvroDataTypeDiscoveryAnalyzer.MATCHINGS_FIELD));
+            assertEquals(682l, matchings.get(0).get("total"));
+            assertEquals("INTEGER", matchings.get(0).get("dataType"));
+            assertEquals(318l, matchings.get(1).get("total"));
+            assertEquals("EMPTY", matchings.get(1).get("dataType"));
             assertNotNull(result);
         } catch (IOException e) {
             e.printStackTrace();
@@ -410,5 +417,39 @@ public class AvroDataTypeDiscoveryAnalyzerTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void testEntryComparator() {
+
+        Map entries = Maps.<DataTypeEnum, Long> newHashMap();
+        entries.put(STRING, 4L);
+        entries.put(EMPTY, 3L);
+        entries.put(DOUBLE, 7L);
+        entries.put(DATE, 6L);
+
+        ArrayList shuffledEntries = new ArrayList<>(entries.entrySet());
+        Collections.shuffle(shuffledEntries);
+
+        assertEquals(
+                Arrays.asList(new AbstractMap.SimpleEntry<>(EMPTY, 3L), new AbstractMap.SimpleEntry<>(STRING, 4L),
+                        new AbstractMap.SimpleEntry<>(DATE, 6L), new AbstractMap.SimpleEntry<>(DOUBLE, 7L)),
+                shuffledEntries
+                        .stream()
+                        .sorted(AvroDataTypeDiscoveryAnalyzer.entryComparator)
+                        .collect(Collectors.toList()));
+
+        List<AbstractMap.SimpleEntry<DataTypeEnum, Long>> expectedEntries =
+                Arrays.asList(new AbstractMap.SimpleEntry<>(EMPTY, 3L), new AbstractMap.SimpleEntry<>(EMPTY, 4L),
+                        new AbstractMap.SimpleEntry<>(STRING, 4L), new AbstractMap.SimpleEntry<>(DATE, 6L),
+                        new AbstractMap.SimpleEntry<>(DOUBLE, 6L), new AbstractMap.SimpleEntry<>(DOUBLE, 7L));
+
+        shuffledEntries = new ArrayList<>(expectedEntries);
+        Collections.shuffle(shuffledEntries);
+
+        assertEquals(expectedEntries.get(0),
+                shuffledEntries.stream().min(AvroDataTypeDiscoveryAnalyzer.entryComparator).get());
+        assertEquals(expectedEntries.get(5),
+                shuffledEntries.stream().max(AvroDataTypeDiscoveryAnalyzer.entryComparator).get());
     }
 }
