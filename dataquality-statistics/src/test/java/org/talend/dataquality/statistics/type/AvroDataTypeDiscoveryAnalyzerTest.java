@@ -80,7 +80,7 @@ public class AvroDataTypeDiscoveryAnalyzerTest {
         Schema result = analyzer.getResult();
         assertNotNull(result);
 
-        Map<String, Long> prop = (Map) result.getObjectProp(GLOBAL_QUALITY_PROP_NAME);
+        Map<String, Long> prop = (Map<String, Long>) result.getObjectProp(GLOBAL_QUALITY_PROP_NAME);
         // checkQuality(prop, 0, 0, 0, 0);
     }
 
@@ -95,13 +95,20 @@ public class AvroDataTypeDiscoveryAnalyzerTest {
         Schema result = analyzer.getResult();
         assertNotNull(result);
 
-        List<Map<String, Object>> aggregations = (List<Map<String, Object>>) result
+        Map<String, Object> aggregate = (Map<String, Object>) result
                 .getField("birthdate")
                 .schema()
                 .getObjectProp("talend.component.dataTypeAggregate");
 
-        assertEquals(3l, aggregations.get(0).get("total"));
-        assertEquals(DataTypeEnum.DATE.toString(), aggregations.get(0).get("dataType"));
+        assertEquals(3l, ((List<Map<String, Object>>) aggregate.get(AvroDataTypeDiscoveryAnalyzer.MATCHINGS_FIELD))
+                .get(0)
+                .get("total"));
+        assertEquals(DataTypeEnum.DATE.toString(),
+                ((List<Map<String, Object>>) aggregate.get(AvroDataTypeDiscoveryAnalyzer.MATCHINGS_FIELD))
+                        .get(0)
+                        .get("dataType"));
+        assertEquals(aggregate.get(AvroDataTypeDiscoveryAnalyzer.DATA_TYPE_FIELD), DataTypeEnum.DATE.toString());
+        assertEquals(aggregate.get(AvroDataTypeDiscoveryAnalyzer.FORCED_FIELD), false);
     }
 
     @Test
@@ -124,11 +131,14 @@ public class AvroDataTypeDiscoveryAnalyzerTest {
         Schema result = analyzer.getResult();
         assertNotNull(result);
 
-        List<Map<String, Object>> aggregation = (List<Map<String, Object>>) result
+        Map<String, Object> aggregate = (Map<String, Object>) result
                 .getField("birthdate")
                 .schema()
                 .getObjectProp("talend.component.dataTypeAggregate");
-        assertEquals(DataTypeEnum.DATE.toString(), aggregation.get(0).get("dataType"));
+        assertEquals(DataTypeEnum.DATE.toString(),
+                ((List<Map<String, Object>>) aggregate.get(AvroDataTypeDiscoveryAnalyzer.MATCHINGS_FIELD))
+                        .get(0)
+                        .get("dataType"));
     }
 
     @Test
@@ -143,20 +153,23 @@ public class AvroDataTypeDiscoveryAnalyzerTest {
 
         Schema specificZipcodeSchema =
                 zipcodeSchema.getTypes().stream().filter(s -> s.getType() == Schema.Type.STRING).findFirst().get();
-        List<Map<String, Object>> prop =
-                (List<Map<String, Object>>) specificZipcodeSchema.getObjectProp(DATA_TYPE_AGGREGATE);
-        assertEquals(1l, prop.get(0).get("total"));
+        Map<String, Object> prop = (Map<String, Object>) specificZipcodeSchema.getObjectProp(DATA_TYPE_AGGREGATE);
+        assertEquals(1l, ((List<Map<String, Object>>) prop.get(AvroDataTypeDiscoveryAnalyzer.MATCHINGS_FIELD))
+                .get(0)
+                .get("total"));
 
         specificZipcodeSchema =
                 zipcodeSchema.getTypes().stream().filter(s -> s.getType() == Schema.Type.NULL).findFirst().get();
-        prop = (List<Map<String, Object>>) specificZipcodeSchema.getObjectProp(DATA_TYPE_AGGREGATE);
-        assertEquals(0, prop.size());
+        prop = (Map<String, Object>) specificZipcodeSchema.getObjectProp(DATA_TYPE_AGGREGATE);
+        assertEquals(0, ((List<Map<String, Object>>) prop.get(AvroDataTypeDiscoveryAnalyzer.MATCHINGS_FIELD)).size());
 
         specificZipcodeSchema =
                 zipcodeSchema.getTypes().stream().filter(s -> s.getType() == Schema.Type.RECORD).findFirst().get();
         Schema codeSchema = specificZipcodeSchema.getField("code").schema();
-        prop = (List<Map<String, Object>>) codeSchema.getObjectProp(DATA_TYPE_AGGREGATE);
-        assertEquals(1l, prop.get(0).get("total"));
+        prop = (Map<String, Object>) codeSchema.getObjectProp(DATA_TYPE_AGGREGATE);
+        assertEquals(1l, ((List<Map<String, Object>>) prop.get(AvroDataTypeDiscoveryAnalyzer.MATCHINGS_FIELD))
+                .get(0)
+                .get("total"));
     }
 
     @Test
@@ -236,9 +249,17 @@ public class AvroDataTypeDiscoveryAnalyzerTest {
             analyzer.init(dateAvroReader.getSchema());
             dateAvroReader.forEach(analyzer::analyze);
             Schema result = analyzer.getResult();
-            assertNotNull(result.getField("friends").schema().getElementType().getField("name").schema().getObjectProp(
-                    DATA_TYPE_AGGREGATE));
+            Map<String, Object> dataTypeAggregate = (Map<String, Object>) result
+                    .getField("friends")
+                    .schema()
+                    .getElementType()
+                    .getField("name")
+                    .schema()
+                    .getObjectProp(DATA_TYPE_AGGREGATE);
             assertNotNull(result);
+            assertNotNull(dataTypeAggregate);
+            assertEquals(dataTypeAggregate.get(AvroDataTypeDiscoveryAnalyzer.FORCED_FIELD), false);
+            assertEquals(dataTypeAggregate.get(AvroDataTypeDiscoveryAnalyzer.DATA_TYPE_FIELD), "STRING");
         } catch (IOException e) {
             e.printStackTrace();
         }

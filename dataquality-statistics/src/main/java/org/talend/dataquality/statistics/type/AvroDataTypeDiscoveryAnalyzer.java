@@ -6,6 +6,7 @@ import static org.talend.dataquality.statistics.datetime.SystemDateTimePatternMa
 import java.util.*;
 import java.util.stream.Stream;
 
+import avro.shaded.com.google.common.collect.Maps;
 import org.apache.avro.AvroRuntimeException;
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericData;
@@ -21,9 +22,13 @@ public class AvroDataTypeDiscoveryAnalyzer implements AvroAnalyzer {
 
     public static final String DATA_TYPE_AGGREGATE = "talend.component.dataTypeAggregate";
 
-    public static final String DATA_TYPE = "dataType";
+    public static final String MATCHINGS_FIELD = "matchings";
 
-    public static String TOTAL = "total";
+    public static final String FORCED_FIELD = "forced";
+
+    public static final String DATA_TYPE_FIELD = "dataType";
+
+    public static String TOTAL_FIELD = "total";
 
     //    private static final String DQTYPE_DISCOVERY_VALUE_LEVEL_SCHEMA_JSON = "{\"type\": \"record\","
     //            + "\"name\": \"discovery_metadata\", \"namespace\": \"org.talend.dataquality\","
@@ -161,13 +166,13 @@ public class AvroDataTypeDiscoveryAnalyzer implements AvroAnalyzer {
         case DOUBLE:
         case BOOLEAN:
             final GenericRecord semRecord = new GenericData.Record(DATA_TYPE_DISCOVERY_VALUE_LEVEL_SCHEMA);
-            semRecord.put(DATA_TYPE, analyzeLeafValue(itemId, item));
+            semRecord.put(DATA_TYPE_FIELD, analyzeLeafValue(itemId, item));
             return semRecord;
 
         case NULL:
             // No information in semantic schema
             final GenericRecord nullSemRecord = new GenericData.Record(DATA_TYPE_DISCOVERY_VALUE_LEVEL_SCHEMA);
-            nullSemRecord.put(DATA_TYPE, analyzeLeafValue(itemId, item));
+            nullSemRecord.put(DATA_TYPE_FIELD, analyzeLeafValue(itemId, item));
             return nullSemRecord;
 
         default:
@@ -244,7 +249,7 @@ public class AvroDataTypeDiscoveryAnalyzer implements AvroAnalyzer {
         case UNION:
             if (dataTypeResults.containsKey(fieldName)) {
                 try {
-                    schema.addProp(DATA_TYPE, dataTypeResults.get(fieldName).getTypeFrequencies());
+                    schema.addProp(DATA_TYPE_FIELD, dataTypeResults.get(fieldName).getTypeFrequencies());
                 } catch (AvroRuntimeException e) {
                     System.out.println("Failed to add prop to field " + fieldName + ".");
                 }
@@ -266,18 +271,34 @@ public class AvroDataTypeDiscoveryAnalyzer implements AvroAnalyzer {
         case NULL:
             if (dataTypeResults.containsKey(fieldName)) {
 
-                List<Map<String, Object>> res = new ArrayList<>();
+                Map<String, Object> aggregate = Maps.newHashMap();
+                aggregate.put(FORCED_FIELD, false);
 
+                dataTypeResults
+                        .get(fieldName)
+                        .getTypeFrequencies()
+                        .entrySet()
+                        .stream()
+                        .max(new Comparator<Map.Entry<DataTypeEnum, Long>>() {
+
+                            @Override
+                            public int compare(Map.Entry<DataTypeEnum, Long> t0, Map.Entry<DataTypeEnum, Long> t1) {
+                                return t0.getValue().compareTo(t1.getValue());
+                            }
+                        })
+                        .map(entry -> aggregate.put(DATA_TYPE_FIELD, entry.getKey()));
+
+                List<Map<String, Object>> matchings = new ArrayList<>();
                 dataTypeResults.get(fieldName).getTypeFrequencies().forEach((key, value) -> {
                     Map<String, Object> result = new HashMap<>();
-                    result.put(DATA_TYPE, key);
-                    result.put(TOTAL, value);
-
-                    res.add(result);
+                    result.put(DATA_TYPE_FIELD, key);
+                    result.put(TOTAL_FIELD, value);
+                    matchings.add(result);
                 });
+                aggregate.put(MATCHINGS_FIELD, matchings);
 
                 try {
-                    schema.addProp(DATA_TYPE_AGGREGATE, res);
+                    schema.addProp(DATA_TYPE_AGGREGATE, aggregate);
                 } catch (AvroRuntimeException e) {
                     System.out.println("Failed to add prop to referenced type " + fieldName
                             + ". The analyzer is not supporting schema with referenced types.");
