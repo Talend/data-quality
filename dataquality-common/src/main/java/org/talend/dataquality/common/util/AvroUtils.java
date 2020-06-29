@@ -345,7 +345,34 @@ public class AvroUtils {
     }
 
     private static String nextNamespaceSuffix(String suffix) {
-        return "";
+        return encode(decode(suffix) + 1);
     }
 
+    private static long decode(String input) {
+        long value = 0;
+        int i = 0;
+        for (char c : input.toCharArray()) {
+            value += (c - 'a' + 1) * Math.pow(26, i);
+            i++;
+        }
+        return value;
+    }
+
+    private static String encode(long value) {
+
+        StringBuilder output = new StringBuilder("");
+
+        long divide = value;
+        long remaining;
+
+        do {
+            divide = divide / 26;
+            remaining = value % 26;
+            if (remaining == 0)
+                remaining = 26;
+            output.append((char) ('a' + remaining - 1));
+        } while (divide != 0);
+
+        return output.toString();
+    }
 }
