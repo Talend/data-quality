@@ -162,8 +162,11 @@ public class AvroDataTypeAnalyzerTest {
             File dateAvroFile = new File(path);
             DataFileReader<GenericRecord> dateAvroReader =
                     new DataFileReader<>(dateAvroFile, new GenericDatumReader<>());
+
+            analyzer.init(dateAvroReader.getSchema());
             analyzer.analyze(dateAvroReader.next());
             Schema result = analyzer.getResult();
+
             assertNotNull(result);
         } catch (IOException e) {
             e.printStackTrace();
