@@ -1,7 +1,5 @@
 package org.talend.dataquality.statistics.type;
 
-import static java.util.stream.Collectors.toList;
-import static org.apache.avro.Schema.Type.RECORD;
 import static org.talend.dataquality.common.util.AvroUtils.copySchema;
 import static org.talend.dataquality.common.util.AvroUtils.createRecordSemanticSchema;
 import static org.talend.dataquality.common.util.AvroUtils.dereferencing;
@@ -14,12 +12,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.avro.AvroRuntimeException;
 import org.apache.avro.Schema;
-import org.apache.avro.SchemaBuilder;
 import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.generic.IndexedRecord;
