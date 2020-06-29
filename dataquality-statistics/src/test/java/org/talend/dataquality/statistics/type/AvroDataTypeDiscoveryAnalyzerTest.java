@@ -20,14 +20,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import avro.shaded.com.google.common.collect.Maps;
 import org.apache.avro.Schema;
+import org.apache.avro.SchemaBuilder;
 import org.apache.avro.file.DataFileReader;
 import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericDatumReader;
 import org.apache.avro.generic.GenericRecord;
+import org.apache.avro.generic.GenericRecordBuilder;
 import org.apache.avro.generic.IndexedRecord;
 import org.apache.avro.io.DatumReader;
 import org.apache.avro.io.Decoder;
@@ -104,10 +107,8 @@ public class AvroDataTypeDiscoveryAnalyzerTest {
         Schema result = analyzer.getResult();
         assertNotNull(result);
 
-        Map<String, Object> aggregate = (Map<String, Object>) result
-                .getField("birthdate")
-                .schema()
-                .getObjectProp("talend.component.dqType");
+        Map<String, Object> aggregate =
+                (Map<String, Object>) result.getField("birthdate").schema().getObjectProp("talend.component.dqType");
 
         assertEquals(3l, ((List<Map<String, Object>>) aggregate.get(AvroDataTypeDiscoveryAnalyzer.MATCHINGS_FIELD))
                 .get(0)
@@ -140,14 +141,80 @@ public class AvroDataTypeDiscoveryAnalyzerTest {
         Schema result = analyzer.getResult();
         assertNotNull(result);
 
-        Map<String, Object> aggregate = (Map<String, Object>) result
-                .getField("birthdate")
-                .schema()
-                .getObjectProp("talend.component.dqType");
+        Map<String, Object> aggregate =
+                (Map<String, Object>) result.getField("birthdate").schema().getObjectProp("talend.component.dqType");
         assertEquals(DataTypeEnum.DATE.toString(),
                 ((List<Map<String, Object>>) aggregate.get(AvroDataTypeDiscoveryAnalyzer.MATCHINGS_FIELD))
                         .get(0)
                         .get("dataType"));
+    }
+
+    @Test
+    public void testRecordsInMaps() {
+
+        AvroDataTypeDiscoveryAnalyzer semanticAnalyzer = new AvroDataTypeDiscoveryAnalyzer();
+
+        Schema nestedSchema_2 = SchemaBuilder.record("record_2_1").fields().requiredString("string_2_0").endRecord();
+        Schema nestedSchema_1 = SchemaBuilder
+                .record("record_1")
+                .fields()
+                .requiredInt("int_1_0")
+                .name("map_1_0")
+                .type()
+                .map()
+                .values(nestedSchema_2)
+                .noDefault()
+                .endRecord();
+        Schema schema = SchemaBuilder
+                .record("record")
+                .fields()
+                .name("map_0")
+                .type()
+                .map()
+                .values(nestedSchema_1)
+                .noDefault()
+                .endRecord();
+
+        GenericRecord nestedRecord_2_1 = new GenericRecordBuilder(nestedSchema_2).set("string_2_0", "France").build();
+        GenericRecord nestedRecord_2_2 = new GenericRecordBuilder(nestedSchema_2).set("string_2_0", "Germany").build();
+
+        List<IndexedRecord> list_1 = Stream.of(nestedRecord_2_1).collect(Collectors.toList());
+        GenericRecord nestedRecord_1_1 = new GenericRecordBuilder(nestedSchema_1)
+                .set("int_1_0", 1)
+                .set("map_1_0",
+                        IntStream.range(0, list_1.size()).boxed().collect(Collectors.toMap(i -> i, i -> list_1.get(i))))
+                .build();
+        List<IndexedRecord> list_2 = Stream.of(nestedRecord_2_2).collect(Collectors.toList());
+        GenericRecord nestedRecord_1_2 = new GenericRecordBuilder(nestedSchema_1)
+                .set("int_1_0", 2)
+                .set("map_1_0",
+                        IntStream.range(0, list_2.size()).boxed().collect(Collectors.toMap(i -> i, i -> list_2.get(i))))
+                .build();
+        List<IndexedRecord> list = Stream.of(nestedRecord_1_1, nestedRecord_1_2).collect(Collectors.toList());
+        IndexedRecord record = new GenericRecordBuilder(schema)
+                .set("map_0",
+                        IntStream.range(0, list.size()).boxed().collect(Collectors.toMap(i -> i, i -> list.get(i))))
+                .build();
+
+        semanticAnalyzer.init(schema);
+        semanticAnalyzer.analyze(record);
+        Schema result = semanticAnalyzer.getResult();
+
+        assertNotNull(result);
+
+        assertNotNull(result.getField("map_0").schema().getValueType().getField("int_1_0").schema().getObjectProp(
+                "talend.component.dqType"));
+
+        assertNotNull(result
+                .getField("map_0")
+                .schema()
+                .getValueType()
+                .getField("map_1_0")
+                .schema()
+                .getValueType()
+                .getField("string_2_0")
+                .schema()
+                .getObjectProp("talend.component.dqType"));
     }
 
     @Test
@@ -287,13 +354,8 @@ public class AvroDataTypeDiscoveryAnalyzerTest {
             dateAvroReader = new DataFileReader<>(fileEntry, new GenericDatumReader<>());
             dateAvroReader.forEach(analyzer::analyze);
             result = analyzer.getResult();
-            assertNotNull(result
-                    .getField("friends")
-                    .schema()
-                    .getElementType()
-                    .getField("name")
-                    .schema()
-                    .getObjectProp(DATA_TYPE_AGGREGATE));
+            assertNotNull(result.getField("friends").schema().getElementType().getField("name").schema().getObjectProp(
+                    DATA_TYPE_AGGREGATE));
             assertNotNull(result);
         } catch (IOException e) {
             e.printStackTrace();

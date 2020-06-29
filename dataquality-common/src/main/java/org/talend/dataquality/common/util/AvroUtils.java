@@ -12,9 +12,11 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import static java.util.stream.Collectors.toList;
 import static org.apache.avro.Schema.Type.BOOLEAN;
 import static org.apache.avro.Schema.Type.BYTES;
 import static org.apache.avro.Schema.Type.DOUBLE;
@@ -24,6 +26,7 @@ import static org.apache.avro.Schema.Type.FLOAT;
 import static org.apache.avro.Schema.Type.INT;
 import static org.apache.avro.Schema.Type.LONG;
 import static org.apache.avro.Schema.Type.NULL;
+import static org.apache.avro.Schema.Type.RECORD;
 import static org.apache.avro.Schema.Type.STRING;
 
 /**
@@ -190,4 +193,159 @@ public class AvroUtils {
         return Pair.of(StreamSupport.stream(dateAvroReader.spliterator(), false).map(c -> (IndexedRecord) c),
                 dateAvroReader.getSchema());
     }
+
+    public static Schema dereferencing(Schema schema) {
+        Schema dereferencedSchema = schema;
+        Stream names = getNamedTypes(schema);
+
+        List<String> flattenNames = flattenStream(names);
+
+        int beforeDistinct = flattenNames.size();
+        flattenNames = flattenNames.stream().distinct().collect(toList());
+
+        if (!flattenNames.isEmpty() && beforeDistinct != flattenNames.size()) {
+            Map<String, String> namespaces = new HashMap<>();
+            for (String name : flattenNames) {
+                namespaces.put(name, "a");
+            }
+            return buildDereferencedSchema(schema, namespaces);
+        }
+        return dereferencedSchema;
+    }
+
+    private static Stream getNamedTypes(Schema schema) {
+        return schema.getFields().stream().flatMap(field -> {
+            Schema fieldSchema = field.schema();
+            switch (fieldSchema.getType()) {
+            case RECORD:
+                return Stream.of(getNamedTypes(fieldSchema), fieldSchema.getFullName());
+            case ARRAY:
+                if (fieldSchema.getElementType().getType() == RECORD) {
+                    return Stream.of(getNamedTypes(fieldSchema.getElementType()));
+                } else {
+                    return Stream.empty();
+                }
+            case MAP:
+                if (fieldSchema.getValueType().getType() == RECORD) {
+                    return Stream.of(getNamedTypes(fieldSchema.getValueType()));
+                } else {
+                    return Stream.empty();
+                }
+            case UNION:
+                return fieldSchema.getTypes().stream().flatMap(unionSchema -> {
+                    switch (unionSchema.getType()) {
+                    case RECORD:
+                        return Stream.of(getNamedTypes(unionSchema), unionSchema.getFullName());
+                    case ARRAY:
+                        if (unionSchema.getElementType().getType() == RECORD) {
+                            return Stream.of(getNamedTypes(unionSchema.getElementType()));
+                        } else {
+                            return null;
+                        }
+                    case MAP:
+                        if (unionSchema.getValueType().getType() == RECORD) {
+                            return Stream.of(getNamedTypes(unionSchema.getValueType()));
+                        } else {
+                            return null;
+                        }
+                    case FIXED:
+                        return Stream.of(unionSchema.getFullName());
+                    default:
+                        return null;
+                    }
+                });
+            case FIXED:
+                return Stream.of(fieldSchema.getFullName());
+            default:
+                return null;
+            }
+        });
+    }
+
+    private static List<String> flattenStream(Stream stream) {
+        List<String> flattenNames = new ArrayList<>();
+        stream.forEach(obj -> {
+            if (obj instanceof String) {
+                flattenNames.add((String) obj);
+            } else {
+                flattenStream((Stream) obj);
+            }
+        });
+        return flattenNames;
+    }
+
+    private static Schema buildDereferencedSchema(Schema schema, Map<String, String> namespaces) {
+
+        final SchemaBuilder.RecordBuilder<Schema> qualityRecordBuilder =
+                SchemaBuilder.record(schema.getName()).namespace(schema.getNamespace());
+        final SchemaBuilder.FieldAssembler<Schema> fieldAssembler = qualityRecordBuilder.fields();
+
+        for (Schema.Field field : schema.getFields()) {
+            Schema fieldSchema = field.schema();
+            switch (fieldSchema.getType()) {
+            case RECORD:
+                fieldAssembler.name(field.name()).type(buildDereferencedSchema(field.schema(), namespaces)).noDefault();
+                break;
+            case ARRAY:
+                if (fieldSchema.getElementType().getType() == Schema.Type.STRING) {
+                    fieldAssembler.name(field.name()).type(fieldSchema).noDefault();
+                } else {
+                    fieldAssembler
+                            .name(field.name())
+                            .type(buildDereferencedSchema(fieldSchema.getElementType(), namespaces))
+                            .noDefault();
+                }
+                break;
+            case UNION:
+
+                List<Schema> fullChild = fieldSchema.getTypes().stream().map(unionSchema -> {
+                    String fullName = unionSchema.getFullName();
+                    if (namespaces.containsKey(fullName)) {
+                        List<Schema.Field> cloneFields = new ArrayList<>();
+
+                        for (Schema.Field f : unionSchema.getFields()) {
+                            Schema.Field _field = new Schema.Field(f.name(), f.schema(), f.doc(), f.defaultValue());
+                            cloneFields.add(_field);
+                        }
+
+                        Schema newSchema = Schema.createRecord(unionSchema.getName(), unionSchema.getDoc(),
+                                unionSchema.getNamespace() + "." + namespaces.get(fullName), unionSchema.isError(),
+                                cloneFields);
+                        namespaces.put(fullName, nextNamespaceSuffix(namespaces.get(fullName)));
+                        return newSchema;
+
+                    } else {
+                        return unionSchema;
+                    }
+                }).collect(Collectors.toList());
+                fieldAssembler.name(field.name()).type(Schema.createUnion(fullChild)).noDefault();
+                break;
+            case MAP:
+                fieldAssembler
+                        .name(field.name())
+                        .type(buildDereferencedSchema(fieldSchema.getValueType(), namespaces))
+                        .noDefault();
+            case ENUM:
+            case FIXED:
+            case STRING:
+            case BYTES:
+            case INT:
+            case LONG:
+            case FLOAT:
+            case DOUBLE:
+            case BOOLEAN:
+                fieldAssembler.name(field.name()).type(field.schema()).noDefault();
+                break;
+            case NULL:
+                break;
+            }
+        }
+
+        return fieldAssembler.endRecord();
+    }
+
+    private static String nextNamespaceSuffix(String suffix) {
+        return "";
+    }
+
 }

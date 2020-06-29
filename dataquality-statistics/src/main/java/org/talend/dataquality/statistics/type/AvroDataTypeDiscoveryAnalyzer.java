@@ -4,6 +4,7 @@ import static java.util.stream.Collectors.toList;
 import static org.apache.avro.Schema.Type.RECORD;
 import static org.talend.dataquality.common.util.AvroUtils.copySchema;
 import static org.talend.dataquality.common.util.AvroUtils.createRecordSemanticSchema;
+import static org.talend.dataquality.common.util.AvroUtils.dereferencing;
 import static org.talend.dataquality.common.util.AvroUtils.itemId;
 import static org.talend.dataquality.statistics.datetime.SystemDateTimePatternManager.isDate;
 
@@ -80,153 +81,6 @@ public class AvroDataTypeDiscoveryAnalyzer implements AvroAnalyzer {
                 createRecordSemanticSchema(this.inputSemanticSchema, DATA_TYPE_DISCOVERY_VALUE_LEVEL_SCHEMA);
     }
 
-    private Stream getNamedTypes(Schema schema) {
-        return schema.getFields().stream().flatMap(field -> {
-            Schema fieldSchema = field.schema();
-            switch (fieldSchema.getType()) {
-            case RECORD:
-                return Stream.of(getNamedTypes(fieldSchema), fieldSchema.getFullName());
-            case ARRAY:
-                if (fieldSchema.getElementType().getType() == RECORD) {
-                    return Stream.of(getNamedTypes(fieldSchema.getElementType()));
-                } else {
-                    return Stream.empty();
-                }
-            case MAP:
-                if (fieldSchema.getValueType().getType() == RECORD) {
-                    return Stream.of(getNamedTypes(fieldSchema.getValueType()));
-                } else {
-                    return Stream.empty();
-                }
-            case UNION:
-                return fieldSchema.getTypes().stream().flatMap(unionSchema -> {
-                    switch (unionSchema.getType()) {
-                    case RECORD:
-                        return Stream.of(getNamedTypes(unionSchema), unionSchema.getFullName());
-                    case ARRAY:
-                        if (unionSchema.getElementType().getType() == RECORD) {
-                            return Stream.of(getNamedTypes(unionSchema.getElementType()));
-                        } else {
-                            return null;
-                        }
-                    case MAP:
-                        if (unionSchema.getValueType().getType() == RECORD) {
-                            return Stream.of(getNamedTypes(unionSchema.getValueType()));
-                        } else {
-                            return null;
-                        }
-                    case FIXED:
-                        return Stream.of(unionSchema.getFullName());
-                    default:
-                        return null;
-                    }
-                });
-            case FIXED:
-                return Stream.of(fieldSchema.getFullName());
-            default:
-                return null;
-            }
-        });
-    }
-
-    private List<String> flattenStream(Stream stream) {
-        List<String> flattenNames = new ArrayList<>();
-        stream.forEach(obj -> {
-            if (obj instanceof String) {
-                flattenNames.add((String) obj);
-            } else {
-                flattenStream((Stream) obj);
-            }
-        });
-        return flattenNames;
-    }
-
-    private Schema dereferencing(Schema schema) {
-        Schema dereferencedSchema = schema;
-        Stream names = getNamedTypes(schema);
-
-        List<String> flattenNames = flattenStream(names);
-
-        int beforeDistinct = flattenNames.size();
-        flattenNames = flattenNames.stream().distinct().collect(toList());
-
-        if (!flattenNames.isEmpty() && beforeDistinct != flattenNames.size()) {
-            Map<String, Integer> namespaces = new HashMap<>();
-            for (String name : flattenNames) {
-                namespaces.put(name, 0);
-            }
-            return buildDereferencedSchema(schema, namespaces);
-        }
-        return dereferencedSchema;
-    }
-
-    private Schema buildDereferencedSchema(Schema schema, Map<String, Integer> namespaces) {
-
-        final SchemaBuilder.RecordBuilder<Schema> qualityRecordBuilder =
-                SchemaBuilder.record(schema.getName()).namespace(schema.getNamespace());
-        final SchemaBuilder.FieldAssembler<Schema> fieldAssembler = qualityRecordBuilder.fields();
-
-        for (Schema.Field field : schema.getFields()) {
-            Schema fieldSchema = field.schema();
-            switch (fieldSchema.getType()) {
-            case RECORD:
-                fieldAssembler.name(field.name()).type(buildDereferencedSchema(field.schema(), namespaces)).noDefault();
-                break;
-            case ARRAY:
-                if (fieldSchema.getElementType().getType() == Schema.Type.STRING) {
-                    fieldAssembler.name(field.name()).type(fieldSchema).noDefault();
-                } else {
-                    fieldAssembler
-                            .name(field.name())
-                            .type(buildDereferencedSchema(fieldSchema.getElementType(), namespaces))
-                            .noDefault();
-                }
-                break;
-            case UNION:
-
-                List<Schema> fullChild = fieldSchema.getTypes().stream().map(unionSchema -> {
-                    String fullName = unionSchema.getFullName();
-                    if (namespaces.containsKey(fullName)) {
-                        List<Schema.Field> cloneFields = new ArrayList<>();
-
-                        for (Schema.Field f : unionSchema.getFields()) {
-                            Schema.Field _field = new Schema.Field(f.name(), f.schema(), f.doc(), f.defaultValue());
-                            cloneFields.add(_field);
-                        }
-
-                        Schema newSchema = Schema
-                                .createRecord(unionSchema.getName(), unionSchema.getDoc(),
-                                        unionSchema.getNamespace() + "." + namespaces.get(fullName),
-                                        unionSchema.isError(), cloneFields);
-                        namespaces.put(fullName, namespaces.get(fullName) + 1);
-                        return newSchema;
-
-                    } else {
-                        return unionSchema;
-                    }
-                }).collect(Collectors.toList());
-                fieldAssembler.name(field.name()).type(Schema.createUnion(fullChild)).noDefault();
-                break;
-            case MAP:
-            case ENUM:
-            case FIXED:
-            case STRING:
-            case BYTES:
-            case INT:
-            case LONG:
-            case FLOAT:
-            case DOUBLE:
-            case BOOLEAN:
-                fieldAssembler.name(field.name()).type(field.schema()).noDefault();
-                break;
-            case NULL:
-                break;
-            }
-        }
-
-        return fieldAssembler.endRecord();
-    }
-
     @Override
     public boolean analyze(IndexedRecord record) {
         analyzeRecord(record);
@@ -284,9 +138,8 @@ public class AvroDataTypeDiscoveryAnalyzer implements AvroAnalyzer {
         case ARRAY:
             final List resultArray = new ArrayList();
             for (Object obj : (List) item) {
-                resultArray
-                        .add(analyzeItem(itemId, obj, itemSchema.getElementType(), resultSchema.getElementType(),
-                                fieldSemanticSchema.getElementType()));
+                resultArray.add(analyzeItem(itemId, obj, itemSchema.getElementType(), resultSchema.getElementType(),
+                        fieldSemanticSchema.getElementType()));
             }
             return new GenericData.Array(resultSchema, resultArray);
 
@@ -294,9 +147,8 @@ public class AvroDataTypeDiscoveryAnalyzer implements AvroAnalyzer {
             final Map<String, Object> itemMap = (Map) item;
             final Map<String, Object> resultMap = new HashMap<>();
             for (Map.Entry<String, Object> itemValue : itemMap.entrySet()) {
-                resultMap
-                        .put(itemValue.getKey(), analyzeItem(itemId, itemValue.getValue(), itemSchema.getValueType(),
-                                resultSchema.getValueType(), fieldSemanticSchema.getValueType()));
+                resultMap.put(itemValue.getKey(), analyzeItem(itemId, itemValue.getValue(), itemSchema.getValueType(),
+                        resultSchema.getValueType(), fieldSemanticSchema.getValueType()));
             }
             return resultMap;
 
@@ -458,9 +310,8 @@ public class AvroDataTypeDiscoveryAnalyzer implements AvroAnalyzer {
                 try {
                     schema.addProp(DATA_TYPE_AGGREGATE, aggregate);
                 } catch (AvroRuntimeException e) {
-                    System.out
-                            .println("Failed to add prop to referenced type " + fieldName
-                                    + ". The analyzer is not supporting schema with referenced types.");
+                    System.out.println("Failed to add prop to referenced type " + fieldName
+                            + ". The analyzer is not supporting schema with referenced types.");
                 }
             }
             break;
