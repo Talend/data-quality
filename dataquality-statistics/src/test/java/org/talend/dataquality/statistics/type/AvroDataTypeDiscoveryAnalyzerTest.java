@@ -245,6 +245,27 @@ public class AvroDataTypeDiscoveryAnalyzerTest {
     }
 
     @Test
+    public void testInputSemanticSchemaWithDataTypeAggregate() {
+        try {
+            String path = AvroDataTypeDiscoveryAnalyzerTest.class.getResource("../sample/96.avro").getPath();
+            File fileEntry = new File(path);
+            DataFileReader<GenericRecord> dateAvroReader = new DataFileReader<>(fileEntry, new GenericDatumReader<>());
+            analyzer.init(dateAvroReader.getSchema());
+            dateAvroReader.forEach(analyzer::analyze);
+            Schema result = analyzer.getResult();
+            analyzer.init(result);
+            dateAvroReader = new DataFileReader<>(fileEntry, new GenericDatumReader<>());
+            dateAvroReader.forEach(analyzer::analyze);
+            result = analyzer.getResult();
+            assertNotNull(result.getField("friends").schema().getElementType().getField("name").schema().getObjectProp(
+                    DATA_TYPE_AGGREGATE));
+            assertNotNull(result);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
     public void testAvroDataTypeAnalyzerOnBigBusiness() {
         try {
             String path = AvroDataTypeDiscoveryAnalyzerTest.class.getResource("../sample/big_business.avro").getPath();
