@@ -3,7 +3,6 @@
   "birthdate" : "12/04/1980",
   "heroes": {},
   "emails":  [],
-  "gender":  "M",
   "location": {
     "zipcode": { "null": null },
     "city": "nantes",

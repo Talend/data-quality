@@ -11,7 +11,14 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -100,7 +107,7 @@ public class AvroDataTypeDiscoveryAnalyzerTest {
         Map<String, Object> aggregate = (Map<String, Object>) result
                 .getField("birthdate")
                 .schema()
-                .getObjectProp("talend.component.dataTypeAggregate");
+                .getObjectProp("talend.component.dqType");
 
         assertEquals(3l, ((List<Map<String, Object>>) aggregate.get(AvroDataTypeDiscoveryAnalyzer.MATCHINGS_FIELD))
                 .get(0)
@@ -136,7 +143,7 @@ public class AvroDataTypeDiscoveryAnalyzerTest {
         Map<String, Object> aggregate = (Map<String, Object>) result
                 .getField("birthdate")
                 .schema()
-                .getObjectProp("talend.component.dataTypeAggregate");
+                .getObjectProp("talend.component.dqType");
         assertEquals(DataTypeEnum.DATE.toString(),
                 ((List<Map<String, Object>>) aggregate.get(AvroDataTypeDiscoveryAnalyzer.MATCHINGS_FIELD))
                         .get(0)
@@ -280,8 +287,13 @@ public class AvroDataTypeDiscoveryAnalyzerTest {
             dateAvroReader = new DataFileReader<>(fileEntry, new GenericDatumReader<>());
             dateAvroReader.forEach(analyzer::analyze);
             result = analyzer.getResult();
-            assertNotNull(result.getField("friends").schema().getElementType().getField("name").schema().getObjectProp(
-                    DATA_TYPE_AGGREGATE));
+            assertNotNull(result
+                    .getField("friends")
+                    .schema()
+                    .getElementType()
+                    .getField("name")
+                    .schema()
+                    .getObjectProp(DATA_TYPE_AGGREGATE));
             assertNotNull(result);
         } catch (IOException e) {
             e.printStackTrace();

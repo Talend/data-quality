@@ -50,21 +50,6 @@
       }
     },
     {
-      "name": "gender",
-      "type": {
-        "type": "enum",
-        "name": "Gender",
-        "symbols": [
-          "M",
-          "F"
-        ],
-        "talend.component.dqType": {
-          "dqType": "STRING",
-          "dataType": "STRING"
-        }
-      }
-    },
-    {
       "name": "location",
       "type": {
         "type": "record",
