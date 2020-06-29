@@ -27,6 +27,12 @@ public abstract class AvroQualityAnalyzer implements AvroAnalyzer {
 
     public static final String VALIDITY_FIELD_NAME = "validity";
 
+    private static final String QUALITY_VALUE_LEVEL_SCHEMA_DEF =
+            "{ \"type\": \"record\"," + "    \"name\": \"quality_metadata\", \"namespace\": \"org.talend.dataquality\","
+                    + "    \"fields\": [ { \"name\": \"validity\", \"type\": \"int\" } ] }";
+
+    public static final Schema QUALITY_VALUE_LEVEL_SCHEMA = new Schema.Parser().parse(QUALITY_VALUE_LEVEL_SCHEMA_DEF);
+
     public static final int VALID_VALUE = 1;
 
     public static final int INVALID_VALUE = -1;
@@ -37,14 +43,14 @@ public abstract class AvroQualityAnalyzer implements AvroAnalyzer {
 
     protected final Map<String, ValueQualityStatistics> qualityResults = new HashMap<>();
 
-    /** Semantic schema with data about discovered types. */
-    protected Schema semanticSchema;
+    /** Semantic schema with data and qd types metadata. */
+    protected Schema inputSemanticSchema;
 
-    /** Schema with the global quality. */
-    protected Schema globalQualitySchema;
+    /** Semantic Schema with data and qd types metadata and quality metadata. */
+    protected Schema outputSemanticSchema;
 
-    /** Schema for the records containing the results of the analysis of each field. */
-    protected Schema recordQualitySchema;
+    /** Schema schema for value level metadata for the records containing the results of the analysis of each field. */
+    protected Schema outputRecordSemanticSchema;
 
     protected <T> T getOrCreate(String key, Map<String, T> map, Class<T> itemClass) {
         T value = map.get(key);
@@ -64,7 +70,7 @@ public abstract class AvroQualityAnalyzer implements AvroAnalyzer {
 
     @Override
     public Schema getResult() {
-        if (semanticSchema == null) {
+        if (inputSemanticSchema == null) {
             return null;
         }
 
@@ -74,13 +80,13 @@ public abstract class AvroQualityAnalyzer implements AvroAnalyzer {
         // Create a deep copy of the semantic schema (without "talend.component.dqType")
         // Update it with the information about the quality
 
-        globalQualitySchema.addProp(GLOBAL_QUALITY_PROP_NAME, stats.toMap());
+        outputSemanticSchema.addProp(GLOBAL_QUALITY_PROP_NAME, stats.toMap());
 
-        for (Schema.Field field : globalQualitySchema.getFields()) {
+        for (Schema.Field field : outputSemanticSchema.getFields()) {
             updateQuality(field.schema(), field.name());
         }
 
-        return globalQualitySchema;
+        return outputSemanticSchema;
     }
 
     private Map<String, Long> getStatMap(String resultKey) {

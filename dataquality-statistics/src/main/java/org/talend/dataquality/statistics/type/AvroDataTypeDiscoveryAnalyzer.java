@@ -1,8 +1,6 @@
 package org.talend.dataquality.statistics.type;
 
-import static org.talend.dataquality.common.util.AvroUtils.SEM_DISCOVERY_DATATYPE_SCHEMA;
-import static org.talend.dataquality.common.util.AvroUtils.SEM_DISCOVERY_SCHEMA;
-import static org.talend.dataquality.common.util.AvroUtils.itemId;
+import static org.talend.dataquality.common.util.AvroUtils.*;
 import static org.talend.dataquality.statistics.datetime.SystemDateTimePatternManager.isDate;
 
 import java.util.*;
@@ -16,7 +14,10 @@ import org.apache.avro.generic.IndexedRecord;
 import org.talend.dataquality.common.inference.AvroAnalyzer;
 import org.talend.dataquality.common.util.LFUCache;
 
-public class AvroDataTypeAnalyzer implements AvroAnalyzer {
+/**
+ *
+ */
+public class AvroDataTypeDiscoveryAnalyzer implements AvroAnalyzer {
 
     public static final String DATA_TYPE_AGGREGATE = "talend.component.dataTypeAggregate";
 
@@ -24,15 +25,31 @@ public class AvroDataTypeAnalyzer implements AvroAnalyzer {
 
     public static String TOTAL = "total";
 
+//    private static final String DQTYPE_DISCOVERY_VALUE_LEVEL_SCHEMA_JSON = "{\"type\": \"record\","
+//            + "\"name\": \"discovery_metadata\", \"namespace\": \"org.talend.dataquality\","
+//            + "\"fields\":[{ \"type\":\"string\", \"name\":\"matching\"}, { \"type\":\"int\", \"name\":\"total\"}]}";
+//
+//    public static final Schema DQTYPE_DISCOVERY_VALUE_LEVEL_SCHEMA = new Schema.Parser().parse(DQTYPE_DISCOVERY_VALUE_LEVEL_SCHEMA_JSON);
+
+    private static final String DATA_TYPE_DISCOVERY_VALUE_LEVEL_SCHEMA_JSON =
+            "{\"type\": \"record\"," + "\"name\": \"discovery_metadata\", \"namespace\": \"org.talend.dataquality\","
+                    + "\"fields\":[{ \"type\":\"string\", \"name\":\"dataType\"}]}";
+
+    public static final Schema DATA_TYPE_DISCOVERY_VALUE_LEVEL_SCHEMA =
+            new Schema.Parser().parse(DATA_TYPE_DISCOVERY_VALUE_LEVEL_SCHEMA_JSON);
+
+
     private final Map<String, SortedList> frequentDatePatterns = new HashMap<>();
 
     private final Map<String, LFUCache> knownDataTypeCaches = new HashMap<>();
 
     private final Map<String, DataTypeOccurences> dataTypeResults = new HashMap<>();
 
-    private Schema semanticSchema;
+    private Schema inputSemanticSchema;
 
-    private Schema recordDataTypeSchema;
+    private Schema outputSemanticSchema;
+
+    private Schema outputRecordSemanticSchema;
 
     @Override
     public void init() {
@@ -41,9 +58,10 @@ public class AvroDataTypeAnalyzer implements AvroAnalyzer {
     }
 
     @Override
-    public void init(Schema schema) {
-        this.semanticSchema = schema; // TODO create Data Type Schema
-        this.recordDataTypeSchema = schema;
+    public void init(Schema semanticSchema) {
+        this.inputSemanticSchema = semanticSchema; // TODO create Data Type Schema
+        this.outputSemanticSchema = copySchema(this.inputSemanticSchema);
+        this.outputRecordSemanticSchema = createRecordSemanticSchema(this.inputSemanticSchema, DATA_TYPE_DISCOVERY_VALUE_LEVEL_SCHEMA);
     }
 
     @Override
@@ -62,8 +80,8 @@ public class AvroDataTypeAnalyzer implements AvroAnalyzer {
             return null;
         }
 
-        final GenericRecord resultRecord = new GenericData.Record(recordDataTypeSchema);
-        analyzeRecord("", record, resultRecord, semanticSchema);
+        final GenericRecord resultRecord = new GenericData.Record(outputRecordSemanticSchema);
+        analyzeRecord("", record, resultRecord, inputSemanticSchema);
         return resultRecord;
     }
 
@@ -127,7 +145,7 @@ public class AvroDataTypeAnalyzer implements AvroAnalyzer {
                     .stream()
                     .filter((type) -> type.getName().equals(realItemSchema.getName()))
                     .findFirst()
-                    .orElse(SEM_DISCOVERY_SCHEMA);
+                    .orElse(DATA_TYPE_DISCOVERY_VALUE_LEVEL_SCHEMA);
             final Schema realSemanticSchema = fieldSemanticSchema.getTypes().get(typeIdx);
 
             return analyzeItem(itemId(itemId, realItemSchema.getName()), item, realItemSchema, realResultSchema,
@@ -142,13 +160,13 @@ public class AvroDataTypeAnalyzer implements AvroAnalyzer {
         case FLOAT:
         case DOUBLE:
         case BOOLEAN:
-            final GenericRecord semRecord = new GenericData.Record(SEM_DISCOVERY_DATATYPE_SCHEMA);
+            final GenericRecord semRecord = new GenericData.Record(DATA_TYPE_DISCOVERY_VALUE_LEVEL_SCHEMA);
             semRecord.put(DATA_TYPE, analyzeLeafValue(itemId, item));
             return semRecord;
 
         case NULL:
             // No information in semantic schema
-            final GenericRecord nullSemRecord = new GenericData.Record(SEM_DISCOVERY_DATATYPE_SCHEMA);
+            final GenericRecord nullSemRecord = new GenericData.Record(DATA_TYPE_DISCOVERY_VALUE_LEVEL_SCHEMA);
             nullSemRecord.put(DATA_TYPE, analyzeLeafValue(itemId, item));
             return nullSemRecord;
 
@@ -191,16 +209,22 @@ public class AvroDataTypeAnalyzer implements AvroAnalyzer {
 
     @Override
     public Schema getResult() {
-        if (recordDataTypeSchema == null) {
+        if (outputSemanticSchema == null) {
             return null;
         }
 
-        for (Schema.Field field : recordDataTypeSchema.getFields()) {
+        for (Schema.Field field : outputSemanticSchema.getFields()) {
             updateDatatype(field.schema(), field.name());
         }
-        return recordDataTypeSchema;
+        return outputSemanticSchema;
     }
 
+    /**
+     * Merge the matchings and the new discovered data types into the input semantic schema.
+     * Matchings will be updated for all existing dataTypeAggregates, if the dataType is forced, it won't be updated.
+     * @param schema
+     * @param fieldName
+     */
     private void updateDatatype(Schema schema, String fieldName) {
         switch (schema.getType()) {
         case RECORD:

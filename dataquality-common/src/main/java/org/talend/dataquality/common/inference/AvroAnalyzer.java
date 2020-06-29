@@ -20,15 +20,15 @@ public interface AvroAnalyzer extends Serializable, AutoCloseable {
      * Prepare implementation for analysis. Implementations may perform various tasks like internal initialization or
      * connection establishment. This method should only be called once.
      *
-     * The semantic type metadata used to validate each record needs to be available in the schema of
+     * The semantic schema used to analyze each record needs to be available in the schema of
      * the first IndexedRecord sent to analyze.
      */
     void init();
 
     /**
-     * Idem init() with the semantic types metadata schema that will be used to validate each record.
+     * init() with the semantic schema that will be used to analyze each record.
      */
-    void init(Schema schema);
+    void init(Schema semanticSchema);
 
     /**
      * Analyze a single record (row).
@@ -44,7 +44,7 @@ public interface AvroAnalyzer extends Serializable, AutoCloseable {
      * Analyze a set of records.
      *
      * @param records A set of records.
-     * @return a stream of *metadata* record out (1/0/-1 values).
+     * @return a stream of *value level metadata* record out.
      */
     Stream<IndexedRecord> analyze(Stream<IndexedRecord> records);
 
@@ -57,12 +57,12 @@ public interface AvroAnalyzer extends Serializable, AutoCloseable {
     }
 
     /**
-     * Retrieve the quality metadata based on values submitted in {@link #analyze(IndexedRecord)}.
+     * Retrieve the semantic schema metadata based on values submitted in {@link #analyze(IndexedRecord)} and the initial semantic schema.
      */
     Schema getResult();
 
     /**
-     * Retrieve the quality metadata (always one element in the list).
+     * Retrieve the semantic schema metadata (always one element in the list).
      */
     List<Schema> getResults();
 }

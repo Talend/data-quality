@@ -3,7 +3,7 @@ package org.talend.dataquality.statistics.type;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.talend.dataquality.common.inference.AvroQualityAnalyzer.GLOBAL_QUALITY_PROP_NAME;
-import static org.talend.dataquality.statistics.type.AvroDataTypeAnalyzer.DATA_TYPE_AGGREGATE;
+import static org.talend.dataquality.statistics.type.AvroDataTypeDiscoveryAnalyzer.DATA_TYPE_AGGREGATE;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,9 +30,9 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.talend.dataquality.common.util.AvroUtils;
 
-public class AvroDataTypeAnalyzerTest {
+public class AvroDataTypeDiscoveryAnalyzerTest {
 
-    private AvroDataTypeAnalyzer analyzer;
+    private AvroDataTypeDiscoveryAnalyzer analyzer;
 
     private Schema personSchema;
 
@@ -64,7 +64,7 @@ public class AvroDataTypeAnalyzerTest {
     public void setUp() throws URISyntaxException, IOException {
         byte[] avsc = Files.readAllBytes(Paths.get(getClass().getResource("/avro/person.avsc").toURI()));
         personSchema = new Schema.Parser().parse(new String(avsc));
-        analyzer = new AvroDataTypeAnalyzer();
+        analyzer = new AvroDataTypeDiscoveryAnalyzer();
         analyzer.init(personSchema);
     }
 
@@ -158,7 +158,7 @@ public class AvroDataTypeAnalyzerTest {
     @Test
     public void testSemanticSchemaNotMatchingRecord() {
         try {
-            String path = AvroDataTypeAnalyzerTest.class.getResource("../sample/date.avro").getPath();
+            String path = AvroDataTypeDiscoveryAnalyzerTest.class.getResource("../sample/date.avro").getPath();
             File dateAvroFile = new File(path);
             DataFileReader<GenericRecord> dateAvroReader =
                     new DataFileReader<>(dateAvroFile, new GenericDatumReader<>());
@@ -176,7 +176,7 @@ public class AvroDataTypeAnalyzerTest {
     @Test
     public void testAvroDataTypeAnalyzerOnSwitch() {
         try {
-            String path = AvroDataTypeAnalyzerTest.class.getResource("../sample/Switch.avro").getPath();
+            String path = AvroDataTypeDiscoveryAnalyzerTest.class.getResource("../sample/Switch.avro").getPath();
             Pair<Stream<IndexedRecord>, Schema> pair = AvroUtils.streamAvroFile(new File(path));
             analyzer.init(pair.getRight());
             List<IndexedRecord> results = analyzer.analyze(pair.getLeft()).collect(Collectors.toList());
@@ -190,7 +190,7 @@ public class AvroDataTypeAnalyzerTest {
     @Test
     public void testAvroDataTypeAnalyzerOnNoFancy() {
         try {
-            String path = AvroDataTypeAnalyzerTest.class.getResource("../sample/no-fancy-structures-10.avro").getPath();
+            String path = AvroDataTypeDiscoveryAnalyzerTest.class.getResource("../sample/no-fancy-structures-10.avro").getPath();
             File fileEntry = new File(path);
             DataFileReader<GenericRecord> dateAvroReader = new DataFileReader<>(fileEntry, new GenericDatumReader<>());
             analyzer.init(dateAvroReader.getSchema());
@@ -207,7 +207,7 @@ public class AvroDataTypeAnalyzerTest {
     @Test
     public void testAvroDataTypeAnalyzerOnExample2() {
         try {
-            String path = AvroDataTypeAnalyzerTest.class.getResource("../sample/example2.avro").getPath();
+            String path = AvroDataTypeDiscoveryAnalyzerTest.class.getResource("../sample/example2.avro").getPath();
             File fileEntry = new File(path);
             DataFileReader<GenericRecord> dateAvroReader = new DataFileReader<>(fileEntry, new GenericDatumReader<>());
             analyzer.init(dateAvroReader.getSchema());
@@ -224,7 +224,7 @@ public class AvroDataTypeAnalyzerTest {
     @Test
     public void testAvroDataTypeAnalyzerOn96() {
         try {
-            String path = AvroDataTypeAnalyzerTest.class.getResource("../sample/96.avro").getPath();
+            String path = AvroDataTypeDiscoveryAnalyzerTest.class.getResource("../sample/96.avro").getPath();
             File fileEntry = new File(path);
             DataFileReader<GenericRecord> dateAvroReader = new DataFileReader<>(fileEntry, new GenericDatumReader<>());
             analyzer.init(dateAvroReader.getSchema());
@@ -241,7 +241,7 @@ public class AvroDataTypeAnalyzerTest {
     @Test
     public void testAvroDataTypeAnalyzerOnBigBusiness() {
         try {
-            String path = AvroDataTypeAnalyzerTest.class.getResource("../sample/big_business.avro").getPath();
+            String path = AvroDataTypeDiscoveryAnalyzerTest.class.getResource("../sample/big_business.avro").getPath();
             File fileEntry = new File(path);
             DataFileReader<GenericRecord> dateAvroReader = new DataFileReader<>(fileEntry, new GenericDatumReader<>());
             analyzer.init(dateAvroReader.getSchema());
@@ -283,7 +283,7 @@ public class AvroDataTypeAnalyzerTest {
     @Test
     public void testAvroDataTypeAnalyzerOnComplexSchemas() {
         try {
-            String path = AvroDataTypeAnalyzerTest.class.getResource("../sample/complex").getPath();
+            String path = AvroDataTypeDiscoveryAnalyzerTest.class.getResource("../sample/complex").getPath();
             File primitiveFolder = new File(path);
             for (final File fileEntry : Objects.requireNonNull(primitiveFolder.listFiles())) {
                 DataFileReader<GenericRecord> dateAvroReader =
@@ -303,7 +303,7 @@ public class AvroDataTypeAnalyzerTest {
     @Test
     public void testAvroDataTypeAnalyzerOnPrimitiveSchemas() {
         try {
-            String path = AvroDataTypeAnalyzerTest.class.getResource("../sample/primitive").getPath();
+            String path = AvroDataTypeDiscoveryAnalyzerTest.class.getResource("../sample/primitive").getPath();
             File primitiveFolder = new File(path);
             for (final File fileEntry : Objects.requireNonNull(primitiveFolder.listFiles())) {
                 DataFileReader<GenericRecord> dateAvroReader =
@@ -323,7 +323,7 @@ public class AvroDataTypeAnalyzerTest {
     @Test
     public void testAvroDataTypeAnalyzerOnStructureSchemas() {
         try {
-            String path = AvroDataTypeAnalyzerTest.class.getResource("../sample/structure").getPath();
+            String path = AvroDataTypeDiscoveryAnalyzerTest.class.getResource("../sample/structure").getPath();
             File primitiveFolder = new File(path);
             for (final File fileEntry : Objects.requireNonNull(primitiveFolder.listFiles())) {
                 DataFileReader<GenericRecord> dateAvroReader =
@@ -344,7 +344,7 @@ public class AvroDataTypeAnalyzerTest {
     @Ignore
     public void testAvroDataTypeAnalyzerOnBigSamples() {
         try {
-            String path = AvroDataTypeAnalyzerTest.class.getResource("../sample").getPath();
+            String path = AvroDataTypeDiscoveryAnalyzerTest.class.getResource("../sample").getPath();
             File primitiveFolder = new File(path);
             for (final File fileEntry : Objects.requireNonNull(primitiveFolder.listFiles())) {
                 if (fileEntry.isFile()) {
