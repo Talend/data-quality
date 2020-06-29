@@ -21,7 +21,7 @@ public abstract class AvroQualityAnalyzer implements AvroAnalyzer {
 
     public static final String DQTYPE_PROP_NAME = "talend.component.dqType";
 
-    public static final String DQTYPE_DATATYPE_FIELD_NAME = "dataType";
+    public static final String DQTYPE_DATA_TYPE_FIELD_NAME = "dataType";
 
     public static final String DQTYPE_DQTYPE_FIELD_NAME = "dqType";
 

@@ -147,7 +147,7 @@ public class AvroDataTypeQualityAnalyzer extends AvroQualityAnalyzer {
             final Optional<Map> maybeProps = Optional.ofNullable((Map) semanticSchema.getObjectProp(DQTYPE_PROP_NAME));
             final GenericRecord semRecord = new GenericData.Record(SEM_QUALITY_SCHEMA);
             String semanticType =
-                    maybeProps.map(props -> props.get(DQTYPE_DATATYPE_FIELD_NAME).toString()).orElse(null);
+                    maybeProps.map(props -> props.get(DQTYPE_DATA_TYPE_FIELD_NAME).toString()).orElse(null);
             semRecord.put(VALIDITY_FIELD_NAME, analyzeLeafValue(itemId, item, semanticType));
             return semRecord;
 

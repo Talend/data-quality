@@ -18,7 +18,7 @@ import org.talend.dataquality.common.util.LFUCache;
 
 public class AvroDataTypeAnalyzer implements AvroAnalyzer {
 
-    public static final String DATA_TYPE_AGGREGATE = "dataTypeAggregate";
+    public static final String DATA_TYPE_AGGREGATE = "talend.component.dataTypeAggregate";
 
     public static final String DATA_TYPE = "dataType";
 
