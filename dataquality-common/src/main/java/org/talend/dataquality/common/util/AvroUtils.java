@@ -48,7 +48,10 @@ public class AvroUtils {
         final SchemaBuilder.FieldAssembler<Schema> fieldAssembler = semanticRecordBuilder.fields();
 
         for (Schema.Field field : recordSchema.getFields()) {
-            fieldAssembler.name(field.name()).type(createSemanticSchema(field.schema(), valueLevelMetadataSchema)).noDefault();
+            fieldAssembler
+                    .name(field.name())
+                    .type(createSemanticSchema(field.schema(), valueLevelMetadataSchema))
+                    .noDefault();
         }
 
         return fieldAssembler.endRecord();

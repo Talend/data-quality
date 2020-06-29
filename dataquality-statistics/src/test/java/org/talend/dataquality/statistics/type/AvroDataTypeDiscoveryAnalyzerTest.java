@@ -95,8 +95,10 @@ public class AvroDataTypeDiscoveryAnalyzerTest {
         Schema result = analyzer.getResult();
         assertNotNull(result);
 
-        List<Map<String, Object>> aggregations =
-                (List<Map<String, Object>>) result.getField("birthdate").schema().getObjectProp("talend.component.dataTypeAggregate");
+        List<Map<String, Object>> aggregations = (List<Map<String, Object>>) result
+                .getField("birthdate")
+                .schema()
+                .getObjectProp("talend.component.dataTypeAggregate");
 
         assertEquals(3l, aggregations.get(0).get("total"));
         assertEquals(DataTypeEnum.DATE.toString(), aggregations.get(0).get("dataType"));
@@ -122,8 +124,10 @@ public class AvroDataTypeDiscoveryAnalyzerTest {
         Schema result = analyzer.getResult();
         assertNotNull(result);
 
-        List<Map<String, Object>> aggregation =
-                (List<Map<String, Object>>) result.getField("birthdate").schema().getObjectProp("talend.component.dataTypeAggregate");
+        List<Map<String, Object>> aggregation = (List<Map<String, Object>>) result
+                .getField("birthdate")
+                .schema()
+                .getObjectProp("talend.component.dataTypeAggregate");
         assertEquals(DataTypeEnum.DATE.toString(), aggregation.get(0).get("dataType"));
     }
 
@@ -190,7 +194,9 @@ public class AvroDataTypeDiscoveryAnalyzerTest {
     @Test
     public void testAvroDataTypeAnalyzerOnNoFancy() {
         try {
-            String path = AvroDataTypeDiscoveryAnalyzerTest.class.getResource("../sample/no-fancy-structures-10.avro").getPath();
+            String path = AvroDataTypeDiscoveryAnalyzerTest.class
+                    .getResource("../sample/no-fancy-structures-10.avro")
+                    .getPath();
             File fileEntry = new File(path);
             DataFileReader<GenericRecord> dateAvroReader = new DataFileReader<>(fileEntry, new GenericDatumReader<>());
             analyzer.init(dateAvroReader.getSchema());

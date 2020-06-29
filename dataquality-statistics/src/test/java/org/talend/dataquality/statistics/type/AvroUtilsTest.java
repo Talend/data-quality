@@ -29,8 +29,10 @@ public class AvroUtilsTest {
             for (final File fileEntry : Objects.requireNonNull(primitiveFolder.listFiles())) {
                 DataFileReader<GenericRecord> avro = new DataFileReader<>(fileEntry, new GenericDatumReader<>());
                 Schema schema = avro.getSchema();
-                Schema discoverySchema = AvroUtils.createRecordSemanticSchema(schema, AvroDataTypeDiscoveryAnalyzer.DATA_TYPE_DISCOVERY_VALUE_LEVEL_SCHEMA);
-                Schema qualitySchema = AvroUtils.createRecordSemanticSchema(schema, AvroQualityAnalyzer.QUALITY_VALUE_LEVEL_SCHEMA);
+                Schema discoverySchema = AvroUtils.createRecordSemanticSchema(schema,
+                        AvroDataTypeDiscoveryAnalyzer.DATA_TYPE_DISCOVERY_VALUE_LEVEL_SCHEMA);
+                Schema qualitySchema =
+                        AvroUtils.createRecordSemanticSchema(schema, AvroQualityAnalyzer.QUALITY_VALUE_LEVEL_SCHEMA);
                 List<Schema> schemas = getAllSubSchemas(schema);
                 List<Schema> discoverySchemas = getAllSubSchemas(discoverySchema);
                 List<Schema> qualitySchemas = getAllSubSchemas(qualitySchema);
@@ -52,8 +54,10 @@ public class AvroUtilsTest {
             for (final File fileEntry : Objects.requireNonNull(primitiveFolder.listFiles())) {
                 DataFileReader<GenericRecord> avro = new DataFileReader<>(fileEntry, new GenericDatumReader<>());
                 Schema schema = avro.getSchema();
-                Schema validationSchema = AvroUtils.createRecordSemanticSchema(schema, AvroQualityAnalyzer.QUALITY_VALUE_LEVEL_SCHEMA);
-                Schema discoverySchema = AvroUtils.createRecordSemanticSchema(schema, AvroDataTypeDiscoveryAnalyzer.DATA_TYPE_DISCOVERY_VALUE_LEVEL_SCHEMA);
+                Schema validationSchema =
+                        AvroUtils.createRecordSemanticSchema(schema, AvroQualityAnalyzer.QUALITY_VALUE_LEVEL_SCHEMA);
+                Schema discoverySchema = AvroUtils.createRecordSemanticSchema(schema,
+                        AvroDataTypeDiscoveryAnalyzer.DATA_TYPE_DISCOVERY_VALUE_LEVEL_SCHEMA);
                 List<Schema> schemas = getAllSubSchemas(schema);
                 List<Schema> validationSchemas = getAllSubSchemas(validationSchema);
                 List<Schema> discoverySchemas = getAllSubSchemas(discoverySchema);
@@ -90,8 +94,10 @@ public class AvroUtilsTest {
             for (final File fileEntry : Objects.requireNonNull(primitiveFolder.listFiles())) {
                 DataFileReader<GenericRecord> avro = new DataFileReader<>(fileEntry, new GenericDatumReader<>());
                 Schema schema = avro.getSchema();
-                Schema validationSchema = AvroUtils.createRecordSemanticSchema(schema, AvroQualityAnalyzer.QUALITY_VALUE_LEVEL_SCHEMA);
-                Schema discoverySchema = AvroUtils.createRecordSemanticSchema(schema, AvroDataTypeDiscoveryAnalyzer.DATA_TYPE_DISCOVERY_VALUE_LEVEL_SCHEMA);
+                Schema validationSchema =
+                        AvroUtils.createRecordSemanticSchema(schema, AvroQualityAnalyzer.QUALITY_VALUE_LEVEL_SCHEMA);
+                Schema discoverySchema = AvroUtils.createRecordSemanticSchema(schema,
+                        AvroDataTypeDiscoveryAnalyzer.DATA_TYPE_DISCOVERY_VALUE_LEVEL_SCHEMA);
                 List<Schema> schemas = getAllSubSchemas(schema);
                 List<Schema> validationSchemas = getAllSubSchemas(validationSchema);
                 List<Schema> discoverySchemas = getAllSubSchemas(discoverySchema);

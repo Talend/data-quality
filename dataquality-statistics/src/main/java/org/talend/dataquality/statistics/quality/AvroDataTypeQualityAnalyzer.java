@@ -63,7 +63,8 @@ public class AvroDataTypeQualityAnalyzer extends AvroQualityAnalyzer {
     private void initResultSchema(Schema semanticSchema) {
         this.inputSemanticSchema = semanticSchema;
         this.outputSemanticSchema = copySchema(this.inputSemanticSchema);
-        this.outputRecordSemanticSchema = createRecordSemanticSchema(this.inputSemanticSchema, QUALITY_VALUE_LEVEL_SCHEMA);
+        this.outputRecordSemanticSchema =
+                createRecordSemanticSchema(this.inputSemanticSchema, QUALITY_VALUE_LEVEL_SCHEMA);
     }
 
     private void analyzeRecord(String id, IndexedRecord record, GenericRecord resultRecord,

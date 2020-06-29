@@ -25,11 +25,11 @@ public class AvroDataTypeDiscoveryAnalyzer implements AvroAnalyzer {
 
     public static String TOTAL = "total";
 
-//    private static final String DQTYPE_DISCOVERY_VALUE_LEVEL_SCHEMA_JSON = "{\"type\": \"record\","
-//            + "\"name\": \"discovery_metadata\", \"namespace\": \"org.talend.dataquality\","
-//            + "\"fields\":[{ \"type\":\"string\", \"name\":\"matching\"}, { \"type\":\"int\", \"name\":\"total\"}]}";
-//
-//    public static final Schema DQTYPE_DISCOVERY_VALUE_LEVEL_SCHEMA = new Schema.Parser().parse(DQTYPE_DISCOVERY_VALUE_LEVEL_SCHEMA_JSON);
+    //    private static final String DQTYPE_DISCOVERY_VALUE_LEVEL_SCHEMA_JSON = "{\"type\": \"record\","
+    //            + "\"name\": \"discovery_metadata\", \"namespace\": \"org.talend.dataquality\","
+    //            + "\"fields\":[{ \"type\":\"string\", \"name\":\"matching\"}, { \"type\":\"int\", \"name\":\"total\"}]}";
+    //
+    //    public static final Schema DQTYPE_DISCOVERY_VALUE_LEVEL_SCHEMA = new Schema.Parser().parse(DQTYPE_DISCOVERY_VALUE_LEVEL_SCHEMA_JSON);
 
     private static final String DATA_TYPE_DISCOVERY_VALUE_LEVEL_SCHEMA_JSON =
             "{\"type\": \"record\"," + "\"name\": \"discovery_metadata\", \"namespace\": \"org.talend.dataquality\","
@@ -37,7 +37,6 @@ public class AvroDataTypeDiscoveryAnalyzer implements AvroAnalyzer {
 
     public static final Schema DATA_TYPE_DISCOVERY_VALUE_LEVEL_SCHEMA =
             new Schema.Parser().parse(DATA_TYPE_DISCOVERY_VALUE_LEVEL_SCHEMA_JSON);
-
 
     private final Map<String, SortedList> frequentDatePatterns = new HashMap<>();
 
@@ -61,7 +60,8 @@ public class AvroDataTypeDiscoveryAnalyzer implements AvroAnalyzer {
     public void init(Schema semanticSchema) {
         this.inputSemanticSchema = semanticSchema; // TODO create Data Type Schema
         this.outputSemanticSchema = copySchema(this.inputSemanticSchema);
-        this.outputRecordSemanticSchema = createRecordSemanticSchema(this.inputSemanticSchema, DATA_TYPE_DISCOVERY_VALUE_LEVEL_SCHEMA);
+        this.outputRecordSemanticSchema =
+                createRecordSemanticSchema(this.inputSemanticSchema, DATA_TYPE_DISCOVERY_VALUE_LEVEL_SCHEMA);
     }
 
     @Override
