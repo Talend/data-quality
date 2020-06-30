@@ -112,6 +112,34 @@ public class AvroUtilsTest {
     }
 
     @Test
+    public void testDereferencingOfUnionOfComplexRefType() throws IOException {
+        String path = AvroUtilsTest.class.getResource("./UnionOfComplexRefType.avro").getPath();
+        File fileEntry = new File(path);
+        DataFileReader<GenericRecord> dateAvroReader = new DataFileReader<>(fileEntry, new GenericDatumReader<>());
+        Schema schemaWithRefType = dateAvroReader.getSchema();
+        Schema schemaWithoutRefTypes = AvroUtils.dereferencing(schemaWithRefType);
+        assertNotEquals(schemaWithRefType, schemaWithoutRefTypes);
+
+        // We should be able to read the file using the dereferenced schema.
+        dateAvroReader = new DataFileReader<>(fileEntry, new GenericDatumReader<>(schemaWithoutRefTypes));
+        assertNotNull(dateAvroReader.iterator().next());
+    }
+
+    @Test
+    public void testDereferencingOfUnionOfMapArrayRefType() throws IOException {
+        String path = AvroUtilsTest.class.getResource("./UnionOfMapArrayRefType.avro").getPath();
+        File fileEntry = new File(path);
+        DataFileReader<GenericRecord> dateAvroReader = new DataFileReader<>(fileEntry, new GenericDatumReader<>());
+        Schema schemaWithRefType = dateAvroReader.getSchema();
+        Schema schemaWithoutRefTypes = AvroUtils.dereferencing(schemaWithRefType);
+        assertNotEquals(schemaWithRefType, schemaWithoutRefTypes);
+
+        // We should be able to read the file using the dereferenced schema.
+        dateAvroReader = new DataFileReader<>(fileEntry, new GenericDatumReader<>(schemaWithoutRefTypes));
+        assertNotNull(dateAvroReader.iterator().next());
+    }
+
+    @Test
     public void testDereferencingOfExample2() throws IOException {
         String path = AvroUtilsTest.class.getResource("./example2.avro").getPath();
         File fileEntry = new File(path);
