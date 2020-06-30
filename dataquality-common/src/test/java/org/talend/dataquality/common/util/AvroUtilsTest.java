@@ -2,12 +2,16 @@ package org.talend.dataquality.common.util;
 
 import org.apache.avro.Schema;
 import org.apache.avro.SchemaBuilder;
+import org.apache.avro.file.DataFileReader;
+import org.apache.avro.generic.GenericDatumReader;
+import org.apache.avro.generic.GenericRecord;
 import org.junit.Test;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class AvroUtilsTest {
 
@@ -77,5 +81,15 @@ public class AvroUtilsTest {
         assertEquals("not so bad", props.get("location.country"));
         assertEquals("not so bad", props.get("age.string"));
         assertEquals("not so bad", props.get("age.int"));
+    }
+
+    @Test
+    public void testDereferencing() throws IOException {
+        String path = AvroUtilsTest.class.getResource("./Switch.avro").getPath();
+        File fileEntry = new File(path);
+        DataFileReader<GenericRecord> dateAvroReader = new DataFileReader<>(fileEntry, new GenericDatumReader<>());
+        Schema schemaWithRefType = dateAvroReader.getSchema();
+        Schema schemaWithoutRefTypes = AvroUtils.dereferencing(schemaWithRefType);
+        assertNotEquals(schemaWithRefType, schemaWithoutRefTypes);
     }
 }
