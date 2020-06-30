@@ -84,12 +84,46 @@ public class AvroUtilsTest {
     }
 
     @Test
-    public void testDereferencing() throws IOException {
+    public void testDereferencingOfSwitch() throws IOException {
         String path = AvroUtilsTest.class.getResource("./Switch.avro").getPath();
         File fileEntry = new File(path);
         DataFileReader<GenericRecord> dateAvroReader = new DataFileReader<>(fileEntry, new GenericDatumReader<>());
         Schema schemaWithRefType = dateAvroReader.getSchema();
         Schema schemaWithoutRefTypes = AvroUtils.dereferencing(schemaWithRefType);
         assertNotEquals(schemaWithRefType, schemaWithoutRefTypes);
+
+        // We should be able to read the file using the dereferenced schema.
+        dateAvroReader = new DataFileReader<>(fileEntry, new GenericDatumReader<>(schemaWithoutRefTypes));
+        assertNotNull(dateAvroReader.iterator().next());
+    }
+
+    @Test
+    public void testDereferencingOfnoFancy() throws IOException {
+        String path = AvroUtilsTest.class.getResource("./no-fancy-structures-10.avro").getPath();
+        File fileEntry = new File(path);
+        DataFileReader<GenericRecord> dateAvroReader = new DataFileReader<>(fileEntry, new GenericDatumReader<>());
+        Schema schemaWithRefType = dateAvroReader.getSchema();
+        Schema schemaWithoutRefTypes = AvroUtils.dereferencing(schemaWithRefType);
+        assertNotEquals(schemaWithRefType, schemaWithoutRefTypes);
+
+        // We should be able to read the file using the dereferenced schema.
+        dateAvroReader = new DataFileReader<>(fileEntry, new GenericDatumReader<>(schemaWithoutRefTypes));
+        assertNotNull(dateAvroReader.iterator().next());
+    }
+
+    @Test
+    public void testDereferencingOfExample2() throws IOException {
+        String path = AvroUtilsTest.class.getResource("./example2.avro").getPath();
+        File fileEntry = new File(path);
+        DataFileReader<GenericRecord> dateAvroReader = new DataFileReader<>(fileEntry, new GenericDatumReader<>());
+        Schema schemaWithRefType = dateAvroReader.getSchema();
+        Schema schemaWithoutRefTypes = AvroUtils.dereferencing(schemaWithRefType);
+        assertNotEquals(schemaWithRefType, schemaWithoutRefTypes);
+
+        // We should be able to read the file using the dereferenced schema.
+        dateAvroReader = new DataFileReader<>(fileEntry, new GenericDatumReader<>(schemaWithoutRefTypes));
+        assertNotNull(dateAvroReader.iterator().next());
+
+        assertEquals("{\"type\":\"record\",\"name\":\"Person\",\"namespace\":\"experiment.sample\",\"fields\":[{\"name\":\"firstName\",\"type\":\"string\"},{\"name\":\"midleName\",\"type\":[\"null\",\"string\"]},{\"name\":\"lastName\",\"type\":\"string\"},{\"name\":\"homeAddress\",\"type\":[\"null\",{\"type\":\"record\",\"name\":\"Address\",\"namespace\":\"experiment.sample.a\",\"fields\":[{\"name\":\"line\",\"type\":\"string\"},{\"name\":\"postalCode\",\"type\":\"string\"},{\"name\":\"city\",\"type\":\"string\"}]}]},{\"name\":\"companyAddress\",\"type\":[\"null\",{\"type\":\"record\",\"name\":\"Address\",\"namespace\":\"experiment.sample.b\",\"fields\":[{\"name\":\"line\",\"type\":\"string\"},{\"name\":\"postalCode\",\"type\":\"string\"},{\"name\":\"city\",\"type\":\"string\"}]}]}]}", schemaWithoutRefTypes.toString());
     }
 }
