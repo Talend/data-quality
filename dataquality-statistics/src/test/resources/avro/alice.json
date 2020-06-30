@@ -3,6 +3,7 @@
   "birthdate": "02/23/2001",
   "heroes": { "best":  "antman" },
   "emails":  [ "" ],
+  "whatAnEnum":  "A",
   "location": {
     "zipcode": { "string": "44000" },
     "city": "nantes",

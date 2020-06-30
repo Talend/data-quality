@@ -109,7 +109,7 @@ public class AvroDataTypeQualityAnalyzerTest {
         assertNotNull(result);
 
         Map<String, Long> prop = (Map) result.getObjectProp(GLOBAL_QUALITY_PROP_NAME);
-        checkQuality(prop, 12, 3, 2, 17);
+        checkQuality(prop, 15, 3, 2, 20);
     }
 
     @Test

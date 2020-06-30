@@ -50,6 +50,22 @@
       }
     },
     {
+          "name": "whatAnEnum",
+          "type": {
+            "type": "enum",
+            "name": "whatAnEnum",
+            "symbols": [
+              "A",
+              "B",
+              "C"
+            ],
+            "talend.component.dqType": {
+              "dqType": "STRING",
+              "dataType": "STRING"
+            }
+          }
+        },
+    {
       "name": "location",
       "type": {
         "type": "record",

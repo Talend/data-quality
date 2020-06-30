@@ -3,6 +3,7 @@
   "birthdate": "29/05/1995",
   "heroes": {},
   "emails":  [],
+  "whatAnEnum": "C",
   "location": {
     "zipcode": { "org.talend.dataquality.test.model.ZipCode":  { "code": 44000 } },
     "city": "nantes",

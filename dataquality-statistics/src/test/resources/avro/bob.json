@@ -3,6 +3,7 @@
   "birthdate" : "12/04/1980",
   "heroes": {},
   "emails":  [],
+  "whatAnEnum": "B",
   "location": {
     "zipcode": { "null": null },
     "city": "nantes",
