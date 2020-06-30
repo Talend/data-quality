@@ -9,6 +9,9 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Map;
 
 import static org.junit.Assert.*;
@@ -153,5 +156,13 @@ public class AvroUtilsTest {
         assertNotNull(dateAvroReader.iterator().next());
 
         assertEquals("{\"type\":\"record\",\"name\":\"Person\",\"namespace\":\"experiment.sample\",\"fields\":[{\"name\":\"firstName\",\"type\":\"string\"},{\"name\":\"midleName\",\"type\":[\"null\",\"string\"]},{\"name\":\"lastName\",\"type\":\"string\"},{\"name\":\"homeAddress\",\"type\":[\"null\",{\"type\":\"record\",\"name\":\"Address\",\"namespace\":\"experiment.sample.a\",\"fields\":[{\"name\":\"line\",\"type\":\"string\"},{\"name\":\"postalCode\",\"type\":\"string\"},{\"name\":\"city\",\"type\":\"string\"}]}]},{\"name\":\"companyAddress\",\"type\":[\"null\",{\"type\":\"record\",\"name\":\"Address\",\"namespace\":\"experiment.sample.b\",\"fields\":[{\"name\":\"line\",\"type\":\"string\"},{\"name\":\"postalCode\",\"type\":\"string\"},{\"name\":\"city\",\"type\":\"string\"}]}]}]}", schemaWithoutRefTypes.toString());
+    }
+
+    @Test
+    public void testDereferencingArray() throws URISyntaxException, IOException {
+        byte[] avsc = Files.readAllBytes(Paths.get(getClass().getResource("./person.avsc").toURI()));
+        Schema schema = new Schema.Parser().parse(new String(avsc));
+        Schema schemaWithoutRefTypes = AvroUtils.dereferencing(schema);
+        assertNotEquals(schema, schemaWithoutRefTypes);
     }
 }

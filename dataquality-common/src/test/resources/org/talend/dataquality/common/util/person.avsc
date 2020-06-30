@@ -1,0 +1,21 @@
+{
+  "namespace": "org.talend.dataquality.test.model",
+  "type": "record",
+  "name": "Person",
+  "fields": [
+    { "name": "firstname", "type": "string" },
+    { "name": "birthdate", "type": "string" },
+    { "name":"fruitsInBasket", "type": {
+                "type": "array",
+                "items":{
+                    "name":"Fruit",
+                    "type":"record",
+                    "fields":[
+                        {"name":"name", "type":"string"}
+                    ]
+                }
+            }
+     },
+     { "name":"preferredFruits", "type": {"type":"array", "items": "Fruit"}}
+  ]
+}

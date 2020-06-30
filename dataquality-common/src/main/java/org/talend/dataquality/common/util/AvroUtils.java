@@ -220,34 +220,18 @@ public class AvroUtils {
             case RECORD:
                 return Stream.of(getNamedTypes(fieldSchema), fieldSchema.getFullName());
             case ARRAY:
-                if (fieldSchema.getElementType().getType() == RECORD) {
-                    return Stream.of(getNamedTypes(fieldSchema.getElementType()));
-                } else {
-                    return Stream.empty();
-                }
+                return Stream.of(getNamedTypes(fieldSchema.getElementType()));
             case MAP:
-                if (fieldSchema.getValueType().getType() == RECORD) {
-                    return Stream.of(getNamedTypes(fieldSchema.getValueType()));
-                } else {
-                    return Stream.empty();
-                }
+                return Stream.of(getNamedTypes(fieldSchema.getValueType()));
             case UNION:
                 return fieldSchema.getTypes().stream().flatMap(unionSchema -> {
                     switch (unionSchema.getType()) {
                     case RECORD:
                         return Stream.of(getNamedTypes(unionSchema), unionSchema.getFullName());
                     case ARRAY:
-                        if (unionSchema.getElementType().getType() == RECORD) {
-                            return Stream.of(getNamedTypes(unionSchema.getElementType()));
-                        } else {
-                            return null;
-                        }
+                        return Stream.of(getNamedTypes(unionSchema.getElementType()));
                     case MAP:
-                        if (unionSchema.getValueType().getType() == RECORD) {
-                            return Stream.of(getNamedTypes(unionSchema.getValueType()));
-                        } else {
-                            return null;
-                        }
+                        return Stream.of(getNamedTypes(unionSchema.getValueType()));
                     case FIXED:
                         return Stream.of(unionSchema.getFullName());
                     default:
@@ -285,22 +269,32 @@ public class AvroUtils {
             switch (fieldSchema.getType()) {
             case RECORD:
                 String fullName1 = fieldSchema.getFullName();
+                Schema schemaToCreate;
                 if (namespaces.containsKey(fullName1)) {
-                    return createDereferencedField(fieldSchema, fullName1, namespaces);
+                    schemaToCreate = createDereferencedField(fieldSchema, fullName1, namespaces);
                 } else {
-                    fieldAssembler
-                            .name(field.name())
-                            .type(buildDereferencedSchema(field.schema(), namespaces))
-                            .noDefault();
+                    schemaToCreate = buildDereferencedSchema(field.schema(), namespaces);
                 }
+                fieldAssembler
+                        .name(field.name())
+                        .type(schemaToCreate)
+                        .noDefault();
                 break;
             case ARRAY:
                 if (fieldSchema.getElementType().getType() == Schema.Type.STRING) {
                     fieldAssembler.name(field.name()).type(fieldSchema).noDefault();
                 } else {
+
+                    Schema schemaToAssemble;
+                    if (namespaces.containsKey(fieldSchema.getFullName())) {
+                        schemaToAssemble = createDereferencedField(fieldSchema, fieldSchema.getFullName(), namespaces);
+                    } else {
+                        schemaToAssemble = buildDereferencedSchema(fieldSchema.getElementType(), namespaces);
+                    }
+
                     fieldAssembler
                             .name(field.name())
-                            .type(buildDereferencedSchema(fieldSchema.getElementType(), namespaces))
+                            .type(schemaToAssemble)
                             .noDefault();
                 }
                 break;
