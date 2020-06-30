@@ -7,7 +7,7 @@
     { "name": "birthdate", "type": "string" },
     { "name": "heroes", "type": { "type": "map", "values": "string" }},
     { "name": "emails", "type": { "type": "array", "items": "string" }},
-    { "name": "whatAnEnum", "type": { "name": "Gender", "type": "enum", "symbols": [ "A", "B", "C" ]}},
+    { "name": "whatAnEnum", "type": { "name": "whatAnEnum", "type": "enum", "symbols": [ "A", "B", "C" ]}},
     { "name": "location", "type": {
       "type": "record",
       "name": "Location",
