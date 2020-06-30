@@ -284,7 +284,15 @@ public class AvroUtils {
             Schema fieldSchema = field.schema();
             switch (fieldSchema.getType()) {
             case RECORD:
-                fieldAssembler.name(field.name()).type(buildDereferencedSchema(field.schema(), namespaces)).noDefault();
+                String fullName1 = fieldSchema.getFullName();
+                if (namespaces.containsKey(fullName1)) {
+                    return createDereferencedField(fieldSchema, fullName1, namespaces);
+                } else {
+                    fieldAssembler
+                            .name(field.name())
+                            .type(buildDereferencedSchema(field.schema(), namespaces))
+                            .noDefault();
+                }
                 break;
             case ARRAY:
                 if (fieldSchema.getElementType().getType() == Schema.Type.STRING) {
@@ -297,23 +305,10 @@ public class AvroUtils {
                 }
                 break;
             case UNION:
-
                 List<Schema> fullChild = fieldSchema.getTypes().stream().map(unionSchema -> {
                     String fullName = unionSchema.getFullName();
                     if (namespaces.containsKey(fullName)) {
-                        List<Schema.Field> cloneFields = new ArrayList<>();
-
-                        for (Schema.Field f : unionSchema.getFields()) {
-                            Schema.Field _field = new Schema.Field(f.name(), f.schema(), f.doc(), f.defaultValue());
-                            cloneFields.add(_field);
-                        }
-
-                        Schema newSchema = Schema.createRecord(unionSchema.getName(), unionSchema.getDoc(),
-                                unionSchema.getNamespace() + "." + namespaces.get(fullName), unionSchema.isError(),
-                                cloneFields);
-                        namespaces.put(fullName, nextNamespaceSuffix(namespaces.get(fullName)));
-                        return newSchema;
-
+                        return createDereferencedField(unionSchema, fullName, namespaces);
                     } else {
                         return unionSchema;
                     }
@@ -342,6 +337,20 @@ public class AvroUtils {
         }
 
         return fieldAssembler.endRecord();
+    }
+
+    private static Schema createDereferencedField(Schema fieldSchema, String fullName, Map<String, String> namespaces) {
+        List<Schema.Field> cloneFields = new ArrayList<>();
+
+        for (Schema.Field f : fieldSchema.getFields()) {
+            Schema.Field _field = new Schema.Field(f.name(), f.schema(), f.doc(), f.defaultValue());
+            cloneFields.add(_field);
+        }
+
+        Schema newSchema = Schema.createRecord(fieldSchema.getName(), fieldSchema.getDoc(),
+                fieldSchema.getNamespace() + "." + namespaces.get(fullName), fieldSchema.isError(), cloneFields);
+        namespaces.put(fullName, nextNamespaceSuffix(namespaces.get(fullName)));
+        return newSchema;
     }
 
     private static String nextNamespaceSuffix(String suffix) {
