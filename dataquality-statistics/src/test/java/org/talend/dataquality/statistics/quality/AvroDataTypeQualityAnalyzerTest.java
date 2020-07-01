@@ -221,6 +221,7 @@ public class AvroDataTypeQualityAnalyzerTest {
                 DataFileReader<GenericRecord> dateAvroReader =
                         new DataFileReader<>(fileEntry, new GenericDatumReader<>());
                 AvroDataTypeDiscoveryAnalyzer discoveryAnalyzer = new AvroDataTypeDiscoveryAnalyzer();
+                System.out.println(fileEntry.getAbsolutePath());
                 discoveryAnalyzer.init(dateAvroReader.getSchema());
                 dateAvroReader.forEach(discoveryAnalyzer::analyze);
                 Schema discoveryResult = discoveryAnalyzer.getResult();

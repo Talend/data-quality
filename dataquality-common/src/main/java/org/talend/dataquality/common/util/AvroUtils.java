@@ -1,5 +1,6 @@
 package org.talend.dataquality.common.util;
 
+import static java.util.stream.Collectors.reducing;
 import static java.util.stream.Collectors.toList;
 import static org.apache.avro.Schema.Type.BOOLEAN;
 import static org.apache.avro.Schema.Type.BYTES;
@@ -10,17 +11,16 @@ import static org.apache.avro.Schema.Type.FLOAT;
 import static org.apache.avro.Schema.Type.INT;
 import static org.apache.avro.Schema.Type.LONG;
 import static org.apache.avro.Schema.Type.NULL;
+import static org.apache.avro.Schema.Type.RECORD;
 import static org.apache.avro.Schema.Type.STRING;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -218,41 +218,71 @@ public class AvroUtils {
     }
 
     private static Stream getNamedTypes(Schema schema) {
+        if (schema.getType() != RECORD)
+            return Stream.empty();
+
         return schema.getFields().stream().flatMap(field -> {
             Schema fieldSchema = field.schema();
             switch (fieldSchema.getType()) {
             case RECORD:
-                return Stream.of(getNamedTypes(fieldSchema), fieldSchema.getFullName());
+                List recordNames = (List) getNamedTypes(fieldSchema).collect(Collectors.toCollection(ArrayList::new));
+                recordNames.add(fieldSchema.getFullName());
+                return recordNames.stream();
             case ARRAY:
-                return Stream.of(getNamedTypes(fieldSchema.getElementType()),
-                        fieldSchema.getElementType().getFullName());
+                Stream arrayStream = getNamedTypes(fieldSchema.getElementType());
+                if (arrayStream != null) {
+                    List arrayNames = (List) arrayStream.collect(Collectors.toCollection(ArrayList::new));
+                    arrayNames.add(fieldSchema.getElementType().getFullName());
+                    return arrayNames.stream();
+                } else {
+                    return Stream.empty();
+                }
+
             case MAP:
-                return Stream.of(getNamedTypes(fieldSchema.getValueType()));
+                Stream namedTypes = getNamedTypes(fieldSchema.getValueType());
+                List mapNames = (List) namedTypes.collect(Collectors.toCollection(ArrayList::new));
+                mapNames.add(fieldSchema.getValueType().getFullName());
+                return mapNames.stream();
             case UNION:
                 return fieldSchema.getTypes().stream().flatMap(unionSchema -> {
                     switch (unionSchema.getType()) {
                     case RECORD:
-                        return Stream.of(getNamedTypes(unionSchema), unionSchema.getFullName());
+                        List unionRecordStream =
+                                (List) getNamedTypes(unionSchema).collect(Collectors.toCollection(ArrayList::new));
+                        unionRecordStream.add(unionSchema.getFullName());
+                        return unionRecordStream.stream();
                     case ARRAY:
-                        return Stream.of(getNamedTypes(unionSchema.getElementType()));
+                        List unionArrayStream = (List) getNamedTypes(unionSchema.getElementType())
+                                .collect(Collectors.toCollection(ArrayList::new));
+                        if (unionSchema.getElementType().getType() == RECORD) {
+                            unionArrayStream.add(unionSchema.getElementType().getFullName());
+                        }
+                        return unionArrayStream.stream();
                     case MAP:
-                        return Stream.of(getNamedTypes(unionSchema.getValueType()));
+                        List unionMapStream = (List) getNamedTypes(unionSchema.getValueType())
+                                .collect(Collectors.toCollection(ArrayList::new));
+                        unionMapStream.add(unionSchema.getValueType().getFullName());
+                        return unionMapStream.stream();
                     case FIXED:
-                        return Stream.of(unionSchema.getFullName());
+                        return Stream.of(fieldSchema.getFullName());
                     default:
-                        return null;
+                        return Stream.empty();
                     }
                 });
-            case FIXED:
+
+            case ENUM:
                 return Stream.of(fieldSchema.getFullName());
             default:
-                return null;
+                return Stream.empty();
             }
         });
     }
 
     private static List<String> flattenStream(Stream stream) {
         List<String> flattenNames = new ArrayList<>();
+        if (stream == null)
+            return flattenNames;
+
         stream.forEach(obj -> {
             if (obj instanceof String) {
                 flattenNames.add((String) obj);
@@ -267,8 +297,6 @@ public class AvroUtils {
 
         String namespace = schema.getNamespace();
         if (namespaces.containsKey(schema.getFullName())) {
-            byte[] bites = new byte[8];
-            new Random().nextBytes(bites);
             namespace = namespace + "." + namespaces.get(schema.getFullName());
             namespaces.put(schema.getFullName(), nextNamespaceSuffix(namespaces.get(schema.getFullName())));
         }
@@ -285,9 +313,8 @@ public class AvroUtils {
             case ARRAY:
                 fieldAssembler
                         .name(field.name())
-                        .type(Schema.createArray(buildDereferencedSchema(fieldSchema.getElementType(), namespaces)))
+                        .type(Schema.createArray(dereferenceLeaf(fieldSchema.getElementType(), namespaces)))
                         .noDefault();
-
                 break;
             case UNION:
                 List<Schema> fullChild = fieldSchema.getTypes().stream().map(unionSchema -> {
@@ -295,9 +322,21 @@ public class AvroUtils {
                     case RECORD:
                         return buildDereferencedSchema(unionSchema, namespaces);
                     case ARRAY:
-                        return Schema.createArray(buildDereferencedSchema(unionSchema.getElementType(), namespaces));
+                        Schema unionArraySchema;
+                        if (unionSchema.getElementType().getType() != RECORD) {
+                            unionArraySchema = dereferenceLeaf(unionSchema.getElementType(), namespaces);
+                        } else {
+                            unionArraySchema = buildDereferencedSchema(unionSchema.getElementType(), namespaces);
+                        }
+                        return Schema.createArray(unionArraySchema);
                     case MAP:
-                        return Schema.createMap(buildDereferencedSchema(unionSchema.getValueType(), namespaces));
+                        Schema unionMapSchema;
+                        if (unionSchema.getValueType().getType() != RECORD) {
+                            unionMapSchema = dereferenceLeaf(unionSchema.getValueType(), namespaces);
+                        } else {
+                            unionMapSchema = buildDereferencedSchema(unionSchema.getValueType(), namespaces);
+                        }
+                        return Schema.createMap(unionMapSchema);
                     default:
                         return unionSchema;
                     }
@@ -306,12 +345,28 @@ public class AvroUtils {
                 fieldAssembler.name(field.name()).type(Schema.createUnion(fullChild)).noDefault();
                 break;
             case MAP:
-                fieldAssembler
-                        .name(field.name())
-                        .type(Schema.createMap(buildDereferencedSchema(fieldSchema.getValueType(), namespaces)))
-                        .noDefault();
+                Schema mapSchema;
+                if (fieldSchema.getValueType().getType() != RECORD) {
+                    mapSchema = Schema.createMap(dereferenceLeaf(fieldSchema.getValueType(), namespaces));
+
+                } else {
+                    mapSchema = Schema.createMap(buildDereferencedSchema(fieldSchema.getValueType(), namespaces));
+                }
+                fieldAssembler.name(field.name()).type(mapSchema).noDefault();
                 break;
             case ENUM:
+                String enumNamespace = fieldSchema.getNamespace();
+                if (namespaces.containsKey(fieldSchema.getFullName())) {
+                    enumNamespace = enumNamespace + "." + namespaces.get(fieldSchema.getFullName());
+                    namespaces.put(fieldSchema.getFullName(),
+                            nextNamespaceSuffix(namespaces.get(fieldSchema.getFullName())));
+                }
+                fieldAssembler
+                        .name(field.name())
+                        .type(Schema.createEnum(field.name(), field.doc(), enumNamespace,
+                                field.schema().getEnumSymbols()))
+                        .noDefault();
+                break;
             case FIXED:
             case STRING:
             case BYTES:
@@ -320,14 +375,32 @@ public class AvroUtils {
             case FLOAT:
             case DOUBLE:
             case BOOLEAN:
-                fieldAssembler.name(field.name()).type(field.schema()).noDefault();
-                break;
             case NULL:
+                fieldAssembler.name(field.name()).type(field.schema()).noDefault();
                 break;
             }
         }
 
         return fieldAssembler.endRecord();
+    }
+
+    private static Schema dereferenceLeaf(Schema fieldSchema, Map<String, String> namespaces) {
+        switch (fieldSchema.getType()) {
+        case RECORD:
+            return buildDereferencedSchema(fieldSchema, namespaces);
+        case ARRAY:
+            return Schema.createArray(dereferenceLeaf(fieldSchema.getElementType(), namespaces));
+        case ENUM:
+            String enumNamespace = fieldSchema.getNamespace();
+            if (namespaces.containsKey(fieldSchema.getFullName())) {
+                enumNamespace = enumNamespace + "." + namespaces.get(fieldSchema.getFullName());
+                namespaces.put(fieldSchema.getFullName(),
+                        nextNamespaceSuffix(namespaces.get(fieldSchema.getFullName())));
+            }
+            return Schema.createEnum(fieldSchema.getName(), fieldSchema.getDoc(), enumNamespace,
+                    fieldSchema.getEnumSymbols());
+        }
+        return fieldSchema;
     }
 
     private static String nextNamespaceSuffix(String suffix) {

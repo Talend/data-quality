@@ -1,0 +1,1 @@
+{"type":"record","name":"union_triple_complex","namespace":"test","fields":[{"name":"col_union","type":["null",{"type":"array","items":{"type":"record","name":"data","fields":[{"name":"sub_string","type":"string"}]}},{"type":"map","values":"data"}]}]}

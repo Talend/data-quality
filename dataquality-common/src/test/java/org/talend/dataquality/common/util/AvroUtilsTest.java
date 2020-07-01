@@ -167,4 +167,28 @@ public class AvroUtilsTest {
         Schema schemaWithoutRefTypes = AvroUtils.dereferencing(schema);
         assertNotEquals(schema, schemaWithoutRefTypes);
     }
+
+    @Test
+    public void testDereferencingoneLevelComplex() throws URISyntaxException, IOException {
+        byte[] avsc = Files.readAllBytes(Paths.get(getClass().getResource("./oneLevelComplex.avsc").toURI()));
+        Schema schema = new Schema.Parser().parse(new String(avsc));
+        Schema schemaWithoutRefTypes = AvroUtils.dereferencing(schema);
+        assertNotEquals(schema, schemaWithoutRefTypes);
+    }
+
+    @Test
+    public void testDereferencingMultiLevelComplex() throws URISyntaxException, IOException {
+        byte[] avsc = Files.readAllBytes(Paths.get(getClass().getResource("./multiLevelComplex.avsc").toURI()));
+        Schema schema = new Schema.Parser().parse(new String(avsc));
+        Schema schemaWithoutRefTypes = AvroUtils.dereferencing(schema);
+        assertNotEquals(schema, schemaWithoutRefTypes);
+    }
+
+    @Test
+    public void testDereferencingUnionOfComplex() throws URISyntaxException, IOException {
+        byte[] avsc = Files.readAllBytes(Paths.get(getClass().getResource("./unionOfComplex.avsc").toURI()));
+        Schema schema = new Schema.Parser().parse(new String(avsc));
+        Schema schemaWithoutRefTypes = AvroUtils.dereferencing(schema);
+        assertNotEquals(schema, schemaWithoutRefTypes);
+    }
 }
