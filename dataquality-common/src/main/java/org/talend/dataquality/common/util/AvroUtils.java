@@ -14,11 +14,13 @@ import static org.apache.avro.Schema.Type.STRING;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -266,6 +268,8 @@ public class AvroUtils {
 
         String namespace = schema.getNamespace();
         if (namespaces.containsKey(schema.getFullName())) {
+            byte[] bites = new byte[8];
+            new Random().nextBytes(bites);
             namespace = namespace + "." + namespaces.get(schema.getFullName());
             namespaces.put(schema.getFullName(), nextNamespaceSuffix(namespaces.get(schema.getFullName())));
         }
@@ -277,16 +281,12 @@ public class AvroUtils {
             Schema fieldSchema = field.schema();
             switch (fieldSchema.getType()) {
             case RECORD:
-                Schema sRecord = buildDereferencedSchema(field.schema(), namespaces);
-                System.out.println(sRecord);
-                fieldAssembler.name(field.name()).type(sRecord).noDefault();
+                fieldAssembler.name(field.name()).type(buildDereferencedSchema(field.schema(), namespaces)).noDefault();
                 break;
             case ARRAY:
-                Schema sArray = Schema.createArray(buildDereferencedSchema(fieldSchema.getElementType(), namespaces));
-                System.out.println(sArray);
                 fieldAssembler
                         .name(field.name())
-                        .type(sArray)
+                        .type(Schema.createArray(buildDereferencedSchema(fieldSchema.getElementType(), namespaces)))
                         .noDefault();
 
                 break;
@@ -304,19 +304,14 @@ public class AvroUtils {
                     }
                 }).collect(Collectors.toList());
 
-                Schema sUnion = Schema.createUnion(fullChild);
-                System.out.println(sUnion);
-                fieldAssembler.name(field.name()).type(sUnion).noDefault();
+                fieldAssembler.name(field.name()).type(Schema.createUnion(fullChild)).noDefault();
                 break;
             case MAP:
-                System.out.println("CREATE MAP");
-                Schema sMap = Schema.createMap(buildDereferencedSchema(fieldSchema.getValueType(), namespaces));
-                System.out.println(sMap);
                 fieldAssembler
                         .name(field.name())
-                        .type(sMap)
+                        .type(Schema.createMap(buildDereferencedSchema(fieldSchema.getValueType(), namespaces)))
                         .noDefault();
-                System.out.println("END MAP");
+                break;
             case ENUM:
             case FIXED:
             case STRING:
@@ -326,7 +321,7 @@ public class AvroUtils {
             case FLOAT:
             case DOUBLE:
             case BOOLEAN:
-                fieldAssembler.name(field.name()).type((new Schema.Parser()).parse(field.schema().toString())).noDefault();
+                fieldAssembler.name(field.name()).type(field.schema()).noDefault();
                 break;
             case NULL:
                 break;
