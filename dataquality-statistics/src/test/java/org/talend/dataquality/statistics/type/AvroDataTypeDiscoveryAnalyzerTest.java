@@ -4,7 +4,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.talend.dataquality.common.inference.AvroQualityAnalyzer.GLOBAL_QUALITY_PROP_NAME;
 import static org.talend.dataquality.statistics.type.AvroDataTypeDiscoveryAnalyzer.DATA_TYPE_AGGREGATE;
-import static org.talend.dataquality.statistics.type.DataTypeEnum.*;
+import static org.talend.dataquality.statistics.type.DataTypeEnum.DATE;
+import static org.talend.dataquality.statistics.type.DataTypeEnum.DOUBLE;
+import static org.talend.dataquality.statistics.type.DataTypeEnum.EMPTY;
+import static org.talend.dataquality.statistics.type.DataTypeEnum.STRING;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +26,6 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import avro.shaded.com.google.common.collect.Maps;
 import org.apache.avro.Schema;
 import org.apache.avro.SchemaBuilder;
 import org.apache.avro.file.DataFileReader;
@@ -41,6 +43,8 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.talend.dataquality.common.util.AvroUtils;
+
+import avro.shaded.com.google.common.collect.Maps;
 
 public class AvroDataTypeDiscoveryAnalyzerTest {
 
@@ -477,7 +481,6 @@ public class AvroDataTypeDiscoveryAnalyzerTest {
             File primitiveFolder = new File(path);
             for (final File fileEntry : Objects.requireNonNull(primitiveFolder.listFiles())) {
                 if (fileEntry.isFile()) {
-                    System.out.println("Analyzing  " + fileEntry);
                     DataFileReader<GenericRecord> dateAvroReader =
                             new DataFileReader<>(fileEntry, new GenericDatumReader<>());
                     analyzer.init(dateAvroReader.getSchema());
