@@ -155,7 +155,9 @@ public class AvroUtilsTest {
         dateAvroReader = new DataFileReader<>(fileEntry, new GenericDatumReader<>(schemaWithoutRefTypes));
         assertNotNull(dateAvroReader.iterator().next());
 
-        assertEquals("{\"type\":\"record\",\"name\":\"Person\",\"namespace\":\"experiment.sample\",\"fields\":[{\"name\":\"firstName\",\"type\":\"string\"},{\"name\":\"midleName\",\"type\":[\"null\",\"string\"]},{\"name\":\"lastName\",\"type\":\"string\"},{\"name\":\"homeAddress\",\"type\":[\"null\",{\"type\":\"record\",\"name\":\"Address\",\"namespace\":\"experiment.sample.a\",\"fields\":[{\"name\":\"line\",\"type\":\"string\"},{\"name\":\"postalCode\",\"type\":\"string\"},{\"name\":\"city\",\"type\":\"string\"}]}]},{\"name\":\"companyAddress\",\"type\":[\"null\",{\"type\":\"record\",\"name\":\"Address\",\"namespace\":\"experiment.sample.b\",\"fields\":[{\"name\":\"line\",\"type\":\"string\"},{\"name\":\"postalCode\",\"type\":\"string\"},{\"name\":\"city\",\"type\":\"string\"}]}]}]}", schemaWithoutRefTypes.toString());
+        assertEquals(
+                "{\"type\":\"record\",\"name\":\"Person\",\"namespace\":\"experiment.sample\",\"fields\":[{\"name\":\"firstName\",\"type\":\"string\"},{\"name\":\"midleName\",\"type\":[\"null\",\"string\"]},{\"name\":\"lastName\",\"type\":\"string\"},{\"name\":\"homeAddress\",\"type\":[\"null\",{\"type\":\"record\",\"name\":\"Address\",\"namespace\":\"experiment.sample.a\",\"fields\":[{\"name\":\"line\",\"type\":\"string\"},{\"name\":\"postalCode\",\"type\":\"string\"},{\"name\":\"city\",\"type\":\"string\"}]}]},{\"name\":\"companyAddress\",\"type\":[\"null\",{\"type\":\"record\",\"name\":\"Address\",\"namespace\":\"experiment.sample.b\",\"fields\":[{\"name\":\"line\",\"type\":\"string\"},{\"name\":\"postalCode\",\"type\":\"string\"},{\"name\":\"city\",\"type\":\"string\"}]}]}]}",
+                schemaWithoutRefTypes.toString());
     }
 
     @Test

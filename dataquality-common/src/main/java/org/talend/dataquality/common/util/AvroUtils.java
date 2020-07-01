@@ -197,9 +197,8 @@ public class AvroUtils {
 
     public static Pair<Stream<IndexedRecord>, Schema> streamAvroFile(File file) throws IOException {
         DataFileReader<GenericRecord> dateAvroReader = new DataFileReader<>(file, new GenericDatumReader<>());
-        return Pair
-                .of(StreamSupport.stream(dateAvroReader.spliterator(), false).map(c -> (IndexedRecord) c),
-                        dateAvroReader.getSchema());
+        return Pair.of(StreamSupport.stream(dateAvroReader.spliterator(), false).map(c -> (IndexedRecord) c),
+                dateAvroReader.getSchema());
     }
 
     public static Schema dereferencing(Schema schema) {
@@ -225,8 +224,8 @@ public class AvroUtils {
             case RECORD:
                 return Stream.of(getNamedTypes(fieldSchema), fieldSchema.getFullName());
             case ARRAY:
-                return Stream
-                        .of(getNamedTypes(fieldSchema.getElementType()), fieldSchema.getElementType().getFullName());
+                return Stream.of(getNamedTypes(fieldSchema.getElementType()),
+                        fieldSchema.getElementType().getFullName());
             case MAP:
                 return Stream.of(getNamedTypes(fieldSchema.getValueType()));
             case UNION:
