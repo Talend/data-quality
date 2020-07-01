@@ -1,21 +1,5 @@
 package org.talend.dataquality.common.util;
 
-import org.apache.avro.Schema;
-import org.apache.avro.SchemaBuilder;
-import org.apache.avro.file.DataFileReader;
-import org.apache.avro.generic.GenericDatumReader;
-import org.apache.avro.generic.GenericRecord;
-import org.apache.avro.generic.IndexedRecord;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
-
 import static java.util.stream.Collectors.toList;
 import static org.apache.avro.Schema.Type.BOOLEAN;
 import static org.apache.avro.Schema.Type.BYTES;
@@ -26,8 +10,28 @@ import static org.apache.avro.Schema.Type.FLOAT;
 import static org.apache.avro.Schema.Type.INT;
 import static org.apache.avro.Schema.Type.LONG;
 import static org.apache.avro.Schema.Type.NULL;
-import static org.apache.avro.Schema.Type.RECORD;
 import static org.apache.avro.Schema.Type.STRING;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
+
+import org.apache.avro.Schema;
+import org.apache.avro.SchemaBuilder;
+import org.apache.avro.file.DataFileReader;
+import org.apache.avro.generic.GenericDatumReader;
+import org.apache.avro.generic.GenericRecord;
+import org.apache.avro.generic.IndexedRecord;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
 /**
  * Methods for Avro analyzers.
@@ -35,7 +39,8 @@ import static org.apache.avro.Schema.Type.STRING;
 public class AvroUtils {
 
     /**
-     * From a record schema, create a value level metadata schema replacing primitive types by a value level metadata schema.
+     * From a record schema, create a value level metadata schema replacing primitive types by a value level metadata
+     * schema.
      *
      * @param sourceSchema Record schema
      * @return Semantic schema
@@ -190,20 +195,18 @@ public class AvroUtils {
 
     public static Pair<Stream<IndexedRecord>, Schema> streamAvroFile(File file) throws IOException {
         DataFileReader<GenericRecord> dateAvroReader = new DataFileReader<>(file, new GenericDatumReader<>());
-        return Pair.of(StreamSupport.stream(dateAvroReader.spliterator(), false).map(c -> (IndexedRecord) c),
-                dateAvroReader.getSchema());
+        return Pair
+                .of(StreamSupport.stream(dateAvroReader.spliterator(), false).map(c -> (IndexedRecord) c),
+                        dateAvroReader.getSchema());
     }
 
     public static Schema dereferencing(Schema schema) {
         Schema dereferencedSchema = schema;
         Stream names = getNamedTypes(schema);
 
-        List<String> flattenNames = flattenStream(names);
+        List<String> flattenNames = flattenStream(names).stream().distinct().collect(toList());
 
-        int beforeDistinct = flattenNames.size();
-        flattenNames = flattenNames.stream().distinct().collect(toList());
-
-        if (!flattenNames.isEmpty() && beforeDistinct != flattenNames.size()) {
+        if (!flattenNames.isEmpty()) {
             Map<String, String> namespaces = new HashMap<>();
             for (String name : flattenNames) {
                 namespaces.put(name, "a");
@@ -220,7 +223,8 @@ public class AvroUtils {
             case RECORD:
                 return Stream.of(getNamedTypes(fieldSchema), fieldSchema.getFullName());
             case ARRAY:
-                return Stream.of(getNamedTypes(fieldSchema.getElementType()));
+                return Stream
+                        .of(getNamedTypes(fieldSchema.getElementType()), fieldSchema.getElementType().getFullName());
             case MAP:
                 return Stream.of(getNamedTypes(fieldSchema.getValueType()));
             case UNION:
@@ -260,60 +264,59 @@ public class AvroUtils {
 
     private static Schema buildDereferencedSchema(Schema schema, Map<String, String> namespaces) {
 
+        String namespace = schema.getNamespace();
+        if (namespaces.containsKey(schema.getFullName())) {
+            namespace = namespace + "." + namespaces.get(schema.getFullName());
+            namespaces.put(schema.getFullName(), nextNamespaceSuffix(namespaces.get(schema.getFullName())));
+        }
         final SchemaBuilder.RecordBuilder<Schema> qualityRecordBuilder =
-                SchemaBuilder.record(schema.getName()).namespace(schema.getNamespace());
+                SchemaBuilder.record(schema.getName()).namespace(namespace);
         final SchemaBuilder.FieldAssembler<Schema> fieldAssembler = qualityRecordBuilder.fields();
 
         for (Schema.Field field : schema.getFields()) {
             Schema fieldSchema = field.schema();
             switch (fieldSchema.getType()) {
             case RECORD:
-                String fullName1 = fieldSchema.getFullName();
-                Schema schemaToCreate;
-                if (namespaces.containsKey(fullName1)) {
-                    schemaToCreate = createDereferencedField(fieldSchema, fullName1, namespaces);
-                } else {
-                    schemaToCreate = buildDereferencedSchema(field.schema(), namespaces);
-                }
-                fieldAssembler
-                        .name(field.name())
-                        .type(schemaToCreate)
-                        .noDefault();
+                Schema sRecord = buildDereferencedSchema(field.schema(), namespaces);
+                System.out.println(sRecord);
+                fieldAssembler.name(field.name()).type(sRecord).noDefault();
                 break;
             case ARRAY:
-                if (fieldSchema.getElementType().getType() == Schema.Type.STRING) {
-                    fieldAssembler.name(field.name()).type(fieldSchema).noDefault();
-                } else {
+                Schema sArray = Schema.createArray(buildDereferencedSchema(fieldSchema.getElementType(), namespaces));
+                System.out.println(sArray);
+                fieldAssembler
+                        .name(field.name())
+                        .type(sArray)
+                        .noDefault();
 
-                    Schema schemaToAssemble;
-                    if (namespaces.containsKey(fieldSchema.getFullName())) {
-                        schemaToAssemble = createDereferencedField(fieldSchema, fieldSchema.getFullName(), namespaces);
-                    } else {
-                        schemaToAssemble = buildDereferencedSchema(fieldSchema.getElementType(), namespaces);
-                    }
-
-                    fieldAssembler
-                            .name(field.name())
-                            .type(schemaToAssemble)
-                            .noDefault();
-                }
                 break;
             case UNION:
                 List<Schema> fullChild = fieldSchema.getTypes().stream().map(unionSchema -> {
-                    String fullName = unionSchema.getFullName();
-                    if (namespaces.containsKey(fullName)) {
-                        return createDereferencedField(unionSchema, fullName, namespaces);
-                    } else {
+                    switch (unionSchema.getType()) {
+                    case RECORD:
+                        return buildDereferencedSchema(unionSchema, namespaces);
+                    case ARRAY:
+                        return Schema.createArray(buildDereferencedSchema(unionSchema.getElementType(), namespaces));
+                    case MAP:
+                        return Schema.createMap(buildDereferencedSchema(unionSchema.getValueType(), namespaces));
+                    default:
                         return unionSchema;
                     }
                 }).collect(Collectors.toList());
-                fieldAssembler.name(field.name()).type(Schema.createUnion(fullChild)).noDefault();
+
+                Schema sUnion = Schema.createUnion(fullChild);
+                System.out.println(sUnion);
+                fieldAssembler.name(field.name()).type(sUnion).noDefault();
                 break;
             case MAP:
+                System.out.println("CREATE MAP");
+                Schema sMap = Schema.createMap(buildDereferencedSchema(fieldSchema.getValueType(), namespaces));
+                System.out.println(sMap);
                 fieldAssembler
                         .name(field.name())
-                        .type(buildDereferencedSchema(fieldSchema.getValueType(), namespaces))
+                        .type(sMap)
                         .noDefault();
+                System.out.println("END MAP");
             case ENUM:
             case FIXED:
             case STRING:
@@ -323,7 +326,7 @@ public class AvroUtils {
             case FLOAT:
             case DOUBLE:
             case BOOLEAN:
-                fieldAssembler.name(field.name()).type(field.schema()).noDefault();
+                fieldAssembler.name(field.name()).type((new Schema.Parser()).parse(field.schema().toString())).noDefault();
                 break;
             case NULL:
                 break;
@@ -331,20 +334,6 @@ public class AvroUtils {
         }
 
         return fieldAssembler.endRecord();
-    }
-
-    private static Schema createDereferencedField(Schema fieldSchema, String fullName, Map<String, String> namespaces) {
-        List<Schema.Field> cloneFields = new ArrayList<>();
-
-        for (Schema.Field f : fieldSchema.getFields()) {
-            Schema.Field _field = new Schema.Field(f.name(), f.schema(), f.doc(), f.defaultValue());
-            cloneFields.add(_field);
-        }
-
-        Schema newSchema = Schema.createRecord(fieldSchema.getName(), fieldSchema.getDoc(),
-                fieldSchema.getNamespace() + "." + namespaces.get(fullName), fieldSchema.isError(), cloneFields);
-        namespaces.put(fullName, nextNamespaceSuffix(namespaces.get(fullName)));
-        return newSchema;
     }
 
     private static String nextNamespaceSuffix(String suffix) {
