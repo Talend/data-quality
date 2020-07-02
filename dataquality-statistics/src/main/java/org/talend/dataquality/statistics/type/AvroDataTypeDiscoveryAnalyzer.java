@@ -4,9 +4,11 @@ import static org.talend.dataquality.common.util.AvroUtils.copySchema;
 import static org.talend.dataquality.common.util.AvroUtils.createRecordSemanticSchema;
 import static org.talend.dataquality.common.util.AvroUtils.dereferencing;
 import static org.talend.dataquality.common.util.AvroUtils.itemId;
+import static org.talend.dataquality.common.util.AvroUtils.cleanSchema;
 import static org.talend.dataquality.statistics.datetime.SystemDateTimePatternManager.isDate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +18,6 @@ import java.util.stream.Stream;
 
 import org.apache.avro.AvroRuntimeException;
 import org.apache.avro.Schema;
-import org.apache.avro.SchemaBuilder;
 import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.generic.IndexedRecord;
@@ -68,66 +69,17 @@ public class AvroDataTypeDiscoveryAnalyzer implements AvroAnalyzer {
     public void init() {
         frequentDatePatterns.clear();
         knownDataTypeCaches.clear();
+        dataTypeResults.clear();
     }
 
     @Override
     public void init(Schema semanticSchema) {
-        cleanSchema(semanticSchema);
-        this.inputSemanticSchema = dereferencing(semanticSchema); // TODO create Data Type Schema
+        init();
+        Schema cleanSchema = cleanSchema(semanticSchema, Arrays.asList(DATA_TYPE_AGGREGATE));
+        this.inputSemanticSchema = dereferencing(cleanSchema); // TODO create Data Type Schema
         this.outputSemanticSchema = copySchema(this.inputSemanticSchema);
         this.outputRecordSemanticSchema =
                 createRecordSemanticSchema(this.inputSemanticSchema, DATA_TYPE_DISCOVERY_VALUE_LEVEL_SCHEMA);
-    }
-
-    private Schema cleanSchema(Schema schema) {
-        final SchemaBuilder.RecordBuilder<Schema> qualityRecordBuilder =
-                SchemaBuilder.record(schema.getName()).namespace(schema.getNamespace());
-        final SchemaBuilder.FieldAssembler<Schema> fieldAssembler = qualityRecordBuilder.fields();
-
-        for (Schema.Field field : schema.getFields()) {
-            Schema fieldSchema = field.schema();
-            switch (fieldSchema.getType()) {
-            case RECORD:
-                List<Schema.Field> cleanFields = new ArrayList<>();
-
-                for (Schema.Field recordField : fieldSchema.getFields()) {
-                    Schema.Field toAddField = new Schema.Field(recordField.name(), recordField.schema(),
-                            recordField.doc(), recordField.defaultVal(), recordField.order());
-                    Map<String, Object> objectProperties = recordField.getObjectProps();
-                    for (Map.Entry<String, Object> entry : objectProperties.entrySet()) {
-
-                        if (!entry.getKey().equals("talend.component.dqType")) {
-                            toAddField.addProp(entry.getKey(), entry.getKey());
-                        }
-
-                        toAddField.addProp(entry.getKey(), entry.getValue());
-                    }
-                    cleanFields.add(toAddField);
-                }
-
-                Schema cleanSchema = Schema.createRecord(field.name(), field.doc(), fieldSchema.getNamespace(),
-                        fieldSchema.isError(), cleanFields);
-
-                fieldAssembler.name(field.name()).type(cleanSchema).noDefault();
-                break;
-            default:
-                fieldAssembler.name(field.name()).type(field.schema()).noDefault();
-                break;
-            }
-        }
-
-        return fieldAssembler.endRecord();
-    }
-
-    private Schema cleanLeaf(Schema leafSchema) {
-        switch (leafSchema.getType()) {
-        case RECORD:
-            return cleanSchema(leafSchema);
-        case ARRAY:
-            return Schema.createArray(cleanLeaf(leafSchema));
-        default:
-            return leafSchema;
-        }
     }
 
     @Override

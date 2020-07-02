@@ -238,14 +238,7 @@ public class AvroDataTypeDiscoveryAnalyzerTest {
 
         AvroDataTypeDiscoveryAnalyzer semanticAnalyzer = new AvroDataTypeDiscoveryAnalyzer();
 
-        Schema schema = SchemaBuilder
-                .record("record")
-                .fields()
-                .name("int1")
-                .type()
-                .intType()
-                .noDefault()
-                .endRecord();
+        Schema schema = SchemaBuilder.record("record").fields().name("int1").type().intType().noDefault().endRecord();
 
         GenericRecord record1 = new GenericRecordBuilder(schema).set("int1", 1).build();
         GenericRecord record2 = new GenericRecordBuilder(schema).set("int1", 2).build();
@@ -266,13 +259,15 @@ public class AvroDataTypeDiscoveryAnalyzerTest {
         semanticAnalyzer.analyze(records2).collect(Collectors.toList());
         Schema result2 = semanticAnalyzer.getResult();
 
-        Map<String, Object> dqTypeProps1 = (Map<String, Object>) result1.getField("int1").schema().getObjectProp("talend.component.dqType");
+        Map<String, Object> dqTypeProps1 =
+                (Map<String, Object>) result1.getField("int1").schema().getObjectProp("talend.component.dqType");
         List<Object> matchings1 = (ArrayList<Object>) dqTypeProps1.get("matchings");
         assertNotNull(result1);
         assertNotNull(result1.getField("int1").schema().getObjectProp("talend.component.dqType"));
         assertEquals(3L, ((Map<String, Object>) matchings1.get(0)).get("total"));
 
-        Map<String, Object> dqTypeProps2 = (Map<String, Object>) result2.getField("int1").schema().getObjectProp("talend.component.dqType");
+        Map<String, Object> dqTypeProps2 =
+                (Map<String, Object>) result2.getField("int1").schema().getObjectProp("talend.component.dqType");
         List<Object> matchings2 = (ArrayList<Object>) dqTypeProps2.get("matchings");
         assertNotNull(result2);
         assertNotNull(result2.getField("int1").schema().getObjectProp("talend.component.dqType"));

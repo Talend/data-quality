@@ -192,11 +192,4 @@ public class AvroUtilsTest {
         assertNotEquals(schema, schemaWithoutRefTypes);
     }
 
-    @Test
-    public void testDereferencingSchema() throws URISyntaxException, IOException {
-        byte[] avsc = Files.readAllBytes(Paths.get(getClass().getResource("./semanticSchema.avsc").toURI()));
-        Schema schema = new Schema.Parser().parse(new String(avsc));
-        Schema schemaWithoutRefTypes = AvroUtils.dereferencing(schema);
-        assertNotEquals(schema, schemaWithoutRefTypes);
-    }
 }
