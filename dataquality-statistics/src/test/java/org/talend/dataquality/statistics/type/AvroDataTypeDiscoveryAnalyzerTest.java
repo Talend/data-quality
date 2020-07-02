@@ -76,6 +76,18 @@ public class AvroDataTypeDiscoveryAnalyzerTest {
         return Arrays.asList(filenames).stream().map(filename -> loadPerson(filename)).toArray(GenericRecord[]::new);
     }
 
+    private IndexedRecord applySchemaToRecord(IndexedRecord record, Schema schema) {
+        GenericRecordBuilder builder = new GenericRecordBuilder(schema);
+        for (Schema.Field outField : schema.getFields()) {
+            Object outValue = null;
+            Schema.Field inField = record.getSchema().getField(outField.name());
+            if (inField != null)
+                outValue = record.get(inField.pos());
+            builder.set(outField, outValue);
+        }
+        return builder.build();
+    }
+
     @Before
     public void setUp() throws URISyntaxException, IOException {
         byte[] avsc = Files.readAllBytes(Paths.get(getClass().getResource("/avro/person.avsc").toURI()));
@@ -219,6 +231,53 @@ public class AvroDataTypeDiscoveryAnalyzerTest {
                 .getField("string_2_0")
                 .schema()
                 .getObjectProp("talend.component.dqType"));
+    }
+
+    @Test
+    public void testSchemaAlreadyEnriched() {
+
+        AvroDataTypeDiscoveryAnalyzer semanticAnalyzer = new AvroDataTypeDiscoveryAnalyzer();
+
+        Schema schema = SchemaBuilder
+                .record("record")
+                .fields()
+                .name("int1")
+                .type()
+                .intType()
+                .noDefault()
+                .endRecord();
+
+        GenericRecord record1 = new GenericRecordBuilder(schema).set("int1", 1).build();
+        GenericRecord record2 = new GenericRecordBuilder(schema).set("int1", 2).build();
+        GenericRecord record3 = new GenericRecordBuilder(schema).set("int1", 3).build();
+
+        Stream<IndexedRecord> records1 = Stream.of(record1, record2, record3);
+
+        semanticAnalyzer.init(schema);
+        semanticAnalyzer.analyze(records1).collect(Collectors.toList());
+        Schema result1 = semanticAnalyzer.getResult();
+
+        record1 = (GenericRecord) applySchemaToRecord(record1, result1);
+        record3 = (GenericRecord) applySchemaToRecord(record3, result1);
+
+        Stream<IndexedRecord> records2 = Stream.of(record1, record3);
+
+        semanticAnalyzer.init(result1);
+        semanticAnalyzer.analyze(records2).collect(Collectors.toList());
+        Schema result2 = semanticAnalyzer.getResult();
+
+        Map<String, Object> dqTypeProps1 = (Map<String, Object>) result1.getField("int1").schema().getObjectProp("talend.component.dqType");
+        List<Object> matchings1 = (ArrayList<Object>) dqTypeProps1.get("matchings");
+        assertNotNull(result1);
+        assertNotNull(result1.getField("int1").schema().getObjectProp("talend.component.dqType"));
+        assertEquals(3L, ((Map<String, Object>) matchings1.get(0)).get("total"));
+
+        Map<String, Object> dqTypeProps2 = (Map<String, Object>) result2.getField("int1").schema().getObjectProp("talend.component.dqType");
+        List<Object> matchings2 = (ArrayList<Object>) dqTypeProps2.get("matchings");
+        assertNotNull(result2);
+        assertNotNull(result2.getField("int1").schema().getObjectProp("talend.component.dqType"));
+        assertEquals(2L, ((Map<String, Object>) matchings2.get(0)).get("total"));
+
     }
 
     @Test
