@@ -210,7 +210,7 @@ public class AvroUtils {
         if (!flattenNames.isEmpty()) {
             Map<String, String> namespaces = new HashMap<>();
             for (String name : flattenNames) {
-                namespaces.put(name, "a");
+                namespaces.put(name, "a"); //referenced namespaces will be suffixed by alphabet a, then b, then c, etc...
             }
             return buildDereferencedSchema(schema, namespaces);
         }
