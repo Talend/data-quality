@@ -219,7 +219,7 @@ public class AvroDataTypeQualityAnalyzer extends AvroQualityAnalyzer {
 
     @Override
     public Stream<IndexedRecord> analyze(Stream<IndexedRecord> records) {
-        return records.map(this::analyzeRecord);
+        return records.sequential().map(this::analyzeRecord);
     }
 
     private IndexedRecord analyzeRecord(IndexedRecord record) {
