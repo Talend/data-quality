@@ -1,3 +1,9 @@
+v7.0.3 2020-07-03
+    - TDQ-18567 also clear 'orderMap' in ChainNodeMap for a new dataset
+    
+v7.0.2 2020-06-29
+    - TDQ-18556: fixed tRuleSurvivorship job with "Define conflict rule"
+    
 v6.2.0 2019-01-02
     - TDQ-16242 All the rules of Confilt Resolution can not be executed if disable first one rule
     
