@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 
 import static org.junit.Assert.*;
@@ -192,4 +194,28 @@ public class AvroUtilsTest {
         assertNotEquals(schema, schemaWithoutRefTypes);
     }
 
+    @Test
+    public void testCleanSchema() throws URISyntaxException, IOException {
+        Schema schema = SchemaBuilder
+                .record("record")
+                .fields()
+                .name("int1")
+                .type()
+                .intBuilder()
+                .prop("prop1", "value1")
+                .prop("prop2", "value2")
+                .prop("prop3", "value3")
+                .endInt()
+                .noDefault()
+                .endRecord();
+        Schema cleanSchema1 = AvroUtils.cleanSchema(schema, Collections.emptyList());
+        Schema cleanSchema2 = AvroUtils.cleanSchema(schema, Collections.singletonList("prop2"));
+        Schema cleanSchema3 = AvroUtils.cleanSchema(schema, Arrays.asList("prop1", "prop3"));
+        assertEquals(schema, cleanSchema1);
+        assertNull(cleanSchema2.getObjectProp("prop2"));
+        assertEquals(2, cleanSchema2.getField("int1").schema().getObjectProps().size());
+        assertNull(cleanSchema3.getObjectProp("prop1"));
+        assertNull(cleanSchema3.getObjectProp("prop3"));
+        assertEquals(1, cleanSchema3.getField("int1").schema().getObjectProps().size());
+    }
 }

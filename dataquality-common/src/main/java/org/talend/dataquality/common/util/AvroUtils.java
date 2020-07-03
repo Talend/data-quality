@@ -570,7 +570,7 @@ public class AvroUtils {
             List<String> propsToAvoid) {
         propsToCopy.forEach((k, v) -> {
             if (!propsToAvoid.contains(k))
-                destinationSchema.getObjectProps().put(k, v);
+                destinationSchema.addProp(k, v);
         });
     }
 
