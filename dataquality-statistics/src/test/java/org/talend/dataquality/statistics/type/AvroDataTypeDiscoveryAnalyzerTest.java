@@ -134,7 +134,6 @@ public class AvroDataTypeDiscoveryAnalyzerTest {
                         .get(0)
                         .get("dataType"));
         assertEquals(aggregate.get(AvroDataTypeDiscoveryAnalyzer.DATA_TYPE_FIELD), DataTypeEnum.DATE.toString());
-        assertEquals(aggregate.get(AvroDataTypeDiscoveryAnalyzer.FORCED_FIELD), false);
     }
 
     @Test
@@ -324,6 +323,23 @@ public class AvroDataTypeDiscoveryAnalyzerTest {
     }
 
     @Test
+    public void testSupportForDateLogicalTypes() {
+        try {
+            String path = AvroDataTypeDiscoveryAnalyzerTest.class.getResource("../sample/date.avro").getPath();
+            Pair<Stream<IndexedRecord>, Schema> pair = AvroUtils.streamAvroFile(new File(path));
+            analyzer.init(pair.getRight());
+            analyzer.analyze(pair.getLeft()).collect(Collectors.toList());
+            Schema result = analyzer.getResult();
+            // All field with "logicalType" should be detected as DATE.
+            // LogicalTypes.Date, LogicalTypes.TimeMicros, LogicalTypes.TimeMillis, LogicalTypes.TimestampMicros, LogicalTypes.TimestampMillis
+            Schema expectedSchema = new Schema.Parser().parse("{\"type\": \"record\",\"name\": \"dateTimeLogical\",\"namespace\": \"org.talend\",\"fields\": [{\"name\": \"name\",\"type\": {\"type\": \"string\",\"talend.component.dqType\": {\"matchings\": [{\"total\": 3,\"dataType\": \"STRING\"}],\"dataType\": \"STRING\"}}},{\"name\": \"date\",\"type\": {\"type\": \"int\",\"logicalType\": \"date\",\"talend.component.dqType\": {\"matchings\": [{\"total\": 3,\"dataType\": \"DATE\"}],\"dataType\": \"DATE\"}}},{\"name\": \"timemillis\",\"type\": {\"type\": \"int\",\"logicalType\": \"time-millis\",\"talend.component.dqType\": {\"matchings\": [{\"total\": 3,\"dataType\": \"DATE\"}],\"dataType\": \"DATE\"}}},{\"name\": \"timemicros\",\"type\": {\"type\": \"long\",\"logicalType\": \"time-micros\",\"talend.component.dqType\": {\"matchings\": [{\"total\": 3,\"dataType\": \"DATE\"}],\"dataType\": \"DATE\"}}},{\"name\": \"timestampmillis\",\"type\": {\"type\": \"long\",\"logicalType\": \"timestamp-millis\",\"talend.component.dqType\": {\"matchings\": [{\"total\": 3,\"dataType\": \"DATE\"}],\"dataType\": \"DATE\"}}},{\"name\": \"timestampmicros\",\"type\": {\"type\": \"long\",\"logicalType\": \"timestamp-micros\",\"talend.component.dqType\": {\"matchings\": [{\"total\": 3,\"dataType\": \"DATE\"}],\"dataType\": \"DATE\"}}}]}");
+            assertEquals(expectedSchema, result);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
     public void testAvroDataTypeAnalyzerOnSwitch() {
         try {
             String path = AvroDataTypeDiscoveryAnalyzerTest.class.getResource("../sample/Switch.avro").getPath();
@@ -391,7 +407,6 @@ public class AvroDataTypeDiscoveryAnalyzerTest {
                     .getObjectProp(DATA_TYPE_AGGREGATE);
             assertNotNull(result);
             assertNotNull(dataTypeAggregate);
-            assertEquals(dataTypeAggregate.get(AvroDataTypeDiscoveryAnalyzer.FORCED_FIELD), false);
             assertEquals(dataTypeAggregate.get(AvroDataTypeDiscoveryAnalyzer.DATA_TYPE_FIELD), "STRING");
         } catch (IOException e) {
             e.printStackTrace();
@@ -542,6 +557,12 @@ public class AvroDataTypeDiscoveryAnalyzerTest {
 
                     Schema result = analyzer.getResult();
                     assertNotNull(result);
+                    //                    analyzer.init(result);
+                    //                    dateAvroReader =
+                    //                            new DataFileReader<>(fileEntry, new GenericDatumReader<>(result));
+                    //                    dateAvroReader.forEach(analyzer::analyze);
+                    //                    Schema result1 = analyzer.getResult();
+                    //                    assertEquals(result, result1);
                 }
             }
         } catch (IOException e) {

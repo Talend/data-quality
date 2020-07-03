@@ -35,8 +35,6 @@ public class AvroDataTypeDiscoveryAnalyzer implements AvroAnalyzer {
 
     public static final String MATCHINGS_FIELD = "matchings";
 
-    public static final String FORCED_FIELD = "forced";
-
     public static final String DATA_TYPE_FIELD = "dataType";
 
     public static String TOTAL_FIELD = "total";
@@ -238,7 +236,7 @@ public class AvroDataTypeDiscoveryAnalyzer implements AvroAnalyzer {
 
     /**
      * Merge the matchings and the new discovered data types into the input semantic schema.
-     * Matchings will be updated for all existing dataTypeAggregates, if the dataType is forced, it won't be updated.
+     * Matchings will be updated for all existing dataTypeAggregates.
      * 
      * @param schema
      * @param fieldName
@@ -294,7 +292,6 @@ public class AvroDataTypeDiscoveryAnalyzer implements AvroAnalyzer {
                         .filter(entry -> !entry.getKey().equals(DataTypeEnum.EMPTY))
                         .max(entryComparator)
                         .map(entry -> {
-                            aggregate.put(FORCED_FIELD, false);
                             aggregate.put(DATA_TYPE_FIELD, entry.getKey());
                             return null;
                         });
