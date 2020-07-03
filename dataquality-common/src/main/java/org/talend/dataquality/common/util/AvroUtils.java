@@ -485,11 +485,10 @@ public class AvroUtils {
             case STRING:
             case BOOLEAN:
             case DOUBLE:
+            case NULL:
                 Schema primitiveSchema = Schema.create(schema.getType());
                 addPropsToSchema(primitiveSchema, schema.getObjectProps(), propsToAvoid);
                 return primitiveSchema;
-            case NULL:
-                return schema;
 
             }
         }
