@@ -12,9 +12,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -195,7 +193,7 @@ public class AvroUtilsTest {
     }
 
     @Test
-    public void testCleanSchema() throws URISyntaxException, IOException {
+    public void testCleanSchemaSimplePrimitive() throws URISyntaxException, IOException {
         Schema schema = SchemaBuilder
                 .record("record")
                 .fields()
@@ -206,16 +204,290 @@ public class AvroUtilsTest {
                 .prop("prop2", "value2")
                 .prop("prop3", "value3")
                 .endInt()
-                .noDefault()
+                .intDefault(2)
                 .endRecord();
         Schema cleanSchema1 = AvroUtils.cleanSchema(schema, Collections.emptyList());
         Schema cleanSchema2 = AvroUtils.cleanSchema(schema, Collections.singletonList("prop2"));
         Schema cleanSchema3 = AvroUtils.cleanSchema(schema, Arrays.asList("prop1", "prop3"));
         assertEquals(schema, cleanSchema1);
-        assertNull(cleanSchema2.getObjectProp("prop2"));
+        assertNull(cleanSchema2.getField("int1").schema().getObjectProp("prop2"));
         assertEquals(2, cleanSchema2.getField("int1").schema().getObjectProps().size());
-        assertNull(cleanSchema3.getObjectProp("prop1"));
-        assertNull(cleanSchema3.getObjectProp("prop3"));
+        assertNull(cleanSchema3.getField("int1").schema().getObjectProp("prop1"));
+        assertNull(cleanSchema3.getField("int1").schema().getObjectProp("prop3"));
         assertEquals(1, cleanSchema3.getField("int1").schema().getObjectProps().size());
+
+        schema = SchemaBuilder
+                .record("record")
+                .fields()
+                .name("int1")
+                .type()
+                .optional()
+                .intBuilder()
+                .prop("prop1", "value1")
+                .prop("prop2", "value2")
+                .prop("prop3", "value3")
+                .endInt()
+                .endRecord();
+        cleanSchema1 = AvroUtils.cleanSchema(schema, Collections.emptyList());
+        cleanSchema2 = AvroUtils.cleanSchema(schema, Collections.singletonList("prop2"));
+        cleanSchema3 = AvroUtils.cleanSchema(schema, Arrays.asList("prop1", "prop3"));
+        assertEquals(schema, cleanSchema1);
+        assertNull(cleanSchema2.getField("int1").schema().getTypes().get(1).getObjectProp("prop2"));
+        assertEquals(2, cleanSchema2.getField("int1").schema().getTypes().get(1).getObjectProps().size());
+        assertNull(cleanSchema3.getField("int1").schema().getTypes().get(1).getObjectProp("prop1"));
+        assertNull(cleanSchema3.getField("int1").schema().getTypes().get(1).getObjectProp("prop3"));
+        assertEquals(1, cleanSchema3.getField("int1").schema().getTypes().get(1).getObjectProps().size());
+    }
+
+    @Test
+    public void testCleanSchemaEnum() throws URISyntaxException, IOException {
+        Schema schema = SchemaBuilder
+                .record("record")
+                .fields()
+                .name("enum1")
+                .type()
+                .enumeration("enum1")
+                .prop("prop1", "value1")
+                .prop("prop2", "value2")
+                .prop("prop3", "value3")
+                .symbols("A", "B", "C")
+                .enumDefault("B")
+                .endRecord();
+        Schema cleanSchema1 = AvroUtils.cleanSchema(schema, Collections.emptyList());
+        Schema cleanSchema2 = AvroUtils.cleanSchema(schema, Collections.singletonList("prop2"));
+        Schema cleanSchema3 = AvroUtils.cleanSchema(schema, Arrays.asList("prop1", "prop3"));
+
+        assertEquals(schema, cleanSchema1);
+        assertNull(cleanSchema2.getField("enum1").schema().getObjectProp("prop2"));
+        assertEquals(2, cleanSchema2.getField("enum1").schema().getObjectProps().size());
+        assertNull(cleanSchema3.getField("enum1").schema().getObjectProp("prop1"));
+        assertNull(cleanSchema3.getField("enum1").schema().getObjectProp("prop3"));
+        assertEquals(1, cleanSchema3.getField("enum1").schema().getObjectProps().size());
+
+        schema = SchemaBuilder
+                .record("record")
+                .fields()
+                .name("enum1")
+                .type()
+                .optional()
+                .enumeration("enum1")
+                .prop("prop1", "value1")
+                .prop("prop2", "value2")
+                .prop("prop3", "value3")
+                .symbols("A", "B", "C")
+                .endRecord();
+        cleanSchema1 = AvroUtils.cleanSchema(schema, Collections.emptyList());
+        cleanSchema2 = AvroUtils.cleanSchema(schema, Collections.singletonList("prop2"));
+        cleanSchema3 = AvroUtils.cleanSchema(schema, Arrays.asList("prop1", "prop3"));
+
+        assertEquals(schema, cleanSchema1);
+        assertNull(cleanSchema2.getField("enum1").schema().getTypes().get(1).getObjectProp("prop2"));
+        assertEquals(2, cleanSchema2.getField("enum1").schema().getTypes().get(1).getObjectProps().size());
+        assertNull(cleanSchema3.getField("enum1").schema().getTypes().get(1).getObjectProp("prop1"));
+        assertNull(cleanSchema3.getField("enum1").schema().getTypes().get(1).getObjectProp("prop3"));
+        assertEquals(1, cleanSchema3.getField("enum1").schema().getTypes().get(1).getObjectProps().size());
+    }
+
+    @Test
+    public void testCleanSchemaFixed() throws URISyntaxException, IOException {
+        Schema schema = SchemaBuilder
+                .record("record")
+                .fields()
+                .name("fixed1")
+                .type()
+                .fixed("fixed1")
+                .prop("prop1", "value1")
+                .prop("prop2", "value2")
+                .prop("prop3", "value3")
+                .size(3)
+                .fixedDefault("ABC")
+                .endRecord();
+        Schema cleanSchema1 = AvroUtils.cleanSchema(schema, Collections.emptyList());
+        Schema cleanSchema2 = AvroUtils.cleanSchema(schema, Collections.singletonList("prop2"));
+        Schema cleanSchema3 = AvroUtils.cleanSchema(schema, Arrays.asList("prop1", "prop3"));
+
+        assertEquals(schema, cleanSchema1);
+        assertNull(cleanSchema2.getField("fixed1").schema().getObjectProp("prop2"));
+        assertEquals(2, cleanSchema2.getField("fixed1").schema().getObjectProps().size());
+        assertNull(cleanSchema3.getField("fixed1").schema().getObjectProp("prop1"));
+        assertNull(cleanSchema3.getField("fixed1").schema().getObjectProp("prop3"));
+        assertEquals(1, cleanSchema3.getField("fixed1").schema().getObjectProps().size());
+
+        schema = SchemaBuilder
+                .record("record")
+                .fields()
+                .name("fixed1")
+                .type()
+                .optional()
+                .fixed("fixed1")
+                .prop("prop1", "value1")
+                .prop("prop2", "value2")
+                .prop("prop3", "value3")
+                .size(3)
+                .endRecord();
+        cleanSchema1 = AvroUtils.cleanSchema(schema, Collections.emptyList());
+        cleanSchema2 = AvroUtils.cleanSchema(schema, Collections.singletonList("prop2"));
+        cleanSchema3 = AvroUtils.cleanSchema(schema, Arrays.asList("prop1", "prop3"));
+
+        assertEquals(schema, cleanSchema1);
+        assertNull(cleanSchema2.getField("fixed1").schema().getTypes().get(1).getObjectProp("prop2"));
+        assertEquals(2, cleanSchema2.getField("fixed1").schema().getTypes().get(1).getObjectProps().size());
+        assertNull(cleanSchema3.getField("fixed1").schema().getTypes().get(1).getObjectProp("prop1"));
+        assertNull(cleanSchema3.getField("fixed1").schema().getTypes().get(1).getObjectProp("prop3"));
+        assertEquals(1, cleanSchema3.getField("fixed1").schema().getTypes().get(1).getObjectProps().size());
+    }
+
+    @Test
+    public void testCleanSchemaMap() throws URISyntaxException, IOException {
+        Schema schema = SchemaBuilder
+                .record("record")
+                .fields()
+                .name("map1")
+                .type()
+                .map()
+                .prop("prop1", "value1")
+                .prop("prop2", "value2")
+                .prop("prop3", "value3")
+                .values(SchemaBuilder.builder().intType())
+                .mapDefault(new HashMap<>())
+                .endRecord();
+        Schema cleanSchema1 = AvroUtils.cleanSchema(schema, Collections.emptyList());
+        Schema cleanSchema2 = AvroUtils.cleanSchema(schema, Collections.singletonList("prop2"));
+        Schema cleanSchema3 = AvroUtils.cleanSchema(schema, Arrays.asList("prop1", "prop3"));
+
+        assertEquals(schema, cleanSchema1);
+        assertNull(cleanSchema2.getField("map1").schema().getObjectProp("prop2"));
+        assertEquals(2, cleanSchema2.getField("map1").schema().getObjectProps().size());
+        assertNull(cleanSchema3.getField("map1").schema().getObjectProp("prop1"));
+        assertNull(cleanSchema3.getField("map1").schema().getObjectProp("prop3"));
+        assertEquals(1, cleanSchema3.getField("map1").schema().getObjectProps().size());
+
+        schema = SchemaBuilder
+                .record("record")
+                .fields()
+                .name("map1")
+                .type()
+                .optional()
+                .map()
+                .prop("prop1", "value1")
+                .prop("prop2", "value2")
+                .prop("prop3", "value3")
+                .values(SchemaBuilder.builder().intType())
+                .endRecord();
+        cleanSchema1 = AvroUtils.cleanSchema(schema, Collections.emptyList());
+        cleanSchema2 = AvroUtils.cleanSchema(schema, Collections.singletonList("prop2"));
+        cleanSchema3 = AvroUtils.cleanSchema(schema, Arrays.asList("prop1", "prop3"));
+
+        assertEquals(schema, cleanSchema1);
+        assertEquals(schema, cleanSchema1);
+        assertNull(cleanSchema2.getField("map1").schema().getTypes().get(1).getObjectProp("prop2"));
+        assertEquals(2, cleanSchema2.getField("map1").schema().getTypes().get(1).getObjectProps().size());
+        assertNull(cleanSchema3.getField("map1").schema().getTypes().get(1).getObjectProp("prop1"));
+        assertNull(cleanSchema3.getField("map1").schema().getTypes().get(1).getObjectProp("prop3"));
+        assertEquals(1, cleanSchema3.getField("map1").schema().getTypes().get(1).getObjectProps().size());
+    }
+
+    @Test
+    public void testCleanSchemaArray() throws URISyntaxException, IOException {
+        Schema schema = SchemaBuilder
+                .record("record")
+                .fields()
+                .name("array1")
+                .type()
+                .array()
+                .prop("prop1", "value1")
+                .prop("prop2", "value2")
+                .prop("prop3", "value3")
+                .items(SchemaBuilder.builder().intType())
+                .arrayDefault(new ArrayList<>())
+                .endRecord();
+        Schema cleanSchema1 = AvroUtils.cleanSchema(schema, Collections.emptyList());
+        Schema cleanSchema2 = AvroUtils.cleanSchema(schema, Collections.singletonList("prop2"));
+        Schema cleanSchema3 = AvroUtils.cleanSchema(schema, Arrays.asList("prop1", "prop3"));
+
+        assertEquals(schema, cleanSchema1);
+        assertNull(cleanSchema2.getField("array1").schema().getObjectProp("prop2"));
+        assertEquals(2, cleanSchema2.getField("array1").schema().getObjectProps().size());
+        assertNull(cleanSchema3.getField("array1").schema().getObjectProp("prop1"));
+        assertNull(cleanSchema3.getField("array1").schema().getObjectProp("prop3"));
+        assertEquals(1, cleanSchema3.getField("array1").schema().getObjectProps().size());
+
+        schema = SchemaBuilder
+                .record("record")
+                .fields()
+                .name("array1")
+                .type()
+                .optional()
+                .array()
+                .prop("prop1", "value1")
+                .prop("prop2", "value2")
+                .prop("prop3", "value3")
+                .items(SchemaBuilder.builder().intType())
+                .endRecord();
+        cleanSchema1 = AvroUtils.cleanSchema(schema, Collections.emptyList());
+        cleanSchema2 = AvroUtils.cleanSchema(schema, Collections.singletonList("prop2"));
+        cleanSchema3 = AvroUtils.cleanSchema(schema, Arrays.asList("prop1", "prop3"));
+
+        assertEquals(schema, cleanSchema1);
+        assertEquals(schema, cleanSchema1);
+        assertNull(cleanSchema2.getField("array1").schema().getTypes().get(1).getObjectProp("prop2"));
+        assertEquals(2, cleanSchema2.getField("array1").schema().getTypes().get(1).getObjectProps().size());
+        assertNull(cleanSchema3.getField("array1").schema().getTypes().get(1).getObjectProp("prop1"));
+        assertNull(cleanSchema3.getField("array1").schema().getTypes().get(1).getObjectProp("prop3"));
+        assertEquals(1, cleanSchema3.getField("array1").schema().getTypes().get(1).getObjectProps().size());
+    }
+
+    @Test
+    public void testCleanSchemaRecord() throws URISyntaxException, IOException {
+        Schema schema = SchemaBuilder
+                .record("record")
+                .fields()
+                .name("record1")
+                .type()
+                .record("record1_1")
+                .prop("prop1", "value1")
+                .prop("prop2", "value2")
+                .prop("prop3", "value3")
+                .fields()
+                .requiredInt("int1")
+                .endRecord()
+                .noDefault()
+                .endRecord();
+        Schema cleanSchema1 = AvroUtils.cleanSchema(schema, Collections.emptyList());
+        Schema cleanSchema2 = AvroUtils.cleanSchema(schema, Collections.singletonList("prop2"));
+        Schema cleanSchema3 = AvroUtils.cleanSchema(schema, Arrays.asList("prop1", "prop3"));
+
+        assertEquals(schema, cleanSchema1);
+        assertNull(cleanSchema2.getField("record1").schema().getObjectProp("prop2"));
+        assertEquals(2, cleanSchema2.getField("record1").schema().getObjectProps().size());
+        assertNull(cleanSchema3.getField("record1").schema().getObjectProp("prop1"));
+        assertNull(cleanSchema3.getField("record1").schema().getObjectProp("prop3"));
+        assertEquals(1, cleanSchema3.getField("record1").schema().getObjectProps().size());
+
+        schema = SchemaBuilder
+                .record("record")
+                .fields()
+                .name("record1")
+                .type()
+                .optional()
+                .record("record1_1")
+                .prop("prop1", "value1")
+                .prop("prop2", "value2")
+                .prop("prop3", "value3")
+                .fields()
+                .requiredInt("int1")
+                .endRecord()
+                .endRecord();
+        cleanSchema1 = AvroUtils.cleanSchema(schema, Collections.emptyList());
+        cleanSchema2 = AvroUtils.cleanSchema(schema, Collections.singletonList("prop2"));
+        cleanSchema3 = AvroUtils.cleanSchema(schema, Arrays.asList("prop1", "prop3"));
+
+        assertEquals(schema, cleanSchema1);
+        assertEquals(schema, cleanSchema1);
+        assertNull(cleanSchema2.getField("record1").schema().getTypes().get(1).getObjectProp("prop2"));
+        assertEquals(2, cleanSchema2.getField("record1").schema().getTypes().get(1).getObjectProps().size());
+        assertNull(cleanSchema3.getField("record1").schema().getTypes().get(1).getObjectProp("prop1"));
+        assertNull(cleanSchema3.getField("record1").schema().getTypes().get(1).getObjectProp("prop3"));
+        assertEquals(1, cleanSchema3.getField("record1").schema().getTypes().get(1).getObjectProps().size());
     }
 }

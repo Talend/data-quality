@@ -16,12 +16,7 @@ import static org.apache.avro.Schema.Type.STRING;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -119,7 +114,7 @@ public class AvroUtils {
     /**
      * Returns true if the type is a primitive type or an enum/fixed type.
      *
-     * @param type Schema type
+     * @param type              Schema type
      * @param enumFixedIncluded Include or not ENUM and FIXED in the check
      * @return True if primitive
      */
@@ -139,7 +134,7 @@ public class AvroUtils {
     /**
      * Extract a given property from a schema. This property can be present at anly level in the schema.
      *
-     * @param schema Schema with the property
+     * @param schema   Schema with the property
      * @param propName Name of the property to extract
      * @return Map with the property values (key: a name built with field name)
      */
@@ -438,132 +433,67 @@ public class AvroUtils {
 
     /**
      * Remove properties for Avro Schema
-     * @param schema schema to modify
+     *
+     * @param schema       schema to modify
      * @param propsToAvoid list of props names to remove
      * @return the schema without props
      */
     public static Schema cleanSchema(Schema schema, List<String> propsToAvoid) {
-        final SchemaBuilder.RecordBuilder<Schema> qualityRecordBuilder =
-                SchemaBuilder.record(schema.getName()).namespace(schema.getNamespace());
-        final SchemaBuilder.FieldAssembler<Schema> fieldAssembler = qualityRecordBuilder.fields();
-
-        for (Schema.Field field : schema.getFields()) {
-            Schema fieldSchema = field.schema();
-            switch (fieldSchema.getType()) {
+        if (schema != null) {
+            switch (schema.getType()) {
             case RECORD:
-                List<Schema.Field> cleanFields = createFieldsWithoutProps(propsToAvoid, fieldSchema);
-
-                Schema cleanSchema = Schema.createRecord(field.name(), field.doc(), fieldSchema.getNamespace(),
-                        fieldSchema.isError(), cleanFields);
-
-                fieldAssembler.name(field.name()).type(cleanSchema).noDefault();
-                break;
-            case ARRAY:
-                Schema cleanArraySchema =
-                        Schema.createArray(cleanLeafSchema(fieldSchema.getElementType(), propsToAvoid));
-
-                fieldAssembler.name(field.name()).type(cleanArraySchema).noDefault();
-                break;
-            case UNION:
-                List<Schema> fullChild = fieldSchema.getTypes().stream().map(unionSchema -> {
-                    switch (unionSchema.getType()) {
-                    case RECORD:
-                        return cleanSchema(unionSchema, propsToAvoid);
-                    case ARRAY:
-                        Schema unionArraySchema;
-                        if (unionSchema.getElementType().getType() != RECORD) {
-                            unionArraySchema = cleanLeafSchema(unionSchema.getElementType(), propsToAvoid);
-                        } else {
-                            unionArraySchema = cleanSchema(unionSchema.getElementType(), propsToAvoid);
-                        }
-                        return Schema.createArray(unionArraySchema);
-                    case MAP:
-                        Schema unionMapSchema;
-                        if (unionSchema.getValueType().getType() != RECORD) {
-                            unionMapSchema = cleanLeafSchema(unionSchema.getValueType(), propsToAvoid);
-                        } else {
-                            unionMapSchema = cleanSchema(unionSchema.getValueType(), propsToAvoid);
-                        }
-                        return Schema.createMap(unionMapSchema);
-                    default:
-                        return unionSchema;
-                    }
-                }).collect(Collectors.toList());
-
-                fieldAssembler.name(field.name()).type(Schema.createUnion(fullChild)).noDefault();
-                break;
-            case MAP:
-                Schema mapSchema;
-                if (fieldSchema.getValueType().getType() != RECORD) {
-                    mapSchema = Schema.createMap(cleanLeafSchema(fieldSchema.getValueType(), propsToAvoid));
-
-                } else {
-                    mapSchema = Schema.createMap(cleanSchema(fieldSchema.getValueType(), propsToAvoid));
+                List<Schema.Field> fields = new ArrayList<>();
+                for (Schema.Field field : schema.getFields()) {
+                    Schema fieldSchema = cleanSchema(field.schema(), propsToAvoid);
+                    fields.add(new Schema.Field(field.name(), fieldSchema, field.doc(), field.defaultVal()));
                 }
-                fieldAssembler.name(field.name()).type(mapSchema).noDefault();
-                break;
+                Schema recordSchema = Schema.createRecord(schema.getName(), schema.getDoc(), schema.getNamespace(),
+                        schema.isError(), fields);
+                addPropsToSchema(recordSchema, schema.getObjectProps(), propsToAvoid);
+                return recordSchema;
+            case MAP:
+                Schema mapSchema = Schema.createMap(cleanSchema(schema.getValueType(), propsToAvoid));
+                addPropsToSchema(mapSchema, schema.getObjectProps(), propsToAvoid);
+                return mapSchema;
+            case ARRAY:
+                Schema arraySchema = Schema.createArray(cleanSchema(schema.getElementType(), propsToAvoid));
+                addPropsToSchema(arraySchema, schema.getObjectProps(), propsToAvoid);
+                return arraySchema;
+            case UNION:
+                List<Schema> types = new ArrayList<>();
+                for (Schema unionType : schema.getTypes()) {
+                    Schema unionTypeSchema = cleanSchema(unionType, propsToAvoid);
+                    types.add(unionTypeSchema);
+                }
+                Schema unionSchema = Schema.createUnion(types);
+                addPropsToSchema(unionSchema, schema.getObjectProps(), propsToAvoid);
+                return unionSchema;
             case ENUM:
-                Schema enumSchema = Schema.createEnum(field.name(), field.doc(), fieldSchema.getNamespace(),
-                        field.schema().getEnumSymbols());
-                addPropsToSchema(enumSchema, fieldSchema.getObjectProps(), propsToAvoid);
-                fieldAssembler.name(field.name()).type(enumSchema).noDefault();
-                break;
-            case STRING:
-            case BYTES:
+                Schema enumSchema = Schema.createEnum(schema.getName(), schema.getDoc(), schema.getNamespace(),
+                        schema.getEnumSymbols());
+                addPropsToSchema(enumSchema, schema.getObjectProps(), propsToAvoid);
+                return enumSchema;
+            case FIXED:
+                Schema fixedSchema = Schema.createFixed(schema.getName(), schema.getDoc(), schema.getNamespace(),
+                        schema.getFixedSize());
+                addPropsToSchema(fixedSchema, schema.getObjectProps(), propsToAvoid);
+                return fixedSchema;
+            case INT:
             case LONG:
             case FLOAT:
-            case DOUBLE:
+            case BYTES:
+            case STRING:
             case BOOLEAN:
-            case INT:
-                fieldAssembler.name(field.name()).type(cleanLeafSchema(fieldSchema, propsToAvoid)).noDefault();
-                break;
+            case DOUBLE:
+                Schema primitiveSchema = Schema.create(schema.getType());
+                addPropsToSchema(primitiveSchema, schema.getObjectProps(), propsToAvoid);
+                return primitiveSchema;
             case NULL:
-            case FIXED:
-            default:
-                fieldAssembler.name(field.name()).type(field.schema()).noDefault();
+                return schema;
 
-                break;
             }
         }
-        return fieldAssembler.endRecord();
-    }
-
-    private static Schema cleanLeafSchema(Schema fieldSchema, List<String> propsToAvoid) {
-        switch (fieldSchema.getType()) {
-        case RECORD:
-            return cleanSchema(fieldSchema, propsToAvoid);
-        case ARRAY:
-            return Schema.createArray(cleanLeafSchema(fieldSchema.getElementType(), propsToAvoid));
-        case STRING:
-            Schema cleanStringPrimitiveSchema = SchemaBuilder.builder().stringBuilder().endString();
-            addPropsToSchema(cleanStringPrimitiveSchema, fieldSchema.getObjectProps(), propsToAvoid);
-            return cleanStringPrimitiveSchema;
-        case BYTES:
-            Schema cleanBytesPrimitiveSchema = SchemaBuilder.builder().bytesBuilder().endBytes();
-            addPropsToSchema(cleanBytesPrimitiveSchema, fieldSchema.getObjectProps(), propsToAvoid);
-            return cleanBytesPrimitiveSchema;
-        case LONG:
-            Schema cleanLongPrimitiveSchema = SchemaBuilder.builder().longBuilder().endLong();
-            addPropsToSchema(cleanLongPrimitiveSchema, fieldSchema.getObjectProps(), propsToAvoid);
-            return cleanLongPrimitiveSchema;
-        case FLOAT:
-            Schema cleanFloatPrimitiveSchema = SchemaBuilder.builder().floatBuilder().endFloat();
-            addPropsToSchema(cleanFloatPrimitiveSchema, fieldSchema.getObjectProps(), propsToAvoid);
-            return cleanFloatPrimitiveSchema;
-        case DOUBLE:
-            Schema cleanDoublePrimitiveSchema = SchemaBuilder.builder().doubleBuilder().endDouble();
-            addPropsToSchema(cleanDoublePrimitiveSchema, fieldSchema.getObjectProps(), propsToAvoid);
-            return cleanDoublePrimitiveSchema;
-        case BOOLEAN:
-            Schema cleanBooleanPrimitiveSchema = SchemaBuilder.builder().booleanBuilder().endBoolean();
-            addPropsToSchema(cleanBooleanPrimitiveSchema, fieldSchema.getObjectProps(), propsToAvoid);
-            return cleanBooleanPrimitiveSchema;
-        case INT:
-            Schema cleanIntPrimitiveSchema = SchemaBuilder.builder().intBuilder().endInt();
-            addPropsToSchema(cleanIntPrimitiveSchema, fieldSchema.getObjectProps(), propsToAvoid);
-            return cleanIntPrimitiveSchema;
-        }
-        return fieldSchema;
+        return null;
     }
 
     private static void addPropsToSchema(Schema destinationSchema, Map<String, Object> propsToCopy,
