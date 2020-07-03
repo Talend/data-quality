@@ -113,4 +113,13 @@ public class ChainNodeMap extends HashMap<String, AbstractChainOfResponsibilityH
         Iterator<Integer> iterator = orderMap.keySet().iterator();
         return orderMap.get(iterator.next());
     }
+
+    /**
+     * Get the orderMap
+     * 
+     * @return
+     */
+    public Map<Integer, AbstractChainOfResponsibilityHandler> getOrderMap() {
+        return orderMap;
+    }
 }
