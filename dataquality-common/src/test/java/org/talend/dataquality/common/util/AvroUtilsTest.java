@@ -111,6 +111,12 @@ public class AvroUtilsTest {
     }
 
     @Test
+    public void testDereferencingIsIdentityForSchemaWithoutRef() {
+        Schema schemaWithoutRefTypes = new Schema.Parser().parse("{\"type\": \"record\",\"name\": \"base\",\"namespace\": \"tdc.qa\",\"fields\": [{ \"name\": \"string1\", \"type\": \"string\" },{ \"name\": \"null1\", \"type\": \"null\" },{ \"name\": \"boolean1\", \"type\": \"boolean\" },{ \"name\": \"int1\", \"type\": \"int\" },{ \"name\": \"long1\", \"type\": \"long\" },{ \"name\": \"float1\", \"type\": \"float\" },{ \"name\": \"double1\", \"type\": \"double\" },{ \"name\": \"bytes1\", \"type\": \"bytes\" },{\"name\": \"enum1\",\"type\": {\"type\": \"enum\",\"name\": \"enum11\",\"symbols\": [\"One\", \"Two\", \"Three\", \"For\"]}},{ \"name\": \"array1\", \"type\": { \"type\": \"array\", \"items\": \"string\" } },{ \"name\": \"map1\", \"type\": { \"type\": \"map\", \"values\": \"long\" } },{ \"name\": \"union1\", \"type\": [\"null\", \"string\", \"boolean\"] },{\"name\": \"fixed1\",\"type\": { \"type\": \"fixed\", \"name\": \"fixed\", \"size\": 15 }}]}");
+        assertEquals(schemaWithoutRefTypes, AvroUtils.dereferencing(schemaWithoutRefTypes));
+    }
+
+    @Test
     public void testDereferencingOfnoFancy() throws IOException {
         String path = AvroUtilsTest.class.getResource("./no-fancy-structures-10.avro").getPath();
         File fileEntry = new File(path);
