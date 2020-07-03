@@ -17,6 +17,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.apache.avro.AvroRuntimeException;
+import org.apache.avro.LogicalType;
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericRecord;
@@ -179,13 +180,13 @@ public class AvroDataTypeDiscoveryAnalyzer implements AvroAnalyzer {
         case DOUBLE:
         case BOOLEAN:
             final GenericRecord semRecord = new GenericData.Record(DATA_TYPE_DISCOVERY_VALUE_LEVEL_SCHEMA);
-            semRecord.put(DATA_TYPE_FIELD, analyzeLeafValue(itemId, item));
+            semRecord.put(DATA_TYPE_FIELD, analyzeLeafValue(itemId, item, itemSchema));
             return semRecord;
 
         case NULL:
             // No information in semantic schema
             final GenericRecord nullSemRecord = new GenericData.Record(DATA_TYPE_DISCOVERY_VALUE_LEVEL_SCHEMA);
-            nullSemRecord.put(DATA_TYPE_FIELD, analyzeLeafValue(itemId, item));
+            nullSemRecord.put(DATA_TYPE_FIELD, analyzeLeafValue(itemId, item, itemSchema));
             return nullSemRecord;
 
         default:
@@ -193,7 +194,7 @@ public class AvroDataTypeDiscoveryAnalyzer implements AvroAnalyzer {
         }
     }
 
-    private Object analyzeLeafValue(String itemId, Object value) {
+    private Object analyzeLeafValue(String itemId, Object value, Schema itemSchema) {
 
         DataTypeEnum type = DataTypeEnum.STRING;// STRING means we didn't find any native data types
 
@@ -217,7 +218,7 @@ public class AvroDataTypeDiscoveryAnalyzer implements AvroAnalyzer {
             if (value != null) {
                 type = TypeInferenceUtils.getNativeDataType(value.toString());
                 if ((DataTypeEnum.STRING.equals(type) && isDate(value.toString(), frequentDatePatterns.get(itemId)))
-                        || isLogicalDate(itemId, value.toString()))
+                        || isLogicalDate(itemSchema.getLogicalType()))
                     type = DataTypeEnum.DATE;
                 knownDataTypeCache.put(itemId, type);
                 dataType.increment(type);
@@ -226,8 +227,11 @@ public class AvroDataTypeDiscoveryAnalyzer implements AvroAnalyzer {
         return type;
     }
 
-    private boolean isLogicalDate(String itemId, String value) {
-        return LOGICAL_DATE.contains(itemId);
+    private boolean isLogicalDate(LogicalType type) {
+        boolean isLogicalDate = false;
+        if (type != null)
+            isLogicalDate = LOGICAL_DATE.contains(type.getName());
+        return isLogicalDate;
     }
 
     @Override
