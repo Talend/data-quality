@@ -1,10 +1,10 @@
 package org.talend.dataquality.statistics.type;
 
+import static org.talend.dataquality.common.util.AvroUtils.cleanSchema;
 import static org.talend.dataquality.common.util.AvroUtils.copySchema;
 import static org.talend.dataquality.common.util.AvroUtils.createRecordSemanticSchema;
 import static org.talend.dataquality.common.util.AvroUtils.dereferencing;
 import static org.talend.dataquality.common.util.AvroUtils.itemId;
-import static org.talend.dataquality.common.util.AvroUtils.cleanSchema;
 import static org.talend.dataquality.statistics.datetime.SystemDateTimePatternManager.isDate;
 
 import java.util.ArrayList;
@@ -42,6 +42,9 @@ public class AvroDataTypeDiscoveryAnalyzer implements AvroAnalyzer {
     private static final String DATA_TYPE_DISCOVERY_VALUE_LEVEL_SCHEMA_JSON =
             "{\"type\": \"record\"," + "\"name\": \"discovery_metadata\", \"namespace\": \"org.talend.dataquality\","
                     + "\"fields\":[{ \"type\":\"string\", \"name\":\"dataType\"}]}";
+
+    private static final List<String> LOGICAL_DATE = Arrays.asList("date", "time-millis", "timemillis", "time-micros",
+            "timemicros", "timestamp-millis", "timestampmillis", "timestamp-micros", "timestampmicros");
 
     public static final Schema DATA_TYPE_DISCOVERY_VALUE_LEVEL_SCHEMA =
             new Schema.Parser().parse(DATA_TYPE_DISCOVERY_VALUE_LEVEL_SCHEMA_JSON);
@@ -213,13 +216,18 @@ public class AvroDataTypeDiscoveryAnalyzer implements AvroAnalyzer {
         } else {
             if (value != null) {
                 type = TypeInferenceUtils.getNativeDataType(value.toString());
-                if (DataTypeEnum.STRING.equals(type) && isDate(value.toString(), frequentDatePatterns.get(itemId)))
+                if ((DataTypeEnum.STRING.equals(type) && isDate(value.toString(), frequentDatePatterns.get(itemId)))
+                        || isLogicalDate(itemId, value.toString()))
                     type = DataTypeEnum.DATE;
                 knownDataTypeCache.put(itemId, type);
                 dataType.increment(type);
             }
         }
         return type;
+    }
+
+    private boolean isLogicalDate(String itemId, String value) {
+        return LOGICAL_DATE.contains(itemId);
     }
 
     @Override
