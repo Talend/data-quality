@@ -132,7 +132,7 @@ public class DataSet {
         conflictList.clear();
         conflictsOfSurvivor.clear();
         clearConflictDataMap();
-        chainMap.clear();
+        clearChainMap();
         fs.init();
         ss.init();
         ts.init();
@@ -141,6 +141,15 @@ public class DataSet {
         for (Column col : columnList) {
             col.init();
         }
+    }
+
+    /**
+     * Clear the chainMap and the orderMap in chainMap for each new Dataset
+     *
+     */
+    private void clearChainMap() {
+        chainMap.getOrderMap().clear();
+        chainMap.clear();
     }
 
     /**
