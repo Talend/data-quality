@@ -189,7 +189,7 @@ public class AvroUtilsTest {
         byte[] avsc = Files.readAllBytes(Paths.get(getClass().getResource("./oneLevelComplex.avsc").toURI()));
         Schema schema = new Schema.Parser().parse(new String(avsc));
         Schema schemaWithoutRefTypes = AvroUtils.dereferencing(schema);
-        assertNotEquals(schema, schemaWithoutRefTypes);
+        assertEquals(schema, schemaWithoutRefTypes);
     }
 
     @Test
