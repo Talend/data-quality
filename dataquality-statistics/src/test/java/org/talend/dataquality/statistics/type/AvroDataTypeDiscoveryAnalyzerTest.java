@@ -272,7 +272,6 @@ public class AvroDataTypeDiscoveryAnalyzerTest {
         assertNotNull(result2);
         assertNotNull(result2.getField("int1").schema().getObjectProp("talend.component.dqType"));
         assertEquals(2L, ((Map<String, Object>) matchings2.get(0)).get("total"));
-
     }
 
     @Test

@@ -503,24 +503,4 @@ public class AvroUtils {
                 destinationSchema.addProp(k, v);
         });
     }
-
-    private static List<Schema.Field> createFieldsWithoutProps(List<String> propsNames, Schema fieldSchema) {
-        List<Schema.Field> cleanFields = new ArrayList<>();
-
-        for (Schema.Field recordField : fieldSchema.getFields()) {
-            Schema.Field toAddField = new Schema.Field(recordField.name(), recordField.schema(), recordField.doc(),
-                    recordField.defaultVal(), recordField.order());
-            Map<String, Object> objectProperties = recordField.getObjectProps();
-            for (Map.Entry<String, Object> entry : objectProperties.entrySet()) {
-
-                if (!propsNames.contains(entry.getKey())) {
-                    toAddField.addProp(entry.getKey(), entry.getKey());
-                }
-
-                toAddField.addProp(entry.getKey(), entry.getValue());
-            }
-            cleanFields.add(toAddField);
-        }
-        return cleanFields;
-    }
 }
