@@ -101,6 +101,16 @@ public class AvroUtilsTest {
     }
 
     @Test
+    public void testDereferencingIsIdempotent() throws IOException {
+        String path = AvroUtilsTest.class.getResource("./Switch.avro").getPath();
+        File fileEntry = new File(path);
+        DataFileReader<GenericRecord> dateAvroReader = new DataFileReader<>(fileEntry, new GenericDatumReader<>());
+        Schema schemaWithRefType = dateAvroReader.getSchema();
+        Schema schemaWithoutRefTypes = AvroUtils.dereferencing(schemaWithRefType);
+        assertEquals(schemaWithoutRefTypes, AvroUtils.dereferencing(schemaWithoutRefTypes));
+    }
+
+    @Test
     public void testDereferencingOfnoFancy() throws IOException {
         String path = AvroUtilsTest.class.getResource("./no-fancy-structures-10.avro").getPath();
         File fileEntry = new File(path);
