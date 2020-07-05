@@ -12,6 +12,7 @@
 // ============================================================================
 package org.talend.survivorship.model;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,6 +22,9 @@ import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.talend.survivorship.action.handler.HandlerParameter;
+import org.talend.survivorship.action.handler.MCCRHandler;
+import org.talend.survivorship.utils.ChainNodeMap;
 
 public class DataSetTest {
 
@@ -205,6 +209,67 @@ public class DataSetTest {
         Assert.assertEquals("The conflictList should be 0", 0, //$NON-NLS-1$
                 dataset.getConflictList().size());
 
+    }
+
+    @Test
+    public void testRest() throws Exception {
+        Column col1 = new Column("FistName", "String"); //$NON-NLS-1$ //$NON-NLS-2$
+        Column col2 = new Column("LastName", "String"); //$NON-NLS-1$ //$NON-NLS-2$
+        List<Column> columns = new ArrayList<>();
+        columns.add(col1);
+        columns.add(col2);
+        DataSet dataset = new DataSet(columns);
+
+        // first record
+        Record record1 = new Record();
+        record1.setId(1);
+        Attribute att1 = new Attribute(record1, col1, "GaSfield"); //$NON-NLS-1$
+        Attribute att2 = new Attribute(record1, col2, "Smith"); //$NON-NLS-1$
+        record1.putAttribute("FistName", att1); //$NON-NLS-1$
+        record1.putAttribute("LastName", att2); //$NON-NLS-1$
+        col1.putAttribute(record1, att1);
+        col2.putAttribute(record1, att2);
+        dataset.getRecordList().add(record1);
+        // second record
+        record1 = new Record();
+        record1.setId(2);
+        att1 = new Attribute(record1, col1, "Goafield"); //$NON-NLS-1$
+        att2 = new Attribute(record1, col2, "LyndHn"); //$NON-NLS-1$
+        record1.putAttribute("FistName", att1); //$NON-NLS-1$
+        record1.putAttribute("LastName", att2); //$NON-NLS-1$
+        col1.putAttribute(record1, att1);
+        col2.putAttribute(record1, att2);
+        dataset.getRecordList().add(record1);
+
+        ChainNodeMap chainNodeMap = new ChainNodeMap();
+        MCCRHandler crnode1 = createHandler("node1"); //$NON-NLS-1$
+        MCCRHandler crnode2 = createHandler("node2"); //$NON-NLS-1$
+        chainNodeMap.put("FistName", crnode1, 0);
+        // nodeMap.linkNodes(1, crnode1);
+        chainNodeMap.linkNodes(2, crnode2);
+
+        // make the private "chainMap" can be accessed
+        Field chainMapField = DataSet.class.getDeclaredField("chainMap");
+        chainMapField.setAccessible(true);
+        chainMapField.set(dataset, chainNodeMap);
+
+        Assert.assertNotNull(chainNodeMap.getFirstNode());
+        Assert.assertEquals(1, chainNodeMap.size());
+        Assert.assertEquals(2, chainNodeMap.getOrderMap().size());
+        Assert.assertEquals(crnode1, chainNodeMap.getFirstNode());
+
+        // After reset, 'chainNodeMap.getFirstNode()' should be null
+        dataset.reset();
+        Assert.assertEquals(0, chainNodeMap.size());
+        Assert.assertEquals(0, chainNodeMap.getOrderMap().size());
+        Assert.assertNull(chainNodeMap.getFirstNode());
+
+    }
+
+    private MCCRHandler createHandler(String name) {
+        HandlerParameter parameter = new HandlerParameter(null, null, null, name, null, null, null);
+        MCCRHandler crnode1 = new MCCRHandler(parameter);
+        return crnode1;
     }
 
 }
