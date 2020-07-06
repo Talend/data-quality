@@ -12,14 +12,20 @@
 // ============================================================================
 package org.talend.survivorship;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.ref.SoftReference;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -1277,6 +1283,52 @@ public class SurvivorshipManagerTest {
         // 08-08-2000 is we expect after implement code because we use most recent to resolve conflict
         assertEquals("The resultCity should be shanghai", "shanghai", //$NON-NLS-1$ //$NON-NLS-2$
                 resultCity);
+    }
+
+    /**
+     * @Description: When the first Dataset has conflict index [0,1,3],it should be cleaned when the next Dataset come
+     * in.
+     *
+     */
+    @Test
+    public void testRunSessionMostCommon2Longest_nullValue() {
+
+        manager = new SurvivorshipManager(SampleData.RULE_PATH, SampleDataConflictMostCommon2Longest.PKG_NAME_CONFLICT_FRE_LONG);
+
+        for (String str : SampleDataConflict.COLUMNS_CONFLICT.keySet()) {
+            Column column = new Column(str, SampleDataConflict.COLUMNS_CONFLICT.get(str));
+            if (column.getName().equals("city1")) { //$NON-NLS-1$
+                for (ConflictRuleDefinition element : SampleDataConflictMostCommon2Longest.RULES_CONFLICT_RESOLVE) {
+                    column.getConflictResolveList().add(element);
+                }
+            }
+            manager.getColumnList().add(column);
+        }
+        for (RuleDefinition element : SampleDataConflictMostCommon2Longest.RULES_CONFLICT_FRE_LONG) {
+            manager.addRuleDefinition(element);
+        }
+        manager.initKnowledgeBase();
+        manager.checkConflictRuleValid();
+        // The first Dataset come in
+        Object[][] tableValue = getTableValue("/org.talend.survivorship.conflict/conflictsFirstGroup.csv", 6, 9, 1);
+        manager.runSession(tableValue); // $NON-NLS-1$
+        Map<String, Object> survivorMap = manager.getSurvivorMap();
+        SoftReference<HashMap<String, List<Integer>>> conflictDataMap = manager.getDataSet().getConflictDataMap();
+        List<Integer> indexs = new ArrayList<Integer>();
+        indexs.add(0);
+        indexs.add(1);
+        indexs.add(3);
+        assertEquals(indexs, conflictDataMap.get().get("city1"));
+        assertEquals(1, survivorMap.size());
+        assertEquals("beijing", survivorMap.get("city1"));
+
+        // TDQ-18567 The value of 'city1' is null in the second dataset,it should not throw IndexOutOfBoundsException
+        Object[][] newDataSet = {
+                { "Lily", "Cheng", "Walker", null, "beijing", 1, SampleData.stringToDate("04-04-2000", "dd-MM-yyyy"), "3", 1 } };
+        manager.runSession(newDataSet);
+        assertEquals(0, survivorMap.size());
+        conflictDataMap = manager.getDataSet().getConflictDataMap();
+        assertEquals(0, conflictDataMap.get().size());
     }
 
     /**
