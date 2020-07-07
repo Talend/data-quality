@@ -14,7 +14,7 @@ N/A
 ### Deprecated
 N/A
 ### Fixed
-N/A
+- fix(TDQ-18567): Clean 'orderMap' in ChainNodeMap for a new dataset
 ### Security
 N/A
 
