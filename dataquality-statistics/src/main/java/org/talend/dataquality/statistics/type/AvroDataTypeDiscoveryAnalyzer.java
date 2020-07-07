@@ -18,6 +18,7 @@ import java.util.stream.Stream;
 
 import org.apache.avro.AvroRuntimeException;
 import org.apache.avro.LogicalType;
+import org.apache.avro.LogicalTypes;
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericRecord;
@@ -44,8 +45,9 @@ public class AvroDataTypeDiscoveryAnalyzer implements AvroAnalyzer {
             "{\"type\": \"record\"," + "\"name\": \"discovery_metadata\", \"namespace\": \"org.talend.dataquality\","
                     + "\"fields\":[{ \"type\":\"string\", \"name\":\"dataType\"}]}";
 
-    private static final List<String> LOGICAL_DATE = Arrays.asList("date", "time-millis", "timemillis", "time-micros",
-            "timemicros", "timestamp-millis", "timestampmillis", "timestamp-micros", "timestampmicros");
+    private static final List<LogicalType> DATE_RELATED_LOGICAL_TYPES =
+            Arrays.asList(LogicalTypes.date(), LogicalTypes.timeMillis(), LogicalTypes.timeMicros(),
+                    LogicalTypes.timestampMillis(), LogicalTypes.timestampMicros());
 
     public static final Schema DATA_TYPE_DISCOVERY_VALUE_LEVEL_SCHEMA =
             new Schema.Parser().parse(DATA_TYPE_DISCOVERY_VALUE_LEVEL_SCHEMA_JSON);
@@ -218,7 +220,7 @@ public class AvroDataTypeDiscoveryAnalyzer implements AvroAnalyzer {
             if (value != null) {
                 type = TypeInferenceUtils.getNativeDataType(value.toString());
                 if ((DataTypeEnum.STRING.equals(type) && isDate(value.toString(), frequentDatePatterns.get(itemId)))
-                        || isLogicalDate(itemSchema.getLogicalType()))
+                        || isLogicalDate(itemSchema))
                     type = DataTypeEnum.DATE;
                 knownDataTypeCache.put(itemId, type);
                 dataType.increment(type);
@@ -227,11 +229,9 @@ public class AvroDataTypeDiscoveryAnalyzer implements AvroAnalyzer {
         return type;
     }
 
-    private boolean isLogicalDate(LogicalType type) {
-        boolean isLogicalDate = false;
-        if (type != null)
-            isLogicalDate = LOGICAL_DATE.contains(type.getName());
-        return isLogicalDate;
+    private boolean isLogicalDate(Schema itemSchema) {
+        Optional<LogicalType> maybeLogicalType = Optional.ofNullable(LogicalTypes.fromSchemaIgnoreInvalid(itemSchema));
+        return maybeLogicalType.map(DATE_RELATED_LOGICAL_TYPES::contains).orElse(false);
     }
 
     @Override
