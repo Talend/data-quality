@@ -198,7 +198,7 @@ public class AvroDataTypeDiscoveryAnalyzer implements AvroAnalyzer {
 
     private Object analyzeLeafValue(String itemId, Object value, Schema itemSchema) {
 
-        DataTypeEnum type = DataTypeEnum.STRING;// STRING means we didn't find any native data types
+        DataTypeEnum type = null;// STRING means we didn't find any native data types
 
         if (!frequentDatePatterns.containsKey(itemId))
             frequentDatePatterns.put(itemId, new SortedList());
@@ -223,8 +223,10 @@ public class AvroDataTypeDiscoveryAnalyzer implements AvroAnalyzer {
                         || isLogicalDate(itemSchema))
                     type = DataTypeEnum.DATE;
                 knownDataTypeCache.put(itemId, type);
-                dataType.increment(type);
+            } else {
+                type = DataTypeEnum.NULL;
             }
+            dataType.increment(type);
         }
         return type;
     }

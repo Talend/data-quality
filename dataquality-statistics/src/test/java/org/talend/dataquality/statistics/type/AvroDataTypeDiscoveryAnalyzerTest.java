@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.talend.dataquality.common.inference.AvroQualityAnalyzer.GLOBAL_QUALITY_PROP_NAME;
 import static org.talend.dataquality.statistics.type.AvroDataTypeDiscoveryAnalyzer.DATA_TYPE_AGGREGATE;
+import static org.talend.dataquality.statistics.type.AvroDataTypeDiscoveryAnalyzer.MATCHINGS_FIELD;
 import static org.talend.dataquality.statistics.type.DataTypeEnum.DATE;
 import static org.talend.dataquality.statistics.type.DataTypeEnum.DOUBLE;
 import static org.talend.dataquality.statistics.type.DataTypeEnum.EMPTY;
@@ -18,6 +19,7 @@ import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -126,13 +128,9 @@ public class AvroDataTypeDiscoveryAnalyzerTest {
         Map<String, Object> aggregate =
                 (Map<String, Object>) result.getField("birthdate").schema().getObjectProp("talend.component.dqType");
 
-        assertEquals(3l, ((List<Map<String, Object>>) aggregate.get(AvroDataTypeDiscoveryAnalyzer.MATCHINGS_FIELD))
-                .get(0)
-                .get("total"));
+        assertEquals(3l, ((List<Map<String, Object>>) aggregate.get(MATCHINGS_FIELD)).get(0).get("total"));
         assertEquals(DataTypeEnum.DATE.toString(),
-                ((List<Map<String, Object>>) aggregate.get(AvroDataTypeDiscoveryAnalyzer.MATCHINGS_FIELD))
-                        .get(0)
-                        .get("dataType"));
+                ((List<Map<String, Object>>) aggregate.get(MATCHINGS_FIELD)).get(0).get("dataType"));
         assertEquals(aggregate.get(AvroDataTypeDiscoveryAnalyzer.DATA_TYPE_FIELD), DataTypeEnum.DATE.toString());
     }
 
@@ -159,9 +157,7 @@ public class AvroDataTypeDiscoveryAnalyzerTest {
         Map<String, Object> aggregate =
                 (Map<String, Object>) result.getField("birthdate").schema().getObjectProp("talend.component.dqType");
         assertEquals(DataTypeEnum.DATE.toString(),
-                ((List<Map<String, Object>>) aggregate.get(AvroDataTypeDiscoveryAnalyzer.MATCHINGS_FIELD))
-                        .get(0)
-                        .get("dataType"));
+                ((List<Map<String, Object>>) aggregate.get(MATCHINGS_FIELD)).get(0).get("dataType"));
     }
 
     @Test
@@ -286,22 +282,18 @@ public class AvroDataTypeDiscoveryAnalyzerTest {
         Schema specificZipcodeSchema =
                 zipcodeSchema.getTypes().stream().filter(s -> s.getType() == Schema.Type.STRING).findFirst().get();
         Map<String, Object> prop = (Map<String, Object>) specificZipcodeSchema.getObjectProp(DATA_TYPE_AGGREGATE);
-        assertEquals(1l, ((List<Map<String, Object>>) prop.get(AvroDataTypeDiscoveryAnalyzer.MATCHINGS_FIELD))
-                .get(0)
-                .get("total"));
+        assertEquals(1l, ((List<Map<String, Object>>) prop.get(MATCHINGS_FIELD)).get(0).get("total"));
 
         specificZipcodeSchema =
                 zipcodeSchema.getTypes().stream().filter(s -> s.getType() == Schema.Type.NULL).findFirst().get();
         prop = (Map<String, Object>) specificZipcodeSchema.getObjectProp(DATA_TYPE_AGGREGATE);
-        assertEquals(0, ((List<Map<String, Object>>) prop.get(AvroDataTypeDiscoveryAnalyzer.MATCHINGS_FIELD)).size());
+        assertEquals(1, ((List<Map<String, Object>>) prop.get(MATCHINGS_FIELD)).size());
 
         specificZipcodeSchema =
                 zipcodeSchema.getTypes().stream().filter(s -> s.getType() == Schema.Type.RECORD).findFirst().get();
         Schema codeSchema = specificZipcodeSchema.getField("code").schema();
         prop = (Map<String, Object>) codeSchema.getObjectProp(DATA_TYPE_AGGREGATE);
-        assertEquals(1l, ((List<Map<String, Object>>) prop.get(AvroDataTypeDiscoveryAnalyzer.MATCHINGS_FIELD))
-                .get(0)
-                .get("total"));
+        assertEquals(1l, ((List<Map<String, Object>>) prop.get(MATCHINGS_FIELD)).get(0).get("total"));
     }
 
     @Test
@@ -384,6 +376,15 @@ public class AvroDataTypeDiscoveryAnalyzerTest {
             dateAvroReader.forEach(analyzer::analyze);
 
             Schema result = analyzer.getResult();
+            HashMap dqTypes = (HashMap) result
+                    .getField("midleName")
+                    .schema()
+                    .getTypes()
+                    .get(0)
+                    .getObjectProp(DATA_TYPE_AGGREGATE);
+            List matchings = (List) dqTypes.get(MATCHINGS_FIELD);
+            HashMap matchingProperties = (HashMap) matchings.get(0);
+            assertEquals(496l, matchingProperties.get("total"));
             assertNotNull(result);
         } catch (IOException e) {
             e.printStackTrace();
@@ -451,10 +452,7 @@ public class AvroDataTypeDiscoveryAnalyzerTest {
                     .getTypes()
                     .get(1)
                     .getObjectProp(DATA_TYPE_AGGREGATE);
-            assertEquals(1000l,
-                    ((List<Map<String, Object>>) aggregate.get(AvroDataTypeDiscoveryAnalyzer.MATCHINGS_FIELD))
-                            .get(0)
-                            .get("total"));
+            assertEquals(1000l, ((List<Map<String, Object>>) aggregate.get(MATCHINGS_FIELD)).get(0).get("total"));
 
             aggregate = (Map<String, Object>) result
                     .getField("business")
@@ -470,8 +468,7 @@ public class AvroDataTypeDiscoveryAnalyzerTest {
                     .getTypes()
                     .get(1)
                     .getObjectProp(DATA_TYPE_AGGREGATE);
-            List<Map<String, Object>> matchings =
-                    ((List<Map<String, Object>>) aggregate.get(AvroDataTypeDiscoveryAnalyzer.MATCHINGS_FIELD));
+            List<Map<String, Object>> matchings = ((List<Map<String, Object>>) aggregate.get(MATCHINGS_FIELD));
             assertEquals(682l, matchings.get(0).get("total"));
             assertEquals("INTEGER", matchings.get(0).get("dataType"));
             assertEquals(318l, matchings.get(1).get("total"));

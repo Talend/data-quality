@@ -28,7 +28,8 @@ public enum DataTypeEnum {
     STRING,
     DATE,
     TIME,
-    EMPTY;
+    EMPTY,
+    NULL;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DataTypeEnum.class);
 
