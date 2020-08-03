@@ -51,7 +51,7 @@ public class UpdateComponent4libphonenumber {
     private static final Map<String, String> DEP_VERSION_MAP = new HashMap<>();
 
     // when update, change the new version here.
-    private static final String LIBPHONENUMBER_VERSION = "8.12.3"; //$NON-NLS-1$
+    private static final String LIBPHONENUMBER_VERSION = "8.10.7"; //$NON-NLS-1$
 
     static {
         // DEP_VERSION_MAP.put("carrier", "1.85"); //$NON-NLS-1$ //$NON-NLS-2$
