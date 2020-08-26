@@ -44,6 +44,8 @@ public class UpdateComponentDefinition {
 
     private static final String DQ_LIB_VERSION = "8.3.1-SNAPSHOT"; //$NON-NLS-1$
 
+    private static final String DQ_STUDIO_LIB_VERSION = "7.4.1-SNAPSHOT"; //$NON-NLS-1$
+
     private static final String DAIKON_VERSION = ""; //$NON-NLS-1$
 
     private static final String[] PROVIDERS = new String[] { //
@@ -70,6 +72,7 @@ public class UpdateComponentDefinition {
         DEP_VERSION_MAP.put("org.talend.dataquality.survivorship", DQ_LIB_VERSION); //$NON-NLS-1$
         DEP_VERSION_MAP.put("org.talend.dataquality.text.japanese", DQ_LIB_VERSION); //$NON-NLS-1$
         DEP_VERSION_MAP.put("org.talend.dataquality.statistics", DQ_LIB_VERSION); //$NON-NLS-1$
+        DEP_VERSION_MAP.put("org.talend.dataprofiler.datamart", DQ_STUDIO_LIB_VERSION); //$NON-NLS-1$
     }
 
     private UpdateComponentDefinition() {
