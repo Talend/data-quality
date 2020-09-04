@@ -12,6 +12,11 @@
 // ============================================================================
 package org.talend.dataquality.matchmerge.mfb;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+
 import org.apache.commons.collections.iterators.IteratorChain;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -22,10 +27,6 @@ import org.talend.dataquality.record.linkage.attribute.IAttributeMatcher;
 import org.talend.dataquality.record.linkage.record.AbstractRecordMatcher;
 import org.talend.dataquality.record.linkage.utils.SurvivorShipAlgorithmEnum;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-
 public class MFBRecordMatcher extends AbstractRecordMatcher {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MFBRecordMatcher.class);
@@ -34,8 +35,9 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
 
     private static double worstConfidenceValue;
 
-    //Added TDQ-18347,20200515 , one key <-> one survivorship function
-    private static String[] survivorshipFunctions;
+    // Added TDQ-18347,20200515 , one key <-> one survivorship function
+    // TDQ-18542 using a list to store the survivorshipFunctions for different match rule
+    private static List<String[]> SURVIVORSHIP_FUNCTIONS_LIST = new ArrayList<String[]>();
 
     public MFBRecordMatcher(double minConfidenceValue) {
         this.minConfidenceValue = minConfidenceValue;
@@ -59,6 +61,10 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
 
     @Override
     public MatchResult getMatchingWeight(Record record1, Record record2) {
+        return getMatchingWeight(record1, record2, 0);
+    }
+
+    public MatchResult getMatchingWeight(Record record1, Record record2, int matcherIndex) {
         Iterator<Attribute> mergedRecordAttributes = record1.getAttributes().iterator();
         Iterator<Attribute> currentRecordAttributes = record2.getAttributes().iterator();
         List<Double> leftWorstConfidenceValueScoreList = record1.getWorstConfidenceValueScoreList();
@@ -76,7 +82,7 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
             Double rightWorstScore = getWorstScore(rightWorstConfidenceValueScoreList, matchIndex);
             // Find the first score to exceed threshold (if any).
             // use record1.getWorstConfidenceValueScoreList() to instead of some while in matchScore method
-            double score = matchScore(left, right, matcher, leftWorstScore, rightWorstScore, matchIndex);
+            double score = matchScore(left, right, matcher, leftWorstScore, rightWorstScore, matchIndex, matcherIndex);
             attributeMatchingWeights[matchIndex] = score;
             result.setScore(matchIndex, matcher.getMatchType(), score, record1.getId(), left.getValue(),
                     record2.getId(), right.getValue());
@@ -124,11 +130,11 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
 
     @SuppressWarnings("unchecked")
     private static double matchScore(Attribute leftAttribute, Attribute rightAttribute, IAttributeMatcher matcher,
-            Double leftWorstScore, Double rightWorstScore, int matchIndex) {
+            Double leftWorstScore, Double rightWorstScore, int matchIndex, int matcherIndex) {
         // Find the best score in values
         // 1- Try first values
         // 2- Compare using values that build attribute value (if any)
-        Iterator<String> leftValues = getAllComparedValues(leftAttribute, matchIndex);
+        Iterator<String> leftValues = getAllComparedValues(leftAttribute, matchIndex, matcherIndex);
 
         double maxScore = 0;
         double score = 0;
@@ -140,7 +146,7 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
 
         while (leftValues.hasNext()) {
             String leftValue = leftValues.next();
-            Iterator<String> rightValues = getAllComparedValues(rightAttribute, matchIndex);
+            Iterator<String> rightValues = getAllComparedValues(rightAttribute, matchIndex, matcherIndex);
             while (rightValues.hasNext()) {
                 String rightValue = rightValues.next();
                 score = matcher.getMatchingWeight(leftValue, rightValue);
@@ -164,12 +170,16 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
         return this.worstConfidenceValue;
     }
 
+    public void clearSurvivorShipFunction() {
+        SURVIVORSHIP_FUNCTIONS_LIST.clear();
+    }
+
     /**
      * keep survivorFunction in the matcher, maybe still need it in future
      * @param survivorShipFunctions
      */
     public void setSurvivorShipFunction(String[] survivorShipFunctions) {
-        survivorshipFunctions = survivorShipFunctions;
+        SURVIVORSHIP_FUNCTIONS_LIST.add(survivorShipFunctions);
     }
 
     /**
@@ -178,7 +188,8 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
      * @param comparedAttribute
      * @return
      */
-    protected static IteratorChain getAllComparedValues(Attribute comparedAttribute, int matchIndex) {
+    protected static IteratorChain getAllComparedValues(Attribute comparedAttribute, int matchIndex, int matcherIndex) {
+        String[] survivorshipFunctions = SURVIVORSHIP_FUNCTIONS_LIST.get(matcherIndex);
         if (survivorshipFunctions != null && survivorshipFunctions.length > matchIndex
                 && SurvivorShipAlgorithmEnum.CONCATENATE
                         .getValue()
@@ -199,12 +210,12 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
      */
     public void setSurvivorShipFunction(SurvivorShipAlgorithmEnum[] surAlgorithms) {
         if (surAlgorithms != null && surAlgorithms.length > 0) {
-            survivorshipFunctions = new String[surAlgorithms.length];
+            String[] survivorshipFunctions = new String[surAlgorithms.length];
             int index = 0;
             for (SurvivorShipAlgorithmEnum sAlgorithm : surAlgorithms) {
                 survivorshipFunctions[index++] = sAlgorithm.getValue();
             }
+            SURVIVORSHIP_FUNCTIONS_LIST.add(survivorshipFunctions);
         }
-
     }
 }

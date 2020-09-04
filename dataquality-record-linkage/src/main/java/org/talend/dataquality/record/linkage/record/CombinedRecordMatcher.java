@@ -20,6 +20,7 @@ import org.talend.dataquality.matchmerge.mfb.MFB.NonMatchResult;
 import org.talend.dataquality.matchmerge.mfb.MFBRecordMatcher;
 import org.talend.dataquality.matchmerge.mfb.MatchResult;
 import org.talend.dataquality.record.linkage.attribute.IAttributeMatcher;
+import org.talend.dataquality.record.linkage.grouping.swoosh.DQMFBRecordMatcher;
 import org.talend.dataquality.record.linkage.grouping.swoosh.RichRecord;
 
 /**
@@ -150,15 +151,16 @@ public class CombinedRecordMatcher extends AbstractRecordMatcher {
     public MatchResult getMatchingWeight(Record record1, Record record2) {
         MatchResult lastPositiveMatchResult = NonMatchResult.INSTANCE;
         double matchingWeight = 0;
-        for (IRecordMatcher m : matchers) {
+        int matcherIndex = 0;
+        for (IRecordMatcher m : this.matchers) {
             MFBRecordMatcher matcher = (MFBRecordMatcher) m;
-            MatchResult matchResult = matcher.getMatchingWeight(record1, record2);
+            MatchResult matchResult = matcher.getMatchingWeight(record1, record2, matcherIndex++);
             double currentWeight = matchResult.getNormalizedConfidence();
             if (currentWeight < matchingWeight) {
                 continue; // a better match already exists
             }
             // store last matcher
-            lastPositiveMatcher = matcher;
+            this.lastPositiveMatcher = matcher;
             matchingWeight = currentWeight;
             lastPositiveMatchResult = matchResult;
 
@@ -198,5 +200,13 @@ public class CombinedRecordMatcher extends AbstractRecordMatcher {
      */
     public List<IRecordMatcher> getMatchers() {
         return this.matchers;
+    }
+
+    public void clear() {
+        for (IRecordMatcher recordMatcher : this.matchers) {
+            if (recordMatcher instanceof DQMFBRecordMatcher) {
+                ((DQMFBRecordMatcher) recordMatcher).clearSurvivorShipFunction();
+            }
+        }
     }
 }
