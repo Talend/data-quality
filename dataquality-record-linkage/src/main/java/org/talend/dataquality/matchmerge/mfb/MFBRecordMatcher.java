@@ -37,7 +37,7 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
 
     // Added TDQ-18347,20200515 , one key <-> one survivorship function
     // TDQ-18542 using a list to store the survivorshipFunctions for different match rule
-    private static List<String[]> SURVIVORSHIP_FUNCTIONS_LIST = new ArrayList<String[]>();
+    private List<String[]> survivorshipFunctionsList = new ArrayList<String[]>();
 
     public MFBRecordMatcher(double minConfidenceValue) {
         this.minConfidenceValue = minConfidenceValue;
@@ -129,7 +129,7 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
     }
 
     @SuppressWarnings("unchecked")
-    private static double matchScore(Attribute leftAttribute, Attribute rightAttribute, IAttributeMatcher matcher,
+    private double matchScore(Attribute leftAttribute, Attribute rightAttribute, IAttributeMatcher matcher,
             Double leftWorstScore, Double rightWorstScore, int matchIndex, int matcherIndex) {
         // Find the best score in values
         // 1- Try first values
@@ -171,7 +171,7 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
     }
 
     public void clearSurvivorShipFunction() {
-        SURVIVORSHIP_FUNCTIONS_LIST.clear();
+        this.survivorshipFunctionsList.clear();
     }
 
     /**
@@ -179,7 +179,7 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
      * @param survivorShipFunctions
      */
     public void setSurvivorShipFunction(String[] survivorShipFunctions) {
-        SURVIVORSHIP_FUNCTIONS_LIST.add(survivorShipFunctions);
+        this.survivorshipFunctionsList.add(survivorShipFunctions);
     }
 
     /**
@@ -188,8 +188,11 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
      * @param comparedAttribute
      * @return
      */
-    protected static IteratorChain getAllComparedValues(Attribute comparedAttribute, int matchIndex, int matcherIndex) {
-        String[] survivorshipFunctions = SURVIVORSHIP_FUNCTIONS_LIST.get(matcherIndex);
+    protected IteratorChain getAllComparedValues(Attribute comparedAttribute, int matchIndex, int matcherIndex) {
+        String[] survivorshipFunctions = null;
+        if (!this.survivorshipFunctionsList.isEmpty() && this.survivorshipFunctionsList.size() > matcherIndex) {
+            survivorshipFunctions = this.survivorshipFunctionsList.get(matcherIndex);
+        }
         if (survivorshipFunctions != null && survivorshipFunctions.length > matchIndex
                 && SurvivorShipAlgorithmEnum.CONCATENATE
                         .getValue()
@@ -215,7 +218,7 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
             for (SurvivorShipAlgorithmEnum sAlgorithm : surAlgorithms) {
                 survivorshipFunctions[index++] = sAlgorithm.getValue();
             }
-            SURVIVORSHIP_FUNCTIONS_LIST.add(survivorshipFunctions);
+            this.survivorshipFunctionsList.add(survivorshipFunctions);
         }
     }
 }

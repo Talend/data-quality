@@ -1442,7 +1442,7 @@ public class SwooshRecordGroupingTest {
             log.trace(one.id + "--" + one.name + "--" + one.address + "--" + one.provinceID + "--" + one.GID + "--"
                     + one.GRP_QUALITY + "--" + one.MASTER + "--" + one.SCORE);
             if (one.id == 6 && one.MASTER == true) {
-                Assert.assertEquals(0.6111111111111112d, one.GRP_QUALITY.doubleValue(), 0.0000000000000007d);
+                Assert.assertEquals(0.7142857142857143d, one.GRP_QUALITY.doubleValue(), 0.0000000000000007d);
             } else if (one.id == 2 && one.MASTER == true) {
                 Assert.assertEquals(1.0d, one.GRP_QUALITY.doubleValue(), 0.0d);
             }
