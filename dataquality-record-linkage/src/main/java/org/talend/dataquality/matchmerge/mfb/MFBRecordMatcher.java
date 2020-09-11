@@ -12,7 +12,6 @@
 // ============================================================================
 package org.talend.dataquality.matchmerge.mfb;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -36,8 +35,7 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
     private static double worstConfidenceValue;
 
     // Added TDQ-18347,20200515 , one key <-> one survivorship function
-    // TDQ-18542 using a list to store the survivorshipFunctions for different match rule
-    private List<String[]> survivorshipFunctionsList = new ArrayList<String[]>();
+    private String[] survivorshipFunctions;
 
     public MFBRecordMatcher(double minConfidenceValue) {
         this.minConfidenceValue = minConfidenceValue;
@@ -61,10 +59,6 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
 
     @Override
     public MatchResult getMatchingWeight(Record record1, Record record2) {
-        return getMatchingWeight(record1, record2, 0);
-    }
-
-    public MatchResult getMatchingWeight(Record record1, Record record2, int matcherIndex) {
         Iterator<Attribute> mergedRecordAttributes = record1.getAttributes().iterator();
         Iterator<Attribute> currentRecordAttributes = record2.getAttributes().iterator();
         List<Double> leftWorstConfidenceValueScoreList = record1.getWorstConfidenceValueScoreList();
@@ -82,7 +76,7 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
             Double rightWorstScore = getWorstScore(rightWorstConfidenceValueScoreList, matchIndex);
             // Find the first score to exceed threshold (if any).
             // use record1.getWorstConfidenceValueScoreList() to instead of some while in matchScore method
-            double score = matchScore(left, right, matcher, leftWorstScore, rightWorstScore, matchIndex, matcherIndex);
+            double score = matchScore(left, right, matcher, leftWorstScore, rightWorstScore, matchIndex);
             attributeMatchingWeights[matchIndex] = score;
             result.setScore(matchIndex, matcher.getMatchType(), score, record1.getId(), left.getValue(),
                     record2.getId(), right.getValue());
@@ -130,11 +124,11 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
 
     @SuppressWarnings("unchecked")
     private double matchScore(Attribute leftAttribute, Attribute rightAttribute, IAttributeMatcher matcher,
-            Double leftWorstScore, Double rightWorstScore, int matchIndex, int matcherIndex) {
+            Double leftWorstScore, Double rightWorstScore, int matchIndex) {
         // Find the best score in values
         // 1- Try first values
         // 2- Compare using values that build attribute value (if any)
-        Iterator<String> leftValues = getAllComparedValues(leftAttribute, matchIndex, matcherIndex);
+        Iterator<String> leftValues = getAllComparedValues(leftAttribute, matchIndex);
 
         double maxScore = 0;
         double score = 0;
@@ -146,7 +140,7 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
 
         while (leftValues.hasNext()) {
             String leftValue = leftValues.next();
-            Iterator<String> rightValues = getAllComparedValues(rightAttribute, matchIndex, matcherIndex);
+            Iterator<String> rightValues = getAllComparedValues(rightAttribute, matchIndex);
             while (rightValues.hasNext()) {
                 String rightValue = rightValues.next();
                 score = matcher.getMatchingWeight(leftValue, rightValue);
@@ -170,16 +164,12 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
         return this.worstConfidenceValue;
     }
 
-    public void clearSurvivorShipFunction() {
-        this.survivorshipFunctionsList.clear();
-    }
-
     /**
      * keep survivorFunction in the matcher, maybe still need it in future
      * @param survivorShipFunctions
      */
     public void setSurvivorShipFunction(String[] survivorShipFunctions) {
-        this.survivorshipFunctionsList.add(survivorShipFunctions);
+        this.survivorshipFunctions = survivorShipFunctions;
     }
 
     /**
@@ -188,15 +178,11 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
      * @param comparedAttribute
      * @return
      */
-    protected IteratorChain getAllComparedValues(Attribute comparedAttribute, int matchIndex, int matcherIndex) {
-        String[] survivorshipFunctions = null;
-        if (!this.survivorshipFunctionsList.isEmpty() && this.survivorshipFunctionsList.size() > matcherIndex) {
-            survivorshipFunctions = this.survivorshipFunctionsList.get(matcherIndex);
-        }
-        if (survivorshipFunctions != null && survivorshipFunctions.length > matchIndex
+    protected IteratorChain getAllComparedValues(Attribute comparedAttribute, int matchIndex) {
+        if (this.survivorshipFunctions != null && this.survivorshipFunctions.length > matchIndex
                 && SurvivorShipAlgorithmEnum.CONCATENATE
                         .getValue()
-                        .equalsIgnoreCase(survivorshipFunctions[matchIndex])) {
+                        .equalsIgnoreCase(this.survivorshipFunctions[matchIndex])) {
             if (comparedAttribute.getValues().size() > 0) {
                 return new IteratorChain(comparedAttribute.getValues().iterator());
             }
@@ -213,12 +199,11 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
      */
     public void setSurvivorShipFunction(SurvivorShipAlgorithmEnum[] surAlgorithms) {
         if (surAlgorithms != null && surAlgorithms.length > 0) {
-            String[] survivorshipFunctions = new String[surAlgorithms.length];
+            this.survivorshipFunctions = new String[surAlgorithms.length];
             int index = 0;
             for (SurvivorShipAlgorithmEnum sAlgorithm : surAlgorithms) {
-                survivorshipFunctions[index++] = sAlgorithm.getValue();
+                this.survivorshipFunctions[index++] = sAlgorithm.getValue();
             }
-            this.survivorshipFunctionsList.add(survivorshipFunctions);
         }
     }
 }

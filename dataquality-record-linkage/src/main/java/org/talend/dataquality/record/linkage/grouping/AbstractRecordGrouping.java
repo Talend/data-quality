@@ -427,7 +427,6 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
 
     protected void clear() {
         this.multiMatchRules.clear();
-        this.combinedRecordMatcher.clear();
     }
 
     private void updateWithExtendedColumn(TYPE[] inputRow, TYPE[] masterRecord, double matchingProba,
