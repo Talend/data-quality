@@ -7,7 +7,6 @@
 // Constants
 
 def AWS_POD_LABEL = "TDQ-RELEASE-${UUID.randomUUID().toString()}"
-def containerName = "talend-${TSBI_BUILD_IMAGE_NAME}"
 
 def getPRMessage(target_dq_lib_version) {
     if (target_dq_lib_version.contains("SNAPSHOT")) {
@@ -21,26 +20,7 @@ pipeline {
     agent {
         kubernetes {
             label AWS_POD_LABEL
-            yaml """
-                apiVersion: v1
-                kind: Pod
-                spec:
-                  imagePullSecrets:
-                  - name: talend-registry
-                  containers:
-                  - name: ${containerName}
-                    image: artifactory.datapwn.com/tlnd-docker-dev/talend/common/tsbi/jdk8-builder-base:1.16.0-20200106163950
-                    tty: true
-                    command:
-                    - cat
-                    volumeMounts:
-                    - name: m2
-                      mountPath: /root/.m2/repository
-                  volumes:
-                  - name: m2
-                    hostPath:
-                      path: /tmp/jenkins/tsbi/m2
-            """
+            yamlFile 'ci/podTemplate.yml'
         }
     }
 
@@ -71,7 +51,7 @@ pipeline {
          */
         stage('Prepare ReleaseVersionBumper') {
             steps {
-                container("${containerName}") {
+                container("talend-jdk8-builder-base") {
                     sh """#! /bin/sh
                         set -e
                         echo target_dq_lib_version=${target_dq_lib_version}
@@ -86,7 +66,7 @@ pipeline {
          */
         stage('Update Lib Version') {
             steps {
-                container("${containerName}") {
+                container("talend-jdk8-builder-base") {
                     sh """#! /bin/sh
                         set -e
                         set +x
@@ -105,7 +85,7 @@ pipeline {
          */
         stage('Perform Pull Request') {
             steps {
-                container("${containerName}") {
+                container("talend-jdk8-builder-base") {
                     withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GIT_LOGIN', passwordVariable: 'GIT_TOKEN')]) {
                         sh """#! /bin/sh
                         set +x

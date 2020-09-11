@@ -14,26 +14,7 @@ pipeline {
     agent {
         kubernetes {
             label AWS_POD_LABEL
-            yaml """
-                apiVersion: v1
-                kind: Pod
-                spec:
-                  imagePullSecrets:
-                  - name: talend-registry
-                  containers:
-                  - name: talend-jdk8-builder-base
-                    image: artifactory.datapwn.com/tlnd-docker-dev/talend/common/tsbi/jdk8-builder-base:1.16.0-20200106163950
-                    tty: true
-                    command:
-                    - cat
-                    volumeMounts:
-                    - name: m2
-                      mountPath: /root/.m2/repository
-                  volumes:
-                  - name: m2
-                    hostPath:
-                      path: /tmp/jenkins/tsbi/m2
-            """
+            yamlFile 'ci/podTemplate.yml'
         }
     }
 

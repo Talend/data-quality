@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+spec:
+  imagePullSecrets:
+    - name: talend-registry
+  containers:
+    - name: talend-jdk8-builder-base
+      image: artifactory.datapwn.com/tlnd-docker-dev/talend/common/tsbi/jdk8-builder-base:2.3.0-20200824113419
+      tty: true
+      command:
+        - cat
+      volumeMounts:
+        - name: m2
+          mountPath: /root/.m2/repository
+  volumes:
+    - name: m2
+      hostPath:
+        path: /tmp/jenkins/tsbi/m2
