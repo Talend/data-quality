@@ -14,7 +14,7 @@ N/A
 ### Deprecated
 N/A
 ### Fixed
-N/A
+fix(TDQ-18542) tMatchGroup(t-swoosh):master records should not do the computation when two rule tabs existing
 ### Security
 N/A
 
