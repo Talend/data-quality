@@ -12,6 +12,13 @@
 // ============================================================================
 package org.talend.dataquality.record.linkage.grouping;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
+
 import org.apache.commons.lang.StringUtils;
 import org.talend.dataquality.matchmerge.SubString;
 import org.talend.dataquality.matchmerge.mfb.MFBAttributeMatcher;
@@ -30,13 +37,6 @@ import org.talend.dataquality.record.linkage.record.IRecordMatcher;
 import org.talend.dataquality.record.linkage.record.RecordMatcherFactory;
 import org.talend.dataquality.record.linkage.utils.CustomAttributeMatcherClassNameConvert;
 import org.talend.utils.classloader.TalendURLClassLoader;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * created by zhao on Jul 19, 2013 <br>
@@ -224,6 +224,8 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
                 return;
             }
             // temporary array to store attributes to match
+            // TODO why get only the first MatchRule here???
+            // https://jira.talendforge.org/browse/TDQ-18732
             List<Map<String, String>> matchingRule = multiMatchRules.get(0);
             String[] lookupDataArray = new String[matchingRule.size()];
 
@@ -417,14 +419,14 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
     @Override
     public void end() throws IOException, InterruptedException {
         // output the masters
-        for (TYPE[] mst : masterRecords) {
+        for (TYPE[] mst : this.masterRecords) {
             outputRow(mst);
         }
         clear();
     }
 
     protected void clear() {
-        multiMatchRules.clear();
+        this.multiMatchRules.clear();
     }
 
     private void updateWithExtendedColumn(TYPE[] inputRow, TYPE[] masterRecord, double matchingProba,
@@ -475,7 +477,7 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
      */
     @Override
     public void addMatchRule(List<Map<String, String>> matchRule) {
-        multiMatchRules.add(matchRule);
+        this.multiMatchRules.add(matchRule);
     }
 
     /*
@@ -521,9 +523,9 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
      */
     @Override
     public void initialize() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
-        masterRecords.clear();
-        combinedRecordMatcher = RecordMatcherFactory.createCombinedRecordMatcher();
-        for (List<Map<String, String>> matchRule : multiMatchRules) {
+        this.masterRecords.clear();
+        this.combinedRecordMatcher = RecordMatcherFactory.createCombinedRecordMatcher();
+        for (List<Map<String, String>> matchRule : this.multiMatchRules) {
             createRecordMatcher(matchRule);
         }
     }
@@ -540,7 +542,7 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
         String[] survivorShipFunctions = new String[recordSize];
         TokenizedResolutionMethod[] tokenMethod = new TokenizedResolutionMethod[recordSize];
         double recordMatchThreshold = acceptableThreshold;// keep compatibility to older version.
-        boolean isSwoosh = matchAlgo == RecordMatcherType.T_SwooshAlgorithm;
+        boolean isSwoosh = this.matchAlgo == RecordMatcherType.T_SwooshAlgorithm;
         int keyIdx = 0;
         for (Map<String, String> recordMap : matchRule) {
             algorithmName[keyIdx][0] = recordMap.get(IRecordGrouping.MATCHING_TYPE);
@@ -605,16 +607,18 @@ public abstract class AbstractRecordGrouping<TYPE> implements IRecordGrouping<TY
             attributeMatcher[indx].setAttributeName(attributeNames[indx]);
         }
 
-        IRecordMatcher recordMatcher = RecordMatcherFactory.createMatcher(RecordMatcherType.simpleVSRMatcher);
+        IRecordMatcher recordMatcher;
         if (isSwoosh) {
             recordMatcher = new DQMFBRecordMatcher(recordMatchThreshold);
             ((DQMFBRecordMatcher) recordMatcher).setSurvivorShipFunction(survivorShipFunctions);
+        } else {
+            recordMatcher = RecordMatcherFactory.createMatcher(RecordMatcherType.simpleVSRMatcher);
         }
         recordMatcher.setRecordSize(recordSize);
         recordMatcher.setAttributeWeights(arrAttrWeights);
         recordMatcher.setAttributeMatchers(attributeMatcher);
         recordMatcher.setRecordMatchThreshold(recordMatchThreshold);
-        combinedRecordMatcher.add(recordMatcher);
+        this.combinedRecordMatcher.add(recordMatcher);
     }
 
     private TokenizedResolutionMethod getTokenMethod(Map<String, String> recordMap) {

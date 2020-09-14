@@ -12,6 +12,10 @@
 // ============================================================================
 package org.talend.dataquality.matchmerge.mfb;
 
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+
 import org.apache.commons.collections.iterators.IteratorChain;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -22,10 +26,6 @@ import org.talend.dataquality.record.linkage.attribute.IAttributeMatcher;
 import org.talend.dataquality.record.linkage.record.AbstractRecordMatcher;
 import org.talend.dataquality.record.linkage.utils.SurvivorShipAlgorithmEnum;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-
 public class MFBRecordMatcher extends AbstractRecordMatcher {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MFBRecordMatcher.class);
@@ -34,8 +34,8 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
 
     private static double worstConfidenceValue;
 
-    //Added TDQ-18347,20200515 , one key <-> one survivorship function
-    private static String[] survivorshipFunctions;
+    // Added TDQ-18347,20200515 , one key <-> one survivorship function
+    private String[] survivorshipFunctions;
 
     public MFBRecordMatcher(double minConfidenceValue) {
         this.minConfidenceValue = minConfidenceValue;
@@ -123,7 +123,7 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
     }
 
     @SuppressWarnings("unchecked")
-    private static double matchScore(Attribute leftAttribute, Attribute rightAttribute, IAttributeMatcher matcher,
+    private double matchScore(Attribute leftAttribute, Attribute rightAttribute, IAttributeMatcher matcher,
             Double leftWorstScore, Double rightWorstScore, int matchIndex) {
         // Find the best score in values
         // 1- Try first values
@@ -169,7 +169,7 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
      * @param survivorShipFunctions
      */
     public void setSurvivorShipFunction(String[] survivorShipFunctions) {
-        survivorshipFunctions = survivorShipFunctions;
+        this.survivorshipFunctions = survivorShipFunctions;
     }
 
     /**
@@ -178,11 +178,11 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
      * @param comparedAttribute
      * @return
      */
-    protected static IteratorChain getAllComparedValues(Attribute comparedAttribute, int matchIndex) {
-        if (survivorshipFunctions != null && survivorshipFunctions.length > matchIndex
+    protected IteratorChain getAllComparedValues(Attribute comparedAttribute, int matchIndex) {
+        if (this.survivorshipFunctions != null && this.survivorshipFunctions.length > matchIndex
                 && SurvivorShipAlgorithmEnum.CONCATENATE
                         .getValue()
-                        .equalsIgnoreCase(survivorshipFunctions[matchIndex])) {
+                        .equalsIgnoreCase(this.survivorshipFunctions[matchIndex])) {
             if (comparedAttribute.getValues().size() > 0) {
                 return new IteratorChain(comparedAttribute.getValues().iterator());
             }
@@ -199,12 +199,11 @@ public class MFBRecordMatcher extends AbstractRecordMatcher {
      */
     public void setSurvivorShipFunction(SurvivorShipAlgorithmEnum[] surAlgorithms) {
         if (surAlgorithms != null && surAlgorithms.length > 0) {
-            survivorshipFunctions = new String[surAlgorithms.length];
+            this.survivorshipFunctions = new String[surAlgorithms.length];
             int index = 0;
             for (SurvivorShipAlgorithmEnum sAlgorithm : surAlgorithms) {
-                survivorshipFunctions[index++] = sAlgorithm.getValue();
+                this.survivorshipFunctions[index++] = sAlgorithm.getValue();
             }
         }
-
     }
 }

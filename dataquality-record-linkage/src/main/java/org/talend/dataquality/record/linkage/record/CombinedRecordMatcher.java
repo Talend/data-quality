@@ -150,7 +150,7 @@ public class CombinedRecordMatcher extends AbstractRecordMatcher {
     public MatchResult getMatchingWeight(Record record1, Record record2) {
         MatchResult lastPositiveMatchResult = NonMatchResult.INSTANCE;
         double matchingWeight = 0;
-        for (IRecordMatcher m : matchers) {
+        for (IRecordMatcher m : this.matchers) {
             MFBRecordMatcher matcher = (MFBRecordMatcher) m;
             MatchResult matchResult = matcher.getMatchingWeight(record1, record2);
             double currentWeight = matchResult.getNormalizedConfidence();
@@ -158,7 +158,7 @@ public class CombinedRecordMatcher extends AbstractRecordMatcher {
                 continue; // a better match already exists
             }
             // store last matcher
-            lastPositiveMatcher = matcher;
+            this.lastPositiveMatcher = matcher;
             matchingWeight = currentWeight;
             lastPositiveMatchResult = matchResult;
 
