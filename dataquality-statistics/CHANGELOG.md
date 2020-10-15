@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 N/A
 ### Changed
-N/A
+-chore(TDQ-17694): Fix Jackson Data Mapper Issues 
 ### Removed
 N/A
 ### Deprecated
