@@ -26,7 +26,6 @@
 		<powermock.version>2.0.2</powermock.version>
 		<re2j.version>1.2</re2j.version>
 		<org.talend.daikon.version>1.16.2</org.talend.daikon.version>
-		<org.codehaus.jackson.version>1.9.15-TALEND</org.codehaus.jackson.version>
 
 		<sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
 	</properties>
