@@ -16,7 +16,7 @@ N/A
 ### Fixed
 N/A
 ### Security
-N/A
+- fix(TDQ-17694): Fix Jackson Data Mapper Issues
 
 ## [8.0.5] - 2020-09-17
 
