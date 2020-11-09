@@ -17,6 +17,7 @@ N/A
 N/A
 ### Security
 - fix(TDQ-17694): Fix Jackson Data Mapper Issues
+- fix(TDQ-18385): Apache Common Codec issues
 
 ## [8.3.0] - 2020-07-16
 ### Added

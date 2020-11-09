@@ -16,7 +16,7 @@ N/A
 ### Fixed
 N/A
 ### Security
-N/A
+- fix(TDQ-18385): Apache Common Codec issues
 
 ## [8.3.0] - 2020-07-16
 
