@@ -16,7 +16,7 @@ N/A
 ### Fixed
 fix(TDQ-18542) tMatchGroup(t-swoosh):master records should not do the computation when two rule tabs existing
 ### Security
-- fix(TDQ-18385): Apache Common Codec issues
+- fix(TDQ-18385): Fix Apache Common Codec issues
 
 ## [8.3.0] - 2020-07-16
 
