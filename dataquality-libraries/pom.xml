@@ -3,12 +3,12 @@
 	<parent>
 		<groupId>org.talend.dataquality</groupId>
 		<artifactId>dataquality-parent</artifactId>
-		<version>8.3.1-SNAPSHOT</version>
+		<version>8.3.1</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>dataquality-libraries</artifactId>
-	<version>8.3.1-SNAPSHOT</version>
+	<version>8.3.1</version>
 	<packaging>pom</packaging>
 	<name>dataquality-libraries</name>
 	<description>Parent pom aggregating other library projects, devops tools</description>
@@ -25,8 +25,9 @@
 		<mockito.version>2.23.4</mockito.version>
 		<powermock.version>2.0.2</powermock.version>
 		<re2j.version>1.2</re2j.version>
-		<org.talend.daikon.version>1.16.2</org.talend.daikon.version>
-		<commons-codec.version>1.14</commons-codec.version><!--adapt for the version using in studio-->
+		<org.talend.daikon.version>1.15.0</org.talend.daikon.version>
+		<commons-codec.version>1.14</commons-codec.version>
+<!--adapt for the version using in studio-->
 
 		<sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
 	</properties>
