@@ -13,7 +13,7 @@
 package org.talend.dataquality.statistics.quality;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.talend.dataquality.statistics.type.DataTypeEnum.STRING;
 
 import java.io.IOException;
@@ -177,4 +177,15 @@ public class ValueQualityAnalyzerTest {
         assertEquals(789, dataTypeStatistics.getUnknownCount());
     }
 
+    @Test
+    public void testClose() throws Exception {
+        DataTypeQualityAnalyzer dataTypeQualityAnalyzer = Mockito.mock(DataTypeQualityAnalyzer.class);
+        QualityAnalyzer analyzer = Mockito.mock(QualityAnalyzer.class);
+        ValueQualityAnalyzer valueQualityAnalyzer = new ValueQualityAnalyzer(dataTypeQualityAnalyzer, analyzer);
+
+        valueQualityAnalyzer.close();
+
+        verify(dataTypeQualityAnalyzer, times(1)).close();
+        verify(analyzer, times(1)).close();
+    }
 }

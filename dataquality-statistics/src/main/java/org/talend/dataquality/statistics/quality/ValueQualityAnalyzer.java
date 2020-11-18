@@ -99,7 +99,11 @@ public class ValueQualityAnalyzer implements Analyzer<ValueQualityStatistics> {
     }
 
     @Override
-    public void close() {
+    public void close() throws Exception {
+        dataTypeQualityAnalyzer.close();
+        if (semanticQualityAnalyzer != null) {
+            semanticQualityAnalyzer.close();
+        }
     }
 
 }
