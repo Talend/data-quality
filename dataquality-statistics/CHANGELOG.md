@@ -16,7 +16,7 @@ N/A
 ### Fixed
 N/A
 ### Security
-N/A
+- fix(TDQ-18897): fix org.apache.httpcomponents:httpclient issue
 
 ## [8.3.1] - 2020-11-18
 ### Security
