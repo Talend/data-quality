@@ -16,7 +16,7 @@ N/A
 ### Fixed
 N/A
 ### Security
-N/A
+- fix(TDQ-18962): XStream Core high severity issue
 
 ## [8.0.6] - 2020-11-12
 
