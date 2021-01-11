@@ -8,6 +8,8 @@
 
 def AWS_POD_LABEL = "TDQ-SE-${UUID.randomUUID().toString()}"
 
+def branchType = getBranchType "${env.BRANCH_NAME}"
+
 pipeline {
     agent {
         kubernetes {
@@ -30,10 +32,13 @@ pipeline {
     }
 
     environment {
+        SLACK_CHANNEL = 'tdq_ci'
         PROJECT_TEAM = 'dataquality'
         PROJECT_NAME = 'parent'
-        SLACK_CHANNEL = 'tdq_ci'
-        SONAR_OPTS = "-Dsonar.projectKey=${PROJECT_TEAM}:${PROJECT_NAME} -Dsonar.projectName=${PROJECT_TEAM}-${PROJECT_NAME}"
+        SONAR_URL = "https://sonar-eks.datapwn.com"
+        SONAR_OPTS = "-Dsonar.host.url=${SONAR_URL} -Dsonar.projectKey=${PROJECT_TEAM}:${PROJECT_NAME} -Dsonar.projectName=${PROJECT_TEAM}-${PROJECT_NAME}"
+        SONAR_DASHBOARD_URL = "${SONAR_URL}/dashboard?id=dataquality%3Aparent"
+
     }
 
     stages {
@@ -78,8 +83,18 @@ pipeline {
             steps {
                 container('talend-jdk8-builder-base') {
                     configFileProvider([configFile(fileId: 'maven-settings-nexus-zl', variable: 'MAVEN_SETTINGS')]) {
-                        withSonarQubeEnv('sonar') {
-                            sh "mvn $SONAR_OPTS sonar:sonar"
+                        withCredentials([usernamePassword(credentialsId: 'sonar-credentials',
+                                passwordVariable: 'SONAR_PASSWORD', usernameVariable: 'SONAR_LOGIN')]) {
+                            script {
+                                if (branchType == 'pull-request') {
+                                    sh 'mvn $SONAR_OPTS -Dsonar.login="$SONAR_LOGIN" -Dsonar.password="$SONAR_PASSWORD" -Dsonar.pullrequest.key=${env.CHANGE_ID} -Dsonar.pullrequest.branch=${env.CHANGE_BRANCH} -Dsonar.pullrequest.base=${env.CHANGE_TARGET} sonar:sonar'
+                                } else if (branchType == 'maintenance') {
+                                    date = sh(script: 'date +%Y-%m-%d', returnStdout: true).trim()
+                                    sh 'mvn $SONAR_OPTS -Dsonar.login="$SONAR_LOGIN" -Dsonar.password="$SONAR_PASSWORD" -Dsonar.projectVersion=$date.${env.GIT_COMMIT} sonar:sonar'
+                                } else {
+                                    sh 'mvn $SONAR_OPTS -Dsonar.login="$SONAR_LOGIN" -Dsonar.password="$SONAR_PASSWORD" sonar:sonar'
+                                }
+                            }
                         }
                     }
                 }
@@ -135,4 +150,23 @@ pipeline {
             }
         }
     }
+}
+
+@NonCPS
+static def getBranchType(String branchName) {
+    def pr_pattern = 'PR-.*'
+    def maintenance_pattern = "maintenance*"
+
+    def branchType
+    switch (branchName) {
+        case ~pr_pattern:
+            branchType = 'pull-request'
+            break
+        case ~maintenance_pattern:
+            branchType = 'maintenance'
+            break
+        default:
+            branchType = 'unknown'
+    }
+    branchType
 }
