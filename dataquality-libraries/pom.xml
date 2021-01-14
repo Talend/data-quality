@@ -27,6 +27,7 @@
 		<re2j.version>1.2</re2j.version>
 		<org.talend.daikon.version>1.16.3</org.talend.daikon.version>
 		<sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
+		<jackson.version>2.11.3</jackson.version>
 	</properties>
 
 	<modules>
@@ -82,6 +83,13 @@
 				<artifactId>commons-math3</artifactId>
 				<version>3.5</version>
 			</dependency>
+			
+			 <!-- Jackson -->
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
 
 			<!-- logging stuff -->
 			<dependency>
