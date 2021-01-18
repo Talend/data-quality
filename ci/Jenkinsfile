@@ -82,30 +82,27 @@ pipeline {
         stage("Sonarqube analysis") {
             steps {
                 container('talend-jdk8-builder-base') {
-                    configFileProvider([configFile(fileId: 'maven-settings-nexus-zl', variable: 'MAVEN_SETTINGS')]) {
-                        withCredentials([usernamePassword(credentialsId: 'sonar-credentials',
-                                passwordVariable: 'SONAR_PASSWORD', usernameVariable: 'SONAR_LOGIN')]) {
-                            script {
-                                if (branchType == 'pull-request') {
-                                    sh """
-                                        mvn $SONAR_OPTS -Dsonar.login="$SONAR_LOGIN" -Dsonar.password="$SONAR_PASSWORD" -Dsonar.pullrequest.key=${env.CHANGE_ID} -Dsonar.pullrequest.branch=${env.CHANGE_BRANCH} -Dsonar.pullrequest.base=${env.CHANGE_TARGET} sonar:sonar
-                                    """
-                                } else if (branchType == 'maintenance') {
-                                    date = sh(script: 'date +%Y-%m-%d', returnStdout: true).trim()
-                                    sh """
-                                        mvn $SONAR_OPTS -Dsonar.login="$SONAR_LOGIN" -Dsonar.password="$SONAR_PASSWORD" -Dsonar.projectVersion=$date.${env.GIT_COMMIT} sonar:sonar
-                                    """
-                                } else {
-                                    sh """
-                                        mvn $SONAR_OPTS -Dsonar.login="$SONAR_LOGIN" -Dsonar.password="$SONAR_PASSWORD" -Dsonar.branch.name=${env.BRANCH_NAME} sonar:sonar
-                                    """
-                                }
+                    withSonarQubeEnv('sonar') {
+                        script {
+                            if (branchType == 'pull-request') {
+                                sh """
+                                    mvn $SONAR_OPTS -Dsonar.pullrequest.key=${env.CHANGE_ID} -Dsonar.pullrequest.branch=${env.CHANGE_BRANCH} -Dsonar.pullrequest.base=${env.CHANGE_TARGET} sonar:sonar
+                                """
+                            } else if (branchType == 'maintenance') {
+                                date = sh(script: 'date +%Y-%m-%d', returnStdout: true).trim()
+                                sh """
+                                    mvn $SONAR_OPTS -Dsonar.projectVersion=$date.${env.GIT_COMMIT} sonar:sonar
+                                """
+                            } else {
+                                sh """
+                                    mvn $SONAR_OPTS -Dsonar.branch.name=${env.BRANCH_NAME} sonar:sonar
+                                """
                             }
                         }
                     }
                 }
             }
-        }      
+        }
 
         /*
         * Publishing artifact stage (only if it is a releasable branch):
