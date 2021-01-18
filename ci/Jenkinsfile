@@ -87,12 +87,18 @@ pipeline {
                                 passwordVariable: 'SONAR_PASSWORD', usernameVariable: 'SONAR_LOGIN')]) {
                             script {
                                 if (branchType == 'pull-request') {
-                                    sh 'mvn $SONAR_OPTS -Dsonar.login="$SONAR_LOGIN" -Dsonar.password="$SONAR_PASSWORD" -Dsonar.pullrequest.key=${env.CHANGE_ID} -Dsonar.pullrequest.branch=${env.CHANGE_BRANCH} -Dsonar.pullrequest.base=${env.CHANGE_TARGET} sonar:sonar'
+                                    sh """
+                                        mvn $SONAR_OPTS -Dsonar.login="$SONAR_LOGIN" -Dsonar.password="$SONAR_PASSWORD" -Dsonar.pullrequest.key=${env.CHANGE_ID} -Dsonar.pullrequest.branch=${env.CHANGE_BRANCH} -Dsonar.pullrequest.base=${env.CHANGE_TARGET} sonar:sonar
+                                    """
                                 } else if (branchType == 'maintenance') {
                                     date = sh(script: 'date +%Y-%m-%d', returnStdout: true).trim()
-                                    sh 'mvn $SONAR_OPTS -Dsonar.login="$SONAR_LOGIN" -Dsonar.password="$SONAR_PASSWORD" -Dsonar.projectVersion=$date.${env.GIT_COMMIT} sonar:sonar'
+                                    sh """
+                                        mvn $SONAR_OPTS -Dsonar.login="$SONAR_LOGIN" -Dsonar.password="$SONAR_PASSWORD" -Dsonar.projectVersion=$date.${env.GIT_COMMIT} sonar:sonar
+                                    """
                                 } else {
-                                    sh 'mvn $SONAR_OPTS -Dsonar.login="$SONAR_LOGIN" -Dsonar.password="$SONAR_PASSWORD" sonar:sonar'
+                                    sh """
+                                        mvn $SONAR_OPTS -Dsonar.login="$SONAR_LOGIN" -Dsonar.password="$SONAR_PASSWORD" -Dsonar.branch.name=${env.BRANCH_NAME} sonar:sonar
+                                    """
                                 }
                             }
                         }
