@@ -36,7 +36,7 @@ pipeline {
         SLACK_CHANNEL = 'tdq_ci'
         PROJECT_TEAM = 'dataquality'
         PROJECT_NAME = 'parent'
-        SONAR_URL = "https://sonar-eks.datapwn.com  "
+        SONAR_URL = "https://sonar-eks.datapwn.com"
         SONAR_OPTS = "-Dsonar.host.url=${SONAR_URL} -Dsonar.projectKey=${PROJECT_TEAM}:${PROJECT_NAME} -Dsonar.projectName=${PROJECT_TEAM}-${PROJECT_NAME}"
         SONAR_DASHBOARD_URL = "${SONAR_URL}/dashboard?id=dataquality%3Aparent"
 
@@ -86,39 +86,25 @@ pipeline {
                     withSonarQubeEnv('sonar') {
                         script {
                             if (branchType == 'pull-request') {
+                                SONAR_DASHBOARD_URL = "${SONAR_DASHBOARD_URL}&pullRequest=${env.CHANGE_ID}"
                                 sh """
                                     mvn $SONAR_OPTS -Dsonar.pullrequest.key=${env.CHANGE_ID} -Dsonar.pullrequest.branch=${env.CHANGE_BRANCH} -Dsonar.pullrequest.base=${env.CHANGE_TARGET} sonar:sonar
                                 """
                             } else if (branchType == 'maintenance') {
+                                SONAR_DASHBOARD_URL = "${SONAR_DASHBOARD_URL}&branch=${env.BRANCH_NAME}"
                                 date = sh(script: 'date +%Y-%m-%d', returnStdout: true).trim()
                                 sh """
                                     mvn $SONAR_OPTS -Dsonar.projectVersion=$date.${env.GIT_COMMIT} sonar:sonar
                                 """
                             } else {
+                                SONAR_DASHBOARD_URL = "${SONAR_DASHBOARD_URL}&branch=${env.BRANCH_NAME}"
                                 sh """
                                     mvn $SONAR_OPTS -Dsonar.branch.name=${env.BRANCH_NAME} sonar:sonar
                                 """
                             }
+                            echo "Sonar URL is ${SONAR_DASHBOARD_URL}"
                         }
                     }
-                }
-            }
-        }
-
-        stage("quality gate") {
-            steps {
-                withSonarQubeEnv('sonar') {
-                    timeout(time: 5, unit: 'MINUTES') {
-                        waitForQualityGate abortPipeline: true
-                    }
-                }
-            }
-            post {
-                always {
-                    junit '*/target/surefire-reports/TEST-*.xml'
-                }
-                success {
-                    archiveArtifacts artifacts: '*/target/dataquality-*.jar', onlyIfSuccessful: true
                 }
             }
         }
