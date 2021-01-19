@@ -104,6 +104,16 @@ pipeline {
             }
         }
 
+        stage("quality gate") {
+            steps {
+                withSonarQubeEnv('sonar') {
+                    timeout(time: 5, unit: 'MINUTES') {
+                        waitForQualityGate abortPipeline: true
+                    }
+                }
+            }
+        }
+
         /*
         * Publishing artifact stage (only if it is a releasable branch):
         *       - Deploy every DQ-SE module jar on Nexus
