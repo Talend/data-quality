@@ -41,6 +41,10 @@ pipeline {
                 name: "target_dq_lib_version",
                 description: "Target DQ Lib SE version",
                 defaultValue: "0.0.0")
+        string(
+                name: "daikon_version",
+                description: "(Optional) Daikon Version. If not set, will remain unchanged.",
+                defaultValue: "")
     }
 
     stages {
@@ -55,7 +59,9 @@ pipeline {
                     sh """#! /bin/sh
                         set -e
                         echo target_dq_lib_version=${target_dq_lib_version}
+                        echo daikon_version=${daikon_version}
                         sed -i "s/String TARGET_VERSION = .*;/String TARGET_VERSION = \\"${target_dq_lib_version}\\";/" dataquality-libraries-devops/src/main/java/org/talend/dataquality/libraries/devops/ReleaseVersionBumper.java
+                        sed -i "s/String TARGET_DAIKON_VERSION = .*;/String TARGET_DAIKON_VERSION = \\"${daikon_version}\\";/" dataquality-libraries-devops/src/main/java/org/talend/dataquality/libraries/devops/ReleaseVersionBumper.java
                        """
                 }
             }
