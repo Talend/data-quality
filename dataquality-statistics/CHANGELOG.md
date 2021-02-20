@@ -16,8 +16,8 @@ N/A
 ### Fixed
 N/A
 ### Security
-- fix(TDQ-18897): Fix org.apache.httpcomponents:httpclient issue
-- fix(TDQ-19066): Fix jackson-databind issues
+- fix([TDQ-18897](https://jira.talendforge.org/browse/TDQ-18897)): Fix org.apache.httpcomponents:httpclient issue
+- fix([TDQ-19066](https://jira.talendforge.org/browse/TDQ-19066)): Fix jackson-databind issues
 
 ## [8.3.1] - 2020-11-18
 ### Security

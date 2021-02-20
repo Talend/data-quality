@@ -16,8 +16,8 @@ N/A
 ### Fixed
 N/A
 ### Security
-- fix(TDQ-18962): XStream Core high severity issue
-- fix(TDQ-19065): XStream Core issue
+- fix([TDQ-18962](https://jira.talendforge.org/browse/TDQ-18962)): XStream Core high severity issue
+- fix([TDQ-19065](https://jira.talendforge.org/browse/TDQ-19065)): XStream Core issue
 
 ## [8.3.1] - 2020-11-18
 ### Security

@@ -16,7 +16,7 @@ N/A
 ### Fixed
 N/A
 ### Security
-- fix(TDQ-19066): Fix jackson-databind issues
+- fix([TDQ-19066](https://jira.talendforge.org/browse/TDQ-19066)): Fix jackson-databind issues
 
 ## [8.3.1] - 2020-11-18
 ### Security
