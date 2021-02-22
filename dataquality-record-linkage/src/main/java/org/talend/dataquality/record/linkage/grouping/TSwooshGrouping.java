@@ -35,6 +35,8 @@ import org.talend.dataquality.record.linkage.grouping.swoosh.RichRecord;
 import org.talend.dataquality.record.linkage.grouping.swoosh.SurvivorShipAlgorithmParams;
 import org.talend.dataquality.record.linkage.grouping.swoosh.SurvivorShipAlgorithmParams.SurvivorshipFunction;
 import org.talend.dataquality.record.linkage.grouping.swoosh.SwooshConstants;
+import org.talend.dataquality.record.linkage.grouping.swoosh.golden.DQGoldenRecordIterator;
+import org.talend.dataquality.record.linkage.grouping.swoosh.golden.DQGoldenRecordMFB;
 import org.talend.dataquality.record.linkage.record.CombinedRecordMatcher;
 import org.talend.dataquality.record.linkage.record.IRecordMatcher;
 import org.talend.dataquality.record.linkage.utils.BidiMultiMap;
@@ -332,6 +334,30 @@ public class TSwooshGrouping<TYPE> {
         }
     }
 
+    public void swooshMatchWithGolden(IRecordMatcher combinedRecordMatcher, SurvivorShipAlgorithmParams survParams) {
+        swooshMatchWithGolden(combinedRecordMatcher, survParams,
+                new org.talend.dataquality.record.linkage.grouping.callback.GroupingCallBackWithGoldenRecord<>(
+                        this.oldGID2New, this.recordGrouping));
+    }
+
+    /**
+     * Used by tmatchgroup only.
+     * 
+     * @param combinedRecordMatcher
+     * @param survParams
+     */
+    private void swooshMatchWithGolden(IRecordMatcher combinedRecordMatcher, SurvivorShipAlgorithmParams survParams,
+            org.talend.dataquality.record.linkage.grouping.callback.GroupingCallBack callBack) {
+        algorithm = (DQMFB) createTswooshAlgorithmWithGolden(combinedRecordMatcher, survParams, callBack);
+        algorithm.setHandleGoldenRecord(true);
+        Iterator<Record> iterator = new DQGoldenRecordIterator(totalCount, rcdsGenerators);
+        ((DQRecordIterator) iterator).setOriginalColumnCount(this.recordGrouping.getOriginalInputColumnSize());
+        while (iterator.hasNext()) {
+
+            algorithm.matchOneRecord(iterator.next());
+        }
+    }
+
     /**
      * DOC yyin Comment method "createTswooshAlgorithm".
      * 
@@ -341,6 +367,24 @@ public class TSwooshGrouping<TYPE> {
      */
     private MatchMergeAlgorithm createTswooshAlgorithm(IRecordMatcher combinedRecordMatcher,
             SurvivorShipAlgorithmParams survParams, MatchMergeAlgorithm.Callback callback) {
+        DQMFBRecordMerger recordMerger = createRecordMerger(survParams);
+        return new DQMFB(combinedRecordMatcher, recordMerger, callback);
+    }
+
+    /**
+     * 
+     * 
+     * @param combinedRecordMatcher
+     * @param survParams
+     * @return
+     */
+    private MatchMergeAlgorithm createTswooshAlgorithmWithGolden(IRecordMatcher combinedRecordMatcher,
+            SurvivorShipAlgorithmParams survParams, MatchMergeAlgorithm.Callback callback) {
+        DQMFBRecordMerger recordMerger = createRecordMerger(survParams);
+        return new DQGoldenRecordMFB(combinedRecordMatcher, recordMerger, callback);
+    }
+
+    private DQMFBRecordMerger createRecordMerger(SurvivorShipAlgorithmParams survParams) {
         SurvivorShipAlgorithmEnum[] surviorShipAlgos =
                 new SurvivorShipAlgorithmEnum[survParams.getSurviorShipAlgos().length];
         String[] funcParams = new String[surviorShipAlgos.length];
@@ -352,8 +396,7 @@ public class TSwooshGrouping<TYPE> {
         }
         DQMFBRecordMerger recordMerger = new DQMFBRecordMerger("MFB", funcParams, surviorShipAlgos, survParams); //$NON-NLS-1$
         recordMerger.setColumnDatePatternMap(this.recordGrouping.getColumnDatePatternMap());
-
-        return new DQMFB(combinedRecordMatcher, recordMerger, callback);
+        return recordMerger;
     }
 
     // init the algorithm before do matching.

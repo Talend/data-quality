@@ -85,7 +85,9 @@ public class DQMFBRecordMerger extends MFBRecordMerger {
     protected Record createNewRecord(Record record1, Record record2, long mergedRecordTimestamp) {
         RichRecord richRecord1 = (RichRecord) record1;
         RichRecord richRecord2 = (RichRecord) record2;
-        RichRecord mergedRecord = new RichRecord(record1.getId(), mergedRecordTimestamp, mergedRecordSource);
+        RichRecord mergedRecord = new RichRecord(Record.generateNewGoldenID(richRecord1, richRecord2),
+                mergedRecordTimestamp, mergedRecordSource);
+        mergedRecord.mergeForbiddenList(richRecord1, richRecord2);
         DQAttribute<?>[] mergedRows =
                 richRecord1.getOriginRow().toArray(new DQAttribute<?>[richRecord1.getOriginRow().size()]);
 

@@ -13,8 +13,10 @@
 package org.talend.dataquality.matchmerge.mfb;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 
 import org.slf4j.Logger;
@@ -34,9 +36,17 @@ public class MFB implements MatchMergeAlgorithm {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MFB.class);
 
-    private final IRecordMatcher matcher;
+    protected final IRecordMatcher matcher;
 
     private final IRecordMerger merger;
+
+    private boolean isHandleGoldenRecord = false;
+
+    // Store the mapping golden record id and golden record
+    protected Map<String, Record> goldenRecordMapExist = new HashMap<>();
+
+    // Store the golden record id and the list which need to do match with it
+    protected Map<String, List<Record>> goldenRecordMapUnExist = new HashMap<>();
 
     /**
      * Builds a Swoosh implementation based on a {@link org.talend.dataquality.record.linkage.record.IRecordMatcher
@@ -172,22 +182,22 @@ public class MFB implements MatchMergeAlgorithm {
         }
         // MFB algorithm
         boolean hasCreatedNewMerge = false;
+        if (!checkRecordValidation(record)) {
+            return;
+        }
         for (Record mergedRecord : mergedRecords) {
             MatchResult matchResult = doMatch(mergedRecord, record);
             if (matchResult.isMatch()) {
-                callback.onMatch(mergedRecord, record, matchResult);
-                Record newMergedRecord = merger.merge(record, mergedRecord);
-                callback.onSynResult(newMergedRecord, record, matchResult);
-                queue.offer(newMergedRecord);
-                callback.onNewMerge(newMergedRecord);
-                mergedRecords.remove(mergedRecord);
-                callback.onRemoveMerge(mergedRecord);
+                // need get a map list from the matchResult if one of record is golden record and they can match
+                executeSubMatchForGoldenRecord(record, mergedRecords, queue, callback, mergedRecord, matchResult);
+                matchTwoRecord(record, mergedRecords, queue, callback, mergedRecord, matchResult);
                 hasCreatedNewMerge = true;
                 break;
             } else {
                 callback.onDifferent(mergedRecord, record, matchResult);
             }
         }
+        hasCreatedNewMerge = startDelayMatch(record, mergedRecords, queue, callback, hasCreatedNewMerge);
         if (!hasCreatedNewMerge) {
             record.getRelatedIds().add(record.getId());
             mergedRecords.add(record);
@@ -196,7 +206,48 @@ public class MFB implements MatchMergeAlgorithm {
         callback.onEndRecord(record);
     }
 
-    private MatchResult doMatch(Record leftRecord, Record rightRecord) {
+    /**
+     * Sometimes new record need to match with other golden reocrd but it is not here on the time. So that we call this
+     * method to check it here or not
+     */
+    protected boolean startDelayMatch(Record record, List<Record> mergedRecords, Queue<Record> queue, Callback callback,
+            boolean hasCreatedNewMerge) {
+        return hasCreatedNewMerge;
+    }
+
+    protected boolean checkRecordValidation(Record record) {
+        return true;
+    }
+
+    /**
+     * Sometimes new record need to match with other golden reocrd
+     */
+    protected void executeSubMatchForGoldenRecord(Record record, List<Record> mergedRecords, Queue<Record> queue,
+            Callback callback, Record mergedRecord, MatchResult matchResult) {
+        // nothing need to do here
+
+    }
+
+    protected void matchTwoRecord(Record record, List<Record> mergedRecords, Queue<Record> queue, Callback callback,
+            Record mergedRecord, MatchResult matchResult) {
+        callback.onMatch(mergedRecord, record, matchResult);
+        Record newMergedRecord = merger.merge(record, mergedRecord);
+        synGoldenRecordMap(newMergedRecord, record, mergedRecord);
+        callback.onSynResult(newMergedRecord, record, matchResult);
+        queue.offer(newMergedRecord);
+        callback.onNewMerge(newMergedRecord);
+        mergedRecords.remove(mergedRecord);
+        callback.onRemoveMerge(mergedRecord);
+    }
+
+    /**
+     * syn goldenRecordMapExist and goldenRecordMapUnExist map here after match two record
+     */
+    protected void synGoldenRecordMap(Record newMergedRecord, Record record, Record mergedRecord) {
+        // nothing to do here
+    }
+
+    protected MatchResult doMatch(Record leftRecord, Record rightRecord) {
         if (leftRecord.getAttributes().size() != rightRecord.getAttributes().size()) {
             throw new IllegalArgumentException("Records do not share same attribute count."); //$NON-NLS-1$
         }
@@ -212,8 +263,27 @@ public class MFB implements MatchMergeAlgorithm {
                 }
             }
         }
+
+        MatchResult matchResult = matcher.getMatchingWeight(leftRecord, rightRecord);
+        matchResult = maskImpactMatchMap(leftRecord, rightRecord, matchResult);
         // Build match result
-        return matcher.getMatchingWeight(leftRecord, rightRecord);
+        return matchResult;
+    }
+
+    protected MatchResult maskImpactMatchMap(Record leftRecord, Record rightRecord, MatchResult matchResult) {
+        return matchResult;
+    }
+
+    protected boolean isGoldenRecordCase(Record leftRecord, Record rightRecord) {
+        return leftRecord.matchInForbiddenList(rightRecord);
+    }
+
+    protected boolean isHandleGoldenRecord() {
+        return isHandleGoldenRecord;
+    }
+
+    public void setHandleGoldenRecord(boolean isHandleGoldenRecord) {
+        this.isHandleGoldenRecord = isHandleGoldenRecord;
     }
 
     /**

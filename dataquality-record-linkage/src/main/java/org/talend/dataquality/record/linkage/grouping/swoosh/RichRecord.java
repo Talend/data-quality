@@ -546,4 +546,24 @@ public class RichRecord extends Record {
         isGrpSizeNotUpdated = true;
     }
 
+    @Override
+    public RichRecord clone() {
+        RichRecord newRichRecord = new RichRecord(this.getId(), this.getTimestamp(), this.getSource());
+        newRichRecord.getAttributes().addAll(this.getAttributes());
+        newRichRecord.getForbiddenList().addAll(this.getForbiddenList());
+        newRichRecord.getRelatedIds().addAll(this.getRelatedIds());
+        newRichRecord.setOriginRow(this.getOriginRow());
+        newRichRecord.isMaster = this.isMaster;
+        newRichRecord.isMerged = this.isMerged;
+        newRichRecord.grpSize = this.grpSize;
+        newRichRecord.score = this.score;
+        newRichRecord.groupQuality = this.groupQuality;
+        newRichRecord.labeledAttributeScores = this.labeledAttributeScores;
+        newRichRecord.recordSize = this.recordSize;
+        if (newRichRecord.getRelatedIds().size() > 1) {
+            newRichRecord.isClone = true;
+        }
+        return newRichRecord;
+    }
+
 }

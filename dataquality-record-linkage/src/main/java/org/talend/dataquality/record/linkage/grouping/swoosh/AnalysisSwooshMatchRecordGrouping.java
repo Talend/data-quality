@@ -175,6 +175,13 @@ public class AnalysisSwooshMatchRecordGrouping extends AnalysisMatchRecordGroupi
         row2.add(row.getMASTER());
         row2.add(row.getSCORE());
         row2.add(row.getGRP_QUALITY());
+        // TODO recover GID here only but we need to do same thing for GRP_SIZE MASTER SCORE and GRP_QUALITY
+        for (DQAttribute<?> attri : row2) {
+            if (attri.getLabel().equals(SwooshConstants.GID)) {
+                attri.setValue(row.getGID().getValue());
+                break;
+            }
+        }
 
         // 3, get other additional column by different options.
         if (this.isOutputDistDetails()) {

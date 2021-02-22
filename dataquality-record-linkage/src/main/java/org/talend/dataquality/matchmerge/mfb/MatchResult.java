@@ -13,8 +13,11 @@
 package org.talend.dataquality.matchmerge.mfb;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.talend.dataquality.matchmerge.Record;
 import org.talend.dataquality.record.linkage.constant.AttributeMatcherType;
 
 public class MatchResult {
@@ -28,6 +31,9 @@ public class MatchResult {
     private double finalWorstConfidenceValue;
 
     private final List<Double> worstConfidenceValueScoreList;
+
+    // The key is source reocrd it will not be golden record the list is golden record ID list
+    private Map<Record, List<String>> impactMatchMap = null;
 
     private final static double THRESHOLD = 0.0000001;
 
@@ -128,6 +134,18 @@ public class MatchResult {
      */
     public List<Double> getWorstConfidenceValueScoreList() {
         return this.worstConfidenceValueScoreList;
+    }
+
+    /**
+     * Getter for ImpactMatchMap.
+     * 
+     * @return the ImpactMatchMap
+     */
+    public Map<Record, List<String>> getImpactMatchMap() {
+        if (impactMatchMap == null) {
+            impactMatchMap = new HashMap<>();
+        }
+        return impactMatchMap;
     }
 
 }

@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class ComponentSwooshMatchRecordGrouping extends AnalysisSwooshMatchRecordGrouping {
 
-    private boolean matchFinished = false;
+    protected boolean matchFinished = false;
 
     /*
      * (non-Javadoc)
@@ -39,7 +39,7 @@ public class ComponentSwooshMatchRecordGrouping extends AnalysisSwooshMatchRecor
                     originalInputColumnSize);
         } else {
             // during the match, the output in processing will not output really
-            swooshGrouping.swooshMatch(combinedRecordMatcher, survivorShipAlgorithmParams);
+            doSwooshMatchWithSingle();
         }
         swooshGrouping.afterAllRecordFinished();
         matchFinished = true;
@@ -53,6 +53,10 @@ public class ComponentSwooshMatchRecordGrouping extends AnalysisSwooshMatchRecor
         clear();
     }
 
+    protected void doSwooshMatchWithSingle() {
+        swooshGrouping.swooshMatch(combinedRecordMatcher, survivorShipAlgorithmParams);
+    }
+
     /*
      *use the same way as tmatchgroup's schema: desided by different conditions: tmatchgroup_java.xml
      *((LINK_WITH_PREVIOUS=='true' AND MATCHING_ALGORITHM=='TSWOOSH_MATCHER')  AND OUTPUTDD == 'true'  AND PROPAGATE_ORIGINAL=='false')"
@@ -60,7 +64,7 @@ public class ComponentSwooshMatchRecordGrouping extends AnalysisSwooshMatchRecor
     @Override
     protected void outputRow(RichRecord row) {
         if (!matchFinished) {
-            tmpMatchResult.add(row);
+            addNewRow(row);
         } else {
             //TDq-12659  remove intermediate master records, when multipass. 
             if (isLinkToPrevious && row.isInterMediateMaster()) {// use multipass
@@ -79,6 +83,10 @@ public class ComponentSwooshMatchRecordGrouping extends AnalysisSwooshMatchRecor
         }
     }
 
+    protected void addNewRow(RichRecord row) {
+        tmpMatchResult.add(row);
+    }
+
     @Override
     protected void clear() {
         // Clear the GID map, no use anymore. but should not clear for multi-pass and store on disk. because it will be used to
@@ -88,6 +96,19 @@ public class ComponentSwooshMatchRecordGrouping extends AnalysisSwooshMatchRecor
         }
         tmpMatchResult.clear();
         masterRecords.clear();
+    }
+
+    public void repeatOutReleatedRecord(String recordID, String newGroupeID) {
+        for (RichRecord record : tmpMatchResult) {
+            if (record.getRelatedIds().size() <= 1 && record.getId().equals(recordID)) {
+                RichRecord newCloneRecord = record.clone();
+                newCloneRecord.setClone(false);
+                newCloneRecord.setGroupId(newGroupeID);
+                outputRow(newCloneRecord);
+                newCloneRecord.setClone(true);
+                break;
+            }
+        }
     }
 
 }

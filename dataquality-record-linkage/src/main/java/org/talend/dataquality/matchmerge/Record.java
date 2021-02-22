@@ -51,6 +51,10 @@ public class Record {
 
     private double confidence = MAX_CONFIDENCE;
 
+    private List<String> forbiddenList = new ArrayList<>();
+
+    protected boolean isClone = false;
+
     /**
      * Creates a empty record (no {@link org.talend.dataquality.matchmerge.Attribute attributes}).
      * 
@@ -216,6 +220,92 @@ public class Record {
      */
     public List<Double> getWorstConfidenceValueScoreList() {
         return this.worstConfidenceValueScoreList;
+    }
+
+    public List<String> getForbiddenList() {
+        if (forbiddenList == null) {
+            forbiddenList = new ArrayList<>();
+        }
+        return forbiddenList;
+    }
+
+    /**
+     * Check whether current record is in the forbidden list of parameter record
+     */
+    public boolean matchInForbiddenList(Record needMatchRecord) {
+        // check master ID
+        String needMatchRecordID = needMatchRecord.getId();
+        for (String recordID : forbiddenList) {
+            if (recordID.equals(needMatchRecordID)) {
+                return true;
+            }
+        }
+        // check sub ID
+        Set<String> matchRecordRelatedIds = needMatchRecord.getRelatedIds();
+        for (String recordID : forbiddenList) {
+            if (matchRecordRelatedIds.contains(recordID)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Add the forbidden list into current record from the parameter record
+     */
+    public boolean addInForbiddenList(Record record) {
+        return this.getForbiddenList().add(record.getId()) && record.getForbiddenList().add(this.getId());
+    }
+
+    /**
+     * Judge whether current record is golden record
+     */
+    public boolean isGoldenRecord() {
+        return !this.getForbiddenList().isEmpty();
+    }
+
+    /**
+     * Merge the forbidden list from record1 and record2 into current record
+     */
+    public void mergeForbiddenList(Record record1, Record record2) {
+        // If record1 and record2 are not golden then fobiddenList will keep empty
+        this.getForbiddenList().clear();
+        this.getForbiddenList().addAll(record1.getForbiddenList());
+        for (String goldenID : record2.getForbiddenList()) {
+            if (!this.getForbiddenList().contains(goldenID)) {
+                this.getForbiddenList().add(goldenID);
+            }
+        }
+    }
+
+    /**
+     * Any one golden record ID is ok for new one. If no golden record then return first record ID
+     */
+    public static String generateNewGoldenID(Record record1, Record record2) {
+        if (record2.isGoldenRecord()) {
+            return record2.getId();
+        }
+        return record1.getId();
+    }
+
+    public boolean isClone() {
+        return isClone;
+    }
+
+    public void setClone(boolean isClone) {
+        this.isClone = isClone;
+    }
+
+    @Override
+    public Record clone() {
+        Record newRecord = new Record(this.getId(), this.getTimestamp(), this.getSource());
+        newRecord.attributes.addAll(this.getAttributes());
+        newRecord.forbiddenList.addAll(this.getForbiddenList());
+        newRecord.relatedIds.addAll(this.getRelatedIds());
+        if (newRecord.relatedIds.size() > 1) {
+            newRecord.isClone = true;
+        }
+        return newRecord;
     }
 
 }

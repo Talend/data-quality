@@ -56,6 +56,9 @@ public class DQMFB extends MFB {
     }
 
     @Override
+    /**
+     * MDM will use this method to start the matching and merging action
+     */
     public List<Record> execute(Iterator<Record> sourceRecords) {
         return execute(sourceRecords, callback);
     }
@@ -72,6 +75,8 @@ public class DQMFB extends MFB {
 
     /**
      * do the match on one record
+     * 
+     * DQ side use this method to start the matching and merging action
      * 
      * @param oneRecord
      */

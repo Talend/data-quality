@@ -12,13 +12,6 @@
 // ============================================================================
 package org.talend.dataquality.matchmerge.mfb;
 
-import org.apache.commons.lang.StringUtils;
-import org.talend.dataquality.matchmerge.Attribute;
-import org.talend.dataquality.matchmerge.AttributeValues;
-import org.talend.dataquality.matchmerge.Record;
-import org.talend.dataquality.record.linkage.record.IRecordMerger;
-import org.talend.dataquality.record.linkage.utils.SurvivorShipAlgorithmEnum;
-
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -26,6 +19,13 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
+import org.talend.dataquality.matchmerge.Attribute;
+import org.talend.dataquality.matchmerge.AttributeValues;
+import org.talend.dataquality.matchmerge.Record;
+import org.talend.dataquality.record.linkage.record.IRecordMerger;
+import org.talend.dataquality.record.linkage.utils.SurvivorShipAlgorithmEnum;
 
 public class MFBRecordMerger implements IRecordMerger {
 
@@ -127,7 +127,7 @@ public class MFBRecordMerger implements IRecordMerger {
         // Conservative strategy -> keeps the lowest confidence to avoid over-confidence in a group with many
         // low-confidence records.
         mergedRecord.setConfidence(Math.min(record1.getConfidence(), record2.getConfidence()));
-        if (record1.getGroupId() != null) {
+        if (record1.getId().equals(mergedRecord.getId()) && record1.getGroupId() != null) {
             mergedRecord.setGroupId(record1.getGroupId());
         } else if (record2.getGroupId() != null) {
             mergedRecord.setGroupId(record2.getGroupId());
