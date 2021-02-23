@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-N/A
+- feat(TDQ-17919) Golden records will match if new sources added
 ### Changed
 N/A
 ### Removed
