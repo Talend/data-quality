@@ -61,7 +61,10 @@ pipeline {
                         echo target_dq_lib_version=${target_dq_lib_version}
                         echo daikon_version=${daikon_version}
                         sed -i "s/String TARGET_VERSION = .*;/String TARGET_VERSION = \\"${target_dq_lib_version}\\";/" dataquality-libraries-devops/src/main/java/org/talend/dataquality/libraries/devops/ReleaseVersionBumper.java
-                        sed -i "s/String TARGET_DAIKON_VERSION = .*;/String TARGET_DAIKON_VERSION = \\"${daikon_version}\\";/" dataquality-libraries-devops/src/main/java/org/talend/dataquality/libraries/devops/ReleaseVersionBumper.java
+                        if [ "${daikon_version}" != "" ]
+                        then
+                          sed -i "s/String TARGET_DAIKON_VERSION = .*;/String TARGET_DAIKON_VERSION = \\"${daikon_version}\\";/" dataquality-libraries-devops/src/main/java/org/talend/dataquality/libraries/devops/ReleaseVersionBumper.java
+                        fi
                        """
                 }
             }
