@@ -16,7 +16,7 @@ N/A
 ### Fixed
 N/A
 ### Security
-N/A
+- fix(TDQ-19073): Fix JUnit issue
 
 ## [8.3.1] - 2020-11-18
 

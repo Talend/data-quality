@@ -17,6 +17,7 @@ N/A
 N/A
 ### Security
 - fix(TDQ-19066): Fix jackson-databind issues
+- fix(TDQ-19073): Fix JUnit issue
 
 ## [8.3.1] - 2020-11-18
 ### Security
