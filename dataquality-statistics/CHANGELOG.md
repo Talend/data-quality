@@ -17,6 +17,7 @@ N/A
 N/A
 ### Security
 - fix(TDQ-19073): Fix JUnit issue
+- fix(TDQ-19045): Update Jackson Databind to 2.11.4
 
 ## [8.0.9] - 2021-02-07
 
