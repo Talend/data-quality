@@ -27,7 +27,7 @@
 		<re2j.version>1.2</re2j.version>
 		<org.talend.daikon.version>1.16.3</org.talend.daikon.version>
 		<commons-codec.version>1.14</commons-codec.version>
-		<jackson.version>2.11.3</jackson.version>
+		<jackson.version>2.11.4</jackson.version>
 <!--adapt for the version using in studio-->
 
 		<sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
