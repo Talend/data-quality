@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2016 qiongli Inc. - www.qiongli.com
+// Copyright (C) 2006-2021 qiongli Inc. - www.qiongli.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.qiongli.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
