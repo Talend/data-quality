@@ -8,7 +8,7 @@ This repository contains the source files of Talend Data Quality libraries.
 | _Project_                                                 | _Description_                                                        |
 |:----------------------------------------------------------|----------------------------------------------------------------------|
 | [dataquality-common](dataquality-common)                  | *Abstractions of data analysis, and low-level utilities such as East Asian text pattern recognition* |
-| [dataquality-converter](dataquality-converter)            | *Convertion tools for datetime, distance, japanese characters, etc.* |
+| [dataquality-converter](dataquality-converter)            | *Conversion tools for datetime, distance, japanese characters, etc.* |
 | [dataquality-email](dataquality-email)                    | *Email validation library*                                           |
 | [dataquality-libraries](dataquality-libraries)            | *Parent pom aggregating other library projects*                      |
 | [dataquality-phone](dataquality-phone)                    | *Phone number validation and conversion tools*                       |
