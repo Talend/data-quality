@@ -1,0 +1,62 @@
+{
+  "type": "record",
+  "name": "union_complex_ref_type",
+  "namespace": "tdc.qa",
+  "fields": [
+    {
+      "name": "col_record_a",
+      "type": {
+        "type": "record",
+        "name": "a",
+        "namespace": "tdc.qa.0",
+        "fields": [
+          {
+            "name": "id",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "col_record_b",
+      "type": {
+        "type": "record",
+        "name": "b",
+        "namespace": "tdc.qa.0",
+        "fields": [
+          {
+            "name": "id",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "col_union_ab",
+      "type": [
+        {
+          "type": "record",
+          "name": "a",
+          "namespace": "tdc.qa.1",
+          "fields": [
+            {
+              "name": "id",
+              "type": "string"
+            }
+          ]
+        },
+        {
+          "type": "record",
+          "name": "b",
+          "namespace": "tdc.qa.1",
+          "fields": [
+            {
+              "name": "id",
+              "type": "string"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "type": "record",
+  "name": "record_0",
+  "fields": [
+    {
+      "name": "map_1",
+      "type": [
+        "null",
+        {
+          "type": "map",
+          "values": [
+            {
+              "type": "string",
+              "discoveryAggregate": {}
+            },
+            "null"
+          ],
+          "discoveryAggregate": {}
+        }
+      ]
+    },
+    {
+      "name": "record_1",
+      "type": [
+        {
+          "type": "record",
+          "name": "record_1",
+          "fields": [
+            {
+              "name": "array_1",
+              "type": {
+                "type": "array",
+                "items": [
+                  {
+                    "type": "record",
+                    "name": "record_2",
+                    "fields": [
+                      {
+                        "name": "int_2",
+                        "type": "int"
+                      },
+                      {
+                        "name": "string_or_int",
+                        "type": [
+                          {
+                            "type": "string",
+                            "discoveryAggregate": {}
+                          },
+                          "null",
+                          {
+                            "type": "int",
+                            "discoveryAggregate": {}
+                          }
+                        ]
+                      }
+                    ],
+                    "discoveryAggregate": {}
+                  },
+                  "null"
+                ]
+              }
+            },
+            {
+              "name": "fixed_1",
+              "type": {
+                "type": "fixed",
+                "name": "fixed_1",
+                "size": 2
+              }
+            },
+            {
+              "name": "enum_1",
+              "type": {
+                "type": "enum",
+                "name": "enum_1",
+                "symbols": [
+                  "symbol1",
+                  "symbol2"
+                ]
+              }
+            }
+          ],
+          "discoveryAggregate": {}
+        },
+        "null"
+      ]
+    }
+  ]
+}

@@ -1,7 +1,5 @@
 package org.talend.dataquality.common.util;
 
-import static java.util.stream.Collectors.reducing;
-import static java.util.stream.Collectors.toList;
 import static org.apache.avro.Schema.Type.BOOLEAN;
 import static org.apache.avro.Schema.Type.BYTES;
 import static org.apache.avro.Schema.Type.DOUBLE;
@@ -14,9 +12,18 @@ import static org.apache.avro.Schema.Type.NULL;
 import static org.apache.avro.Schema.Type.RECORD;
 import static org.apache.avro.Schema.Type.STRING;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.io.UncheckedIOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -24,10 +31,15 @@ import java.util.stream.StreamSupport;
 import org.apache.avro.Schema;
 import org.apache.avro.SchemaBuilder;
 import org.apache.avro.file.DataFileReader;
-import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericDatumReader;
+import org.apache.avro.generic.GenericDatumWriter;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.generic.IndexedRecord;
+import org.apache.avro.io.DatumReader;
+import org.apache.avro.io.Decoder;
+import org.apache.avro.io.DecoderFactory;
+import org.apache.avro.io.Encoder;
+import org.apache.avro.io.EncoderFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -35,6 +47,112 @@ import org.apache.commons.lang3.tuple.Pair;
  * Methods for Avro analyzers.
  */
 public class AvroUtils {
+
+    /**
+     * Apply a {@link Schema} on a {@link IndexedRecord} given in parameters.
+     *
+     * @param record to have the schema applied on
+     * @param schema to be applied
+     * @return the new {@link IndexedRecord} with the new {@link Schema}
+     */
+    public static IndexedRecord applySchema(IndexedRecord record, Schema schema) {
+        try {
+            GenericDatumWriter<IndexedRecord> writer = new GenericDatumWriter<>(record.getSchema());
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            Encoder encoder = EncoderFactory.get().binaryEncoder(outputStream, null);
+            writer.write(record, encoder);
+            encoder.flush();
+
+            DatumReader<IndexedRecord> reader = new GenericDatumReader<>(schema);
+            Decoder decoder = DecoderFactory.get().binaryDecoder(outputStream.toByteArray(), null);
+            return reader.read(null, decoder);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    /**
+     * Replace 'null' unions representation with a simplified version. At the time of writing, 'Daikon' doesn't
+     * support the more advanced representation.
+     * <p>
+     * <p>
+     *
+     * <pre>
+     *  "type": [
+     *      {
+     *          "type": "string",
+     *          "dqType": "STRING"
+     *      },
+     *      {
+     *          "type": "null",
+     *          "dqType": "STRING"
+     *      }
+     * ]
+     * </pre>
+     * </p>
+     * <p>
+     * This method transforms this 'null' union representation in a simpler format:
+     * </p>
+     * <p>
+     *
+     * <pre>
+     *  "type": [
+     *      {
+     *          "type": "string",
+     *          "dqType": "STRING"
+     *      },
+     *      "null"
+     * ]
+     * </pre>
+     * </p>
+     *
+     * @param s the {@link Schema} to transform
+     * @return the transformed {@link Schema}
+     */
+    public static Schema replaceNullUnion(Schema s) {
+        return replaceNullUnion(s, Collections.emptyList());
+    }
+
+    public static Schema replaceNullUnion(Schema s, List<String> propsToAvoid) {
+        if (s == null) {
+            return null;
+        }
+        switch (s.getType()) {
+        case UNION:
+            List<Schema> replacedUnionTypes = new ArrayList<>();
+            for (Schema unionType : s.getTypes()) {
+                if (unionType.getType() == Schema.Type.NULL) {
+                    replacedUnionTypes.add(Schema.create(Schema.Type.NULL));
+                } else {
+                    Schema unionTypeSchema = replaceNullUnion(unionType, propsToAvoid);
+                    replacedUnionTypes.add(unionTypeSchema);
+                }
+            }
+            Schema unionSchema = Schema.createUnion(replacedUnionTypes);
+            addPropsToSchema(unionSchema, s.getObjectProps(), propsToAvoid);
+            return unionSchema;
+        case RECORD:
+            List<Schema.Field> fields = new ArrayList<>();
+            for (Schema.Field outField : s.getFields()) {
+                Schema fieldSchema = replaceNullUnion(outField.schema(), propsToAvoid);
+                addPropsToSchema(fieldSchema, outField.schema().getObjectProps(), propsToAvoid);
+                fields.add(new Schema.Field(outField.name(), fieldSchema, outField.doc(), outField.defaultVal()));
+            }
+            Schema recordSchema = Schema.createRecord(s.getName(), s.getDoc(), s.getNamespace(), s.isError(), fields);
+            addPropsToSchema(recordSchema, s.getObjectProps(), propsToAvoid);
+            return recordSchema;
+        case ARRAY:
+            Schema arraySchema = Schema.createArray(replaceNullUnion(s.getElementType(), propsToAvoid));
+            addPropsToSchema(arraySchema, s.getObjectProps(), propsToAvoid);
+            return arraySchema;
+        case MAP:
+            Schema mapSchema = Schema.createMap(replaceNullUnion(s.getValueType(), propsToAvoid));
+            addPropsToSchema(mapSchema, s.getObjectProps(), propsToAvoid);
+            return mapSchema;
+        default:
+            return s;
+        }
+    }
 
     /**
      * From a record schema, create a value level metadata schema replacing primitive types by a value level metadata

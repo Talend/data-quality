@@ -1,0 +1,19 @@
+{
+  "type": "record",
+  "name": "record_0",
+  "fields": [
+    {
+      "name": "Op",
+      "type": [
+        {
+          "type": "null",
+          "discoveryAggregate": {}
+        },
+        {
+          "type": "string",
+          "discoveryAggregate": {}
+        }
+      ]
+    }
+  ]
+}

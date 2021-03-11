@@ -2,9 +2,12 @@ package org.talend.dataquality.common.util;
 
 import org.apache.avro.Schema;
 import org.apache.avro.SchemaBuilder;
+import org.apache.avro.SchemaCompatibility;
 import org.apache.avro.file.DataFileReader;
+import org.apache.avro.file.DataFileStream;
 import org.apache.avro.generic.GenericDatumReader;
 import org.apache.avro.generic.GenericRecord;
+import org.apache.avro.generic.IndexedRecord;
 import org.junit.Test;
 
 import java.io.File;
@@ -625,6 +628,141 @@ public class AvroUtilsTest {
         assertNull(cleanSchema3.getField("record1").schema().getTypes().get(1).getObjectProp("prop1"));
         assertNull(cleanSchema3.getField("record1").schema().getTypes().get(1).getObjectProp("prop3"));
         assertEquals(1, cleanSchema3.getField("record1").schema().getTypes().get(1).getObjectProps().size());
+    }
+
+    @Test
+    public void testReplaceNullUnion_null_schema() {
+        assertNull(AvroUtils.replaceNullUnion(null));
+    }
+
+    @Test
+    public void testReplaceNullUnion_simple_schema_primitive_types() {
+        Schema schema = SchemaBuilder
+                .record("record_0")
+                .fields()
+                .name("string_1")
+                .type()
+                .stringType()
+                .noDefault()
+                .name("bytes_1")
+                .type()
+                .bytesType()
+                .noDefault()
+                .name("int_1")
+                .type()
+                .intType()
+                .noDefault()
+                .name("long_1")
+                .type()
+                .longType()
+                .noDefault()
+                .name("double_1")
+                .type()
+                .doubleType()
+                .noDefault()
+                .name("float_1")
+                .type()
+                .floatType()
+                .noDefault()
+                .name("boolean_1")
+                .type()
+                .booleanType()
+                .noDefault()
+                .name("null_1")
+                .type()
+                .nullType()
+                .noDefault()
+                .endRecord();
+        assertEquals(schema, AvroUtils.replaceNullUnion(schema));
+    }
+
+    @Test
+    public void testReplaceNullUnion_simple_schema_complex_types() {
+        Schema record1 =
+                SchemaBuilder.record("record_1").fields().name("string_2").type().stringType().noDefault().endRecord();
+        Schema array1 = SchemaBuilder.array().items(record1);
+        Schema map1 = SchemaBuilder.map().values(record1);
+        Schema fixed1 = SchemaBuilder.fixed("fixed_1").size(1);
+        Schema enum1 = SchemaBuilder.enumeration("enumeration_1").symbols("symbol1", "symbol2");
+        Schema schema = SchemaBuilder
+                .record("record_0")
+                .fields()
+                .name("record_1")
+                .type(record1)
+                .noDefault()
+                .name("array_1")
+                .type(array1)
+                .noDefault()
+                .name("map_1")
+                .type(map1)
+                .noDefault()
+                .name("fixed_1")
+                .type(fixed1)
+                .noDefault()
+                .name("enum_1")
+                .type(enum1)
+                .noDefault()
+                .endRecord();
+        assertEquals(schema, AvroUtils.replaceNullUnion(schema));
+    }
+
+    @Test
+    public void testReplaceNullUnion_simple_schema_union_types() {
+        Schema schema = SchemaBuilder
+                .record("record_0")
+                .fields()
+                .name("string_1")
+                .type()
+                .nullable()
+                .stringType()
+                .noDefault()
+                .endRecord();
+        assertEquals(schema, AvroUtils.replaceNullUnion(schema));
+    }
+
+    @Test
+    public void testReplaceNullUnion_simple_schema_union_types_with_props() throws IOException {
+        Schema schema = readSchemaFromResources("unionStringWithProp.avsc");
+        Schema expectedSchema = readSchemaFromResources("unionStringWithPropExpected.avsc");
+        Schema newSchema = AvroUtils.replaceNullUnion(schema);
+
+        SchemaCompatibility.SchemaPairCompatibility compactResult =
+                SchemaCompatibility.checkReaderWriterCompatibility(newSchema, schema);
+        assertTrue(SchemaCompatibility.schemaNameEquals(newSchema, schema));
+        assertNotNull(compactResult);
+        assertEquals(SchemaCompatibility.SchemaCompatibilityType.COMPATIBLE, compactResult.getType());
+        assertNotEquals(schema, newSchema);
+        assertEquals(expectedSchema, newSchema);
+    }
+
+    @Test
+    public void testReplaceNullUnion_complex_schema_union_types_with_props() throws IOException {
+        Schema schema = readSchemaFromResources("complexWithProp.avsc");
+        Schema expectedSchema = readSchemaFromResources("complexWithPropExpected.avsc");
+        Schema newSchema = AvroUtils.replaceNullUnion(schema);
+
+        SchemaCompatibility.SchemaPairCompatibility compactResult =
+                SchemaCompatibility.checkReaderWriterCompatibility(newSchema, schema);
+        assertTrue(SchemaCompatibility.schemaNameEquals(newSchema, schema));
+        assertNotNull(compactResult);
+        assertEquals(SchemaCompatibility.SchemaCompatibilityType.COMPATIBLE, compactResult.getType());
+        assertNotEquals(schema, newSchema);
+        assertEquals(expectedSchema, newSchema);
+    }
+
+    @Test
+    public void testApplySchema_referencesInUnion() throws IOException {
+        Schema dereferencedSchema = readSchemaFromResources("UnionOfComplexRefType_dereferencedSchema.avsc");
+        DataFileStream<IndexedRecord> originalStream = new DataFileStream<>(
+                getClass().getResourceAsStream("UnionOfComplexRefType.avro"), new GenericDatumReader<>());
+
+        IndexedRecord originalRecord = originalStream.iterator().next();
+        IndexedRecord resultingRecord = AvroUtils.applySchema(originalRecord, dereferencedSchema);
+
+        assertEquals(originalRecord.toString(), resultingRecord.toString());
+        assertNotEquals(originalRecord.getSchema(), resultingRecord.getSchema());
+        assertEquals(dereferencedSchema, resultingRecord.getSchema());
+
     }
 
     private Schema readSchemaFromResources(String resourceName) throws IOException {
