@@ -31,6 +31,6 @@ Talend Open Studio for Data Quality can be download from the [Talend website](ht
 
 ## License
 
-Copyright (c) 2006-2020 Talend
+Copyright (c) 2006-2021 Talend
 
 Licensed under the [Apache Licence v2](https://www.apache.org/licenses/LICENSE-2.0.txt)
