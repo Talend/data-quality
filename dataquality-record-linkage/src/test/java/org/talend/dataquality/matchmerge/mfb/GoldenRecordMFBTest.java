@@ -250,6 +250,7 @@ public class GoldenRecordMFBTest {
         }
     };
 
+    String[] inputDataMDMSchema = new String[] { "Id", "Name", "Description", "Price", "Family", "Picture" };
     @SuppressWarnings("serial")
     List<String[]> inputDataMDM = new ArrayList<String[]>() {
 
@@ -260,6 +261,7 @@ public class GoldenRecordMFBTest {
         }
     };
 
+    String[] inputDataSchema = new String[] { "id", "name", "city", "birthday", "group" };
     @SuppressWarnings("serial")
     List<String[]> inputData1 = new ArrayList<String[]>() {
 
@@ -330,7 +332,7 @@ public class GoldenRecordMFBTest {
         String[][] expectFobiddenList = new String[][] { {}, {}, {}, {} };
         List<MatchMergeRule> matchRules = generateMatchMergeRuleList();
         Callback callback = new MatchMergeCallback(10, 2);
-        Iterator<Record> matchMergeInput = generateInputRecord(inputData1);
+        Iterator<Record> matchMergeInput = generateInputRecord();
         try {
             MatchMergeAlgorithm buildDQMFB = buildDQMFB(matchRules, callback);
             List<Record> matchMergeResults = buildDQMFB.execute(matchMergeInput);
@@ -347,11 +349,11 @@ public class GoldenRecordMFBTest {
         String[][] expectFobiddenList = new String[][] { {}, {}, {}, {} };
         List<MatchMergeRule> matchRules = generateMDMMatchMergeRuleList();
         Callback callback = new MatchMergeCallback(10, 2);
-        Iterator<Record> matchMergeInput = generateInputRecord(inputDataMDM);
+        Iterator<Record> matchMergeInput = generateInputRecord();
         try {
             MatchMergeAlgorithm buildDQMFB = buildDQMFB(matchRules, callback);
             List<Record> matchMergeResults = buildDQMFB.execute(matchMergeInput);
-            // matchMergeResults
+            Assert.assertTrue(matchMergeResults.size() == 1);
             // old package return: RichRecord.confidence = 0.8601009835799536
             // new package return : RichRecord.confidence = 0.9141456782817841
             // validateResult(matchMergeResults, callback, expectResult, expectFobiddenList);
@@ -557,11 +559,23 @@ public class GoldenRecordMFBTest {
         }
     }
 
-    private Iterator<Record> generateInputRecord(List<String[]> inputData1) {
+    private Iterator<Record> generateMDMInputRecord() {
+        List<Record> matchRuleList = new ArrayList<>();
+        for (int index = 0; index < inputDataMDM.size(); index++) {
+            List<Attribute> attributeList = getAttributList(inputDataMDMSchema, inputDataMDM.get(index));
+            List<DQAttribute<?>> dqAttributeList = getDQAttributList(inputDataMDMSchema, inputDataMDM.get(index));
+            RichRecord richRecord = new RichRecord(attributeList, String.valueOf(currentIndex++), timestamp++, "MFB");
+            richRecord.setOriginRow(dqAttributeList);
+            matchRuleList.add(richRecord);
+        }
+        return matchRuleList.iterator();
+    }
+
+    private Iterator<Record> generateInputRecord() {
         List<Record> matchRuleList = new ArrayList<>();
         for (int index = 0; index < inputData1.size(); index++) {
-            List<Attribute> attributeList = getAttributList(inputData1.get(index));
-            List<DQAttribute<?>> dqAttributeList = getDQAttributList(inputData1.get(index));
+            List<Attribute> attributeList = getAttributList(inputDataSchema, inputData1.get(index));
+            List<DQAttribute<?>> dqAttributeList = getDQAttributList(inputDataSchema, inputData1.get(index));
             RichRecord richRecord = new RichRecord(attributeList, String.valueOf(currentIndex++), timestamp++, "MFB");
             richRecord.setOriginRow(dqAttributeList);
             matchRuleList.add(richRecord);
@@ -573,8 +587,8 @@ public class GoldenRecordMFBTest {
             Map<String, String[]> forbiddenMap) {
         List<Record> matchRuleList = new ArrayList<>();
         for (int index = 0; index < inputData.size(); index++) {
-            List<Attribute> attributeList = getAttributList(inputData.get(index));
-            List<DQAttribute<?>> dqAttributeList = getDQAttributList(inputData.get(index));
+            List<Attribute> attributeList = getAttributList(inputDataSchema, inputData.get(index));
+            List<DQAttribute<?>> dqAttributeList = getDQAttributList(inputDataSchema, inputData.get(index));
             RichRecord richRecord = new RichRecord(attributeList, String.valueOf(currentIndex++), timestamp++, "MFB");
             richRecord.setOriginRow(dqAttributeList);
             matchRuleList.add(richRecord);
@@ -595,50 +609,27 @@ public class GoldenRecordMFBTest {
         }
     }
 
-    private List<DQAttribute<?>> getDQAttributList(String[] inputData) {
+    private List<DQAttribute<?>> getDQAttributList(String[] label, String[] inputData) {
         List<DQAttribute<?>> result = new ArrayList<>();
-        DQAttribute<String> dqAttribute = new DQAttribute<>("id", 0, inputData[0], 0);
-        dqAttribute.setReferenceValue(inputData[0]);
-        dqAttribute.setOriginalValue(inputData[0]);
-        result.add(dqAttribute);
-        dqAttribute = new DQAttribute<>("name", 1, inputData[1], 1);
-        dqAttribute.setReferenceValue(inputData[1]);
-        dqAttribute.setOriginalValue(inputData[1]);
-        result.add(dqAttribute);
-        dqAttribute = new DQAttribute<>("city", 2, inputData[2], 2);
-        dqAttribute.setReferenceValue(inputData[2]);
-        dqAttribute.setOriginalValue(inputData[2]);
-        result.add(dqAttribute);
-        dqAttribute = new DQAttribute<>("birthday", 3, inputData[3], 3);
-        dqAttribute.setReferenceValue(inputData[3]);
-        dqAttribute.setOriginalValue(inputData[3]);
-        result.add(dqAttribute);
-        dqAttribute = new DQAttribute<>("group", 4, inputData[4], 4);
-        dqAttribute.setReferenceValue(inputData[4]);
-        dqAttribute.setOriginalValue(inputData[4]);
-        result.add(dqAttribute);
+        for (int i = 0; i < inputData.length; i++) {
+            DQAttribute<String> dqAttribute = new DQAttribute<>(label[i], i, inputData[i], i);
+            dqAttribute.setReferenceValue(inputData[i]);
+            dqAttribute.setOriginalValue(inputData[i]);
+            result.add(dqAttribute);
+        }
         return result;
     }
 
-    private List<Attribute> getAttributList(String[] inputData) {
+    private List<Attribute> getAttributList(String[] label, String[] inputData) {
         List<Attribute> result = new ArrayList<>();
-        Attribute dqAttribute = new Attribute("id", 0, inputData[0], 0);
-        dqAttribute.setReferenceValue(inputData[0]);
-        result.add(dqAttribute);
-        dqAttribute = new Attribute("name", 1, inputData[1], 1);
-        dqAttribute.setReferenceValue(inputData[1]);
-        result.add(dqAttribute);
-        dqAttribute = new Attribute("city", 2, inputData[2], 2);
-        dqAttribute.setReferenceValue(inputData[2]);
-        result.add(dqAttribute);
-        dqAttribute = new Attribute("birthday", 3, inputData[3], 3);
-        dqAttribute.setReferenceValue(inputData[3]);
-        result.add(dqAttribute);
-        dqAttribute = new Attribute("group", 4, inputData[4], 4);
-        dqAttribute.setReferenceValue(inputData[4]);
-        result.add(dqAttribute);
+        for (int i = 0; i < inputData.length; i++) {
+            Attribute dqAttribute = new Attribute(label[i], i, inputData[i], i);
+            dqAttribute.setReferenceValue(inputData[i]);
+            result.add(dqAttribute);
+        }
         return result;
     }
+
 
     private void validateResult(List<Record> matchMergeResults, Callback callback, String[][] expectResult,
             String[][] expectFobiddenList) {
