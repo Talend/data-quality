@@ -227,6 +227,40 @@ public class GoldenRecordMFBTest {
     };
 
     @SuppressWarnings("serial")
+    List<Map<String, String>> MatchRuleCaseMDM = new ArrayList<Map<String, String>>() {
+
+        {
+            add(new HashMap<String, String>() {
+
+                {
+                    // put("REFERENCE_COLUMN_IDX", "0");
+                    // put("REFERENCE_COLUMN", "Name");
+                    put("MATCHING_TYPE", "JARO_WINKLER");
+                    put("TOKENIZATION_TYPE", "NO");
+                    put("ATTRIBUTE_THRESHOLD", 0 + "");
+                    put("HANDLE_NULL", "nullMatchNull");
+                    put("SURVIVORSHIP_FUNCTION", "CONCATENATE");
+                    put("ATTRIBUTE_NAME", "Name");
+                    put("COLUMN_IDX", "0");
+                    put("CONFIDENCE_WEIGHT", "1");
+                    put("RECORD_MATCH_THRESHOLD", 0.85 + "");
+
+                }
+            });
+        }
+    };
+
+    @SuppressWarnings("serial")
+    List<String[]> inputDataMDM = new ArrayList<String[]>() {
+
+        {
+            add(new String[] { "1", "Mugaa", "Large mug, easy-grip handle", "10.99", "Mugs", "mug" });
+            add(new String[] { "2", "Muggaa", "Large mug, handle", "12.99", "Mugs", "mug" });
+            add(new String[] { "3", "Muggyab", "Large mug", "18.99", "Mugs", "mug" });
+        }
+    };
+
+    @SuppressWarnings("serial")
     List<String[]> inputData1 = new ArrayList<String[]>() {
 
         {
@@ -296,11 +330,31 @@ public class GoldenRecordMFBTest {
         String[][] expectFobiddenList = new String[][] { {}, {}, {}, {} };
         List<MatchMergeRule> matchRules = generateMatchMergeRuleList();
         Callback callback = new MatchMergeCallback(10, 2);
-        Iterator<Record> matchMergeInput = generateInputRecord();
+        Iterator<Record> matchMergeInput = generateInputRecord(inputData1);
         try {
             MatchMergeAlgorithm buildDQMFB = buildDQMFB(matchRules, callback);
             List<Record> matchMergeResults = buildDQMFB.execute(matchMergeInput);
             validateResult(matchMergeResults, callback, expectResult, expectFobiddenList);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+    }
+
+    @Test
+    public void tMdmTest() {
+        // TDQ-19241 compare different between 3.3.2 and 8.3.2 record.linkage
+        // String[][] expectResult = new String[][] { { "2", "2" }, { "5", "1", "3", "4", "5" } };
+        String[][] expectFobiddenList = new String[][] { {}, {}, {}, {} };
+        List<MatchMergeRule> matchRules = generateMDMMatchMergeRuleList();
+        Callback callback = new MatchMergeCallback(10, 2);
+        Iterator<Record> matchMergeInput = generateInputRecord(inputDataMDM);
+        try {
+            MatchMergeAlgorithm buildDQMFB = buildDQMFB(matchRules, callback);
+            List<Record> matchMergeResults = buildDQMFB.execute(matchMergeInput);
+            // matchMergeResults
+            // old package return: RichRecord.confidence = 0.8601009835799536
+            // new package return : RichRecord.confidence = 0.9141456782817841
+            // validateResult(matchMergeResults, callback, expectResult, expectFobiddenList);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
@@ -503,7 +557,7 @@ public class GoldenRecordMFBTest {
         }
     }
 
-    private Iterator<Record> generateInputRecord() {
+    private Iterator<Record> generateInputRecord(List<String[]> inputData1) {
         List<Record> matchRuleList = new ArrayList<>();
         for (int index = 0; index < inputData1.size(); index++) {
             List<Attribute> attributeList = getAttributList(inputData1.get(index));
@@ -600,6 +654,14 @@ public class GoldenRecordMFBTest {
                     Arrays.equals(expectFobiddenList[index], forbiddenList.toArray()));
         }
 
+    }
+
+    private List<MatchMergeRule> generateMDMMatchMergeRuleList() {
+        List<MatchMergeRule> matchMergeRuleList = new ArrayList<>();
+        MatchMergeRule matchMergeRule = new DQMatchMergeRuleImpl();
+        matchMergeRuleList.add(matchMergeRule);
+        initMatchRule(null, matchMergeRule, MatchRuleCaseMDM);
+        return matchMergeRuleList;
     }
 
     private List<MatchMergeRule> generateMatchMergeRuleList() {
