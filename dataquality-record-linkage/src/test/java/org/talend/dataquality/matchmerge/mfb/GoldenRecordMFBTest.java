@@ -231,20 +231,71 @@ public class GoldenRecordMFBTest {
 
         {
             add(new HashMap<String, String>() {
+                {
+                    put("REFERENCE_COLUMN_IDX", "0");
+                    put("REFERENCE_COLUMN", "id");
+                    put("MATCHING_TYPE", "DUMMY");
+                    put("ATTRIBUTE_NAME", "id");
+                    put("COLUMN_IDX", "0");
+                    put("CONFIDENCE_WEIGHT", "0");
+                }
+            });
+            add(new HashMap<String, String>() {
 
                 {
-                    // put("REFERENCE_COLUMN_IDX", "0");
-                    // put("REFERENCE_COLUMN", "Name");
+                    put("REFERENCE_COLUMN_IDX", "1");
+                    put("REFERENCE_COLUMN", "Name");
                     put("MATCHING_TYPE", "JARO_WINKLER");
                     put("TOKENIZATION_TYPE", "NO");
                     put("ATTRIBUTE_THRESHOLD", 0 + "");
                     put("HANDLE_NULL", "nullMatchNull");
                     put("SURVIVORSHIP_FUNCTION", "CONCATENATE");
                     put("ATTRIBUTE_NAME", "Name");
-                    put("COLUMN_IDX", "0");
+                    put("COLUMN_IDX", "1");
                     put("CONFIDENCE_WEIGHT", "1");
                     put("RECORD_MATCH_THRESHOLD", 0.85 + "");
 
+                }
+            });
+            add(new HashMap<String, String>() {
+                {
+                    put("REFERENCE_COLUMN_IDX", "2");
+                    put("REFERENCE_COLUMN", "Description");
+                    put("MATCHING_TYPE", "DUMMY");
+                    put("ATTRIBUTE_NAME", "Description");
+                    put("COLUMN_IDX", "2");
+                    put("CONFIDENCE_WEIGHT", "0");
+                }
+            });
+
+            add(new HashMap<String, String>() {
+                {
+                    put("REFERENCE_COLUMN_IDX", "3");
+                    put("REFERENCE_COLUMN", "Price");
+                    put("MATCHING_TYPE", "DUMMY");
+                    put("ATTRIBUTE_NAME", "Price");
+                    put("COLUMN_IDX", "3");
+                    put("CONFIDENCE_WEIGHT", "0");
+                }
+            });
+            add(new HashMap<String, String>() {
+                {
+                    put("REFERENCE_COLUMN_IDX", "4");
+                    put("REFERENCE_COLUMN", "Family");
+                    put("MATCHING_TYPE", "DUMMY");
+                    put("ATTRIBUTE_NAME", "Family");
+                    put("COLUMN_IDX", "4");
+                    put("CONFIDENCE_WEIGHT", "0");
+                }
+            });
+            add(new HashMap<String, String>() {
+                {
+                    put("REFERENCE_COLUMN_IDX", "5");
+                    put("REFERENCE_COLUMN", "Picture");
+                    put("MATCHING_TYPE", "DUMMY");
+                    put("ATTRIBUTE_NAME", "Picture");
+                    put("COLUMN_IDX", "5");
+                    put("CONFIDENCE_WEIGHT", "0");
                 }
             });
         }
@@ -349,11 +400,15 @@ public class GoldenRecordMFBTest {
         String[][] expectFobiddenList = new String[][] { {}, {}, {}, {} };
         List<MatchMergeRule> matchRules = generateMDMMatchMergeRuleList();
         Callback callback = new MatchMergeCallback(10, 2);
-        Iterator<Record> matchMergeInput = generateInputRecord();
+        Iterator<Record> matchMergeInput = generateMDMInputRecord();
         try {
             MatchMergeAlgorithm buildDQMFB = buildDQMFB(matchRules, callback);
             List<Record> matchMergeResults = buildDQMFB.execute(matchMergeInput);
             Assert.assertTrue(matchMergeResults.size() == 1);
+
+            RichRecord result = (RichRecord) matchMergeResults.get(0);
+            System.out.println(result.getConfidence());// 0.9095238327980042
+
             // old package return: RichRecord.confidence = 0.8601009835799536
             // new package return : RichRecord.confidence = 0.9141456782817841
             // validateResult(matchMergeResults, callback, expectResult, expectFobiddenList);
