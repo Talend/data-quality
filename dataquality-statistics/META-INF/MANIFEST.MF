@@ -22,9 +22,9 @@ Import-Package: com.clearspring.analytics.stream,
  com.clearspring.analytics.stream.quantile,
  org.apache.commons.math3.stat.descriptive;version="3.3.0",
  org.apache.commons.math3.stat.descriptive.rank;version="3.3.0",
- org.talend.daikon.number;version="[0.31.11,5.3.0]",
- org.talend.daikon.pattern.character;version="[0.31.11,5.3.0]",
- org.talend.daikon.pattern.word;version="[0.31.11,5.3.0]"
+ org.talend.daikon.number;version="[0.31.11,1.0.0)",
+ org.talend.daikon.pattern.character;version="[0.31.11,1.0.0)",
+ org.talend.daikon.pattern.word;version="[0.31.11,1.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.talend.dataquality.statistics,
  org.talend.dataquality.statistics.cardinality,
