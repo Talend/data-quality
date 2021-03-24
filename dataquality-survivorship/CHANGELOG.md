@@ -16,7 +16,7 @@ N/A
 ### Fixed
 N/A
 ### Security
-N/A
+- fix(TDQ-19261): XStream Core issues (1.4.16)
 
 ## [8.0.10] - 2021-03-11
 ### Security
