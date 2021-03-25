@@ -34,7 +34,14 @@
 			<groupId>commons-collections</groupId>
 			<artifactId>commons-collections</artifactId>
 		</dependency>
-
+		
+		<!-- TDQ-19124 msjian: add this when upgrade daikon from 1.16.3 to 5.3.0 -->
+		<dependency>
+			<groupId>org.apache.servicemix.bundles</groupId>
+			<artifactId>org.apache.servicemix.bundles.avro</artifactId>
+			<version>1.8.2_1</version>
+		</dependency>
+		
 		<!-- Stream Lib -->
 		<dependency>
 			<groupId>com.clearspring.analytics</groupId>
