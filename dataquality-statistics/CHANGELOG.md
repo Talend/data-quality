@@ -21,6 +21,7 @@ N/A
 - fix(TDQ-19073): Fix JUnit issue
 - fix(TDQ-19045): Update Jackson Databind to 2.11.4
 - fix(TDQ-19124): Upgrade Daikon to 5.3.0
+- fix(TDQ-19292): Fix Data Mapper for Jackson issues
 
 ## [8.3.1] - 2020-11-18
 ### Security
