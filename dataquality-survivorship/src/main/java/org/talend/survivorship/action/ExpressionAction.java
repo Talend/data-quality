@@ -13,16 +13,19 @@
 package org.talend.survivorship.action;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
-
+import org.mozilla.javascript.EcmaError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import delight.rhinosandox.RhinoSandbox;
+import delight.rhinosandox.RhinoSandboxes;
+
 /**
- * Create by zshen define a action which make sure input value is adapt the special expression
+ * Create by zshen define a action which make sure input value is adapt the
+ * special expression
  */
 public class ExpressionAction extends AbstractSurvivorshipAction {
 
@@ -31,34 +34,35 @@ public class ExpressionAction extends AbstractSurvivorshipAction {
     /*
      * (non-Javadoc)
      * 
-     * @see org.talend.survivorship.action.ISurvivoredAction#checkCanHandle(org.talend.survivorship.model.DataSet,
-     * java.lang.Object, java.lang.String, boolean)
+     * @see
+     * org.talend.survivorship.action.ISurvivoredAction#checkCanHandle(org.talend.
+     * survivorship.model.DataSet, java.lang.Object, java.lang.String, boolean)
      */
     @Override
     public boolean canHandle(ActionParameter actionParameter) {
         if (actionParameter.getExpression() == null) {
             return false;
         }
-        ScriptEngineManager manager = new ScriptEngineManager();
-        ScriptEngine engine = manager.getEngineByName("javascript"); //$NON-NLS-1$
+        final RhinoSandbox sandbox = RhinoSandboxes.create();
         try {
-            if (actionParameter.getInputData() != null && actionParameter.getInputData() instanceof Number) {
-
-                return (Boolean) engine
-                        .eval(actionParameter.getInputData().toString() + actionParameter.getExpression());
-            } else if (actionParameter.getInputData() != null && actionParameter.getInputData() instanceof Date) {
-                String varName = actionParameter.getColumn() + "Date"; //$NON-NLS-1$
-                engine.put(varName, actionParameter.getInputData());
-                return (Boolean) engine.eval("" + varName + actionParameter.getExpression()); //$NON-NLS-1$
+            String varName = actionParameter.getColumn();
+            if (actionParameter.getInputData() == null) {
+                return false;
             } else {
-                String varName = actionParameter.getColumn() + "String"; //$NON-NLS-1$
-                engine.put(varName, actionParameter.getInputData());
-                return (Boolean) engine.eval("" + varName + actionParameter.getExpression()); //$NON-NLS-1$
-
+                if (actionParameter.getInputData() instanceof Number) {
+                    return (Boolean) sandbox.eval(null,
+                            actionParameter.getInputData().toString() + actionParameter.getExpression());
+                } else if (actionParameter.getInputData() instanceof Date) {
+                    varName = actionParameter.getColumn() + "Date"; //$NON-NLS-1$
+                } else {
+                    varName = actionParameter.getColumn() + "String"; //$NON-NLS-1$
+                }
+                Map<String, Object> values = new HashMap<String, Object>();
+                values.put(varName, actionParameter.getInputData());
+                return (Boolean) sandbox.eval(null, "" + varName + actionParameter.getExpression(), values);
             }
-        } catch (ScriptException e) {
+        } catch (EcmaError e) {
             LOGGER.error(e.getMessage(), e);
-            // no need implement
         }
         return false;
     }
