@@ -56,6 +56,18 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.javadelight/delight-rhino-sandbox -->
+		<dependency>
+    		<groupId>org.javadelight</groupId>
+    		<artifactId>delight-rhino-sandbox</artifactId>
+    		<version>0.0.15</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.mozilla/rhino -->
+		<dependency>
+    		<groupId>org.mozilla</groupId>
+    		<artifactId>rhino</artifactId>
+    		<version>1.7.13</version>
+		</dependency>
 	</dependencies>
 
 	<build>

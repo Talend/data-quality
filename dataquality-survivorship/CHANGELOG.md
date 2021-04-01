@@ -19,6 +19,7 @@ N/A
 - fix(TDQ-18962): XStream Core high severity issue
 - fix(TDQ-19065): XStream Core issue
 - fix(TDQ-19261): XStream Core issues (1.4.16)
+- fix(TDQ-19243): Fix CWE-95 in ExpressionAction
 
 ## [8.3.1] - 2020-11-18
 ### Security

@@ -12,15 +12,19 @@
 // ============================================================================
 package org.talend.survivorship.action;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.mozilla.javascript.EcmaError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import delight.rhinosandox.RhinoSandbox;
+import delight.rhinosandox.RhinoSandboxes;
+
 /**
- * Create by zshen define a action which make sure input value is adapt the special regex
+ * Create by zshen define a action which make sure input value is adapt the
+ * special regex
  */
 public class MatchRegexAction extends AbstractSurvivorshipAction {
 
@@ -29,24 +33,27 @@ public class MatchRegexAction extends AbstractSurvivorshipAction {
     /*
      * (non-Javadoc)
      * 
-     * @see org.talend.survivorship.action.ISurvivoredAction#checkCanHandle(org.talend.survivorship.model.DataSet,
-     * java.lang.Object, java.lang.String, java.lang.String, int, boolean)
+     * @see
+     * org.talend.survivorship.action.ISurvivoredAction#checkCanHandle(org.talend.
+     * survivorship.model.DataSet, java.lang.Object, java.lang.String,
+     * java.lang.String, int, boolean)
      */
     @Override
     public boolean canHandle(ActionParameter actionParameter) {
         if (actionParameter.getExpression() == null) {
             return false;
         }
-        ScriptEngineManager manager = new ScriptEngineManager();
-        ScriptEngine engine = manager.getEngineByName("javascript"); //$NON-NLS-1$
+        final RhinoSandbox sandbox = RhinoSandboxes.create();
         try {
             if (actionParameter.getInputData() != null) {
-                engine.put("inputData", actionParameter.getInputData()); //$NON-NLS-1$
-                Object eval = engine.eval("inputData.match(\"" + actionParameter.getExpression() + "\")"); //$NON-NLS-1$ //$NON-NLS-2$
+                Map<String, Object> values = new HashMap<String, Object>();
+                values.put("inputData", actionParameter.getInputData());
+                Object eval = sandbox.eval(null, "inputData.match(\"" + actionParameter.getExpression() + "\")", //$NON-NLS-1$ //$NON-NLS-2$
+                        values);
                 return eval != null;
 
             }
-        } catch (ScriptException e) {
+        } catch (EcmaError e) {
             LOGGER.error(e.getMessage(), e);
             // no need implement
         }
