@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2021 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package org.talend.dataquality.statistics.type;
 
 import static org.talend.dataquality.common.util.AvroUtils.cleanSchema;
@@ -9,11 +21,11 @@ import static org.talend.dataquality.statistics.datetime.SystemDateTimePatternMa
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.apache.avro.AvroRuntimeException;
@@ -24,12 +36,19 @@ import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.generic.IndexedRecord;
 import org.talend.dataquality.common.inference.AvroAnalyzer;
-import org.talend.dataquality.common.util.LFUCache;
 
 import avro.shaded.com.google.common.collect.Maps;
 
 /**
+ * Data type quality analyzer for Avro records.
  *
+ * How to use it:
+ * <ul>
+ * <li>create a new instance</li>
+ * <li>initialize the instance with a schema containing the data type (see {@link #init(Schema)})</li>
+ * <li>analyze records (see {@link #analyze(Stream<IndexedRecord>)}) as many times as needed</li>
+ * <li>finally, get the global result (see {@link #getResult()})</li>
+ * </ul>
  */
 public class AvroDataTypeDiscoveryAnalyzer implements AvroAnalyzer {
 
@@ -54,8 +73,6 @@ public class AvroDataTypeDiscoveryAnalyzer implements AvroAnalyzer {
 
     private final Map<String, SortedList> frequentDatePatterns = new HashMap<>();
 
-    private final Map<String, LFUCache> knownDataTypeCaches = new HashMap<>();
-
     private final Map<String, DataTypeOccurences> dataTypeResults = new HashMap<>();
 
     private Schema inputSemanticSchema;
@@ -72,7 +89,6 @@ public class AvroDataTypeDiscoveryAnalyzer implements AvroAnalyzer {
     @Override
     public void init() {
         frequentDatePatterns.clear();
-        knownDataTypeCaches.clear();
         dataTypeResults.clear();
     }
 
@@ -111,15 +127,13 @@ public class AvroDataTypeDiscoveryAnalyzer implements AvroAnalyzer {
 
         for (Schema.Field field : record.getSchema().getFields()) {
             final String itemId = itemId(id, field.name());
-            final Optional<Schema> maybeFieldResultSchema =
-                    Optional.ofNullable(resultRecord.getSchema().getField(field.name())).map(Schema.Field::schema);
-            final Optional<Schema> maybeFieldSemanticSchema =
-                    Optional.ofNullable(semanticSchema.getField(field.name())).map(Schema.Field::schema);
+            final Schema.Field resultField = resultRecord.getSchema().getField(field.name());
+            final Schema.Field semanticField = semanticSchema.getField(field.name());
 
-            if (maybeFieldResultSchema.isPresent())
-                if (maybeFieldSemanticSchema.isPresent()) {
+            if (resultField != null)
+                if (semanticField != null) {
                     final Object semRecord = analyzeItem(itemId, record.get(field.pos()), field.schema(),
-                            maybeFieldResultSchema.get(), maybeFieldSemanticSchema.get());
+                            resultField.schema(), semanticField.schema());
                     resultRecord.put(field.name(), semRecord);
                 } else {
                     System.out.println(field.name() + " field is missing from semantic schema.");
@@ -181,59 +195,62 @@ public class AvroDataTypeDiscoveryAnalyzer implements AvroAnalyzer {
         case FLOAT:
         case DOUBLE:
         case BOOLEAN:
+        case NULL:
             final GenericRecord semRecord = new GenericData.Record(DATA_TYPE_DISCOVERY_VALUE_LEVEL_SCHEMA);
             semRecord.put(DATA_TYPE_FIELD, analyzeLeafValue(itemId, item, itemSchema));
             return semRecord;
-
-        case NULL:
-            // No information in semantic schema
-            final GenericRecord nullSemRecord = new GenericData.Record(DATA_TYPE_DISCOVERY_VALUE_LEVEL_SCHEMA);
-            nullSemRecord.put(DATA_TYPE_FIELD, analyzeLeafValue(itemId, item, itemSchema));
-            return nullSemRecord;
 
         default:
             throw new IllegalStateException("Unexpected value: " + itemSchema.getType());
         }
     }
 
-    private Object analyzeLeafValue(String itemId, Object value, Schema itemSchema) {
+    private DataTypeEnum analyzeLeafValue(String itemId, Object value, Schema itemSchema) {
 
-        DataTypeEnum type = null;// STRING means we didn't find any native data types
+        DataTypeEnum type;// STRING means we didn't find any native data types
 
         if (!frequentDatePatterns.containsKey(itemId))
             frequentDatePatterns.put(itemId, new SortedList());
 
-        if (dataTypeResults.get(itemId) == null) {
+        if (dataTypeResults.get(itemId) == null)
             dataTypeResults.put(itemId, new DataTypeOccurences());
-        }
+
         DataTypeOccurences dataType = dataTypeResults.get(itemId);
 
-        LFUCache<String, DataTypeEnum> knownDataTypeCache = knownDataTypeCaches.get(value);
-        if (knownDataTypeCache == null)
-            knownDataTypeCache = new LFUCache<>();
-        final DataTypeEnum knownDataType = knownDataTypeCache.get(value);
-
-        if (knownDataType != null) {
-            dataType.increment(knownDataType);
-            type = knownDataType;
+        if (value != null) {
+            type = getNativeDataType(value, itemSchema);
+            if ((DataTypeEnum.STRING.equals(type) && isDate(value.toString(), frequentDatePatterns.get(itemId)))
+                    || isLogicalDate(itemSchema))
+                type = DataTypeEnum.DATE;
         } else {
-            if (value != null) {
-                type = TypeInferenceUtils.getNativeDataType(value.toString());
-                if ((DataTypeEnum.STRING.equals(type) && isDate(value.toString(), frequentDatePatterns.get(itemId)))
-                        || isLogicalDate(itemSchema))
-                    type = DataTypeEnum.DATE;
-                knownDataTypeCache.put(itemId, type);
-            } else {
-                type = DataTypeEnum.NULL;
-            }
-            dataType.increment(type);
+            type = DataTypeEnum.NULL;
         }
+
+        dataType.increment(type);
+
         return type;
     }
 
+    private DataTypeEnum getNativeDataType(Object itemValue, Schema itemSchema) {
+        switch (itemSchema.getType()) {
+        case BOOLEAN:
+            return DataTypeEnum.BOOLEAN;
+        case FLOAT:
+        case DOUBLE:
+            return DataTypeEnum.DOUBLE;
+        case INT:
+        case LONG:
+            return DataTypeEnum.INTEGER;
+        case NULL:
+            return DataTypeEnum.NULL;
+        default:
+            return TypeInferenceUtils.getNativeDataType(itemValue.toString());
+        }
+    }
+
     private boolean isLogicalDate(Schema itemSchema) {
-        Optional<LogicalType> maybeLogicalType = Optional.ofNullable(LogicalTypes.fromSchemaIgnoreInvalid(itemSchema));
-        return maybeLogicalType.map(DATE_RELATED_LOGICAL_TYPES::contains).orElse(false);
+        LogicalType logicalType = LogicalTypes.fromSchemaIgnoreInvalid(itemSchema);
+        return logicalType != null && DATE_RELATED_LOGICAL_TYPES.contains(logicalType);
     }
 
     @Override
@@ -332,7 +349,7 @@ public class AvroDataTypeDiscoveryAnalyzer implements AvroAnalyzer {
 
     @Override
     public List<Schema> getResults() {
-        return null;
+        return Collections.singletonList(getResult());
     }
 
     @Override
