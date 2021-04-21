@@ -79,7 +79,7 @@
 				<configuration>
 					<instructions>
 						<Import-Package/>
-						<Include-Resource>{maven-resources}</Include-Resource>
+						<Include-Resource>{maven-resources},lib=lib</Include-Resource>
 					</instructions>
 				</configuration>
 			</plugin>
