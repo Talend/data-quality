@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry exported="true" kind="lib" path="lib/delight-rhino-sandbox-0.0.15.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/rhino-1.7.13.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-		<classpathentry including="**/*.java" kind="src" path="src/main/java"/>
+	<classpathentry including="**/*.java" kind="src" path="src/main/java"/>
 	<classpathentry excluding="**/*.java" kind="src" path="src/main/resources"/>
 	<classpathentry including="**/*.java" kind="src" output="target/classes" path="src/test/java"/>
 	<classpathentry excluding="**/*.java" kind="src" output="target/classes" path="src/test/resources"/>
