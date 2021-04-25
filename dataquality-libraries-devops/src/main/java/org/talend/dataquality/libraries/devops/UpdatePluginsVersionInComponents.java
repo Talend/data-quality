@@ -43,7 +43,7 @@ public class UpdatePluginsVersionInComponents {
 
     private static final String COMPONENTS_FOLDER = "/components"; //$NON-NLS-1$
 
-    private static final String TALEND_STUDIO_VERSION = "7.3.1_r2021_04"; //$NON-NLS-1$
+    private static final String TALEND_STUDIO_VERSION = "7.4.1"; //$NON-NLS-1$
 
     private static final String[] PROVIDERS = new String[] { //
             "/org.talend.designer.components.tdqprovider", //$NON-NLS-1$
