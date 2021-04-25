@@ -99,7 +99,7 @@ public class UpdatePluginsVersionInComponents {
                             if (line.contains(depName)) {
                                 System.out.println(depName); // NOSONAR
                                 // MVN field
-                                line = line.replaceAll(depName + "\\d\\d?.\\d\\d?.\\d\\d?(_[rR]\\d\\d\\d\\d_\\d\\d)?\"", //$NON-NLS-1$
+                                line = line.replaceAll(depName + "\\d\\d?.\\d\\d?.\\d\\d?(_[rR]\\d\\d\\d\\d_\\d\\d)?(-SNAPSHOT)?\"", //$NON-NLS-1$
                                         depName + DEP_VERSION_MAP.get(depName) + "\""); //$NON-NLS-1$ //$NON-NLS-2$
                             }
                         }
