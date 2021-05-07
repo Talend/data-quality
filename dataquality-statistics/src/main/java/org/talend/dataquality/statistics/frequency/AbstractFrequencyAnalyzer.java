@@ -27,7 +27,7 @@ public abstract class AbstractFrequencyAnalyzer<T extends AbstractFrequencyStati
 
     private static final long serialVersionUID = 5073865267265592024L;
 
-    protected ResizableList<T> freqTableStatistics;
+    protected List<T> freqTableStatistics;
 
     protected abstract void initFreqTableList(int size);
 

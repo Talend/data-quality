@@ -27,7 +27,7 @@ public class QuantileAnalyzer extends AbstractQuantileAnalyzer<QuantileStatistic
 
     private static final long serialVersionUID = 6841816568752139978L;
 
-    private final ResizableList<QuantileStatistics> stats = new ResizableList<>(QuantileStatistics.class);
+    private final ResizableList<QuantileStatistics> stats = new ResizableList<>(QuantileStatistics::new);
 
     public QuantileAnalyzer(DataTypeEnum[] types) {
         super(types);

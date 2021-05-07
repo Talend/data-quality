@@ -33,11 +33,11 @@ public class DataTypeQualityAnalyzer extends QualityAnalyzer<ValueQualityStatist
 
     private static final long serialVersionUID = -5951511723860660263L;
 
-    private final ResizableList<ValueQualityStatistics> results = new ResizableList<>(ValueQualityStatistics.class);
+    private final ResizableList<ValueQualityStatistics> results = new ResizableList<>(ValueQualityStatistics::new);
 
-    private final ResizableList<SortedList> frequentDatePatterns = new ResizableList<>(SortedList.class);
+    private final ResizableList<SortedList> frequentDatePatterns = new ResizableList<>(SortedList::new);
 
-    private final ResizableList<LFUCache> knownDataTypeCaches = new ResizableList<>(LFUCache.class);
+    private final ResizableList<LFUCache> knownDataTypeCaches = new ResizableList<>(LFUCache::new);
 
     public DataTypeQualityAnalyzer(DataTypeEnum[] types, boolean isStoreInvalidValues) {
         this.isStoreInvalidValues = isStoreInvalidValues;

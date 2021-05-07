@@ -44,7 +44,7 @@ public class CompositePatternFrequencyAnalyzer extends AbstractFrequencyAnalyzer
 
     private List<AbstractPatternRecognizer> patternFreqRecognizers = new ArrayList<>();
 
-    private final ResizableList<LFUCache> knownPatternCaches = new ResizableList<>(LFUCache.class);
+    private final ResizableList<LFUCache> knownPatternCaches = new ResizableList<>(LFUCache::new);
 
     private DataTypeEnum[] types; // types of columns
 
@@ -149,11 +149,9 @@ public class CompositePatternFrequencyAnalyzer extends AbstractFrequencyAnalyzer
 
     @Override
     protected void initFreqTableList(int size) {
-        List<PatternFrequencyStatistics> freqTableList = new ArrayList<>();
+        freqTableStatistics = new ArrayList<>();
         for (int i = 0; i < size; i++) {
-            PatternFrequencyStatistics freqTable = new PatternFrequencyStatistics();
-            freqTableList.add(freqTable);
+            freqTableStatistics.add(new PatternFrequencyStatistics());
         }
-        freqTableStatistics = new ResizableList<>(freqTableList);
     }
 }

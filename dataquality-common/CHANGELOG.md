@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 N/A
 ### Changed
 - chore(TPRUN-514): Refactor AvroUtils for TPRUN-14
+- chore(TPRUN-952): Refactor ResizableList
 ### Removed
 N/A
 ### Deprecated

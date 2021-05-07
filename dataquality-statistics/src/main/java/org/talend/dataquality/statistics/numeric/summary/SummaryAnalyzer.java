@@ -30,7 +30,7 @@ public class SummaryAnalyzer extends NumericalStatisticsAnalyzer<SummaryStatisti
 
     private static final long serialVersionUID = 8369753525474844077L;
 
-    private final ResizableList<SummaryStatistics> summaryStats = new ResizableList<>(SummaryStatistics.class);
+    private final ResizableList<SummaryStatistics> summaryStats = new ResizableList<>(SummaryStatistics::new);
 
     public SummaryAnalyzer(DataTypeEnum[] types) {
         super(types);

@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Provides a way to combine several {@link Analyzer} together and a
- * {@link org.talend.datascience.common.inference.Analyzers.Result result} that stores all underlying results.
+ * {@link org.talend.dataquality.common.inference.Analyzers.Result result} that stores all underlying results.
  *
  * @see #with(Analyzer[])
  */
@@ -33,7 +33,7 @@ public class Analyzers implements Analyzer<Analyzers.Result> {
 
     private final Analyzer<?>[] analyzerArrays;
 
-    private final ResizableList<Result> results = new ResizableList<>(Result.class);
+    private final ResizableList<Result> results = new ResizableList<>(Result::new);
 
     private Analyzers(Analyzer<?>... analyzers) {
         this.analyzerArrays = analyzers;

@@ -35,14 +35,14 @@ public class DataTypeAnalyzer implements Analyzer<DataTypeOccurences> {
 
     private static final long serialVersionUID = 373694310453353502L;
 
-    private final ResizableList<DataTypeOccurences> dataTypeResults = new ResizableList<>(DataTypeOccurences.class);
+    private final ResizableList<DataTypeOccurences> dataTypeResults = new ResizableList<>(DataTypeOccurences::new);
 
-    private final ResizableList<SortedList> frequentDatePatterns = new ResizableList<>(SortedList.class);
+    private final ResizableList<SortedList> frequentDatePatterns = new ResizableList<>(SortedList::new);
 
     /** Optional custom date patterns. */
     protected List<String> customDateTimePatterns = new ArrayList<>();
 
-    private final ResizableList<LFUCache> knownDataTypeCaches = new ResizableList<>(LFUCache.class);
+    private final ResizableList<LFUCache> knownDataTypeCaches = new ResizableList<>(LFUCache::new);
 
     /**
      * Default empty constructor.

@@ -29,12 +29,10 @@ public class DataTypeFrequencyAnalyzer extends AbstractFrequencyAnalyzer<DataTyp
 
     @Override
     protected void initFreqTableList(int size) {
-        List<DataTypeFrequencyStatistics> freqTableList = new ArrayList<>();
+        freqTableStatistics = new ArrayList<>();
         for (int i = 0; i < size; i++) {
-            DataTypeFrequencyStatistics freqTable = new DataTypeFrequencyStatistics();
-            freqTableList.add(freqTable);
+            freqTableStatistics.add(new DataTypeFrequencyStatistics());
         }
-        freqTableStatistics = new ResizableList<>(freqTableList);
     }
 
 }

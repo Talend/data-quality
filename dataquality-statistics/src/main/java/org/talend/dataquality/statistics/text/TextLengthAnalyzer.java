@@ -29,7 +29,7 @@ public class TextLengthAnalyzer implements Analyzer<TextLengthStatistics> {
 
     private static final long serialVersionUID = -9106960246571082963L;
 
-    private ResizableList<TextLengthStatistics> textStatistics = new ResizableList<>(TextLengthStatistics.class);
+    private ResizableList<TextLengthStatistics> textStatistics = new ResizableList<>(TextLengthStatistics::new);
 
     @Override
     public void init() {

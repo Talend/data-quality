@@ -39,7 +39,7 @@ public class CardinalityHLLAnalyzer implements Analyzer<CardinalityHLLStatistics
 
     @Override
     public void init() {
-        cardinalityStatistics = new ResizableList<>(CardinalityHLLStatistics.class);
+        cardinalityStatistics = new ResizableList<>(CardinalityHLLStatistics::new);
     }
 
     /**

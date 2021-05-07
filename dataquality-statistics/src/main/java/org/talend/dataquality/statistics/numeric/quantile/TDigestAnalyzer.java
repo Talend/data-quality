@@ -33,7 +33,7 @@ public class TDigestAnalyzer extends NumericalStatisticsAnalyzer<TDigestQuantile
 
     private static final long serialVersionUID = -9176043422228459277L;
 
-    private final ResizableList<TDigestQuantileStatistics> stats = new ResizableList<>(TDigestQuantileStatistics.class);
+    private final ResizableList<TDigestQuantileStatistics> stats = new ResizableList<>(TDigestQuantileStatistics::new);
 
     private Integer[] compression = null;
 

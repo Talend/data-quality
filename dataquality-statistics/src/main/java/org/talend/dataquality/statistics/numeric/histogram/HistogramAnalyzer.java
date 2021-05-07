@@ -33,7 +33,7 @@ public class HistogramAnalyzer extends NumericalStatisticsAnalyzer<HistogramStat
 
     private static final long serialVersionUID = -3756520692420812485L;
 
-    private ResizableList<HistogramStatistics> stats = new ResizableList<>(HistogramStatistics.class);
+    private ResizableList<HistogramStatistics> stats = new ResizableList<>(HistogramStatistics::new);
 
     private HistogramParameter histogramParameter = null;
 
