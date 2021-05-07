@@ -358,7 +358,7 @@ public class SystemDateTimePatternManager {
         if (CollectionUtils.isNotEmpty(patternGroupList)) {
             for (Map<Pattern, String> patternMap : patternGroupList) {
                 if (isFoundRegex(value, patternMap, resultMap)) {
-                    frequentDatePatternsCache.addNewValue(patternMap);
+                    frequentDatePatternsCache.add(patternMap);
                     return resultMap;
                 }
             }
@@ -368,10 +368,10 @@ public class SystemDateTimePatternManager {
 
     private static Optional<Map<String, Locale>> findValueInFrequentDatePatternsCache(String value,
             SortedList<Map<Pattern, String>> frequentDatePatternsCache) {
-        if (CollectionUtils.isNotEmpty(frequentDatePatternsCache)) {
+        if (frequentDatePatternsCache.size() > 0) {
             Map<String, Locale> resultMap = new HashMap<>();
             for (int j = 0; j < frequentDatePatternsCache.size(); j++) {
-                Map<Pattern, String> cachedPattern = frequentDatePatternsCache.get(j).getLeft();
+                Map<Pattern, String> cachedPattern = frequentDatePatternsCache.get(j);
                 if (isFoundRegex(value, cachedPattern, resultMap)) {
                     frequentDatePatternsCache.increment(j);
                     return Optional.of(resultMap);
@@ -448,7 +448,7 @@ public class SystemDateTimePatternManager {
 
     public static boolean isDate(String value, SortedList<Pair<Pattern, DateTimeFormatter>> orderedPatterns) {
         for (int j = 0; j < orderedPatterns.size(); j++) {
-            Pair<Pattern, DateTimeFormatter> cachedPattern = orderedPatterns.get(j).getLeft();
+            Pair<Pattern, DateTimeFormatter> cachedPattern = orderedPatterns.get(j);
             if (cachedPattern.getLeft().matcher(value).find()
                     && isMatchDateTimePattern(value, cachedPattern.getRight())) {
                 orderedPatterns.increment(j);
@@ -457,7 +457,7 @@ public class SystemDateTimePatternManager {
         }
 
         Optional<Pair<Pattern, DateTimeFormatter>> foundPattern = findOneDatePattern(value);
-        foundPattern.ifPresent(orderedPatterns::addNewValue);
+        foundPattern.ifPresent(orderedPatterns::add);
         return foundPattern.isPresent();
     }
 
