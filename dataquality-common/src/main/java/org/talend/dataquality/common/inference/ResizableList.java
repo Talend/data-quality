@@ -24,8 +24,9 @@ import org.talend.dataquality.common.exception.DQCommonRuntimeException;
 
 /**
  * A {@link List} that can increase its size to ensure that all index in list have an instance of <i>T</i>.
+ * It relies on a {@link Supplier} to create new instances when increasing its size.
  * 
- * @param <T> the type of this list.
+ * @param <T> the type of list's elements.
  * @see #resize(int)
  */
 public class ResizableList<T> implements List<T>, Serializable {
@@ -39,7 +40,7 @@ public class ResizableList<T> implements List<T>, Serializable {
     /**
      * Creates a list with explicit {@link #resize(int) resize} that contains instances of <i>T</i>.
      * 
-     * @param supplier The class of <i>T</i>.
+     * @param supplier the {@link Supplier} object that creates new instances of type <i>T</i>.
      */
     public ResizableList(Supplier<T> supplier) {
         this.supplier = supplier;
@@ -50,8 +51,7 @@ public class ResizableList<T> implements List<T>, Serializable {
      * Resize the list so it contains <code>size</code> instances of <i>T</i>. Method only scales up, never down.
      * 
      * @param size The new size for the list. Must be a positive number.
-     * @return <code>true</code> if new elements were added to the list (i.e. list was resized), <code>false</code> if
-     * no new elements were added.
+     * @return {@code true} if new elements were added to the list (i.e. the list was resized), {@code false} otherwise.
      */
     public boolean resize(int size) {
         if (size < 0) {
