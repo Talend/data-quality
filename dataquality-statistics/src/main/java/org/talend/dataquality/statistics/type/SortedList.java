@@ -15,6 +15,7 @@ package org.talend.dataquality.statistics.type;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import org.apache.commons.lang3.tuple.MutablePair;
 
@@ -27,7 +28,7 @@ import org.apache.commons.lang3.tuple.MutablePair;
  */
 public class SortedList<K> {
 
-    private final ArrayList<MutablePair<K, Integer>> list = new ArrayList<>();
+    private final List<MutablePair<K, Integer>> list = new ArrayList<>();
 
     /**
      * Add a new value to the list.
