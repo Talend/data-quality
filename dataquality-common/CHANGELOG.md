@@ -8,7 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 N/A
 ### Changed
-- chore(TPRUN-514): Refactor AvroUtils for TPRUN-14
+- chore(TPRUN-514): Refactor AvroUtils for Discovery processor
+- chore(TPRUN-979): Refactor AvroUtils for Validation processor
 ### Removed
 N/A
 ### Deprecated

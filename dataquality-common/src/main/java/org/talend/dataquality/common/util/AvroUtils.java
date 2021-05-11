@@ -13,7 +13,6 @@ import static org.apache.avro.Schema.Type.RECORD;
 import static org.apache.avro.Schema.Type.STRING;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.ArrayList;
@@ -24,16 +23,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 import org.apache.avro.Schema;
 import org.apache.avro.SchemaBuilder;
-import org.apache.avro.file.DataFileReader;
 import org.apache.avro.generic.GenericDatumReader;
 import org.apache.avro.generic.GenericDatumWriter;
-import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.generic.IndexedRecord;
 import org.apache.avro.io.DatumReader;
 import org.apache.avro.io.Decoder;
@@ -41,12 +38,22 @@ import org.apache.avro.io.DecoderFactory;
 import org.apache.avro.io.Encoder;
 import org.apache.avro.io.EncoderFactory;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 
 /**
- * Methods for Avro analyzers.
+ * Utility Avro functions, mostly used by Avro analyzers and DQ processors.
+ *
  */
 public class AvroUtils {
+
+    /**
+     * Make a copy of a schema.
+     *
+     * @param sourceSchema Schema to copy
+     * @return New schema
+     */
+    public static Schema copySchema(Schema sourceSchema) {
+        return new Schema.Parser().parse(sourceSchema.toString());
+    }
 
     /**
      * Apply a {@link Schema} on a {@link IndexedRecord} given in parameters.
@@ -215,13 +222,56 @@ public class AvroUtils {
     }
 
     /**
-     * Make a copy of a schema.
+     * Construct a schema with the same structure of the {@param baseSchema} while replacing the leaf value schemas with
+     * {@param leafSchema}.
      *
-     * @param sourceSchema Schema to copy
-     * @return New schema
+     * @param baseSchema the input schema to copy
+     * @param leafSchema the schema of the leaf
+     * @param namespaceSuffix a suffix to add to the namespace of the records
+     * @return the new constructed schema
      */
-    public static Schema copySchema(Schema sourceSchema) {
-        return new Schema.Parser().parse(sourceSchema.toString());
+    public static Schema createSchemaFromLeafSchema(Schema baseSchema, Schema leafSchema, String namespaceSuffix) {
+        switch (baseSchema.getType()) {
+        case RECORD:
+            SchemaBuilder.RecordBuilder<Schema> builder = SchemaBuilder.record(baseSchema.getName());
+            if (namespaceSuffix != null) {
+                builder.namespace(
+                        (baseSchema.getNamespace() == null ? "" : baseSchema.getNamespace() + ".") + namespaceSuffix);
+            } else {
+                builder.namespace(baseSchema.getNamespace());
+            }
+            SchemaBuilder.FieldAssembler<Schema> fieldAssembler = builder.fields();
+            for (Schema.Field field : baseSchema.getFields()) {
+                Schema fieldSchema = createSchemaFromLeafSchema(field.schema(), leafSchema, namespaceSuffix);
+                fieldAssembler.name(field.name()).type(fieldSchema).noDefault();
+            }
+            return fieldAssembler.endRecord();
+        case ARRAY:
+            return Schema
+                    .createArray(createSchemaFromLeafSchema(baseSchema.getElementType(), leafSchema, namespaceSuffix));
+        case MAP:
+            return Schema.createMap(createSchemaFromLeafSchema(baseSchema.getValueType(), leafSchema, namespaceSuffix));
+        case UNION:
+            return Schema.createUnion(baseSchema
+                    .getTypes()
+                    .stream()
+                    .map(unionSchema -> createSchemaFromLeafSchema(unionSchema, leafSchema, namespaceSuffix))
+                    .distinct()
+                    .collect(Collectors.toList()));
+        case ENUM:
+        case FIXED:
+        case STRING:
+        case BYTES:
+        case INT:
+        case LONG:
+        case FLOAT:
+        case DOUBLE:
+        case BOOLEAN:
+        case NULL:
+            return leafSchema;
+        default:
+            throw new IllegalStateException("Unexpected Avro Schema type: " + baseSchema.getType());
+        }
     }
 
     public static boolean isPrimitiveType(Schema.Type type) {
@@ -241,11 +291,96 @@ public class AvroUtils {
     }
 
     public static String itemId(String prefix, String itemId) {
-        if (StringUtils.isEmpty(prefix)) {
-            return itemId;
-        }
+        return StringUtils.isEmpty(prefix) ? itemId : prefix + "." + itemId;
+    }
 
-        return prefix + "." + itemId;
+    /**
+     * Iterates over a given schema and calls a consumer for each leaf with it's schema and it's path.
+     *
+     * @param fieldSchema the schema to be iterated.
+     * @param fieldPath the root of the given schema, initially an empty string.
+     * @param consumer the callback consumer.
+     */
+    public static void applyFunctionOnFields(Schema fieldSchema, String fieldPath,
+            BiConsumer<Schema, String> consumer) {
+        switch (fieldSchema.getType()) {
+        case RECORD:
+            for (Schema.Field field : fieldSchema.getFields()) {
+                applyFunctionOnFields(field.schema(), itemId(fieldPath, field.name()), consumer);
+            }
+            break;
+        case ARRAY:
+            applyFunctionOnFields(fieldSchema.getElementType(), fieldPath, consumer);
+            break;
+        case MAP:
+            applyFunctionOnFields(fieldSchema.getValueType(), fieldPath, consumer);
+            break;
+        case UNION:
+            for (Schema unionSchema : fieldSchema.getTypes()) {
+                applyFunctionOnFields(unionSchema, itemId(fieldPath, unionSchema.getName()), consumer);
+            }
+            break;
+        case ENUM:
+        case FIXED:
+        case STRING:
+        case BYTES:
+        case INT:
+        case LONG:
+        case FLOAT:
+        case DOUBLE:
+        case BOOLEAN:
+        case NULL:
+            consumer.accept(fieldSchema, fieldPath);
+            break;
+        }
+    }
+
+    /**
+     * Extract a given property from a schema. This property can be present at any level in the schema.
+     * if propName is <code>null</code>, it will extract all the available properties from the schema.
+     *
+     * @param schema Schema with the property
+     * @param propName Name of the property to extract
+     * @return Map with the property values (key: a name built with field name)
+     */
+    public static Map<String, Object> extractProperties(Schema schema, String propName) {
+        Objects.requireNonNull(schema, "Input schema should not be null.");
+        Map<String, Object> props = new HashMap<>();
+        applyFunctionOnFields(schema, "", (fieldSchema, fieldPath) -> {
+            if (propName != null) {
+                if (fieldSchema.getObjectProp(propName) != null) {
+                    props.put(fieldPath, fieldSchema.getObjectProp(propName));
+                }
+            } else {
+                Map<String, Object> fieldProps = fieldSchema.getObjectProps();
+                if (!fieldProps.isEmpty()) {
+                    props.put(fieldPath, fieldProps);
+                }
+            }
+        });
+        return props;
+    }
+
+    /**
+     * Add a property to a schema.
+     *
+     * @param schema to be enriched
+     * @param propName is the name of the property
+     * @param props a map that has the key represents the path to the field and the value is the value of the property
+     */
+    public static void addProperties(Schema schema, String propName, Map<String, Object> props) {
+        Objects.requireNonNull(schema, "Input schema should not be null.");
+        applyFunctionOnFields(schema, "", (fieldSchema, fieldPath) -> {
+            if (props.containsKey(fieldPath)) {
+                if (propName != null) {
+                    fieldSchema.addProp(propName, props.get(fieldPath));
+                } else if (props.get(fieldPath) instanceof Map) {
+                    for (Map.Entry<String, Object> entry : ((Map<String, Object>) props.get(fieldPath)).entrySet()) {
+                        fieldSchema.addProp(entry.getKey(), entry.getValue());
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -259,63 +394,6 @@ public class AvroUtils {
     }
 
     /**
-     * Extract a given property from a schema. This property can be present at any level in the schema.
-     * if propName is <code>null</code>, it will extract all the available properties from the schema.
-     *
-     * @param schema Schema with the property
-     * @param propName Name of the property to extract
-     * @return Map with the property values (key: a name built with field name)
-     */
-    public static Map<String, Object> extractProperties(Schema schema, String propName) {
-        Objects.requireNonNull(schema, "Input schema should not be null.");
-        final Map<String, Object> props = new HashMap<>();
-        extractProperties(schema, propName, props, "");
-        return props;
-    }
-
-    private static void extractProperties(Schema schema, String propName, Map<String, Object> props, String prefix) {
-        switch (schema.getType()) {
-        case RECORD:
-            for (Schema.Field field : schema.getFields()) {
-                extractProperties(field.schema(), propName, props, itemId(prefix, field.name()));
-            }
-            break;
-        case ARRAY:
-            extractProperties(schema.getElementType(), propName, props, prefix);
-            break;
-        case MAP:
-            extractProperties(schema.getValueType(), propName, props, prefix);
-            break;
-        case UNION:
-            for (Schema unionSchema : schema.getTypes()) {
-                extractProperties(unionSchema, propName, props, itemId(prefix, unionSchema.getName()));
-            }
-            break;
-        case ENUM:
-        case FIXED:
-        case STRING:
-        case BYTES:
-        case INT:
-        case LONG:
-        case FLOAT:
-        case DOUBLE:
-        case BOOLEAN:
-        case NULL:
-            if (propName != null) {
-                if (schema.getObjectProp(propName) != null) {
-                    props.put(prefix, schema.getObjectProp(propName));
-                }
-            } else {
-                Map<String, Object> fieldProps = schema.getObjectProps();
-                if (!fieldProps.isEmpty()) {
-                    props.put(prefix, fieldProps);
-                }
-            }
-            break;
-        }
-    }
-
-    /**
      * Add the properties map to the given schema. The properties can be extracted using {@code ExtractAllProperties}.
      * The key of the map represents the path to the field in the schema, the value is another Map of key/value properties.
      *
@@ -324,65 +402,6 @@ public class AvroUtils {
      */
     public static void addAllProperties(Schema schema, Map<String, Object> props) {
         addProperties(schema, null, props);
-    }
-
-    /**
-     * Add a property to a schema.
-     *
-     * @param schema to be enriched
-     * @param propName is the name of the property
-     * @param props a map that has the key represents the path to the field and the value is the value of the property
-     */
-    public static void addProperties(Schema schema, String propName, Map<String, Object> props) {
-        Objects.requireNonNull(schema, "Input schema should not be null.");
-        addProperties(schema, propName, props, "");
-    }
-
-    private static void addProperties(Schema schema, String propName, Map<String, Object> props, String prefix) {
-        switch (schema.getType()) {
-        case RECORD:
-            for (Schema.Field field : schema.getFields()) {
-                addProperties(field.schema(), propName, props, itemId(prefix, field.name()));
-            }
-            break;
-        case ARRAY:
-            addProperties(schema.getElementType(), propName, props, prefix);
-            break;
-        case MAP:
-            addProperties(schema.getValueType(), propName, props, prefix);
-            break;
-        case UNION:
-            for (Schema unionSchema : schema.getTypes()) {
-                addProperties(unionSchema, propName, props, itemId(prefix, unionSchema.getName()));
-            }
-            break;
-        case ENUM:
-        case FIXED:
-        case STRING:
-        case BYTES:
-        case INT:
-        case LONG:
-        case FLOAT:
-        case DOUBLE:
-        case BOOLEAN:
-        case NULL:
-            if (props.containsKey(prefix)) {
-                if (propName != null) {
-                    schema.addProp(propName, props.get(prefix));
-                } else if (props.get(prefix) instanceof Map) {
-                    for (Map.Entry<String, Object> entry : ((Map<String, Object>) props.get(prefix)).entrySet()) {
-                        schema.addProp(entry.getKey(), entry.getValue());
-                    }
-                }
-            }
-            break;
-        }
-    }
-
-    public static Pair<Stream<IndexedRecord>, Schema> streamAvroFile(File file) throws IOException {
-        DataFileReader<GenericRecord> dateAvroReader = new DataFileReader<>(file, new GenericDatumReader<>());
-        return Pair.of(StreamSupport.stream(dateAvroReader.spliterator(), false).map(c -> c),
-                dateAvroReader.getSchema());
     }
 
     public static Schema dereferencing(Schema schema, boolean keepProps) {

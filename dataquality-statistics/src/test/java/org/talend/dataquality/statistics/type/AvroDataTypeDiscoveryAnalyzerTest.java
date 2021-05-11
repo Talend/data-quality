@@ -27,6 +27,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import org.apache.avro.Schema;
 import org.apache.avro.SchemaBuilder;
@@ -44,9 +45,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.talend.dataquality.common.util.AvroUtils;
-
-import avro.shaded.com.google.common.collect.Maps;
 
 public class AvroDataTypeDiscoveryAnalyzerTest {
 
@@ -62,6 +60,12 @@ public class AvroDataTypeDiscoveryAnalyzerTest {
         GenericRecord record = reader.read(null, decoder);
 
         return record;
+    }
+
+    public static Pair<Stream<IndexedRecord>, Schema> streamAvroFile(File file) throws IOException {
+        DataFileReader<GenericRecord> dateAvroReader = new DataFileReader<>(file, new GenericDatumReader<>());
+        return Pair.of(StreamSupport.stream(dateAvroReader.spliterator(), false).map(c -> c),
+                dateAvroReader.getSchema());
     }
 
     private GenericRecord loadPerson(String filename) {
@@ -318,7 +322,7 @@ public class AvroDataTypeDiscoveryAnalyzerTest {
     public void testSupportForDateLogicalTypes() {
         try {
             String path = AvroDataTypeDiscoveryAnalyzerTest.class.getResource("../sample/date.avro").getPath();
-            Pair<Stream<IndexedRecord>, Schema> pair = AvroUtils.streamAvroFile(new File(path));
+            Pair<Stream<IndexedRecord>, Schema> pair = streamAvroFile(new File(path));
             analyzer.init(pair.getRight());
             analyzer.analyze(pair.getLeft()).collect(Collectors.toList());
             Schema result = analyzer.getResult();
@@ -336,7 +340,7 @@ public class AvroDataTypeDiscoveryAnalyzerTest {
     public void testAvroDataTypeAnalyzerOnSwitch() {
         try {
             String path = AvroDataTypeDiscoveryAnalyzerTest.class.getResource("../sample/Switch.avro").getPath();
-            Pair<Stream<IndexedRecord>, Schema> pair = AvroUtils.streamAvroFile(new File(path));
+            Pair<Stream<IndexedRecord>, Schema> pair = streamAvroFile(new File(path));
             analyzer.init(pair.getRight());
             List<IndexedRecord> results = analyzer.analyze(pair.getLeft()).collect(Collectors.toList());
             Schema result = analyzer.getResult();
@@ -571,13 +575,13 @@ public class AvroDataTypeDiscoveryAnalyzerTest {
     @Test
     public void testEntryComparator() {
 
-        Map entries = Maps.<DataTypeEnum, Long> newHashMap();
+        Map<DataTypeEnum, Long> entries = new HashMap<>();
         entries.put(STRING, 4L);
         entries.put(EMPTY, 3L);
         entries.put(DOUBLE, 7L);
         entries.put(DATE, 6L);
 
-        ArrayList shuffledEntries = new ArrayList<>(entries.entrySet());
+        ArrayList<Map.Entry<DataTypeEnum, Long>> shuffledEntries = new ArrayList<>(entries.entrySet());
         Collections.shuffle(shuffledEntries);
 
         assertEquals(
