@@ -7,6 +7,7 @@ import org.apache.avro.file.DataFileReader;
 import org.apache.avro.file.DataFileStream;
 import org.apache.avro.generic.GenericDatumReader;
 import org.apache.avro.generic.GenericRecord;
+import org.apache.avro.generic.GenericRecordBuilder;
 import org.apache.avro.generic.IndexedRecord;
 import org.junit.Test;
 
@@ -24,6 +25,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
+import static org.talend.dataquality.common.util.AvroUtils.applySchema;
+import static org.talend.dataquality.common.util.AvroUtils.createSchemaFromLeafSchema;
 
 public class AvroUtilsTest {
 
@@ -58,6 +61,36 @@ public class AvroUtilsTest {
             .type(Schema.createUnion(Schema.create(Schema.Type.STRING), Schema.create(Schema.Type.INT)))
             .noDefault()
             .endRecord();
+
+    @Test
+    public void testApplySchema() {
+        Schema originalSchema =
+                SchemaBuilder.record("InputRow").fields().requiredString("Email").requiredString("Date").endRecord();
+        Schema newSchema = AvroUtils.copySchema(originalSchema);
+        newSchema.getField("Email").schema().addProp("prop", "EMAIL");
+        newSchema.getField("Date").schema().addProp("prop", "DATE");
+
+        IndexedRecord ir1 = new GenericRecordBuilder(originalSchema)
+                .set("Email", "ww at breaking.bad")
+                .set("Date", "31/02/2000")
+                .build();
+        IndexedRecord ir2 = new GenericRecordBuilder(originalSchema)
+                .set("Email", "xxxxx@talend.com")
+                .set("Date", "07/07/2007")
+                .build();
+
+        assertEquals(ir1.getSchema(), originalSchema);
+        assertEquals(ir2.getSchema(), originalSchema);
+
+        IndexedRecord ir1New = applySchema(ir1, newSchema);
+        IndexedRecord ir2New = applySchema(ir2, newSchema);
+
+        assertEquals(ir1New.getSchema(), newSchema);
+        assertEquals(ir2New.getSchema(), newSchema);
+
+        assertEquals(System.identityHashCode(ir1New.getSchema()), System.identityHashCode(newSchema));
+        assertEquals(System.identityHashCode(ir2New.getSchema()), System.identityHashCode(newSchema));
+    }
 
     private Schema getAnnotatedSimpleSchema() {
         Schema schema = AvroUtils.copySchema(SIMPLE_SCHEMA);
@@ -183,6 +216,38 @@ public class AvroUtilsTest {
         AvroUtils.addProperties(schema, "quality", props);
 
         assertEquals(getAnnotatedComplexSchema().toString(), schema.toString());
+    }
+
+    @Test
+    public void testCreateSchemaFromLeafSchema() {
+        Schema originalSchema = SchemaBuilder
+                .record("InputRow")
+                .fields()
+                .requiredString("Email")
+                .name("Name")
+                .type()
+                .record("name")
+                .fields()
+                .requiredString("first")
+                .requiredString("last")
+                .endRecord()
+                .noDefault()
+                .endRecord();
+
+        assertEquals(originalSchema.getField("Email").schema(), SchemaBuilder.builder().stringType());
+        assertEquals(originalSchema.getField("Name").schema().getField("first").schema(),
+                SchemaBuilder.builder().stringType());
+        assertEquals(originalSchema.getField("Name").schema().getField("last").schema(),
+                SchemaBuilder.builder().stringType());
+
+        Schema fieldSchema =
+                SchemaBuilder.record("leaf").fields().requiredInt("size").requiredString("desc").endRecord();
+
+        Schema newSchema = createSchemaFromLeafSchema(originalSchema, fieldSchema, "ns");
+
+        assertEquals(newSchema.getField("Email").schema(), fieldSchema);
+        assertEquals(newSchema.getField("Name").schema().getField("first").schema(), fieldSchema);
+        assertEquals(newSchema.getField("Name").schema().getField("last").schema(), fieldSchema);
     }
 
     @Test
@@ -757,7 +822,7 @@ public class AvroUtilsTest {
                 getClass().getResourceAsStream("UnionOfComplexRefType.avro"), new GenericDatumReader<>());
 
         IndexedRecord originalRecord = originalStream.iterator().next();
-        IndexedRecord resultingRecord = AvroUtils.applySchema(originalRecord, dereferencedSchema);
+        IndexedRecord resultingRecord = applySchema(originalRecord, dereferencedSchema);
 
         assertEquals(originalRecord.toString(), resultingRecord.toString());
         assertNotEquals(originalRecord.getSchema(), resultingRecord.getSchema());

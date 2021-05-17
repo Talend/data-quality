@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 N/A
 ### Changed
 - workitem([TPRUN-354](https://jira.talendforge.org/browse/TPRUN-354)): Improve "native" discovery for typed data
-
+- chore([TPRUN-953](https://jira.talendforge.org/browse/TPRUN-953)): Refactor SortedList
 ### Removed
 N/A
 ### Deprecated

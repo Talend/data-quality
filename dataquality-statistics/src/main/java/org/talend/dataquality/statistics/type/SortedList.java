@@ -15,6 +15,7 @@ package org.talend.dataquality.statistics.type;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import org.apache.commons.lang3.tuple.MutablePair;
 
@@ -25,15 +26,25 @@ import org.apache.commons.lang3.tuple.MutablePair;
  *
  * @param <K>
  */
-public class SortedList<K> extends ArrayList<MutablePair<K, Integer>> {
+public class SortedList<K> {
+
+    private final List<MutablePair<K, Integer>> list = new ArrayList<>();
 
     /**
      * Add a new value to the list.
      * Careful not to add an existing value.
      * @param value to add
      */
-    public boolean addNewValue(K value) {
-        return add(MutablePair.of(value, 0));
+    public void add(K value) {
+        list.add(MutablePair.of(value, 0));
+    }
+
+    public K get(int index) {
+        return list.get(index).getLeft();
+    }
+
+    public int size() {
+        return list.size();
     }
 
     /**
@@ -42,18 +53,18 @@ public class SortedList<K> extends ArrayList<MutablePair<K, Integer>> {
      * @param foundIndex of the value to increment
      */
     public void increment(int foundIndex) {
-        //increment the frequency
-        int newFrequency = get(foundIndex).getRight() + 1;
-        get(foundIndex).setRight(newFrequency);
+        //Increment the frequency
+        int newFrequency = list.get(foundIndex).getRight() + 1;
+        list.get(foundIndex).setRight(newFrequency);
 
         //Find the index where the value should be
         int currentIndex = foundIndex - 1;
-        while (currentIndex >= 0 && get(currentIndex).getRight() < newFrequency)
+        while (currentIndex >= 0 && list.get(currentIndex).getRight() < newFrequency)
             currentIndex--;
 
         //Move the value to the right index
         //Use swap is ok since the swapped frequency difference is always 1
         if (currentIndex + 1 != foundIndex)
-            Collections.swap(this, currentIndex + 1, foundIndex);
+            Collections.swap(list, currentIndex + 1, foundIndex);
     }
 }

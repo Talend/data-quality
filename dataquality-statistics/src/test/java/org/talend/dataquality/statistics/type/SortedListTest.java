@@ -1,5 +1,4 @@
-package org.talend.dataquality.statistics.type;// ============================================================================
-
+// ============================================================================
 //
 // Copyright (C) 2006-2021 Talend Inc. - www.talend.com
 //
@@ -11,30 +10,26 @@ package org.talend.dataquality.statistics.type;// ==============================
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
+package org.talend.dataquality.statistics.type;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 public class SortedListTest {
 
-    SortedList<String> sortedList = new SortedList<>();
-
-    @Before
-    public void before() {
-        sortedList.clear();
-    }
-
     @Test
     public void testIncrement() {
-        sortedList.addNewValue("value1");
-        sortedList.addNewValue("value2");
-        sortedList.addNewValue("value3");
-        Assert.assertEquals(sortedList.get(0).left, "value1");
+        SortedList<String> sortedList = new SortedList<>();
+        sortedList.add("value1");
+        sortedList.add("value2");
+        sortedList.add("value3");
+        Assert.assertEquals(sortedList.get(0), "value1");
         sortedList.increment(2);
-        Assert.assertEquals(sortedList.get(0).left, "value3");
+        Assert.assertEquals(sortedList.get(0), "value3");
         sortedList.increment(2);
         sortedList.increment(1);
-        Assert.assertEquals(sortedList.get(0).left, "value1");
+        Assert.assertEquals(sortedList.get(0), "value1");
+        Assert.assertEquals(sortedList.get(1), "value3");
+        Assert.assertEquals(sortedList.get(2), "value2");
     }
 }
