@@ -4,23 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
-### Added
-N/A
-### Changed
-N/A
-### Removed
-N/A
-### Deprecated
-N/A
-### Fixed
-N/A
+## [9.0.0] - 2021-06-02
 ### Security
-- fix(TDQ-18962): XStream Core high severity issue
-- fix(TDQ-19065): XStream Core issue
-- fix(TDQ-19261): XStream Core issues (1.4.16)
-- fix(TDQ-19243): Fix CWE-95 in ExpressionAction
-- fix(TDQ-19472): Fix XStream Core issues (to 1.4.17)
+- fix([TDQ-18962](https://jira.talendforge.org/browse/TDQ-18962)): XStream Core high severity issue
+- fix([TDQ-19065](https://jira.talendforge.org/browse/TDQ-19065)): XStream Core issue
+- fix([TDQ-19261](https://jira.talendforge.org/browse/TDQ-19261)): XStream Core issues (1.4.16)
+- fix([TDQ-19243](https://jira.talendforge.org/browse/TDQ-19243)): Fix CWE-95 in ExpressionAction
+- fix([TDQ-19472](https://jira.talendforge.org/browse/TDQ-19472)): Fix XStream Core issues (to 1.4.17)
 
 ## [8.3.1] - 2020-11-18
 ### Security

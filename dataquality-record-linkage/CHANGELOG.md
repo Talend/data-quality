@@ -4,19 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [9.0.0] - 2021-06-02
 ### Added
-- feat(TDQ-17919) Golden records will match if new sources added
-### Changed
-N/A
-### Removed
-N/A
-### Deprecated
-N/A
-### Fixed
-N/A
+- feat([TDQ-17919](https://jira.talendforge.org/browse/TDQ-17919)) Golden records will match if new sources added
 ### Security
-- fix(TDQ-19073): Fix JUnit issue
+- fix([TDQ-19073](https://jira.talendforge.org/browse/TDQ-19073)): Fix JUnit issue
 
 ## [8.3.1] - 2020-11-18
 ### Fixed
