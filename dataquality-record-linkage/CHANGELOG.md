@@ -16,7 +16,7 @@ N/A
 ### Fixed
 N/A
 ### Security
-N/A
+- fix(TDQ-19311): Fix Apache Commons IO issues (to 2.8.0)
 
 ## [8.0.11] - 2021-04-15
 
