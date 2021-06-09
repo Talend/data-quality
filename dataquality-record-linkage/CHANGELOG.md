@@ -14,7 +14,7 @@ N/A
 ### Deprecated
 N/A
 ### Fixed
-N/A
+- fix([TDQ-19484](https://jira.talendforge.org/browse/TDQ-19484)): tMatchGroup Multi Pass matching inconsistencies
 ### Security
 N/A
 
