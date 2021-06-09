@@ -15,6 +15,8 @@ package org.talend.dataquality.record.linkage.grouping.callback;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.matchmerge.Record;
 import org.talend.dataquality.matchmerge.mfb.MatchResult;
 import org.talend.dataquality.record.linkage.grouping.AbstractRecordGrouping;
@@ -28,6 +30,8 @@ import org.talend.dataquality.record.linkage.utils.BidiMultiMap;
  * processing.
  */
 public class MultiPassGroupingCallBack<T> extends GroupingCallBack<T> {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MultiPassGroupingCallBack.class);
 
     private Map<String, List<List<DQAttribute<?>>>> groupRows = null;
 
@@ -96,7 +100,13 @@ public class MultiPassGroupingCallBack<T> extends GroupingCallBack<T> {
         String oldgrpId1 = richRecord1.getGID() == null ? null : richRecord1.getGID().getValue(); // .getOriginRow().get(getIndexGID()).getValue();
         String oldgrpId2 = richRecord2.getGID() == null ? null : richRecord2.getGID().getValue();// .getOriginRow().get(getIndexGID()).getValue();
         uniqueOldGroupQuality(record1, record2);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("#onMatch:" + "grpId1:" + grpId1 + " grpId2:" + grpId2);
+        }
         if (grpId1 == null && grpId2 == null) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("match way 1 : both GroupID are null");
+            }
             // Both records are original records.
             richRecord1.setGroupId(oldgrpId1);
             richRecord2.setGroupId(oldgrpId1);
@@ -106,33 +116,30 @@ public class MultiPassGroupingCallBack<T> extends GroupingCallBack<T> {
 
             richRecord1.setMaster(false);
             richRecord2.setMaster(false);
+            updateNotMasteredRecords(oldgrpId2, oldgrpId1);
             // Put into the map: <gid2,gid1>, oldgrpId2 is not used any more, but can be found by oldgrpId1 which is
             // used
-            oldGID2New.put(oldgrpId2, oldgrpId1);
-            updateNotMasteredRecords(oldgrpId2, oldgrpId1);
+            updateOldGID2NewMap(oldgrpId1, oldgrpId2);
             output(richRecord1);
             output(richRecord2);
 
         } else if (grpId1 != null && grpId2 != null) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("match way 2 : both GroupID are exist");
+            }
             // Both records are merged records.
             richRecord2.setGroupId(grpId1);
             updateNotMasteredRecords(grpId2, grpId1);
             // Put into the map: <gid2,gid1>
-            oldGID2New.put(grpId2, grpId1);
-            // Update map where value equals to gid2
-            List<String> keysOfGID2 = oldGID2New.getKeys(grpId2);
-            if (keysOfGID2 != null) {
-                for (String key : keysOfGID2) {
-                    oldGID2New.put(key, grpId1);
-                }
-            }
+            updateOldGID2NewMap(grpId1, grpId2);
 
         } else if (grpId1 == null) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("match way 3 : only GroupID1 is null");
+            }
             // richRecord1 is original record
             // GID is the gid of record 2.
             richRecord1.setGroupId(grpId2);
-            // Put into the map: <gid2,gid1>
-            oldGID2New.put(grpId2, oldgrpId1);
             updateNotMasteredRecords(oldgrpId1, grpId2);
             // group size is 0 for none-master record
             richRecord1.setGrpSize(0);
@@ -141,11 +148,13 @@ public class MultiPassGroupingCallBack<T> extends GroupingCallBack<T> {
             output(richRecord1);
 
         } else {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("match way 4 : only GroupID2 is null");
+            }
             // richRecord2 is original record.
             // GID
-            richRecord2.setGroupId(richRecord1.getGroupId());
-            updateNotMasteredRecords(oldgrpId2, richRecord1.getGroupId());
-            oldGID2New.put(grpId2, oldgrpId1);
+            richRecord2.setGroupId(grpId1);
+            updateNotMasteredRecords(oldgrpId2, grpId1);
             // group size is 0 for none-master record
             richRecord2.setGrpSize(0);
             richRecord2.setMaster(false);
@@ -153,6 +162,30 @@ public class MultiPassGroupingCallBack<T> extends GroupingCallBack<T> {
             output(richRecord2);
         }
 
+    }
+
+    /**
+     * oldGID2New can be update only record1 and record2 take groupID with same time.
+     * else will cause sub record can not replace success.
+     * Detail information please check RichRecord#getoutputRowForMultipass
+     */
+    private void updateOldGID2NewMap(String newGrpId1, String oldGrpId) {
+        oldGID2New.put(oldGrpId, newGrpId1);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("put oldGID2New:<" + oldGrpId + "," + newGrpId1 + ">");
+        }
+        // Update map where value equals to gid2
+        List<String> keysOfGID2 = oldGID2New.getKeys(oldGrpId);
+        if (keysOfGID2 != null) {
+            for (String key : keysOfGID2) {
+                oldGID2New.put(key, newGrpId1);
+            }
+        }
+        if (LOGGER.isDebugEnabled()) {
+            for (String oldGID : oldGID2New.keySet()) {
+                LOGGER.debug("oldGID:" + oldGID + " newGID:" + oldGID2New.get(oldGID));
+            }
+        }
     }
 
     /**

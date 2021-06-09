@@ -18,6 +18,8 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.talend.dataquality.matchmerge.Attribute;
 import org.talend.dataquality.matchmerge.Record;
 
@@ -27,6 +29,8 @@ import org.talend.dataquality.matchmerge.Record;
  * 
  */
 public class RichRecord extends Record {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RichRecord.class);
 
     private List<DQAttribute<?>> originRow = null;
 
@@ -418,8 +422,14 @@ public class RichRecord extends Record {
             String finalGID = this.getGroupId();
             // The GID of master record should use recent GID too
             finalGID = computeGID(oldGID2New);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("#1 after compute oldID:" + this.getGroupId() + " finalGID:" + finalGID);
+            }
             if (StringUtils.isBlank(finalGID)) {
                 finalGID = UUID.randomUUID().toString();
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("#2 after randomUUID oldID:" + this.getGroupId() + " finalGID:" + finalGID);
+                }
             }
             if (getGrpSize() == 0) {
                 setGrpSize(1);
@@ -455,6 +465,9 @@ public class RichRecord extends Record {
         } else {// for not master
             String finalGID = computeGID(oldGID2New);
             setGroupId(finalGID);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("#3 after compute oldID:" + this.getGroupId() + " finalGID:" + finalGID);
+            }
             if (recordSize == originRow.size()) {
                 if (gId == null) {
                     addOtherAttributeForNotMaster(oldGID2New);
