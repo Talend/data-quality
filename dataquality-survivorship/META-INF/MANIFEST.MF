@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Survivorship runtime library
 Bundle-SymbolicName: org.talend.dataquality.survivorship
-Bundle-Version: 8.0.13
+Bundle-Version: 8.0.14.SNAPSHOT
 Bundle-ClassPath: .,
  lib/delight-rhino-sandbox-0.0.15.jar,
  lib/rhino-1.7.13.jar
