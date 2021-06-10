@@ -4,19 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
-### Added
-N/A
-### Changed
-N/A
-### Removed
-N/A
-### Deprecated
-N/A
-### Fixed
-N/A
+## [8.0.13] - 2021-06-10
 ### Security
-- fix(TDQ-19311): Fix Apache Commons IO issues (to 2.8.0)
+- fix([TDQ-19311](https://jira.talendforge.org/browse/TDQ-19311)): Fix Apache Commons IO issues (to 2.8.0)
 
 ## [8.0.11] - 2021-04-15
 
